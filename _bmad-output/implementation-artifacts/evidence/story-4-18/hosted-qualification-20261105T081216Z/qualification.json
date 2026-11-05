@@ -1,0 +1,103 @@
+{
+  "schema": "mcpcli-story-4-18-qualification/v1",
+  "observed_at_utc": "2026-11-05T08:20:25.649876+00:00",
+  "source_sha": "c2ae2797259b76cb6ed744b017e502bec267bc5f",
+  "authenticated_actor": "jpiquot",
+  "clean_current_main_at_source_gate": true,
+  "source_gate": {
+    "exit_code": 1,
+    "receipt_emitted": false,
+    "stderr": "Release source gate failed: No successful latest ci.yml push run exists for c2ae2797259b76cb6ed744b017e502bec267bc5f.",
+    "command_evidence": "source-gate.command.json"
+  },
+  "ci": {
+    "run_id": 41874049213,
+    "attempt": 1,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41874049213",
+    "conclusion": "failure",
+    "required_jobs_passed": [
+      "release-automation",
+      "ci / build-and-test",
+      "conformance-vector-contract",
+      "conformance-vector-loopback",
+      "enrolled-module-conformance"
+    ],
+    "required_jobs_failed": [
+      "topology-vector-discovery",
+      "ci / aspire-tests"
+    ]
+  },
+  "commitlint": {
+    "run_id": 41874049817,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41874049817",
+    "conclusion": "success",
+    "required_step": "Validate commit messages",
+    "required_step_conclusion": "success"
+  },
+  "blockers": [
+    {
+      "kind": "workflow-pin-scope",
+      "observed": "Committed Builds gitlink 06a51f55bfe2e03a06e1121d94a41e98f1e3e251 differs from both workflow pins 4ae27c89226737e2d26925a23298ee619eb4efb9. Hosted non-live suite ran 191 tests, failing only those two equality subtests.",
+      "proposal": "proposed-workflow-alignment.patch",
+      "proposal_applied_to_repository": false,
+      "proposal_verified": "Disposable clone: equality test fails before; both CiWorkflowTests and actionlint pass after.",
+      "catalog_or_dependency_closure_changed_by_proposal": false,
+      "scope_authorization_required": true
+    },
+    {
+      "kind": "parties-query-selector",
+      "observed": "All 14 Tenants vectors pass; all seven Parties vectors fail at persisted parties.get-party with Gateway HTTP 503: Catalog authority cannot safely admit this operation.",
+      "current_runtime_sdk": "4.0.4",
+      "candidate_sdk": "4.1.0",
+      "candidate_source": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "candidate_contains_selector_policy": true,
+      "selected_parties_source": "13a4f913f2f0177a30291091cbc8893202e4622d",
+      "selected_owner_bindings_present": false,
+      "compiled_policy_probe": "All three historical selectors reject absent/foreign bindings and accept an exact explicit binding.",
+      "qualification_limit": "Published SDK API/source and a pure policy probe do not establish module or live compatibility. A cohort-only bump still lacks owner bindings. No enrolled Contracts, inventory or vectors were changed."
+    },
+    {
+      "kind": "native-nonmember-persisted-state",
+      "observed": "Writer bootstrap passes. The first absence read and required 422 insufficient-permissions-rejection pass, but the post-command administrator read succeeds; NativeAdministratorBoundary.cs:39/46 fails because the target has persisted business state.",
+      "ownership": "Upstream runtime/module semantics; the negative control remains blocking.",
+      "inference": "The log reports one projected rejection event for vector-create. It is consistent with a rejection creating a read model; this task has not isolated the responsible upstream implementation or qualified a fix."
+    }
+  ],
+  "builds_review": {
+    "old_revision": "4ae27c89226737e2d26925a23298ee619eb4efb9",
+    "current_gitlink": "06a51f55bfe2e03a06e1121d94a41e98f1e3e251",
+    "domain_ci_and_commitlint_workflow_bytes_changed": false,
+    "referenced_action_files_changed": false,
+    "catalog_changes_already_present_in_current_gitlink": {
+      "HexalithEventStoreVersion": [
+        "4.0.4",
+        "4.1.0"
+      ],
+      "HexalithFrontComposerVersion": [
+        "4.7.5",
+        "4.7.6"
+      ],
+      "HexalithMemoriesVersion": [
+        "3.0.18",
+        "3.0.23"
+      ]
+    },
+    "root_pins_preserve_production_cohort": [
+      "HexalithEventStoreVersion=4.0.4",
+      "HexalithPartiesVersion=1.5.1",
+      "HexalithTenantsVersion=7.0.0"
+    ]
+  },
+  "side_effects": {
+    "staging_dispatched": false,
+    "publication_dispatched": false,
+    "nuget_pushes": 0,
+    "git_commits_created": 0,
+    "git_pushes": 0,
+    "dependency_changes": false,
+    "reference_changes": false,
+    "production_behavior_changes": false,
+    "live_services_started": false
+  },
+  "remaining": "Story execution and sprint status remain in-progress. Scope authorization for the exact workflow-only alignment, upstream owner selector and nonmember-state qualification, fresh committed-source full CI/staging, candidate-bound acceptance, production approval and both public-content checks remain required."
+}

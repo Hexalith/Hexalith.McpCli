@@ -1,0 +1,8 @@
+{
+  "observed_at": "2026-11-05T08:20:25.649876+00:00",
+  "source_sha": "c2ae2797259b76cb6ed744b017e502bec267bc5f",
+  "working_tree": "",
+  "remote_main": "c2ae2797259b76cb6ed744b017e502bec267bc5f",
+  "authenticated_actor": "jpiquot",
+  "purpose": "Final clean-source snapshot before retaining task-owned evidence; failed full CI still blocks staging"
+}

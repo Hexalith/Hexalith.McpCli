@@ -1,0 +1,26 @@
+{
+  "schema": "mcpcli-story-4-18-commit-validation/v1",
+  "observed_at_utc": "2026-11-05T09:48:57.155110+00:00",
+  "source_sha": "c2ae2797259b76cb6ed744b017e502bec267bc5f",
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "input_file": "commit-message.txt",
+  "exact_input_sha256": "1ee98cc1e88d5dd062b7f034219fe2108f81d13445f9c7d145a816d4bb88305e",
+  "exit_code": 0,
+  "pinned_cli_version": "21.2.4",
+  "tooling_preparation": {
+    "command": [
+      "npm",
+      "ci",
+      "--ignore-scripts"
+    ],
+    "exit_code": 0
+  },
+  "approved_patch_exact_match": true,
+  "prior_evidence_hashes_verified": 29
+}

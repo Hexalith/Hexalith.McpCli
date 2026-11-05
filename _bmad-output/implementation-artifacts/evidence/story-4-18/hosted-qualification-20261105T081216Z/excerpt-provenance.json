@@ -1,0 +1,12 @@
+{
+  "ci_workflow_log": {
+    "path": "topology-vector-discovery.log",
+    "sha256": "16ee66dd9e109f73c9115f66f3f0231547403d1f4389b2f68fb4caf507219cd4"
+  },
+  "smoke_command_stdout": {
+    "path": "c93410d6e32246a691fffae62de96001/runtime-diagnostics/20261104T180814Z-d4367a32/command.stdout.txt",
+    "sha256": "cec1f437a17e7d608d49c99eddf144e4dc38e1fc3f7b7bea61da4be1a053c7aa",
+    "failure_excerpt_first_line": 8729,
+    "failure_excerpt_lines": 14
+  }
+}

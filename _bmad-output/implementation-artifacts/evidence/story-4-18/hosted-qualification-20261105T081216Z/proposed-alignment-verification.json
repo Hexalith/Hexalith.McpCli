@@ -1,0 +1,35 @@
+[
+  {
+    "name": "before",
+    "command": [
+      "python3",
+      "tools/live-topology/test_ci.py",
+      "CiWorkflowTests.test_workflow_pin_matches_builds_gitlink"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "FF\n======================================================================\nFAIL: test_workflow_pin_matches_builds_gitlink (__main__.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/ci.yml', pin='4ae27c89226737e2d26925a23298ee619eb4efb9')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/mcpcli-4-18-qualification-20261105T081216Z/alignment-fixture/tools/live-topology/test_ci.py\", line 1945, in test_workflow_pin_matches_builds_gitlink\n    self.assertEqual(recorded[2], pin)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\nAssertionError: '06a51f55bfe2e03a06e1121d94a41e98f1e3e251' != '4ae27c89226737e2d26925a23298ee619eb4efb9'\n- 06a51f55bfe2e03a06e1121d94a41e98f1e3e251\n+ 4ae27c89226737e2d26925a23298ee619eb4efb9\n\n\n======================================================================\nFAIL: test_workflow_pin_matches_builds_gitlink (__main__.CiWorkflowTests.test_workflow_pin_matches_builds_gitlink) (workflow='.github/workflows/commitlint.yml', pin='4ae27c89226737e2d26925a23298ee619eb4efb9')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/mcpcli-4-18-qualification-20261105T081216Z/alignment-fixture/tools/live-topology/test_ci.py\", line 1945, in test_workflow_pin_matches_builds_gitlink\n    self.assertEqual(recorded[2], pin)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^\nAssertionError: '06a51f55bfe2e03a06e1121d94a41e98f1e3e251' != '4ae27c89226737e2d26925a23298ee619eb4efb9'\n- 06a51f55bfe2e03a06e1121d94a41e98f1e3e251\n+ 4ae27c89226737e2d26925a23298ee619eb4efb9\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.003s\n\nFAILED (failures=2)\n"
+  },
+  {
+    "name": "after",
+    "command": [
+      "python3",
+      "tools/live-topology/test_ci.py",
+      "CiWorkflowTests"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.003s\n\nOK\n"
+  },
+  {
+    "name": "actionlint",
+    "command": [
+      "actionlint",
+      ".github/workflows/ci.yml",
+      ".github/workflows/commitlint.yml"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  }
+]

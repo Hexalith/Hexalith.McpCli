@@ -1,0 +1,52 @@
+{
+  "schema": "mcpcli-story-4-18-workflow-alignment/v1",
+  "source_sha": "c2ae2797259b76cb6ed744b017e502bec267bc5f",
+  "observed_at_utc": "2026-11-05T08:42:53.220678+00:00",
+  "user_approval": {
+    "response": "Yes I approve",
+    "scope": "Apply the prepared two-line workflow alignment to the existing Builds gitlink; no dependency change.",
+    "proposal": "../hosted-qualification-20261105T081216Z/proposed-workflow-alignment.patch"
+  },
+  "old_pin": "4ae27c89226737e2d26925a23298ee619eb4efb9",
+  "new_pin": "06a51f55bfe2e03a06e1121d94a41e98f1e3e251",
+  "workflow_changes": [
+    ".github/workflows/ci.yml",
+    ".github/workflows/commitlint.yml"
+  ],
+  "exact_proposed_replacements_verified": true,
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "tools/live-topology/test_ci.py",
+        "CiWorkflowTests"
+      ],
+      "started_at_utc": "2026-11-05T08:42:53.231896+00:00",
+      "completed_at_utc": "2026-11-05T08:42:53.313715+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "..\n----------------------------------------------------------------------\nRan 2 tests in 0.012s\n\nOK\n"
+    },
+    {
+      "command": [
+        "actionlint",
+        ".github/workflows/ci.yml",
+        ".github/workflows/commitlint.yml"
+      ],
+      "started_at_utc": "2026-11-05T08:42:53.313767+00:00",
+      "completed_at_utc": "2026-11-05T08:42:53.606593+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "reference_changes": false,
+  "dependency_changes": false,
+  "staging_dispatched": false,
+  "publication_dispatched": false,
+  "remaining_blockers": [
+    "Parties persisted reads fail with Gateway 503.",
+    "Nonmember rejection smoke detects persisted business state.",
+    "Fresh committed-source full CI, staging, candidate-bound acceptance, production approval and both public-content checks remain required."
+  ]
+}

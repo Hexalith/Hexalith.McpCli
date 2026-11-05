@@ -1,0 +1,149 @@
+[
+  {
+    "operation": "parties.create-party",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/parties.create-party/live-result.json",
+    "sha256": "e143ab42dd5d873cd180ace2aa39764127fd34315062e9f2cd1f278d27344003",
+    "error": "VectorError: persisted-invocation parties.get-party: read deadline: persisted-invocation parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\", \"/document/type\", \"/document/isErased\", \"/document/personDetails/lastName\", \"/document/contactChannels\", \"/document/contactChannels/0/id\", \"/document/contactChannels/0/type\", \"/document/contactChannels/0/value\", \"/document/contactChannels/0/isPreferred\", \"/document/identifiers\", \"/document/identifiers/0/id\", \"/document/identifiers/0/type\", \"/document/identifiers/0/value\"]",
+    "passed": false
+  },
+  {
+    "operation": "parties.deactivate-party",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/parties.deactivate-party/live-result.json",
+    "sha256": "6cb9806a17cf586f90545fb3e047411b5a3adcec18562e7543034a508a606ee9",
+    "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]",
+    "passed": false
+  },
+  {
+    "operation": "parties.get-party",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/parties.get-party/live-result.json",
+    "sha256": "559beec055e44ca1c8664ada913fd1ca85069793953348483ebe931589892ad1",
+    "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]",
+    "passed": false
+  },
+  {
+    "operation": "parties.list-parties",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/parties.list-parties/live-result.json",
+    "sha256": "969df47e155558acf016ff70cbcd37d71dcdf6ce233315ee1f54a32f1eaac89a",
+    "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]",
+    "passed": false
+  },
+  {
+    "operation": "parties.reactivate-party",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/parties.reactivate-party/live-result.json",
+    "sha256": "c62a3bf5349267e52d732f667ebfd7f8fcefba96ac2474c4458744e8c4aa5c3d",
+    "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]",
+    "passed": false
+  },
+  {
+    "operation": "parties.search-parties",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/parties.search-parties/live-result.json",
+    "sha256": "caea605e5fbd11aaaf03e20f0afd87c901c3ae393eed0855550c50887408d157",
+    "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]",
+    "passed": false
+  },
+  {
+    "operation": "parties.update-party",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/parties.update-party/live-result.json",
+    "sha256": "ccb1d51b738a9fa3be376820053a39477219e5bb4789af5d97ba30c5684b61c3",
+    "error": "VectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\"/document/id\", \"/document/isActive\", \"/document/personDetails/firstName\"]",
+    "passed": false
+  },
+  {
+    "operation": "tenants.add-user-to-tenant",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.add-user-to-tenant/live-result.json",
+    "sha256": "711d3e8009af4c247d75ad238f59aabf31c611d346b2980117a53e0154cc4380",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.change-user-role",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.change-user-role/live-result.json",
+    "sha256": "7a70a8d2b7452616185435fb289ab61f2023499681d3f698837c1a61fe96bc26",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.create-tenant",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.create-tenant/live-result.json",
+    "sha256": "a0347afb816bcdbe6bbd79b02b6099d102242d4ec2c93155991d8624bd07ea9d",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.disable-tenant",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.disable-tenant/live-result.json",
+    "sha256": "9542ac3de8b6bcf7265d244116ef83003dbaa484983995904692089f0357a7b9",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.enable-tenant",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.enable-tenant/live-result.json",
+    "sha256": "46d3f7a56c26a33970cb52d824fdf95057703fef088f2ce2712295ce5a4994c2",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.get-tenant",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.get-tenant/live-result.json",
+    "sha256": "7fe51976c6f746dd68a73f11c1456a49e43c4a475f343c5f2d0cc20a072897cc",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.get-tenant-audit",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.get-tenant-audit/live-result.json",
+    "sha256": "ec685437155a270770b7f107dae15e04552776eede9133cf801b48c6b5db4db4",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.get-tenant-users",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.get-tenant-users/live-result.json",
+    "sha256": "f627a09df71f3a2fb6e69896acfa6d8f381356a2db68f9a8e3df9a9233894f96",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.get-user-tenants",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.get-user-tenants/live-result.json",
+    "sha256": "5cb552ad1300e9672e82c728ddc020c8257bc676524eda4bceb2ef30772183c2",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.list-tenants",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.list-tenants/live-result.json",
+    "sha256": "f0d446d696d7ec8276fdeb8bdbc72a59125808207c49d167d500bce6bc9a9983",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.remove-tenant-configuration",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.remove-tenant-configuration/live-result.json",
+    "sha256": "76d55d5cae2da151a8c9fe4c2984f6113c27b21393546380beaccc8b2648bb81",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.remove-user-from-tenant",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.remove-user-from-tenant/live-result.json",
+    "sha256": "a449e9597c87934fc74fecac22730a4766da1effab0a4a58250c204a48c50367",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.set-tenant-configuration",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.set-tenant-configuration/live-result.json",
+    "sha256": "2d432579f316cd569c6c0d25def03c6041367dd5e2818939602d8248d1afffd9",
+    "error": null,
+    "passed": true
+  },
+  {
+    "operation": "tenants.update-tenant",
+    "source_path_in_artifact": "c93410d6e32246a691fffae62de96001/vectors/edb23d77a1db4189969804cbf41ed4cb/tenants.update-tenant/live-result.json",
+    "sha256": "c6eac9444153f8c3ed14036997d8d2a8a4c93455fb52a2d0de681d46f7f0803d",
+    "error": null,
+    "passed": true
+  }
+]

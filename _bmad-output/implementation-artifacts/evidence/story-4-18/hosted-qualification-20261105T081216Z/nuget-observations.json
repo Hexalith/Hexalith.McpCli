@@ -1,0 +1,64 @@
+[
+  {
+    "package": "hexalith.eventstore.contracts",
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.contracts/index.json",
+    "observed_at": "2026-11-05T08:14:09.115148+00:00",
+    "http_status": 200,
+    "body_sha256": "d19f322372971fafc1ffffb9f4f87f8ef61a05248893ea994d3dbfa7c3d9e86c",
+    "scope": "Read-only version index observation; not production preflight",
+    "latest_version": "4.1.0"
+  },
+  {
+    "package": "hexalith.eventstore.client",
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.client/index.json",
+    "observed_at": "2026-11-05T08:14:09.115387+00:00",
+    "http_status": 200,
+    "body_sha256": "d19f322372971fafc1ffffb9f4f87f8ef61a05248893ea994d3dbfa7c3d9e86c",
+    "scope": "Read-only version index observation; not production preflight",
+    "latest_version": "4.1.0"
+  },
+  {
+    "package": "hexalith.eventstore.server",
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.server/index.json",
+    "observed_at": "2026-11-05T08:14:09.115579+00:00",
+    "http_status": 200,
+    "body_sha256": "d19f322372971fafc1ffffb9f4f87f8ef61a05248893ea994d3dbfa7c3d9e86c",
+    "scope": "Read-only version index observation; not production preflight",
+    "latest_version": "4.1.0"
+  },
+  {
+    "package": "hexalith.parties.contracts",
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.contracts/index.json",
+    "observed_at": "2026-11-05T08:14:09.115978+00:00",
+    "http_status": 200,
+    "body_sha256": "28129df49cf4cbb5689d61be4809ae1899223992ec91382974ddcee263f1cf92",
+    "scope": "Read-only version index observation; not production preflight",
+    "latest_version": "3.0.0"
+  },
+  {
+    "package": "hexalith.tenants.contracts",
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.contracts/index.json",
+    "observed_at": "2026-11-05T08:14:09.116360+00:00",
+    "http_status": 200,
+    "body_sha256": "0d5d4cd1b83cc75fac1fe4ddff48834cda31c6f193637e14dd25f2c1206357b3",
+    "scope": "Read-only version index observation; not production preflight",
+    "latest_version": "7.0.2"
+  },
+  {
+    "package": "hexalith.mcpcli.abstractions",
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/index.json",
+    "observed_at": "2026-11-05T08:14:09.116646+00:00",
+    "http_status": 200,
+    "body_sha256": "680f72ac205c0f8fefaf5569f47a3fb3b6e1318a0cc79a94f438a113b40006aa",
+    "scope": "Read-only version index observation; not production preflight",
+    "latest_version": "2.0.0"
+  },
+  {
+    "package": "hexalith.mcpcli",
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/index.json",
+    "observed_at": "2026-11-05T08:14:09.116905+00:00",
+    "http_status": 404,
+    "body_sha256": "d4f91dae38ef7dfba3375c047ee185dc0705ca8e40bc195f5aed05b28b54430b",
+    "scope": "Read-only version index observation; not production preflight"
+  }
+]

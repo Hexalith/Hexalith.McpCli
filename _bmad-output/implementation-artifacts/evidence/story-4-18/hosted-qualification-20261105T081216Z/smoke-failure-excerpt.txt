@@ -1,0 +1,14 @@
+[91m    Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument [FAIL]
+[0m[37m      System.InvalidOperationException : The nonmember smoke target has persisted business state.
+[0m[90m      Stack Trace:
+[0m[37m        tests/Hexalith.McpCli.Integration.Tests/NativeAdministratorBoundary.cs(46,0): at Hexalith.McpCli.Integration.Tests.NativeAdministratorBoundary.<>c__DisplayClass1_0.<<RequireNonmemberRejectionAsync>g__RequireAbsentAsync|0>d.MoveNext()
+[0m[37m        --- End of stack trace from previous location ---
+[0m[37m        tests/Hexalith.McpCli.Integration.Tests/NativeAdministratorBoundary.cs(39,0): at Hexalith.McpCli.Integration.Tests.NativeAdministratorBoundary.RequireNonmemberRejectionAsync(IEventStoreGatewayClient nonmember, IEventStoreGatewayClient administrator, CancellationToken cancellationToken)
+[0m[37m        tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeTests.cs(40,0): at Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument()
+[0m[37m        --- End of stack trace from previous location ---
+[0minfo: CommunityToolkit.Aspire.Hosting.Dapr.DaprDistributedApplicationLifecycleHook[0]
+      Stopping Dapr-related resources...
+[37m  Finished:    Hexalith.McpCli.Integration.Tests (ID = 'f021412994883d412e43a3eac6eeddacc883f2296b3d06418b0d5b8ccdbb2c1c')
+[0m[37m=== TEST EXECUTION SUMMARY ===
+[0m[37m   Hexalith.McpCli.Integration.Tests  Total: 1, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 79.934s
+[0m[0m

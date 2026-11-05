@@ -1,0 +1,2 @@
+dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a:src/Hexalith.EventStore/Controllers/QueriesController.cs:318:                || !Hexalith.EventStore.Contracts.Routing.RouteCatalogQuerySelectorPolicy.Matches(selected.Declaration, request.ProjectionActorType))
+dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a:src/Hexalith.EventStore/Queries/HandlerAwareQueryRouter.cs:70:                || !Hexalith.EventStore.Contracts.Routing.RouteCatalogQuerySelectorPolicy.Matches(committed.Declaration, query.ProjectionActorType))

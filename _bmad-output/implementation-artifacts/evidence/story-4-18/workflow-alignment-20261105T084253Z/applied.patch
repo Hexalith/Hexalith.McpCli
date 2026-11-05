@@ -1,0 +1,25 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 7c6de2a..8932bd1 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -15,7 +15,7 @@ permissions:
+ 
+ jobs:
+   ci:
+-    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@4ae27c89226737e2d26925a23298ee619eb4efb9
++    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@06a51f55bfe2e03a06e1121d94a41e98f1e3e251
+     with:
+       solution: Hexalith.McpCli.slnx
+       test-platform: microsoft-testing-platform
+diff --git a/.github/workflows/commitlint.yml b/.github/workflows/commitlint.yml
+index 83ec784..fb30a63 100644
+--- a/.github/workflows/commitlint.yml
++++ b/.github/workflows/commitlint.yml
+@@ -16,6 +16,6 @@ permissions:
+ 
+ jobs:
+   commitlint:
+-    uses: Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@4ae27c89226737e2d26925a23298ee619eb4efb9
++    uses: Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@06a51f55bfe2e03a06e1121d94a41e98f1e3e251
+     with:
+       pull-request-title: ${{ github.event.pull_request.title }}

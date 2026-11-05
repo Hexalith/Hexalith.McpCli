@@ -1,0 +1,16 @@
+[
+  {
+    "id": 13351455238,
+    "name": "aspire-hook-evidence",
+    "sha256": "sha256:ecb4af205da165c5d6f2b85baa6e5ac20aa17b61345c42f1f5a363d4f7dfcddb",
+    "verified": true,
+    "path": "/tmp/mcpcli-4-18-qualification-20261105T081216Z/aspire-hook-evidence.zip"
+  },
+  {
+    "id": 13346018221,
+    "name": "live-preflight-evidence",
+    "sha256": "sha256:6c4e3afe25eed367cd75903606e7f451c2ae32f2f63972fbf98e7fa1441e5cae",
+    "verified": true,
+    "path": "/tmp/mcpcli-4-18-qualification-20261105T081216Z/live-preflight-evidence.zip"
+  }
+]
