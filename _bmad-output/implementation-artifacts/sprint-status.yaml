@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '2026-11-05'
+last_updated: '2026-11-06'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -85,7 +85,7 @@ development_status:
   4-15-publish-the-no-new-server-rule: done
   4-16-stage-and-validate-the-paired-packages: done # Build/review complete; staging 40885068007 passed all three OS lanes and required Windows checks.
   4-17-verify-the-operator-setup-experience: done # Code review pass 2 2026-10-31: 9 patches plus 1 resolved decision applied; 61 Platform tests, 18 README assertions and 7 Claude Code prompt checks pass; accepted timing exception and deferred work retained.
-  4-18-publish-the-validated-package-pair: review # Build complete 2026-11-05: all 11 review patches and 6 follow-up corrections verified; 1,678 ordinary tests, 151 release tests and 4 selector tests pass. Existing Tenants deferral retained.
+  4-18-publish-the-validated-package-pair: in-progress # Code review pass 3 (2026-11-06): 10 patches left as action items, 1 deferral recorded in the ledger. Published 2.0.1 unchanged.
   epic-4-retrospective: optional
 
   epic-5: backlog
