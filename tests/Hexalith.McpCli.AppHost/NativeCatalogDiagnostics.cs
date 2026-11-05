@@ -12,6 +12,7 @@ internal static class NativeCatalogDiagnostics
     {
         text = Regex.Replace(text, "-----BEGIN [^-]+-----.*?(?:-----END [^-]+-----|\\z)", "[REDACTED PEM]", RegexOptions.Singleline);
         text = Regex.Replace(text, @"\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+", "[REDACTED JWT]");
+        text = Regex.Replace(text, @"(?i)\bBearer\s+[A-Za-z0-9._~+/-]+=*", "Bearer [REDACTED]");
         text = Regex.Replace(text, @"(?i)((?<quote>\\+)""[^""\r\n]*(?:SigningKey|PrivateKey)\k<quote>""\s*:\s*)\k<quote>""[^""\r\n]*(?:\k<quote>""|\z)",
             match => match.Groups[1].Value + match.Groups["quote"].Value + "\"[REDACTED]" + match.Groups["quote"].Value + "\"");
         text = Regex.Replace(text, "\"(?:[^\"\\\\]|\\\\.)*\"", match =>

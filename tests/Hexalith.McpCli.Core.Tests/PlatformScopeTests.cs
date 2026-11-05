@@ -132,6 +132,11 @@ public sealed class PlatformScopeTests
     [InlineData("platform:Upper", null)]
     [InlineData("platform:", null)]
     [InlineData("platform:double--dash", null)]
+    [InlineData("platform:-routing", null)]
+    [InlineData("platform:routing-", null)]
+    [InlineData("platform:rou_ting", null)]
+    [InlineData("platform:a:b", null)]
+    [InlineData("other-tenant", null)]
     [InlineData("platform:routing", "fixed-tenant")]
     public void InvalidPlatformDeclarationIsExcluded(string scope, string? moduleFixedTenant)
     {

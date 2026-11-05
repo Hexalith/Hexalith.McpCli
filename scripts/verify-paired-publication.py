@@ -128,9 +128,24 @@ def redact_operator(text):
     return text
 
 
+def redact_operator_values(value):
+    if isinstance(value, dict):
+        return {redact_operator_values(key): redact_operator_values(item) for key, item in value.items()}
+    if isinstance(value, list):
+        return [redact_operator_values(item) for item in value]
+    if not isinstance(value, str):
+        return value
+    redacted = redact_operator(value)
+    try:
+        decoded = json.loads(redacted)
+    except ValueError:
+        return redacted
+    sanitized = redact_operator_values(decoded)
+    return json.dumps(sanitized, ensure_ascii=False) if sanitized != decoded else redacted
+
+
 def require_sanitized_operator(decision):
-    serialized = json.dumps(decision, ensure_ascii=False)
-    if redact_operator(serialized) != serialized:
+    if redact_operator_values(decision) != decision:
         raise ValueError('Operator acceptance contains a credential or private key; redact the source evidence first.')
 
 
@@ -139,7 +154,8 @@ def record_operator(serialized, output):
     if not isinstance(decision, dict):
         raise ValueError('Operator acceptance must be a JSON object.')
     require_sanitized_operator(decision)
-    write_new(output, decision)
+    with Path(output).open('x', encoding='utf-8', newline='') as recorded:
+        recorded.write(serialized)
 
 
 def retain_operator(paths, output):
@@ -155,13 +171,15 @@ def retain_operator(paths, output):
             continue
         raw = path.read_bytes()
         decoded = raw.decode('utf-8')
-        # Decode JSON escapes before credential matching; keep exact approved bytes when safe.
+        # Inspect decoded strings and keys recursively; keep exact approved bytes when safe.
         try:
-            normalized = json.dumps(json.loads(decoded), ensure_ascii=False, indent=2) + '\n'
+            document = json.loads(decoded)
+            sanitized = redact_operator_values(document)
+            redacted = sanitized != document
+            retained = json.dumps(sanitized, ensure_ascii=False, indent=2) + '\n' if redacted else decoded
         except ValueError:
-            normalized = decoded
-        redacted = redact_operator(decoded) != decoded or redact_operator(normalized) != normalized
-        retained = redact_operator(normalized) if redacted else decoded
+            retained = redact_operator(decoded)
+            redacted = retained != decoded
         name = str(index + 1) + '-' + path.name
         (output / name).write_text(retained, encoding='utf-8', newline='')
         entries.append({'input_name': path.name, 'retained_name': name, 'original_sha256': hashlib.sha256(raw).hexdigest(),
@@ -250,7 +268,7 @@ def operator_acceptance(path, prepared, accepted_path, origin, actor):
                 or any(re.fullmatch(ulid, command.get(key, '')) is None for key in ('message_id', 'correlation_id'))
                 or persisted.get('tenant') != session['selected_tenant'] or persisted.get('id') != session['party_id']
                 or persisted.get('isActive') is not True or persisted.get('isErased') is not False
-                or not persisted.get('synthetic_fields_verified') or session['party_id'] in party_ids):
+                or persisted.get('synthetic_fields_verified') is not True or session['party_id'] in party_ids):
             raise ValueError('Client sessions must prove the approved command and matching persisted synthetic Party.')
         party_ids.add(session['party_id'])
     return decision
@@ -307,7 +325,10 @@ def validate(candidate, operator_path, version, sha, run_id, actor, output):
         acceptance_source = root / 'accepted-staging-only/acceptance-source.json'
         validate_source_evidence(read_json(acceptance_source), sha)
         validate_pair_content(preparation / 'packages', version, sha)
-        operator_acceptance(operator_path, prepared, accepted_path, origin, actor)
+        decision = operator_acceptance(operator_path, prepared, accepted_path, origin, actor)
+        operator_decision = {'schema': decision['schema']}
+        if decision['schema'] == 'mcpcli-paired-automated-acceptance/v1':
+            operator_decision['authorization'] = decision['authorization']
         fresh_source = root / 'publication-source.json'
         subprocess.run([sys.executable, str(ROOT / 'scripts/verify-release-source.py'), '--output', str(fresh_source),
                         '--', sha, os.environ.get('DISPATCH_REF', ''), 'paired'], check=True, capture_output=True)
@@ -317,6 +338,7 @@ def validate(candidate, operator_path, version, sha, run_id, actor, output):
                    'origin': origin, 'preparation_sha256': digest(prepared_path),
                    'acceptance_sha256': digest(accepted_path), 'acceptance_source_sha256': digest(acceptance_source),
                    'operator_sha256': digest(operator_path), 'operator_actor': actor,
+                   'operator_decision': operator_decision,
                    'source_evidence': read_json(fresh_source)}
         write_new(output, receipt)
         return receipt

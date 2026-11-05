@@ -45,7 +45,9 @@ internal static class NativeAdministratorBoundary
                 await administrator.SubmitQueryAsync(query, cancellationToken: deadline.Token).ConfigureAwait(false);
                 throw new InvalidOperationException("The nonmember smoke target has persisted business state.");
             }
-            catch (EventStoreGatewayException missing) when (missing.StatusCode == 404) { }
+            // Bound SDK 4.1.0 QueryNotFoundExceptionHandler emits this stable projection-absence code.
+            catch (EventStoreGatewayException missing) when (missing.StatusCode == 404
+                && missing.ReasonCode == QueryProblemReasonCodes.ProjectionMissing) { }
         }
     }
 }

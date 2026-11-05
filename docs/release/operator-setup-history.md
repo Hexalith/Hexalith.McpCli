@@ -12,14 +12,14 @@ Story 4.17 uses the accepted **staging-only** pair from source `32fb5dbf75216ada
 | `accepted-pair.json` | `b90d5295de08a48451f29b4d830692af83770c717d1205f078ab24243d5ff026` |
 
 
-The [three-service preparation status](../../_bmad-output/implementation-artifacts/evidence/story-4-17/three-service-preparation-20261031/status.json) records the owner environment used for Story 4.17. It was removed on 2026-10-31 after the client sessions and the timed run ([cleanup receipt](../../_bmad-output/implementation-artifacts/evidence/story-4-17/cleanup-20261031/receipt.json)); their results are in the [session checklist](operator-setup-checklist.md). A new environment needs its own reviewed preparation. A prepared private profile can support ordinary client sessions; the independent timed operator must use a fresh installation and fresh `MCPCLI_HOME`, then create/configure the profile and client registration after timing begins. The owner supplies endpoint, tenant, actor, token and expiry privately beforehand.
+The [three-service preparation status](../../_bmad-output/implementation-artifacts/evidence/story-4-17/three-service-preparation-20261031/status.json) records the owner environment used for Story 4.17. It was removed on 2026-10-31 after the client sessions and the timed run ([cleanup receipt](../../_bmad-output/implementation-artifacts/evidence/story-4-17/cleanup-20261031/receipt.json)); their results are in the [Story 4.17 acceptance table below](#story-417-acceptance). A new environment needs its own reviewed preparation. A prepared private profile can support ordinary client sessions; the independent timed operator must use a fresh installation and fresh `MCPCLI_HOME`, then create/configure the profile and client registration after timing begins. The owner supplies endpoint, tenant, actor, token and expiry privately beforehand.
 
 
 ## Story 4.17 acceptance
 
 Story [4.17](../../_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md) has all required rows evidenced, with the timing exception below accepted by the user. Use the [README operator setup](../../README.md#operator-setup-with-an-accepted-staged-tool) as the operator's instructions. This document is the observer's procedure and evidence index. Offline protocol smoke cannot satisfy a client row.
 
-The approved staged tool is 1.2.0 from `32fb5dbf75216adaf21551bcfa36439741c41e01`; recheck both package hashes, prepared/accepted receipt hashes and clean-source binding against the README before every new installation. Do not publish the pair or enable paired publication.
+The approved staged tool is 1.2.0 from `32fb5dbf75216adaf21551bcfa36439741c41e01`; recheck both package hashes and prepared/accepted receipt hashes against the hash table above, and the clean-source binding against the accepted staging packet, before installing that historical pair. Story 4.17 prohibited publishing that pair or enabling paired publication; current publication follows the [operator checklist](operator-setup-checklist.md).
 
 | Required result | Status | Evidence / exact blocker |
 | --- | --- | --- |

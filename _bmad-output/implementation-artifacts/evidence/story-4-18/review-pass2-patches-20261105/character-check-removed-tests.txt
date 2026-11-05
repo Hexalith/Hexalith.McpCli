@@ -1,0 +1,25 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.McpCli.Core.Tests
+  Discovered:  Hexalith.McpCli.Core.Tests
+  Starting:    Hexalith.McpCli.Core.Tests
+    Hexalith.McpCli.Core.Tests.PlatformScopeTests.InvalidPlatformDeclarationIsExcluded(scope: "platform:rou_ting", moduleFixedTenant: null) [FAIL]
+      Shouldly.ShouldAssertException : catalog.Diagnostics
+          should contain an element satisfying the condition
+      (((diagnostic.Category == "invalid_routing_value") && (diagnostic.TypeName == "ProbeQuery")) && diagnostic.Message.Contains("PlatformScope", Ordinal))
+          but does not
+      Stack Trace:
+        /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/PlatformScopeTests.cs(161,0): at Hexalith.McpCli.Core.Tests.PlatformScopeTests.InvalidPlatformDeclarationIsExcluded(String scope, String moduleFixedTenant)
+           at InvokeStub_PlatformScopeTests.InvalidPlatformDeclarationIsExcluded(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.McpCli.Core.Tests.PlatformScopeTests.InvalidPlatformDeclarationIsExcluded(scope: "platform:a:b", moduleFixedTenant: null) [FAIL]
+      Shouldly.ShouldAssertException : catalog.Diagnostics
+          should contain an element satisfying the condition
+      (((diagnostic.Category == "invalid_routing_value") && (diagnostic.TypeName == "ProbeQuery")) && diagnostic.Message.Contains("PlatformScope", Ordinal))
+          but does not
+      Stack Trace:
+        /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/PlatformScopeTests.cs(161,0): at Hexalith.McpCli.Core.Tests.PlatformScopeTests.InvalidPlatformDeclarationIsExcluded(String scope, String moduleFixedTenant)
+           at InvokeStub_PlatformScopeTests.InvalidPlatformDeclarationIsExcluded(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Finished:    Hexalith.McpCli.Core.Tests (ID = '3efc5b572f57111550f262c9152479243bd08eed1d328a9916a760e776baf39a')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Core.Tests  Total: 24, Errors: 0, Failed: 2, Skipped: 0, Not Run: 0, Time: 0.374s

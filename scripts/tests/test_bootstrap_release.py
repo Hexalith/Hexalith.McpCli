@@ -8,9 +8,11 @@ import re
 import shutil
 import subprocess
 import struct
+import sys
 import tempfile
 import unittest
 import warnings
+from unittest.mock import patch
 from zipfile import ZipFile
 
 
@@ -305,10 +307,18 @@ origin = state["origin"]
 args = sys.argv[1:]
 with (root / "gh.log").open("a") as log: log.write(json.dumps(args) + "\\n")
 endpoint = next(arg for arg in args if arg.startswith("repos/"))
+refs_path = root / "paired-refs.json"
+refs = json.loads(refs_path.read_text()) if refs_path.exists() else []
 if "POST" in args:
     assert endpoint.endswith("/git/refs"), args
-    result = {}
-elif "/git/matching-refs/tags/" in endpoint: result = []
+    fields = dict(args[index + 1].split("=", 1) for index, arg in enumerate(args) if arg == "-f")
+    assert not any(item["ref"] == fields["ref"] for item in refs), fields
+    result = {"ref": fields["ref"], "object": {"type": "commit", "sha": fields["sha"]}}
+    refs.append(result)
+    refs_path.write_text(json.dumps(refs))
+elif "/git/matching-refs/tags/" in endpoint:
+    prefix = "refs/tags/" + endpoint.split("/git/matching-refs/tags/", 1)[1]
+    result = [item for item in refs if item["ref"].startswith(prefix)]
 elif endpoint.endswith("/workflows/release.yml"): result = {"id": 1}
 elif endpoint.endswith("/jobs"): result = {"total_count": len(state["jobs"]), "jobs": state["jobs"]}
 elif endpoint.endswith("/artifacts"):
@@ -401,13 +411,13 @@ urllib.request.urlopen = paired_registry
     def run_workflow_step(self, job, name):
         block = self.workflow_step(job, name)
         environment = dict(self.env)
-        for key in ("DISPATCH_SHA", "DISPATCH_REF", "REPOSITORY", "MCPCLI_RELEASE_PHASE", "RECOVERY_VERSION",
+        for key in ("DISPATCH_SHA", "DISPATCH_REF", "REPOSITORY", "MCPCLI_RELEASE_PHASE", "PHASE", "RECOVERY_VERSION",
                     "RECOVERY_PHASE", "GH_TOKEN", "GH_REPO", "GITHUB_TOKEN", "NUGET_API_KEY"):
             environment.pop(key, None)
         environment.update(self.workflow_exports)
         if "        env:\n" in block:
             declarations = block.split("        env:\n", 1)[1].split("        run:", 1)[0]
-            values = {"${{ inputs.phase }}": "bootstrap", "${{ inputs.recovery_version }}": self.env.get("WORKFLOW_RECOVERY_VERSION", "1.0.0"),
+            values = {"${{ inputs.phase }}": self.env.get("WORKFLOW_PHASE", "bootstrap"), "${{ inputs.recovery_version }}": self.env.get("WORKFLOW_RECOVERY_VERSION", "1.0.0"),
                       "${{ github.token }}": "fixture-github-token", "${{ github.repository }}": "fixture/repo",
                       "${{ secrets.GITHUB_TOKEN }}": "fixture-github-token",
                       "${{ github.sha }}": self.env.get("WORKFLOW_SHA", SHA),
@@ -1739,6 +1749,28 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
                 self.assertNotIn("\x1b", result.stderr)
                 self.assertNotIn("\x00", result.stderr)
                 self.assert_no_push()
+
+    def test_workflow_refuses_paired_recovery_before_production_approval(self):
+        for phase, version, accepted in (("paired", "1.0.0", False), ("bootstrap", "1.0.0", True),
+                                          ("paired", "", True)):
+            with self.subTest(phase=phase, version=version):
+                self.env.update(WORKFLOW_PHASE=phase, WORKFLOW_RECOVERY_VERSION=version)
+                result = self.run_workflow_step("verify-source", "Refuse unsupported paired recovery before production approval")
+                self.assertEqual(result.returncode == 0, accepted, result.stderr)
+                self.assertEqual(result.stdout, "")
+                self.assertEqual(result.stderr, "")
+                self.assert_no_push()
+
+    def test_subprocess_failure_detail_decodes_bytes_before_redacting_and_retaining(self):
+        sys.path.insert(0, str(ROOT / 'scripts'))
+        from paired_release import module
+        gate = module('verify-release-source')
+        with patch.dict(os.environ, {'GH_TOKEN': 'fixture-byte-secret'}):
+            for stderr in (b'HTTP 403: denied\nfixture-byte-secret\x00\n',
+                           'HTTP 403: denied\nfixture-byte-secret\x00\n'):
+                error = subprocess.CalledProcessError(1, ['gh', 'api'], stderr=stderr)
+                self.assertEqual(gate.failure_detail(error),
+                    "Command '['gh', 'api']' returned non-zero exit status 1.\nHTTP 403: denied\n[REDACTED]")
 
     def test_source_gate_accepts_exact_detached_head_for_release_and_recovery(self):
         self.env["LOCAL_SOURCE_STATE"] = "detached"

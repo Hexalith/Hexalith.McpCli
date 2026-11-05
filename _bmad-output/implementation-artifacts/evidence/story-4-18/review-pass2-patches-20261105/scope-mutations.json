@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "prefix-check-removed",
+    "detected": true,
+    "test_exit_code": 1
+  },
+  {
+    "mutation": "character-check-removed",
+    "detected": true,
+    "test_exit_code": 1
+  },
+  {
+    "mutation": "boundary-character-checks-removed",
+    "detected": true,
+    "test_exit_code": 1
+  }
+]

@@ -21,6 +21,10 @@ public sealed class NativeAdministratorBoundaryTests
     [InlineData("authority-unavailable")]
     [InlineData("present-before")]
     [InlineData("changed-after")]
+    [InlineData("missing-endpoint-before")]
+    [InlineData("missing-endpoint-after")]
+    [InlineData("unrelated-not-found-before")]
+    [InlineData("unrelated-not-found-after")]
     public async Task RequiresOwnerPermissionRejectionAndUnchangedState(string outcome)
     {
         var nonmember = Substitute.For<IEventStoreGatewayClient>();
@@ -39,7 +43,13 @@ public sealed class NativeAdministratorBoundaryTests
                 Assert.True(call.Arg<CancellationToken>().CanBeCanceled);
                 return outcome == "present-before" || outcome == "changed-after" && reads == 2
                     ? Task.FromResult(new EventStoreQueryResult("correlation", JsonSerializer.SerializeToElement(new { id = request.AggregateId }), false, null))
-                    : Task.FromException<EventStoreQueryResult>(new EventStoreGatewayException(404, "Not Found"));
+                    : Task.FromException<EventStoreQueryResult>(outcome == "missing-endpoint-before"
+                        || outcome == "missing-endpoint-after" && reads == 2
+                        ? new EventStoreGatewayException(404, "Not Found")
+                        : new EventStoreGatewayException(404, "Not Found", type: "https://hexalith.io/problems/not-found",
+                            detail: "The requested resource was not found.", reasonCode: outcome == "unrelated-not-found-before"
+                                || outcome == "unrelated-not-found-after" && reads == 2
+                                ? "other_resource_missing" : QueryProblemReasonCodes.ProjectionMissing));
             });
         nonmember.SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>()).Returns(call =>
         {
@@ -65,7 +75,8 @@ public sealed class NativeAdministratorBoundaryTests
         else
         {
             await Assert.ThrowsAnyAsync<Exception>(() => test);
-            Assert.Equal(outcome == "present-before" ? 0 : 1, calls.Count(call => call == "command"));
+            Assert.Equal(outcome == "present-before" || outcome.EndsWith("-before", StringComparison.Ordinal) ? 0 : 1,
+                calls.Count(call => call == "command"));
         }
     }
 }

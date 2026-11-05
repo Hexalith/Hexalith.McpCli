@@ -256,7 +256,11 @@ internal static class NativeCatalogTool
         }
         string diagnostics = string.Empty;
         try { diagnostics = string.Join(Environment.NewLine, await Task.WhenAll(output, error).WaitAsync(TimeSpan.FromSeconds(2)).ConfigureAwait(false)); }
-        catch (Exception diagnosticFailure) { failure ??= diagnosticFailure; }
+        catch (Exception diagnosticFailure)
+        {
+            failure ??= diagnosticFailure;
+            if (diagnosticFailure is TimeoutException) failure.Data["CatalogOwnedProcessStillRunning"] = true;
+        }
         diagnostics = NativeCatalogDiagnostics.Sanitize(diagnostics);
         try { File.WriteAllText(Path.Combine(directory, log), diagnostics); }
         catch (Exception logFailure)

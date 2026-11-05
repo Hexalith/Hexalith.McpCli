@@ -1,0 +1,58 @@
+{
+  "abstractions": {
+    "total": 20,
+    "failed": 0,
+    "succeeded": 20,
+    "skipped": 0,
+    "skip_details": []
+  },
+  "analyzers": {
+    "total": 19,
+    "failed": 0,
+    "succeeded": 19,
+    "skipped": 0,
+    "skip_details": []
+  },
+  "core": {
+    "total": 740,
+    "failed": 0,
+    "succeeded": 736,
+    "skipped": 4,
+    "skip_details": [
+      "skipped Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls",
+      "  Windows ACLs are exercised only on Windows.",
+      "skipped Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsRestrictionPreservesInheritedExistingFiles",
+      "  Windows ACL inheritance is exercised only on Windows.",
+      "skipped Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten",
+      "  Windows ACLs are exercised only on Windows.",
+      "skipped Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction",
+      "  Runs only in the fresh benchmark child process."
+    ]
+  },
+  "manifest": {
+    "total": 334,
+    "failed": 0,
+    "succeeded": 334,
+    "skipped": 0,
+    "skip_details": []
+  },
+  "cli": {
+    "total": 491,
+    "failed": 0,
+    "succeeded": 489,
+    "skipped": 2,
+    "skip_details": [
+      "skipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync",
+      "  Windows file attributes are required for this fixture.",
+      "skipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync",
+      "  Windows ACLs are required for this fixture."
+    ]
+  },
+  "mcp": {
+    "total": 80,
+    "failed": 0,
+    "succeeded": 80,
+    "skipped": 0,
+    "skip_details": []
+  }
+}

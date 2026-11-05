@@ -1,3 +1,20 @@
+if (args is ["catalog-pipe-holder", string pidFile])
+{
+    File.WriteAllText(pidFile, Environment.ProcessId.ToString(System.Globalization.CultureInfo.InvariantCulture));
+    await Task.Delay(TimeSpan.FromSeconds(30));
+    return 0;
+}
+
+if (args is ["catalog-pipe-parent", string marker])
+{
+    var start = new System.Diagnostics.ProcessStartInfo(Environment.ProcessPath!) { UseShellExecute = false };
+    start.ArgumentList.Add("catalog-pipe-holder");
+    start.ArgumentList.Add(marker);
+    using System.Diagnostics.Process child = System.Diagnostics.Process.Start(start)
+        ?? throw new InvalidOperationException("The controlled pipe holder did not start.");
+    return 0;
+}
+
 if (Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_ASSETS") is { Length: > 0 } readerAssets)
 {
     File.AppendAllText(Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_CALLS")!, System.Text.Json.JsonSerializer.Serialize(args) + Environment.NewLine);

@@ -1,3 +1,5 @@
+using System.Diagnostics;
+using System.Reflection;
 using System.Text.Json;
 using System.IO.Compression;
 using System.Security.Cryptography;
@@ -163,6 +165,56 @@ public sealed class NativeCatalogToolTests : IDisposable
         string sanitized = NativeCatalogDiagnostics.Sanitize(diagnostic);
         Assert.DoesNotContain("do-not-retain", sanitized, StringComparison.Ordinal);
         Assert.Contains("REDACTED", sanitized, StringComparison.Ordinal);
+    }
+
+    /// <summary>Opaque child-process bearer credentials are redacted even without an ambient secret binding.</summary>
+    [Theory]
+    [InlineData(" ")]
+    [InlineData("\t")]
+    [InlineData("\n")]
+    public void OpaqueBearerDiagnosticsAreRedacted(string separator)
+    {
+        string diagnostic = "authorization: Bearer" + separator + "opaque-child-credential+/_~.abc==";
+        for (int escapes = 0; escapes < 3; escapes++)
+        {
+            string sanitized = NativeCatalogDiagnostics.Sanitize(diagnostic);
+            Assert.DoesNotContain("opaque-child-credential", sanitized, StringComparison.Ordinal);
+            Assert.Contains("REDACTED", sanitized, StringComparison.Ordinal);
+            diagnostic = JsonSerializer.Serialize(diagnostic);
+        }
+    }
+
+    /// <summary>An exited parent with inherited open pipes retains process ownership and the preparation directory.</summary>
+    [Fact]
+    public async Task OpenDescendantPipesRetainOwnedPreparation()
+    {
+        string path = Path.Combine(_root, "inherited-pipes"), pidFile = Path.Combine(_root, "descendant.pid");
+        string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
+        string executable = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "fixtures", "Topology.DaprStub", "bin",
+            configuration, "net10.0", OperatingSystem.IsWindows() ? "dapr.exe" : "dapr");
+        MethodInfo run = typeof(NativeCatalogTool).GetMethod("RunAsync", BindingFlags.NonPublic | BindingFlags.Static)!;
+        try
+        {
+            TimeoutException failure = await Assert.ThrowsAsync<TimeoutException>(() => NativeCatalogTool.RunOwnedPreparationAsync(path, "owner", async () =>
+            {
+                await ((Task)run.Invoke(null, [path, "build.log", new[] { "catalog-pipe-parent", pidFile },
+                    TestContext.Current.CancellationToken, executable])!);
+            }));
+            Assert.True(failure.Data.Contains("CatalogOwnedProcessStillRunning"));
+            Assert.Equal("owner", File.ReadAllText(Path.Combine(path, ".owner")));
+            using Process descendant = Process.GetProcessById(int.Parse(File.ReadAllText(pidFile), System.Globalization.CultureInfo.InvariantCulture));
+            Assert.False(descendant.HasExited);
+        }
+        finally
+        {
+            if (File.Exists(pidFile))
+            {
+                using Process descendant = Process.GetProcessById(int.Parse(File.ReadAllText(pidFile), System.Globalization.CultureInfo.InvariantCulture));
+                if (!descendant.HasExited) descendant.Kill(entireProcessTree: true);
+                using var cleanup = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+                await descendant.WaitForExitAsync(cleanup.Token);
+            }
+        }
     }
 
     /// <summary>Existing foreign paths and mismatched ownership markers are never removed or overwritten.</summary>

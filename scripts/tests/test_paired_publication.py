@@ -107,13 +107,14 @@ class PublicationTests(unittest.TestCase):
                     'MCPCLI_RECOVERY_VERSION': '', 'RECOVERY_VERSION': '', 'MCPCLI_PAIRED_CANDIDATE': str(self.candidate),
                     'MCPCLI_OPERATOR_ACCEPTANCE': str(self.operator), 'MCPCLI_PAIRED_PREFLIGHT': str(self.initial)}
         self.pushes = []
+        self.download_push_counts = []
         self.mode = None
         self.preflight_count = 0
 
     def execute(self, argv, **kwargs):
         if 'verify-release-source.py' in str(argv[1]):
             if self.mode == 'source-before-second' and len(self.pushes) == 1:
-                raise subprocess.CalledProcessError(1, argv, stderr='main moved')
+                raise subprocess.CalledProcessError(1, argv, stderr=b'main moved\n' + self.env['NUGET_API_KEY'].encode())
             write_new(Path(argv[argv.index('--output') + 1]), self.source_gate)
             return subprocess.CompletedProcess(argv, 0, stdout=b'', stderr=b'')
         self.assertEqual(argv[:3], ['dotnet', 'nuget', 'push'])
@@ -132,6 +133,7 @@ class PublicationTests(unittest.TestCase):
 
     def downloaded(self, url, destination, pushed):
         self.assertTrue(pushed)
+        self.download_push_counts.append(len(self.pushes))
         name = next(filename for filename in self.package_hashes if filename.lower() in url)
         destination.write_bytes((self.staging / name).read_bytes())
         with ZipFile(destination, 'a') as archive:
@@ -169,9 +171,20 @@ class PublicationTests(unittest.TestCase):
         self.assertTrue(all(item['status'] == 'public-verified' for item in result['packages'].values()))
         self.assertEqual(self.preflight_count, 5)  # initial, import, snapshot and immediately before each push
         self.assertEqual(result['operator_sha256'], digest(self.operator))
+        self.assertEqual(result['operator_decision'], {'schema': self.decision['schema']})
+        for name in ('snapshot-preflight.json', 'before-push-1.json', 'before-push-2.json'):
+            receipt = json.loads((self.publisher.OUTCOMES / name).read_text())
+            self.assertEqual(receipt['operator_decision'], {'schema': self.decision['schema']})
         self.assertEqual(result['origin'], self.origin)
 
-    def test_configured_shell_hooks_publish_both_exact_archives_and_complete_outcome(self):
+    def test_public_verification_waits_until_both_guarded_pushes_complete(self):
+        with self.controls():
+            self.import_pair()
+            self.publisher.publish(VERSION)
+        self.assertEqual(self.download_push_counts, [2, 2])
+        self.assertEqual(self.preflight_count, 5)
+
+    def test_configured_shell_hooks_publish_pair_and_first_source_bound_markers(self):
         shell = shell_fixtures.BootstrapReleaseTests()
         shell.setUp()
         self.addCleanup(shell.doCleanups)
@@ -201,6 +214,23 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(outcome['source_sha'], SHA)
         self.assertEqual(outcome['origin'], self.origin)
         self.assertEqual(len((shell.root / 'source.log').read_text().splitlines()), 5)
+        references = json.loads((shell.root / 'paired-refs.json').read_text())
+        self.assertEqual(references, [{'ref': 'refs/tags/' + self.publisher.MARKER + suffix,
+            'object': {'type': 'commit', 'sha': SHA}} for suffix in ('', '-v' + VERSION)])
+        earlier_sha = 'b' * 40
+        shell.env['EARLIER_BOOTSTRAP_SHA'] = earlier_sha
+        shell.executable('git', '''#!/usr/bin/env python3
+import json, os, sys
+from pathlib import Path
+assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTSTRAP_SHA"], os.environ["DISPATCH_SHA"]]
+(Path(os.environ["RELEASE_TEST_ROOT"]) / "recovery-ancestor.json").write_text(json.dumps(sys.argv[1:]))
+''')
+        with patch.dict(os.environ, shell.env):
+            with self.assertRaisesRegex(ValueError, 'closed'):
+                self.request.check_bootstrap_line()
+            self.request.check_bootstrap_recovery_line('1.0.0', earlier_sha)
+        self.assertEqual(json.loads((shell.root / 'recovery-ancestor.json').read_text()),
+                         ['merge-base', '--is-ancestor', earlier_sha, SHA])
 
     def test_snapshot_survives_original_import_changes_and_pushes_only_checked_bytes(self):
         self.mode = 'mutate-original-after-first'
@@ -211,10 +241,10 @@ class PublicationTests(unittest.TestCase):
 
     def test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry(self):
         for mode, pushes, first, second in [('first-push', 1, 'push-uncertain', 'not-attempted'),
-                ('second-push', 2, 'public-verified', 'push-uncertain'),
-                ('public-mismatch', 1, 'push-succeeded-public-unverified', 'not-attempted'),
-                ('source-before-second', 1, 'public-verified', 'not-attempted'),
-                ('second-occupied', 1, 'public-verified', 'not-attempted')]:
+                ('second-push', 2, 'push-succeeded-public-unverified', 'push-uncertain'),
+                ('public-mismatch', 2, 'push-succeeded-public-unverified', 'push-succeeded-public-unverified'),
+                ('source-before-second', 1, 'push-succeeded-public-unverified', 'not-attempted'),
+                ('second-occupied', 1, 'push-succeeded-public-unverified', 'not-attempted')]:
             with self.subTest(mode=mode):
                 # Each test case has a new immutable attempt and no retries.
                 self.publisher.IMPORTED = self.root / ('imported-' + mode)
@@ -231,6 +261,8 @@ class PublicationTests(unittest.TestCase):
                 result = json.loads((self.publisher.OUTCOMES / 'outcome.json').read_text())
                 self.assertEqual(result['status'], 'partial-or-uncertain')
                 self.assertEqual([result['packages'][identity]['status'] for identity in PAIR], [first, second])
+                if mode == 'source-before-second':
+                    self.assertTrue(result['reason'].endswith('main moved\n[REDACTED]'), result['reason'])
                 for path in self.publisher.OUTCOMES.rglob('*.json'):
                     self.assertNotIn(self.env['NUGET_API_KEY'], path.read_text())
 
@@ -245,7 +277,7 @@ class PublicationTests(unittest.TestCase):
             self.assertEqual(result['reason'], reason)
 
     def test_mutated_import_receipt_package_or_extra_package_never_pushes(self):
-        for mode in ('hash', 'receipt', 'extra'):
+        for mode in ('hash', 'receipt', 'decision', 'extra'):
             self.publisher.IMPORTED = self.root / ('bad-import-' + mode)
             self.publisher.OUTCOMES = self.root / ('bad-outcome-' + mode)
             self.initial = self.root / ('bad-preflight-' + mode + '.json')
@@ -254,6 +286,8 @@ class PublicationTests(unittest.TestCase):
                 self.import_pair()
                 if mode == 'hash': next((self.publisher.IMPORTED / 'packages').iterdir()).write_bytes(b'tamper')
                 elif mode == 'extra': (self.publisher.IMPORTED / 'packages/extra.nupkg').write_bytes(b'extra')
+                elif mode == 'decision': self.change_json(self.publisher.IMPORTED / 'import.json',
+                    lambda document: document.update(operator_decision={'schema': 'mcpcli-paired-automated-acceptance/v1'}))
                 else: self.change_json(self.publisher.IMPORTED / 'import.json', lambda document: document.update(operator_sha256='0' * 64))
                 with self.assertRaises(ValueError): self.publisher.publish(VERSION)
             self.assertEqual(self.pushes, [])
@@ -298,6 +332,12 @@ class PublicationTests(unittest.TestCase):
         result = json.loads((self.publisher.OUTCOMES / 'outcome.json').read_text())
         self.assertEqual(result['status'], 'paired-public-verified')
         self.assertEqual(result['operator_sha256'], digest(self.operator))
+        expected = {'schema': decision['schema'], 'authorization': decision['authorization']}
+        self.assertEqual(result['operator_decision'], expected)
+        for path in (self.initial, self.publisher.IMPORTED / 'preflight.json',
+                     self.publisher.IMPORTED / 'import.json', self.publisher.OUTCOMES / 'snapshot-preflight.json',
+                     self.publisher.OUTCOMES / 'before-push-1.json', self.publisher.OUTCOMES / 'before-push-2.json'):
+            self.assertEqual(json.loads(path.read_text())['operator_decision'], expected)
         self.assertNotIn('sessions', result)
         self.assertEqual([name for name, _ in self.pushes], [f'{identity}.{VERSION}.nupkg' for identity in PAIR])
 
@@ -322,7 +362,8 @@ class PublicationTests(unittest.TestCase):
             lambda d: d['sessions'][0]['command_result'].update(message_id='01m695ptvdn76pqh5f0wte7hs6'),
             lambda d: d['sessions'][0]['tenant_read'].update(tenant='wrong'),
             lambda d: d['sessions'][0]['tenant_read'].update(tenant='system'),
-            lambda d: d['sessions'][0]['persisted_party'].update(synthetic_fields_verified=False)]
+            *[lambda d, value=value: d['sessions'][0]['persisted_party'].update(synthetic_fields_verified=value)
+              for value in (False, 'false', 'true', 1, ['verified'], {'verified': True})]]
         for index, change in enumerate(mutations):
             decision = copy.deepcopy(self.decision)
             change(decision)
@@ -377,6 +418,38 @@ class PublicationTests(unittest.TestCase):
 
 
 class PublicationBoundaryTests(unittest.TestCase):
+    def test_decoded_nested_bearer_credentials_are_refused_and_redacted(self):
+        verifier = module('verify-paired-publication')
+        for separator in ('\t', '\n', '\r\n'):
+            credential = 'Bearer' + separator + 'opaque-fresh-credential'
+            for packet in ({'evidence': [{'nested': credential}]}, {credential: 'value'},
+                           {'evidence': json.dumps({'nested': [credential]})},
+                           {'evidence': json.dumps(json.dumps({credential: 'value'}))}):
+                with self.subTest(separator=repr(separator), packet=packet), tempfile.TemporaryDirectory() as temporary:
+                    root = Path(temporary)
+                    serialized = json.dumps(packet).replace('B', '\\u0042')
+                    source = root / 'source.json'
+                    source.write_text(serialized)
+                    with self.assertRaisesRegex(ValueError, 'credential'):
+                        verifier.record_operator(serialized, root / 'recorded.json')
+                    self.assertFalse((root / 'recorded.json').exists())
+                    verifier.retain_operator([source], root / 'retained')
+                    self.assertNotIn('opaque-fresh-credential', (root / 'retained/1-source.json').read_text())
+                    self.assertTrue(json.loads((root / 'retained/retention.json').read_text())['entries'][0]['redacted'])
+                    self.assertEqual(source.read_text(), serialized)
+
+    def test_safe_operator_recording_and_retention_preserve_exact_input_bytes(self):
+        verifier = module('verify-paired-publication')
+        raw = b'{\r\n  "evidence": ["safe\\ttext", {"nested": "\\u0061"}]\r\n}\r\n'
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            recorded = root / 'recorded.json'
+            verifier.record_operator(raw.decode('utf-8'), recorded)
+            self.assertEqual(recorded.read_bytes(), raw)
+            verifier.retain_operator([recorded], root / 'retained')
+            self.assertEqual((root / 'retained/1-recorded.json').read_bytes(), raw)
+            self.assertFalse(json.loads((root / 'retained/retention.json').read_text())['entries'][0]['redacted'])
+
     def test_fresh_credentials_are_refused_and_redacted_without_changing_originals(self):
         verifier = module('verify-paired-publication')
         samples = [

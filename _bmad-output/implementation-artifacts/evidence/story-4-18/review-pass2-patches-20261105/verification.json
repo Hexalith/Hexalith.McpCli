@@ -1,0 +1,128 @@
+{
+  "baseline_commit": "b8cf5d8e4093df4f1a4b565c2425ff929c45d578",
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "elapsed_seconds": 89.002,
+      "exit_code": 0,
+      "tests": 149
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p test_paired_publication.py",
+      "elapsed_seconds": 3.222,
+      "exit_code": 0,
+      "note": "Rerun after final receipt-tamper and bytes-refusal assertions.",
+      "tests": 29
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts/tests:scripts python3 -m unittest test_bootstrap_release.BootstrapReleaseTests.test_subprocess_failure_detail_decodes_bytes_before_redacting_and_retaining test_bootstrap_release.BootstrapReleaseTests.test_workflow_refuses_paired_recovery_before_production_approval",
+      "exit_code": 0,
+      "tests": 2
+    },
+    {
+      "command": "dotnet build tests/Hexalith.McpCli.Core.Tests --no-restore --configuration Release -warnaserror",
+      "errors": 0,
+      "exit_code": 0,
+      "warnings": 0
+    },
+    {
+      "command": "dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -class Hexalith.McpCli.Core.Tests.PlatformScopeTests",
+      "exit_code": 0,
+      "skipped": 0,
+      "tests": 24
+    },
+    {
+      "command": "node --test scripts/tests/select-release-version.test.mjs",
+      "exit_code": 0,
+      "tests": 4
+    },
+    {
+      "command": "actionlint .github/workflows/release.yml .github/workflows/ci.yml",
+      "exit_code": 0
+    },
+    {
+      "command": "bash -n scripts/release-preflight.sh scripts/release-prepare.sh scripts/release-publish.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "bash scripts/check-agent-instructions-sync.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    },
+    {
+      "built_cli_query": "passed",
+      "built_stdio_mcp_run_query": "passed",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 /tmp/mcpcli418-readme-probe.py",
+      "exit_code": 0,
+      "live_domain_calls": 0,
+      "note": "The standalone probe was corrected to avoid duplicating the CLI tenant flag, parse chunked HTTP request bodies and supply the synthetic response correlation ID. Its earlier harness failures did not exercise live services.",
+      "synthetic_loopback_reads": 2
+    }
+  ],
+  "detected_guard_removals": [
+    {
+      "detected": true,
+      "mutation": "prefix-check-removed",
+      "test_exit_code": 1
+    },
+    {
+      "detected": true,
+      "mutation": "character-check-removed",
+      "test_exit_code": 1
+    },
+    {
+      "detected": true,
+      "mutation": "boundary-character-checks-removed",
+      "test_exit_code": 1
+    },
+    {
+      "detected": true,
+      "errors": 0,
+      "failures": 2,
+      "mutation": "fr22-hash-format-removed"
+    },
+    {
+      "detected": true,
+      "errors": 1,
+      "failures": 0,
+      "mutation": "fr22-synchronization-type-removed"
+    },
+    {
+      "detected": true,
+      "errors": 0,
+      "failures": 1,
+      "mutation": "paired-recovery-workflow-guard-removed"
+    }
+  ],
+  "frozen_intent_unchanged": true,
+  "modified_file_sha256": {
+    "README.md": "a5d22e3a20907c72f4831a91ccca78bde029c2d1cc92a7db55fae867d5548465",
+    "_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md": "e221062bdfab59788685ee0f18cc8e6e347e59bbd3a71fcf9256c73929e32136",
+    "docs/release/canonical-scope-upgrade.md": "2e69947d6af53a74a71e3241179bec9b152a6016026b693c2826bd25aa91f9f6",
+    "docs/release/operator-setup-history.md": "d33ff54983dd0745e4da9112cc84e7b0a5e830d127ef070232dc4d4fb43b7dbf",
+    "scripts/publish-paired-release.py": "1a81dd6b093f4f0454107831a90a1356394744235c2e95ec427259cae6e85642",
+    "scripts/tests/test_bootstrap_release.py": "1e613407ddf1fe58c7f5d3ce6cdecd1a9bcba97fedc0a5fdda46e5b68341d1e5",
+    "scripts/tests/test_paired_publication.py": "ad42c0bd37bc81276aef28a59f1f03b8f92909963785bf4059c7745514001749",
+    "scripts/tests/test_paired_release.py": "94c2fe7050f949a8957d380fe2c8db27dedeaaf0d589ce166d0fbd751d69b02a",
+    "scripts/verify-paired-publication.py": "4b25df84a916055ded184a403bb080d9eb45656ef4a21feddc4c6733cc1b8c9f",
+    "scripts/verify-release-source.py": "160227a6f8237b6fd7ae2280675495d128f1028f686dd8aedbeb22a02a5f30af",
+    "tests/Hexalith.McpCli.Core.Tests/PlatformScopeTests.cs": "32ea1daa84d33c51eb3afac177ba9e0c7b4c441c9c15044da2effe1b6a4e30fe",
+    "tools/conformance-vectors/v1/README.md": "6ea745677c67fb756d7d4b3c75fd17a9cf70a825166f9ea182dcafe8bf8b6a8e"
+  },
+  "observed_source_sha": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+  "recorded_at_utc": "2026-11-05T22:01:50.343623+00:00",
+  "retained_file_sha256": {
+    "boundary-character-checks-removed-tests.txt": "6196faa43359174458437188b97b3130505b1cfc940acd30d70759cc059dc65e",
+    "character-check-removed-tests.txt": "8ae596ab188eab17ba02aff483afee33300d23769dfcb3fd9d3b59c1d7704fac",
+    "prefix-check-removed-tests.txt": "0c26581e0d668d045084990b9cf324cca5a10dd5d515af6d5e11af15d641aea1",
+    "readme-probe.py": "abba8d560e3175150cb66363409656765825dd69ed98eb182a8cf49cefe784c3",
+    "scope-mutations.json": "40342a4ad3552498043fb52cd2d4ac014fc67b001e6fc506a8d291aa91a22d03"
+  },
+  "schema": "mcpcli-story-4-18-review-pass2-patches/v1",
+  "scope": "Eleven second-review corrections; no production CLI/MCP behavior, dependency, enrollment, reference, historical evidence, remote publication or client acceptance changed.",
+  "source_clean": false,
+  "status": "passed-local"
+}

@@ -46,7 +46,7 @@ def prepare(version):
     shutil.copyfile(os.environ['MCPCLI_OPERATOR_ACCEPTANCE'], IMPORTED / 'operator.json')
     checked = preflight(IMPORTED / 'candidate', IMPORTED / 'operator.json', version, IMPORTED / 'preflight.json')
     bindings = ('source_sha', 'version', 'packages', 'origin', 'preparation_sha256', 'acceptance_sha256',
-                'acceptance_source_sha256', 'operator_sha256', 'operator_actor')
+                'acceptance_source_sha256', 'operator_sha256', 'operator_actor', 'operator_decision')
     if any(original.get(key) != checked[key] for key in bindings):
         raise ValueError('Preflight bindings changed before import.')
     verifier = module('verify-paired-publication')
@@ -105,11 +105,12 @@ def publish(version):
             if (imported.get('preflight_sha256') != digest(snapshot / 'preflight.json')
                     or any(imported.get(key) != checked[key] for key in
                            ('source_sha', 'version', 'packages', 'origin', 'preparation_sha256', 'acceptance_sha256',
-                            'acceptance_source_sha256', 'operator_sha256', 'operator_actor'))
+                            'acceptance_source_sha256', 'operator_sha256', 'operator_actor', 'operator_decision'))
                     or packages(snapshot / 'packages', version) != checked['packages']):
                 raise ValueError('Imported archives, receipts or snapshot packages changed before publication.')
             result.update(preflight_sha256=digest(OUTCOMES / 'snapshot-preflight.json'), packages_sha256=checked['packages'],
-                          operator_sha256=checked['operator_sha256'], origin=checked['origin'])
+                          operator_sha256=checked['operator_sha256'], operator_actor=checked['operator_actor'],
+                          operator_decision=checked['operator_decision'], origin=checked['origin'])
             public = OUTCOMES / 'public'
             public.mkdir()
             recovery = module('recover-bootstrap-release')
@@ -142,6 +143,11 @@ def publish(version):
                 if pushed.returncode != 0:
                     raise ValueError(f'{identity} push failed or is uncertain (exit {pushed.returncode}); no automatic retry.')
                 outcome['status'] = 'push-succeeded-public-unverified'
+            # Both guarded pushes finish before waiting for NuGet indexing or comparing public contents.
+            for index, identity in enumerate(PAIR):
+                filename = f'{identity}.{version}.nupkg'
+                package = snapshot / 'packages' / filename
+                outcome = result['packages'][identity]
                 downloaded = public / filename
                 url = (f'https://api.nuget.org/v3-flatcontainer/{identity.lower()}/{version.lower()}/'
                        f'{identity.lower()}.{version.lower()}.nupkg')

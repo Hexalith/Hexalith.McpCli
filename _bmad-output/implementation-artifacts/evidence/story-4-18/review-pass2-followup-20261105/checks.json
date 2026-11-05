@@ -1,0 +1,215 @@
+[
+  {
+    "name": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 4.56,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:18:38.075566+00:00"
+  },
+  {
+    "name": "build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 5.366,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:18:43.442543+00:00"
+  },
+  {
+    "name": "abstractions",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.073,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:18:44.516830+00:00"
+  },
+  {
+    "name": "analyzers",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 5.797,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:18:50.315626+00:00"
+  },
+  {
+    "name": "core",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.2,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:18:52.517112+00:00"
+  },
+  {
+    "name": "manifest",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 125.133,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:20:57.646941+00:00"
+  },
+  {
+    "name": "cli",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 14.697,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:21:12.345927+00:00"
+  },
+  {
+    "name": "mcp",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.908,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:21:14.254609+00:00"
+  },
+  {
+    "name": "release-python",
+    "command": [
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "scripts/tests",
+      "-p",
+      "test_*.py"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 84.387,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:22:38.641597+00:00"
+  },
+  {
+    "name": "release-node",
+    "command": [
+      "node",
+      "--test",
+      "scripts/tests/select-release-version.test.mjs"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 6.922,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:22:45.563992+00:00"
+  },
+  {
+    "name": "actionlint",
+    "command": [
+      "actionlint",
+      ".github/workflows/release.yml",
+      ".github/workflows/ci.yml",
+      ".github/workflows/commitlint.yml"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.31,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:22:45.875484+00:00"
+  },
+  {
+    "name": "shell-syntax",
+    "command": [
+      "bash",
+      "-n",
+      "scripts/release-preflight.sh",
+      "scripts/release-prepare.sh",
+      "scripts/release-publish.sh"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.003,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:22:45.879895+00:00"
+  },
+  {
+    "name": "instruction-sync",
+    "command": [
+      "bash",
+      "scripts/check-agent-instructions-sync.sh"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.006,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:22:45.887046+00:00"
+  },
+  {
+    "name": "whitespace",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.114,
+    "source_sha_before": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "source_sha_after": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+    "finished_at_utc": "2026-11-05T22:22:46.002853+00:00"
+  }
+]

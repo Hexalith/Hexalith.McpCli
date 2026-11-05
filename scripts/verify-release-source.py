@@ -12,7 +12,8 @@ import sys
 def failure_detail(error):
     detail = str(error)
     if isinstance(error, subprocess.CalledProcessError) and error.stderr:
-        detail += f"\n{error.stderr.strip()}"
+        stderr = error.stderr.decode('utf-8', errors='replace') if isinstance(error.stderr, bytes) else error.stderr
+        detail += f"\n{stderr.strip()}"
     credentials = {os.environ.get(name, "") for name in
                    ("GH_TOKEN", "GITHUB_TOKEN", "GH_ENTERPRISE_TOKEN", "GITHUB_ENTERPRISE_TOKEN", "NUGET_API_KEY")}
     for credential in sorted(credentials - {""}, key=len, reverse=True):

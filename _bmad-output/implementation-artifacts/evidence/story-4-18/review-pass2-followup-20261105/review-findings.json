@@ -1,0 +1,96 @@
+{
+  "baseline_commit": "b8cf5d8e4093df4f1a4b565c2425ff929c45d578",
+  "observed_source_sha": "0005671e4792b60c1257ff5ec74c79319c2792f4",
+  "diff_file_bytes": 22700228,
+  "review_layers": [
+    {
+      "name": "Blind Hunter",
+      "status": "completed",
+      "finding_floor": 10,
+      "findings": [
+        {
+          "id": "R3-B1",
+          "location": "scripts/verify-paired-publication.py:131",
+          "claim": "Serialized whitespace hides opaque bearer credentials from recording and retention guards."
+        },
+        {
+          "id": "R3-B2",
+          "location": "tests/Hexalith.McpCli.AppHost/NativeCatalogDiagnostics.cs:13",
+          "claim": "Opaque subprocess bearer credentials survive retained diagnostics."
+        },
+        {
+          "id": "R3-B3",
+          "location": "scripts/verify-paired-publication.py:208",
+          "claim": "Consistently invalid selected-tenant summary fields pass operator attestation."
+        },
+        {
+          "id": "R3-B4",
+          "location": "scripts/verify-paired-publication.py:253",
+          "claim": "Truthy nonboolean synthetic_fields_verified values are accepted."
+        },
+        {
+          "id": "R3-B5",
+          "location": "scripts/verify-paired-publication.py:235",
+          "claim": "Set comparison accepts repeated discovery entries."
+        },
+        {
+          "id": "R3-B6",
+          "location": "scripts/verify-paired-publication.py:224",
+          "claim": "An error excerpt can coexist with an approved successful summary."
+        },
+        {
+          "id": "R3-B7",
+          "location": "scripts/verify-paired-publication.py:224",
+          "claim": "Failed-cleanup prose can coexist with a passed session attestation."
+        },
+        {
+          "id": "R3-B8",
+          "location": "tests/Hexalith.McpCli.Integration.Tests/NativeAdministratorBoundary.cs:41",
+          "claim": "A missing endpoint 404 can stand in for persisted tenant absence."
+        },
+        {
+          "id": "R3-B9",
+          "location": "tests/Hexalith.McpCli.Integration.Tests/NativeCatalogEvidence.cs:43",
+          "claim": "Identically incomplete SDK readbacks can pass."
+        },
+        {
+          "id": "R3-B10",
+          "location": "tests/Hexalith.McpCli.Core.Tests/PlatformScopeTests.cs:130",
+          "claim": "Malformed command declarations need dedicated grammar cases."
+        }
+      ]
+    },
+    {
+      "name": "Edge Case Hunter",
+      "status": "completed",
+      "findings": [
+        {
+          "id": "R3-E1",
+          "location": "tests/Hexalith.McpCli.AppHost/NativeCatalogTool.cs:258",
+          "claim": "An exited parent can leave a pipe-holding descendant while cleanup deletes its owned preparation directory.",
+          "reproduced": "TimeoutException; ownership_marker=False; directory_exists=False; descendant_still_running=True; controlled descendant terminated after proof."
+        },
+        {
+          "id": "R3-E2",
+          "location": "scripts/verify-paired-publication.py:107",
+          "claim": "Year-9999 extreme-offset timestamp UTC conversion overflows outside the structured refusal handler."
+        }
+      ]
+    },
+    {
+      "name": "Verification Gap",
+      "status": "completed",
+      "findings": [
+        {
+          "id": "R3-V1",
+          "location": "scripts/publish-paired-release.py:75",
+          "claim": "First-pair global marker creation is not connected to subsequent historical recovery verification.",
+          "pre_verified": true,
+          "mutation_evidence": "Removing the global marker POST in a temporary copy still passed all 29 prior publication tests."
+        }
+      ]
+    }
+  ],
+  "triage": "All 13 findings have individual verdicts in the spec Review Triage Log; 6 patch groups, 7 rejected, 0 new deferrals.",
+  "scope": "Full baseline diff including retained evidence and untracked implementation; current local corrections preserve public 2.0.1 archives and their original source bindings."
+}

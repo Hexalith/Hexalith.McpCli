@@ -122,9 +122,9 @@ After the current-main source has green blocking CI and commitlint jobs and step
 
 Dispatch `Release` from the same current `main` with `phase=paired`, the exact `staging_run_id`, an empty `recovery_version`, and `operator_acceptance` containing the candidate-specific approval JSON. The authenticated dispatch actor must match `approved_by`. Review the exact candidate and approve the existing `production` environment. The workflow authenticates the original staging run and GitHub artifact digests, recomputes three-OS acceptance, cross-checks acceptance-source evidence and rechecks current-main gates after approval and immediately before each push. Pinned semantic-release must select the same shared version; any mismatch refuses both pushes.
 
-Publication imports and snapshots the accepted archives without build or pack. It checks both NuGet identities before pushing only `Hexalith.McpCli.Abstractions` and `Hexalith.McpCli`, then verifies their public consumer contents while allowing NuGet's repository signature and packing core-properties metadata. It retains source-bound preflight, push-intent, per-package push/public results and a final outcome; both verified packages and receipts become release assets. A confirmed first-ever package absence requires explicit 404s from both NuGet's version index and registration identity; an uncertain response refuses publication.
+Publication imports and snapshots the accepted archives without build or pack. It checks both NuGet identities before pushing only `Hexalith.McpCli.Abstractions` and `Hexalith.McpCli`, then verifies their public consumer contents while allowing NuGet's repository signature and packing core-properties metadata. It retains source-bound preflight, push-intent, per-package push/public results and a final outcome; both verified packages and receipts become release assets. Preflight and outcome receipts retain the decision schema and automated bypass authorization when used. A confirmed first-ever package absence requires explicit 404s from both NuGet's version index and registration identity; an uncertain response refuses publication.
 
-Two NuGet pushes cannot be atomic. A failed or uncertain push stops the run, retains partial outcomes and never triggers an automatic duplicate push. The durable per-version repository marker records that publication started; a global marker prevents new independent bootstrap versions. For recovery, preserve the original archives and all receipts, inspect both public identities and signature-aware contents, establish which pushes occurred, and obtain a reviewed recovery decision. `recovery_version` supports only the existing bootstrap procedure; paired recovery is refused. Do not delete markers, repack the same version, or restart an uncertain publication to bypass this stop. Advance Story 4.18 only after both public versions verify.
+Two NuGet pushes cannot be atomic. Both packages are pushed in sequence, with a fresh preflight immediately before each push; public downloads and content verification follow both pushes. A failed or uncertain push stops the run, retains partial outcomes and never triggers an automatic duplicate push. The durable per-version repository marker records that publication started; a global marker prevents new independent bootstrap versions. For recovery, preserve the original archives and all receipts, inspect both public identities and signature-aware contents, establish which pushes occurred, and obtain a reviewed recovery decision. `recovery_version` supports only the existing bootstrap procedure; paired recovery is refused. Do not delete markers, repack the same version, or restart an uncertain publication to bypass this stop. Record paired publication as complete only after both public versions verify.
 
 ## Operator setup with an accepted staged tool
 
@@ -195,7 +195,7 @@ cd ~ && rm -rf ~/hexalith-operator
 
 ### Environment owner: environment and handoff
 
-Use a fresh **accepted staging** pair at the shared version selected by the pinned release tooling. Obtain both archives, `prepared.json`, `accepted-pair.json`, `acceptance-source.json`, their SHA-256 values and exact source SHA from the selected successful `stage-paired` Release run. The owner supplies the accepted version as `VERSION`; do not substitute another archive with the same version, a public-feed package or a source build. Record the run ID and all four package/receipt hashes before installation.
+Use a fresh **accepted staging** pair at the shared version selected by the pinned release tooling. Obtain both archives, `prepared.json`, `accepted-pair.json`, `acceptance-source.json`, their SHA-256 values and exact source SHA from the selected successful `stage-paired` Release run. The owner supplies the accepted version as `VERSION`; do not substitute another archive with the same version, a public-feed package or a source build. Record the run ID and all five package/receipt hashes before installation.
 
 Before starting, have .NET **10 SDK** installed (`dotnet --info` and `dotnet --list-runtimes` must show .NET 10), Python 3 for the private token prompt below, and an installed, signed-in MCP client. The framework-dependent executable also needs the .NET 10 runtime in the environment that launches it. Record exact client, extension/harness, OS and runtime versions; the registration formats below were checked against official documentation on 2026-10-30. Client execution still requires the [operator checklist](https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/operator-setup-checklist.md).
 
@@ -205,7 +205,7 @@ A new candidate needs its own owner-approved ready environment and reviewed prep
 
 Replace `VERSION` in installation commands and both archive filenames with the accepted shared version supplied by the owner.
 
-For the quick start, first verify the supplied four hashes and receipts as described in the manual installation below. Then copy the two verified packages, by name, into a handoff folder that the operator can read, and write its `NuGet.Config`. Choose a folder path without `&`, `<`, `>` or quotes, because the block writes it into XML unescaped:
+For the quick start, first verify the supplied five hashes and receipts as described in the manual installation below. Then copy the two verified packages, by name, into a handoff folder that the operator can read, and write its `NuGet.Config`. Choose a folder path without `&`, `<`, `>` or quotes, because the block writes it into XML unescaped:
 
 ```sh
 handoff=/absolute/path/handoff
@@ -250,7 +250,7 @@ $env:NUGET_HTTP_CACHE_PATH = Join-Path $operator_root 'http-cache'
 $env:NUGET_PLUGINS_CACHE_PATH = Join-Path $operator_root 'plugin-cache'
 ```
 
-Verify the supplied four hashes with `sha256sum` (Linux), `shasum -a 256` (macOS), or `Get-FileHash -Algorithm SHA256` (PowerShell). Confirm both receipts name the accepted version and supplied full source SHA, `prepared.json` says `source_clean: true`, and `accepted-pair.json` says `accepted-staging-only` and binds the prepared hash and both package hashes. Stop on any mismatch.
+Verify the supplied five hashes with `sha256sum` (Linux), `shasum -a 256` (macOS), or `Get-FileHash -Algorithm SHA256` (PowerShell). Confirm `prepared.json` and `accepted-pair.json` name the accepted version and supplied full source SHA, `prepared.json` says `source_clean: true`, and `accepted-pair.json` says `accepted-staging-only` and binds the prepared hash and both package hashes. Confirm `acceptance-source.json` binds the same source as clean current main and contains successful CI/commitlint and FR-22 instruction synchronization evidence. Stop on any mismatch.
 
 Create `NuGet.Config` in the task directory with the **absolute local package path**, escaping XML characters such as `&` as `&amp;`. This clears inherited sources and fallback folders:
 
@@ -362,23 +362,23 @@ Call `run_query` with the following MCP argument object. Replace every `APPROVED
 {"operation":"tenants.get-tenant","tenant":"APPROVED-TENANT","aggregateId":"APPROVED-TENANT","payload":"{\"TenantId\":\"APPROVED-TENANT\"}"}
 ```
 
-Require `isError: false`, matching JSON text and `structuredContent`, result `tenant` equal to the selected tenant, and `document.tenantId` equal to that tenant with `document.status: "Active"`. This is current invocation guidance; the automated artifact approval and scripted replay do not establish a new actual operator-client session. The earlier session guidance remains below.
+Require `isError: false`, matching JSON text and `structuredContent`, result `tenant` equal to the selected tenant, and `document.tenantId` equal to that tenant with `document.status: "Active"`. This is current invocation guidance; the automated artifact approval and scripted replay do not establish a new actual operator-client session. Continue with the cross-module task below for actual-session acceptance.
 
 <a id="complete-the-approved-cross-module-task"></a>
 
-### Historical cross-module operator task (Tenants 5.10.0)
+### Complete the approved cross-module task
 
-These retained operator examples describe the former Tenants 5.10.0 package and its `system` scope. They are historical session guidance. Current Contracts 7.0.4 uses the explicit scopes described under [Gateway boundary](#gateway-boundary); this enrollment records automated approval and scripted replay, with actual operator-client acceptance remaining a separate gate.
+The [historical sessions](https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/operator-setup-history.md) used Tenants 5.10.0 and its `system` scope. Fresh sessions use current Contracts 7.0.4 and the selected canonical tenant as shown below; the [Gateway boundary](#gateway-boundary) describes its explicit scopes. Automated approval and scripted replay make no actual operator-client acceptance claim.
 
 In each actual client, request the tools from server **hexalith** explicitly. First call `list_modules` with `{}`, then `list_operations` with `{"module":"tenants"}` and `{"module":"parties"}`, and `describe_operation` for `tenants.get-tenant`, `parties.create-party` and `parties.get-party`. Confirm the five tools `list_modules`, `list_operations`, `describe_operation`, `send_command`, `run_query`, both modules and `submittable: true` for the selected operations.
 
 Replace `APPROVED-TENANT` with the approved tenant and use a fresh Party ID, contact ID and identifier ID for **every** client and attempt. The following are MCP **argument objects**, not CLI commands. `payload` is a string containing JSON; keep its property casing. Use synthetic names and contact details only.
 
 ```json
-{"operation":"tenants.get-tenant","payload":"{\"TenantId\":\"APPROVED-TENANT\"}"}
+{"operation":"tenants.get-tenant","tenant":"APPROVED-TENANT","aggregateId":"APPROVED-TENANT","payload":"{\"TenantId\":\"APPROVED-TENANT\"}"}
 ```
 
-Call `run_query` with those arguments. Require result `tenant: "system"`, `document.tenantId` equal to the selected tenant and an active tenant document. Then obtain the operator's write approval and call `send_command` once:
+Call `run_query` with those arguments. Require result `tenant` and `document.tenantId` equal to the selected canonical tenant, with `document.status: "Active"`. Then obtain the operator's write approval and call `send_command` once:
 
 ```json
 {"operation":"parties.create-party","payload":"{\"PartyId\":\"party-CLIENT-ATTEMPT\",\"Type\":\"Person\",\"PersonDetails\":{\"FirstName\":\"Operator\",\"LastName\":\"Setup\"},\"ContactChannels\":[{\"PartyId\":\"party-CLIENT-ATTEMPT\",\"ContactChannelId\":\"email-CLIENT-ATTEMPT\",\"Type\":\"Email\",\"Value\":\"operator@example.test\",\"IsPreferred\":true}],\"Identifiers\":[{\"PartyId\":\"party-CLIENT-ATTEMPT\",\"IdentifierId\":\"external-CLIENT-ATTEMPT\",\"Type\":\"Other\",\"Value\":\"operator-setup\"}]}"}
@@ -413,6 +413,8 @@ Require the selected result tenant, `document.id` equal to your Party ID, `isAct
 Record every attempted session, failure, assistance and elapsed time in the [session checklist](https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/operator-setup-checklist.md). An assisted, interrupted, unexecuted or over-900-second attempt remains visible and cannot be reported as unassisted success. The historical 685-second timing exception was assisted and used an experienced operator; it is neither first-time nor unassisted success. If using the actual-session acceptance path, repeat all three client sessions for the fresh candidate. The explicitly authorized automated path records no client-session result.
 
 ## Gateway boundary
+
+See the [canonical scope upgrade](https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/canonical-scope-upgrade.md) for the 2.0.0 bootstrap and 2.0.1 paired release, tenant normalization and platform-scope migration.
 
 The CLI and MCP server share one catalog and executor. McpCli discovers operations only from flagged, referenced `*.Contracts` packages. It submits commands and queries to the EventStore gateway; the gateway routes them to the owning module server. McpCli never connects to a module server or references its implementation packages.
 

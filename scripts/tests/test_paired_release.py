@@ -271,6 +271,19 @@ class PairedReleaseTests(unittest.TestCase):
                 self.assertFalse((self.root / 'accepted.json').exists())
                 self.source_gate = original
 
+    def test_missing_or_malformed_fr22_synchronization_hashes_refuse(self):
+        names = ('AGENTS.md', 'CLAUDE.md', '.github/copilot-instructions.md')
+        invalid = [None, 'not-a-dictionary', [], {name: None for name in names},
+                   {name: 'not-a-hash' for name in names}]
+        for synchronization in invalid:
+            original = copy.deepcopy(self.source_gate)
+            self.source_gate['fr22']['synchronization'] = synchronization
+            self.save_gates()
+            with self.subTest(synchronization=synchronization), self.assertRaises(ValueError):
+                self.compare()
+            self.assertFalse((self.root / 'accepted.json').exists())
+            self.source_gate = original
+
     def test_acceptance_requires_successful_staged_compiler_analyzer_evidence(self):
         for mode in ('missing', 'failed', 'wrong-source', 'wrong-packages', 'no-analyzer', 'load-failure'):
             self.save_gates()

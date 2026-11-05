@@ -109,9 +109,9 @@ verifier checks that digest again when freezing its input. Package IDs and their
 approval directory names compare case-insensitively; versions remain exact.
 `Hexalith.Parties.Contracts` 1.5.1 has all seven vectors and its exact signed-archive
 receipt under `modules/Hexalith.Parties.Contracts/`. `Hexalith.Tenants.Contracts`
-7.0.0 has fourteen unchanged vectors and its authentic signed public-archive
-receipt under `modules/Hexalith.Tenants.Contracts/`. That receipt links the
-[automated approval evidence](../../../_bmad-output/implementation-artifacts/evidence/story-4-18/tenants7-public-artifact/approval.json),
+7.0.4 has fourteen vectors with only package-version metadata refreshed and its
+authentic signed public-archive receipt under `modules/Hexalith.Tenants.Contracts/`. That receipt links the
+[automated approval evidence](../../../_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/approval.json),
 including the exact source, archive, inventory and vector hashes, strict validator
 result, authenticated account and delegated Codex identity. The user explicitly
 authorized bypass of human validation; no separate human review or actual
