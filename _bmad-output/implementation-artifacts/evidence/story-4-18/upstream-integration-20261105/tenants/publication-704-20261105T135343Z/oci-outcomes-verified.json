@@ -1,0 +1,56 @@
+{
+  "time_utc": "2026-11-05T14:18:37.787779+00:00",
+  "run": 42039944398,
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "version": "7.0.4",
+  "outputs": [
+    {
+      "destination": "registry.hexalith.com/tenants:7.0.4",
+      "index_digest": "sha256:712a6975c87d804e93399026c25a668926daaf60b2cb1837729d7a464100166c",
+      "platforms": [
+        {
+          "platform": "linux/amd64",
+          "manifest_digest": "sha256:9e30ec2285d29502a9f32bd8ba8104ce6d424c7b869ea18973e3092e54202529",
+          "config_digest": "sha256:df6477ffb094dec7107136bc75ecb18f7c6e934eb6745cc60275171a712479ae",
+          "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+          "version": "7.0.4"
+        },
+        {
+          "platform": "linux/arm64",
+          "manifest_digest": "sha256:677d084d658e83d33fcccb77b31ab934dc796612c7a0fc770c3c98cf3a3e04a2",
+          "config_digest": "sha256:4fe351d7549910cda5928a5214e6abd89df1db0d2b83f5d210709dacd192ff2d",
+          "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+          "version": "7.0.4"
+        }
+      ],
+      "owner_destination_result": "pass",
+      "owner_smoke_result": "pass",
+      "independent_raw_digest_and_source_checks": "pass",
+      "verification_boundary": "Authenticated owner registry readback/smoke evidence, independently verified against its hash-bound original artifact; no independent local registry credentials/pull claimed."
+    },
+    {
+      "destination": "registry.hexalith.com/tenants-api:7.0.4",
+      "index_digest": "sha256:39e1fab54a79df171b3ac4aa40a3e3d4bb2812697ed80f6dc330b55ae00393d2",
+      "platforms": [
+        {
+          "platform": "linux/amd64",
+          "manifest_digest": "sha256:ef956af7faea264d1950e23be385aceca5cc52cfaf59a3c2eaf0e28be2c012fe",
+          "config_digest": "sha256:55ad4559812af0217fe760416c8b0cd9be32382dca167e09179966afd2b0e263",
+          "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+          "version": "7.0.4"
+        },
+        {
+          "platform": "linux/arm64",
+          "manifest_digest": "sha256:15d6566ed5d981d4eb977bedc0bae73c32b464136aaf4ad3520371cfb1794261",
+          "config_digest": "sha256:c5eb329f06a0d73e1857bfa4c7ad8c18145cbc731b25d994ef21b405f6a6a89d",
+          "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+          "version": "7.0.4"
+        }
+      ],
+      "owner_destination_result": "pass",
+      "owner_smoke_result": "pass",
+      "independent_raw_digest_and_source_checks": "pass",
+      "verification_boundary": "Authenticated owner registry readback/smoke evidence, independently verified against its hash-bound original artifact; no independent local registry credentials/pull claimed."
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+{
+  "time_utc": "2026-11-05T14:14:59.506524+00:00",
+  "packages": [
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "sdk": "4.1.0",
+      "http_status": 200,
+      "archive_url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.contracts/7.0.4/hexalith.tenants.contracts.7.0.4.nupkg",
+      "filename": "hexalith.tenants.contracts.7.0.4.nupkg",
+      "sha256": "04989ef3b9755c8af217517c7964a75796903d2c21c517ff76d7d46c574861a7",
+      "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+      "signed": true,
+      "consumer_entries_equal_to_actual_prepared": true,
+      "public_metadata": {
+        "Id": "Hexalith.Tenants.Contracts",
+        "Version": "7.0.4",
+        "NormalizedVersion": "7.0.4",
+        "PackageHash": "+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+        "PackageHashAlgorithm": "SHA512",
+        "Published": "2026-11-05T14:07:48.287+00:00"
+      },
+      "public_metadata_url": "https://www.nuget.org/api/v2/Packages(Id='Hexalith.Tenants.Contracts',Version='7.0.4')"
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "sdk": "4.1.0",
+      "http_status": 200,
+      "archive_url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.client/7.0.4/hexalith.tenants.client.7.0.4.nupkg",
+      "filename": "hexalith.tenants.client.7.0.4.nupkg",
+      "sha256": "36ca4232d215d95bdcd0e6ff4867df7c844079bb538425d43f9e618fabd5e5a6",
+      "artifactHash": "sha512-Mproi7dze0CjUxrMnlZlngO8MuJS3Z9pWlpMabP0irAQm4UdfXn1bQfgsMBVxmC6JpZY3/QjCBKkvYt1oPbRQg==",
+      "signed": true,
+      "consumer_entries_equal_to_actual_prepared": true,
+      "public_metadata": {
+        "Id": "Hexalith.Tenants.Client",
+        "Version": "7.0.4",
+        "NormalizedVersion": "7.0.4",
+        "PackageHash": "Mproi7dze0CjUxrMnlZlngO8MuJS3Z9pWlpMabP0irAQm4UdfXn1bQfgsMBVxmC6JpZY3/QjCBKkvYt1oPbRQg==",
+        "PackageHashAlgorithm": "SHA512",
+        "Published": "2026-11-05T14:07:47.987+00:00"
+      },
+      "public_metadata_url": "https://www.nuget.org/api/v2/Packages(Id='Hexalith.Tenants.Client',Version='7.0.4')"
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "http_status": 404,
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.server/7.0.4/hexalith.tenants.server.7.0.4.nupkg"
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "sdk": "4.1.0",
+      "http_status": 200,
+      "archive_url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.testing/7.0.4/hexalith.tenants.testing.7.0.4.nupkg",
+      "filename": "hexalith.tenants.testing.7.0.4.nupkg",
+      "sha256": "454cb5126dfdaf7c3fa38b470527f5a602bed8dbd0d21409aeb46995673802c3",
+      "artifactHash": "sha512-jYinXpzehhWnCF/RrKOKLMt4r+7c87/jO5FyKyHkVRc6td5m9BgcQ9d3cDM8FfRWQzT0LCxHiAhdZHMMjAg/aw==",
+      "signed": true,
+      "consumer_entries_equal_to_actual_prepared": true,
+      "public_metadata": {
+        "Id": "Hexalith.Tenants.Testing",
+        "Version": "7.0.4",
+        "NormalizedVersion": "7.0.4",
+        "PackageHash": "jYinXpzehhWnCF/RrKOKLMt4r+7c87/jO5FyKyHkVRc6td5m9BgcQ9d3cDM8FfRWQzT0LCxHiAhdZHMMjAg/aw==",
+        "PackageHashAlgorithm": "SHA512",
+        "Published": "2026-11-05T14:07:48.93+00:00"
+      },
+      "public_metadata_url": "https://www.nuget.org/api/v2/Packages(Id='Hexalith.Tenants.Testing',Version='7.0.4')"
+    },
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "sdk": "4.1.0",
+      "http_status": 200,
+      "archive_url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.aspire/7.0.4/hexalith.tenants.aspire.7.0.4.nupkg",
+      "filename": "hexalith.tenants.aspire.7.0.4.nupkg",
+      "sha256": "97f6f65eda909e3797f873b4fd1c446f57fab1dd14685069e124b6ab83c7aae5",
+      "artifactHash": "sha512-zEY6wqLX/hV5H3itPTZZYOYch2byOicAB9WxRBLsaCcUZwzLTtnJdB0mDwqIlNq2Ad7KSyQhrIq1mcCI3gq9JA==",
+      "signed": true,
+      "consumer_entries_equal_to_actual_prepared": true,
+      "public_metadata": {
+        "Id": "Hexalith.Tenants.Aspire",
+        "Version": "7.0.4",
+        "NormalizedVersion": "7.0.4",
+        "PackageHash": "zEY6wqLX/hV5H3itPTZZYOYch2byOicAB9WxRBLsaCcUZwzLTtnJdB0mDwqIlNq2Ad7KSyQhrIq1mcCI3gq9JA==",
+        "PackageHashAlgorithm": "SHA512",
+        "Published": "2026-11-05T14:07:47.61+00:00"
+      },
+      "public_metadata_url": "https://www.nuget.org/api/v2/Packages(Id='Hexalith.Tenants.Aspire',Version='7.0.4')"
+    }
+  ],
+  "state": "Registry readback pending; no push retried."
+}

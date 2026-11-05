@@ -1,0 +1,27 @@
+{
+  "time_utc": "2026-11-05T13:40:27.179067+00:00",
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "remote_main": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "owner_working_tree": "",
+  "required_source_workflows": {
+    "ci.yml": 42029976383,
+    "source-reference.yml": 42029975839,
+    "story-guards.yml": 42029976106
+  },
+  "commitlint": 42029976588,
+  "codeql": 42029976661,
+  "all_required_source_gates": "success",
+  "publication_authorized": false,
+  "release_dispatched": false,
+  "new_public_hashes_available": false,
+  "local_pinned_source_gate_replay": {
+    "result": "pass",
+    "official_task_private_gh": "2.103.3",
+    "verified_checksum": "4c806978ffce1cec70853302a56d70ac6da4f19bae7adca4e1a8ab00633dd91d",
+    "unchanged_pinned_script": true,
+    "evidence": "source-gates.compatible-gh.json",
+    "tool_binding": "official-gh-verification.json",
+    "original_tooling_refusal_preserved": "source-gates.local-gh-refused.json",
+    "global_tools_and_auth_preserved": true
+  }
+}

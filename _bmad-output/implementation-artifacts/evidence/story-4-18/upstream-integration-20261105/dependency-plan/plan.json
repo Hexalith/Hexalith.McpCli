@@ -1,0 +1,326 @@
+{
+  "schema": "mcpcli-story-4-18-dependency-preparation/v1",
+  "observed_at_utc": "2026-11-05T11:38:44.052439+00:00",
+  "owner_release_candidates": [
+    {
+      "repository": "Hexalith/Hexalith.Tenants",
+      "source_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "selected_version": "7.0.3",
+      "packages": [
+        {
+          "id": "Hexalith.Tenants.Contracts",
+          "project": "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj"
+        },
+        {
+          "id": "Hexalith.Tenants.Client",
+          "project": "src/Hexalith.Tenants.Client/Hexalith.Tenants.Client.csproj"
+        },
+        {
+          "id": "Hexalith.Tenants.Server",
+          "project": "src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj"
+        },
+        {
+          "id": "Hexalith.Tenants.Testing",
+          "project": "src/Hexalith.Tenants.Testing/Hexalith.Tenants.Testing.csproj"
+        },
+        {
+          "id": "Hexalith.Tenants.Aspire",
+          "project": "src/Hexalith.Tenants.Aspire/Hexalith.Tenants.Aspire.csproj"
+        }
+      ],
+      "semantic_release_selection_receipt": "../tenants/selected-release.json",
+      "release_workflow_sha256": "8e631fcfcc4d3ab7f7a6c27a4ab744a49d4bb5ba2f7d84ddf627266e44532f58",
+      "current_source_ci": {
+        "id": 42018235352,
+        "status": "in_progress",
+        "conclusion": null,
+        "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/42018235352"
+      },
+      "registry_observations": [
+        {
+          "id": "Hexalith.Tenants.Contracts",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "7.0.2",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.contracts/index.json"
+        },
+        {
+          "id": "Hexalith.Tenants.Client",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "7.0.2",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.client/index.json"
+        },
+        {
+          "id": "Hexalith.Tenants.Server",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "7.0.2",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.server/index.json"
+        },
+        {
+          "id": "Hexalith.Tenants.Testing",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "7.0.2",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.testing/index.json"
+        },
+        {
+          "id": "Hexalith.Tenants.Aspire",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "7.0.2",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.aspire/index.json"
+        }
+      ],
+      "registry_observation_is_not_production_preflight": true,
+      "workflow_dispatch_ref": "main",
+      "production_environment": "production",
+      "publication_dispatched_by_this_task": false,
+      "authorization": "Final exact Tenants publication requires explicit authorization; Parties has a separate active owner publication workflow and is not dispatched here.",
+      "container_outputs": [
+        {
+          "repository": "tenants",
+          "tag": "7.0.3",
+          "destination": "registry.hexalith.com/tenants:7.0.3",
+          "platforms": [
+            "linux/amd64",
+            "linux/arm64"
+          ]
+        },
+        {
+          "repository": "tenants-api",
+          "tag": "7.0.3",
+          "destination": "registry.hexalith.com/tenants-api:7.0.3",
+          "platforms": [
+            "linux/amd64",
+            "linux/arm64"
+          ]
+        }
+      ],
+      "github_release": {
+        "tag": "v7.0.3",
+        "source_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+        "package_assets": 5
+      },
+      "pinned_container_publisher_source": "ff3b7628132059bc42e04fa8c98c1c427b528f62",
+      "preparation_hold": {
+        "unprotected_job": "prepare-release",
+        "publication_job": "release",
+        "environment": "production",
+        "required_reviewer": "jpiquot",
+        "will_approve_publication": false,
+        "required_source_workflows": [
+          "ci.yml",
+          "story-guards.yml",
+          "source-reference.yml"
+        ]
+      }
+    },
+    {
+      "repository": "Hexalith/Hexalith.Parties",
+      "source_sha": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+      "selected_version": "3.1.0",
+      "packages": [
+        {
+          "id": "Hexalith.Parties.Contracts",
+          "project": "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.Client",
+          "project": "src/Hexalith.Parties.Client/Hexalith.Parties.Client.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.AdminPortal",
+          "project": "src/Hexalith.Parties.AdminPortal/Hexalith.Parties.AdminPortal.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.ConsumerPortal",
+          "project": "src/Hexalith.Parties.ConsumerPortal/Hexalith.Parties.ConsumerPortal.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.Picker",
+          "project": "src/Hexalith.Parties.Picker/Hexalith.Parties.Picker.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.Authentication",
+          "project": "src/Hexalith.Parties.Authentication/Hexalith.Parties.Authentication.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.Projections",
+          "project": "src/Hexalith.Parties.Projections/Hexalith.Parties.Projections.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.Security",
+          "project": "src/Hexalith.Parties.Security/Hexalith.Parties.Security.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.Testing",
+          "project": "src/Hexalith.Parties.Testing/Hexalith.Parties.Testing.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.Aspire",
+          "project": "src/Hexalith.Parties.Aspire/Hexalith.Parties.Aspire.csproj"
+        },
+        {
+          "id": "Hexalith.Parties.EventStoreExtensions",
+          "project": "src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj"
+        }
+      ],
+      "semantic_release_selection_receipt": "../parties/selected-release.json",
+      "release_workflow_sha256": "05f2ba42f06015b44f77cdf7e31372bc8de9b2f6a698a4e70a6839298535c9ca",
+      "current_source_ci": {
+        "id": 42019195546,
+        "status": "completed",
+        "conclusion": "cancelled",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/42019195546"
+      },
+      "registry_observations": [
+        {
+          "id": "Hexalith.Parties.Contracts",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.contracts/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.Client",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.client/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.AdminPortal",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.adminportal/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.ConsumerPortal",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.consumerportal/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.Picker",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.picker/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.Authentication",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.authentication/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.Projections",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.projections/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.Security",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.security/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.Testing",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.testing/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.Aspire",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.aspire/index.json"
+        },
+        {
+          "id": "Hexalith.Parties.EventStoreExtensions",
+          "index_http_status": 200,
+          "selected_version_occupied": false,
+          "latest_index_entry": "3.0.0",
+          "url": "https://api.nuget.org/v3-flatcontainer/hexalith.parties.eventstoreextensions/index.json"
+        }
+      ],
+      "registry_observation_is_not_production_preflight": true,
+      "workflow_dispatch_ref": "main",
+      "production_environment": "production",
+      "publication_dispatched_by_this_task": false,
+      "authorization": "Final exact Tenants publication requires explicit authorization; Parties has a separate active owner publication workflow and is not dispatched here."
+    }
+  ],
+  "contracts_source_comparison": {
+    "tenants": {
+      "accepted": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27",
+      "fixed": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "changed_paths": []
+    },
+    "parties": {
+      "accepted": "13a4f913f2f0177a30291091cbc8893202e4622d",
+      "fixed": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+      "changed_paths": [
+        "src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs"
+      ],
+      "change_scope": "Owner routing metadata only; enrolled command/query declarations and payload/result source files are unchanged."
+    }
+  },
+  "minimal_mcpcli_selection": {
+    "EventStore": {
+      "version": "4.1.0",
+      "source": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "public_archives": "eventstore-cohort.json",
+      "required_changes": [
+        "root EventStore pin and exact production/helper closure",
+        "native SDK cohort, public archive hashes/source/configuration snapshot",
+        "cohort assertions, SDK evidence and current README claims"
+      ]
+    },
+    "Tenants": {
+      "target_version": "7.0.3",
+      "source": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "artifact_state": "Unpublished candidate at this checkpoint; no hash/version approval placeholders written.",
+      "why_contracts_rebind_required": "native_cohort.manifest requires each Tenants archive sourceCommit to equal the qualified Tenants source and enforces one Tenants version; ci.gateway_package_provenance seals actual ConformanceHost Contracts and AppHost Aspire archives. Keeping 7.0.0 with fixed source would violate these existing gates.",
+      "binding_gate_anchors": [
+        "tools/live-topology/native_cohort.py:28",
+        "tools/live-topology/native_cohort.py:37",
+        "tools/live-topology/ci.py:254",
+        "tools/live-topology/ci.py:256"
+      ],
+      "required_metadata_changes": "After real public artifacts exist, bind exact five-package cohort and approved Contracts artifact; refresh only package/version/hash metadata in the 14 Tenants vectors, inventory, approval and companion plans. Keep all operations, payloads and assertions."
+    },
+    "Parties": {
+      "enrolled_contracts_version_to_retain": "1.5.1",
+      "approved_vectors_to_retain": 7,
+      "qualified_owner_source_candidate": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+      "aspire_helper_version_to_retain": "2.0.0",
+      "reason": "The enrolled Contracts artifact and descriptor wire remain unchanged; native preparation builds the owner domain/adapter from source, and native-runtime public archives bind only EventStore/Tenants. The new source explicitly accepts those historical selectors.",
+      "qualification_required": "Retain exact current archive and inventory/vector bindings; prove all seven live vectors under the new source/SDK. Do not transfer old live acceptance or infer compatibility from source comparison alone."
+    },
+    "unchanged": [
+      "enrolled operations and request/response wire",
+      "root reference gitlinks unless qualification demonstrates a required change",
+      "independent Testing.Integration 3.128.4 fixture cohort",
+      "production CLI/MCP behavior"
+    ]
+  },
+  "remaining_gates": [
+    "Complete exact-source owner CI; repair only relevant failures.",
+    "Obtain explicit final Tenants publication authorization for concrete 7.0.3 source/workflow; do not dispatch speculative publication.",
+    "Obtain real public Tenants 7.0.3 archive hashes/embedded source metadata and independent owner publication evidence.",
+    "Apply the complete exact source/dependency/metadata selection, fresh restore/build and required local conformance checks.",
+    "Green exact-source full McpCli CI and 21 live vectors plus independent smoke; fresh three-platform staging; candidate-bound acceptance; production approval and both public package contents."
+  ],
+  "not_a_release_acceptance": true
+}

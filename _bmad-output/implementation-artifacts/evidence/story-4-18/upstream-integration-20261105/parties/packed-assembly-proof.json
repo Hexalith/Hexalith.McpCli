@@ -1,0 +1,13 @@
+{
+  "package": "Hexalith.Parties.Contracts.0.0.0-selector-check.nupkg",
+  "package_sha256": "5b3c2d5b57bf75d9a5fced9c42dd3fd6921584fa9d32147010ffd194d0278237",
+  "archive_dll_path": "lib/net10.0/Hexalith.Parties.Contracts.dll",
+  "archive_dll_sha256": "fc9c0cbbc0c62d79d41546d9d78c5d22625a6c8d4ad07925a1f30cdf4ab5b946",
+  "built_tested_production_dll_sha256": "fc9c0cbbc0c62d79d41546d9d78c5d22625a6c8d4ad07925a1f30cdf4ab5b946",
+  "bytes_equal": true,
+  "production_properties": "410-release-properties.stdout.txt",
+  "actual_catalog_test_cases": 7,
+  "skipped": 0,
+  "assembly_source_attribute_and_three_binding_cases_executed": true,
+  "limits": "Local synthetic package only; not a public or accepted release artifact."
+}

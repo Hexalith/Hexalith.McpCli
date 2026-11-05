@@ -1,0 +1,7 @@
+{
+  "Properties": {
+    "HexalithEventStoreVersion": "4.1.0",
+    "HexalithEventStoreCatalogApiSupported": "true",
+    "DefineConstants": "TRACE;HEXALITH_EVENTSTORE_CATALOG_API;HEXALITH_EVENTSTORE_QUERY_SELECTOR_BINDINGS;HEXALITH_EVENTSTORE_CATALOG_HOSTS;DEBUG"
+  }
+}

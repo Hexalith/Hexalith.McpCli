@@ -1,0 +1,7 @@
+{
+  "artifact_id": 13408646165,
+  "name": "aspire-hook-evidence",
+  "expected_digest": "sha256:e6ba67c0b9ddbab637c14680b0f085b9d16a587473036e9fc26dd61fcdbd286b",
+  "actual_digest": "sha256:e6ba67c0b9ddbab637c14680b0f085b9d16a587473036e9fc26dd61fcdbd286b",
+  "matches": true
+}

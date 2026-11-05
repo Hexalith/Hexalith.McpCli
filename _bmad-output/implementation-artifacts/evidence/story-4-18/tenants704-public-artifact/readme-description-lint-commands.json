@@ -1,0 +1,32 @@
+[
+  {
+    "command": [
+      "dotnet",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+      "describe",
+      "tenants.get-tenant",
+      "--lint"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "dotnet",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+      "describe",
+      "parties.create-party",
+      "--lint"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "dotnet",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+      "describe",
+      "parties.get-party",
+      "--lint"
+    ],
+    "exit_code": 0
+  }
+]

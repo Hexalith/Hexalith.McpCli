@@ -1,0 +1,409 @@
+{
+  "formatVersion": 1,
+  "module": "tenants",
+  "purpose": "release",
+  "targets": [
+    {
+      "id": "T01",
+      "name": "tenants.add-user-to-tenant",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.AddUserToTenant"
+    },
+    {
+      "id": "T02",
+      "name": "tenants.change-user-role",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.ChangeUserRole"
+    },
+    {
+      "id": "T03",
+      "name": "tenants.create-tenant",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.CreateTenant"
+    },
+    {
+      "id": "T04",
+      "name": "tenants.disable-tenant",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.DisableTenant"
+    },
+    {
+      "id": "T05",
+      "name": "tenants.enable-tenant",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.EnableTenant"
+    },
+    {
+      "id": "T06",
+      "name": "tenants.get-tenant",
+      "contractType": "Hexalith.Tenants.Contracts.Queries.GetTenantQuery"
+    },
+    {
+      "id": "T07",
+      "name": "tenants.get-tenant-audit",
+      "contractType": "Hexalith.Tenants.Contracts.Queries.GetTenantAuditQuery"
+    },
+    {
+      "id": "T08",
+      "name": "tenants.get-tenant-users",
+      "contractType": "Hexalith.Tenants.Contracts.Queries.GetTenantUsersQuery"
+    },
+    {
+      "id": "T09",
+      "name": "tenants.get-user-tenants",
+      "contractType": "Hexalith.Tenants.Contracts.Queries.GetUserTenantsQuery"
+    },
+    {
+      "id": "T10",
+      "name": "tenants.list-tenants",
+      "contractType": "Hexalith.Tenants.Contracts.Queries.ListTenantsQuery"
+    },
+    {
+      "id": "T11",
+      "name": "tenants.remove-tenant-configuration",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.RemoveTenantConfiguration"
+    },
+    {
+      "id": "T12",
+      "name": "tenants.remove-user-from-tenant",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.RemoveUserFromTenant"
+    },
+    {
+      "id": "T13",
+      "name": "tenants.set-tenant-configuration",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.SetTenantConfiguration"
+    },
+    {
+      "id": "T14",
+      "name": "tenants.update-tenant",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.UpdateTenant"
+    },
+    {
+      "id": "T15",
+      "name": "tenants.bootstrap-global-admin",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.BootstrapGlobalAdmin"
+    },
+    {
+      "id": "T16",
+      "name": "tenants.set-global-administrator",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.SetGlobalAdministrator"
+    },
+    {
+      "id": "T17",
+      "name": "tenants.remove-global-administrator",
+      "contractType": "Hexalith.Tenants.Contracts.Commands.RemoveGlobalAdministrator"
+    },
+    {
+      "id": "T18",
+      "name": "tenants.get-global-administrators",
+      "contractType": "Hexalith.Tenants.Contracts.Queries.GetGlobalAdministratorsQuery"
+    },
+    {
+      "id": "T19",
+      "name": "tenants.resolve-tenant-owner-authority",
+      "contractType": "Hexalith.Tenants.Contracts.Queries.ResolveTenantOwnerAuthority"
+    },
+    {
+      "id": "T20",
+      "name": "tenants.resolve-tenant-read-authority",
+      "contractType": "Hexalith.Tenants.Contracts.Queries.ResolveTenantReadAuthority"
+    }
+  ],
+  "legacyRows": [
+    {
+      "id": "L01",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/AddUserToTenant.cs",
+      "targetIds": [
+        "T01"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L02",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/ChangeUserRole.cs",
+      "targetIds": [
+        "T02"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L03",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/CreateTenant.cs",
+      "targetIds": [
+        "T03"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L04",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/DisableTenant.cs",
+      "targetIds": [
+        "T04"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L05",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/EnableTenant.cs",
+      "targetIds": [
+        "T05"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L06",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Queries/GetTenantQuery.cs",
+      "targetIds": [
+        "T06"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L07",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Queries/GetTenantAuditQuery.cs",
+      "targetIds": [
+        "T07"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L08",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Queries/GetTenantUsersQuery.cs",
+      "targetIds": [
+        "T08"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L09",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Queries/GetUserTenantsQuery.cs",
+      "targetIds": [
+        "T09"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L10",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Queries/ListTenantsQuery.cs",
+      "targetIds": [
+        "T10"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L11",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/RemoveTenantConfiguration.cs",
+      "targetIds": [
+        "T11"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L12",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/RemoveUserFromTenant.cs",
+      "targetIds": [
+        "T12"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L13",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/SetTenantConfiguration.cs",
+      "targetIds": [
+        "T13"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L14",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/UpdateTenant.cs",
+      "targetIds": [
+        "T14"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Proposed v1 gateway operation already decorated and covered by a Story 4.8 vector; exact current release artifact and inventory require fresh owning-maintainer approval.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L15",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/BootstrapGlobalAdmin.cs",
+      "targetIds": [
+        "T15"
+      ],
+      "disposition": "defer",
+      "coverage": "exclude",
+      "rationale": "Global-administrator bootstrap is explicitly outside Story 4.8 v1 decoration. This records no retirement permission.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L16",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/SetGlobalAdministrator.cs",
+      "targetIds": [
+        "T16"
+      ],
+      "disposition": "defer",
+      "coverage": "exclude",
+      "rationale": "Global-administrator changes are explicitly outside Story 4.8 v1 decoration. This records no retirement permission.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L17",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Commands/RemoveGlobalAdministrator.cs",
+      "targetIds": [
+        "T17"
+      ],
+      "disposition": "defer",
+      "coverage": "exclude",
+      "rationale": "Global-administrator changes are explicitly outside Story 4.8 v1 decoration. This records no retirement permission.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L18",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Queries/GetGlobalAdministratorsQuery.cs",
+      "targetIds": [
+        "T18"
+      ],
+      "disposition": "defer",
+      "coverage": "exclude",
+      "rationale": "Global-administrator enumeration is explicitly outside Story 4.8 v1 decoration. This records no retirement permission.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L19",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Queries/ResolveTenantOwnerAuthority.cs",
+      "targetIds": [
+        "T19"
+      ],
+      "disposition": "defer",
+      "coverage": "exclude",
+      "rationale": "Internal authorization proof is explicitly outside Story 4.8 v1 decoration. This records no retirement permission.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    },
+    {
+      "id": "L20",
+      "legacyOperation": "src/Hexalith.Tenants.Contracts/Queries/ResolveTenantReadAuthority.cs",
+      "targetIds": [
+        "T20"
+      ],
+      "disposition": "defer",
+      "coverage": "exclude",
+      "rationale": "New internal delegated tenant-read proof remains undecorated in the current candidate; proposed exclusion needs owner approval. This records no retirement permission.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "_bmad-output/implementation-artifacts/evidence/story-4-11/owner-approval/approval.json"
+      }
+    }
+  ]
+}

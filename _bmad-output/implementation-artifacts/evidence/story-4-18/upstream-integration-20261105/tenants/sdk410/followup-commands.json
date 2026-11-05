@@ -1,0 +1,46 @@
+[
+  {
+    "name": "corrected-bootstrap-binding-test",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+      "-method",
+      "Hexalith.Tenants.Contracts.Tests.CiQualityGateScriptTests.FrozenBootstrapJobsBindTheCompletePublishedSdkCohort",
+      "-xml",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/corrected-bootstrap-binding-test.xml"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.17
+  },
+  {
+    "name": "server-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj",
+      "-c",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-nr:false",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithFrontComposerFromSource=false",
+      "-p:HexalithMemoriesFromSource=false"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 7.4
+  },
+  {
+    "name": "server-tests-sdk410",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Tenants.Server.Tests/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll",
+      "-xml",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/server-tests-sdk410.xml"
+    ],
+    "exit_code": 1,
+    "elapsed_seconds": 12.7
+  }
+]

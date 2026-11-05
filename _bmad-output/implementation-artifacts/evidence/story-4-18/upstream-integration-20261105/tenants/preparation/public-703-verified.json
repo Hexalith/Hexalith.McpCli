@@ -1,0 +1,151 @@
+{
+  "time_utc": "2026-11-05T12:45:50.065254+00:00",
+  "scope": "Read-only downloaded public archives; no adoption into SDK4.1 selection. Exact7.0.3 identities occupied, sourcef412, dependencies4.0.4.",
+  "packages": [
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "7.0.3",
+      "source": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archive_sha256": "57c2125fe0e698221bcd25dae5a468a9c4c7443e6de93a13d12c9e6e957a1d6e",
+      "bytes": 61154,
+      "signed": true,
+      "consumer_entries_equal_to_rejected_prepared_archive": true,
+      "changed_entries": [],
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.contracts/7.0.3/hexalith.tenants.contracts.7.0.3.nupkg"
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "version": "7.0.3",
+      "source": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archive_sha256": "c34cb38f538597ef040d8a5174e0c63e272aec0f319a9be904ff9b6c681cd1c7",
+      "bytes": 37701,
+      "signed": true,
+      "consumer_entries_equal_to_rejected_prepared_archive": true,
+      "changed_entries": [],
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.client/7.0.3/hexalith.tenants.client.7.0.3.nupkg"
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "version": "7.0.3",
+      "source": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Server",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.DomainService",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.ServiceDefaults",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archive_sha256": "891058a7fb3afa1cf08b33368090c85e96dfab22af53654562ab632d182f6a84",
+      "bytes": 42608,
+      "signed": true,
+      "consumer_entries_equal_to_rejected_prepared_archive": true,
+      "changed_entries": [],
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.server/7.0.3/hexalith.tenants.server.7.0.3.nupkg"
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "version": "7.0.3",
+      "source": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.DomainService",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Server",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archive_sha256": "3203cd89b21f2e21c32381ba8c52a6fb975fd5cceb95778a9e2ba0f7bc2d5f5b",
+      "bytes": 28793,
+      "signed": true,
+      "consumer_entries_equal_to_rejected_prepared_archive": true,
+      "changed_entries": [],
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.testing/7.0.3/hexalith.tenants.testing.7.0.3.nupkg"
+    },
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "version": "7.0.3",
+      "source": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Aspire",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.ServiceDefaults",
+          "version": "4.0.4",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "archive_sha256": "fd2319f84fd6cfd0e667831ce32beb459a813076757210dc3cb8a97eb24ba647",
+      "bytes": 22950,
+      "signed": true,
+      "consumer_entries_equal_to_rejected_prepared_archive": true,
+      "changed_entries": [],
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.aspire/7.0.3/hexalith.tenants.aspire.7.0.3.nupkg"
+    }
+  ]
+}

@@ -1,0 +1,157 @@
+{
+  "time_utc": "2026-11-05T14:03:15.792617+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "run": 42039944398,
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "version": "7.0.4",
+  "sdk": "4.1.0",
+  "sdk_public_source": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+  "artifact": {
+    "id": 13420269243,
+    "name": "release-candidate",
+    "sha256": "7a0ca2d3fcf62f17e6dc162864fecb9349d434ae0aea65c1adc8d17437b4be6d",
+    "tar_sha256": "19a6bbb12015ecf69efba3786f02920b4db1bba1e4194932e564bcc61d750e01"
+  },
+  "packages": [
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "sha256": "b322382a15a0a1a266e3343c5274efbbed32c41418a1c1bc97902e39fd74ccc8",
+      "dll_sha256": "b48cc04f982bc58fa4c93712a2e55ab1f5c28532634eec620528519f78cc77c1",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Aspire",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.ServiceDefaults",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false,
+      "filename": "Hexalith.Tenants.Aspire.7.0.4.nupkg"
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "sha256": "f8cfec616a06edd6144fa03b39648873d83362bc543659602688ac13926a5da9",
+      "dll_sha256": "e439b0a965fc9a10f40629586127ea8cea51800e93cf251723631e44993748e6",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false,
+      "filename": "Hexalith.Tenants.Client.7.0.4.nupkg"
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "sha256": "43bc7531037038acb2baa7bb25b1fb55b8b102931746119cdc0897e07cd827eb",
+      "dll_sha256": "6758c6691127f0f480d1a84860de621bd610f60d7ef1b6c5fe9e5a768283f983",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false,
+      "filename": "Hexalith.Tenants.Contracts.7.0.4.nupkg"
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "sha256": "8c5b5cd99569dffc3787bba610c571424626bbf4d557f5c8c8c14b91e480d482",
+      "dll_sha256": "44187842f060b1c7bd8a4cff3bf7a3c69c1eaebb0aae9267b61a401cc41d27a3",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Server",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.DomainService",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.ServiceDefaults",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false,
+      "filename": "Hexalith.Tenants.Server.7.0.4.nupkg"
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "sha256": "7b48f809397b65207e5c1da55050ab7fd1c12d24e1913d68a961db1bbbce2af6",
+      "dll_sha256": "cf9df7d6d41d5348c52e947bfa323f209a32b7c22bbbed77d8ab310b07e21b0f",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.DomainService",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Server",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false,
+      "filename": "Hexalith.Tenants.Testing.7.0.4.nupkg"
+    }
+  ],
+  "consumer_receipt": "verified-prepared/catalog-package-consumer.json",
+  "semantic_release": "25.0.9",
+  "source_job_and_preparation_succeeded": true,
+  "publication_approval_submitted": false,
+  "user_authorization": "Spec2026-11-05 exact Tenants7.0.4 source8e205, fiveNuGetIDs, both multi-platform images and tag/release/assets."
+}

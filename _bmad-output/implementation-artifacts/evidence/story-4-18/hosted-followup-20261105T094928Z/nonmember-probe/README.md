@@ -1,0 +1,11 @@
+# Proposed Tenants rejection-only read fix
+
+Owner: Hexalith.Tenants. This is a proposed patch retained outside the read-only references directory. It has not been applied to that repository or selected by McpCli.
+
+The pinned owner source at `1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27` intentionally retains projection checkpoints for rejection-only histories. Its `GetTenantQueryHandler` currently treats the resulting nonnull, empty `TenantReadModel` as a created tenant. The actual pinned projection/query source reproduces a successful read containing empty `tenantId`/`name` and `Unknown` status after `InsufficientPermissionsRejection`. This explains the independent smoke failure without implying that the rejected creation emitted `TenantCreated`.
+
+`tenants-rejection-only-read.patch` changes only the owner query's existence condition and adds two focused xUnit tests. A missing business identity is handled through the existing not-found/forbidden path; rejection/audit checkpoints remain retained. The tests exercise the real shared in-memory store, original projection source and query source, retain the checkpoint, require administrator not-found/nonmember forbidden, then prove legitimate creation after rejection and preservation after a later rejection.
+
+`regression-results.json` binds each command and query source hash. The unchanged owner guard fails one of the two tests; the proposed guard passes both with no skips. Both red/green Release builds pass `-warnaserror`. `patch-apply-check.json` proves the patch applies to the pinned source in a disposable directory. The original failed console probe and initial fixture compilation errors are retained separately.
+
+The query base and its collaborators come from the previously reproduced pinned owner host binary (exact hash in `query-source.json`); the two changed/tested types compile directly from exact owner source. This is a focused in-memory diagnosis and proposed fix. It does not establish live compatibility, package publication, current owner-main applicability, or release acceptance. The owner must review/integrate and publish compatible artifacts; McpCli runtime/source changes need separate authorization under Story 4.18's frozen scope. Keep its current live rejection guard blocking.

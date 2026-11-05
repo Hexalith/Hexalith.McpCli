@@ -1,0 +1,10 @@
+{
+  "result": "failed",
+  "fullV1Accepted": false,
+  "packages": [
+    "Hexalith.Parties.Contracts",
+    "Hexalith.Tenants.Contracts"
+  ],
+  "results": [],
+  "error": "Hexalith.Tenants.Contracts: restored bytes differ from the approved artifact hash."
+}

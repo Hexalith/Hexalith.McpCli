@@ -1,0 +1,3 @@
+From https://github.com/Hexalith/Hexalith.Parties
+ * branch              main       -> FETCH_HEAD
+   bb278312..b8ec6852  main       -> origin/main

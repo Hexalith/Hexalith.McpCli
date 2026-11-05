@@ -1,0 +1,52 @@
+{
+  "result": "failed",
+  "fullLiveAccepted": false,
+  "runId": "da23d899e99b4f2395a0878d7d8f147e",
+  "preparationRunId": "7f559e84e73c4aa48dddf82d7b3fec74",
+  "output": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e",
+  "vectors": {
+    "result": "failed",
+    "error": "/home/runner/work/_temp/mcpcli-live-ci-31b_6ibw/venv/bin/python /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tools/live-topology/run-vectors.py --output /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors exited 1; stdout: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors-process.stdout.txt; stderr: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors-process.stderr.txt; failed Operations: parties.create-party, parties.deactivate-party, parties.get-party, parties.list-parties, parties.reactivate-party, parties.search-parties, parties.update-party; lane receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/live-lane.json; runner stdout: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors-process.stdout.txt",
+    "failures": [
+      {
+        "operation": "parties.create-party",
+        "result": "failed",
+        "error": "VectorError: parties.create-party: isolated child exited 1; see /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.create-party"
+      },
+      {
+        "operation": "parties.deactivate-party",
+        "result": "failed",
+        "error": "VectorError: parties.deactivate-party: isolated child exited 1; see /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.deactivate-party"
+      },
+      {
+        "operation": "parties.get-party",
+        "result": "failed",
+        "error": "VectorError: parties.get-party: isolated child exited 1; see /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.get-party"
+      },
+      {
+        "operation": "parties.list-parties",
+        "result": "failed",
+        "error": "VectorError: parties.list-parties: isolated child exited 1; see /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.list-parties"
+      },
+      {
+        "operation": "parties.reactivate-party",
+        "result": "failed",
+        "error": "VectorError: parties.reactivate-party: isolated child exited 1; see /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.reactivate-party"
+      },
+      {
+        "operation": "parties.search-parties",
+        "result": "failed",
+        "error": "VectorError: parties.search-parties: isolated child exited 1; see /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.search-parties"
+      },
+      {
+        "operation": "parties.update-party",
+        "result": "failed",
+        "error": "VectorError: parties.update-party: isolated child exited 1; see /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.update-party"
+      }
+    ],
+    "interrupted": [],
+    "laneError": null,
+    "receipt": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/live-lane.json"
+  },
+  "error": "RuntimeError: /home/runner/work/_temp/mcpcli-live-ci-31b_6ibw/venv/bin/python /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tools/live-topology/run-vectors.py --output /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors exited 1; stdout: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors-process.stdout.txt; stderr: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors-process.stderr.txt; failed Operations: parties.create-party, parties.deactivate-party, parties.get-party, parties.list-parties, parties.reactivate-party, parties.search-parties, parties.update-party; lane receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/live-lane.json; runner stdout: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors-process.stdout.txt; independent smoke failed: /home/runner/work/_temp/mcpcli-live-ci-31b_6ibw/venv/bin/python /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tools/live-topology/run-isolated.py -- dotnet /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.GatewaySmokeTests -failSkips -result-xml /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/smoke/tests.xml exited 1; stdout: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/smoke/process.stdout.txt; stderr: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/smoke/process.stderr.txt"
+}

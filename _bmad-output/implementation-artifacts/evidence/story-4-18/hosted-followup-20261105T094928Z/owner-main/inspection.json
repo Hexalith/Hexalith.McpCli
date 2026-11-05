@@ -1,0 +1,65 @@
+{
+  "schema": "mcpcli-story-4-18-owner-main-inspection/v1",
+  "observations": [
+    {
+      "repository": "Hexalith/Hexalith.Tenants",
+      "source_sha": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+      "observed_at_utc": "2026-11-05T10:01:14.569579+00:00",
+      "files": [
+        {
+          "path": "src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs",
+          "retained_path": "Hexalith.Tenants/src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs",
+          "sha256": "977bda534905a9e44380ee92c59bf7823729dd63b1aa37c82a2d0adf982ea2f8",
+          "command": [
+            "gh",
+            "api",
+            "-H",
+            "Accept: application/vnd.github.raw+json",
+            "repos/Hexalith/Hexalith.Tenants/contents/src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs?ref=143cec60a3f5bb1831fa57f35c510880ceb788d8"
+          ],
+          "exit_code": 0
+        },
+        {
+          "path": "src/Hexalith.Tenants/Projections/TenantProjectionHandler.cs",
+          "retained_path": "Hexalith.Tenants/src/Hexalith.Tenants/Projections/TenantProjectionHandler.cs",
+          "sha256": "d85fa7c634258572d71b575b1955a7bf246faa1e306cb3f18c34745f3674db78",
+          "command": [
+            "gh",
+            "api",
+            "-H",
+            "Accept: application/vnd.github.raw+json",
+            "repos/Hexalith/Hexalith.Tenants/contents/src/Hexalith.Tenants/Projections/TenantProjectionHandler.cs?ref=143cec60a3f5bb1831fa57f35c510880ceb788d8"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "owner_main_unchanged_after_fetch": true
+    },
+    {
+      "repository": "Hexalith/Hexalith.Parties",
+      "source_sha": "bb2783120c0eed620e3d4f52a2ebaf6aa510126f",
+      "observed_at_utc": "2026-11-05T10:01:15.767193+00:00",
+      "files": [
+        {
+          "path": "src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs",
+          "retained_path": "Hexalith.Parties/src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs",
+          "sha256": "4a402973a21bd276b0088cb04cff8cefea724a52b0acc9317d9aa0257a796b4a",
+          "command": [
+            "gh",
+            "api",
+            "-H",
+            "Accept: application/vnd.github.raw+json",
+            "repos/Hexalith/Hexalith.Parties/contents/src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs?ref=bb2783120c0eed620e3d4f52a2ebaf6aa510126f"
+          ],
+          "exit_code": 0
+        }
+      ],
+      "owner_main_unchanged_after_fetch": true
+    }
+  ],
+  "findings": {
+    "tenants_created_identity_guard_missing": true,
+    "parties_explicit_compatibility_selector_bindings_missing": true
+  },
+  "limits": "Read-only current owner-main source inspection. No owner changes, package qualification or live acceptance."
+}

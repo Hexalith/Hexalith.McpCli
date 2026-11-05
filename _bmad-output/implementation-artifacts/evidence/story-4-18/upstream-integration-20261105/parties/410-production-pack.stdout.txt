@@ -1,0 +1,1 @@
+  Successfully created package '/tmp/mcpcli-418-upstream-owner-evidence/parties/packed/Hexalith.Parties.Contracts.0.0.0-selector-check.nupkg'.

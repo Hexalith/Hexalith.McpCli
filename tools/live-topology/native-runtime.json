@@ -1,17 +1,17 @@
 {
-  "eventStoreVersion": "4.0.4",
+  "eventStoreVersion": "4.1.0",
   "sources": {
     "Hexalith.EventStore": {
       "repository": "https://github.com/Hexalith/Hexalith.EventStore.git",
-      "commit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     "Hexalith.Tenants": {
       "repository": "https://github.com/Hexalith/Hexalith.Tenants.git",
-      "commit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27"
+      "commit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
     },
     "Hexalith.Parties": {
       "repository": "https://github.com/Hexalith/Hexalith.Parties.git",
-      "commit": "13a4f913f2f0177a30291091cbc8893202e4622d"
+      "commit": "d4415715b2517927655c538e6d41e05d71d4207e"
     },
     "Hexalith.Platform": {
       "repository": "https://github.com/Hexalith/Hexalith.Platform.git",
@@ -21,117 +21,117 @@
   "packages": [
     {
       "id": "Hexalith.EventStore.Admin.Abstractions",
-      "version": "4.0.4",
-      "sha256": "b36b6dc74889eb59357578729ce740a4ec4705f1e7638c2c0cf6664d5f5c4875",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "fbad15a2a09282b438d7c8594a2c0206e85eb7691bc91053f57da5e91f0fb928",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.Admin.Cli",
-      "version": "4.0.4",
-      "sha256": "2dbf6647375b16255bba52cdb7af21842454c7da1301544078060cf1e2c0973a",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "4623f699c38ff5ce725b9ab42216932c9ee4b1ace86bf78601c68be43e27e40a",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.Admin.Server",
-      "version": "4.0.4",
-      "sha256": "5a4d619d869ab079ccd091ecba6ab605e2dc0ebeddfc8bf414dc7e81dff3fe55",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "910b31d7014c3e11789ae3672b8fde353af5fe8653ec76a71e589f054f5e3d3e",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.Aspire",
-      "version": "4.0.4",
-      "sha256": "ec83ffb50c8254a447eba3b21a238de562577bb5ca99b88fef0d31126a8e245f",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "c498671d461b0342d76be0b02bd76c4ad0cf8fd1ba7017ec3b6bdc67bb0746b1",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.Client",
-      "version": "4.0.4",
-      "sha256": "d0ee0a075c60ee69b37c53a11844ac3dd238a77038dfdf650ce8c24dee562f71",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "efab5fd7b4e7d5bbafc2a09adc92e98b985ca750ee888323585892c33cab50cc",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.Contracts",
-      "version": "4.0.4",
-      "sha256": "9ec69a9b44fd7f5ba42a8469cba1fa03cdca327cb97b7985625972a1323df5b5",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "e2c09e4f00340f26dd3c1509167c83f41ca757f2442f6624bc58edace1fe9a70",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.DomainService",
-      "version": "4.0.4",
-      "sha256": "5ce256c9c62b16185742de531abb0b549b3096e0e4e5d1aba97fe6703b96d097",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "da40e1e05461bac67bbbf9f3a839085e0f8c65e726168b33f2dc955e0c2d1fb0",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.Gateway",
-      "version": "4.0.4",
-      "sha256": "1174296b2cae05bb89b5f675fd6e0edab18da040a2829ffa684049f12c21dd4d",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "ba571748d713eeab11bdaa310385ac20602566a2538fd364befb2ff1ea5c2d81",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.RestApi.Generators",
-      "version": "4.0.4",
-      "sha256": "4adf85638ade08690a9c1c853b9ec3c0933168961cbdae5beaa1d354ff4bd556",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "c15f859665aebfd18844f7fd9eee4bd38f07cea61aad3310371b391a1b093467",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.Server",
-      "version": "4.0.4",
-      "sha256": "c8f7e8ffea04f65787bdb18bfb46e03176d8cdb548e4d269d94e2483a25fbeb9",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "fce322ee16345aa1c150375065bc2665c34f38d1bab6086d1144dd275dc25da4",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.ServiceDefaults",
-      "version": "4.0.4",
-      "sha256": "25c910b17e82fc90326ebd974dc8b6c84d8ad55e1b4f23b9459fd56896f0816d",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "bdd2fd1e6eb19e45f488da2654673acc662a4d3c8e4b5e8465e90aac3ce901d5",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.SignalR",
-      "version": "4.0.4",
-      "sha256": "b2f724f9bdc6a7e0cb1e62d9ea118d19dd302e46583690cd227d024249f5ff90",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "ae1a8be64e86e6fd9bac9e6d8e08271971756f6edf376ff055677101a3360246",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.Testing",
-      "version": "4.0.4",
-      "sha256": "fae2691ad4d316972fa2f4499b9d6efeee286578299630750571b1e9f4dbdfee",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "7b8346041a1e36b41186b3dc239a72e8976c56b2971b8adc6ad54d8e77c29b3f",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.EventStore.Testing.Integration",
-      "version": "4.0.4",
-      "sha256": "fcf16aecd12df63a926ea6ecce25490da3bb63afb16bb50fe917172e9526a306",
-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
+      "version": "4.1.0",
+      "sha256": "4f799b95b5272415e679c7b368fa078348ec3f83b8bf6befddfc4caf0eed96fe",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
     },
     {
       "id": "Hexalith.Tenants.Aspire",
-      "version": "7.0.0",
-      "sha256": "7b85802d60b57c5567eb00834f2ada09a38656691061218b24da5833fde81af8",
-      "sourceCommit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27"
+      "version": "7.0.4",
+      "sha256": "97f6f65eda909e3797f873b4fd1c446f57fab1dd14685069e124b6ab83c7aae5",
+      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
     },
     {
       "id": "Hexalith.Tenants.Client",
-      "version": "7.0.0",
-      "sha256": "ecaade25858382710fe086c158b6e23d21c768fcde0b1b76568e044fba2c0226",
-      "sourceCommit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27"
+      "version": "7.0.4",
+      "sha256": "36ca4232d215d95bdcd0e6ff4867df7c844079bb538425d43f9e618fabd5e5a6",
+      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
     },
     {
       "id": "Hexalith.Tenants.Contracts",
-      "version": "7.0.0",
-      "sha256": "e21f5ac7b5f332f1921f70a249ab2032b9978d56ffdd6641a0a4b94d04850bdc",
-      "sourceCommit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27"
+      "version": "7.0.4",
+      "sha256": "04989ef3b9755c8af217517c7964a75796903d2c21c517ff76d7d46c574861a7",
+      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
     },
     {
       "id": "Hexalith.Tenants.Server",
-      "version": "7.0.0",
-      "sha256": "9cf820339470711db992d83f0478fd07d02a77b449225f4f49764dd1e728f975",
-      "sourceCommit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27"
+      "version": "7.0.4",
+      "sha256": "6daeac9fde718cdc84d804f132ec33aeae49c9b9fbeaf91e876dbaec7c4302be",
+      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
     },
     {
       "id": "Hexalith.Tenants.Testing",
-      "version": "7.0.0",
-      "sha256": "482987d84f4d6e6aab1c8205de70f0662fe1c732369917842c9f464605010448",
-      "sourceCommit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27"
+      "version": "7.0.4",
+      "sha256": "454cb5126dfdaf7c3fa38b470527f5a602bed8dbd0d21409aeb46995673802c3",
+      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
     }
   ]
 }

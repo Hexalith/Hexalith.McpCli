@@ -1,0 +1,17 @@
+{
+  "time_utc": "2026-11-05T12:39:30.495646+00:00",
+  "contracts": {
+    "executed": 1005,
+    "failed": 1,
+    "skipped": 0,
+    "sole_failure": "Relevant CI fixture expected old 4.0.4 override; fixed and focused rerun passed."
+  },
+  "server": {
+    "executed": 1815,
+    "failed": 7,
+    "skipped": 0,
+    "failures": "All seven require ordinary source/config files in root-declared EventStore, absent in the intentionally minimal isolated checkout. Initialize only this declared direct input and rerun the failed classes; no production fix required."
+  },
+  "cache": "Current dotnet restore/build/tests inherit task-private NUGET_PACKAGES and HTTP cache. Early separate synthetic pack-lifecycle invocation did not set these variables; it has no owner-package source installation step. No shared cache contents were repaired.",
+  "shared_cache_mismatch_attribution": "Unknown; retained observed bytes and fresh public proof only."
+}

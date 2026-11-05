@@ -1,0 +1,9 @@
+{
+  "artifact_id": 13412349342,
+  "staging_run_id": 42023389616,
+  "source_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "expected_digest": "sha256:c54d61c15bf5c27a1cb8f4013cd66059e596089f6d05c540203fb2b1be9111d5",
+  "actual_digest": "sha256:c54d61c15bf5c27a1cb8f4013cd66059e596089f6d05c540203fb2b1be9111d5",
+  "digest_matches": true,
+  "expired": false
+}

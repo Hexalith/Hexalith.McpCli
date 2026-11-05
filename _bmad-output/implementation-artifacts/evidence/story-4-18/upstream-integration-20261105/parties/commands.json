@@ -1,0 +1,366 @@
+[
+  {
+    "name": "410-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Catalog.Tests/Hexalith.Parties.Catalog.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-warnaserror",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithTenantsVersion=5.11.2",
+      "-p:HexalithMemoriesVersion=3.0.11",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithTenantsFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithMcpCliFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:19:23.627078+00:00",
+    "completed_at_utc": "2026-11-05T11:19:27.675593+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-effective-properties",
+    "command": [
+      "dotnet",
+      "msbuild",
+      "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+      "-nologo",
+      "-getProperty:HexalithEventStoreVersion,HexalithEventStoreCatalogApiSupported,DefineConstants",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithTenantsVersion=5.11.2",
+      "-p:HexalithMemoriesVersion=3.0.11",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithTenantsFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithMcpCliFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:19:27.675726+00:00",
+    "completed_at_utc": "2026-11-05T11:19:28.062763+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-discovery",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Catalog.Tests/bin/Release/net10.0/Hexalith.Parties.Catalog.Tests.dll",
+      "-preEnumerateTheories",
+      "-list",
+      "tests"
+    ],
+    "started_at_utc": "2026-11-05T11:19:28.063048+00:00",
+    "completed_at_utc": "2026-11-05T11:19:28.228914+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-catalog-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Catalog.Tests/bin/Release/net10.0/Hexalith.Parties.Catalog.Tests.dll"
+    ],
+    "started_at_utc": "2026-11-05T11:19:28.229137+00:00",
+    "completed_at_utc": "2026-11-05T11:19:28.692159+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-removed-bindings-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Catalog.Tests/Hexalith.Parties.Catalog.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-warnaserror",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithTenantsVersion=5.11.2",
+      "-p:HexalithMemoriesVersion=3.0.11",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithTenantsFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithMcpCliFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:19:28.692577+00:00",
+    "completed_at_utc": "2026-11-05T11:19:30.303559+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-removed-bindings-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Catalog.Tests/bin/Release/net10.0/Hexalith.Parties.Catalog.Tests.dll",
+      "-class",
+      "Hexalith.Parties.Contracts.Tests.PartiesCatalogTests"
+    ],
+    "started_at_utc": "2026-11-05T11:19:30.303749+00:00",
+    "completed_at_utc": "2026-11-05T11:19:30.703959+00:00",
+    "exit_code": 1
+  },
+  {
+    "name": "410-final-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Catalog.Tests/Hexalith.Parties.Catalog.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-warnaserror",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithTenantsVersion=5.11.2",
+      "-p:HexalithMemoriesVersion=3.0.11",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithTenantsFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithMcpCliFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:19:30.704222+00:00",
+    "completed_at_utc": "2026-11-05T11:19:32.134270+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-final-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Catalog.Tests/bin/Release/net10.0/Hexalith.Parties.Catalog.Tests.dll"
+    ],
+    "started_at_utc": "2026-11-05T11:19:32.134501+00:00",
+    "completed_at_utc": "2026-11-05T11:19:32.582251+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "404-legacy-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Catalog.Tests/Hexalith.Parties.Catalog.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-warnaserror",
+      "-p:HexalithEventStoreVersion=4.0.4",
+      "-p:HexalithTenantsVersion=5.11.2",
+      "-p:HexalithMemoriesVersion=3.0.11",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithTenantsFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithMcpCliFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:19:32.582486+00:00",
+    "completed_at_utc": "2026-11-05T11:19:34.471542+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "404-legacy-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Catalog.Tests/bin/Release/net10.0/Hexalith.Parties.Catalog.Tests.dll"
+    ],
+    "started_at_utc": "2026-11-05T11:19:34.471783+00:00",
+    "completed_at_utc": "2026-11-05T11:19:34.888830+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "capability-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Ci.Tests/Hexalith.Parties.Ci.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-warnaserror",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithTenantsVersion=5.11.2",
+      "-p:HexalithMemoriesVersion=3.0.11",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithTenantsFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithMcpCliFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:21:16.507976+00:00",
+    "completed_at_utc": "2026-11-05T11:21:18.528387+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "capability-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Ci.Tests/bin/Release/net10.0/Hexalith.Parties.Ci.Tests.dll",
+      "-method",
+      "Hexalith.Parties.Ci.Tests.AspireRuntimePreparationTests.CatalogApiAvailabilityDoesNotSelectNativeHosts"
+    ],
+    "started_at_utc": "2026-11-05T11:21:18.528679+00:00",
+    "completed_at_utc": "2026-11-05T11:21:25.290871+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-production-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Catalog.Tests/Hexalith.Parties.Catalog.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-warnaserror",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithTenantsVersion=5.11.2",
+      "-p:HexalithMemoriesVersion=3.0.11",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithTenantsFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithMcpCliFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:21:25.291123+00:00",
+    "completed_at_utc": "2026-11-05T11:21:30.824776+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-release-properties",
+    "command": [
+      "dotnet",
+      "msbuild",
+      "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+      "-nologo",
+      "-p:Configuration=Release",
+      "-getProperty:HexalithEventStoreVersion,HexalithEventStoreCatalogApiSupported,DefineConstants",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithTenantsVersion=5.11.2",
+      "-p:HexalithMemoriesVersion=3.0.11",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithTenantsFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithMcpCliFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:21:30.825059+00:00",
+    "completed_at_utc": "2026-11-05T11:21:31.165781+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-production-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Catalog.Tests/bin/Release/net10.0/Hexalith.Parties.Catalog.Tests.dll"
+    ],
+    "started_at_utc": "2026-11-05T11:21:31.166032+00:00",
+    "completed_at_utc": "2026-11-05T11:21:31.593071+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "410-production-pack",
+    "command": [
+      "dotnet",
+      "pack",
+      "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+      "--configuration",
+      "Release",
+      "--no-build",
+      "--no-restore",
+      "--output",
+      "/tmp/mcpcli-418-upstream-owner-evidence/parties/packed",
+      "-p:PackageVersion=0.0.0-selector-check",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithTenantsVersion=5.11.2",
+      "-p:HexalithMemoriesVersion=3.0.11",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithTenantsFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithMcpCliFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:21:31.593582+00:00",
+    "completed_at_utc": "2026-11-05T11:21:32.330491+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "rebased-default-properties",
+    "command": [
+      "dotnet",
+      "msbuild",
+      "src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj",
+      "-nologo",
+      "-p:Configuration=Release",
+      "-getProperty:HexalithEventStoreVersion,HexalithEventStoreCatalogApiSupported,DefineConstants"
+    ],
+    "source_sha": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+    "started_at_utc": "2026-11-05T11:26:30.678992+00:00",
+    "completed_at_utc": "2026-11-05T11:26:31.012772+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "rebased-default-catalog-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Catalog.Tests/Hexalith.Parties.Catalog.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "source_sha": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+    "started_at_utc": "2026-11-05T11:26:31.013000+00:00",
+    "completed_at_utc": "2026-11-05T11:26:33.565160+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "rebased-default-catalog-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Catalog.Tests/bin/Release/net10.0/Hexalith.Parties.Catalog.Tests.dll"
+    ],
+    "source_sha": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+    "started_at_utc": "2026-11-05T11:26:33.565367+00:00",
+    "completed_at_utc": "2026-11-05T11:26:34.008116+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "rebased-capability-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Parties.Ci.Tests/Hexalith.Parties.Ci.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-warnaserror"
+    ],
+    "source_sha": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+    "started_at_utc": "2026-11-05T11:26:34.008313+00:00",
+    "completed_at_utc": "2026-11-05T11:26:35.803336+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "rebased-capability-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Parties.Ci.Tests/bin/Release/net10.0/Hexalith.Parties.Ci.Tests.dll",
+      "-method",
+      "Hexalith.Parties.Ci.Tests.AspireRuntimePreparationTests.CatalogApiAvailabilityDoesNotSelectNativeHosts"
+    ],
+    "source_sha": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+    "started_at_utc": "2026-11-05T11:26:35.803569+00:00",
+    "completed_at_utc": "2026-11-05T11:26:42.382192+00:00",
+    "exit_code": 0
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "command": [
+    "dotnet",
+    "msbuild",
+    "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+    "-nologo",
+    "-getProperty:HexalithEventStoreVersion,HexalithEventStoreFromSource,HexalithTenantsCatalogArtifactsAvailable,DefineConstants",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true",
+    "-p:HexalithEventStoreFromSource=false",
+    "-p:HexalithEventStoreVersion=4.1.0"
+  ],
+  "exit_code": 0,
+  "evaluation": {
+    "Properties": {
+      "HexalithEventStoreVersion": "4.1.0",
+      "HexalithEventStoreFromSource": "false",
+      "HexalithTenantsCatalogArtifactsAvailable": "true",
+      "DefineConstants": "TRACE;HEXALITH_DEVELOPMENT_CATALOG_COHORT;HEXALITH_DEVELOPMENT_CATALOG_SOURCE;HEXALITH_TECHNICAL_HTTP_CATALOG_BINDING;HEXALITH_CHECKPOINTED_TENANT_PROJECTION;DEBUG"
+    }
+  }
+}

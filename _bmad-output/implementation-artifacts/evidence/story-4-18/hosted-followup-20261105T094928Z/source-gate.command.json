@@ -1,0 +1,24 @@
+{
+  "command": [
+    "python3",
+    "scripts/verify-release-source.py",
+    "--staging",
+    "--output",
+    "/tmp/mcpcli-418-hosted-cu3do37s/source-gate.json",
+    "--",
+    "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "refs/heads/main",
+    "paired"
+  ],
+  "environment": {
+    "REPOSITORY": "Hexalith/Hexalith.McpCli"
+  },
+  "started_at_utc": "2026-11-05T10:03:05.232092+00:00",
+  "completed_at_utc": "2026-11-05T10:03:06.666547+00:00",
+  "source_before": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+  "source_after": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+  "clean_before": true,
+  "clean_after": true,
+  "exit_code": 1,
+  "receipt_emitted": false
+}

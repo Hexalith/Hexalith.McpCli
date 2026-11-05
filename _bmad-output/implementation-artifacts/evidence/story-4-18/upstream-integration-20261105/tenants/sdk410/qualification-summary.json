@@ -1,0 +1,135 @@
+{
+  "source_base": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "native_public_sdk": "4.1.0",
+  "native_public_source": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+  "patch_sha256": "5b2f6edbbfe91cd64e7ec66835ac5402c212c4c1fa11d39488395c8b81658062",
+  "tests": {
+    "contracts-tests": [
+      {
+        "environment": "64-bit (x64) .NET 10.0.14 [collection-per-class, parallel (collections, 14 threads)]",
+        "id": "59d5bbba-a089-43ed-bcbc-589c9b5e028d",
+        "name": "/tmp/mcpcli-418-tenants410-isolated/tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+        "run-date": "2026-11-05",
+        "run-time": "12:31:54",
+        "start-rtf": "2026-11-05T12:31:54.3293931+00:00",
+        "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+        "target-framework": ".NETCoreApp,Version=v10.0",
+        "errors": "0",
+        "failed": "1",
+        "finish-rtf": "2026-11-05T12:36:55.4929939+00:00",
+        "not-run": "0",
+        "passed": "1004",
+        "skipped": "0",
+        "time": "301.176",
+        "time-rtf": "00:05:01.1760000",
+        "total": "1005"
+      }
+    ],
+    "corrected-bootstrap-binding-test": [
+      {
+        "environment": "64-bit (x64) .NET 10.0.14 [collection-per-class, parallel (collections, 14 threads)]",
+        "id": "294fa7f5-3757-4400-b40b-1d4fa3b2b3a9",
+        "name": "/tmp/mcpcli-418-tenants410-isolated/tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+        "run-date": "2026-11-05",
+        "run-time": "12:37:54",
+        "start-rtf": "2026-11-05T12:37:54.4540976+00:00",
+        "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+        "target-framework": ".NETCoreApp,Version=v10.0",
+        "errors": "0",
+        "failed": "0",
+        "finish-rtf": "2026-11-05T12:37:56.3655862+00:00",
+        "not-run": "0",
+        "passed": "1",
+        "skipped": "0",
+        "time": "1.912",
+        "time-rtf": "00:00:01.9120000",
+        "total": "1"
+      }
+    ],
+    "server-tests-sdk410": [
+      {
+        "environment": "64-bit (x64) .NET 10.0.14 [collection-per-class, parallel (collections, 14 threads)]",
+        "id": "58cda327-164a-46f7-a86f-634bb792b60a",
+        "name": "/tmp/mcpcli-418-tenants410-isolated/tests/Hexalith.Tenants.Server.Tests/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll",
+        "run-date": "2026-11-05",
+        "run-time": "12:38:03",
+        "start-rtf": "2026-11-05T12:38:03.9846804+00:00",
+        "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+        "target-framework": ".NETCoreApp,Version=v10.0",
+        "errors": "0",
+        "failed": "7",
+        "finish-rtf": "2026-11-05T12:38:16.4015743+00:00",
+        "not-run": "0",
+        "passed": "1808",
+        "skipped": "0",
+        "time": "12.418",
+        "time-rtf": "00:00:12.4180000",
+        "total": "1815"
+      }
+    ],
+    "server-missing-fixtures-retest": [
+      {
+        "environment": "64-bit (x64) .NET 10.0.14 [collection-per-class, parallel (collections, 14 threads)]",
+        "id": "d2a43659-c8ee-43c7-9807-b14af2b49d64",
+        "name": "/tmp/mcpcli-418-tenants410-isolated/tests/Hexalith.Tenants.Server.Tests/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll",
+        "run-date": "2026-11-05",
+        "run-time": "12:40:40",
+        "start-rtf": "2026-11-05T12:40:40.4025054+00:00",
+        "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+        "target-framework": ".NETCoreApp,Version=v10.0",
+        "errors": "0",
+        "failed": "0",
+        "finish-rtf": "2026-11-05T12:40:40.5310204+00:00",
+        "not-run": "0",
+        "passed": "7",
+        "skipped": "0",
+        "time": "0.129",
+        "time-rtf": "00:00:00.1290000",
+        "total": "7"
+      }
+    ],
+    "legacy404-compiled-catalog-tests": [
+      {
+        "environment": "64-bit (x64) .NET 10.0.14 [collection-per-class, parallel (collections, 14 threads)]",
+        "id": "9d501197-4446-4efa-ae0a-9896aa8375fb",
+        "name": "/tmp/mcpcli-418-tenants410-isolated/tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+        "run-date": "2026-11-05",
+        "run-time": "12:40:52",
+        "start-rtf": "2026-11-05T12:40:52.2145656+00:00",
+        "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+        "target-framework": ".NETCoreApp,Version=v10.0",
+        "errors": "0",
+        "failed": "0",
+        "finish-rtf": "2026-11-05T12:40:52.4259445+00:00",
+        "not-run": "0",
+        "passed": "3",
+        "skipped": "0",
+        "time": "0.211",
+        "time-rtf": "00:00:00.2110000",
+        "total": "3"
+      }
+    ],
+    "public410-compiled-catalog-tests": [
+      {
+        "environment": "64-bit (x64) .NET 10.0.14 [collection-per-class, parallel (collections, 14 threads)]",
+        "id": "a1e4e47b-b06f-4813-99a2-0241dcf75c2b",
+        "name": "/tmp/mcpcli-418-tenants410-isolated/tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+        "run-date": "2026-11-05",
+        "run-time": "12:40:55",
+        "start-rtf": "2026-11-05T12:40:55.1377151+00:00",
+        "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+        "target-framework": ".NETCoreApp,Version=v10.0",
+        "errors": "0",
+        "failed": "0",
+        "finish-rtf": "2026-11-05T12:40:55.3497572+00:00",
+        "not-run": "0",
+        "passed": "3",
+        "skipped": "0",
+        "time": "0.212",
+        "time-rtf": "00:00:00.2120000",
+        "total": "3"
+      }
+    ]
+  },
+  "interpretation": "The sole full Contracts failure is corrected by the focused rerun. The seven full Server failures require pinned source documentation fixtures; all seven pass after their direct root input is initialized. No unchanged broad suite repeated. Future exact-source hosted qualification still required."
+}

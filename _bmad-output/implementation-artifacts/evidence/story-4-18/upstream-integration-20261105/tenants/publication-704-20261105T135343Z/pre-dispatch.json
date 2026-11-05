@@ -1,0 +1,42 @@
+{
+  "time_utc": "2026-11-05T13:53:54.827143+00:00",
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "remote_main": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "version": "7.0.4",
+  "packages": [
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "7.0.4",
+      "occupied": false,
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.contracts/index.json"
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "version": "7.0.4",
+      "occupied": false,
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.client/index.json"
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "version": "7.0.4",
+      "occupied": false,
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.server/index.json"
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "version": "7.0.4",
+      "occupied": false,
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.testing/index.json"
+    },
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "version": "7.0.4",
+      "occupied": false,
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.aspire/index.json"
+    }
+  ],
+  "active_or_matching_release_exists": false,
+  "authorization": "Spec additional publication authorization2026-11-05; exact user answer: Approve this Tenants publication.",
+  "scope": "Five manifestNuGetIDs;tenants/tenants-api7.0.4 forlinux/amd64 andlinux/arm64;source-boundtag/release/assets.",
+  "production_approval_authorized": true
+}

@@ -1,0 +1,5 @@
+{
+  "catalog": "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.Builds/Props/Directory.Packages.props",
+  "builds": "06a51f55bfe2e03a06e1121d94a41e98f1e3e251",
+  "overlay": "/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/native-runtime-packages.props"
+}

@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-418-sdk410-isolated/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 100 ms).
+  Restored /tmp/mcpcli-418-sdk410-isolated/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj (in 172 ms).
+  Restored /tmp/mcpcli-418-sdk410-isolated/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 211 ms).
+  Restored /tmp/mcpcli-418-sdk410-isolated/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 216 ms).
+  Restored /tmp/mcpcli-418-sdk410-isolated/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 217 ms).
+  Restored /tmp/mcpcli-418-sdk410-isolated/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 219 ms).
+  Restored /tmp/mcpcli-418-sdk410-isolated/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj (in 180 ms).
+  20 of 27 projects are up-to-date for restore.

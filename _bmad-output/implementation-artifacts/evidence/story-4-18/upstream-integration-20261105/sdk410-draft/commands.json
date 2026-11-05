@@ -1,0 +1,147 @@
+[
+  {
+    "name": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx"
+    ],
+    "started_at_utc": "2026-11-05T11:41:38.983734+00:00",
+    "completed_at_utc": "2026-11-05T11:41:40.400931+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 0
+  },
+  {
+    "name": "release-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "started_at_utc": "2026-11-05T11:41:40.407087+00:00",
+    "completed_at_utc": "2026-11-05T11:41:46.191690+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 0
+  },
+  {
+    "name": "manifest-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "started_at_utc": "2026-11-05T11:41:46.193805+00:00",
+    "completed_at_utc": "2026-11-05T11:43:49.256822+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 2
+  },
+  {
+    "name": "cohort-fixtures-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "started_at_utc": "2026-11-05T11:47:39.688132+00:00",
+    "completed_at_utc": "2026-11-05T11:47:42.768046+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 0
+  },
+  {
+    "name": "updated-manifest-guards",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.IntegrationFixtureUsesOnlyItsReviewedHexalithPackageClosure",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.NativeCatalogAuditTests.PublishedArchiveAndConsumedAssetsMatchActualCacheBytes"
+    ],
+    "started_at_utc": "2026-11-05T11:47:42.769864+00:00",
+    "completed_at_utc": "2026-11-05T11:47:43.126269+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 0
+  },
+  {
+    "name": "core-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "started_at_utc": "2026-11-05T11:47:43.128295+00:00",
+    "completed_at_utc": "2026-11-05T11:47:45.396437+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 0
+  },
+  {
+    "name": "cli-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "started_at_utc": "2026-11-05T11:47:45.398174+00:00",
+    "completed_at_utc": "2026-11-05T11:48:00.871618+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 0
+  },
+  {
+    "name": "mcp-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "started_at_utc": "2026-11-05T11:48:00.873416+00:00",
+    "completed_at_utc": "2026-11-05T11:48:02.775423+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 0
+  },
+  {
+    "name": "native-cohort-tests",
+    "command": [
+      "python3",
+      "-B",
+      "tools/live-topology/test_native_cohort.py"
+    ],
+    "started_at_utc": "2026-11-05T11:48:02.777181+00:00",
+    "completed_at_utc": "2026-11-05T11:48:02.858562+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 0
+  },
+  {
+    "name": "ci-hook-tests",
+    "command": [
+      "python3",
+      "-B",
+      "tools/live-topology/test_ci.py"
+    ],
+    "started_at_utc": "2026-11-05T11:48:02.860399+00:00",
+    "completed_at_utc": "2026-11-05T11:54:47.774397+00:00",
+    "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+    "exit_code": 0
+  }
+]

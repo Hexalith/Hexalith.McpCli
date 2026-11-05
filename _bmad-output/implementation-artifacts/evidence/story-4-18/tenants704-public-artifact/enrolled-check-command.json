@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "tools/conformance-vectors/v1/check_enrolled.py",
+    "--output",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/enrolled"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 664.06,
+  "NUGET_PACKAGES": "/tmp/mcpcli-418-cohort704-public-cache"
+}

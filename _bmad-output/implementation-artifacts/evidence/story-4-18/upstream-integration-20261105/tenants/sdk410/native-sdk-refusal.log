@@ -1,0 +1,1 @@
+/tmp/mcpcli-418-tenants410-isolated/Directory.Build.targets(32,5): error : Catalog SDK selection '4.1.0' is not qualified. Use a qualified stable SDK through 3.133.0 or the coordinated 4.0.x package cohort, or the explicit legacy compatibility profile. [/tmp/mcpcli-418-tenants410-isolated/src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj]

@@ -1,0 +1,162 @@
+{
+  "observed_at_utc": "2026-11-05T13:03:22.154886+00:00",
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "runs": [
+    {
+      "name": "ci",
+      "id": 42029976383,
+      "status": "in_progress",
+      "conclusion": "",
+      "jobs": [
+        {
+          "id": 127254274187,
+          "name": "Server profile boundary (canonical scope 4.1.0)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:48Z",
+          "currentSteps": []
+        },
+        {
+          "id": 127254274471,
+          "name": "Blocking HTTP contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:48Z",
+          "currentSteps": []
+        },
+        {
+          "id": 127254274556,
+          "name": "Published catalog HTTP (canonical scope 4.1.0)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:48Z",
+          "currentSteps": []
+        },
+        {
+          "id": 127254274694,
+          "name": "Blocking authenticated live routes (rest)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:51Z",
+          "currentSteps": []
+        },
+        {
+          "id": 127254274900,
+          "name": "ci / build-and-test",
+          "status": "in_progress",
+          "conclusion": "",
+          "startedAt": "2026-11-05T12:47:48Z",
+          "currentSteps": [
+            "Unit tests (Tier 1, Microsoft.Testing.Platform)"
+          ]
+        },
+        {
+          "id": 127254274968,
+          "name": "Blocking authenticated live routes (authenticated-ui)",
+          "status": "in_progress",
+          "conclusion": "",
+          "startedAt": "2026-11-05T12:47:48Z",
+          "currentSteps": [
+            "Verify authenticated UI, measured responsive modes and contextual audit Back"
+          ]
+        },
+        {
+          "id": 127254274991,
+          "name": "Blocking authenticated live routes (anonymous-ui)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:48Z",
+          "currentSteps": []
+        },
+        {
+          "id": 127254275098,
+          "name": "Blocking authenticated live routes (persisted)",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:48Z",
+          "currentSteps": []
+        }
+      ]
+    },
+    {
+      "name": "source-reference",
+      "id": 42029975839,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 127254257526,
+          "name": "Actual source catalog owner profile",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:45Z",
+          "currentSteps": []
+        },
+        {
+          "id": 127254257893,
+          "name": "Projection provenance",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:46Z",
+          "currentSteps": []
+        }
+      ]
+    },
+    {
+      "name": "story-guards",
+      "id": 42029976106,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 127254237704,
+          "name": "validate-remove-focus-in-chromium",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:43Z",
+          "currentSteps": []
+        },
+        {
+          "id": 127254238130,
+          "name": "validate-release-artifacts",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:43Z",
+          "currentSteps": []
+        },
+        {
+          "id": 127254238131,
+          "name": "validate-story-gitlinks",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:43Z",
+          "currentSteps": []
+        },
+        {
+          "id": 127254238347,
+          "name": "validate-read-only-release-version",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:47:43Z",
+          "currentSteps": []
+        }
+      ]
+    },
+    {
+      "name": "commitlint",
+      "id": 42029976588,
+      "status": "completed",
+      "conclusion": "success",
+      "jobs": [
+        {
+          "id": 127253644240,
+          "name": "commitlint / commitlint",
+          "status": "completed",
+          "conclusion": "success",
+          "startedAt": "2026-11-05T12:46:29Z",
+          "currentSteps": []
+        }
+      ]
+    }
+  ]
+}

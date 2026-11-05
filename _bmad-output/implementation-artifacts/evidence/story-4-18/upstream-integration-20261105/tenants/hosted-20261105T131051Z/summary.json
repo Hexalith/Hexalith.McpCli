@@ -1,0 +1,101 @@
+{
+  "observed_at_utc": "2026-11-05T13:10:51.567353+00:00",
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "run": 42029976383,
+  "status": "in_progress",
+  "conclusion": "",
+  "jobs": [
+    {
+      "databaseId": 127254274187,
+      "name": "Server profile boundary (canonical scope 4.1.0)",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T12:47:48Z",
+      "current_steps": [],
+      "elapsed_seconds": 1384
+    },
+    {
+      "databaseId": 127254274471,
+      "name": "Blocking HTTP contracts",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T12:47:48Z",
+      "current_steps": [],
+      "elapsed_seconds": 1384
+    },
+    {
+      "databaseId": 127254274556,
+      "name": "Published catalog HTTP (canonical scope 4.1.0)",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T12:47:48Z",
+      "current_steps": [],
+      "elapsed_seconds": 1384
+    },
+    {
+      "databaseId": 127254274694,
+      "name": "Blocking authenticated live routes (rest)",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T12:47:51Z",
+      "current_steps": [],
+      "elapsed_seconds": 1381
+    },
+    {
+      "databaseId": 127254274900,
+      "name": "ci / build-and-test",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T12:47:48Z",
+      "current_steps": [],
+      "elapsed_seconds": 1384
+    },
+    {
+      "databaseId": 127254274968,
+      "name": "Blocking authenticated live routes (authenticated-ui)",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T12:47:48Z",
+      "current_steps": [],
+      "elapsed_seconds": 1384
+    },
+    {
+      "databaseId": 127254274991,
+      "name": "Blocking authenticated live routes (anonymous-ui)",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T12:47:48Z",
+      "current_steps": [],
+      "elapsed_seconds": 1384
+    },
+    {
+      "databaseId": 127254275098,
+      "name": "Blocking authenticated live routes (persisted)",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-05T12:47:48Z",
+      "current_steps": [],
+      "elapsed_seconds": 1384
+    },
+    {
+      "databaseId": 127264107637,
+      "name": "ci / aspire-tests",
+      "status": "in_progress",
+      "conclusion": "",
+      "startedAt": "2026-11-05T13:08:11Z",
+      "current_steps": [
+        "Initialize root-declared submodules"
+      ],
+      "elapsed_seconds": 161
+    },
+    {
+      "databaseId": 127264110778,
+      "name": "ci / performance-tests",
+      "status": "completed",
+      "conclusion": "skipped",
+      "startedAt": "2026-11-05T13:08:08Z",
+      "current_steps": [],
+      "elapsed_seconds": 164
+    }
+  ]
+}

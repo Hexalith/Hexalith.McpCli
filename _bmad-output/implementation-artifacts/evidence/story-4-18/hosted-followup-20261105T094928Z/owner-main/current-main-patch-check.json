@@ -1,0 +1,24 @@
+{
+  "owner_sha": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+  "missing_test_check": {
+    "command": [
+      "gh",
+      "api",
+      "repos/Hexalith/Hexalith.Tenants/contents/tests/Hexalith.Tenants.Server.Tests/Queries/GetTenantCreationEvidenceTests.cs?ref=143cec60a3f5bb1831fa57f35c510880ceb788d8"
+    ],
+    "exit_code": 1,
+    "stderr": "gh: Not Found (HTTP 404)\n"
+  },
+  "patch_apply_check": {
+    "command": [
+      "git",
+      "apply",
+      "--check",
+      "/tmp/mcpcli-418-hosted-cu3do37s/nonmember-probe/tenants-rejection-only-read.patch"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "qualification_limit": "Applies cleanly to current owner-main raw source. No full owner-main build or live acceptance."
+}

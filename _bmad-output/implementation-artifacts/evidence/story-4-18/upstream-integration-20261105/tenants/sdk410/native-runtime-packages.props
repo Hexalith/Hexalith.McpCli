@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Project><Import Project="/home/administrator/projects/hexalith/mcpcli/references/Hexalith.Builds/Props/Directory.Packages.props" /><ItemGroup><PackageVersion Update="StackExchange.Redis" Version="3.4.31" /></ItemGroup></Project>

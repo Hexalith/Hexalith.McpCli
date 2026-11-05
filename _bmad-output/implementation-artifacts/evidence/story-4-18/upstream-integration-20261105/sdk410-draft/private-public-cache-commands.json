@@ -1,0 +1,143 @@
+[
+  {
+    "name": "public-cache-restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx",
+      "--source",
+      "https://api.nuget.org/v3/index.json"
+    ],
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+      "NUGET_HTTP_CACHE_PATH": "/tmp/mcpcli-418-sdk410-public-http-cache"
+    },
+    "started_at_utc": "2026-11-05T12:08:08.421455+00:00",
+    "completed_at_utc": "2026-11-05T12:08:13.243691+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "public-cache-release-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+      "NUGET_HTTP_CACHE_PATH": "/tmp/mcpcli-418-sdk410-public-http-cache"
+    },
+    "started_at_utc": "2026-11-05T12:08:13.244398+00:00",
+    "completed_at_utc": "2026-11-05T12:08:19.954769+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "public-cache-manifest-guards",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.IntegrationFixtureUsesOnlyItsReviewedHexalithPackageClosure",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.NativeCatalogAuditTests.PublishedArchiveAndConsumedAssetsMatchActualCacheBytes"
+    ],
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+      "NUGET_HTTP_CACHE_PATH": "/tmp/mcpcli-418-sdk410-public-http-cache"
+    },
+    "started_at_utc": "2026-11-05T12:08:19.954965+00:00",
+    "completed_at_utc": "2026-11-05T12:08:20.323073+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "public-cache-core-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+      "NUGET_HTTP_CACHE_PATH": "/tmp/mcpcli-418-sdk410-public-http-cache"
+    },
+    "started_at_utc": "2026-11-05T12:08:20.323266+00:00",
+    "completed_at_utc": "2026-11-05T12:08:22.694790+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "public-cache-cli-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+      "NUGET_HTTP_CACHE_PATH": "/tmp/mcpcli-418-sdk410-public-http-cache"
+    },
+    "started_at_utc": "2026-11-05T12:08:22.694981+00:00",
+    "completed_at_utc": "2026-11-05T12:08:38.388322+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "public-cache-mcp-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+      "NUGET_HTTP_CACHE_PATH": "/tmp/mcpcli-418-sdk410-public-http-cache"
+    },
+    "started_at_utc": "2026-11-05T12:08:38.388521+00:00",
+    "completed_at_utc": "2026-11-05T12:08:40.270232+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "public-cache-enrolled-replay",
+    "command": [
+      "/tmp/mcpcli-418-upstream-owner-evidence/sdk410-draft/venv/bin/python",
+      "tools/conformance-vectors/v1/check_enrolled.py",
+      "--output",
+      "/tmp/mcpcli-418-upstream-owner-evidence/sdk410-draft/public-cache-enrolled-replay"
+    ],
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+      "NUGET_HTTP_CACHE_PATH": "/tmp/mcpcli-418-sdk410-public-http-cache"
+    },
+    "started_at_utc": "2026-11-05T12:08:40.270451+00:00",
+    "completed_at_utc": "2026-11-05T12:14:51.616027+00:00",
+    "exit_code": 0
+  },
+  {
+    "name": "final-diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "environment": {
+      "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+      "NUGET_HTTP_CACHE_PATH": "/tmp/mcpcli-418-sdk410-public-http-cache"
+    },
+    "started_at_utc": "2026-11-05T12:14:51.669966+00:00",
+    "completed_at_utc": "2026-11-05T12:14:51.704837+00:00",
+    "exit_code": 0
+  }
+]

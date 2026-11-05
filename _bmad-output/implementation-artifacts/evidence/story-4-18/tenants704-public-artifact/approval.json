@@ -1,0 +1,195 @@
+{
+  "status": "approved-published-artifact",
+  "formatVersion": 1,
+  "recordedAtUtc": "2026-11-05T14:27:38.344084+00:00",
+  "approvalBasis": "User explicitly approved the compatible dependency/source and artifact-bound metadata refresh preserving enrolled operations/wire, and exact Tenants7.0.4 publication. This records delegated automated public-artifact acceptance; no separate human byte review or actual client session is claimed.",
+  "approver": "Codex automation delegated by the requesting user through authenticated account jpiquot",
+  "packageId": "Hexalith.Tenants.Contracts",
+  "version": "7.0.4",
+  "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+  "artifactSha256": "04989ef3b9755c8af217517c7964a75796903d2c21c517ff76d7d46c574861a7",
+  "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "sdk": "4.1.0",
+  "publication": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v7.0.4",
+  "publicArchiveUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.contracts/7.0.4/hexalith.tenants.contracts.7.0.4.nupkg",
+  "repositorySignature": "dotnet nuget verify --all passed; exact command/output retained in publication evidence",
+  "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+  "vectorFilesSha256": {
+    "add-user-to-tenant.vector.json": "7e8666ee1a2a5e8e89e82e5ed7df9ba1c917c8d08777703240f78fbab2556b62",
+    "change-user-role.vector.json": "dc2b837fd892d7b9be684d4a2d42c0203d716f2bc43cd80022b30b7f334a2ad9",
+    "create-tenant.vector.json": "455211d3fd4785040a6838698c1a674807c20b2f81f88d550710225d400ba3bc",
+    "disable-tenant.vector.json": "998e1225abde7e9ddfd570e7b9e0d81c81a45900c5dfb845dd5ae67ed7b7eb33",
+    "enable-tenant.vector.json": "2868cca0a3de82ab3556dcd6758a97e1c6e8ab5f42d55246337ea93fdd45d3af",
+    "get-tenant-audit.vector.json": "0ac5e44af94431c4c82c05da18219fefb93a1df72bf1de0e7e78353e04b3681f",
+    "get-tenant-users.vector.json": "12de8324d987a372df5de014539a98fe7f441c15914f63d9bdb649783672d5eb",
+    "get-tenant.vector.json": "30fa2f81dcaaa230b52fee2b9aa09e2cca4a8ba51506f35c6c930b3fe05334b6",
+    "get-user-tenants.vector.json": "13ec10dc84bacfb2f4ee16e2bd95ee33d89bb9581290c1528806c312c415f9c7",
+    "list-tenants.vector.json": "2b1da26e962fbb425b2ed164fcbee6713c61584eb54e5feb3df67012a018537b",
+    "remove-tenant-configuration.vector.json": "df94e4a9c999fb83f62a5ada872b8bd1e440df7b6f84d0e46520648c8f387d13",
+    "remove-user-from-tenant.vector.json": "ebe83d37f8eda2243b09ba4608ca15ca66935024eb00e772f05ac6eb7a27e89a",
+    "set-tenant-configuration.vector.json": "9eec4aa84d061e8f7b81629537f299bdb1cce26b6fa1407acb188b0e9fc29f8d",
+    "update-tenant.vector.json": "428f51f6553f7b4151e0ed9eff84128409e4e681a6823a916d0f38dbcb37fe03"
+  },
+  "verification": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/tenants/publication-704-20261105T135343Z/public-nuget-verified.json",
+    "sha256": "7f75a92863c381cd9293fcaedc543e20573b341f38f0b1fd04128309bd7b59d7",
+    "result": "passed",
+    "scope": "Signed public archive identity/source/SDK/hash and exact prepared consumer content. Fresh offline/live qualification remains separate."
+  },
+  "scopePreservation": {
+    "operations": 14,
+    "inventoryBytesUnchanged": true,
+    "vectorPayloadsEnvelopesAssertionsUnchanged": true,
+    "changes": [
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+        "old_sha256": "235a853cdd85f6df72d5eeaa8d89a03b35b361b9347b1a10e3ee3b6b74081a80",
+        "new_sha256": "7e8666ee1a2a5e8e89e82e5ed7df9ba1c917c8d08777703240f78fbab2556b62",
+        "operation": "tenants.add-user-to-tenant",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.add-user-to-tenant.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+        "old_sha256": "a780125888131a2c7c173e3e871d381260f551710e818679974c6e237768d59b",
+        "new_sha256": "dc2b837fd892d7b9be684d4a2d42c0203d716f2bc43cd80022b30b7f334a2ad9",
+        "operation": "tenants.change-user-role",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.change-user-role.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+        "old_sha256": "45c46e681d6254746a90cd714390a69a0c393569ab01ed58508a9de736517e42",
+        "new_sha256": "455211d3fd4785040a6838698c1a674807c20b2f81f88d550710225d400ba3bc",
+        "operation": "tenants.create-tenant",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.create-tenant.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+        "old_sha256": "dde30f0f33fd4a2511161ec5071bf34df57a5559c2b95b1d9ab7a35102f4fcd2",
+        "new_sha256": "998e1225abde7e9ddfd570e7b9e0d81c81a45900c5dfb845dd5ae67ed7b7eb33",
+        "operation": "tenants.disable-tenant",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.disable-tenant.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+        "old_sha256": "df5c68579c6434746d8c571afaeb3af03a840db6ae70e03838fa19cba104d5c2",
+        "new_sha256": "2868cca0a3de82ab3556dcd6758a97e1c6e8ab5f42d55246337ea93fdd45d3af",
+        "operation": "tenants.enable-tenant",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.enable-tenant.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+        "old_sha256": "a97d4c82fe5f73f380d337d16777215e2d27b479f3e65440a783c1906f3532b6",
+        "new_sha256": "0ac5e44af94431c4c82c05da18219fefb93a1df72bf1de0e7e78353e04b3681f",
+        "operation": "tenants.get-tenant-audit",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.get-tenant-audit.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+        "old_sha256": "1e02d4c9f4b3eab6e2c7b532df46acd6639ea29863f3541cffc6a2cf62369cff",
+        "new_sha256": "12de8324d987a372df5de014539a98fe7f441c15914f63d9bdb649783672d5eb",
+        "operation": "tenants.get-tenant-users",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.get-tenant-users.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+        "old_sha256": "872375af6aa01b916f2192854839e0ddc0d90518391f3b0d4a13bba7cd09542d",
+        "new_sha256": "30fa2f81dcaaa230b52fee2b9aa09e2cca4a8ba51506f35c6c930b3fe05334b6",
+        "operation": "tenants.get-tenant",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.get-tenant.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+        "old_sha256": "a2655d4a2c9286599a529746b3c51be068ffce58a35785e1daaf649b5bdcc597",
+        "new_sha256": "13ec10dc84bacfb2f4ee16e2bd95ee33d89bb9581290c1528806c312c415f9c7",
+        "operation": "tenants.get-user-tenants",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.get-user-tenants.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+        "old_sha256": "7cc17790f181f77cf0061108bcfab78e20059da588fd69d5533f0485a25b388e",
+        "new_sha256": "2b1da26e962fbb425b2ed164fcbee6713c61584eb54e5feb3df67012a018537b",
+        "operation": "tenants.list-tenants",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.list-tenants.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+        "old_sha256": "d8457285ead1b387c13c31dc342c2e932c3b686f0b21c194016372ca9f05a630",
+        "new_sha256": "df94e4a9c999fb83f62a5ada872b8bd1e440df7b6f84d0e46520648c8f387d13",
+        "operation": "tenants.remove-tenant-configuration",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.remove-tenant-configuration.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+        "old_sha256": "0095c222aceafc0fa4be56282dfadeafc449ea5dd5dc05362aea6eb7c6ee5c51",
+        "new_sha256": "ebe83d37f8eda2243b09ba4608ca15ca66935024eb00e772f05ac6eb7a27e89a",
+        "operation": "tenants.remove-user-from-tenant",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.remove-user-from-tenant.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+        "old_sha256": "221bb29376846c56186918cdcb295850cd7578bbebfe53cf593ebf1109df1606",
+        "new_sha256": "9eec4aa84d061e8f7b81629537f299bdb1cce26b6fa1407acb188b0e9fc29f8d",
+        "operation": "tenants.set-tenant-configuration",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.set-tenant-configuration.json",
+        "only_plan_vector_hash_changed": true
+      },
+      {
+        "vector": "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+        "old_sha256": "b8483be038efd2b6c4d995e131b94aa38b9cc872e15673af3f9f76652d9532cf",
+        "new_sha256": "428f51f6553f7b4151e0ed9eff84128409e4e681a6823a916d0f38dbcb37fe03",
+        "operation": "tenants.update-tenant",
+        "only_package_version_changed": true,
+        "companion_plan": "tools/live-topology/plans/tenants.update-tenant.json",
+        "only_plan_vector_hash_changed": true
+      }
+    ]
+  },
+  "supersedes": {
+    "version": "7.0.0",
+    "approval": "_bmad-output/implementation-artifacts/evidence/story-4-18/tenants7-public-artifact/approval.json",
+    "artifactHash": "sha512-q1jGvSBg2LSPViJalRVX5ueCtyjyX19yom7MvTtuhSHaelovLJebTl032tPCtKDG2CVZK0pQhh+SbH6qz0Muhw==",
+    "sourceCommit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27"
+  },
+  "publicMetadata": {
+    "Id": "Hexalith.Tenants.Contracts",
+    "Version": "7.0.4",
+    "NormalizedVersion": "7.0.4",
+    "PackageHash": "+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "PackageHashAlgorithm": "SHA512",
+    "Published": "2026-11-05T14:07:48.287+00:00"
+  },
+  "publicationRun": 42039944398,
+  "ownerPublicationVerification": "_bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/tenants/publication-704-20261105T135343Z/publication-verified.json",
+  "offlineConformance": {
+    "result": "passed",
+    "evidence": "_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/enrolled/enrolled.json",
+    "sha256": "d2b40f895b591d0717dba6a47814bfde106288a17d1d6c7d2d229b8602221086",
+    "scope": "All artifact-specific vectors and combined21 production CLI/MCP wire/error replay; this does not establish source-services live acceptance."
+  },
+  "limits": "Artifact-bound metadata refresh only. No changed operation/wire, live acceptance, staging acceptance or public McpCli pair is inferred."
+}

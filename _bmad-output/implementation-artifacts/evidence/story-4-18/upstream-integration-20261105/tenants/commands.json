@@ -1,0 +1,96 @@
+[
+  {
+    "name": "green-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-p:HexalithFrontComposerFromSource=false",
+      "-p:HexalithMemoriesFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:15:11.117991+00:00",
+    "completed_at_utc": "2026-11-05T11:15:15.369769+00:00",
+    "source_sha_before": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "source_sha_after": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "exit_code": 0
+  },
+  {
+    "name": "new-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Tenants.Server.Tests/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll",
+      "-class",
+      "Hexalith.Tenants.Server.Tests.Queries.GetTenantCreationEvidenceTests"
+    ],
+    "started_at_utc": "2026-11-05T11:15:15.371980+00:00",
+    "completed_at_utc": "2026-11-05T11:15:15.880887+00:00",
+    "source_sha_before": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "source_sha_after": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "exit_code": 0
+  },
+  {
+    "name": "removed-guard-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-p:HexalithFrontComposerFromSource=false",
+      "-p:HexalithMemoriesFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:15:15.883121+00:00",
+    "completed_at_utc": "2026-11-05T11:15:18.106448+00:00",
+    "source_sha_before": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "source_sha_after": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "exit_code": 0
+  },
+  {
+    "name": "removed-guard-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Tenants.Server.Tests/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll",
+      "-class",
+      "Hexalith.Tenants.Server.Tests.Queries.GetTenantCreationEvidenceTests"
+    ],
+    "started_at_utc": "2026-11-05T11:15:18.108613+00:00",
+    "completed_at_utc": "2026-11-05T11:15:18.594760+00:00",
+    "source_sha_before": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "source_sha_after": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "exit_code": 1
+  },
+  {
+    "name": "final-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj",
+      "--configuration",
+      "Release",
+      "-m:1",
+      "-p:HexalithFrontComposerFromSource=false",
+      "-p:HexalithMemoriesFromSource=false"
+    ],
+    "started_at_utc": "2026-11-05T11:15:18.596707+00:00",
+    "completed_at_utc": "2026-11-05T11:15:20.799374+00:00",
+    "source_sha_before": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "source_sha_after": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "exit_code": 0
+  },
+  {
+    "name": "full-server-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Tenants.Server.Tests/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll"
+    ],
+    "started_at_utc": "2026-11-05T11:15:20.801363+00:00",
+    "completed_at_utc": "2026-11-05T11:15:33.374887+00:00",
+    "source_sha_before": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "source_sha_after": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "exit_code": 0
+  }
+]

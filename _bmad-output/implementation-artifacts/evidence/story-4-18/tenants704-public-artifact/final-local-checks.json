@@ -1,0 +1,73 @@
+[
+  {
+    "name": "final-solution-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.54
+  },
+  {
+    "name": "production-performance",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-class",
+      "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.82
+  },
+  {
+    "name": "production-vector-preflight",
+    "command": [
+      "python3",
+      "tools/live-topology/run-vectors.py",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/vector-preflight",
+      "--preflight-only"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 36.56
+  },
+  {
+    "name": "production-test-discovery",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+      "-preEnumerateTheories",
+      "-list",
+      "tests"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.16
+  },
+  {
+    "name": "readme-modules",
+    "command": [
+      "dotnet",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+      "modules"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.87
+  },
+  {
+    "name": "readme-tenant-operations",
+    "command": [
+      "dotnet",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll",
+      "operations",
+      "--module",
+      "tenants"
+    ],
+    "exit_code": 2,
+    "elapsed_seconds": 0.11
+  }
+]

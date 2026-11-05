@@ -1,0 +1,120 @@
+{
+  "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+  "ci_run_id": 42005561664,
+  "passed": 14,
+  "failed": 7,
+  "vectors": [
+    {
+      "operation": "parties.create-party",
+      "result": "failed",
+      "message": "Live vector parties.create-party failed: FAILED parties.create-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.create-party/live-result.json\nVectorError: persisted-invocation parties.get-party: read deadline: persisted-invocation parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\", \\\"/document/type\\\", \\\"/document/isErased\\\", \\\"/document/personDetails/lastName\\\", \\\"/document/contactChannels\\\", \\\"/document/contactChannels/0/id\\\", \\\"/document/contactChannels/0/type\\\", \\\"/document/contactChannels/0/value\\\", \\\"/document/contactChannels/0/isPreferred\\\", \\\"/document/identifiers\\\", \\\"/document/identifiers/0/id\\\", \\\"/document/identifiers/0/type\\\", \\\"/document/identifiers/0/value\\\"]\n",
+      "source_entry": "da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.create-party/tests.xml",
+      "source_sha256": "24c7ea606442c5dbf67814e2727baef2071ba7ed29b2239b1745dece49fbc443",
+      "retained_xml": "failed-parties.create-party.xml"
+    },
+    {
+      "operation": "parties.deactivate-party",
+      "result": "failed",
+      "message": "Live vector parties.deactivate-party failed: FAILED parties.deactivate-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.deactivate-party/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n",
+      "source_entry": "da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.deactivate-party/tests.xml",
+      "source_sha256": "812722c16cc90369c463d975bad2965ceaa554f7fef60f921aa8fcf96491ff49",
+      "retained_xml": "failed-parties.deactivate-party.xml"
+    },
+    {
+      "operation": "parties.get-party",
+      "result": "failed",
+      "message": "Live vector parties.get-party failed: FAILED parties.get-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.get-party/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n",
+      "source_entry": "da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.get-party/tests.xml",
+      "source_sha256": "c7b9794f91e6c349a5f81638b910a2053fa73bae6171519d3ca3fa913c75ee79",
+      "retained_xml": "failed-parties.get-party.xml"
+    },
+    {
+      "operation": "parties.list-parties",
+      "result": "failed",
+      "message": "Live vector parties.list-parties failed: FAILED parties.list-parties; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.list-parties/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n",
+      "source_entry": "da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.list-parties/tests.xml",
+      "source_sha256": "2a602fdde2864c2b8a256325ee9a5efc811247caf37b6f2aac2261ce25f4012c",
+      "retained_xml": "failed-parties.list-parties.xml"
+    },
+    {
+      "operation": "parties.reactivate-party",
+      "result": "failed",
+      "message": "Live vector parties.reactivate-party failed: FAILED parties.reactivate-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.reactivate-party/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n",
+      "source_entry": "da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.reactivate-party/tests.xml",
+      "source_sha256": "ec544503b1919643232788a0e925c82757ad48406b8b73577ab378f2991c0b79",
+      "retained_xml": "failed-parties.reactivate-party.xml"
+    },
+    {
+      "operation": "parties.search-parties",
+      "result": "failed",
+      "message": "Live vector parties.search-parties failed: FAILED parties.search-parties; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.search-parties/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n",
+      "source_entry": "da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.search-parties/tests.xml",
+      "source_sha256": "3187fd8f8aef9b86863b6cf33726c92f798e9923e41ae9535892b908cce20245",
+      "retained_xml": "failed-parties.search-parties.xml"
+    },
+    {
+      "operation": "parties.update-party",
+      "result": "failed",
+      "message": "Live vector parties.update-party failed: FAILED parties.update-party; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.update-party/live-result.json\nVectorError: persisted-prerequisites-0 parties.get-party: read deadline: persisted-prerequisites-0 parties.get-party: CLI exit 2: {'error': {'code': 'gateway_error', 'status': 503, 'detail': 'Catalog authority cannot safely admit this operation.'}}; declared assertion paths: [\\\"/document/id\\\", \\\"/document/isActive\\\", \\\"/document/personDetails/firstName\\\"]\n",
+      "source_entry": "da23d899e99b4f2395a0878d7d8f147e/vectors/5ca60f98f4db4c80a38a056019decfad/parties.update-party/tests.xml",
+      "source_sha256": "b62439ed8882f13601b06661ef01611c0329b4d6da0d92b4b4090d5c43f6153f",
+      "retained_xml": "failed-parties.update-party.xml"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.create-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.enable-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-user-tenants",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.list-tenants",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.remove-tenant-configuration",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.remove-user-from-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.update-tenant",
+      "result": "passed"
+    }
+  ]
+}

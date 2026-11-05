@@ -1,0 +1,183 @@
+{
+  "schema": "mcpcli-owner-local-preparation/v1",
+  "time_utc": "2026-11-05T12:51:35.077669+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "selected_version": "7.0.4",
+  "selection": "selected-release.json",
+  "sdk": "4.1.0",
+  "sdk_source": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+  "packages": [
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "file": "nupkgs/Hexalith.Tenants.Aspire.7.0.4.nupkg",
+      "sha256": "dad9f1323267eafc6d205ad1cd7447d49602ca3387fd1ff24b5d399005a6885d",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Aspire",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.ServiceDefaults",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "file": "nupkgs/Hexalith.Tenants.Client.7.0.4.nupkg",
+      "sha256": "84f7ef1760497f10f3b33877ada8ecc9b7deb3c480460fb4c6051fcff2f04a80",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "file": "nupkgs/Hexalith.Tenants.Contracts.7.0.4.nupkg",
+      "sha256": "482507e3698730f08471967de368b02b3190031a1838985cf67e01336d4fda14",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "file": "nupkgs/Hexalith.Tenants.Server.7.0.4.nupkg",
+      "sha256": "84b765c90932e730957c2ed887399ba82c993a7b07551d8e89a990a7708babb5",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Server",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.DomainService",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.ServiceDefaults",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "version": "7.0.4",
+      "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "file": "nupkgs/Hexalith.Tenants.Testing.7.0.4.nupkg",
+      "sha256": "5b303b533fe1dbb85d2b049dc2061423f3612241f52ec6c5371b06e79f4f8c83",
+      "sdk_dependencies": [
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.DomainService",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        },
+        {
+          "id": "Hexalith.EventStore.Server",
+          "version": "4.1.0",
+          "exclude": "Build,Analyzers"
+        }
+      ],
+      "signed": false
+    }
+  ],
+  "container_outputs": [
+    {
+      "destination": "registry.hexalith.com/tenants:7.0.4",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "artifact_state": "Not built or published by this local package preparation."
+    },
+    {
+      "destination": "registry.hexalith.com/tenants-api:7.0.4",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "artifact_state": "Not built or published by this local package preparation."
+    }
+  ],
+  "future_publication_side_effects": [
+    "Five listed NuGet IDs at7.0.4",
+    "Both listed OCI images forlinux/amd64 andlinux/arm64",
+    "v7.0.4 tag and GitHub release/assets bound to exact source"
+  ],
+  "qualification": {
+    "local_five_owner_builds": true,
+    "pack_manifest_and_metadata": true,
+    "actual_catalog_consumer": true,
+    "package_only_consumers": true,
+    "fresh_exact_source_ci": "success42029976383, including mandatory Aspire127264107637",
+    "source_reference": "success42029975839",
+    "story_guards": "success42029976106",
+    "publication_authorized": false,
+    "release_dispatched": false,
+    "hosted_immutable_candidate": false,
+    "new_public_hashes_available": false,
+    "commitlint": "success42029976588",
+    "codeql": "success42029976661",
+    "all_required_source_gates": "success",
+    "final_gate_evidence": "../hosted-green-20261105T133938Z/qualification.json"
+  },
+  "limitations": "Local unsigned package evidence only. A future normal release must independently verify its source, version, archive bytes and SDK4.1 receipt. The externally published7.0.3 remains a valid4.0.4 release but is rejected for this planned4.1 cohort. Never use these unsigned local hashes as signed-public enrollment approval."
+}

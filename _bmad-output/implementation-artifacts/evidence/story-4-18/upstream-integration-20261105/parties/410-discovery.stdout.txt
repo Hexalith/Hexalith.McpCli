@@ -1,0 +1,9 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+
+Hexalith.Parties.Contracts.Tests.PartiesCatalogAdapterTests.EnrollmentRequiresCanonicalPayloadHashingFromTheSelectedEventStore
+Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.DeclarationsCoverEveryCommandQueryAndProjectionWithoutDuplicateRoutes
+Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.ExistingPublicAndInternalOperationsKeepTheirPolicyAndSerializedShapes
+Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.OtherPartyQueriesDoNotAcceptLegacySelectors
+Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(wireType: "PartyDetail", selector: "PartyDetailProjectionQueryActor")
+Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(wireType: "PartyIndex", selector: "PartyIndexProjectionQueryActor")
+Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(wireType: "PartySearch", selector: "PartyIndexProjectionQueryActor")

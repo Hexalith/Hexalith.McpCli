@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "test_native_cohort",
+    "test_ci.CiHooksTests.test_preparation_order_bounds_source_flags_and_nonsecret_exports",
+    "test_ci.CiHooksTests.test_separate_adapter_materializes_its_ordinary_package_runtime_closure",
+    "test_ci.CiHooksTests.test_published_gateway_profile_binds_both_vector_and_independent_smoke",
+    "test_ci.CiHooksTests.test_actual_composition_and_client_public_tenants_bytes_are_sealed",
+    "test_ci.CiHooksTests.test_different_gateway_cohort_refuses_before_build_or_runtime",
+    "test_ci.CiHooksTests.test_embedded_archive_identity_and_source_are_validated_before_preparation",
+    "test_ci.CiHooksTests.test_snapshot_manifest_cohort_source_identity_and_blob_binding_refuse_before_runners"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli/tools/live-topology",
+  "exit_code": 0,
+  "elapsed_seconds": 60.21
+}

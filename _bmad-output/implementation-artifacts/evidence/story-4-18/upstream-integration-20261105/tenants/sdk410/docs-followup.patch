@@ -1,0 +1,10 @@
+diff --git a/docs/guides/canonical-scope-upgrade.md b/docs/guides/canonical-scope-upgrade.md
+index a65a8a17..be3d550a 100644
+--- a/docs/guides/canonical-scope-upgrade.md
++++ b/docs/guides/canonical-scope-upgrade.md
+@@ -2,4 +2,4 @@
+ 
+ Tenants administration and cross-tenant catalog operations now use declared platform scopes. The public `system` tenant is reserved; existing `system` stream identities remain an internal storage detail behind the authenticated EventStore workload route.
+ 
+-The 7.0.0 package cohort requires EventStore 4.0.4 and McpCli.Abstractions 2.0.0. The 7.0.3 update selects qualified public EventStore 4.1.0 by default; explicit 4.0.4 package builds remain available for compatibility. Upgrade those producers first, then upgrade all Tenants packages together. Update callers that supplied `system` as a public tenant or expected a per-call tenant for a platform-scoped operation. The catalog includes the global administrator audit query as a separate platform operation.
++The 7.0.0 package cohort requires EventStore 4.0.4 and McpCli.Abstractions 2.0.0. Current package builds select qualified public EventStore 4.1.0 by default; explicit 4.0.4 package builds remain available for compatibility. Upgrade those producers first, then upgrade all Tenants packages together. Update callers that supplied `system` as a public tenant or expected a per-call tenant for a platform-scoped operation. The catalog includes the global administrator audit query as a separate platform operation.

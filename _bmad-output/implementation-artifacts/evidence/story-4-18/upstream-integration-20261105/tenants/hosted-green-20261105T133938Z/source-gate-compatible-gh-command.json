@@ -1,0 +1,26 @@
+{
+  "command": [
+    "python3",
+    "/tmp/mcpcli-418-evidence-scan/source_workflow_gates.py",
+    "--repository",
+    "Hexalith/Hexalith.Tenants",
+    "--source",
+    "8e20524574901d71ad5f4876804c64c3c6c87b88",
+    "--workflow",
+    "ci.yml",
+    "--workflow",
+    "story-guards.yml",
+    "--workflow",
+    "source-reference.yml",
+    "--evidence",
+    "_bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/tenants/hosted-green-20261105T133938Z/source-gates.compatible-gh.json"
+  ],
+  "private_gh_path": "/tmp/mcpcli-418-tools/gh-2.103.3/bin",
+  "started_at_utc": "2026-11-05T13:45:46.334710+00:00",
+  "completed_at_utc": "2026-11-05T13:45:53.558637+00:00",
+  "exit_code": 0,
+  "pinned_script_unchanged": true,
+  "auth_configuration_preserved": true,
+  "global_gh_binary_preserved": true,
+  "remote_mutations": false
+}

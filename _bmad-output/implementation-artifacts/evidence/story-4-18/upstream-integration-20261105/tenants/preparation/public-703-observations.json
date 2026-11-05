@@ -1,0 +1,30 @@
+{
+  "time_utc": "2026-11-05T12:43:41.376670+00:00",
+  "packages": [
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "has_703": true,
+      "latest": "7.0.3"
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "has_703": true,
+      "latest": "7.0.3"
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "has_703": true,
+      "latest": "7.0.3"
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "has_703": true,
+      "latest": "7.0.3"
+    },
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "has_703": true,
+      "latest": "7.0.3"
+    }
+  ]
+}

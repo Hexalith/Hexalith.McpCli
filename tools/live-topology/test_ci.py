@@ -70,7 +70,7 @@ if name == 'dotnet':
             warnings['warnNotAsError'] = [] if '-p:WarningsNotAsErrors=' in args else ['NU1901', 'NU1902', 'NU1903', 'NU1904']
             assets.write_text(json.dumps(document))
     elif args[0] == 'msbuild':
-        print('4.0.3' if mode == 'wrong-package-cohort' else '4.0.4')
+        print('4.0.3' if mode == 'wrong-package-cohort' else '4.1.0')
     sys.exit(0)
 if name == 'dapr':
     print('CLI version: ' + ('1.18.0' if mode == 'wrong-dapr-cli' else '1.18.2') + '\nRuntime version: ' + ('1.18.0' if mode == 'wrong-dapr' else '1.18.7'))
@@ -310,16 +310,16 @@ class CiHooksTests(unittest.TestCase):
         assemblies = ('Gateway', 'Server', 'DomainService', 'Contracts')
         for suffix in assemblies:
             name = 'Hexalith.EventStore.' + suffix
-            package = cache / name.lower() / '4.0.4'
+            package = cache / name.lower() / '4.1.0'
             package.mkdir(parents=True)
-            nuspec = ('<package><metadata><id>' + name + '</id><version>4.0.4</version><repository commit="'
+            nuspec = ('<package><metadata><id>' + name + '</id><version>4.1.0</version><repository commit="'
                       + 'a' * 40 + '" url="https://github.com/Hexalith/Hexalith.EventStore.git" /></metadata></package>').encode()
             payload = (name + '-qualified-fixture').encode()
             (package / (name.lower() + '.nuspec')).write_bytes(nuspec)
             extracted = package / ('lib/net10.0/' + name + '.dll')
             extracted.parent.mkdir(parents=True)
             extracted.write_bytes(payload)
-            with ZipFile(package / (name.lower() + '.4.0.4.nupkg'), 'w') as archive:
+            with ZipFile(package / (name.lower() + '.4.1.0.nupkg'), 'w') as archive:
                 archive.writestr(name + '.nuspec', nuspec)
                 archive.writestr('lib/net10.0/' + name + '.dll', payload)
         projects = [gateway, *(self.root / 'references' / ('Hexalith.' + module) / 'src' / ('Hexalith.' + module)
@@ -332,7 +332,7 @@ class CiHooksTests(unittest.TestCase):
             (project / 'obj').mkdir(exist_ok=True)
             output = project / 'bin/Release/net10.0'
             output.mkdir(parents=True)
-            libraries = {'Hexalith.EventStore.' + suffix + '/4.0.4': {'type': 'package'} for suffix in assemblies}
+            libraries = {'Hexalith.EventStore.' + suffix + '/4.1.0': {'type': 'package'} for suffix in assemblies}
             target = {name: {'type': 'package', 'runtime': {'lib/net10.0/' + name.split('/')[0] + '.dll': {}}}
                       for name in libraries}
             (project / 'obj/project.assets.json').write_text(json.dumps({
@@ -345,11 +345,11 @@ class CiHooksTests(unittest.TestCase):
         (platform / 'Hexalith.Platform.CatalogBuilder.csproj').touch()
         (platform / 'Program.cs').touch()
         (self.root / 'Directory.Packages.props').write_text('<Project />')
-        tenants_package = cache / 'hexalith.tenants.contracts/7.0.0'
+        tenants_package = cache / 'hexalith.tenants.contracts/7.0.4'
         tenants_package.mkdir(parents=True)
-        with ZipFile(tenants_package / 'hexalith.tenants.contracts.7.0.0.nupkg', 'w') as archive:
-            archive.writestr('Hexalith.Tenants.Contracts.nuspec', '<package><metadata><id>Hexalith.Tenants.Contracts</id><version>7.0.0</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>')
-        selection = {'eventStoreVersion': '4.0.4', 'sources': {
+        with ZipFile(tenants_package / 'hexalith.tenants.contracts.7.0.4.nupkg', 'w') as archive:
+            archive.writestr('Hexalith.Tenants.Contracts.nuspec', '<package><metadata><id>Hexalith.Tenants.Contracts</id><version>7.0.4</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>')
+        selection = {'eventStoreVersion': '4.1.0', 'sources': {
             'Hexalith.' + module: {'repository': 'https://github.com/Hexalith/Hexalith.' + module + '.git', 'commit': 'a' * 40}
             for module in ('EventStore', 'Tenants', 'Parties', 'Platform')}, 'packages': []}
         for archive in cache.rglob('*.nupkg'):
@@ -360,21 +360,21 @@ class CiHooksTests(unittest.TestCase):
                                           'sha256': hashlib.sha256(archive.read_bytes()).hexdigest()})
         # Aspire is represented by the same synthetic archive machinery as the runtime SDK.
         aspire = dict(selection['packages'][0], id='Hexalith.EventStore.Aspire')
-        folder = cache / 'hexalith.eventstore.aspire/4.0.4'
+        folder = cache / 'hexalith.eventstore.aspire/4.1.0'
         folder.mkdir(parents=True)
-        with ZipFile(folder / 'hexalith.eventstore.aspire.4.0.4.nupkg', 'w') as archive:
-            archive.writestr('Hexalith.EventStore.Aspire.nuspec', '<package><metadata><id>Hexalith.EventStore.Aspire</id><version>4.0.4</version><repository url="https://github.com/Hexalith/Hexalith.EventStore.git" commit="' + 'a' * 40 + '" /></metadata></package>')
-        aspire['sha256'] = hashlib.sha256((folder / 'hexalith.eventstore.aspire.4.0.4.nupkg').read_bytes()).hexdigest()
+        with ZipFile(folder / 'hexalith.eventstore.aspire.4.1.0.nupkg', 'w') as archive:
+            archive.writestr('Hexalith.EventStore.Aspire.nuspec', '<package><metadata><id>Hexalith.EventStore.Aspire</id><version>4.1.0</version><repository url="https://github.com/Hexalith/Hexalith.EventStore.git" commit="' + 'a' * 40 + '" /></metadata></package>')
+        aspire['sha256'] = hashlib.sha256((folder / 'hexalith.eventstore.aspire.4.1.0.nupkg').read_bytes()).hexdigest()
         selection['packages'].append(aspire)
         (self.tools / 'native-runtime.json').write_text(json.dumps(selection))
         for project_name, package_name in [('AppHost', 'Aspire'), ('ConformanceHost', 'Contracts')]:
             package_id = 'Hexalith.Tenants.' + package_name
-            folder = cache / package_id.lower() / '7.0.0'
+            folder = cache / package_id.lower() / '7.0.4'
             folder.mkdir(parents=True, exist_ok=True)
-            nuspec = ('<package><metadata><id>' + package_id + '</id><version>7.0.0</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>').encode()
+            nuspec = ('<package><metadata><id>' + package_id + '</id><version>7.0.4</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>').encode()
             payload = (package_id + '-public-fixture').encode()
             asset = 'lib/net10.0/' + package_id + '.dll'
-            archive = folder / (package_id.lower() + '.7.0.0.nupkg')
+            archive = folder / (package_id.lower() + '.7.0.4.nupkg')
             with ZipFile(archive, 'w') as content:
                 content.writestr(package_id + '.nuspec', nuspec)
                 content.writestr(asset, payload)
@@ -383,14 +383,14 @@ class CiHooksTests(unittest.TestCase):
             (folder / asset).write_bytes(payload)
             previous = next((item for item in selection['packages'] if item['id'] == package_id), None)
             if previous is not None: selection['packages'].remove(previous)
-            selection['packages'].append({'id': package_id, 'version': '7.0.0', 'sourceCommit': 'a' * 40,
+            selection['packages'].append({'id': package_id, 'version': '7.0.4', 'sourceCommit': 'a' * 40,
                                           'sha256': hashlib.sha256(archive.read_bytes()).hexdigest()})
             project = self.root / 'tests' / ('Hexalith.McpCli.' + project_name)
             (project / 'obj').mkdir(parents=True, exist_ok=True)
             output = project / 'bin/Release/net10.0'
             output.mkdir(parents=True, exist_ok=True)
             (output / (package_id + '.dll')).write_bytes(payload)
-            identity = package_id + '/7.0.0'
+            identity = package_id + '/7.0.4'
             (project / 'obj/project.assets.json').write_text(json.dumps({'libraries': {identity: {'type': 'package'}},
                 'targets': {'net10.0': {identity: {'runtime': {asset: {}}}}}, 'packageFolders': {str(cache): {}}}))
         (self.tools / 'native-runtime.json').write_text(json.dumps(selection))
@@ -416,7 +416,7 @@ class CiHooksTests(unittest.TestCase):
             'Properties/launchSettings.json': 'src/Hexalith.EventStore/Properties/launchSettings.json',
         }
         (gateway / 'Configuration/provenance.json').write_text(json.dumps({
-            'profile': 'published', 'eventStoreVersion': '4.0.4',
+            'profile': 'published', 'eventStoreVersion': '4.1.0',
             'sourceRepository': 'https://github.com/Hexalith/Hexalith.EventStore.git', 'sourceCommit': 'a' * 40,
             'files': {relative: {'sourcePath': original, 'sha256': hashlib.sha256((gateway / relative).read_bytes()).hexdigest()}
                       for relative, original in files.items()}}))
@@ -496,7 +496,7 @@ class CiHooksTests(unittest.TestCase):
             self.assertIn('-p:UseNuGetDeps=true', call)
             self.assertIn('Release', call)
             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
-            self.assertIn('-p:HexalithEventStoreVersion=4.0.4', call)
+            self.assertIn('-p:HexalithEventStoreVersion=4.1.0', call)
             self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
         overlay = Path(prepared['privateDirectory']) / 'source-runtime-packages.props'
         self.assertEqual('b' * 40, prepared['sourcePackageCatalog']['buildsCommit'])
@@ -541,9 +541,9 @@ class CiHooksTests(unittest.TestCase):
         for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
             self.assertEqual(str(Path(self.env['HOME']) / '.aspire/bundle' / relative), tools[relative]['path'])
             self.assertEqual(bundle_hashes[relative], tools[relative]['sha256'])
-        self.assertEqual(['4.0.4'] * 3,
+        self.assertEqual(['4.1.0'] * 3,
                          [source['HexalithEventStoreVersion'] for source in prepared['sources'] if source['module'] != 'Hexalith.Platform'])
-        self.assertEqual({'profile': 'published', 'version': '4.0.4', 'sourceCommit': 'a' * 40},
+        self.assertEqual({'profile': 'published', 'version': '4.1.0', 'sourceCommit': 'a' * 40},
                          {key: prepared['gateway'][key] for key in ('profile', 'version', 'sourceCommit')})
         self.assertEqual({'Hexalith.Tenants', 'Hexalith.Parties'}, set(prepared['gateway']['domainHosts']))
         property_calls = [call for call in calls if call[0] == 'dotnet' and call[2] == 'msbuild']
@@ -553,7 +553,7 @@ class CiHooksTests(unittest.TestCase):
             self.assertIn('-p:UseHexalithProjectReferences=false', call)
             self.assertIn('-p:UseNuGetDeps=true', call)
             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
-            self.assertIn('-p:HexalithEventStoreVersion=4.0.4', call)
+            self.assertIn('-p:HexalithEventStoreVersion=4.1.0', call)
         self.assertEqual(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '2280',
                           'python3', 'tools/live-topology/ci.py', 'prepare'], calls[0])
         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())
@@ -579,7 +579,7 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual('src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj', selected[0][3])
         self.assertEqual(str(self.root / 'references/Hexalith.Parties'), selected[0][1])
         self.assertIn('-p:HexalithEventStoreFromSource=false', selected[0])
-        self.assertIn('-p:HexalithEventStoreVersion=4.0.4', selected[0])
+        self.assertIn('-p:HexalithEventStoreVersion=4.1.0', selected[0])
 
     def test_competing_nested_catalog_is_rechecked_before_either_live_runner(self):
         prepared = self.prepare()
@@ -712,7 +712,7 @@ class CiHooksTests(unittest.TestCase):
 
     def test_changed_gateway_package_bytes_refuse_before_any_live_runner(self):
         self.prepare()
-        with ZipFile(self.root / 'package-cache/hexalith.eventstore.gateway/4.0.4/hexalith.eventstore.gateway.4.0.4.nupkg', 'a') as archive:
+        with ZipFile(self.root / 'package-cache/hexalith.eventstore.gateway/4.1.0/hexalith.eventstore.gateway.4.1.0.nupkg', 'a') as archive:
             archive.writestr('changed.txt', b'changed')
         result = self.invoke('run-ci.sh')
         self.assertNotEqual(0, result.returncode)
@@ -752,7 +752,7 @@ class CiHooksTests(unittest.TestCase):
                         if phase == 'run': self.prepare()
                         (self.root / 'runner-gateway-environment.jsonl').unlink(missing_ok=True)
                         changed = json.loads(original)
-                        identity = 'Hexalith.EventStore.Contracts/4.0.4'
+                        identity = 'Hexalith.EventStore.Contracts/4.1.0'
                         if defect == 'transitive-version':
                             changed['libraries']['Hexalith.EventStore.Contracts/4.0.3'] = changed['libraries'].pop(identity)
                         else:
@@ -767,7 +767,7 @@ class CiHooksTests(unittest.TestCase):
                             asset.write_text(original)
 
     def test_archive_extracted_deployed_and_configuration_mutations_refuse_before_runners(self):
-        package = self.root / 'package-cache/hexalith.eventstore.gateway/4.0.4'
+        package = self.root / 'package-cache/hexalith.eventstore.gateway/4.1.0'
         deployed = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0'
         source = self.root / 'references/Hexalith.EventStore/src/Hexalith.EventStore/appsettings.json'
         cases = [package / 'hexalith.eventstore.gateway.nuspec',
@@ -813,12 +813,12 @@ class CiHooksTests(unittest.TestCase):
 
 
     def test_embedded_archive_identity_and_source_are_validated_before_preparation(self):
-        folder = self.root / 'package-cache/hexalith.eventstore.gateway/4.0.4'
-        archive = folder / 'hexalith.eventstore.gateway.4.0.4.nupkg'
+        folder = self.root / 'package-cache/hexalith.eventstore.gateway/4.1.0'
+        archive = folder / 'hexalith.eventstore.gateway.4.1.0.nupkg'
         nuspec = folder / 'hexalith.eventstore.gateway.nuspec'
         original_archive, original_nuspec = archive.read_bytes(), nuspec.read_bytes()
         for before, after in ((b'<id>Hexalith.EventStore.Gateway</id>', b'<id>Wrong.Package</id>'),
-                              (b'<version>4.0.4</version>', b'<version>4.0.3</version>'),
+                              (b'<version>4.1.0</version>', b'<version>4.0.3</version>'),
                               (b'a' * 40, b'not-a-source-commit')):
             with self.subTest(replacement=after):
                 self.fresh_evidence()
@@ -1134,7 +1134,7 @@ class CiHooksTests(unittest.TestCase):
         command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
                    '-warnaserror -m:1 -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low '
                    '-p:TreatWarningsAsErrors=true -p:WarningsNotAsErrors= -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
-                   '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.0.4 '
+                   '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.1.0 '
                    f'-p:HexalithBuildPackageVersions1={overlay}')
         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
         stderr = self.evidence / 'Hexalith.Tenants-build.stderr.txt'

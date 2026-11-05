@@ -1,0 +1,41 @@
+[
+  {
+    "name": "strict-native-build",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:NuGetAudit=true",
+      "-p:NuGetAuditMode=all",
+      "-p:NuGetAuditLevel=low",
+      "-p:TreatWarningsAsErrors=true",
+      "-p:WarningsNotAsErrors=",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithBuildPackageVersions1=/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/native-runtime-packages.props"
+    ],
+    "cwd": "/tmp/mcpcli-418-tenants704-candidate",
+    "exit_code": 0,
+    "elapsed_seconds": 2.27
+  },
+  {
+    "name": "probe-build",
+    "command": [
+      "dotnet",
+      "build",
+      "OwnerProbe.csproj",
+      "-c",
+      "Release",
+      "-m:1"
+    ],
+    "cwd": "/tmp/mcpcli-418-tenant-sdk-probe",
+    "exit_code": 1,
+    "elapsed_seconds": 2.07
+  }
+]

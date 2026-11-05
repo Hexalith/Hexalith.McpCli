@@ -1,0 +1,13 @@
+{
+  "schema": "mcpcli-story-4-18-tenants-candidate-rejection/v1",
+  "recorded_at_utc": "2026-11-05T12:22:05.027071+00:00",
+  "source_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "candidate_version": "7.0.3",
+  "preparation_run_id": 42023389616,
+  "verified_artifact_record_sha256": "6ee2e972b0faa8532bd3934a9144977f97ac1e4f08186a756f35a5e5d66fa204",
+  "candidate_artifact_integrity_valid": true,
+  "native_410_compatibility_qualified": false,
+  "reason": "Prepared cohort/consumer proof uses SDK 4.0.4; owner package-mode fences reject native EventStore 4.1.0. No production approval or publication request is permitted for this incompatible candidate.",
+  "publication_approval_submitted": false,
+  "next": "Reproduce exact refusal; integrate narrow 4.1.0 default/fence/capability upgrades, prove source/public DLL equality, then new exact-source CI and preparation."
+}

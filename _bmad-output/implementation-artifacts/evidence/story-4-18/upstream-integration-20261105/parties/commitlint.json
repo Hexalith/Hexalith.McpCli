@@ -1,0 +1,20 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "input_file": "commit-message.txt",
+  "input_sha256": "4c6e8fd7be834b460454bcfc2be93776cde96bf151ea304f12b635045e3c21ae",
+  "exit_code": 0,
+  "pinned_cli": "21.2.4",
+  "tooling": "npm ci --ignore-scripts",
+  "node": "24.22.1",
+  "npm": "11.19.1",
+  "pinned_local_cli_verified": "21.2.4",
+  "npm_ci_exit_code": 0,
+  "local_pinned_revalidation_exit_code": 0,
+  "initial_tooling_failure": "npm-ci-node26-failed.stderr.txt"
+}

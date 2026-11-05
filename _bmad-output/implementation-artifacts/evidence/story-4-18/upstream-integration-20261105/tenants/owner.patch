@@ -1,0 +1,26 @@
+diff --git a/src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs b/src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs
+index 051244f9..51bacf82 100644
+--- a/src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs
++++ b/src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs
+@@ -46,7 +46,8 @@ public sealed class GetTenantQueryHandler(
+         TenantReadModel? model = tenantEntry?.Value;
+         cancellationToken.ThrowIfCancellationRequested();
+ 
+-        if (model is null) {
++        // Rejection-only histories retain checkpoints without creating a tenant.
++        if (model is null || string.IsNullOrEmpty(model.TenantId)) {
+             return await IsGlobalAdminAsync(envelope, cancellationToken).ConfigureAwait(false)
+                 ? new QueryResult(false, default, ErrorMessage: "Tenant not found")
+                 : new QueryResult(false, default, ErrorMessage: QueryAdapterFailureReason.Forbidden);
+diff --git a/tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj b/tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj
+index 1422a912..38f455e5 100644
+--- a/tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj
++++ b/tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj
+@@ -20,6 +20,7 @@
+     </ItemGroup>
+ 
+     <ItemGroup>
++        <PackageReference Include="Hexalith.EventStore.Testing" />
+         <PackageReference Include="YamlDotNet" />
+     </ItemGroup>
+ 

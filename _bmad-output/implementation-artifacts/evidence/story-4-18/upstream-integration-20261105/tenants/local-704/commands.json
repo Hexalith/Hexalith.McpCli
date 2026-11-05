@@ -1,0 +1,159 @@
+[
+  {
+    "name": "locked-version-selection",
+    "command": [
+      "node",
+      "/tmp/mcpcli-418-owner-version-selector.mjs",
+      "/home/administrator/projects/hexalith/tenants",
+      "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/local-704/selected-release.json"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.12,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  },
+  {
+    "name": "build-Hexalith.Tenants.Contracts",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-nr:false",
+      "-p:Version=7.0.4"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.02,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  },
+  {
+    "name": "build-Hexalith.Tenants.Client",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Client/Hexalith.Tenants.Client.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-nr:false",
+      "-p:Version=7.0.4"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.32,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  },
+  {
+    "name": "build-Hexalith.Tenants.Server",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-nr:false",
+      "-p:Version=7.0.4"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.37,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  },
+  {
+    "name": "build-Hexalith.Tenants.Testing",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Testing/Hexalith.Tenants.Testing.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-nr:false",
+      "-p:Version=7.0.4"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.42,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  },
+  {
+    "name": "build-Hexalith.Tenants.Aspire",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Aspire/Hexalith.Tenants.Aspire.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-nr:false",
+      "-p:Version=7.0.4"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.47,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  },
+  {
+    "name": "pack-exact-manifest",
+    "command": [
+      "python3",
+      "scripts/pack-release-packages.py",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/local-704/nupkgs",
+      "7.0.4"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 8.89,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  },
+  {
+    "name": "package-metadata-validation",
+    "command": [
+      "python3",
+      "scripts/validate-nuget-packages.py",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/local-704/nupkgs"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.06,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  },
+  {
+    "name": "actual-catalog-consumer",
+    "command": [
+      "python3",
+      "scripts/verify-catalog-package-consumer.py",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/local-704/nupkgs",
+      "--expected-source-sha",
+      "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "--output",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/local-704/catalog-package-consumer.json"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 5.43,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  },
+  {
+    "name": "package-only-consumers",
+    "command": [
+      "python3",
+      "scripts/validate-consumer-package-references.py",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/local-704/nupkgs"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 5.38,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-sdk410-public-cache",
+    "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "schema": "mcpcli-story-4-18-tenants-preparation-dispatch/v1",
+  "source_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "version": "7.0.3",
+  "dispatched_at_utc": "2026-11-05T11:59:32.855778+00:00",
+  "command": [
+    "gh",
+    "workflow",
+    "run",
+    "release.yml",
+    "--repo",
+    "Hexalith/Hexalith.Tenants",
+    "--ref",
+    "main"
+  ],
+  "exit_code": 0,
+  "gates": [
+    {
+      "workflow": "ci.yml",
+      "run_id": 42018235352,
+      "conclusion": "success",
+      "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/42018235352"
+    },
+    {
+      "workflow": "story-guards.yml",
+      "run_id": 42018234466,
+      "conclusion": "success",
+      "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/42018234466"
+    },
+    {
+      "workflow": "source-reference.yml",
+      "run_id": 42018234349,
+      "conclusion": "success",
+      "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/42018234349"
+    },
+    {
+      "workflow": "commitlint.yml",
+      "run_id": 42018234967,
+      "conclusion": "success",
+      "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/42018234967"
+    }
+  ],
+  "required_reviewer_hold_verified": true,
+  "production_approval_granted": false,
+  "publication_authorized_by_this_dispatch": false,
+  "preparation_timeout_minutes": 60,
+  "side_effect_scope": "Dispatch existing credential-free preparation; leave protected publication pending mandatory reviewer."
+}

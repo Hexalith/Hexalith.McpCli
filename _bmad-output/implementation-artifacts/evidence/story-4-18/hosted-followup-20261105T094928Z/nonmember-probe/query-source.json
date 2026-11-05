@@ -1,0 +1,9 @@
+{
+  "repository": "Hexalith/Hexalith.Tenants",
+  "commit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27",
+  "path": "src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs",
+  "sha256": "977bda534905a9e44380ee92c59bf7823729dd63b1aa37c82a2d0adf982ea2f8",
+  "supporting_host_binary": "/tmp/mcpcli-4-18-qualification-20261104T043026Z/build-reproduction/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll",
+  "supporting_host_sha256": "281cfd1bf0e197cb25eb0789861cc09fe6588eb517b0d7f077a506ba154ef993",
+  "limits": "Exact projection/query source over in-memory shared store and an authority seam; no live acceptance."
+}

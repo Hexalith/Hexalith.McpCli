@@ -1,0 +1,215 @@
+[
+  {
+    "name": "server-missing-fixtures-retest",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Tenants.Server.Tests/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll",
+      "-method",
+      "Hexalith.Tenants.Server.Tests.Configuration.EventPublicationConfigurationTests.EventStoreHostAppsettings_ConfiguresSharedTenantEventTopicForGlobalAdministratorsDomain",
+      "-method",
+      "Hexalith.Tenants.Server.Tests.Documentation.QuickstartDocumentationTests.Quickstart_referenced_local_paths_exist",
+      "-method",
+      "Hexalith.Tenants.Server.Tests.Documentation.QuickstartDocumentationTests.Quickstart_token_request_matches_generated_realm_credentials_and_current_development_settings",
+      "-method",
+      "Hexalith.Tenants.Server.Tests.Documentation.QuickstartDocumentationTests.Quickstart_command_gateway_and_status_routes_match_EventStore_source",
+      "-method",
+      "Hexalith.Tenants.Server.Tests.Documentation.CompensatingCommandsDocumentationTests.Compensating_guide_command_gateway_and_status_routes_match_EventStore_source",
+      "-method",
+      "Hexalith.Tenants.Server.Tests.Documentation.CrossAggregateTimingDocumentationTests.Timing_guide_matches_current_EventStore_command_status_contract",
+      "-method",
+      "Hexalith.Tenants.Server.Tests.Documentation.CrossAggregateTimingDocumentationTests.Timing_guide_references_source_backed_files_that_anchor_the_claims",
+      "-xml",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/server-missing-fixtures-retest.xml"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.36,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  },
+  {
+    "name": "native-strict-build",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:NuGetAudit=true",
+      "-p:NuGetAuditMode=all",
+      "-p:NuGetAuditLevel=low",
+      "-p:TreatWarningsAsErrors=true",
+      "-p:WarningsNotAsErrors=",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithBuildPackageVersions1=/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/native-runtime-packages.props"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 4.13,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  },
+  {
+    "name": "controlled-contracts-build-410-before",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:NuGetAudit=true",
+      "-p:NuGetAuditMode=all",
+      "-p:NuGetAuditLevel=low",
+      "-p:TreatWarningsAsErrors=true",
+      "-p:WarningsNotAsErrors=",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithBuildPackageVersions1=/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/native-runtime-packages.props"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.82,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  },
+  {
+    "name": "controlled-contracts-build-404",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:NuGetAudit=true",
+      "-p:NuGetAuditMode=all",
+      "-p:NuGetAuditLevel=low",
+      "-p:TreatWarningsAsErrors=true",
+      "-p:WarningsNotAsErrors=",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithEventStoreVersion=4.0.4",
+      "-p:HexalithBuildPackageVersions1=/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/native-runtime-packages.props"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.72,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  },
+  {
+    "name": "controlled-contracts-build-410-after",
+    "command": [
+      "dotnet",
+      "build",
+      "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-p:NuGetAudit=true",
+      "-p:NuGetAuditMode=all",
+      "-p:NuGetAuditLevel=low",
+      "-p:TreatWarningsAsErrors=true",
+      "-p:WarningsNotAsErrors=",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithEventStoreVersion=4.1.0",
+      "-p:HexalithBuildPackageVersions1=/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/native-runtime-packages.props"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.12,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  },
+  {
+    "name": "legacy404-catalog-test-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+      "-c",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-nr:false",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithFrontComposerFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithEventStoreVersion=4.0.4"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 3.59,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  },
+  {
+    "name": "legacy404-compiled-catalog-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+      "-class",
+      "Hexalith.Tenants.Contracts.Tests.PublishedTenantCatalogTests",
+      "-class",
+      "Hexalith.Tenants.Contracts.Tests.TenantCatalogTests",
+      "-xml",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/legacy404-compiled-catalog-tests.xml"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.42,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  },
+  {
+    "name": "public410-catalog-test-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+      "-c",
+      "Release",
+      "-warnaserror",
+      "-m:1",
+      "-nr:false",
+      "-p:UseHexalithProjectReferences=false",
+      "-p:UseNuGetDeps=true",
+      "-p:HexalithEventStoreFromSource=false",
+      "-p:HexalithFrontComposerFromSource=false",
+      "-p:HexalithMemoriesFromSource=false",
+      "-p:HexalithEventStoreVersion=4.1.0"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.53,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  },
+  {
+    "name": "public410-compiled-catalog-tests",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.Tenants.Contracts.Tests/bin/Release/net10.0/Hexalith.Tenants.Contracts.Tests.dll",
+      "-class",
+      "Hexalith.Tenants.Contracts.Tests.PublishedTenantCatalogTests",
+      "-class",
+      "Hexalith.Tenants.Contracts.Tests.TenantCatalogTests",
+      "-xml",
+      "/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/public410-compiled-catalog-tests.xml"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.42,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.03,
+    "private_cache": "/tmp/mcpcli-418-sdk410-public-cache"
+  }
+]

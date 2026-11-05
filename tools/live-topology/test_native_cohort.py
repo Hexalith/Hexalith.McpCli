@@ -18,11 +18,11 @@ class NativeCohortTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
-        self.selection = {'eventStoreVersion': '4.0.4', 'sources': {
+        self.selection = {'eventStoreVersion': '4.1.0', 'sources': {
             module: {'repository': native.REPOSITORIES[module], 'commit': 'a' * 40} for module in native.MODULES},
             'packages': []}
-        for name, version in [('Hexalith.EventStore.Gateway', '4.0.4'), ('Hexalith.EventStore.Aspire', '4.0.4'),
-                              ('Hexalith.Tenants.Contracts', '7.0.0'), ('Hexalith.Tenants.Aspire', '7.0.0')]:
+        for name, version in [('Hexalith.EventStore.Gateway', '4.1.0'), ('Hexalith.EventStore.Aspire', '4.1.0'),
+                              ('Hexalith.Tenants.Contracts', '7.0.4'), ('Hexalith.Tenants.Aspire', '7.0.4')]:
             self.selection['packages'].append({'id': name, 'version': version, 'sourceCommit': 'a' * 40, 'sha256': 'b' * 64})
         self.path = self.root / 'selection.json'
         self.path.write_text(json.dumps(self.selection))
@@ -134,7 +134,7 @@ class NativeCohortTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'Invalid qualified source identity'):
                 native.manifest(self.path)
         changed = json.loads(json.dumps(self.selection))
-        changed['packages'][-1]['version'] = '7.0.0-local'
+        changed['packages'][-1]['version'] = '7.0.4-local'
         self.path.write_text(json.dumps(changed))
         with self.assertRaisesRegex(ValueError, 'archive identities are required'):
             native.manifest(self.path)
@@ -144,7 +144,7 @@ class NativeCohortTests(unittest.TestCase):
         archive = self.root / 'tenants.nupkg'
         def write(commit):
             with ZipFile(archive, 'w') as content:
-                content.writestr('package.nuspec', '<package><metadata><id>Hexalith.Tenants.Contracts</id><version>7.0.0</version>'
+                content.writestr('package.nuspec', '<package><metadata><id>Hexalith.Tenants.Contracts</id><version>7.0.4</version>'
                     '<repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + commit + '" /></metadata></package>')
         write('a' * 40)
         package['sha256'] = hashlib.sha256(archive.read_bytes()).hexdigest()
@@ -156,7 +156,7 @@ class NativeCohortTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'repository source differs'):
             native.verify_archive(archive, package)
         with self.assertRaisesRegex(ValueError, 'no authenticated public archive'):
-            native.require_restored_archive(archive, self.selection, 'Hexalith.EventStore.Contracts/4.0.4')
+            native.require_restored_archive(archive, self.selection, 'Hexalith.EventStore.Contracts/4.1.0')
 
 
 if __name__ == '__main__':

@@ -1,0 +1,20 @@
+{
+  "branch": "main",
+  "error": "GET repos/Hexalith/Hexalith.Tenants/actions/workflows/ci.yml/runs failed (exit=1, HTTP=None, transport-or-cli-error)",
+  "gates": [
+    {
+      "workflow": "ci.yml"
+    }
+  ],
+  "repository": "Hexalith/Hexalith.Tenants",
+  "request_failure": {
+    "classification": "transport-or-cli-error",
+    "endpoint": "repos/Hexalith/Hexalith.Tenants/actions/workflows/ci.yml/runs",
+    "exit_status": 1,
+    "http_status": null,
+    "method": "GET"
+  },
+  "result": "refused",
+  "schema": "hexalith.source-workflow-gates.v1",
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+}

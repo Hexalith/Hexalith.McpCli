@@ -1,0 +1,6 @@
+{
+  "time_utc": "2026-11-05T14:25:35.752122+00:00",
+  "result": "refused",
+  "error": "Launched adapter output missing Hexalith.EventStore.Client.dll after the subsequent catalog-test project build ran without CopyLocalLockFileAssemblies=true.",
+  "interpretation": "Both exact native builds and nine catalog tests passed. Re-materialize adapter with the exact native property before sealing provenance; no source/dependency change."
+}

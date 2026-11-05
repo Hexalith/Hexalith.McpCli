@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-418-tenant-sdk-probe/OwnerProbe.csproj (in 1.13 sec).
+/tmp/mcpcli-418-tenant-sdk-probe/Program.cs(13,99): error CS0117: 'DistributedApplicationOptions' does not contain a definition for 'EnvironmentName' [/tmp/mcpcli-418-tenant-sdk-probe/OwnerProbe.csproj]
+/tmp/mcpcli-418-tenant-sdk-probe/Program.cs(10,40): warning CS8714: The type 'string?' cannot be used as type parameter 'TKey' in the generic type or method 'Enumerable.ToDictionary<TSource, TKey, TElement>(IEnumerable<TSource>, Func<TSource, TKey>, Func<TSource, TElement>)'. Nullability of type argument 'string?' doesn't match 'notnull' constraint. [/tmp/mcpcli-418-tenant-sdk-probe/OwnerProbe.csproj]
+
+Build FAILED.
+
+/tmp/mcpcli-418-tenant-sdk-probe/Program.cs(10,40): warning CS8714: The type 'string?' cannot be used as type parameter 'TKey' in the generic type or method 'Enumerable.ToDictionary<TSource, TKey, TElement>(IEnumerable<TSource>, Func<TSource, TKey>, Func<TSource, TElement>)'. Nullability of type argument 'string?' doesn't match 'notnull' constraint. [/tmp/mcpcli-418-tenant-sdk-probe/OwnerProbe.csproj]
+/tmp/mcpcli-418-tenant-sdk-probe/Program.cs(13,99): error CS0117: 'DistributedApplicationOptions' does not contain a definition for 'EnvironmentName' [/tmp/mcpcli-418-tenant-sdk-probe/OwnerProbe.csproj]
+    1 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.82

@@ -1,0 +1,7 @@
+{
+  "environment_ids": [
+    18745236815
+  ],
+  "state": "approved",
+  "comment": "User-authorized Tenants 7.0.4 from 8e20524574901d71ad5f4876804c64c3c6c87b88. Verified hosted artifact 13420269243 / sha256 7a0ca2d3fcf62f17e6dc162864fecb9349d434ae0aea65c1adc8d17437b4be6d, SDK 4.1.0, five NuGet packages, tenants and tenants-api for linux/amd64 and linux/arm64, and source-bound tag/release."
+}

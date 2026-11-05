@@ -1,0 +1,75 @@
+2026-11-05T12:18:59.4307917Z ##[endgroup]
+2026-11-05T12:19:08.5959486Z prepare-module-build: dotnet exited 2: {"status":"failed","outcome":{"exitCode":"PrerequisiteUnavailable","phase":"Prerequisite","category":"PrerequisiteUnavailable","ruleId":"HXW011"},"diagnostics":[{"ruleId":"HXW011","phase":"Prerequisite","category":"PrerequisiteUnavailable","message":"Platform identity db816425ff2b9e8e07af79257b01d3520782f46a has no local v\u003CSemVer\u003E release tag.","field":"/home/runner/work/Hexalith.Parties/Hexalith.Parties/references/Hexalith.Platform","hint":"Fetch Platform tags, then retry.","source":null,"location":null,"row":null}]}
+2026-11-05T12:19:08.5963236Z  
+2026-11-05T12:19:08.6063443Z ##[error]Process completed with exit code 1.
+2026-11-05T12:19:08.6071406Z ##[end-action id=__self_2.__run;outcome=failure;conclusion=failure;duration_ms=9184]
+2026-11-05T12:19:08.6196384Z ##[group]Run python3 .hexalith/builds-execution/Github/run-module-integration/run_module_integration.py finalize --receipt "$RUNNER_TEMP/hexalith-ci-owner.json" --evidence TestResults/module-integration --job-status "$CI_JOB_STATUS"
+2026-11-05T12:19:08.6198196Z python3 .hexalith/builds-execution/Github/run-module-integration/run_module_integration.py finalize --receipt "$RUNNER_TEMP/hexalith-ci-owner.json" --evidence TestResults/module-integration --job-status "$CI_JOB_STATUS"
+2026-11-05T12:19:08.6249144Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T12:19:08.6249506Z env:
+2026-11-05T12:19:08.6249725Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T12:19:08.6250014Z   CI_JOB_STATUS: failure
+2026-11-05T12:19:08.6250254Z ##[endgroup]
+2026-11-05T12:19:08.7055215Z ##[group]Run set -euo pipefail
+2026-11-05T12:19:08.7055571Z set -euo pipefail
+2026-11-05T12:19:08.7055863Z config="${HEXALITH_CI_REGISTRY_CONFIG:-}"
+2026-11-05T12:19:08.7056201Z if [[ -z "$config" ]]; then exit 0; fi
+2026-11-05T12:19:08.7056546Z runner_temp="$(realpath -e -- "$RUNNER_TEMP")"
+2026-11-05T12:19:08.7057149Z if [[ "$(dirname -- "$config")" != "$runner_temp" || "$(basename -- "$config")" != hexalith-ci-registry.* || -L "$config" ]]; then
+2026-11-05T12:19:08.7057835Z   echo '::error::Refusing to remove a foreign registry credential directory.'
+2026-11-05T12:19:08.7058240Z   exit 1
+2026-11-05T12:19:08.7058440Z fi
+2026-11-05T12:19:08.7058648Z rm -rf -- "$config"
+2026-11-05T12:19:08.7059292Z [[ ! -e "$config" && ! -L "$config" ]]
+2026-11-05T12:19:08.7109215Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T12:19:08.7109586Z env:
+2026-11-05T12:19:09.6526342Z   UNIT_VSTEST_FAILURE_COUNT: 
+2026-11-05T12:19:09.6526607Z   UNIT_MTP_FAILURE_COUNT: 
+2026-11-05T12:19:09.6526845Z ##[endgroup]
+2026-11-05T12:19:09.6609720Z ##[error]Tier 1 Microsoft.Testing.Platform did not report a failure count.
+2026-11-05T12:19:09.6611511Z ##[error]Process completed with exit code 1.
+2026-11-05T12:19:09.6657419Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-11-05T12:19:09.6657860Z with:
+2026-11-05T12:19:09.6658144Z   name: blocking-test-results
+2026-11-05T12:19:09.6658498Z   path: TestResults/**/*.trx
+TestResults/**/coverage.cobertura.xml
+
+2026-11-05T12:19:09.6659176Z   retention-days: 7
+2026-11-05T12:19:09.6659440Z   if-no-files-found: warn
+2026-11-05T12:19:09.6659688Z   compression-level: 6
+2026-11-05T12:19:09.6659909Z   overwrite: false
+2026-11-05T12:19:09.6660140Z   include-hidden-files: false
+2026-11-05T12:19:09.6660386Z   archive: true
+2026-11-05T12:19:09.6660589Z env:
+2026-11-05T12:19:09.6660797Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T12:19:09.6661051Z ##[endgroup]
+2026-11-05T12:19:09.8182992Z ##[warning]No files were found with the provided path: TestResults/**/*.trx
+TestResults/**/coverage.cobertura.xml. No artifacts will be uploaded.
+2026-11-05T12:19:09.8336627Z Post job cleanup.
+2026-11-05T12:19:09.9266096Z [command]/usr/bin/git version
+2026-11-05T12:19:09.9325236Z git version 2.56.0
+2026-11-05T12:19:09.6526607Z   UNIT_MTP_FAILURE_COUNT: 
+2026-11-05T12:19:09.6526845Z ##[endgroup]
+2026-11-05T12:19:09.6609720Z ##[error]Tier 1 Microsoft.Testing.Platform did not report a failure count.
+2026-11-05T12:19:09.6611511Z ##[error]Process completed with exit code 1.
+2026-11-05T12:19:09.6657419Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-11-05T12:19:09.6657860Z with:
+2026-11-05T12:19:09.6658144Z   name: blocking-test-results
+2026-11-05T12:19:09.6658498Z   path: TestResults/**/*.trx
+TestResults/**/coverage.cobertura.xml
+
+2026-11-05T12:19:09.6659176Z   retention-days: 7
+2026-11-05T12:19:09.6659440Z   if-no-files-found: warn
+2026-11-05T12:19:09.6659688Z   compression-level: 6
+2026-11-05T12:19:09.6659909Z   overwrite: false
+2026-11-05T12:19:09.6660140Z   include-hidden-files: false
+2026-11-05T12:19:09.6660386Z   archive: true
+2026-11-05T12:19:09.6660589Z env:
+2026-11-05T12:19:09.6660797Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T12:19:09.6661051Z ##[endgroup]
+2026-11-05T12:19:09.8182992Z ##[warning]No files were found with the provided path: TestResults/**/*.trx
+TestResults/**/coverage.cobertura.xml. No artifacts will be uploaded.
+2026-11-05T12:19:09.8336627Z Post job cleanup.
+2026-11-05T12:19:09.9266096Z [command]/usr/bin/git version
+2026-11-05T12:19:09.9325236Z git version 2.56.0
+2026-11-05T12:19:09.9365386Z Temporarily overriding HOME='/home/runner/work/_temp/d6a6a0b9-33ed-4054-99d7-e3aeccefe47b' before making global git config changes

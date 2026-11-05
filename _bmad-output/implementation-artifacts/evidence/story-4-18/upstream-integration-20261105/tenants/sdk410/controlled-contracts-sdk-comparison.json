@@ -1,0 +1,16 @@
+{
+  "410-before": {
+    "sdk": "4.1.0",
+    "dll_sha256": "2ca75c751bb5cf989e2c791be2a6a84cfed354abe1d1cf5bbddea66238cc50d2"
+  },
+  "404": {
+    "sdk": "4.0.4",
+    "dll_sha256": "d03768df6642b0d7370c47290976b12d4cfa86a6a1f6050c7cff55c7920048fe"
+  },
+  "410-after": {
+    "sdk": "4.1.0",
+    "dll_sha256": "2ca75c751bb5cf989e2c791be2a6a84cfed354abe1d1cf5bbddea66238cc50d2"
+  },
+  "same_410_bytes_after_restore": true,
+  "different_when_only_sdk_changes": true
+}

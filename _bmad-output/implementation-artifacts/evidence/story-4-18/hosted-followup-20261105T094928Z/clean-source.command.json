@@ -1,0 +1,12 @@
+{
+  "command": [
+    "git",
+    "status",
+    "--porcelain"
+  ],
+  "started_at_utc": "2026-11-05T09:49:22.613776+00:00",
+  "completed_at_utc": "2026-11-05T09:49:23.014134+00:00",
+  "source_before": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+  "source_after": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+  "exit_code": 0
+}

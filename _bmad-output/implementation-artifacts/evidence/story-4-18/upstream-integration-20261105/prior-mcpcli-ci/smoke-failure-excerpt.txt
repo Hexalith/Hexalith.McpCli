@@ -1,0 +1,6 @@
+System.InvalidOperationException : The nonmember smoke target has persisted business state.
+   at Hexalith.McpCli.Integration.Tests.NativeAdministratorBoundary.<>c__DisplayClass1_0.<<RequireNonmemberRejectionAsync>g__RequireAbsentAsync|0>d.MoveNext() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/NativeAdministratorBoundary.cs:line 46
+--- End of stack trace from previous location ---
+   at Hexalith.McpCli.Integration.Tests.NativeAdministratorBoundary.RequireNonmemberRejectionAsync(IEventStoreGatewayClient nonmember, IEventStoreGatewayClient administrator, CancellationToken cancellationToken) in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/NativeAdministratorBoundary.cs:line 39
+   at Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/GatewaySmokeTests.cs:line 40
+--- End of stack trace from previous location ---

@@ -1,0 +1,6 @@
+remote: 
+remote: GitHub found 5 vulnerabilities on Hexalith/Hexalith.Parties's default branch (3 high, 2 moderate). To find out more, visit:        
+remote:      https://github.com/Hexalith/Hexalith.Parties/security/dependabot        
+remote: 
+To https://github.com/Hexalith/Hexalith.Parties.git
+   b8ec6852..b34fa6a6  HEAD -> main

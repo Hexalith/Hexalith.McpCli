@@ -1,0 +1,54 @@
+[
+  {
+    "project": "Abstractions",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Abstractions.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.07
+  },
+  {
+    "project": "Analyzers",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Analyzers.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 3.12
+  },
+  {
+    "project": "Core",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Core.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 2.32
+  },
+  {
+    "project": "Manifest",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 2,
+    "elapsed_seconds": 123.1
+  }
+]

@@ -1,0 +1,100 @@
+{
+  "schema": "mcpcli-story-4-18-verified-tenants-candidate/v1",
+  "verified_at_utc": "2026-11-05T12:14:52.020063+00:00",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "source_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "version": "7.0.3",
+  "run_id": 42023389616,
+  "run_url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/42023389616",
+  "artifact_id": 13412349342,
+  "original_artifact_sha256": "c54d61c15bf5c27a1cb8f4013cd66059e596089f6d05c540203fb2b1be9111d5",
+  "original_tar_sha256": "a130672a8121b02afbe8a72fcae927837fc50bfa8228de0246f1db58c8c78224",
+  "original_artifact_digest_verified": true,
+  "prepared_source_and_version_match": true,
+  "packages": [
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "version": "7.0.3",
+      "archive": "Hexalith.Tenants.Aspire.7.0.3.nupkg",
+      "sha256": "78c88193f1657355fe04f1689d85eb647c5c1bfb36e9de1a6768e2b446a0a380",
+      "artifactHash": "sha512-jb6Ra7FZSETRIk6YzoGn4yI25VgzVfaQ85viqSvR9MBqDB1Voo2uTYxAp8QaSafbSm3gwBgoFQiN9MBfkmamrQ==",
+      "sourceCommit": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "repository": "https://github.com/Hexalith/Hexalith.Tenants",
+      "signature_present": false
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "version": "7.0.3",
+      "archive": "Hexalith.Tenants.Client.7.0.3.nupkg",
+      "sha256": "8faddec19aba67d77cb149c9634dd468402adeb325f5dcb4d442b1b4c707f34f",
+      "artifactHash": "sha512-sC0LOn0/GVyZgHAxYqZKk+V0Ka+xgWevn8NeK8yByeMyFwUF9y+Xe4O9hF7LVagmOTsN3Mle8ksvZ5ZEyhtcrg==",
+      "sourceCommit": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "repository": "https://github.com/Hexalith/Hexalith.Tenants",
+      "signature_present": false
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "version": "7.0.3",
+      "archive": "Hexalith.Tenants.Contracts.7.0.3.nupkg",
+      "sha256": "485c93e8118cc093904917ce22a6855fb854f80bfdca0fcdf0c8745ca0e7d59b",
+      "artifactHash": "sha512-P2C5DpoOCd6/fEkcw5cPtE4nNuSFMecFqmSDXYY7TRXhR3UdQ5dd3Vwq82++yRQuSCfq325UGkGBmJ9FhSDhTA==",
+      "sourceCommit": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "repository": "https://github.com/Hexalith/Hexalith.Tenants",
+      "signature_present": false
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "version": "7.0.3",
+      "archive": "Hexalith.Tenants.Server.7.0.3.nupkg",
+      "sha256": "a8e2f7b4e21a3dac0346957c6d6292e1b5083d54e85ad50ed5c379f790b82f11",
+      "artifactHash": "sha512-FDWiDnFxKlQ2lyKg8VxE7Rt//kC+3hyrhaYOmSj4+e47VJ4kAYk6Io2tAFknBM6bx6IezwSltofpEGzEZ9p3Cw==",
+      "sourceCommit": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "repository": "https://github.com/Hexalith/Hexalith.Tenants",
+      "signature_present": false
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "version": "7.0.3",
+      "archive": "Hexalith.Tenants.Testing.7.0.3.nupkg",
+      "sha256": "33447c79d281d1827d1d314bb96bafe67b11657398f8d221e6c3608bc6ccc833",
+      "artifactHash": "sha512-56v8FVejz4SNqkXbUGqgBMLjgmzcOyb34BUZGgZSqzVc8KscXszLTTZr6ONx5i6CN01/ELYqmFQrDSfAGOcz2A==",
+      "sourceCommit": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+      "repository": "https://github.com/Hexalith/Hexalith.Tenants",
+      "signature_present": false
+    }
+  ],
+  "candidate_consumer_receipt": "verified-candidate/catalog-package-consumer.json",
+  "production_job_waiting": true,
+  "production_approval_granted": false,
+  "publication_dispatched_or_approved_by_this_task": false,
+  "containers": [
+    {
+      "destination": "registry.hexalith.com/tenants:7.0.3",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ]
+    },
+    {
+      "destination": "registry.hexalith.com/tenants-api:7.0.3",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ]
+    }
+  ],
+  "github_release": {
+    "tag": "v7.0.3",
+    "source_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+    "assets": [
+      "Hexalith.Tenants.Aspire.7.0.3.nupkg",
+      "Hexalith.Tenants.Client.7.0.3.nupkg",
+      "Hexalith.Tenants.Contracts.7.0.3.nupkg",
+      "Hexalith.Tenants.Server.7.0.3.nupkg",
+      "Hexalith.Tenants.Testing.7.0.3.nupkg"
+    ]
+  },
+  "public_artifact_rebind_pending": "After publication, download actual public packages and bind their exact signed archive hashes/source; do not assume the unsigned candidate hash is the public NuGet hash.",
+  "consumer_receipt_source_version_verified": true,
+  "consumer_receipt_sdk": "4.0.4"
+}

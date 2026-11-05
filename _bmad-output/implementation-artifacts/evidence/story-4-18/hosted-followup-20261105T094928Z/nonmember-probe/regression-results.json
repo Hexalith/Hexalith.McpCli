@@ -1,0 +1,60 @@
+[
+  {
+    "name": "red-build",
+    "command": [
+      "dotnet",
+      "build",
+      "/tmp/mcpcli-418-hosted-cu3do37s/nonmember-probe/regression/NonmemberRegression.Tests.csproj",
+      "--configuration",
+      "Release",
+      "--no-restore",
+      "-warnaserror"
+    ],
+    "started_at_utc": "2026-11-05T09:59:05.461619+00:00",
+    "completed_at_utc": "2026-11-05T09:59:07.222391+00:00",
+    "exit_code": 0,
+    "query_source_sha256": "977bda534905a9e44380ee92c59bf7823729dd63b1aa37c82a2d0adf982ea2f8"
+  },
+  {
+    "name": "red-tests",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-418-hosted-cu3do37s/nonmember-probe/regression/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll",
+      "-class",
+      "Hexalith.Tenants.Server.Tests.Queries.GetTenantCreationEvidenceTests"
+    ],
+    "started_at_utc": "2026-11-05T09:59:07.222770+00:00",
+    "completed_at_utc": "2026-11-05T09:59:07.671721+00:00",
+    "exit_code": 1,
+    "query_source_sha256": "977bda534905a9e44380ee92c59bf7823729dd63b1aa37c82a2d0adf982ea2f8"
+  },
+  {
+    "name": "green-build",
+    "command": [
+      "dotnet",
+      "build",
+      "/tmp/mcpcli-418-hosted-cu3do37s/nonmember-probe/regression/NonmemberRegression.Tests.csproj",
+      "--configuration",
+      "Release",
+      "--no-restore",
+      "-warnaserror"
+    ],
+    "started_at_utc": "2026-11-05T09:59:07.672033+00:00",
+    "completed_at_utc": "2026-11-05T09:59:08.516629+00:00",
+    "exit_code": 0,
+    "query_source_sha256": "438f3dee7a57ba06057c4f6cbee69e74fd7af4a9e8693a6460bb682e0112df4e"
+  },
+  {
+    "name": "green-tests",
+    "command": [
+      "dotnet",
+      "/tmp/mcpcli-418-hosted-cu3do37s/nonmember-probe/regression/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll",
+      "-class",
+      "Hexalith.Tenants.Server.Tests.Queries.GetTenantCreationEvidenceTests"
+    ],
+    "started_at_utc": "2026-11-05T09:59:08.516831+00:00",
+    "completed_at_utc": "2026-11-05T09:59:08.939574+00:00",
+    "exit_code": 0,
+    "query_source_sha256": "438f3dee7a57ba06057c4f6cbee69e74fd7af4a9e8693a6460bb682e0112df4e"
+  }
+]

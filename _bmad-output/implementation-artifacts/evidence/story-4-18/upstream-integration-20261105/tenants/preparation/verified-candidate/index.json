@@ -1,0 +1,50 @@
+{
+  "assets": [
+    {
+      "project": "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "sha256": "3c9c250b8dc7d621dced9477e6c8a369e13ccc25147f0a7c7e854b951a155b87"
+    },
+    {
+      "project": "src/Hexalith.Tenants.Client/Hexalith.Tenants.Client.csproj",
+      "sha256": "db4622acf54db29f3d321fcd5447b8b5dfbc79159e76ab3eb58d6660cc0b7f8f"
+    },
+    {
+      "project": "src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj",
+      "sha256": "e29b9ef9c7cee478c97ea08737ef29ac46ba11d975b3566b0587703fa0c81392"
+    },
+    {
+      "project": "src/Hexalith.Tenants.Testing/Hexalith.Tenants.Testing.csproj",
+      "sha256": "15188471a523b091c08c03f42de5e47a840259bdb6d9d1cc6fcd232f9a8fc26e"
+    },
+    {
+      "project": "src/Hexalith.Tenants.Aspire/Hexalith.Tenants.Aspire.csproj",
+      "sha256": "d2dda5bbf2e74fbaa936603e9a636b6b441045d4383258841d905f1fab03d5fe"
+    }
+  ],
+  "manifest_sha256": "ac68a2e24e454a1ed4987338dd58eb66ad6341fa15da9b1ce676611e5da82749",
+  "packages": [
+    {
+      "name": "Hexalith.Tenants.Aspire.7.0.3.nupkg",
+      "sha256": "78c88193f1657355fe04f1689d85eb647c5c1bfb36e9de1a6768e2b446a0a380"
+    },
+    {
+      "name": "Hexalith.Tenants.Client.7.0.3.nupkg",
+      "sha256": "8faddec19aba67d77cb149c9634dd468402adeb325f5dcb4d442b1b4c707f34f"
+    },
+    {
+      "name": "Hexalith.Tenants.Contracts.7.0.3.nupkg",
+      "sha256": "485c93e8118cc093904917ce22a6855fb854f80bfdca0fcdf0c8745ca0e7d59b"
+    },
+    {
+      "name": "Hexalith.Tenants.Server.7.0.3.nupkg",
+      "sha256": "a8e2f7b4e21a3dac0346957c6d6292e1b5083d54e85ad50ed5c379f790b82f11"
+    },
+    {
+      "name": "Hexalith.Tenants.Testing.7.0.3.nupkg",
+      "sha256": "33447c79d281d1827d1d314bb96bafe67b11657398f8d221e6c3608bc6ccc833"
+    }
+  ],
+  "schema": "hexalith.release.restore-context.v1",
+  "source_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "version": "7.0.3"
+}

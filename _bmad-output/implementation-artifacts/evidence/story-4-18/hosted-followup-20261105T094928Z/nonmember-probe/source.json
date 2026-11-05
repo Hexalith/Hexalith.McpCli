@@ -1,0 +1,7 @@
+{
+  "repository": "Hexalith/Hexalith.Tenants",
+  "commit": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27",
+  "path": "src/Hexalith.Tenants/Projections/TenantProjectionHandler.cs",
+  "sha256": "d85fa7c634258572d71b575b1955a7bf246faa1e306cb3f18c34745f3674db78",
+  "limits": "In-memory source-bound projection probe. No live services, persisted query execution, or hosted acceptance."
+}

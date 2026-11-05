@@ -1,0 +1,49 @@
+EEEE......
+======================================================================
+ERROR: test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore (__main__.CatalogPackageMetadataTests.test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore) (sdk='4.1.0', alias='4.1.0')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-418-tenants410-isolated/tests/scripts/test_catalog_package_consumer.py", line 75, in test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore
+    CONSUMER.verify(root, 'a' * 40)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/tmp/mcpcli-418-tenants410-isolated/scripts/verify-catalog-package-consumer.py", line 56, in verify
+    raise ValueError('Catalog SDK dependency is not one qualified stable cohort.')
+ValueError: Catalog SDK dependency is not one qualified stable cohort.
+
+======================================================================
+ERROR: test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore (__main__.CatalogPackageMetadataTests.test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore) (sdk='4.1.0', alias='4.1.0.0')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-418-tenants410-isolated/tests/scripts/test_catalog_package_consumer.py", line 75, in test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore
+    CONSUMER.verify(root, 'a' * 40)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/tmp/mcpcli-418-tenants410-isolated/scripts/verify-catalog-package-consumer.py", line 56, in verify
+    raise ValueError('Catalog SDK dependency is not one qualified stable cohort.')
+ValueError: Catalog SDK dependency is not one qualified stable cohort.
+
+======================================================================
+ERROR: test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore (__main__.CatalogPackageMetadataTests.test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore) (sdk='4.1.0', alias='4.1.0+metadata-with-dash')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-418-tenants410-isolated/tests/scripts/test_catalog_package_consumer.py", line 75, in test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore
+    CONSUMER.verify(root, 'a' * 40)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/tmp/mcpcli-418-tenants410-isolated/scripts/verify-catalog-package-consumer.py", line 56, in verify
+    raise ValueError('Catalog SDK dependency is not one qualified stable cohort.')
+ValueError: Catalog SDK dependency is not one qualified stable cohort.
+
+======================================================================
+ERROR: test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore (__main__.CatalogPackageMetadataTests.test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore) (sdk='4.1.0', alias='4.1.0.0+metadata.1')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/mcpcli-418-tenants410-isolated/tests/scripts/test_catalog_package_consumer.py", line 75, in test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore
+    CONSUMER.verify(root, 'a' * 40)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/tmp/mcpcli-418-tenants410-isolated/scripts/verify-catalog-package-consumer.py", line 56, in verify
+    raise ValueError('Catalog SDK dependency is not one qualified stable cohort.')
+ValueError: Catalog SDK dependency is not one qualified stable cohort.
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.101s
+
+FAILED (errors=4)

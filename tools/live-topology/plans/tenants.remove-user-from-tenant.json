@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.remove-user-from-tenant",
-  "vectorSha256": "0095c222aceafc0fa4be56282dfadeafc449ea5dd5dc05362aea6eb7c6ee5c51",
+  "vectorSha256": "ebe83d37f8eda2243b09ba4608ca15ca66935024eb00e772f05ac6eb7a27e89a",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [

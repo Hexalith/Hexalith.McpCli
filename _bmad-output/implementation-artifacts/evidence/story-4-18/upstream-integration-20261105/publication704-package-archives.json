@@ -1,0 +1,142 @@
+{
+  "reason": "Additional package blobs retained without changing the original immutable package-archives.zip. Extract at story-4-18 to restore original distinct evidence paths.",
+  "archive": "publication704-package-archives.zip",
+  "archive_sha256": "6c22cebe505649433c59c4e74b1de29bf5fcd5da511fe279c35d1aeb57b8c6ca",
+  "packages": [
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/public-704/hexalith.tenants.aspire.7.0.4.nupkg",
+      "sha256": "97f6f65eda909e3797f873b4fd1c446f57fab1dd14685069e124b6ab83c7aae5",
+      "bytes": 22962
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/public-704/hexalith.tenants.client.7.0.4.nupkg",
+      "sha256": "36ca4232d215d95bdcd0e6ff4867df7c844079bb538425d43f9e618fabd5e5a6",
+      "bytes": 37700
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/public-704/hexalith.tenants.contracts.7.0.4.nupkg",
+      "sha256": "04989ef3b9755c8af217517c7964a75796903d2c21c517ff76d7d46c574861a7",
+      "bytes": 61163
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/public-704/hexalith.tenants.server.7.0.4.nupkg",
+      "sha256": "6daeac9fde718cdc84d804f132ec33aeae49c9b9fbeaf91e876dbaec7c4302be",
+      "bytes": 42609
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/public-704/hexalith.tenants.testing.7.0.4.nupkg",
+      "sha256": "454cb5126dfdaf7c3fa38b470527f5a602bed8dbd0d21409aeb46995673802c3",
+      "bytes": 28793
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/github/Hexalith.Tenants.Aspire.7.0.4.nupkg",
+      "sha256": "b322382a15a0a1a266e3343c5274efbbed32c41418a1c1bc97902e39fd74ccc8",
+      "bytes": 9875
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/github/Hexalith.Tenants.Client.7.0.4.nupkg",
+      "sha256": "f8cfec616a06edd6144fa03b39648873d83362bc543659602688ac13926a5da9",
+      "bytes": 24614
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/github/Hexalith.Tenants.Contracts.7.0.4.nupkg",
+      "sha256": "43bc7531037038acb2baa7bb25b1fb55b8b102931746119cdc0897e07cd827eb",
+      "bytes": 48076
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/github/Hexalith.Tenants.Server.7.0.4.nupkg",
+      "sha256": "8c5b5cd99569dffc3787bba610c571424626bbf4d557f5c8c8c14b91e480d482",
+      "bytes": 29522
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/github/Hexalith.Tenants.Testing.7.0.4.nupkg",
+      "sha256": "7b48f809397b65207e5c1da55050ab7fd1c12d24e1913d68a961db1bbbce2af6",
+      "bytes": 15706
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Aspire.7.0.4.nupkg",
+      "sha256": "97f6f65eda909e3797f873b4fd1c446f57fab1dd14685069e124b6ab83c7aae5",
+      "bytes": 22962
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Client.7.0.4.nupkg",
+      "sha256": "36ca4232d215d95bdcd0e6ff4867df7c844079bb538425d43f9e618fabd5e5a6",
+      "bytes": 37700
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Contracts.7.0.4.nupkg",
+      "sha256": "04989ef3b9755c8af217517c7964a75796903d2c21c517ff76d7d46c574861a7",
+      "bytes": 61163
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Server.7.0.4.nupkg",
+      "sha256": "6daeac9fde718cdc84d804f132ec33aeae49c9b9fbeaf91e876dbaec7c4302be",
+      "bytes": 42609
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Testing.7.0.4.nupkg",
+      "sha256": "454cb5126dfdaf7c3fa38b470527f5a602bed8dbd0d21409aeb46995673802c3",
+      "bytes": 28793
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/reviewed/Hexalith.Tenants.Aspire.7.0.4.nupkg",
+      "sha256": "b322382a15a0a1a266e3343c5274efbbed32c41418a1c1bc97902e39fd74ccc8",
+      "bytes": 9875
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/reviewed/Hexalith.Tenants.Client.7.0.4.nupkg",
+      "sha256": "f8cfec616a06edd6144fa03b39648873d83362bc543659602688ac13926a5da9",
+      "bytes": 24614
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/reviewed/Hexalith.Tenants.Contracts.7.0.4.nupkg",
+      "sha256": "43bc7531037038acb2baa7bb25b1fb55b8b102931746119cdc0897e07cd827eb",
+      "bytes": 48076
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/reviewed/Hexalith.Tenants.Server.7.0.4.nupkg",
+      "sha256": "8c5b5cd99569dffc3787bba610c571424626bbf4d557f5c8c8c14b91e480d482",
+      "bytes": 29522
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/reviewed/Hexalith.Tenants.Testing.7.0.4.nupkg",
+      "sha256": "7b48f809397b65207e5c1da55050ab7fd1c12d24e1913d68a961db1bbbce2af6",
+      "bytes": 15706
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/verified-prepared/Hexalith.Tenants.Aspire.7.0.4.nupkg",
+      "sha256": "b322382a15a0a1a266e3343c5274efbbed32c41418a1c1bc97902e39fd74ccc8",
+      "bytes": 9875
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/verified-prepared/Hexalith.Tenants.Client.7.0.4.nupkg",
+      "sha256": "f8cfec616a06edd6144fa03b39648873d83362bc543659602688ac13926a5da9",
+      "bytes": 24614
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/verified-prepared/Hexalith.Tenants.Contracts.7.0.4.nupkg",
+      "sha256": "43bc7531037038acb2baa7bb25b1fb55b8b102931746119cdc0897e07cd827eb",
+      "bytes": 48076
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/verified-prepared/Hexalith.Tenants.Server.7.0.4.nupkg",
+      "sha256": "8c5b5cd99569dffc3787bba610c571424626bbf4d557f5c8c8c14b91e480d482",
+      "bytes": 29522
+    },
+    {
+      "path": "upstream-integration-20261105/tenants/publication-704-20261105T135343Z/verified-prepared/Hexalith.Tenants.Testing.7.0.4.nupkg",
+      "sha256": "7b48f809397b65207e5c1da55050ab7fd1c12d24e1913d68a961db1bbbce2af6",
+      "bytes": 15706
+    },
+    {
+      "path": "tenants704-public-artifact/enrolled/Hexalith.Parties.Contracts/inputs-4dktakq8/artifacts/Hexalith.Parties.Contracts.1.5.1.nupkg",
+      "sha256": "2b521a3bb58a1904a662bc47bc850ba28737f13a753021c0366a79a4956b3a0c",
+      "bytes": 129134
+    },
+    {
+      "path": "tenants704-public-artifact/enrolled/Hexalith.Tenants.Contracts/inputs-ze6jsw0o/artifacts/Hexalith.Tenants.Contracts.7.0.4.nupkg",
+      "sha256": "04989ef3b9755c8af217517c7964a75796903d2c21c517ff76d7d46c574861a7",
+      "bytes": 61163
+    }
+  ]
+}

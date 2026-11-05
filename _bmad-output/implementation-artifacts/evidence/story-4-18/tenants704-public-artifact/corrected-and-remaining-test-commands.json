@@ -1,0 +1,55 @@
+[
+  {
+    "name": "manifest-rebuild",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+      "--no-restore",
+      "-c",
+      "Release",
+      "-warnaserror"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 3.98
+  },
+  {
+    "name": "manifest-corrected-source-binding",
+    "command": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.PackageConfigurationRetainsReviewedSourceAndDeployedHashes",
+      "-xml",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/manifest-corrected-source-binding.xml"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.27
+  },
+  {
+    "name": "cli-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Cli.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 15.31
+  },
+  {
+    "name": "mcp-tests",
+    "command": [
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Mcp.Tests",
+      "--no-build",
+      "--configuration",
+      "Release"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.97
+  }
+]

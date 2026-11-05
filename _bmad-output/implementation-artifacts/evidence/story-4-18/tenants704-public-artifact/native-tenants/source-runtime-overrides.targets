@@ -1,0 +1,1 @@
+<Project><PropertyGroup><WarningsNotAsErrors /></PropertyGroup><ItemGroup><PackageVersion Update="StackExchange.Redis" Version="3.4.31" /></ItemGroup></Project>

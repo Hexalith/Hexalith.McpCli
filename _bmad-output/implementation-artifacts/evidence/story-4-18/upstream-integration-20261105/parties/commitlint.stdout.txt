@@ -1,0 +1,3 @@
+⧗   --- input ---
+fix(routing): bind published legacy query selectors
+✔   found 0 problems, 0 warnings

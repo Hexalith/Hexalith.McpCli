@@ -167,18 +167,18 @@ Every live child still proves all four private namespaces; setup or probe failur
 fails preparation.
 
 `prepare-ci.sh` authenticates the complete native runtime selection in
-`native-runtime.json`: exact public EventStore **4.0.4** archives, public Tenants
-**7.0.0** archives and their embedded repository commits, plus the separately
+`native-runtime.json`: exact public EventStore **4.1.0** archives, public Tenants
+**7.0.4** archives and their embedded repository commits, plus the separately
 qualified Parties and Platform source revisions. The independent
 Testing.Integration **3.128.4** package continues to own the test lifecycle.
 
 Generic CLI and MCP query requests preserve every descriptor-declared
 `projectionActorType`, including the frozen published Parties selectors. SDK
-4.0.4 rejects those historical selectors for native HTTP query routes. Native
-acceptance therefore remains pending genuine shared SDK compatibility support,
-owner-declared digest-bound selectors and verification of the resulting public
-cohort. The committed catalog must still choose the actual receiver; offline
-scripted parity and preflight do not establish native acceptance.
+4.1.0 supplies the exact owner-enrolled selector policy. The immutable Parties
+source selection includes its three digest-bound compatibility bindings; foreign
+selectors remain refused. The committed catalog chooses the actual receiver.
+Fresh complete native CI remains required for this selected cohort; offline
+scripted parity, owner compilation and preflight do not establish live acceptance.
 
 Missing public packages, hash or source mismatches, wrong repository identities,
 linked or dirty owned checkouts refuse before source selection. Only disposable
@@ -207,7 +207,7 @@ catalog files and the pinned catalog; execution rejects source or file drift
 before vectors and again before smoke. Server build commands retain their
 separate 300-second bounds. The owned gateway's mandatory
 configuration snapshot is verified against native source commit
-`326bfef884543cdbcaf96de7f4c4ad378dbad6d7`, matching the public 4.0.4 archive
+`dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`, matching the public 4.1.0 archive
 metadata; normal overrides, real JWT validation and sidecar tokens remain active.
 
 Before creating any digest material or catalog authority, the AppHost verifies

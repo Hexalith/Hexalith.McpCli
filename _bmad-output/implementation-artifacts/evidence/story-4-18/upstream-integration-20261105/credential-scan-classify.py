@@ -1,0 +1,20 @@
+from pathlib import Path
+import json,urllib.request,tarfile,zipfile,io,hashlib,base64,subprocess,re,datetime
+root=Path('/home/administrator/projects/hexalith/mcpcli');r=root/'_bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105';result=json.loads(Path('/tmp/mcpcli-418-evidence-scan/result.json').read_text());lock=json.loads(subprocess.check_output(['git','show','f4129cfe0a44b079a4f11f9cfb1374aed915f243:package-lock.json'],cwd='/home/administrator/projects/hexalith/tenants'))
+with zipfile.ZipFile(r/'tenants/preparation/release-candidate.original.zip') as z: raw=z.read('release-candidate.tar')
+with tarfile.open(fileobj=io.BytesIO(raw)) as outer:
+ proofs=[]
+ for package in ['@octokit/auth-token','@octokit/graphql','@octokit/request','@octokit/core','@semantic-release/git']:
+  local='node_modules/'+package;version=json.load(outer.extractfile(local+'/package.json'))['version'];url='https://registry.npmjs.org/'+package.replace('/','%2f')+'/'+version
+  with urllib.request.urlopen(url,timeout=30) as f:meta=json.load(f)
+  with urllib.request.urlopen(meta['dist']['tarball'],timeout=30) as f:archive=f.read()
+  integrity='sha512-'+base64.b64encode(hashlib.sha512(archive).digest()).decode();assert integrity==lock['packages'][local]['integrity'];assert integrity==meta['dist']['integrity']
+  with tarfile.open(fileobj=io.BytesIO(archive)) as t:public=t.extractfile(next(n for n in t.getmembers() if n.name.lower()=='package/readme.md')).read()
+  captured=outer.extractfile(local+'/README.md').read();assert public==captured
+  proofs.append({'path':local+'/README.md','package':package,'version':version,'public_registry_metadata':url,'public_registry_tarball':meta['dist']['tarball'],'locked_integrity_verified':True,'readme_sha256':hashlib.sha256(captured).hexdigest(),'classification':'Published dependency README bytes, including documentation examples; not a credential introduced by this task.'})
+ script=outer.extractfile('.hexalith/release/smoke_container_platforms.py').read()
+ api=json.loads(subprocess.check_output(['gh','api','repos/Hexalith/Hexalith.Builds/contents/Github/publish-containers/smoke_container_platforms.py?ref=ff3b7628132059bc42e04fa8c98c1c427b528f62']));public=base64.b64decode(api['content']);assert public==script
+ proofs.append({'path':'.hexalith/release/smoke_container_platforms.py','source':'Hexalith/Hexalith.Builds@ff3b7628132059bc42e04fa8c98c1c427b528f62','sha256':hashlib.sha256(script).hexdigest(),'public_source_equal':True,'classification':'Literal source-code redaction/signing-key handling patterns; exact public producer source, not a credential value.'})
+line=(r/'sdk410-draft/manifest-tests.stdout.txt').read_text().splitlines()[36];value=line.split('SigningKey=',1)[1];assert re.fullmatch(r'[\[\]<>]*(?:REDACTED|MASKED|redacted|masked)[\[\]<>]*',value)
+result['classifications']={'known_credential_matches':0,'pattern_findings':'Both pattern paths refer to the same npm documentation example in an exact public locked README; the parent tar naturally includes those same bytes.','public_dependency_and_source_proofs':proofs,'manifest_existing_redaction':{'path':'sdk410-draft/manifest-tests.stdout.txt','line':37,'value_is_only_an_already_redacted_placeholder':True,'candidate_value_not_recorded':True},'unclassified_findings':0};result['result']='pass';result['scope']='Original raw hosted archives and logs remain byte-identical. Broad sanitizer matches have explicit placeholder/public-source classification. This task performed no blanket rewrite, credential disclosure or secret-value printing.'
+(r/'credential-scan.json').write_text(json.dumps(result,indent=2)+'\n');(r/'credential-scan-reproduce.py').write_bytes(Path('/tmp/mcpcli-418-evidence-scan/scan.py').read_bytes());(r/'credential-scan-classify.py').write_bytes(Path('/tmp/mcpcli-418-evidence-scan/classify.py').read_bytes());print('PASS: zero known credential matches; all pattern/redactor matches classified by public locked/source bytes or existing redaction placeholders; no values printed')

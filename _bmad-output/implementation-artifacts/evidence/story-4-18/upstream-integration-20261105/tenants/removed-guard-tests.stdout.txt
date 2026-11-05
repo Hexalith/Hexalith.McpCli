@@ -1,0 +1,23 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.Tenants.Server.Tests
+  Discovered:  Hexalith.Tenants.Server.Tests
+  Starting:    Hexalith.Tenants.Server.Tests
+    Hexalith.Tenants.Server.Tests.Queries.GetTenantCreationEvidenceTests.RejectedCreationRemainsAbsentUntilActualCreationAndLaterRejectionPreservesIt [FAIL]
+      Shouldly.ShouldAssertException : await QueryAsync(store, administrator: true);
+              rejected.Success
+          should be
+      False
+          but was
+      True
+      Stack Trace:
+        tests/Hexalith.Tenants.Server.Tests/Queries/GetTenantCreationEvidenceTests.cs(49,0): at Hexalith.Tenants.Server.Tests.Queries.GetTenantCreationEvidenceTests.RejectedCreationRemainsAbsentUntilActualCreationAndLaterRejectionPreservesIt()
+           at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+           at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+           at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)
+        --- End of stack trace from previous location ---
+           at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+           at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+           at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)
+  Finished:    Hexalith.Tenants.Server.Tests (ID = '254a977046786ae2ff6bc99ede6db020ac52015799c0e8c557d55dfe21c18f4c')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.Tenants.Server.Tests  Total: 2, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.265s

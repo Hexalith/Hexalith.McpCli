@@ -1,0 +1,30 @@
+{
+  "time_utc": "2026-11-05T12:58:44.203736+00:00",
+  "source_directory": "/tmp/mcpcli-418-upstream-owner-evidence",
+  "scope": "Task evidence copied byte-for-byte; private package caches, build trees and disposable Python venv omitted. Original ZIPs and failed history retained. No approved production binding changed.",
+  "excluded_redundant_files": [
+    {
+      "path": "tenants/preparation/release-candidate.tar",
+      "sha256": "a130672a8121b02afbe8a72fcae927837fc50bfa8228de0246f1db58c8c78224",
+      "reason": "Redundant unpacked tar reproducible from original hash-verified ZIP, or controlled DLL with exact command/hash comparison retained."
+    },
+    {
+      "path": "tenants/sdk410/controlled-contracts-404.dll",
+      "sha256": "d03768df6642b0d7370c47290976b12d4cfa86a6a1f6050c7cff55c7920048fe",
+      "reason": "Redundant unpacked tar reproducible from original hash-verified ZIP, or controlled DLL with exact command/hash comparison retained."
+    },
+    {
+      "path": "tenants/sdk410/controlled-contracts-410-after.dll",
+      "sha256": "2ca75c751bb5cf989e2c791be2a6a84cfed354abe1d1cf5bbddea66238cc50d2",
+      "reason": "Redundant unpacked tar reproducible from original hash-verified ZIP, or controlled DLL with exact command/hash comparison retained."
+    },
+    {
+      "path": "tenants/sdk410/controlled-contracts-410-before.dll",
+      "sha256": "2ca75c751bb5cf989e2c791be2a6a84cfed354abe1d1cf5bbddea66238cc50d2",
+      "reason": "Redundant unpacked tar reproducible from original hash-verified ZIP, or controlled DLL with exact command/hash comparison retained."
+    }
+  ],
+  "copied_files": 672,
+  "story_complete": false,
+  "paired_publication": false
+}

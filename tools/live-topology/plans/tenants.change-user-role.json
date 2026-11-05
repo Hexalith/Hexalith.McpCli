@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.change-user-role",
-  "vectorSha256": "a780125888131a2c7c173e3e871d381260f551710e818679974c6e237768d59b",
+  "vectorSha256": "dc2b837fd892d7b9be684d4a2d42c0203d716f2bc43cd80022b30b7f334a2ad9",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [

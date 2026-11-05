@@ -1,0 +1,12 @@
+{
+  "command": [
+    "git",
+    "apply",
+    "--check",
+    "/tmp/mcpcli-418-hosted-cu3do37s/nonmember-probe/tenants-rejection-only-read.patch"
+  ],
+  "cwd": "/tmp/mcpcli-418-hosted-cu3do37s/nonmember-probe/apply-check",
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": ""
+}

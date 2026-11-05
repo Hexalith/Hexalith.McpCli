@@ -1,0 +1,18 @@
+[1:48:33 PM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+[1:48:33 PM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js"
+[1:48:33 PM] [semantic-release] › ⚠  Run automated release from branch main on repository /tmp/mcpcli-owner-selection-Qh4Bh8/remote.git in dry-run mode
+[1:48:33 PM] [semantic-release] › ✔  Allowed to push to the Git repository
+[1:48:33 PM] [semantic-release] › ℹ  Found git tag v7.0.3 associated with version 7.0.3 on branch main
+[1:48:33 PM] [semantic-release] › ℹ  Found 2 commits since last release
+[1:48:33 PM] [semantic-release] › ℹ  Start step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js"
+[1:48:33 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: clarify the current SDK selection
+[1:48:33 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[1:48:33 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(build): qualify the public EventStore 4.1.0 cohort
+[1:48:33 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[1:48:33 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analysis of 2 commits complete: patch release
+[1:48:33 PM] [semantic-release] › ✔  Completed step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js"
+[1:48:33 PM] [semantic-release] › ℹ  The next release version is 7.0.4
+[1:48:33 PM] [semantic-release] › ⚠  Skip v7.0.4 tag creation in dry-run mode
+[1:48:33 PM] [semantic-release] › ✔  Published release 7.0.4 on default channel
+[1:48:33 PM] [semantic-release] › ℹ  Release note for version 7.0.4:
+{"schema":"mcpcli-owner-version-selection/v1","source_sha":"8e20524574901d71ad5f4876804c64c3c6c87b88","semantic_release":"25.0.9","release":true,"version":"7.0.4","packages":[{"id":"Hexalith.Tenants.Contracts","project":"src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj"},{"id":"Hexalith.Tenants.Client","project":"src/Hexalith.Tenants.Client/Hexalith.Tenants.Client.csproj"},{"id":"Hexalith.Tenants.Server","project":"src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj"},{"id":"Hexalith.Tenants.Testing","project":"src/Hexalith.Tenants.Testing/Hexalith.Tenants.Testing.csproj"},{"id":"Hexalith.Tenants.Aspire","project":"src/Hexalith.Tenants.Aspire/Hexalith.Tenants.Aspire.csproj"}],"mutation_scope":"All semantic-release Git probes target a temporary local remote; no publication hooks are loaded."}

@@ -1,0 +1,30 @@
+{
+  "dispatch": {
+    "command": [
+      "gh",
+      "workflow",
+      "run",
+      "release.yml",
+      "--repo",
+      "Hexalith/Hexalith.Tenants",
+      "--ref",
+      "main"
+    ],
+    "started_at_utc": "2026-11-05T13:54:26.246415+00:00",
+    "exit_code": 0,
+    "source_immediately_before": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+    "authorized_source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+    "version": "7.0.4",
+    "dispatch_attempts": 1
+  },
+  "run": {
+    "conclusion": "",
+    "createdAt": "2026-11-05T13:54:28Z",
+    "databaseId": 42039944398,
+    "event": "workflow_dispatch",
+    "headBranch": "main",
+    "headSha": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+    "status": "queued",
+    "url": "https://github.com/Hexalith/Hexalith.Tenants/actions/runs/42039944398"
+  }
+}

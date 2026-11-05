@@ -1,0 +1,17 @@
+{
+  "time_utc": "2026-11-05T14:18:37.787996+00:00",
+  "result": "pass",
+  "repository": "Hexalith/Hexalith.Tenants",
+  "run": 42039944398,
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "version": "7.0.4",
+  "sdk": "4.1.0",
+  "five_signed_public_nuget_packages": "public-nuget-verified.json",
+  "both_two_platform_oci_outputs": "oci-outcomes-verified.json",
+  "github_tag_and_release": "github-tag-704.json and github-release-704.json",
+  "actual_prepared_artifact": "verified-hosted-candidate.json",
+  "publication_approval_by_this_task": "production-approval.json",
+  "workflow_result": "success",
+  "mcpcli_rebind_may_use_only_verified_actual_public_bytes": true,
+  "no_duplicate_push_or_repack": true
+}

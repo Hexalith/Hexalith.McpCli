@@ -1,0 +1,24 @@
+{
+  "source": "1d078dd9a794ec5a121343225261f2f0997e95c5",
+  "assembly": {
+    "environment": "64-bit (x64) .NET 10.0.14 [collection-per-class, parallel (collections, 14 threads)]",
+    "id": "52e7df5d-31e0-4fed-8de6-9b1ac3c9d7ab",
+    "name": "/tmp/mcpcli-418-parties-native/tests/Hexalith.Parties.Contracts.Tests/bin/Release/net10.0/Hexalith.Parties.Contracts.Tests.dll",
+    "run-date": "2026-11-05",
+    "run-time": "12:56:23",
+    "start-rtf": "2026-11-05T12:56:23.9973506+00:00",
+    "test-framework": "xUnit.net v3 4.0.2+0c7aa4991f",
+    "target-framework": ".NETCoreApp,Version=v10.0",
+    "errors": "0",
+    "failed": "0",
+    "finish-rtf": "2026-11-05T12:56:24.2532973+00:00",
+    "not-run": "0",
+    "passed": "9",
+    "skipped": "0",
+    "time": "0.256",
+    "time-rtf": "00:00:00.2560000",
+    "total": "9"
+  },
+  "exact_native_override_setup": true,
+  "interpretation": "Nine real compiled catalog/selector cases executed, including the three exact legacy bindings, three canonical serialization cases and unrelated-route refusal; zero failures/skips. Public SDK4.1, Memories3.0.11 and Tenants5.11.2."
+}

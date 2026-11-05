@@ -1,0 +1,74 @@
+{
+  "schema": "mcpcli-story-4-18-hosted-followup/v1",
+  "observed_at_utc": "2026-11-05T10:04:02.714649+00:00",
+  "source_sha": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8",
+  "authenticated_actor": "jpiquot",
+  "source_clean_through_last_snapshot": true,
+  "commit_push": {
+    "committed_approved_existing_changes": true,
+    "commitlint_evidence": "../workflow-commit-20261105/validation.json",
+    "remote_main_equals_source": true
+  },
+  "ci": {
+    "run_id": 42005561664,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42005561664",
+    "status": "in_progress",
+    "conclusion": "",
+    "required_jobs_passed": [
+      "conformance-vector-loopback",
+      "topology-vector-discovery",
+      "release-automation",
+      "enrolled-module-conformance",
+      "conformance-vector-contract",
+      "ci / build-and-test"
+    ],
+    "required_jobs_running": [
+      "ci / aspire-tests"
+    ]
+  },
+  "commitlint": {
+    "run_id": 42005561417,
+    "conclusion": "success",
+    "validate_commit_messages_passed": true
+  },
+  "source_gate": {
+    "exit_code": 1,
+    "receipt_emitted": false,
+    "refusal": "Release source gate failed: No successful latest ci.yml push run exists for f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8.",
+    "note": "Latest CI is still running; this is not a fresh hosted live failure. Initial invocation omitted required REPOSITORY; its exact failure is preserved separately."
+  },
+  "nonmember_diagnosis": {
+    "owner": "Hexalith/Hexalith.Tenants",
+    "pinned_owner_source": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27",
+    "current_owner_main": "143cec60a3f5bb1831fa57f35c510880ceb788d8",
+    "current_owner_guard_missing": true,
+    "proposed_patch": "nonmember-probe/tenants-rejection-only-read.patch",
+    "red": {
+      "tests": 2,
+      "failed": 1,
+      "skipped": 0
+    },
+    "green": {
+      "tests": 2,
+      "failed": 0,
+      "skipped": 0
+    },
+    "limits": "In-memory diagnosis over exact owner projection/query sources and prior pinned host collaborators; no live or published-package fix qualified."
+  },
+  "parties_owner_main": {
+    "sha": "bb2783120c0eed620e3d4f52a2ebaf6aa510126f",
+    "explicit_compatibility_bindings_missing": true,
+    "existing_proposal": "../query-selector-compatibility/parties-owner-bindings.patch"
+  },
+  "scope": {
+    "owner_changes_applied": false,
+    "dependencies_changed": false,
+    "references_changed": false,
+    "enrollment_changed": false,
+    "staging_dispatched": false,
+    "publication_dispatched": false,
+    "ci_cancelled": false
+  },
+  "remaining": "CI is still running. Resolve and qualify owner fixes through separately authorized scope; exact-source green CI, fresh three-OS pair, candidate-bound acceptance, production approval and public contents remain mandatory. Story and sprint remain in-progress.",
+  "final_snapshot": "final-snapshot.json"
+}

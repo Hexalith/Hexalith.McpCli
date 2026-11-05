@@ -1,0 +1,17 @@
+[1:42:52 PM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+[1:42:52 PM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js"
+[1:42:52 PM] [semantic-release] › ⚠  Run automated release from branch main on repository /tmp/mcpcli-owner-selection-N3qWtr/remote.git in dry-run mode
+[1:42:52 PM] [semantic-release] › ✔  Allowed to push to the Git repository
+[1:42:52 PM] [semantic-release] › ℹ  Found git tag v7.0.2 associated with version 7.0.2 on branch main
+[1:42:52 PM] [semantic-release] › ℹ  Found 2 commits since last release
+[1:42:52 PM] [semantic-release] › ℹ  Start step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js"
+[1:42:52 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(build): qualify the public EventStore 4.1.0 cohort
+[1:42:52 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[1:42:52 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(queries): hide tenants before their creation
+[1:42:52 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[1:42:52 PM] [semantic-release] [/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analysis of 2 commits complete: patch release
+[1:42:52 PM] [semantic-release] › ✔  Completed step "analyzeCommits" of plugin "/home/administrator/projects/hexalith/tenants/node_modules/@semantic-release/commit-analyzer/index.js"
+[1:42:52 PM] [semantic-release] › ℹ  The next release version is 7.0.3
+[1:42:52 PM] [semantic-release] › ⚠  Skip v7.0.3 tag creation in dry-run mode
+[1:42:52 PM] [semantic-release] › ✔  Published release 7.0.3 on default channel
+[1:42:52 PM] [semantic-release] › ℹ  Release note for version 7.0.3:

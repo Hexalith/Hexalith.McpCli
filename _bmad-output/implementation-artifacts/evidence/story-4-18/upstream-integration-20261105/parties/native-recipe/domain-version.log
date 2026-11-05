@@ -1,0 +1,7 @@
+{
+  "Properties": {
+    "HexalithEventStoreVersion": "4.1.0",
+    "HexalithMemoriesVersion": "3.0.11",
+    "HexalithTenantsVersion": "5.11.2"
+  }
+}

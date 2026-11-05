@@ -1,0 +1,27 @@
+{
+  "time_utc": "2026-11-05T14:10:10.538526+00:00",
+  "packages": [
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "http_status": 404
+    },
+    {
+      "id": "Hexalith.Tenants.Client",
+      "http_status": 404
+    },
+    {
+      "id": "Hexalith.Tenants.Server",
+      "http_status": 404
+    },
+    {
+      "id": "Hexalith.Tenants.Testing",
+      "http_status": 404
+    },
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "http_status": 404
+    }
+  ],
+  "owner_workflow_still_running": true,
+  "all_owner_outcomes_verified": false
+}

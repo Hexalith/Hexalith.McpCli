@@ -1,0 +1,29 @@
+{
+  "observed_at_utc": "2026-11-05T12:34:43.596335+00:00",
+  "supersedes_candidate_claims_in": "plan.json",
+  "rejected_tenants_candidate": {
+    "source": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+    "version": "7.0.3",
+    "reason": "Prepared consumer receipt and nuspec dependencies use SDK4.0.4; selected native compilation requires public4.1.0 and owner fences reject it. Never approve this held preparation.",
+    "preparation_run": 42023389616,
+    "rejection_evidence": "../tenants/preparation/compatibility-rejection.json"
+  },
+  "required_correction": {
+    "target_version": "7.0.3, pending fresh locked semantic-release selection at corrected source",
+    "sdk": "4.1.0",
+    "source": "pending validated owner commit",
+    "public_archives": "pending new exact-source owner qualification and explicitly approved publication",
+    "preserve_legacy": "Keep exact4.0.4 canonical build and qualified3.x capability profiles; no newSDK range blanket"
+  },
+  "mcpcli_wire_draft": {
+    "path": "../sdk410-draft/candidate.patch",
+    "private_public_cache_replay": "PASS;21 vectors across CLI/MCP",
+    "sample_validation": "PASS",
+    "sample_loopback": "PASS",
+    "full_native_acceptance": false,
+    "enrolled_contracts_retained": {
+      "Parties": "1.5.1",
+      "Tenants": "7.0.0"
+    }
+  }
+}

@@ -1,0 +1,212 @@
+[
+  {
+    "operation": "parties.create-party",
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "vectorSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+    "planSha256": "e85d89636c8500bf4c450c51491f4daf35e6e2c5a4f455450ed6384d1528c93a"
+  },
+  {
+    "operation": "parties.deactivate-party",
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "vectorSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+    "planSha256": "fb500e2e2e81ff7010c3e85aa8c6d66e7f04c8b2885147741942fd88f627a4fe"
+  },
+  {
+    "operation": "parties.get-party",
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "vectorSha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+    "planSha256": "dd2621f83ceea13132ca4cb9f80dbddba876585087a25d5040d9ba16be2e2114"
+  },
+  {
+    "operation": "parties.list-parties",
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "vectorSha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+    "planSha256": "9dab3b9dc8e58eee937b788def5c6a8c73e44f4a4914bad38d9f7d1db5eeb13c"
+  },
+  {
+    "operation": "parties.reactivate-party",
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "vectorSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+    "planSha256": "e4b481be8bfc8e7489611fa2ad9df09e36b814d64ae299954dbda72e3cf94849"
+  },
+  {
+    "operation": "parties.search-parties",
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "vectorSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+    "planSha256": "8e5940ac30b110464e770637efd308c0d3cbb6bddf73e32bf150b0f24ef8285e"
+  },
+  {
+    "operation": "parties.update-party",
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+    "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+    "vectorSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+    "planSha256": "ac52d8e21f71cdd5cbf1eb7883c294831b0f8a2c6919ea1fb58334edfdb0252c"
+  },
+  {
+    "operation": "tenants.add-user-to-tenant",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "7e8666ee1a2a5e8e89e82e5ed7df9ba1c917c8d08777703240f78fbab2556b62",
+    "planSha256": "dd88faca9f05363063dd6865d8ae8da816390ed45a2152f08c9b47289207ae27"
+  },
+  {
+    "operation": "tenants.change-user-role",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "dc2b837fd892d7b9be684d4a2d42c0203d716f2bc43cd80022b30b7f334a2ad9",
+    "planSha256": "f9a2867f035701a385a158227ff4392777d3ee9de0c3bfb6716a143f7398a1df"
+  },
+  {
+    "operation": "tenants.create-tenant",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "455211d3fd4785040a6838698c1a674807c20b2f81f88d550710225d400ba3bc",
+    "planSha256": "dec5e9d4e206e27d3447d94c3d4168635518e0e757dee7b0b79ade29b3668355"
+  },
+  {
+    "operation": "tenants.disable-tenant",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "998e1225abde7e9ddfd570e7b9e0d81c81a45900c5dfb845dd5ae67ed7b7eb33",
+    "planSha256": "c944dd99aaf617549d7cd6a96e3fa0284a35dbf7653b9d8e44cb8b846c31beb6"
+  },
+  {
+    "operation": "tenants.enable-tenant",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "2868cca0a3de82ab3556dcd6758a97e1c6e8ab5f42d55246337ea93fdd45d3af",
+    "planSha256": "31e64ac6695acdf64e62f8cccdb174e2dd480ecefef7362a237c53fd1a8edac2"
+  },
+  {
+    "operation": "tenants.get-tenant-audit",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "0ac5e44af94431c4c82c05da18219fefb93a1df72bf1de0e7e78353e04b3681f",
+    "planSha256": "8825c72dc6e4ea60378c9d6198d0c395c453d1c70c367e007b16f32e48c5870e"
+  },
+  {
+    "operation": "tenants.get-tenant-users",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "12de8324d987a372df5de014539a98fe7f441c15914f63d9bdb649783672d5eb",
+    "planSha256": "c56a6b01bad25a51fca66ce3f3f9011ab3953b9814a68c6fa6aac6a0c3e71f95"
+  },
+  {
+    "operation": "tenants.get-tenant",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "30fa2f81dcaaa230b52fee2b9aa09e2cca4a8ba51506f35c6c930b3fe05334b6",
+    "planSha256": "6775f6c170561a1756c935404f884064ea36083f6894e88118a587f94182d109"
+  },
+  {
+    "operation": "tenants.get-user-tenants",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "13ec10dc84bacfb2f4ee16e2bd95ee33d89bb9581290c1528806c312c415f9c7",
+    "planSha256": "a837304f54d8551fa759865e65ada063cd20d28044e4f18fa7487dd0baa64f49"
+  },
+  {
+    "operation": "tenants.list-tenants",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "2b1da26e962fbb425b2ed164fcbee6713c61584eb54e5feb3df67012a018537b",
+    "planSha256": "7ed76d01fbb0726ebe4b0c5dd980c69d02d9ff9d852f58264c5857f3438f63c1"
+  },
+  {
+    "operation": "tenants.remove-tenant-configuration",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "df94e4a9c999fb83f62a5ada872b8bd1e440df7b6f84d0e46520648c8f387d13",
+    "planSha256": "f30ff80aa1f31b8e3162d06d9812532bd72266cd833cba03ea6185a90486f149"
+  },
+  {
+    "operation": "tenants.remove-user-from-tenant",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "ebe83d37f8eda2243b09ba4608ca15ca66935024eb00e772f05ac6eb7a27e89a",
+    "planSha256": "49495b9f108fae71c800543fc97f1c2842b7f94b691179c8640b51df3f232603"
+  },
+  {
+    "operation": "tenants.set-tenant-configuration",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "9eec4aa84d061e8f7b81629537f299bdb1cce26b6fa1407acb188b0e9fc29f8d",
+    "planSha256": "d945fa92296d6d1158e2c334ad906cb164f780a73023219ff0fead18ff2cd289"
+  },
+  {
+    "operation": "tenants.update-tenant",
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.4",
+    "artifactHash": "sha512-+c7XGhZA2uaEontjOXArCrfc2qHe2P5inlg5VKwco4j4N0NEdxfUqn0oKAPwBvj4N86oEC+svbVse+tUQRJJ5w==",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+    "approvalSha256": "f3cf3573723c650be7848a0222b403ce81c4ccd80b383df3ae80ecbc0adfdf4e",
+    "vectorSha256": "428f51f6553f7b4151e0ed9eff84128409e4e681a6823a916d0f38dbcb37fe03",
+    "planSha256": "06f8760c602a520dc13cca890e45a99378f9376ee8640cc27917e5f2421f448d"
+  }
+]

@@ -1,0 +1,9 @@
+The '-xml' switch has been deprecated in favor of '-result-xml' and will be removed in the next major version
+
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.McpCli.Manifest.Tests
+  Discovered:  Hexalith.McpCli.Manifest.Tests
+  Starting:    Hexalith.McpCli.Manifest.Tests
+  Finished:    Hexalith.McpCli.Manifest.Tests (ID = '61220d80c6b9679efd5639fc1a77b1bbce87a4c2521c0d57a9bf7a6d75f3a29f')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Manifest.Tests  Total: 1, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 1.045s

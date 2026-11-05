@@ -1,11 +1,11 @@
 <Project>
   <PropertyGroup>
     <!-- Pin the gateway client and enrolled Contracts before the Builds catalog import; enrolled Contracts stay on the exact artifacts bound by the approved vectors. -->
-    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">4.0.4</HexalithEventStoreVersion>
+    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">4.1.0</HexalithEventStoreVersion>
     <HexalithMcpCliVersion Condition="'$(HexalithMcpCliVersion)' == ''">2.0.0</HexalithMcpCliVersion>
     <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">1.5.1</HexalithPartiesVersion>
     <HexalithPartiesAspireVersion Condition="'$(HexalithPartiesAspireVersion)' == ''">2.0.0</HexalithPartiesAspireVersion>
-    <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">7.0.0</HexalithTenantsVersion>
+    <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">7.0.4</HexalithTenantsVersion>
     <HexalithBuildPackageVersions1>$(MSBuildThisFileDirectory)references/Hexalith.Builds/Props/Directory.Packages.props</HexalithBuildPackageVersions1>
     <HexalithBuildPackageVersions2>$(MSBuildThisFileDirectory)../Hexalith.Builds/Props/Directory.Packages.props</HexalithBuildPackageVersions2>
     <HexalithBuildPackageVersions3>$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/Directory.Packages.props</HexalithBuildPackageVersions3>
@@ -15,9 +15,9 @@
   <Import Project="$(HexalithBuildPackageVersions3)" Condition="Exists('$(HexalithBuildPackageVersions3)') And '$(HexalithVersionsLoaded)' != 'true'" />
   <ItemGroup>
     <!-- The isolated AppHost test fixture still uses the topology-owning 3.128.4 harness.
-         Production EventStore dependencies remain on the coordinated 4.0.4 cohort. -->
+         Production EventStore dependencies remain on the coordinated 4.1.0 cohort. -->
     <PackageVersion Update="Hexalith.EventStore.Testing.Integration" Version="3.128.4" />
-    <!-- Keep the EventStore 4.0.4 Redis floor explicit across Builds catalog revisions. -->
+    <!-- Keep the EventStore 4.1.0 Redis floor explicit across Builds catalog revisions. -->
     <PackageVersion Update="StackExchange.Redis" Version="3.4.31" />
   </ItemGroup>
   <PropertyGroup>

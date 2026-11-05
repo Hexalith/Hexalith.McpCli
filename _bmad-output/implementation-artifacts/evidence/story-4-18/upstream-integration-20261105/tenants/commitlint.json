@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "input_file": "commit-message.txt",
+  "input_sha256": "316469ed4d31e4cba1c0d9ef8ee3835e4cd6afa57772db6318c9cbd70cd36864",
+  "exit_code": 0,
+  "pinned_cli": "21.2.4",
+  "tooling": "npm ci --ignore-scripts"
+}

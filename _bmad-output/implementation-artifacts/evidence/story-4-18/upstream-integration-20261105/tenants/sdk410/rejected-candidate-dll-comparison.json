@@ -1,0 +1,16 @@
+[
+  {
+    "package": "Hexalith.Tenants.Contracts",
+    "rejected_404_candidate_sha256": "fd190b4b1e1535daae8312d6434412c2f264aea1f139122fa1c4d19737b3edf2",
+    "sdk410_compiled_sha256": "8876470130bc07f3958ddfb58c363d9b48eb82d338cb7775769148e1b363d271",
+    "equal": false,
+    "note": "Cross-build evidence; not isolated solely to SDK because project build properties/source inputs also differ. No package qualification inferred."
+  },
+  {
+    "package": "Hexalith.Tenants.Server",
+    "rejected_404_candidate_sha256": "2b60687179907101cf91aeed71837910323da02485f609695eef6e39d12f17d4",
+    "sdk410_compiled_sha256": "4d04b55593a41892aba6284e1ae20f45349d494d44501921d054cf313cd9dbfc",
+    "equal": false,
+    "note": "Cross-build evidence; not isolated solely to SDK because project build properties/source inputs also differ. No package qualification inferred."
+  }
+]

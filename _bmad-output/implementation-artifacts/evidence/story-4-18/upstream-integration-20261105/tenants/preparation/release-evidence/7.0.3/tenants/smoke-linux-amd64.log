@@ -1,0 +1,7 @@
+platform=linux/amd64
+image=registry.hexalith.com/tenants@sha256:1b96660a2450b9113d55d0146ce491f21ebe64934a35bbf496d340a8763836b2
+container_state=running|0
+container_state=running|0
+attempts=2
+cleanup=pass
+outcome=pass

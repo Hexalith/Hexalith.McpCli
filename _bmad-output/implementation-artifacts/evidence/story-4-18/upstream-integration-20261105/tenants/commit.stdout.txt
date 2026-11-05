@@ -1,0 +1,3 @@
+[main f4129cfe] fix(queries): hide tenants before their creation
+ 3 files changed, 102 insertions(+), 1 deletion(-)
+ create mode 100644 tests/Hexalith.Tenants.Server.Tests/Queries/GetTenantCreationEvidenceTests.cs

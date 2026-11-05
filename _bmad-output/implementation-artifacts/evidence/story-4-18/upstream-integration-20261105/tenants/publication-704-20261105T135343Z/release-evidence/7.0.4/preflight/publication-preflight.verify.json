@@ -1,0 +1,155 @@
+{
+  "checked_at": "2026-11-05T14:06:37.305494Z",
+  "destinations": {
+    "absence": {
+      "container_count": 2,
+      "container_repositories": [
+        "registry.hexalith.com/tenants",
+        "registry.hexalith.com/tenants-api"
+      ],
+      "package_count": 5,
+      "package_ids": [
+        "Hexalith.Tenants.Contracts",
+        "Hexalith.Tenants.Client",
+        "Hexalith.Tenants.Server",
+        "Hexalith.Tenants.Testing",
+        "Hexalith.Tenants.Aspire"
+      ],
+      "result": "pass",
+      "version": "7.0.4"
+    },
+    "result": "pass",
+    "version_floor": {
+      "candidate": "7.0.4",
+      "destinations": [
+        {
+          "highest_stable": "7.0.3",
+          "identity": "Hexalith/Hexalith.Tenants",
+          "kind": "github-release",
+          "observed_versions_sha256": "cd25b5e8325353a54d088f52bfea886cdc0de232d5c819864d48c8144a9ae7d4"
+        },
+        {
+          "highest_stable": "7.0.3",
+          "identity": "Hexalith/Hexalith.Tenants",
+          "kind": "git-tag",
+          "observed_versions_sha256": "1de4aac4a2466ee71370a0dc32a32472ef5993f89af97b74be584889146f36ae"
+        },
+        {
+          "highest_stable": "7.0.3",
+          "identity": "Hexalith.Tenants.Contracts",
+          "kind": "nuget",
+          "observed_versions_sha256": "9b2527cf8a36de9d3daf7de0942a1404b614c74c1e2569d14823b8f8f51df37e"
+        },
+        {
+          "highest_stable": "7.0.3",
+          "identity": "Hexalith.Tenants.Client",
+          "kind": "nuget",
+          "observed_versions_sha256": "1237108ecd936e818967e6ceb0714bcba87a21f1d63941ae6583cbb700105747"
+        },
+        {
+          "highest_stable": "7.0.3",
+          "identity": "Hexalith.Tenants.Server",
+          "kind": "nuget",
+          "observed_versions_sha256": "9b2527cf8a36de9d3daf7de0942a1404b614c74c1e2569d14823b8f8f51df37e"
+        },
+        {
+          "highest_stable": "7.0.3",
+          "identity": "Hexalith.Tenants.Testing",
+          "kind": "nuget",
+          "observed_versions_sha256": "1237108ecd936e818967e6ceb0714bcba87a21f1d63941ae6583cbb700105747"
+        },
+        {
+          "highest_stable": "7.0.3",
+          "identity": "Hexalith.Tenants.Aspire",
+          "kind": "nuget",
+          "observed_versions_sha256": "9b2527cf8a36de9d3daf7de0942a1404b614c74c1e2569d14823b8f8f51df37e"
+        },
+        {
+          "highest_stable": "7.0.3",
+          "identity": "registry.hexalith.com/tenants",
+          "kind": "oci-registry",
+          "observed_versions_sha256": "ba4f9f69f69ab87aebbcb840169d8e67b40814405154018baa852aeece34b349"
+        },
+        {
+          "highest_stable": "7.0.3",
+          "identity": "registry.hexalith.com/tenants-api",
+          "kind": "oci-registry",
+          "observed_versions_sha256": "7410aad3004b8682e453beacbf3bd233968820dfefa85c375bf077a463a0dee0"
+        }
+      ],
+      "result": "pass"
+    }
+  },
+  "identity": {
+    "builds": {
+      "action_sha": "ff3b7628132059bc42e04fa8c98c1c427b528f62",
+      "files": {
+        "oci_registry_validator.py": "3f54edb036642551e64c180b4708a954d84bd55cac381a4459c3f75448488608",
+        "publication_preflight.py": "fdf5949cff1e8602870fd1fc1477affd0b760f9e8303c731993c4945fc7994ae",
+        "publish-containers.sh": "3f8b05e17cd0756cef23f07e2efb992ee76d7d2f59b9f1e1179e3da5d684441d",
+        "smoke-container-platforms.sh": "f11865658a24ecea906da087d8446c7f631dc5a9328e294676534d590ef0e89e",
+        "smoke_container_platforms.py": "7f1161d6f477c77ddf6a1e2f381df03451168565dd8cabc28010ab23db443491"
+      },
+      "workflow_sha": "ff3b7628132059bc42e04fa8c98c1c427b528f62"
+    },
+    "container_repositories": [
+      "registry.hexalith.com/tenants",
+      "registry.hexalith.com/tenants-api"
+    ],
+    "environment": "production",
+    "packages": {
+      "ids": [
+        "Hexalith.Tenants.Contracts",
+        "Hexalith.Tenants.Client",
+        "Hexalith.Tenants.Server",
+        "Hexalith.Tenants.Testing",
+        "Hexalith.Tenants.Aspire"
+      ],
+      "manifest_sha256": "ac68a2e24e454a1ed4987338dd58eb66ad6341fa15da9b1ce676611e5da82749",
+      "normalized_ids": [
+        "hexalith.tenants.contracts",
+        "hexalith.tenants.client",
+        "hexalith.tenants.server",
+        "hexalith.tenants.testing",
+        "hexalith.tenants.aspire"
+      ]
+    },
+    "platforms": [
+      "linux/amd64",
+      "linux/arm64"
+    ],
+    "repository": "Hexalith/Hexalith.Tenants",
+    "run": {
+      "actor": "jpiquot",
+      "attempt": "1",
+      "event": "workflow_dispatch",
+      "id": "42039944398",
+      "number": "669",
+      "ref": "refs/heads/main",
+      "triggering_actor": "jpiquot",
+      "workflow_ref": "Hexalith/Hexalith.Tenants/.github/workflows/release.yml@refs/heads/main",
+      "workflow_sha": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+    },
+    "schema": "hexalith.release-publication-preflight.v4",
+    "source": {
+      "branch": "main",
+      "ci_run": {
+        "conclusion": "success",
+        "event": "push",
+        "head_branch": "main",
+        "head_sha": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+        "id": 42029976383,
+        "status": "completed"
+      },
+      "ci_workflow": "ci.yml",
+      "live_sha": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+      "ref": "refs/heads/main"
+    },
+    "source_sha": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+    "version": "7.0.4"
+  },
+  "identity_sha256": "1afc1814599da2dbbd17415e356047c2628ea403d1a16707e63892730c31e0ba",
+  "phase": "verify",
+  "result": "pass",
+  "schema": "hexalith.release-publication-preflight.v4"
+}

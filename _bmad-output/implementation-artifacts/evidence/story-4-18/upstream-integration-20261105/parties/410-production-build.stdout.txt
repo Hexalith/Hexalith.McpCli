@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-418-parties-isolated/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj (in 177 ms).
+  Restored /tmp/mcpcli-418-parties-isolated/tests/Hexalith.Parties.Catalog.Tests/Hexalith.Parties.Catalog.Tests.csproj (in 177 ms).
+  Restored /tmp/mcpcli-418-parties-isolated/src/Hexalith.Parties.Contracts/Hexalith.Parties.Contracts.csproj (in 173 ms).
+  Hexalith.Parties.Contracts -> /tmp/mcpcli-418-parties-isolated/src/Hexalith.Parties.Contracts/bin/Release/net10.0/Hexalith.Parties.Contracts.dll
+  Hexalith.Parties.EventStoreExtensions -> /tmp/mcpcli-418-parties-isolated/src/Hexalith.Parties.EventStoreExtensions/bin/Release/net10.0/Hexalith.Parties.EventStoreExtensions.dll
+  Hexalith.Parties.Catalog.Tests -> /tmp/mcpcli-418-parties-isolated/tests/Hexalith.Parties.Catalog.Tests/bin/Release/net10.0/Hexalith.Parties.Catalog.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:05.31

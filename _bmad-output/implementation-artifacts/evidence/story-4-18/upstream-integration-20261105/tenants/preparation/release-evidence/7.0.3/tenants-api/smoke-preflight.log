@@ -1,0 +1,3 @@
+check=linux/arm64-runtime-capability
+image=registry.hexalith.com/tenants-api@sha256:2167d7aab35e99fd008d81acadf81ef355d3ae03355358dbb5512a4198be4d07
+outcome=pass

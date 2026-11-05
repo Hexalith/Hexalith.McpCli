@@ -1,0 +1,65 @@
+{
+  "total_count": 3,
+  "artifacts": [
+    {
+      "id": 13421588264,
+      "node_id": "MDg6QXJ0aWZhY3QxMzQyMTU4ODI2NA==",
+      "name": "release-evidence-42039944398-1",
+      "size_in_bytes": 484833,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Tenants/actions/artifacts/13421588264",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.Tenants/actions/artifacts/13421588264/zip",
+      "expired": false,
+      "digest": "sha256:57c38ab03e20da144953e8f22514fa396b528f2c8362195ac45cfccb52f7f3d3",
+      "created_at": "2026-11-05T14:14:20Z",
+      "updated_at": "2026-11-05T14:14:20Z",
+      "expires_at": "2026-12-05T13:54:29Z",
+      "workflow_run": {
+        "id": 42039944398,
+        "repository_id": 1174267565,
+        "head_repository_id": 1174267565,
+        "head_branch": "main",
+        "head_sha": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+      }
+    },
+    {
+      "id": 13421010194,
+      "node_id": "MDg6QXJ0aWZhY3QxMzQyMTAxMDE5NA==",
+      "name": "release-source-admission-42039944398-1",
+      "size_in_bytes": 6967,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Tenants/actions/artifacts/13421010194",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.Tenants/actions/artifacts/13421010194/zip",
+      "expired": false,
+      "digest": "sha256:d12edc2e134fbecc4a10d7585d40b21e4dabb4cd4920c3704c403fd6dec55d04",
+      "created_at": "2026-11-05T13:54:46Z",
+      "updated_at": "2026-11-05T13:54:46Z",
+      "expires_at": "2026-12-05T13:54:29Z",
+      "workflow_run": {
+        "id": 42039944398,
+        "repository_id": 1174267565,
+        "head_repository_id": 1174267565,
+        "head_branch": "main",
+        "head_sha": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+      }
+    },
+    {
+      "id": 13420269243,
+      "node_id": "MDg6QXJ0aWZhY3QxMzQyMDI2OTI0Mw==",
+      "name": "release-candidate",
+      "size_in_bytes": 10782581,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Tenants/actions/artifacts/13420269243",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.Tenants/actions/artifacts/13420269243/zip",
+      "expired": false,
+      "digest": "sha256:7a0ca2d3fcf62f17e6dc162864fecb9349d434ae0aea65c1adc8d17437b4be6d",
+      "created_at": "2026-11-05T14:02:35Z",
+      "updated_at": "2026-11-05T14:02:35Z",
+      "expires_at": "2026-11-06T14:02:34Z",
+      "workflow_run": {
+        "id": 42039944398,
+        "repository_id": 1174267565,
+        "head_repository_id": 1174267565,
+        "head_branch": "main",
+        "head_sha": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+      }
+    }
+  ]
+}

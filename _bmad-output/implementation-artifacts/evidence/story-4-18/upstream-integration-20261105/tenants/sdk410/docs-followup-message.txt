@@ -1,0 +1,1 @@
+docs: clarify the current SDK selection

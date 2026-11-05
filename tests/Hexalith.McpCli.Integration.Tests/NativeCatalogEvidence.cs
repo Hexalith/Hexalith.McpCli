@@ -53,7 +53,7 @@ internal static class NativeCatalogEvidence
         }
         await File.WriteAllTextAsync(Path.Combine(run, "native-catalog.json"), JsonSerializer.Serialize(new
         {
-            result = "passed", backupReference, sdkVersion = "4.0.4", rootDigest = root,
+            result = "passed", backupReference, sdkVersion = "4.1.0", rootDigest = root,
             hosts, inputs = coordinates.RootElement.GetProperty("inputs").Clone(), readback = readbacks[0], eventStoreSourceCommit = Environment.GetEnvironmentVariable("MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT"),
         }), deadline.Token).ConfigureAwait(false);
     }

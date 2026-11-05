@@ -1,0 +1,21 @@
+{
+  "endpoint": "/alive",
+  "environment": "Development",
+  "image_repository": "registry.hexalith.com/tenants-api",
+  "platforms": [
+    {
+      "cleanup": "pass",
+      "digest": "sha256:ef956af7faea264d1950e23be385aceca5cc52cfaf59a3c2eaf0e28be2c012fe",
+      "outcome": "pass",
+      "platform": "linux/amd64"
+    },
+    {
+      "cleanup": "pass",
+      "digest": "sha256:15d6566ed5d981d4eb977bedc0bae73c32b464136aaf4ad3520371cfb1794261",
+      "outcome": "pass",
+      "platform": "linux/arm64"
+    }
+  ],
+  "result": "pass",
+  "timeout_seconds": 180.0
+}

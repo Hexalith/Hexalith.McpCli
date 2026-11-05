@@ -1,0 +1,41 @@
+The '-xml' switch has been deprecated in favor of '-result-xml' and will be removed in the next major version
+
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.Tenants.Contracts.Tests
+  Discovered:  Hexalith.Tenants.Contracts.Tests
+  Starting:    Hexalith.Tenants.Contracts.Tests
+    Hexalith.Tenants.Contracts.Tests.CiQualityGateScriptTests.FrozenBootstrapJobsBindTheCompletePublishedSdkCohort [FAIL]
+      Shouldly.ShouldAssertException : result.ExitCode
+          should be
+      0
+          but was
+      1
+      
+      Additional Info:
+          .....F......
+      ======================================================================
+      FAIL: test_live_build_pins_the_major_package_cohort (__main__.BootstrapCompatibilityTests.test_live_build_pins_the_major_package_cohort)
+      ----------------------------------------------------------------------
+      Traceback (most recent call last):
+        File "/tmp/mcpcli-418-tenants410-isolated/tests/scripts/test_bootstrap_compatibility.py", line 118, in test_live_build_pins_the_major_package_cohort
+          self.assertIn('-p:HexalithEventStoreVersion=4.0.4', call['arguments'])
+          ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+      AssertionError: '-p:HexalithEventStoreVersion=4.0.4' not found in ['build', 'references/Hexalith.EventStore/src/Hexalith.EventStore/Hexalith.EventStore.csproj', '--configuration', 'Release', '-p:HexalithEventStoreVersion=4.1.0', '-p:HexalithMcpCliVersion=2.0.0', '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true', '-p:HexalithFrontComposerFromSource=false', '-p:HexalithMemoriesFromSource=false', '-warnaserror', '-m:1', '-nr:false']
+      
+      ----------------------------------------------------------------------
+      Ran 12 tests in 1.797s
+      
+      FAILED (failures=1)
+      
+      Stack Trace:
+        tests/Hexalith.Tenants.Contracts.Tests/CiQualityGateScriptTests.cs(539,0): at Hexalith.Tenants.Contracts.Tests.CiQualityGateScriptTests.FrozenBootstrapJobsBindTheCompletePublishedSdkCohort()
+           at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+           at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+           at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)
+        --- End of stack trace from previous location ---
+           at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+           at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+           at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)
+  Finished:    Hexalith.Tenants.Contracts.Tests (ID = '77212c8faf22d48d6c97d802d7f72b4dde11c0a49885cc5b230baea9f12abfbf')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.Tenants.Contracts.Tests  Total: 1005, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 301.176s

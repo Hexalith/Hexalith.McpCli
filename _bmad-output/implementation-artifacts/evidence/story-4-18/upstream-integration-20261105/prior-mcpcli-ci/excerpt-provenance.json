@@ -1,0 +1,5 @@
+{
+  "source_entry": "da23d899e99b4f2395a0878d7d8f147e/smoke/tests.xml",
+  "source_sha256": "5ddc4368f3ad611bca2cb860815d9754b0b0bca857d3a1bc809090424deef40c",
+  "selection": "XML failure message and stack-trace; no reconstructed fields"
+}

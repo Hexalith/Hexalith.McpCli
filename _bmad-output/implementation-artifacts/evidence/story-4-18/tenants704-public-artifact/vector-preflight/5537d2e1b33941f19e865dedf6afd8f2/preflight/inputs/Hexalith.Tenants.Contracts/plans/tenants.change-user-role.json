@@ -1,0 +1,102 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.change-user-role",
+  "vectorSha256": "dc2b837fd892d7b9be684d4a2d42c0203d716f2bc43cd80022b30b7f334a2ad9",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-roles"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Roles"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/1"
+    },
+    {
+      "label": "persisted-prerequisites-1",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-user-2@example.com",
+              "role": "TenantReader"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-user-2@example.com",
+              "role": "TenantOwner"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

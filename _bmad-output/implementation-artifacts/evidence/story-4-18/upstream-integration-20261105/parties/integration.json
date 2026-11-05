@@ -1,0 +1,29 @@
+{
+  "source_sha": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+  "inspected_remote_parent": "b8ec68520b078b68f254c73b0e0c721983d59e8d",
+  "remote_main_after_push": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+  "observed_at_utc": "2026-11-05T11:28:06.919126+00:00",
+  "normal_fast_forward_push": true,
+  "shared_owner_worktree_and_index_untouched": true,
+  "changes": [
+    "Directory.Build.targets",
+    "src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs",
+    "tests/Hexalith.Parties.Ci.Tests/AspireRuntimePreparationTests.cs",
+    "tests/Hexalith.Parties.Contracts.Tests/PartiesCatalogTests.cs"
+  ],
+  "catalog_cases": {
+    "passed": 7,
+    "skipped": 0,
+    "exact_selector_theories": 3
+  },
+  "capability_cases": {
+    "passed": 23,
+    "skipped": 0
+  },
+  "removed_bindings_failed": true,
+  "legacy_404_cases": {
+    "passed": 3,
+    "skipped": 0
+  },
+  "public_package_or_live_acceptance_established": false
+}

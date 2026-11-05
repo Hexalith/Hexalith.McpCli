@@ -1,0 +1,18 @@
+{
+  "approved_artifact_hash": "sha512-q1jGvSBg2LSPViJalRVX5ueCtyjyX19yom7MvTtuhSHaelovLJebTl032tPCtKDG2CVZK0pQhh+SbH6qz0Muhw==",
+  "assets_library_sha512": "G0XICP9NVFYgAFk4hZd+KTqM45TbdHnH6Y1pMmTTH2PcxeoqZzzTH/OehH3eScRXXneTlVjkOOaToI7QaaYqLQ==",
+  "observed": [
+    {
+      "kind": "restored-cache",
+      "path": "/home/administrator/.nuget/packages/hexalith.tenants.contracts/7.0.0/hexalith.tenants.contracts.7.0.0.nupkg",
+      "sha256": "81a33bb7562507004d4dfb8da2365cdea1fb874ff53798787bff110c0d9573ef",
+      "artifactHash": "sha512-G0XICP9NVFYgAFk4hZd+KTqM45TbdHnH6Y1pMmTTH2PcxeoqZzzTH/OehH3eScRXXneTlVjkOOaToI7QaaYqLQ=="
+    },
+    {
+      "kind": "fresh-public",
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.tenants.contracts/7.0.0/hexalith.tenants.contracts.7.0.0.nupkg",
+      "sha256": "e21f5ac7b5f332f1921f70a249ab2032b9978d56ffdd6641a0a4b94d04850bdc",
+      "artifactHash": "sha512-q1jGvSBg2LSPViJalRVX5ueCtyjyX19yom7MvTtuhSHaelovLJebTl032tPCtKDG2CVZK0pQhh+SbH6qz0Muhw=="
+    }
+  ]
+}

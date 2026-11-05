@@ -1,0 +1,318 @@
+[12:30:49 PM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+[12:30:49 PM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js"
+[12:30:49 PM] [semantic-release] › ⚠  Run automated release from branch main on repository /tmp/mcpcli-owner-selection-zRXzI6/remote.git in dry-run mode
+[12:30:49 PM] [semantic-release] › ✔  Allowed to push to the Git repository
+[12:30:49 PM] [semantic-release] › ℹ  Found git tag v3.0.0 associated with version 3.0.0 on branch main
+[12:30:49 PM] [semantic-release] › ℹ  Found 84 commits since last release
+[12:30:49 PM] [semantic-release] › ℹ  Start step "analyzeCommits" of plugin "/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js"
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(routing): bind published legacy query selectors
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: ci
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build(deps): record synchronized source selections
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: sync local changes via /pushall
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: merge refs/remotes/origin/fix/adopt-platform-117 into main via /pushall
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): exclude the generated Builds checkout
+
+Ignore only the root workflow-owned Builds preparation/helper checkout.
+Keep tracked source, selected tests, declarations, configuration and
+unrelated untracked inputs visible to the unchanged source-clean guard.
+
+A real Git regression covers the checkout and mutation boundaries.
+Full hosted trusted-handoff and native qualification remain pending.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): activate the adopted package capabilities
+
+Enable the exact Memories 3.0.23 and FrontComposer 4.7.6 branches.
+Keep prior/source selections and unknown-package fallbacks intact.
+
+Retain strict UI asset identity and verify anonymous gateway denial
+through the issued native fixture. Local package controls pass;
+full hosted and manual lifecycle qualification remain pending.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build(ci): adopt the qualified full Parties tuple
+
+Select published Platform 1.3.0 and signed Builds 4.44.2 for ordinary and
+manual CI. Preserve incoming source, native controls and dated approvals.
+
+Focused Release/package checks and hosted qualification are pending.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: reconcile incoming Parties main locally
+
+Merge inspected main 3e4367622764118fc2ad710ad1040994ae4cfa49
+into the existing adoption branch without rewriting either history.
+
+Retain the coherent Platform 1.1.7 and Builds 4.43.6 caller tuple,
+preserve incoming subscription fixes and dated selection observations,
+and keep publication and native qualification explicitly pending.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build(deps): record selected release pointers
+
+Align current source observations with the selected Platform v1.1.6 and
+Builds v4.43.5 releases while preserving prior selection history.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): align current catalog observation with gitlinks
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): align source observations with gitlinks
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build(deps): refresh npm transitive lockfile
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: ci(release): sign off aligned Platform and Builds pointers
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build(deps): align Builds with Platform catalog
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build(deps): advance Platform package catalog source
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: record subscription verification results
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: select subscription safety source
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: qualify reconciliation and refresh controls
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: ci: shallow declaration owner checkouts
+
+Fetch depth one at the same three recorded owner gitlinks to bound
+cold setup within the unchanged ten-minute declaration job limit.
+Retain the real four-manifest validator, generator and strict tests.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: preserve incoming main before checkout correction
+
+Retain the independent module build timeout update from 7d3bc887
+while keeping the declaration job limit unchanged.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): extend module build budget for dependency checkout
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test: retain owner-bound native SDK output diagnostics
+
+Measure already loaded test assemblies separately from actual copied composition output after the real
+persistence assertions. Bind existing ordinary and lifecycle artifact paths through the published native
+handoff, source mapping, owner metadata and issued receipt without forwarding GitHub environment.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: ci: adopt Platform 1.1.7 in both package CI entry points
+
+Bind ordinary and registered lifecycle baselines to the verified Builds 4.43.6 source. Preserve
+prior owner approval and source observations, recording this continuation as delegated source
+selection only.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): restore Aspire runner packages for integration
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test: strengthen deferred work qualification
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): include lifecycle test project in inventory
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: merge refs/remotes/origin/ci/lifecycle-qualification-proposal into main via /pushall
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test: align selection with released platform tuple
+
+Record Platform v1.1.6 and Builds v4.43.5 as the current selection.
+Withdraw the untagged Platform and Builds advances from the ledger.
+Keep the five owner-approved /pushall gitlink advances unchanged.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): use direct-root Builds catalog CLI
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): use released Builds module CLI required by Platform
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(build): align published Builds tuple
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs(ci): sign off released Platform gitlink
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: style(ci): normalize fixture line endings
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): pin released Platform source
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): preserve the first persistence observation
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test: refresh g5 evidence at eventstore a9205f51
+
+Record owner 8.5 done and 8.6 in-progress in the G5 row evidence.
+Require the new AzureKeyVault adapter project to stay non-packable.
+G5 stays needs-additive-api and Parties Story 8.7 stays blocked.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test(ci): bind lifecycle declaration profiles
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): verify cancellation phase at the signal
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): attempt cleanup after resume errors
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): journal lifecycle intent before launch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test(ci): qualify disposable owner lifecycle
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build(deps): sign off advanced root gitlinks
+
+Record the owner-approved /pushall advance as the current selection.
+Advance Builds to 72575407 to drop the duplicate KeyVault catalog pin.
+Add validated-advance ledger rows and align the fitness selection.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: sync local changes via /pushall
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: record story 8.7 prerequisite evidence
+
+Record the closed G5 prerequisite and retained local protection.
+Keep extraction blocked until owner delivery and parity proof.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: merge origin/fix/memories-3018-refresh-capability into main via /pushall
+
+Co-Authored-By: Claude Haiku 5.5 <noreply@anthropic.com>
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): qualify selected frontend and consumers
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): align catalog records and isolated probes
+
+Resolve the recorded catalog before standalone package fallbacks.
+Preserve dated owner decisions and record measured delegated selections.
+Keep independent fixture probes outside the parent workspace mapping.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: ci: enroll disposable Parties package integration
+
+Use the qualified v2 workflow and published tool with Platform v1.1.5.
+Retain all fifteen isolated projects and the independent protocol gates.
+Record delegated Platform source selection; keep native qualification open.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): scope protocol caches to the execution step
+
+Keep runner.temp expressions in a supported step environment while preserving isolated package caches and the required protocol cases.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): isolate refresh checks on reviewed catalog
+
+Move package protocol checks into their own job and propose the exact CI-qualified Builds source.
+Record only delegated source selection; keep publication, compatibility and full review gates pending.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: ci: qualify refresh with selected Tenants 7
+
+Use the verified catalog-selected family in the new protocol lane while retaining the older offline inputs.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(memories): qualify refresh support for 3.0.18
+
+Admit the exact selected package after API and published-client protocol qualification.
+Run the strict refresh and persisted recovery controls against that package in owning CI.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): register catalog qualification tests
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: ci: enforce catalog qualification test counts
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(catalog): qualify EventStore 4.0.4
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix: submodules
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(deps): align published EventStore Platform and Builds
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test: close story 8.10 after round 10 requalification
+
+Land the nine Round 8 patches and the seven Round 10 review fixes to
+the Epic 8 closure gate: live gaps are reported before shallow-history
+or missing-Builds skips, open tasks come from the live spec, the
+emitter refuses tokens under ambient package overrides, and a broken
+stdin pipe no longer hides a child's exit code or timeout.
+
+Record the owner's signoff of Platform c635a2dc, requalify all six
+lanes at parties_snapshot 6d0c8958 with stamped Pass receipts, and
+mark story 8.10 and Epic 8 done. Log DW-207 for a pre-existing
+supervisor-fixture race.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test: record story 8.10 round 9 review outcome
+
+Return story 8.10 to in-progress after the Round 9 review of
+f4285584..b029c62a: archive the b029c62a-tree receipts behind a new
+canonical Unvalidated table, record the owner's Tenants 4d0d5998
+successor confirmation, and retire stale current-source prose in the
+8.3 matrix and the Epic 8 spine.
+
+Tighten the matrix-sync checks to label+SHA pairs and the graph
+sentence, reject review status while unchecked tasks remain, and log
+DW-204 (done) plus DW-205 and DW-206 (open).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): record Platform successor and expire prior receipts
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(topology): bind selected technical catalog profile
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: record story 8.10 I16 parity receipts
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs(parties): record v2 custody observation recheck
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs(parties): record V2 custody feasibility blockers
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): sign off selected Tenants successor
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test: reconcile approved committed selections
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(test): align Tenants selection evidence with gitlink
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(ci): select Tenants qualified for EventStore 3.132.2
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(test): align package receipt with selected Builds catalog
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(test): refresh current source selection receipt
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test: reconcile current Parties source observations
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: feat: classify missing parties and actor mismatches
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is minor
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(build): close five deferred verification gaps
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: reconcile tenants submodule with upstream
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: merge refs/remotes/origin/fix/caller-catalog-authority into main via /pushall
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: fix(build): defer family fallbacks to the caller catalog
+
+Keep standalone package choices while honoring explicit catalog authority.
+Preserve explicit version overrides and the publication hold.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The release type for the commit is patch
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build: sync local changes via /pushall
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: record story 8.10 round 8 review findings
+
+Review f98e702a and keep story 8.10 in progress, with nine patches
+left as action items in the spec.
+
+Demote the premature live-bound warning-policy Pass receipt to
+Unvalidated and record the blocked-lane diagnosis as DW-202 (the
+Release solution build shares the Admin.UI obj folder with the
+TestHost nested restore) and DW-203 (ClientPackageTests leaves the
+Contracts assets pointing at a deleted restore folder).
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: test: harden story 8.10 closure validation
+
+Bind v2 receipts to normalized Git content and closure commits.
+Cover historical catalogs, binary process I/O, and invalid stamps.
+Record build blockers and reopen DW-159 without closing Epic 8.
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: align local tool instructions with the pinned release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: record story 8.10 review findings
+
+Record the round 7 code review of the DW-144 reopen commit fb07a6cf:
+four resolved decisions, nine open patch items, and three deferrals
+(DW-199 to DW-201). Move story 8.10 to in-progress until the patches
+land; Epic 8 stays in-progress.
+
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: build(deps): update the module tool to 4.41.1
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analyzing commit: docs: record verified release publication
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  The commit should not trigger a release
+[12:30:49 PM] [semantic-release] [/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js] › ℹ  Analysis of 84 commits complete: minor release
+[12:30:49 PM] [semantic-release] › ✔  Completed step "analyzeCommits" of plugin "/tmp/mcpcli-418-parties-isolated/node_modules/@semantic-release/commit-analyzer/index.js"
+[12:30:49 PM] [semantic-release] › ℹ  The next release version is 3.1.0
+[12:30:49 PM] [semantic-release] › ⚠  Skip v3.1.0 tag creation in dry-run mode
+[12:30:49 PM] [semantic-release] › ✔  Published release 3.1.0 on default channel
+[12:30:49 PM] [semantic-release] › ℹ  Release note for version 3.1.0:

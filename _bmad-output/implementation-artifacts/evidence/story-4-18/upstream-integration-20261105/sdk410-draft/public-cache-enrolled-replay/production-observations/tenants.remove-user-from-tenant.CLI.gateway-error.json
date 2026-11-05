@@ -1,0 +1,30 @@
+{
+  "source": "/tmp/mcpcli-418-upstream-owner-evidence/sdk410-draft/public-cache-enrolled-replay/Hexalith.Tenants.Contracts/inputs-nw7stnvu/vectors/11/remove-user-from-tenant.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M6NT3Q3M38MZF73PBX6SF1VJ",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "commandType": "remove-user-from-tenant",
+        "payload": {
+          "TenantId": "vector-removal",
+          "UserId": "vector-user-3@example.com"
+        },
+        "correlationId": "01M6NT3Q3M38MZF73PBX6SF1VJ"
+      }
+    }
+  ]
+}

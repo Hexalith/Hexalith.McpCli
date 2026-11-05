@@ -1,0 +1,12 @@
+{
+  "initial_isolated_commit": "4cb14d942105db147e112ce247f0ed53452992fe",
+  "inspected_remote_parent": "b8ec68520b078b68f254c73b0e0c721983d59e8d",
+  "rebased_commit": "b34fa6a6e39b942858c3756d2b09d68b00e0d292",
+  "paths": [
+    "Directory.Build.targets",
+    "src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs",
+    "tests/Hexalith.Parties.Ci.Tests/AspireRuntimePreparationTests.cs",
+    "tests/Hexalith.Parties.Contracts.Tests/PartiesCatalogTests.cs"
+  ],
+  "shared_owner_worktree_and_index_untouched": true
+}

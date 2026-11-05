@@ -1,0 +1,6 @@
+⧗   --- input ---
+fix(deps): qualify the public SDK 4.1 cohort
+
+Bind the signed Tenants 7.0.4 archives and qualified owner sources.
+Preserve enrolled operations and wire while retaining native equality evidence.
+✔   found 0 problems, 0 warnings

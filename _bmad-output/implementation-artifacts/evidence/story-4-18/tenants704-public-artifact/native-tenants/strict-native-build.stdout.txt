@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-418-tenants704-candidate/src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj (in 173 ms).
+  Restored /tmp/mcpcli-418-tenants704-candidate/src/Hexalith.Tenants/Hexalith.Tenants.csproj (in 177 ms).
+  Restored /tmp/mcpcli-418-tenants704-candidate/src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj (in 436 ms).
+  Hexalith.Tenants.Contracts -> /tmp/mcpcli-418-tenants704-candidate/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll
+  Hexalith.Tenants.Server -> /tmp/mcpcli-418-tenants704-candidate/src/Hexalith.Tenants.Server/bin/Release/net10.0/Hexalith.Tenants.Server.dll
+  Hexalith.Tenants -> /tmp/mcpcli-418-tenants704-candidate/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.03

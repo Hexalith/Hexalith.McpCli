@@ -1,0 +1,2 @@
+To https://github.com/Hexalith/Hexalith.McpCli.git
+   c2ae279..f24266b  HEAD -> main

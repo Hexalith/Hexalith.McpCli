@@ -1,0 +1,15 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  Hexalith.Tenants.Contracts -> /home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants.Contracts/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll
+  Hexalith.Tenants.Server -> /home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants.Server/bin/Release/net10.0/Hexalith.Tenants.Server.dll
+  Hexalith.Tenants -> /home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll
+  Hexalith.Tenants.Testing -> /home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants.Testing/bin/Release/net10.0/Hexalith.Tenants.Testing.dll
+  Hexalith.Tenants.Client -> /home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants.Client/bin/Release/net10.0/Hexalith.Tenants.Client.dll
+  Hexalith.Tenants.Sample -> /home/administrator/projects/hexalith/tenants/samples/Hexalith.Tenants.Sample/bin/Release/net10.0/Hexalith.Tenants.Sample.dll
+  Hexalith.Tenants.Server.Tests -> /home/administrator/projects/hexalith/tenants/tests/Hexalith.Tenants.Server.Tests/bin/Release/net10.0/Hexalith.Tenants.Server.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.00

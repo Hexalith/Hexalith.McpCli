@@ -1,0 +1,379 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 41ed13ff..48b4cc0a 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -22,7 +22,7 @@ jobs:
+       fail-fast: false
+       matrix:
+         include:
+-          - profile: canonical scope 4.0.4
++          - profile: canonical scope 4.1.0
+             sdk-argument: ''
+             budget-minimum: 8
+             runtime-minimum: 7
+@@ -73,7 +73,7 @@ jobs:
+       fail-fast: false
+       matrix:
+         include:
+-          - profile: canonical scope 4.0.4
++          - profile: canonical scope 4.1.0
+             sdk-argument: ''
+             owner-source-minimum: 25
+     env:
+@@ -254,7 +254,14 @@ jobs:
+         run: |
+           set -euo pipefail
+           source_sha="$(git rev-parse HEAD:references/Hexalith.EventStore)"
+-          printf 'TENANTS_SOURCE_SDK_PRODUCER_VERSION=4.0.4\n' >> "$GITHUB_ENV"
++          sdk_producer_version="$(dotnet msbuild src/Hexalith.Tenants/Hexalith.Tenants.csproj -nologo \
++            -getProperty:HexalithEventStoreVersion -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true \
++            -p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.1.0)"
++          if [[ "$sdk_producer_version" != '4.1.0' ]]; then
++            echo 'The authenticated package profile did not select its exact qualified SDK.' >&2
++            exit 1
++          fi
++          printf 'TENANTS_SOURCE_SDK_PRODUCER_VERSION=%s\n' "$sdk_producer_version" >> "$GITHUB_ENV"
+           python3 scripts/prepare-source-catalog-profile.py \
+             --ci-job authenticated-routes --sdk-source-sha "$source_sha" \
+             --output "${RUNNER_TEMP}/tenants-package-backend.json"
+@@ -274,7 +281,7 @@ jobs:
+             tests/Hexalith.Tenants.AppHost.Tests/Hexalith.Tenants.AppHost.Tests.csproj \
+             tests/Hexalith.Tenants.IntegrationTests/Hexalith.Tenants.IntegrationTests.csproj; do
+             dotnet build "$project" --configuration Release \
+-              -p:HexalithEventStoreVersion=4.0.4 -p:HexalithMcpCliVersion=2.0.0 \
++              -p:HexalithEventStoreVersion=4.1.0 -p:HexalithMcpCliVersion=2.0.0 \
+               -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true \
+               -p:HexalithFrontComposerFromSource=false -p:HexalithMemoriesFromSource=false \
+               -warnaserror -m:1 -nr:false
+diff --git a/Directory.Build.props b/Directory.Build.props
+index 1ed6e013..2c37688c 100644
+--- a/Directory.Build.props
++++ b/Directory.Build.props
+@@ -1,7 +1,7 @@
+ <Project>
+     <PropertyGroup>
+         <!-- Canonical public scope requires the coordinated SemVer-major EventStore and McpCli packages. -->
+-        <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">4.0.4</HexalithEventStoreVersion>
++        <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">4.1.0</HexalithEventStoreVersion>
+         <HexalithMcpCliVersion Condition="'$(HexalithMcpCliVersion)' == ''">2.0.0</HexalithMcpCliVersion>
+         <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">7.0.0</HexalithTenantsVersion>
+         <HexalithMemoriesVersion Condition="'$(HexalithMemoriesVersion)' == ''">3.0.18</HexalithMemoriesVersion>
+diff --git a/Directory.Build.targets b/Directory.Build.targets
+index 0ff94b0b..1e210c2b 100644
+--- a/Directory.Build.targets
++++ b/Directory.Build.targets
+@@ -3,47 +3,47 @@
+   <PropertyGroup>
+     <_TenantsNestedReferenceRoot>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)references/'))</_TenantsNestedReferenceRoot>
+     <HexalithTenantsCatalogArtifactsAvailable>false</HexalithTenantsCatalogArtifactsAvailable>
+-    <HexalithTenantsCatalogSdkVersion>$([System.Text.RegularExpressions.Regex]::Replace('$(HexalithEventStoreVersion)', '\A(3\.129\.[01]|3\.130\.[012]|3\.131\.0|3\.132\.[012]|3\.133\.0|4\.0\.[01234])(?:\.0)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?\z', '$1'))</HexalithTenantsCatalogSdkVersion>
++    <HexalithTenantsCatalogSdkVersion>$([System.Text.RegularExpressions.Regex]::Replace('$(HexalithEventStoreVersion)', '\A(3\.129\.[01]|3\.130\.[012]|3\.131\.0|3\.132\.[012]|3\.133\.0|4\.0\.[01234]|4\.1\.0)(?:\.0)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?\z', '$1'))</HexalithTenantsCatalogSdkVersion>
+   </PropertyGroup>
+-  <!-- The canonical EventStore 4.0.x packages carries the same development catalog cohort as its source. -->
+-  <PropertyGroup Condition="'$(HexalithEventStoreFromSource)' == 'true' or ('$(HexalithTenantsCatalogSdkVersion)' == '4.0.0' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.1' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.2' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.3' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.4')">
++  <!-- The qualified EventStore 4.0.x and 4.1.0 packages carry the same development catalog cohort as its source. -->
++  <PropertyGroup Condition="'$(HexalithEventStoreFromSource)' == 'true' or ('$(HexalithTenantsCatalogSdkVersion)' == '4.0.0' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.1' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.2' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.3' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.4' or '$(HexalithTenantsCatalogSdkVersion)' == '4.1.0')">
+     <DefineConstants>$(DefineConstants);HEXALITH_DEVELOPMENT_CATALOG_COHORT</DefineConstants>
+   </PropertyGroup>
+   <PropertyGroup Condition="'$(HexalithEventStoreFromSource)' == 'true'">
+     <DefineConstants>$(DefineConstants);HEXALITH_DEVELOPMENT_CATALOG_SOURCE_REFERENCE</DefineConstants>
+   </PropertyGroup>
+-  <PropertyGroup Condition="'$(HexalithEventStoreFromSource)' == 'true' or '$(HexalithTenantsCatalogSdkVersion)' == '3.129.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.129.1' or '$(HexalithTenantsCatalogSdkVersion)' == '3.130.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.130.1' or '$(HexalithTenantsCatalogSdkVersion)' == '3.130.2' or '$(HexalithTenantsCatalogSdkVersion)' == '3.131.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.1' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.2' or '$(HexalithTenantsCatalogSdkVersion)' == '3.133.0' or ('$(HexalithTenantsCatalogSdkVersion)' == '4.0.0' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.1' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.2' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.3' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.4')">
++  <PropertyGroup Condition="'$(HexalithEventStoreFromSource)' == 'true' or '$(HexalithTenantsCatalogSdkVersion)' == '3.129.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.129.1' or '$(HexalithTenantsCatalogSdkVersion)' == '3.130.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.130.1' or '$(HexalithTenantsCatalogSdkVersion)' == '3.130.2' or '$(HexalithTenantsCatalogSdkVersion)' == '3.131.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.1' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.2' or '$(HexalithTenantsCatalogSdkVersion)' == '3.133.0' or ('$(HexalithTenantsCatalogSdkVersion)' == '4.0.0' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.1' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.2' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.3' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.4' or '$(HexalithTenantsCatalogSdkVersion)' == '4.1.0')">
+     <HexalithTenantsCatalogArtifactsAvailable>true</HexalithTenantsCatalogArtifactsAvailable>
+     <DefineConstants>$(DefineConstants);HEXALITH_DEVELOPMENT_CATALOG_SOURCE</DefineConstants>
+   </PropertyGroup>
+ 
+   <!-- Technical HTTP activation v2 is available only in this qualified binary or the enrolled source graph. -->
+-  <PropertyGroup Condition="'$(HexalithEventStoreFromSource)' == 'true' or '$(HexalithTenantsCatalogSdkVersion)' == '3.131.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.1' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.2' or '$(HexalithTenantsCatalogSdkVersion)' == '3.133.0' or ('$(HexalithTenantsCatalogSdkVersion)' == '4.0.0' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.1' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.2' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.3' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.4')">
++  <PropertyGroup Condition="'$(HexalithEventStoreFromSource)' == 'true' or '$(HexalithTenantsCatalogSdkVersion)' == '3.131.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.0' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.1' or '$(HexalithTenantsCatalogSdkVersion)' == '3.132.2' or '$(HexalithTenantsCatalogSdkVersion)' == '3.133.0' or ('$(HexalithTenantsCatalogSdkVersion)' == '4.0.0' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.1' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.2' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.3' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.4' or '$(HexalithTenantsCatalogSdkVersion)' == '4.1.0')">
+     <DefineConstants>$(DefineConstants);HEXALITH_TECHNICAL_HTTP_CATALOG_BINDING</DefineConstants>
+   </PropertyGroup>
+ 
+   <!-- The optional durable tenant projection needs EventStore's checkpointed client API, first published in 3.133.0. -->
+-  <PropertyGroup Condition="'$(HexalithEventStoreFromSource)' == 'true' or '$(HexalithTenantsCatalogSdkVersion)' == '3.133.0' or ('$(HexalithTenantsCatalogSdkVersion)' == '4.0.0' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.1' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.2' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.3' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.4')">
++  <PropertyGroup Condition="'$(HexalithEventStoreFromSource)' == 'true' or '$(HexalithTenantsCatalogSdkVersion)' == '3.133.0' or ('$(HexalithTenantsCatalogSdkVersion)' == '4.0.0' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.1' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.2' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.3' or '$(HexalithTenantsCatalogSdkVersion)' == '4.0.4' or '$(HexalithTenantsCatalogSdkVersion)' == '4.1.0')">
+     <DefineConstants>$(DefineConstants);HEXALITH_CHECKPOINTED_TENANT_PROJECTION</DefineConstants>
+   </PropertyGroup>
+ 
+   <Target Name="ValidateCatalogSdkSelection" BeforeTargets="CollectPackageReferences;PrepareForBuild"
+           Condition="'$(HexalithEventStoreFromSource)' != 'true' and '$(HexalithEventStoreVersion)' != '' and !$(MSBuildProjectFullPath.StartsWith('$(_TenantsNestedReferenceRoot)'))">
+     <Error Condition="$([MSBuild]::VersionGreaterThanOrEquals('$(HexalithEventStoreVersion)', '3.129.0')) and '$(HexalithTenantsCatalogArtifactsAvailable)' != 'true'"
+-           Text="Catalog SDK selection '$(HexalithEventStoreVersion)' is not qualified. Use a qualified stable SDK through 3.133.0 or the coordinated 4.0.x package cohort, or the explicit legacy compatibility profile." />
++           Text="Catalog SDK selection '$(HexalithEventStoreVersion)' is not qualified. Use a qualified stable SDK through 3.133.0 or the coordinated 4.0.x or 4.1.0 package cohort, or the explicit legacy compatibility profile." />
+   </Target>
+ 
+   <Target Name="ValidatePublishedCatalogSdk">
+     <Error Condition="'$(IsPackable)' == 'true' and '$(HexalithTenantsCatalogArtifactsAvailable)' != 'true'"
+-           Text="Published Tenants packages require the qualified EventStore catalog SDK through 3.133.0, the coordinated 4.0.x package cohort, or an enrolled source build. The 3.128.4 compatibility profile is not publishable." />
++           Text="Published Tenants packages require the qualified EventStore catalog SDK through 3.133.0, the coordinated 4.0.x or 4.1.0 package cohort, or an enrolled source build. The 3.128.4 compatibility profile is not publishable." />
+   </Target>
+ 
+   <!-- Every current Tenants archive must retain the coordinated major-version cohort,
+        including packing without a build against a DLL produced with different global properties. -->
+   <Target Name="ValidateCanonicalBoundaryPackageCohort" BeforeTargets="CollectPackageReferences;PrepareForBuild;GenerateNuspec"
+           Condition="'$(MSBuildProjectName)' == 'Hexalith.Tenants.Contracts' or '$(MSBuildProjectName)' == 'Hexalith.Tenants.Server' or '$(MSBuildProjectName)' == 'Hexalith.Tenants.Client' or '$(MSBuildProjectName)' == 'Hexalith.Tenants.Testing' or '$(MSBuildProjectName)' == 'Hexalith.Tenants.Aspire'">
+-    <Error Condition="'$(HexalithEventStoreFromSource)' != 'true' and '$(HexalithEventStoreVersion)' != '4.0.4'"
+-           Text="Canonical Tenants packages require EventStore 4.0.4 in package mode." />
++    <Error Condition="'$(HexalithEventStoreFromSource)' != 'true' and '$(HexalithEventStoreVersion)' != '4.0.4' and '$(HexalithEventStoreVersion)' != '4.1.0'"
++           Text="Canonical Tenants packages require EventStore 4.0.4 or 4.1.0 in package mode." />
+     <Error Condition="'$(HexalithMcpCliFromSource)' != 'true' and '$(HexalithMcpCliVersion)' != '2.0.0'"
+            Text="Canonical Tenants packages require McpCli.Abstractions 2.0.0 in package mode." />
+   </Target>
+diff --git a/docs/development-route-catalog.md b/docs/development-route-catalog.md
+index 3c183592..bf87d6d2 100644
+--- a/docs/development-route-catalog.md
++++ b/docs/development-route-catalog.md
+@@ -86,8 +86,10 @@ result records are uploaded; raw observations and key material remain private.
+ 
+ ## Published SDK qualification
+ 
+-The current default package selection is public stable EventStore `4.0.4`. The
+-current canonical-scope catalog cohort is `4.0.0`, `4.0.1`, `4.0.2`, `4.0.3` and `4.0.4`.
++The current default package selection is public stable EventStore `4.1.0`. The
++qualified canonical-scope catalog cohort is `4.0.0`, `4.0.1`, `4.0.2`, `4.0.3`, `4.0.4`
++and `4.1.0`. Current Tenants package builds accept exact `4.1.0` or the retained
++`4.0.4` compatibility profile; ordinary release preparation uses the `4.1.0` default.
+ The retained finite compatibility set is `3.129.0`, `3.129.1`, `3.130.0`, `3.130.1`,
+ `3.130.2`, `3.131.0`, `3.132.0`, `3.132.1`, `3.132.2` and `3.133.0`;
+ zero fourth revisions and build metadata normalize to the same stable cohort.
+@@ -105,9 +107,11 @@ version override. Its lane requires compiled
+ enrollment, the complete owner catalog, all generated HTTP cases, ordinary stale
+ artifact refusals, and a fresh packed Contracts/Server consumer. The consumer
+ checks source metadata and candidate archive/DLL hashes before discovering all
+-22 routes, 22 operations and 12 command adapters through the public SDK APIs.
+-Binary qualification enables `HEXALITH_DEVELOPMENT_CATALOG_SOURCE`; only an
+-actual source graph enables `HEXALITH_DEVELOPMENT_CATALOG_COHORT`.
++23 routes, 23 operations and 12 command adapters through the public SDK APIs.
++Binary qualification enables `HEXALITH_DEVELOPMENT_CATALOG_SOURCE`; the canonical
++4.x package cohort and an actual source graph also enable
++`HEXALITH_DEVELOPMENT_CATALOG_COHORT`. Only source graphs enable
++`HEXALITH_DEVELOPMENT_CATALOG_SOURCE_REFERENCE`.
+ 
+ Reproduce the public package checks from this repository with .NET pinned by
+ `global.json`, using the root-declared Builds and Platform inputs (no nested
+@@ -171,7 +175,7 @@ for the published package selection. On 2026-11-02, local Release builds of both
+ the standalone and source solutions completed with zero warnings and errors.
+ The package governance suite passed 409 cases, the generated HTTP suite passed
+ 66 cases, and an isolated consumer restored fresh Contracts and Server archives
+-and discovered 22 routes, 22 operations and 12 adapters. Exact-source CI and
++and discovered 23 routes, 23 operations and 12 adapters. Exact-source CI and
+ release admission still run on the pushed commit.
+ 
+ The [3.132.1 qualification record](eventstore-3.132.1-qualification.json) records
+diff --git a/docs/guides/canonical-scope-upgrade.md b/docs/guides/canonical-scope-upgrade.md
+index ec84360d..a65a8a17 100644
+--- a/docs/guides/canonical-scope-upgrade.md
++++ b/docs/guides/canonical-scope-upgrade.md
+@@ -2,4 +2,4 @@
+ 
+ Tenants administration and cross-tenant catalog operations now use declared platform scopes. The public `system` tenant is reserved; existing `system` stream identities remain an internal storage detail behind the authenticated EventStore workload route.
+ 
+-The 7.0.0 package cohort requires EventStore 4.0.4 and McpCli.Abstractions 2.0.0. Upgrade those producers first, then upgrade all Tenants packages together. Update callers that supplied `system` as a public tenant or expected a per-call tenant for a platform-scoped operation. The catalog includes the global administrator audit query as a separate platform operation.
++The 7.0.0 package cohort requires EventStore 4.0.4 and McpCli.Abstractions 2.0.0. The 7.0.3 update selects qualified public EventStore 4.1.0 by default; explicit 4.0.4 package builds remain available for compatibility. Upgrade those producers first, then upgrade all Tenants packages together. Update callers that supplied `system` as a public tenant or expected a per-call tenant for a platform-scoped operation. The catalog includes the global administrator audit query as a separate platform operation.
+diff --git a/scripts/verify-catalog-package-consumer.py b/scripts/verify-catalog-package-consumer.py
+index 24a6b714..55a48299 100644
+--- a/scripts/verify-catalog-package-consumer.py
++++ b/scripts/verify-catalog-package-consumer.py
+@@ -51,7 +51,7 @@ def verify(directory, expected_source=None, output=None):
+             for dependency in metadata.findall('.//{*}dependency'):
+                 if dependency.get('id', '').startswith('Hexalith.EventStore.'):
+                     selected = dependency.get('version', '').lstrip('[(').split(',')[0].strip().rstrip('])')
+-                    normalized = re.fullmatch(r'(3\.129\.[01]|3\.130\.[012]|3\.131\.0|3\.132\.[012]|3\.133\.0|4\.0\.[01234])(?:\.0)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?', selected)
++                    normalized = re.fullmatch(r'(3\.129\.[01]|3\.130\.[012]|3\.131\.0|3\.132\.[012]|3\.133\.0|4\.0\.[01234]|4\.1\.0)(?:\.0)?(?:\+[0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*)?', selected)
+                     if not normalized or sdk is not None and normalized[1] != sdk:
+                         raise ValueError('Catalog SDK dependency is not one qualified stable cohort.')
+                     sdk = normalized[1]
+diff --git a/tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs b/tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs
+index d337dbef..98ec2abe 100644
+--- a/tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs
++++ b/tests/Hexalith.Tenants.Contracts.Tests/PackageGovernanceTests.cs
+@@ -819,12 +819,13 @@ public class PackageGovernanceTests {
+     }
+ 
+     [Theory]
+-    [InlineData("", false, "4.0.4")]
++    [InlineData("", false, "4.1.0")]
+     [InlineData("4.0.0", false, "4.0.0")]
+     [InlineData("4.0.1", false, "4.0.1")]
+     [InlineData("4.0.2", false, "4.0.2")]
+     [InlineData("4.0.3", false, "4.0.3")]
+     [InlineData("4.0.4", false, "4.0.4")]
++    [InlineData("4.1.0", false, "4.1.0")]
+     [InlineData("3.129.0", false, "3.129.0")]
+     [InlineData("3.131.0", false, "3.131.0")]
+     [InlineData("3.132.0", false, "3.132.0")]
+@@ -951,6 +952,16 @@ public class PackageGovernanceTests {
+     [InlineData("4.0.4-preview.1", false, false)]
+     [InlineData("4.0.4.1", false, false)]
+     [InlineData("4.0.5", false, false)]
++    [InlineData("4.1.0", false, true)]
++    [InlineData("4.1.0.0", false, true)]
++    [InlineData("4.1.0+metadata-with-dash", false, true)]
++    [InlineData("4.1.0.0+metadata.1", false, true)]
++    [InlineData("4.1.0-preview.1", false, false)]
++    [InlineData("4.1.0.1", false, false)]
++    [InlineData("4.1.0+", false, false)]
++    [InlineData("4.1.0+invalid..metadata", false, false)]
++    [InlineData("4.1.1", false, false)]
++    [InlineData("4.2.0", false, false)]
+     [InlineData("test-source-version", true, true)]
+     public Task Published_packages_require_qualified_catalog_artifactsAsync(
+         string selectedVersion,
+@@ -1038,6 +1049,16 @@ public class PackageGovernanceTests {
+     [InlineData("4.0.4-preview.1", false, false)]
+     [InlineData("4.0.4.1", false, false)]
+     [InlineData("4.0.5", false, false)]
++    [InlineData("4.1.0", false, true)]
++    [InlineData("4.1.0.0", false, true)]
++    [InlineData("4.1.0+metadata-with-dash", false, true)]
++    [InlineData("4.1.0.0+metadata.1", false, true)]
++    [InlineData("4.1.0-preview.1", false, false)]
++    [InlineData("4.1.0.1", false, false)]
++    [InlineData("4.1.0+", false, false)]
++    [InlineData("4.1.0+invalid..metadata", false, false)]
++    [InlineData("4.1.1", false, false)]
++    [InlineData("4.2.0", false, false)]
+     [InlineData("test-source-version", true, true)]
+     public Task Native_hosts_refuse_unqualified_catalog_sdk_selectionsAsync(string selectedVersion, bool useSource, bool accepted)
+         => EvaluateEventStoreVersionSelectionAsync(selectedVersion, useSource, selectedVersion,
+@@ -1144,18 +1165,21 @@ public class PackageGovernanceTests {
+                 string[] constants = properties.GetProperty("DefineConstants").GetString()!.Split(';', StringSplitOptions.RemoveEmptyEntries);
+                 constants.Contains("HEXALITH_DEVELOPMENT_CATALOG_SOURCE").ShouldBe(catalogAvailable);
+                 constants.Contains("HEXALITH_DEVELOPMENT_CATALOG_COHORT").ShouldBe(useSource
+-                    || expectedVersion.StartsWith("4.0.", StringComparison.Ordinal));
++                    || expectedVersion.StartsWith("4.0.", StringComparison.Ordinal)
++                    || expectedVersion.StartsWith("4.1.0", StringComparison.Ordinal));
+                 constants.Contains("HEXALITH_DEVELOPMENT_CATALOG_SOURCE_REFERENCE").ShouldBe(useSource);
+                 constants.Contains("HEXALITH_CHECKPOINTED_TENANT_PROJECTION").ShouldBe(useSource
+                     || expectedVersion.StartsWith("3.133.0", StringComparison.Ordinal)
+-                    || expectedVersion.StartsWith("4.0.", StringComparison.Ordinal));
++                    || expectedVersion.StartsWith("4.0.", StringComparison.Ordinal)
++                    || expectedVersion.StartsWith("4.1.0", StringComparison.Ordinal));
+                 constants.Contains("HEXALITH_TECHNICAL_HTTP_CATALOG_BINDING").ShouldBe(useSource
+                     || expectedVersion.StartsWith("3.131.0", StringComparison.Ordinal)
+                     || expectedVersion.StartsWith("3.132.0", StringComparison.Ordinal)
+                     || expectedVersion.StartsWith("3.132.1", StringComparison.Ordinal)
+                     || expectedVersion.StartsWith("3.132.2", StringComparison.Ordinal)
+                     || expectedVersion.StartsWith("3.133.0", StringComparison.Ordinal)
+-                    || expectedVersion.StartsWith("4.0.", StringComparison.Ordinal));
++                    || expectedVersion.StartsWith("4.0.", StringComparison.Ordinal)
++                    || expectedVersion.StartsWith("4.1.0", StringComparison.Ordinal));
+                 if (catalogAvailable && !useSource) {
+                     properties.GetProperty("HexalithTenantsCatalogSdkVersion").GetString()
+                         .ShouldBe(string.Join(".", expectedVersion.Split('+')[0].Split('.').Take(3)));
+diff --git a/tests/scripts/test_bootstrap_compatibility.py b/tests/scripts/test_bootstrap_compatibility.py
+index 4054d7ef..8f40fc7b 100644
+--- a/tests/scripts/test_bootstrap_compatibility.py
++++ b/tests/scripts/test_bootstrap_compatibility.py
+@@ -109,13 +109,50 @@ with open(os.environ['MOCK_DOTNET_LOG'], 'a') as output:
+         calls = [json.loads(line) for line in log.read_text().splitlines()] if log.exists() else []
+         return result, calls
+ 
++    def test_package_profile_binds_the_evaluated_sdk_before_provisioning(self):
++        self.run_package_profile('4.1.0', accepted=True)
++
++    def test_package_profile_refuses_a_different_evaluated_sdk_before_provisioning(self):
++        self.run_package_profile('4.0.4', accepted=False)
++
++    def run_package_profile(self, selected, accepted):
++        log = self.root / 'profile-dotnet.json'
++        dotnet = self.bin / 'dotnet'
++        dotnet.write_text("""#!/usr/bin/env python3
++import json, os, pathlib, sys
++pathlib.Path(os.environ['MOCK_DOTNET_LOG']).write_text(json.dumps(sys.argv[1:]))
++print(os.environ['MOCK_SDK_SELECTION'])
++""")
++        dotnet.chmod(0o755)
++        workflow = (ROOT / '.github/workflows/ci.yml').read_text()
++        step = workflow.split('      - name: Provision the canonical package catalog on the fresh backend\n', 1)[1]
++        block = step.split('        run: |\n', 1)[1].split('\n      - name:', 1)[0]
++        environment = self.environment | {'MOCK_DOTNET_LOG': str(log), 'MOCK_SDK_SELECTION': selected,
++                                          'RUNNER_TEMP': str(self.root)}
++        provisioned = self.root / 'provisioned'
++        result = subprocess.run(['bash', '-c', 'python3() { touch "$RUNNER_TEMP/provisioned"; };\n' + textwrap.dedent(block)],
++                                env=environment, capture_output=True, text=True, timeout=20)
++        arguments = json.loads(log.read_text())
++        self.assertEqual(arguments[:2], ['msbuild', 'src/Hexalith.Tenants/Hexalith.Tenants.csproj'])
++        self.assertIn('-getProperty:HexalithEventStoreVersion', arguments)
++        self.assertIn('-p:HexalithEventStoreVersion=4.1.0', arguments)
++        self.assertIn('-p:HexalithEventStoreFromSource=false', arguments)
++        self.assertIn('-p:UseHexalithProjectReferences=false', arguments)
++        self.assertIn('-p:UseNuGetDeps=true', arguments)
++        self.assertEqual(result.returncode == 0, accepted, result.stdout + result.stderr)
++        self.assertEqual(provisioned.exists(), accepted)
++        self.assertEqual(self.environment_file.read_text(), 'Retained=value\n' +
++                         ('TENANTS_SOURCE_SDK_PRODUCER_VERSION=4.1.0\n' if accepted else ''))
++        if not accepted:
++            self.assertIn('did not select its exact qualified SDK', result.stderr)
++
+     def test_live_build_pins_the_major_package_cohort(self):
+         result, calls = self.run_live_build()
+         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+         self.assertEqual(len(calls), 6)
+         for call in calls:
+             self.assertIsNone(call['versionEnvironment'])
+-            self.assertIn('-p:HexalithEventStoreVersion=4.0.4', call['arguments'])
++            self.assertIn('-p:HexalithEventStoreVersion=4.1.0', call['arguments'])
+             self.assertIn('-p:HexalithMcpCliVersion=2.0.0', call['arguments'])
+             self.assertIn('-p:UseHexalithProjectReferences=false', call['arguments'])
+             self.assertIn('-p:UseNuGetDeps=true', call['arguments'])
+diff --git a/tests/scripts/test_catalog_artifact_guards.py b/tests/scripts/test_catalog_artifact_guards.py
+index dae6ada5..878ca793 100644
+--- a/tests/scripts/test_catalog_artifact_guards.py
++++ b/tests/scripts/test_catalog_artifact_guards.py
+@@ -78,13 +78,22 @@ class CatalogArtifactPackTests(unittest.TestCase):
+             self.assertEqual(built.returncode, 0, built.stdout + built.stderr)
+             stale = {package: binary(package).read_bytes() for package in ('Contracts', 'Server')}
+             for property_name, version, diagnostic in (
+-                    ('HexalithEventStoreVersion', '3.128.4', 'Canonical Tenants packages require EventStore 4.0.4'),
++                    ('HexalithEventStoreVersion', '3.128.4', 'Canonical Tenants packages require EventStore 4.0.4 or 4.1.0'),
++                    ('HexalithEventStoreVersion', '3.133.0', 'Canonical Tenants packages require EventStore 4.0.4 or 4.1.0'),
+                     ('HexalithMcpCliVersion', '1.1.0', 'Canonical Tenants packages require McpCli.Abstractions 2.0.0')):
+                 with self.subTest(canonical_guard=property_name):
+                     rejected = run('build', project('Contracts'), '--no-restore', *common,
+                                    f'-p:{property_name}={version}')
+                     self.assertNotEqual(rejected.returncode, 0, rejected.stdout + rejected.stderr)
+                     self.assertIn(diagnostic, rejected.stdout + rejected.stderr)
++            # Keep the exact previously qualified canonical package profile buildable.
++            compatible = run('build', 'PackFixtures.slnx', *common, '-warnaserror',
++                             '-p:HexalithEventStoreVersion=4.0.4')
++            self.assertEqual(compatible.returncode, 0, compatible.stdout + compatible.stderr)
++            # The ordinary default remains the current public SDK.
++            selected = run('msbuild', project('Contracts'), '-nologo', '-getProperty:HexalithEventStoreVersion')
++            self.assertEqual(selected.returncode, 0, selected.stdout + selected.stderr)
++            self.assertEqual(selected.stdout.strip(), '4.1.0')
+             for package in PACKAGES:
+                 with self.subTest(legacy_package=package):
+                     output = parent / ('legacy-rejected-' + package)
+diff --git a/tests/scripts/test_catalog_package_consumer.py b/tests/scripts/test_catalog_package_consumer.py
+index d26d5bf2..c13aa86e 100644
+--- a/tests/scripts/test_catalog_package_consumer.py
++++ b/tests/scripts/test_catalog_package_consumer.py
+@@ -40,7 +40,7 @@ class CatalogPackageMetadataTests(unittest.TestCase):
+         self.reject(server={'version': '7.0.1'}, message='versions disagree')
+ 
+     def test_unknown_or_prerelease_sdk_refuses_before_restore(self):
+-        for sdk in ('3.128.4', '3.129.0-preview.1', '3.129.2', '3.130.3', '3.131.1', '3.132.3', '3.133.1', '4.0.5', '4.0.4-preview.1', '4.0.4.1', '4.0.3-preview.1', '4.0.0-preview.1',
++        for sdk in ('3.128.4', '3.129.0-preview.1', '3.129.2', '3.130.3', '3.131.1', '3.132.3', '3.133.1', '4.0.5', '4.1.1', '4.2.0', '4.1.0-preview.1', '4.1.0.1', '4.1.0+', '4.1.0+invalid..metadata', '4.0.4-preview.1', '4.0.4.1', '4.0.3-preview.1', '4.0.0-preview.1',
+                     '3.133.0-preview.1', '3.133.0.1',
+                     '3.132.2-preview.1', '3.132.2.1',
+                     '3.132.1-preview.1', '3.132.1-preview.1+metadata', '3.132.1.1', '3.132.1+',
+@@ -53,7 +53,7 @@ class CatalogPackageMetadataTests(unittest.TestCase):
+                 self.reject(server={'sdk': sdk}, message='qualified stable cohort')
+ 
+     def test_every_qualified_sdk_and_alias_reaches_only_its_normalized_restore(self):
+-        for sdk in ('3.129.0', '3.129.1', '3.130.0', '3.130.1', '3.130.2', '3.131.0', '3.132.0', '3.132.1', '3.132.2', '3.133.0', '4.0.0', '4.0.1', '4.0.2', '4.0.3', '4.0.4'):
++        for sdk in ('3.129.0', '3.129.1', '3.130.0', '3.130.1', '3.130.2', '3.131.0', '3.132.0', '3.132.1', '3.132.2', '3.133.0', '4.0.0', '4.0.1', '4.0.2', '4.0.3', '4.0.4', '4.1.0'):
+             for alias in (sdk, sdk + '.0', sdk + '+metadata-with-dash', sdk + '.0+metadata.1'):
+                 with self.subTest(sdk=sdk, alias=alias), tempfile.TemporaryDirectory(prefix='tenants-catalog-metadata-') as temporary:
+                     root = Path(temporary)
+@@ -94,6 +94,8 @@ class CatalogPackageMetadataTests(unittest.TestCase):
+         self.reject(contracts={'sdk': '3.132.2'}, server={'sdk': '3.133.0'}, message='qualified stable cohort')
+         self.reject(contracts={'sdk': '3.133.0'}, server={'sdk': '3.132.2'}, message='qualified stable cohort')
+         self.reject(contracts={'sdk': '4.0.0'}, server={'sdk': '3.133.0'}, message='qualified stable cohort')
++        self.reject(contracts={'sdk': '4.0.4'}, server={'sdk': '4.1.0'}, message='qualified stable cohort')
++        self.reject(contracts={'sdk': '4.1.0'}, server={'sdk': '4.0.4'}, message='qualified stable cohort')
+ 
+     def reject(self, server, message, contracts=None):
+         with tempfile.TemporaryDirectory(prefix='tenants-catalog-metadata-') as temporary:

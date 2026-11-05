@@ -1,0 +1,52 @@
+{
+  "schema": "mcpcli-external-publication-observation/v1",
+  "observed_at_utc": "2026-11-05T12:52:39.654063+00:00",
+  "preparation_run": 42023389616,
+  "source": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "version": "7.0.3",
+  "sdk": "4.0.4",
+  "causality": [
+    "This task dispatched the existing release workflow for credential-free preparation after green exact-source gates and a mandatory production reviewer hold were verified.",
+    "The recorded production review was later approved externally under the audit login jpiquot. This task submitted no production approval.",
+    "The workflow then published the source-bound4.0.4 package/container cohort and completed. Its publication does not qualify the planned4.1 cohort.",
+    "Cancellation attempted only after the corrected source was integrated; GitHub refused because the old run had already completed."
+  ],
+  "original_candidate_digest": "c54d61c15bf5c27a1cb8f4013cd66059e596089f6d05c540203fb2b1be9111d5",
+  "original_snapshot_preserved": true,
+  "approval_record": "completed-run-approvals.json",
+  "run_finished_at_utc": "2026-11-05T12:31:02Z",
+  "github_release_published_at_utc": "2026-11-05T12:26:54Z",
+  "public_nuget_verification": "public-703-verified.json",
+  "verified_published_source_sdk": "All5publicsignedarchives bindf412 andSDK4.0.4; consumer entries equal the original preparedbytes excluding.signature.p7s.",
+  "owner_outcome_artifact": {
+    "id": 13414886578,
+    "name": "release-evidence-42023389616-1",
+    "sha256": "036a251d3e501929e42a71eb35a5858373cc20fda906b1ccd088f2f21a836769"
+  },
+  "oci_outcomes": [
+    {
+      "destination": "registry.hexalith.com/tenants:7.0.3",
+      "index_digest": "sha256:f99702bc0a36f1edc8d68c5ded38833a44a5b70702ec757a75d625dbca68c659",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "owner_destination_verification": "pass",
+      "owner_smoke": "pass forbothplatforms",
+      "evidence": "release-evidence/7.0.3/destinations/verified.json"
+    },
+    {
+      "destination": "registry.hexalith.com/tenants-api:7.0.3",
+      "index_digest": "sha256:9915641f0b1bcc612a75a164e7e87cf4811f39e7024274ecd395e22769616b63",
+      "platforms": [
+        "linux/amd64",
+        "linux/arm64"
+      ],
+      "owner_destination_verification": "pass",
+      "owner_smoke": "pass forbothplatforms",
+      "evidence": "release-evidence/7.0.3/tenants-api-destination/verified.json"
+    }
+  ],
+  "interpretation": "Valid release evidence for the selected4.0.4 owner build. Rejected solely as a compatible dependency for planned McpCli native4.1. Do not overwrite, unpublish, repack or adopt it into4.1 selections.",
+  "next_preparation": "Local7.0.4 only until exact publication is explicitly authorized; shared reviewerhold is insufficient task-owned non-publication."
+}

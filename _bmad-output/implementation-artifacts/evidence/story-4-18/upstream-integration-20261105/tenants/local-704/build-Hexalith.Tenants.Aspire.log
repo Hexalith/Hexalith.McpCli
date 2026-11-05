@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-418-tenants704-candidate/src/Hexalith.Tenants.Aspire/Hexalith.Tenants.Aspire.csproj (in 211 ms).
+  Hexalith.Tenants.Aspire -> /tmp/mcpcli-418-tenants704-candidate/src/Hexalith.Tenants.Aspire/bin/Release/net10.0/Hexalith.Tenants.Aspire.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.25

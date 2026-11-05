@@ -1,0 +1,107 @@
+{
+  "schema": "mcpcli-story-4-18-published-eventstore-cohort/v1",
+  "observed_at_utc": "2026-11-05T11:33:15.189437+00:00",
+  "eventStoreVersion": "4.1.0",
+  "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+  "packages": [
+    {
+      "id": "Hexalith.EventStore.Admin.Abstractions",
+      "version": "4.1.0",
+      "sha256": "fbad15a2a09282b438d7c8594a2c0206e85eb7691bc91053f57da5e91f0fb928",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.admin.abstractions/4.1.0/hexalith.eventstore.admin.abstractions.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.Admin.Cli",
+      "version": "4.1.0",
+      "sha256": "4623f699c38ff5ce725b9ab42216932c9ee4b1ace86bf78601c68be43e27e40a",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.admin.cli/4.1.0/hexalith.eventstore.admin.cli.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.Admin.Server",
+      "version": "4.1.0",
+      "sha256": "910b31d7014c3e11789ae3672b8fde353af5fe8653ec76a71e589f054f5e3d3e",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.admin.server/4.1.0/hexalith.eventstore.admin.server.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.Aspire",
+      "version": "4.1.0",
+      "sha256": "c498671d461b0342d76be0b02bd76c4ad0cf8fd1ba7017ec3b6bdc67bb0746b1",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.aspire/4.1.0/hexalith.eventstore.aspire.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.Client",
+      "version": "4.1.0",
+      "sha256": "efab5fd7b4e7d5bbafc2a09adc92e98b985ca750ee888323585892c33cab50cc",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.client/4.1.0/hexalith.eventstore.client.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.Contracts",
+      "version": "4.1.0",
+      "sha256": "e2c09e4f00340f26dd3c1509167c83f41ca757f2442f6624bc58edace1fe9a70",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.contracts/4.1.0/hexalith.eventstore.contracts.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.DomainService",
+      "version": "4.1.0",
+      "sha256": "da40e1e05461bac67bbbf9f3a839085e0f8c65e726168b33f2dc955e0c2d1fb0",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.domainservice/4.1.0/hexalith.eventstore.domainservice.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.Gateway",
+      "version": "4.1.0",
+      "sha256": "ba571748d713eeab11bdaa310385ac20602566a2538fd364befb2ff1ea5c2d81",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.gateway/4.1.0/hexalith.eventstore.gateway.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.RestApi.Generators",
+      "version": "4.1.0",
+      "sha256": "c15f859665aebfd18844f7fd9eee4bd38f07cea61aad3310371b391a1b093467",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.restapi.generators/4.1.0/hexalith.eventstore.restapi.generators.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.Server",
+      "version": "4.1.0",
+      "sha256": "fce322ee16345aa1c150375065bc2665c34f38d1bab6086d1144dd275dc25da4",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.server/4.1.0/hexalith.eventstore.server.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.ServiceDefaults",
+      "version": "4.1.0",
+      "sha256": "bdd2fd1e6eb19e45f488da2654673acc662a4d3c8e4b5e8465e90aac3ce901d5",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.servicedefaults/4.1.0/hexalith.eventstore.servicedefaults.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.SignalR",
+      "version": "4.1.0",
+      "sha256": "ae1a8be64e86e6fd9bac9e6d8e08271971756f6edf376ff055677101a3360246",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.signalr/4.1.0/hexalith.eventstore.signalr.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.Testing",
+      "version": "4.1.0",
+      "sha256": "7b8346041a1e36b41186b3dc239a72e8976c56b2971b8adc6ad54d8e77c29b3f",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.testing/4.1.0/hexalith.eventstore.testing.4.1.0.nupkg"
+    },
+    {
+      "id": "Hexalith.EventStore.Testing.Integration",
+      "version": "4.1.0",
+      "sha256": "4f799b95b5272415e679c7b368fa078348ec3f83b8bf6befddfc4caf0eed96fe",
+      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "downloadUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.testing.integration/4.1.0/hexalith.eventstore.testing.integration.4.1.0.nupkg"
+    }
+  ],
+  "limits": "Authenticated public archive/source bindings only. This does not establish native module/live compatibility."
+}

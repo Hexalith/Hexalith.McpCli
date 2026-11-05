@@ -1,0 +1,21 @@
+{
+  "environment": {
+    "HexalithBuildPackageVersions1": "/tmp/mcpcli-418-upstream-owner-evidence/tenants/sdk410/native-runtime-packages.props",
+    "CustomAfterMicrosoftCommonTargets": "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/native-tenants/source-runtime-overrides.targets",
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-cohort704-public-cache",
+    "NUGET_HTTP_CACHE_PATH": "/tmp/mcpcli-418-cohort704-public-http-cache",
+    "UseHexalithProjectReferences": "false",
+    "UseNuGetDeps": "true",
+    "HexalithEventStoreFromSource": "false",
+    "HexalithEventStoreVersion": "4.1.0",
+    "NuGetAudit": "true",
+    "NuGetAuditMode": "all",
+    "NuGetAuditLevel": "low",
+    "TreatWarningsAsErrors": "true",
+    "DOTNET_ENVIRONMENT": "Development",
+    "ASPNETCORE_ENVIRONMENT": "Development"
+  },
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "catalog": "Root Builds06a plus explicit Redis3.4.31 overlay, same effective native recipe. Inherited environment reaches the actual SDK ProjectLaunchConfiguration build; its explicit BuildEnvironment digest is empty because no extra launch overrides are needed.",
+  "package_catalog_sha256": "c07619d18254b669f08e12844953dbd85ba5cc486ca6f19a130b4d737e9c1f1b"
+}

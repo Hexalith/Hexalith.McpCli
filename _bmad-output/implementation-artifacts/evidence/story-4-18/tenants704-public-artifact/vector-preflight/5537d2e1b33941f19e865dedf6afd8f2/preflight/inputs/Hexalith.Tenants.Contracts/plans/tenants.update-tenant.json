@@ -1,0 +1,83 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.update-tenant",
+  "vectorSha256": "428f51f6553f7b4151e0ed9eff84128409e4e681a6823a916d0f38dbcb37fe03",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-update"
+        },
+        "envelope": {
+          "tenant": "vector-update"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-update"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Update Original"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": "Description cleared by the update"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-update"
+        },
+        "envelope": {
+          "tenant": "vector-update"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-update"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Update Renamed"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

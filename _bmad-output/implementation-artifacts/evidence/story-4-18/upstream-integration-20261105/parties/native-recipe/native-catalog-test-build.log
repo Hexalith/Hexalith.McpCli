@@ -1,0 +1,18 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-418-parties-native/src/Hexalith.Parties.Client/Hexalith.Parties.Client.csproj (in 173 ms).
+  Restored /tmp/mcpcli-418-parties-native/src/Hexalith.Parties.Testing/Hexalith.Parties.Testing.csproj (in 173 ms).
+  Restored /tmp/mcpcli-418-parties-native/src/Hexalith.Parties.AdminPortal/Hexalith.Parties.AdminPortal.csproj (in 1.33 sec).
+  Restored /tmp/mcpcli-418-parties-native/tests/Hexalith.Parties.Contracts.Tests/Hexalith.Parties.Contracts.Tests.csproj (in 1.42 sec).
+  2 of 6 projects are up-to-date for restore.
+  Hexalith.Parties.Contracts -> /tmp/mcpcli-418-parties-native/src/Hexalith.Parties.Contracts/bin/Release/net10.0/Hexalith.Parties.Contracts.dll
+  Hexalith.Parties.EventStoreExtensions -> /tmp/mcpcli-418-parties-native/src/Hexalith.Parties.EventStoreExtensions/bin/Release/net10.0/Hexalith.Parties.EventStoreExtensions.dll
+  Hexalith.Parties.Client -> /tmp/mcpcli-418-parties-native/src/Hexalith.Parties.Client/bin/Release/net10.0/Hexalith.Parties.Client.dll
+  Hexalith.Parties.AdminPortal -> /tmp/mcpcli-418-parties-native/src/Hexalith.Parties.AdminPortal/bin/Release/net10.0/Hexalith.Parties.AdminPortal.dll
+  Hexalith.Parties.Testing -> /tmp/mcpcli-418-parties-native/src/Hexalith.Parties.Testing/bin/Release/net10.0/Hexalith.Parties.Testing.dll
+  Hexalith.Parties.Contracts.Tests -> /tmp/mcpcli-418-parties-native/tests/Hexalith.Parties.Contracts.Tests/bin/Release/net10.0/Hexalith.Parties.Contracts.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:07.57

@@ -1,0 +1,20 @@
+{
+  "source_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "remote_main_sha": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "observed_at_utc": "2026-11-05T11:20:51.883695+00:00",
+  "committed_paths": [
+    "src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs",
+    "tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj",
+    "tests/Hexalith.Tenants.Server.Tests/Queries/GetTenantCreationEvidenceTests.cs"
+  ],
+  "full_server_tests": {
+    "passed": 1815,
+    "failed": 0,
+    "skipped": 0
+  },
+  "new_tests": {
+    "passed": 2,
+    "guard_removal_failed": true
+  },
+  "production_dependency_changed": false
+}

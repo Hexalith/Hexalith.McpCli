@@ -1,0 +1,1 @@
+fix(routing): bind published legacy query selectors

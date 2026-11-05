@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.set-tenant-configuration",
-  "vectorSha256": "221bb29376846c56186918cdcb295850cd7578bbebfe53cf593ebf1109df1606",
+  "vectorSha256": "9eec4aa84d061e8f7b81629537f299bdb1cce26b6fa1407acb188b0e9fc29f8d",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [

@@ -1,0 +1,13 @@
+{
+  "comparisons": [
+    {
+      "archive": "/tmp/mcpcli-418-cohort704-public-cache/hexalith.tenants.contracts/7.0.4/hexalith.tenants.contracts.7.0.4.nupkg",
+      "asset": "lib/net10.0/Hexalith.Tenants.Contracts.dll",
+      "deployed": "/tmp/mcpcli-418-tenants704-candidate/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.Contracts.dll",
+      "public_sha256": "6758c6691127f0f480d1a84860de621bd610f60d7ef1b6c5fe9e5a768283f983",
+      "deployed_sha256": "5ed09a39d161ca532bb11e88bba9c317641fb471e5ea265c9d740dfdc9b3dbf6",
+      "equal": false
+    }
+  ],
+  "boundary": "Source-built module-owned assemblies are bound to exact owner source/build output; the existing public-archive equality gates apply to every restored SDK assembly in domain hosts and every restored SDK/Tenants assembly in composition/client hosts. The SDK owner-preparation guard independently seals all deployed source-host DLL/configuration before and after its actual preparation. No equality guard was relaxed."
+}

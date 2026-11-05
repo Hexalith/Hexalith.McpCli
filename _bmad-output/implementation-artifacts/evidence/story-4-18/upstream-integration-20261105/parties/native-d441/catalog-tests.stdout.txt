@@ -1,0 +1,9 @@
+The '-xml' switch has been deprecated in favor of '-result-xml' and will be removed in the next major version
+
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.Parties.Contracts.Tests
+  Discovered:  Hexalith.Parties.Contracts.Tests
+  Starting:    Hexalith.Parties.Contracts.Tests
+  Finished:    Hexalith.Parties.Contracts.Tests (ID = '2ffe51ceb9f620c52c70504e6d4598981e3f2f042e66b8b9162db0a762af475a')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.Parties.Contracts.Tests  Total: 9, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 0.275s

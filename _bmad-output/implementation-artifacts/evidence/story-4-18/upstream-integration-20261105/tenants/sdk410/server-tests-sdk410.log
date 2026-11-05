@@ -1,0 +1,92 @@
+The '-xml' switch has been deprecated in favor of '-result-xml' and will be removed in the next major version
+
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.Tenants.Server.Tests
+  Discovered:  Hexalith.Tenants.Server.Tests
+  Starting:    Hexalith.Tenants.Server.Tests
+    Hexalith.Tenants.Server.Tests.Documentation.CompensatingCommandsDocumentationTests.Compensating_guide_command_gateway_and_status_routes_match_EventStore_source [FAIL]
+      System.IO.DirectoryNotFoundException : Could not find a part of the path '/tmp/mcpcli-418-tenants410-isolated/references/Hexalith.EventStore/src/Hexalith.EventStore/Controllers/CommandsController.cs'.
+      Stack Trace:
+           at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        tests/Hexalith.Tenants.Server.Tests/Documentation/CompensatingCommandsDocumentationTests.cs(86,0): at Hexalith.Tenants.Server.Tests.Documentation.CompensatingCommandsDocumentationTests.Compensating_guide_command_gateway_and_status_routes_match_EventStore_source()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.Tenants.Server.Tests.Documentation.QuickstartDocumentationTests.Quickstart_referenced_local_paths_exist [FAIL]
+      Shouldly.ShouldAssertException : File.Exists(RepositoryPath(path.Split('/')))
+          should be
+      True
+          but was
+      False
+      
+      Additional Info:
+          references/Hexalith.EventStore/src/Hexalith.EventStore/appsettings.Development.json must exist because the quickstart references it.
+      Stack Trace:
+        tests/Hexalith.Tenants.Server.Tests/Documentation/QuickstartDocumentationTests.cs(67,0): at Hexalith.Tenants.Server.Tests.Documentation.QuickstartDocumentationTests.Quickstart_referenced_local_paths_exist()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.Tenants.Server.Tests.Documentation.QuickstartDocumentationTests.Quickstart_token_request_matches_generated_realm_credentials_and_current_development_settings [FAIL]
+      System.IO.DirectoryNotFoundException : Could not find a part of the path '/tmp/mcpcli-418-tenants410-isolated/references/Hexalith.EventStore/src/Hexalith.EventStore/appsettings.Development.json'.
+      Stack Trace:
+           at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        tests/Hexalith.Tenants.Server.Tests/Documentation/QuickstartDocumentationTests.cs(107,0): at Hexalith.Tenants.Server.Tests.Documentation.QuickstartDocumentationTests.Quickstart_token_request_matches_generated_realm_credentials_and_current_development_settings()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.Tenants.Server.Tests.Documentation.QuickstartDocumentationTests.Quickstart_command_gateway_and_status_routes_match_EventStore_source [FAIL]
+      System.IO.DirectoryNotFoundException : Could not find a part of the path '/tmp/mcpcli-418-tenants410-isolated/references/Hexalith.EventStore/src/Hexalith.EventStore/Controllers/CommandsController.cs'.
+      Stack Trace:
+           at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        tests/Hexalith.Tenants.Server.Tests/Documentation/QuickstartDocumentationTests.cs(79,0): at Hexalith.Tenants.Server.Tests.Documentation.QuickstartDocumentationTests.Quickstart_command_gateway_and_status_routes_match_EventStore_source()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.Tenants.Server.Tests.Documentation.CrossAggregateTimingDocumentationTests.Timing_guide_matches_current_EventStore_command_status_contract [FAIL]
+      System.IO.DirectoryNotFoundException : Could not find a part of the path '/tmp/mcpcli-418-tenants410-isolated/references/Hexalith.EventStore/src/Hexalith.EventStore/Controllers/CommandStatusController.cs'.
+      Stack Trace:
+           at Interop.ThrowExceptionForIoErrno(ErrorInfo errorInfo, String path, Boolean isDirError)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String path, OpenFlags flags, Int32 mode, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+           at Microsoft.Win32.SafeHandles.SafeFileHandle.Open(String fullPath, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, UnixFileMode openPermissions, Int64& fileLength, UnixFileMode& filePermissions, Boolean failForSymlink, Boolean& wasSymlink, Func`4 createOpenException)
+           at System.IO.Strategies.OSFileStreamStrategy..ctor(String path, FileMode mode, FileAccess access, FileShare share, FileOptions options, Int64 preallocationSize, Nullable`1 unixCreateMode)
+           at System.IO.StreamReader.ValidateArgsAndOpenPath(String path, Int32 bufferSize)
+           at System.IO.File.ReadAllText(String path, Encoding encoding)
+        tests/Hexalith.Tenants.Server.Tests/Documentation/CrossAggregateTimingDocumentationTests.cs(76,0): at Hexalith.Tenants.Server.Tests.Documentation.CrossAggregateTimingDocumentationTests.Timing_guide_matches_current_EventStore_command_status_contract()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.Tenants.Server.Tests.Documentation.CrossAggregateTimingDocumentationTests.Timing_guide_references_source_backed_files_that_anchor_the_claims [FAIL]
+      Shouldly.ShouldAssertException : File.Exists(RepositoryPath(sourcePath.Split('/')))
+          should be
+      True
+          but was
+      False
+      
+      Additional Info:
+          references/Hexalith.EventStore/docs/concepts/command-lifecycle.md must exist because the guide cites it.
+      Stack Trace:
+        tests/Hexalith.Tenants.Server.Tests/Documentation/CrossAggregateTimingDocumentationTests.cs(68,0): at Hexalith.Tenants.Server.Tests.Documentation.CrossAggregateTimingDocumentationTests.Timing_guide_references_source_backed_files_that_anchor_the_claims()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+    Hexalith.Tenants.Server.Tests.Configuration.EventPublicationConfigurationTests.EventStoreHostAppsettings_ConfiguresSharedTenantEventTopicForGlobalAdministratorsDomain [FAIL]
+      System.IO.FileNotFoundException : The configuration file 'src/Hexalith.EventStore/appsettings.json' was not found and is not optional. The expected physical path was '/tmp/mcpcli-418-tenants410-isolated/references/Hexalith.EventStore/src/Hexalith.EventStore/appsettings.json'.
+      Stack Trace:
+           at Microsoft.Extensions.Configuration.FileConfigurationProvider.Load(Boolean reload)
+           at Microsoft.Extensions.Configuration.ConfigurationRoot..ctor(IList`1 providers)
+           at Microsoft.Extensions.Configuration.ConfigurationBuilder.Build()
+        tests/Hexalith.Tenants.Server.Tests/Configuration/EventPublicationConfigurationTests.cs(261,0): at Hexalith.Tenants.Server.Tests.Configuration.EventPublicationConfigurationTests.EventStoreHostAppsettings_ConfiguresSharedTenantEventTopicForGlobalAdministratorsDomain()
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+  Finished:    Hexalith.Tenants.Server.Tests (ID = '5a28a93a6523cd5492f7d1b6aebe6f97f60ee10725d4c7a0b77149fd3dfa7567')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.Tenants.Server.Tests  Total: 1815, Errors: 0, Failed: 7, Skipped: 0, Not Run: 0, Time: 12.418s

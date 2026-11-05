@@ -1,0 +1,45 @@
+{
+  "source": "f4129cfe0a44b079a4f11f9cfb1374aed915f243",
+  "commands": [
+    {
+      "name": "native-sdk-refusal",
+      "command": [
+        "dotnet",
+        "msbuild",
+        "src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj",
+        "-nologo",
+        "-t:ValidateCatalogSdkSelection",
+        "-p:NuGetAudit=true",
+        "-p:NuGetAuditMode=all",
+        "-p:NuGetAuditLevel=low",
+        "-p:TreatWarningsAsErrors=true",
+        "-p:WarningsNotAsErrors=",
+        "-p:UseHexalithProjectReferences=false",
+        "-p:UseNuGetDeps=true",
+        "-p:HexalithEventStoreFromSource=false",
+        "-p:HexalithEventStoreVersion=4.1.0"
+      ],
+      "exit_code": 1
+    },
+    {
+      "name": "native-canonical-refusal",
+      "command": [
+        "dotnet",
+        "msbuild",
+        "src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj",
+        "-nologo",
+        "-t:ValidateCanonicalBoundaryPackageCohort",
+        "-p:NuGetAudit=true",
+        "-p:NuGetAuditMode=all",
+        "-p:NuGetAuditLevel=low",
+        "-p:TreatWarningsAsErrors=true",
+        "-p:WarningsNotAsErrors=",
+        "-p:UseHexalithProjectReferences=false",
+        "-p:UseNuGetDeps=true",
+        "-p:HexalithEventStoreFromSource=false",
+        "-p:HexalithEventStoreVersion=4.1.0"
+      ],
+      "exit_code": 1
+    }
+  ]
+}

@@ -1,0 +1,1 @@
+PREFLIGHT-ONLY: full live acceptance=False; receipt: /home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/vector-preflight/live-lane.json

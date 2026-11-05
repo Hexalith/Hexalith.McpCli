@@ -1,0 +1,7 @@
+{
+  "time_utc": "2026-11-05T12:46:23.912385+00:00",
+  "parent": "42c9d23adfb53a353b10c7598930f03a84426745",
+  "commit": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "remote_before": "42c9d23adfb53a353b10c7598930f03a84426745",
+  "reason": "Public7.0.3 was already published from f412 usingSDK4.0.4; remove the inaccurate version-specific4.1 claim while preserving accurate current source defaults."
+}

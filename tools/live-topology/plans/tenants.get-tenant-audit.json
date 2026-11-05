@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.get-tenant-audit",
-  "vectorSha256": "a97d4c82fe5f73f380d337d16777215e2d27b479f3e65440a783c1906f3532b6",
+  "vectorSha256": "0ac5e44af94431c4c82c05da18219fefb93a1df72bf1de0e7e78353e04b3681f",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [

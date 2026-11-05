@@ -1,0 +1,16 @@
+{
+  "repository": "cli/cli",
+  "release_tag": "v2.103.3",
+  "release_id": 424663522,
+  "asset_id": 679195621,
+  "asset_name": "gh_2.103.3_linux_amd64.tar.gz",
+  "asset_url": "https://github.com/cli/cli/releases/download/v2.103.3/gh_2.103.3_linux_amd64.tar.gz",
+  "official_checksums_url": "https://github.com/cli/cli/releases/download/v2.103.3/gh_2.103.3_checksums.txt",
+  "sha256": "4c806978ffce1cec70853302a56d70ac6da4f19bae7adca4e1a8ab00633dd91d",
+  "github_asset_digest": "sha256:4c806978ffce1cec70853302a56d70ac6da4f19bae7adca4e1a8ab00633dd91d",
+  "checksum_verified": true,
+  "version_output": "gh version 2.103.3 (2026-10-26)\nhttps://github.com/cli/cli/releases/tag/v2.103.3\n",
+  "binary_path": "/tmp/mcpcli-418-tools/gh-2.103.3/bin/gh",
+  "global_tools_modified": false,
+  "auth_configuration_modified": false
+}

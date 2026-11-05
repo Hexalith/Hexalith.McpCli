@@ -1,0 +1,10 @@
+{
+  "time_utc": "2026-11-05T12:49:01.065547+00:00",
+  "source": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+  "version": "7.0.4",
+  "sdk": "4.1.0",
+  "kind": "Local package preparation only; not hosted immutable release-candidate, full source CI acceptance, container qualification or publication authorization.",
+  "published": false,
+  "workflow_dispatched": false,
+  "publication_credentials_present": false
+}

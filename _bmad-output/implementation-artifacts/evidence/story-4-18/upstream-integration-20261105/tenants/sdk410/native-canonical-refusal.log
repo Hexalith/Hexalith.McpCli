@@ -1,0 +1,1 @@
+/tmp/mcpcli-418-tenants410-isolated/Directory.Build.targets(45,5): error : Canonical Tenants packages require EventStore 4.0.4 in package mode. [/tmp/mcpcli-418-tenants410-isolated/src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj]

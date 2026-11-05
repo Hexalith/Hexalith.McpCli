@@ -1,0 +1,37 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.Parties.Catalog.Tests
+  Discovered:  Hexalith.Parties.Catalog.Tests
+  Starting:    Hexalith.Parties.Catalog.Tests
+    Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(wireType: "PartyDetail", selector: "PartyDetailProjectionQueryActor") [FAIL]
+      Shouldly.ShouldAssertException : route.Execution.CompatibilityProjectionActorTypes
+          should be
+      ["PartyDetailProjectionQueryActor"]
+          but was
+      null
+      Stack Trace:
+        tests/Hexalith.Parties.Contracts.Tests/PartiesCatalogTests.cs(67,0): at Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(String wireType, String selector)
+           at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+           at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+    Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(wireType: "PartyIndex", selector: "PartyIndexProjectionQueryActor") [FAIL]
+      Shouldly.ShouldAssertException : route.Execution.CompatibilityProjectionActorTypes
+          should be
+      ["PartyIndexProjectionQueryActor"]
+          but was
+      null
+      Stack Trace:
+        tests/Hexalith.Parties.Contracts.Tests/PartiesCatalogTests.cs(67,0): at Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(String wireType, String selector)
+           at InvokeStub_PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+    Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(wireType: "PartySearch", selector: "PartyIndexProjectionQueryActor") [FAIL]
+      Shouldly.ShouldAssertException : route.Execution.CompatibilityProjectionActorTypes
+          should be
+      ["PartyIndexProjectionQueryActor"]
+          but was
+      null
+      Stack Trace:
+        tests/Hexalith.Parties.Contracts.Tests/PartiesCatalogTests.cs(67,0): at Hexalith.Parties.Contracts.Tests.PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(String wireType, String selector)
+           at InvokeStub_PartiesCatalogTests.PublishedMcpCliQueriesAcceptOnlyTheirOwnerDeclaredLegacySelector(Object, Span`1)
+           at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Finished:    Hexalith.Parties.Catalog.Tests (ID = 'df12d070c6440e4d48805de3514dfd54002bded0e35f5544a3e3f7b1b0ccf81a')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.Parties.Catalog.Tests  Total: 6, Errors: 0, Failed: 3, Skipped: 0, Not Run: 0, Time: 0.252s

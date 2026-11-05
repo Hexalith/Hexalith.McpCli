@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Tenants.Contracts",
-    "version": "7.0.0"
+    "version": "7.0.4"
   },
   "operation": "tenants.get-tenant-users",
   "kind": "query",

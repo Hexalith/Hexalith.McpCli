@@ -1,0 +1,32 @@
+[
+  {
+    "name": "restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "Hexalith.McpCli.slnx",
+      "--source",
+      "https://api.nuget.org/v3/index.json"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 5.74,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-cohort704-public-cache",
+    "source_before": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8"
+  },
+  {
+    "name": "release-build",
+    "command": [
+      "dotnet",
+      "build",
+      "Hexalith.McpCli.slnx",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 4.89,
+    "NUGET_PACKAGES": "/tmp/mcpcli-418-cohort704-public-cache",
+    "source_before": "f24266b628a2abcfbdc9f0d064e0e4c324d8e7c8"
+  }
+]

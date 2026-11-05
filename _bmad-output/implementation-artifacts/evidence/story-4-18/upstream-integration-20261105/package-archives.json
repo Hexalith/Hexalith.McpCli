@@ -1,0 +1,251 @@
+{
+  "reason": "Repository .gitignore excludes *.nupkg. This ordinary tracked ZIP preserves each raw package at its original relative evidence path; extract it into this directory to reconstruct the package files. Signed public packages, unsigned local candidates and historical candidates remain in distinct paths.",
+  "archive": "package-archives.zip",
+  "packages": [
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.admin.abstractions.4.1.0.nupkg",
+      "sha256": "fbad15a2a09282b438d7c8594a2c0206e85eb7691bc91053f57da5e91f0fb928",
+      "bytes": 132480
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.admin.cli.4.1.0.nupkg",
+      "sha256": "4623f699c38ff5ce725b9ab42216932c9ee4b1ace86bf78601c68be43e27e40a",
+      "bytes": 1032102
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.admin.server.4.1.0.nupkg",
+      "sha256": "910b31d7014c3e11789ae3672b8fde353af5fe8653ec76a71e589f054f5e3d3e",
+      "bytes": 199413
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.aspire.4.1.0.nupkg",
+      "sha256": "c498671d461b0342d76be0b02bd76c4ad0cf8fd1ba7017ec3b6bdc67bb0746b1",
+      "bytes": 127056
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.client.4.1.0.nupkg",
+      "sha256": "efab5fd7b4e7d5bbafc2a09adc92e98b985ca750ee888323585892c33cab50cc",
+      "bytes": 567362
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.contracts.4.1.0.nupkg",
+      "sha256": "e2c09e4f00340f26dd3c1509167c83f41ca757f2442f6624bc58edace1fe9a70",
+      "bytes": 459058
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.domainservice.4.1.0.nupkg",
+      "sha256": "da40e1e05461bac67bbbf9f3a839085e0f8c65e726168b33f2dc955e0c2d1fb0",
+      "bytes": 446439
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.gateway.4.1.0.nupkg",
+      "sha256": "ba571748d713eeab11bdaa310385ac20602566a2538fd364befb2ff1ea5c2d81",
+      "bytes": 305441
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.restapi.generators.4.1.0.nupkg",
+      "sha256": "c15f859665aebfd18844f7fd9eee4bd38f07cea61aad3310371b391a1b093467",
+      "bytes": 52803
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.server.4.1.0.nupkg",
+      "sha256": "fce322ee16345aa1c150375065bc2665c34f38d1bab6086d1144dd275dc25da4",
+      "bytes": 1359987
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.servicedefaults.4.1.0.nupkg",
+      "sha256": "bdd2fd1e6eb19e45f488da2654673acc662a4d3c8e4b5e8465e90aac3ce901d5",
+      "bytes": 233466
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.signalr.4.1.0.nupkg",
+      "sha256": "ae1a8be64e86e6fd9bac9e6d8e08271971756f6edf376ff055677101a3360246",
+      "bytes": 45334
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.testing.4.1.0.nupkg",
+      "sha256": "7b8346041a1e36b41186b3dc239a72e8976c56b2971b8adc6ad54d8e77c29b3f",
+      "bytes": 98367
+    },
+    {
+      "path": "dependency-plan/eventstore-4.1.0/hexalith.eventstore.testing.integration.4.1.0.nupkg",
+      "sha256": "4f799b95b5272415e679c7b368fa078348ec3f83b8bf6befddfc4caf0eed96fe",
+      "bytes": 64601
+    },
+    {
+      "path": "parties/packed/Hexalith.Parties.Contracts.0.0.0-selector-check.nupkg",
+      "sha256": "5b3c2d5b57bf75d9a5fced9c42dd3fd6921584fa9d32147010ffd194d0278237",
+      "bytes": 126016
+    },
+    {
+      "path": "sdk410-draft/enrolled-replay/Hexalith.Parties.Contracts/inputs-gmauh49i/artifacts/Hexalith.Parties.Contracts.1.5.1.nupkg",
+      "sha256": "2b521a3bb58a1904a662bc47bc850ba28737f13a753021c0366a79a4956b3a0c",
+      "bytes": 129134
+    },
+    {
+      "path": "sdk410-draft/fresh-public-tenants-contracts-7.0.0.nupkg",
+      "sha256": "e21f5ac7b5f332f1921f70a249ab2032b9978d56ffdd6641a0a4b94d04850bdc",
+      "bytes": 61147
+    },
+    {
+      "path": "sdk410-draft/public-cache-enrolled-replay/Hexalith.Parties.Contracts/inputs-n9w64oxp/artifacts/Hexalith.Parties.Contracts.1.5.1.nupkg",
+      "sha256": "2b521a3bb58a1904a662bc47bc850ba28737f13a753021c0366a79a4956b3a0c",
+      "bytes": 129134
+    },
+    {
+      "path": "sdk410-draft/public-cache-enrolled-replay/Hexalith.Tenants.Contracts/inputs-nw7stnvu/artifacts/Hexalith.Tenants.Contracts.7.0.0.nupkg",
+      "sha256": "e21f5ac7b5f332f1921f70a249ab2032b9978d56ffdd6641a0a4b94d04850bdc",
+      "bytes": 61147
+    },
+    {
+      "path": "tenants/local-704/nupkgs/Hexalith.Tenants.Aspire.7.0.4.nupkg",
+      "sha256": "dad9f1323267eafc6d205ad1cd7447d49602ca3387fd1ff24b5d399005a6885d",
+      "bytes": 9881
+    },
+    {
+      "path": "tenants/local-704/nupkgs/Hexalith.Tenants.Client.7.0.4.nupkg",
+      "sha256": "84f7ef1760497f10f3b33877ada8ecc9b7deb3c480460fb4c6051fcff2f04a80",
+      "bytes": 24635
+    },
+    {
+      "path": "tenants/local-704/nupkgs/Hexalith.Tenants.Contracts.7.0.4.nupkg",
+      "sha256": "482507e3698730f08471967de368b02b3190031a1838985cf67e01336d4fda14",
+      "bytes": 48085
+    },
+    {
+      "path": "tenants/local-704/nupkgs/Hexalith.Tenants.Server.7.0.4.nupkg",
+      "sha256": "84b765c90932e730957c2ed887399ba82c993a7b07551d8e89a990a7708babb5",
+      "bytes": 29529
+    },
+    {
+      "path": "tenants/local-704/nupkgs/Hexalith.Tenants.Testing.7.0.4.nupkg",
+      "sha256": "5b303b533fe1dbb85d2b049dc2061423f3612241f52ec6c5371b06e79f4f8c83",
+      "bytes": 15717
+    },
+    {
+      "path": "tenants/preparation/public-703/hexalith.tenants.aspire.7.0.3.nupkg",
+      "sha256": "fd2319f84fd6cfd0e667831ce32beb459a813076757210dc3cb8a97eb24ba647",
+      "bytes": 22950
+    },
+    {
+      "path": "tenants/preparation/public-703/hexalith.tenants.client.7.0.3.nupkg",
+      "sha256": "c34cb38f538597ef040d8a5174e0c63e272aec0f319a9be904ff9b6c681cd1c7",
+      "bytes": 37701
+    },
+    {
+      "path": "tenants/preparation/public-703/hexalith.tenants.contracts.7.0.3.nupkg",
+      "sha256": "57c2125fe0e698221bcd25dae5a468a9c4c7443e6de93a13d12c9e6e957a1d6e",
+      "bytes": 61154
+    },
+    {
+      "path": "tenants/preparation/public-703/hexalith.tenants.server.7.0.3.nupkg",
+      "sha256": "891058a7fb3afa1cf08b33368090c85e96dfab22af53654562ab632d182f6a84",
+      "bytes": 42608
+    },
+    {
+      "path": "tenants/preparation/public-703/hexalith.tenants.testing.7.0.3.nupkg",
+      "sha256": "3203cd89b21f2e21c32381ba8c52a6fb975fd5cceb95778a9e2ba0f7bc2d5f5b",
+      "bytes": 28793
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/github/Hexalith.Tenants.Aspire.7.0.3.nupkg",
+      "sha256": "78c88193f1657355fe04f1689d85eb647c5c1bfb36e9de1a6768e2b446a0a380",
+      "bytes": 9864
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/github/Hexalith.Tenants.Client.7.0.3.nupkg",
+      "sha256": "8faddec19aba67d77cb149c9634dd468402adeb325f5dcb4d442b1b4c707f34f",
+      "bytes": 24615
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/github/Hexalith.Tenants.Contracts.7.0.3.nupkg",
+      "sha256": "485c93e8118cc093904917ce22a6855fb854f80bfdca0fcdf0c8745ca0e7d59b",
+      "bytes": 48067
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/github/Hexalith.Tenants.Server.7.0.3.nupkg",
+      "sha256": "a8e2f7b4e21a3dac0346957c6d6292e1b5083d54e85ad50ed5c379f790b82f11",
+      "bytes": 29522
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/github/Hexalith.Tenants.Testing.7.0.3.nupkg",
+      "sha256": "33447c79d281d1827d1d314bb96bafe67b11657398f8d221e6c3608bc6ccc833",
+      "bytes": 15707
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/nuget/Hexalith.Tenants.Aspire.7.0.3.nupkg",
+      "sha256": "fd2319f84fd6cfd0e667831ce32beb459a813076757210dc3cb8a97eb24ba647",
+      "bytes": 22950
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/nuget/Hexalith.Tenants.Client.7.0.3.nupkg",
+      "sha256": "c34cb38f538597ef040d8a5174e0c63e272aec0f319a9be904ff9b6c681cd1c7",
+      "bytes": 37701
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/nuget/Hexalith.Tenants.Contracts.7.0.3.nupkg",
+      "sha256": "57c2125fe0e698221bcd25dae5a468a9c4c7443e6de93a13d12c9e6e957a1d6e",
+      "bytes": 61154
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/nuget/Hexalith.Tenants.Server.7.0.3.nupkg",
+      "sha256": "891058a7fb3afa1cf08b33368090c85e96dfab22af53654562ab632d182f6a84",
+      "bytes": 42608
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/nuget/Hexalith.Tenants.Testing.7.0.3.nupkg",
+      "sha256": "3203cd89b21f2e21c32381ba8c52a6fb975fd5cceb95778a9e2ba0f7bc2d5f5b",
+      "bytes": 28793
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/reviewed/Hexalith.Tenants.Aspire.7.0.3.nupkg",
+      "sha256": "78c88193f1657355fe04f1689d85eb647c5c1bfb36e9de1a6768e2b446a0a380",
+      "bytes": 9864
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/reviewed/Hexalith.Tenants.Client.7.0.3.nupkg",
+      "sha256": "8faddec19aba67d77cb149c9634dd468402adeb325f5dcb4d442b1b4c707f34f",
+      "bytes": 24615
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/reviewed/Hexalith.Tenants.Contracts.7.0.3.nupkg",
+      "sha256": "485c93e8118cc093904917ce22a6855fb854f80bfdca0fcdf0c8745ca0e7d59b",
+      "bytes": 48067
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/reviewed/Hexalith.Tenants.Server.7.0.3.nupkg",
+      "sha256": "a8e2f7b4e21a3dac0346957c6d6292e1b5083d54e85ad50ed5c379f790b82f11",
+      "bytes": 29522
+    },
+    {
+      "path": "tenants/preparation/release-evidence/7.0.3/destinations/reviewed/Hexalith.Tenants.Testing.7.0.3.nupkg",
+      "sha256": "33447c79d281d1827d1d314bb96bafe67b11657398f8d221e6c3608bc6ccc833",
+      "bytes": 15707
+    },
+    {
+      "path": "tenants/preparation/verified-candidate/Hexalith.Tenants.Aspire.7.0.3.nupkg",
+      "sha256": "78c88193f1657355fe04f1689d85eb647c5c1bfb36e9de1a6768e2b446a0a380",
+      "bytes": 9864
+    },
+    {
+      "path": "tenants/preparation/verified-candidate/Hexalith.Tenants.Client.7.0.3.nupkg",
+      "sha256": "8faddec19aba67d77cb149c9634dd468402adeb325f5dcb4d442b1b4c707f34f",
+      "bytes": 24615
+    },
+    {
+      "path": "tenants/preparation/verified-candidate/Hexalith.Tenants.Contracts.7.0.3.nupkg",
+      "sha256": "485c93e8118cc093904917ce22a6855fb854f80bfdca0fcdf0c8745ca0e7d59b",
+      "bytes": 48067
+    },
+    {
+      "path": "tenants/preparation/verified-candidate/Hexalith.Tenants.Server.7.0.3.nupkg",
+      "sha256": "a8e2f7b4e21a3dac0346957c6d6292e1b5083d54e85ad50ed5c379f790b82f11",
+      "bytes": 29522
+    },
+    {
+      "path": "tenants/preparation/verified-candidate/Hexalith.Tenants.Testing.7.0.3.nupkg",
+      "sha256": "33447c79d281d1827d1d314bb96bafe67b11657398f8d221e6c3608bc6ccc833",
+      "bytes": 15707
+    }
+  ]
+}

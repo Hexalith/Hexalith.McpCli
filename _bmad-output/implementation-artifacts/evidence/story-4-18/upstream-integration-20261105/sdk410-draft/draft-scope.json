@@ -1,0 +1,12 @@
+{
+  "public_eventstore_cohort": "4.1.0",
+  "public_eventstore_source": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+  "enrolled_contracts_unchanged": {
+    "Hexalith.Parties.Contracts": "1.5.1",
+    "Hexalith.Tenants.Contracts": "7.0.0"
+  },
+  "tenants_runtime_source_retained_until_real_703_artifacts": "1b2c71b0e3cc5b16745f87aa7f1bc2c0ac8ffc27",
+  "full_fixed_native_acceptance_claimed": false,
+  "native_snapshot_is_exact_public_source": true,
+  "only_observed_version_bound_guard_fixtures_updated": true
+}

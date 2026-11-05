@@ -1,0 +1,1 @@
+fix(queries): hide tenants before their creation

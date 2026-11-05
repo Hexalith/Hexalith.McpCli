@@ -10,7 +10,7 @@ import subprocess
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
-COHORT = '4.0.4'
+COHORT = '4.1.0'
 MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Platform')
 REPOSITORIES = {name: f'https://github.com/Hexalith/{name}.git' for name in MODULES}
 
@@ -26,13 +26,13 @@ def manifest(path: Path) -> dict:
     packages = value.get('packages', [])
     identities = {(item.get('id'), item.get('version')) for item in packages}
     if len(identities) != len(packages) or not {('Hexalith.EventStore.Gateway', COHORT),
-            ('Hexalith.EventStore.Aspire', COHORT), ('Hexalith.Tenants.Contracts', '7.0.0'),
-            ('Hexalith.Tenants.Aspire', '7.0.0')} <= identities:
+            ('Hexalith.EventStore.Aspire', COHORT), ('Hexalith.Tenants.Contracts', '7.0.4'),
+            ('Hexalith.Tenants.Aspire', '7.0.4')} <= identities:
         raise ValueError('Public Gateway, Aspire and Tenants7 archive identities are required.')
     for item in packages:
         module = 'Hexalith.EventStore' if item['id'].startswith('Hexalith.EventStore.') else 'Hexalith.Tenants'
         if not re.fullmatch(r'Hexalith\.(EventStore|Tenants)\.[A-Za-z.]+', item['id']) \
-                or item['version'] != (COHORT if module == 'Hexalith.EventStore' else '7.0.0') \
+                or item['version'] != (COHORT if module == 'Hexalith.EventStore' else '7.0.4') \
                 or not re.fullmatch('[0-9a-f]{64}', item.get('sha256', '')) \
                 or item.get('sourceCommit') != value['sources'][module]['commit']:
             raise ValueError('Every public archive must bind its exact package version, hash and repository source.')

@@ -1,0 +1,474 @@
+diff --git a/Directory.Build.props b/Directory.Build.props
+index 1184547..2db8276 100644
+--- a/Directory.Build.props
++++ b/Directory.Build.props
+@@ -1,7 +1,7 @@
+ <Project>
+   <PropertyGroup>
+     <!-- Pin the gateway client and enrolled Contracts before the Builds catalog import; enrolled Contracts stay on the exact artifacts bound by the approved vectors. -->
+-    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">4.0.4</HexalithEventStoreVersion>
++    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">4.1.0</HexalithEventStoreVersion>
+     <HexalithMcpCliVersion Condition="'$(HexalithMcpCliVersion)' == ''">2.0.0</HexalithMcpCliVersion>
+     <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">1.5.1</HexalithPartiesVersion>
+     <HexalithPartiesAspireVersion Condition="'$(HexalithPartiesAspireVersion)' == ''">2.0.0</HexalithPartiesAspireVersion>
+diff --git a/tests/Hexalith.McpCli.EventStoreGateway.TestHost/Configuration/provenance.json b/tests/Hexalith.McpCli.EventStoreGateway.TestHost/Configuration/provenance.json
+index 44f6c86..62ef98d 100644
+--- a/tests/Hexalith.McpCli.EventStoreGateway.TestHost/Configuration/provenance.json
++++ b/tests/Hexalith.McpCli.EventStoreGateway.TestHost/Configuration/provenance.json
+@@ -1,8 +1,8 @@
+ {
+   "profile": "published",
+-  "eventStoreVersion": "4.0.4",
++  "eventStoreVersion": "4.1.0",
+   "sourceRepository": "https://github.com/Hexalith/Hexalith.EventStore.git",
+-  "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7",
++  "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+   "files": {
+     "Configuration/appsettings.gateway.json": {
+       "sourcePath": "src/Hexalith.EventStore/appsettings.json",
+diff --git a/tests/Hexalith.McpCli.Integration.Tests/NativeCatalogEvidence.cs b/tests/Hexalith.McpCli.Integration.Tests/NativeCatalogEvidence.cs
+index 7c7e053..47b1294 100644
+--- a/tests/Hexalith.McpCli.Integration.Tests/NativeCatalogEvidence.cs
++++ b/tests/Hexalith.McpCli.Integration.Tests/NativeCatalogEvidence.cs
+@@ -53,7 +53,7 @@ internal static class NativeCatalogEvidence
+         }
+         await File.WriteAllTextAsync(Path.Combine(run, "native-catalog.json"), JsonSerializer.Serialize(new
+         {
+-            result = "passed", backupReference, sdkVersion = "4.0.4", rootDigest = root,
++            result = "passed", backupReference, sdkVersion = "4.1.0", rootDigest = root,
+             hosts, inputs = coordinates.RootElement.GetProperty("inputs").Clone(), readback = readbacks[0], eventStoreSourceCommit = Environment.GetEnvironmentVariable("MCPCLI_EVENTSTORE_PACKAGE_SOURCE_COMMIT"),
+         }), deadline.Token).ConfigureAwait(false);
+     }
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs b/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs
+index 3642589..561a1fe 100644
+--- a/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs
++++ b/tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs
+@@ -47,7 +47,7 @@ public sealed class DependencyPolicyTests
+         string[] helpers = ["Hexalith.EventStore.Aspire", "Hexalith.Parties.Aspire", "Hexalith.Tenants.Aspire"];
+         Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckAspireHelperClosure(policy, graph, helpers));
+         Assert.Equal(graph.RootId, Assert.Single(graph.Nodes.Values, node => node.Type == "project").Id);
+-        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/2.30.10", "Hexalith.EventStore.Aspire/4.0.4", "Hexalith.EventStore.Client/4.0.4", "Hexalith.EventStore.Contracts/4.0.4", "Hexalith.EventStore.ServiceDefaults/4.0.4", "Hexalith.Parties.Aspire/2.0.0", "Hexalith.Tenants.Aspire/7.0.0" },
++        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/2.30.10", "Hexalith.EventStore.Aspire/4.1.0", "Hexalith.EventStore.Client/4.1.0", "Hexalith.EventStore.Contracts/4.1.0", "Hexalith.EventStore.ServiceDefaults/4.1.0", "Hexalith.Parties.Aspire/2.0.0", "Hexalith.Tenants.Aspire/7.0.0" },
+             graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase))
+                 .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
+     }
+@@ -1055,13 +1055,13 @@ public sealed class DependencyPolicyTests
+         Assert.Equal(new[]
+         {
+             "Hexalith.Commons.UniqueIds/2.30.10",
+-            "Hexalith.EventStore.Aspire/4.0.4",
+-            "Hexalith.EventStore.Client/4.0.4",
+-            "Hexalith.EventStore.Contracts/4.0.4",
+-            "Hexalith.EventStore.DomainService/4.0.4",
+-            "Hexalith.EventStore.Server/4.0.4",
+-            "Hexalith.EventStore.ServiceDefaults/4.0.4",
+-            "Hexalith.EventStore.Testing/4.0.4",
++            "Hexalith.EventStore.Aspire/4.1.0",
++            "Hexalith.EventStore.Client/4.1.0",
++            "Hexalith.EventStore.Contracts/4.1.0",
++            "Hexalith.EventStore.DomainService/4.1.0",
++            "Hexalith.EventStore.Server/4.1.0",
++            "Hexalith.EventStore.ServiceDefaults/4.1.0",
++            "Hexalith.EventStore.Testing/4.1.0",
+             "Hexalith.EventStore.Testing.Integration/3.128.4",
+             "Hexalith.McpCli.Abstractions/2.0.0",
+             "Hexalith.Parties.Aspire/2.0.0",
+diff --git a/tests/Hexalith.McpCli.Manifest.Tests/NativeCatalogAuditTests.cs b/tests/Hexalith.McpCli.Manifest.Tests/NativeCatalogAuditTests.cs
+index c72bebe..a0603cb 100644
+--- a/tests/Hexalith.McpCli.Manifest.Tests/NativeCatalogAuditTests.cs
++++ b/tests/Hexalith.McpCli.Manifest.Tests/NativeCatalogAuditTests.cs
+@@ -81,11 +81,11 @@ public sealed class NativeCatalogAuditTests : IDisposable
+     {
+         string root = DependencyPolicyTests.FindRepositoryRoot();
+         using JsonDocument restored = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(root, "tests", "Hexalith.McpCli.AppHost", "obj", "project.assets.json")));
+-        const string identity = "Hexalith.EventStore.Client/4.0.4";
++        const string identity = "Hexalith.EventStore.Client/4.1.0";
+         JsonElement library = restored.RootElement.GetProperty("libraries").GetProperty(identity);
+         string cache = restored.RootElement.GetProperty("packageFolders").EnumerateObject().Select(item => item.Name)
+-            .Single(folder => File.Exists(Path.Combine(folder, "hexalith.eventstore.client", "4.0.4", "hexalith.eventstore.client.4.0.4.nupkg")));
+-        string archive = Path.Combine(cache, "hexalith.eventstore.client", "4.0.4", "hexalith.eventstore.client.4.0.4.nupkg");
++            .Single(folder => File.Exists(Path.Combine(folder, "hexalith.eventstore.client", "4.1.0", "hexalith.eventstore.client.4.1.0.nupkg")));
++        string archive = Path.Combine(cache, "hexalith.eventstore.client", "4.1.0", "hexalith.eventstore.client.4.1.0.nupkg");
+         using JsonDocument selection = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(root, "tools", "live-topology", "native-runtime.json")));
+         Assert.Equal(selection.RootElement.GetProperty("packages").EnumerateArray().Single(item => item.GetProperty("id").GetString() == "Hexalith.EventStore.Client")
+             .GetProperty("sha256").GetString(), Digest(archive));
+diff --git a/tools/dependency-policy.json b/tools/dependency-policy.json
+index e442af5..c5ffa7b 100644
+--- a/tools/dependency-policy.json
++++ b/tools/dependency-policy.json
+@@ -24,8 +24,8 @@
+     "Grpc.Net.Common": "2.80.0",
+     "Grpc.Reflection": "2.80.0",
+     "Hexalith.Commons.UniqueIds": "2.30.10",
+-    "Hexalith.EventStore.Client": "4.0.4",
+-    "Hexalith.EventStore.Contracts": "4.0.4",
++    "Hexalith.EventStore.Client": "4.1.0",
++    "Hexalith.EventStore.Contracts": "4.1.0",
+     "Humanizer.Core": "3.0.10",
+     "Json.More.Net": "3.0.1",
+     "JsonPointer.Net": "7.0.4",
+@@ -76,9 +76,9 @@
+   },
+   "aspireHelperSupportPackages": {
+     "Hexalith.Commons.UniqueIds": "2.30.10",
+-    "Hexalith.EventStore.Client": "4.0.4",
+-    "Hexalith.EventStore.Contracts": "4.0.4",
+-    "Hexalith.EventStore.ServiceDefaults": "4.0.4"
++    "Hexalith.EventStore.Client": "4.1.0",
++    "Hexalith.EventStore.Contracts": "4.1.0",
++    "Hexalith.EventStore.ServiceDefaults": "4.1.0"
+   },
+   "testPackages": [
+     "Hexalith.EventStore.Gateway",
+diff --git a/tools/live-topology/native-runtime.json b/tools/live-topology/native-runtime.json
+index c1e4743..fdf7c52 100644
+--- a/tools/live-topology/native-runtime.json
++++ b/tools/live-topology/native-runtime.json
+@@ -1,9 +1,9 @@
+ {
+-  "eventStoreVersion": "4.0.4",
++  "eventStoreVersion": "4.1.0",
+   "sources": {
+     "Hexalith.EventStore": {
+       "repository": "https://github.com/Hexalith/Hexalith.EventStore.git",
+-      "commit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     "Hexalith.Tenants": {
+       "repository": "https://github.com/Hexalith/Hexalith.Tenants.git",
+@@ -21,87 +21,87 @@
+   "packages": [
+     {
+       "id": "Hexalith.EventStore.Admin.Abstractions",
+-      "version": "4.0.4",
+-      "sha256": "b36b6dc74889eb59357578729ce740a4ec4705f1e7638c2c0cf6664d5f5c4875",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "fbad15a2a09282b438d7c8594a2c0206e85eb7691bc91053f57da5e91f0fb928",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.Admin.Cli",
+-      "version": "4.0.4",
+-      "sha256": "2dbf6647375b16255bba52cdb7af21842454c7da1301544078060cf1e2c0973a",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "4623f699c38ff5ce725b9ab42216932c9ee4b1ace86bf78601c68be43e27e40a",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.Admin.Server",
+-      "version": "4.0.4",
+-      "sha256": "5a4d619d869ab079ccd091ecba6ab605e2dc0ebeddfc8bf414dc7e81dff3fe55",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "910b31d7014c3e11789ae3672b8fde353af5fe8653ec76a71e589f054f5e3d3e",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.Aspire",
+-      "version": "4.0.4",
+-      "sha256": "ec83ffb50c8254a447eba3b21a238de562577bb5ca99b88fef0d31126a8e245f",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "c498671d461b0342d76be0b02bd76c4ad0cf8fd1ba7017ec3b6bdc67bb0746b1",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.Client",
+-      "version": "4.0.4",
+-      "sha256": "d0ee0a075c60ee69b37c53a11844ac3dd238a77038dfdf650ce8c24dee562f71",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "efab5fd7b4e7d5bbafc2a09adc92e98b985ca750ee888323585892c33cab50cc",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.Contracts",
+-      "version": "4.0.4",
+-      "sha256": "9ec69a9b44fd7f5ba42a8469cba1fa03cdca327cb97b7985625972a1323df5b5",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "e2c09e4f00340f26dd3c1509167c83f41ca757f2442f6624bc58edace1fe9a70",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.DomainService",
+-      "version": "4.0.4",
+-      "sha256": "5ce256c9c62b16185742de531abb0b549b3096e0e4e5d1aba97fe6703b96d097",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "da40e1e05461bac67bbbf9f3a839085e0f8c65e726168b33f2dc955e0c2d1fb0",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.Gateway",
+-      "version": "4.0.4",
+-      "sha256": "1174296b2cae05bb89b5f675fd6e0edab18da040a2829ffa684049f12c21dd4d",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "ba571748d713eeab11bdaa310385ac20602566a2538fd364befb2ff1ea5c2d81",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.RestApi.Generators",
+-      "version": "4.0.4",
+-      "sha256": "4adf85638ade08690a9c1c853b9ec3c0933168961cbdae5beaa1d354ff4bd556",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "c15f859665aebfd18844f7fd9eee4bd38f07cea61aad3310371b391a1b093467",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.Server",
+-      "version": "4.0.4",
+-      "sha256": "c8f7e8ffea04f65787bdb18bfb46e03176d8cdb548e4d269d94e2483a25fbeb9",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "fce322ee16345aa1c150375065bc2665c34f38d1bab6086d1144dd275dc25da4",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.ServiceDefaults",
+-      "version": "4.0.4",
+-      "sha256": "25c910b17e82fc90326ebd974dc8b6c84d8ad55e1b4f23b9459fd56896f0816d",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "bdd2fd1e6eb19e45f488da2654673acc662a4d3c8e4b5e8465e90aac3ce901d5",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.SignalR",
+-      "version": "4.0.4",
+-      "sha256": "b2f724f9bdc6a7e0cb1e62d9ea118d19dd302e46583690cd227d024249f5ff90",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "ae1a8be64e86e6fd9bac9e6d8e08271971756f6edf376ff055677101a3360246",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.Testing",
+-      "version": "4.0.4",
+-      "sha256": "fae2691ad4d316972fa2f4499b9d6efeee286578299630750571b1e9f4dbdfee",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "7b8346041a1e36b41186b3dc239a72e8976c56b2971b8adc6ad54d8e77c29b3f",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.EventStore.Testing.Integration",
+-      "version": "4.0.4",
+-      "sha256": "fcf16aecd12df63a926ea6ecce25490da3bb63afb16bb50fe917172e9526a306",
+-      "sourceCommit": "326bfef884543cdbcaf96de7f4c4ad378dbad6d7"
++      "version": "4.1.0",
++      "sha256": "4f799b95b5272415e679c7b368fa078348ec3f83b8bf6befddfc4caf0eed96fe",
++      "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+     },
+     {
+       "id": "Hexalith.Tenants.Aspire",
+diff --git a/tools/live-topology/native_cohort.py b/tools/live-topology/native_cohort.py
+index 44e5553..26f6030 100644
+--- a/tools/live-topology/native_cohort.py
++++ b/tools/live-topology/native_cohort.py
+@@ -10,7 +10,7 @@ import subprocess
+ import xml.etree.ElementTree as ET
+ from zipfile import ZipFile
+ 
+-COHORT = '4.0.4'
++COHORT = '4.1.0'
+ MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Platform')
+ REPOSITORIES = {name: f'https://github.com/Hexalith/{name}.git' for name in MODULES}
+ 
+diff --git a/tools/live-topology/test_ci.py b/tools/live-topology/test_ci.py
+index 6df07c5..98420a1 100644
+--- a/tools/live-topology/test_ci.py
++++ b/tools/live-topology/test_ci.py
+@@ -70,7 +70,7 @@ if name == 'dotnet':
+             warnings['warnNotAsError'] = [] if '-p:WarningsNotAsErrors=' in args else ['NU1901', 'NU1902', 'NU1903', 'NU1904']
+             assets.write_text(json.dumps(document))
+     elif args[0] == 'msbuild':
+-        print('4.0.3' if mode == 'wrong-package-cohort' else '4.0.4')
++        print('4.0.3' if mode == 'wrong-package-cohort' else '4.1.0')
+     sys.exit(0)
+ if name == 'dapr':
+     print('CLI version: ' + ('1.18.0' if mode == 'wrong-dapr-cli' else '1.18.2') + '\nRuntime version: ' + ('1.18.0' if mode == 'wrong-dapr' else '1.18.7'))
+@@ -310,16 +310,16 @@ class CiHooksTests(unittest.TestCase):
+         assemblies = ('Gateway', 'Server', 'DomainService', 'Contracts')
+         for suffix in assemblies:
+             name = 'Hexalith.EventStore.' + suffix
+-            package = cache / name.lower() / '4.0.4'
++            package = cache / name.lower() / '4.1.0'
+             package.mkdir(parents=True)
+-            nuspec = ('<package><metadata><id>' + name + '</id><version>4.0.4</version><repository commit="'
++            nuspec = ('<package><metadata><id>' + name + '</id><version>4.1.0</version><repository commit="'
+                       + 'a' * 40 + '" url="https://github.com/Hexalith/Hexalith.EventStore.git" /></metadata></package>').encode()
+             payload = (name + '-qualified-fixture').encode()
+             (package / (name.lower() + '.nuspec')).write_bytes(nuspec)
+             extracted = package / ('lib/net10.0/' + name + '.dll')
+             extracted.parent.mkdir(parents=True)
+             extracted.write_bytes(payload)
+-            with ZipFile(package / (name.lower() + '.4.0.4.nupkg'), 'w') as archive:
++            with ZipFile(package / (name.lower() + '.4.1.0.nupkg'), 'w') as archive:
+                 archive.writestr(name + '.nuspec', nuspec)
+                 archive.writestr('lib/net10.0/' + name + '.dll', payload)
+         projects = [gateway, *(self.root / 'references' / ('Hexalith.' + module) / 'src' / ('Hexalith.' + module)
+@@ -332,7 +332,7 @@ class CiHooksTests(unittest.TestCase):
+             (project / 'obj').mkdir(exist_ok=True)
+             output = project / 'bin/Release/net10.0'
+             output.mkdir(parents=True)
+-            libraries = {'Hexalith.EventStore.' + suffix + '/4.0.4': {'type': 'package'} for suffix in assemblies}
++            libraries = {'Hexalith.EventStore.' + suffix + '/4.1.0': {'type': 'package'} for suffix in assemblies}
+             target = {name: {'type': 'package', 'runtime': {'lib/net10.0/' + name.split('/')[0] + '.dll': {}}}
+                       for name in libraries}
+             (project / 'obj/project.assets.json').write_text(json.dumps({
+@@ -349,7 +349,7 @@ class CiHooksTests(unittest.TestCase):
+         tenants_package.mkdir(parents=True)
+         with ZipFile(tenants_package / 'hexalith.tenants.contracts.7.0.0.nupkg', 'w') as archive:
+             archive.writestr('Hexalith.Tenants.Contracts.nuspec', '<package><metadata><id>Hexalith.Tenants.Contracts</id><version>7.0.0</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>')
+-        selection = {'eventStoreVersion': '4.0.4', 'sources': {
++        selection = {'eventStoreVersion': '4.1.0', 'sources': {
+             'Hexalith.' + module: {'repository': 'https://github.com/Hexalith/Hexalith.' + module + '.git', 'commit': 'a' * 40}
+             for module in ('EventStore', 'Tenants', 'Parties', 'Platform')}, 'packages': []}
+         for archive in cache.rglob('*.nupkg'):
+@@ -360,11 +360,11 @@ class CiHooksTests(unittest.TestCase):
+                                           'sha256': hashlib.sha256(archive.read_bytes()).hexdigest()})
+         # Aspire is represented by the same synthetic archive machinery as the runtime SDK.
+         aspire = dict(selection['packages'][0], id='Hexalith.EventStore.Aspire')
+-        folder = cache / 'hexalith.eventstore.aspire/4.0.4'
++        folder = cache / 'hexalith.eventstore.aspire/4.1.0'
+         folder.mkdir(parents=True)
+-        with ZipFile(folder / 'hexalith.eventstore.aspire.4.0.4.nupkg', 'w') as archive:
+-            archive.writestr('Hexalith.EventStore.Aspire.nuspec', '<package><metadata><id>Hexalith.EventStore.Aspire</id><version>4.0.4</version><repository url="https://github.com/Hexalith/Hexalith.EventStore.git" commit="' + 'a' * 40 + '" /></metadata></package>')
+-        aspire['sha256'] = hashlib.sha256((folder / 'hexalith.eventstore.aspire.4.0.4.nupkg').read_bytes()).hexdigest()
++        with ZipFile(folder / 'hexalith.eventstore.aspire.4.1.0.nupkg', 'w') as archive:
++            archive.writestr('Hexalith.EventStore.Aspire.nuspec', '<package><metadata><id>Hexalith.EventStore.Aspire</id><version>4.1.0</version><repository url="https://github.com/Hexalith/Hexalith.EventStore.git" commit="' + 'a' * 40 + '" /></metadata></package>')
++        aspire['sha256'] = hashlib.sha256((folder / 'hexalith.eventstore.aspire.4.1.0.nupkg').read_bytes()).hexdigest()
+         selection['packages'].append(aspire)
+         (self.tools / 'native-runtime.json').write_text(json.dumps(selection))
+         for project_name, package_name in [('AppHost', 'Aspire'), ('ConformanceHost', 'Contracts')]:
+@@ -416,7 +416,7 @@ class CiHooksTests(unittest.TestCase):
+             'Properties/launchSettings.json': 'src/Hexalith.EventStore/Properties/launchSettings.json',
+         }
+         (gateway / 'Configuration/provenance.json').write_text(json.dumps({
+-            'profile': 'published', 'eventStoreVersion': '4.0.4',
++            'profile': 'published', 'eventStoreVersion': '4.1.0',
+             'sourceRepository': 'https://github.com/Hexalith/Hexalith.EventStore.git', 'sourceCommit': 'a' * 40,
+             'files': {relative: {'sourcePath': original, 'sha256': hashlib.sha256((gateway / relative).read_bytes()).hexdigest()}
+                       for relative, original in files.items()}}))
+@@ -496,7 +496,7 @@ class CiHooksTests(unittest.TestCase):
+             self.assertIn('-p:UseNuGetDeps=true', call)
+             self.assertIn('Release', call)
+             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
+-            self.assertIn('-p:HexalithEventStoreVersion=4.0.4', call)
++            self.assertIn('-p:HexalithEventStoreVersion=4.1.0', call)
+             self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
+         overlay = Path(prepared['privateDirectory']) / 'source-runtime-packages.props'
+         self.assertEqual('b' * 40, prepared['sourcePackageCatalog']['buildsCommit'])
+@@ -541,9 +541,9 @@ class CiHooksTests(unittest.TestCase):
+         for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
+             self.assertEqual(str(Path(self.env['HOME']) / '.aspire/bundle' / relative), tools[relative]['path'])
+             self.assertEqual(bundle_hashes[relative], tools[relative]['sha256'])
+-        self.assertEqual(['4.0.4'] * 3,
++        self.assertEqual(['4.1.0'] * 3,
+                          [source['HexalithEventStoreVersion'] for source in prepared['sources'] if source['module'] != 'Hexalith.Platform'])
+-        self.assertEqual({'profile': 'published', 'version': '4.0.4', 'sourceCommit': 'a' * 40},
++        self.assertEqual({'profile': 'published', 'version': '4.1.0', 'sourceCommit': 'a' * 40},
+                          {key: prepared['gateway'][key] for key in ('profile', 'version', 'sourceCommit')})
+         self.assertEqual({'Hexalith.Tenants', 'Hexalith.Parties'}, set(prepared['gateway']['domainHosts']))
+         property_calls = [call for call in calls if call[0] == 'dotnet' and call[2] == 'msbuild']
+@@ -553,7 +553,7 @@ class CiHooksTests(unittest.TestCase):
+             self.assertIn('-p:UseHexalithProjectReferences=false', call)
+             self.assertIn('-p:UseNuGetDeps=true', call)
+             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
+-            self.assertIn('-p:HexalithEventStoreVersion=4.0.4', call)
++            self.assertIn('-p:HexalithEventStoreVersion=4.1.0', call)
+         self.assertEqual(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '2280',
+                           'python3', 'tools/live-topology/ci.py', 'prepare'], calls[0])
+         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())
+@@ -579,7 +579,7 @@ class CiHooksTests(unittest.TestCase):
+         self.assertEqual('src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj', selected[0][3])
+         self.assertEqual(str(self.root / 'references/Hexalith.Parties'), selected[0][1])
+         self.assertIn('-p:HexalithEventStoreFromSource=false', selected[0])
+-        self.assertIn('-p:HexalithEventStoreVersion=4.0.4', selected[0])
++        self.assertIn('-p:HexalithEventStoreVersion=4.1.0', selected[0])
+ 
+     def test_competing_nested_catalog_is_rechecked_before_either_live_runner(self):
+         prepared = self.prepare()
+@@ -712,7 +712,7 @@ class CiHooksTests(unittest.TestCase):
+ 
+     def test_changed_gateway_package_bytes_refuse_before_any_live_runner(self):
+         self.prepare()
+-        with ZipFile(self.root / 'package-cache/hexalith.eventstore.gateway/4.0.4/hexalith.eventstore.gateway.4.0.4.nupkg', 'a') as archive:
++        with ZipFile(self.root / 'package-cache/hexalith.eventstore.gateway/4.1.0/hexalith.eventstore.gateway.4.1.0.nupkg', 'a') as archive:
+             archive.writestr('changed.txt', b'changed')
+         result = self.invoke('run-ci.sh')
+         self.assertNotEqual(0, result.returncode)
+@@ -752,7 +752,7 @@ class CiHooksTests(unittest.TestCase):
+                         if phase == 'run': self.prepare()
+                         (self.root / 'runner-gateway-environment.jsonl').unlink(missing_ok=True)
+                         changed = json.loads(original)
+-                        identity = 'Hexalith.EventStore.Contracts/4.0.4'
++                        identity = 'Hexalith.EventStore.Contracts/4.1.0'
+                         if defect == 'transitive-version':
+                             changed['libraries']['Hexalith.EventStore.Contracts/4.0.3'] = changed['libraries'].pop(identity)
+                         else:
+@@ -767,7 +767,7 @@ class CiHooksTests(unittest.TestCase):
+                             asset.write_text(original)
+ 
+     def test_archive_extracted_deployed_and_configuration_mutations_refuse_before_runners(self):
+-        package = self.root / 'package-cache/hexalith.eventstore.gateway/4.0.4'
++        package = self.root / 'package-cache/hexalith.eventstore.gateway/4.1.0'
+         deployed = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0'
+         source = self.root / 'references/Hexalith.EventStore/src/Hexalith.EventStore/appsettings.json'
+         cases = [package / 'hexalith.eventstore.gateway.nuspec',
+@@ -813,12 +813,12 @@ class CiHooksTests(unittest.TestCase):
+ 
+ 
+     def test_embedded_archive_identity_and_source_are_validated_before_preparation(self):
+-        folder = self.root / 'package-cache/hexalith.eventstore.gateway/4.0.4'
+-        archive = folder / 'hexalith.eventstore.gateway.4.0.4.nupkg'
++        folder = self.root / 'package-cache/hexalith.eventstore.gateway/4.1.0'
++        archive = folder / 'hexalith.eventstore.gateway.4.1.0.nupkg'
+         nuspec = folder / 'hexalith.eventstore.gateway.nuspec'
+         original_archive, original_nuspec = archive.read_bytes(), nuspec.read_bytes()
+         for before, after in ((b'<id>Hexalith.EventStore.Gateway</id>', b'<id>Wrong.Package</id>'),
+-                              (b'<version>4.0.4</version>', b'<version>4.0.3</version>'),
++                              (b'<version>4.1.0</version>', b'<version>4.0.3</version>'),
+                               (b'a' * 40, b'not-a-source-commit')):
+             with self.subTest(replacement=after):
+                 self.fresh_evidence()
+@@ -1134,7 +1134,7 @@ class CiHooksTests(unittest.TestCase):
+         command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
+                    '-warnaserror -m:1 -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low '
+                    '-p:TreatWarningsAsErrors=true -p:WarningsNotAsErrors= -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
+-                   '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.0.4 '
++                   '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.1.0 '
+                    f'-p:HexalithBuildPackageVersions1={overlay}')
+         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
+         stderr = self.evidence / 'Hexalith.Tenants-build.stderr.txt'
+diff --git a/tools/live-topology/test_native_cohort.py b/tools/live-topology/test_native_cohort.py
+index 991b82f..8b17dae 100644
+--- a/tools/live-topology/test_native_cohort.py
++++ b/tools/live-topology/test_native_cohort.py
+@@ -18,10 +18,10 @@ class NativeCohortTests(unittest.TestCase):
+         self.temporary = tempfile.TemporaryDirectory()
+         self.addCleanup(self.temporary.cleanup)
+         self.root = Path(self.temporary.name)
+-        self.selection = {'eventStoreVersion': '4.0.4', 'sources': {
++        self.selection = {'eventStoreVersion': '4.1.0', 'sources': {
+             module: {'repository': native.REPOSITORIES[module], 'commit': 'a' * 40} for module in native.MODULES},
+             'packages': []}
+-        for name, version in [('Hexalith.EventStore.Gateway', '4.0.4'), ('Hexalith.EventStore.Aspire', '4.0.4'),
++        for name, version in [('Hexalith.EventStore.Gateway', '4.1.0'), ('Hexalith.EventStore.Aspire', '4.1.0'),
+                               ('Hexalith.Tenants.Contracts', '7.0.0'), ('Hexalith.Tenants.Aspire', '7.0.0')]:
+             self.selection['packages'].append({'id': name, 'version': version, 'sourceCommit': 'a' * 40, 'sha256': 'b' * 64})
+         self.path = self.root / 'selection.json'
+@@ -156,7 +156,7 @@ class NativeCohortTests(unittest.TestCase):
+         with self.assertRaisesRegex(ValueError, 'repository source differs'):
+             native.verify_archive(archive, package)
+         with self.assertRaisesRegex(ValueError, 'no authenticated public archive'):
+-            native.require_restored_archive(archive, self.selection, 'Hexalith.EventStore.Contracts/4.0.4')
++            native.require_restored_archive(archive, self.selection, 'Hexalith.EventStore.Contracts/4.1.0')
+ 
+ 
+ if __name__ == '__main__':
