@@ -1,0 +1,12 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests",
+    "-result-xml",
+    "/tmp/mcpcli-418-root-integration/gateway-boundary-reproduction.xml"
+  ],
+  "exit_code": 0,
+  "elapsed_seconds": 7.28
+}

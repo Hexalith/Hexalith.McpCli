@@ -1,0 +1,9 @@
+{
+  "command": [
+    "/tmp/mcpcli-418-tools/gh-2.103.3/bin/gh",
+    "api",
+    "repos/Hexalith/Hexalith.McpCli/actions/jobs/127325755002/logs",
+    "--allow-escape-sequences"
+  ],
+  "exit_code": 0
+}

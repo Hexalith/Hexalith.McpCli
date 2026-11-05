@@ -1,0 +1,45 @@
+{
+  "total_count": 2,
+  "artifacts": [
+    {
+      "id": 13427912286,
+      "node_id": "MDg6QXJ0aWZhY3QxMzQyNzkxMjI4Ng==",
+      "name": "enrolled-module-evidence",
+      "size_in_bytes": 366010,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13427912286",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13427912286/zip",
+      "expired": false,
+      "digest": "sha256:5912946c32b1c24447faddb095b41d79837706ed61f69543454603458a65fcdc",
+      "created_at": "2026-11-05T15:11:20Z",
+      "updated_at": "2026-11-05T15:11:20Z",
+      "expires_at": "2026-12-05T15:01:23Z",
+      "workflow_run": {
+        "id": 42050717270,
+        "repository_id": 1379417482,
+        "head_repository_id": 1379417482,
+        "head_branch": "main",
+        "head_sha": "624de50385ac3d9aab15f25d056f1f24ae651645"
+      }
+    },
+    {
+      "id": 13426449454,
+      "node_id": "MDg6QXJ0aWZhY3QxMzQyNjQ0OTQ1NA==",
+      "name": "blocking-test-results",
+      "size_in_bytes": 240165,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13426449454",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13426449454/zip",
+      "expired": false,
+      "digest": "sha256:7059027368d1e521bbd5b330ec2906d2c57b3defa78fbf8ee2da4a9dd663854c",
+      "created_at": "2026-11-05T15:12:47Z",
+      "updated_at": "2026-11-05T15:12:47Z",
+      "expires_at": "2026-11-12T15:12:46Z",
+      "workflow_run": {
+        "id": 42050717270,
+        "repository_id": 1379417482,
+        "head_repository_id": 1379417482,
+        "head_branch": "main",
+        "head_sha": "624de50385ac3d9aab15f25d056f1f24ae651645"
+      }
+    }
+  ]
+}

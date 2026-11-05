@@ -1,0 +1,3 @@
+# Preserve only captured logs for this startup diagnosis.
+!/build-and-test-first-failure.original.log
+!/manifest-two-cpu-diagnostic/Manifest.trx

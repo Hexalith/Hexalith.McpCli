@@ -1,0 +1,6 @@
+⧗   --- input ---
+test: retain gateway startup failure diagnostics
+
+Preserve the readiness bound and actual boundary assertions.
+Capture sanitized child output and HTTP/process state when initialization fails.
+✔   found 0 problems, 0 warnings

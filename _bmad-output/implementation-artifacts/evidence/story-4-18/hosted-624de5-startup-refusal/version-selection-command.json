@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "scripts/select-release-version.mjs",
+    "/tmp/mcpcli-418-root-integration/version-selection.json"
+  ],
+  "exit_code": 0
+}

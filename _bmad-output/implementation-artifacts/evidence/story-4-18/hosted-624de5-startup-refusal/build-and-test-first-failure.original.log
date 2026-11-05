@@ -1,0 +1,799 @@
+﻿2026-11-05T15:01:27.9317699Z Current runner version: '2.338.2'
+2026-11-05T15:01:27.9356110Z ##[group]Runner Image Provisioner
+2026-11-05T15:01:27.9356920Z Hosted Compute Agent
+2026-11-05T15:01:27.9357403Z Version: 20261028.624
+2026-11-05T15:01:27.9357937Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+2026-11-05T15:01:27.9358584Z Build Date: 2026-10-28T21:51:42Z
+2026-11-05T15:01:27.9359144Z Worker ID: {a834ecb3-6278-40a5-b4ca-4bc5a6a2196b}
+2026-11-05T15:01:27.9359738Z Region: westus2
+2026-11-05T15:01:27.9360203Z Cloud: Azure
+2026-11-05T15:01:27.9360677Z ##[endgroup]
+2026-11-05T15:01:27.9362026Z ##[group]Operating System
+2026-11-05T15:01:27.9362550Z Ubuntu
+2026-11-05T15:01:27.9363073Z 26.04.1
+2026-11-05T15:01:27.9363510Z LTS
+2026-11-05T15:01:27.9363969Z ##[endgroup]
+2026-11-05T15:01:27.9364468Z ##[group]Runner Image
+2026-11-05T15:01:27.9364981Z Image: ubuntu-26.04
+2026-11-05T15:01:27.9365434Z Version: 20261101.186.1
+2026-11-05T15:01:27.9366526Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261101.186/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-05T15:01:27.9367879Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261101.186
+2026-11-05T15:01:27.9368671Z ##[endgroup]
+2026-11-05T15:01:27.9369651Z ##[group]GITHUB_TOKEN Permissions
+2026-11-05T15:01:27.9371432Z Contents: read
+2026-11-05T15:01:27.9371924Z Metadata: read
+2026-11-05T15:01:27.9372480Z ##[endgroup]
+2026-11-05T15:01:27.9374455Z Secret source: Actions
+2026-11-05T15:01:27.9375294Z Cache mode: write
+2026-11-05T15:01:27.9375900Z Prepare workflow directory
+2026-11-05T15:01:27.9637020Z Prepare all required actions
+2026-11-05T15:01:27.9676048Z Getting action download info
+2026-11-05T15:01:28.3759028Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-05T15:01:28.5384450Z Download action repository 'Hexalith/Hexalith.Builds@e171c5a788eab183b32683431b084198c9b8d373' (SHA:e171c5a788eab183b32683431b084198c9b8d373)
+2026-11-05T15:01:30.4212255Z Download action repository 'actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68' (SHA:a98b56852c35b8e3190ac28c8c2271da59106c68)
+2026-11-05T15:01:30.6596051Z Download action repository 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9' (SHA:55cc8345863c7cc4c66a329aec7e433d2d1c52a9)
+2026-11-05T15:01:30.8647561Z Download action repository 'Hexalith/Hexalith.Builds@c171c7265e70806f09f6ac54130aa6e28ef74395' (SHA:c171c7265e70806f09f6ac54130aa6e28ef74395)
+2026-11-05T15:01:33.4316654Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-11-05T15:01:33.6493992Z Getting action download info
+2026-11-05T15:01:33.8124588Z Download action repository 'dapr/setup-dapr@8d980918fd43a2765c143ce7f687665b2d46a6b9' (SHA:8d980918fd43a2765c143ce7f687665b2d46a6b9)
+2026-11-05T15:01:34.1919776Z Download action repository 'nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60' (SHA:ad984534de44a9489a53aefd81eb77f87c70dc60)
+2026-11-05T15:01:34.5263973Z Uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@06a51f55bfe2e03a06e1121d94a41e98f1e3e251
+2026-11-05T15:01:34.5266756Z ##[group] Inputs
+2026-11-05T15:01:34.5267010Z   solution: Hexalith.McpCli.slnx
+2026-11-05T15:01:34.5267236Z   module-manifest: 
+2026-11-05T15:01:34.5267437Z   dotnet-global-json: global.json
+2026-11-05T15:01:34.5267895Z   packages-lock-file: Directory.Packages.props, global.json, references/Hexalith.Builds/Props/Directory.Packages.props
+2026-11-05T15:01:34.5268344Z   dapr-version: 1.18.2
+2026-11-05T15:01:34.5268549Z   dapr-runtime-version: 1.18.7
+2026-11-05T15:01:34.5268785Z   test-platform: microsoft-testing-platform
+2026-11-05T15:01:34.5269061Z   allowed-not-runnable-tests: 
+2026-11-05T15:01:34.5270102Z   unit-test-projects: tests/Hexalith.McpCli.Abstractions.Tests
+tests/Hexalith.McpCli.Analyzers.Tests
+tests/Hexalith.McpCli.Core.Tests
+tests/Hexalith.McpCli.Manifest.Tests
+tests/Hexalith.McpCli.Cli.Tests
+tests/Hexalith.McpCli.Mcp.Tests
+
+2026-11-05T15:01:34.5271227Z   integration-test-projects: 
+2026-11-05T15:01:34.5271512Z   aspire-test-project: tests/Hexalith.McpCli.Integration.Tests
+2026-11-05T15:01:34.5271848Z   aspire-non-performance-filter: Category!=Performance
+2026-11-05T15:01:34.5272125Z   performance-filter: Category=Performance
+2026-11-05T15:01:34.5272386Z   aspire-mtp-excluded-trait: Category=Performance
+2026-11-05T15:01:34.5272661Z   performance-mtp-trait: Category=Performance
+2026-11-05T15:01:34.5273225Z   run-consumer-validation: false
+2026-11-05T15:01:34.5273448Z   package-prepare-script: 
+2026-11-05T15:01:34.5273660Z   run-coverage-gate: false
+2026-11-05T15:01:34.5274184Z   coverage-minimum-line: 80
+2026-11-05T15:01:34.5274434Z   coverage-required-branch: 100
+2026-11-05T15:01:34.5274652Z   coverage-isolation-targets: 
+2026-11-05T15:01:34.5274864Z   coverage-line-scope: 
+2026-11-05T15:01:34.5275068Z   aspire-continue-on-error: false
+2026-11-05T15:01:34.5275343Z   aspire-prepare-script: tools/live-topology/prepare-ci.sh
+2026-11-05T15:01:34.5275670Z   aspire-runner-script: tools/live-topology/run-ci.sh
+2026-11-05T15:01:34.5275944Z   aspire-prepare-timeout-minutes: 40
+2026-11-05T15:01:34.5297229Z   aspire-runner-timeout-minutes: 300
+2026-11-05T15:01:34.5297614Z   aspire-evidence-path: TestResults/live-ci
+2026-11-05T15:01:34.5297955Z   aspire-browser-project: 
+2026-11-05T15:01:34.5298262Z   aspire-fail-skips: false
+2026-11-05T15:01:34.5298575Z   build-timeout-minutes: 60
+2026-11-05T15:01:34.5298915Z   aspire-timeout-minutes: 360
+2026-11-05T15:01:34.5299142Z   performance-timeout-minutes: 60
+2026-11-05T15:01:34.5299358Z   governed-ci: false
+2026-11-05T15:01:34.5299544Z   builds-execution-sha: 
+2026-11-05T15:01:34.5299729Z   candidate-commit: 
+2026-11-05T15:01:34.5299918Z   dependency-policy-repository: 
+2026-11-05T15:01:34.5300137Z   dependency-policy-path: 
+2026-11-05T15:01:34.5300349Z   dependency-policy-commit: 
+2026-11-05T15:01:34.5300562Z   dependency-policy-sha256: 
+2026-11-05T15:01:34.5300776Z   expected-ci-evaluator-digest: 
+2026-11-05T15:01:34.5301179Z ##[endgroup]
+2026-11-05T15:01:34.5301372Z Complete job name: ci / build-and-test
+2026-11-05T15:01:34.6157639Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-05T15:01:34.6158193Z with:
+2026-11-05T15:01:34.6158371Z   fetch-depth: 0
+2026-11-05T15:01:34.6158555Z   submodules: false
+2026-11-05T15:01:34.6158756Z   repository: Hexalith/Hexalith.McpCli
+2026-11-05T15:01:34.6160729Z   token: ***
+2026-11-05T15:01:34.6160907Z   ssh-strict: true
+2026-11-05T15:01:34.6161237Z   ssh-user: git
+2026-11-05T15:01:34.6161418Z   persist-credentials: true
+2026-11-05T15:01:34.6161611Z   clean: true
+2026-11-05T15:01:34.6161789Z   sparse-checkout-cone-mode: true
+2026-11-05T15:01:34.6162006Z   fetch-tags: false
+2026-11-05T15:01:34.6162184Z   show-progress: true
+2026-11-05T15:01:34.6162356Z   lfs: false
+2026-11-05T15:01:34.6162529Z   set-safe-directory: true
+2026-11-05T15:01:34.6162746Z   allow-unsafe-pr-checkout: false
+2026-11-05T15:01:34.6163129Z ##[endgroup]
+2026-11-05T15:01:34.8788770Z Syncing repository: Hexalith/Hexalith.McpCli
+2026-11-05T15:01:34.8790538Z ##[group]Getting Git version info
+2026-11-05T15:01:34.8791341Z Working directory is '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli'
+2026-11-05T15:01:34.8792175Z [command]/usr/bin/git version
+2026-11-05T15:01:34.8802045Z git version 2.56.0
+2026-11-05T15:01:34.8817878Z ##[endgroup]
+2026-11-05T15:01:34.8825855Z Temporarily overriding HOME='/home/runner/work/_temp/d0ee5dda-6eae-4eae-abea-14d747129168' before making global git config changes
+2026-11-05T15:01:34.8827022Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T15:01:34.8829617Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T15:01:34.8885063Z Deleting the contents of '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli'
+2026-11-05T15:01:34.8887887Z ##[group]Determining repository object format
+2026-11-05T15:01:34.8889132Z ##[endgroup]
+2026-11-05T15:01:34.8889639Z ##[group]Initializing the repository
+2026-11-05T15:01:34.8892579Z [command]/usr/bin/git init /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T15:01:34.8971736Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-05T15:01:34.8972580Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-05T15:01:34.8973408Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-05T15:01:34.8974028Z hint: call:
+2026-11-05T15:01:34.8974428Z hint:
+2026-11-05T15:01:34.8974902Z hint: 	git config --global init.defaultBranch <name>
+2026-11-05T15:01:34.8975466Z hint:
+2026-11-05T15:01:34.8975994Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-05T15:01:34.8976776Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-05T15:01:34.8977404Z hint:
+2026-11-05T15:01:34.8977796Z hint: 	git branch -m <name>
+2026-11-05T15:01:34.8978288Z hint:
+2026-11-05T15:01:34.8978847Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-05T15:01:34.8981891Z Initialized empty Git repository in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/
+2026-11-05T15:01:34.8991552Z [command]/usr/bin/git remote add origin https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T15:01:34.9034650Z ##[endgroup]
+2026-11-05T15:01:34.9035274Z ##[group]Disabling automatic garbage collection
+2026-11-05T15:01:34.9038281Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-05T15:01:34.9073337Z ##[endgroup]
+2026-11-05T15:01:34.9074029Z ##[group]Setting up auth
+2026-11-05T15:01:34.9074602Z Removing SSH command configuration
+2026-11-05T15:01:34.9080249Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T15:01:34.9115840Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T15:01:34.9513512Z Removing HTTP extra header
+2026-11-05T15:01:34.9518743Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T15:01:34.9547048Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T15:01:34.9772749Z Removing includeIf entries pointing to credentials config files
+2026-11-05T15:01:34.9777129Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:01:34.9811353Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-05T15:01:35.0052887Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-05T15:01:35.0088097Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path /home/runner/work/_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config
+2026-11-05T15:01:35.0117081Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config
+2026-11-05T15:01:35.0148713Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config
+2026-11-05T15:01:35.0177211Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config
+2026-11-05T15:01:35.0208450Z ##[endgroup]
+2026-11-05T15:01:35.0209027Z ##[group]Fetching the repository
+2026-11-05T15:01:35.0210033Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-11-05T15:01:37.0583015Z From https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T15:01:37.0583438Z  * [new branch]      main       -> origin/main
+2026-11-05T15:01:37.0583717Z  * [new tag]         v1.0.0     -> v1.0.0
+2026-11-05T15:01:37.0583954Z  * [new tag]         v1.1.0     -> v1.1.0
+2026-11-05T15:01:37.0584177Z  * [new tag]         v2.0.0     -> v2.0.0
+2026-11-05T15:01:37.0590621Z [command]/usr/bin/git branch --list --remote origin/main
+2026-11-05T15:01:37.0614863Z   origin/main
+2026-11-05T15:01:37.0621874Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-11-05T15:01:37.0642577Z 624de50385ac3d9aab15f25d056f1f24ae651645
+2026-11-05T15:01:37.0646311Z ##[endgroup]
+2026-11-05T15:01:37.0646817Z ##[group]Determining the checkout info
+2026-11-05T15:01:37.0647383Z ##[endgroup]
+2026-11-05T15:01:37.0651910Z [command]/usr/bin/git sparse-checkout disable
+2026-11-05T15:01:37.0695119Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-05T15:01:37.0722317Z ##[group]Checking out the ref
+2026-11-05T15:01:37.0726156Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-05T15:01:37.8908558Z Switched to a new branch 'main'
+2026-11-05T15:01:37.8912266Z branch 'main' set up to track 'origin/main'.
+2026-11-05T15:01:37.8949756Z ##[endgroup]
+2026-11-05T15:01:37.8997808Z [command]/usr/bin/git log -1 --format=%H
+2026-11-05T15:01:37.9021786Z 624de50385ac3d9aab15f25d056f1f24ae651645
+2026-11-05T15:01:37.9265549Z ##[group]Run Hexalith/Hexalith.Builds/Github/initialize-build@e171c5a788eab183b32683431b084198c9b8d373
+2026-11-05T15:01:37.9265956Z ##[endgroup]
+2026-11-05T15:01:37.9308500Z ##[start-action display=Initialize root-declared submodules;id=__Hexalith_Hexalith_Builds.__run]
+2026-11-05T15:01:37.9338003Z ##[group]Run git -c submodule.recurse=false submodule update --init
+2026-11-05T15:01:37.9338598Z [36;1mgit -c submodule.recurse=false submodule update --init[0m
+2026-11-05T15:01:37.9386366Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T15:01:37.9386673Z ##[endgroup]
+2026-11-05T15:01:37.9783603Z Submodule 'references/Hexalith.AI.Tools' (https://github.com/Hexalith/Hexalith.AI.Tools.git) registered for path 'references/Hexalith.AI.Tools'
+2026-11-05T15:01:37.9789299Z Submodule 'references/Hexalith.Agents' (https://github.com/Hexalith/Hexalith.Agents.git) registered for path 'references/Hexalith.Agents'
+2026-11-05T15:01:37.9796077Z Submodule 'references/Hexalith.Builds' (https://github.com/Hexalith/Hexalith.Builds.git) registered for path 'references/Hexalith.Builds'
+2026-11-05T15:01:37.9802394Z Submodule 'references/Hexalith.ChatBot' (https://github.com/Hexalith/Hexalith.ChatBot.git) registered for path 'references/Hexalith.ChatBot'
+2026-11-05T15:01:37.9808912Z Submodule 'references/Hexalith.Commons' (https://github.com/Hexalith/Hexalith.Commons.git) registered for path 'references/Hexalith.Commons'
+2026-11-05T15:01:37.9815607Z Submodule 'references/Hexalith.Conversations' (https://github.com/Hexalith/Hexalith.Conversations.git) registered for path 'references/Hexalith.Conversations'
+2026-11-05T15:01:37.9822225Z Submodule 'references/Hexalith.EventStore' (https://github.com/Hexalith/Hexalith.EventStore.git) registered for path 'references/Hexalith.EventStore'
+2026-11-05T15:01:37.9829201Z Submodule 'references/Hexalith.Folders' (https://github.com/Hexalith/Hexalith.Folders.git) registered for path 'references/Hexalith.Folders'
+2026-11-05T15:01:37.9836273Z Submodule 'references/Hexalith.FrontComposer' (https://github.com/Hexalith/Hexalith.FrontComposer.git) registered for path 'references/Hexalith.FrontComposer'
+2026-11-05T15:01:37.9843286Z Submodule 'references/Hexalith.Memories' (https://github.com/Hexalith/Hexalith.Memories.git) registered for path 'references/Hexalith.Memories'
+2026-11-05T15:01:37.9850278Z Submodule 'references/Hexalith.Parties' (https://github.com/Hexalith/Hexalith.Parties.git) registered for path 'references/Hexalith.Parties'
+2026-11-05T15:01:37.9857394Z Submodule 'references/Hexalith.Platform' (https://github.com/Hexalith/Hexalith.Platform.git) registered for path 'references/Hexalith.Platform'
+2026-11-05T15:01:37.9864816Z Submodule 'references/Hexalith.PolymorphicSerializations' (https://github.com/Hexalith/Hexalith.PolymorphicSerializations.git) registered for path 'references/Hexalith.PolymorphicSerializations'
+2026-11-05T15:01:37.9871878Z Submodule 'references/Hexalith.Projects' (https://github.com/Hexalith/Hexalith.Projects.git) registered for path 'references/Hexalith.Projects'
+2026-11-05T15:01:37.9879059Z Submodule 'references/Hexalith.Tenants' (https://github.com/Hexalith/Hexalith.Tenants.git) registered for path 'references/Hexalith.Tenants'
+2026-11-05T15:01:37.9886878Z Submodule 'references/Hexalith.Timesheets' (https://github.com/Hexalith/Hexalith.Timesheets.git) registered for path 'references/Hexalith.Timesheets'
+2026-11-05T15:01:37.9894877Z Submodule 'references/Hexalith.Works' (https://github.com/Hexalith/Hexalith.Works.git) registered for path 'references/Hexalith.Works'
+2026-11-05T15:01:38.0124948Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.AI.Tools'...
+2026-11-05T15:01:38.4604077Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Agents'...
+2026-11-05T15:01:40.9212626Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Builds'...
+2026-11-05T15:01:47.7449399Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.ChatBot'...
+2026-11-05T15:01:50.0666787Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Commons'...
+2026-11-05T15:01:50.5649624Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Conversations'...
+2026-11-05T15:01:55.1948686Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.EventStore'...
+2026-11-05T15:02:16.5855021Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Folders'...
+2026-11-05T15:02:40.3276722Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.FrontComposer'...
+2026-11-05T15:03:24.2777158Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Memories'...
+2026-11-05T15:03:26.3699570Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Parties'...
+2026-11-05T15:03:28.0985104Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Platform'...
+2026-11-05T15:03:31.9253769Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.PolymorphicSerializations'...
+2026-11-05T15:03:32.4207696Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Projects'...
+2026-11-05T15:03:42.1562229Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Tenants'...
+2026-11-05T15:03:44.7147620Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Timesheets'...
+2026-11-05T15:03:47.4380374Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Works'...
+2026-11-05T15:03:52.6903089Z Submodule path 'references/Hexalith.AI.Tools': checked out '1745b6663ad32bb1288167135ed0f979366c53a0'
+2026-11-05T15:03:54.2503064Z Submodule path 'references/Hexalith.Agents': checked out '7957108c30d38b8e82eb072cf3437b6a67627cd7'
+2026-11-05T15:03:54.4958462Z Submodule path 'references/Hexalith.Builds': checked out '06a51f55bfe2e03a06e1121d94a41e98f1e3e251'
+2026-11-05T15:03:55.0775579Z Submodule path 'references/Hexalith.ChatBot': checked out '7626f59481e521b5775c45159e0eb471a02d9ddc'
+2026-11-05T15:03:55.0961286Z Submodule path 'references/Hexalith.Commons': checked out '11555ace9efcae2928a00122dcba91243e5a8a1a'
+2026-11-05T15:04:04.6982274Z Submodule path 'references/Hexalith.Conversations': checked out 'c02e6092905b17e0c675c24e27082a7bcb27b06a'
+2026-11-05T15:04:05.5041105Z Submodule path 'references/Hexalith.EventStore': checked out 'fe974f485fa2c29d9ea055f5597b41ae38d072f1'
+2026-11-05T15:04:15.5455721Z Submodule path 'references/Hexalith.Folders': checked out '9198d9213f6ea54c629148322f05e7ded994822d'
+2026-11-05T15:04:16.3855368Z Submodule path 'references/Hexalith.FrontComposer': checked out 'b70627f649826b1a2338ccc13295ba02b71f7424'
+2026-11-05T15:04:17.0143012Z Submodule path 'references/Hexalith.Memories': checked out '4dac7decfdd33b3d048de3c77e9cb1562bb95c6f'
+2026-11-05T15:04:17.6849717Z Submodule path 'references/Hexalith.Parties': checked out '570ff5935ac79331db4a10f74cfaa774c56239eb'
+2026-11-05T15:04:20.6811713Z Submodule path 'references/Hexalith.Platform': checked out 'aaa30aff1038688a921494a78c9fc53fc5eb8836'
+2026-11-05T15:04:20.9438457Z Submodule path 'references/Hexalith.PolymorphicSerializations': checked out 'bce4eb9f45c6b131b960ab4fa39e50ff01e51960'
+2026-11-05T15:04:27.8992524Z Submodule path 'references/Hexalith.Projects': checked out '9c3c28f4a54cd95efc3bfcc55bd2424b881c3525'
+2026-11-05T15:04:28.8060325Z Submodule path 'references/Hexalith.Tenants': checked out '143cec60a3f5bb1831fa57f35c510880ceb788d8'
+2026-11-05T15:04:29.6987205Z Submodule path 'references/Hexalith.Timesheets': checked out '56ad35e1183193f7203264511e760c2b9f5d2729'
+2026-11-05T15:04:31.7550119Z Submodule path 'references/Hexalith.Works': checked out 'a75e1ee368bc4f2e868b5c03fef4545a64d88fc2'
+2026-11-05T15:04:31.7610780Z ##[end-action id=__Hexalith_Hexalith_Builds.__run;outcome=success;conclusion=success;duration_ms=173830]
+2026-11-05T15:04:31.8002313Z ##[group]Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+2026-11-05T15:04:31.8002633Z with:
+2026-11-05T15:04:31.8002814Z   global-json-file: global.json
+2026-11-05T15:04:31.8003022Z   cache: false
+2026-11-05T15:04:31.8003194Z ##[endgroup]
+2026-11-05T15:04:31.9257641Z [command]/home/runner/work/_actions/actions/setup-dotnet/a98b56852c35b8e3190ac28c8c2271da59106c68/externals/install-dotnet.sh --skip-non-versioned-files --runtime dotnet --channel LTS
+2026-11-05T15:04:32.3128204Z dotnet-install: .NET Core Runtime with version '10.0.14' is already installed.
+2026-11-05T15:04:32.3147863Z [command]/home/runner/work/_actions/actions/setup-dotnet/a98b56852c35b8e3190ac28c8c2271da59106c68/externals/install-dotnet.sh --skip-non-versioned-files --channel 10.0.4xx
+2026-11-05T15:04:32.6387331Z dotnet-install: .NET Core SDK with version '10.0.403' is already installed.
+2026-11-05T15:04:32.7799591Z ##[group]Run actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+2026-11-05T15:04:32.7799891Z with:
+2026-11-05T15:04:32.7800061Z   path: ~/.nuget/packages
+2026-11-05T15:04:32.7800247Z   key: nuget-
+2026-11-05T15:04:32.7800411Z   restore-keys: nuget-
+2026-11-05T15:04:32.7800598Z   enableCrossOsArchive: false
+2026-11-05T15:04:32.7800804Z   fail-on-cache-miss: false
+2026-11-05T15:04:32.7801230Z   lookup-only: false
+2026-11-05T15:04:32.7801414Z   save-always: false
+2026-11-05T15:04:32.7801581Z env:
+2026-11-05T15:04:32.7801749Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:04:32.7801952Z ##[endgroup]
+2026-11-05T15:04:33.4444623Z Cache hit for: nuget-
+2026-11-05T15:04:34.7891237Z Received 20971520 of 60262511 (34.8%), 20.0 MBs/sec
+2026-11-05T15:04:35.1015472Z Received 60262511 of 60262511 (100.0%), 43.8 MBs/sec
+2026-11-05T15:04:35.1017635Z Cache Size: ~57 MB (60262511 B)
+2026-11-05T15:04:35.1120118Z [command]/usr/bin/tar -xf /home/runner/work/_temp/b9e1e638-1e0e-4fe3-b321-63c6e1f9ac9e/cache.tzst -P -C /home/runner/work/Hexalith.McpCli/Hexalith.McpCli --use-compress-program unzstd
+2026-11-05T15:04:35.3442961Z Cache restored successfully
+2026-11-05T15:04:35.6337819Z Cache restored from key: nuget-
+2026-11-05T15:04:35.6870412Z ##[group]Run dotnet restore "$SOLUTION" -p:Configuration=Release
+2026-11-05T15:04:35.6870861Z [36;1mdotnet restore "$SOLUTION" -p:Configuration=Release[0m
+2026-11-05T15:04:35.7249241Z shell: /usr/bin/bash -e {0}
+2026-11-05T15:04:35.7249472Z env:
+2026-11-05T15:04:35.7249659Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:04:35.7249899Z   SOLUTION: Hexalith.McpCli.slnx
+2026-11-05T15:04:35.7250283Z ##[endgroup]
+2026-11-05T15:05:15.6273920Z   Determining projects to restore...
+2026-11-05T15:05:17.3898192Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 193 ms).
+2026-11-05T15:05:19.1616731Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 2 sec).
+2026-11-05T15:05:19.1832827Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 1.78 sec).
+2026-11-05T15:05:19.1863001Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj (in 2.03 sec).
+2026-11-05T15:05:19.4101874Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 6 ms).
+2026-11-05T15:05:19.4833008Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj (in 2 ms).
+2026-11-05T15:05:19.6452680Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj (in 2 ms).
+2026-11-05T15:05:19.6462294Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/StdioHost/Hexalith.McpCli.StdioHost.csproj (in 12 ms).
+2026-11-05T15:05:19.8412907Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.InvalidProvider.Contracts/Catalog.InvalidProvider.Contracts.csproj (in 6 ms).
+2026-11-05T15:05:19.8452342Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj (in 2 ms).
+2026-11-05T15:05:19.8482093Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Table.Contracts/Catalog.Table.Contracts.csproj (in 2 ms).
+2026-11-05T15:05:19.8535126Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.String.Contracts/Catalog.String.Contracts.csproj (in 2 ms).
+2026-11-05T15:05:19.8604216Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Routing.Contracts/Catalog.Routing.Contracts.csproj (in 3 ms).
+2026-11-05T15:05:19.9601308Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Lint.Contracts/Catalog.Lint.Contracts.csproj (in 3 ms).
+2026-11-05T15:05:19.9646793Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Invalid.Contracts/Catalog.Invalid.Contracts.csproj (in 2 ms).
+2026-11-05T15:05:19.9776783Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Explicit.Contracts/Catalog.Explicit.Contracts.csproj (in 8 ms).
+2026-11-05T15:05:19.9812293Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj (in 3 ms).
+2026-11-05T15:05:20.0405807Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.csproj (in 29 ms).
+2026-11-05T15:05:21.2797908Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 1.88 sec).
+2026-11-05T15:05:21.2909949Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj (in 1.24 sec).
+2026-11-05T15:05:21.3064859Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj (in 7 ms).
+2026-11-05T15:05:21.3174763Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj (in 15 ms).
+2026-11-05T15:05:21.3222272Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj (in 4.16 sec).
+2026-11-05T15:05:21.3242269Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj (in 1.33 sec).
+2026-11-05T15:05:21.3388298Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj (in 11 ms).
+2026-11-05T15:05:21.3429791Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj (in 15 ms).
+2026-11-05T15:05:21.3437693Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj (in 16 ms).
+2026-11-05T15:05:21.4023519Z ##[group]Run dotnet build "$SOLUTION" --no-restore --configuration Release -warnaserror
+2026-11-05T15:05:21.4024074Z [36;1mdotnet build "$SOLUTION" --no-restore --configuration Release -warnaserror[0m
+2026-11-05T15:05:21.4069063Z shell: /usr/bin/bash -e {0}
+2026-11-05T15:05:21.4069285Z env:
+2026-11-05T15:05:21.4069467Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:05:21.4069702Z   SOLUTION: Hexalith.McpCli.slnx
+2026-11-05T15:05:21.4069904Z ##[endgroup]
+2026-11-05T15:07:07.9719245Z   Hexalith.McpCli.Analyzers -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+2026-11-05T15:07:23.8932085Z   Manifest.Unmarked.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.Unmarked.Contracts/bin/Release/net10.0/manifest.AUnmarked.Contracts.dll
+2026-11-05T15:07:24.2545114Z   Topology.DaprStub -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Topology.DaprStub/bin/Release/net10.0/dapr.dll
+2026-11-05T15:08:09.5957069Z   Hexalith.McpCli.AppHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.AppHost/bin/Release/net10.0/Hexalith.McpCli.AppHost.dll
+2026-11-05T15:08:11.0775659Z   Hexalith.McpCli.EventStoreGateway.TestHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.McpCli.EventStoreGateway.TestHost.dll
+2026-11-05T15:08:11.2850420Z   Hexalith.McpCli.Abstractions -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+2026-11-05T15:08:11.4290384Z   Manifest.MarkedEmpty.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.MarkedEmpty.Contracts/bin/Release/net10.0/Manifest.MarkedEmpty.Contracts.dll
+2026-11-05T15:08:11.4942983Z   Catalog.Table.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Table.Contracts/bin/Release/net10.0/Catalog.Table.Contracts.dll
+2026-11-05T15:08:11.6004060Z   Catalog.String.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.String.Contracts/bin/Release/net10.0/Catalog.String.Contracts.dll
+2026-11-05T15:08:11.7654518Z   Catalog.Routing.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Routing.Contracts/bin/Release/net10.0/Catalog.Routing.Contracts.dll
+2026-11-05T15:08:11.8563334Z   Catalog.Lint.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Lint.Contracts/bin/Release/net10.0/Catalog.Lint.Contracts.dll
+2026-11-05T15:08:11.9236141Z   Hexalith.McpCli.Analyzers.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll
+2026-11-05T15:08:11.9913757Z   Catalog.InvalidProvider.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.InvalidProvider.Contracts/bin/Release/net10.0/Catalog.InvalidProvider.Contracts.dll
+2026-11-05T15:08:12.0731983Z   Catalog.Invalid.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Invalid.Contracts/bin/Release/net10.0/Catalog.Invalid.Contracts.dll
+2026-11-05T15:08:12.2317083Z   Catalog.Explicit.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Explicit.Contracts/bin/Release/net10.0/Catalog.Explicit.Contracts.dll
+2026-11-05T15:08:12.4126926Z   Hexalith.McpCli.Sample.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Sample.Contracts/bin/Release/net10.0/Hexalith.McpCli.Sample.Contracts.dll
+2026-11-05T15:08:12.7878025Z   Hexalith.McpCli.Abstractions.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll
+2026-11-05T15:08:12.8992182Z   Hexalith.McpCli.Core -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll
+2026-11-05T15:08:13.0111592Z   Hexalith.McpCli.Mcp -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll
+2026-11-05T15:08:18.4984982Z   Hexalith.McpCli -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll
+2026-11-05T15:08:28.4160723Z   Hexalith.McpCli.Mcp.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll
+2026-11-05T15:08:28.4469026Z   Hexalith.McpCli.StdioHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/StdioHost/bin/Release/net10.0/Hexalith.McpCli.StdioHost.dll
+2026-11-05T15:08:28.9068851Z   Hexalith.McpCli.ConformanceHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll
+2026-11-05T15:08:30.8751790Z   Hexalith.McpCli.Core.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll
+2026-11-05T15:08:30.9248071Z   Hexalith.McpCli.Cli.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll
+2026-11-05T15:08:31.9734779Z   Hexalith.McpCli.Integration.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll
+2026-11-05T15:08:33.0884317Z   Hexalith.McpCli.Manifest.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll
+2026-11-05T15:08:33.1164603Z 
+2026-11-05T15:08:33.1171160Z Build succeeded.
+2026-11-05T15:08:33.1171812Z     0 Warning(s)
+2026-11-05T15:08:33.1175924Z     0 Error(s)
+2026-11-05T15:08:33.1176474Z 
+2026-11-05T15:08:33.1176900Z Time Elapsed 00:03:08.57
+2026-11-05T15:08:33.1585590Z ##[group]Run set -euo pipefail
+2026-11-05T15:08:33.1585931Z [36;1mset -euo pipefail[0m
+2026-11-05T15:08:33.1586133Z [36;1mfailures=0[0m
+2026-11-05T15:08:33.1586316Z [36;1m{[0m
+2026-11-05T15:08:33.1586555Z [36;1m  echo "## Tier 1 Unit Tests (Microsoft.Testing.Platform)"[0m
+2026-11-05T15:08:33.1586836Z [36;1m  echo[0m
+2026-11-05T15:08:33.1587037Z [36;1m  echo "| Project | Status | Exit code |"[0m
+2026-11-05T15:08:33.1587315Z [36;1m  echo "| --- | --- | ---: |"[0m
+2026-11-05T15:08:33.1587543Z [36;1m} >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:08:33.1587760Z [36;1mwhile IFS= read -r proj; do[0m
+2026-11-05T15:08:33.1587974Z [36;1m  [ -z "$proj" ] && continue[0m
+2026-11-05T15:08:33.1588202Z [36;1m  name=$(basename "$proj")[0m
+2026-11-05T15:08:33.1588454Z [36;1m  result_file="TestResults/${name}/${name}.trx"[0m
+2026-11-05T15:08:33.1588712Z [36;1m  rm -f -- "$result_file"[0m
+2026-11-05T15:08:33.1588942Z [36;1m  mkdir -p "TestResults/${name}"[0m
+2026-11-05T15:08:33.1589256Z [36;1m  report_marker="TestResults/${name}/.started"[0m
+2026-11-05T15:08:33.1589522Z [36;1m  touch "$report_marker"[0m
+2026-11-05T15:08:33.1589750Z [36;1m  summary_proj=${proj//\\/\\\\}[0m
+2026-11-05T15:08:33.1590087Z [36;1m  summary_proj=${summary_proj//|/\\|}[0m
+2026-11-05T15:08:33.1590447Z [36;1m  summary_proj=${summary_proj//\`/\\\`}[0m
+2026-11-05T15:08:33.1590889Z [36;1m  coverage_args=()[0m
+2026-11-05T15:08:33.1591286Z [36;1m  if [ "$RUN_COVERAGE_GATE" = "true" ]; then[0m
+2026-11-05T15:08:33.1591751Z [36;1m    coverage_args+=(--coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml)[0m
+2026-11-05T15:08:33.1592188Z [36;1m  fi[0m
+2026-11-05T15:08:33.1592448Z [36;1m  if dotnet test "$proj" --no-build --configuration Release \[0m
+2026-11-05T15:08:33.1592789Z [36;1m      --results-directory "TestResults/${name}" \[0m
+2026-11-05T15:08:33.1593067Z [36;1m      --report-xunit-trx \[0m
+2026-11-05T15:08:33.1593340Z [36;1m      --report-xunit-trx-filename "${name}.trx" \[0m
+2026-11-05T15:08:33.1593624Z [36;1m      "${coverage_args[@]}" </dev/null; then[0m
+2026-11-05T15:08:33.1593886Z [36;1m    status=PASS[0m
+2026-11-05T15:08:33.1594081Z [36;1m    exit_code=0[0m
+2026-11-05T15:08:33.1594262Z [36;1m  else[0m
+2026-11-05T15:08:33.1594433Z [36;1m    exit_code=$?[0m
+2026-11-05T15:08:33.1594649Z [36;1m    annotation_proj=${proj//%/%25}[0m
+2026-11-05T15:08:33.1594910Z [36;1m    if [ "$exit_code" -eq 10 ]; then[0m
+2026-11-05T15:08:33.1595384Z [36;1m      printf '::error title=Test shard infrastructure failure::%s exited with infrastructure code %d.\n' "$annotation_proj" "$exit_code"[0m
+2026-11-05T15:08:33.1595942Z [36;1m      printf '| %s | FAIL | %d |\n' "$summary_proj" "$exit_code" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:08:33.1596271Z [36;1m      exit "$exit_code"[0m
+2026-11-05T15:08:33.1596475Z [36;1m    fi[0m
+2026-11-05T15:08:33.1596664Z [36;1m    if [ ! -f "$result_file" ]; then[0m
+2026-11-05T15:08:33.1596938Z [36;1m      annotation_result_file=${result_file//%/%25}[0m
+2026-11-05T15:08:33.1597386Z [36;1m      printf '::error title=Test shard infrastructure failure::%s exited with code %d without producing %s.\n' \[0m
+2026-11-05T15:08:33.1597858Z [36;1m        "$annotation_proj" "$exit_code" "$annotation_result_file"[0m
+2026-11-05T15:08:33.1598239Z [36;1m      printf '| %s | FAIL | %d |\n' "$summary_proj" "$exit_code" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:08:33.1598571Z [36;1m      exit "$exit_code"[0m
+2026-11-05T15:08:33.1598763Z [36;1m    fi[0m
+2026-11-05T15:08:33.1598935Z [36;1m    status=FAIL[0m
+2026-11-05T15:08:33.1599139Z [36;1m    failures=$((failures + 1))[0m
+2026-11-05T15:08:33.1599518Z [36;1m    printf '::error title=Test shard failed::%s exited with code %d.\n' "$annotation_proj" "$exit_code"[0m
+2026-11-05T15:08:33.1599877Z [36;1m  fi[0m
+2026-11-05T15:08:33.1600145Z [36;1m  # A zero child exit is insufficient: require this invocation's nonzero TRX.[0m
+2026-11-05T15:08:33.1600747Z [36;1m  # The heredoc also keeps the verifier from consuming the project-list stdin.[0m
+2026-11-05T15:08:33.1601399Z [36;1m  if ! python3 - "$result_file" "$report_marker" "$exit_code" <<'PYTRX'[0m
+2026-11-05T15:08:33.1601712Z [36;1mimport os[0m
+2026-11-05T15:08:33.1601905Z [36;1mimport pathlib[0m
+2026-11-05T15:08:33.1602101Z [36;1mimport sys[0m
+2026-11-05T15:08:33.1602320Z [36;1mimport xml.etree.ElementTree as ET[0m
+2026-11-05T15:08:33.1602561Z [36;1m[0m
+2026-11-05T15:08:33.1602723Z [36;1mtry:[0m
+2026-11-05T15:08:33.1602920Z [36;1m    report = pathlib.Path(sys.argv[1])[0m
+2026-11-05T15:08:33.1603347Z [36;1m    if report.stat().st_mtime_ns < pathlib.Path(sys.argv[2]).stat().st_mtime_ns:[0m
+2026-11-05T15:08:33.1603715Z [36;1m        raise ValueError("stale report")[0m
+2026-11-05T15:08:33.1603997Z [36;1m    root = ET.parse(report).getroot()[0m
+2026-11-05T15:08:33.1604342Z [36;1m    ns = "{http://microsoft.com/schemas/VisualStudio/TeamTest/2010}"[0m
+2026-11-05T15:08:33.1604664Z [36;1m    if root.tag != ns + "TestRun":[0m
+2026-11-05T15:08:33.1604919Z [36;1m        raise ValueError("invalid TRX root")[0m
+2026-11-05T15:08:33.1605229Z [36;1m    counters = root.find(f"{ns}ResultSummary/{ns}Counters")[0m
+2026-11-05T15:08:33.1605580Z [36;1m    results = root.findall(f"{ns}Results/{ns}UnitTestResult")[0m
+2026-11-05T15:08:33.1605874Z [36;1m    if counters is None:[0m
+2026-11-05T15:08:33.1606250Z [36;1m        raise ValueError("missing counters")[0m
+2026-11-05T15:08:33.1606520Z [36;1m    total = int(counters.get("total", "-1"))[0m
+2026-11-05T15:08:33.1606802Z [36;1m    executed = int(counters.get("executed", "-1"))[0m
+2026-11-05T15:08:33.1607120Z [36;1m    outcomes = [result.get("outcome") for result in results][0m
+2026-11-05T15:08:33.1607622Z [36;1m    allowed_not_runnable = {name.strip() for name in os.environ.get("ALLOWED_NOT_RUNNABLE_TESTS", "").splitlines() if name.strip()}[0m
+2026-11-05T15:08:33.1608242Z [36;1m    not_runnable = [result.get("testName") for result in results if result.get("outcome") == "NotRunnable"][0m
+2026-11-05T15:08:33.1608818Z [36;1m    if len(not_runnable) != len(set(not_runnable)) or any(name not in allowed_not_runnable for name in not_runnable):[0m
+2026-11-05T15:08:33.1609259Z [36;1m        raise ValueError("unexpected not-runnable test")[0m
+2026-11-05T15:08:33.1609751Z [36;1m    if total != len(results) or executed <= 0 or executed != sum(outcome not in {"NotExecuted", "NotRunnable"} for outcome in outcomes):[0m
+2026-11-05T15:08:33.1610252Z [36;1m        raise ValueError("missing or inconsistent test results")[0m
+2026-11-05T15:08:33.1610682Z [36;1m    if any(outcome not in {"Passed", "Failed", "NotExecuted", "NotRunnable"} for outcome in outcomes):[0m
+2026-11-05T15:08:33.1611231Z [36;1m        raise ValueError("invalid result outcome")[0m
+2026-11-05T15:08:33.1611519Z [36;1m    summary = root.find(f"{ns}ResultSummary")[0m
+2026-11-05T15:08:33.1611887Z [36;1m    if summary is None or summary.get("outcome") not in {"Completed", "Passed", "Failed"}:[0m
+2026-11-05T15:08:33.1612260Z [36;1m        raise ValueError("invalid result summary")[0m
+2026-11-05T15:08:33.1612721Z [36;1m    for name, outcome in (("passed", "Passed"), ("failed", "Failed"), ("notExecuted", "NotExecuted"), ("notRunnable", "NotRunnable")):[0m
+2026-11-05T15:08:33.1613266Z [36;1m        if name in counters.attrib and int(counters.get(name)) != outcomes.count(outcome):[0m
+2026-11-05T15:08:33.1613673Z [36;1m            raise ValueError("contradictory outcome counters")[0m
+2026-11-05T15:08:33.1614008Z [36;1m    failures = [int(counters.get(name, "0")) for name in[0m
+2026-11-05T15:08:33.1614432Z [36;1m                ("failed", "error", "timeout", "aborted", "inconclusive", "passedButRunAborted", "disconnected")][0m
+2026-11-05T15:08:33.1614833Z [36;1m    if any(value < 0 for value in failures):[0m
+2026-11-05T15:08:33.1615121Z [36;1m        raise ValueError("invalid failure counters")[0m
+2026-11-05T15:08:33.1615659Z [36;1m    if int(sys.argv[3]) == 0 and ("Failed" in outcomes or summary.get("outcome") == "Failed" or any(failures)):[0m
+2026-11-05T15:08:33.1616143Z [36;1m        raise ValueError("failed summary or counters with successful exit")[0m
+2026-11-05T15:08:33.1616499Z [36;1mexcept (OSError, ValueError, ET.ParseError):[0m
+2026-11-05T15:08:33.1616896Z [36;1m    print("Expected a fresh, valid TRX with nonzero executed test results.", file=sys.stderr)[0m
+2026-11-05T15:08:33.1617263Z [36;1m    sys.exit(1)[0m
+2026-11-05T15:08:33.1617455Z [36;1mPYTRX[0m
+2026-11-05T15:08:33.1617628Z [36;1m  then[0m
+2026-11-05T15:08:33.1617826Z [36;1m    annotation_proj=${proj//%/%25}[0m
+2026-11-05T15:08:33.1618253Z [36;1m    printf '::error title=Invalid test report::%s did not produce fresh nonzero test evidence.\n' "$annotation_proj"[0m
+2026-11-05T15:08:33.1618743Z [36;1m    printf '| %s | FAIL | 1 |\n' "$summary_proj" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:08:33.1619035Z [36;1m    exit 1[0m
+2026-11-05T15:08:33.1619210Z [36;1m  fi[0m
+2026-11-05T15:08:33.1619491Z [36;1m  printf '| %s | %s | %d |\n' "$summary_proj" "$status" "$exit_code" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:08:33.1619829Z [36;1mdone <<< "$UNIT_TEST_PROJECTS"[0m
+2026-11-05T15:08:33.1620064Z [36;1mecho >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:08:33.1620360Z [36;1mprintf 'failure-count=%d\n' "$failures" >> "$GITHUB_OUTPUT"[0m
+2026-11-05T15:08:33.1665720Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T15:08:33.1666136Z env:
+2026-11-05T15:08:33.1666321Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:08:33.1667074Z   UNIT_TEST_PROJECTS: tests/Hexalith.McpCli.Abstractions.Tests
+tests/Hexalith.McpCli.Analyzers.Tests
+tests/Hexalith.McpCli.Core.Tests
+tests/Hexalith.McpCli.Manifest.Tests
+tests/Hexalith.McpCli.Cli.Tests
+tests/Hexalith.McpCli.Mcp.Tests
+
+2026-11-05T15:08:33.1667818Z   ALLOWED_NOT_RUNNABLE_TESTS: 
+2026-11-05T15:08:33.1668036Z   RUN_COVERAGE_GATE: false
+2026-11-05T15:08:33.1668231Z ##[endgroup]
+2026-11-05T15:08:36.5945318Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll (net10.0|x64)
+2026-11-05T15:08:37.2711718Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll (net10.0|x64) [32mpassed[m [90m(984ms)[m
+2026-11-05T15:08:37.2785463Z 
+2026-11-05T15:08:37.2787341Z   In process file artifacts produced:
+2026-11-05T15:08:37.2789202Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx
+2026-11-05T15:08:37.2790156Z 
+2026-11-05T15:08:37.2798122Z [32mTest run summary: Passed!
+2026-11-05T15:08:37.2802590Z [m  total: 20
+2026-11-05T15:08:37.2802896Z   failed: 0
+2026-11-05T15:08:37.2803263Z [32m  succeeded: 20
+2026-11-05T15:08:37.2803594Z [m  skipped: 0
+2026-11-05T15:08:37.2803902Z   duration: 3s 537ms
+2026-11-05T15:08:38.0102900Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll (net10.0|x64)
+2026-11-05T15:09:45.7548603Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll (net10.0|x64) [32mpassed[m [90m(1m 07s 746ms)[m
+2026-11-05T15:09:45.7608479Z 
+2026-11-05T15:09:45.7610596Z   In process file artifacts produced:
+2026-11-05T15:09:45.7612601Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx
+2026-11-05T15:09:45.7613291Z 
+2026-11-05T15:09:45.7619661Z [32mTest run summary: Passed!
+2026-11-05T15:09:45.7623799Z [m  total: 19
+2026-11-05T15:09:45.7624058Z   failed: 0
+2026-11-05T15:09:45.7624345Z [32m  succeeded: 19
+2026-11-05T15:09:45.7626097Z [m  skipped: 0
+2026-11-05T15:09:45.7626477Z   duration: 1m 07s 955ms
+2026-11-05T15:09:46.4470875Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:09:48.0068226Z [33mskipped[m Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten
+2026-11-05T15:09:48.0091715Z   Windows ACLs are exercised only on Windows.
+2026-11-05T15:09:48.0122210Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:09:48.0132710Z [33mskipped[m Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsRestrictionPreservesInheritedExistingFiles
+2026-11-05T15:09:48.0151550Z   Windows ACL inheritance is exercised only on Windows.
+2026-11-05T15:09:48.0182258Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:09:48.0269716Z [33mskipped[m Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls
+2026-11-05T15:09:48.0270427Z   Windows ACLs are exercised only on Windows.
+2026-11-05T15:09:48.0271466Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:09:48.0907689Z [33mskipped[m Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction
+2026-11-05T15:09:48.0908558Z   Runs only in the fresh benchmark child process.
+2026-11-05T15:09:48.0909213Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:09:48.8766299Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64) [32mpassed[m [90m(2s 430ms)[m
+2026-11-05T15:09:48.8827784Z 
+2026-11-05T15:09:48.8830078Z   In process file artifacts produced:
+2026-11-05T15:09:48.8831915Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx
+2026-11-05T15:09:48.8832318Z 
+2026-11-05T15:09:48.8838555Z [32mTest run summary: Passed!
+2026-11-05T15:09:48.8844262Z [m  total: 735
+2026-11-05T15:09:48.8844488Z   failed: 0
+2026-11-05T15:09:48.8844703Z [32m  succeeded: 731
+2026-11-05T15:09:48.8856385Z [m  skipped: 4
+2026-11-05T15:09:48.8856711Z   duration: 2s 622ms
+2026-11-05T15:09:50.0622314Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+2026-11-05T15:10:41.0491430Z [31mfailed[m Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.ActualKestrelEnforcesOneMiB(bytes: 1048577, expected: RequestEntityTooLarge) [90m(20s 165ms)[m
+2026-11-05T15:10:41.0502171Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+2026-11-05T15:10:41.0503844Z [31m  Xunit.MicrosoftTestingPlatform.XunitException: System.Threading.Tasks.TaskCanceledException : A task was canceled.
+2026-11-05T15:10:41.0506052Z [m[90m    at Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.StartGatewayAsync() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:103[90m
+2026-11-05T15:10:41.0510547Z     at Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.InitializeAsync() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:29[90m
+2026-11-05T15:10:41.0513722Z     at Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.InitializeAsync() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:33[90m
+2026-11-05T15:11:01.1187892Z [m[31mfailed[m Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.ActualKestrelEnforcesOneMiB(bytes: 1048576, expected: OK) [90m(20s 076ms)[m
+2026-11-05T15:11:01.1189158Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+2026-11-05T15:11:01.1190228Z [31m  Xunit.MicrosoftTestingPlatform.XunitException: System.Threading.Tasks.TaskCanceledException : A task was canceled.
+2026-11-05T15:11:01.1191973Z [m[90m    at Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.StartGatewayAsync() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:103[90m
+2026-11-05T15:11:01.1193586Z     at Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.InitializeAsync() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:29[90m
+2026-11-05T15:11:01.1195124Z     at Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.InitializeAsync() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:33[90m
+2026-11-05T15:11:21.1753565Z [m[31mfailed[m Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.PackageConfigurationRetainsReviewedSourceAndDeployedHashes [90m(20s 055ms)[m
+2026-11-05T15:11:21.1755862Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+2026-11-05T15:11:21.1758115Z [31m  Xunit.MicrosoftTestingPlatform.XunitException: System.Threading.Tasks.TaskCanceledException : A task was canceled.
+2026-11-05T15:11:21.1760357Z [m[90m    at Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.StartGatewayAsync() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:103[90m
+2026-11-05T15:11:21.1763241Z     at Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.InitializeAsync() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:29[90m
+2026-11-05T15:11:21.1765935Z     at Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.InitializeAsync() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:33[90m
+2026-11-05T15:12:24.2898323Z [m[m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64) [31mfailed with 3 error(s)[m [90m(2m 34s 229ms)[m
+2026-11-05T15:12:24.2899599Z Exit code: 2
+2026-11-05T15:12:24.2899971Z   Error output: restore.log: 
+2026-11-05T15:12:24.2900280Z   
+2026-11-05T15:12:24.2900518Z   restore.log: 
+2026-11-05T15:12:24.2900754Z   
+2026-11-05T15:12:24.2901138Z   restore.log: 
+2026-11-05T15:12:24.2901381Z   
+2026-11-05T15:12:24.2901596Z   restore.log: 
+2026-11-05T15:12:24.2901832Z   
+2026-11-05T15:12:24.2902053Z   build.log: 
+2026-11-05T15:12:24.2902408Z   controlled-reader-build-stop
+2026-11-05T15:12:24.2902718Z   
+2026-11-05T15:12:24.2902958Z   restore.log: 
+2026-11-05T15:12:24.2903205Z   
+2026-11-05T15:12:24.2903503Z   build.log: compiler error NU1109
+2026-11-05T15:12:24.2903895Z   SigningKey=[REDACTED]]
+2026-11-05T15:12:24.2904199Z   [REDACTED JWT]
+2026-11-05T15:12:24.2904469Z   [REDACTED PEM]
+2026-11-05T15:12:24.5626143Z   xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+2026-11-05T15:12:24.7917940Z 
+2026-11-05T15:12:24.7918152Z   In process file artifacts produced:
+2026-11-05T15:12:24.7918760Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx
+2026-11-05T15:12:24.7919219Z 
+2026-11-05T15:12:24.7919549Z [31mTest run summary: Failed!
+2026-11-05T15:12:24.7919785Z [m  total: 326
+2026-11-05T15:12:24.7919974Z [31m  failed: 3
+2026-11-05T15:12:24.7920172Z [m  succeeded: 323
+2026-11-05T15:12:24.7920348Z   skipped: 0
+2026-11-05T15:12:24.7920539Z   duration: 2m 34s 889ms
+2026-11-05T15:12:24.7921105Z Test run completed with non-success exit code: 2 (see: https://aka.ms/testingplatform/exitcodes)
+2026-11-05T15:12:24.7939356Z ##[error]tests/Hexalith.McpCli.Manifest.Tests exited with code 2.
+2026-11-05T15:12:25.0239365Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+2026-11-05T15:12:41.4675966Z [33mskipped[m Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync
+2026-11-05T15:12:41.4676665Z   Windows ACLs are required for this fixture.
+2026-11-05T15:12:41.4677294Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+2026-11-05T15:12:41.5647564Z [33mskipped[m Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync
+2026-11-05T15:12:41.5648740Z   Windows file attributes are required for this fixture.
+2026-11-05T15:12:41.5649859Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+2026-11-05T15:12:43.6144172Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64) [32mpassed[m [90m(18s 592ms)[m
+2026-11-05T15:12:43.6207030Z 
+2026-11-05T15:12:43.6209211Z   In process file artifacts produced:
+2026-11-05T15:12:43.6210723Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx
+2026-11-05T15:12:43.6211732Z 
+2026-11-05T15:12:43.6217726Z [32mTest run summary: Passed!
+2026-11-05T15:12:43.6221838Z [m  total: 487
+2026-11-05T15:12:43.6222092Z   failed: 0
+2026-11-05T15:12:43.6222384Z [32m  succeeded: 485
+2026-11-05T15:12:43.6222699Z [m  skipped: 2
+2026-11-05T15:12:43.6222925Z   duration: 18s 792ms
+2026-11-05T15:12:44.3294304Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll (net10.0|x64)
+2026-11-05T15:12:46.2262670Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll (net10.0|x64) [32mpassed[m [90m(1s 899ms)[m
+2026-11-05T15:12:46.2323673Z 
+2026-11-05T15:12:46.2325976Z   In process file artifacts produced:
+2026-11-05T15:12:46.2327538Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx
+2026-11-05T15:12:46.2328546Z 
+2026-11-05T15:12:46.2335490Z [32mTest run summary: Passed!
+2026-11-05T15:12:46.2339686Z [m  total: 72
+2026-11-05T15:12:46.2339951Z   failed: 0
+2026-11-05T15:12:46.2341609Z [32m  succeeded: 72
+2026-11-05T15:12:46.2341962Z [m  skipped: 0
+2026-11-05T15:12:46.2342289Z   duration: 2s 091ms
+2026-11-05T15:12:46.2843588Z ##[group]Run set -euo pipefail
+2026-11-05T15:12:46.2843908Z [36;1mset -euo pipefail[0m
+2026-11-05T15:12:46.2844144Z [36;1mif [ "$TEST_PLATFORM" = "vstest" ]; then[0m
+2026-11-05T15:12:46.2844491Z [36;1m  if [ -n "$UNIT_TEST_PROJECTS" ] && [ -z "$UNIT_VSTEST_FAILURE_COUNT" ]; then[0m
+2026-11-05T15:12:46.2844953Z [36;1m    echo '::error title=Missing test shard output::Tier 1 VSTest did not report a failure count.'[0m
+2026-11-05T15:12:46.2845316Z [36;1m    exit 1[0m
+2026-11-05T15:12:46.2845497Z [36;1m  fi[0m
+2026-11-05T15:12:46.2845810Z [36;1m  if [ -n "$INTEGRATION_TEST_PROJECTS" ] && [ -z "$INTEGRATION_VSTEST_FAILURE_COUNT" ]; then[0m
+2026-11-05T15:12:46.2846337Z [36;1m    echo '::error title=Missing test shard output::Tier 2 VSTest did not report a failure count.'[0m
+2026-11-05T15:12:46.2846690Z [36;1m    exit 1[0m
+2026-11-05T15:12:46.2846866Z [36;1m  fi[0m
+2026-11-05T15:12:46.2847112Z [36;1melif [ "$TEST_PLATFORM" = "microsoft-testing-platform" ]; then[0m
+2026-11-05T15:12:46.2847519Z [36;1m  if [ -n "$UNIT_TEST_PROJECTS" ] && [ -z "$UNIT_MTP_FAILURE_COUNT" ]; then[0m
+2026-11-05T15:12:46.2848035Z [36;1m    echo '::error title=Missing test shard output::Tier 1 Microsoft.Testing.Platform did not report a failure count.'[0m
+2026-11-05T15:12:46.2848448Z [36;1m    exit 1[0m
+2026-11-05T15:12:46.2848628Z [36;1m  fi[0m
+2026-11-05T15:12:46.2848916Z [36;1m  if [ -n "$INTEGRATION_TEST_PROJECTS" ] && [ -z "$INTEGRATION_MTP_FAILURE_COUNT" ]; then[0m
+2026-11-05T15:12:46.2849435Z [36;1m    echo '::error title=Missing test shard output::Tier 2 Microsoft.Testing.Platform did not report a failure count.'[0m
+2026-11-05T15:12:46.2849847Z [36;1m    exit 1[0m
+2026-11-05T15:12:46.2850012Z [36;1m  fi[0m
+2026-11-05T15:12:46.2850171Z [36;1mfi[0m
+2026-11-05T15:12:46.2850350Z [36;1m[0m
+2026-11-05T15:12:46.2850525Z [36;1mtotal_failures=0[0m
+2026-11-05T15:12:46.2850729Z [36;1mfor failure_count in \[0m
+2026-11-05T15:12:46.2851066Z [36;1m  "$UNIT_VSTEST_FAILURE_COUNT" \[0m
+2026-11-05T15:12:46.2851310Z [36;1m  "$UNIT_MTP_FAILURE_COUNT" \[0m
+2026-11-05T15:12:46.2851560Z [36;1m  "$INTEGRATION_VSTEST_FAILURE_COUNT" \[0m
+2026-11-05T15:12:46.2851817Z [36;1m  "$INTEGRATION_MTP_FAILURE_COUNT"; do[0m
+2026-11-05T15:12:46.2852073Z [36;1m  [ -z "$failure_count" ] && continue[0m
+2026-11-05T15:12:46.2852332Z [36;1m  if [[ ! "$failure_count" =~ ^[0-9]+$ ]]; then[0m
+2026-11-05T15:12:46.2852782Z [36;1m    printf '::error title=Invalid test shard output::Expected a numeric failure count, received %s.\n' "$failure_count"[0m
+2026-11-05T15:12:46.2853189Z [36;1m    exit 1[0m
+2026-11-05T15:12:46.2853363Z [36;1m  fi[0m
+2026-11-05T15:12:46.2853770Z [36;1m  total_failures=$((total_failures + 10#$failure_count))[0m
+2026-11-05T15:12:46.2854037Z [36;1mdone[0m
+2026-11-05T15:12:46.2854202Z [36;1m[0m
+2026-11-05T15:12:46.2854380Z [36;1mif [ "$total_failures" -ne 0 ]; then[0m
+2026-11-05T15:12:46.2854823Z [36;1m  printf '::error title=Blocking test failures::%d test project(s) failed across the blocking tiers.\n' "$total_failures"[0m
+2026-11-05T15:12:46.2855231Z [36;1m  exit 1[0m
+2026-11-05T15:12:46.2855401Z [36;1mfi[0m
+2026-11-05T15:12:46.2904251Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T15:12:46.2904544Z env:
+2026-11-05T15:12:46.2904724Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:12:46.2904961Z   TEST_PLATFORM: microsoft-testing-platform
+2026-11-05T15:12:46.2905742Z   UNIT_TEST_PROJECTS: tests/Hexalith.McpCli.Abstractions.Tests
+tests/Hexalith.McpCli.Analyzers.Tests
+tests/Hexalith.McpCli.Core.Tests
+tests/Hexalith.McpCli.Manifest.Tests
+tests/Hexalith.McpCli.Cli.Tests
+tests/Hexalith.McpCli.Mcp.Tests
+
+2026-11-05T15:12:46.2906518Z   INTEGRATION_TEST_PROJECTS: 
+2026-11-05T15:12:46.2906726Z   UNIT_VSTEST_FAILURE_COUNT: 
+2026-11-05T15:12:46.2906924Z   UNIT_MTP_FAILURE_COUNT: 1
+2026-11-05T15:12:46.2907128Z   INTEGRATION_VSTEST_FAILURE_COUNT: 
+2026-11-05T15:12:46.2907362Z   INTEGRATION_MTP_FAILURE_COUNT: 
+2026-11-05T15:12:46.2907568Z ##[endgroup]
+2026-11-05T15:12:46.2971858Z ##[error]1 test project(s) failed across the blocking tiers.
+2026-11-05T15:12:46.2975217Z ##[error]Process completed with exit code 1.
+2026-11-05T15:12:46.3018030Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-11-05T15:12:46.3018354Z with:
+2026-11-05T15:12:46.3018537Z   name: blocking-test-results
+2026-11-05T15:12:46.3018821Z   path: TestResults/**/*.trx
+TestResults/**/coverage.cobertura.xml
+
+2026-11-05T15:12:46.3019111Z   retention-days: 7
+2026-11-05T15:12:46.3019298Z   if-no-files-found: warn
+2026-11-05T15:12:46.3019504Z   compression-level: 6
+2026-11-05T15:12:46.3019688Z   overwrite: false
+2026-11-05T15:12:46.3019880Z   include-hidden-files: false
+2026-11-05T15:12:46.3020077Z   archive: true
+2026-11-05T15:12:46.3020246Z env:
+2026-11-05T15:12:46.3020602Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:12:46.3020873Z ##[endgroup]
+2026-11-05T15:12:46.4465693Z With the provided path, there will be 6 files uploaded
+2026-11-05T15:12:46.4467019Z Artifact name is valid!
+2026-11-05T15:12:46.4467725Z Root directory input is valid!
+2026-11-05T15:12:46.8176776Z Uploading artifact: blocking-test-results.zip
+2026-11-05T15:12:46.8207308Z Beginning upload of artifact content to blob storage
+2026-11-05T15:12:47.4290849Z Uploaded bytes 240165
+2026-11-05T15:12:47.5048463Z Finished uploading artifact content to blob storage!
+2026-11-05T15:12:47.5049286Z SHA256 digest of uploaded artifact is 7059027368d1e521bbd5b330ec2906d2c57b3defa78fbf8ee2da4a9dd663854c
+2026-11-05T15:12:47.5049961Z Finalizing artifact upload
+2026-11-05T15:12:48.1196068Z Artifact blocking-test-results successfully finalized. Artifact ID 13426449454
+2026-11-05T15:12:48.1196741Z Artifact blocking-test-results has been successfully uploaded! Final size is 240165 bytes. Artifact ID is 13426449454
+2026-11-05T15:12:48.1199417Z Artifact download URL: https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42050717270/artifacts/13426449454
+2026-11-05T15:12:48.1410475Z Post job cleanup.
+2026-11-05T15:12:48.2186599Z [command]/usr/bin/git version
+2026-11-05T15:12:48.2212727Z git version 2.56.0
+2026-11-05T15:12:48.2244584Z Temporarily overriding HOME='/home/runner/work/_temp/aa615105-d065-4efb-8a85-b3e3f3c5a078' before making global git config changes
+2026-11-05T15:12:48.2245650Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T15:12:48.2249037Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T15:12:48.2281569Z Removing SSH command configuration
+2026-11-05T15:12:48.2287201Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T15:12:48.2322611Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T15:12:48.3467443Z Entering 'references/Hexalith.AI.Tools'
+2026-11-05T15:12:48.3510654Z Entering 'references/Hexalith.Agents'
+2026-11-05T15:12:48.3590125Z Entering 'references/Hexalith.Builds'
+2026-11-05T15:12:48.3636018Z Entering 'references/Hexalith.ChatBot'
+2026-11-05T15:12:48.3687256Z Entering 'references/Hexalith.Commons'
+2026-11-05T15:12:48.3730216Z Entering 'references/Hexalith.Conversations'
+2026-11-05T15:12:48.3877569Z Entering 'references/Hexalith.EventStore'
+2026-11-05T15:12:48.3939131Z Entering 'references/Hexalith.Folders'
+2026-11-05T15:12:48.4003119Z Entering 'references/Hexalith.FrontComposer'
+2026-11-05T15:12:48.4053876Z Entering 'references/Hexalith.Memories'
+2026-11-05T15:12:48.4104922Z Entering 'references/Hexalith.Parties'
+2026-11-05T15:12:48.4158974Z Entering 'references/Hexalith.Platform'
+2026-11-05T15:12:48.4231415Z Entering 'references/Hexalith.PolymorphicSerializations'
+2026-11-05T15:12:48.4274850Z Entering 'references/Hexalith.Projects'
+2026-11-05T15:12:48.4338944Z Entering 'references/Hexalith.Tenants'
+2026-11-05T15:12:48.4387920Z Entering 'references/Hexalith.Timesheets'
+2026-11-05T15:12:48.4442747Z Entering 'references/Hexalith.Works'
+2026-11-05T15:12:48.4519286Z Removing HTTP extra header
+2026-11-05T15:12:48.4524317Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T15:12:48.4556077Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T15:12:48.4812928Z Entering 'references/Hexalith.AI.Tools'
+2026-11-05T15:12:48.4854083Z Entering 'references/Hexalith.Agents'
+2026-11-05T15:12:48.4922933Z Entering 'references/Hexalith.Builds'
+2026-11-05T15:12:48.4968813Z Entering 'references/Hexalith.ChatBot'
+2026-11-05T15:12:48.5020145Z Entering 'references/Hexalith.Commons'
+2026-11-05T15:12:48.5061951Z Entering 'references/Hexalith.Conversations'
+2026-11-05T15:12:48.5205034Z Entering 'references/Hexalith.EventStore'
+2026-11-05T15:12:48.5262351Z Entering 'references/Hexalith.Folders'
+2026-11-05T15:12:48.5326256Z Entering 'references/Hexalith.FrontComposer'
+2026-11-05T15:12:48.5376155Z Entering 'references/Hexalith.Memories'
+2026-11-05T15:12:48.5426621Z Entering 'references/Hexalith.Parties'
+2026-11-05T15:12:48.5480224Z Entering 'references/Hexalith.Platform'
+2026-11-05T15:12:48.5557323Z Entering 'references/Hexalith.PolymorphicSerializations'
+2026-11-05T15:12:48.5598620Z Entering 'references/Hexalith.Projects'
+2026-11-05T15:12:48.5663454Z Entering 'references/Hexalith.Tenants'
+2026-11-05T15:12:48.5712056Z Entering 'references/Hexalith.Timesheets'
+2026-11-05T15:12:48.5766526Z Entering 'references/Hexalith.Works'
+2026-11-05T15:12:48.5842232Z Removing includeIf entries pointing to credentials config files
+2026-11-05T15:12:48.5848760Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.5872745Z includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T15:12:48.5874009Z includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T15:12:48.5874476Z includeif.gitdir:/github/workspace/.git.path
+2026-11-05T15:12:48.5874960Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T15:12:48.5881320Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T15:12:48.5902009Z /home/runner/work/_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config
+2026-11-05T15:12:48.5910521Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-59134c81\-8574\-4c52\-b65b\-e34c04971877\.config
+2026-11-05T15:12:48.5980511Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T15:12:48.6001130Z /home/runner/work/_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config
+2026-11-05T15:12:48.6008968Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-59134c81\-8574\-4c52\-b65b\-e34c04971877\.config
+2026-11-05T15:12:48.6038674Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-05T15:12:48.6059049Z /github/runner_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config
+2026-11-05T15:12:48.6065409Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-59134c81\-8574\-4c52\-b65b\-e34c04971877\.config
+2026-11-05T15:12:48.6095205Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T15:12:48.6115412Z /github/runner_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config
+2026-11-05T15:12:48.6122157Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-59134c81\-8574\-4c52\-b65b\-e34c04971877\.config
+2026-11-05T15:12:48.6152237Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-05T15:12:48.6401534Z Entering 'references/Hexalith.AI.Tools'
+2026-11-05T15:12:48.6423236Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.AI.Tools/config	remote.origin.url
+2026-11-05T15:12:48.6442292Z Entering 'references/Hexalith.Agents'
+2026-11-05T15:12:48.6461634Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Agents/config	remote.origin.url
+2026-11-05T15:12:48.6507358Z Entering 'references/Hexalith.Builds'
+2026-11-05T15:12:48.6526455Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Builds/config	remote.origin.url
+2026-11-05T15:12:48.6549002Z Entering 'references/Hexalith.ChatBot'
+2026-11-05T15:12:48.6567949Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.ChatBot/config	remote.origin.url
+2026-11-05T15:12:48.6595433Z Entering 'references/Hexalith.Commons'
+2026-11-05T15:12:48.6614780Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Commons/config	remote.origin.url
+2026-11-05T15:12:48.6632764Z Entering 'references/Hexalith.Conversations'
+2026-11-05T15:12:48.6650687Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Conversations/config	remote.origin.url
+2026-11-05T15:12:48.6771652Z Entering 'references/Hexalith.EventStore'
+2026-11-05T15:12:48.6791546Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.EventStore/config	remote.origin.url
+2026-11-05T15:12:48.6823465Z Entering 'references/Hexalith.Folders'
+2026-11-05T15:12:48.6841905Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Folders/config	remote.origin.url
+2026-11-05T15:12:48.6884220Z Entering 'references/Hexalith.FrontComposer'
+2026-11-05T15:12:48.6903054Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.FrontComposer/config	remote.origin.url
+2026-11-05T15:12:48.6929487Z Entering 'references/Hexalith.Memories'
+2026-11-05T15:12:48.6948166Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Memories/config	remote.origin.url
+2026-11-05T15:12:48.6974612Z Entering 'references/Hexalith.Parties'
+2026-11-05T15:12:48.6993277Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Parties/config	remote.origin.url
+2026-11-05T15:12:48.7022933Z Entering 'references/Hexalith.Platform'
+2026-11-05T15:12:48.7041477Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Platform/config	remote.origin.url
+2026-11-05T15:12:48.7087751Z Entering 'references/Hexalith.PolymorphicSerializations'
+2026-11-05T15:12:48.7106901Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.PolymorphicSerializations/config	remote.origin.url
+2026-11-05T15:12:48.7124957Z Entering 'references/Hexalith.Projects'
+2026-11-05T15:12:48.7144492Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Projects/config	remote.origin.url
+2026-11-05T15:12:48.7212819Z Entering 'references/Hexalith.Tenants'
+2026-11-05T15:12:48.7232166Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Tenants/config	remote.origin.url
+2026-11-05T15:12:48.7257407Z Entering 'references/Hexalith.Timesheets'
+2026-11-05T15:12:48.7276314Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Timesheets/config	remote.origin.url
+2026-11-05T15:12:48.7307376Z Entering 'references/Hexalith.Works'
+2026-11-05T15:12:48.7325949Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Works/config	remote.origin.url
+2026-11-05T15:12:48.7382116Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.AI.Tools/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7412035Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Agents/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7437899Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Builds/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7465078Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.ChatBot/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7491571Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Commons/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7522460Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Conversations/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7548017Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.EventStore/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7572724Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Folders/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7598278Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.FrontComposer/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7626395Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Memories/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7652595Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Parties/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7677452Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Platform/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7701797Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.PolymorphicSerializations/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7725704Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Projects/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7756659Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Tenants/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7781710Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Timesheets/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7810022Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Works/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:12:48.7832970Z Removing credentials config '/home/runner/work/_temp/git-credentials-59134c81-8574-4c52-b65b-e34c04971877.config'
+2026-11-05T15:12:48.7966178Z Evaluate and set job outputs
+2026-11-05T15:12:48.7972097Z Cleaning up orphan processes
+2026-11-05T15:12:48.9719871Z Terminate orphan process: pid (2747) (dotnet)
+2026-11-05T15:12:48.9754930Z Terminate orphan process: pid (2748) (dotnet)
+2026-11-05T15:12:48.9797033Z Terminate orphan process: pid (2749) (dotnet)
+2026-11-05T15:12:48.9822550Z Terminate orphan process: pid (2922) (VBCSCompiler)

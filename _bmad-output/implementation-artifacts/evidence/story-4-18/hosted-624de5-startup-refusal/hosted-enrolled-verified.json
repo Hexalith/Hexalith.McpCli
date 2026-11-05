@@ -1,0 +1,12 @@
+{
+  "source": "624de50385ac3d9aab15f25d056f1f24ae651645",
+  "run_id": 42050717270,
+  "artifact_id": 13427912286,
+  "zip_digest": "sha256:5912946c32b1c24447faddb095b41d79837706ed61f69543454603458a65fcdc",
+  "result": "passed",
+  "fullV1Accepted": true,
+  "packages": [
+    "Hexalith.Parties.Contracts",
+    "Hexalith.Tenants.Contracts"
+  ]
+}

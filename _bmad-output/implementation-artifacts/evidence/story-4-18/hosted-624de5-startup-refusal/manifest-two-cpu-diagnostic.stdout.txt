@@ -1,0 +1,12 @@
+Running tests from /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64) passed (2m 22s 984ms)
+
+  In process file artifacts produced:
+    - /tmp/mcpcli-418-root-integration/manifest-two-cpu-diagnostic/Manifest.trx
+
+Test run summary: Passed!
+  total: 326
+  failed: 0
+  succeeded: 326
+  skipped: 0
+  duration: 2m 23s 126ms

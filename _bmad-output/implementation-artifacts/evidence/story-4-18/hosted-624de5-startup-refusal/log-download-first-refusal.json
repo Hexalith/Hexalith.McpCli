@@ -1,0 +1,10 @@
+{
+  "command": [
+    "/tmp/mcpcli-418-tools/gh-2.103.3/bin/gh",
+    "api",
+    "repos/Hexalith/Hexalith.McpCli/actions/jobs/127325755002/logs"
+  ],
+  "exit_code": 1,
+  "stderr": "the response contains terminal escape sequences; pass --allow-escape-sequences to output it anyway",
+  "resolution": "Explicit --allow-escape-sequences enabled only for captured raw bytes; the display copy strips ANSI sequences and uses the existing credential redactor."
+}

@@ -1,0 +1,186 @@
+[
+  {
+    "name": "head-before",
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "branch-before",
+    "command": [
+      "git",
+      "branch",
+      "--show-current"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "index-before",
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--name-only"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "remote-before",
+    "command": [
+      "git",
+      "ls-remote",
+      "origin",
+      "refs/heads/main"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "tracked-paths",
+    "command": [
+      "git",
+      "diff",
+      "--name-only"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "stage",
+    "command": [
+      "git",
+      "add",
+      "--",
+      "Directory.Build.props",
+      "README.md",
+      "_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md",
+      "docs/release/operator-setup-checklist.md",
+      "tests/Hexalith.McpCli.AppHost/NativeCatalogRuntime.cs",
+      "tests/Hexalith.McpCli.AppHost/Program.cs",
+      "tests/Hexalith.McpCli.EventStoreGateway.TestHost/Configuration/provenance.json",
+      "tests/Hexalith.McpCli.Integration.Tests/NativeCatalogEvidence.cs",
+      "tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs",
+      "tests/Hexalith.McpCli.Manifest.Tests/NativeCatalogAuditTests.cs",
+      "tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/approval.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+      "tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+      "tools/dependency-policy.json",
+      "tools/live-topology/README.md",
+      "tools/live-topology/ci.py",
+      "tools/live-topology/native-runtime.json",
+      "tools/live-topology/native_cohort.py",
+      "tools/live-topology/plans/tenants.add-user-to-tenant.json",
+      "tools/live-topology/plans/tenants.change-user-role.json",
+      "tools/live-topology/plans/tenants.create-tenant.json",
+      "tools/live-topology/plans/tenants.disable-tenant.json",
+      "tools/live-topology/plans/tenants.enable-tenant.json",
+      "tools/live-topology/plans/tenants.get-tenant-audit.json",
+      "tools/live-topology/plans/tenants.get-tenant-users.json",
+      "tools/live-topology/plans/tenants.get-tenant.json",
+      "tools/live-topology/plans/tenants.get-user-tenants.json",
+      "tools/live-topology/plans/tenants.list-tenants.json",
+      "tools/live-topology/plans/tenants.remove-tenant-configuration.json",
+      "tools/live-topology/plans/tenants.remove-user-from-tenant.json",
+      "tools/live-topology/plans/tenants.set-tenant-configuration.json",
+      "tools/live-topology/plans/tenants.update-tenant.json",
+      "tools/live-topology/test_ci.py",
+      "tools/live-topology/test_native_cohort.py",
+      "_bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105",
+      "_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact",
+      "_bmad-output/implementation-artifacts/evidence/story-4-18/hosted-followup-20261105T094928Z"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "staged-whitespace",
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "staged-stat",
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--stat"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "commit",
+    "command": [
+      "git",
+      "commit",
+      "--file",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/root-commit-message.txt"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "head-after",
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "status-after",
+    "command": [
+      "git",
+      "status",
+      "--porcelain"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "remote-before-push",
+    "command": [
+      "git",
+      "ls-remote",
+      "origin",
+      "refs/heads/main"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "push",
+    "command": [
+      "git",
+      "push",
+      "origin",
+      "HEAD:refs/heads/main"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "remote-after",
+    "command": [
+      "git",
+      "ls-remote",
+      "origin",
+      "refs/heads/main"
+    ],
+    "exit_code": 0
+  }
+]

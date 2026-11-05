@@ -1,0 +1,37 @@
+[
+  {
+    "name": "diagnostic-build",
+    "command": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 3.68
+  },
+  {
+    "name": "manifest-two-cpu-diagnostic",
+    "command": [
+      "taskset",
+      "-c",
+      "0,1",
+      "dotnet",
+      "test",
+      "tests/Hexalith.McpCli.Manifest.Tests",
+      "--no-build",
+      "--configuration",
+      "Release",
+      "--results-directory",
+      "/tmp/mcpcli-418-root-integration/manifest-two-cpu-diagnostic",
+      "--report-xunit-trx",
+      "--report-xunit-trx-filename",
+      "Manifest.trx"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 143.55
+  }
+]
