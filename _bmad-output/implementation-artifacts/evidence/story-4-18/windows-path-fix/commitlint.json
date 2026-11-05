@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "exit_code": 0,
+  "message_sha256": "54ec3d96c6835fd539cb5671840b712bfb9a32c7e73b821316cc6489bd96ae70",
+  "cli": "21.2.4"
+}

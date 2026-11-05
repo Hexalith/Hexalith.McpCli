@@ -1,0 +1,14 @@
+{
+  "time_utc": "20261105T161120Z",
+  "command": [
+    "/tmp/mcpcli-418-tools/gh-2.103.3/bin/gh",
+    "api",
+    "repos/Hexalith/Hexalith.McpCli/actions/jobs/127344862923/logs",
+    "--allow-escape-sequences"
+  ],
+  "exit_code": 1,
+  "raw_response_sha256": "c7613ddfa5498c638ff1787e8e686b02c090f688128118475b65bb493382d423",
+  "stderr": "gh: HTTP 404\n",
+  "partial_log_available": false,
+  "sanitized_response": "\ufeff<?xml version=\"1.0\" encoding=\"utf-8\"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist.\nRequestId:b944bd6c-801e-002a-1840-6d48e1000000\nTime:2026-11-05T16:11:22.3205112Z</Message></Error>"
+}

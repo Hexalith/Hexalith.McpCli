@@ -1,0 +1,15 @@
+{
+  "time_utc": "2026-11-05T16:16:29.045716+00:00",
+  "command": [
+    "gh",
+    "api",
+    "--method",
+    "POST",
+    "repos/Hexalith/Hexalith.McpCli/actions/workflows/release.yml/dispatches",
+    "--input",
+    "/tmp/mcpcli-418-startup-diagnostic-integration/stage-dispatch-input.json"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": ""
+}

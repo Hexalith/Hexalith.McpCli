@@ -1,0 +1,271 @@
+﻿2026-11-05T16:18:07.0922858Z Current runner version: '2.338.2'
+2026-11-05T16:18:07.0946454Z ##[group]Runner Image Provisioner
+2026-11-05T16:18:07.0947185Z Hosted Compute Agent
+2026-11-05T16:18:07.0947685Z Version: 20261103.629
+2026-11-05T16:18:07.0948197Z Commit: 15dbd9ccb5dbf34fae002b6ed1a2670f52df37bc
+2026-11-05T16:18:07.0948800Z Build Date: 2026-11-03T17:26:59Z
+2026-11-05T16:18:07.0949321Z Worker ID: {94678593-5cb6-48ae-8b09-145f8186caf8}
+2026-11-05T16:18:07.0949897Z Region: westus3
+2026-11-05T16:18:07.0950740Z Cloud: Azure
+2026-11-05T16:18:07.0951312Z ##[endgroup]
+2026-11-05T16:18:07.0952482Z ##[group]Operating System
+2026-11-05T16:18:07.0952968Z Microsoft Windows Server 2025
+2026-11-05T16:18:07.0953487Z 10.0.26100
+2026-11-05T16:18:07.0953910Z Datacenter
+2026-11-05T16:18:07.0954288Z ##[endgroup]
+2026-11-05T16:18:07.0954725Z ##[group]Runner Image
+2026-11-05T16:18:07.0955264Z Image: windows-2025-vs2026
+2026-11-05T16:18:07.0955717Z Version: 20261103.298.1
+2026-11-05T16:18:07.0956959Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20261103.298/images/windows/Windows2025-VS2026-Readme.md
+2026-11-05T16:18:07.0958258Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20261103.298
+2026-11-05T16:18:07.0959003Z ##[endgroup]
+2026-11-05T16:18:07.0959876Z ##[group]GITHUB_TOKEN Permissions
+2026-11-05T16:18:07.0961407Z Contents: read
+2026-11-05T16:18:07.0961861Z Metadata: read
+2026-11-05T16:18:07.0962317Z ##[endgroup]
+2026-11-05T16:18:07.0964042Z Secret source: Actions
+2026-11-05T16:18:07.0964791Z Cache mode: write
+2026-11-05T16:18:07.0965329Z Prepare workflow directory
+2026-11-05T16:18:07.1270325Z Prepare all required actions
+2026-11-05T16:18:07.1316181Z Getting action download info
+2026-11-05T16:18:07.4638898Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-05T16:18:07.6484011Z Download action repository 'actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68' (SHA:a98b56852c35b8e3190ac28c8c2271da59106c68)
+2026-11-05T16:18:08.2852446Z Download action repository 'actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333' (SHA:9000827ccba6bdab643e8b6fd33ac0654aef8333)
+2026-11-05T16:18:08.9650564Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-11-05T16:18:09.2536961Z Complete job name: smoke-pair (windows-latest)
+2026-11-05T16:18:09.4677710Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-05T16:18:09.4679706Z with:
+2026-11-05T16:18:09.4680604Z   ref: 7e9ea7705dd07583dc29ffc4613e29efa8a3cffb
+2026-11-05T16:18:09.4681767Z   submodules: false
+2026-11-05T16:18:09.4682655Z   persist-credentials: false
+2026-11-05T16:18:09.4683718Z   repository: Hexalith/Hexalith.McpCli
+2026-11-05T16:18:09.4693151Z   token: ***
+2026-11-05T16:18:09.4694377Z   ssh-strict: true
+2026-11-05T16:18:09.4695212Z   ssh-user: git
+2026-11-05T16:18:09.4696047Z   clean: true
+2026-11-05T16:18:09.4696924Z   sparse-checkout-cone-mode: true
+2026-11-05T16:18:09.4697907Z   fetch-depth: 1
+2026-11-05T16:18:09.4698713Z   fetch-tags: false
+2026-11-05T16:18:09.4699521Z   show-progress: true
+2026-11-05T16:18:09.4700318Z   lfs: false
+2026-11-05T16:18:09.4701108Z   set-safe-directory: true
+2026-11-05T16:18:09.4702090Z   allow-unsafe-pr-checkout: false
+2026-11-05T16:18:09.4703351Z ##[endgroup]
+2026-11-05T16:18:09.6032280Z Syncing repository: Hexalith/Hexalith.McpCli
+2026-11-05T16:18:09.6034458Z ##[group]Getting Git version info
+2026-11-05T16:18:09.6035440Z Working directory is 'D:\a\Hexalith.McpCli\Hexalith.McpCli'
+2026-11-05T16:18:09.6640840Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-05T16:18:10.3834951Z git version 2.56.0.windows.4
+2026-11-05T16:18:10.3879365Z ##[endgroup]
+2026-11-05T16:18:10.3893797Z Temporarily overriding HOME='D:\a\_temp\2b1cfbe6-fe2d-4bf7-98ca-95a96830726e' before making global git config changes
+2026-11-05T16:18:10.3898031Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T16:18:10.3904451Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Hexalith.McpCli\Hexalith.McpCli
+2026-11-05T16:18:10.4505038Z Deleting the contents of 'D:\a\Hexalith.McpCli\Hexalith.McpCli'
+2026-11-05T16:18:10.4509839Z ##[group]Determining repository object format
+2026-11-05T16:18:10.4511336Z ##[endgroup]
+2026-11-05T16:18:10.4512394Z ##[group]Initializing the repository
+2026-11-05T16:18:10.4518793Z [command]"C:\Program Files\Git\bin\git.exe" init D:\a\Hexalith.McpCli\Hexalith.McpCli
+2026-11-05T16:18:10.5988575Z Initialized empty Git repository in D:/a/Hexalith.McpCli/Hexalith.McpCli/.git/
+2026-11-05T16:18:10.6029693Z [command]"C:\Program Files\Git\bin\git.exe" remote add origin https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T16:18:10.6724064Z ##[endgroup]
+2026-11-05T16:18:10.6724624Z ##[group]Disabling automatic garbage collection
+2026-11-05T16:18:10.6732167Z [command]"C:\Program Files\Git\bin\git.exe" config --local gc.auto 0
+2026-11-05T16:18:10.7032730Z ##[endgroup]
+2026-11-05T16:18:10.7033343Z ##[group]Setting up auth
+2026-11-05T16:18:10.7033739Z Removing SSH command configuration
+2026-11-05T16:18:10.7041108Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T16:18:10.7342911Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-05T16:18:13.2878503Z Removing HTTP extra header
+2026-11-05T16:18:13.2890300Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T16:18:13.3195529Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-05T16:18:13.7654081Z Removing includeIf entries pointing to credentials config files
+2026-11-05T16:18:13.7666304Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T16:18:13.7969092Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-05T16:18:14.2568450Z [command]"C:\Program Files\Git\bin\git.exe" config --file D:\a\_temp\git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config http.https://github.com/.extraheader "AUTHORIZATION: basic ***"
+2026-11-05T16:18:14.2883311Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/Hexalith.McpCli/Hexalith.McpCli/.git.path D:\a\_temp\git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config
+2026-11-05T16:18:14.3190522Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:D:/a/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path D:\a\_temp\git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config
+2026-11-05T16:18:14.3699018Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config
+2026-11-05T16:18:14.4006988Z [command]"C:\Program Files\Git\bin\git.exe" config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config
+2026-11-05T16:18:14.4329319Z ##[endgroup]
+2026-11-05T16:18:14.4330120Z ##[group]Fetching the repository
+2026-11-05T16:18:14.4340505Z [command]"C:\Program Files\Git\bin\git.exe" -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin 7e9ea7705dd07583dc29ffc4613e29efa8a3cffb
+2026-11-05T16:18:17.8691075Z From https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T16:18:17.8691719Z  * branch            7e9ea7705dd07583dc29ffc4613e29efa8a3cffb -> FETCH_HEAD
+2026-11-05T16:18:17.8744964Z [command]"C:\Program Files\Git\bin\git.exe" rev-parse --verify --quiet 7e9ea7705dd07583dc29ffc4613e29efa8a3cffb^{object}
+2026-11-05T16:18:18.0365858Z 7e9ea7705dd07583dc29ffc4613e29efa8a3cffb
+2026-11-05T16:18:18.0404412Z ##[endgroup]
+2026-11-05T16:18:18.0404876Z ##[group]Determining the checkout info
+2026-11-05T16:18:18.0405493Z ##[endgroup]
+2026-11-05T16:18:18.0412412Z [command]"C:\Program Files\Git\bin\git.exe" sparse-checkout disable
+2026-11-05T16:18:18.0820278Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset-all extensions.worktreeConfig
+2026-11-05T16:18:18.1127819Z ##[group]Checking out the ref
+2026-11-05T16:18:18.1135552Z [command]"C:\Program Files\Git\bin\git.exe" checkout --progress --force 7e9ea7705dd07583dc29ffc4613e29efa8a3cffb
+2026-11-05T16:18:19.1988508Z Updating files:  22% (3604/15696)
+2026-11-05T16:18:19.2546562Z Updating files:  23% (3611/15696)
+2026-11-05T16:18:19.2843578Z Updating files:  24% (3768/15696)
+2026-11-05T16:18:19.3116263Z Updating files:  25% (3924/15696)
+2026-11-05T16:18:19.3408852Z Updating files:  26% (4081/15696)
+2026-11-05T16:18:19.3706592Z Updating files:  27% (4238/15696)
+2026-11-05T16:18:19.4005255Z Updating files:  28% (4395/15696)
+2026-11-05T16:18:19.4335149Z Updating files:  29% (4552/15696)
+2026-11-05T16:18:19.4638931Z Updating files:  30% (4709/15696)
+2026-11-05T16:18:19.4976946Z Updating files:  31% (4866/15696)
+2026-11-05T16:18:19.5276633Z Updating files:  32% (5023/15696)
+2026-11-05T16:18:19.5560781Z Updating files:  33% (5180/15696)
+2026-11-05T16:18:19.5836057Z Updating files:  34% (5337/15696)
+2026-11-05T16:18:19.6116960Z Updating files:  35% (5494/15696)
+2026-11-05T16:18:19.6397461Z Updating files:  36% (5651/15696)
+2026-11-05T16:18:19.6664773Z Updating files:  37% (5808/15696)
+2026-11-05T16:18:19.6948673Z Updating files:  38% (5965/15696)
+2026-11-05T16:18:19.7221509Z Updating files:  39% (6122/15696)
+2026-11-05T16:18:19.7507405Z Updating files:  40% (6279/15696)
+2026-11-05T16:18:19.7843253Z Updating files:  41% (6436/15696)
+2026-11-05T16:18:19.8132228Z Updating files:  42% (6593/15696)
+2026-11-05T16:18:19.8428831Z Updating files:  43% (6750/15696)
+2026-11-05T16:18:19.8669635Z Updating files:  44% (6907/15696)
+2026-11-05T16:18:19.8904262Z Updating files:  45% (7064/15696)
+2026-11-05T16:18:19.9184747Z Updating files:  46% (7221/15696)
+2026-11-05T16:18:19.9500320Z Updating files:  47% (7378/15696)
+2026-11-05T16:18:19.9886752Z Updating files:  48% (7535/15696)
+2026-11-05T16:18:20.0206830Z Updating files:  49% (7692/15696)
+2026-11-05T16:18:20.0499147Z Updating files:  50% (7848/15696)
+2026-11-05T16:18:20.0811550Z Updating files:  51% (8005/15696)
+2026-11-05T16:18:20.1102482Z Updating files:  52% (8162/15696)
+2026-11-05T16:18:20.1431357Z Updating files:  53% (8319/15696)
+2026-11-05T16:18:20.1774187Z Updating files:  54% (8476/15696)
+2026-11-05T16:18:20.1902683Z Updating files:  55% (8633/15696)
+2026-11-05T16:18:20.2078752Z Updating files:  55% (8698/15696)
+2026-11-05T16:18:20.2422907Z Updating files:  56% (8790/15696)
+2026-11-05T16:18:20.2729412Z Updating files:  57% (8947/15696)
+2026-11-05T16:18:20.3081705Z Updating files:  58% (9104/15696)
+2026-11-05T16:18:20.5944863Z Updating files:  59% (9261/15696)
+2026-11-05T16:18:20.6263436Z Updating files:  60% (9418/15696)
+2026-11-05T16:18:20.6606805Z Updating files:  61% (9575/15696)
+2026-11-05T16:18:20.6937712Z Updating files:  62% (9732/15696)
+2026-11-05T16:18:20.7312628Z Updating files:  63% (9889/15696)
+2026-11-05T16:18:20.7762692Z Updating files:  64% (10046/15696)
+2026-11-05T16:18:20.8036634Z Updating files:  65% (10203/15696)
+2026-11-05T16:18:20.8321304Z Updating files:  66% (10360/15696)
+2026-11-05T16:18:20.8579657Z Updating files:  67% (10517/15696)
+2026-11-05T16:18:20.8883970Z Updating files:  68% (10674/15696)
+2026-11-05T16:18:20.9159676Z Updating files:  69% (10831/15696)
+2026-11-05T16:18:20.9433437Z Updating files:  70% (10988/15696)
+2026-11-05T16:18:20.9694578Z Updating files:  71% (11145/15696)
+2026-11-05T16:18:20.9982449Z Updating files:  72% (11302/15696)
+2026-11-05T16:18:21.0263345Z Updating files:  73% (11459/15696)
+2026-11-05T16:18:21.0527748Z Updating files:  74% (11616/15696)
+2026-11-05T16:18:21.0798313Z Updating files:  75% (11772/15696)
+2026-11-05T16:18:21.1077491Z Updating files:  76% (11929/15696)
+2026-11-05T16:18:21.1369931Z Updating files:  77% (12086/15696)
+2026-11-05T16:18:21.1670554Z Updating files:  78% (12243/15696)
+2026-11-05T16:18:21.1909315Z Updating files:  79% (12400/15696)
+2026-11-05T16:18:21.1950674Z Updating files:  79% (12529/15696)
+2026-11-05T16:18:21.2237716Z Updating files:  80% (12557/15696)
+2026-11-05T16:18:21.2536752Z Updating files:  81% (12714/15696)
+2026-11-05T16:18:21.2865808Z Updating files:  82% (12871/15696)
+2026-11-05T16:18:21.3155671Z Updating files:  83% (13028/15696)
+2026-11-05T16:18:21.3442939Z Updating files:  84% (13185/15696)
+2026-11-05T16:18:21.3716240Z Updating files:  85% (13342/15696)
+2026-11-05T16:18:21.3962698Z Updating files:  86% (13499/15696)
+2026-11-05T16:18:21.4260697Z Updating files:  87% (13656/15696)
+2026-11-05T16:18:21.4549487Z Updating files:  88% (13813/15696)
+2026-11-05T16:18:21.4665339Z Updating files:  89% (13970/15696)
+2026-11-05T16:18:21.4689818Z ##[error]error: unable to create file _bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/vector-preflight/5537d2e1b33941f19e865dedf6afd8f2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.remove-tenant-configuration.json: Filename too long
+2026-11-05T16:18:21.5619527Z Updating files:  90% (14127/15696)
+2026-11-05T16:18:21.5669852Z Updating files:  91% (14284/15696)
+2026-11-05T16:18:21.5673762Z ##[error]error: unable to create file _bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/sdk410-draft/public-cache-enrolled-replay/Hexalith.Tenants.Contracts/inputs-nw7stnvu/vectors/10/remove-tenant-configuration.vector.json: Filename too long
+2026-11-05T16:18:21.6471681Z Updating files:  92% (14441/15696)
+2026-11-05T16:18:21.6846846Z Updating files:  93% (14598/15696)
+2026-11-05T16:18:21.6849103Z ##[error]error: unable to create file _bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Aspire.7.0.4.nupkg.signature-verification.log: Filename too long
+2026-11-05T16:18:21.6852380Z ##[error]error: unable to create file _bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Client.7.0.4.nupkg.signature-verification.log: Filename too long
+2026-11-05T16:18:21.6854966Z ##[error]error: unable to create file _bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Contracts.7.0.4.nupkg.signature-verification.log: Filename too long
+2026-11-05T16:18:21.6857459Z ##[error]error: unable to create file _bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Server.7.0.4.nupkg.signature-verification.log: Filename too long
+2026-11-05T16:18:21.6860650Z ##[error]error: unable to create file _bmad-output/implementation-artifacts/evidence/story-4-18/upstream-integration-20261105/tenants/publication-704-20261105T135343Z/release-evidence/7.0.4/destinations/nuget/Hexalith.Tenants.Testing.7.0.4.nupkg.signature-verification.log: Filename too long
+2026-11-05T16:18:21.7359373Z Updating files:  94% (14755/15696)
+2026-11-05T16:18:22.1195929Z Updating files:  95% (14912/15696)
+2026-11-05T16:18:22.1552554Z Updating files:  96% (15069/15696)
+2026-11-05T16:18:22.1876510Z Updating files:  97% (15226/15696)
+2026-11-05T16:18:22.1924168Z Updating files:  98% (15383/15696)
+2026-11-05T16:18:22.2171829Z Updating files:  98% (15411/15696)
+2026-11-05T16:18:22.2468705Z Updating files:  99% (15540/15696)
+2026-11-05T16:18:22.2468968Z Updating files: 100% (15696/15696)
+2026-11-05T16:18:22.2469190Z Updating files: 100% (15696/15696), done.
+2026-11-05T16:18:22.2726201Z Note: switching to '7e9ea7705dd07583dc29ffc4613e29efa8a3cffb'.
+2026-11-05T16:18:22.2726591Z 
+2026-11-05T16:18:22.2726798Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-05T16:18:22.2727161Z changes and commit them, and you can discard any commits you make in this
+2026-11-05T16:18:22.2727502Z state without impacting any branches by switching back to a branch.
+2026-11-05T16:18:22.2727705Z 
+2026-11-05T16:18:22.2727837Z If you want to create a new branch to retain commits you create, you may
+2026-11-05T16:18:22.2728153Z do so (now or later) by using -c with the switch command. Example:
+2026-11-05T16:18:22.2728346Z 
+2026-11-05T16:18:22.2728442Z   git switch -c <new-branch-name>
+2026-11-05T16:18:22.2728589Z 
+2026-11-05T16:18:22.2728667Z Or undo this operation with:
+2026-11-05T16:18:22.2728780Z 
+2026-11-05T16:18:22.2728846Z   git switch -
+2026-11-05T16:18:22.2728933Z 
+2026-11-05T16:18:22.2729089Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-05T16:18:22.2729312Z 
+2026-11-05T16:18:22.2729448Z HEAD is now at 7e9ea77 test: retain gateway startup failure diagnostics
+2026-11-05T16:18:22.2842573Z ##[group]Removing auth
+2026-11-05T16:18:22.2842800Z Removing SSH command configuration
+2026-11-05T16:18:22.2850583Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T16:18:22.3161184Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-05T16:18:22.9053786Z Removing HTTP extra header
+2026-11-05T16:18:22.9062276Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T16:18:22.9386562Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-05T16:18:23.5042910Z Removing includeIf entries pointing to credentials config files
+2026-11-05T16:18:23.5051368Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T16:18:23.5318667Z includeif.gitdir:D:/a/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T16:18:23.5319086Z includeif.gitdir:D:/a/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T16:18:23.5320122Z includeif.gitdir:/github/workspace/.git.path
+2026-11-05T16:18:23.5320434Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T16:18:23.5354012Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T16:18:23.5617967Z D:\a\_temp\git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config
+2026-11-05T16:18:23.5651953Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/Hexalith.McpCli/Hexalith.McpCli/.git.path D\:\\a\\_temp\\git\-credentials\-522482bf\-a7cb\-453e\-a146\-c01f1d04f1c9\.config
+2026-11-05T16:18:23.5955390Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:D:/a/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T16:18:23.6226772Z D:\a\_temp\git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config
+2026-11-05T16:18:23.6262631Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:D:/a/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path D\:\\a\\_temp\\git\-credentials\-522482bf\-a7cb\-453e\-a146\-c01f1d04f1c9\.config
+2026-11-05T16:18:23.6570575Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-05T16:18:23.6846076Z /github/runner_temp/git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config
+2026-11-05T16:18:23.6883924Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-522482bf\-a7cb\-453e\-a146\-c01f1d04f1c9\.config
+2026-11-05T16:18:23.7193207Z [command]"C:\Program Files\Git\bin\git.exe" config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T16:18:23.7504875Z /github/runner_temp/git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config
+2026-11-05T16:18:23.7548136Z [command]"C:\Program Files\Git\bin\git.exe" config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-522482bf\-a7cb\-453e\-a146\-c01f1d04f1c9\.config
+2026-11-05T16:18:23.7885484Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-05T16:18:24.2487418Z Removing credentials config 'D:\a\_temp\git-credentials-522482bf-a7cb-453e-a146-c01f1d04f1c9.config'
+2026-11-05T16:18:24.2497534Z ##[endgroup]
+2026-11-05T16:18:24.2518515Z ##[error]The process 'C:\Program Files\Git\bin\git.exe' failed with exit code 1
+2026-11-05T16:18:24.2874500Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-11-05T16:18:24.2874888Z with:
+2026-11-05T16:18:24.2875067Z   name: paired-consumer-windows-latest
+2026-11-05T16:18:24.2875434Z   path: D:\a\_temp/consumer/
+!D:\a\_temp/consumer/smoke/private/
+!D:\a\_temp/consumer/tests/home/
+
+2026-11-05T16:18:24.2875778Z   if-no-files-found: error
+2026-11-05T16:18:24.2875957Z   compression-level: 6
+2026-11-05T16:18:24.2876110Z   overwrite: false
+2026-11-05T16:18:24.2876268Z   include-hidden-files: false
+2026-11-05T16:18:24.2876443Z   archive: true
+2026-11-05T16:18:24.2876610Z ##[endgroup]
+2026-11-05T16:18:24.4390779Z ##[error]No files were found with the provided path: D:\a\_temp/consumer/
+!D:\a\_temp/consumer/smoke/private/
+!D:\a\_temp/consumer/tests/home/. No artifacts will be uploaded.
+2026-11-05T16:18:24.4676514Z Post job cleanup.
+2026-11-05T16:18:24.6046382Z [command]"C:\Program Files\Git\bin\git.exe" version
+2026-11-05T16:18:24.6321129Z git version 2.56.0.windows.4
+2026-11-05T16:18:24.6378525Z Temporarily overriding HOME='D:\a\_temp\be560e7a-4269-40f4-855a-a48775f14241' before making global git config changes
+2026-11-05T16:18:24.6379413Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T16:18:24.6386725Z [command]"C:\Program Files\Git\bin\git.exe" config --global --add safe.directory D:\a\Hexalith.McpCli\Hexalith.McpCli
+2026-11-05T16:18:24.6692144Z Removing SSH command configuration
+2026-11-05T16:18:24.6702820Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T16:18:24.7084403Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :\""
+2026-11-05T16:18:25.2123945Z Removing HTTP extra header
+2026-11-05T16:18:25.2132931Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T16:18:25.2443294Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "sh -c \"git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :\""
+2026-11-05T16:18:25.7377409Z Removing includeIf entries pointing to credentials config files
+2026-11-05T16:18:25.7387844Z [command]"C:\Program Files\Git\bin\git.exe" config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T16:18:25.7698952Z [command]"C:\Program Files\Git\bin\git.exe" submodule foreach --recursive "git config --local --show-origin --name-only --get-regexp remote.origin.url"
+2026-11-05T16:18:26.2636341Z Cleaning up orphan processes

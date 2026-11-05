@@ -1,0 +1,38 @@
+{
+  "time_utc": "2026-11-05T15:54:32.528055+00:00",
+  "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42055016082/job/127344862923",
+  "authenticated": false,
+  "status": 200,
+  "sign_in_log_text": true,
+  "log_link_paths": [
+    "/Hexalith/Hexalith.McpCli/actions/runs/42055016082/job_rerun_dialogs_partial",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/1",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/11",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/14",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/15",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/16",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/2",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/4",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/5",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/6",
+    "/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs/9",
+    "dialog-10bb487a-abda-4304-a3da-93c1dfd1b26a",
+    "dialog-10bb487a-abda-4304-a3da-93c1dfd1b26a-title",
+    "https://github.blog/",
+    "https://github.blog/changelog/",
+    "https://github.githubassets.com/assets/changelog-dark-b1c25ae971bd641b.png",
+    "https://github.githubassets.com/assets/changelog-fd687bff072883b0.png",
+    "https://github.githubassets.com/assets/keyboard-shortcuts-dialog-a16d02c932336fbf.js",
+    "https://github.githubassets.com/assets/keyboard-shortcuts-dialog.9f3e4e657ddd68a5.module.css",
+    "{&quot;action&quot;:&quot;blog&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;blog_link_resources_navbar&quot;}",
+    "{&quot;action&quot;:&quot;changelog&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;developers&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;changelog_link_developers_navbar&quot;}",
+    "{&quot;action&quot;:&quot;changelog&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;resources&quot;,&quot;location&quot;:&quot;navbar&quot;,&quot;label&quot;:&quot;changelog_link_resources_navbar&quot;}",
+    "{&quot;action&quot;:&quot;homepage&quot;,&quot;tag&quot;:&quot;link&quot;,&quot;context&quot;:&quot;logo&quot;,&quot;location&quot;:&quot;header&quot;,&quot;label&quot;:&quot;homepage_link_logo_header&quot;}",
+    "{&quot;event_type&quot;:&quot;authentication.click&quot;,&quot;payload&quot;:{&quot;location_in_page&quot;:&quot;workflow logs&quot;,&quot;repository_id&quot;:null,&quot;auth_type&quot;:&quot;LOG_IN&quot;,&quot;originating_url&quot;:&quot;https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42055016082/job/127344862923&quot;,&quot;user_id&quot;:null}}"
+  ],
+  "inline_log_status_mentions": [
+    "            data-log-url=\"\"",
+    "            data-log-url=\"/Hexalith/Hexalith.McpCli/commit/7e9ea7705dd07583dc29ffc4613e29efa8a3cffb/checks/127344862923/logs",
+    "            data-name=\"Run Aspire hook\""
+  ]
+}

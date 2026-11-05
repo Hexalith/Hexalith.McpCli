@@ -1,0 +1,51 @@
+{
+  "source": "7e9ea7705dd07583dc29ffc4613e29efa8a3cffb",
+  "run_id": 42055016082,
+  "job_id": 127340920817,
+  "artifact_id": 13428732614,
+  "zip_digest": "sha256:7bdbcacfe104e61ec04a64152696e9b06967c1874bfcf162b5c40f0bea07cc5e",
+  "manifest_tests": 326,
+  "manifest_passed": 326,
+  "gateway_cases": [
+    {
+      "name": "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.ActualKestrelEnforcesOneMiB(bytes: 1048577, expected: RequestEntityTooLarge)",
+      "outcome": "Passed",
+      "duration": "00:00:02.4520000"
+    },
+    {
+      "name": "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.ActualKestrelEnforcesOneMiB(bytes: 1048576, expected: OK)",
+      "outcome": "Passed",
+      "duration": "00:00:01.7740000"
+    },
+    {
+      "name": "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.PackageConfigurationRetainsReviewedSourceAndDeployedHashes",
+      "outcome": "Passed",
+      "duration": "00:00:01.5089999"
+    },
+    {
+      "name": "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.ActualStreamBoundaryAdmitsValidAuthorityBeforeStateAccess",
+      "outcome": "Passed",
+      "duration": "00:00:01.5900000"
+    },
+    {
+      "name": "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.ActualStreamBoundaryRejectsInvalidAuthority(defect: \"outside-domain\")",
+      "outcome": "Passed",
+      "duration": "00:00:01.8540000"
+    },
+    {
+      "name": "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.ActualStreamBoundaryRejectsInvalidAuthority(defect: \"wrong-key\")",
+      "outcome": "Passed",
+      "duration": "00:00:01.6640000"
+    },
+    {
+      "name": "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.ActualStreamBoundaryRejectsInvalidAuthority(defect: \"absent-proof\")",
+      "outcome": "Passed",
+      "duration": "00:00:01.7100000"
+    },
+    {
+      "name": "Hexalith.McpCli.Manifest.Tests.PackageGatewayBoundaryTests.ActualStreamBoundaryRejectsInvalidAuthority(defect: \"mismatched-caller\")",
+      "outcome": "Passed",
+      "duration": "00:00:01.8260000"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md
+docs/release/operator-setup-checklist.md
+tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs

@@ -5,6 +5,7 @@ import copy
 import io
 import json
 import os
+import shlex
 from pathlib import Path
 import struct
 import subprocess
@@ -299,6 +300,25 @@ class PairedReleaseTests(unittest.TestCase):
                 self.compare()
             self.assertFalse((self.root / 'accepted.json').exists())
             path.write_bytes(original)
+
+    def test_windows_checkout_enables_long_paths_before_loading_retained_evidence(self):
+        workflow = (SCRIPTS.parent / '.github/workflows/release.yml').read_text()
+        smoke = workflow.split('  smoke-pair:', 1)[1].split('  accept-staged-pair:', 1)[0]
+        steps = smoke.split('      - ')
+        setting = next(index for index, step in enumerate(steps) if 'core.longpaths' in step)
+        checkout = next(index for index, step in enumerate(steps) if 'uses: actions/checkout@' in step)
+        self.assertLess(setting, checkout, 'Windows must enable long paths before checkout encounters captured evidence.')
+        self.assertIn("if: runner.os == 'Windows'", steps[setting])
+        self.assertIn('shell: pwsh', steps[setting])
+        command = steps[setting].split('        run: ', 1)[1].strip()
+        config = self.root / 'disposable-windows-runner.gitconfig'
+        environment = {**os.environ, 'GIT_CONFIG_GLOBAL': str(config), 'GIT_CONFIG_NOSYSTEM': '1'}
+        subprocess.run(['git', 'config', '--global', 'core.longpaths', 'false'], env=environment, check=True)
+        result = subprocess.run(shlex.split(command), env=environment, capture_output=True, text=True)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        enabled = subprocess.run(['git', 'config', '--global', '--type=bool', '--get', 'core.longpaths'],
+                                 env=environment, capture_output=True, text=True, check=True)
+        self.assertEqual(enabled.stdout.strip(), 'true')
 
     def test_staging_workflow_guards_actual_dispatch_ref_before_selection(self):
         workflow = (SCRIPTS.parent / '.github/workflows/release.yml').read_text().split('  stage-pair:', 1)[1].split('  smoke-pair:', 1)[0]

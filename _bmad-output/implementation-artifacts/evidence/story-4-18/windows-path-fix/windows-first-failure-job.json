@@ -1,0 +1,108 @@
+{
+  "id": 127369320356,
+  "run_id": 42062678763,
+  "workflow_name": "Release",
+  "head_branch": "main",
+  "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/42062678763",
+  "run_attempt": 1,
+  "node_id": "CR_kwDOUjg9is8AAAAdp82XpA",
+  "head_sha": "7e9ea7705dd07583dc29ffc4613e29efa8a3cffb",
+  "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/127369320356",
+  "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42062678763/job/127369320356",
+  "status": "completed",
+  "conclusion": "failure",
+  "created_at": "2026-11-05T16:18:03Z",
+  "started_at": "2026-11-05T16:18:06Z",
+  "completed_at": "2026-11-05T16:18:28Z",
+  "name": "smoke-pair (windows-latest)",
+  "steps": [
+    {
+      "name": "Set up job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 1,
+      "started_at": "2026-11-05T16:18:07Z",
+      "completed_at": "2026-11-05T16:18:09Z"
+    },
+    {
+      "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "status": "completed",
+      "conclusion": "failure",
+      "number": 2,
+      "started_at": "2026-11-05T16:18:09Z",
+      "completed_at": "2026-11-05T16:18:24Z"
+    },
+    {
+      "name": "Initialize root-declared Builds for required platform tests",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 3,
+      "started_at": "2026-11-05T16:18:24Z",
+      "completed_at": "2026-11-05T16:18:24Z"
+    },
+    {
+      "name": "Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 4,
+      "started_at": "2026-11-05T16:18:24Z",
+      "completed_at": "2026-11-05T16:18:24Z"
+    },
+    {
+      "name": "Run actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 5,
+      "started_at": "2026-11-05T16:18:24Z",
+      "completed_at": "2026-11-05T16:18:24Z"
+    },
+    {
+      "name": "Install the same local tool bytes and run offline smoke",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 6,
+      "started_at": "2026-11-05T16:18:24Z",
+      "completed_at": "2026-11-05T16:18:24Z"
+    },
+    {
+      "name": "Execute required Windows Core and CLI suites or macOS CLI suite",
+      "status": "completed",
+      "conclusion": "skipped",
+      "number": 7,
+      "started_at": "2026-11-05T16:18:24Z",
+      "completed_at": "2026-11-05T16:18:24Z"
+    },
+    {
+      "name": "Retain actual platform receipts and raw captures",
+      "status": "completed",
+      "conclusion": "failure",
+      "number": 8,
+      "started_at": "2026-11-05T16:18:24Z",
+      "completed_at": "2026-11-05T16:18:24Z"
+    },
+    {
+      "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 16,
+      "started_at": "2026-11-05T16:18:24Z",
+      "completed_at": "2026-11-05T16:18:26Z"
+    },
+    {
+      "name": "Complete job",
+      "status": "completed",
+      "conclusion": "success",
+      "number": 17,
+      "started_at": "2026-11-05T16:18:26Z",
+      "completed_at": "2026-11-05T16:18:26Z"
+    }
+  ],
+  "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/127369320356",
+  "labels": [
+    "windows-latest"
+  ],
+  "runner_id": 1000073340,
+  "runner_name": "GitHub Actions 1000073340",
+  "runner_group_id": 0,
+  "runner_group_name": "GitHub Actions"
+}

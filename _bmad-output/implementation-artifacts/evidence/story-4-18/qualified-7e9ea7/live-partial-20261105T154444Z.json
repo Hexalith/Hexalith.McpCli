@@ -1,0 +1,13 @@
+{
+  "time_utc": "20261105T154444Z",
+  "command": [
+    "/tmp/mcpcli-418-tools/gh-2.103.3/bin/gh",
+    "api",
+    "repos/Hexalith/Hexalith.McpCli/actions/jobs/127344862923/logs",
+    "--allow-escape-sequences"
+  ],
+  "exit_code": 1,
+  "raw_response_sha256": "5df00b7fd38c9a731c851831144e80de9535b4edccc14d4ac489acc242dd032f",
+  "stderr": "gh: HTTP 404\n",
+  "partial_log_available": false
+}

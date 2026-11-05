@@ -1,0 +1,7 @@
+# Qualification at 7e9ea7 full native qualification
+
+CI 42055016082 at source `7e9ea7705dd07583dc29ffc4613e29efa8a3cffb` passed every required job, including full native 21-vector plus independent smoke acceptance. `live-verified.json` authenticates original Aspire artifact 13432193435 with digest `e395fe5e5353c357812a5201b5235cca7760580bf04169d290acea139fd11563` and all 22 executed passing XML cases. `native-preparation-selection-verified.json` verifies the exact 19 public archive/four owner source selection and 30 deployed/restored package seals. `hosted-gateway-cases-verified.json` independently verifies 326 Manifest cases, including all 8 actual gateway boundaries.
+
+The earlier `624de5` gateway-startup cause remains unproven; diagnostics preserve future failures with no deadline/assertion change. Direct job/run log endpoints returned 404 during live execution; public current-step log links were empty and check annotations absent. Those bounded visibility observations are retained. The final actual artifact, rather than elapsed time, grants this source's live result.
+
+Fresh source/FR22 gates passed and staging run 42062678763 prepared `2.0.1`, but its Windows checkout subsequently failed from captured evidence path lengths. This source's pair is unaccepted and must never be published; see ../windows-path-fix/. No current-source or candidate acceptance transfers to the necessary workflow follow-up.

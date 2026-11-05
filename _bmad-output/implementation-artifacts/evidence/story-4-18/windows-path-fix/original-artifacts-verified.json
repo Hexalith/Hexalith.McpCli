@@ -1,0 +1,25 @@
+{
+  "run_id": 42062678763,
+  "source": "7e9ea7705dd07583dc29ffc4613e29efa8a3cffb",
+  "version": "2.0.1",
+  "artifacts": [
+    {
+      "name": "paired-consumer-ubuntu-latest",
+      "artifact_id": 13431454964,
+      "digest": "sha256:95ce6a5ef1d11f116821656a76fa0475be2ba13d749b2bbf5585d6d721b39825"
+    },
+    {
+      "name": "paired-consumer-macos-latest",
+      "artifact_id": 13431319707,
+      "digest": "sha256:b8672ae2105f262f8e1cae7d0c6289d56cc32c0d10f6dfe9657eba757ffb10c9"
+    },
+    {
+      "name": "paired-preparation",
+      "artifact_id": 13431319361,
+      "digest": "sha256:22581f773108b713b9fdcdf52c5dd0261c3ddb75c5c60af7a9312f5d55bc83b1"
+    }
+  ],
+  "accepted": false,
+  "must_not_publish": true,
+  "reason": "Windows checkout failed on seven captured evidence paths before any Windows test; full staging and acceptance-source gate were not executed."
+}

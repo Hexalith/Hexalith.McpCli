@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "scripts/select-release-version.mjs",
+    "/tmp/mcpcli-418-startup-diagnostic-integration/version-selection.json"
+  ],
+  "exit_code": 0
+}

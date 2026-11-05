@@ -1,0 +1,5 @@
+# Windows checkout path refusal and scoped correction
+
+Staging run 42062678763 at source `7e9ea7705dd07583dc29ffc4613e29efa8a3cffb` prepared the sole `2.0.1` pair. Linux/macOS smoke passed. Windows job 127369320356 failed during checkout, before any tool or platform test, because seven captured evidence paths are 260–273 characters under the 37-character hosted checkout prefix. No Windows receipt or accepted-pair artifact exists. Original authenticated preparation and both consumer ZIPs/digests are preserved; `original-artifacts-verified.json` marks this pair unaccepted/must-not-publish. Publication/recovery jobs skipped.
+
+The minimal correction enables `core.longpaths` only on the disposable Windows runner, in pwsh before checkout. Existing evidence bytes/paths/hashes are untouched. The real isolated-Git regression proves false→true and detects removed, wrong-platform and misplaced settings. Three targeted workflow tests and release actionlint pass. Fresh exact-source CI and all three staging acceptances are mandatory; no previous archive or non-Windows receipt can qualify the new source.

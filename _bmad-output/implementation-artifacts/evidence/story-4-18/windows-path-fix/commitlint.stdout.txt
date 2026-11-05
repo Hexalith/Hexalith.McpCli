@@ -1,0 +1,6 @@
+⧗   --- input ---
+fix(ci): enable long paths before Windows checkout
+
+Preserve the captured evidence while allowing its full paths on the disposable runner.
+Require fresh source and three-platform acceptance for the next immutable pair.
+✔   found 0 problems, 0 warnings

@@ -1,0 +1,16 @@
+{
+  "result": "passed",
+  "fullLiveAccepted": true,
+  "runId": "71422bb468f3465bac114b2eec6c99d5",
+  "preparationRunId": "4371e3b1d2e14599899c519fe055d1e2",
+  "output": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/71422bb468f3465bac114b2eec6c99d5",
+  "vectors": {
+    "result": "passed",
+    "count": 21,
+    "receipt": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/71422bb468f3465bac114b2eec6c99d5/vectors/live-lane.json"
+  },
+  "smoke": {
+    "result": "passed",
+    "receipt": "/home/runner/work/_temp/mcpcli-live-ci-4r_2dy0q/runtime/runs/20261105T161250Z-1489aacd/result.json"
+  }
+}

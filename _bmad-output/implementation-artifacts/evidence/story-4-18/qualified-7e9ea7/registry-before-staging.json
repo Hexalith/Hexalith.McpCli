@@ -1,0 +1,12 @@
+{
+  "time_utc": "2026-11-05T16:16:25.127576+00:00",
+  "scope": "Read-only availability observation; normal protected publication preflight remains mandatory.",
+  "versions": {
+    "Hexalith.McpCli.Abstractions": [
+      "1.0.0",
+      "1.1.0",
+      "2.0.0"
+    ],
+    "Hexalith.McpCli": []
+  }
+}

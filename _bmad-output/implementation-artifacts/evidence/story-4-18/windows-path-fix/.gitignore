@@ -1,0 +1,2 @@
+# Preserve only captured logs in this task evidence directory.
+!/windows-first-failure.original.log

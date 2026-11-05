@@ -1,0 +1,760 @@
+﻿2026-11-05T15:26:40.3576992Z Current runner version: '2.338.2'
+2026-11-05T15:26:40.3614206Z ##[group]Runner Image Provisioner
+2026-11-05T15:26:40.3615589Z Hosted Compute Agent
+2026-11-05T15:26:40.3616587Z Version: 20261028.624
+2026-11-05T15:26:40.3617660Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+2026-11-05T15:26:40.3618877Z Build Date: 2026-10-28T21:51:42Z
+2026-11-05T15:26:40.3620505Z Worker ID: {f8771728-8edb-4c66-8b7e-6c35a1bf519e}
+2026-11-05T15:26:40.3621824Z Region: eastus
+2026-11-05T15:26:40.3623320Z Cloud: Azure
+2026-11-05T15:26:40.3624330Z ##[endgroup]
+2026-11-05T15:26:40.3627797Z ##[group]Operating System
+2026-11-05T15:26:40.3629482Z Ubuntu
+2026-11-05T15:26:40.3630553Z 26.04.1
+2026-11-05T15:26:40.3631556Z LTS
+2026-11-05T15:26:40.3632490Z ##[endgroup]
+2026-11-05T15:26:40.3633448Z ##[group]Runner Image
+2026-11-05T15:26:40.3634747Z Image: ubuntu-26.04
+2026-11-05T15:26:40.3635988Z Version: 20261101.186.1
+2026-11-05T15:26:40.3638457Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261101.186/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-05T15:26:40.3641464Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261101.186
+2026-11-05T15:26:40.3643312Z ##[endgroup]
+2026-11-05T15:26:40.3645285Z ##[group]GITHUB_TOKEN Permissions
+2026-11-05T15:26:40.3648277Z Contents: read
+2026-11-05T15:26:40.3649641Z Metadata: read
+2026-11-05T15:26:40.3650626Z ##[endgroup]
+2026-11-05T15:26:40.3653818Z Secret source: Actions
+2026-11-05T15:26:40.3655535Z Cache mode: write
+2026-11-05T15:26:40.3656800Z Prepare workflow directory
+2026-11-05T15:26:40.4164713Z Prepare all required actions
+2026-11-05T15:26:40.4241614Z Getting action download info
+2026-11-05T15:26:40.6744404Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-05T15:26:40.8371134Z Download action repository 'Hexalith/Hexalith.Builds@e171c5a788eab183b32683431b084198c9b8d373' (SHA:e171c5a788eab183b32683431b084198c9b8d373)
+2026-11-05T15:26:42.5233226Z Download action repository 'actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68' (SHA:a98b56852c35b8e3190ac28c8c2271da59106c68)
+2026-11-05T15:26:42.6745621Z Download action repository 'actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9' (SHA:55cc8345863c7cc4c66a329aec7e433d2d1c52a9)
+2026-11-05T15:26:42.8052556Z Download action repository 'Hexalith/Hexalith.Builds@c171c7265e70806f09f6ac54130aa6e28ef74395' (SHA:c171c7265e70806f09f6ac54130aa6e28ef74395)
+2026-11-05T15:26:45.1966844Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-11-05T15:26:45.4026065Z Getting action download info
+2026-11-05T15:26:45.5190309Z Download action repository 'dapr/setup-dapr@8d980918fd43a2765c143ce7f687665b2d46a6b9' (SHA:8d980918fd43a2765c143ce7f687665b2d46a6b9)
+2026-11-05T15:26:45.7220788Z Download action repository 'nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60' (SHA:ad984534de44a9489a53aefd81eb77f87c70dc60)
+2026-11-05T15:26:45.8512760Z Uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@06a51f55bfe2e03a06e1121d94a41e98f1e3e251
+2026-11-05T15:26:45.8517223Z ##[group] Inputs
+2026-11-05T15:26:45.8517622Z   solution: Hexalith.McpCli.slnx
+2026-11-05T15:26:45.8517929Z   module-manifest: 
+2026-11-05T15:26:45.8518209Z   dotnet-global-json: global.json
+2026-11-05T15:26:45.8518837Z   packages-lock-file: Directory.Packages.props, global.json, references/Hexalith.Builds/Props/Directory.Packages.props
+2026-11-05T15:26:45.8519659Z   dapr-version: 1.18.2
+2026-11-05T15:26:45.8519942Z   dapr-runtime-version: 1.18.7
+2026-11-05T15:26:45.8520288Z   test-platform: microsoft-testing-platform
+2026-11-05T15:26:45.8520657Z   allowed-not-runnable-tests: 
+2026-11-05T15:26:45.8522100Z   unit-test-projects: tests/Hexalith.McpCli.Abstractions.Tests
+tests/Hexalith.McpCli.Analyzers.Tests
+tests/Hexalith.McpCli.Core.Tests
+tests/Hexalith.McpCli.Manifest.Tests
+tests/Hexalith.McpCli.Cli.Tests
+tests/Hexalith.McpCli.Mcp.Tests
+
+2026-11-05T15:26:45.8523504Z   integration-test-projects: 
+2026-11-05T15:26:45.8523908Z   aspire-test-project: tests/Hexalith.McpCli.Integration.Tests
+2026-11-05T15:26:45.8524404Z   aspire-non-performance-filter: Category!=Performance
+2026-11-05T15:26:45.8524812Z   performance-filter: Category=Performance
+2026-11-05T15:26:45.8525195Z   aspire-mtp-excluded-trait: Category=Performance
+2026-11-05T15:26:45.8525608Z   performance-mtp-trait: Category=Performance
+2026-11-05T15:26:45.8526376Z   run-consumer-validation: false
+2026-11-05T15:26:45.8526712Z   package-prepare-script: 
+2026-11-05T15:26:45.8527017Z   run-coverage-gate: false
+2026-11-05T15:26:45.8527724Z   coverage-minimum-line: 80
+2026-11-05T15:26:45.8528051Z   coverage-required-branch: 100
+2026-11-05T15:26:45.8528383Z   coverage-isolation-targets: 
+2026-11-05T15:26:45.8561164Z   coverage-line-scope: 
+2026-11-05T15:26:45.8561789Z   aspire-continue-on-error: false
+2026-11-05T15:26:45.8562411Z   aspire-prepare-script: tools/live-topology/prepare-ci.sh
+2026-11-05T15:26:45.8562995Z   aspire-runner-script: tools/live-topology/run-ci.sh
+2026-11-05T15:26:45.8563452Z   aspire-prepare-timeout-minutes: 40
+2026-11-05T15:26:45.8563844Z   aspire-runner-timeout-minutes: 300
+2026-11-05T15:26:45.8564196Z   aspire-evidence-path: TestResults/live-ci
+2026-11-05T15:26:45.8564547Z   aspire-browser-project: 
+2026-11-05T15:26:45.8564833Z   aspire-fail-skips: false
+2026-11-05T15:26:45.8565115Z   build-timeout-minutes: 60
+2026-11-05T15:26:45.8565542Z   aspire-timeout-minutes: 360
+2026-11-05T15:26:45.8565855Z   performance-timeout-minutes: 60
+2026-11-05T15:26:45.8566155Z   governed-ci: false
+2026-11-05T15:26:45.8566412Z   builds-execution-sha: 
+2026-11-05T15:26:45.8566686Z   candidate-commit: 
+2026-11-05T15:26:45.8566953Z   dependency-policy-repository: 
+2026-11-05T15:26:45.8567265Z   dependency-policy-path: 
+2026-11-05T15:26:45.8567571Z   dependency-policy-commit: 
+2026-11-05T15:26:45.8567869Z   dependency-policy-sha256: 
+2026-11-05T15:26:45.8568184Z   expected-ci-evaluator-digest: 
+2026-11-05T15:26:45.8568497Z ##[endgroup]
+2026-11-05T15:26:45.8568752Z Complete job name: ci / build-and-test
+2026-11-05T15:26:45.9514812Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-05T15:26:45.9515567Z with:
+2026-11-05T15:26:45.9515791Z   fetch-depth: 0
+2026-11-05T15:26:45.9516022Z   submodules: false
+2026-11-05T15:26:45.9516282Z   repository: Hexalith/Hexalith.McpCli
+2026-11-05T15:26:45.9519351Z   token: ***
+2026-11-05T15:26:45.9519586Z   ssh-strict: true
+2026-11-05T15:26:45.9519812Z   ssh-user: git
+2026-11-05T15:26:45.9520044Z   persist-credentials: true
+2026-11-05T15:26:45.9520295Z   clean: true
+2026-11-05T15:26:45.9520520Z   sparse-checkout-cone-mode: true
+2026-11-05T15:26:45.9520805Z   fetch-tags: false
+2026-11-05T15:26:45.9521030Z   show-progress: true
+2026-11-05T15:26:45.9521257Z   lfs: false
+2026-11-05T15:26:45.9521469Z   set-safe-directory: true
+2026-11-05T15:26:45.9521734Z   allow-unsafe-pr-checkout: false
+2026-11-05T15:26:45.9522246Z ##[endgroup]
+2026-11-05T15:26:46.2740233Z Syncing repository: Hexalith/Hexalith.McpCli
+2026-11-05T15:26:46.2741804Z ##[group]Getting Git version info
+2026-11-05T15:26:46.2742646Z Working directory is '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli'
+2026-11-05T15:26:46.2743812Z [command]/usr/bin/git version
+2026-11-05T15:26:46.2763860Z git version 2.56.0
+2026-11-05T15:26:46.2785455Z ##[endgroup]
+2026-11-05T15:26:46.2800931Z Temporarily overriding HOME='/home/runner/work/_temp/8ac6f614-b67e-4ffe-b623-0241c22704e2' before making global git config changes
+2026-11-05T15:26:46.2802703Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T15:26:46.2806364Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T15:26:46.2886856Z Deleting the contents of '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli'
+2026-11-05T15:26:46.2890164Z ##[group]Determining repository object format
+2026-11-05T15:26:46.2892186Z ##[endgroup]
+2026-11-05T15:26:46.2893018Z ##[group]Initializing the repository
+2026-11-05T15:26:46.2897535Z [command]/usr/bin/git init /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T15:26:46.3031429Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-05T15:26:46.3032562Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-05T15:26:46.3033387Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-05T15:26:46.3033880Z hint: call:
+2026-11-05T15:26:46.3034115Z hint:
+2026-11-05T15:26:46.3034469Z hint: 	git config --global init.defaultBranch <name>
+2026-11-05T15:26:46.3034863Z hint:
+2026-11-05T15:26:46.3035272Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-05T15:26:46.3035924Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-05T15:26:46.3036402Z hint:
+2026-11-05T15:26:46.3036658Z hint: 	git branch -m <name>
+2026-11-05T15:26:46.3036943Z hint:
+2026-11-05T15:26:46.3037368Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-05T15:26:46.3047726Z Initialized empty Git repository in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/
+2026-11-05T15:26:46.3060533Z [command]/usr/bin/git remote add origin https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T15:26:46.3144033Z ##[endgroup]
+2026-11-05T15:26:46.3145193Z ##[group]Disabling automatic garbage collection
+2026-11-05T15:26:46.3146340Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-05T15:26:46.3190530Z ##[endgroup]
+2026-11-05T15:26:46.3191222Z ##[group]Setting up auth
+2026-11-05T15:26:46.3198031Z Removing SSH command configuration
+2026-11-05T15:26:46.3198871Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T15:26:46.3243187Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T15:26:46.3751086Z Removing HTTP extra header
+2026-11-05T15:26:46.3757936Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T15:26:46.3797591Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T15:26:46.4087437Z Removing includeIf entries pointing to credentials config files
+2026-11-05T15:26:46.4094654Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:26:46.4137604Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-05T15:26:46.4437428Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-05T15:26:46.4485617Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path /home/runner/work/_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config
+2026-11-05T15:26:46.4524176Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config
+2026-11-05T15:26:46.4564624Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config
+2026-11-05T15:26:46.4601229Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config
+2026-11-05T15:26:46.4632242Z ##[endgroup]
+2026-11-05T15:26:46.4632847Z ##[group]Fetching the repository
+2026-11-05T15:26:46.4638907Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-11-05T15:26:48.1514648Z From https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T15:26:48.1515437Z  * [new branch]      main       -> origin/main
+2026-11-05T15:26:48.1516005Z  * [new tag]         v1.0.0     -> v1.0.0
+2026-11-05T15:26:48.1516575Z  * [new tag]         v1.1.0     -> v1.1.0
+2026-11-05T15:26:48.1517106Z  * [new tag]         v2.0.0     -> v2.0.0
+2026-11-05T15:26:48.1526075Z [command]/usr/bin/git branch --list --remote origin/main
+2026-11-05T15:26:48.1556348Z   origin/main
+2026-11-05T15:26:48.1564941Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-11-05T15:26:48.1592699Z 7e9ea7705dd07583dc29ffc4613e29efa8a3cffb
+2026-11-05T15:26:48.1597271Z ##[endgroup]
+2026-11-05T15:26:48.1597807Z ##[group]Determining the checkout info
+2026-11-05T15:26:48.1598477Z ##[endgroup]
+2026-11-05T15:26:48.1604186Z [command]/usr/bin/git sparse-checkout disable
+2026-11-05T15:26:48.1672050Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-05T15:26:48.1713874Z ##[group]Checking out the ref
+2026-11-05T15:26:48.1714802Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-05T15:26:49.2036826Z Switched to a new branch 'main'
+2026-11-05T15:26:49.2043513Z branch 'main' set up to track 'origin/main'.
+2026-11-05T15:26:49.2086105Z ##[endgroup]
+2026-11-05T15:26:49.2145918Z [command]/usr/bin/git log -1 --format=%H
+2026-11-05T15:26:49.2176997Z 7e9ea7705dd07583dc29ffc4613e29efa8a3cffb
+2026-11-05T15:26:49.2478656Z ##[group]Run Hexalith/Hexalith.Builds/Github/initialize-build@e171c5a788eab183b32683431b084198c9b8d373
+2026-11-05T15:26:49.2479630Z ##[endgroup]
+2026-11-05T15:26:49.2533414Z ##[start-action display=Initialize root-declared submodules;id=__Hexalith_Hexalith_Builds.__run]
+2026-11-05T15:26:49.2570032Z ##[group]Run git -c submodule.recurse=false submodule update --init
+2026-11-05T15:26:49.2570674Z [36;1mgit -c submodule.recurse=false submodule update --init[0m
+2026-11-05T15:26:49.2623411Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T15:26:49.2623860Z ##[endgroup]
+2026-11-05T15:26:49.3016591Z Submodule 'references/Hexalith.AI.Tools' (https://github.com/Hexalith/Hexalith.AI.Tools.git) registered for path 'references/Hexalith.AI.Tools'
+2026-11-05T15:26:49.3023116Z Submodule 'references/Hexalith.Agents' (https://github.com/Hexalith/Hexalith.Agents.git) registered for path 'references/Hexalith.Agents'
+2026-11-05T15:26:49.3030274Z Submodule 'references/Hexalith.Builds' (https://github.com/Hexalith/Hexalith.Builds.git) registered for path 'references/Hexalith.Builds'
+2026-11-05T15:26:49.3038177Z Submodule 'references/Hexalith.ChatBot' (https://github.com/Hexalith/Hexalith.ChatBot.git) registered for path 'references/Hexalith.ChatBot'
+2026-11-05T15:26:49.3045618Z Submodule 'references/Hexalith.Commons' (https://github.com/Hexalith/Hexalith.Commons.git) registered for path 'references/Hexalith.Commons'
+2026-11-05T15:26:49.3053068Z Submodule 'references/Hexalith.Conversations' (https://github.com/Hexalith/Hexalith.Conversations.git) registered for path 'references/Hexalith.Conversations'
+2026-11-05T15:26:49.3061561Z Submodule 'references/Hexalith.EventStore' (https://github.com/Hexalith/Hexalith.EventStore.git) registered for path 'references/Hexalith.EventStore'
+2026-11-05T15:26:49.3070785Z Submodule 'references/Hexalith.Folders' (https://github.com/Hexalith/Hexalith.Folders.git) registered for path 'references/Hexalith.Folders'
+2026-11-05T15:26:49.3078360Z Submodule 'references/Hexalith.FrontComposer' (https://github.com/Hexalith/Hexalith.FrontComposer.git) registered for path 'references/Hexalith.FrontComposer'
+2026-11-05T15:26:49.3085011Z Submodule 'references/Hexalith.Memories' (https://github.com/Hexalith/Hexalith.Memories.git) registered for path 'references/Hexalith.Memories'
+2026-11-05T15:26:49.3091759Z Submodule 'references/Hexalith.Parties' (https://github.com/Hexalith/Hexalith.Parties.git) registered for path 'references/Hexalith.Parties'
+2026-11-05T15:26:49.3098589Z Submodule 'references/Hexalith.Platform' (https://github.com/Hexalith/Hexalith.Platform.git) registered for path 'references/Hexalith.Platform'
+2026-11-05T15:26:49.3106260Z Submodule 'references/Hexalith.PolymorphicSerializations' (https://github.com/Hexalith/Hexalith.PolymorphicSerializations.git) registered for path 'references/Hexalith.PolymorphicSerializations'
+2026-11-05T15:26:49.3112401Z Submodule 'references/Hexalith.Projects' (https://github.com/Hexalith/Hexalith.Projects.git) registered for path 'references/Hexalith.Projects'
+2026-11-05T15:26:49.3119665Z Submodule 'references/Hexalith.Tenants' (https://github.com/Hexalith/Hexalith.Tenants.git) registered for path 'references/Hexalith.Tenants'
+2026-11-05T15:26:49.3126958Z Submodule 'references/Hexalith.Timesheets' (https://github.com/Hexalith/Hexalith.Timesheets.git) registered for path 'references/Hexalith.Timesheets'
+2026-11-05T15:26:49.3134918Z Submodule 'references/Hexalith.Works' (https://github.com/Hexalith/Hexalith.Works.git) registered for path 'references/Hexalith.Works'
+2026-11-05T15:26:49.3172166Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.AI.Tools'...
+2026-11-05T15:26:49.4983981Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Agents'...
+2026-11-05T15:26:51.8540238Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Builds'...
+2026-11-05T15:26:59.6753518Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.ChatBot'...
+2026-11-05T15:27:01.3255436Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Commons'...
+2026-11-05T15:27:01.7135199Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Conversations'...
+2026-11-05T15:27:05.6638482Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.EventStore'...
+2026-11-05T15:27:25.6112179Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Folders'...
+2026-11-05T15:27:40.8516755Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.FrontComposer'...
+2026-11-05T15:28:16.3547076Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Memories'...
+2026-11-05T15:28:18.1493777Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Parties'...
+2026-11-05T15:28:19.6383682Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Platform'...
+2026-11-05T15:28:23.1408290Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.PolymorphicSerializations'...
+2026-11-05T15:28:23.3974264Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Projects'...
+2026-11-05T15:28:33.2034261Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Tenants'...
+2026-11-05T15:28:35.8415365Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Timesheets'...
+2026-11-05T15:28:37.7537207Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Works'...
+2026-11-05T15:28:41.1024347Z Submodule path 'references/Hexalith.AI.Tools': checked out '1745b6663ad32bb1288167135ed0f979366c53a0'
+2026-11-05T15:28:42.8263705Z Submodule path 'references/Hexalith.Agents': checked out '7957108c30d38b8e82eb072cf3437b6a67627cd7'
+2026-11-05T15:28:43.1362036Z Submodule path 'references/Hexalith.Builds': checked out '06a51f55bfe2e03a06e1121d94a41e98f1e3e251'
+2026-11-05T15:28:43.7181927Z Submodule path 'references/Hexalith.ChatBot': checked out '7626f59481e521b5775c45159e0eb471a02d9ddc'
+2026-11-05T15:28:43.7417974Z Submodule path 'references/Hexalith.Commons': checked out '11555ace9efcae2928a00122dcba91243e5a8a1a'
+2026-11-05T15:28:51.6948966Z Submodule path 'references/Hexalith.Conversations': checked out 'c02e6092905b17e0c675c24e27082a7bcb27b06a'
+2026-11-05T15:28:52.7299429Z Submodule path 'references/Hexalith.EventStore': checked out 'fe974f485fa2c29d9ea055f5597b41ae38d072f1'
+2026-11-05T15:28:57.1375752Z Submodule path 'references/Hexalith.Folders': checked out '9198d9213f6ea54c629148322f05e7ded994822d'
+2026-11-05T15:28:58.1272846Z Submodule path 'references/Hexalith.FrontComposer': checked out 'b70627f649826b1a2338ccc13295ba02b71f7424'
+2026-11-05T15:28:58.8486888Z Submodule path 'references/Hexalith.Memories': checked out '4dac7decfdd33b3d048de3c77e9cb1562bb95c6f'
+2026-11-05T15:28:59.7254578Z Submodule path 'references/Hexalith.Parties': checked out '570ff5935ac79331db4a10f74cfaa774c56239eb'
+2026-11-05T15:29:01.5468704Z Submodule path 'references/Hexalith.Platform': checked out 'aaa30aff1038688a921494a78c9fc53fc5eb8836'
+2026-11-05T15:29:01.5612516Z Submodule path 'references/Hexalith.PolymorphicSerializations': checked out 'bce4eb9f45c6b131b960ab4fa39e50ff01e51960'
+2026-11-05T15:29:05.1770999Z Submodule path 'references/Hexalith.Projects': checked out '9c3c28f4a54cd95efc3bfcc55bd2424b881c3525'
+2026-11-05T15:29:06.0331311Z Submodule path 'references/Hexalith.Tenants': checked out '143cec60a3f5bb1831fa57f35c510880ceb788d8'
+2026-11-05T15:29:06.9827646Z Submodule path 'references/Hexalith.Timesheets': checked out '56ad35e1183193f7203264511e760c2b9f5d2729'
+2026-11-05T15:29:08.3493422Z Submodule path 'references/Hexalith.Works': checked out 'a75e1ee368bc4f2e868b5c03fef4545a64d88fc2'
+2026-11-05T15:29:08.3600115Z ##[end-action id=__Hexalith_Hexalith_Builds.__run;outcome=success;conclusion=success;duration_ms=139106]
+2026-11-05T15:29:08.3755969Z ##[group]Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+2026-11-05T15:29:08.3756402Z with:
+2026-11-05T15:29:08.3756620Z   global-json-file: global.json
+2026-11-05T15:29:08.3756881Z   cache: false
+2026-11-05T15:29:08.3757087Z ##[endgroup]
+2026-11-05T15:29:08.5242160Z [command]/home/runner/work/_actions/actions/setup-dotnet/a98b56852c35b8e3190ac28c8c2271da59106c68/externals/install-dotnet.sh --skip-non-versioned-files --runtime dotnet --channel LTS
+2026-11-05T15:29:08.7249512Z dotnet-install: .NET Core Runtime with version '10.0.14' is already installed.
+2026-11-05T15:29:08.7279760Z [command]/home/runner/work/_actions/actions/setup-dotnet/a98b56852c35b8e3190ac28c8c2271da59106c68/externals/install-dotnet.sh --skip-non-versioned-files --channel 10.0.4xx
+2026-11-05T15:29:08.8967730Z dotnet-install: .NET Core SDK with version '10.0.403' is already installed.
+2026-11-05T15:29:08.9774702Z ##[group]Run actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+2026-11-05T15:29:08.9775169Z with:
+2026-11-05T15:29:08.9775406Z   path: ~/.nuget/packages
+2026-11-05T15:29:08.9775679Z   key: nuget-
+2026-11-05T15:29:08.9775905Z   restore-keys: nuget-
+2026-11-05T15:29:08.9776166Z   enableCrossOsArchive: false
+2026-11-05T15:29:08.9776448Z   fail-on-cache-miss: false
+2026-11-05T15:29:08.9776710Z   lookup-only: false
+2026-11-05T15:29:08.9776952Z   save-always: false
+2026-11-05T15:29:08.9777174Z env:
+2026-11-05T15:29:08.9777389Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:29:08.9777660Z ##[endgroup]
+2026-11-05T15:29:09.1887801Z Cache hit for: nuget-
+2026-11-05T15:29:09.5840361Z Received 60262511 of 60262511 (100.0%), 170.5 MBs/sec
+2026-11-05T15:29:09.5841599Z Cache Size: ~57 MB (60262511 B)
+2026-11-05T15:29:09.5872248Z [command]/usr/bin/tar -xf /home/runner/work/_temp/364972e8-4e81-44ec-95ed-7d625c19857d/cache.tzst -P -C /home/runner/work/Hexalith.McpCli/Hexalith.McpCli --use-compress-program unzstd
+2026-11-05T15:29:09.8649769Z Cache restored successfully
+2026-11-05T15:29:09.9352117Z Cache restored from key: nuget-
+2026-11-05T15:29:09.9749616Z ##[group]Run dotnet restore "$SOLUTION" -p:Configuration=Release
+2026-11-05T15:29:09.9750672Z [36;1mdotnet restore "$SOLUTION" -p:Configuration=Release[0m
+2026-11-05T15:29:09.9870472Z shell: /usr/bin/bash -e {0}
+2026-11-05T15:29:09.9870960Z env:
+2026-11-05T15:29:09.9871336Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:29:09.9871833Z   SOLUTION: Hexalith.McpCli.slnx
+2026-11-05T15:29:09.9872252Z ##[endgroup]
+2026-11-05T15:29:17.5044693Z   Determining projects to restore...
+2026-11-05T15:29:19.6608774Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Topology.DaprStub/Topology.DaprStub.csproj (in 245 ms).
+2026-11-05T15:29:19.6661039Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.InvalidProvider.Contracts/Catalog.InvalidProvider.Contracts.csproj (in 277 ms).
+2026-11-05T15:29:19.6741457Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.Unmarked.Contracts/Manifest.Unmarked.Contracts.csproj (in 3 ms).
+2026-11-05T15:29:19.6831170Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj (in 7 ms).
+2026-11-05T15:29:19.6874759Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Table.Contracts/Catalog.Table.Contracts.csproj (in 4 ms).
+2026-11-05T15:29:19.6940782Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.String.Contracts/Catalog.String.Contracts.csproj (in 5 ms).
+2026-11-05T15:29:20.8386671Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Lint.Contracts/Catalog.Lint.Contracts.csproj (in 1.14 sec).
+2026-11-05T15:29:20.8430548Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Routing.Contracts/Catalog.Routing.Contracts.csproj (in 1.15 sec).
+2026-11-05T15:29:20.8561744Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Explicit.Contracts/Catalog.Explicit.Contracts.csproj (in 5 ms).
+2026-11-05T15:29:20.8616892Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Invalid.Contracts/Catalog.Invalid.Contracts.csproj (in 7 ms).
+2026-11-05T15:29:20.8670901Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Sample.Contracts/Hexalith.McpCli.Sample.Contracts.csproj (in 5 ms).
+2026-11-05T15:29:22.1331236Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.csproj (in 1.14 sec).
+2026-11-05T15:29:22.1360729Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/StdioHost/Hexalith.McpCli.StdioHost.csproj (in 2.62 sec).
+2026-11-05T15:29:22.7351932Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj (in 575 ms).
+2026-11-05T15:29:22.8067084Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj (in 36 ms).
+2026-11-05T15:29:22.8414097Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj (in 17 ms).
+2026-11-05T15:29:22.8880795Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj (in 3.5 sec).
+2026-11-05T15:29:22.8931504Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj (in 1.99 sec).
+2026-11-05T15:29:22.8953414Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj (in 755 ms).
+2026-11-05T15:29:22.9146837Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.csproj (in 9 ms).
+2026-11-05T15:29:22.9197806Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj (in 40 ms).
+2026-11-05T15:29:22.9290264Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 17 ms).
+2026-11-05T15:29:22.9337664Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj (in 25 ms).
+2026-11-05T15:29:22.9368798Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 11 ms).
+2026-11-05T15:29:22.9373331Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 10 ms).
+2026-11-05T15:29:22.9407671Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 3 ms).
+2026-11-05T15:29:23.1617736Z   Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 229 ms).
+2026-11-05T15:29:23.2287346Z ##[group]Run dotnet build "$SOLUTION" --no-restore --configuration Release -warnaserror
+2026-11-05T15:29:23.2288041Z [36;1mdotnet build "$SOLUTION" --no-restore --configuration Release -warnaserror[0m
+2026-11-05T15:29:23.2346567Z shell: /usr/bin/bash -e {0}
+2026-11-05T15:29:23.2346854Z env:
+2026-11-05T15:29:23.2347073Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:29:23.2347383Z   SOLUTION: Hexalith.McpCli.slnx
+2026-11-05T15:29:23.2347672Z ##[endgroup]
+2026-11-05T15:29:29.3095445Z   Hexalith.McpCli.Analyzers -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+2026-11-05T15:29:30.3111544Z   Manifest.Unmarked.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.Unmarked.Contracts/bin/Release/net10.0/manifest.AUnmarked.Contracts.dll
+2026-11-05T15:29:30.5656411Z   Topology.DaprStub -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Topology.DaprStub/bin/Release/net10.0/dapr.dll
+2026-11-05T15:29:34.2424837Z   Hexalith.McpCli.EventStoreGateway.TestHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.McpCli.EventStoreGateway.TestHost.dll
+2026-11-05T15:29:35.9507057Z   Hexalith.McpCli.AppHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.AppHost/bin/Release/net10.0/Hexalith.McpCli.AppHost.dll
+2026-11-05T15:29:36.1483253Z   Hexalith.McpCli.Abstractions -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+2026-11-05T15:29:36.4349944Z   Catalog.String.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.String.Contracts/bin/Release/net10.0/Catalog.String.Contracts.dll
+2026-11-05T15:29:36.4376195Z   Catalog.Lint.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Lint.Contracts/bin/Release/net10.0/Catalog.Lint.Contracts.dll
+2026-11-05T15:29:36.6206590Z   Catalog.Table.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Table.Contracts/bin/Release/net10.0/Catalog.Table.Contracts.dll
+2026-11-05T15:29:36.6538578Z   Hexalith.McpCli.Sample.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Sample.Contracts/bin/Release/net10.0/Hexalith.McpCli.Sample.Contracts.dll
+2026-11-05T15:29:36.7193126Z   Catalog.Invalid.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Invalid.Contracts/bin/Release/net10.0/Catalog.Invalid.Contracts.dll
+2026-11-05T15:29:36.9821735Z   Catalog.InvalidProvider.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.InvalidProvider.Contracts/bin/Release/net10.0/Catalog.InvalidProvider.Contracts.dll
+2026-11-05T15:29:36.9961647Z   Catalog.Routing.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Routing.Contracts/bin/Release/net10.0/Catalog.Routing.Contracts.dll
+2026-11-05T15:29:37.2865386Z   Manifest.MarkedEmpty.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Manifest.MarkedEmpty.Contracts/bin/Release/net10.0/Manifest.MarkedEmpty.Contracts.dll
+2026-11-05T15:29:38.2871850Z   Hexalith.McpCli.Analyzers.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll
+2026-11-05T15:29:38.5321878Z   Hexalith.McpCli.Abstractions.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll
+2026-11-05T15:29:38.6082073Z   Hexalith.McpCli.Core -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll
+2026-11-05T15:29:38.7471940Z   Catalog.Explicit.Contracts -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/Catalog.Explicit.Contracts/bin/Release/net10.0/Catalog.Explicit.Contracts.dll
+2026-11-05T15:29:39.1866675Z   Hexalith.McpCli.Mcp -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll
+2026-11-05T15:29:41.9092220Z   Hexalith.McpCli -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll
+2026-11-05T15:29:43.1033187Z   Hexalith.McpCli.Mcp.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll
+2026-11-05T15:29:43.1790962Z   Hexalith.McpCli.StdioHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/fixtures/StdioHost/bin/Release/net10.0/Hexalith.McpCli.StdioHost.dll
+2026-11-05T15:29:43.7469018Z   Hexalith.McpCli.ConformanceHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll
+2026-11-05T15:29:48.2621631Z   Hexalith.McpCli.Core.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll
+2026-11-05T15:29:48.3015028Z   Hexalith.McpCli.Cli.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll
+2026-11-05T15:29:49.0286328Z   Hexalith.McpCli.Integration.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll
+2026-11-05T15:29:51.5862216Z   Hexalith.McpCli.Manifest.Tests -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll
+2026-11-05T15:29:51.6129935Z 
+2026-11-05T15:29:51.6137327Z Build succeeded.
+2026-11-05T15:29:51.6137961Z     0 Warning(s)
+2026-11-05T15:29:51.6138468Z     0 Error(s)
+2026-11-05T15:29:51.6138760Z 
+2026-11-05T15:29:51.6139622Z Time Elapsed 00:00:27.99
+2026-11-05T15:29:51.6525819Z ##[group]Run set -euo pipefail
+2026-11-05T15:29:51.6526274Z [36;1mset -euo pipefail[0m
+2026-11-05T15:29:51.6526538Z [36;1mfailures=0[0m
+2026-11-05T15:29:51.6526765Z [36;1m{[0m
+2026-11-05T15:29:51.6527062Z [36;1m  echo "## Tier 1 Unit Tests (Microsoft.Testing.Platform)"[0m
+2026-11-05T15:29:51.6527430Z [36;1m  echo[0m
+2026-11-05T15:29:51.6527687Z [36;1m  echo "| Project | Status | Exit code |"[0m
+2026-11-05T15:29:51.6528033Z [36;1m  echo "| --- | --- | ---: |"[0m
+2026-11-05T15:29:51.6528319Z [36;1m} >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:29:51.6528596Z [36;1mwhile IFS= read -r proj; do[0m
+2026-11-05T15:29:51.6528868Z [36;1m  [ -z "$proj" ] && continue[0m
+2026-11-05T15:29:51.6529381Z [36;1m  name=$(basename "$proj")[0m
+2026-11-05T15:29:51.6529715Z [36;1m  result_file="TestResults/${name}/${name}.trx"[0m
+2026-11-05T15:29:51.6530054Z [36;1m  rm -f -- "$result_file"[0m
+2026-11-05T15:29:51.6530341Z [36;1m  mkdir -p "TestResults/${name}"[0m
+2026-11-05T15:29:51.6530711Z [36;1m  report_marker="TestResults/${name}/.started"[0m
+2026-11-05T15:29:51.6531034Z [36;1m  touch "$report_marker"[0m
+2026-11-05T15:29:51.6531311Z [36;1m  summary_proj=${proj//\\/\\\\}[0m
+2026-11-05T15:29:51.6531622Z [36;1m  summary_proj=${summary_proj//|/\\|}[0m
+2026-11-05T15:29:51.6531939Z [36;1m  summary_proj=${summary_proj//\`/\\\`}[0m
+2026-11-05T15:29:51.6532236Z [36;1m  coverage_args=()[0m
+2026-11-05T15:29:51.6532514Z [36;1m  if [ "$RUN_COVERAGE_GATE" = "true" ]; then[0m
+2026-11-05T15:29:51.6533315Z [36;1m    coverage_args+=(--coverage --coverage-output-format cobertura --coverage-output coverage.cobertura.xml)[0m
+2026-11-05T15:29:51.6533870Z [36;1m  fi[0m
+2026-11-05T15:29:51.6534170Z [36;1m  if dotnet test "$proj" --no-build --configuration Release \[0m
+2026-11-05T15:29:51.6534598Z [36;1m      --results-directory "TestResults/${name}" \[0m
+2026-11-05T15:29:51.6534943Z [36;1m      --report-xunit-trx \[0m
+2026-11-05T15:29:51.6535269Z [36;1m      --report-xunit-trx-filename "${name}.trx" \[0m
+2026-11-05T15:29:51.6535619Z [36;1m      "${coverage_args[@]}" </dev/null; then[0m
+2026-11-05T15:29:51.6535925Z [36;1m    status=PASS[0m
+2026-11-05T15:29:51.6536153Z [36;1m    exit_code=0[0m
+2026-11-05T15:29:51.6536368Z [36;1m  else[0m
+2026-11-05T15:29:51.6536589Z [36;1m    exit_code=$?[0m
+2026-11-05T15:29:51.6536847Z [36;1m    annotation_proj=${proj//%/%25}[0m
+2026-11-05T15:29:51.6537150Z [36;1m    if [ "$exit_code" -eq 10 ]; then[0m
+2026-11-05T15:29:51.6537779Z [36;1m      printf '::error title=Test shard infrastructure failure::%s exited with infrastructure code %d.\n' "$annotation_proj" "$exit_code"[0m
+2026-11-05T15:29:51.6538537Z [36;1m      printf '| %s | FAIL | %d |\n' "$summary_proj" "$exit_code" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:29:51.6538966Z [36;1m      exit "$exit_code"[0m
+2026-11-05T15:29:51.6539408Z [36;1m    fi[0m
+2026-11-05T15:29:51.6539645Z [36;1m    if [ ! -f "$result_file" ]; then[0m
+2026-11-05T15:29:51.6540001Z [36;1m      annotation_result_file=${result_file//%/%25}[0m
+2026-11-05T15:29:51.6540583Z [36;1m      printf '::error title=Test shard infrastructure failure::%s exited with code %d without producing %s.\n' \[0m
+2026-11-05T15:29:51.6541200Z [36;1m        "$annotation_proj" "$exit_code" "$annotation_result_file"[0m
+2026-11-05T15:29:51.6541712Z [36;1m      printf '| %s | FAIL | %d |\n' "$summary_proj" "$exit_code" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:29:51.6542130Z [36;1m      exit "$exit_code"[0m
+2026-11-05T15:29:51.6542380Z [36;1m    fi[0m
+2026-11-05T15:29:51.6542580Z [36;1m    status=FAIL[0m
+2026-11-05T15:29:51.6542827Z [36;1m    failures=$((failures + 1))[0m
+2026-11-05T15:29:51.6543330Z [36;1m    printf '::error title=Test shard failed::%s exited with code %d.\n' "$annotation_proj" "$exit_code"[0m
+2026-11-05T15:29:51.6543826Z [36;1m  fi[0m
+2026-11-05T15:29:51.6544169Z [36;1m  # A zero child exit is insufficient: require this invocation's nonzero TRX.[0m
+2026-11-05T15:29:51.6544899Z [36;1m  # The heredoc also keeps the verifier from consuming the project-list stdin.[0m
+2026-11-05T15:29:51.6545454Z [36;1m  if ! python3 - "$result_file" "$report_marker" "$exit_code" <<'PYTRX'[0m
+2026-11-05T15:29:51.6545843Z [36;1mimport os[0m
+2026-11-05T15:29:51.6546068Z [36;1mimport pathlib[0m
+2026-11-05T15:29:51.6546302Z [36;1mimport sys[0m
+2026-11-05T15:29:51.6546553Z [36;1mimport xml.etree.ElementTree as ET[0m
+2026-11-05T15:29:51.6546837Z [36;1m[0m
+2026-11-05T15:29:51.6547026Z [36;1mtry:[0m
+2026-11-05T15:29:51.6547262Z [36;1m    report = pathlib.Path(sys.argv[1])[0m
+2026-11-05T15:29:51.6547768Z [36;1m    if report.stat().st_mtime_ns < pathlib.Path(sys.argv[2]).stat().st_mtime_ns:[0m
+2026-11-05T15:29:51.6548243Z [36;1m        raise ValueError("stale report")[0m
+2026-11-05T15:29:51.6548574Z [36;1m    root = ET.parse(report).getroot()[0m
+2026-11-05T15:29:51.6548984Z [36;1m    ns = "{http://microsoft.com/schemas/VisualStudio/TeamTest/2010}"[0m
+2026-11-05T15:29:51.6549662Z [36;1m    if root.tag != ns + "TestRun":[0m
+2026-11-05T15:29:51.6550004Z [36;1m        raise ValueError("invalid TRX root")[0m
+2026-11-05T15:29:51.6550408Z [36;1m    counters = root.find(f"{ns}ResultSummary/{ns}Counters")[0m
+2026-11-05T15:29:51.6550857Z [36;1m    results = root.findall(f"{ns}Results/{ns}UnitTestResult")[0m
+2026-11-05T15:29:51.6551229Z [36;1m    if counters is None:[0m
+2026-11-05T15:29:51.6551558Z [36;1m        raise ValueError("missing counters")[0m
+2026-11-05T15:29:51.6552064Z [36;1m    total = int(counters.get("total", "-1"))[0m
+2026-11-05T15:29:51.6552419Z [36;1m    executed = int(counters.get("executed", "-1"))[0m
+2026-11-05T15:29:51.6552825Z [36;1m    outcomes = [result.get("outcome") for result in results][0m
+2026-11-05T15:29:51.6553496Z [36;1m    allowed_not_runnable = {name.strip() for name in os.environ.get("ALLOWED_NOT_RUNNABLE_TESTS", "").splitlines() if name.strip()}[0m
+2026-11-05T15:29:51.6554310Z [36;1m    not_runnable = [result.get("testName") for result in results if result.get("outcome") == "NotRunnable"][0m
+2026-11-05T15:29:51.6555072Z [36;1m    if len(not_runnable) != len(set(not_runnable)) or any(name not in allowed_not_runnable for name in not_runnable):[0m
+2026-11-05T15:29:51.6555672Z [36;1m        raise ValueError("unexpected not-runnable test")[0m
+2026-11-05T15:29:51.6556315Z [36;1m    if total != len(results) or executed <= 0 or executed != sum(outcome not in {"NotExecuted", "NotRunnable"} for outcome in outcomes):[0m
+2026-11-05T15:29:51.6556989Z [36;1m        raise ValueError("missing or inconsistent test results")[0m
+2026-11-05T15:29:51.6557570Z [36;1m    if any(outcome not in {"Passed", "Failed", "NotExecuted", "NotRunnable"} for outcome in outcomes):[0m
+2026-11-05T15:29:51.6558099Z [36;1m        raise ValueError("invalid result outcome")[0m
+2026-11-05T15:29:51.6558460Z [36;1m    summary = root.find(f"{ns}ResultSummary")[0m
+2026-11-05T15:29:51.6558939Z [36;1m    if summary is None or summary.get("outcome") not in {"Completed", "Passed", "Failed"}:[0m
+2026-11-05T15:29:51.6559691Z [36;1m        raise ValueError("invalid result summary")[0m
+2026-11-05T15:29:51.6560304Z [36;1m    for name, outcome in (("passed", "Passed"), ("failed", "Failed"), ("notExecuted", "NotExecuted"), ("notRunnable", "NotRunnable")):[0m
+2026-11-05T15:29:51.6561036Z [36;1m        if name in counters.attrib and int(counters.get(name)) != outcomes.count(outcome):[0m
+2026-11-05T15:29:51.6561559Z [36;1m            raise ValueError("contradictory outcome counters")[0m
+2026-11-05T15:29:51.6561984Z [36;1m    failures = [int(counters.get(name, "0")) for name in[0m
+2026-11-05T15:29:51.6562535Z [36;1m                ("failed", "error", "timeout", "aborted", "inconclusive", "passedButRunAborted", "disconnected")][0m
+2026-11-05T15:29:51.6563065Z [36;1m    if any(value < 0 for value in failures):[0m
+2026-11-05T15:29:51.6563417Z [36;1m        raise ValueError("invalid failure counters")[0m
+2026-11-05T15:29:51.6564111Z [36;1m    if int(sys.argv[3]) == 0 and ("Failed" in outcomes or summary.get("outcome") == "Failed" or any(failures)):[0m
+2026-11-05T15:29:51.6564747Z [36;1m        raise ValueError("failed summary or counters with successful exit")[0m
+2026-11-05T15:29:51.6565203Z [36;1mexcept (OSError, ValueError, ET.ParseError):[0m
+2026-11-05T15:29:51.6565705Z [36;1m    print("Expected a fresh, valid TRX with nonzero executed test results.", file=sys.stderr)[0m
+2026-11-05T15:29:51.6566175Z [36;1m    sys.exit(1)[0m
+2026-11-05T15:29:51.6566405Z [36;1mPYTRX[0m
+2026-11-05T15:29:51.6566610Z [36;1m  then[0m
+2026-11-05T15:29:51.6566839Z [36;1m    annotation_proj=${proj//%/%25}[0m
+2026-11-05T15:29:51.6567386Z [36;1m    printf '::error title=Invalid test report::%s did not produce fresh nonzero test evidence.\n' "$annotation_proj"[0m
+2026-11-05T15:29:51.6568022Z [36;1m    printf '| %s | FAIL | 1 |\n' "$summary_proj" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:29:51.6568394Z [36;1m    exit 1[0m
+2026-11-05T15:29:51.6568607Z [36;1m  fi[0m
+2026-11-05T15:29:51.6568966Z [36;1m  printf '| %s | %s | %d |\n' "$summary_proj" "$status" "$exit_code" >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:29:51.6569664Z [36;1mdone <<< "$UNIT_TEST_PROJECTS"[0m
+2026-11-05T15:29:51.6569949Z [36;1mecho >> "$GITHUB_STEP_SUMMARY"[0m
+2026-11-05T15:29:51.6570312Z [36;1mprintf 'failure-count=%d\n' "$failures" >> "$GITHUB_OUTPUT"[0m
+2026-11-05T15:29:51.6624309Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T15:29:51.6624679Z env:
+2026-11-05T15:29:51.6625057Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:29:51.6626088Z   UNIT_TEST_PROJECTS: tests/Hexalith.McpCli.Abstractions.Tests
+tests/Hexalith.McpCli.Analyzers.Tests
+tests/Hexalith.McpCli.Core.Tests
+tests/Hexalith.McpCli.Manifest.Tests
+tests/Hexalith.McpCli.Cli.Tests
+tests/Hexalith.McpCli.Mcp.Tests
+
+2026-11-05T15:29:51.6627131Z   ALLOWED_NOT_RUNNABLE_TESTS: 
+2026-11-05T15:29:51.6627389Z   RUN_COVERAGE_GATE: false
+2026-11-05T15:29:51.6627627Z ##[endgroup]
+2026-11-05T15:29:52.6631511Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll (net10.0|x64)
+2026-11-05T15:29:53.3024826Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll (net10.0|x64) [32mpassed[m [90m(641ms)[m
+2026-11-05T15:29:53.3107166Z 
+2026-11-05T15:29:53.3109688Z   In process file artifacts produced:
+2026-11-05T15:29:53.3112755Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx
+2026-11-05T15:29:53.3114136Z 
+2026-11-05T15:29:53.3122407Z [32mTest run summary: Passed!
+2026-11-05T15:29:53.3126586Z [m  total: 20
+2026-11-05T15:29:53.3127235Z   failed: 0
+2026-11-05T15:29:53.3128001Z [32m  succeeded: 20
+2026-11-05T15:29:53.3128604Z [m  skipped: 0
+2026-11-05T15:29:53.3134570Z   duration: 917ms
+2026-11-05T15:29:54.2821566Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll (net10.0|x64)
+2026-11-05T15:29:58.7047797Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll (net10.0|x64) [32mpassed[m [90m(4s 424ms)[m
+2026-11-05T15:29:58.7128162Z 
+2026-11-05T15:29:58.7132019Z   In process file artifacts produced:
+2026-11-05T15:29:58.7141168Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx
+2026-11-05T15:29:58.7142591Z 
+2026-11-05T15:29:58.7143649Z [32mTest run summary: Passed!
+2026-11-05T15:29:58.7150709Z [m  total: 19
+2026-11-05T15:29:58.7151458Z   failed: 0
+2026-11-05T15:29:58.7152286Z [32m  succeeded: 19
+2026-11-05T15:29:58.7152965Z [m  skipped: 0
+2026-11-05T15:29:58.7153612Z   duration: 4s 702ms
+2026-11-05T15:29:59.6837552Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:30:02.0523349Z [33mskipped[m Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsTemporaryFileHasPrivateAclBeforeTokenBytesAreWritten
+2026-11-05T15:30:02.0525016Z   Windows ACLs are exercised only on Windows.
+2026-11-05T15:30:02.0547161Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:30:02.0571407Z [33mskipped[m Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsRestrictionPreservesInheritedExistingFiles
+2026-11-05T15:30:02.0595125Z   Windows ACL inheritance is exercised only on Windows.
+2026-11-05T15:30:02.0621001Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:30:02.0778295Z [33mskipped[m Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls
+2026-11-05T15:30:02.0790468Z   Windows ACLs are exercised only on Windows.
+2026-11-05T15:30:02.0811764Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:30:02.3234660Z [33mskipped[m Hexalith.McpCli.Core.Tests.CatalogPerformanceTests.MeasureFirstConstruction
+2026-11-05T15:30:02.3236606Z   Runs only in the fresh benchmark child process.
+2026-11-05T15:30:02.3238948Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64)
+2026-11-05T15:30:03.3844486Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll (net10.0|x64) [32mpassed[m [90m(3s 702ms)[m
+2026-11-05T15:30:03.3913007Z 
+2026-11-05T15:30:03.3915304Z   In process file artifacts produced:
+2026-11-05T15:30:03.3917289Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx
+2026-11-05T15:30:03.3918066Z 
+2026-11-05T15:30:03.3929711Z [32mTest run summary: Passed!
+2026-11-05T15:30:03.3937734Z [m  total: 735
+2026-11-05T15:30:03.3938123Z   failed: 0
+2026-11-05T15:30:03.3940916Z [32m  succeeded: 731
+2026-11-05T15:30:03.3941596Z [m  skipped: 4
+2026-11-05T15:30:03.3942041Z   duration: 3s 977ms
+2026-11-05T15:30:04.3661874Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64)
+2026-11-05T15:32:39.6474183Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll (net10.0|x64) [32mpassed[m [90m(2m 35s 285ms)[m
+2026-11-05T15:32:39.6523926Z 
+2026-11-05T15:32:39.6526927Z   In process file artifacts produced:
+2026-11-05T15:32:39.6528865Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx
+2026-11-05T15:32:39.6530002Z 
+2026-11-05T15:32:39.6538681Z [32mTest run summary: Passed!
+2026-11-05T15:32:39.6543914Z [m  total: 326
+2026-11-05T15:32:39.6544319Z   failed: 0
+2026-11-05T15:32:39.6544696Z [32m  succeeded: 326
+2026-11-05T15:32:39.6545245Z [m  skipped: 0
+2026-11-05T15:32:39.6545672Z   duration: 2m 35s 575ms
+2026-11-05T15:32:40.5950315Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+2026-11-05T15:32:59.2211336Z [33mskipped[m Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync
+2026-11-05T15:32:59.2212774Z   Windows ACLs are required for this fixture.
+2026-11-05T15:32:59.2214664Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+2026-11-05T15:32:59.3481238Z [33mskipped[m Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync
+2026-11-05T15:32:59.3482863Z   Windows file attributes are required for this fixture.
+2026-11-05T15:32:59.3484417Z   from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+2026-11-05T15:33:01.4095873Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64) [32mpassed[m [90m(20s 816ms)[m
+2026-11-05T15:33:01.4172690Z 
+2026-11-05T15:33:01.4175440Z   In process file artifacts produced:
+2026-11-05T15:33:01.4178365Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx
+2026-11-05T15:33:01.4179703Z 
+2026-11-05T15:33:01.4188817Z [32mTest run summary: Passed!
+2026-11-05T15:33:01.4194844Z [m  total: 487
+2026-11-05T15:33:01.4195256Z   failed: 0
+2026-11-05T15:33:01.4195694Z [32m  succeeded: 485
+2026-11-05T15:33:01.4196003Z [m  skipped: 2
+2026-11-05T15:33:01.4196248Z   duration: 21s 078ms
+2026-11-05T15:33:02.3125224Z Running tests from /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll (net10.0|x64)
+2026-11-05T15:33:04.8234165Z [m/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll (net10.0|x64) [32mpassed[m [90m(2s 512ms)[m
+2026-11-05T15:33:04.8310495Z 
+2026-11-05T15:33:04.8313069Z   In process file artifacts produced:
+2026-11-05T15:33:04.8315558Z     - /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx
+2026-11-05T15:33:04.8316346Z 
+2026-11-05T15:33:04.8324508Z [32mTest run summary: Passed!
+2026-11-05T15:33:04.8330085Z [m  total: 72
+2026-11-05T15:33:04.8330479Z   failed: 0
+2026-11-05T15:33:04.8330930Z [32m  succeeded: 72
+2026-11-05T15:33:04.8331361Z [m  skipped: 0
+2026-11-05T15:33:04.8331761Z   duration: 2s 760ms
+2026-11-05T15:33:04.8924416Z ##[group]Run set -euo pipefail
+2026-11-05T15:33:04.8924801Z [36;1mset -euo pipefail[0m
+2026-11-05T15:33:04.8925102Z [36;1mif [ "$TEST_PLATFORM" = "vstest" ]; then[0m
+2026-11-05T15:33:04.8925545Z [36;1m  if [ -n "$UNIT_TEST_PROJECTS" ] && [ -z "$UNIT_VSTEST_FAILURE_COUNT" ]; then[0m
+2026-11-05T15:33:04.8926172Z [36;1m    echo '::error title=Missing test shard output::Tier 1 VSTest did not report a failure count.'[0m
+2026-11-05T15:33:04.8926676Z [36;1m    exit 1[0m
+2026-11-05T15:33:04.8926892Z [36;1m  fi[0m
+2026-11-05T15:33:04.8927290Z [36;1m  if [ -n "$INTEGRATION_TEST_PROJECTS" ] && [ -z "$INTEGRATION_VSTEST_FAILURE_COUNT" ]; then[0m
+2026-11-05T15:33:04.8927973Z [36;1m    echo '::error title=Missing test shard output::Tier 2 VSTest did not report a failure count.'[0m
+2026-11-05T15:33:04.8928466Z [36;1m    exit 1[0m
+2026-11-05T15:33:04.8928685Z [36;1m  fi[0m
+2026-11-05T15:33:04.8928997Z [36;1melif [ "$TEST_PLATFORM" = "microsoft-testing-platform" ]; then[0m
+2026-11-05T15:33:04.8929864Z [36;1m  if [ -n "$UNIT_TEST_PROJECTS" ] && [ -z "$UNIT_MTP_FAILURE_COUNT" ]; then[0m
+2026-11-05T15:33:04.8930556Z [36;1m    echo '::error title=Missing test shard output::Tier 1 Microsoft.Testing.Platform did not report a failure count.'[0m
+2026-11-05T15:33:04.8931113Z [36;1m    exit 1[0m
+2026-11-05T15:33:04.8931342Z [36;1m  fi[0m
+2026-11-05T15:33:04.8931712Z [36;1m  if [ -n "$INTEGRATION_TEST_PROJECTS" ] && [ -z "$INTEGRATION_MTP_FAILURE_COUNT" ]; then[0m
+2026-11-05T15:33:04.8932430Z [36;1m    echo '::error title=Missing test shard output::Tier 2 Microsoft.Testing.Platform did not report a failure count.'[0m
+2026-11-05T15:33:04.8932981Z [36;1m    exit 1[0m
+2026-11-05T15:33:04.8933183Z [36;1m  fi[0m
+2026-11-05T15:33:04.8933375Z [36;1mfi[0m
+2026-11-05T15:33:04.8933562Z [36;1m[0m
+2026-11-05T15:33:04.8933756Z [36;1mtotal_failures=0[0m
+2026-11-05T15:33:04.8934005Z [36;1mfor failure_count in \[0m
+2026-11-05T15:33:04.8934281Z [36;1m  "$UNIT_VSTEST_FAILURE_COUNT" \[0m
+2026-11-05T15:33:04.8934579Z [36;1m  "$UNIT_MTP_FAILURE_COUNT" \[0m
+2026-11-05T15:33:04.8934883Z [36;1m  "$INTEGRATION_VSTEST_FAILURE_COUNT" \[0m
+2026-11-05T15:33:04.8935213Z [36;1m  "$INTEGRATION_MTP_FAILURE_COUNT"; do[0m
+2026-11-05T15:33:04.8935530Z [36;1m  [ -z "$failure_count" ] && continue[0m
+2026-11-05T15:33:04.8935860Z [36;1m  if [[ ! "$failure_count" =~ ^[0-9]+$ ]]; then[0m
+2026-11-05T15:33:04.8936440Z [36;1m    printf '::error title=Invalid test shard output::Expected a numeric failure count, received %s.\n' "$failure_count"[0m
+2026-11-05T15:33:04.8936981Z [36;1m    exit 1[0m
+2026-11-05T15:33:04.8937184Z [36;1m  fi[0m
+2026-11-05T15:33:04.8937456Z [36;1m  total_failures=$((total_failures + 10#$failure_count))[0m
+2026-11-05T15:33:04.8937797Z [36;1mdone[0m
+2026-11-05T15:33:04.8937989Z [36;1m[0m
+2026-11-05T15:33:04.8938203Z [36;1mif [ "$total_failures" -ne 0 ]; then[0m
+2026-11-05T15:33:04.8938781Z [36;1m  printf '::error title=Blocking test failures::%d test project(s) failed across the blocking tiers.\n' "$total_failures"[0m
+2026-11-05T15:33:04.8939572Z [36;1m  exit 1[0m
+2026-11-05T15:33:04.8939779Z [36;1mfi[0m
+2026-11-05T15:33:04.8987942Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-11-05T15:33:04.8988296Z env:
+2026-11-05T15:33:04.8988511Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:33:04.8988995Z   TEST_PLATFORM: microsoft-testing-platform
+2026-11-05T15:33:04.8990171Z   UNIT_TEST_PROJECTS: tests/Hexalith.McpCli.Abstractions.Tests
+tests/Hexalith.McpCli.Analyzers.Tests
+tests/Hexalith.McpCli.Core.Tests
+tests/Hexalith.McpCli.Manifest.Tests
+tests/Hexalith.McpCli.Cli.Tests
+tests/Hexalith.McpCli.Mcp.Tests
+
+2026-11-05T15:33:04.8991210Z   INTEGRATION_TEST_PROJECTS: 
+2026-11-05T15:33:04.8991481Z   UNIT_VSTEST_FAILURE_COUNT: 
+2026-11-05T15:33:04.8991734Z   UNIT_MTP_FAILURE_COUNT: 0
+2026-11-05T15:33:04.8991989Z   INTEGRATION_VSTEST_FAILURE_COUNT: 
+2026-11-05T15:33:04.8992267Z   INTEGRATION_MTP_FAILURE_COUNT: 
+2026-11-05T15:33:04.8992528Z ##[endgroup]
+2026-11-05T15:33:04.9118557Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-11-05T15:33:04.9119007Z with:
+2026-11-05T15:33:04.9119515Z   name: blocking-test-results
+2026-11-05T15:33:04.9119893Z   path: TestResults/**/*.trx
+TestResults/**/coverage.cobertura.xml
+
+2026-11-05T15:33:04.9120273Z   retention-days: 7
+2026-11-05T15:33:04.9120524Z   if-no-files-found: warn
+2026-11-05T15:33:04.9120770Z   compression-level: 6
+2026-11-05T15:33:04.9120993Z   overwrite: false
+2026-11-05T15:33:04.9121219Z   include-hidden-files: false
+2026-11-05T15:33:04.9121471Z   archive: true
+2026-11-05T15:33:04.9121671Z env:
+2026-11-05T15:33:04.9121872Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T15:33:04.9122120Z ##[endgroup]
+2026-11-05T15:33:05.0770954Z With the provided path, there will be 6 files uploaded
+2026-11-05T15:33:05.0775222Z Artifact name is valid!
+2026-11-05T15:33:05.0775826Z Root directory input is valid!
+2026-11-05T15:33:05.2845966Z Uploading artifact: blocking-test-results.zip
+2026-11-05T15:33:05.2887089Z Beginning upload of artifact content to blob storage
+2026-11-05T15:33:05.4001489Z Uploaded bytes 239971
+2026-11-05T15:33:05.4135537Z Finished uploading artifact content to blob storage!
+2026-11-05T15:33:05.4137229Z SHA256 digest of uploaded artifact is 7bdbcacfe104e61ec04a64152696e9b06967c1874bfcf162b5c40f0bea07cc5e
+2026-11-05T15:33:05.4139493Z Finalizing artifact upload
+2026-11-05T15:33:05.8886277Z Artifact blocking-test-results successfully finalized. Artifact ID 13428732614
+2026-11-05T15:33:05.8887838Z Artifact blocking-test-results has been successfully uploaded! Final size is 239971 bytes. Artifact ID is 13428732614
+2026-11-05T15:33:05.8891883Z Artifact download URL: https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42055016082/artifacts/13428732614
+2026-11-05T15:33:05.9648890Z Post job cleanup.
+2026-11-05T15:33:06.0902639Z Cache hit occurred on the primary key nuget-, not saving cache.
+2026-11-05T15:33:06.1019407Z Post job cleanup.
+2026-11-05T15:33:06.2493822Z Post job cleanup.
+2026-11-05T15:33:06.3452581Z [command]/usr/bin/git version
+2026-11-05T15:33:06.3530684Z git version 2.56.0
+2026-11-05T15:33:06.3568225Z Temporarily overriding HOME='/home/runner/work/_temp/1bf4b341-7969-4a31-91c0-2d401e150c7e' before making global git config changes
+2026-11-05T15:33:06.3570061Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T15:33:06.3573584Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T15:33:06.3613393Z Removing SSH command configuration
+2026-11-05T15:33:06.3620999Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T15:33:06.3661206Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T15:33:06.4080360Z Entering 'references/Hexalith.AI.Tools'
+2026-11-05T15:33:06.4136122Z Entering 'references/Hexalith.Agents'
+2026-11-05T15:33:06.4224860Z Entering 'references/Hexalith.Builds'
+2026-11-05T15:33:06.4291119Z Entering 'references/Hexalith.ChatBot'
+2026-11-05T15:33:06.4352587Z Entering 'references/Hexalith.Commons'
+2026-11-05T15:33:06.4403771Z Entering 'references/Hexalith.Conversations'
+2026-11-05T15:33:06.4572795Z Entering 'references/Hexalith.EventStore'
+2026-11-05T15:33:06.4646432Z Entering 'references/Hexalith.Folders'
+2026-11-05T15:33:06.4725547Z Entering 'references/Hexalith.FrontComposer'
+2026-11-05T15:33:06.4787113Z Entering 'references/Hexalith.Memories'
+2026-11-05T15:33:06.4848832Z Entering 'references/Hexalith.Parties'
+2026-11-05T15:33:06.4912657Z Entering 'references/Hexalith.Platform'
+2026-11-05T15:33:06.4996620Z Entering 'references/Hexalith.PolymorphicSerializations'
+2026-11-05T15:33:06.5047309Z Entering 'references/Hexalith.Projects'
+2026-11-05T15:33:06.5124825Z Entering 'references/Hexalith.Tenants'
+2026-11-05T15:33:06.5183369Z Entering 'references/Hexalith.Timesheets'
+2026-11-05T15:33:06.5248278Z Entering 'references/Hexalith.Works'
+2026-11-05T15:33:06.5339962Z Removing HTTP extra header
+2026-11-05T15:33:06.5345568Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T15:33:06.5386459Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T15:33:06.5697901Z Entering 'references/Hexalith.AI.Tools'
+2026-11-05T15:33:06.5746662Z Entering 'references/Hexalith.Agents'
+2026-11-05T15:33:06.5827217Z Entering 'references/Hexalith.Builds'
+2026-11-05T15:33:06.5882235Z Entering 'references/Hexalith.ChatBot'
+2026-11-05T15:33:06.5942983Z Entering 'references/Hexalith.Commons'
+2026-11-05T15:33:06.5992726Z Entering 'references/Hexalith.Conversations'
+2026-11-05T15:33:06.6156606Z Entering 'references/Hexalith.EventStore'
+2026-11-05T15:33:06.6222580Z Entering 'references/Hexalith.Folders'
+2026-11-05T15:33:06.6300018Z Entering 'references/Hexalith.FrontComposer'
+2026-11-05T15:33:06.6361608Z Entering 'references/Hexalith.Memories'
+2026-11-05T15:33:06.6421793Z Entering 'references/Hexalith.Parties'
+2026-11-05T15:33:06.6486170Z Entering 'references/Hexalith.Platform'
+2026-11-05T15:33:06.6569818Z Entering 'references/Hexalith.PolymorphicSerializations'
+2026-11-05T15:33:06.6618919Z Entering 'references/Hexalith.Projects'
+2026-11-05T15:33:06.6693045Z Entering 'references/Hexalith.Tenants'
+2026-11-05T15:33:06.6750587Z Entering 'references/Hexalith.Timesheets'
+2026-11-05T15:33:06.6813855Z Entering 'references/Hexalith.Works'
+2026-11-05T15:33:06.6902419Z Removing includeIf entries pointing to credentials config files
+2026-11-05T15:33:06.6909272Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.6940291Z includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T15:33:06.6942249Z includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T15:33:06.6943385Z includeif.gitdir:/github/workspace/.git.path
+2026-11-05T15:33:06.6944202Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T15:33:06.6952629Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T15:33:06.6979322Z /home/runner/work/_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config
+2026-11-05T15:33:06.6992472Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-53655e2f\-5cfd\-48d5\-8b95\-3bd37902e2b4\.config
+2026-11-05T15:33:06.7033879Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T15:33:06.7066573Z /home/runner/work/_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config
+2026-11-05T15:33:06.7077153Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-53655e2f\-5cfd\-48d5\-8b95\-3bd37902e2b4\.config
+2026-11-05T15:33:06.7114686Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-05T15:33:06.7139876Z /github/runner_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config
+2026-11-05T15:33:06.7147889Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-53655e2f\-5cfd\-48d5\-8b95\-3bd37902e2b4\.config
+2026-11-05T15:33:06.7183568Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T15:33:06.7207652Z /github/runner_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config
+2026-11-05T15:33:06.7217209Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-53655e2f\-5cfd\-48d5\-8b95\-3bd37902e2b4\.config
+2026-11-05T15:33:06.7255031Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-05T15:33:06.7556343Z Entering 'references/Hexalith.AI.Tools'
+2026-11-05T15:33:06.7579546Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.AI.Tools/config	remote.origin.url
+2026-11-05T15:33:06.7600537Z Entering 'references/Hexalith.Agents'
+2026-11-05T15:33:06.7622494Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Agents/config	remote.origin.url
+2026-11-05T15:33:06.7675758Z Entering 'references/Hexalith.Builds'
+2026-11-05T15:33:06.7697578Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Builds/config	remote.origin.url
+2026-11-05T15:33:06.7724480Z Entering 'references/Hexalith.ChatBot'
+2026-11-05T15:33:06.7746062Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.ChatBot/config	remote.origin.url
+2026-11-05T15:33:06.7778422Z Entering 'references/Hexalith.Commons'
+2026-11-05T15:33:06.7802523Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Commons/config	remote.origin.url
+2026-11-05T15:33:06.7825039Z Entering 'references/Hexalith.Conversations'
+2026-11-05T15:33:06.7846479Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Conversations/config	remote.origin.url
+2026-11-05T15:33:06.7980150Z Entering 'references/Hexalith.EventStore'
+2026-11-05T15:33:06.8002704Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.EventStore/config	remote.origin.url
+2026-11-05T15:33:06.8040819Z Entering 'references/Hexalith.Folders'
+2026-11-05T15:33:06.8062954Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Folders/config	remote.origin.url
+2026-11-05T15:33:06.8111779Z Entering 'references/Hexalith.FrontComposer'
+2026-11-05T15:33:06.8134120Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.FrontComposer/config	remote.origin.url
+2026-11-05T15:33:06.8167216Z Entering 'references/Hexalith.Memories'
+2026-11-05T15:33:06.8189767Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Memories/config	remote.origin.url
+2026-11-05T15:33:06.8221745Z Entering 'references/Hexalith.Parties'
+2026-11-05T15:33:06.8244080Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Parties/config	remote.origin.url
+2026-11-05T15:33:06.8279678Z Entering 'references/Hexalith.Platform'
+2026-11-05T15:33:06.8302082Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Platform/config	remote.origin.url
+2026-11-05T15:33:06.8357771Z Entering 'references/Hexalith.PolymorphicSerializations'
+2026-11-05T15:33:06.8380198Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.PolymorphicSerializations/config	remote.origin.url
+2026-11-05T15:33:06.8401480Z Entering 'references/Hexalith.Projects'
+2026-11-05T15:33:06.8424268Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Projects/config	remote.origin.url
+2026-11-05T15:33:06.8472146Z Entering 'references/Hexalith.Tenants'
+2026-11-05T15:33:06.8494238Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Tenants/config	remote.origin.url
+2026-11-05T15:33:06.8524400Z Entering 'references/Hexalith.Timesheets'
+2026-11-05T15:33:06.8547239Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Timesheets/config	remote.origin.url
+2026-11-05T15:33:06.8582979Z Entering 'references/Hexalith.Works'
+2026-11-05T15:33:06.8605006Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Works/config	remote.origin.url
+2026-11-05T15:33:06.8669800Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.AI.Tools/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8704473Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Agents/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8735309Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Builds/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8767279Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.ChatBot/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8799084Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Commons/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8838806Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Conversations/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8870261Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.EventStore/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8901060Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Folders/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8932331Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.FrontComposer/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8966598Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Memories/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.8996765Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Parties/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.9026985Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Platform/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.9057739Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.PolymorphicSerializations/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.9087480Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Projects/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.9124309Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Tenants/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.9154796Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Timesheets/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.9188588Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Works/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T15:33:06.9215813Z Removing credentials config '/home/runner/work/_temp/git-credentials-53655e2f-5cfd-48d5-8b95-3bd37902e2b4.config'
+2026-11-05T15:33:06.9372820Z Evaluate and set job outputs
+2026-11-05T15:33:06.9379081Z Cleaning up orphan processes
+2026-11-05T15:33:06.9760788Z Terminate orphan process: pid (2954) (dotnet)
+2026-11-05T15:33:06.9785014Z Terminate orphan process: pid (2955) (dotnet)
+2026-11-05T15:33:06.9824400Z Terminate orphan process: pid (2956) (dotnet)
+2026-11-05T15:33:06.9848937Z Terminate orphan process: pid (3093) (VBCSCompiler)

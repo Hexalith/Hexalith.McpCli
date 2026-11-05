@@ -1,0 +1,25 @@
+{
+  "time_utc": "20261105T154524Z",
+  "job_id": 127344862923,
+  "status": "in_progress",
+  "active_steps": [
+    {
+      "name": "Run Aspire hook",
+      "status": "in_progress",
+      "conclusion": null,
+      "number": 17,
+      "started_at": "2026-11-05T15:37:53Z",
+      "completed_at": null
+    }
+  ],
+  "check_status": "in_progress",
+  "check_conclusion": null,
+  "check_output": {
+    "title": null,
+    "summary": null,
+    "text": null,
+    "annotations_count": 0,
+    "annotations_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/127344862923/annotations"
+  },
+  "annotations": []
+}

@@ -1,0 +1,10 @@
+{
+  "time_utc": "2026-11-05T15:56:04.734814+00:00",
+  "authenticated": false,
+  "current_step": {
+    "data-name": "Run Aspire hook",
+    "data-log-url": ""
+  },
+  "completed_step_log_links": 10,
+  "limitation": "The public job page requires sign-in to view logs and provides no data-log-url for the active Run Aspire hook; completed steps have log paths. Official job and run download APIs also return404 while this job is active. No raw HTML, page/session tokens or browser login was retained or attempted."
+}

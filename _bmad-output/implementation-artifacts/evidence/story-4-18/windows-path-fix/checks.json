@@ -1,0 +1,31 @@
+[
+  {
+    "name": "workflow-tests",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "scripts.tests.test_paired_release.PairedReleaseTests.test_windows_checkout_enables_long_paths_before_loading_retained_evidence",
+      "scripts.tests.test_paired_release.PairedReleaseTests.test_staging_workflow_guards_actual_dispatch_ref_before_selection",
+      "scripts.tests.test_paired_release.PairedReleaseTests.test_all_windows_required_tests_must_execute_not_skip"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "actionlint",
+    "command": [
+      "actionlint",
+      ".github/workflows/release.yml"
+    ],
+    "exit_code": 0
+  },
+  {
+    "name": "whitespace",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0
+  }
+]

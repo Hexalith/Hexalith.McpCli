@@ -1,0 +1,17 @@
+[
+  {
+    "mutation": "removed",
+    "result": "detected",
+    "exception": "StopIteration"
+  },
+  {
+    "mutation": "wrong-os",
+    "result": "detected",
+    "exception": "AssertionError"
+  },
+  {
+    "mutation": "after-checkout",
+    "result": "detected",
+    "exception": "AssertionError"
+  }
+]

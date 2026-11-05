@@ -1,0 +1,20 @@
+{
+  "time_utc": "2026-11-05T16:13:14.216947+00:00",
+  "source": "7e9ea7705dd07583dc29ffc4613e29efa8a3cffb",
+  "local_head": "7e9ea7705dd07583dc29ffc4613e29efa8a3cffb",
+  "remote_main": "7e9ea7705dd07583dc29ffc4613e29efa8a3cffb",
+  "source_clean": true,
+  "run_id": 42055016082,
+  "run_attempt": 1,
+  "run_status": "in_progress",
+  "job_id": 127344862923,
+  "job_status": "in_progress",
+  "check_status": "in_progress",
+  "check_conclusion": null,
+  "annotation_count": 0,
+  "active_step": "Run Aspire hook",
+  "active_started_utc": "2026-11-05T15:37:53Z",
+  "elapsed_seconds": 2121,
+  "review_deadline_utc": "2026-11-05T16:26:59Z",
+  "hook_outer_deadline_utc": "2026-11-05T20:32:53+00:00"
+}

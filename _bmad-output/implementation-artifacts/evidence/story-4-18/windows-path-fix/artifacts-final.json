@@ -1,0 +1,65 @@
+{
+  "total_count": 3,
+  "artifacts": [
+    {
+      "id": 13431454964,
+      "node_id": "MDg6QXJ0aWZhY3QxMzQzMTQ1NDk2NA==",
+      "name": "paired-consumer-ubuntu-latest",
+      "size_in_bytes": 122139,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13431454964",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13431454964/zip",
+      "expired": false,
+      "digest": "sha256:95ce6a5ef1d11f116821656a76fa0475be2ba13d749b2bbf5585d6d721b39825",
+      "created_at": "2026-11-05T16:18:52Z",
+      "updated_at": "2026-11-05T16:18:52Z",
+      "expires_at": "2026-12-05T16:16:30Z",
+      "workflow_run": {
+        "id": 42062678763,
+        "repository_id": 1379417482,
+        "head_repository_id": 1379417482,
+        "head_branch": "main",
+        "head_sha": "7e9ea7705dd07583dc29ffc4613e29efa8a3cffb"
+      }
+    },
+    {
+      "id": 13431319707,
+      "node_id": "MDg6QXJ0aWZhY3QxMzQzMTMxOTcwNw==",
+      "name": "paired-consumer-macos-latest",
+      "size_in_bytes": 159972,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13431319707",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13431319707/zip",
+      "expired": false,
+      "digest": "sha256:b8672ae2105f262f8e1cae7d0c6289d56cc32c0d10f6dfe9657eba757ffb10c9",
+      "created_at": "2026-11-05T16:20:07Z",
+      "updated_at": "2026-11-05T16:20:07Z",
+      "expires_at": "2026-12-05T16:16:30Z",
+      "workflow_run": {
+        "id": 42062678763,
+        "repository_id": 1379417482,
+        "head_repository_id": 1379417482,
+        "head_branch": "main",
+        "head_sha": "7e9ea7705dd07583dc29ffc4613e29efa8a3cffb"
+      }
+    },
+    {
+      "id": 13431319361,
+      "node_id": "MDg6QXJ0aWZhY3QxMzQzMTMxOTM2MQ==",
+      "name": "paired-preparation",
+      "size_in_bytes": 4305881,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13431319361",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13431319361/zip",
+      "expired": false,
+      "digest": "sha256:22581f773108b713b9fdcdf52c5dd0261c3ddb75c5c60af7a9312f5d55bc83b1",
+      "created_at": "2026-11-05T16:17:58Z",
+      "updated_at": "2026-11-05T16:17:58Z",
+      "expires_at": "2026-12-05T16:16:30Z",
+      "workflow_run": {
+        "id": 42062678763,
+        "repository_id": 1379417482,
+        "head_repository_id": 1379417482,
+        "head_branch": "main",
+        "head_sha": "7e9ea7705dd07583dc29ffc4613e29efa8a3cffb"
+      }
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "time_utc": "20261105T155301Z",
+  "command": [
+    "/tmp/mcpcli-418-tools/gh-2.103.3/bin/gh",
+    "api",
+    "repos/Hexalith/Hexalith.McpCli/actions/runs/42055016082/logs",
+    "--allow-escape-sequences"
+  ],
+  "exit_code": 1,
+  "raw_response_sha256": "e8fa4851e502f3095a703c63ad22e9fd551fe971c46d41f9ed673989835740ab",
+  "stderr": "gh: Not Found (HTTP 404)\n",
+  "sanitized_response": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/actions/workflow-runs#download-workflow-run-logs\",\"status\":\"404\"}"
+}
