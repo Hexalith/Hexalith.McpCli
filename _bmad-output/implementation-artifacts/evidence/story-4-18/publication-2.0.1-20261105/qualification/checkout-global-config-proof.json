@@ -1,0 +1,6 @@
+{
+  "source": "https://github.com/actions/checkout/blob/3d3c42e5aac5ba805825da76410c181273ba90b1/src/git-auth-helper.ts",
+  "git_blob": "dd7e6fbdb5387908190676a6ec9c4a828a044dea",
+  "sha256": "5cd92240cd3e51b4e2be5b14d1df84ac314c427c5d0980b13b45d622998db430",
+  "scope": "Read-only pinned implementation check: checkout copies existing user .gitconfig into its temporary HOME before Git commands, preserving the Windows pre-checkout core.longpaths setting."
+}

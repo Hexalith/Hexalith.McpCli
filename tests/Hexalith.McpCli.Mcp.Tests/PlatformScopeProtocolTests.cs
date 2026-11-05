@@ -15,6 +15,40 @@ namespace Hexalith.McpCli.Mcp.Tests;
 /// <summary>Checks canonical scope behavior and advertised result schemas through both MCP protocols.</summary>
 public sealed class PlatformScopeProtocolTests
 {
+    /// <summary>Session and per-call reserved tenants return the complete public error through both protocols.</summary>
+    [Theory]
+    [InlineData("2025-06-18", false, false)]
+    [InlineData("2025-06-18", false, true)]
+    [InlineData("2025-06-18", true, false)]
+    [InlineData("2025-06-18", true, true)]
+    [InlineData("2026-07-28", false, false)]
+    [InlineData("2026-07-28", false, true)]
+    [InlineData("2026-07-28", true, false)]
+    [InlineData("2026-07-28", true, true)]
+    public async Task ReservedSystemTenantIsRefusedWithoutSubmissionAsync(string version, bool command, bool fromSession)
+    {
+        await using McpTestSession session = await CreateAsync(version, Settings(fromSession ? "SyStEm" : null));
+        string operation = command ? "routing-fixture.envelope-item" : "routing-fixture.get-http2-status";
+        string toolName = command ? "send_command" : "run_query";
+        string? tenant = fromSession ? null : "SyStEm";
+        OperationCall call = command
+            ? new SendCommandArguments(operation, QueryPayload, Tenant: tenant, CorrelationId: CorrelationId, IdempotencyKey: Key)
+            : new RunQueryArguments(operation, "{}", Tenant: tenant, AggregateId: ItemId);
+        CallToolResult result = await session.CallAsync(toolName, call);
+        AssertDocument(result, new
+        {
+            error = new
+            {
+                code = "validation_failed",
+                operation,
+                violations = new[] { new { path = "/tenant", message = "The public tenant 'system' is reserved." } },
+            },
+        }, isError: true);
+        IList<McpClientTool> tools = await session.Client.ListToolsAsync(cancellationToken: session.Token);
+        AssertSchema(result, tools.Single(tool => tool.Name == toolName), isError: true);
+        session.Gateway.ReceivedCalls().ShouldBeEmpty();
+    }
+
     /// <summary>Describe and execution retain the declared scope over unrelated session tenants.</summary>
     [Theory]
     [InlineData("2025-06-18")]

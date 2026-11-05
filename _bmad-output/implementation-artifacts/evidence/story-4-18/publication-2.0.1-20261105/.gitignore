@@ -1,0 +1,3 @@
+# Preserve only selected captured logs in this publication handoff.
+!/parent-review/build.log
+!/qualification/release-automation.original.log

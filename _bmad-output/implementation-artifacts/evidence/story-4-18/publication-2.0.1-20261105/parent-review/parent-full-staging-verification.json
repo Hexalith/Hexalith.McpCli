@@ -1,0 +1,19 @@
+{
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "staging_run_id": 42080077255,
+  "version": "2.0.1",
+  "packages": {
+    "Hexalith.McpCli.2.0.1.nupkg": "7ed0f79f0ee4b92abf54d65900ba48b5bab9c257f5eaf6596401f410d6c8ec7f",
+    "Hexalith.McpCli.Abstractions.2.0.1.nupkg": "8a5bdce50d81309ad65cff680276378de214cadf4a04076fcdb550d787af46e3"
+  },
+  "preparation_sha256": "7d948b7882d5cc9773d3b7e7921027be1810895b454d3b446772551b64a3ebe6",
+  "acceptance_sha256": "83796066d6ec59af0f87aba05138fd317be6ff7e1ded2488fd13c464c058ade7",
+  "readme_sha256": "17f88b9047b5b1061d925e1b866cb64d7dd3857c71037ebbaa53b1711c00ebac",
+  "recomputed_acceptance_equals_original": true,
+  "all_three_platforms": [
+    "Darwin",
+    "Linux",
+    "Windows"
+  ],
+  "scope": "Parent independently authenticated all five original artifact ZIPs, recomputed staging acceptance and checked actual package metadata/README plus acceptance source gates; publication remains pending."
+}

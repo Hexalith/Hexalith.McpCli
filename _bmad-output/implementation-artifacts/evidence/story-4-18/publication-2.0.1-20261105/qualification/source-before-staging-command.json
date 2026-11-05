@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "scripts/verify-release-source.py",
+    "--staging",
+    "--output",
+    "/tmp/mcpcli-418-readme-link-fix/source-before-staging.json",
+    "--",
+    "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+    "refs/heads/main",
+    "paired"
+  ],
+  "exit_code": 0
+}

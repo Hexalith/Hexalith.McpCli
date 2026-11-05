@@ -1,0 +1,14 @@
+{
+  "time_utc": "2026-11-05T18:18:06.540742+00:00",
+  "command": [
+    "/tmp/mcpcli-418-tools/gh-2.103.3/bin/gh",
+    "api",
+    "--method",
+    "POST",
+    "repos/Hexalith/Hexalith.McpCli/actions/runs/42082617201/pending_deployments",
+    "--input",
+    "/tmp/mcpcli-418-publication-42080077255/production-approval-input.json"
+  ],
+  "exit_code": 0,
+  "stderr": ""
+}

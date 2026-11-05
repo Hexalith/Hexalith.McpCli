@@ -1,0 +1,217 @@
+{
+  "destinations": [
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.AI.Tools/blob/70dbf73e80787299c832d30d911b16b105ab194d/hexalith-llm-instructions.md#hexalith-mcp-and-cli-ownership",
+      "kind": "inline",
+      "line": 44,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.AI.Tools/blob/70dbf73e80787299c832d30d911b16b105ab194d/hexalith-mcpcli-migration-instructions.md",
+      "kind": "inline",
+      "line": 46,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/evidence/story-4-15/code-review-20261029/README.md",
+      "kind": "inline",
+      "line": 46,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/.github/workflows/bootstrap-package.yml",
+      "kind": "inline",
+      "line": 52,
+      "relative": false
+    },
+    {
+      "destination": "https://www.nuget.org/packages/Hexalith.McpCli.Abstractions",
+      "kind": "inline",
+      "line": 54,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/.github/workflows/release.yml",
+      "kind": "inline",
+      "line": 83,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/.github/workflows/release.yml",
+      "kind": "inline",
+      "line": 87,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/operator-setup-history.md",
+      "kind": "inline",
+      "line": 117,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/operator-setup-checklist.md",
+      "kind": "inline",
+      "line": 121,
+      "relative": false
+    },
+    {
+      "destination": "#configure-the-private-operator-profile",
+      "kind": "inline",
+      "line": 167,
+      "relative": false
+    },
+    {
+      "destination": "#resolve-setup-failures",
+      "kind": "inline",
+      "line": 187,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/operator-setup-checklist.md",
+      "kind": "inline",
+      "line": 200,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/operator-setup-checklist.md",
+      "kind": "inline",
+      "line": 204,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/operator-setup-history.md",
+      "kind": "inline",
+      "line": 204,
+      "relative": false
+    },
+    {
+      "destination": "https://code.claude.com/docs/en/mcp",
+      "kind": "inline",
+      "line": 314,
+      "relative": false
+    },
+    {
+      "destination": "https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers",
+      "kind": "inline",
+      "line": 324,
+      "relative": false
+    },
+    {
+      "destination": "https://code.visualstudio.com/docs/agent-customization/mcp-servers",
+      "kind": "inline",
+      "line": 338,
+      "relative": false
+    },
+    {
+      "destination": "https://learn.microsoft.com/en-us/windows/dev-environment/wsl-interop",
+      "kind": "inline",
+      "line": 355,
+      "relative": false
+    },
+    {
+      "destination": "#gateway-boundary",
+      "kind": "inline",
+      "line": 371,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/docs/release/operator-setup-checklist.md",
+      "kind": "inline",
+      "line": 413,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/approval.json",
+      "kind": "inline",
+      "line": 448,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/evidence/story-4-11/publication-20261021/parent-root-review-fixed-ubuntu-acceptance-audit.json",
+      "kind": "inline",
+      "line": 448,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/tools/inventory-coverage/v1/README.md",
+      "kind": "inline",
+      "line": 448,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/tools/conformance-vectors/v1/README.md",
+      "kind": "inline",
+      "line": 448,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/tools/conformance-vectors/v1/README.md#production-parity-and-first-construction-gate",
+      "kind": "inline",
+      "line": 450,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/spec-add-six-domain-modules.md",
+      "kind": "inline",
+      "line": 452,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/module/hexalith.module-manifest.v2.json",
+      "kind": "inline",
+      "line": 456,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.Platform/blob/main/README.md#module-tool",
+      "kind": "inline",
+      "line": 456,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.Platform/blob/main/README.md#launch-mcpcli-under-a-debugger",
+      "kind": "inline",
+      "line": 463,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/tools/live-topology/README.md",
+      "kind": "inline",
+      "line": 573,
+      "relative": false
+    },
+    {
+      "destination": "https://docs.dapr.io/operations/security/mtls/",
+      "kind": "inline",
+      "line": 575,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/evidence/story-4-12/publication-20261023/expanded-publication/private-runtime/README.md",
+      "kind": "inline",
+      "line": 575,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/tools/live-topology/README.md",
+      "kind": "inline",
+      "line": 585,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/tools/live-topology/README.md",
+      "kind": "inline",
+      "line": 587,
+      "relative": false
+    },
+    {
+      "destination": "https://github.com/Hexalith/Hexalith.McpCli/blob/main/tools/live-topology/README.md#required-ci-lane",
+      "kind": "inline",
+      "line": 596,
+      "relative": false
+    }
+  ],
+  "readme_sha256": "17f88b9047b5b1061d925e1b866cb64d7dd3857c71037ebbaa53b1711c00ebac",
+  "relative_destinations": [],
+  "schema": "mcpcli-readme-link-scan/v1"
+}

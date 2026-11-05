@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "/tmp/mcpcli-418-tools/prescan-staged-readmes.py",
+    "42080077255",
+    "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+    "/tmp/mcpcli-418-staging-42080077255/prescan"
+  ],
+  "exit_code": 0
+}

@@ -1,0 +1,62 @@
+{
+  "archive": "publication/paired-publication-outcomes.original.zip",
+  "archive_sha256": "a23cc85e4fa7eeab62901a83d6bd4a9606571a97b1847d5053727802299024e1",
+  "reason": "Preserve the single authenticated outcome archive and its exact embedded original staging ZIPs/unsigned packages/signed public packages; do not duplicate caches, installations or every archive.",
+  "entries": [
+    {
+      "member": "_temp/paired-candidate/accepted-staging-only.zip",
+      "sha256": "3e3751ca7e84b9bd48a1f3e8d037414df52841fa0e8d5eb7ef622530c9a921dd",
+      "bytes": 4526
+    },
+    {
+      "member": "_temp/paired-candidate/paired-consumer-macos-latest.zip",
+      "sha256": "87959f9a8640a33195c8e8adcb74977078fc0e7adb99c0bb0b4df23b4bb9ce51",
+      "bytes": 160018
+    },
+    {
+      "member": "_temp/paired-candidate/paired-consumer-ubuntu-latest.zip",
+      "sha256": "1d72bb9835bd7b36fc4aaf2815b099c73ade576e57fc7be22c8f94be76752a70",
+      "bytes": 122135
+    },
+    {
+      "member": "_temp/paired-candidate/paired-consumer-windows-latest.zip",
+      "sha256": "dfeebb3db385d9b651fc9b941cc69292e441a312a50a7ed39ff6f63e8441a2f5",
+      "bytes": 211219
+    },
+    {
+      "member": "_temp/paired-candidate/paired-preparation.zip",
+      "sha256": "4cb5d2ab21e1d90d4ba7b5ddb6a82f1abdb17e2a10196b62400e92ce03c3dfc9",
+      "bytes": 4305857
+    },
+    {
+      "member": "_temp/paired-candidate/staging-origin.json",
+      "sha256": "8dcd20d8d20b91601ff6a3ce787f9e554eae21c85f4413e2a5662bd46f5f08ff",
+      "bytes": 1079
+    },
+    {
+      "member": "Hexalith.McpCli/Hexalith.McpCli/nupkgs/paired/packages/Hexalith.McpCli.2.0.1.nupkg",
+      "sha256": "7ed0f79f0ee4b92abf54d65900ba48b5bab9c257f5eaf6596401f410d6c8ec7f",
+      "bytes": 4290818
+    },
+    {
+      "member": "Hexalith.McpCli/Hexalith.McpCli/nupkgs/paired/packages/Hexalith.McpCli.Abstractions.2.0.1.nupkg",
+      "sha256": "8a5bdce50d81309ad65cff680276378de214cadf4a04076fcdb550d787af46e3",
+      "bytes": 46259
+    },
+    {
+      "member": "Hexalith.McpCli/Hexalith.McpCli/nupkgs/paired-publication/outcome.json",
+      "sha256": "3e7cb00271487002e9065a4a7f1053c0881e4c67ba37a8dcd701148d7b2bed94",
+      "bytes": 2774
+    },
+    {
+      "member": "Hexalith.McpCli/Hexalith.McpCli/nupkgs/paired-publication/public/Hexalith.McpCli.2.0.1.nupkg",
+      "sha256": "305938d63bc47fd45090976ac1b1626a1ec69edfcaa525f6b728654cb1ab3876",
+      "bytes": 4303905
+    },
+    {
+      "member": "Hexalith.McpCli/Hexalith.McpCli/nupkgs/paired-publication/public/Hexalith.McpCli.Abstractions.2.0.1.nupkg",
+      "sha256": "5c384c717119e7830d6369ecaa17161f64eda35d0ed6d9115f92d24547356f08",
+      "bytes": 59346
+    }
+  ]
+}

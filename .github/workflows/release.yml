@@ -106,7 +106,6 @@ jobs:
           REPOSITORY: ${{ github.repository }}
           DISPATCH_SHA: ${{ github.sha }}
           MCPCLI_STAGING_RUN_ID: ${{ inputs.staging_run_id }}
-          OPERATOR_ACCEPTANCE: ${{ inputs.operator_acceptance }}
         run: |
           python3 scripts/verify-paired-publication.py fetch --repository "$REPOSITORY" \
             --staging-run "$MCPCLI_STAGING_RUN_ID" --source-sha "$DISPATCH_SHA" --candidate "$RUNNER_TEMP/paired-candidate"

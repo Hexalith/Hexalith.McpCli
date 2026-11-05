@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python3",
+    "scripts/verify-paired-publication.py",
+    "fetch",
+    "--repository",
+    "Hexalith/Hexalith.McpCli",
+    "--staging-run",
+    "42080077255",
+    "--source-sha",
+    "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+    "--candidate",
+    "/tmp/mcpcli-418-candidate-42080077255"
+  ],
+  "exit_code": 0
+}

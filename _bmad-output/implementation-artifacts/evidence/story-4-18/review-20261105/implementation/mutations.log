@@ -1,0 +1,5 @@
+recording-credential-guard-removed DETECTED
+retention-redaction-removed DETECTED
+historical-system-read-reintroduced DETECTED
+tenant-read-equality-removed DETECTED
+real-paired-publish-shell-selector-broken DETECTED (zero fake pushes)

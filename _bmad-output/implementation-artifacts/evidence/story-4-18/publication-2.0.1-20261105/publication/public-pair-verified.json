@@ -1,0 +1,67 @@
+{
+  "time_utc": "2026-11-05T18:42:22.593685+00:00",
+  "result": "passed",
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "version": "2.0.1",
+  "staging_run_id": 42080077255,
+  "publication_run_id": 42082617201,
+  "packages": [
+    {
+      "package_id": "Hexalith.McpCli.Abstractions",
+      "version": "2.0.1",
+      "source_commit": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+      "public_url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/2.0.1/hexalith.mcpcli.abstractions.2.0.1.nupkg",
+      "metadata_url": "https://www.nuget.org/api/v2/Packages(Id='Hexalith.McpCli.Abstractions',Version='2.0.1')",
+      "public_metadata": {
+        "Id": "Hexalith.McpCli.Abstractions",
+        "Version": "2.0.1",
+        "Published": "2026-11-05T18:19:14.093+00:00",
+        "PackageHash": "G5ook5dA+uecfiR7QKOat+E4NUyJczMnfpKroEyYrVlyM4krfM73LWvBZwxN6wBP4toebKHi1zBfqB6KID3p+g==",
+        "PackageHashAlgorithm": "SHA512"
+      },
+      "public_sha256": "5c384c717119e7830d6369ecaa17161f64eda35d0ed6d9115f92d24547356f08",
+      "public_sha512": "G5ook5dA+uecfiR7QKOat+E4NUyJczMnfpKroEyYrVlyM4krfM73LWvBZwxN6wBP4toebKHi1zBfqB6KID3p+g==",
+      "staged_sha256": "8a5bdce50d81309ad65cff680276378de214cadf4a04076fcdb550d787af46e3",
+      "consumer_entries": 8,
+      "consumer_contents_exact": true,
+      "readme_sha256": "17f88b9047b5b1061d925e1b866cb64d7dd3857c71037ebbaa53b1711c00ebac",
+      "signature_command": [
+        "dotnet",
+        "nuget",
+        "verify",
+        "--all",
+        "/tmp/mcpcli-418-publication-42080077255/verified-public/Hexalith.McpCli.Abstractions.2.0.1.nupkg"
+      ],
+      "signature_exit_code": 0
+    },
+    {
+      "package_id": "Hexalith.McpCli",
+      "version": "2.0.1",
+      "source_commit": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+      "public_url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/2.0.1/hexalith.mcpcli.2.0.1.nupkg",
+      "public_sha256": "305938d63bc47fd45090976ac1b1626a1ec69edfcaa525f6b728654cb1ab3876",
+      "public_sha512": "eIBzkcDRh3PnjuRp8SmYHO3puqkVTW+gP3AuJUTJ5bdCsr10JU+icHKFnhlV9r/ghOrdMfzgWrgqXJkl6zbcHA==",
+      "staged_sha256": "7ed0f79f0ee4b92abf54d65900ba48b5bab9c257f5eaf6596401f410d6c8ec7f",
+      "consumer_entries": 87,
+      "consumer_contents_exact": true,
+      "readme_sha256": "17f88b9047b5b1061d925e1b866cb64d7dd3857c71037ebbaa53b1711c00ebac",
+      "signature_command": [
+        "dotnet",
+        "nuget",
+        "verify",
+        "--all",
+        "/tmp/mcpcli-418-publication-42080077255/verified-public/Hexalith.McpCli.2.0.1.nupkg"
+      ],
+      "signature_exit_code": 0,
+      "public_metadata": {
+        "Id": "Hexalith.McpCli",
+        "Version": "2.0.1",
+        "Published": "2026-11-05T18:27:32.833+00:00",
+        "PackageHash": "eIBzkcDRh3PnjuRp8SmYHO3puqkVTW+gP3AuJUTJ5bdCsr10JU+icHKFnhlV9r/ghOrdMfzgWrgqXJkl6zbcHA==",
+        "PackageHashAlgorithm": "SHA512"
+      },
+      "metadata_status": 200
+    }
+  ],
+  "scope": "Both independently downloaded signed public archives have exact accepted consumer contents, source and README; dotnet nuget verify --all passes both. V2 hash metadata verified wherever currently available, with any indexing lag recorded separately."
+}

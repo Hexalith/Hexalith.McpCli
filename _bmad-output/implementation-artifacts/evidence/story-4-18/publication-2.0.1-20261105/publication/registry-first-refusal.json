@@ -1,0 +1,6 @@
+{
+  "result": "refused-before-dispatch",
+  "reason": "Could not confirm first-ever package absence for Hexalith.McpCli",
+  "cause": "Original helper suppresses the underlying registration exception; exact service cause unproven. Subsequent independent fresh official endpoint observations are retained.",
+  "publication_dispatch_performed": false
+}

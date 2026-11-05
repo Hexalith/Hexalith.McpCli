@@ -1,0 +1,12 @@
+{
+  "time_utc": "2026-11-05T18:16:09.863643+00:00",
+  "scope": "Fresh strict read-only availability after the preserved initial uncertainty; protected job repeats credentialed registry preflight.",
+  "versions": {
+    "Hexalith.McpCli.Abstractions": [
+      "1.0.0",
+      "1.1.0",
+      "2.0.0"
+    ],
+    "Hexalith.McpCli": []
+  }
+}

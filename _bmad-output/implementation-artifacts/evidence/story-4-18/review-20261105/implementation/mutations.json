@@ -1,0 +1,40 @@
+{
+  "source_sha256": "187bea4f92e79534a79dc2b521ee55ca0e9136e45ae4b88a7d7ba4fed74463ed",
+  "results": [
+    {
+      "mutation": "recording-credential-guard-removed",
+      "detected": true,
+      "tests": 1,
+      "failures": 12,
+      "errors": 0
+    },
+    {
+      "mutation": "retention-redaction-removed",
+      "detected": true,
+      "tests": 1,
+      "failures": 12,
+      "errors": 0
+    },
+    {
+      "mutation": "historical-system-read-reintroduced",
+      "detected": true,
+      "tests": 1,
+      "failures": 0,
+      "errors": 1
+    },
+    {
+      "mutation": "tenant-read-equality-removed",
+      "detected": true,
+      "tests": 1,
+      "failures": 2,
+      "errors": 0
+    },
+    {
+      "mutation": "real-paired-publish-shell-selector-broken",
+      "detected": true,
+      "fake_pushes": 0,
+      "real_network": false,
+      "real_pushes": 0
+    }
+  ]
+}

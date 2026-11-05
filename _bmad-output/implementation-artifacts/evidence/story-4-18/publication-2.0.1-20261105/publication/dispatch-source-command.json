@@ -1,0 +1,13 @@
+{
+  "command": [
+    "python3",
+    "scripts/verify-release-source.py",
+    "--output",
+    "/tmp/mcpcli-418-publication-42080077255/source-before-publication-dispatch.json",
+    "--",
+    "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+    "refs/heads/main",
+    "paired"
+  ],
+  "exit_code": 0
+}

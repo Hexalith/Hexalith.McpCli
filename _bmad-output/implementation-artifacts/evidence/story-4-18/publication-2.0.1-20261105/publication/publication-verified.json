@@ -1,0 +1,103 @@
+{
+  "time_utc": "2026-11-05T18:45:21.075756+00:00",
+  "result": "passed",
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "version": "2.0.1",
+  "publication_run_id": 42082617201,
+  "staging_run_id": 42080077255,
+  "github_tag_commit": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "github_release_url": "https://github.com/Hexalith/Hexalith.McpCli/releases/tag/v2.0.1",
+  "github_release_assets": [
+    {
+      "name": "1-public-verification.json",
+      "id": 714411472,
+      "digest": "sha256:96082881affe25b4643035e0a171455cd50a40be4468f1a77d5699d2018d2a88"
+    },
+    {
+      "name": "1-push-intent.json",
+      "id": 714411505,
+      "digest": "sha256:dff23e4a2a387810fd80bbe22106b7dacc42efbf99b39d014b81008a558bb935"
+    },
+    {
+      "name": "1-push-result.json",
+      "id": 714411559,
+      "digest": "sha256:af0bc086d473fdee12ac29f3a83a27d886a0bed4ef93f3e74df698fd22ed30cc"
+    },
+    {
+      "name": "2-public-verification.json",
+      "id": 714411618,
+      "digest": "sha256:cd9863a3ee9d7c8546a0defdb75562b55674ec7a78710288c4e6c129fd3ba198"
+    },
+    {
+      "name": "2-push-intent.json",
+      "id": 714411587,
+      "digest": "sha256:dcc3832a7b1d327b1b144c91856e19ec6acabad0915f3870f2e52bdc7f2d7b2e"
+    },
+    {
+      "name": "2-push-result.json",
+      "id": 714411674,
+      "digest": "sha256:0eca70f13d478641d95a34f4916aae87d43813017a1352eea6bdb9ed926cadb8"
+    },
+    {
+      "name": "before-push-1.json",
+      "id": 714411728,
+      "digest": "sha256:1ff741a6d354e42ad9742638f6a0403ade642e1281f92d27e8b14327b7efae20"
+    },
+    {
+      "name": "before-push-2.json",
+      "id": 714411782,
+      "digest": "sha256:1ff741a6d354e42ad9742638f6a0403ade642e1281f92d27e8b14327b7efae20"
+    },
+    {
+      "name": "Hexalith.McpCli.2.0.1.nupkg",
+      "id": 714411933,
+      "digest": "sha256:7ed0f79f0ee4b92abf54d65900ba48b5bab9c257f5eaf6596401f410d6c8ec7f"
+    },
+    {
+      "name": "Hexalith.McpCli.Abstractions.2.0.1.nupkg",
+      "id": 714411376,
+      "digest": "sha256:8a5bdce50d81309ad65cff680276378de214cadf4a04076fcdb550d787af46e3"
+    },
+    {
+      "name": "outcome.json",
+      "id": 714411811,
+      "digest": "sha256:3e7cb00271487002e9065a4a7f1053c0881e4c67ba37a8dcd701148d7b2bed94"
+    },
+    {
+      "name": "preflight.json",
+      "id": 714411427,
+      "digest": "sha256:1ff741a6d354e42ad9742638f6a0403ade642e1281f92d27e8b14327b7efae20"
+    },
+    {
+      "name": "publication-started.json",
+      "id": 714411837,
+      "digest": "sha256:1d94c52d79d315312a408aeb3f6b661ea26633374418b7c7d723a9de152e70c4"
+    },
+    {
+      "name": "snapshot-preflight.json",
+      "id": 714411874,
+      "digest": "sha256:1ff741a6d354e42ad9742638f6a0403ade642e1281f92d27e8b14327b7efae20"
+    }
+  ],
+  "local_operator_sha256": "dccb33f10f4b8713543dd880ae744c653545ee084df784fa603064b795685cb8",
+  "hosted_canonical_operator_sha256": "b334878c9dc42651e3dfe43ee6b1357454a4367370ca13ba1bbb1ca948e84377",
+  "operator_semantics_identical": true,
+  "packages": {
+    "Hexalith.McpCli": {
+      "consumer_content_sha256": "5d3741b89d584cc43489af279154e0d90f892f9d28dc10fa55cfe14a297012a2",
+      "public_sha256": "305938d63bc47fd45090976ac1b1626a1ec69edfcaa525f6b728654cb1ab3876",
+      "public_url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/2.0.1/hexalith.mcpcli.2.0.1.nupkg",
+      "staged_sha256": "7ed0f79f0ee4b92abf54d65900ba48b5bab9c257f5eaf6596401f410d6c8ec7f",
+      "status": "public-verified"
+    },
+    "Hexalith.McpCli.Abstractions": {
+      "consumer_content_sha256": "db763c5450c85b5d31bbad631560522675c6230071135922982366ae84056bcb",
+      "public_sha256": "5c384c717119e7830d6369ecaa17161f64eda35d0ed6d9115f92d24547356f08",
+      "public_url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/2.0.1/hexalith.mcpcli.abstractions.2.0.1.nupkg",
+      "staged_sha256": "8a5bdce50d81309ad65cff680276378de214cadf4a04076fcdb550d787af46e3",
+      "status": "public-verified"
+    }
+  },
+  "outcome_artifact": 13442229454,
+  "outcome_zip_sha256": "a23cc85e4fa7eeab62901a83d6bd4a9606571a97b1847d5053727802299024e1"
+}

@@ -1,0 +1,20 @@
+{
+  "id": 13442229454,
+  "node_id": "MDg6QXJ0aWZhY3QxMzQ0MjIyOTQ1NA==",
+  "name": "paired-publication-outcomes",
+  "size_in_bytes": 17964331,
+  "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13442229454",
+  "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13442229454/zip",
+  "expired": false,
+  "digest": "sha256:a23cc85e4fa7eeab62901a83d6bd4a9606571a97b1847d5053727802299024e1",
+  "created_at": "2026-11-05T18:39:48Z",
+  "updated_at": "2026-11-05T18:39:48Z",
+  "expires_at": "2026-12-05T18:16:21Z",
+  "workflow_run": {
+    "id": 42082617201,
+    "repository_id": 1379417482,
+    "head_repository_id": 1379417482,
+    "head_branch": "main",
+    "head_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e"
+  }
+}

@@ -9,6 +9,38 @@ public sealed class PlatformScopeCommandTests
 {
     private const string ItemId = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
 
+    /// <summary>Reserved public tenant input returns the full CLI refusal without submitting either operation.</summary>
+    [Theory]
+    [InlineData(false, "system")]
+    [InlineData(false, "SyStEm")]
+    [InlineData(true, "system")]
+    [InlineData(true, "SyStEm")]
+    public async Task ReservedSystemTenantExitsTwoWithoutRequestsAsync(bool command, string tenant)
+    {
+        await using var harness = new QueryCliHarness(commandResponse: command);
+        string operation = command ? "routing-fixture.envelope-item" : "routing-fixture.get-http2-status";
+        string[] arguments = command
+            ? ["send", operation, "--payload", JsonSerializer.Serialize(new { ItemId }), "--tenant", tenant,
+                "--actor", "operator-1", "--correlation-id", "01J9MZHXT3RKM0VWXRXGSJDATK",
+                "--idempotency-key", "01J9MZHXT3RKM0VWXRXGSJDATN"]
+            : ["query", operation, "--payload", "{}", "--aggregate-id", ItemId, "--tenant", tenant];
+        (int exit, string output, string error) = await harness.InvokeAsync(arguments);
+
+        exit.ShouldBe(2, output + error);
+        AssertJson(output, JsonSerializer.Serialize(new
+        {
+            error = new
+            {
+                code = "validation_failed",
+                operation,
+                violations = new[] { new { path = "/tenant", message = "The public tenant 'system' is reserved." } },
+            },
+        }));
+        AssertDiagnostics(error);
+        error.ShouldNotContain("System.Net.Http");
+        harness.Calls.ShouldBe(0);
+    }
+
     /// <summary>Describe shows the fixed scope and omits the tenant argument.</summary>
     [Fact]
     public async Task DescribeReportsPlatformScopeAsync()

@@ -1,0 +1,6 @@
+{
+  "exit_code": 0,
+  "package_id": "Hexalith.McpCli",
+  "stderr": "",
+  "stdout": "Pushing Hexalith.McpCli.2.0.1.nupkg to 'https://www.nuget.org/api/v2/package'...\n  PUT https://www.nuget.org/api/v2/package/\n  Created https://www.nuget.org/api/v2/package/ 943ms\nYour package was pushed.\n"
+}

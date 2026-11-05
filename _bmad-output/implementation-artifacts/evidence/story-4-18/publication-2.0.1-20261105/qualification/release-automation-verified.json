@@ -1,0 +1,12 @@
+{
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "run_id": 42072073153,
+  "job_id": 127402908329,
+  "original_log_sha256": "2e82ff80dac20a7e9baf64f18b0d6e8455b44bf40169911b64905c39cebb647e",
+  "executed_python_tests": 141,
+  "summary": [
+    "141",
+    "131.349"
+  ],
+  "scope": "Actual corrected-source passing release-automation output; prior matrix audit remains valid because only README destinations changed."
+}

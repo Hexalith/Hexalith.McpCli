@@ -1,0 +1,7 @@
+⧗   --- input ---
+fix(release): complete validated package pair review
+
+Record the verified 2.0.1 pair and its immutable publication evidence.
+Correct manual acceptance and credential handling in future releases.
+Exercise the real paired shell hooks and full tenant error contracts.
+✔   found 0 problems, 0 warnings

@@ -761,3 +761,12 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: A clean focused Manifest.Tests build does not build the package Gateway host required by its socket tests.
   evidence: Low; pre-existing package-host work. `tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:41` asserts that the host DLL already exists, but `tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj:12` and the referenced Integration.Tests/AppHost graph have no package-host build dependency. The documented full solution build supplies it; add a build-only project dependency for clean focused runs.
+
+## Deferred from: implementation of spec-4-18-publish-the-validated-package-pair.md (2026-11-05)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
+  summary: Shared bootstrap/public-content verification trusts the official NuGet download and accepted payload equality without an automated cryptographic signature gate.
+  evidence: Medium; inherited from the baseline bootstrap verifier. `scripts/recover-bootstrap-release.py:29` excludes repository signatures and core metadata from content comparison, and `scripts/publish-paired-release.py:149` reuses that policy. Both actual 2.0.1 public signatures passed independent `dotnet nuget verify --all`; a future shared gate should define and test missing/invalid-signature handling without retrying a push.
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
+  summary: An existing local Builds Props tree can shadow a declared enclosing workspace catalog without proving local ownership.
+  evidence: Medium; inherited local-copy trust. `tools/conformance-vectors/v1/verify_artifact.py:25` returns the local directory before declaration checks; the baseline already copied that local path directly. Validate the standalone-versus-superproject ownership rule and add an undeclared-local-tree regression before changing resolution. Current publication used the checked, root-declared catalog.

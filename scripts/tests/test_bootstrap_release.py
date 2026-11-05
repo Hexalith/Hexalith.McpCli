@@ -291,6 +291,79 @@ else:
         self.assertNotIn("fixture-secret-never-print", result.stdout + result.stderr)
         return result
 
+    def paired_controls(self, origin, source_gate, staging_jobs):
+        """Reuse isolated executable/registry fixtures while running the real paired shell/Python hooks."""
+        self.env["MCPCLI_RELEASE_PHASE"] = "paired"
+        (self.root / "paired-controls.json").write_text(json.dumps({
+            "origin": origin, "source": source_gate, "jobs": staging_jobs}))
+        self.executable("gh", '''#!/usr/bin/env python3
+import json, os, sys
+from pathlib import Path
+root = Path(os.environ["RELEASE_TEST_ROOT"])
+state = json.loads((root / "paired-controls.json").read_text())
+origin = state["origin"]
+args = sys.argv[1:]
+with (root / "gh.log").open("a") as log: log.write(json.dumps(args) + "\\n")
+endpoint = next(arg for arg in args if arg.startswith("repos/"))
+if "POST" in args:
+    assert endpoint.endswith("/git/refs"), args
+    result = {}
+elif "/git/matching-refs/tags/" in endpoint: result = []
+elif endpoint.endswith("/workflows/release.yml"): result = {"id": 1}
+elif endpoint.endswith("/jobs"): result = {"total_count": len(state["jobs"]), "jobs": state["jobs"]}
+elif endpoint.endswith("/artifacts"):
+    artifacts = [dict(item, expired=False, workflow_run={"id": origin["staging_run_id"],
+        "head_sha": origin["source_sha"], "head_branch": "main"}) for item in origin["artifacts"]]
+    result = {"total_count": len(artifacts), "artifacts": artifacts}
+elif endpoint.endswith("/runs/" + str(origin["staging_run_id"])):
+    result = {"id": origin["staging_run_id"], "workflow_id": 1, "path": ".github/workflows/release.yml",
+        "head_sha": origin["source_sha"], "head_branch": "main", "event": "workflow_dispatch",
+        "head_repository": {"full_name": origin["repository"]}, "status": "completed", "conclusion": "success",
+        "run_attempt": origin["run_attempt"], "updated_at": origin["completed_at"]}
+else: raise AssertionError(args)
+print(json.dumps(result))
+''')
+        self.executable("dotnet", '''#!/usr/bin/env python3
+import hashlib, json, os, shutil, sys
+from pathlib import Path
+from zipfile import ZipFile
+root = Path(os.environ["RELEASE_TEST_ROOT"])
+args = sys.argv[1:]
+assert args[:2] == ["nuget", "push"] and "--skip-duplicate" not in args, args
+assert args[args.index("--api-key") + 1] == os.environ["NUGET_API_KEY"]
+safe = ["REDACTED" if i and args[i-1] == "--api-key" else arg for i, arg in enumerate(args)]
+with (root / "dotnet.log").open("a") as log: log.write(json.dumps(safe) + "\\n")
+package = Path(args[2])
+for name in ("pushed", "fake-public"):
+    destination = root / name / package.name
+    destination.parent.mkdir(exist_ok=True)
+    shutil.copyfile(package, destination)
+with ZipFile(destination, "a") as archive: archive.writestr(".signature.p7s", "synthetic repository signature")
+''')
+        with (self.bin / "sitecustomize.py").open("a") as customize:
+            customize.write('''
+import subprocess
+original_run = subprocess.run
+def paired_run(args, **kwargs):
+    if len(args) > 1 and str(args[1]).endswith("/verify-release-source.py"):
+        root = Path(os.environ["RELEASE_TEST_ROOT"])
+        source = json.loads((root / "paired-controls.json").read_text())["source"]
+        with Path(args[args.index("--output") + 1]).open("x") as output: json.dump(source, output)
+        with (root / "source.log").open("a") as log: log.write(json.dumps(args) + "\\n")
+        return subprocess.CompletedProcess(args, 0, stdout=b"", stderr=b"")
+    return original_run(args, **kwargs)
+subprocess.run = paired_run
+def paired_registry(url, timeout):
+    if not url.endswith(".nupkg"): return registry(url, timeout)
+    root = Path(os.environ["RELEASE_TEST_ROOT"])
+    matches = [path for path in (root / "fake-public").glob("*.nupkg") if path.name.lower() == url.rsplit("/", 1)[1]]
+    if len(matches) != 1: raise HTTPError(url, 404, "not pushed", {}, None)
+    response = io.BytesIO(matches[0].read_bytes())
+    response.status = 200
+    return response
+urllib.request.urlopen = paired_registry
+''')
+
     def calls(self):
         path = self.root / "dotnet.log"
         return [json.loads(line) for line in path.read_text().splitlines()] if path.exists() else []

@@ -118,10 +118,20 @@ def credentials():
             'GITHUB_ENTERPRISE_TOKEN', 'NUGET_API_KEY')} - {''}
 
 
+def redact_operator(text):
+    for value in sorted(credentials(), key=len, reverse=True):
+        text = text.replace(value, '[REDACTED]')
+    text = re.sub(r'-----BEGIN (?P<kind>(?:[A-Z0-9]+ )*PRIVATE KEY)-----.*?(?:-----END (?P=kind)-----|\Z)',
+                  '[REDACTED PRIVATE KEY]', text, flags=re.S)
+    text = re.sub(r'\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+', '[REDACTED JWT]', text)
+    text = re.sub(r'(?i)\bBearer\s+[A-Za-z0-9._~+/-]+=*', 'Bearer [REDACTED]', text)
+    return text
+
+
 def require_sanitized_operator(decision):
     serialized = json.dumps(decision, ensure_ascii=False)
-    if any(value in serialized for value in credentials()):
-        raise ValueError('Operator acceptance contains a GitHub or publication credential; redact the source evidence first.')
+    if redact_operator(serialized) != serialized:
+        raise ValueError('Operator acceptance contains a credential or private key; redact the source evidence first.')
 
 
 def record_operator(serialized, output):
@@ -150,10 +160,8 @@ def retain_operator(paths, output):
             normalized = json.dumps(json.loads(decoded), ensure_ascii=False, indent=2) + '\n'
         except ValueError:
             normalized = decoded
-        redacted = any(value in decoded or value in normalized for value in credentials())
-        retained = normalized if redacted else decoded
-        for value in sorted(credentials(), key=len, reverse=True):
-            retained = retained.replace(value, '[REDACTED]')
+        redacted = redact_operator(decoded) != decoded or redact_operator(normalized) != normalized
+        retained = redact_operator(normalized) if redacted else decoded
         name = str(index + 1) + '-' + path.name
         (output / name).write_text(retained, encoding='utf-8', newline='')
         entries.append({'input_name': path.name, 'retained_name': name, 'original_sha256': hashlib.sha256(raw).hexdigest(),
@@ -235,7 +243,7 @@ def operator_acceptance(path, prepared, accepted_path, origin, actor):
         if not all(isinstance(record, dict) for record in (command, persisted, tenant)):
             raise ValueError('Actual session result documents are required.')
         ulid = r'[0-7][0-9A-HJKMNP-TV-Z]{25}'
-        if (tenant.get('tenant') != 'system' or tenant.get('document_id') != session['selected_tenant']
+        if (tenant.get('tenant') != session['selected_tenant'] or tenant.get('document_id') != session['selected_tenant']
                 or tenant.get('is_active') is not True or tenant.get('membership_verified') is not True
                 or command.get('status') != 'accepted' or command.get('tenant') != session['selected_tenant']
                 or command.get('aggregate_id') != session['party_id']
@@ -336,7 +344,12 @@ def main():
     args = parser.parse_args()
     try:
         if args.command == 'record-operator':
-            record_operator(os.environ.get('OPERATOR_ACCEPTANCE', ''), args.output)
+            if os.environ.get('GITHUB_EVENT_PATH'):
+                event = read_json(os.environ['GITHUB_EVENT_PATH'])
+                serialized = event['inputs']['operator_acceptance']
+            else:
+                serialized = os.environ.get('OPERATOR_ACCEPTANCE', '')
+            record_operator(serialized, args.output)
         elif args.command == 'retain-operator':
             retain_operator(args.input, args.output)
         elif args.command == 'fetch':

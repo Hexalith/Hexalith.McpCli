@@ -1,0 +1,42 @@
+async configureTempGlobalConfig(): Promise<string> {
+    // Already setup global config
+    if (this.temporaryHomePath?.length > 0) {
+      return path.join(this.temporaryHomePath, '.gitconfig')
+    }
+    // Create a temp home directory
+    const runnerTemp = process.env['RUNNER_TEMP'] || ''
+    assert.ok(runnerTemp, 'RUNNER_TEMP is not defined')
+    const uniqueId = randomUUID()
+    this.temporaryHomePath = path.join(runnerTemp, uniqueId)
+    await fs.promises.mkdir(this.temporaryHomePath, {recursive: true})
+
+    // Copy the global git config
+    const gitConfigPath = path.join(
+      process.env['HOME'] || os.homedir(),
+      '.gitconfig'
+    )
+    const newGitConfigPath = path.join(this.temporaryHomePath, '.gitconfig')
+    let configExists = false
+    try {
+      await fs.promises.stat(gitConfigPath)
+      configExists = true
+    } catch (err) {
+      if ((err as any)?.code !== 'ENOENT') {
+        throw err
+      }
+    }
+    if (configExists) {
+      core.info(`Copying '${gitConfigPath}' to '${newGitConfigPath}'`)
+      await io.cp(gitConfigPath, newGitConfigPath)
+    } else {
+      await fs.promises.writeFile(newGitConfigPath, '')
+    }
+
+    // Override HOME
+    core.info(
+      `Temporarily overriding HOME='${this.temporaryHomePath}' before making global git config changes`
+    )
+    this.git.setEnvironmentVariable('HOME', this.temporaryHomePath)
+
+    return newGitConfigPath
+  }

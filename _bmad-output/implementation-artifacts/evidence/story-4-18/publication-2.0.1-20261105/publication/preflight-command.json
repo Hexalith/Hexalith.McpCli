@@ -1,0 +1,22 @@
+{
+  "command": [
+    "python3",
+    "scripts/verify-paired-publication.py",
+    "verify",
+    "--staging-run",
+    "42080077255",
+    "--source-sha",
+    "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+    "--candidate",
+    "/tmp/mcpcli-418-candidate-42080077255",
+    "--version",
+    "2.0.1",
+    "--operator",
+    "/tmp/mcpcli-418-publication-42080077255/operator-acceptance.json",
+    "--actor",
+    "jpiquot",
+    "--output",
+    "/tmp/mcpcli-418-publication-42080077255/publication-preflight.json"
+  ],
+  "exit_code": 1
+}

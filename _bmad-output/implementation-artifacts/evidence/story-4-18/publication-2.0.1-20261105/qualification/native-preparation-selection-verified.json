@@ -1,0 +1,22 @@
+{
+  "result": "passed",
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "selection_exact": true,
+  "qualified_owner_sources": {
+    "Hexalith.EventStore": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+    "Hexalith.Tenants": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+    "Hexalith.Parties": "d4415715b2517927655c538e6d41e05d71d4207e",
+    "Hexalith.Platform": "ee6f477c595defb79e17ca6ea3e5790de24c114e"
+  },
+  "verified_host_package_bindings": 30,
+  "source_package_catalog": {
+    "buildsCommit": "06a51f55bfe2e03a06e1121d94a41e98f1e3e251",
+    "catalogSha256": "eae620c7364a105242b776bef4b95e1a0fddd7b9762cd64b358b145c8532e47b",
+    "overlaySha256": "fc7a9ffe77c94774ebc7eb31ff04fdce12e533826220e129c5a8265c2a787a6f",
+    "overridesSha256": "42b020d8bfdc2374adf4488790578db6bd7478fb6cde2b39d8024cfeada82ad8"
+  },
+  "reader_audit": {
+    "path": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/native-reader-audit.json",
+    "sha256": "854edd1f6303c4a3a120b48396ee0ba39d89209662be8d8a594dca0671329273"
+  }
+}

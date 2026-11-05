@@ -1,0 +1,15 @@
+{
+  "time_utc": "2026-11-05T18:16:19.714622+00:00",
+  "command": [
+    "gh",
+    "api",
+    "--method",
+    "POST",
+    "repos/Hexalith/Hexalith.McpCli/actions/workflows/release.yml/dispatches",
+    "--input",
+    "/tmp/mcpcli-418-publication-42080077255/paired-dispatch-input.json"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": ""
+}

@@ -1,0 +1,210 @@
+﻿2026-11-05T17:11:57.5972674Z Current runner version: '2.338.2'
+2026-11-05T17:11:57.5995627Z ##[group]Runner Image Provisioner
+2026-11-05T17:11:57.5996517Z Hosted Compute Agent
+2026-11-05T17:11:57.5997112Z Version: 20261028.624
+2026-11-05T17:11:57.5997744Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+2026-11-05T17:11:57.5998458Z Build Date: 2026-10-28T21:51:42Z
+2026-11-05T17:11:57.5999182Z Worker ID: {565984f3-203f-495f-8ea2-048d678ad953}
+2026-11-05T17:11:57.5999838Z Region: westus3
+2026-11-05T17:11:57.6000352Z Cloud: Azure
+2026-11-05T17:11:57.6000857Z ##[endgroup]
+2026-11-05T17:11:57.6002123Z ##[group]Operating System
+2026-11-05T17:11:57.6002712Z Ubuntu
+2026-11-05T17:11:57.6003236Z 26.04.1
+2026-11-05T17:11:57.6003718Z LTS
+2026-11-05T17:11:57.6004261Z ##[endgroup]
+2026-11-05T17:11:57.6004904Z ##[group]Runner Image
+2026-11-05T17:11:57.6005662Z Image: ubuntu-26.04
+2026-11-05T17:11:57.6006230Z Version: 20261101.186.1
+2026-11-05T17:11:57.6007522Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261101.186/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-05T17:11:57.6009055Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261101.186
+2026-11-05T17:11:57.6010013Z ##[endgroup]
+2026-11-05T17:11:57.6011049Z ##[group]GITHUB_TOKEN Permissions
+2026-11-05T17:11:57.6013550Z Contents: read
+2026-11-05T17:11:57.6014119Z Metadata: read
+2026-11-05T17:11:57.6014630Z ##[endgroup]
+2026-11-05T17:11:57.6017044Z Secret source: Actions
+2026-11-05T17:11:57.6017983Z Cache mode: write
+2026-11-05T17:11:57.6018708Z Prepare workflow directory
+2026-11-05T17:11:57.6347437Z Prepare all required actions
+2026-11-05T17:11:57.6412087Z Getting action download info
+2026-11-05T17:11:57.9344302Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-05T17:11:58.0636911Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-11-05T17:11:58.2284967Z Complete job name: release-automation
+2026-11-05T17:11:58.2991798Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-05T17:11:58.2992775Z with:
+2026-11-05T17:11:58.2993257Z   submodules: false
+2026-11-05T17:11:58.2993791Z   repository: Hexalith/Hexalith.McpCli
+2026-11-05T17:11:58.2998122Z   token: ***
+2026-11-05T17:11:58.2998653Z   ssh-strict: true
+2026-11-05T17:11:58.2999124Z   ssh-user: git
+2026-11-05T17:11:58.2999652Z   persist-credentials: true
+2026-11-05T17:11:58.3000181Z   clean: true
+2026-11-05T17:11:58.3000661Z   sparse-checkout-cone-mode: true
+2026-11-05T17:11:58.3001239Z   fetch-depth: 1
+2026-11-05T17:11:58.3001704Z   fetch-tags: false
+2026-11-05T17:11:58.3002163Z   show-progress: true
+2026-11-05T17:11:58.3002673Z   lfs: false
+2026-11-05T17:11:58.3003131Z   set-safe-directory: true
+2026-11-05T17:11:58.3003685Z   allow-unsafe-pr-checkout: false
+2026-11-05T17:11:58.3004447Z ##[endgroup]
+2026-11-05T17:11:58.5357078Z Syncing repository: Hexalith/Hexalith.McpCli
+2026-11-05T17:11:58.5360711Z ##[group]Getting Git version info
+2026-11-05T17:11:58.5362263Z Working directory is '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli'
+2026-11-05T17:11:58.5364387Z [command]/usr/bin/git version
+2026-11-05T17:11:58.5365300Z git version 2.56.0
+2026-11-05T17:11:58.5370851Z ##[endgroup]
+2026-11-05T17:11:58.5380600Z Temporarily overriding HOME='/home/runner/work/_temp/1fd80894-7600-45a7-9754-ee9815c50c27' before making global git config changes
+2026-11-05T17:11:58.5383156Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T17:11:58.5387322Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T17:11:58.5448788Z Deleting the contents of '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli'
+2026-11-05T17:11:58.5450800Z ##[group]Determining repository object format
+2026-11-05T17:11:58.5452471Z ##[endgroup]
+2026-11-05T17:11:58.5454744Z ##[group]Initializing the repository
+2026-11-05T17:11:58.5457140Z [command]/usr/bin/git init /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T17:11:58.5531988Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-05T17:11:58.5536430Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-05T17:11:58.5538449Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-05T17:11:58.5540141Z hint: call:
+2026-11-05T17:11:58.5541181Z hint:
+2026-11-05T17:11:58.5542572Z hint: 	git config --global init.defaultBranch <name>
+2026-11-05T17:11:58.5544025Z hint:
+2026-11-05T17:11:58.5545054Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-05T17:11:58.5547444Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-05T17:11:58.5549341Z hint:
+2026-11-05T17:11:58.5550591Z hint: 	git branch -m <name>
+2026-11-05T17:11:58.5552208Z hint:
+2026-11-05T17:11:58.5554014Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-05T17:11:58.5557055Z Initialized empty Git repository in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/
+2026-11-05T17:11:58.5561938Z [command]/usr/bin/git remote add origin https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T17:11:58.5596765Z ##[endgroup]
+2026-11-05T17:11:58.5599454Z ##[group]Disabling automatic garbage collection
+2026-11-05T17:11:58.5601280Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-05T17:11:58.5628658Z ##[endgroup]
+2026-11-05T17:11:58.5630267Z ##[group]Setting up auth
+2026-11-05T17:11:58.5631554Z Removing SSH command configuration
+2026-11-05T17:11:58.5633276Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T17:11:58.5662113Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T17:11:58.6052666Z Removing HTTP extra header
+2026-11-05T17:11:58.6058636Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T17:11:58.6089583Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T17:11:58.6293226Z Removing includeIf entries pointing to credentials config files
+2026-11-05T17:11:58.6297568Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T17:11:58.6325857Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-05T17:11:58.6539431Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-05T17:11:58.6572860Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path /home/runner/work/_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config
+2026-11-05T17:11:58.6602807Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config
+2026-11-05T17:11:58.6633780Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config
+2026-11-05T17:11:58.6666460Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config
+2026-11-05T17:11:58.6692222Z ##[endgroup]
+2026-11-05T17:11:58.6693758Z ##[group]Fetching the repository
+2026-11-05T17:11:58.6698945Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin +aa2845edbea23444a1d362060b8d0f5dc05a132e:refs/remotes/origin/main
+2026-11-05T17:12:01.9945125Z From https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T17:12:01.9947852Z  * [new ref]         aa2845edbea23444a1d362060b8d0f5dc05a132e -> origin/main
+2026-11-05T17:12:01.9953008Z [command]/usr/bin/git branch --list --remote origin/main
+2026-11-05T17:12:01.9977289Z   origin/main
+2026-11-05T17:12:01.9984034Z [command]/usr/bin/git rev-parse refs/remotes/origin/main
+2026-11-05T17:12:02.0004385Z aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T17:12:02.0009192Z ##[endgroup]
+2026-11-05T17:12:02.0011327Z ##[group]Determining the checkout info
+2026-11-05T17:12:02.0014403Z ##[endgroup]
+2026-11-05T17:12:02.0016308Z [command]/usr/bin/git sparse-checkout disable
+2026-11-05T17:12:02.0062231Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-05T17:12:02.0090754Z ##[group]Checking out the ref
+2026-11-05T17:12:02.0093225Z [command]/usr/bin/git checkout --progress --force -B main refs/remotes/origin/main
+2026-11-05T17:12:02.8851641Z Switched to a new branch 'main'
+2026-11-05T17:12:02.8854449Z branch 'main' set up to track 'origin/main'.
+2026-11-05T17:12:02.8886732Z ##[endgroup]
+2026-11-05T17:12:02.8929648Z [command]/usr/bin/git log -1 --format=%H
+2026-11-05T17:12:02.8953001Z aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T17:12:02.9209684Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-11-05T17:12:02.9210153Z with:
+2026-11-05T17:12:02.9210472Z   node-version: 24
+2026-11-05T17:12:02.9210736Z   check-latest: false
+2026-11-05T17:12:02.9213290Z   token: ***
+2026-11-05T17:12:02.9213616Z   package-manager-cache: true
+2026-11-05T17:12:02.9213945Z ##[endgroup]
+2026-11-05T17:12:03.0406966Z Found in cache @ /opt/hostedtoolcache/node/24.22.2/x64
+2026-11-05T17:12:03.0415716Z ##[group]Environment details
+2026-11-05T17:12:06.5900882Z node: v24.22.2
+2026-11-05T17:12:06.5901348Z npm: 11.19.1
+2026-11-05T17:12:06.5901695Z yarn: 1.22.22
+2026-11-05T17:12:06.5903250Z ##[endgroup]
+2026-11-05T17:12:06.6021396Z ##[group]Run npm ci
+2026-11-05T17:12:06.6022117Z npm ci
+2026-11-05T17:12:06.6108031Z shell: /usr/bin/bash -e {0}
+2026-11-05T17:12:06.6108526Z ##[endgroup]
+2026-11-05T17:12:13.0826795Z 
+2026-11-05T17:12:13.0835368Z added 357 packages, and audited 501 packages in 6s
+2026-11-05T17:12:13.0836220Z 
+2026-11-05T17:12:13.0836600Z 106 packages are looking for funding
+2026-11-05T17:12:13.0837127Z   run `npm fund` for details
+2026-11-05T17:12:13.1604512Z 
+2026-11-05T17:12:13.1605619Z 38 vulnerabilities (37 moderate, 1 high)
+2026-11-05T17:12:13.1606217Z 
+2026-11-05T17:12:13.1607125Z To address issues that do not require attention, run:
+2026-11-05T17:12:13.1607827Z   npm audit fix
+2026-11-05T17:12:13.1608215Z 
+2026-11-05T17:12:13.1608793Z To address all issues (including breaking changes), run:
+2026-11-05T17:12:13.1609392Z   npm audit fix --force
+2026-11-05T17:12:13.1609752Z 
+2026-11-05T17:12:13.1610313Z Run `npm audit` for details.
+2026-11-05T17:12:13.1948427Z ##[group]Run PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+2026-11-05T17:12:13.1949140Z PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'
+2026-11-05T17:12:13.1980662Z shell: /usr/bin/bash -e {0}
+2026-11-05T17:12:13.1981090Z ##[endgroup]
+2026-11-05T17:14:24.6883855Z .............................................................................................................................................
+2026-11-05T17:14:24.6884905Z ----------------------------------------------------------------------
+2026-11-05T17:14:24.6885868Z Ran 141 tests in 131.349s
+2026-11-05T17:14:24.6886169Z 
+2026-11-05T17:14:24.6886365Z OK
+2026-11-05T17:14:24.7187048Z ##[group]Run node --test scripts/tests/select-release-version.test.mjs
+2026-11-05T17:14:24.7187635Z node --test scripts/tests/select-release-version.test.mjs
+2026-11-05T17:14:24.7219282Z shell: /usr/bin/bash -e {0}
+2026-11-05T17:14:24.7219625Z ##[endgroup]
+2026-11-05T17:14:29.2639468Z ✔ detached source selects its exact release result with absent-main (1214.241716ms)
+2026-11-05T17:14:29.2641773Z ✔ detached source selects its exact release result with main-before-source (661.332032ms)
+2026-11-05T17:14:29.2643230Z ✔ detached source selects its exact release result with main-after-source (662.351744ms)
+2026-11-05T17:14:29.2644476Z ✔ detached source selects its exact release result with no-release (652.603366ms)
+2026-11-05T17:14:29.2725220Z ℹ tests 4
+2026-11-05T17:14:29.2725898Z ℹ suites 0
+2026-11-05T17:14:29.2726328Z ℹ pass 4
+2026-11-05T17:14:29.2726780Z ℹ fail 0
+2026-11-05T17:14:29.2727227Z ℹ cancelled 0
+2026-11-05T17:14:29.2727663Z ℹ skipped 0
+2026-11-05T17:14:29.2728255Z ℹ todo 0
+2026-11-05T17:14:29.2728677Z ℹ duration_ms 4515.173682
+2026-11-05T17:14:29.2897327Z Post job cleanup.
+2026-11-05T17:14:29.4173963Z Post job cleanup.
+2026-11-05T17:14:29.5098798Z [command]/usr/bin/git version
+2026-11-05T17:14:29.5139176Z git version 2.56.0
+2026-11-05T17:14:29.5172304Z Temporarily overriding HOME='/home/runner/work/_temp/f7a7fd04-068c-4895-a9d0-68cac10a502b' before making global git config changes
+2026-11-05T17:14:29.5173925Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T17:14:29.5176157Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T17:14:29.5209443Z Removing SSH command configuration
+2026-11-05T17:14:29.5216226Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T17:14:29.5249764Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T17:14:29.5534029Z Removing HTTP extra header
+2026-11-05T17:14:29.5540057Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T17:14:29.5570256Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T17:14:29.5943741Z Removing includeIf entries pointing to credentials config files
+2026-11-05T17:14:29.5959182Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T17:14:29.5999928Z includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T17:14:29.6016392Z includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T17:14:29.6026032Z includeif.gitdir:/github/workspace/.git.path
+2026-11-05T17:14:29.6027460Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T17:14:29.6031937Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T17:14:29.6044492Z /home/runner/work/_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config
+2026-11-05T17:14:29.6066273Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-ce1b3ec1\-cb2d\-49e7\-b0a4\-533a23d01b5f\.config
+2026-11-05T17:14:29.6109231Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T17:14:29.6132179Z /home/runner/work/_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config
+2026-11-05T17:14:29.6147688Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-ce1b3ec1\-cb2d\-49e7\-b0a4\-533a23d01b5f\.config
+2026-11-05T17:14:29.6178841Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-05T17:14:29.6198309Z /github/runner_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config
+2026-11-05T17:14:29.6205626Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-ce1b3ec1\-cb2d\-49e7\-b0a4\-533a23d01b5f\.config
+2026-11-05T17:14:29.6233185Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T17:14:29.6254544Z /github/runner_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config
+2026-11-05T17:14:29.6260513Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-ce1b3ec1\-cb2d\-49e7\-b0a4\-533a23d01b5f\.config
+2026-11-05T17:14:29.6295890Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-05T17:14:29.6546524Z Removing credentials config '/home/runner/work/_temp/git-credentials-ce1b3ec1-cb2d-49e7-b0a4-533a23d01b5f.config'
+2026-11-05T17:14:29.6699289Z Cleaning up orphan processes

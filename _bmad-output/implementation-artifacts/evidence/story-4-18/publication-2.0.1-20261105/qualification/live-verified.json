@@ -1,0 +1,11 @@
+{
+  "time_utc": "2026-11-05T17:59:57.619702+00:00",
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "run_id": 42072073153,
+  "artifact_id": 13439888870,
+  "archive_digest": "sha256:f8b3da541f55cca31b02e1bb3206f91282c05c375616ee7821b122f1390b58ba",
+  "vectors_passed": 21,
+  "independent_smoke_passed": 1,
+  "result": "passed",
+  "scope": "Authenticated original hosted artifact, exact approved coverage, all21 individual XML cases and independent smoke; CI itself also enforces phase/provenance/ownership cleanup receipts."
+}

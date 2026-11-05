@@ -1,0 +1,11 @@
+{
+  "scope": "Read-only availability; normal publication preflight is still required.",
+  "versions": {
+    "Hexalith.McpCli.Abstractions": [
+      "1.0.0",
+      "1.1.0",
+      "2.0.0"
+    ],
+    "Hexalith.McpCli": []
+  }
+}

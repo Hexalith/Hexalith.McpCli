@@ -1,0 +1,27 @@
+{
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "staging_run_id": 42080077255,
+  "identical_raw_discovery_bytes": true,
+  "platforms": {
+    "windows": {
+      "actual_suite_case_counts": {
+        "Hexalith.McpCli.Cli.Tests.xml": {
+          "Pass": 456,
+          "Skip": 31
+        },
+        "Hexalith.McpCli.Core.Tests.xml": {
+          "Pass": 732,
+          "Skip": 3
+        }
+      },
+      "capture_count": 49,
+      "required_windows_tests_passed": 7
+    },
+    "linux": {
+      "actual_suite_case_counts": {},
+      "capture_count": 49,
+      "required_windows_tests_passed": null
+    }
+  },
+  "scope": "Both platform smoke receipts match immutable source/package/preparation and49 raw captures match byte-for-byte; all7 mandatory Windows tests passed. Other suite skips remain recorded and are permitted by the platform contract."
+}

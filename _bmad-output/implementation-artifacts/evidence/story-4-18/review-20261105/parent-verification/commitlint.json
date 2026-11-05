@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "pinned_cli_version": "21.2.4",
+  "lock_version": "21.2.4",
+  "exit_code": 0,
+  "message_file": "commit-message.txt"
+}

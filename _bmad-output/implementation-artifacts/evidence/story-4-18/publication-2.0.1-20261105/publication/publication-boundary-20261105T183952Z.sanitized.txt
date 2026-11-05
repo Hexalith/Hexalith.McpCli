@@ -1,0 +1,690 @@
+﻿2026-11-05T18:18:10.6885970Z Current runner version: '2.338.2'
+2026-11-05T18:18:10.6912477Z ##[group]Runner Image Provisioner
+2026-11-05T18:18:10.6913440Z Hosted Compute Agent
+2026-11-05T18:18:10.6914073Z Version: 20261028.624
+2026-11-05T18:18:10.6914771Z Commit: 54898b74c23fde5556c9b3c3a2290865feef0dfe
+2026-11-05T18:18:10.6915529Z Build Date: 2026-10-28T21:51:42Z
+2026-11-05T18:18:10.6916207Z Worker ID: {1d0b9802-3832-4aaf-a93d-74245a72e8ad}
+2026-11-05T18:18:10.6916998Z Region: centralus
+2026-11-05T18:18:10.6917556Z Cloud: Azure
+2026-11-05T18:18:10.6918076Z ##[endgroup]
+2026-11-05T18:18:10.6919627Z ##[group]Operating System
+2026-11-05T18:18:10.6920678Z Ubuntu
+2026-11-05T18:18:10.6921281Z 26.04.1
+2026-11-05T18:18:10.6921845Z LTS
+2026-11-05T18:18:10.6922353Z ##[endgroup]
+2026-11-05T18:18:10.6922994Z ##[group]Runner Image
+2026-11-05T18:18:10.6923597Z Image: ubuntu-26.04
+2026-11-05T18:18:10.6924197Z Version: 20261101.186.1
+2026-11-05T18:18:10.6925586Z Included Software: https://github.com/actions/runner-images/blob/ubuntu26/20261101.186/images/ubuntu/Ubuntu2604-Readme.md
+2026-11-05T18:18:10.6927236Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu26%2F20261101.186
+2026-11-05T18:18:10.6928227Z ##[endgroup]
+2026-11-05T18:18:10.6929696Z ##[group]GITHUB_TOKEN Permissions
+2026-11-05T18:18:10.6932057Z Actions: read
+2026-11-05T18:18:10.6932742Z Contents: write
+2026-11-05T18:18:10.6933326Z Issues: write
+2026-11-05T18:18:10.6933868Z Metadata: read
+2026-11-05T18:18:10.6934512Z PullRequests: write
+2026-11-05T18:18:10.6935085Z ##[endgroup]
+2026-11-05T18:18:10.6937441Z Secret source: Actions
+2026-11-05T18:18:10.6938575Z Cache mode: write
+2026-11-05T18:18:10.6939553Z Prepare workflow directory
+2026-11-05T18:18:10.7386513Z Prepare all required actions
+2026-11-05T18:18:10.7464231Z Getting action download info
+2026-11-05T18:18:11.0703803Z Download action repository 'actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1' (SHA:3d3c42e5aac5ba805825da76410c181273ba90b1)
+2026-11-05T18:18:11.2523007Z Download action repository 'actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68' (SHA:a98b56852c35b8e3190ac28c8c2271da59106c68)
+2026-11-05T18:18:11.6558546Z Download action repository 'actions/setup-node@820762786026740c76f36085b0efc47a31fe5020' (SHA:820762786026740c76f36085b0efc47a31fe5020)
+2026-11-05T18:18:11.8398943Z Download action repository 'NuGet/login@8d196754b4036150537f80ac539e15c2f1028841' (SHA:8d196754b4036150537f80ac539e15c2f1028841)
+2026-11-05T18:18:12.1461812Z Download action repository 'actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9' (SHA:cf430e030ddbb5b0abf93d22962f4752f3646cd9)
+2026-11-05T18:18:12.3153034Z Complete job name: publish
+2026-11-05T18:18:12.4170705Z ##[group]Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+2026-11-05T18:18:12.4171992Z with:
+2026-11-05T18:18:12.4172684Z   ref: aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T18:18:12.4173396Z   fetch-depth: 0
+2026-11-05T18:18:12.4173970Z   submodules: false
+2026-11-05T18:18:12.4174585Z   repository: Hexalith/Hexalith.McpCli
+2026-11-05T18:18:12.4177960Z   token: ***
+2026-11-05T18:18:12.4178522Z   ssh-strict: true
+2026-11-05T18:18:12.4179213Z   ssh-user: git
+2026-11-05T18:18:12.4179845Z   persist-credentials: true
+2026-11-05T18:18:12.4180982Z   clean: true
+2026-11-05T18:18:12.4181932Z   sparse-checkout-cone-mode: true
+2026-11-05T18:18:12.4182941Z   fetch-tags: false
+2026-11-05T18:18:12.4183867Z   show-progress: true
+2026-11-05T18:18:12.4184781Z   lfs: false
+2026-11-05T18:18:12.4185765Z   set-safe-directory: true
+2026-11-05T18:18:12.4187262Z   allow-unsafe-pr-checkout: false
+2026-11-05T18:18:12.4189195Z ##[endgroup]
+2026-11-05T18:18:12.6970799Z Syncing repository: Hexalith/Hexalith.McpCli
+2026-11-05T18:18:12.6973931Z ##[group]Getting Git version info
+2026-11-05T18:18:12.6975457Z Working directory is '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli'
+2026-11-05T18:18:12.6977712Z [command]/usr/bin/git version
+2026-11-05T18:18:12.6996377Z git version 2.56.0
+2026-11-05T18:18:12.7056709Z ##[endgroup]
+2026-11-05T18:18:12.7208638Z Temporarily overriding HOME='/home/runner/work/_temp/d625e9d3-c0dc-4b66-8e30-c22e2f407947' before making global git config changes
+2026-11-05T18:18:12.7211721Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T18:18:12.7213875Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T18:18:12.7217329Z Deleting the contents of '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli'
+2026-11-05T18:18:12.7218687Z ##[group]Determining repository object format
+2026-11-05T18:18:12.7219707Z ##[endgroup]
+2026-11-05T18:18:12.7221858Z ##[group]Initializing the repository
+2026-11-05T18:18:12.7223382Z [command]/usr/bin/git init /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T18:18:12.7341675Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-11-05T18:18:12.7372084Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-11-05T18:18:12.7374416Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-11-05T18:18:12.7376412Z hint: call:
+2026-11-05T18:18:12.7377749Z hint:
+2026-11-05T18:18:12.7379276Z hint: 	git config --global init.defaultBranch <name>
+2026-11-05T18:18:12.7381500Z hint:
+2026-11-05T18:18:12.7383175Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-11-05T18:18:12.7385407Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-11-05T18:18:12.7387406Z hint:
+2026-11-05T18:18:12.7388894Z hint: 	git branch -m <name>
+2026-11-05T18:18:12.7390680Z hint:
+2026-11-05T18:18:12.7392620Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-11-05T18:18:12.7395332Z Initialized empty Git repository in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/
+2026-11-05T18:18:12.7399715Z [command]/usr/bin/git remote add origin https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T18:18:12.7454681Z ##[endgroup]
+2026-11-05T18:18:12.7456923Z ##[group]Disabling automatic garbage collection
+2026-11-05T18:18:12.7458913Z [command]/usr/bin/git config --local gc.auto 0
+2026-11-05T18:18:12.7533858Z ##[endgroup]
+2026-11-05T18:18:12.7535653Z ##[group]Setting up auth
+2026-11-05T18:18:12.7537226Z Removing SSH command configuration
+2026-11-05T18:18:12.7543477Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T18:18:12.7599567Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T18:18:12.8177891Z Removing HTTP extra header
+2026-11-05T18:18:12.8184658Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T18:18:12.8221220Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T18:18:12.8534413Z Removing includeIf entries pointing to credentials config files
+2026-11-05T18:18:12.8539768Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T18:18:12.8580867Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-05T18:18:12.8883914Z [command]/usr/bin/git config --file /home/runner/work/_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-11-05T18:18:12.8925529Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path /home/runner/work/_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config
+2026-11-05T18:18:12.8959128Z [command]/usr/bin/git config --local includeIf.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path /home/runner/work/_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config
+2026-11-05T18:18:12.8996918Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git.path /github/runner_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config
+2026-11-05T18:18:12.9040610Z [command]/usr/bin/git config --local includeIf.gitdir:/github/workspace/.git/worktrees/*.path /github/runner_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config
+2026-11-05T18:18:12.9077388Z ##[endgroup]
+2026-11-05T18:18:12.9078351Z ##[group]Fetching the repository
+2026-11-05T18:18:12.9084983Z [command]/usr/bin/git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-11-05T18:18:15.5587138Z From https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T18:18:15.5591198Z  * [new branch]      main       -> origin/main
+2026-11-05T18:18:15.5591868Z  * [new tag]         v1.0.0     -> v1.0.0
+2026-11-05T18:18:15.5592485Z  * [new tag]         v1.1.0     -> v1.1.0
+2026-11-05T18:18:15.5593236Z  * [new tag]         v2.0.0     -> v2.0.0
+2026-11-05T18:18:15.5601451Z [command]/usr/bin/git rev-parse --verify --quiet aa2845edbea23444a1d362060b8d0f5dc05a132e^{object}
+2026-11-05T18:18:15.5631873Z aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T18:18:15.5637696Z ##[endgroup]
+2026-11-05T18:18:15.5638770Z ##[group]Determining the checkout info
+2026-11-05T18:18:15.5644510Z ##[endgroup]
+2026-11-05T18:18:15.5645801Z [command]/usr/bin/git sparse-checkout disable
+2026-11-05T18:18:15.5703525Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-11-05T18:18:15.5735974Z ##[group]Checking out the ref
+2026-11-05T18:18:15.5739494Z [command]/usr/bin/git checkout --progress --force aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T18:18:16.5976708Z Updating files:  95% (15323/15983)
+2026-11-05T18:18:16.6153875Z Updating files:  96% (15344/15983)
+2026-11-05T18:18:16.6269517Z Updating files:  97% (15504/15983)
+2026-11-05T18:18:16.6370561Z Updating files:  98% (15664/15983)
+2026-11-05T18:18:16.6463772Z Updating files:  99% (15824/15983)
+2026-11-05T18:18:16.6464478Z Updating files: 100% (15983/15983)
+2026-11-05T18:18:16.6464942Z Updating files: 100% (15983/15983), done.
+2026-11-05T18:18:16.6655174Z Note: switching to 'aa2845edbea23444a1d362060b8d0f5dc05a132e'.
+2026-11-05T18:18:16.6655529Z 
+2026-11-05T18:18:16.6655889Z You are in 'detached HEAD' state. You can look around, make experimental
+2026-11-05T18:18:16.6656896Z changes and commit them, and you can discard any commits you make in this
+2026-11-05T18:18:16.6657794Z state without impacting any branches by switching back to a branch.
+2026-11-05T18:18:16.6658682Z 
+2026-11-05T18:18:16.6659069Z If you want to create a new branch to retain commits you create, you may
+2026-11-05T18:18:16.6659901Z do so (now or later) by using -c with the switch command. Example:
+2026-11-05T18:18:16.6660615Z 
+2026-11-05T18:18:16.6660809Z   git switch -c <new-branch-name>
+2026-11-05T18:18:16.6661119Z 
+2026-11-05T18:18:16.6661283Z Or undo this operation with:
+2026-11-05T18:18:16.6661627Z 
+2026-11-05T18:18:16.6661764Z   git switch -
+2026-11-05T18:18:16.6662013Z 
+2026-11-05T18:18:16.6662380Z Turn off this advice by setting config variable advice.detachedHead to false
+2026-11-05T18:18:16.6662925Z 
+2026-11-05T18:18:16.6663209Z HEAD is now at aa2845e docs: fix package-rendered cohort links
+2026-11-05T18:18:16.6749497Z ##[endgroup]
+2026-11-05T18:18:16.6753187Z [command]/usr/bin/git log -1 --format=%H
+2026-11-05T18:18:16.6779926Z aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T18:18:16.7004094Z ##[group]Run git submodule update --init -- references/Hexalith.Builds references/Hexalith.AI.Tools
+2026-11-05T18:18:16.7004928Z [36;1mgit submodule update --init -- references/Hexalith.Builds references/Hexalith.AI.Tools[0m
+2026-11-05T18:18:16.7057176Z shell: /usr/bin/bash -e {0}
+2026-11-05T18:18:16.7057461Z ##[endgroup]
+2026-11-05T18:18:16.7446884Z Submodule 'references/Hexalith.AI.Tools' (https://github.com/Hexalith/Hexalith.AI.Tools.git) registered for path 'references/Hexalith.AI.Tools'
+2026-11-05T18:18:16.7453076Z Submodule 'references/Hexalith.Builds' (https://github.com/Hexalith/Hexalith.Builds.git) registered for path 'references/Hexalith.Builds'
+2026-11-05T18:18:16.7489509Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.AI.Tools'...
+2026-11-05T18:18:17.2892996Z Cloning into '/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Builds'...
+2026-11-05T18:18:25.5854569Z Submodule path 'references/Hexalith.AI.Tools': checked out '1745b6663ad32bb1288167135ed0f979366c53a0'
+2026-11-05T18:18:25.8997950Z Submodule path 'references/Hexalith.Builds': checked out '06a51f55bfe2e03a06e1121d94a41e98f1e3e251'
+2026-11-05T18:18:25.9093223Z ##[group]Run actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+2026-11-05T18:18:25.9093647Z with:
+2026-11-05T18:18:25.9093855Z   global-json-file: global.json
+2026-11-05T18:18:25.9094104Z   cache: false
+2026-11-05T18:18:25.9094307Z ##[endgroup]
+2026-11-05T18:18:26.0577210Z [command]/home/runner/work/_actions/actions/setup-dotnet/a98b56852c35b8e3190ac28c8c2271da59106c68/externals/install-dotnet.sh --skip-non-versioned-files --runtime dotnet --channel LTS
+2026-11-05T18:18:26.4129752Z dotnet-install: .NET Core Runtime with version '10.0.14' is already installed.
+2026-11-05T18:18:26.4156604Z [command]/home/runner/work/_actions/actions/setup-dotnet/a98b56852c35b8e3190ac28c8c2271da59106c68/externals/install-dotnet.sh --skip-non-versioned-files --channel 10.0.4xx
+2026-11-05T18:18:26.6985614Z dotnet-install: .NET Core SDK with version '10.0.403' is already installed.
+2026-11-05T18:18:26.7197760Z ##[group]Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+2026-11-05T18:18:26.7198175Z with:
+2026-11-05T18:18:26.7198367Z   node-version: 24
+2026-11-05T18:18:26.7198582Z   check-latest: false
+2026-11-05T18:18:26.7201270Z   token: ***
+2026-11-05T18:18:26.7201497Z   package-manager-cache: true
+2026-11-05T18:18:26.7201738Z env:
+2026-11-05T18:18:26.7201932Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T18:18:26.7202196Z ##[endgroup]
+2026-11-05T18:18:26.8514386Z Found in cache @ /opt/hostedtoolcache/node/24.22.2/x64
+2026-11-05T18:18:26.8517847Z ##[group]Environment details
+2026-11-05T18:18:27.3168975Z node: v24.22.2
+2026-11-05T18:18:27.3169424Z npm: 11.19.1
+2026-11-05T18:18:27.3169727Z yarn: 1.22.22
+2026-11-05T18:18:27.3171356Z ##[endgroup]
+2026-11-05T18:18:27.3306379Z ##[group]Run npm ci
+2026-11-05T18:18:27.3306654Z [36;1mnpm ci[0m
+2026-11-05T18:18:27.3360831Z shell: /usr/bin/bash -e {0}
+2026-11-05T18:18:27.3361095Z env:
+2026-11-05T18:18:27.3361300Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T18:18:27.3361562Z ##[endgroup]
+2026-11-05T18:18:33.9158242Z 
+2026-11-05T18:18:33.9165581Z added 357 packages, and audited 501 packages in 7s
+2026-11-05T18:18:33.9166003Z 
+2026-11-05T18:18:33.9166285Z 106 packages are looking for funding
+2026-11-05T18:18:33.9166730Z   run `npm fund` for details
+2026-11-05T18:18:33.9965674Z 
+2026-11-05T18:18:33.9966952Z 38 vulnerabilities (37 moderate, 1 high)
+2026-11-05T18:18:33.9967655Z 
+2026-11-05T18:18:33.9968537Z To address issues that do not require attention, run:
+2026-11-05T18:18:33.9969182Z   npm audit fix
+2026-11-05T18:18:33.9969429Z 
+2026-11-05T18:18:33.9969935Z To address all issues (including breaking changes), run:
+2026-11-05T18:18:33.9970898Z   npm audit fix --force
+2026-11-05T18:18:33.9971188Z 
+2026-11-05T18:18:33.9971582Z Run `npm audit` for details.
+2026-11-05T18:18:34.0669382Z ##[group]Run python3 scripts/verify-release-source.py --output "$RUNNER_TEMP/release-source.json" -- "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"
+2026-11-05T18:18:34.0671125Z [36;1mpython3 scripts/verify-release-source.py --output "$RUNNER_TEMP/release-source.json" -- "$DISPATCH_SHA" "$DISPATCH_REF" "$MCPCLI_RELEASE_PHASE"[0m
+2026-11-05T18:18:34.0722595Z shell: /usr/bin/bash -e {0}
+2026-11-05T18:18:34.0722856Z env:
+2026-11-05T18:18:34.0723058Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T18:18:34.0725776Z   GH_TOKEN: ***
+2026-11-05T18:18:34.0726027Z   REPOSITORY: Hexalith/Hexalith.McpCli
+2026-11-05T18:18:34.0726559Z   DISPATCH_REF: refs/heads/main
+2026-11-05T18:18:34.0726862Z   DISPATCH_SHA: aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T18:18:34.0727196Z   MCPCLI_RELEASE_PHASE: paired
+2026-11-05T18:18:34.0727441Z   MCPCLI_RECOVERY_VERSION: 
+2026-11-05T18:18:34.0727671Z ##[endgroup]
+2026-11-05T18:18:38.5844397Z Verified ci.yml: https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42072073153
+2026-11-05T18:18:38.5845836Z Verified commitlint.yml: https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42072073252
+2026-11-05T18:18:38.5846830Z Verified current main source aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T18:18:38.5966897Z ##[group]Run python3 scripts/verify-paired-publication.py fetch --repository "$REPOSITORY" \
+2026-11-05T18:18:38.5967639Z [36;1mpython3 scripts/verify-paired-publication.py fetch --repository "$REPOSITORY" \[0m
+2026-11-05T18:18:38.5968396Z [36;1m  --staging-run "$MCPCLI_STAGING_RUN_ID" --source-sha "$DISPATCH_SHA" --candidate "$RUNNER_TEMP/paired-candidate"[0m
+2026-11-05T18:18:38.5969248Z [36;1mpython3 scripts/verify-paired-publication.py record-operator --output "$RUNNER_TEMP/operator-acceptance.json"[0m
+2026-11-05T18:18:38.6018431Z shell: /usr/bin/bash -e {0}
+2026-11-05T18:18:38.6018690Z env:
+2026-11-05T18:18:38.6018890Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T18:18:38.6021595Z   GH_TOKEN: ***
+2026-11-05T18:18:38.6021842Z   REPOSITORY: Hexalith/Hexalith.McpCli
+2026-11-05T18:18:38.6022185Z   DISPATCH_SHA: aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T18:18:38.6022525Z   MCPCLI_STAGING_RUN_ID: 42080077255
+2026-11-05T18:18:38.6025539Z   OPERATOR_ACCEPTANCE: {"schema":"mcpcli-paired-automated-acceptance/v1","decision":"approved","authorization":"user-requested-human-validation-bypass","approved_by":"jpiquot","decided_at_utc":"2026-11-05T18:12:04.483257+00:00","staging_run_id":42080077255,"source_sha":"aa2845edbea23444a1d362060b8d0f5dc05a132e","version":"2.0.1","packages":{"Hexalith.McpCli.2.0.1.nupkg":"7ed0f79f0ee4b92abf54d65900ba48b5bab9c257f5eaf6596401f410d6c8ec7f","Hexalith.McpCli.Abstractions.2.0.1.nupkg":"8a5bdce50d81309ad65cff680276378de214cadf4a04076fcdb550d787af46e3"},"preparation_sha256":"7d948b7882d5cc9773d3b7e7921027be1810895b454d3b446772551b64a3ebe6","acceptance_sha256":"83796066d6ec59af0f87aba05138fd317be6ff7e1ded2488fd13c464c058ade7","readme_sha256":"17f88b9047b5b1061d925e1b866cb64d7dd3857c71037ebbaa53b1711c00ebac"}
+2026-11-05T18:18:38.6028500Z ##[endgroup]
+2026-11-05T18:18:42.8717575Z ##[group]Run NuGet/login@8d196754b4036150537f80ac539e15c2f1028841
+2026-11-05T18:18:42.8717963Z with:
+2026-11-05T18:18:42.8718159Z   user: jpiquot
+2026-11-05T18:18:42.8718444Z   token-service-url: https://www.nuget.org/api/v2/token
+2026-11-05T18:18:42.8718800Z   audience: https://www.nuget.org
+2026-11-05T18:18:42.8719048Z env:
+2026-11-05T18:18:42.8719241Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T18:18:42.8719487Z ##[endgroup]
+2026-11-05T18:18:44.9129131Z Successfully exchanged OIDC token for NuGet API key.
+2026-11-05T18:18:44.9278560Z ##[group]Run npx --no-install semantic-release
+2026-11-05T18:18:44.9278960Z [36;1mnpx --no-install semantic-release[0m
+2026-11-05T18:18:44.9328156Z shell: /usr/bin/bash -e {0}
+2026-11-05T18:18:44.9328415Z env:
+2026-11-05T18:18:44.9328632Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T18:18:44.9331424Z   GITHUB_TOKEN: ***
+2026-11-05T18:18:44.9333759Z   GH_TOKEN: ***
+2026-11-05T18:18:44.9334000Z   REPOSITORY: Hexalith/Hexalith.McpCli
+2026-11-05T18:18:44.9334289Z   DISPATCH_REF: refs/heads/main
+2026-11-05T18:18:44.9334592Z   DISPATCH_SHA: aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T18:18:44.9335186Z   NUGET_API_KEY: ***
+2026-11-05T18:18:44.9335420Z   MCPCLI_RELEASE_PHASE: paired
+2026-11-05T18:18:44.9335677Z   MCPCLI_STAGING_RUN_ID: 42080077255
+2026-11-05T18:18:44.9336039Z   MCPCLI_PAIRED_CANDIDATE: /home/runner/work/_temp/paired-candidate
+2026-11-05T18:18:44.9336535Z   MCPCLI_OPERATOR_ACCEPTANCE: /home/runner/work/_temp/operator-acceptance.json
+2026-11-05T18:18:44.9337098Z   MCPCLI_PAIRED_PREFLIGHT: /home/runner/work/_temp/paired-preflight.json
+2026-11-05T18:18:44.9337691Z ##[endgroup]
+2026-11-05T18:18:45.7664937Z [6:18:45 PM] [semantic-release] › ℹ  Running semantic-release version 25.0.9
+2026-11-05T18:18:45.9484873Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "verifyConditions" from "@semantic-release/exec"
+2026-11-05T18:18:45.9486779Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "verifyConditions" from "@semantic-release/github"
+2026-11-05T18:18:45.9493059Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "@semantic-release/commit-analyzer"
+2026-11-05T18:18:45.9495615Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "analyzeCommits" from "@semantic-release/exec"
+2026-11-05T18:18:45.9497794Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "verifyRelease" from "@semantic-release/exec"
+2026-11-05T18:18:45.9500339Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "generateNotes" from "@semantic-release/release-notes-generator"
+2026-11-05T18:18:45.9502898Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "generateNotes" from "@semantic-release/exec"
+2026-11-05T18:18:45.9505118Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "prepare" from "@semantic-release/exec"
+2026-11-05T18:18:45.9508204Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "publish" from "@semantic-release/exec"
+2026-11-05T18:18:45.9509949Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "publish" from "@semantic-release/github"
+2026-11-05T18:18:45.9513145Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "addChannel" from "@semantic-release/exec"
+2026-11-05T18:18:45.9515041Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "addChannel" from "@semantic-release/github"
+2026-11-05T18:18:45.9517024Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "success" from "@semantic-release/exec"
+2026-11-05T18:18:45.9518859Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "success" from "@semantic-release/github"
+2026-11-05T18:18:45.9521070Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "fail" from "@semantic-release/exec"
+2026-11-05T18:18:45.9522858Z [6:18:45 PM] [semantic-release] › ✔  Loaded plugin "fail" from "@semantic-release/github"
+2026-11-05T18:18:47.4632913Z [6:18:47 PM] [semantic-release] › ✔  Run automated release from branch main on repository https://github.com/Hexalith/Hexalith.McpCli
+2026-11-05T18:18:47.7740910Z [6:18:47 PM] [semantic-release] › ✔  Allowed to push to the Git repository
+2026-11-05T18:18:47.7762229Z [6:18:47 PM] [semantic-release] › ℹ  Start step "verifyConditions" of plugin "@semantic-release/exec"
+2026-11-05T18:18:47.7764445Z [6:18:47 PM] [semantic-release] › ✔  Completed step "verifyConditions" of plugin "@semantic-release/exec"
+2026-11-05T18:18:47.7766602Z [6:18:47 PM] [semantic-release] › ℹ  Start step "verifyConditions" of plugin "@semantic-release/github"
+2026-11-05T18:18:47.7781079Z [6:18:47 PM] [semantic-release] [@semantic-release/github] › ℹ  Verify GitHub authentication (https://api.github.com)
+2026-11-05T18:18:48.2436834Z [6:18:48 PM] [semantic-release] › ✔  Completed step "verifyConditions" of plugin "@semantic-release/github"
+2026-11-05T18:18:48.2532315Z [6:18:48 PM] [semantic-release] › ℹ  Found git tag v2.0.0 associated with version 2.0.0 on branch main
+2026-11-05T18:18:48.2665935Z [6:18:48 PM] [semantic-release] › ℹ  Found 49 commits since last release
+2026-11-05T18:18:48.2674664Z [6:18:48 PM] [semantic-release] › ℹ  Start step "analyzeCommits" of plugin "@semantic-release/commit-analyzer"
+2026-11-05T18:18:48.2891745Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: docs: fix package-rendered cohort links
+2026-11-05T18:18:48.2892961Z 
+2026-11-05T18:18:48.2893719Z Use absolute GitHub URLs for the artifact approval and runtime guide.
+2026-11-05T18:18:48.2895247Z Require new source qualification and staged README scans before acceptance.
+2026-11-05T18:18:48.2899065Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.2911002Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): enable long paths before Windows checkout
+2026-11-05T18:18:48.2912375Z 
+2026-11-05T18:18:48.2913267Z Preserve the captured evidence while allowing its full paths on the disposable runner.
+2026-11-05T18:18:48.2914786Z Require fresh source and three-platform acceptance for the next immutable pair.
+2026-11-05T18:18:48.2916705Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.2919046Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: test: retain gateway startup failure diagnostics
+2026-11-05T18:18:48.2920460Z 
+2026-11-05T18:18:48.2921182Z Preserve the readiness bound and actual boundary assertions.
+2026-11-05T18:18:48.2922546Z Capture sanitized child output and HTTP/process state when initialization fails.
+2026-11-05T18:18:48.2924292Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.2926661Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(deps): qualify the public SDK 4.1 cohort
+2026-11-05T18:18:48.2927896Z 
+2026-11-05T18:18:48.2928695Z Bind the signed Tenants 7.0.4 archives and qualified owner sources.
+2026-11-05T18:18:48.2931492Z Preserve enrolled operations and wire while retaining native equality evidence.
+2026-11-05T18:18:48.2933507Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.2935857Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): align approved workflow pins with Builds
+2026-11-05T18:18:48.2938089Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.2956917Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: build(deps): sync EventStore reference with main
+2026-11-05T18:18:48.2962515Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.2966385Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: build: sync local changes via /pushall
+2026-11-05T18:18:48.2968574Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.2971060Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): provide smoke writer bootstrap evidence path
+2026-11-05T18:18:48.2973428Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.2975752Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): align Builds revision with shared workflows
+2026-11-05T18:18:48.2978261Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.2980749Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): preserve compiler policy in native rebuilds
+2026-11-05T18:18:48.2982957Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.2985280Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): use corrected shared Dapr initialization
+2026-11-05T18:18:48.2993404Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.2995873Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: docs(release): retain story 4.18 qualification handoff
+2026-11-05T18:18:48.2998111Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3001020Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: build: merge refs/remotes/origin/main into main via /pushall
+2026-11-05T18:18:48.3003364Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3005724Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: build: merge refs/remotes/origin/main into main via /pushall
+2026-11-05T18:18:48.3006862Z 
+2026-11-05T18:18:48.3007184Z # Conflicts:
+2026-11-05T18:18:48.3007790Z #	Directory.Build.props
+2026-11-05T18:18:48.3008756Z #	src/Hexalith.McpCli.Abstractions/HexalithCommandAttribute.cs
+2026-11-05T18:18:48.3009879Z #	src/Hexalith.McpCli.Abstractions/HexalithQueryAttribute.cs
+2026-11-05T18:18:48.3011087Z #	src/Hexalith.McpCli.Core/Catalog/RoutingResolver.cs
+2026-11-05T18:18:48.3016325Z #	tests/Hexalith.McpCli.Cli.Tests/PlatformScopeCommandTests.cs
+2026-11-05T18:18:48.3021669Z #	tests/Hexalith.McpCli.Core.Tests/PlatformScopeTests.cs
+2026-11-05T18:18:48.3023566Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3027929Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix: story 4.18
+2026-11-05T18:18:48.3030228Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3032544Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): allow root submodule checkout to finish
+2026-11-05T18:18:48.3034729Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3037258Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: build: sync submodules to upstream main
+2026-11-05T18:18:48.3038362Z 
+2026-11-05T18:18:48.3039144Z Fast-forward EventStore, Parties, Tenants, Platform, FrontComposer, and
+2026-11-05T18:18:48.3040334Z Timesheets to their origin/main tips.
+2026-11-05T18:18:48.3040849Z 
+2026-11-05T18:18:48.3041451Z Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+2026-11-05T18:18:48.3043141Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3045406Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): accept NuGet empty asset placeholders
+2026-11-05T18:18:48.3047426Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3049378Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): align Builds workflow pins with gitlink
+2026-11-05T18:18:48.3052153Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3054657Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: build: sync local changes via /pushall
+2026-11-05T18:18:48.3055986Z 
+2026-11-05T18:18:48.3056824Z Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
+2026-11-05T18:18:48.3058957Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3061922Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): enforce native audit warnings as errors
+2026-11-05T18:18:48.3063301Z 
+2026-11-05T18:18:48.3064180Z Clear inherited warning downgrades for native qualification builds.
+2026-11-05T18:18:48.3065834Z Keep the reader audit policy strict and cover the pinned owner override.
+2026-11-05T18:18:48.3067821Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3069791Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix: submodules
+2026-11-05T18:18:48.3072248Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3074642Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(runtime): preserve declared query selector wire fields
+2026-11-05T18:18:48.3077001Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3079326Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: build: merge published administrator fixture changes
+2026-11-05T18:18:48.3081751Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3084239Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(runtime): bind native requests to audited catalog authority
+2026-11-05T18:18:48.3086581Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3089159Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: test(topology): assert live administrator role for tenant commands
+2026-11-05T18:18:48.3091766Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3094255Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: test(topology): retain catalog refusal reasons in package gateway
+2026-11-05T18:18:48.3096575Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3099055Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): keep native catalog reader independent of advisory feed
+2026-11-05T18:18:48.3101546Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3104530Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): accept gateway readback without owner executable digest
+2026-11-05T18:18:48.3106824Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3109215Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: test(topology): check native project launch preconditions
+2026-11-05T18:18:48.3111769Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3114590Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): prepare Tenants from unsuppressed source project
+2026-11-05T18:18:48.3117133Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3119649Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: test(topology): cover native Development environment selection
+2026-11-05T18:18:48.3122253Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3124677Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): select Development for native catalog tests
+2026-11-05T18:18:48.3126953Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3129440Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): retain verified native preparation evidence
+2026-11-05T18:18:48.3131904Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3134574Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): refuse nested catalogs during source selection
+2026-11-05T18:18:48.3136927Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3139374Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): verify adapter archives without copy-local DLLs
+2026-11-05T18:18:48.3141574Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3143000Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: docs(evidence): record public Tenants 7.0.0 archive verification
+2026-11-05T18:18:48.3145228Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3147942Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): carry pinned catalog through Aspire rebuilds
+2026-11-05T18:18:48.3150429Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3152953Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: test(topology): bind source failure diagnostics to catalog overlay
+2026-11-05T18:18:48.3156042Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3158608Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(ci): pin commitlint workflow to current Builds catalog
+2026-11-05T18:18:48.3160918Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3162514Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): align qualified source hosts with Redis floor
+2026-11-05T18:18:48.3164786Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3166537Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): align Tenants and Builds with EventStore 4.0.4
+2026-11-05T18:18:48.3167823Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3169070Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(deps): align Redis with EventStore 4.0.4
+2026-11-05T18:18:48.3170719Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3173628Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(topology): qualify canonical EventStore and Tenants runtime
+2026-11-05T18:18:48.3175944Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3178153Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(release): select a fresh pair after the bootstrap
+2026-11-05T18:18:48.3180715Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3182979Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: build(merge): merge package vector receipt branch into main
+2026-11-05T18:18:48.3184166Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3185391Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: feat(scopes)!: support canonical platform request scopes
+2026-11-05T18:18:48.3186538Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3192884Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: fix(build): retain topology test harness for package mode
+2026-11-05T18:18:48.3194118Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The release type for the commit is patch
+2026-11-05T18:18:48.3195538Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analyzing commit: chore(vectors): record committed Tenants candidate provenance
+2026-11-05T18:18:48.3197636Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  The commit should not trigger a release
+2026-11-05T18:18:48.3199526Z [6:18:48 PM] [semantic-release] [@semantic-release/commit-analyzer] › ℹ  Analysis of 49 commits complete: patch release
+2026-11-05T18:18:48.3201634Z [6:18:48 PM] [semantic-release] › ✔  Completed step "analyzeCommits" of plugin "@semantic-release/commit-analyzer"
+2026-11-05T18:18:48.3203358Z [6:18:48 PM] [semantic-release] › ℹ  Start step "analyzeCommits" of plugin "@semantic-release/exec"
+2026-11-05T18:18:48.3204997Z [6:18:48 PM] [semantic-release] › ✔  Completed step "analyzeCommits" of plugin "@semantic-release/exec"
+2026-11-05T18:18:48.3206321Z [6:18:48 PM] [semantic-release] › ℹ  The next release version is 2.0.1
+2026-11-05T18:18:48.3207701Z [6:18:48 PM] [semantic-release] › ℹ  Start step "verifyRelease" of plugin "@semantic-release/exec"
+2026-11-05T18:18:48.3208745Z [6:18:48 PM] [semantic-release] [@semantic-release/exec] › ℹ  Call script bash scripts/release-preflight.sh 2.0.1
+2026-11-05T18:18:53.2796944Z [6:18:53 PM] [semantic-release] › ✔  Completed step "verifyRelease" of plugin "@semantic-release/exec"
+2026-11-05T18:18:53.2798358Z [6:18:53 PM] [semantic-release] › ℹ  Start step "generateNotes" of plugin "@semantic-release/release-notes-generator"
+2026-11-05T18:18:53.3273619Z [6:18:53 PM] [semantic-release] › ✔  Completed step "generateNotes" of plugin "@semantic-release/release-notes-generator"
+2026-11-05T18:18:53.3274898Z [6:18:53 PM] [semantic-release] › ℹ  Start step "generateNotes" of plugin "@semantic-release/exec"
+2026-11-05T18:18:53.3289206Z [6:18:53 PM] [semantic-release] › ✔  Completed step "generateNotes" of plugin "@semantic-release/exec"
+2026-11-05T18:18:53.3299459Z [6:18:53 PM] [semantic-release] › ℹ  Start step "prepare" of plugin "@semantic-release/exec"
+2026-11-05T18:18:53.3315471Z [6:18:53 PM] [semantic-release] [@semantic-release/exec] › ℹ  Call script bash scripts/release-prepare.sh 2.0.1 --verify-source
+2026-11-05T18:18:58.1840988Z [6:18:58 PM] [semantic-release] › ✔  Completed step "prepare" of plugin "@semantic-release/exec"
+2026-11-05T18:19:00.3397101Z [6:19:00 PM] [semantic-release] › ✔  Created tag v2.0.1
+2026-11-05T18:19:00.3398558Z [6:19:00 PM] [semantic-release] › ℹ  Start step "publish" of plugin "@semantic-release/exec"
+2026-11-05T18:19:00.3419199Z [6:19:00 PM] [semantic-release] [@semantic-release/exec] › ℹ  Call script bash scripts/release-publish.sh 2.0.1
+2026-11-05T18:19:14.1746340Z Waiting for the pushed package to become public (1/91).
+2026-11-05T18:19:24.2704644Z Waiting for the pushed package to become public (2/91).
+2026-11-05T18:19:34.3106873Z Waiting for the pushed package to become public (3/91).
+2026-11-05T18:19:44.3569808Z Waiting for the pushed package to become public (4/91).
+2026-11-05T18:19:54.4081554Z Waiting for the pushed package to become public (5/91).
+2026-11-05T18:20:04.4399235Z Waiting for the pushed package to become public (6/91).
+2026-11-05T18:20:14.4832019Z Waiting for the pushed package to become public (7/91).
+2026-11-05T18:20:24.5175800Z Waiting for the pushed package to become public (8/91).
+2026-11-05T18:20:34.5457817Z Waiting for the pushed package to become public (9/91).
+2026-11-05T18:20:44.5761448Z Waiting for the pushed package to become public (10/91).
+2026-11-05T18:20:54.6077601Z Waiting for the pushed package to become public (11/91).
+2026-11-05T18:21:04.6457387Z Waiting for the pushed package to become public (12/91).
+2026-11-05T18:21:14.6979566Z Waiting for the pushed package to become public (13/91).
+2026-11-05T18:21:24.7318887Z Waiting for the pushed package to become public (14/91).
+2026-11-05T18:21:34.7613811Z Waiting for the pushed package to become public (15/91).
+2026-11-05T18:21:44.7962908Z Waiting for the pushed package to become public (16/91).
+2026-11-05T18:21:54.8321189Z Waiting for the pushed package to become public (17/91).
+2026-11-05T18:22:04.8642106Z Waiting for the pushed package to become public (18/91).
+2026-11-05T18:22:14.8918588Z Waiting for the pushed package to become public (19/91).
+2026-11-05T18:22:24.9254971Z Waiting for the pushed package to become public (20/91).
+2026-11-05T18:22:34.9871103Z Waiting for the pushed package to become public (21/91).
+2026-11-05T18:22:45.0122450Z Waiting for the pushed package to become public (22/91).
+2026-11-05T18:22:55.0401148Z Waiting for the pushed package to become public (23/91).
+2026-11-05T18:23:05.0764323Z Waiting for the pushed package to become public (24/91).
+2026-11-05T18:23:15.1485942Z Waiting for the pushed package to become public (25/91).
+2026-11-05T18:23:25.1745041Z Waiting for the pushed package to become public (26/91).
+2026-11-05T18:23:35.1998267Z Waiting for the pushed package to become public (27/91).
+2026-11-05T18:23:45.2375979Z Waiting for the pushed package to become public (28/91).
+2026-11-05T18:23:55.2904173Z Waiting for the pushed package to become public (29/91).
+2026-11-05T18:24:05.3267557Z Waiting for the pushed package to become public (30/91).
+2026-11-05T18:24:15.4326903Z Waiting for the pushed package to become public (31/91).
+2026-11-05T18:24:25.4575838Z Waiting for the pushed package to become public (32/91).
+2026-11-05T18:24:35.5257180Z Waiting for the pushed package to become public (33/91).
+2026-11-05T18:24:45.5498837Z Waiting for the pushed package to become public (34/91).
+2026-11-05T18:24:55.5765126Z Waiting for the pushed package to become public (35/91).
+2026-11-05T18:25:05.6698421Z Waiting for the pushed package to become public (36/91).
+2026-11-05T18:25:15.7008728Z Waiting for the pushed package to become public (37/91).
+2026-11-05T18:25:25.7316044Z Waiting for the pushed package to become public (38/91).
+2026-11-05T18:25:35.7567270Z Waiting for the pushed package to become public (39/91).
+2026-11-05T18:25:45.7829844Z Waiting for the pushed package to become public (40/91).
+2026-11-05T18:25:55.8091428Z Waiting for the pushed package to become public (41/91).
+2026-11-05T18:26:05.8323480Z Waiting for the pushed package to become public (42/91).
+2026-11-05T18:26:15.8597561Z Waiting for the pushed package to become public (43/91).
+2026-11-05T18:26:25.8865552Z Waiting for the pushed package to become public (44/91).
+2026-11-05T18:26:35.9138262Z Waiting for the pushed package to become public (45/91).
+2026-11-05T18:26:45.9476930Z Waiting for the pushed package to become public (46/91).
+2026-11-05T18:26:55.9778714Z Waiting for the pushed package to become public (47/91).
+2026-11-05T18:27:06.0038026Z Waiting for the pushed package to become public (48/91).
+2026-11-05T18:27:16.0294012Z Waiting for the pushed package to become public (49/91).
+2026-11-05T18:27:32.9379358Z Waiting for the pushed package to become public (1/91).
+2026-11-05T18:27:42.9679964Z Waiting for the pushed package to become public (2/91).
+2026-11-05T18:27:52.9996884Z Waiting for the pushed package to become public (3/91).
+2026-11-05T18:28:03.0369144Z Waiting for the pushed package to become public (4/91).
+2026-11-05T18:28:13.1847925Z Waiting for the pushed package to become public (5/91).
+2026-11-05T18:28:23.2371539Z Waiting for the pushed package to become public (6/91).
+2026-11-05T18:28:33.2679266Z Waiting for the pushed package to become public (7/91).
+2026-11-05T18:28:43.2998375Z Waiting for the pushed package to become public (8/91).
+2026-11-05T18:28:53.3292483Z Waiting for the pushed package to become public (9/91).
+2026-11-05T18:29:03.3597807Z Waiting for the pushed package to become public (10/91).
+2026-11-05T18:29:13.3930766Z Waiting for the pushed package to become public (11/91).
+2026-11-05T18:29:23.4322265Z Waiting for the pushed package to become public (12/91).
+2026-11-05T18:29:33.8059683Z Waiting for the pushed package to become public (13/91).
+2026-11-05T18:29:43.8619402Z Waiting for the pushed package to become public (14/91).
+2026-11-05T18:29:53.9032550Z Waiting for the pushed package to become public (15/91).
+2026-11-05T18:30:03.9449803Z Waiting for the pushed package to become public (16/91).
+2026-11-05T18:30:14.0598967Z Waiting for the pushed package to become public (17/91).
+2026-11-05T18:30:24.1057773Z Waiting for the pushed package to become public (18/91).
+2026-11-05T18:30:34.1447164Z Waiting for the pushed package to become public (19/91).
+2026-11-05T18:30:44.1910457Z Waiting for the pushed package to become public (20/91).
+2026-11-05T18:30:54.2181077Z Waiting for the pushed package to become public (21/91).
+2026-11-05T18:31:04.2492490Z Waiting for the pushed package to become public (22/91).
+2026-11-05T18:31:14.2789521Z Waiting for the pushed package to become public (23/91).
+2026-11-05T18:31:24.3421265Z Waiting for the pushed package to become public (24/91).
+2026-11-05T18:31:34.3786493Z Waiting for the pushed package to become public (25/91).
+2026-11-05T18:31:44.4043545Z Waiting for the pushed package to become public (26/91).
+2026-11-05T18:31:54.4396771Z Waiting for the pushed package to become public (27/91).
+2026-11-05T18:32:04.4794034Z Waiting for the pushed package to become public (28/91).
+2026-11-05T18:32:14.5051336Z Waiting for the pushed package to become public (29/91).
+2026-11-05T18:32:24.5385033Z Waiting for the pushed package to become public (30/91).
+2026-11-05T18:32:34.5659034Z Waiting for the pushed package to become public (31/91).
+2026-11-05T18:32:44.5920816Z Waiting for the pushed package to become public (32/91).
+2026-11-05T18:32:54.6319647Z Waiting for the pushed package to become public (33/91).
+2026-11-05T18:33:04.6727739Z Waiting for the pushed package to become public (34/91).
+2026-11-05T18:33:15.5822717Z Waiting for the pushed package to become public (35/91).
+2026-11-05T18:33:25.6116927Z Waiting for the pushed package to become public (36/91).
+2026-11-05T18:33:35.6398907Z Waiting for the pushed package to become public (37/91).
+2026-11-05T18:33:45.6723063Z Waiting for the pushed package to become public (38/91).
+2026-11-05T18:33:55.7072406Z Waiting for the pushed package to become public (39/91).
+2026-11-05T18:34:05.7343975Z Waiting for the pushed package to become public (40/91).
+2026-11-05T18:34:15.7687485Z Waiting for the pushed package to become public (41/91).
+2026-11-05T18:34:25.7945325Z Waiting for the pushed package to become public (42/91).
+2026-11-05T18:34:36.6249033Z Waiting for the pushed package to become public (43/91).
+2026-11-05T18:34:46.6598304Z Waiting for the pushed package to become public (44/91).
+2026-11-05T18:34:58.0053660Z Waiting for the pushed package to become public (45/91).
+2026-11-05T18:35:08.0441761Z Waiting for the pushed package to become public (46/91).
+2026-11-05T18:35:18.0772907Z Waiting for the pushed package to become public (47/91).
+2026-11-05T18:35:28.1057498Z Waiting for the pushed package to become public (48/91).
+2026-11-05T18:35:38.1342570Z Waiting for the pushed package to become public (49/91).
+2026-11-05T18:35:48.1704782Z Waiting for the pushed package to become public (50/91).
+2026-11-05T18:35:58.1988483Z Waiting for the pushed package to become public (51/91).
+2026-11-05T18:36:08.2263260Z Waiting for the pushed package to become public (52/91).
+2026-11-05T18:36:18.2696069Z Waiting for the pushed package to become public (53/91).
+2026-11-05T18:36:28.3041437Z Waiting for the pushed package to become public (54/91).
+2026-11-05T18:36:38.3373381Z Waiting for the pushed package to become public (55/91).
+2026-11-05T18:36:48.3720296Z Waiting for the pushed package to become public (56/91).
+2026-11-05T18:36:58.4178927Z Waiting for the pushed package to become public (57/91).
+2026-11-05T18:37:08.4427280Z Waiting for the pushed package to become public (58/91).
+2026-11-05T18:37:18.4707310Z Waiting for the pushed package to become public (59/91).
+2026-11-05T18:37:28.4940661Z Waiting for the pushed package to become public (60/91).
+2026-11-05T18:37:38.5223159Z Waiting for the pushed package to become public (61/91).
+2026-11-05T18:37:48.5762725Z Waiting for the pushed package to become public (62/91).
+2026-11-05T18:37:58.6016924Z Waiting for the pushed package to become public (63/91).
+2026-11-05T18:38:08.6255242Z Waiting for the pushed package to become public (64/91).
+2026-11-05T18:38:18.6606638Z Waiting for the pushed package to become public (65/91).
+2026-11-05T18:38:28.6924058Z Waiting for the pushed package to become public (66/91).
+2026-11-05T18:38:38.7190266Z Waiting for the pushed package to become public (67/91).
+2026-11-05T18:38:48.7490480Z Waiting for the pushed package to become public (68/91).
+2026-11-05T18:38:58.7847025Z Waiting for the pushed package to become public (69/91).
+2026-11-05T18:39:08.8989124Z Waiting for the pushed package to become public (70/91).
+2026-11-05T18:39:18.9264647Z Waiting for the pushed package to become public (71/91).
+2026-11-05T18:39:29.1949798Z [6:39:29 PM] [semantic-release] › ✔  Completed step "publish" of plugin "@semantic-release/exec"
+2026-11-05T18:39:29.1951667Z [6:39:29 PM] [semantic-release] › ℹ  Start step "publish" of plugin "@semantic-release/github"
+2026-11-05T18:39:29.9402868Z [6:39:29 PM] [semantic-release] [@semantic-release/github] › ✘  The asset nupkgs/bootstrap/*.nupkg cannot be read, and will be ignored.
+2026-11-05T18:39:31.2659669Z [6:39:31 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/Hexalith.McpCli.Abstractions.2.0.1.nupkg
+2026-11-05T18:39:32.0285761Z [6:39:32 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/preflight.json
+2026-11-05T18:39:33.0238486Z [6:39:33 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/1-public-verification.json
+2026-11-05T18:39:33.8576042Z [6:39:33 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/1-push-intent.json
+2026-11-05T18:39:35.0716240Z [6:39:35 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/1-push-result.json
+2026-11-05T18:39:35.8151819Z [6:39:35 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/2-push-intent.json
+2026-11-05T18:39:36.8996043Z [6:39:36 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/2-public-verification.json
+2026-11-05T18:39:37.9255496Z [6:39:37 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/2-push-result.json
+2026-11-05T18:39:39.0079722Z [6:39:39 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/before-push-1.json
+2026-11-05T18:39:39.9583394Z [6:39:39 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/before-push-2.json
+2026-11-05T18:39:40.9721253Z [6:39:40 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/outcome.json
+2026-11-05T18:39:41.8749309Z [6:39:41 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/publication-started.json
+2026-11-05T18:39:42.9156917Z [6:39:42 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/snapshot-preflight.json
+2026-11-05T18:39:44.3008738Z [6:39:44 PM] [semantic-release] [@semantic-release/github] › ℹ  Published file https://github.com/Hexalith/Hexalith.McpCli/releases/download/untagged-60034cb96a3b37ebb505/Hexalith.McpCli.2.0.1.nupkg
+2026-11-05T18:39:44.9393276Z [6:39:44 PM] [semantic-release] [@semantic-release/github] › ℹ  Published GitHub release: https://github.com/Hexalith/Hexalith.McpCli/releases/tag/v2.0.1
+2026-11-05T18:39:44.9394904Z [6:39:44 PM] [semantic-release] › ✔  Completed step "publish" of plugin "@semantic-release/github"
+2026-11-05T18:39:44.9403056Z [6:39:44 PM] [semantic-release] › ℹ  Start step "success" of plugin "@semantic-release/exec"
+2026-11-05T18:39:44.9418609Z [6:39:44 PM] [semantic-release] › ✔  Completed step "success" of plugin "@semantic-release/exec"
+2026-11-05T18:39:44.9419755Z [6:39:44 PM] [semantic-release] › ℹ  Start step "success" of plugin "@semantic-release/github"
+2026-11-05T18:39:45.2064847Z [6:39:45 PM] [semantic-release] [@semantic-release/github] › ℹ  Skip commenting on issues and pull requests.
+2026-11-05T18:39:45.5783410Z [6:39:45 PM] [semantic-release] › ✔  Completed step "success" of plugin "@semantic-release/github"
+2026-11-05T18:39:45.5784524Z [6:39:45 PM] [semantic-release] › ✔  Published release 2.0.1 on default channel
+2026-11-05T18:39:45.6111759Z ##[group]Run python3 - <<'PYTHON'
+2026-11-05T18:39:45.6112119Z [36;1mpython3 - <<'PYTHON'[0m
+2026-11-05T18:39:45.6112408Z [36;1mimport json, os[0m
+2026-11-05T18:39:45.6112666Z [36;1mfrom pathlib import Path[0m
+2026-11-05T18:39:45.6113028Z [36;1mpath = Path('nupkgs/paired-publication/outcome.json')[0m
+2026-11-05T18:39:45.6113521Z [36;1moutcome = json.loads(path.read_text()) if path.is_file() else {}[0m
+2026-11-05T18:39:45.6114032Z [36;1mvalid = (outcome.get('status') == 'paired-public-verified'[0m
+2026-11-05T18:39:45.6114500Z [36;1m         and outcome.get('source_sha') == os.environ['DISPATCH_SHA'][0m
+2026-11-05T18:39:45.6115014Z [36;1m         and str(outcome.get('staging_run_id')) == os.environ['MCPCLI_STAGING_RUN_ID'][0m
+2026-11-05T18:39:45.6115617Z [36;1m         and set(outcome.get('packages', {})) == {'Hexalith.McpCli.Abstractions', 'Hexalith.McpCli'}[0m
+2026-11-05T18:39:45.6116305Z [36;1m         and all(item.get('status') == 'public-verified' for item in outcome['packages'].values()))[0m
+2026-11-05T18:39:45.6116848Z [36;1mreceipt = {'status': 'passed' if valid else 'refused',[0m
+2026-11-05T18:39:45.6117631Z [36;1m           'reason': 'Both public packages verified' if valid else 'Paired publication produced no complete public-pair verification; no-release is not publication'}[0m
+2026-11-05T18:39:45.6118633Z [36;1mPath(os.environ['RUNNER_TEMP'], 'paired-publication-completion.json').write_text(json.dumps(receipt, indent=2) + '\n')[0m
+2026-11-05T18:39:45.6119215Z [36;1mif not valid:[0m
+2026-11-05T18:39:45.6119475Z [36;1m    raise SystemExit(receipt['reason'])[0m
+2026-11-05T18:39:45.6119768Z [36;1mPYTHON[0m
+2026-11-05T18:39:45.6169058Z shell: /usr/bin/bash -e {0}
+2026-11-05T18:39:45.6169324Z env:
+2026-11-05T18:39:45.6169526Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T18:39:45.6169848Z   DISPATCH_SHA: aa2845edbea23444a1d362060b8d0f5dc05a132e
+2026-11-05T18:39:45.6170420Z   MCPCLI_STAGING_RUN_ID: 42080077255
+2026-11-05T18:39:45.6170691Z ##[endgroup]
+2026-11-05T18:39:45.6518187Z ##[group]Run python3 scripts/verify-paired-publication.py retain-operator --input "$RUNNER_TEMP/operator-acceptance.json" --input nupkgs/paired/operator.json --output "$RUNNER_TEMP/retained-operator"
+2026-11-05T18:39:45.6519691Z [36;1mpython3 scripts/verify-paired-publication.py retain-operator --input "$RUNNER_TEMP/operator-acceptance.json" --input nupkgs/paired/operator.json --output "$RUNNER_TEMP/retained-operator"[0m
+2026-11-05T18:39:45.6568245Z shell: /usr/bin/bash -e {0}
+2026-11-05T18:39:45.6568511Z env:
+2026-11-05T18:39:45.6568715Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T18:39:45.6571799Z   GH_TOKEN: ***
+2026-11-05T18:39:45.6572307Z   NUGET_API_KEY: ***
+2026-11-05T18:39:45.6572530Z ##[endgroup]
+2026-11-05T18:39:45.7352008Z ##[group]Run actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+2026-11-05T18:39:45.7352454Z with:
+2026-11-05T18:39:45.7352682Z   name: paired-publication-outcomes
+2026-11-05T18:39:45.7354192Z   path: /home/runner/work/_temp/paired-preflight.json*
+/home/runner/work/_temp/paired-publication-completion.json
+/home/runner/work/_temp/release-source.json
+/home/runner/work/_temp/operator-acceptance.json.failure.json
+/home/runner/work/_temp/retained-operator/
+/home/runner/work/_temp/paired-candidate/
+nupkgs/paired/
+!nupkgs/paired/operator.json
+nupkgs/paired-publication/
+
+2026-11-05T18:39:45.7355684Z   if-no-files-found: warn
+2026-11-05T18:39:45.7355941Z   compression-level: 6
+2026-11-05T18:39:45.7356175Z   overwrite: false
+2026-11-05T18:39:45.7356396Z   include-hidden-files: false
+2026-11-05T18:39:45.7356638Z   archive: true
+2026-11-05T18:39:45.7356835Z env:
+2026-11-05T18:39:45.7357030Z   DOTNET_ROOT: /usr/share/dotnet
+2026-11-05T18:39:45.7357282Z ##[endgroup]
+2026-11-05T18:39:45.9004237Z Multiple search paths detected. Calculating the least common ancestor of all paths
+2026-11-05T18:39:45.9006525Z The least common ancestor is /home/runner/work. This will be the root directory of the artifact
+2026-11-05T18:39:45.9007374Z With the provided path, there will be 35 files uploaded
+2026-11-05T18:39:45.9012469Z Artifact name is valid!
+2026-11-05T18:39:45.9013062Z Root directory input is valid!
+2026-11-05T18:39:46.1874337Z Uploading artifact: paired-publication-outcomes.zip
+2026-11-05T18:39:46.1930315Z Beginning upload of artifact content to blob storage
+2026-11-05T18:39:47.1306975Z Uploaded bytes 8388608
+2026-11-05T18:39:48.3646402Z Uploaded bytes 16777216
+2026-11-05T18:39:48.4755233Z Uploaded bytes 17964331
+2026-11-05T18:39:48.5215711Z Finished uploading artifact content to blob storage!
+2026-11-05T18:39:48.5217503Z SHA256 digest of uploaded artifact is a23cc85e4fa7eeab62901a83d6bd4a9606571a97b1847d5053727802299024e1
+2026-11-05T18:39:48.5219002Z Finalizing artifact upload
+2026-11-05T18:39:49.0832336Z Artifact paired-publication-outcomes successfully finalized. Artifact ID 13442229454
+2026-11-05T18:39:49.0834078Z Artifact paired-publication-outcomes has been successfully uploaded! Final size is 17964331 bytes. Artifact ID is 13442229454
+2026-11-05T18:39:49.0836754Z Artifact download URL: https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42082617201/artifacts/13442229454
+2026-11-05T18:39:49.1106688Z Post job cleanup.
+2026-11-05T18:39:49.2511585Z Post job cleanup.
+2026-11-05T18:39:49.4086801Z Post job cleanup.
+2026-11-05T18:39:49.4989692Z [command]/usr/bin/git version
+2026-11-05T18:39:49.5055217Z git version 2.56.0
+2026-11-05T18:39:49.5114931Z Temporarily overriding HOME='/home/runner/work/_temp/72afd0d1-c0b4-44d8-82fa-e4d5e55944ad' before making global git config changes
+2026-11-05T18:39:49.5116750Z Adding repository directory to the temporary git global config as a safe directory
+2026-11-05T18:39:49.5123332Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/Hexalith.McpCli/Hexalith.McpCli
+2026-11-05T18:39:49.5195288Z Removing SSH command configuration
+2026-11-05T18:39:49.5205163Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-11-05T18:39:49.5283549Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-11-05T18:39:49.5637336Z Entering 'references/Hexalith.AI.Tools'
+2026-11-05T18:39:49.5695354Z Entering 'references/Hexalith.Builds'
+2026-11-05T18:39:49.5781093Z Removing HTTP extra header
+2026-11-05T18:39:49.5786656Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-11-05T18:39:49.5828624Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-11-05T18:39:49.6146726Z Entering 'references/Hexalith.AI.Tools'
+2026-11-05T18:39:49.6196744Z Entering 'references/Hexalith.Builds'
+2026-11-05T18:39:49.6269355Z Removing includeIf entries pointing to credentials config files
+2026-11-05T18:39:49.6278218Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T18:39:49.6310287Z includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T18:39:49.6311325Z includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T18:39:49.6311954Z includeif.gitdir:/github/workspace/.git.path
+2026-11-05T18:39:49.6312443Z includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T18:39:49.6320785Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path
+2026-11-05T18:39:49.6351912Z /home/runner/work/_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config
+2026-11-05T18:39:49.6362849Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git.path \/home\/runner\/work\/_temp\/git\-credentials\-ac152bae\-3e9b\-482a\-9fe5\-d1f637854a10\.config
+2026-11-05T18:39:49.6409372Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path
+2026-11-05T18:39:49.6437961Z /home/runner/work/_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config
+2026-11-05T18:39:49.6447232Z [command]/usr/bin/git config --local --unset includeif.gitdir:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/worktrees/*.path \/home\/runner\/work\/_temp\/git\-credentials\-ac152bae\-3e9b\-482a\-9fe5\-d1f637854a10\.config
+2026-11-05T18:39:49.6483791Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git.path
+2026-11-05T18:39:49.6508717Z /github/runner_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config
+2026-11-05T18:39:49.6517874Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git.path \/github\/runner_temp\/git\-credentials\-ac152bae\-3e9b\-482a\-9fe5\-d1f637854a10\.config
+2026-11-05T18:39:49.6553707Z [command]/usr/bin/git config --local --get-all includeif.gitdir:/github/workspace/.git/worktrees/*.path
+2026-11-05T18:39:49.6578192Z /github/runner_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config
+2026-11-05T18:39:49.6587205Z [command]/usr/bin/git config --local --unset includeif.gitdir:/github/workspace/.git/worktrees/*.path \/github\/runner_temp\/git\-credentials\-ac152bae\-3e9b\-482a\-9fe5\-d1f637854a10\.config
+2026-11-05T18:39:49.6622719Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-11-05T18:39:49.6924991Z Entering 'references/Hexalith.AI.Tools'
+2026-11-05T18:39:49.6951945Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.AI.Tools/config	remote.origin.url
+2026-11-05T18:39:49.6975472Z Entering 'references/Hexalith.Builds'
+2026-11-05T18:39:49.6999527Z file:/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Builds/config	remote.origin.url
+2026-11-05T18:39:49.7046085Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.AI.Tools/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T18:39:49.7097454Z [command]/usr/bin/git config --file /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.git/modules/references/Hexalith.Builds/config --name-only --get-regexp ^includeIf\.gitdir:
+2026-11-05T18:39:49.7127940Z Removing credentials config '/home/runner/work/_temp/git-credentials-ac152bae-3e9b-482a-9fe5-d1f637854a10.config'
+2026-11-05T18:39:49.7290198Z Cleaning up orphan processes

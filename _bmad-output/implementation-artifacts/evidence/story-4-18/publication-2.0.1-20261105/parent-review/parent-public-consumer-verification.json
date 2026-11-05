@@ -1,0 +1,11 @@
+{
+  "command": [
+    "bash",
+    "scripts/smoke-bootstrap-consumer.sh",
+    "2.0.1",
+    "https://api.nuget.org/v3/index.json",
+    "/tmp/mcpcli-418-parent-stage-0vehohb4/public-consumer"
+  ],
+  "exit_code": 0,
+  "scope": "Fresh isolated .NET10 decorated Contracts consumer restored only from official public NuGet; includes the real packaged MCPCLI001 analyzer assertion."
+}

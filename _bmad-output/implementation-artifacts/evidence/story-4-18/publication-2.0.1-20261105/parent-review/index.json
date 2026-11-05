@@ -1,0 +1,11 @@
+{
+  "baseline_commit": "b8cf5d8e4093df4f1a4b565c2425ff929c45d578",
+  "observed_head": "8a3467b10d24819efa6b7f99b3111a74a37bb365",
+  "full_diff": "/tmp/mcpcli-418-parent-review-okh5k7mv/all-changes.diff",
+  "size": 21476668,
+  "sha256": "da3b6c2ae6d480e1bbceaac648d00a290d1214dece3c6e538a9ab381fc782ea4",
+  "implementation_diff": "/tmp/mcpcli-418-parent-review-okh5k7mv/implementation.diff",
+  "implementation_bytes": 906614,
+  "evidence_sections": 2378,
+  "untracked_files": 0
+}

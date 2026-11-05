@@ -1,0 +1,9 @@
+{
+  "ref": "main",
+  "inputs": {
+    "phase": "stage-paired",
+    "recovery_version": "",
+    "staging_run_id": "",
+    "operator_acceptance": ""
+  }
+}

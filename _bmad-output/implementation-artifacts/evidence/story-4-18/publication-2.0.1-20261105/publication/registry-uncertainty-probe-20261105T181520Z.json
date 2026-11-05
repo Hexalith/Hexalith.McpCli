@@ -1,0 +1,46 @@
+[
+  {
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/index.json",
+    "time_utc": "2026-11-05T18:15:20.248656+00:00",
+    "status": 404,
+    "body_sha256": "7fa074219ed39b32878b8a57de86987ba3468d6235654467f53c7a6e0ec021d8",
+    "body": "\ufeff<?xml version=\"1.0\" encoding=\"utf-8\"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist.\nRequestId:eec29e10-c01e-0040-7d51-6dbacf000000\nTime:2026-11-05T18:15:21.0124466Z</Message></Error>",
+    "elapsed_seconds": 0.17
+  },
+  {
+    "url": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli/index.json",
+    "time_utc": "2026-11-05T18:15:20.249410+00:00",
+    "status": 404,
+    "body_sha256": "bf516af2a4aa4bb540563e49f759f5f9b290ee6fbb46d4ab78d87aaec6dd8f72",
+    "body": "\ufeff<?xml version=\"1.0\" encoding=\"utf-8\"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist.\nRequestId:235ffa47-e01e-0057-3351-6d13c4000000\nTime:2026-11-05T18:15:21.0132709Z</Message></Error>",
+    "elapsed_seconds": 0.17
+  },
+  {
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/2.0.1/hexalith.mcpcli.2.0.1.nupkg",
+    "time_utc": "2026-11-05T18:15:20.249807+00:00",
+    "status": 404,
+    "body_sha256": "ce180ad6164d22a261b44002a20e1258b0e901bd3e93a01b091113b4f633fce7",
+    "body": "\ufeff<?xml version=\"1.0\" encoding=\"utf-8\"?><Error><Code>BlobNotFound</Code><Message>The specified blob does not exist.\nRequestId:b448822c-c01e-0032-3c51-6dbd80000000\nTime:2026-11-05T18:15:21.0122928Z</Message></Error>",
+    "elapsed_seconds": 0.17
+  },
+  {
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/index.json",
+    "time_utc": "2026-11-05T18:15:20.251388+00:00",
+    "status": 200,
+    "headers": {
+      "Date": "Thu, 05 Nov 2026 18:15:21 GMT",
+      "Content-Type": "application/json",
+      "ETag": "0x8DF391930E52B8B",
+      "X-Cache": "TCP_MISS"
+    },
+    "body_sha256": "680f72ac205c0f8fefaf5569f47a3fb3b6e1318a0cc79a94f438a113b40006aa",
+    "body": {
+      "versions": [
+        "1.0.0",
+        "1.1.0",
+        "2.0.0"
+      ]
+    },
+    "elapsed_seconds": 0.16
+  }
+]

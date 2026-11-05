@@ -1,0 +1,351 @@
+{
+  "total_count": 6,
+  "jobs": [
+    {
+      "id": 127439326998,
+      "run_id": 42082617201,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/42082617201",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdq_nPFg",
+      "head_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/127439326998",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42082617201/job/127439326998",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-05T18:16:21Z",
+      "started_at": "2026-11-05T18:16:24Z",
+      "completed_at": "2026-11-05T18:16:39Z",
+      "name": "verify-source",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T18:16:25Z",
+          "completed_at": "2026-11-05T18:16:25Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T18:16:25Z",
+          "completed_at": "2026-11-05T18:16:31Z"
+        },
+        {
+          "name": "Refuse unsupported paired recovery before production approval",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T18:16:31Z",
+          "completed_at": "2026-11-05T18:16:31Z"
+        },
+        {
+          "name": "Initialize root-declared baseline for paired source verification",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T18:16:31Z",
+          "completed_at": "2026-11-05T18:16:31Z"
+        },
+        {
+          "name": "Require current main with exact-source bootstrap and commitlint success",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T18:16:31Z",
+          "completed_at": "2026-11-05T18:16:37Z"
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10,
+          "started_at": "2026-11-05T18:16:37Z",
+          "completed_at": "2026-11-05T18:16:37Z"
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11,
+          "started_at": "2026-11-05T18:16:37Z",
+          "completed_at": "2026-11-05T18:16:37Z"
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/127439326998",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000073450,
+      "runner_name": "GitHub Actions 1000073450",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 127439329423,
+      "run_id": 42082617201,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/42082617201",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdq_nYjw",
+      "head_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/127439329423",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42082617201/job/127439329423",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-05T18:16:22Z",
+      "started_at": "2026-11-05T18:16:22Z",
+      "completed_at": "2026-11-05T18:16:21Z",
+      "name": "stage-pair",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/127439329423",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 127439330839,
+      "run_id": 42082617201,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/42082617201",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdq_neFw",
+      "head_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/127439330839",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42082617201/job/127439330839",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-05T18:16:22Z",
+      "started_at": "2026-11-05T18:16:22Z",
+      "completed_at": "2026-11-05T18:16:21Z",
+      "name": "smoke-pair",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/127439330839",
+      "labels": [],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 127439332162,
+      "run_id": 42082617201,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/42082617201",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdq_njQg",
+      "head_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/127439332162",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42082617201/job/127439332162",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-05T18:16:22Z",
+      "started_at": "2026-11-05T18:16:22Z",
+      "completed_at": "2026-11-05T18:16:21Z",
+      "name": "accept-staged-pair",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/127439332162",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    },
+    {
+      "id": 127439493469,
+      "run_id": 42082617201,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/42082617201",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdq_xZXQ",
+      "head_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/127439493469",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42082617201/job/127439493469",
+      "status": "in_progress",
+      "conclusion": null,
+      "created_at": "2026-11-05T18:16:39Z",
+      "started_at": "2026-11-05T18:18:09Z",
+      "completed_at": null,
+      "name": "publish",
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1,
+          "started_at": "2026-11-05T18:18:10Z",
+          "completed_at": "2026-11-05T18:18:12Z"
+        },
+        {
+          "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2,
+          "started_at": "2026-11-05T18:18:12Z",
+          "completed_at": "2026-11-05T18:18:16Z"
+        },
+        {
+          "name": "Initialize root-declared Builds submodule",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3,
+          "started_at": "2026-11-05T18:18:16Z",
+          "completed_at": "2026-11-05T18:18:25Z"
+        },
+        {
+          "name": "Set up .NET",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4,
+          "started_at": "2026-11-05T18:18:25Z",
+          "completed_at": "2026-11-05T18:18:26Z"
+        },
+        {
+          "name": "Set up Node",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5,
+          "started_at": "2026-11-05T18:18:26Z",
+          "completed_at": "2026-11-05T18:18:27Z"
+        },
+        {
+          "name": "Install pinned release tooling",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6,
+          "started_at": "2026-11-05T18:18:27Z",
+          "completed_at": "2026-11-05T18:18:34Z"
+        },
+        {
+          "name": "Recheck source and independent results after production approval",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7,
+          "started_at": "2026-11-05T18:18:34Z",
+          "completed_at": "2026-11-05T18:18:38Z"
+        },
+        {
+          "name": "Authenticate the selected staging run and retain the explicit operator decision",
+          "status": "in_progress",
+          "conclusion": null,
+          "number": 8,
+          "started_at": "2026-11-05T18:18:38Z",
+          "completed_at": null
+        },
+        {
+          "name": "Get short-lived NuGet publication key",
+          "status": "pending",
+          "conclusion": null,
+          "number": 9,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Derive one version and publish the selected phase",
+          "status": "pending",
+          "conclusion": null,
+          "number": 10,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Require both paired packages publicly verified",
+          "status": "pending",
+          "conclusion": null,
+          "number": 11,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Retain sanitized operator evidence on success or refusal",
+          "status": "pending",
+          "conclusion": null,
+          "number": 12,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Retain paired publication success, refusal or partial outcomes",
+          "status": "pending",
+          "conclusion": null,
+          "number": 13,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Set up Node",
+          "status": "pending",
+          "conclusion": null,
+          "number": 24,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Set up .NET",
+          "status": "pending",
+          "conclusion": null,
+          "number": 25,
+          "started_at": null,
+          "completed_at": null
+        },
+        {
+          "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+          "status": "pending",
+          "conclusion": null,
+          "number": 26,
+          "started_at": null,
+          "completed_at": null
+        }
+      ],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/127439493469",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": 1000073458,
+      "runner_name": "GitHub Actions 1000073458",
+      "runner_group_id": 0,
+      "runner_group_name": "GitHub Actions"
+    },
+    {
+      "id": 127439495756,
+      "run_id": 42082617201,
+      "workflow_name": "Release",
+      "head_branch": "main",
+      "run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/42082617201",
+      "run_attempt": 1,
+      "node_id": "CR_kwDOUjg9is8AAAAdq_xiTA",
+      "head_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/jobs/127439495756",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42082617201/job/127439495756",
+      "status": "completed",
+      "conclusion": "skipped",
+      "created_at": "2026-11-05T18:16:39Z",
+      "started_at": "2026-11-05T18:16:39Z",
+      "completed_at": "2026-11-05T18:16:39Z",
+      "name": "recover",
+      "steps": [],
+      "check_run_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/check-runs/127439495756",
+      "labels": [
+        "ubuntu-latest"
+      ],
+      "runner_id": null,
+      "runner_name": null,
+      "runner_group_id": null,
+      "runner_group_name": null
+    }
+  ]
+}

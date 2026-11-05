@@ -1,0 +1,36 @@
+{
+  "source": "8a3467b10d24819efa6b7f99b3111a74a37bb365",
+  "ci_run_id": 42065781900,
+  "job_id": 127379330054,
+  "actual_passing_log_sha256": "d2e815eea140722790a9114fbb10170a5d527bc0da9b82aa4dd02b6b0df7b75a",
+  "executed_python_cases": 141,
+  "skips": 0,
+  "matrix": [
+    {
+      "expected": "accepted matching pair publishes only two immutable archives",
+      "covering_test": "test_paired_publication.PublicationTests.test_complete_preflight_and_exact_byte_two_pushes_verify_signed_public_contents",
+      "passed_in_full_executed_suite": true
+    },
+    {
+      "expected": "missing/tampered evidence fails before pushes",
+      "covering_test": "test_paired_publication.PublicationTests.test_mutated_import_receipt_package_or_extra_package_never_pushes",
+      "passed_in_full_executed_suite": true
+    },
+    {
+      "expected": "missing key or uncertain registry refuses; first identity absence is explicit",
+      "covering_test": "test_paired_publication.PublicationTests.test_missing_key_or_uncertain_registry_never_pushes_and_retains_refusal",
+      "passed_in_full_executed_suite": true
+    },
+    {
+      "expected": "partial or uncertain second push retained without retry",
+      "covering_test": "test_paired_publication.PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry",
+      "passed_in_full_executed_suite": true
+    },
+    {
+      "expected": "independent bootstrap closes once paired publication starts",
+      "covering_test": "test_paired_publication.PublicationBoundaryTests.test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible",
+      "passed_in_full_executed_suite": true
+    }
+  ],
+  "scope": "Parent inspected the test assertions and actual passing job log; hosted publication remains pending."
+}

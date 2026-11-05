@@ -1,0 +1,22 @@
+[
+  {
+    "name": "tool-flat",
+    "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/2.0.1/hexalith.mcpcli.2.0.1.nupkg",
+    "time_utc": "2026-11-05T18:33:21.609927+00:00",
+    "status": 404
+  },
+  {
+    "name": "tool-v2",
+    "url": "https://www.nuget.org/api/v2/Packages(Id='Hexalith.McpCli',Version='2.0.1')",
+    "time_utc": "2026-11-05T18:33:21.610433+00:00",
+    "status": 404
+  },
+  {
+    "name": "abstractions-v2",
+    "url": "https://www.nuget.org/api/v2/Packages(Id='Hexalith.McpCli.Abstractions',Version='2.0.1')",
+    "time_utc": "2026-11-05T18:33:21.610776+00:00",
+    "status": 200,
+    "sha256": "477bc9cac9a41a4910b00a803f8f39649c996d09f8489fd779bc6b2962ecc54b",
+    "bytes": 3047
+  }
+]

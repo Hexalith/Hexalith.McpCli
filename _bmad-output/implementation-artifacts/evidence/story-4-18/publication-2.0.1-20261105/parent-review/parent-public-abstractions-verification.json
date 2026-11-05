@@ -1,0 +1,9 @@
+{
+  "package_id": "Hexalith.McpCli.Abstractions",
+  "version": "2.0.1",
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "public_sha256": "5c384c717119e7830d6369ecaa17161f64eda35d0ed6d9115f92d24547356f08",
+  "staged_sha256": "8a5bdce50d81309ad65cff680276378de214cadf4a04076fcdb550d787af46e3",
+  "consumer_contents_match": true,
+  "dotnet_nuget_verify_all_exit_code": 0
+}

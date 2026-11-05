@@ -1,0 +1,83 @@
+{
+  "scope": "Only review-requested patch files and their covering checks; no remote operations or publication. Published 2.0.1 archives unchanged.",
+  "files_sha256": {
+    ".github/workflows/release.yml": "cb277291cef369ee9b3b89d68b2dfe65da4e4ac5bb4ec4d3985c0dee01b4d8f9",
+    "README.md": "4a95c3a5b073d71622231fd1f0d3b31bcd8019835eb8b4cdf5e3e7e9fd962ebc",
+    "docs/release/operator-setup-checklist.md": "123943ca5004bebeff1971d78350ad691876281be5bb646818243dd6a6764a77",
+    "scripts/verify-paired-publication.py": "187bea4f92e79534a79dc2b521ee55ca0e9136e45ae4b88a7d7ba4fed74463ed",
+    "scripts/tests/test_paired_publication.py": "7c93f5c332a51fd37286e08afff7e9a90cd48622b73a837fed9ecaa5a2529b69",
+    "scripts/tests/test_bootstrap_release.py": "fb0746880ab37df99198e12a8574d3e4227ae5db607c9b2b7985e314aad3a072",
+    "tests/Hexalith.McpCli.Cli.Tests/PlatformScopeCommandTests.cs": "23c68630713ab427db0aa3c34172b1d8a3afde0b15233298d35b4d4860eb4971",
+    "tests/Hexalith.McpCli.Mcp.Tests/PlatformScopeProtocolTests.cs": "0ec69b9a5c742189fd6697331c2785f91395ada197d5888bae0fb304ac4a04f9"
+  },
+  "verification": {
+    "publication_tests": {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -v -s scripts/tests -p 'test_paired_publication.py'",
+      "passed": 28,
+      "failed": 0,
+      "skipped": 0
+    },
+    "dotnet": {
+      "build": "Both edited test projects: --no-restore --configuration Release -warnaserror; passed, zero warnings/errors",
+      "runs": {
+        "cli": {
+          "Pass": 7,
+          "Fail": 0,
+          "Skip": 0
+        },
+        "mcp": {
+          "Pass": 22,
+          "Fail": 0,
+          "Skip": 0
+        }
+      }
+    },
+    "actionlint": {
+      "command": "actionlint .github/workflows/release.yml",
+      "exit_code": 0
+    },
+    "git_diff_check_exit_code": 0,
+    "guard_mutations": {
+      "source_sha256": "187bea4f92e79534a79dc2b521ee55ca0e9136e45ae4b88a7d7ba4fed74463ed",
+      "results": [
+        {
+          "mutation": "recording-credential-guard-removed",
+          "detected": true,
+          "tests": 1,
+          "failures": 12,
+          "errors": 0
+        },
+        {
+          "mutation": "retention-redaction-removed",
+          "detected": true,
+          "tests": 1,
+          "failures": 12,
+          "errors": 0
+        },
+        {
+          "mutation": "historical-system-read-reintroduced",
+          "detected": true,
+          "tests": 1,
+          "failures": 0,
+          "errors": 1
+        },
+        {
+          "mutation": "tenant-read-equality-removed",
+          "detected": true,
+          "tests": 1,
+          "failures": 2,
+          "errors": 0
+        },
+        {
+          "mutation": "real-paired-publish-shell-selector-broken",
+          "detected": true,
+          "fake_pushes": 0,
+          "real_network": false,
+          "real_pushes": 0
+        }
+      ]
+    }
+  },
+  "local_fixture_correction": "First new shell-hook test completed both synthetic pushes but its expected list used sorted dictionary order. Corrected expectation to PAIR publication order; the full focused publication module then passed.",
+  "unmodified_parent_work": "Spec/deferred-work changes and prior publication/review evidence preserved; checklist existing parent prose preserved except the requested tenant/security guidance."
+}

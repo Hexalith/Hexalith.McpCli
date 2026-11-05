@@ -1,0 +1,63 @@
+{
+  "operator_sha256": "b334878c9dc42651e3dfe43ee6b1357454a4367370ca13ba1bbb1ca948e84377",
+  "origin": {
+    "artifacts": [
+      {
+        "digest": "sha256:4cb5d2ab21e1d90d4ba7b5ddb6a82f1abdb17e2a10196b62400e92ce03c3dfc9",
+        "id": 13439309550,
+        "name": "paired-preparation"
+      },
+      {
+        "digest": "sha256:1d72bb9835bd7b36fc4aaf2815b099c73ade576e57fc7be22c8f94be76752a70",
+        "id": 13439979292,
+        "name": "paired-consumer-ubuntu-latest"
+      },
+      {
+        "digest": "sha256:dfeebb3db385d9b651fc9b941cc69292e441a312a50a7ed39ff6f63e8441a2f5",
+        "id": 13440511642,
+        "name": "paired-consumer-windows-latest"
+      },
+      {
+        "digest": "sha256:87959f9a8640a33195c8e8adcb74977078fc0e7adb99c0bb0b4df23b4bb9ce51",
+        "id": 13441780493,
+        "name": "paired-consumer-macos-latest"
+      },
+      {
+        "digest": "sha256:3e3751ca7e84b9bd48a1f3e8d037414df52841fa0e8d5eb7ef622530c9a921dd",
+        "id": 13440687149,
+        "name": "accepted-staging-only"
+      }
+    ],
+    "completed_at": "2026-11-05T18:10:10Z",
+    "repository": "Hexalith/Hexalith.McpCli",
+    "run_attempt": 1,
+    "source_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+    "staging_run_id": 42080077255
+  },
+  "packages": {
+    "Hexalith.McpCli": {
+      "consumer_content_sha256": "5d3741b89d584cc43489af279154e0d90f892f9d28dc10fa55cfe14a297012a2",
+      "public_sha256": "305938d63bc47fd45090976ac1b1626a1ec69edfcaa525f6b728654cb1ab3876",
+      "public_url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/2.0.1/hexalith.mcpcli.2.0.1.nupkg",
+      "staged_sha256": "7ed0f79f0ee4b92abf54d65900ba48b5bab9c257f5eaf6596401f410d6c8ec7f",
+      "status": "public-verified"
+    },
+    "Hexalith.McpCli.Abstractions": {
+      "consumer_content_sha256": "db763c5450c85b5d31bbad631560522675c6230071135922982366ae84056bcb",
+      "public_sha256": "5c384c717119e7830d6369ecaa17161f64eda35d0ed6d9115f92d24547356f08",
+      "public_url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/2.0.1/hexalith.mcpcli.abstractions.2.0.1.nupkg",
+      "staged_sha256": "8a5bdce50d81309ad65cff680276378de214cadf4a04076fcdb550d787af46e3",
+      "status": "public-verified"
+    }
+  },
+  "packages_sha256": {
+    "Hexalith.McpCli.2.0.1.nupkg": "7ed0f79f0ee4b92abf54d65900ba48b5bab9c257f5eaf6596401f410d6c8ec7f",
+    "Hexalith.McpCli.Abstractions.2.0.1.nupkg": "8a5bdce50d81309ad65cff680276378de214cadf4a04076fcdb550d787af46e3"
+  },
+  "preflight_sha256": "1ff741a6d354e42ad9742638f6a0403ade642e1281f92d27e8b14327b7efae20",
+  "schema": "mcpcli-paired-publication-outcome/v1",
+  "source_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "staging_run_id": "42080077255",
+  "status": "paired-public-verified",
+  "version": "2.0.1"
+}

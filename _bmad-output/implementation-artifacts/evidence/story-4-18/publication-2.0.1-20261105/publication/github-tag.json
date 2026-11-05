@@ -1,0 +1,10 @@
+{
+  "ref": "refs/tags/v2.0.1",
+  "node_id": "REF_kwDOUjg9irByZWZzL3RhZ3MvdjIuMC4x",
+  "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/refs/tags/v2.0.1",
+  "object": {
+    "sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+    "type": "commit",
+    "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/commits/aa2845edbea23444a1d362060b8d0f5dc05a132e"
+  }
+}

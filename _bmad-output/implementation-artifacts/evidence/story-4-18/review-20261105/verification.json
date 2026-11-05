@@ -1,0 +1,32 @@
+{
+  "release_source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "release_version": "2.0.1",
+  "review_layers": 3,
+  "individual_findings": 16,
+  "patch_groups": 6,
+  "rejected_findings": 6,
+  "inherited_deferred_findings": 2,
+  "patch_verification": {
+    "release_python_passed": 145,
+    "release_node_passed": 4,
+    "manifest": {
+      "passed": 326,
+      "skipped": 0
+    },
+    "cli": {
+      "passed": 489,
+      "skipped": 2,
+      "skip_reason": "Two Windows-only output-file ACL cases on this Linux host"
+    },
+    "mcp": {
+      "passed": 80,
+      "skipped": 0
+    },
+    "fresh_restore_release_build": true,
+    "actionlint": true,
+    "instruction_sync": true,
+    "whitespace": true
+  },
+  "public_release_verification": "All21 live vectors plus independent smoke, all3 staging platforms, both public signatures/consumer bytes/source and fresh public consumers passed for the immutable release source.",
+  "published_archives_changed": false
+}

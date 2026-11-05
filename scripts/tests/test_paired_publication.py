@@ -7,6 +7,7 @@ import io
 import json
 import os
 from pathlib import Path
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -16,6 +17,7 @@ from urllib.error import HTTPError
 from zipfile import ZipFile
 
 import test_paired_release as fixtures
+import test_bootstrap_release as shell_fixtures
 from test_paired_release import SHA, VERSION, jobs
 from paired_release import PAIR, digest, module, packages, write_new
 
@@ -87,7 +89,7 @@ class PublicationTests(unittest.TestCase):
                 'server_identity': {'name': 'hexalith', 'version': VERSION}, 'tools': sorted(self.verifier.TOOLS),
                 'modules': ['parties', 'tenants'], 'operation_lists': ['parties', 'tenants'],
                 'described_operations': ['tenants.get-tenant', 'parties.create-party', 'parties.get-party'],
-                'tenant_read': {'tenant': 'system', 'document_id': 'fixture-tenant', 'is_active': True, 'membership_verified': True},
+                'tenant_read': {'tenant': 'fixture-tenant', 'document_id': 'fixture-tenant', 'is_active': True, 'membership_verified': True},
                 'command_result': {'status': 'accepted', 'tenant': 'fixture-tenant', 'aggregate_id': 'fixture-party-' + str(index),
                                    'message_id': '01M695PTVDN76PQH5F0WTE7HS6', 'correlation_id': '01M695PTVDN76PQH5F0WTE7HS6'},
                 'persisted_party': {'tenant': 'fixture-tenant', 'id': 'fixture-party-' + str(index), 'isActive': True,
@@ -168,6 +170,37 @@ class PublicationTests(unittest.TestCase):
         self.assertEqual(self.preflight_count, 5)  # initial, import, snapshot and immediately before each push
         self.assertEqual(result['operator_sha256'], digest(self.operator))
         self.assertEqual(result['origin'], self.origin)
+
+    def test_configured_shell_hooks_publish_both_exact_archives_and_complete_outcome(self):
+        shell = shell_fixtures.BootstrapReleaseTests()
+        shell.setUp()
+        self.addCleanup(shell.doCleanups)
+        shell.paired_controls(self.origin, self.source_gate, jobs(self.verifier.STAGING_JOBS))
+        shell.env.update(self.env, MCPCLI_RELEASE_PHASE='paired')
+        shutil.copy(self.verifier.ROOT / 'README.md', shell.root / 'README.md')
+        timing = shell.root / self.verifier.TIMING
+        timing.parent.mkdir(parents=True)
+        shutil.copy(self.verifier.ROOT / self.verifier.TIMING, timing)
+        configuration = json.loads((self.verifier.ROOT / '.releaserc.json').read_text())
+        hooks = dict(plugin for plugin in configuration['plugins'] if isinstance(plugin, list))['@semantic-release/exec']
+        for name in ('verifyReleaseCmd', 'prepareCmd', 'publishCmd'):
+            result = subprocess.run(hooks[name].replace('${nextRelease.version}', VERSION), shell=True,
+                cwd=shell.root, env=shell.env, text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, f'{name}: {result.stdout}{result.stderr}')
+        pushes = shell.calls()
+        self.assertEqual(len(pushes), 2)
+        self.assertEqual([Path(call[2]).name for call in pushes], [f'{identity}.{VERSION}.nupkg' for identity in PAIR])
+        for name, expected in self.package_hashes.items():
+            self.assertEqual(digest(shell.root / 'pushed' / name), expected)
+        outcome = json.loads((shell.root / 'nupkgs/paired-publication/outcome.json').read_text())
+        self.assertEqual(outcome['status'], 'paired-public-verified')
+        self.assertEqual(set(outcome['packages']), set(PAIR))
+        self.assertTrue(all(item['status'] == 'public-verified' for item in outcome['packages'].values()))
+        self.assertEqual(outcome['packages_sha256'], self.package_hashes)
+        self.assertEqual(outcome['operator_sha256'], digest(self.operator))
+        self.assertEqual(outcome['source_sha'], SHA)
+        self.assertEqual(outcome['origin'], self.origin)
+        self.assertEqual(len((shell.root / 'source.log').read_text().splitlines()), 5)
 
     def test_snapshot_survives_original_import_changes_and_pushes_only_checked_bytes(self):
         self.mode = 'mutate-original-after-first'
@@ -288,6 +321,7 @@ class PublicationTests(unittest.TestCase):
             lambda d: d['sessions'][0]['command_result'].update(aggregate_id='wrong-party'),
             lambda d: d['sessions'][0]['command_result'].update(message_id='01m695ptvdn76pqh5f0wte7hs6'),
             lambda d: d['sessions'][0]['tenant_read'].update(tenant='wrong'),
+            lambda d: d['sessions'][0]['tenant_read'].update(tenant='system'),
             lambda d: d['sessions'][0]['persisted_party'].update(synthetic_fields_verified=False)]
         for index, change in enumerate(mutations):
             decision = copy.deepcopy(self.decision)
@@ -325,7 +359,7 @@ class PublicationTests(unittest.TestCase):
         with self.controls():
             self.real_preflight(self.candidate, self.operator, VERSION, self.initial)
             self.change_json(self.operator, lambda document: document.update(accidental_secret=self.env['NUGET_API_KEY']))
-            with self.assertRaisesRegex(ValueError, 'contains a GitHub or publication credential'):
+            with self.assertRaisesRegex(ValueError, 'contains a credential'):
                 self.publisher.prepare(VERSION)
         self.assertFalse(self.publisher.IMPORTED.exists())
         self.assertEqual(self.pushes, [])
@@ -343,6 +377,86 @@ class PublicationTests(unittest.TestCase):
 
 
 class PublicationBoundaryTests(unittest.TestCase):
+    def test_fresh_credentials_are_refused_and_redacted_without_changing_originals(self):
+        verifier = module('verify-paired-publication')
+        samples = [
+            ('jwt', 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaXh0dXJlIn0.c3ludGhldGlj', 'c3ludGhldGlj'),
+            ('bearer', 'Bearer fixture-fresh-token+/_~.abc==', 'fixture-fresh-token'),
+            *[(kind.lower().replace(' ', '-'), f'-----BEGIN {kind}-----\nZml4dHVyZS1wcml2YXRlLWtleQ==\n-----END {kind}-----',
+               'Zml4dHVyZS1wcml2YXRlLWtleQ==') for kind in ('PRIVATE KEY', 'RSA PRIVATE KEY', 'EC PRIVATE KEY', 'OPENSSH PRIVATE KEY')],
+        ]
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            for name, secret, recognizable in samples:
+                for escaped in (False, True):
+                    with self.subTest(kind=name, escaped=escaped):
+                        serialized = json.dumps({'evidence': secret})
+                        if escaped:
+                            serialized = serialized.replace('e', '\\u0065').replace('B', '\\u0042')
+                        source = root / f'{name}-{escaped}.json'
+                        source.write_text(serialized)
+                        raw = source.read_bytes()
+                        recorded = root / (source.stem + '-recorded.json')
+                        with self.assertRaisesRegex(ValueError, 'credential|private key'):
+                            verifier.record_operator(serialized, recorded)
+                        self.assertFalse(recorded.exists())
+                        retained = root / (source.stem + '-retained')
+                        verifier.retain_operator([source], retained)
+                        manifest = json.loads((retained / 'retention.json').read_text())['entries'][0]
+                        self.assertTrue(manifest['redacted'])
+                        self.assertEqual(manifest['original_sha256'], hashlib.sha256(raw).hexdigest())
+                        self.assertEqual(manifest['retained_sha256'], digest(retained / manifest['retained_name']))
+                        self.assertEqual(source.read_bytes(), raw)
+                        evidence = json.loads((retained / manifest['retained_name']).read_text())['evidence']
+                        self.assertIn('[REDACTED', evidence)
+                        self.assertNotIn(recognizable, evidence)
+
+    def test_dispatch_reads_operator_from_event_without_echoing_or_retaining_credentials(self):
+        root = Path(__file__).resolve().parents[2]
+        workflow = (root / '.github/workflows/release.yml').read_text()
+        block = workflow.split('      - name: Authenticate the selected staging run and retain the explicit operator decision\n', 1)[1].split('      - name:', 1)[0]
+        self.assertNotIn('OPERATOR_ACCEPTANCE:', block)
+        self.assertNotIn('${{ inputs.operator_acceptance }}', workflow)
+        command = next(line.strip() for line in block.splitlines() if ' record-operator ' in line)
+        secret = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmaXh0dXJlIn0.c3ludGhldGlj'
+        for unsafe in (False, True):
+            with self.subTest(unsafe=unsafe), tempfile.TemporaryDirectory() as temporary:
+                directory = Path(temporary)
+                event = directory / 'dispatch.json'
+                decision = {'evidence': 'Bearer ' + secret if unsafe else 'sanitized actual excerpt'}
+                event.write_text(json.dumps({'inputs': {'operator_acceptance': json.dumps(decision)}}))
+                environment = {**os.environ, 'GITHUB_EVENT_PATH': str(event), 'RUNNER_TEMP': temporary,
+                               'OPERATOR_ACCEPTANCE': json.dumps({'evidence': 'ignored local value'})}
+                result = subprocess.run(['bash', '-e', '-c', command], cwd=root, env=environment, text=True, capture_output=True)
+                self.assertEqual(result.returncode, 1 if unsafe else 0, result.stderr)
+                self.assertEqual(result.stdout, '')
+                self.assertNotIn(secret, result.stderr)
+                output = directory / 'operator-acceptance.json'
+                self.assertEqual(output.exists(), not unsafe)
+                if not unsafe:
+                    self.assertEqual(json.loads(output.read_text()), decision)
+                else:
+                    self.assertIn('Paired publication refused:', result.stderr)
+                    self.assertEqual(json.loads(output.with_suffix('.json.failure.json').read_text())['status'], 'refused')
+                retained = directory / 'retained'
+                result = subprocess.run([sys.executable, str(root / 'scripts/verify-paired-publication.py'), 'retain-operator',
+                    '--input', str(output), '--output', str(retained)], env=environment, text=True, capture_output=True)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertNotIn(secret, result.stdout + result.stderr)
+                for path in directory.rglob('*'):
+                    if path.is_file() and path != event:
+                        self.assertNotIn(secret, path.read_text())
+
+    def test_local_operator_json_environment_input_remains_supported(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            output = Path(temporary) / 'operator.json'
+            environment = {key: value for key, value in os.environ.items() if key != 'GITHUB_EVENT_PATH'}
+            environment['OPERATOR_ACCEPTANCE'] = '{"decision":"approved","evidence":"redacted excerpt"}'
+            result = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[1] / 'verify-paired-publication.py'),
+                'record-operator', '--output', str(output)], env=environment, text=True, capture_output=True)
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertEqual(json.loads(output.read_text()), json.loads(environment['OPERATOR_ACCEPTANCE']))
+
     def test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets(self):
         verifier = module('verify-paired-publication')
         with tempfile.TemporaryDirectory() as temporary, patch.dict(os.environ, {'GH_TOKEN': 'fixture-github-secret',
@@ -539,7 +653,8 @@ class PublicationBoundaryTests(unittest.TestCase):
         publication = workflow.split('  publish:\n', 1)[1].split('  recover:\n', 1)[0]
         self.assertIn('    environment: production', publication)
         self.assertIn('id-token: write', publication)
-        for text in ('MCPCLI_STAGING_RUN_ID: ${{ inputs.staging_run_id }}', 'OPERATOR_ACCEPTANCE: ${{ inputs.operator_acceptance }}',
+        self.assertNotIn('${{ inputs.operator_acceptance }}', workflow)
+        for text in ('MCPCLI_STAGING_RUN_ID: ${{ inputs.staging_run_id }}',
                      'DISPATCH_SHA: ${{ github.sha }}', '--source-sha "$DISPATCH_SHA"', 'paired-publication-outcomes',
                      "if: ${{ always() && inputs.phase == 'paired' }}", 'nupkgs/paired-publication/'):
             self.assertIn(text, publication)

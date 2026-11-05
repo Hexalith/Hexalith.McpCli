@@ -1,0 +1,4 @@
+[
+  {"location":"scripts/verify-paired-publication.py:238","trigger_condition":"Actual-client sessions truthfully record a canonical selected-tenant read","guard_snippet":"tenant.get('tenant') != session['selected_tenant']","potential_consequence":"Valid current manual acceptance packets are refused unless they misreport the tenant."},
+  {"location":"tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/create-tenant.vector.json:27","trigger_condition":"Dependency qualification preserves request/response wire","guard_snippet":"Gateway command tenant changes from 'system' to 'platform:tenants'; single-tenant queries use the target tenant.","potential_consequence":"The checked acceptance row incorrectly claims wire compatibility across the canonical-scope migration.","kind":"claim","confidence":"high"}
+]

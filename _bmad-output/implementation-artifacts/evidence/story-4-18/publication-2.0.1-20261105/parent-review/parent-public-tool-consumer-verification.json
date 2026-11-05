@@ -1,0 +1,47 @@
+{
+  "version": "2.0.1",
+  "checks": [
+    {
+      "name": "install",
+      "command": [
+        "dotnet",
+        "tool",
+        "install",
+        "Hexalith.McpCli",
+        "--version",
+        "2.0.1",
+        "--tool-path",
+        "/tmp/mcpcli-418-parent-stage-0vehohb4/public-tool",
+        "--configfile",
+        "/tmp/mcpcli-418-parent-stage-0vehohb4/public-consumer/NuGet.Config",
+        "--no-cache"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "version",
+      "command": [
+        "/tmp/mcpcli-418-parent-stage-0vehohb4/public-tool/hexalith",
+        "--version"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "modules",
+      "command": [
+        "/tmp/mcpcli-418-parent-stage-0vehohb4/public-tool/hexalith",
+        "modules",
+        "--strict"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "public_source": "https://api.nuget.org/v3/index.json",
+  "fresh_private_cache": true,
+  "offline_modules": [
+    "parties",
+    "tenants"
+  ],
+  "gateway_calls": 0,
+  "gui_client_sessions": 0
+}

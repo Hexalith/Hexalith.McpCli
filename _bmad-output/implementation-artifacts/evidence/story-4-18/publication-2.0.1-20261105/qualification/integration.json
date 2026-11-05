@@ -1,0 +1,11 @@
+{
+  "parent": "8a3467b10d24819efa6b7f99b3111a74a37bb365",
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "remote": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "changed_files": [
+    "README.md"
+  ],
+  "corrected_relative_links": 2,
+  "superseded_ci": 42065781900,
+  "supersession_authorization": "Parent explicitly authorized immediate corrected-source push and normal workflow supersession; no staging/publication or acceptance transfer from8a3467."
+}

@@ -1,0 +1,56 @@
+[
+  {
+    "name": "release-python",
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "scripts/tests",
+      "-p",
+      "test_*.py"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 97.524
+  },
+  {
+    "name": "release-node",
+    "command": [
+      "node",
+      "--test",
+      "scripts/tests/select-release-version.test.mjs"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 7.49
+  },
+  {
+    "name": "actionlint",
+    "command": [
+      "actionlint",
+      ".github/workflows/release.yml"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.415
+  },
+  {
+    "name": "instructions",
+    "command": [
+      "bash",
+      "scripts/check-agent-instructions-sync.sh"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.008
+  },
+  {
+    "name": "whitespace",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.117
+  }
+]

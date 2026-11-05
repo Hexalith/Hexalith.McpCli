@@ -1,0 +1,10 @@
+/tmp/mcpcli-418-parent-stage-0vehohb4/public-consumer/MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description [/tmp/mcpcli-418-parent-stage-0vehohb4/public-consumer/Bootstrap.Consumer.Contracts.csproj]
+  Bootstrap.Consumer.Contracts -> /tmp/mcpcli-418-parent-stage-0vehohb4/public-consumer/bin/Release/net10.0/Bootstrap.Consumer.Contracts.dll
+
+Build succeeded.
+
+/tmp/mcpcli-418-parent-stage-0vehohb4/public-consumer/MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description [/tmp/mcpcli-418-parent-stage-0vehohb4/public-consumer/Bootstrap.Consumer.Contracts.csproj]
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.17

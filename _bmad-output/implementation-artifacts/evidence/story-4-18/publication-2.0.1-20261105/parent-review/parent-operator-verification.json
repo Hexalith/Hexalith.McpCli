@@ -1,0 +1,13 @@
+{
+  "source": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+  "staging_run_id": 42080077255,
+  "version": "2.0.1",
+  "operator_sha256": "dccb33f10f4b8713543dd880ae744c653545ee084df784fa603064b795685cb8",
+  "schema": "mcpcli-paired-automated-acceptance/v1",
+  "authorization": "user-requested-human-validation-bypass",
+  "approved_by": "jpiquot",
+  "staging_completed_at": "2026-11-05T18:10:10Z",
+  "decision_at": "2026-11-05T18:12:04.483257+00:00",
+  "all_bindings_pass": true,
+  "fresh_client_sessions_claimed": false
+}

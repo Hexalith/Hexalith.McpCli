@@ -1,0 +1,4 @@
+docs: fix package-rendered cohort links
+
+Use absolute GitHub URLs for the artifact approval and runtime guide.
+Require new source qualification and staged README scans before acceptance.
