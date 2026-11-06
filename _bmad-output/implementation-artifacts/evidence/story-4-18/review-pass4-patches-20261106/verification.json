@@ -1,0 +1,56 @@
+{
+  "schema": "mcpcli-review-patch-verification/v1",
+  "story": "4.18",
+  "review": "code review pass 4 (2026-11-06)",
+  "observed_head": "d0b0fd1de3e6345e7fdfb1e96e0d4df4a4f63807",
+  "scope": "Uncommitted working-tree corrections on top of observed_head; local synthetic checks only",
+  "checks": [
+    {
+      "command": "dotnet restore Hexalith.McpCli.slnx",
+      "result": "All projects are up-to-date for restore."
+    },
+    {
+      "command": "dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror",
+      "result": "Build succeeded, 0 warnings, 0 errors"
+    },
+    {
+      "command": "dotnet test tests/Hexalith.McpCli.Core.Tests --no-build --configuration Release",
+      "result": "total 752, succeeded 748, failed 0, skipped 4 (three Windows-only ProfileStoreTests and CatalogPerformanceTests.MeasureFirstConstruction)"
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "result": "Ran 161 tests, OK"
+    },
+    {
+      "command": "python3 -m unittest test_paired_publication (cwd scripts/tests)",
+      "result": "Ran 41 tests, OK"
+    },
+    {
+      "command": "git diff --check",
+      "result": "exit 0"
+    },
+    {
+      "command": "bash scripts/check-agent-instructions-sync.sh",
+      "result": "exit 0"
+    },
+    {
+      "command": "guard removals (guard-mutations.py and the C# probe)",
+      "result": "17 of 17 verifier clause removals and 1 of 1 executor removal fail a named test; originals restored byte-for-byte"
+    }
+  ],
+  "unchanged_production_files": [
+    "scripts/verify-paired-publication.py",
+    "src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs"
+  ],
+  "file_sha256": {
+    "README.md": "c910c3d282508a606a05fa478bb9751703be98117315ba249adad0b216407d3b",
+    "docs/release/operator-setup-checklist.md": "f8bd801d458229816b82e9ed1442f636931d6c7e843af1ab082f5b8ba373b5ec",
+    "docs/release/operator-setup-history.md": "8098f2afa20ac70daa4ab40053fe55ec03bacf69a9f170da774698200766d8a0",
+    "scripts/tests/test_paired_publication.py": "d0a3467c561ada3e0a929a3accf7cdfb6f69de78ab29664bc946dc53d38c91ae",
+    "tests/Hexalith.McpCli.Core.Tests/PlatformScopeTests.cs": "08b2cac37a800c98caa26a8772d176af778c28a58d5befcf9b2217a829e4f8a7",
+    "tools/conformance-vectors/v1/README.md": "e6950ea2fa04675d6530911caf0c6182e74cc2f690a48c0e1b91781f4068d5a1",
+    "scripts/verify-paired-publication.py": "20fe1123b4cd3dbac9d84806ce45edc4c30ef021a5ee47d7e6b7bc3b0cb49128",
+    "src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs": "d3e0440580e50158f5fbc9734eab2709effa3a6bb43c2c8cfc6aaf29eb812521"
+  },
+  "not_established": "No hosted CI, staging, live topology, public package or remote operation ran; published 2.0.1 bytes and evidence are unchanged."
+}
