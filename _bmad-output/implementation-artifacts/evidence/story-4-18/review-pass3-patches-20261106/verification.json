@@ -1,0 +1,318 @@
+{
+  "schema": "mcpcli-story-4-18-local-verification/v1",
+  "scope": "Review pass 3 patches; synthetic local checks only.",
+  "commands": [
+    {
+      "name": "release-tests",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/tests",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 102.776,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "ci-hook-tests",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/live-topology",
+        "-p",
+        "test_ci.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 431.934,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "selector-tests",
+      "argv": [
+        "node",
+        "--test",
+        "scripts/tests/select-release-version.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 6.814,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "shell-syntax",
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/release-preflight.sh",
+        "scripts/release-prepare.sh",
+        "scripts/release-publish.sh",
+        "scripts/recover-bootstrap-release.sh",
+        "tools/live-topology/prepare-ci.sh",
+        "tools/live-topology/run-ci.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.002,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "notes": "Bash parses only the first script in this multi-argument invocation. The per-file syntax checks below cover every entry point."
+    },
+    {
+      "name": "instruction-sync",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.006,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "diff-whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.097,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "guard-removals",
+      "argv": [
+        "python3",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/review-pass3-patches-20261106/guard-mutations.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 88.043,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "actionlint",
+      "argv": [
+        "actionlint",
+        ".github/workflows/release.yml",
+        ".github/workflows/ci.yml",
+        ".github/workflows/commitlint.yml"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.306,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "syntax-release-preflight",
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/release-preflight.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.008,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "syntax-release-prepare",
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/release-prepare.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.002,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "syntax-release-publish",
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/release-publish.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.002,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "syntax-smoke-bootstrap-consumer",
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/smoke-bootstrap-consumer.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.002,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "syntax-check-agent-instructions-sync",
+      "argv": [
+        "bash",
+        "-n",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.001,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "syntax-prepare-ci",
+      "argv": [
+        "bash",
+        "-n",
+        "tools/live-topology/prepare-ci.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.001,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "syntax-run-ci",
+      "argv": [
+        "bash",
+        "-n",
+        "tools/live-topology/run-ci.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.001,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "final-publication-tests",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/tests",
+        "-p",
+        "test_paired_publication.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 3.118,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "final-diff-whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.096,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    }
+  ],
+  "test_counts": {
+    "release": 156,
+    "controlled_topology_hooks": 87,
+    "node_selector": 4,
+    "final_publication_subset": 36,
+    "detected_guard_removals": 13
+  },
+  "matrix_coverage": {
+    "rows": [
+      {
+        "state": "Accepted exact pair and candidate-specific approval",
+        "tests": [
+          "test_paired_publication.PublicationTests.test_complete_preflight_and_exact_byte_two_pushes_verify_signed_public_contents",
+          "test_paired_publication.PublicationTests.test_automated_authorization_publishes_only_exact_candidate_without_claiming_sessions"
+        ],
+        "result": "passed",
+        "log": "release-tests.stderr.txt"
+      },
+      {
+        "state": "Missing/tampered evidence or mismatched/failed gate",
+        "tests": [
+          "test_paired_publication.PublicationTests.test_original_staging_archive_source_version_and_acceptance_source_must_match",
+          "test_paired_publication.PublicationTests.test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record",
+          "test_paired_publication.PublicationTests.test_mutated_import_receipt_package_or_extra_package_never_pushes",
+          "test_paired_publication.PublicationBoundaryTests.test_original_run_and_artifact_metadata_must_be_exact_and_jobs_executed"
+        ],
+        "result": "passed",
+        "log": "release-tests.stderr.txt"
+      },
+      {
+        "state": "Missing key, occupied version, uncertain feed, or first-ever absence",
+        "tests": [
+          "test_paired_publication.PublicationTests.test_missing_key_or_uncertain_registry_never_pushes_and_retains_refusal",
+          "test_paired_publication.PublicationBoundaryTests.test_both_registry_identities_are_checked_and_occupied_version_fails",
+          "test_paired_publication.PublicationBoundaryTests.test_first_ever_absence_requires_both_explicit_404s"
+        ],
+        "result": "passed",
+        "log": "release-tests.stderr.txt"
+      },
+      {
+        "state": "First push succeeds and second fails/is uncertain",
+        "tests": [
+          "test_paired_publication.PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry"
+        ],
+        "result": "passed",
+        "log": "release-tests.stderr.txt"
+      },
+      {
+        "state": "Bootstrap requested after paired publication starts",
+        "tests": [
+          "test_paired_publication.PublicationBoundaryTests.test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible",
+          "test_paired_publication.PublicationTests.test_configured_shell_hooks_publish_pair_and_first_source_bound_markers"
+        ],
+        "result": "passed",
+        "log": "release-tests.stderr.txt"
+      }
+    ],
+    "all_rows_executed_and_passed": true
+  },
+  "guard_removals": {
+    "result": "all detected",
+    "count": 13,
+    "receipt": "guard-mutations.json"
+  },
+  "spec_integrity": {
+    "baseline_commit": "b8cf5d8e4093df4f1a4b565c2425ff929c45d578",
+    "baseline_preserved": true,
+    "frozen_block_sha256": "f468f3e2dcadbad78d34fe0a76ab71124e1fa648384810823cbf68cc4b44e6cf",
+    "frozen_block_preserved": true
+  },
+  "working_tree_sha256": {
+    "README.md": "52fa0b41059fb5b3d87723aefd5ec8529c099ee1bdf71837a0210eaac2b590bd",
+    "docs/release/operator-setup-checklist.md": "0cd21e95afc4ddd90233132e39ceaddc9c8e2aecfeb88691be533d677db3f3da",
+    "scripts/tests/test_paired_publication.py": "843feffa585794440c5ea63e5dde4fe7be62af770952c4eb7298b6aa4282e1a2",
+    "scripts/verify-paired-publication.py": "2876bcbc7fc0547dc2b31d5c11d3f4e18671e2519f8decab487b804c7a1bfa97",
+    "tools/conformance-vectors/v1/README.md": "95ea253b9edf4db2298190d51feb4550e184f258daf2eb97e45bca8d7340dd99",
+    "tools/live-topology/README.md": "292d0b6511eeb0e2676f51086c1e246d400302ae6b14bf8286e7cba90096bc4a",
+    "tools/live-topology/test_ci.py": "35168c89006dc39b808fbb524db5b80805ddbfa445357a883a38e919c0489925"
+  },
+  "notes": [
+    "The final publication subset reran after the duplicate-key regression gained exact stdout/stderr and refusal-document assertions.",
+    "Topology checks use controlled tools and synthetic packages; they do not run the real live acceptance lane.",
+    "No commits, pushes, remote operations, dependency/reference updates or public publication were performed."
+  ],
+  "result": "passed"
+}

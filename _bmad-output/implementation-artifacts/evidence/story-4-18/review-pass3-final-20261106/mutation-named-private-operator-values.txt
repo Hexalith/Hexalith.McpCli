@@ -1,0 +1,246 @@
+test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) ... 
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=0, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=0, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=1, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=1, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=2, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=2, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=0, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=0, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=1, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=1, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=2, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=2, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=0, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=0, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=1, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=1, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=2, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=2, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=0, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=0, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=1, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=1, duplicate=True) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=2, duplicate=False) ... FAIL
+  test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=2, duplicate=True) ... FAIL
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=0, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=0, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 581, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertNotIn(secret, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 'unbound-named-key-first-20261106' unexpectedly found in '{"evidence":{"SigningKey":"unbound-named-key-first-20261106","SigningKey":"unbound-named-key-second-20261106","message":"retain \\"quotes\\", back\\\\slashes and new\\nlines; SigningKey is configured"},"message":"retain \\"quotes\\", back\\\\slashes and new\\nlines; SigningKey is configured"}'
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=1, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=1, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=2, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='SigningKey', depth=2, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=0, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=0, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 581, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertNotIn(secret, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 'unbound-named-key-first-20261106' unexpectedly found in '{"evidence":{"PrivateKey":"unbound-named-key-first-20261106","PrivateKey":"unbound-named-key-second-20261106","message":"retain \\"quotes\\", back\\\\slashes and new\\nlines; SigningKey is configured"},"message":"retain \\"quotes\\", back\\\\slashes and new\\nlines; SigningKey is configured"}'
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=1, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=1, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=2, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='PrivateKey', depth=2, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=0, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=0, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 581, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertNotIn(secret, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 'unbound-named-key-first-20261106' unexpectedly found in '{"evidence":{"Authentication:JwtBearer:SigningKey":"unbound-named-key-first-20261106","Authentication:JwtBearer:SigningKey":"unbound-named-key-second-20261106","message":"retain \\"quotes\\", back\\\\slashes and new\\nlines; SigningKey is configured"},"message":"retain \\"quotes\\", back\\\\slashes and new\\nlines; SigningKey is configured"}'
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=1, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=1, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=2, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='Authentication:JwtBearer:SigningKey', depth=2, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=0, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=0, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 581, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertNotIn(secret, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 'unbound-named-key-first-20261106' unexpectedly found in '{"evidence":{"pRiVaTeKeY":"unbound-named-key-first-20261106","pRiVaTeKeY":"unbound-named-key-second-20261106","message":"retain \\"quotes\\", back\\\\slashes and new\\nlines; SigningKey is configured"},"message":"retain \\"quotes\\", back\\\\slashes and new\\nlines; SigningKey is configured"}'
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=1, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=1, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=2, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+======================================================================
+FAIL: test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) (key='pRiVaTeKeY', depth=2, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 571, in test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json
+    self.assertEqual(verifier.main(), 1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+----------------------------------------------------------------------
+Ran 1 test in 0.028s
+
+FAILED (failures=24)

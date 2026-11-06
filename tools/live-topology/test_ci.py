@@ -99,6 +99,9 @@ elif name == 'curl':
         shutil.copyfile(package, destination)
     else: shutil.copyfile(root / 'aspire-fixture.tar.gz', destination)
 elif name == 'git':
+    drift_path = root / 'source-drift.json'
+    drift = json.loads(drift_path.read_text()) if drift_path.exists() else {}
+    source_mode = drift.get('mode') if pathlib.Path.cwd().name == drift.get('source') else ''
     if args[0] == 'config':
         for module in ('EventStore', 'Tenants', 'Parties', 'Platform'):
             if mode != 'undeclared-source' or module != 'Parties':
@@ -110,13 +113,13 @@ elif name == 'git':
     elif args[0] == 'rev-parse' and args[-1].endswith('^{commit}'):
         print('a' * 40)
     elif args == ['rev-parse', 'HEAD']:
-        print((('c' if mode == 'wrong-builds-source' else 'b') if pathlib.Path.cwd().name == 'Hexalith.Builds' else 'd' if mode in ('wrong-builds-source', 'dirty-builds-source') else 'a') * 40)
+        print(('e' if source_mode == 'moved-source' else ('c' if mode == 'wrong-builds-source' else 'b') if pathlib.Path.cwd().name == 'Hexalith.Builds' else 'd' if mode in ('wrong-builds-source', 'dirty-builds-source') else 'a') * 40)
     elif args == ['remote', 'get-url', 'origin']:
-        print('https://github.com/Hexalith/' + pathlib.Path.cwd().name + '.git')
+        print('https://example.invalid/foreign.git' if source_mode == 'foreign-source' else 'https://github.com/Hexalith/' + pathlib.Path.cwd().name + '.git')
     elif args[0] == 'show':
         sys.stdout.buffer.write((pathlib.Path.cwd() / args[1].split(':', 1)[1]).read_bytes())
     elif args == ['status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all']:
-        if mode == 'dirty-source' or mode == 'dirty-builds-source' and pathlib.Path.cwd().name == 'Hexalith.Builds': print('M  ' + pathlib.Path.cwd().name + '-fixture.txt')
+        if source_mode == 'dirty-source' or mode == 'dirty-source' and pathlib.Path.cwd().name != 'Hexalith.Builds' or mode == 'dirty-builds-source' and pathlib.Path.cwd().name == 'Hexalith.Builds': print('M  ' + pathlib.Path.cwd().name + '-fixture.txt')
 elif name == 'sudo':
     if args != ['-n', 'sysctl', '-w', 'kernel.apparmor_restrict_unprivileged_userns=0']:
         sys.exit(89)
@@ -159,6 +162,15 @@ if mode == 'nested-before-smoke' and pathlib.Path(__file__).name == 'run-vectors
     nested = root / 'references/Hexalith.Tenants/references/Hexalith.Builds/.git'
     nested.parent.mkdir(parents=True)
     nested.write_bytes(b'untouched nested checkout')
+if mode.startswith('source-before-smoke-') and pathlib.Path(__file__).name == 'run-vectors.py':
+    drift = mode.removeprefix('source-before-smoke-')
+    if drift == 'selection':
+        selection_path = root / 'tools/live-topology/native-runtime.json'
+        selection = json.loads(selection_path.read_text())
+        selection['sources']['Hexalith.Parties']['commit'] = 'e' * 40
+        selection_path.write_text(json.dumps(selection))
+    else:
+        (root / 'source-drift.json').write_text(json.dumps({'source': 'Hexalith.Parties', 'mode': drift}))
 def owned(name, base=runtime):
     path = base / 'runs' / name; path.mkdir(parents=True)
     namespaces = {key: key + ':[' + str(2000 + index) + ']' for index, key in enumerate(('user', 'pid', 'net', 'mnt'))}
@@ -722,6 +734,65 @@ class CiHooksTests(unittest.TestCase):
                 self.assertIn('pinned clean direct checkout', result.stderr)
                 self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
                 self.assertFalse(any(call[0] == 'git' and call[2] in ('fetch', 'checkout') for call in self.calls()))
+
+    def test_after_preparation_source_and_selection_drift_refuse_before_vectors(self):
+        selection_path = self.tools / 'native-runtime.json'
+        original = selection_path.read_bytes()
+        for mode in ('moved-source', 'dirty-source', 'foreign-source', 'selection'):
+            with self.subTest(mode=mode):
+                self.fresh_evidence()
+                self.prepare()
+                if mode == 'selection':
+                    selection = json.loads(original)
+                    selection['sources']['Hexalith.Parties']['commit'] = 'e' * 40
+                    selection_path.write_text(json.dumps(selection))
+                elif mode != 'dirty-source':
+                    (self.root / 'source-drift.json').write_text(json.dumps({'source': 'Hexalith.Parties', 'mode': mode}))
+                try:
+                    result = self.invoke('run-ci.sh', 'dirty-source' if mode == 'dirty-source' else '')
+                    self.assertNotEqual(0, result.returncode)
+                    message = 'selection changed after preparation' if mode == 'selection' else 'source identity or clean owned files changed'
+                    self.assertIn(message, result.stderr)
+                    self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+                    self.assertEqual('failed', json.loads((self.evidence / 'ci-live.json').read_text())['result'])
+                finally:
+                    selection_path.write_bytes(original)
+                    (self.root / 'source-drift.json').unlink(missing_ok=True)
+
+    def test_after_vector_source_and_selection_drift_refuse_before_independent_smoke(self):
+        selection_path = self.tools / 'native-runtime.json'
+        original = selection_path.read_bytes()
+        for mode in ('moved-source', 'dirty-source', 'foreign-source', 'selection'):
+            with self.subTest(mode=mode):
+                self.fresh_evidence()
+                self.prepare()
+                try:
+                    result = self.invoke('run-ci.sh', 'source-before-smoke-' + mode)
+                    self.assertNotEqual(0, result.returncode)
+                    message = 'selection changed after preparation' if mode == 'selection' else 'source identity or clean owned files changed'
+                    self.assertIn(message, result.stderr)
+                    runners = (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()
+                    self.assertEqual(1, len(runners), 'Independent smoke must not start after source drift.')
+                    self.assertFalse((self.root / 'runner-smoke-output.json').exists())
+                    self.assertEqual('failed', json.loads((self.evidence / 'ci-live.json').read_text())['result'])
+                finally:
+                    selection_path.write_bytes(original)
+                    (self.root / 'source-drift.json').unlink(missing_ok=True)
+                    (self.root / 'runner-gateway-environment.jsonl').unlink(missing_ok=True)
+
+    def test_preparation_requires_exact_root_redis_override_before_builds(self):
+        props = self.root / 'Directory.Build.props'
+        for version in ('3.4.30', None):
+            with self.subTest(version=version):
+                self.fresh_evidence()
+                props.write_text('<Project />' if version is None else
+                    '<Project><ItemGroup><PackageVersion Update="StackExchange.Redis" Version="' + version + '" /></ItemGroup></Project>')
+                result = self.invoke('prepare-ci.sh')
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn('exact root Redis 3.4.31 override', result.stderr)
+                self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
+                self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+                self.assertEqual('failed', json.loads((self.evidence / 'preparation.json').read_text())['result'])
 
     def test_published_gateway_profile_binds_both_vector_and_independent_smoke(self):
         self.prepare()
@@ -1575,16 +1646,17 @@ class CiHooksTests(unittest.TestCase):
     def test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text(self):
         module = self.ci_module()
         ordinary = 'retain "quotes", back\\slashes and new\nlines'
-        for secret in ('quoted-"credential"', 'back\\slash-credential', 'new\nline-credential'):
-            with self.subTest(secret=repr(secret)), patch.dict(os.environ, {'TEST_SECRET_TOKEN': secret}):
-                diagnostic = {'diagnostic': secret, 'ordinary': ordinary}
-                result = module.sanitized(json.dumps(diagnostic))
-                self.assertEqual({'diagnostic': '[REDACTED]', 'ordinary': ordinary}, json.loads(result))
-                self.assertNotIn(json.dumps(secret)[1:-1], result)
-                nested = module.sanitized(json.dumps({'nested': json.dumps(diagnostic)}))
-                self.assertEqual({'diagnostic': '[REDACTED]', 'ordinary': ordinary}, json.loads(json.loads(nested)['nested']))
-                self.assertEqual('before [REDACTED] after', module.sanitized('before ' + secret + ' after'))
-                self.assertEqual(ordinary, module.sanitized(ordinary))
+        for key in ('TEST_SECRET_TOKEN', 'NUGET_API_KEY'):
+            for secret in ('opaque-api-credential', 'quoted-"credential"', 'back\\slash-credential', 'new\nline-credential'):
+                with self.subTest(key=key, secret=repr(secret)), patch.dict(os.environ, {key: secret}):
+                    diagnostic = {'diagnostic': secret, 'ordinary': ordinary}
+                    result = module.sanitized(json.dumps(diagnostic))
+                    self.assertEqual({'diagnostic': '[REDACTED]', 'ordinary': ordinary}, json.loads(result))
+                    self.assertNotIn(json.dumps(secret)[1:-1], result)
+                    nested = module.sanitized(json.dumps({'nested': json.dumps(diagnostic)}))
+                    self.assertEqual({'diagnostic': '[REDACTED]', 'ordinary': ordinary}, json.loads(json.loads(nested)['nested']))
+                    self.assertEqual('before [REDACTED] after', module.sanitized('before ' + secret + ' after'))
+                    self.assertEqual(ordinary, module.sanitized(ordinary))
 
     def test_unowned_evidence_is_untouched_and_retry_requires_fresh_directory(self):
         self.evidence.mkdir()

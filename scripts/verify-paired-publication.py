@@ -130,12 +130,13 @@ def redact_operator(text):
 
 def redact_operator_values(value):
     if isinstance(value, dict):
-        return {redact_operator_values(key): redact_operator_values(item) for key, item in value.items()}
+        return {redact_operator_values(key): '[REDACTED]' if private_operator_key(key) else redact_operator_values(item)
+                for key, item in value.items()}
     if isinstance(value, list):
         return [redact_operator_values(item) for item in value]
     if not isinstance(value, str):
         return value
-    redacted = redact_operator(value)
+    redacted = redact_operator_text(value)
     try:
         decoded = json.loads(redacted)
     except ValueError:
@@ -144,13 +145,69 @@ def redact_operator_values(value):
     return json.dumps(sanitized, ensure_ascii=False) if sanitized != decoded else redacted
 
 
+def redact_operator_text(text):
+    text = redact_operator(text)
+    strings = r'"(?:[^"\\]|\\.)*"'
+    decoder = json.JSONDecoder()
+    parts, cursor = [], 0
+    # Keep raw spans so duplicate fields cannot hide a private value.
+    for match in re.finditer(strings, text):
+        if match.start() < cursor:
+            continue
+        try:
+            key = json.loads(match.group())
+        except ValueError:
+            continue
+        if not private_operator_key(key):
+            continue
+        separator = re.match(r'\s*:\s*', text[match.end():])
+        if separator is None:
+            continue
+        start = match.end() + separator.end()
+        try:
+            value, end = decoder.raw_decode(text, start)
+        except ValueError:
+            value = re.match(strings, text[start:])
+            if value is None:
+                continue
+            end = start + value.end()
+        if value == '[REDACTED]':
+            continue
+        parts.extend((text[cursor:start], '"[REDACTED]"'))
+        cursor = end
+    text = ''.join([*parts, text[cursor:]])
+
+    # Inspect every raw JSON string, including values hidden by duplicate keys.
+    def sanitize(match):
+        try:
+            value = json.loads(match.group())
+        except ValueError:
+            return match.group()
+        sanitized = redact_operator_values(value)
+        return json.dumps(sanitized, ensure_ascii=False) if sanitized != value else match.group()
+    return re.sub(strings, sanitize, text)
+
+
+def private_operator_key(key):
+    return isinstance(key, str) and re.search(r'(?:SigningKey|PrivateKey)\Z', key, re.I) is not None
+
+
+def unique_operator_keys(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError('Operator acceptance contains duplicate JSON keys.')
+        result[key] = value
+    return result
+
+
 def require_sanitized_operator(decision):
     if redact_operator_values(decision) != decision:
         raise ValueError('Operator acceptance contains a credential or private key; redact the source evidence first.')
 
 
 def record_operator(serialized, output):
-    decision = json.loads(serialized)
+    decision = json.loads(serialized, object_pairs_hook=unique_operator_keys)
     if not isinstance(decision, dict):
         raise ValueError('Operator acceptance must be a JSON object.')
     require_sanitized_operator(decision)
@@ -171,15 +228,9 @@ def retain_operator(paths, output):
             continue
         raw = path.read_bytes()
         decoded = raw.decode('utf-8')
-        # Inspect decoded strings and keys recursively; keep exact approved bytes when safe.
-        try:
-            document = json.loads(decoded)
-            sanitized = redact_operator_values(document)
-            redacted = sanitized != document
-            retained = json.dumps(sanitized, ensure_ascii=False, indent=2) + '\n' if redacted else decoded
-        except ValueError:
-            retained = redact_operator(decoded)
-            redacted = retained != decoded
+        # Redact the raw text as well as decoded strings; parsing alone loses duplicate values.
+        retained = redact_operator_text(decoded)
+        redacted = retained != decoded
         name = str(index + 1) + '-' + path.name
         (output / name).write_text(retained, encoding='utf-8', newline='')
         entries.append({'input_name': path.name, 'retained_name': name, 'original_sha256': hashlib.sha256(raw).hexdigest(),

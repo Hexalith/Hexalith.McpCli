@@ -1,0 +1,166 @@
+test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) ... 
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value={'d': 'synthetic-private-key-component'}, depth=0, duplicate=False) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value={'d': 'synthetic-private-key-component'}, depth=0, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value={'d': 'synthetic-private-key-component'}, depth=1, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value={'d': 'synthetic-private-key-component'}, depth=2, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=0, duplicate=False) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=0, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=1, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=2, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value={'d': 'synthetic-private-key-component'}, depth=0, duplicate=False) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value={'d': 'synthetic-private-key-component'}, depth=0, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value={'d': 'synthetic-private-key-component'}, depth=1, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value={'d': 'synthetic-private-key-component'}, depth=2, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=0, duplicate=False) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=0, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=1, duplicate=True) ... FAIL
+  test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=2, duplicate=True) ... FAIL
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value={'d': 'synthetic-private-key-component'}, depth=0, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 533, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    self.assertNotIn(component, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'synthetic-private-key-component' unexpectedly found in '{"evidence":{"PrivateKey":{"d": "synthetic-private-key-component"},"message":"safe container evidence"},"safe":[{"unchanged":true}]}'
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value={'d': 'synthetic-private-key-component'}, depth=0, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 533, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    self.assertNotIn(component, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'synthetic-private-key-component' unexpectedly found in '{"evidence":{"PrivateKey":{"d": "synthetic-private-key-component"},"PrivateKey":"[REDACTED]","message":"safe container evidence"},"safe":[{"unchanged":true}]}'
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value={'d': 'synthetic-private-key-component'}, depth=1, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 526, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    with self.assertRaisesRegex(ValueError, 'credential|duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value={'d': 'synthetic-private-key-component'}, depth=2, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 526, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    with self.assertRaisesRegex(ValueError, 'credential|duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=0, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 533, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    self.assertNotIn(component, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'synthetic-private-key-component' unexpectedly found in '{"evidence":{"PrivateKey":["synthetic-private-key-component", {"nested": ["synthetic-private-key-component"]}],"message":"safe container evidence"},"safe":[{"unchanged":true}]}'
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=0, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 533, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    self.assertNotIn(component, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'synthetic-private-key-component' unexpectedly found in '{"evidence":{"PrivateKey":["synthetic-private-key-component", {"nested": ["synthetic-private-key-component"]}],"PrivateKey":"[REDACTED]","message":"safe container evidence"},"safe":[{"unchanged":true}]}'
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=1, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 526, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    with self.assertRaisesRegex(ValueError, 'credential|duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='PrivateKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=2, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 526, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    with self.assertRaisesRegex(ValueError, 'credential|duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value={'d': 'synthetic-private-key-component'}, depth=0, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 533, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    self.assertNotIn(component, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'synthetic-private-key-component' unexpectedly found in '{"evidence":{"SigningKey":{"d": "synthetic-private-key-component"},"message":"safe container evidence"},"safe":[{"unchanged":true}]}'
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value={'d': 'synthetic-private-key-component'}, depth=0, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 533, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    self.assertNotIn(component, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'synthetic-private-key-component' unexpectedly found in '{"evidence":{"SigningKey":{"d": "synthetic-private-key-component"},"SigningKey":"[REDACTED]","message":"safe container evidence"},"safe":[{"unchanged":true}]}'
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value={'d': 'synthetic-private-key-component'}, depth=1, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 526, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    with self.assertRaisesRegex(ValueError, 'credential|duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value={'d': 'synthetic-private-key-component'}, depth=2, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 526, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    with self.assertRaisesRegex(ValueError, 'credential|duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=0, duplicate=False)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 533, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    self.assertNotIn(component, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'synthetic-private-key-component' unexpectedly found in '{"evidence":{"SigningKey":["synthetic-private-key-component", {"nested": ["synthetic-private-key-component"]}],"message":"safe container evidence"},"safe":[{"unchanged":true}]}'
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=0, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 533, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    self.assertNotIn(component, retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'synthetic-private-key-component' unexpectedly found in '{"evidence":{"SigningKey":["synthetic-private-key-component", {"nested": ["synthetic-private-key-component"]}],"SigningKey":"[REDACTED]","message":"safe container evidence"},"safe":[{"unchanged":true}]}'
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=1, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 526, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    with self.assertRaisesRegex(ValueError, 'credential|duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_named_private_containers_are_redacted_including_duplicates_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_containers_are_redacted_including_duplicates_and_encoded_json) (key='SigningKey', value=['synthetic-private-key-component', {'nested': ['synthetic-private-key-component']}], depth=2, duplicate=True)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 526, in test_named_private_containers_are_redacted_including_duplicates_and_encoded_json
+    with self.assertRaisesRegex(ValueError, 'credential|duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.017s
+
+FAILED (failures=16)

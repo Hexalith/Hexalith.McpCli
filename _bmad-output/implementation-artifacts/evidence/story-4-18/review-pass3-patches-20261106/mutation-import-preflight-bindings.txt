@@ -1,0 +1,15 @@
+test_changed_valid_operator_decision_refuses_import_after_initial_preflight (test_paired_publication.PublicationTests.test_changed_valid_operator_decision_refuses_import_after_initial_preflight) ... FAIL
+
+======================================================================
+FAIL: test_changed_valid_operator_decision_refuses_import_after_initial_preflight (test_paired_publication.PublicationTests.test_changed_valid_operator_decision_refuses_import_after_initial_preflight)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 192, in test_changed_valid_operator_decision_refuses_import_after_initial_preflight
+    with self.assertRaisesRegex(ValueError, 'Preflight bindings changed before import'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.040s
+
+FAILED (failures=1)

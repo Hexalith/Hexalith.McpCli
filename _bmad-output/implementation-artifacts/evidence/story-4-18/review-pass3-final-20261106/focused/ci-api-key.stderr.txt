@@ -1,0 +1,6 @@
+test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.028s
+
+OK

@@ -1,0 +1,173 @@
+{
+  "mutations": [
+    {
+      "name": "duplicate-operator-keys",
+      "test": "PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value",
+      "detected": true,
+      "failures": 4,
+      "errors": 0,
+      "mutation": {
+        "file": "scripts/verify-paired-publication.py",
+        "removed": "decision = json.loads(serialized, object_pairs_hook=unique_operator_keys)",
+        "replacement": "decision = json.loads(serialized)"
+      },
+      "log_sha256": "9d1ad3f36f7e8d24a5c928f93e548a384ee62dd77708f1ac7edbf1473d013978"
+    },
+    {
+      "name": "raw-operator-redaction",
+      "test": "PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value",
+      "detected": true,
+      "failures": 3,
+      "errors": 0,
+      "mutation": {
+        "file": "scripts/verify-paired-publication.py",
+        "removed": "        retained = redact_operator_text(decoded)",
+        "replacement": "        document = json.loads(decoded)\n        sanitized = redact_operator_values(document)\n        retained = json.dumps(sanitized) if sanitized != document else decoded"
+      },
+      "log_sha256": "fece87cdcd6f1fc33bb82b6adac93f19f683a6a1efafe5de8c45c6b1309b622d"
+    },
+    {
+      "name": "paired-source-phase",
+      "test": "PublicationTests.test_real_paired_source_producer_writes_evidence_accepted_by_publication",
+      "detected": true,
+      "failures": 1,
+      "errors": 0,
+      "mutation": {
+        "file": "scripts/verify-release-source.py",
+        "removed": "paired = args.phase == 'paired'",
+        "replacement": "paired = False"
+      },
+      "log_sha256": "33a8e35c7898665bbb87e729e72dac5638ee99cf48f08e0a2fd40b97d673bef5"
+    },
+    {
+      "name": "paired-source-current-main",
+      "test": "PublicationTests.test_real_paired_source_producer_writes_evidence_accepted_by_publication",
+      "detected": true,
+      "failures": 0,
+      "errors": 1,
+      "mutation": {
+        "file": "scripts/verify-release-source.py",
+        "removed": "'current_main': live_main,",
+        "replacement": ""
+      },
+      "log_sha256": "821208b696c42aa5ffd234910a0a1b5edffd94ca6d03e4f75d258ebfddab6923"
+    },
+    {
+      "name": "recomputed-acceptance",
+      "test": "PublicationTests.test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record",
+      "detected": true,
+      "failures": 1,
+      "errors": 0,
+      "mutation": {
+        "file": "scripts/verify-paired-publication.py",
+        "removed": "if read_json(recomputed) != read_json(accepted_path):",
+        "replacement": "if False:"
+      },
+      "log_sha256": "bad884070d312063a01fe34485bf108b4ac51d0cb61c22a22f445ebd2bfc8198"
+    },
+    {
+      "name": "import-preflight-bindings",
+      "test": "PublicationTests.test_changed_valid_operator_decision_refuses_import_after_initial_preflight",
+      "detected": true,
+      "failures": 1,
+      "errors": 0,
+      "mutation": {
+        "file": "scripts/publish-paired-release.py",
+        "removed": "if any(original.get(key) != checked[key] for key in bindings):",
+        "replacement": "if False:"
+      },
+      "log_sha256": "0cd6471772d0fbb188585ea2c20fe41711707b51831ae2f92403f15989b20494"
+    },
+    {
+      "name": "duplicate-public-members",
+      "test": "PublicationTests.test_duplicate_public_archive_member_refuses_even_when_consumer_bytes_match",
+      "detected": true,
+      "failures": 1,
+      "errors": 0,
+      "mutation": {
+        "file": "scripts/publish-paired-release.py",
+        "removed": "if len(archive.namelist()) != len(set(archive.namelist())):",
+        "replacement": "if False:"
+      },
+      "log_sha256": "0c3e12ed370d7e4a7b149d7e182d2c5f2e42faaa5b6b261d0f98f5cf3b723bc5"
+    },
+    {
+      "name": "prepared-selection",
+      "test": "CiHooksTests.test_after_preparation_source_and_selection_drift_refuse_before_vectors",
+      "detected": true,
+      "failures": 1,
+      "errors": 0,
+      "mutation": {
+        "file": "tools/live-topology/ci.py",
+        "removed": "if prepared.get('selection') != selection:",
+        "replacement": "if False:"
+      },
+      "log_sha256": "26fb58abda82d623cf5172d0cf8be8bc94e8f72c2b500dd536e31e26f36daf36"
+    },
+    {
+      "name": "prepared-head",
+      "test": "CiHooksTests.test_after_preparation_source_and_selection_drift_refuse_before_vectors",
+      "detected": true,
+      "failures": 4,
+      "errors": 0,
+      "mutation": {
+        "file": "tools/live-topology/ci.py",
+        "removed": "if commit != source['selectedCommit'] or status or remote != source['repository']:",
+        "replacement": "if status or remote != source['repository']:"
+      },
+      "log_sha256": "5400ac390ae06ca5936784a90a3eceef245be489a1e86adeb9bf08aae2e14f76"
+    },
+    {
+      "name": "prepared-status",
+      "test": "CiHooksTests.test_after_preparation_source_and_selection_drift_refuse_before_vectors",
+      "detected": true,
+      "failures": 3,
+      "errors": 0,
+      "mutation": {
+        "file": "tools/live-topology/ci.py",
+        "removed": "if commit != source['selectedCommit'] or status or remote != source['repository']:",
+        "replacement": "if commit != source['selectedCommit'] or remote != source['repository']:"
+      },
+      "log_sha256": "2af84ce3400f5f4361edc1171f55e765acad1331e8a4eca90b17e2f92b540212"
+    },
+    {
+      "name": "prepared-remote",
+      "test": "CiHooksTests.test_after_preparation_source_and_selection_drift_refuse_before_vectors",
+      "detected": true,
+      "failures": 2,
+      "errors": 0,
+      "mutation": {
+        "file": "tools/live-topology/ci.py",
+        "removed": "if commit != source['selectedCommit'] or status or remote != source['repository']:",
+        "replacement": "if commit != source['selectedCommit'] or status:"
+      },
+      "log_sha256": "4055b2d323e4b17e434f110dd518302fc779f0d4866332408bd6249fc8fdd611"
+    },
+    {
+      "name": "before-smoke-provenance",
+      "test": "CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke",
+      "detected": true,
+      "failures": 4,
+      "errors": 0,
+      "mutation": {
+        "file": "tools/live-topology/ci.py",
+        "removed": "        require_prepared_provenance(prepared)\n",
+        "replacement": "        pass\n"
+      },
+      "log_sha256": "f05d18c8f154c09290e87a704bdbe114539f375f095ed33c71d94dc512226f3b"
+    },
+    {
+      "name": "root-redis-override",
+      "test": "CiHooksTests.test_preparation_requires_exact_root_redis_override_before_builds",
+      "detected": true,
+      "failures": 2,
+      "errors": 0,
+      "mutation": {
+        "file": "tools/live-topology/ci.py",
+        "removed": "if not catalog.is_file() or redis != ['3.4.31']:",
+        "replacement": "if not catalog.is_file():"
+      },
+      "log_sha256": "1cb04602193691af050c4a746000175d910f0598c6d964eded68a85a724fa801"
+    }
+  ]
+}

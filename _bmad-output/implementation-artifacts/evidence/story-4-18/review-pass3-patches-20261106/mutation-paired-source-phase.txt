@@ -1,0 +1,31 @@
+test_real_paired_source_producer_writes_evidence_accepted_by_publication (test_paired_publication.PublicationTests.test_real_paired_source_producer_writes_evidence_accepted_by_publication) ... FAIL
+
+======================================================================
+FAIL: test_real_paired_source_producer_writes_evidence_accepted_by_publication (test_paired_publication.PublicationTests.test_real_paired_source_producer_writes_evidence_accepted_by_publication)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 477, in test_real_paired_source_producer_writes_evidence_accepted_by_publication
+    self.assertEqual(gate.main(), 0)
+                     ~~~~~~~~~^^
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/verify-release-source.py", line 161, in main
+    response = github_json(
+        f"repos/{repository}/actions/workflows/{workflow}/runs",
+        "-f", "branch=main", "-f", "event=push", "-f", f"head_sha={args.sha}", "-f", "per_page=100",
+    )
+  File "/usr/lib/python3.14/unittest/mock.py", line 1176, in __call__
+    return self._mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1180, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/unittest/mock.py", line 1247, in _execute_mock_call
+    result = effect(*args, **kwargs)
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 464, in github
+    self.fail('Unexpected GitHub request: ' + endpoint)
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Unexpected GitHub request: repos/fixture/repo/actions/workflows/bootstrap-package.yml/runs
+
+----------------------------------------------------------------------
+Ran 1 test in 0.023s
+
+FAILED (failures=1)

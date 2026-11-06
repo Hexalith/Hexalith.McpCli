@@ -96,6 +96,12 @@ public sealed class PlatformScopeTests
     [InlineData("routing-fixture.items-list", "other-tenant")]
     [InlineData("routing-fixture.items-list", "platform:other")]
     [InlineData("routing-fixture.colon-wire", "system")]
+    [InlineData("routing-fixture.items-list", "Platform:routing")]
+    [InlineData("routing-fixture.items-list", "platform:Routing")]
+    [InlineData("routing-fixture.items-list", "PLATFORM:ROUTING")]
+    [InlineData("routing-fixture.colon-wire", "Platform:routing")]
+    [InlineData("routing-fixture.colon-wire", "platform:Routing")]
+    [InlineData("routing-fixture.colon-wire", "PLATFORM:ROUTING")]
     public async Task PlatformScopeConflictIsRefusedAsync(string operation, string suppliedScope)
     {
         IEventStoreGatewayClient gateway = Gateway();
@@ -106,8 +112,18 @@ public sealed class PlatformScopeTests
         OperationOutcome outcome = await Executor(gateway).ExecuteAsync(call, Context(null),
             TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
-        outcome.Error.Violations.ShouldNotBeNull().ShouldHaveSingleItem().Path.ShouldBe("/tenant");
+        outcome.Document.ShouldBeNull();
+        JsonElement actual = JsonSerializer.SerializeToElement(new { error = outcome.Error }, McpCliJson.Result);
+        JsonElement expected = JsonSerializer.SerializeToElement(new
+        {
+            error = new
+            {
+                code = "validation_failed",
+                operation,
+                violations = new[] { new { path = "/tenant", message = "The per-call tenant disagrees with the operation's platform scope." } },
+            },
+        });
+        JsonElement.DeepEquals(actual, expected).ShouldBeTrue(actual.GetRawText());
         gateway.ReceivedCalls().ShouldBeEmpty();
     }
 

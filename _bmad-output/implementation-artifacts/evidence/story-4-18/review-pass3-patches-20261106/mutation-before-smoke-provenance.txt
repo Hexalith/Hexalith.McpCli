@@ -1,0 +1,46 @@
+test_after_vector_source_and_selection_drift_refuse_before_independent_smoke (test_ci.CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke) ... 
+  test_after_vector_source_and_selection_drift_refuse_before_independent_smoke (test_ci.CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke) (mode='moved-source') ... FAIL
+  test_after_vector_source_and_selection_drift_refuse_before_independent_smoke (test_ci.CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke) (mode='dirty-source') ... FAIL
+  test_after_vector_source_and_selection_drift_refuse_before_independent_smoke (test_ci.CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke) (mode='foreign-source') ... FAIL
+  test_after_vector_source_and_selection_drift_refuse_before_independent_smoke (test_ci.CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke) (mode='selection') ... FAIL
+
+======================================================================
+FAIL: test_after_vector_source_and_selection_drift_refuse_before_independent_smoke (test_ci.CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke) (mode='moved-source')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 751, in test_after_vector_source_and_selection_drift_refuse_before_independent_smoke
+    self.assertNotEqual(0, result.returncode)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_after_vector_source_and_selection_drift_refuse_before_independent_smoke (test_ci.CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke) (mode='dirty-source')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 751, in test_after_vector_source_and_selection_drift_refuse_before_independent_smoke
+    self.assertNotEqual(0, result.returncode)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_after_vector_source_and_selection_drift_refuse_before_independent_smoke (test_ci.CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke) (mode='foreign-source')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 751, in test_after_vector_source_and_selection_drift_refuse_before_independent_smoke
+    self.assertNotEqual(0, result.returncode)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0
+
+======================================================================
+FAIL: test_after_vector_source_and_selection_drift_refuse_before_independent_smoke (test_ci.CiHooksTests.test_after_vector_source_and_selection_drift_refuse_before_independent_smoke) (mode='selection')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 751, in test_after_vector_source_and_selection_drift_refuse_before_independent_smoke
+    self.assertNotEqual(0, result.returncode)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0
+
+----------------------------------------------------------------------
+Ran 1 test in 17.217s
+
+FAILED (failures=4)

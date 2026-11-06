@@ -1,0 +1,58 @@
+test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) ... 
+  test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) (key='NUGET_API_KEY', secret="'opaque-api-credential'") ... FAIL
+  test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) (key='NUGET_API_KEY', secret='\'quoted-"credential"\'') ... FAIL
+  test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) (key='NUGET_API_KEY', secret="'back\\\\slash-credential'") ... FAIL
+  test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) (key='NUGET_API_KEY', secret="'new\\nline-credential'") ... FAIL
+
+======================================================================
+FAIL: test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) (key='NUGET_API_KEY', secret="'opaque-api-credential'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1634, in test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text
+    self.assertEqual({'diagnostic': '[REDACTED]', 'ordinary': ordinary}, json.loads(result))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'diagnostic': '[REDACTED]', 'ordinary': 'retain "quotes"[27 chars]nes'} != {'diagnostic': 'opaque-api-credential', 'ordinary': 'reta[38 chars]nes'}
+- {'diagnostic': '[REDACTED]',
++ {'diagnostic': 'opaque-api-credential',
+   'ordinary': 'retain "quotes", back\\slashes and new\nlines'}
+
+======================================================================
+FAIL: test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) (key='NUGET_API_KEY', secret='\'quoted-"credential"\'')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1634, in test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text
+    self.assertEqual({'diagnostic': '[REDACTED]', 'ordinary': ordinary}, json.loads(result))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'diagnostic': '[REDACTED]', 'ordinary': 'retain "quotes"[27 chars]nes'} != {'diagnostic': 'quoted-"credential"', 'ordinary': 'retain[36 chars]nes'}
+- {'diagnostic': '[REDACTED]',
++ {'diagnostic': 'quoted-"credential"',
+   'ordinary': 'retain "quotes", back\\slashes and new\nlines'}
+
+======================================================================
+FAIL: test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) (key='NUGET_API_KEY', secret="'back\\\\slash-credential'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1634, in test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text
+    self.assertEqual({'diagnostic': '[REDACTED]', 'ordinary': ordinary}, json.loads(result))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'diagnostic': '[REDACTED]', 'ordinary': 'retain "quotes"[27 chars]nes'} != {'diagnostic': 'back\\slash-credential', 'ordinary': 'ret[39 chars]nes'}
+- {'diagnostic': '[REDACTED]',
++ {'diagnostic': 'back\\slash-credential',
+   'ordinary': 'retain "quotes", back\\slashes and new\nlines'}
+
+======================================================================
+FAIL: test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text (test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text) (key='NUGET_API_KEY', secret="'new\\nline-credential'")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 1634, in test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text
+    self.assertEqual({'diagnostic': '[REDACTED]', 'ordinary': ordinary}, json.loads(result))
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'diagnostic': '[REDACTED]', 'ordinary': 'retain "quotes"[27 chars]nes'} != {'diagnostic': 'new\nline-credential', 'ordinary': 'retai[37 chars]nes'}
+- {'diagnostic': '[REDACTED]',
++ {'diagnostic': 'new\nline-credential',
+   'ordinary': 'retain "quotes", back\\slashes and new\nlines'}
+
+----------------------------------------------------------------------
+Ran 1 test in 0.034s
+
+FAILED (failures=4)
