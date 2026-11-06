@@ -1,0 +1,212 @@
+[
+  {
+    "path": "references/Hexalith.AI.Tools",
+    "head": "1745b6663ad32bb1288167135ed0f979366c53a0",
+    "status": "## main...origin/main",
+    "surface_projects": [],
+    "owners": {},
+    "host_registration_hits": []
+  },
+  {
+    "path": "references/Hexalith.Commons",
+    "head": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+    "status": "## main...origin/main",
+    "surface_projects": [],
+    "owners": {},
+    "host_registration_hits": []
+  },
+  {
+    "path": "references/Hexalith.PolymorphicSerializations",
+    "head": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+    "status": "## main...origin/main",
+    "surface_projects": [],
+    "owners": {},
+    "host_registration_hits": []
+  },
+  {
+    "path": "references/Hexalith.Conversations",
+    "head": "9a5c684de5ee4876448faa26737f6afd36cf33e7",
+    "status": "## main...origin/main",
+    "surface_projects": [],
+    "owners": {},
+    "host_registration_hits": []
+  },
+  {
+    "path": "references/Hexalith.EventStore",
+    "head": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+    "status": "## main...origin/main",
+    "surface_projects": [
+      "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+      "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+      "tests/Hexalith.EventStore.Admin.Cli.Tests/Hexalith.EventStore.Admin.Cli.Tests.csproj",
+      "tests/Hexalith.EventStore.Admin.Mcp.Tests/Hexalith.EventStore.Admin.Mcp.Tests.csproj"
+    ],
+    "owners": {},
+    "host_registration_hits": [
+      "src/Hexalith.EventStore.Admin.Mcp/Program.cs:57: .AddMcpServer(options => options.ServerInfo = new() {",
+      "src/Hexalith.EventStore.Admin.Mcp/Program.cs:62: .WithStdioServerTransport()"
+    ]
+  },
+  {
+    "path": "references/Hexalith.Memories",
+    "head": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+    "status": "## main...origin/main",
+    "surface_projects": [
+      "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
+      "src/Hexalith.Memories.Mcp/Hexalith.Memories.Mcp.csproj",
+      "tests/Hexalith.Memories.Cli.Tests/Hexalith.Memories.Cli.Tests.csproj",
+      "tests/Hexalith.Memories.Mcp.Tests/Hexalith.Memories.Mcp.Tests.csproj"
+    ],
+    "owners": {},
+    "host_registration_hits": [
+      "src/Hexalith.Memories.AppHost/Hexalith.Memories.AppHost.csproj:14: <ProjectReference Include=\"..\\Hexalith.Memories.Mcp\\Hexalith.Memories.Mcp.csproj\" />",
+      "src/Hexalith.Memories.Mcp/McpCompositionRoot.cs:91: services.AddMcpServer()",
+      "src/Hexalith.Memories.Mcp/McpCompositionRoot.cs:92: .WithHttpTransport(options => options.Stateless = true)",
+      "src/Hexalith.Memories.Mcp/Program.cs:23: app.MapMcp(\"/mcp\").RequireAuthorization();"
+    ]
+  },
+  {
+    "path": "references/Hexalith.Tenants",
+    "head": "cf36618a2c27b5722a1ff811cfbbce4528c3c105",
+    "status": "## main...origin/main",
+    "surface_projects": [],
+    "owners": {},
+    "host_registration_hits": []
+  },
+  {
+    "path": "references/Hexalith.Builds",
+    "head": "beb85e497957fedc66854013efd2cc4bd216ecbc",
+    "status": "## main...origin/main",
+    "surface_projects": [
+      "src/libraries/Hexalith.Builds.Evidence.Cli/Hexalith.Builds.Evidence.Cli.csproj",
+      "src/libraries/Hexalith.Builds.Module.Cli/Hexalith.Builds.Module.Cli.csproj"
+    ],
+    "owners": {},
+    "host_registration_hits": []
+  },
+  {
+    "path": "references/Hexalith.FrontComposer",
+    "head": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+    "status": "## main...origin/main",
+    "surface_projects": [
+      "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj",
+      "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj",
+      "tests/Hexalith.FrontComposer.Cli.Tests/Hexalith.FrontComposer.Cli.Tests.csproj",
+      "tests/Hexalith.FrontComposer.Mcp.Tests/Hexalith.FrontComposer.Mcp.Tests.csproj"
+    ],
+    "owners": {},
+    "host_registration_hits": [
+      "samples/Counter/Counter.Web/Counter.Web.csproj:11: <ProjectReference Include=\"..\\..\\..\\src\\Hexalith.FrontComposer.Mcp\\Hexalith.FrontComposer.Mcp.csproj\" />",
+      "samples/Counter/Counter.Web/Program.cs:196: _ = builder.Services.AddFrontComposerMcp(o => {",
+      "samples/Counter/Counter.Web/Program.cs:232: IEndpointConventionBuilder mcpEndpoint = app.MapFrontComposerMcp();",
+      "src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpEndpointRouteBuilderExtensions.cs:13: public static IEndpointConventionBuilder MapFrontComposerMcp(this IEndpointRouteBuilder endpoints, string? pattern = null) {",
+      "src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpEndpointRouteBuilderExtensions.cs:17: \"FrontComposer MCP services are not registered. Call IServiceCollection.AddFrontComposerMcp(...) before MapFrontComposerMcp(...).\");",
+      "src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpEndpointRouteBuilderExtensions.cs:34: return endpoints.MapMcp(route).RequireAuthorization();",
+      "src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpServiceCollectionExtensions.cs:20: public static IServiceCollection AddFrontComposerMcp(",
+      "src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpServiceCollectionExtensions.cs:79: _ = services.AddMcpServer()",
+      "src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpServiceCollectionExtensions.cs:80: .WithHttpTransport()"
+    ]
+  },
+  {
+    "path": "references/Hexalith.Parties",
+    "head": "1308ad000c79ebc394fc395588f9af91092e8c4c",
+    "status": "## main...origin/main",
+    "surface_projects": [
+      "src/Hexalith.Parties.Mcp/Hexalith.Parties.Mcp.csproj",
+      "tests/Hexalith.Parties.Mcp.Tests/Hexalith.Parties.Mcp.Tests.csproj"
+    ],
+    "owners": {},
+    "host_registration_hits": [
+      "src/Hexalith.Parties.AppHost/Hexalith.Parties.AppHost.csproj:18: <ProjectReference Include=\"..\\Hexalith.Parties.Mcp\\Hexalith.Parties.Mcp.csproj\" />",
+      "src/Hexalith.Parties.Mcp/Program.cs:61: _ = builder.Services.AddMcpServer()",
+      "src/Hexalith.Parties.Mcp/Program.cs:62: .WithHttpTransport(options => options.Stateless = true)",
+      "src/Hexalith.Parties.Mcp/Program.cs:67: _ = app.MapMcp();",
+      "src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj:66: <ProjectReference Include=\"$(HexalithFrontComposerRoot)\\src\\Hexalith.FrontComposer.Mcp\\Hexalith.FrontComposer.Mcp.csproj\" Condition=\"'$(HexalithFrontComposerFromSource)' == 'true'\" />",
+      "src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj:67: <PackageReference Include=\"Hexalith.FrontComposer.Mcp\" Condition=\"'$(HexalithFrontComposerFromSource)' != 'true'\" />"
+    ]
+  },
+  {
+    "path": "references/Hexalith.Agents",
+    "head": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+    "status": "## main...origin/main",
+    "surface_projects": [],
+    "owners": {},
+    "host_registration_hits": []
+  },
+  {
+    "path": "references/Hexalith.Projects",
+    "head": "31cb92c4362becd83938bd550ca62d07b6af448a",
+    "status": "## main...origin/main",
+    "surface_projects": [
+      "src/Hexalith.Projects.Cli/Hexalith.Projects.Cli.csproj",
+      "src/Hexalith.Projects.Mcp/Hexalith.Projects.Mcp.csproj",
+      "tests/Hexalith.Projects.Cli.Tests/Hexalith.Projects.Cli.Tests.csproj",
+      "tests/Hexalith.Projects.Mcp.Tests/Hexalith.Projects.Mcp.Tests.csproj"
+    ],
+    "owners": {},
+    "host_registration_hits": [
+      "src/Hexalith.Projects.Mcp/Hexalith.Projects.Mcp.csproj:11: <ProjectReference Include=\"$(HexalithFrontComposerRoot)\\src\\Hexalith.FrontComposer.Mcp\\Hexalith.FrontComposer.Mcp.csproj\" Condition=\"'$(UseHexalithProjectReferences)' == 'true'\" />",
+      "src/Hexalith.Projects.Mcp/Hexalith.Projects.Mcp.csproj:16: <PackageReference Include=\"Hexalith.FrontComposer.Mcp\" Condition=\"'$(UseHexalithProjectReferences)' != 'true'\" />",
+      "src/Hexalith.Projects.Mcp/ProjectsMcpModule.cs:51: return services.AddFrontComposerMcp();",
+      "src/Hexalith.Projects.Mcp/ProjectsMcpModule.cs:62: endpoints.MapFrontComposerMcp();"
+    ]
+  },
+  {
+    "path": "references/Hexalith.Folders",
+    "head": "e88c940000446e13d17d86a7288649d8653a7138",
+    "status": "## main...origin/main",
+    "surface_projects": [
+      "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+      "src/Hexalith.Folders.Mcp/Hexalith.Folders.Mcp.csproj",
+      "tests/Hexalith.Folders.Cli.Tests/Hexalith.Folders.Cli.Tests.csproj",
+      "tests/Hexalith.Folders.Mcp.Tests/Hexalith.Folders.Mcp.Tests.csproj"
+    ],
+    "owners": {},
+    "host_registration_hits": [
+      "src/Hexalith.Folders.Mcp/Program.cs:55: .AddMcpServer(options => options.ServerInfo = new()",
+      "src/Hexalith.Folders.Mcp/Program.cs:61: .WithStdioServerTransport()"
+    ]
+  },
+  {
+    "path": "references/Hexalith.ChatBot",
+    "head": "b13c58006d292836a9c8b242de476765676e5fb2",
+    "status": "## main...origin/main",
+    "surface_projects": [
+      "src/Hexalith.ChatBot.Cli/Hexalith.ChatBot.Cli.csproj",
+      "src/Hexalith.ChatBot.Mcp/Hexalith.ChatBot.Mcp.csproj",
+      "tests/Hexalith.ChatBot.Cli.Tests/Hexalith.ChatBot.Cli.Tests.csproj",
+      "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj"
+    ],
+    "owners": {},
+    "host_registration_hits": [
+      "src/Hexalith.ChatBot.Mcp/Program.cs:41: .AddMcpServer()",
+      "src/Hexalith.ChatBot.Mcp/Program.cs:42: .WithStdioServerTransport()"
+    ]
+  },
+  {
+    "path": "references/Hexalith.Works",
+    "head": "2e9fafba151a184eb4552796db7eecc25ffaf8c7",
+    "status": "## main...origin/main",
+    "surface_projects": [],
+    "owners": {},
+    "host_registration_hits": []
+  },
+  {
+    "path": "references/Hexalith.Timesheets",
+    "head": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+    "status": "## main...origin/main",
+    "surface_projects": [],
+    "owners": {},
+    "host_registration_hits": []
+  },
+  {
+    "path": "references/Hexalith.Platform",
+    "head": "019f593544ad157036b7d12173ff89a16464f3cc",
+    "status": "## main...origin/main",
+    "surface_projects": [],
+    "owners": {
+      ".github/CODEOWNERS": "# Administrator owns all changes, including workflows and this ownership policy.\n* @jpiquot\n/.github/workflows/** @jpiquot\n/.github/CODEOWNERS @jpiquot\n"
+    },
+    "host_registration_hits": []
+  }
+]

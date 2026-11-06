@@ -134,6 +134,23 @@ public sealed class NativeCatalogAuditTests : IDisposable
         Assert.Throws<InvalidDataException>(() => NativeCatalogAudit.Load(_root, proof, hash, kind == "sdk" ? "different" : "4.0.4"));
     }
 
+    /// <summary>The frozen one-source reader is valid, but cannot acquire an unaudited cohort source.</summary>
+    [Fact]
+    public void FrozenReaderAcceptsAbsentCohortAndRejectsSourceAddition()
+    {
+        const string cohort = "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs";
+        string proof = Path.Combine(_root, "audit.json");
+        var receipt = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllBytes(proof))!.AsObject();
+        receipt["inputs"]!.AsObject().Remove(cohort);
+        File.Delete(Path.Combine(_root, cohort));
+        File.WriteAllText(proof, receipt.ToJsonString());
+        string hash = Digest(proof);
+        using (JsonDocument audit = NativeCatalogAudit.Load(_root, proof, hash, "4.0.4"))
+            Assert.False(audit.RootElement.GetProperty("inputs").TryGetProperty(cohort, out _));
+        File.WriteAllText(Path.Combine(_root, cohort), "// added after online audit");
+        Assert.Throws<InvalidDataException>(() => NativeCatalogAudit.Load(_root, proof, hash, "4.0.4"));
+    }
+
     private static string Digest(string path) => Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(path)));
 
     /// <inheritdoc />

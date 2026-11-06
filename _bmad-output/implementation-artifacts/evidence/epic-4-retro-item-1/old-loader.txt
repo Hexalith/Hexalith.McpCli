@@ -1,0 +1,30 @@
+Preloaded Hexalith.McpCli.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null
+Owner refs: Hexalith.McpCli.Abstractions, Version=2.0.1.0, Culture=neutral, PublicKeyToken=null
+Resolving Hexalith.EventStore.Contracts, Version=4.1.0.0, Culture=neutral, PublicKeyToken=null
+Resolving Hexalith.McpCli.Abstractions, Version=2.0.1.0, Culture=neutral, PublicKeyToken=null
+System.Reflection.TargetInvocationException: Exception has been thrown by the target of an invocation.
+ ---> Hexalith.EventStore.ServiceDefaults.Routing.RouteCatalogUnavailableException: The complete compiled declaration inventory cannot be read.
+   at Hexalith.EventStore.ServiceDefaults.Routing.CompiledRouteCatalogDeclarations.Read(IEnumerable`1 assemblies)
+   at System.Reflection.MethodBaseInvoker.InterpretedInvoke_Method(Object obj, IntPtr* args)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   --- End of inner exception stack trace ---
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+   at Program.<Main>$(String[] args) in /tmp/mcpcli-green-main-cohort-probe/loader/Program.cs:line 19
+Resolving Hexalith.McpCli.Abstractions, Version=2.0.1.0, Culture=neutral, PublicKeyToken=null
+System.IO.FileLoadException: Could not load file or assembly 'Hexalith.McpCli.Abstractions, Version=2.0.1.0, Culture=neutral, PublicKeyToken=null'. The located assembly's manifest definition does not match the assembly reference. (0x80131040)
+File name: 'Hexalith.McpCli.Abstractions, Version=2.0.1.0, Culture=neutral, PublicKeyToken=null'
+ ---> System.IO.FileLoadException: Could not load file or assembly '/tmp/mcpcli-green-main-cohort-probe/owner-2.0.1/Hexalith.McpCli.Abstractions.dll'. The located assembly's manifest definition does not match the assembly reference. (0x80131040)
+File name: '/tmp/mcpcli-green-main-cohort-probe/owner-2.0.1/Hexalith.McpCli.Abstractions.dll'
+   at System.Runtime.Loader.AssemblyLoadContext.LoadFromAssemblyPath(String assemblyPath)
+   at System.Reflection.Assembly.LoadFromResolveHandler(Object sender, ResolveEventArgs args)
+   at System.Runtime.Loader.AssemblyLoadContext.InvokeResolveEvent(ResolveEventHandler eventHandler, RuntimeAssembly assembly, String name)
+   at System.ModuleHandle.ResolveType(QCallModule module, Int32 typeToken, IntPtr* typeInstArgs, Int32 typeInstCount, IntPtr* methodInstArgs, Int32 methodInstCount, ObjectHandleOnStack type)
+   at System.ModuleHandle.ResolveTypeHandle(Int32 typeToken, RuntimeTypeHandle[] typeInstantiationContext, RuntimeTypeHandle[] methodInstantiationContext)
+   at System.Reflection.RuntimeModule.ResolveType(Int32 metadataToken, Type[] genericTypeArguments, Type[] genericMethodArguments)
+   at System.Reflection.CustomAttribute.FilterCustomAttributeRecord(MetadataToken caCtorToken, MetadataImport& scope, RuntimeModule decoratedModule, MetadataToken decoratedToken, RuntimeType attributeFilterType, Boolean mustBeInheritable, ListBuilder`1& derivedAttributes, RuntimeType& attributeType, IRuntimeMethodInfo& ctorWithParameters, Boolean& isVarArg)
+   at System.Reflection.CustomAttribute.AddCustomAttributes(ListBuilder`1& attributes, RuntimeModule decoratedModule, Int32 decoratedMetadataToken, RuntimeType attributeFilterType, Boolean mustBeInheritable, ListBuilder`1 derivedAttributes)
+   at System.Reflection.CustomAttribute.GetCustomAttributes(RuntimeModule decoratedModule, Int32 decoratedMetadataToken, Int32 pcaCount, RuntimeType attributeFilterType)
+   at System.Attribute.GetCustomAttributes(Assembly element, Boolean inherit)
+   at Program.<Main>$(String[] args) in /tmp/mcpcli-green-main-cohort-probe/loader/Program.cs:line 23

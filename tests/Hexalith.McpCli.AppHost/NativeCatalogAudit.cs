@@ -23,8 +23,9 @@ internal static class NativeCatalogAudit
             string[] inputs = ["global.json", "Directory.Build.props", "Directory.Packages.props",
                 "references/Hexalith.Builds/Props/Directory.Packages.props",
                 "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj",
-                "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs",
-                "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs"];
+                "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs"];
+            const string cohort = "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs";
+            if (File.Exists(Path.Combine(root, cohort))) inputs = [.. inputs, cohort];
             if (audit.GetProperty("packages").EnumerateObject().Any(package =>
                 !audit.GetProperty("archives").TryGetProperty(package.Name, out JsonElement archive) || string.IsNullOrEmpty(archive.GetString())))
                 throw new InvalidDataException("The online audit must retain actual archive hashes.");

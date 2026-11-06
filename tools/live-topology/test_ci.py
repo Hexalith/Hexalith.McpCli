@@ -302,7 +302,8 @@ class CiHooksTests(unittest.TestCase):
         (self.root / 'global.json').write_text('{"sdk":{"version":"10.0.402","rollForward":"latestPatch"}}')
         (self.root / '.gitmodules').touch()
         (self.root / 'Directory.Build.props').write_text(
-            '<Project><ItemGroup><PackageVersion Update="StackExchange.Redis" Version="3.4.31" /></ItemGroup></Project>')
+            '<Project><PropertyGroup><HexalithMcpCliVersion>2.0.0</HexalithMcpCliVersion></PropertyGroup>'
+            '<ItemGroup><PackageVersion Update="StackExchange.Redis" Version="3.4.31" /></ItemGroup></Project>')
         builds = self.root / 'references/Hexalith.Builds'
         (builds / 'Props').mkdir(parents=True)
         (builds / 'Props/Directory.Packages.props').write_text('<Project><ItemGroup /></Project>')
@@ -510,6 +511,7 @@ class CiHooksTests(unittest.TestCase):
             self.assertIn('Release', call)
             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
             self.assertIn('-p:HexalithEventStoreVersion=4.1.0', call)
+            self.assertIn('-p:HexalithMcpCliVersion=2.0.0', call)
             self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
         overlay = Path(prepared['privateDirectory']) / 'source-runtime-packages.props'
         self.assertEqual('b' * 40, prepared['sourcePackageCatalog']['buildsCommit'])
@@ -518,6 +520,8 @@ class CiHooksTests(unittest.TestCase):
         self.assertIn(str(self.root / 'references/Hexalith.Builds/Props/Directory.Packages.props'),
                       overlay.read_text())
         self.assertIn('Update="StackExchange.Redis" Version="3.4.31"', overlay.read_text())
+        overrides = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
+        self.assertIn('Update="Hexalith.McpCli.Abstractions" Version="2.0.0"', overrides.read_text())
         for call in source_builds:
             self.assertEqual(call[3] != source_builds[0][3],
                              '-p:HexalithBuildPackageVersions1=' + str(overlay) in call)
@@ -671,10 +675,53 @@ class CiHooksTests(unittest.TestCase):
                     second = module.reader_audit_provenance()
                     self.assertNotEqual(first['inputs'][relative], second['inputs'][relative])
                     path.unlink()
-                    with self.assertRaises(FileNotFoundError):
-                        module.reader_audit_provenance()
+                    if path.name == 'PublishedCatalogArtifactCohort.cs':
+                        self.assertNotIn(relative, module.reader_audit_provenance()['inputs'])
+                    else:
+                        with self.assertRaises(FileNotFoundError):
+                            module.reader_audit_provenance()
                 finally:
                     path.write_bytes(original)
+
+    def test_frozen_reader_without_cohort_source_prepares_and_rechecks_audit(self):
+        relative = 'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs'
+        (self.root / relative).unlink()
+        prepared = self.prepare()
+        audit = json.loads(Path(prepared['readerAudit']['path']).read_text())
+        self.assertNotIn(relative, audit['inputs'])
+        self.assertIn(relative.replace('PublishedCatalogArtifactCohort.cs', 'Program.cs'), audit['inputs'])
+        self.ci_module().require_reader_audit(prepared)
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        inherited = [json.loads(line) for line in (self.root / 'runner-reader-audit.jsonl').read_text().splitlines()]
+        self.assertEqual(2, len(inherited))
+        self.assertTrue(all(item == prepared['readerAudit'] for item in inherited))
+        (self.root / relative).write_text('// unexpected new source')
+        with self.assertRaisesRegex(ValueError, 'online audit proof changed'):
+            self.ci_module().require_reader_audit(prepared)
+
+    def test_inherited_source_override_pins_abstractions_during_real_msbuild_evaluation(self):
+        prepared = self.prepare()
+        override = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
+        project = self.root / 'source-owner.csproj'
+        project.write_text('<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net10.0</TargetFramework>'
+                           '</PropertyGroup><ItemGroup><PackageVersion Include="Hexalith.McpCli.Abstractions" '
+                           'Version="2.0.1" /></ItemGroup></Project>')
+        environment = dict(os.environ, CustomAfterMicrosoftCommonTargets=str(override))
+        result = subprocess.run([shutil.which('dotnet'), 'msbuild', str(project), '-nologo', '-getItem:PackageVersion'],
+                                cwd=self.root, env=environment, capture_output=True, text=True, timeout=30)
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        packages = json.loads(result.stdout)['Items']['PackageVersion']
+        self.assertEqual(['2.0.0'], [item['Version'] for item in packages
+                                   if item['Identity'] == 'Hexalith.McpCli.Abstractions'])
+
+    def test_mismatched_root_mcpcli_pin_refuses_before_source_builds(self):
+        path = self.root / 'Directory.Build.props'
+        path.write_text(path.read_text().replace('>2.0.0<', '>2.0.1<'))
+        result = self.invoke('prepare-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('exact root McpCli 2.0.0 pin', result.stderr)
+        self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
 
     def test_reader_requires_complete_successful_online_graph_audits(self):
         module = self.ci_module()
@@ -1226,6 +1273,7 @@ class CiHooksTests(unittest.TestCase):
                    '-warnaserror -m:1 -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low '
                    '-p:TreatWarningsAsErrors=true -p:WarningsNotAsErrors= -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
                    '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=4.1.0 '
+                   '-p:HexalithMcpCliVersion=2.0.0 '
                    f'-p:HexalithBuildPackageVersions1={overlay}')
         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
         stderr = self.evidence / 'Hexalith.Tenants-build.stderr.txt'
