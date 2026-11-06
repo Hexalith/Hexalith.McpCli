@@ -11,6 +11,8 @@ namespace Hexalith.McpCli.AppHost;
 /// <summary>Invokes the existing Platform catalog executable over immutable copies of prepared owner assemblies.</summary>
 internal static class NativeCatalogTool
 {
+    /// <summary>Observes completed copies in component controls without replacing measured bytes or granting authority.</summary>
+    internal static AsyncLocal<Action<string>?> InputsCopiedObserver { get; } = new();
     /// <summary>Builds the existing tool in a private directory and returns its actual catalog receipt.</summary>
     /// <param name="repositoryRoot">The owning McpCli checkout.</param>
     /// <param name="directory">The private directory owned by this activation attempt.</param>
@@ -32,9 +34,19 @@ internal static class NativeCatalogTool
         }
         string template = Path.Combine(repositoryRoot.FullName, "references", "Hexalith.Platform", "src", "Hexalith.Platform.CatalogBuilder", "Hexalith.Platform.CatalogBuilder.csproj");
         string build = Path.Combine(directory, "reader");
+        byte[] globalJsonBytes = File.ReadAllBytes(Path.Combine(repositoryRoot.FullName, "global.json"));
         PrepareBuildDirectory(repositoryRoot.FullName, build);
         string project = Path.Combine(build, "Hexalith.Platform.CatalogBuilder.csproj");
-        XDocument xml = XDocument.Load(template);
+        string program = Path.Combine(build, "Program.cs");
+        string cohort = Path.Combine(build, "PublishedCatalogArtifactCohort.cs");
+        string[] templatePaths = [template, Path.Combine(Path.GetDirectoryName(template)!, "Program.cs"),
+            Path.Combine(Path.GetDirectoryName(template)!, "PublishedCatalogArtifactCohort.cs")];
+        Dictionary<string, byte[]> templateBytes = templatePaths.ToDictionary(path => path, File.ReadAllBytes, StringComparer.Ordinal);
+        Dictionary<string, string> templateHashes = templateBytes.ToDictionary(pair =>
+            Path.GetRelativePath(repositoryRoot.FullName, pair.Key).Replace(Path.DirectorySeparatorChar, '/'), pair => Digest(pair.Value), StringComparer.Ordinal);
+        templateHashes.Add("global.json", Digest(globalJsonBytes));
+        using var templateStream = new MemoryStream(templateBytes[template]);
+        XDocument xml = XDocument.Load(templateStream);
         xml.Root!.AddFirst(new XElement("Import", new XAttribute("Project", Path.Combine(repositoryRoot.FullName, "Directory.Packages.props"))));
         xml.Root.AddFirst(new XElement("Import", new XAttribute("Project", Path.Combine(repositoryRoot.FullName, "Directory.Build.props"))));
         XElement references = new("ItemGroup");
@@ -63,19 +75,33 @@ internal static class NativeCatalogTool
                 new XElement("HintPath", Path.Combine(destination, Path.GetFileName(source)))));
         }
         string bindings = Path.Combine(build, "bindings.props");
-        new XDocument(new XElement("Project", references)).Save(bindings);
-        xml.Save(project);
-        File.Copy(Path.Combine(Path.GetDirectoryName(template)!, "Program.cs"), Path.Combine(build, "Program.cs"));
+        byte[] bindingsBytes = SerializeDocument(new XDocument(new XElement("Project", references)));
+        byte[] projectBytes = SerializeDocument(xml);
+        Dictionary<string, byte[]> readerInputBytes = new(StringComparer.Ordinal)
+        {
+            [project] = projectBytes, [program] = templateBytes[templatePaths[1]], [cohort] = templateBytes[templatePaths[2]],
+            [bindings] = bindingsBytes, [Path.Combine(build, "global.json")] = globalJsonBytes,
+        };
+        // Expected digests precede every write/readback; copied drift cannot become a new baseline.
+        Dictionary<string, string> readerInputHashes = readerInputBytes.ToDictionary(pair => pair.Key, pair => Digest(pair.Value), StringComparer.Ordinal);
+        foreach ((string path, byte[] bytes) in readerInputBytes)
+            await File.WriteAllBytesAsync(path, bytes, token).ConfigureAwait(false);
+        InputsCopiedObserver.Value?.Invoke(build);
         string output = Path.Combine(build, "output");
         string auditPath = Environment.GetEnvironmentVariable("MCPCLI_NATIVE_READER_AUDIT_PATH")
             ?? throw new InvalidOperationException("The isolated reader requires its retained online graph audit.");
         string auditHash = Environment.GetEnvironmentVariable("MCPCLI_NATIVE_READER_AUDIT_SHA256")
             ?? throw new InvalidOperationException("The isolated reader requires its prepared online audit hash.");
         using JsonDocument audit = NativeCatalogAudit.Load(repositoryRoot.FullName, auditPath, auditHash, sdkVersion);
+        RequireUnchangedReaderInputs(repositoryRoot.FullName, build, auditPath, auditHash, sdkVersion, templateHashes, readerInputHashes);
         // Restore only metadata before checking the retained audit and the actual package bytes compilation will consume.
         string[] properties = ["-p:GeneratePackageOnBuild=false", "-p:NuGetAudit=false", "-p:CentralPackageVersionsFileImported=true",
             "-p:UseHexalithProjectReferences=false", "-p:HexalithEventStoreVersion=" + sdkVersion,
-            "-p:PlatformCatalogBindings=" + bindings, "--nologo", "-warnaserror"];
+            "-p:PlatformCatalogBindings=" + bindings,
+            "-p:HexalithBuildPackageVersions1=" + Path.Combine(repositoryRoot.FullName, "references", "Hexalith.Builds", "Props", "Directory.Packages.props"),
+            "-p:HexalithBuildPackageVersions2=", "-p:HexalithBuildPackageVersions3=",
+            "-p:ImportDirectoryBuildProps=false", "-p:ImportDirectoryBuildTargets=false", "-p:ImportDirectoryPackagesProps=false",
+            "-p:CustomAfterMicrosoftCommonTargets=", "--nologo", "-warnaserror"];
         await RunAsync(build, "restore.log", ["restore", project, "-p:Configuration=Release", .. properties], token, dotnetExecutable).ConfigureAwait(false);
         Dictionary<string, string> auditedPackageGraph;
         using (JsonDocument assets = JsonDocument.Parse(await File.ReadAllBytesAsync(Path.Combine(build, "obj", "project.assets.json"), token).ConfigureAwait(false)))
@@ -89,8 +115,10 @@ internal static class NativeCatalogTool
                 throw new InvalidDataException("The actual private catalog reader did not restore the exact published SDK cohort.");
             }
         }
+        RequireUnchangedReaderInputs(repositoryRoot.FullName, build, auditPath, auditHash, sdkVersion, templateHashes, readerInputHashes);
         await RunAsync(build, "build.log", ["build", project, "--no-restore", "-c", "Release", "-m:1", "--output", output,
             .. properties], token, dotnetExecutable).ConfigureAwait(false);
+        RequireUnchangedReaderInputs(repositoryRoot.FullName, build, auditPath, auditHash, sdkVersion, templateHashes, readerInputHashes);
         foreach ((string filename, string source) in copied)
         {
             string target = Path.Combine(output, filename);
@@ -123,19 +151,47 @@ internal static class NativeCatalogTool
             if (Convert.ToHexStringLower(SHA256.HashData(await File.ReadAllBytesAsync(path, token).ConfigureAwait(false))) != digest)
                 throw new InvalidDataException("A separately prepared owner dependency changed during catalog generation.");
         }
+        RequireUnchangedReaderInputs(repositoryRoot.FullName, build, auditPath, auditHash, sdkVersion, templateHashes, readerInputHashes);
         await File.WriteAllBytesAsync(Path.Combine(build, "preparation.json"), JsonSerializer.SerializeToUtf8Bytes(new
         {
             instanceId, gatewayAppId, sdkVersion,
             auditReceiptSha256 = auditHash, auditedPackageGraph,
+            buildsCatalogSha256 = audit.RootElement.GetProperty("inputs").GetProperty("references/Hexalith.Builds/Props/Directory.Packages.props").GetString(),
             templateSource = template,
-            templateProjectSha256 = Digest(File.ReadAllBytes(template)),
-            readerProjectSha256 = Digest(File.ReadAllBytes(project)),
-            globalJsonSha256 = Digest(File.ReadAllBytes(Path.Combine(build, "global.json"))),
-            bindingsSha256 = Digest(File.ReadAllBytes(bindings)),
-            templateHash = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(build, "Program.cs")))),
+            templateProjectSha256 = templateHashes[Path.GetRelativePath(repositoryRoot.FullName, template).Replace(Path.DirectorySeparatorChar, '/')],
+            readerProjectSha256 = readerInputHashes[project],
+            globalJsonSha256 = readerInputHashes[Path.Combine(build, "global.json")],
+            bindingsSha256 = readerInputHashes[bindings],
+            templateHash = readerInputHashes[program],
+            templateProgramSha256 = templateHashes[Path.GetRelativePath(repositoryRoot.FullName, templatePaths[1]).Replace(Path.DirectorySeparatorChar, '/')],
+            readerProgramSha256 = readerInputHashes[program],
+            templateCohortSha256 = templateHashes[Path.GetRelativePath(repositoryRoot.FullName, templatePaths[2]).Replace(Path.DirectorySeparatorChar, '/')],
+            readerCohortSha256 = readerInputHashes[cohort],
             inputHashes,
         }), token).ConfigureAwait(false);
         return JsonDocument.Parse(await File.ReadAllBytesAsync(Path.Combine(directory, "receipt.json"), token).ConfigureAwait(false));
+    }
+
+    private static byte[] SerializeDocument(XDocument document)
+    {
+        using var stream = new MemoryStream();
+        document.Save(stream);
+        return stream.ToArray();
+    }
+
+    private static void RequireUnchangedReaderInputs(string root, string build, string auditPath, string auditHash, string sdkVersion,
+        IReadOnlyDictionary<string, string> templateHashes, IReadOnlyDictionary<string, string> readerInputHashes)
+    {
+        using JsonDocument audit = NativeCatalogAudit.Load(root, auditPath, auditHash, sdkVersion);
+        if (templateHashes.Any(pair => audit.RootElement.GetProperty("inputs").GetProperty(pair.Key).GetString() != pair.Value)
+            || readerInputHashes.Any(pair => !File.Exists(pair.Key) || Digest(File.ReadAllBytes(pair.Key)) != pair.Value))
+            throw new InvalidDataException("The copied catalog reader inputs differ from their exact online audit seal.");
+        string[] allowed = [Path.Combine(build, "Program.cs"), Path.Combine(build, "PublishedCatalogArtifactCohort.cs")];
+        if (Directory.EnumerateFiles(build, "*", SearchOption.AllDirectories).Any(path =>
+            Path.GetExtension(path).Equals(".cs", StringComparison.OrdinalIgnoreCase)
+            && !Path.GetRelativePath(build, path).StartsWith("obj" + Path.DirectorySeparatorChar, StringComparison.Ordinal)
+            && !allowed.Contains(path, StringComparer.Ordinal)))
+            throw new InvalidDataException("The private catalog reader contains an unsealed source file.");
     }
 
     /// <summary>Places the exact root SDK policy in the private reader ancestry before invoking dotnet.</summary>

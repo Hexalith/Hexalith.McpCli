@@ -21,8 +21,10 @@ internal static class NativeCatalogAudit
                 || audit.GetProperty("sdkVersion").GetString() != sdkVersion || !audit.GetProperty("packages").EnumerateObject().Any())
                 throw new InvalidDataException("A complete matching online reader audit is required.");
             string[] inputs = ["global.json", "Directory.Build.props", "Directory.Packages.props",
+                "references/Hexalith.Builds/Props/Directory.Packages.props",
                 "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj",
-                "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs"];
+                "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs",
+                "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs"];
             if (audit.GetProperty("packages").EnumerateObject().Any(package =>
                 !audit.GetProperty("archives").TryGetProperty(package.Name, out JsonElement archive) || string.IsNullOrEmpty(archive.GetString())))
                 throw new InvalidDataException("The online audit must retain actual archive hashes.");

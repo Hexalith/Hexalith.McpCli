@@ -18,11 +18,43 @@ if (args is ["catalog-pipe-parent", string marker])
 if (Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_ASSETS") is { Length: > 0 } readerAssets)
 {
     File.AppendAllText(Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_CALLS")!, System.Text.Json.JsonSerializer.Serialize(args) + Environment.NewLine);
+    string? behavior = Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_BEHAVIOR");
     if (args is ["restore", string project, ..])
     {
         string directory = Path.Combine(Path.GetDirectoryName(project)!, "obj");
         Directory.CreateDirectory(directory);
         File.Copy(readerAssets, Path.Combine(directory, "project.assets.json"));
+        if (behavior == "copy-cohort-before-build")
+            File.AppendAllText(Path.Combine(Path.GetDirectoryName(project)!, "PublishedCatalogArtifactCohort.cs"), "// changed copy");
+        if (behavior == "catalog-source-after-restore")
+            File.AppendAllText(Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_CATALOG_SOURCE")!, "// changed catalog");
+        return 0;
+    }
+    if (behavior is not null && args is ["build", ..])
+    {
+        Directory.CreateDirectory(args[Array.IndexOf(args, "--output") + 1]);
+        string build = Path.GetDirectoryName(args[1])!;
+        if (behavior == "copy-cohort-after-build")
+            File.AppendAllText(Path.Combine(build, "PublishedCatalogArtifactCohort.cs"), "// changed build copy");
+        if (behavior == "uppercase-source-after-build")
+            File.WriteAllText(Path.Combine(build, "Extra.CS"), "// unsealed uppercase source");
+        return 0;
+    }
+    if (behavior is not null && args is [_, string request])
+    {
+        using var document = System.Text.Json.JsonDocument.Parse(File.ReadAllBytes(request));
+        string output = document.RootElement.GetProperty("outputDirectory").GetString()!;
+        if (behavior == "source-cohort-after-generation")
+            File.AppendAllText(Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_COHORT_SOURCE")!, "// changed source");
+        if (behavior == "copy-cohort-after-generation")
+            File.AppendAllText(Path.Combine(Path.GetDirectoryName(request)!, "PublishedCatalogArtifactCohort.cs"), "// changed copy");
+        if (behavior == "extra-source-after-generation")
+        {
+            string extra = Path.Combine(Path.GetDirectoryName(request)!, "extra");
+            Directory.CreateDirectory(extra);
+            File.WriteAllText(Path.Combine(extra, "Unsealed.cs"), "// unsealed source");
+        }
+        File.WriteAllText(Path.Combine(output, "receipt.json"), "{\"result\":\"controlled-fixture\"}");
         return 0;
     }
     Console.Error.WriteLine("controlled-reader-build-stop");

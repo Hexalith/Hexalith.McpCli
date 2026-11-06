@@ -75,14 +75,38 @@ public sealed class NativeCatalogToolTests : IDisposable
     [InlineData("archive")]
     [InlineData("asset")]
     [InlineData("matching")]
+    [InlineData("cohort-source-missing")]
+    [InlineData("cohort-source-changed")]
+    [InlineData("copy-cohort-before-build")]
+    [InlineData("source-cohort-after-generation")]
+    [InlineData("copy-cohort-after-generation")]
+    [InlineData("extra-source-after-generation")]
+    [InlineData("matching-generated")]
+    [InlineData("copy-before-seal-program")]
+    [InlineData("copy-before-seal-cohort")]
+    [InlineData("copy-before-seal-project")]
+    [InlineData("copy-before-seal-bindings")]
+    [InlineData("copy-before-seal-global")]
+    [InlineData("catalog-source-missing")]
+    [InlineData("catalog-source-changed")]
+    [InlineData("catalog-source-after-restore")]
+    [InlineData("copy-cohort-after-build")]
+    [InlineData("uppercase-source-after-build")]
     public async Task ActualReaderValidatesRestoredBytesBeforeCompilation(string kind)
     {
         string template = Path.Combine(_root, "references", "Hexalith.Platform", "src", "Hexalith.Platform.CatalogBuilder");
         Directory.CreateDirectory(template);
         File.WriteAllText(Path.Combine(template, "Hexalith.Platform.CatalogBuilder.csproj"), "<Project />");
         File.WriteAllText(Path.Combine(template, "Program.cs"), "// inert managed reader template");
+        string cohort = Path.Combine(template, "PublishedCatalogArtifactCohort.cs");
+        File.WriteAllText(cohort, "// inert managed cohort source");
         foreach (string input in new[] { "global.json", "Directory.Build.props", "Directory.Packages.props" })
             File.WriteAllText(Path.Combine(_root, input), input == "global.json" ? "{}" : "<Project />");
+        string catalog = Path.Combine(_root, "references", "Hexalith.Builds", "Props", "Directory.Packages.props");
+        Directory.CreateDirectory(Path.GetDirectoryName(catalog)!);
+        File.WriteAllText(catalog, "<Project />");
+        string fallback = Path.Combine(_root, "sibling-catalog.props");
+        File.WriteAllText(fallback, "<Project />");
         string owner = Path.Combine(_root, "managed-owner", "Owner.dll");
         Directory.CreateDirectory(Path.GetDirectoryName(owner)!);
         File.Copy(typeof(NativeCatalogToolTests).Assembly.Location, owner);
@@ -96,8 +120,10 @@ public sealed class NativeCatalogToolTests : IDisposable
         string digest = Convert.ToBase64String(SHA512.HashData(File.ReadAllBytes(archive)));
         string identity = "Hexalith.EventStore.Client/4.0.4";
         var inputs = new[] { "global.json", "Directory.Build.props", "Directory.Packages.props",
+            "references/Hexalith.Builds/Props/Directory.Packages.props",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj",
-            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs" }.ToDictionary(name => name,
+            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs",
+            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs" }.ToDictionary(name => name,
                 name => Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(_root, name)))));
         string audit = Path.Combine(_root, "audit.json");
         string auditedIdentity = kind == "uncovered" ? "Other/1.0.0" : identity;
@@ -114,6 +140,10 @@ public sealed class NativeCatalogToolTests : IDisposable
         }));
         if (kind == "archive") File.AppendAllText(archive, "changed archive");
         if (kind == "asset") File.AppendAllText(asset, "changed consumed assembly");
+        if (kind == "cohort-source-missing") File.Delete(cohort);
+        if (kind == "cohort-source-changed") File.AppendAllText(cohort, "changed source");
+        if (kind == "catalog-source-missing") File.Delete(catalog);
+        if (kind == "catalog-source-changed") File.AppendAllText(catalog, "changed source");
         string bin = Path.Combine(_root, "controlled-dotnet");
         Directory.CreateDirectory(bin);
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
@@ -125,33 +155,110 @@ public sealed class NativeCatalogToolTests : IDisposable
         {
             ["PATH"] = bin + Path.PathSeparator + Environment.GetEnvironmentVariable("PATH"),
             ["MCPCLI_TEST_READER_ASSETS"] = restored, ["MCPCLI_TEST_READER_CALLS"] = calls,
+            ["MCPCLI_TEST_READER_BEHAVIOR"] = kind.Contains("-generation", StringComparison.Ordinal)
+                || kind.EndsWith("-after-build", StringComparison.Ordinal)
+                || kind is "matching-generated" or "copy-cohort-before-build" or "catalog-source-after-restore" ? kind : null,
+            ["MCPCLI_TEST_READER_CATALOG_SOURCE"] = catalog,
+            ["CustomAfterMicrosoftCommonTargets"] = fallback,
+            ["MCPCLI_TEST_READER_COHORT_SOURCE"] = cohort,
             ["MCPCLI_NATIVE_READER_AUDIT_PATH"] = audit,
             ["MCPCLI_NATIVE_READER_AUDIT_SHA256"] = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(audit))),
         };
         var prior = environment.ToDictionary(pair => pair.Key, pair => Environment.GetEnvironmentVariable(pair.Key));
         string directory = Path.Combine(_root, "actual-reader");
+        Action<string>? priorObserver = NativeCatalogTool.InputsCopiedObserver.Value;
+        int copyStageCalls = 0;
+        NativeCatalogTool.InputsCopiedObserver.Value = reader =>
+        {
+            copyStageCalls++;
+            string? name = kind switch
+            {
+                "copy-before-seal-program" => "Program.cs",
+                "copy-before-seal-cohort" => "PublishedCatalogArtifactCohort.cs",
+                "copy-before-seal-project" => "Hexalith.Platform.CatalogBuilder.csproj",
+                "copy-before-seal-bindings" => "bindings.props",
+                "copy-before-seal-global" => "global.json",
+                _ => null,
+            };
+            if (name is not null) File.AppendAllText(Path.Combine(reader, name), "changed immediately after copying");
+        };
         try
         {
             foreach (var pair in environment) Environment.SetEnvironmentVariable(pair.Key, pair.Value);
-            InvalidDataException failure = await Assert.ThrowsAsync<InvalidDataException>(() => NativeCatalogTool.RunOwnedPreparationAsync(directory, "owner", async () =>
+            Exception? failure = await Record.ExceptionAsync(() => NativeCatalogTool.RunOwnedPreparationAsync(directory, "owner", async () =>
             {
                 using JsonDocument unused = await NativeCatalogTool.GenerateAsync(new DirectoryInfo(_root), directory, "instance", "eventstore", "4.0.4",
                     [(owner, owner, "parties")], TestContext.Current.CancellationToken, Path.Combine(bin, OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet"));
             }));
-            string[][] commands = File.ReadAllLines(calls).Select(line => JsonSerializer.Deserialize<string[]>(line)!).ToArray();
-            Assert.Equal("restore", commands[0][0]);
-            Assert.Contains("-p:Configuration=Release", commands[0]);
+            string[][] commands = File.Exists(calls) ? File.ReadAllLines(calls).Select(line => JsonSerializer.Deserialize<string[]>(line)!).ToArray() : [];
+            if (kind == "matching-generated")
+            {
+                Assert.Null(failure);
+                Assert.Equal(3, commands.Length);
+                Assert.Equal(1, copyStageCalls);
+                foreach (string[] command in commands.Take(2))
+                {
+                    Assert.Contains("-p:HexalithBuildPackageVersions1=" + catalog, command);
+                    Assert.Contains("-p:HexalithBuildPackageVersions2=", command);
+                    Assert.Contains("-p:HexalithBuildPackageVersions3=", command);
+                    Assert.Contains("-p:ImportDirectoryBuildProps=false", command);
+                    Assert.Contains("-p:ImportDirectoryBuildTargets=false", command);
+                    Assert.Contains("-p:ImportDirectoryPackagesProps=false", command);
+                    Assert.Contains("-p:CustomAfterMicrosoftCommonTargets=", command);
+                }
+                string reader = Path.Combine(directory, "reader");
+                using JsonDocument prepared = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(reader, "preparation.json")));
+                foreach (var (name, original, copy) in new[]
+                {
+                    ("Program", Path.Combine(template, "Program.cs"), Path.Combine(reader, "Program.cs")),
+                    ("Cohort", cohort, Path.Combine(reader, "PublishedCatalogArtifactCohort.cs")),
+                })
+                {
+                    string originalHash = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(original)));
+                    string copiedHash = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(copy)));
+                    Assert.Equal(originalHash, copiedHash);
+                    Assert.Equal(originalHash, prepared.RootElement.GetProperty("template" + name + "Sha256").GetString());
+                    Assert.Equal(copiedHash, prepared.RootElement.GetProperty("reader" + name + "Sha256").GetString());
+                }
+                Assert.Equal(Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(catalog))),
+                    prepared.RootElement.GetProperty("buildsCatalogSha256").GetString());
+                using JsonDocument request = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(reader, "request.json")));
+                Assert.False(request.RootElement.TryGetProperty("qualificationCohort", out _));
+                Assert.False(request.RootElement.TryGetProperty("currentOwnerArtifacts", out _));
+                return; // Controlled process proof only; no live catalog or qualification credit.
+            }
+            bool beforeProcess = kind is "cohort-source-missing" or "cohort-source-changed" or "catalog-source-missing" or "catalog-source-changed"
+                || kind.StartsWith("copy-before-seal-", StringComparison.Ordinal);
+            if (kind is "cohort-source-missing" or "catalog-source-missing") Assert.IsType<FileNotFoundException>(failure);
+            else Assert.IsType<InvalidDataException>(failure);
+            if (kind.StartsWith("copy-before-seal-", StringComparison.Ordinal)) Assert.Equal(1, copyStageCalls);
+            if (beforeProcess) Assert.Empty(commands);
+            else
+            {
+                Assert.Equal("restore", commands[0][0]);
+                Assert.Contains("-p:Configuration=Release", commands[0]);
+            }
             if (kind == "matching")
             {
                 Assert.Equal(2, commands.Length);
                 Assert.Equal("build", commands[1][0]);
                 Assert.Contains("--no-restore", commands[1]);
-                Assert.Contains("controlled-reader-build-stop", failure.Message, StringComparison.Ordinal);
+                Assert.Contains("controlled-reader-build-stop", failure!.Message, StringComparison.Ordinal);
             }
-            else Assert.Single(commands);
+            else if (kind.EndsWith("-generation", StringComparison.Ordinal)) Assert.Equal(3, commands.Length);
+            else if (kind.EndsWith("-after-build", StringComparison.Ordinal))
+            {
+                Assert.Equal(2, commands.Length);
+                Assert.Equal("build", commands[1][0]); // No generation invocation may observe build-time drift.
+            }
+            else if (!beforeProcess) Assert.Single(commands);
             Assert.False(Directory.Exists(directory));
         }
-        finally { foreach (var pair in prior) Environment.SetEnvironmentVariable(pair.Key, pair.Value); }
+        finally
+        {
+            NativeCatalogTool.InputsCopiedObserver.Value = priorObserver;
+            foreach (var pair in prior) Environment.SetEnvironmentVariable(pair.Key, pair.Value);
+        }
     }
 
     /// <summary>CI-compatible sanitization also covers direct and multiply escaped JSON key diagnostics.</summary>
@@ -323,7 +430,9 @@ public sealed class NativeCatalogToolTests : IDisposable
             declarations = new[] { "owner-route" }, operations = new[] { new { RouteId = "owner-route", Digest = "operation-hash" } },
         }));
         File.WriteAllText(party, JsonSerializer.Serialize(new { templateHash = "program-hash", templateProjectSha256 = "template-project-hash",
-            readerProjectSha256 = "reader-project-hash", globalJsonSha256 = "sdk-policy-hash", inputHashes = new Dictionary<string, string> { ["adapter.dll"] = "adapter-hash" },
+            readerProjectSha256 = "reader-project-hash", globalJsonSha256 = "sdk-policy-hash",
+            templateProgramSha256 = "original-program-hash", readerProgramSha256 = "copied-program-hash", buildsCatalogSha256 = "direct-catalog-hash",
+            templateCohortSha256 = "original-cohort-hash", readerCohortSha256 = "copied-cohort-hash", inputHashes = new Dictionary<string, string> { ["adapter.dll"] = "adapter-hash" },
             auditReceiptSha256 = "online-audit-hash", auditedPackageGraph = new Dictionary<string, string> { ["SDK/4.0.4"] = "audited-package-hash" },
             privateKey = "private-reader-value" }));
         var retained = NativeCatalogPreparationEvidence.Capture(tenant, party);
@@ -332,6 +441,11 @@ public sealed class NativeCatalogToolTests : IDisposable
         Assert.Contains("sdk-image-hash", json, StringComparison.Ordinal);
         Assert.Contains("reader-project-hash", json, StringComparison.Ordinal);
         Assert.Contains("template-project-hash", json, StringComparison.Ordinal);
+        Assert.Contains("original-program-hash", json, StringComparison.Ordinal);
+        Assert.Contains("copied-program-hash", json, StringComparison.Ordinal);
+        Assert.Contains("original-cohort-hash", json, StringComparison.Ordinal);
+        Assert.Contains("copied-cohort-hash", json, StringComparison.Ordinal);
+        Assert.Contains("direct-catalog-hash", json, StringComparison.Ordinal);
         Assert.Contains("environment-digest", json, StringComparison.Ordinal);
         Assert.Contains("online-audit-hash", json, StringComparison.Ordinal);
         Assert.Contains("audited-package-hash", json, StringComparison.Ordinal);

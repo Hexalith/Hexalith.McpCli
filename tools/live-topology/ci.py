@@ -366,8 +366,10 @@ def reader_audit_provenance() -> dict:
         sources[relative] = {'packages': graph, 'policy': {'audit': audit, 'warnings': warning_policy,
                                                          'dependencyNoWarn': dependency_warnings}}
     inputs = ['global.json', 'Directory.Build.props', 'Directory.Packages.props',
+              'references/Hexalith.Builds/Props/Directory.Packages.props',
               'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj',
-              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs']
+              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs',
+              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs']
     return {'schemaVersion': 1, 'result': 'audited', 'sdkVersion': EVENTSTORE_COHORT,
             'sources': sources, 'packages': packages, 'archives': archives,
             'inputs': {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in inputs}}

@@ -194,7 +194,7 @@ adapter remains a separate compiled library. Its ordinary build uses
 closure; every deployed SDK DLL must match its public archive before preparation
 is accepted. Online source, AppHost and client builds explicitly audit all dependencies with warnings as errors.
 Preparation requires low-level auditing without advisory exclusions or NU19xx warning suppression and retains the effective restore policy.
-`native-reader-audit.json` binds both NuGet content hashes and actual archive SHA512 values, plus reader input hashes, before both runners. Each private reader restores first,
+`native-reader-audit.json` binds both NuGet content hashes and actual archive SHA512 values, plus exact project, Program.cs and PublishedCatalogArtifactCohort.cs input hashes, before both runners. The private reader also binds the actual direct root-declared Builds catalog, forces that path without sibling fallback, disables reader-only automatic Directory.Build/Packages imports and the inherited source-host post-import hook, and preserves that hook for source owners. Expected project/bindings/source/SDK-policy digests come from sealed in-memory bytes before writing. It copies both audited source files, refuses extra source files regardless of extension case, and rechecks seals before compilation, immediately after build before generation, and after generation. Safe preparation evidence retains separate original and copied source digests. Each private reader restores first,
 checks every package archive and extracted asset against that proof, then builds with
 `--no-restore`. Only the isolated advisory-feed refresh is disabled; native evidence
 retains the exact audited graph. No server dependency edge or loader exception is added. The source

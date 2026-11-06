@@ -16,8 +16,10 @@ public sealed class NativeCatalogAuditTests : IDisposable
     public NativeCatalogAuditTests()
     {
         string[] inputs = ["global.json", "Directory.Build.props", "Directory.Packages.props",
+                "references/Hexalith.Builds/Props/Directory.Packages.props",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj",
-            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs"];
+            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs",
+            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs"];
         var hashes = new Dictionary<string, string>();
         foreach (string input in inputs)
         {
@@ -110,12 +112,25 @@ public sealed class NativeCatalogAuditTests : IDisposable
     [InlineData("receipt")]
     [InlineData("sdk")]
     [InlineData("input")]
+    [InlineData("cohort-source")]
+    [InlineData("catalog-source")]
+    [InlineData("cohort-input-missing")]
     public void ChangedAuditInputsRefuseBeforeOfflineBuild(string kind)
     {
         string proof = Path.Combine(_root, "audit.json");
         string hash = Digest(proof);
         if (kind == "receipt") File.AppendAllText(proof, " ");
         if (kind == "input") File.AppendAllText(Path.Combine(_root, "global.json"), "changed");
+        const string cohortSource = "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs";
+        if (kind == "cohort-source") File.AppendAllText(Path.Combine(_root, cohortSource), "changed");
+        if (kind == "catalog-source") File.AppendAllText(Path.Combine(_root, "references/Hexalith.Builds/Props/Directory.Packages.props"), "changed");
+        if (kind == "cohort-input-missing")
+        {
+            var receipt = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllBytes(proof))!.AsObject();
+            receipt["inputs"]!.AsObject().Remove(cohortSource);
+            File.WriteAllText(proof, receipt.ToJsonString());
+            hash = Digest(proof);
+        }
         Assert.Throws<InvalidDataException>(() => NativeCatalogAudit.Load(_root, proof, hash, kind == "sdk" ? "different" : "4.0.4"));
     }
 

@@ -344,6 +344,7 @@ class CiHooksTests(unittest.TestCase):
         platform.mkdir(parents=True)
         (platform / 'Hexalith.Platform.CatalogBuilder.csproj').touch()
         (platform / 'Program.cs').touch()
+        (platform / 'PublishedCatalogArtifactCohort.cs').write_text('// inert cohort fixture')
         (self.root / 'Directory.Packages.props').write_text('<Project />')
         tenants_package = cache / 'hexalith.tenants.contracts/7.0.4'
         tenants_package.mkdir(parents=True)
@@ -643,6 +644,25 @@ class CiHooksTests(unittest.TestCase):
         Path(audit['path']).write_text('{}')
         with self.assertRaisesRegex(ValueError, 'online audit proof changed'):
             self.ci_module().require_reader_audit(prepared)
+
+    def test_reader_audit_seals_complete_catalog_template_sources(self):
+        module = self.ci_module()
+        for relative in ("references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs",
+                         "references/Hexalith.Builds/Props/Directory.Packages.props"):
+            with self.subTest(relative=relative):
+                path = self.root / relative
+                original = path.read_bytes()
+                try:
+                    first = module.reader_audit_provenance()
+                    self.assertEqual(hashlib.sha256(original).hexdigest(), first['inputs'][relative])
+                    path.write_text('// changed source fixture')
+                    second = module.reader_audit_provenance()
+                    self.assertNotEqual(first['inputs'][relative], second['inputs'][relative])
+                    path.unlink()
+                    with self.assertRaises(FileNotFoundError):
+                        module.reader_audit_provenance()
+                finally:
+                    path.write_bytes(original)
 
     def test_reader_requires_complete_successful_online_graph_audits(self):
         module = self.ci_module()
