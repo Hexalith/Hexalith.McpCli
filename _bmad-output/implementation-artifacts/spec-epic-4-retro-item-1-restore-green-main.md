@@ -2,7 +2,7 @@
 title: 'Restore green main CI'
 type: 'bugfix'
 created: '2026-11-06'
-status: 'in-review'
+status: 'done'
 route: 'oneshot'
 review_loop_iteration: 0
 context: []
@@ -38,3 +38,7 @@ Restore hosted main CI for Epic 4 retrospective F1, including topology-vector-di
 - Medium, patched: absent-cohort Python control stopped before runner propagation. It now executes both vector and smoke hooks with the same six-input audit before checking addition drift.
 
 - First complete Python run: 196 passed, one failure in an exact diagnostic command expectation missing the newly added version flag. Updated that expectation without changing its strictness; focused rerun passed. The complete final rerun is pending alongside hosted qualification.
+
+- Final complete Python rerun passed 198/198. Repair commit `6725d953d160eafba85b8bf9e11eea2e665d3684` is pushed to main and is qualifying in hosted CI run 42213303320. No live acceptance is claimed while that run is pending.
+
+- Hosted acceptance achieved: main CI run 42213303320 succeeded for `6725d953d160eafba85b8bf9e11eea2e665d3684`, including both required jobs. Downloaded receipts confirm all 21 passing vectors, one passing unskipped smoke and `fullLiveAccepted: true`. Evidence: `evidence/epic-4-retro-item-1/hosted-acceptance.json`. The retrospective action is done.

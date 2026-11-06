@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-06-2026 12:31'
+last_updated: '11-06-2026 13:32'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -236,7 +236,7 @@ action_items:
       syncs to run the pin-equality test and Manifest.Tests before committing (F1,
       blocking)."
     owner: "McpCli maintainer"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-06.md"
   - id: "epic-4-retro-item-2-close-bootstrap-line"
     epic: 4
@@ -254,7 +254,7 @@ action_items:
       and update the tenant rule and stack versions in the three agent entry points
       (F3)."
     owner: "Product/architecture owner"
-    status: open
+    status: in-progress
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-06.md"
   - id: "epic-4-retro-item-4-finish-story-4-5"
     epic: 4

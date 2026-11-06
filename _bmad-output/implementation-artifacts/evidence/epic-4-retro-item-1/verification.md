@@ -20,3 +20,9 @@ Checks passed:
 - `bash scripts/check-agent-instructions-sync.sh` and `git diff --check`.
 
 First Python suite: 196/197, with one exact command expectation requiring the new version flag. The corrected diagnostic test passes; the complete final rerun and hosted main qualification are pending at this snapshot. Local checks are not live acceptance.
+
+Final local Python rerun: `python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'` passed all 198 tests in 484.759 seconds. Hosted main run 42213303320 is qualifying commit `6725d953d160eafba85b8bf9e11eea2e665d3684`; acceptance remains pending.
+
+## Hosted acceptance
+
+[Main CI run 42213303320](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42213303320) completed successfully for `6725d953d160eafba85b8bf9e11eea2e665d3684`. Both topology-vector-discovery and ci / aspire-tests are green. Downloaded aspire-hook-evidence confirms `ci-live.json` has `result: passed` and `fullLiveAccepted: true`, all 21 vector outcomes passed, and independent smoke XML records exactly one passing test with zero failures, skips or not-run cases. `hosted-acceptance.json` records the operation outcomes and SHA-256 bindings for these three raw receipts. No upstream edits, gitlink changes, gate weakening or Epic 5 changes were required. This final result supersedes the pending qualification notes above.

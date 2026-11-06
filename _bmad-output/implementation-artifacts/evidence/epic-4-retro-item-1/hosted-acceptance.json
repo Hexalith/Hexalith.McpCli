@@ -1,0 +1,141 @@
+{
+  "runId": 42213303320,
+  "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42213303320",
+  "branch": "main",
+  "sourceCommit": "6725d953d160eafba85b8bf9e11eea2e665d3684",
+  "conclusion": "success",
+  "fullLiveAccepted": true,
+  "liveRunId": "dbbcc9a74bd14f1bb4e310851d8a4fbd",
+  "vectors": [
+    {
+      "operation": "parties.create-party",
+      "result": "passed"
+    },
+    {
+      "operation": "parties.deactivate-party",
+      "result": "passed"
+    },
+    {
+      "operation": "parties.get-party",
+      "result": "passed"
+    },
+    {
+      "operation": "parties.list-parties",
+      "result": "passed"
+    },
+    {
+      "operation": "parties.reactivate-party",
+      "result": "passed"
+    },
+    {
+      "operation": "parties.search-parties",
+      "result": "passed"
+    },
+    {
+      "operation": "parties.update-party",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.create-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.enable-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.get-user-tenants",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.list-tenants",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.remove-tenant-configuration",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.remove-user-from-tenant",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "result": "passed"
+    },
+    {
+      "operation": "tenants.update-tenant",
+      "result": "passed"
+    }
+  ],
+  "smoke": {
+    "total": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "not-run": 0
+  },
+  "evidenceSha256": {
+    "ci-live.json": "57d7ba23d5dc2097c92fd9ec26a8cacbbf04b82ea6883b97b139c61634432d0d",
+    "dbbcc9a74bd14f1bb4e310851d8a4fbd/vectors/live-lane.json": "5caa1533192fcb014ea453529a8a1eb06858127734e673cae0915bb146071d8c",
+    "dbbcc9a74bd14f1bb4e310851d8a4fbd/smoke/tests.xml": "82aa29927c0e02c2e0e159870a714b4fe92b51ea277eb82d0c9f3ef917ca9067"
+  },
+  "jobs": [
+    {
+      "name": "conformance-vector-contract",
+      "conclusion": "success"
+    },
+    {
+      "name": "conformance-vector-loopback",
+      "conclusion": "success"
+    },
+    {
+      "name": "release-automation",
+      "conclusion": "success"
+    },
+    {
+      "name": "enrolled-module-conformance",
+      "conclusion": "success"
+    },
+    {
+      "name": "topology-vector-discovery",
+      "conclusion": "success"
+    },
+    {
+      "name": "ci / build-and-test",
+      "conclusion": "success"
+    },
+    {
+      "name": "ci / aspire-tests",
+      "conclusion": "success"
+    },
+    {
+      "name": "ci / performance-tests",
+      "conclusion": "skipped"
+    }
+  ]
+}
