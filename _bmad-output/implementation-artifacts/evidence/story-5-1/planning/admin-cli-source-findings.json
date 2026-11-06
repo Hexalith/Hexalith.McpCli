@@ -1,0 +1,735 @@
+{
+  "source_revision": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+  "source_status": "",
+  "scope": "Static source inventory only, no execution/parity/approval claim. All proposed defer/exclude pending owner decision.",
+  "counts": {
+    "reachable_operations": 31,
+    "implemented_remote": 21,
+    "implemented_local": 7,
+    "registered_unavailable_stubs": 3,
+    "unregistered_backup_helpers": 6
+  },
+  "rows": [
+    {
+      "operation": "health",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/HealthCommand.cs:47",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/HealthCommand.cs:63",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/HealthCommand.cs:100",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/HealthCommand.cs:144"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET /api/v1/admin/health",
+      "expected_behavior": "Health report; --strict maps Degraded from exit1 to exit2; --wait polls every 1s, timeout default30s positive; without strict Degraded is acceptable to stop waiting. --quiet suppresses stdout unless --output supplied. Existing errors exit2 on stderr.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "health dapr",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/HealthDaprCommand.cs:28",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/HealthDaprCommand.cs:56"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET /api/v1/admin/health/dapr",
+      "expected_behavior": "Dapr component health list with optional --component/-c local case-insensitive filtering.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "stream list",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamListCommand.cs:37",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamListCommand.cs:81",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamListCommand.cs:83"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/streams?count=...&tenantId=...&domain=...",
+      "expected_behavior": "Recently active streams; --tenant/-T, --domain/-d; --count/-c default1000; paged result first page, no cursor option. Empty list emits stderr note and no JSON body.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Current CLI calls the root streams GET, but server advertises GetRecentlyActiveStreams at AdminStreamsController.cs:350, not root GET. Preserve route mismatch as observed source gap, not a successful/parity claim; generic stream reading is outside v1."
+    },
+    {
+      "operation": "stream events",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamEventsCommand.cs:38",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamEventsCommand.cs:85",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamEventsCommand.cs:95",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamEventsCommand.cs:97"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/streams/{tenant}/{domain}/{aggregateId}/timeline?count=...&fromSequence=...&toSequence=...",
+      "expected_behavior": "Timeline at stream; optional --from/--to; --count/-c default100; first page only; empty rows produce stderr note without JSON body.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "stream event",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamEventCommand.cs:36",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamEventCommand.cs:75",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamEventCommand.cs:77"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/streams/{tenant}/{domain}/{aggregateId}/events/{sequenceNumber}",
+      "expected_behavior": "Inspect event payload/metadata by sequence; safe output formatting and sentinel preservation.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "stream state",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamStateCommand.cs:32",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamStateCommand.cs:71",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamStateCommand.cs:73"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/streams/{tenant}/{domain}/{aggregateId}/state?sequenceNumber=...",
+      "expected_behavior": "Reconstruct state at required --at/-a position.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "stream diff",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamDiffCommand.cs:30",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamDiffCommand.cs:73",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamDiffCommand.cs:75"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/streams/{tenant}/{domain}/{aggregateId}/diff?fromSequence=...&toSequence=...",
+      "expected_behavior": "Compare aggregate state at required --from/--to positions.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "stream causation",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamCausationCommand.cs:29",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamCausationCommand.cs:68",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamCausationCommand.cs:70"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/streams/{tenant}/{domain}/{aggregateId}/causation?sequenceNumber=...",
+      "expected_behavior": "Trace causation chain at required --at/-a position.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "projection list",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionListCommand.cs:31",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionListCommand.cs:58",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionListCommand.cs:64"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/projections[?tenantId=...]",
+      "expected_behavior": "Projection status list; optional --tenant/-T.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "projection status",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionStatusCommand.cs:42",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionStatusCommand.cs:73",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionStatusCommand.cs:75"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/projections/{tenant}/{name}",
+      "expected_behavior": "Projection detail/status/errors/configuration.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "projection pause",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionPauseCommand.cs:20",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionPauseCommand.cs:51"
+      ],
+      "current_transport": "CLI -> Bearer HTTP POST api/v1/admin/projections/{tenant}/{name}/pause",
+      "expected_behavior": "Pause processing; immediate POST without local prompt/confirm.",
+      "security_class": "Human-only Admin API + AdminOperator policy + tenant filter",
+      "mutation": true,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "projection resume",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionResumeCommand.cs:20",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionResumeCommand.cs:51"
+      ],
+      "current_transport": "CLI -> Bearer HTTP POST api/v1/admin/projections/{tenant}/{name}/resume",
+      "expected_behavior": "Resume processing; immediate POST without local prompt/confirm.",
+      "security_class": "Human-only Admin API + AdminOperator policy + tenant filter",
+      "mutation": true,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "projection reset",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionResetCommand.cs:21",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionResetCommand.cs:56"
+      ],
+      "current_transport": "CLI -> Bearer HTTP POST api/v1/admin/projections/{tenant}/{name}/reset",
+      "expected_behavior": "Reset/reprocess from optional --from, null means beginning; immediate POST with FromPosition body, destructive state rebuild; result is not completion proof.",
+      "security_class": "Human-only Admin API + AdminOperator policy + tenant filter",
+      "mutation": true,
+      "destructive": true,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "tenant list",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantListCommand.cs:24",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantListCommand.cs:48"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/tenants",
+      "expected_behavior": "Tenant summaries; tenant listing is AdminFull, not AdminReadOnly.",
+      "security_class": "Human-only Admin API + AdminFull policy",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "tenant detail",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantDetailCommand.cs:28",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantDetailCommand.cs:56"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/tenants/{tenantId}",
+      "expected_behavior": "Tenant detail; TryGetAsync 404 becomes explicit not-found error exit2.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "tenant users",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantUsersCommand.cs:25",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantUsersCommand.cs:53"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/tenants/{tenantId}/users",
+      "expected_behavior": "Users assigned to tenant; scoped authorization and privacy.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "tenant verify",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantVerifyCommand.cs:33",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantVerifyCommand.cs:63"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/tenants/{tenantId}",
+      "expected_behavior": "Derive PASS exit0 for any status other than Disabled; Disabled FAIL exit2; missing tenant exit2; --quiet suppresses stdout unless output file supplied. Does not call separate health service.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "snapshot policies",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotPoliciesCommand.cs:28",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotPoliciesCommand.cs:55",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotPoliciesCommand.cs:61"
+      ],
+      "current_transport": "CLI -> Bearer HTTP GET api/v1/admin/storage/snapshot-policies[?tenantId=...]",
+      "expected_behavior": "List snapshot policies with optional --tenant/-T.",
+      "security_class": "Human-only Admin API + AdminReadOnly policy; tenant filter where scoped",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "snapshot create",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotCreateCommand.cs:28",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotCreateCommand.cs:63"
+      ],
+      "current_transport": "CLI -> Bearer HTTP POST api/v1/admin/storage/{tenantId}/{domain}/{aggregateId}/snapshot",
+      "expected_behavior": "Request on-demand snapshot; no local confirmation; format AdminOperationResult.",
+      "security_class": "Human-only Admin API + AdminOperator policy + tenant filter",
+      "mutation": true,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "snapshot set-policy",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotSetPolicyCommand.cs:29",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotSetPolicyCommand.cs:73"
+      ],
+      "current_transport": "CLI -> Bearer HTTP PUT api/v1/admin/storage/{tenantId}/{domain}/{aggregateType}/snapshot-policy?intervalEvents=...",
+      "expected_behavior": "Set/overwrite snapshot policy; requires positive intervalEvents, no local confirmation.",
+      "security_class": "Human-only Admin API + AdminOperator policy + tenant filter",
+      "mutation": true,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "snapshot delete-policy",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotDeletePolicyCommand.cs:28",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotDeletePolicyCommand.cs:63"
+      ],
+      "current_transport": "CLI -> Bearer HTTP DELETE api/v1/admin/storage/{tenantId}/{domain}/{aggregateType}/snapshot-policy",
+      "expected_behavior": "Delete snapshot policy, no local confirmation; changes future snapshot behavior.",
+      "security_class": "Human-only Admin API + AdminOperator policy + tenant filter",
+      "mutation": true,
+      "destructive": true,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No approved generic administration contract/transport in McpCli v1; Story 5.2 decision plus authorization, behavior, conformance and release proof required."
+    },
+    {
+      "operation": "backup create",
+      "registration": "reachable-stub",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:14",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:15",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:16",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:17"
+      ],
+      "current_transport": "CLI local registered unavailable stub; no HTTP request",
+      "expected_behavior": "Prints Command unavailable. This operation is not implemented in this release. to stderr; exits2; no actual backup operation.",
+      "security_class": "Unavailable administrative compatibility spelling",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Retain explicit unavailable status; no functional backup or replacement claim. Source helper with similar name is not registered; backend is deferred."
+    },
+    {
+      "operation": "backup restore",
+      "registration": "reachable-stub",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:14",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:15",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:16",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:17"
+      ],
+      "current_transport": "CLI local registered unavailable stub; no HTTP request",
+      "expected_behavior": "Prints Command unavailable. This operation is not implemented in this release. to stderr; exits2; no actual backup operation.",
+      "security_class": "Unavailable administrative compatibility spelling",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Retain explicit unavailable status; no functional backup or replacement claim. Source helper with similar name is not registered; backend is deferred."
+    },
+    {
+      "operation": "backup list",
+      "registration": "reachable-stub",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:14",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:15",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:16",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs:17"
+      ],
+      "current_transport": "CLI local registered unavailable stub; no HTTP request",
+      "expected_behavior": "Prints Command unavailable. This operation is not implemented in this release. to stderr; exits2; no actual backup operation.",
+      "security_class": "Unavailable administrative compatibility spelling",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Retain explicit unavailable status; no functional backup or replacement claim. Source helper with similar name is not registered; backend is deferred."
+    },
+    {
+      "operation": "config profile add",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileAddCommand.cs:21",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileAddCommand.cs:52"
+      ],
+      "current_transport": "CLI local file write ~/.eventstore/profiles.json",
+      "expected_behavior": "Create or overwrite profile; --api-url required, --api-token/--default-format optional. Validates name; saves plaintext token with note; Unix new dir700/file600. No overwrite confirmation.",
+      "security_class": "Local operator credential/configuration data; no Admin API authorization check",
+      "mutation": true,
+      "destructive": true,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Shared McpCli mcpcli.json is a different store/credential authority; no automatic migration or overwrite authorized."
+    },
+    {
+      "operation": "config profile list",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileListCommand.cs:26"
+      ],
+      "current_transport": "CLI local file read ~/.eventstore/profiles.json",
+      "expected_behavior": "List profiles; table/CSV mask token with first4+ellipsis; JSON serializes all raw token values. Empty store emits stderr note and exits0 without JSON.",
+      "security_class": "Local operator credential/configuration data; no Admin API authorization check",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Must explicitly approve privacy/output differences; do not copy raw-token JSON into shared heads; no credential-store migration authority."
+    },
+    {
+      "operation": "config profile show",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileShowCommand.cs:25"
+      ],
+      "current_transport": "CLI local file read ~/.eventstore/profiles.json",
+      "expected_behavior": "Read named profile; table/CSV mask token, JSON serializes raw token. Missing profile exits2.",
+      "security_class": "Local operator credential/configuration data; no Admin API authorization check",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Must explicitly approve privacy/output differences; do not copy raw-token JSON into shared heads; no credential-store migration authority."
+    },
+    {
+      "operation": "config profile remove",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileRemoveCommand.cs:18"
+      ],
+      "current_transport": "CLI local file mutation ~/.eventstore/profiles.json",
+      "expected_behavior": "Remove profile; removing active one clears active selection; missing name exit2; no confirmation.",
+      "security_class": "Local operator credential/configuration data; no Admin API authorization check",
+      "mutation": true,
+      "destructive": true,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "No automatic shared-profile deletion/migration. Preserve private store boundary and operator choice."
+    },
+    {
+      "operation": "config use",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ConfigUseCommand.cs:18"
+      ],
+      "current_transport": "CLI local file mutation ~/.eventstore/profiles.json",
+      "expected_behavior": "Select profile or --clear; --clear wins over supplied name. No name and no clear exits2. Missing named profile exits2.",
+      "security_class": "Local operator credential/configuration data; no Admin API authorization check",
+      "mutation": true,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Shared profile selection differs; migration requires explicit selected-environment credential decision."
+    },
+    {
+      "operation": "config current",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ConfigCurrentCommand.cs:22"
+      ],
+      "current_transport": "CLI local resolved configuration read",
+      "expected_behavior": "Report resolved URL/token/format with per-field source; CLI > env > named/active profile > defaults. JSON includes raw token; non-JSON masks.",
+      "security_class": "Local operator credential/configuration data; no Admin API authorization check",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Raw-token JSON output is an observed privacy gap, not target requirement; shared settings contract and credential-store isolation apply."
+    },
+    {
+      "operation": "config completion",
+      "registration": "reachable",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ConfigCompletionCommand.cs:18"
+      ],
+      "current_transport": "CLI local text generation to stdout",
+      "expected_behavior": "Generate bash/zsh/powershell/fish scripts; invalid shell exits2; no Admin API request.",
+      "security_class": "Local executable-script generation",
+      "mutation": false,
+      "destructive": false,
+      "local_confirmation": "none in registered command",
+      "proposed_disposition": "defer",
+      "proposed_coverage": "exclude",
+      "approval": "pending genuine owner decision",
+      "owner": "EventStore owning maintainer; platform/operator owner for administration",
+      "replacement_gap": "Shell completion is explicitly outside McpCli v1. Retain developer convenience pending owner disposition, no generated subcommands added."
+    }
+  ],
+  "unregistered_helpers": [
+    {
+      "name": "backup export-stream",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupExportStreamCommand.cs:35"
+      ],
+      "registration": "unregistered helper only; not a shipped reachable leaf",
+      "warning": "Compiled source/tests do not override BackupCommand three-stub registration."
+    },
+    {
+      "name": "backup import-stream",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupImportStreamCommand.cs:27",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupImportStreamCommand.cs:65"
+      ],
+      "registration": "unregistered helper only; not a shipped reachable leaf",
+      "warning": "Compiled source/tests do not override BackupCommand three-stub registration."
+    },
+    {
+      "name": "backup list",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupListCommand.cs:31",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupListCommand.cs:58",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupListCommand.cs:64"
+      ],
+      "registration": "unregistered helper only; not a shipped reachable leaf",
+      "warning": "Compiled source/tests do not override BackupCommand three-stub registration."
+    },
+    {
+      "name": "backup restore",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupRestoreCommand.cs:28",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupRestoreCommand.cs:63"
+      ],
+      "registration": "unregistered helper only; not a shipped reachable leaf",
+      "warning": "Compiled source/tests do not override BackupCommand three-stub registration."
+    },
+    {
+      "name": "backup trigger",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupTriggerCommand.cs:28",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupTriggerCommand.cs:63"
+      ],
+      "registration": "unregistered helper only; not a shipped reachable leaf",
+      "warning": "Compiled source/tests do not override BackupCommand three-stub registration."
+    },
+    {
+      "name": "backup validate",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupValidateCommand.cs:26",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupValidateCommand.cs:53"
+      ],
+      "registration": "unregistered helper only; not a shipped reachable leaf",
+      "warning": "Compiled source/tests do not override BackupCommand three-stub registration."
+    }
+  ],
+  "framework_variants": [
+    {
+      "name": "version/help/parser",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Program.cs:14",
+        "src/Hexalith.EventStore.Admin.Cli/Program.cs:24",
+        "src/Hexalith.EventStore.Admin.Cli/Program.cs:41"
+      ],
+      "behavior": "--version/-v standalone returns informational version exit0. Normal System.CommandLine help/parser; no explicit command aliases in source; option aliases are separate spelling metadata."
+    },
+    {
+      "name": "global options/profile precedence",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/GlobalOptionsBinding.cs:33",
+        "src/Hexalith.EventStore.Admin.Cli/GlobalOptionsBinding.cs:130",
+        "src/Hexalith.EventStore.Admin.Cli/Profiles/ProfileManager.cs:31",
+        "src/Hexalith.EventStore.Admin.Cli/Profiles/ProfileManager.cs:95"
+      ],
+      "behavior": "Recursive --url/-u, --token/-t, --format/-f, --output/-o, --profile/-p. URL/token/format resolve CLI>EVENTSTORE_ADMIN_*>explicit/active profiles>http://localhost:5002/no token/table. Store ~/.eventstore/profiles.json, never McpCli mcpcli.json; no store read performed during investigation."
+    },
+    {
+      "name": "output/exit/privacy",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/ExitCodes.cs:6",
+        "src/Hexalith.EventStore.Admin.Cli/Formatting/OutputWriter.cs:21",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileListCommand.cs:49",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileShowCommand.cs:49",
+        "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ConfigCurrentCommand.cs:45"
+      ],
+      "behavior": "Remote commands table default/json/csv, errors/progress generally stderr; stdout or UTF8 file output (overwrite), empty collections may emit no stdout; exit0 success,1 degraded,2 error. Config commands often write directly to console rather than OutputWriter. JSON profiles/current expose tokens; report this gap, do not perpetuate as target behavior."
+    },
+    {
+      "name": "HTTP client",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Cli/Client/AdminApiClient.cs:24",
+        "src/Hexalith.EventStore.Admin.Cli/Client/AdminApiClient.cs:67",
+        "src/Hexalith.EventStore.Admin.Cli/Client/AdminApiClient.cs:122",
+        "src/Hexalith.EventStore.Admin.Cli/Client/AdminApiClient.cs:179"
+      ],
+      "behavior": "Bearer HTTP Admin API client, timeout10s, structured safe problem-detail mapping; TryGet returns null on404, writes accept200/202; health wait explicitly polls and tolerates transient AdminApiExceptions. Not a gateway envelope client."
+    },
+    {
+      "name": "server authority and current unsafe confirmation gap",
+      "source": [
+        "src/Hexalith.EventStore.Admin.Server/Controllers/AdminHealthController.cs:19",
+        "src/Hexalith.EventStore.Admin.Server/Controllers/AdminStreamsController.cs:23",
+        "src/Hexalith.EventStore.Admin.Server/Controllers/AdminProjectionsController.cs:20",
+        "src/Hexalith.EventStore.Admin.Server/Controllers/AdminTenantsController.cs:23",
+        "src/Hexalith.EventStore.Admin.Server/Controllers/AdminStorageController.cs:18",
+        "src/Hexalith.EventStore.Admin.Server/Controllers/AdminTenantsController.cs:256"
+      ],
+      "behavior": "All matching Admin controllers require EventStoreHuman plus endpoint role policy; tenant list specifically AdminFull, other scoped reads AdminReadOnly, projection/snapshot writes AdminOperator. These human surfaces cannot be treated as available agent-client contracts. Registered projection and snapshot mutations have no local --confirm/--yes prompt; do not invent confirmation protection or approve agent execution."
+    }
+  ],
+  "test_evidence_source_only": [
+    "tests/Hexalith.EventStore.Admin.Cli.Tests/Commands/Backup/BackupCommandTests.cs:25",
+    "tests/Hexalith.EventStore.Admin.Cli.Tests/Commands/Backup/BackupCommandTests.cs:44",
+    "tests/Hexalith.EventStore.Admin.Cli.Tests/Commands/HealthCommandWaitTests.cs",
+    "tests/Hexalith.EventStore.Admin.Cli.Tests/Commands/HealthCommandStrictTests.cs",
+    "tests/Hexalith.EventStore.Admin.Cli.Tests/Commands/Config/ProfileListCommandTests.cs",
+    "tests/Hexalith.EventStore.Admin.Cli.Tests/Commands/Projection/ProjectionResetCommandTests.cs"
+  ],
+  "notes": "No tests executed: investigation only. No command-level aliases found. Current source route mismatch for stream list is static evidence; no live HTTP outcome asserted. Destructive flags describe potential data/control loss, not permission.",
+  "artifact_status": "unapproved investigation; not a finalized migration inventory"
+}
