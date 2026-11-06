@@ -18,4 +18,5 @@ if [ "$release_phase" = paired ]; then
     --output "${MCPCLI_PAIRED_PREFLIGHT:?Fresh preflight receipt path is required}"
   exit
 fi
+# Always enforce public-tool closure; ambient recovery values grant no exception.
 python3 "$script_directory/release-request.py" --registry -- "$release_version" "$release_phase"

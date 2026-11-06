@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "collected_at": "2026-11-06T13:25:13.819497+00:00",
+  "source_head": "9b44fe2026efa4b9234dd6a5c53e068b752a1837",
+  "decision": {
+    "status": "pending-explicit-user-decision",
+    "accepted_historical_deviations": []
+  },
+  "indexes": {
+    "hexalith.mcpcli.abstractions": {
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/index.json",
+      "data": {
+        "versions": [
+          "1.0.0",
+          "1.1.0",
+          "2.0.0",
+          "2.0.1"
+        ]
+      }
+    },
+    "hexalith.mcpcli": {
+      "url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/index.json",
+      "data": {
+        "versions": [
+          "2.0.1"
+        ]
+      }
+    }
+  },
+  "packages": {
+    "1.0.0": {
+      "package_id": "Hexalith.McpCli.Abstractions",
+      "version": "1.0.0",
+      "download_url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/1.0.0/hexalith.mcpcli.abstractions.1.0.0.nupkg",
+      "downloaded_package_sha256": "1bd30a88863b07a30c1d3ba9985f588c2d30e0bbb08f16a459258a8eea12e224",
+      "repository_signature_present": true,
+      "signature_validation_performed": false,
+      "nuspec_path": "Hexalith.McpCli.Abstractions.nuspec",
+      "nuspec_repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.McpCli",
+        "commit": "d9f822d64f7afa9bd51ca1698f5051147b86b554"
+      },
+      "registration": {
+        "url": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli.abstractions/1.0.0.json",
+        "data": {
+          "@id": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli.abstractions/1.0.0.json",
+          "@type": [
+            "Package",
+            "http://schema.nuget.org/catalog#Permalink"
+          ],
+          "catalogEntry": "https://api.nuget.org/v3/catalog0/data/2026.10.17.18.25.31/hexalith.mcpcli.abstractions.1.0.0.json",
+          "listed": true,
+          "packageContent": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/1.0.0/hexalith.mcpcli.abstractions.1.0.0.nupkg",
+          "published": "2026-10-17T18:21:26.79+00:00",
+          "registration": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli.abstractions/index.json",
+          "@context": {
+            "@vocab": "http://schema.nuget.org/schema#",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "catalogEntry": {
+              "@type": "@id"
+            },
+            "registration": {
+              "@type": "@id"
+            },
+            "packageContent": {
+              "@type": "@id"
+            },
+            "published": {
+              "@type": "xsd:dateTime"
+            }
+          }
+        }
+      },
+      "catalog": {
+        "url": "https://api.nuget.org/v3/catalog0/data/2026.10.17.18.25.31/hexalith.mcpcli.abstractions.1.0.0.json",
+        "data": {
+          "id": "Hexalith.McpCli.Abstractions",
+          "version": "1.0.0",
+          "published": "2026-10-17T18:21:26.79Z",
+          "listed": true,
+          "commitId": null,
+          "commitTimeStamp": null,
+          "packageHash": "4H+TXbc+bNsjG0aEYgJbHWYOWqVWOC86EMqwjWXWwWCvdmbKE0pqM1PlaCNQEfabqpXxaZbILsMVr6xhXyYZCw==",
+          "packageHashAlgorithm": "SHA512"
+        }
+      }
+    },
+    "1.1.0": {
+      "package_id": "Hexalith.McpCli.Abstractions",
+      "version": "1.1.0",
+      "download_url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/1.1.0/hexalith.mcpcli.abstractions.1.1.0.nupkg",
+      "downloaded_package_sha256": "84af4f6005fe1846ab89fa95d237b070a7a7f6e57bf0d7586d9fbe46abd43173",
+      "repository_signature_present": true,
+      "signature_validation_performed": false,
+      "nuspec_path": "Hexalith.McpCli.Abstractions.nuspec",
+      "nuspec_repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.McpCli",
+        "commit": "8d4a8c07636c1ad065dfc8dc28dbfc956d5deb82"
+      },
+      "registration": {
+        "url": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli.abstractions/1.1.0.json",
+        "data": {
+          "@id": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli.abstractions/1.1.0.json",
+          "@type": [
+            "Package",
+            "http://schema.nuget.org/catalog#Permalink"
+          ],
+          "catalogEntry": "https://api.nuget.org/v3/catalog0/data/2026.10.27.20.25.37/hexalith.mcpcli.abstractions.1.1.0.json",
+          "listed": true,
+          "packageContent": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/1.1.0/hexalith.mcpcli.abstractions.1.1.0.nupkg",
+          "published": "2026-10-27T20:19:03.93+00:00",
+          "registration": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli.abstractions/index.json",
+          "@context": {
+            "@vocab": "http://schema.nuget.org/schema#",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "catalogEntry": {
+              "@type": "@id"
+            },
+            "registration": {
+              "@type": "@id"
+            },
+            "packageContent": {
+              "@type": "@id"
+            },
+            "published": {
+              "@type": "xsd:dateTime"
+            }
+          }
+        }
+      },
+      "catalog": {
+        "url": "https://api.nuget.org/v3/catalog0/data/2026.10.27.20.25.37/hexalith.mcpcli.abstractions.1.1.0.json",
+        "data": {
+          "id": "Hexalith.McpCli.Abstractions",
+          "version": "1.1.0",
+          "published": "2026-10-27T20:19:03.93Z",
+          "listed": true,
+          "commitId": null,
+          "commitTimeStamp": null,
+          "packageHash": "O+xqYUa5tvSY5vnoJM18RSBHPSEzPNfTXrY3egJ3ehxVsZ0irDujjHrVxSPPSfx7WSg/0WWuRCIwMvuw5yrSWA==",
+          "packageHashAlgorithm": "SHA512"
+        }
+      }
+    },
+    "2.0.0": {
+      "package_id": "Hexalith.McpCli.Abstractions",
+      "version": "2.0.0",
+      "download_url": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/2.0.0/hexalith.mcpcli.abstractions.2.0.0.nupkg",
+      "downloaded_package_sha256": "d569654447a07f57cfe66c11a20716d8098b1879b39668521922775deed6e9ea",
+      "repository_signature_present": true,
+      "signature_validation_performed": false,
+      "nuspec_path": "Hexalith.McpCli.Abstractions.nuspec",
+      "nuspec_repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.McpCli",
+        "commit": "06cfdf25a352034b36041e9ed44da514b167ca5a"
+      },
+      "registration": {
+        "url": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli.abstractions/2.0.0.json",
+        "data": {
+          "@id": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli.abstractions/2.0.0.json",
+          "@type": [
+            "Package",
+            "http://schema.nuget.org/catalog#Permalink"
+          ],
+          "catalogEntry": "https://api.nuget.org/v3/catalog0/data/2026.11.02.19.40.09/hexalith.mcpcli.abstractions.2.0.0.json",
+          "listed": true,
+          "packageContent": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/2.0.0/hexalith.mcpcli.abstractions.2.0.0.nupkg",
+          "published": "2026-11-02T19:31:50.503+00:00",
+          "registration": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli.abstractions/index.json",
+          "@context": {
+            "@vocab": "http://schema.nuget.org/schema#",
+            "xsd": "http://www.w3.org/2001/XMLSchema#",
+            "catalogEntry": {
+              "@type": "@id"
+            },
+            "registration": {
+              "@type": "@id"
+            },
+            "packageContent": {
+              "@type": "@id"
+            },
+            "published": {
+              "@type": "xsd:dateTime"
+            }
+          }
+        }
+      },
+      "catalog": {
+        "url": "https://api.nuget.org/v3/catalog0/data/2026.11.02.19.40.09/hexalith.mcpcli.abstractions.2.0.0.json",
+        "data": {
+          "id": "Hexalith.McpCli.Abstractions",
+          "version": "2.0.0",
+          "published": "2026-11-02T19:31:50.503Z",
+          "listed": true,
+          "commitId": null,
+          "commitTimeStamp": null,
+          "packageHash": "erliRTUr/hyZbMdX7HC997NMxdRlpYi8qDTcQH/ObEWbewKPNzCQdHWJO6AODxIzmYHfPwwiA/E+PG9l15lEhw==",
+          "packageHashAlgorithm": "SHA512"
+        }
+      }
+    }
+  },
+  "github_runs": [
+    {
+      "api_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/40576687691",
+      "id": 40576687691,
+      "name": "Release",
+      "event": "workflow_dispatch",
+      "head_branch": "main",
+      "head_sha": "8d4a8c07636c1ad065dfc8dc28dbfc956d5deb82",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-10-27T20:17:21Z",
+      "updated_at": "2026-10-27T20:19:12Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/40576687691",
+      "run_attempt": 1
+    },
+    {
+      "api_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/runs/41510077761",
+      "id": 41510077761,
+      "name": "Release",
+      "event": "workflow_dispatch",
+      "head_branch": "main",
+      "head_sha": "06cfdf25a352034b36041e9ed44da514b167ca5a",
+      "status": "completed",
+      "conclusion": "success",
+      "created_at": "2026-11-02T19:27:17Z",
+      "updated_at": "2026-11-02T19:31:58Z",
+      "html_url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/41510077761",
+      "run_attempt": 1
+    }
+  ],
+  "refs": {
+    "v1.0.0": {
+      "api_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/ref/tags/v1.0.0",
+      "remote_object": {
+        "sha": "d9f822d64f7afa9bd51ca1698f5051147b86b554",
+        "type": "commit",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/commits/d9f822d64f7afa9bd51ca1698f5051147b86b554"
+      },
+      "local_commit_sha": "d9f822d64f7afa9bd51ca1698f5051147b86b554"
+    },
+    "v1.1.0": {
+      "api_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/ref/tags/v1.1.0",
+      "remote_object": {
+        "sha": "8d4a8c07636c1ad065dfc8dc28dbfc956d5deb82",
+        "type": "commit",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/commits/8d4a8c07636c1ad065dfc8dc28dbfc956d5deb82"
+      },
+      "local_commit_sha": "8d4a8c07636c1ad065dfc8dc28dbfc956d5deb82"
+    },
+    "v2.0.0": {
+      "api_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/ref/tags/v2.0.0",
+      "remote_object": {
+        "sha": "06cfdf25a352034b36041e9ed44da514b167ca5a",
+        "type": "commit",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/commits/06cfdf25a352034b36041e9ed44da514b167ca5a"
+      },
+      "local_commit_sha": "06cfdf25a352034b36041e9ed44da514b167ca5a"
+    },
+    "v2.0.1": {
+      "api_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/ref/tags/v2.0.1",
+      "remote_object": {
+        "sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+        "type": "commit",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/commits/aa2845edbea23444a1d362060b8d0f5dc05a132e"
+      },
+      "local_commit_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e"
+    },
+    "mcpcli-paired-publication-started": {
+      "api_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/ref/tags/mcpcli-paired-publication-started",
+      "remote_object": {
+        "sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+        "type": "commit",
+        "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/git/commits/aa2845edbea23444a1d362060b8d0f5dc05a132e"
+      },
+      "local_commit_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e"
+    }
+  },
+  "chronology": [
+    {
+      "event": "parties_decorated_contracts_enrollment",
+      "source_sha": "558ce91f495072ecd1d96cb16e0efda9fa3b0722",
+      "committed_at": "2026-10-21T12:50:44+02:00",
+      "subject": "feat(parties): enroll published queries and pin complete coverage",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/commit/558ce91f495072ecd1d96cb16e0efda9fa3b0722"
+    },
+    {
+      "event": "tenants_decorated_contracts_enrollment",
+      "source_sha": "f20a4e0d279615def05a454b73599d1cf583c338",
+      "committed_at": "2026-10-22T06:42:14+02:00",
+      "subject": "feat(conformance): enroll approved Tenants contracts for v1 parity",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/commit/f20a4e0d279615def05a454b73599d1cf583c338"
+    },
+    {
+      "event": "platform_scope_attributes_added",
+      "source_sha": "1b369a9e80ffcfb2c61232f9a61be6b7fb38b8b2",
+      "committed_at": "2026-11-02T15:03:55+01:00",
+      "subject": "feat(mcpcli): support platform-scoped catalog operations",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/commit/1b369a9e80ffcfb2c61232f9a61be6b7fb38b8b2"
+    }
+  ],
+  "first_tool_publication": {
+    "url": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli/2.0.1.json",
+    "data": {
+      "@id": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli/2.0.1.json",
+      "@type": [
+        "Package",
+        "http://schema.nuget.org/catalog#Permalink"
+      ],
+      "catalogEntry": "https://api.nuget.org/v3/catalog0/data/2026.11.05.18.38.41/hexalith.mcpcli.2.0.1.json",
+      "listed": true,
+      "packageContent": "https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/2.0.1/hexalith.mcpcli.2.0.1.nupkg",
+      "published": "2026-11-05T18:27:32.833+00:00",
+      "registration": "https://api.nuget.org/v3/registration5-gz-semver2/hexalith.mcpcli/index.json",
+      "@context": {
+        "@vocab": "http://schema.nuget.org/schema#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "catalogEntry": {
+          "@type": "@id"
+        },
+        "registration": {
+          "@type": "@id"
+        },
+        "packageContent": {
+          "@type": "@id"
+        },
+        "published": {
+          "@type": "xsd:dateTime"
+        }
+      }
+    }
+  },
+  "abstractions_and_analyzer_source_comparison": {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "v1.0.0",
+      "v1.1.0",
+      "--",
+      "src/Hexalith.McpCli.Abstractions",
+      "src/Hexalith.McpCli.Analyzers"
+    ],
+    "exit_code": 0,
+    "identical": true
+  }
+}

@@ -245,20 +245,13 @@ class PublicationTests(unittest.TestCase):
         references = json.loads((shell.root / 'paired-refs.json').read_text())
         self.assertEqual(references, [{'ref': 'refs/tags/' + self.publisher.MARKER + suffix,
             'object': {'type': 'commit', 'sha': SHA}} for suffix in ('', '-v' + VERSION)])
-        earlier_sha = 'b' * 40
-        shell.env['EARLIER_BOOTSTRAP_SHA'] = earlier_sha
-        shell.executable('git', '''#!/usr/bin/env python3
-import json, os, sys
-from pathlib import Path
-assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTSTRAP_SHA"], os.environ["DISPATCH_SHA"]]
-(Path(os.environ["RELEASE_TEST_ROOT"]) / "recovery-ancestor.json").write_text(json.dumps(sys.argv[1:]))
-''')
-        with patch.dict(os.environ, shell.env):
+        with patch.dict(os.environ, shell.env), patch.object(self.request, 'registry_versions', return_value=['2.0.1']):
             with self.assertRaisesRegex(ValueError, 'closed'):
                 self.request.check_bootstrap_line()
-            self.request.check_bootstrap_recovery_line('1.0.0', earlier_sha)
-        self.assertEqual(json.loads((shell.root / 'recovery-ancestor.json').read_text()),
-                         ['merge-base', '--is-ancestor', earlier_sha, SHA])
+            with self.assertRaisesRegex(ValueError, 'not in the fixed historical allowlist'):
+                self.request.historical_sha(VERSION)
+        self.assertEqual(self.request.historical_sha('1.0.0'),
+                         'd9f822d64f7afa9bd51ca1698f5051147b86b554')
 
     def test_snapshot_survives_original_import_changes_and_pushes_only_checked_bytes(self):
         self.mode = 'mutate-original-after-first'
@@ -912,7 +905,8 @@ class PublicationBoundaryTests(unittest.TestCase):
             publisher.reserve_version(VERSION, SHA)
             self.assertEqual(command.call_count, 1)
             self.assertIn('ref=' + marker['ref'] + '-v' + VERSION, command.call_args.args[0])
-        with patch.dict(os.environ, {'REPOSITORY': 'fixture/repo'}), patch('paired_release.module', return_value=gate):
+        with patch.dict(os.environ, {'REPOSITORY': 'fixture/repo'}), patch('paired_release.module', return_value=gate), \
+                patch.object(request, 'registry_versions', return_value=[]):
             for response in ([marker], {'error': 'uncertain'}):
                 with patch.object(gate, 'github_json', return_value=response), self.assertRaisesRegex(ValueError, 'closed'):
                     request.check_bootstrap_line()
@@ -922,24 +916,15 @@ class PublicationBoundaryTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, 'already started'): publisher.reserve_version(VERSION, SHA)
             command.assert_not_called()
 
-    def test_bootstrap_recovery_cannot_target_paired_or_later_release_tags(self):
+    def test_bootstrap_recovery_cannot_target_unlisted_paired_or_later_versions(self):
         request = module('release-request')
-        gate = module('verify-release-source')
-        marker = {'ref': 'refs/tags/mcpcli-paired-publication-started', 'object': {'type': 'commit', 'sha': 'b' * 40}}
-        version = {'ref': marker['ref'] + '-v' + VERSION, 'object': {'type': 'commit', 'sha': 'c' * 40}}
-        cases = [('before-any-pair', [[]], SHA, 0, True), ('historical', [[marker], []], SHA, 0, True),
-                 ('paired-version', [[marker, version], [version]], SHA, 0, False),
-                 ('same-source', [[marker], []], 'b' * 40, 0, False),
-                 ('later-source', [[marker], []], 'c' * 40, 1, False),
-                 ('missing-global', [[version]], SHA, 0, False), ('uncertain', [{'bad': 'state'}], SHA, 0, False)]
-        for mode, responses, sha, code, accepted in cases:
-            with self.subTest(mode=mode), patch.dict(os.environ, {'REPOSITORY': 'fixture/repo'}), \
-                    patch('paired_release.module', return_value=gate), patch.object(gate, 'github_json', side_effect=responses), \
-                    patch.object(subprocess, 'run', return_value=subprocess.CompletedProcess([], code)) as git:
-                if accepted: request.check_bootstrap_recovery_line(VERSION, sha)
-                else:
-                    with self.assertRaises(ValueError): request.check_bootstrap_recovery_line(VERSION, sha)
-                if mode in ('before-any-pair', 'paired-version', 'missing-global', 'uncertain'): git.assert_not_called()
+        for version in (VERSION, '2.0.1', '2.0.2', '3.0.0'):
+            with self.subTest(version=version), patch.object(subprocess, 'run') as git, \
+                    patch.object(request, 'urlopen') as registry:
+                with self.assertRaisesRegex(ValueError, 'not in the fixed historical allowlist'):
+                    request.historical_sha(version)
+                git.assert_not_called()
+                registry.assert_not_called()
 
     def test_original_run_and_artifact_metadata_must_be_exact_and_jobs_executed(self):
         verifier = module('verify-paired-publication')

@@ -16,7 +16,7 @@ def failure_detail(error):
         detail += f"\n{stderr.strip()}"
     credentials = {os.environ.get(name, "") for name in
                    ("GH_TOKEN", "GITHUB_TOKEN", "GH_ENTERPRISE_TOKEN", "GITHUB_ENTERPRISE_TOKEN", "NUGET_API_KEY")}
-    for credential in sorted(credentials - {""}, key=len, reverse=True):
+    for credential in sorted((value for value in credentials if value.strip()), key=len, reverse=True):
         detail = detail.replace(credential, "[REDACTED]")
     return re.sub(r"[\x00-\x08\x0b-\x1f\x7f]", "", detail)
 
@@ -81,6 +81,44 @@ def validate_jobs(jobs, required):
                 raise ValueError(f'Required step {name}: {step} was missing, skipped or unsuccessful.')
 
 
+def verify_recovery_tag(version, sha, repository, live_main):
+    from paired_release import module
+    if module('release-request').historical_sha(version) != sha:
+        raise ValueError("Recovery source SHA does not match the fixed historical binding.")
+    tag = f"refs/tags/v{version}^{{commit}}"
+    tagged = subprocess.run(
+        ["git", "rev-parse", "--verify", tag],
+        check=False, capture_output=True, text=True,
+    )
+    if tagged.returncode != 0:
+        raise ValueError("Historical recovery tag does not exist.")
+    if tagged.stdout.strip() != sha:
+        raise ValueError("Recovery tag does not match the exact checked-out release SHA.")
+    remote_tag = github_json(
+        f"repos/{repository}/git/ref/tags/v{version}")["object"]
+    for _ in range(4):
+        if remote_tag["type"] == "commit":
+            break
+        if remote_tag["type"] != "tag":
+            raise ValueError("Remote recovery tag does not resolve to a commit.")
+        remote_tag = github_json(
+            f"repos/{repository}/git/tags/{remote_tag['sha']}")["object"]
+    if remote_tag["type"] != "commit" or remote_tag["sha"] != sha:
+        raise ValueError("Remote recovery tag does not match the exact release SHA.")
+    fetched_main = subprocess.run(
+        ["git", "rev-parse", "origin/main"],
+        check=True, capture_output=True, text=True,
+    ).stdout.strip()
+    if fetched_main != live_main:
+        raise ValueError("Current main moved after recovery checkout; fetch and retry.")
+    ancestor = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", sha, "origin/main"],
+        check=False, capture_output=True, text=True,
+    )
+    if ancestor.returncode != 0:
+        raise ValueError("Recovery tag is not an ancestor of current main.")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("sha")
@@ -97,6 +135,10 @@ def main() -> int:
             raise ValueError('Paired source verification requires evidence output and refuses tagged recovery.')
         if args.staging and (args.phase != "paired" or args.tagged_recovery or not args.output):
             raise ValueError("Paired staging requires fresh output and cannot recover a release.")
+        if args.tagged_recovery is not None:
+            from paired_release import module
+            if module('release-request').historical_sha(args.tagged_recovery) != args.sha:
+                raise ValueError("Recovery source SHA does not match the fixed historical binding.")
         if args.ref != "refs/heads/main":
             raise ValueError("Release must be dispatched from refs/heads/main.")
         if re.fullmatch(r"[0-9a-f]{40}", args.sha) is None:
@@ -116,43 +158,12 @@ def main() -> int:
         repository = os.environ["REPOSITORY"]
         live_main = github_json(f"repos/{repository}/git/ref/heads/main")["object"]["sha"]
         if args.tagged_recovery is not None:
-            tag = f"refs/tags/v{args.tagged_recovery}^{{commit}}"
-            tagged_sha = subprocess.run(
-                ["git", "rev-parse", "--verify", tag],
-                check=True, capture_output=True, text=True,
-            ).stdout.strip()
-            if tagged_sha != args.sha:
-                raise ValueError("Recovery tag does not match the exact checked-out release SHA.")
-            remote_tag = github_json(
-                f"repos/{repository}/git/ref/tags/v{args.tagged_recovery}")["object"]
-            for _ in range(4):
-                if remote_tag["type"] == "commit":
-                    break
-                if remote_tag["type"] != "tag":
-                    raise ValueError("Remote recovery tag does not resolve to a commit.")
-                remote_tag = github_json(
-                    f"repos/{repository}/git/tags/{remote_tag['sha']}")["object"]
-            if remote_tag["type"] != "commit" or remote_tag["sha"] != args.sha:
-                raise ValueError("Remote recovery tag does not match the exact release SHA.")
-            fetched_main = subprocess.run(
-                ["git", "rev-parse", "origin/main"],
-                check=True, capture_output=True, text=True,
-            ).stdout.strip()
-            if fetched_main != live_main:
-                raise ValueError("Current main moved after recovery checkout; fetch and retry.")
-            ancestor = subprocess.run(
-                ["git", "merge-base", "--is-ancestor", args.sha, "origin/main"],
-                check=False, capture_output=True, text=True,
-            )
-            if ancestor.returncode != 0:
-                raise ValueError("Recovery tag is not an ancestor of current main.")
+            verify_recovery_tag(args.tagged_recovery, args.sha, repository, live_main)
         elif args.sha != live_main:
             raise ValueError("Dispatch SHA is not the current main SHA; main may have moved during approval.")
         if args.phase == 'bootstrap':
             from paired_release import module
-            if args.tagged_recovery is not None:
-                module('release-request').check_bootstrap_recovery_line(args.tagged_recovery, args.sha)
-            elif not os.environ.get('MCPCLI_RECOVERY_VERSION'):
+            if args.tagged_recovery is None:
                 module('release-request').check_bootstrap_line()
         gates = {}
         paired = args.phase == 'paired'

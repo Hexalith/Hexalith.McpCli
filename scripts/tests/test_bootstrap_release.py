@@ -18,7 +18,12 @@ from zipfile import ZipFile
 
 ROOT = Path(__file__).resolve().parents[2]
 PACKAGE = "Hexalith.McpCli.Abstractions.1.0.0.nupkg"
-SHA = "a" * 40
+SHA = "d9f822d64f7afa9bd51ca1698f5051147b86b554"
+HISTORICAL_TAGS = {
+    "v1.0.0": SHA,
+    "v1.1.0": "8d4a8c07636c1ad065dfc8dc28dbfc956d5deb82",
+    "v2.0.0": "06cfdf25a352034b36041e9ed44da514b167ca5a",
+}
 
 
 def package(path, *, identity="Hexalith.McpCli.Abstractions", version="1.0.0", missing=(), dependency=False,
@@ -46,6 +51,7 @@ class BootstrapReleaseTests(unittest.TestCase):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
+        (self.root / "historical-tags.json").write_text(json.dumps(HISTORICAL_TAGS))
         shutil.copytree(ROOT / "scripts", self.root / "scripts", ignore=shutil.ignore_patterns("__pycache__"))
         (self.root / "tools").mkdir()
         shutil.copy(ROOT / "tools/release-packages.json", self.root / "tools/release-packages.json")
@@ -55,9 +61,19 @@ class BootstrapReleaseTests(unittest.TestCase):
         # LC_ALL=C keeps system messages such as mkdir's "File exists" untranslated.
         self.env = dict(os.environ, MCPCLI_RELEASE_PHASE="bootstrap", NUGET_API_KEY="fixture-secret-never-print",
                         LC_ALL="C", PATH=f"{self.bin}:{os.environ['PATH']}", PYTHONPATH=str(self.bin),
-                        RELEASE_TEST_ROOT=str(self.root), REGISTRY_STATE="free", SOURCE_STATE="success",
+                        RELEASE_TEST_ROOT=str(self.root), REGISTRY_STATE="free", TOOL_REGISTRY_STATE="404", SOURCE_STATE="success",
                         REPOSITORY="fixture/repo", DISPATCH_SHA=SHA, DISPATCH_REF="refs/heads/main")
         self.workflow_exports = {}
+        runner = self.root / "runner-temp"
+        runner.mkdir()
+        self.env["RUNNER_TEMP"] = str(runner)
+        # The real prerequisite implementation has its own executable tests. This
+        # fixture isolates workflow/source-gate wiring from unrelated submodules.
+        (self.root / "scripts/verify-paired-prerequisites.py").write_text(
+            "import os\nfrom pathlib import Path\nREQUIRED = '70dbf73e80787299c832d30d911b16b105ab194d'\ndef verify():\n"
+            "    Path(os.environ['RELEASE_TEST_ROOT'], 'prerequisites.log').write_text('verified')\n"
+            "    if os.environ.get('PREREQUISITES_FAIL'): raise ValueError('fixture FR-22 failed')\n"
+            "    return {}\n")
         (self.bin / "sitecustomize.py").write_text('''
 import io, json, os, time
 from pathlib import Path
@@ -66,7 +82,8 @@ import urllib.request
 def registry(url, timeout):
     root = Path(os.environ["RELEASE_TEST_ROOT"])
     with (root / "registry.log").open("a") as log: log.write(url + "\\n")
-    state = os.environ["REGISTRY_STATE"]
+    tool = "/hexalith.mcpcli/" in url
+    state = (os.environ.get("TOOL_REGISTRATION_STATE", os.environ.get("TOOL_REGISTRY_STATE", "404")) if "registration5" in url else os.environ.get("TOOL_REGISTRY_STATE", "404")) if tool else os.environ["REGISTRY_STATE"]
     if url.endswith(".nupkg"):
         public_state = os.environ.get("PUBLIC_STATE")
         downloads = root / "downloads.log"
@@ -164,9 +181,10 @@ if args[:2] == ["nuget", "push"]:
     (root / "pushed.path").write_text(str(package))
 ''')
         self.executable("git", '''#!/usr/bin/env python3
-import os, sys
+import json, os, sys
 from pathlib import Path
 root = Path(os.environ["RELEASE_TEST_ROOT"])
+tags = json.loads((root / "historical-tags.json").read_text())
 state = os.environ.get("LOCAL_SOURCE_STATE", "clean")
 state_file = root / "local-source-state"
 if state_file.exists(): state = state_file.read_text()
@@ -175,35 +193,44 @@ if state == "not-git":
     sys.exit(128)
 if sys.argv[1:] == ["rev-parse", "HEAD"]:
     checkout = root / "checkout-sha"
-    print(checkout.read_text() if checkout.exists() else "b" * 40 if state == "wrong-head" else os.environ.get("LOCAL_HEAD_SHA", "a" * 40))
-elif sys.argv[1:] in (["rev-parse", "--verify", "refs/tags/v1.0.0^{commit}"],
-                      ["rev-parse", "-q", "--verify", "refs/tags/v1.0.0^{commit}"]):
+    print(checkout.read_text() if checkout.exists() else "b" * 40 if state == "wrong-head" else os.environ.get("LOCAL_HEAD_SHA", "d9f822d64f7afa9bd51ca1698f5051147b86b554"))
+elif sys.argv[1] == "rev-parse" and sys.argv[-1].startswith("refs/tags/v") and sys.argv[-1].endswith("^{commit}"):
     if os.environ.get("TAG_EXISTS") == "false": sys.exit(1)
-    print(os.environ.get("TAG_SHA", "a" * 40))
-elif sys.argv[1:] == ["checkout", "--detach", "v1.0.0"]:
-    (root / "checkout-sha").write_text(os.environ.get("TAG_SHA", "a" * 40))
+    tag = sys.argv[-1].removeprefix("refs/tags/").removesuffix("^{commit}")
+    if tag not in tags: sys.exit(1)
+    print(os.environ.get("TAG_SHA", tags[tag]))
+elif sys.argv[1:3] == ["checkout", "--detach"] and sys.argv[-1].startswith("v"):
+    if sys.argv[-1] not in tags: sys.exit(1)
+    (root / "checkout-sha").write_text(os.environ.get("TAG_SHA", tags[sys.argv[-1]]))
     state_file.write_text("detached")
+    if os.environ.get("CHECK_SUBMODULE_ALIGNMENT"): (root / "submodule-mismatch").touch()
     if os.environ.get("SABOTAGE_TAGGED_SCRIPTS"):
         for script in (root / "scripts").iterdir():
             if script.suffix == ".sh":
                 script.write_text('#!/usr/bin/env bash\\necho "tagged helper called" >> "$RELEASE_TEST_ROOT/tagged-helper.log"\\nexit 91\\n')
             elif script.suffix == ".py":
                 script.write_text('from pathlib import Path\\nimport os\\nPath(os.environ["RELEASE_TEST_ROOT"]).joinpath("tagged-helper.log").write_text("called")\\nraise RuntimeError("tagged helper must not run")\\n')
+elif sys.argv[1:] == ["submodule", "update", "--init", "--", "references/Hexalith.AI.Tools", "references/Hexalith.Builds"]:
+    (root / "submodule-mismatch").unlink(missing_ok=True)
 elif sys.argv[1:] == ["rev-parse", "origin/main"]:
-    print(os.environ.get("FETCHED_MAIN_SHA", os.environ.get("LIVE_SHA", "a" * 40)))
+    print(os.environ.get("FETCHED_MAIN_SHA", os.environ.get("LIVE_SHA", "d9f822d64f7afa9bd51ca1698f5051147b86b554")))
 elif sys.argv[1:3] == ["merge-base", "--is-ancestor"]:
-    if sys.argv[3:] not in ([os.environ.get("TAG_SHA", "a" * 40), "origin/main"], ["v1.0.0", "origin/main"]): sys.exit(1)
+    if len(sys.argv) != 5 or sys.argv[4] != "origin/main": sys.exit(1)
+    if sys.argv[3] not in {*tags, *tags.values(), os.environ.get("TAG_SHA")}: sys.exit(1)
     if os.environ.get("RECOVERY_ANCESTOR") == "false": sys.exit(1)
 elif sys.argv[1:] == ["branch", "--show-current"]: print("" if state == "detached" else "feature" if state == "feature" else "main")
 elif sys.argv[1:] == ["status", "--porcelain", "--untracked-files=normal"]:
+    if (root / "submodule-mismatch").exists(): print(" M references/Hexalith.AI.Tools")
     if state == "dirty": print(" M scripts/release-publish.sh")
     if state == "untracked": print("?? scripts/unreviewed.py")
 else: sys.exit(1)
 ''')
         self.executable("gh", '''#!/usr/bin/env python3
-import json, os, shutil, sys
+import hashlib, json, os, shutil, sys
 from pathlib import Path
 root = Path(os.environ["RELEASE_TEST_ROOT"])
+tags = json.loads((root / "historical-tags.json").read_text())
+tag_objects = {hashlib.sha1(tag.encode()).hexdigest(): sha for tag, sha in tags.items()}
 args = sys.argv[1:]
 if args[0] == "release":
     operation = args[1]
@@ -238,8 +265,8 @@ if args[0] == "release":
     else: sys.exit(6)
     sys.exit(0)
 state = os.environ["SOURCE_STATE"]
-sha = os.environ.get("LIVE_SHA", "a" * 40)
-run_sha = os.environ.get("RUN_SHA", "a" * 40)
+sha = os.environ.get("LIVE_SHA", "d9f822d64f7afa9bd51ca1698f5051147b86b554")
+run_sha = os.environ.get("RUN_SHA", "d9f822d64f7afa9bd51ca1698f5051147b86b554")
 with (Path(os.environ["RELEASE_TEST_ROOT"]) / "gh.log").open("a") as log: log.write(" ".join(sys.argv[1:]) + "\\n")
 if state == "permission-denied":
     print(os.environ["SUBPROCESS_STDERR"] + chr(0), file=sys.stderr)
@@ -247,23 +274,41 @@ if state == "permission-denied":
 endpoint = sys.argv[4]
 if "/git/matching-refs/tags/mcpcli-paired-publication-started" in endpoint:
     marker_state = os.environ.get("PAIR_PUBLICATION_STATE", "absent")
+    if marker_state == "unavailable":
+        print("fixture unavailable", file=sys.stderr)
+        sys.exit(1)
     if marker_state == "absent": print("[]")
     elif endpoint.endswith("-v1.0.0"):
-        print(json.dumps([{"ref":"refs/tags/mcpcli-paired-publication-started-v1.0.0", "object":{"type":"commit", "sha":"a" * 40}}]))
+        print(json.dumps([{"ref":"refs/tags/mcpcli-paired-publication-started-v1.0.0", "object":{"type":"commit", "sha":"d9f822d64f7afa9bd51ca1698f5051147b86b554"}}]))
     else:
         print(json.dumps([{"ref":"refs/tags/mcpcli-paired-publication-started", "object":{"type":"commit", "sha":"b" * 40}}]))
 elif endpoint.endswith("git/ref/heads/main"):
     print(json.dumps({"object":{"sha":"b" * 40 if state == "stale" else sha}}))
-elif endpoint.endswith("git/ref/tags/v1.0.0"):
+elif "/git/ref/tags/v" in endpoint:
+    tag = endpoint.rsplit("/", 1)[1]
+    if tag not in tags: sys.exit(1)
     if os.environ.get("REMOTE_TAG_ANNOTATED") == "1":
-        print(json.dumps({"object":{"type":"tag", "sha":"t" * 40}}))
+        print(json.dumps({"object":{"type":"tag", "sha":hashlib.sha1(tag.encode()).hexdigest()}}))
     else:
-        print(json.dumps({"object":{"type":os.environ.get("REMOTE_TAG_TYPE", "commit"), "sha":os.environ.get("REMOTE_TAG_SHA", "a" * 40)}}))
-elif endpoint.endswith("git/tags/" + "t" * 40):
-    print(json.dumps({"object":{"type":"commit", "sha":os.environ.get("REMOTE_TAG_SHA", "a" * 40)}}))
+        print(json.dumps({"object":{"type":os.environ.get("REMOTE_TAG_TYPE", "commit"), "sha":os.environ.get("REMOTE_TAG_SHA", tags[tag])}}))
+elif "/git/tags/" in endpoint:
+    tag_object = endpoint.rsplit("/", 1)[1]
+    if tag_object not in tag_objects: sys.exit(1)
+    print(json.dumps({"object":{"type":"commit", "sha":os.environ.get("REMOTE_TAG_SHA", tag_objects[tag_object])}}))
 else:
-    gate = "bootstrap" if "bootstrap-package" in endpoint else "commitlint"
-    run = {"head_sha":run_sha, "head_branch":"main", "event":"push", "status":"completed",
+    if endpoint.endswith("/jobs"):
+        sys.path.insert(0, str(root / "scripts"))
+        from paired_release import module
+        gate_module = module("verify-release-source")
+        required = gate_module.STAGING_JOBS if "/runs/1/" in endpoint else gate_module.STAGING_COMMITLINT_JOBS
+        jobs = [{"name": name, "status": "completed", "conclusion": "success",
+                 "steps": [{"name": step, "status": "completed", "conclusion": "success"} for step in steps]}
+                for name, steps in required.items()]
+        if os.environ.get("CI_JOB_FAIL"): jobs[0]["steps"][0]["conclusion"] = "failure"
+        print(json.dumps({"total_count":len(jobs), "jobs":jobs}))
+        sys.exit(0)
+    gate = "bootstrap" if "bootstrap-package" in endpoint else "ci" if "/ci.yml/" in endpoint else "commitlint"
+    run = {"id":1 if gate == "ci" else 2, "head_sha":run_sha, "head_branch":"main", "event":"push", "status":"completed",
            "conclusion":"success", "run_number":1, "run_attempt":1, "html_url":"https://example.test/" + gate}
     runs = [run]
     if state == gate + "-missing": runs = []
@@ -394,15 +439,6 @@ urllib.request.urlopen = paired_registry
         receipt.update(overrides)
         (path.parent.parent / "bootstrap.sha256").write_text(json.dumps(receipt) + "\n")
 
-    def complete_github_release(self):
-        preserved = self.root / "runner-temp/release-scripts"
-        preserved.mkdir(parents=True, exist_ok=True)
-        for filename in ("verify-release-source.py", "paired_release.py", "release-request.py"):
-            shutil.copy(self.root / "scripts" / filename, preserved / filename)
-        self.env.update(RUNNER_TEMP=str(preserved.parent), RECOVERY_VERSION="1.0.0")
-        self.workflow_exports["DISPATCH_SHA"] = SHA
-        return self.run_workflow_step("recover", "Complete the GitHub release")
-
     def workflow_step(self, job, name):
         workflow = (ROOT / ".github/workflows/release.yml").read_text()
         job_block = re.split(r"(?m)^  [\w-]+:\n", workflow.split(f"  {job}:\n", 1)[1], maxsplit=1)[0]
@@ -415,6 +451,7 @@ urllib.request.urlopen = paired_registry
                     "RECOVERY_PHASE", "GH_TOKEN", "GH_REPO", "GITHUB_TOKEN", "NUGET_API_KEY"):
             environment.pop(key, None)
         environment.update(self.workflow_exports)
+        (Path(environment["RUNNER_TEMP"]) / "release-source.json").unlink(missing_ok=True)
         if "        env:\n" in block:
             declarations = block.split("        env:\n", 1)[1].split("        run:", 1)[0]
             values = {"${{ inputs.phase }}": self.env.get("WORKFLOW_PHASE", "bootstrap"), "${{ inputs.recovery_version }}": self.env.get("WORKFLOW_RECOVERY_VERSION", "1.0.0"),
@@ -435,7 +472,7 @@ urllib.request.urlopen = paired_registry
         command = block.split("        run: ", 1)[1]
         if command.startswith("|\n"):
             command = "\n".join(line[10:] if line else "" for line in command.splitlines()[1:])
-        result = subprocess.run(["bash", "-c", command], cwd=self.root,
+        result = subprocess.run(["bash", "--noprofile", "--norc", "-e", "-o", "pipefail", "-c", command], cwd=self.root,
                                 env=environment, text=True, capture_output=True)
         self.assertNotIn("fixture-secret-never-print", result.stdout + result.stderr)
         if environment.get("GITHUB_ENV"):
@@ -467,57 +504,29 @@ urllib.request.urlopen = paired_registry
             assets.mkdir()
             (assets / PACKAGE).write_bytes(b"previous release asset")
 
-    def test_workflow_completes_missing_published_and_draft_releases_with_exact_assets(self):
-        staged = self.staged()
-        unrelated = self.root / "nupkgs/unrelated.nupkg"
-        unrelated.write_bytes(b"unrelated artifacts must not become release assets")
-        for state, existing_asset, operations in (("missing", False, ["view", "create"]),
-                                  ("published", False, ["view", "upload"]),
-                                  ("draft", False, ["view", "upload", "edit"]),
-                                  ("published", True, ["view", "upload"]),
-                                  ("draft", True, ["view", "upload", "edit"])):
-            with self.subTest(state=state, existing_asset=existing_asset):
-                self.reset_github_release(state, existing_asset=existing_asset)
-                result = self.complete_github_release()
-                self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertEqual([call[1] for call in self.release_calls()], operations)
-                assets = self.root / "github-assets"
-                self.assertEqual([path.name for path in assets.iterdir()], [PACKAGE])
-                self.assertEqual((assets / PACKAGE).read_bytes(), staged.read_bytes())
-                self.assertIs(json.loads((self.root / "github-release.json").read_text())["isDraft"], False)
-                self.assertEqual(json.loads((self.root / "github-release.json").read_text())["assets"], [PACKAGE])
-                self.assertEqual(unrelated.read_bytes(), b"unrelated artifacts must not become release assets")
-                self.assert_no_push()
+    def test_historical_workflow_has_no_publication_credentials_or_release_writes(self):
+        workflow = (ROOT / ".github/workflows/release.yml").read_text()
+        recovery = workflow.split("  recover:\n", 1)[1].split("  stage-pair:\n", 1)[0]
+        for forbidden in ("NuGet/login", "NUGET_API_KEY", "id-token:", "contents: write", "gh release", "nuget push", "release-publish.sh"):
+            self.assertNotIn(forbidden, recovery)
+        self.assertIn("contents: read", recovery)
+        self.assertIn("historical-bootstrap-verification", recovery)
+        self.assertIn('cp -a scripts "$RUNNER_TEMP/release-scripts"', recovery)
+        self.assertNotIn("MCPCLI_RECOVERY_VERSION", recovery)
 
-    def test_workflow_completion_propagates_creation_upload_publication_and_source_failures(self):
-        staged = self.staged()
-        for failure, state, operations in (("create", "missing", ["view", "create"]),
-                                           ("upload", "draft", ["view", "upload"]),
-                                           ("edit", "draft", ["view", "upload", "edit"])):
-            with self.subTest(failure=failure):
-                self.reset_github_release(state)
-                self.env["GITHUB_RELEASE_FAIL"] = failure
-                result = self.complete_github_release()
-                self.assertEqual(result.returncode, 42, result.stderr)
-                self.assertIn(f"fixture release {failure} failed", result.stderr)
-                self.assertEqual([call[1] for call in self.release_calls()], operations)
-                assets = self.root / "github-assets"
-                self.assertEqual(assets.exists(), failure == "edit")
-                if failure == "edit":
-                    self.assertEqual((assets / PACKAGE).read_bytes(), staged.read_bytes())
-                if state == "missing":
-                    self.assertFalse((self.root / "github-release.json").exists())
-                else:
-                    self.assertIs(json.loads((self.root / "github-release.json").read_text())["isDraft"], True)
-                self.assert_no_push()
-        self.env.pop("GITHUB_RELEASE_FAIL")
-        self.env["SOURCE_STATE"] = "bootstrap-failed"
-        self.reset_github_release("draft")
-        result = self.complete_github_release()
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("No successful latest bootstrap-package.yml push run", result.stderr)
-        self.assertEqual(self.release_calls(), [])
-        self.assert_no_push()
+    def test_historical_source_requires_exact_allowlisted_version_and_sha(self):
+        for version, sha in (("1.0.1", SHA), ("2.0.1", SHA), ("1.0.0", "b" * 40)):
+            with self.subTest(version=version, sha=sha):
+                result = self.run_script("verify-release-source.py", "--tagged-recovery", version, "--", sha, "refs/heads/main", "bootstrap")
+                self.assertEqual(result.returncode, 1)
+                self.assertEqual(result.stdout, "")
+                message = (f"Bootstrap recovery version {version} is not in the fixed historical allowlist."
+                           if version != "1.0.0" else "Recovery source SHA does not match the fixed historical binding.")
+                self.assertEqual(result.stderr, f"Release source gate failed: {message}\n")
+                self.assertEqual(self.calls(), [])
+                self.assertFalse((self.root / "gh.log").exists())
+                self.assertFalse((self.root / "registry.log").exists())
+                self.assertEqual(self.release_calls(), [])
 
     def test_prepare_builds_only_bootstrap_and_preserves_other_artifacts(self):
         other = self.root / "nupkgs/unrelated.nupkg"
@@ -695,7 +704,7 @@ urllib.request.urlopen = paired_registry
                 self.env["REGISTRY_STATE"] = state
                 result = self.run_script(script, *args)
                 self.assertNotEqual(result.returncode, 0)
-                self.assertIn("receipt source SHA does not match", result.stderr)
+                self.assertIn("receipt source SHA does not match" if script == "release-publish.sh" else "Recovery source SHA does not match the fixed historical binding", result.stderr)
                 self.assert_no_push()
 
     def test_preparation_refuses_a_head_change_during_the_build(self):
@@ -1329,46 +1338,46 @@ urllib.request.urlopen = paired_registry
                 self.assertIn(message, result.stderr)
                 self.assert_no_push()
 
-    def test_recovery_publishes_absent_package_then_verifies_public_content(self):
-        staged = self.staged()
-        shutil.copy(staged, self.root / "public.nupkg")
-        result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("Verified public package", result.stdout)
-        self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
+    def test_recovery_refuses_absent_package_even_when_tool_is_public(self):
+        self.staged()
+        self.env["TOOL_REGISTRY_STATE"] = "taken"
+        for ambient in ("", "1.0.0"):
+            self.env["MCPCLI_RECOVERY_VERSION"] = ambient
+            result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
+            self.assertEqual(result.returncode, 1)
+            self.assertEqual(result.stderr, "Bootstrap recovery failed: Historical bootstrap recovery requires already-public Hexalith.McpCli.Abstractions 1.0.0; publication is forbidden.\n")
+            self.assertNotIn("Verified public package", result.stdout)
+            self.assertEqual(self.calls(), [])
+            self.assertFalse((self.root / "downloads.log").exists())
+            self.assertFalse((self.root / "sleeps.log").exists())
+            self.assertEqual(self.release_calls(), [])
 
-    def test_recover_workflow_preserves_scripts_checks_out_tag_and_uses_login_key(self):
-        runner = self.root / "runner-temp"
-        runner.mkdir()
+    def test_recover_workflow_preserves_reviewed_history_and_helpers_without_credentials(self):
+        runner = Path(self.env["RUNNER_TEMP"])
         github_env = runner / "github-env"
         github_env.touch()
         self.env.update(LIVE_SHA="b" * 40, LOCAL_HEAD_SHA="b" * 40, DISPATCH_SHA="b" * 40,
-                        REMOTE_TAG_ANNOTATED="1", SABOTAGE_TAGGED_SCRIPTS="1",
-                        RUNNER_TEMP=str(runner), GITHUB_ENV=str(github_env),
-                        NUGET_API_KEY="ambient-key-must-not-be-used",
-                        EXPECTED_PUBLICATION_KEY="fixture-secret-never-print")
+                        REMOTE_TAG_ANNOTATED="1", SABOTAGE_TAGGED_SCRIPTS="1", CHECK_SUBMODULE_ALIGNMENT="1",
+                        GITHUB_ENV=str(github_env), REGISTRY_STATE="taken", TOOL_REGISTRY_STATE="taken")
         for name in ("Preserve reviewed recovery scripts before checking out the release tag",
-                     "Require an existing release tag on main",
-                     "Rebuild and consumer-test the tagged package",
-                     "Publish only if absent and verify the public package",
-                     "Complete the GitHub release"):
+                     "Require an existing release tag on main", "Rebuild and consumer-test the tagged package",
+                     "Verify the already-public historical package without publication"):
             with self.subTest(step=name):
                 result = self.run_workflow_step("recover", name)
                 self.assertEqual(result.returncode, 0, result.stderr)
                 if name == "Require an existing release tag on main":
                     self.assertEqual(github_env.read_text(), f"DISPATCH_SHA={SHA}\n")
                     self.assertEqual(self.workflow_exports, {"DISPATCH_SHA": SHA})
-                    self.assertEqual(self.env["DISPATCH_SHA"], "b" * 40)
+                    self.assertFalse((self.root / "submodule-mismatch").exists())
                 elif name == "Rebuild and consumer-test the tagged package":
                     shutil.copy(self.root / "nupkgs/bootstrap" / PACKAGE, self.root / "public.nupkg")
-                elif name == "Publish only if absent and verify the public package":
+                elif name == "Verify the already-public historical package without publication":
                     self.assertIn("Verified tagged recovery source", result.stdout)
                     self.assertIn("Verified public package", result.stdout)
         self.assertFalse((self.root / "tagged-helper.log").exists())
-        self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
-        self.assertEqual([call[1] for call in self.release_calls()], ["view", "create"])
-        self.assertEqual((self.root / "github-assets" / PACKAGE).read_bytes(),
-                         (self.root / "nupkgs/bootstrap" / PACKAGE).read_bytes())
+        self.assert_no_push()
+        self.assertEqual(self.release_calls(), [])
+        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "restore", "build", "restore", "build"])
 
     def test_publication_workflow_uses_nuget_login_output_instead_of_ambient_key(self):
         self.env["NUGET_API_KEY"] = "ambient-key-must-not-be-used"
@@ -1399,35 +1408,19 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "restore", "build", "nuget"])
         push, = [call for call in self.calls() if call[:2] == ["nuget", "push"]]
         self.assertEqual(Path(push[2]).name, PACKAGE)
-        self.assertEqual(len((self.root / "registry.log").read_text().splitlines()), 2)
+        registry = (self.root / "registry.log").read_text().splitlines()
+        self.assertEqual(sum("/hexalith.mcpcli.abstractions/" in url for url in registry), 2)
+        self.assertEqual(sum("/hexalith.mcpcli/" in url for url in registry), 8)
 
-    def test_push_failures_stop_direct_publication_recovery_and_workflow_completion(self):
+    def test_direct_publication_still_propagates_push_failure(self):
         self.staged()
         self.env["PUSH_FAIL"] = "1"
-        preserved = self.root / "runner-temp/release-scripts"
-        shutil.copytree(self.root / "scripts", preserved)
-        self.env["RUNNER_TEMP"] = str(preserved.parent)
-        self.workflow_exports["DISPATCH_SHA"] = SHA
-        for entry in ("direct", "recovery", "workflow"):
-            with self.subTest(entry=entry):
-                (self.root / "dotnet.log").unlink(missing_ok=True)
-                if entry == "direct":
-                    result = self.run_script("release-publish.sh", "1.0.0")
-                    self.assertEqual(result.returncode, 43)
-                elif entry == "recovery":
-                    result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
-                else:
-                    result = self.run_workflow_steps("recover", "Publish only if absent and verify the public package",
-                                                     "Complete the GitHub release")
-                self.assertNotEqual(result.returncode, 0)
-                self.assertIn("fixture NuGet push failed: HTTP 403", result.stderr)
-                self.assertNotIn("Verified public package", result.stdout)
-                self.assertEqual(len(self.calls()), 1)
-                self.assertEqual(self.calls()[0][:2], ["nuget", "push"])
-                self.assertFalse((self.root / "pushed.sha256").exists())
-                self.assertFalse((self.root / "downloads.log").exists())
-                self.assertFalse((self.root / "consumer-environment.json").exists())
-                self.assertEqual(self.release_calls(), [])
+        result = self.run_script("release-publish.sh", "1.0.0")
+        self.assertEqual(result.returncode, 43)
+        self.assertEqual(result.stderr, "fixture NuGet push failed: HTTP 403\n")
+        self.assertFalse((self.root / "pushed.sha256").exists())
+        self.assertFalse((self.root / "downloads.log").exists())
+        self.assertEqual(self.release_calls(), [])
 
     def test_recovery_rejects_invalid_source_before_registry_download_or_consumer_calls(self):
         shutil.copy(self.staged(), self.root / "public.nupkg")
@@ -1451,30 +1444,33 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
                 else:
                     self.env[key] = original
 
-    def test_workflow_tag_step_refuses_missing_or_unmerged_tags_before_building(self):
-        self.env.update(RECOVERY_VERSION="1.0.0", RECOVERY_PHASE="bootstrap")
-        for changed, value, message in (("TAG_EXISTS", "false", "does not exist"),
-                                       ("RECOVERY_ANCESTOR", "false", "not on main"),
-                                       ("WORKFLOW_RECOVERY_VERSION", "invalid", "Invalid release version: invalid")):
+    def test_workflow_tag_step_refuses_missing_moved_or_unmerged_tags_before_building(self):
+        self.run_workflow_step("recover", "Preserve reviewed recovery scripts before checking out the release tag")
+        for changed, value, message in (("TAG_EXISTS", "false", "Historical recovery tag does not exist."),
+                                       ("TAG_SHA", "b" * 40, "Recovery tag does not match the fixed historical binding."),
+                                       ("RECOVERY_ANCESTOR", "false", "not an ancestor"),
+                                       ("WORKFLOW_RECOVERY_VERSION", "1.0.1", "not in the fixed historical allowlist")):
             with self.subTest(changed=changed):
                 self.env[changed] = value
                 result = self.run_workflow_step("recover", "Require an existing release tag on main")
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(message, result.stderr)
-                self.assertFalse((self.root / "checkout-sha").exists())
                 self.assertEqual(self.calls(), [])
+                self.assertEqual(self.release_calls(), [])
+                self.assertFalse((self.root / "registry.log").exists())
+                self.assert_no_push()
                 del self.env[changed]
 
-    def test_recovery_waits_for_its_newly_pushed_package_after_a_404(self):
+    def test_historical_download_never_retries_or_waits(self):
         shutil.copy(self.staged(), self.root / "public.nupkg")
-        self.env["PUBLIC_STATE"] = "404-then-200"
+        self.env.update(PUBLIC_STATE="404-then-200", REGISTRY_STATE="taken")
         result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("Waiting for the pushed package to become public", result.stdout)
-        self.assertIn("Verified public package", result.stdout)
-        self.assertEqual(len((self.root / "downloads.log").read_text().splitlines()), 2)
-        self.assertEqual((self.root / "sleeps.log").read_text().splitlines(), ["10"])
-        self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.stderr, "Bootstrap recovery failed: Could not verify the public package: uncertain registry response (HTTP 404)\n")
+        self.assertEqual(len((self.root / "downloads.log").read_text().splitlines()), 1)
+        self.assertFalse((self.root / "sleeps.log").exists())
+        self.assertEqual(self.calls(), [])
+        self.assertEqual(self.release_calls(), [])
 
     def test_recovery_reports_local_package_write_failure_without_registry_error(self):
         shutil.copy(self.staged(), self.root / "public.nupkg")
@@ -1506,25 +1502,18 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
                 self.assertNotIn("Verified public package", result.stdout)
                 self.assert_no_push()
 
-    def test_recovery_processing_wait_is_bounded_and_only_retries_new_package_404s(self):
-        shutil.copy(self.staged(), self.root / "public.nupkg")
-        for registry, public, downloads, sleeps, pushes in (("free", "404", 91, 90, 1),
-                                                          ("taken", "404", 1, 0, 0),
-                                                          ("free", "500", 1, 0, 1),
-                                                          ("free", "timeout", 1, 0, 1)):
-            with self.subTest(registry=registry, public=public):
-                self.env.update(REGISTRY_STATE=registry, PUBLIC_STATE=public)
-                for name in ("downloads.log", "sleeps.log", "dotnet.log"):
-                    (self.root / name).unlink(missing_ok=True)
-                result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
-                self.assertNotEqual(result.returncode, 0)
-                self.assertIn("Could not verify the public package", result.stderr)
-                self.assertEqual(len((self.root / "downloads.log").read_text().splitlines()), downloads)
-                sleep_log = self.root / "sleeps.log"
-                self.assertEqual(len(sleep_log.read_text().splitlines()) if sleep_log.exists() else 0, sleeps)
-                self.assertEqual(sum(int(delay) for delay in sleep_log.read_text().splitlines()) if sleep_log.exists() else 0,
-                                 900 if sleeps else 0)
-                self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), pushes)
+    def test_paired_download_retains_its_bounded_post_push_processing_wait(self):
+        sys.path.insert(0, str(ROOT / "scripts"))
+        from paired_release import module
+        recovery = module("recover-bootstrap-release")
+        from urllib.error import HTTPError
+        with patch.object(recovery, "urlopen", side_effect=HTTPError("fixture", 404, "processing", {}, None)) as download, \
+             patch.object(recovery.time, "sleep") as sleep, patch("builtins.print"):
+            with self.assertRaisesRegex(ValueError, "HTTP 404"):
+                recovery.download_public_package("fixture", self.root / "download.nupkg", pushed=True)
+            self.assertEqual(download.call_count, 91)
+            self.assertEqual(sleep.call_count, 90)
+            self.assertEqual(sum(call.args[0] for call in sleep.call_args_list), 900)
 
     def test_recovery_requires_consumer_analyzer_proof_from_the_download_directory(self):
         shutil.copy(self.staged(), self.root / "public.nupkg")
@@ -1581,37 +1570,42 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
                 self.assert_no_push()
                 del self.env[changed]
 
-    def test_direct_recovery_publish_requires_tagged_source_and_independent_gates(self):
+    def test_ambient_recovery_variables_do_not_select_historical_publisher_policy(self):
         self.staged()
-        # Main is ahead of the tag, so only the tagged-recovery source policy can pass.
-        self.env.update(MCPCLI_RECOVERY_VERSION="1.0.0", LIVE_SHA="b" * 40)
-        baseline = dict(self.env)
-        for changed, value, message in (("RECOVERY_ANCESTOR", "false", "Recovery tag is not an ancestor of current main"),
-                                        ("REMOTE_TAG_SHA", "c" * 40, "Remote recovery tag does not match the exact release SHA"),
-                                        ("SOURCE_STATE", "bootstrap-failed", "No successful latest bootstrap-package.yml push run")):
-            with self.subTest(changed=changed):
-                self.env = dict(baseline, **{changed: value})
-                result = self.run_script("release-publish.sh", "1.0.0")
-                self.assertNotEqual(result.returncode, 0)
-                self.assertIn(message, result.stderr)
-                self.assert_no_push()
-        self.env = baseline
+        self.env.update(MCPCLI_RECOVERY_VERSION="1.0.0", RECOVERY_VERSION="1.0.0", LIVE_SHA="b" * 40)
         result = self.run_script("release-publish.sh", "1.0.0")
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn("Verified tagged recovery source", result.stdout)
-        self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 1)
+        self.assertEqual(result.returncode, 1)
+        self.assertEqual(result.stderr, "Release source gate failed: Dispatch SHA is not the current main SHA; main may have moved during approval.\n")
+        self.assertEqual(result.stdout, "Validated bootstrap packages at version 1.0.0\n" * 2)
+        self.assertEqual(self.calls(), [])
+        self.assertEqual(self.release_calls(), [])
 
-    def test_recovery_publisher_refuses_version_mismatch(self):
+    def test_bootstrap_closure_cannot_be_bypassed_by_marker_or_environment(self):
         self.staged()
-        self.env["MCPCLI_RECOVERY_VERSION"] = "1.0.1"
-        result = self.run_script("release-publish.sh", "1.0.0")
-        self.assertNotEqual(result.returncode, 0)
-        self.assertIn("Recovery version does not match", result.stderr)
-        self.assert_no_push()
+        self.env["TOOL_REGISTRY_STATE"] = "taken"
+        recovery_values = ((None, None), ("", ""), ("1.0.0", None), (None, "1.0.0"),
+                           ("1.0.0", ""), ("", "1.0.0"), ("1.0.0", "1.0.0"), ("1.0.0", "1.0.1"))
+        for marker in ("absent", "started", "unavailable"):
+            for recovery, legacy_recovery in recovery_values:
+                for script in ("release-preflight.sh", "release-publish.sh"):
+                    with self.subTest(marker=marker, recovery=recovery, legacy_recovery=legacy_recovery, script=script):
+                        self.env["PAIR_PUBLICATION_STATE"] = marker
+                        for key, value in (("MCPCLI_RECOVERY_VERSION", recovery), ("RECOVERY_VERSION", legacy_recovery)):
+                            self.env.pop(key, None)
+                            if value is not None:
+                                self.env[key] = value
+                        result = self.run_script(script, "1.0.0")
+                        self.assertEqual(result.returncode, 1)
+                        self.assertEqual(result.stdout, "")
+                        self.assertEqual(result.stderr, "Independent bootstrap publication is closed: Hexalith.McpCli is already public on NuGet.\n")
+                        self.assertFalse((self.root / "gh.log").exists())
+                        self.assertEqual(self.calls(), [])
+                        self.assertEqual(self.release_calls(), [])
 
-    def test_recovery_absent_publisher_uses_validated_phase_over_ambient_phase(self):
-        staged = self.staged()
-        shutil.copy(staged, self.root / "public.nupkg")
+    def test_historical_verification_is_independent_of_ambient_phase_and_marker(self):
+        shutil.copy(self.staged(), self.root / "public.nupkg")
+        self.env.update(REGISTRY_STATE="taken", TOOL_REGISTRY_STATE="taken", PAIR_PUBLICATION_STATE="started")
+        self.env.pop("NUGET_API_KEY")
         for ambient in (None, "paired", "unknown"):
             with self.subTest(ambient=ambient):
                 if ambient is None:
@@ -1620,7 +1614,9 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
                     self.env["MCPCLI_RELEASE_PHASE"] = ambient
                 result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
                 self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(len([call for call in self.calls() if call[:2] == ["nuget", "push"]]), 3)
+                self.assertIn("Verified public package", result.stdout)
+        self.assert_no_push()
+        self.assertEqual(self.release_calls(), [])
 
     def test_recovery_verifies_matching_existing_package_without_republishing(self):
         staged = self.staged(core_properties="original packing NuGet version")
@@ -1685,18 +1681,19 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
             self.assertEqual(Path(call[2]).name, PACKAGE)
             self.assertNotIn("--skip-duplicate", call)
 
-    def test_source_and_bootstrap_recovery_refuse_the_paired_publication_line(self):
-        self.env['PAIR_PUBLICATION_STATE'] = 'started'
-        cases = [('verify-release-source.py', (SHA, 'refs/heads/main', 'bootstrap'), 'Independent bootstrap publication is closed'),
-                 ('verify-release-source.py', ('--tagged-recovery', '1.0.0', '--', SHA, 'refs/heads/main', 'bootstrap'), 'Paired release versions cannot use bootstrap recovery'),
-                 ('recover-bootstrap-release.py', ('1.0.0', 'bootstrap'), 'Paired release versions cannot use bootstrap recovery')]
-        for script, arguments, message in cases:
-            with self.subTest(script=script, arguments=arguments):
-                result = self.run_script(script, *arguments)
-                self.assertNotEqual(result.returncode, 0)
-                self.assertIn(message, result.stderr)
-                self.assertFalse((self.root / 'registry.log').exists())
-                self.assert_no_push()
+    def test_absent_tool_preserves_marker_closure_and_uncertainty_guards(self):
+        for marker, message in (("started", "Independent bootstrap publication is closed after paired publication starts."),
+                                ("unavailable", "Could not confirm bootstrap publication line: uncertain repository response")):
+            self.env["PAIR_PUBLICATION_STATE"] = marker
+            for script, arguments, prefix in (("release-preflight.sh", ("1.0.0",), ""),
+                    ("verify-release-source.py", (SHA, "refs/heads/main", "bootstrap"), "Release source gate failed: ")):
+                with self.subTest(marker=marker, script=script):
+                    result = self.run_script(script, *arguments)
+                    self.assertEqual(result.returncode, 1)
+                    self.assertEqual(result.stdout, "")
+                    self.assertEqual(result.stderr, prefix + message + "\n")
+                    self.assertEqual(self.calls(), [])
+                    self.assertEqual(self.release_calls(), [])
 
     def test_source_rejections_require_current_main_and_both_latest_results(self):
         result = self.run_script("verify-release-source.py", SHA, "refs/heads/feature", "bootstrap")
@@ -1750,16 +1747,24 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
                 self.assertNotIn("\x00", result.stderr)
                 self.assert_no_push()
 
-    def test_workflow_refuses_paired_recovery_before_production_approval(self):
-        for phase, version, accepted in (("paired", "1.0.0", False), ("bootstrap", "1.0.0", True),
-                                          ("paired", "", True)):
+    def test_workflow_rejects_invalid_dispatch_before_approval_and_credentials(self):
+        cases = (("bootstrap", "", "Ordinary bootstrap dispatch is closed; an explicit historical recovery version is required."),
+                 ("bootstrap", "2.0.1", "Bootstrap recovery version 2.0.1 is not in the fixed historical allowlist."),
+                 ("paired", "1.0.0", "Paired recovery is unsupported; preserve outcomes for evidence-based recovery."))
+        for phase, version, message in cases:
             with self.subTest(phase=phase, version=version):
                 self.env.update(WORKFLOW_PHASE=phase, WORKFLOW_RECOVERY_VERSION=version)
-                result = self.run_workflow_step("verify-source", "Refuse unsupported paired recovery before production approval")
-                self.assertEqual(result.returncode == 0, accepted, result.stderr)
+                result = self.run_workflow_step("verify-source", "Validate release request before production approval")
+                self.assertEqual(result.returncode, 1)
                 self.assertEqual(result.stdout, "")
-                self.assertEqual(result.stderr, "")
-                self.assert_no_push()
+                self.assertEqual(result.stderr, message + "\n")
+                self.assertFalse((self.root / "gh.log").exists())
+                self.assertFalse((self.root / "registry.log").exists())
+                self.assertEqual(self.calls(), [])
+                self.assertEqual(self.release_calls(), [])
+        self.env.update(WORKFLOW_PHASE="paired", WORKFLOW_RECOVERY_VERSION="")
+        result = self.run_workflow_step("verify-source", "Validate release request before production approval")
+        self.assertEqual((result.returncode, result.stdout, result.stderr), (0, "", ""))
 
     def test_subprocess_failure_detail_decodes_bytes_before_redacting_and_retaining(self):
         sys.path.insert(0, str(ROOT / 'scripts'))
@@ -1785,22 +1790,23 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         release = (ROOT / ".github/workflows/release.yml").read_text()
         verify = release.split("  verify-source:\n", 1)[1].split("  publish:\n", 1)[0]
         self.assertIn("    if: ${{ inputs.phase != 'stage-paired' }}", verify)
+        self.assertIn("Validate release request before production approval", verify)
         for job in ("publish", "recover"):
             section = release.split(f"  {job}:\n", 1)[1].split("    steps:\n", 1)[0]
             self.assertIn("    needs: verify-source\n", section)
-            operator = "==" if job == "publish" else "!="
-            expected = f"    if: ${{{{ inputs.recovery_version {operator} '' }}}}\n" if job == "publish" else "    if: ${{ inputs.recovery_version != '' && inputs.phase == 'bootstrap' }}\n"
+            expected = ("    if: ${{ inputs.phase == 'paired' && inputs.recovery_version == '' }}\n" if job == "publish"
+                        else "    if: ${{ inputs.recovery_version != '' && inputs.phase == 'bootstrap' }}\n")
             self.assertIn(expected, section)
-        self.assertIn('run: bash "$RUNNER_TEMP/release-scripts/release-prepare.sh" "$RECOVERY_VERSION"', release)
         bootstrap = (ROOT / ".github/workflows/bootstrap-package.yml").read_text()
         self.assertIn("group: bootstrap-package-${{ github.event_name }}-${{ github.ref }}", bootstrap)
 
     def test_workflow_source_steps_reject_stale_main_and_failed_bootstrap_before_effects(self):
-        for job, name in (("verify-source", "Require current main with exact-source bootstrap and commitlint success"),
+        self.env["WORKFLOW_PHASE"] = "paired"
+        for job, name in (("verify-source", "Require current main with full paired gates and instruction prerequisites"),
                           ("publish", "Recheck source and independent results after production approval"),
                           ("recover", "Require current reviewed recovery workflow and independent gates")):
             for state, message in (("stale", "Dispatch SHA is not the current main SHA"),
-                                   ("bootstrap-failed", f"No successful latest bootstrap-package.yml push run exists for {SHA}")):
+                                   ("ci-failed", f"No successful latest ci.yml push run exists for {SHA}")):
                 with self.subTest(job=job, state=state):
                     self.env["SOURCE_STATE"] = state
                     result = self.run_workflow_step(job, name)
@@ -1814,7 +1820,8 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
     def test_workflow_source_steps_require_their_own_sha_declarations(self):
         from unittest.mock import patch
         self.env["DISPATCH_SHA"] = SHA
-        for job, name in (("verify-source", "Require current main with exact-source bootstrap and commitlint success"),
+        self.env["WORKFLOW_PHASE"] = "paired"
+        for job, name in (("verify-source", "Require current main with full paired gates and instruction prerequisites"),
                           ("publish", "Recheck source and independent results after production approval"),
                           ("recover", "Require current reviewed recovery workflow and independent gates")):
             with self.subTest(job=job):
@@ -1841,6 +1848,196 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
                 self.run_workflow_step("recover", "fixture")
         self.assertEqual(self.calls(), [])
         self.assert_no_push()
+
+    def test_tool_registry_uncertainty_refuses_all_ordinary_bootstrap_entry_points(self):
+        self.staged()
+        cases = [(state, "404", f"Could not confirm the NuGet version is free: HTTP {state}")
+                 for state in ("403", "500")]
+        cases += [(state, "404", "Could not confirm the NuGet version is free: uncertain registry response")
+                  for state in ("timeout", "bad-json", "unexpected-status")]
+        cases += [(state, "404", "Could not confirm the NuGet version is free: invalid version index")
+                  for state in ("bad-shape", "empty", "blank-version", "whitespace-version", "nonsense-version", "partial-version")]
+        cases += [("404", registration, "Could not confirm first-ever package absence for Hexalith.McpCli")
+                  for registration in ("free", "500", "timeout")]
+        for state, registration, message in cases:
+            self.env.update(TOOL_REGISTRY_STATE=state, TOOL_REGISTRATION_STATE=registration,
+                            MCPCLI_RECOVERY_VERSION="1.0.0", RECOVERY_VERSION="1.0.0")
+            for script, arguments, prefix in (("release-preflight.sh", ("1.0.0",), ""),
+                    ("release-publish.sh", ("1.0.0",), ""),
+                    ("verify-release-source.py", (SHA, "refs/heads/main", "bootstrap"), "Release source gate failed: ")):
+                with self.subTest(state=state, registration=registration, script=script):
+                    result = self.run_script(script, *arguments)
+                    self.assertEqual((result.returncode, result.stdout, result.stderr), (1, "", prefix + message + "\n"))
+                    self.assertEqual(self.calls(), [])
+                    self.assertEqual(self.release_calls(), [])
+                    self.assertFalse((self.root / "downloads.log").exists())
+        self.assertNotIn("matching-refs", (self.root / "gh.log").read_text())
+
+    def test_all_three_historical_bindings_match_evidence_and_run_explicit_source_gates(self):
+        history = json.loads((ROOT / "scripts/bootstrap-history.json").read_text())["releases"]
+        evidence = json.loads((ROOT / "_bmad-output/implementation-artifacts/evidence/epic-4-retro-item-2-bootstrap/history-investigation.json").read_text())
+        self.assertEqual(set(history), {"1.0.0", "1.1.0", "2.0.0"})
+        self.env.update(TOOL_REGISTRY_STATE="taken", PAIR_PUBLICATION_STATE="unavailable")
+        self.env.pop("NUGET_API_KEY")
+        self.env.pop("TAG_SHA", None)
+        self.env.pop("REMOTE_TAG_SHA", None)
+        for version, release in history.items():
+            with self.subTest(version=version):
+                sha = release["source_sha"]
+                self.assertEqual(sha, evidence["refs"][release["tag"]]["local_commit_sha"])
+                self.assertEqual(sha, evidence["packages"][version]["nuspec_repository"]["commit"])
+                self.env.update(LOCAL_HEAD_SHA=sha, RUN_SHA=sha,
+                                LIVE_SHA="b" * 40, REGISTRY_STATE="taken")
+                source = self.run_script("verify-release-source.py", "--tagged-recovery", version, "--", sha, "refs/heads/main", "bootstrap")
+                self.assertEqual(source.returncode, 0, source.stderr)
+                self.assertIn(f"Verified tagged recovery source {sha}", source.stdout)
+                self.assertEqual(source.stderr, "")
+                selected = self.run_script("release-request.py", "--historical-sha", "--", version, "bootstrap")
+                self.assertEqual((selected.returncode, selected.stdout, selected.stderr), (0, sha + "\n", ""))
+                self.assertEqual(self.calls(), [])
+                self.assertEqual(self.release_calls(), [])
+        self.assertFalse((self.root / "registry.log").exists())
+
+    def test_historical_tag_fixtures_detect_hardcoded_local_and_remote_v1_lookups(self):
+        gate = self.root / "scripts/verify-release-source.py"
+        original = gate.read_text()
+        mutations = (
+            ('tag = f"refs/tags/v{version}^{{commit}}"', 'tag = "refs/tags/v1.0.0^{commit}"',
+             "Recovery tag does not match the exact checked-out release SHA."),
+            ('f"repos/{repository}/git/ref/tags/v{version}"', 'f"repos/{repository}/git/ref/tags/v1.0.0"',
+             "Remote recovery tag does not match the exact release SHA."),
+        )
+        self.env.update(LIVE_SHA="b" * 40)
+        self.env.pop("TAG_SHA", None)
+        self.env.pop("REMOTE_TAG_SHA", None)
+        for lookup, hardcoded, diagnostic in mutations:
+            self.assertIn(lookup, original)
+            gate.write_text(original.replace(lookup, hardcoded))
+            for tag in ("v1.1.0", "v2.0.0"):
+                with self.subTest(lookup=lookup, tag=tag):
+                    sha = HISTORICAL_TAGS[tag]
+                    self.env.update(LOCAL_HEAD_SHA=sha, RUN_SHA=sha)
+                    result = self.run_script("verify-release-source.py", "--tagged-recovery", tag[1:],
+                                             "--", sha, "refs/heads/main", "bootstrap")
+                    self.assertEqual((result.returncode, result.stdout, result.stderr),
+                                     (1, "", f"Release source gate failed: {diagnostic}\n"))
+                    self.assertEqual(self.calls(), [])
+                    self.assertEqual(self.release_calls(), [])
+                    self.assertFalse((self.root / "registry.log").exists())
+
+    def test_corrupt_or_missing_bootstrap_history_refuses_before_external_effects(self):
+        path = self.root / "scripts/bootstrap-history.json"
+        history = json.loads(path.read_text())
+        wrong_schema = {**history, "schema": "mcpcli-bootstrap-history/v2"}
+        wrong_tag = json.loads(json.dumps(history))
+        wrong_tag["releases"]["1.0.0"]["tag"] = "v1.1.0"
+        cases = [("missing-file", None), ("malformed-json", "{"), ("wrong-schema", json.dumps(wrong_schema)),
+                 ("wrong-tag", json.dumps(wrong_tag)), ("invalid-releases", json.dumps({**history, "releases": []}))]
+        for sha in ("invalid", "a" * 39, "A" * 40, SHA + "\n", 42):
+            malformed_sha = json.loads(json.dumps(history))
+            malformed_sha["releases"]["1.0.0"]["source_sha"] = sha
+            cases.append((f"malformed-sha-{sha!r}", json.dumps(malformed_sha)))
+        for case, contents in cases:
+            if contents is None:
+                path.unlink()
+            else:
+                path.write_text(contents)
+            for script, arguments, prefix in (
+                    ("release-request.py", ("--historical-sha", "--", "1.0.0", "bootstrap"), ""),
+                    ("release-request.py", ("--dispatch", "--", "1.0.0", "bootstrap"), ""),
+                    ("verify-release-source.py", ("--tagged-recovery", "1.0.0", "--", SHA, "refs/heads/main", "bootstrap"),
+                     "Release source gate failed: ")):
+                with self.subTest(case=case, script=script, arguments=arguments):
+                    result = self.run_script(script, *arguments)
+                    self.assertEqual((result.returncode, result.stdout, result.stderr),
+                                     (1, "", prefix + "Bootstrap history is missing or invalid.\n"))
+                    self.assertEqual(self.calls(), [])
+                    self.assertEqual(self.release_calls(), [])
+                    self.assertFalse((self.root / "gh.log").exists())
+                    self.assertFalse((self.root / "registry.log").exists())
+                    self.assertFalse((self.root / "downloads.log").exists())
+
+    def test_historical_workflow_retains_both_streams_and_helper_failure_status(self):
+        scripts = Path(self.env["RUNNER_TEMP"]) / "release-scripts"
+        scripts.mkdir()
+        (scripts / "recover-bootstrap-release.py").write_text(
+            "import os, sys\n"
+            "assert 'NUGET_API_KEY' not in os.environ\n"
+            "print('fixture verification progress', flush=True)\n"
+            "print('fixture verification refused', file=sys.stderr, flush=True)\n"
+            "raise SystemExit(19)\n")
+        result = self.run_workflow_step("recover", "Verify the already-public historical package without publication")
+        diagnostic = "fixture verification progress\nfixture verification refused\n"
+        self.assertEqual((result.returncode, result.stdout, result.stderr), (19, diagnostic, ""))
+        retained = Path(self.env["RUNNER_TEMP"]) / "bootstrap-verification.txt"
+        self.assertEqual(retained.read_text(), diagnostic)
+        self.assertEqual(self.calls(), [])
+        self.assertEqual(self.release_calls(), [])
+        for name in ("gh.log", "registry.log", "downloads.log", "pushed.sha256"):
+            self.assertFalse((self.root / name).exists())
+
+    def test_historical_dispatch_rejects_invalid_tags_and_absence_before_approval(self):
+        self.env.update(REGISTRY_STATE="taken", TOOL_REGISTRY_STATE="taken")
+        self.env.pop("NUGET_API_KEY")
+        baseline = dict(self.env)
+        for key, value, message in (("TAG_EXISTS", "false", "Historical recovery tag does not exist."),
+                ("TAG_SHA", "c" * 40, "Recovery tag does not match the exact checked-out release SHA."),
+                ("REMOTE_TAG_SHA", "c" * 40, "Remote recovery tag does not match the exact release SHA."),
+                ("RECOVERY_ANCESTOR", "false", "Recovery tag is not an ancestor of current main."),
+                ("FETCHED_MAIN_SHA", "c" * 40, "Current main moved after recovery checkout; fetch and retry."),
+                ("REGISTRY_STATE", "free", "Historical bootstrap recovery requires already-public Hexalith.McpCli.Abstractions 1.0.0; publication is forbidden.")):
+            with self.subTest(key=key):
+                self.env = dict(baseline, **{key: value})
+                result = self.run_workflow_step("verify-source", "Validate release request before production approval")
+                self.assertEqual((result.returncode, result.stdout, result.stderr), (1, "", message + "\n"))
+                self.assertFalse((self.root / "checkout-sha").exists())
+                self.assertEqual(self.calls(), [])
+                self.assertEqual(self.release_calls(), [])
+        self.env = baseline
+        result = self.run_workflow_step("verify-source", "Validate release request before production approval")
+        self.assertEqual((result.returncode, result.stdout, result.stderr), (0, "", ""))
+
+    def test_current_recovery_workflow_requires_ci_jobs_and_fr22(self):
+        name = "Require current reviewed recovery workflow and independent gates"
+        for key, value, message in (("CI_JOB_FAIL", "1", "Required step"),
+                                    ("PREREQUISITES_FAIL", "1", "fixture FR-22 failed")):
+            with self.subTest(key=key):
+                self.env[key] = value
+                result = self.run_workflow_step("recover", name)
+                self.assertEqual(result.returncode, 1)
+                self.assertIn(message, result.stderr)
+                self.assertEqual(self.calls(), [])
+                self.assertEqual(self.release_calls(), [])
+                self.assertFalse((self.root / "registry.log").exists())
+                del self.env[key]
+
+    def test_closure_fixture_detects_removing_the_registry_guard(self):
+        self.env["TOOL_REGISTRY_STATE"] = "taken"
+        refused = self.run_script("release-preflight.sh", "1.0.0")
+        self.assertEqual(refused.returncode, 1)
+        request = self.root / "scripts/release-request.py"
+        request.write_text(request.read_text().replace("        check_bootstrap_line()\n", ""))
+        mutant = self.run_script("release-preflight.sh", "1.0.0")
+        self.assertEqual((mutant.returncode, mutant.stdout, mutant.stderr), (0, "", ""))
+        self.assertEqual(self.calls(), [])
+        self.assertEqual(self.release_calls(), [])
+
+    def test_historical_checkout_alignment_guard_is_observable(self):
+        self.run_workflow_step("recover", "Preserve reviewed recovery scripts before checking out the release tag")
+        self.env.update(CHECK_SUBMODULE_ALIGNMENT="1", GITHUB_ENV=str(self.root / "runner-temp/github-env"))
+        block = self.workflow_step("recover", "Require an existing release tag on main")
+        alignment = "          git submodule update --init -- references/Hexalith.AI.Tools references/Hexalith.Builds\n"
+        self.assertIn(alignment, block)
+        with patch.object(self, "workflow_step", return_value=block.replace(alignment, "")):
+            mutant = self.run_workflow_step("recover", "Require an existing release tag on main")
+        self.assertEqual(mutant.returncode, 1)
+        self.assertEqual(mutant.stderr, "Release source gate failed: Release source has uncommitted changes.\n")
+        self.assertFalse(Path(self.env["GITHUB_ENV"]).exists())
+        aligned = self.run_workflow_step("recover", "Require an existing release tag on main")
+        self.assertEqual(aligned.returncode, 0, aligned.stderr)
+        self.assertEqual(aligned.stderr, "")
+        self.assertEqual(self.calls(), [])
+        self.assertEqual(self.release_calls(), [])
 
     def test_source_gate_orders_run_number_before_attempt_and_latest_attempt_within_run(self):
         for gate in ("bootstrap", "commitlint"):

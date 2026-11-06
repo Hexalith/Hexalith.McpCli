@@ -1,0 +1,84 @@
+{
+  "schema": "mcpcli-bootstrap-closure-local-validation/v1",
+  "validated_on": "2026-11-06",
+  "baseline_commit": "9b44fe2026efa4b9234dd6a5c53e068b752a1837",
+  "scope": "Uncommitted implementation source; local fixtures and static checks only. Parent owns review, commits, push and exact-source hosted CI evidence.",
+  "source_file_sha256": {
+    "scripts/release-request.py": "edefb7074c2d38d6a4dca07778fc25ee4c1db68ece50374b636832291ce94cf9",
+    "scripts/bootstrap-history.json": "92c3cd8c7fc946ba9da66054990f0160e62ff5048c92d72443f52abe3ff85704",
+    "scripts/verify-release-source.py": "127e9ca0292cd1d6a3f154a00ceff1e39f0fe63a9db2412756157d3f14df541e",
+    "scripts/recover-bootstrap-release.py": "8072e7531291f2df7d5b9a79d5103c2571ce6da13c5e21c4e58f299d639aee17",
+    "scripts/release-publish.sh": "fbffa007be8bdb041ce977429ee976568844553c61878f4a9951b60a3f3e9abe",
+    "scripts/release-preflight.sh": "b821b11f95867ea558e6d10bc20e77087f6b1602c7a1056554a180f61d9abcf4",
+    "scripts/release-prepare.sh": "e52da3d47b3c7e0c6ea637fd88b17224ccb657ecbbce1bfaa1971533f6449b6c",
+    "scripts/tests/test_bootstrap_release.py": "c56c33f16420b2a5de1420c9f7cef5691f557a335a093cdf6a6aa5a1cef5827b",
+    "scripts/tests/test_paired_publication.py": "a84d2d08efd36e50943efc7122dd9f705cce44f6a4085ca9a2a2563e32aaa8c9",
+    ".github/workflows/release.yml": "28f14e211e160c3099da3bff1e16217194239789194e1cfeabe740a3203c0735",
+    ".github/workflows/bootstrap-package.yml": "39c30229ae5f225d99dd9723e6a29f4bdf07dad88b4c8b5d55c7d0bd85c82bd7",
+    ".github/workflows/ci.yml": "17c3f713239028c27fc33b9c3d79e340d27b64c61ed472961195695919c57d3f",
+    ".github/workflows/commitlint.yml": "a0f97ad1fdabfbb187ed0f9bb256a9e1a5db5f033548641f77c1120bf1481376"
+  },
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "exit_code": 0,
+      "tests_passed": 167,
+      "log": "local-release-tests.txt",
+      "qualification": "Full implementation suite passed; the subsequent test-only paired fixture correction replaces a live registry read with its existing explicit public-tool fixture and passed the focused check below."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts/tests python3 -m unittest test_paired_publication.PublicationTests.test_configured_shell_hooks_publish_pair_and_first_source_bound_markers",
+      "exit_code": 0,
+      "tests_passed": 1,
+      "log": "local-paired-fixture.txt"
+    },
+    {
+      "command": "node --test scripts/tests/select-release-version.test.mjs",
+      "exit_code": 0,
+      "tests_passed": 4,
+      "log": "local-selector-tests.txt"
+    },
+    {
+      "command": "actionlint .github/workflows/release.yml .github/workflows/bootstrap-package.yml .github/workflows/ci.yml .github/workflows/commitlint.yml",
+      "exit_code": 0
+    },
+    {
+      "command": "bash -n scripts/release-preflight.sh scripts/release-publish.sh scripts/release-prepare.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/live-topology -p test_ci.py -k CiWorkflowTests",
+      "exit_code": 0,
+      "tests_passed": 2
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "matrix_coverage": [
+    "public-tool closure independent of marker and both ambient recovery variables",
+    "uncertain tool/Abstractions feeds and dual-404 absence proof",
+    "existing marker closure and marker unavailability after proven tool absence",
+    "ordinary bootstrap and unsupported dispatch refusal before credentials/approval",
+    "three full tag/SHA bindings checked against original public nuspec/tag evidence",
+    "unknown recovery version, missing/moved tag, wrong SHA, nonancestor and failed independent gates",
+    "full paired current-main CI job/step and FR-22 prerequisite checks",
+    "missing historical public package refuses publication",
+    "source-bound clean receipt, immutable consumer content comparison and public analyzer proof",
+    "reviewed helpers/history preserved across historical checkout; historical root-submodule alignment before cleanliness checks",
+    "historical workflow has no publication key, write permissions or GitHub release completion",
+    "registry-guard and historical-submodule-order mutation controls; paired download wait remains bounded"
+  ],
+  "publication_performed": false,
+  "release_dispatch_performed": false,
+  "github_release_edits_performed": false,
+  "tag_mutation_performed": false,
+  "pending_parent": [
+    "independent review",
+    "exact full commit-message validation with pinned commitlint",
+    "task-file commit and push after divergence checks",
+    "green exact-source CI, Commitlint and Bootstrap package push runs with IDs",
+    "complete only retrospective action item 2 after those checks"
+  ]
+}

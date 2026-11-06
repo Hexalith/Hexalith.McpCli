@@ -1,0 +1,29 @@
+{
+  "schema": "mcpcli-bootstrap-history-decisions/v1",
+  "decided_on": "2026-11-06",
+  "owner": "requesting repository owner",
+  "instruction": "apply recommended",
+  "source_spec": "_bmad-output/implementation-artifacts/spec-epic-4-retro-item-2-close-bootstrap-line.md",
+  "decision_scope": "Per-version historical AD-17 process deviations after evidence and recommendations",
+  "decisions": [
+    {
+      "package_id": "Hexalith.McpCli.Abstractions",
+      "version": "1.1.0",
+      "source_sha": "8d4a8c07636c1ad065dfc8dc28dbfc956d5deb82",
+      "disposition": "accepted-fixed-historical-process-deviation",
+      "ad17_compliant": false
+    },
+    {
+      "package_id": "Hexalith.McpCli.Abstractions",
+      "version": "2.0.0",
+      "source_sha": "06cfdf25a352034b36041e9ed44da514b167ca5a",
+      "disposition": "accepted-fixed-historical-process-deviation",
+      "ad17_compliant": false
+    }
+  ],
+  "future_bootstrap_exception": false,
+  "package_publication_authorized": false,
+  "tag_mutation_authorized": false,
+  "retrospective_verdict": "rejected",
+  "historical_recovery": "verification-only; exact allowlisted tag/source; already-public package required; no NuGet publication key, package push or GitHub release edits"
+}

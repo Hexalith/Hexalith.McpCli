@@ -1,0 +1,33 @@
+{
+  "source_sha": "9b44fe2026efa4b9234dd6a5c53e068b752a1837",
+  "run_id": 42221463909,
+  "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42221463909",
+  "artifact_id": 13504804470,
+  "result": "failed",
+  "vectors_passed": 16,
+  "vectors_failed": 5,
+  "smoke_result": "passed",
+  "failures": [
+    {
+      "operation": "parties.create-party",
+      "diagnostic": "System.TimeoutException : Bootstrap authority did not converge in 60 seconds. Privileged query HTTP 503.\n---- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n-------- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n------------ System.IO.IOException : Unable to read data from the transport connection: Operation canceled.\n---------------- System.Net.Sockets.SocketException : Operation canceled"
+    },
+    {
+      "operation": "parties.search-parties",
+      "diagnostic": "System.TimeoutException : Bootstrap authority did not converge in 60 seconds. Privileged query HTTP 503.\n---- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n-------- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n------------ System.IO.IOException : Unable to read data from the transport connection: Operation canceled.\n---------------- System.Net.Sockets.SocketException : Operation canceled"
+    },
+    {
+      "operation": "parties.update-party",
+      "diagnostic": "System.TimeoutException : Bootstrap authority did not converge in 60 seconds. Privileged query HTTP 503.\n---- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n-------- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n------------ System.IO.IOException : Unable to read data from the transport connection: Operation canceled.\n---------------- System.Net.Sockets.SocketException : Operation canceled"
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "diagnostic": "System.TimeoutException : Bootstrap authority did not converge in 60 seconds. Privileged query HTTP 503.\n---- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n-------- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n------------ System.IO.IOException : Unable to read data from the transport connection: Operation canceled.\n---------------- System.Net.Sockets.SocketException : Operation canceled"
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "diagnostic": "System.TimeoutException : Bootstrap authority did not converge in 60 seconds. Privileged query HTTP 503.\n---- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n-------- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n------------ System.IO.IOException : Unable to read data from the transport connection: Operation canceled.\n---------------- System.Net.Sockets.SocketException : Operation canceled"
+    }
+  ],
+  "qualification": "Existing main before bootstrap-closure code; diagnostic observation only. Fresh task-source hosted CI remains required."
+}

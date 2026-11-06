@@ -1,0 +1,59 @@
+{
+  "schema": "mcpcli-bootstrap-reviewed-validation/v1",
+  "validated_on": "2026-11-06",
+  "baseline_commit": "9b44fe2026efa4b9234dd6a5c53e068b752a1837",
+  "source_file_sha256": {
+    "scripts/release-request.py": "edefb7074c2d38d6a4dca07778fc25ee4c1db68ece50374b636832291ce94cf9",
+    "scripts/bootstrap-history.json": "92c3cd8c7fc946ba9da66054990f0160e62ff5048c92d72443f52abe3ff85704",
+    "scripts/verify-release-source.py": "127e9ca0292cd1d6a3f154a00ceff1e39f0fe63a9db2412756157d3f14df541e",
+    "scripts/recover-bootstrap-release.py": "8072e7531291f2df7d5b9a79d5103c2571ce6da13c5e21c4e58f299d639aee17",
+    "scripts/release-publish.sh": "fbffa007be8bdb041ce977429ee976568844553c61878f4a9951b60a3f3e9abe",
+    "scripts/release-preflight.sh": "b821b11f95867ea558e6d10bc20e77087f6b1602c7a1056554a180f61d9abcf4",
+    "scripts/tests/test_bootstrap_release.py": "2f8813891f10d3d1e8f41c9c0a034922d9e3306a69724044fbc02f16c6f8c7d1",
+    "scripts/tests/test_paired_publication.py": "a84d2d08efd36e50943efc7122dd9f705cce44f6a4085ca9a2a2563e32aaa8c9",
+    ".github/workflows/release.yml": "3a5fc45de22fc6caa86022cd7f6c0733adcf82bb83d4cb50882629c10a332a7a"
+  },
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "tests_passed": 170,
+      "exit_code": 0,
+      "log": "reviewed-release-tests.txt"
+    },
+    {
+      "command": "node --test scripts/tests/select-release-version.test.mjs",
+      "tests_passed": 4,
+      "exit_code": 0,
+      "log": "reviewed-selector-tests.txt"
+    },
+    {
+      "command": "actionlint .github/workflows/release.yml .github/workflows/bootstrap-package.yml .github/workflows/ci.yml .github/workflows/commitlint.yml",
+      "exit_code": 0
+    },
+    {
+      "command": "bash -n scripts/release-preflight.sh scripts/release-publish.sh scripts/release-prepare.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/live-topology -p test_ci.py -k CiWorkflowTests",
+      "tests_passed": 2,
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check",
+      "exit_code": 0
+    }
+  ],
+  "review": {
+    "layers": [
+      "blind-hunter",
+      "edge-case-hunter",
+      "verification-gap"
+    ],
+    "patches": "All patch entries in the spec triage log applied and verified; no deferred work.",
+    "historical_byte_compatibility": "Synthetic fixture coverage only; no current hosted rebuild rehearsal for all historical versions claimed."
+  },
+  "publication_performed": false,
+  "tag_mutation_performed": false,
+  "pending": "Commit/push and green exact-source hosted CI; retrospective action item 2 remains in-progress."
+}

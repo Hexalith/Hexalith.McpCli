@@ -4,6 +4,7 @@
 import argparse
 import json
 import os
+from pathlib import Path
 import re
 import subprocess
 from urllib.error import HTTPError
@@ -70,50 +71,61 @@ def version_is_published(version: str) -> bool:
 
 
 def check_bootstrap_line():
+    if registry_versions('Hexalith.McpCli', allow_first_absence=True):
+        raise ValueError('Independent bootstrap publication is closed: Hexalith.McpCli is already public on NuGet.')
     from paired_release import module
-    repository = os.environ['REPOSITORY']
     try:
         marker = module('verify-release-source').github_json(
-            f'repos/{repository}/git/matching-refs/tags/mcpcli-paired-publication-started')
-    except (ValueError, OSError, subprocess.CalledProcessError):
+            f"repos/{os.environ['REPOSITORY']}/git/matching-refs/tags/mcpcli-paired-publication-started")
+    except (ValueError, KeyError, OSError, subprocess.CalledProcessError):
         raise ValueError('Could not confirm bootstrap publication line: uncertain repository response') from None
     if marker != []:
         raise ValueError('Independent bootstrap publication is closed after paired publication starts.')
 
 
-def check_bootstrap_recovery_line(version, sha):
+def historical_sha(version):
+    validate_version(version)
+    try:
+        history = json.loads(Path(__file__).with_name('bootstrap-history.json').read_text())
+        if history['schema'] != 'mcpcli-bootstrap-history/v1' or not isinstance(history['releases'], dict):
+            raise ValueError('Bootstrap history is missing or invalid.')
+        release = history['releases'].get(version)
+        if release is None:
+            raise ValueError(f'Bootstrap recovery version {version} is not in the fixed historical allowlist.')
+        if (release['tag'] != 'v' + version
+                or re.fullmatch('[0-9a-f]{40}', release['source_sha']) is None):
+            raise ValueError('Bootstrap history is missing or invalid.')
+        return release['source_sha']
+    except (KeyError, TypeError, OSError, json.JSONDecodeError):
+        raise ValueError('Bootstrap history is missing or invalid.') from None
+
+
+def validate_dispatch(version, phase):
+    if phase == 'paired':
+        if version:
+            raise ValueError('Paired recovery is unsupported; preserve outcomes for evidence-based recovery.')
+        return
+    if phase != 'bootstrap':
+        raise ValueError(f'Unknown release phase: {phase}')
+    if not version:
+        raise ValueError('Ordinary bootstrap dispatch is closed; an explicit historical recovery version is required.')
+    sha = historical_sha(version)
     from paired_release import module
     gate = module('verify-release-source')
     repository = os.environ['REPOSITORY']
-    marker = 'mcpcli-paired-publication-started'
-    endpoint = f'repos/{repository}/git/matching-refs/tags/'
-    references = gate.github_json(endpoint + marker)
-    if references == []:
-        return  # No paired publication has ever started.
-    if not isinstance(references, list):
-        raise ValueError('Could not confirm historical bootstrap recovery: uncertain publication state.')
-    global_markers = [item for item in references if item.get('ref') == 'refs/tags/' + marker]
-    if (len(global_markers) != 1 or global_markers[0].get('object', {}).get('type') != 'commit'
-            or re.fullmatch('[0-9a-f]{40}', global_markers[0]['object'].get('sha', '')) is None):
-        raise ValueError('Could not confirm historical bootstrap recovery: first-pair marker is missing or invalid.')
-    version_ref = 'refs/tags/' + marker + '-v' + version
-    version_markers = gate.github_json(endpoint + marker + '-v' + version)
-    if not isinstance(version_markers, list) or any(item.get('ref') == version_ref for item in version_markers):
-        raise ValueError('Paired release versions cannot use bootstrap recovery.')
-    first_pair = global_markers[0]['object']['sha']
-    ancestor = subprocess.run(['git', 'merge-base', '--is-ancestor', sha, first_pair], capture_output=True)
-    if sha == first_pair or ancestor.returncode != 0:
-        raise ValueError('Bootstrap recovery is limited to historical versions preceding paired publication.')
+    live_main = gate.github_json(f'repos/{repository}/git/ref/heads/main')['object']['sha']
+    gate.verify_recovery_tag(version, sha, repository, live_main)
+    if not version_is_published(version):
+        raise ValueError(f'Historical bootstrap recovery requires already-public Hexalith.McpCli.Abstractions {version}; publication is forbidden.')
 
 
 def check_registry(version: str, phase='bootstrap') -> None:
     if not os.environ.get("NUGET_API_KEY", "").strip():
         raise ValueError("NuGet publication key is required")
     if phase == 'bootstrap':
+        check_bootstrap_line()
         if version_is_published(version):
             raise ValueError(f"Hexalith.McpCli.Abstractions {version} is already published")
-        if not os.environ.get('MCPCLI_RECOVERY_VERSION'):
-            check_bootstrap_line()
         return
     # Check both identities before the first push, including a confirmed first-ever tool absence.
     for identity in ('Hexalith.McpCli.Abstractions', 'Hexalith.McpCli'):
@@ -126,13 +138,23 @@ def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("version")
     parser.add_argument("phase")
-    parser.add_argument("--registry", action="store_true")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--registry", action="store_true")
+    mode.add_argument("--dispatch", action="store_true")
+    mode.add_argument("--historical-sha", action="store_true")
     args = parser.parse_args()
     try:
-        validate_request(args.version, args.phase)
-        if args.registry:
+        if args.dispatch:
+            validate_dispatch(args.version, args.phase)
+        else:
+            validate_request(args.version, args.phase)
+        if args.historical_sha:
+            print(historical_sha(args.version))
+        elif args.registry:
             check_registry(args.version, args.phase)
-    except (ValueError, KeyError, OSError) as error:
+    except (ValueError, KeyError, TypeError, OSError, subprocess.CalledProcessError) as error:
+        from paired_release import module
+        error = module('verify-release-source').failure_detail(error)
         parser.exit(1, f"{error}\n")
 
 

@@ -1,0 +1,30 @@
+{
+  "source_sha": "9b44fe2026efa4b9234dd6a5c53e068b752a1837",
+  "scope": "Pre-change baseline only; guards not implemented; historical decision pending",
+  "local_node": "v26.4.0",
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "exit_code": 0,
+      "tests_passed": 161
+    },
+    {
+      "command": "node --test scripts/tests/select-release-version.test.mjs",
+      "exit_code": 0,
+      "tests_passed": 4
+    },
+    {
+      "command": "actionlint .github/workflows/release.yml .github/workflows/bootstrap-package.yml .github/workflows/ci.yml .github/workflows/commitlint.yml",
+      "exit_code": 0
+    },
+    {
+      "command": "bash -n scripts/release-preflight.sh scripts/release-publish.sh scripts/release-prepare.sh",
+      "exit_code": 0
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/live-topology -p test_ci.py -k CiWorkflowTests",
+      "exit_code": 0,
+      "tests_passed": 2
+    }
+  ]
+}

@@ -245,7 +245,7 @@ action_items:
       recovery, and record the owner decision on the Abstractions 1.1.0 and 2.0.0
       AD-17 deviations (F2)."
     owner: "McpCli maintainer"
-    status: open
+    status: in-progress
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-06.md"
   - id: "epic-4-retro-item-3-reconcile-platform-scopes"
     epic: 4

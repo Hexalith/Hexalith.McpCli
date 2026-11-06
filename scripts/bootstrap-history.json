@@ -1,0 +1,17 @@
+{
+  "schema": "mcpcli-bootstrap-history/v1",
+  "releases": {
+    "1.0.0": {
+      "tag": "v1.0.0",
+      "source_sha": "d9f822d64f7afa9bd51ca1698f5051147b86b554"
+    },
+    "1.1.0": {
+      "tag": "v1.1.0",
+      "source_sha": "8d4a8c07636c1ad065dfc8dc28dbfc956d5deb82"
+    },
+    "2.0.0": {
+      "tag": "v2.0.0",
+      "source_sha": "06cfdf25a352034b36041e9ed44da514b167ca5a"
+    }
+  }
+}

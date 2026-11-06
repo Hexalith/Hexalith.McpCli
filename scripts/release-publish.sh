@@ -26,16 +26,9 @@ cp "$staging_directory/$package_name" "$publication_directory/$package_name"
 python3 "$script_directory/validate-release-packages.py" -- "$publication_directory" "$release_version" "$release_phase"
 actual_hash="$(python3 "$script_directory/release-receipt.py" verify -- "$receipt" "$publication_directory/$package_name" \
   "${DISPATCH_SHA:?Exact release SHA is required}")"
-printf 'Publishing %s SHA-256 %s\n' "$package_name" "$actual_hash"
-source_args=()
-if [ -n "${MCPCLI_RECOVERY_VERSION:-}" ]; then
-  if [ "$MCPCLI_RECOVERY_VERSION" != "$release_version" ]; then
-    echo "Recovery version does not match the prepared package." >&2
-    exit 1
-  fi
-  source_args+=(--tagged-recovery "$release_version")
-fi
-python3 "$script_directory/verify-release-source.py" "${source_args[@]}" -- "${DISPATCH_SHA:?Exact release SHA is required}" \
+# Ambient recovery variables never select historical source policy for a publisher.
+python3 "$script_directory/verify-release-source.py" -- "${DISPATCH_SHA:?Exact release SHA is required}" \
   "${DISPATCH_REF:?Release dispatch ref is required}" "$release_phase"
+printf 'Publishing %s SHA-256 %s\n' "$package_name" "$actual_hash"
 dotnet nuget push "$publication_directory/$package_name" \
   --source https://api.nuget.org/v3/index.json --api-key "$NUGET_API_KEY"

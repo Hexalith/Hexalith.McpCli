@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recover a tagged bootstrap release without republishing an existing package."""
+"""Verify an already-public, fixed historical bootstrap release without publication."""
 
 import argparse
 import hashlib
@@ -15,6 +15,7 @@ from zipfile import ZipFile
 
 
 SCRIPT_DIRECTORY = Path(__file__).resolve().parent
+# Shared with the paired publisher; historical verification always passes pushed=False.
 PUBLIC_DOWNLOAD_ATTEMPTS = 91
 PUBLIC_DOWNLOAD_DELAY_SECONDS = 10
 
@@ -51,6 +52,7 @@ def download_public_package(url, downloaded, pushed):
                     raise HTTPError(url, response.status, 'unexpected package download status', None, None)
                 package_bytes = response.read()
         except HTTPError as error:
+            error.close()
             if error.code == 404 and attempt + 1 < attempts:
                 print(f'Waiting for the pushed package to become public ({attempt + 1}/{attempts}).', flush=True)
                 time.sleep(PUBLIC_DOWNLOAD_DELAY_SECONDS)
@@ -76,13 +78,9 @@ def recover(version, phase):
     prepared = staging / package_name
     load_script('release-receipt').verify_receipt('nupkgs/bootstrap.sha256', prepared,
                                                  os.environ.get('DISPATCH_SHA', ''))
-    pushed = not request.version_is_published(version)
-    if pushed:
-        subprocess.run(['bash', str(SCRIPT_DIRECTORY / 'release-publish.sh'), version], check=True,
-                       env={**os.environ, 'MCPCLI_RELEASE_PHASE': phase,
-                            'MCPCLI_RECOVERY_VERSION': version})
-    else:
-        print(f'Hexalith.McpCli.Abstractions {version} is already published; verifying without a second push.')
+    if not request.version_is_published(version):
+        raise ValueError(f'Historical bootstrap recovery requires already-public Hexalith.McpCli.Abstractions {version}; publication is forbidden.')
+    print(f'Hexalith.McpCli.Abstractions {version} is already published; verification only, without a second push.')
 
     with tempfile.TemporaryDirectory() as temporary:
         public = Path(temporary) / 'public'
@@ -90,7 +88,7 @@ def recover(version, phase):
         downloaded = public / package_name
         url = (f'https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli.abstractions/{version.lower()}/'
                f'hexalith.mcpcli.abstractions.{version.lower()}.nupkg')
-        download_public_package(url, downloaded, pushed)
+        download_public_package(url, downloaded, pushed=False)
         subprocess.run(['python3', str(SCRIPT_DIRECTORY / 'validate-release-packages.py'), '--', str(public), version, phase], check=True)
         if content(prepared) != content(downloaded):
             raise ValueError('The published package content does not match the tagged bootstrap package.')
