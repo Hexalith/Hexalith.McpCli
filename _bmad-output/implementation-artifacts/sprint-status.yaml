@@ -85,7 +85,7 @@ development_status:
   4-15-publish-the-no-new-server-rule: done
   4-16-stage-and-validate-the-paired-packages: done # Build/review complete; staging 40885068007 passed all three OS lanes and required Windows checks.
   4-17-verify-the-operator-setup-experience: done # Code review pass 2 2026-10-31: 9 patches plus 1 resolved decision applied; 61 Platform tests, 18 README assertions and 7 Claude Code prompt checks pass; accepted timing exception and deferred work retained.
-  4-18-publish-the-validated-package-pair: review # Pass-3 patches and three-layer follow-up complete; final local verification passes. Four inherited follow-ups deferred; published 2.0.1 unchanged.
+  4-18-publish-the-validated-package-pair: done # Code review pass 4 2026-11-06: all 8 patches applied; 752 Core and 161 release Python tests pass, 18 guard removals detected. Four inherited follow-ups deferred; published 2.0.1 unchanged.
   epic-4-retrospective: optional
 
   epic-5: backlog
