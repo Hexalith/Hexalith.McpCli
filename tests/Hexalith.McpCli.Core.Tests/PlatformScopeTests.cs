@@ -225,6 +225,48 @@ public sealed class PlatformScopeTests
             .ShouldBeOfType<SubmitQueryRequest>().Tenant.ShouldBe("system");
     }
 
+    /// <summary>A fixed module tenant accepts only its exact per-call value; case variants never reach the gateway.</summary>
+    [Theory]
+    [InlineData("fixed-tenant", "fixed-tenant", false)]
+    [InlineData("fixed-tenant", "Fixed-Tenant", true)]
+    [InlineData("fixed-tenant", "FIXED-TENANT", true)]
+    [InlineData("system", "system", false)]
+    [InlineData("system", "System", true)]
+    [InlineData("system", "SYSTEM", true)]
+    public async Task FixedTenantRequiresExactPerCallValueAsync(string fixedTenant, string callTenant, bool refused)
+    {
+        Assembly fixture = TenantPropertyFixture(platformScope: null, fixedTenant: fixedTenant);
+        var provider = new CatalogProvider(() => [fixture], new RecordingLogger<CatalogProvider>());
+        IEventStoreGatewayClient gateway = Gateway();
+        var executor = new OperationExecutor(provider, new ExecutionAvailability(false, true), gateway, strict: false);
+
+        OperationOutcome outcome = await executor.ExecuteAsync(
+            new RunQueryArguments("scope-probe.inspect", "{}", Tenant: callTenant), Context(null),
+            TestContext.Current.CancellationToken);
+
+        if (!refused)
+        {
+            outcome.Error.ShouldBeNull();
+            gateway.ReceivedCalls().ShouldHaveSingleItem().GetArguments()[0]
+                .ShouldBeOfType<SubmitQueryRequest>().Tenant.ShouldBe(fixedTenant);
+            return;
+        }
+
+        outcome.Document.ShouldBeNull();
+        JsonElement actual = JsonSerializer.SerializeToElement(new { error = outcome.Error }, McpCliJson.Result);
+        JsonElement expected = JsonSerializer.SerializeToElement(new
+        {
+            error = new
+            {
+                code = "validation_failed",
+                operation = "scope-probe.inspect",
+                violations = new[] { new { path = "/tenant", message = "The per-call tenant disagrees with the module's fixed tenant." } },
+            },
+        });
+        JsonElement.DeepEquals(actual, expected).ShouldBeTrue(actual.GetRawText());
+        gateway.ReceivedCalls().ShouldBeEmpty();
+    }
+
     private static Assembly TenantPropertyFixture(string? platformScope = "platform:routing", string? fixedTenant = null)
     {
         AssemblyBuilder assembly = AssemblyBuilder.DefineDynamicAssembly(

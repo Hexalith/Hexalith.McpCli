@@ -14,7 +14,8 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from urllib.error import HTTPError
-from zipfile import ZipFile
+import warnings
+from zipfile import ZipFile, ZipInfo
 
 import test_paired_release as fixtures
 import test_bootstrap_release as shell_fixtures
@@ -345,6 +346,12 @@ assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTS
                 with self.assertRaises(ValueError):
                     self.verifier.operator_acceptance(path, self.prepared, self.accepted_path,
                                                       self.origin, 'fixture-owner')
+        # A self-consistent decision from a bot or an unauthenticated actor never attests the bypass.
+        for index, actor in enumerate(('fixture-app[bot]', '')):
+            path = self.root / f'automated-actor-{index}.json'
+            write_new(path, {**decision, 'approved_by': actor})
+            with self.subTest(actor=actor), self.assertRaisesRegex(ValueError, 'Automated authorization must bind'):
+                self.verifier.operator_acceptance(path, self.prepared, self.accepted_path, self.origin, actor)
 
     def test_automated_authorization_publishes_only_exact_candidate_without_claiming_sessions(self):
         decision = {'schema': 'mcpcli-paired-automated-acceptance/v1', 'decision': 'approved',
@@ -376,6 +383,7 @@ assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTS
             lambda d: d['timing_exception'].update(unassisted_success=True), lambda d: d['timing_exception'].update(first_time_operator=True),
             lambda d: d['sessions'].pop(), lambda d: d['sessions'][0].update(actual_client=False),
             lambda d: d['sessions'][0].update(status='not-executed'), lambda d: d.update(decided_at_utc=None),
+            lambda d: d.update(decided_at_utc='9999-01-01T00:00:00Z'),
             lambda d: d.update(sessions=[None, None, None]), lambda d: d['sessions'][0].update(version='1.2.0'),
             lambda d: d['sessions'][0].update(started_at_utc='2026-10-31T00:01:00Z'),
             lambda d: d['sessions'][0]['environment_approval'].update(ready=False),
@@ -400,6 +408,17 @@ assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTS
                 with self.assertRaises(ValueError): self.real_preflight(self.candidate, self.operator, VERSION, output)
                 self.assertFalse(output.exists())
         self.assertEqual(self.pushes, [])
+        # Session evidence approved by a bot or an unauthenticated actor is refused even when self-consistent.
+        for index, actor in enumerate(('fixture-owner', 'fixture-app[bot]', '')):
+            path = self.root / f'actual-actor-{index}.json'
+            write_new(path, {**copy.deepcopy(self.decision), 'approved_by': actor})
+            with self.subTest(actor=actor):
+                if actor == 'fixture-owner':
+                    accepted = self.verifier.operator_acceptance(path, self.prepared, self.accepted_path, self.origin, actor)
+                    self.assertEqual(accepted['approved_by'], actor)
+                    continue
+                with self.assertRaisesRegex(ValueError, 'Explicit authenticated operator decision'):
+                    self.verifier.operator_acceptance(path, self.prepared, self.accepted_path, self.origin, actor)
 
     def test_original_staging_archive_source_version_and_acceptance_source_must_match(self):
         with self.controls():
@@ -503,9 +522,67 @@ assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTS
             with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, 'README|source'):
                 self.verifier.validate_pair_content(self.staging, VERSION, SHA)
 
+    def test_staged_package_with_duplicate_or_unsafe_members_is_refused(self):
+        path = self.staging / f'{PAIR[0]}.{VERSION}.nupkg'
+        original = path.read_bytes()
+        self.verifier.validate_pair_content(self.staging, VERSION, SHA)
+        for member in ('fixture.dll', '../escape.txt', '/absolute.txt', 'lib\\escape.dll'):
+            path.write_bytes(original)
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', UserWarning)
+                with ZipFile(path, 'a') as archive: archive.writestr(member, 'unapproved member')
+            with self.subTest(member=member), self.assertRaisesRegex(ValueError, 'unsafe or duplicate members'):
+                self.verifier.validate_pair_content(self.staging, VERSION, SHA)
+
+    def test_candidate_symlink_or_extra_entry_is_refused_before_import(self):
+        link = self.root / 'candidate-link'
+        link.symlink_to(self.candidate, target_is_directory=True)
+        refusal = 'only authenticated original staging archives'
+        with self.controls():
+            output = self.root / 'symlink-preflight.json'
+            with self.assertRaisesRegex(ValueError, refusal):
+                self.real_preflight(link, self.operator, VERSION, output)
+            self.assertFalse(output.exists())
+            self.real_preflight(self.candidate, self.operator, VERSION, self.initial)
+            (self.candidate / 'unauthenticated.txt').write_text('not a staging archive')
+            output = self.root / 'extra-preflight.json'
+            with self.assertRaisesRegex(ValueError, refusal):
+                self.real_preflight(self.candidate, self.operator, VERSION, output)
+            self.assertFalse(output.exists())
+            with self.assertRaisesRegex(ValueError, refusal):
+                self.publisher.prepare(VERSION)
+        self.assertFalse((self.publisher.IMPORTED / 'import.json').exists())
+        self.assertFalse((self.publisher.IMPORTED / 'packages').exists())
+        self.assertEqual(self.pushes, [])
+
 
 
 class PublicationBoundaryTests(unittest.TestCase):
+    def test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction(self):
+        verifier = module('verify-paired-publication')
+        def archive(*members):
+            buffer = io.BytesIO()
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', UserWarning)
+                with ZipFile(buffer, 'w') as zipped:
+                    for member in members: zipped.writestr(member, 'fixture')
+            return buffer.getvalue()
+        link = ZipInfo('link')
+        link.external_attr = 0o120777 << 16
+        cases = {'duplicate': archive('a.txt', 'a.txt'), 'absolute': archive('/absolute.txt'),
+                 'parent': archive('../escape.txt'), 'backslash': archive('dir\\escape.txt'),
+                 'drive': archive('C:escape.txt'), 'symlink': archive(link)}
+        with tempfile.TemporaryDirectory() as temporary:
+            safe = Path(temporary) / 'safe'
+            verifier.extract(archive('dir/a.txt', 'b.txt'), safe)
+            self.assertEqual((safe / 'dir/a.txt').read_text(), 'fixture')
+            for name, data in cases.items():
+                target = Path(temporary) / name
+                with self.subTest(name=name):
+                    with self.assertRaisesRegex(ValueError, 'Unsafe or duplicate staging artifact member'):
+                        verifier.extract(data, target)
+                    self.assertFalse(target.exists())
+
     def test_named_private_containers_are_redacted_including_duplicates_and_encoded_json(self):
         verifier = module('verify-paired-publication')
         component = 'synthetic-private-key-component'
