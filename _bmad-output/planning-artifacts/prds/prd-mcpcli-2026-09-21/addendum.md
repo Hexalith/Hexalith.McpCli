@@ -2,7 +2,9 @@
 title: "PRD Addendum: Hexalith.McpCli"
 status: final
 created: 2026-09-21
-updated: 2026-09-23
+updated: 2026-11-06
+changeProposals:
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md
 ---
 
 # PRD Addendum: Hexalith.McpCli
@@ -65,11 +67,15 @@ alternatives were rejected:
   its validator rejects additional properties, which is why PRD FR-16 sends
   neither on Queries.
 - Gateway validator rules: `AggregateId` is required and nonempty on every
-  Query (hence the `aggregateId` constant member); tenant, domain, and
-  projection type are lowercase alphanumeric plus hyphens, at most 64
-  characters; aggregate and entity identifiers are alphanumeric plus dots,
+  Query (hence the `aggregateId` constant member); ordinary tenants, domain, and
+  projection type are lowercase ASCII alphanumeric plus hyphens, at most 64
+  characters. Declared platform request scopes use the separate `platform:`
+  grammar and exact matching in PRD FR-15/16; public variable-scope tenant inputs
+  are lowercased without trimming before selection and override comparison, and
+  public `system` is reserved; aggregate and entity identifiers are alphanumeric plus dots,
   hyphens, and underscores, at most 256 characters, no colon.
-- Profile storage: `~/.eventstore/mcpcli.json`, this tool only (§E); why the
+- Profile storage: default `~/.eventstore/mcpcli.json`, relocated through an
+  absolute `MCPCLI_HOME` under PRD FR-18 (§E), this tool only; why the
   admin CLI file is not shared: §A.
 - Identifier type recognition (FR-7): the Catalog recognizes
   `ByteAether.Ulid.Ulid` by full type name, so the Decoration Package needs no reference to that type.
@@ -96,9 +102,11 @@ alternatives were rejected:
 
 **Toolchain and layout**
 
-- Pinned packages: ModelContextProtocol 2.2.0,
-  ModelContextProtocol.AspNetCore 2.2.0, System.CommandLine 2.0.12. No
-  Spectre.Console. Central package management via Hexalith.Builds.
+- Current packages: ModelContextProtocol 2.3.1 and System.CommandLine 2.0.14.
+  ModelContextProtocol.AspNetCore remains reserved for the future HTTP release.
+  No Spectre.Console. Effective versions come from the root-declared
+  Hexalith.Builds catalog, root build overrides and dependency policy; this
+  reconciliation authorizes no package update.
 - Flat layout `src/Hexalith.McpCli.*` and `tests/Hexalith.McpCli.*.Tests`,
   matching sibling modules rather than the nested layout documented in
   `hexalith-llm-instructions.md` (PRD Open Question 2, resolved by the
@@ -174,11 +182,13 @@ Survey facts that shaped the PRD (full detail in `extract-references.md`):
   `IQueryContract`; wire `CommandType` differs per Module (kebab-case, full
   type name, `nameof`). This variation is why canonical `module.kebab-case`
   Operation Names map to Module-specific wire values.
-- Tenants runs every Command and Query under the Envelope tenant `system`
-  (`TenantIdentity.ForTenant` puts the managed tenant in the aggregate
-  identifier) and no longer has a projection actor; reads go through the
-  read-model store by handler routing. Hence `fixedTenant` on the marker and
-  `projectionActorType` being optional.
+- At the original 2026-09-21 survey, Tenants ran every Command and Query under
+  the Envelope tenant `system` (`TenantIdentity.ForTenant` put the managed
+  tenant in the aggregate identifier). That historical design motivated
+  `fixedTenant`; it is not current Tenants enrollment policy. Current Commands
+  and cross-tenant reads declare `platform:tenants`; single-tenant reads use the
+  selected public tenant and matching aggregate identifier (PRD §8.1). Projection
+  actor routing remains optional and follows the owning contract.
 - At the 2026-09-21 survey, none of the four candidate Contracts libraries
   carried a `[Description]` attribute. The accepted v1 scope later narrowed to
   Tenants and Parties; Projects and Folders follow after v1 (PRD FR-20).
@@ -196,7 +206,7 @@ spelling shown. Positional CLI arguments are shown in angle brackets.
 | kind | `list_operations` (optional) | `--kind read\|write` | filter |
 | operation | `describe_operation`, `send_command`, `run_query` | `describe <op>`, `send <op>`, `query <op>` | Operation Name |
 | payload | `send_command`, `run_query` | `--payload <json>` / `@file` / stdin | validated against the Schema |
-| tenant | `send_command`, `run_query` (optional) | none per call; `--tenant` is a session setting (global) | the only per-call identity value, MCP only; honored per PRD FR-16 (fixed tenant, then operator gate) |
+| tenant | `send_command`, `run_query` (optional) | none per call; `--tenant` is a session setting (global) | the only per-call identity value, MCP only; honored per PRD FR-16 (declared platform scope, else fixed tenant, else canonical public tenant under the operator gate) |
 | aggregateId | `send_command`, `run_query` (optional) | `--aggregate-id` | explicit value wins over the constant; disagreement with the accessor value is a validation failure; required when a Query has no property and no constant |
 | correlationId | `send_command` (optional) | `--correlation-id` | caller-supplied ULID is passed through; when omitted, the generated message identifier is used as command correlation; no second identifier is generated (§B) |
 | idempotencyKey | `send_command` (optional) | `--idempotency-key` | caller-supplied ULID; never generated; passed through and echoed when present; retry safety requires a trusted Gateway adapter for the Command type |
@@ -249,7 +259,16 @@ options never reformat or redirect the protocol stream.
 
 Boolean environment variables accept `true`, `false`, `1`, `0`.
 
-Profile file: `~/.eventstore/mcpcli.json`, this tool only:
+Profile file: default `~/.eventstore/mcpcli.json`, this tool only. An explicit
+constructor file path takes precedence; otherwise an absolute `MCPCLI_HOME`
+selects `<MCPCLI_HOME>/.eventstore/mcpcli.json` on every OS, and an unset override
+uses the user-profile home. Empty, whitespace-only, relative,
+control-character-containing or existing-file overrides fail safely as
+`configuration_invalid` without exposing the path or falling back to the real
+home. This is a store-location selector outside the session-setting table, not
+an identity or per-call override. Existing atomicity and file protections apply.
+
+Profile document:
 
 ```json
 {
@@ -313,7 +332,7 @@ for ownership checks, and validates the complete rebuilt Payload after filling
 |---|---|---|
 | `list_modules` | `modules`; each item has `name`, `description`, `operationCount` | none |
 | `list_operations` | `module`, `operations`; each item has `name`, `kind`, `description` | none |
-| `describe_operation` | `name`, `kind`, `description`, `schema`, `envelope`, `lintFindings`, `submittable`; `envelope` has `aggregateIdRequired`, `idempotencyKeyRequired`, `arguments`; each lint finding has `code`, `severity`, `message` | `example`, `envelope.fixedTenant`, lint finding `property` (required for property-level findings), `reason` (required when `submittable` is `false`) |
+| `describe_operation` | `name`, `kind`, `description`, `schema`, `envelope`, `lintFindings`, `submittable`; `envelope` has `aggregateIdRequired`, `idempotencyKeyRequired`, `arguments`; each lint finding has `code`, `severity`, `message` | `example`, `envelope.fixedTenant`, `envelope.platformScope`, lint finding `property` (required for property-level findings), `reason` (required when `submittable` is `false`) |
 | `send_command` | `operation`, `messageId`, `correlationId`, `tenant`, `aggregateId`, `status` | `idempotencyKey` (echoed only when caller-supplied), `result` (present only when the Gateway returns a result payload) |
 | `run_query` | `operation`, `tenant`, `document` | `paging`; when present it requires `pageSize` and may independently include `offset`, `nextCursor`, `totalCount`, `hasMore` |
 
@@ -329,11 +348,11 @@ Public member types and constraints:
 | `kind` | string enum: `read`, `write` |
 | `schema` | JSON object produced by FR-7 |
 | `example` | JSON object that validates against `schema` |
-| `envelope` | JSON object; `fixedTenant` is a Gateway-valid Tenant string; `aggregateIdRequired` and `idempotencyKeyRequired` are booleans; `idempotencyKeyRequired` is true exactly when the Operation names a non-nullable or serializer-required `idempotencyKeyProperty` (effective `JsonPropertyInfo.IsRequired` under its Payload options); `arguments` is a duplicate-free array of applicable §E argument-name strings |
+| `envelope` | JSON object; `fixedTenant` is an exact Gateway-valid ordinary Tenant string; `platformScope` is an exact declared `platform:` scope under PRD §5.1; the two optional members are mutually exclusive; `aggregateIdRequired` and `idempotencyKeyRequired` are booleans; `idempotencyKeyRequired` is true exactly when the Operation names a non-nullable or serializer-required `idempotencyKeyProperty` (effective `JsonPropertyInfo.IsRequired` under its Payload options); `arguments` is a duplicate-free array of applicable §E argument-name strings |
 | `lintFindings` | array of objects defined below; empty when no finding exists |
 | `submittable` | boolean describing head-level surface availability from Read-only Mode and resolved Gateway URL only; Tenant, actor, Payload, and per-call Envelope requirements are evaluated on execution; `reason` is `read_only` or `configuration_invalid` when false |
 | `messageId`, `correlationId`, `idempotencyKey` | ULID string; `messageId` is the Gateway's canonical execution identifier |
-| `tenant` | non-empty string satisfying the FR-15 Gateway Tenant pattern |
+| `tenant` | non-empty resolved ordinary/fixed Tenant satisfying FR-15, or the exact declared platform scope under FR-16; a public variable-scope `system` value is refused |
 | `aggregateId` | non-empty string satisfying the FR-15 Gateway aggregate-identifier pattern and the Module's Identifier Kind |
 | `status` | string constant `accepted`, representing the successful Gateway `202 Accepted` response; later values require a public-contract change |
 | `result` | any JSON value returned as `SubmitCommandResponse.ResultPayload`; omitted when the Gateway returns no payload |
@@ -361,14 +380,24 @@ Public member types and constraints:
   "description": "Lists the users of one tenant.",
   "schema": { "type": "object", "additionalProperties": false, "properties": { "TenantId": { "type": "string", "description": "…" } }, "required": ["TenantId"] },
   "example": { "TenantId": "acme" },
-  "envelope": { "fixedTenant": "system", "aggregateIdRequired": false, "idempotencyKeyRequired": false, "arguments": ["aggregateId", "entityId", "pageSize", "offset", "cursor"] },
+  "envelope": { "aggregateIdRequired": false, "idempotencyKeyRequired": false, "arguments": ["tenant", "aggregateId", "entityId", "pageSize", "offset", "cursor"] },
   "lintFindings": [],
   "submittable": true
 }
 ```
 
+For `tenants.list-tenants`, the corresponding platform-scoped Envelope is:
+
+```json
+{ "platformScope": "platform:tenants", "aggregateIdRequired": false, "idempotencyKeyRequired": false, "arguments": ["aggregateId", "entityId", "pageSize", "offset", "cursor"] }
+```
+
 `arguments` lists the Envelope arguments the caller may supply; `tenant` is
-omitted when the Module declares a `fixedTenant`. Lint finding `code` is one of
+omitted when the Operation declares a platform scope or the Module declares a
+fixed tenant. Either declaration ignores the session tenant and requires an
+exact ordinal match from any supplied per-call tenant; the operator override
+gate cannot replace a declaration. Variable-scope values follow FR-16's
+canonicalization and operator gate. Lint finding `code` is one of
 `missing_property_description`, `unmarked_identifier_like_property`,
 `payload_paging_member`, or `hollow_description`; `severity` is the string
 constant `warning`. For the first three codes, `property` is an RFC 6901 JSON
@@ -391,7 +420,7 @@ confirmed a trusted idempotency adapter for that Command type.
 `run_query`:
 
 ```json
-{ "operation": "tenants.list-tenants", "tenant": "system", "document": [ ], "paging": { "pageSize": 50, "offset": 0, "nextCursor": "…", "totalCount": 120, "hasMore": true } }
+{ "operation": "tenants.list-tenants", "tenant": "platform:tenants", "document": [ ], "paging": { "pageSize": 50, "offset": 0, "nextCursor": "…", "totalCount": 120, "hasMore": true } }
 ```
 
 ### Error documents

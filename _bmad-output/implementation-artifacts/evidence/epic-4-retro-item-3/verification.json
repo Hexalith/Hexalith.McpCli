@@ -1,0 +1,429 @@
+{
+  "result": "passed",
+  "commands": [
+    {
+      "args": [
+        "config",
+        "profile",
+        "add",
+        "operator",
+        "--url",
+        "http://127.0.0.1:1",
+        "--token",
+        "[TEST TOKEN]"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 50,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "profile",
+        "list"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 278,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "use",
+        "operator"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 34,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "set",
+        "operator",
+        "tenant",
+        "AcMe"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 49,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "current"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 578,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "set",
+        "operator",
+        "actor",
+        "operator-actor"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 48,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "use",
+        "--clear"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 28,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "use",
+        "operator"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 34,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "modules"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 530,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "operations",
+        "tenants"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 7065,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "describe",
+        "tenants.list-tenants"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 1796,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "describe",
+        "tenants.get-tenant-users"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 1978,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "describe",
+        "tenants.get-tenant"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 1150,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "describe",
+        "parties.create-party"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 9208,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "profile",
+        "remove",
+        "operator"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 50,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "profile",
+        "list"
+      ],
+      "exitCode": 0,
+      "stdoutBytes": 46,
+      "stderrBytes": 0,
+      "homeKind": "owned-directory"
+    },
+    {
+      "args": [
+        "config",
+        "current"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "modules"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "mcp",
+        "--transport",
+        "stdio"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 0,
+      "stderrBytes": 152,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "config",
+        "current"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "modules"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "mcp",
+        "--transport",
+        "stdio"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 0,
+      "stderrBytes": 152,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "config",
+        "current"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "modules"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "mcp",
+        "--transport",
+        "stdio"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 0,
+      "stderrBytes": 152,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "config",
+        "current"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "modules"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "mcp",
+        "--transport",
+        "stdio"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 0,
+      "stderrBytes": 152,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "config",
+        "current"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "modules"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 152,
+      "stderrBytes": 0,
+      "homeKind": "invalid-override"
+    },
+    {
+      "args": [
+        "mcp",
+        "--transport",
+        "stdio"
+      ],
+      "exitCode": 2,
+      "stdoutBytes": 0,
+      "stderrBytes": 152,
+      "homeKind": "invalid-override"
+    }
+  ],
+  "commandCount": 31,
+  "descriptionEnvelopes": {
+    "tenants.list-tenants": {
+      "aggregateIdRequired": false,
+      "idempotencyKeyRequired": false,
+      "arguments": [
+        "aggregateId",
+        "entityId",
+        "pageSize",
+        "offset",
+        "cursor"
+      ],
+      "platformScope": "platform:tenants"
+    },
+    "tenants.get-tenant-users": {
+      "aggregateIdRequired": false,
+      "idempotencyKeyRequired": false,
+      "arguments": [
+        "tenant",
+        "aggregateId",
+        "entityId",
+        "pageSize",
+        "offset",
+        "cursor"
+      ]
+    },
+    "tenants.get-tenant": {
+      "aggregateIdRequired": false,
+      "idempotencyKeyRequired": false,
+      "arguments": [
+        "tenant",
+        "aggregateId",
+        "entityId",
+        "pageSize",
+        "offset",
+        "cursor"
+      ]
+    },
+    "parties.create-party": {
+      "aggregateIdRequired": false,
+      "idempotencyKeyRequired": false,
+      "arguments": [
+        "tenant",
+        "aggregateId",
+        "correlationId",
+        "idempotencyKey",
+        "extensions"
+      ]
+    }
+  },
+  "protectedChecks": {
+    "epic5SectionsUnchanged": true,
+    "storyIdsUnchanged": true,
+    "executorOnlyCommentChanged": true,
+    "instructionsByteIdentical": true,
+    "ciPinPitfallPreserved": true,
+    "versionsAndNativeSelectionUnchanged": true,
+    "bootstrapAndPairedPublicationCriteriaUnchanged": true
+  },
+  "evidenceDirectory": "/tmp/mcpcli-scope-reconciliation-7iduet6r",
+  "baselineCommit": "9968e657fa5d1f4e640991e1b0e7fbc98de071a6",
+  "tests": {
+    "core": {
+      "passed": 105,
+      "skippedWindowsOnly": 3
+    },
+    "cliScope": {
+      "passed": 7
+    },
+    "cliHome": {
+      "passed": 4
+    },
+    "mcpScope": {
+      "passed": 34
+    }
+  },
+  "build": {
+    "restoreExitCode": 0,
+    "releaseBuildExitCode": 0,
+    "warnings": 0,
+    "errors": 0
+  },
+  "appliedFileSha256": {
+    "AGENTS.md": "177e64b0245b059a338563d7d65e96ca95580f1ade62cc09b14fa60f8ef04415",
+    "CLAUDE.md": "177e64b0245b059a338563d7d65e96ca95580f1ade62cc09b14fa60f8ef04415",
+    ".github/copilot-instructions.md": "177e64b0245b059a338563d7d65e96ca95580f1ade62cc09b14fa60f8ef04415",
+    "_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md": "774d0b1bd22e107a25fedfe1250999ea38ccbaca7083ecec40aa5fef6ba0e197",
+    "_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md": "8769cbc1a5fecee015c096a1e189dac4ff4e620c334ac7020bb4fa32fffa2868",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md": "d8890d8c3bf0d806e800b9e3e766e7cdee77b50348509e4fcbe54c8e9b4ed57e",
+    "_bmad-output/planning-artifacts/epics.md": "5980c0867b013ea6aac5c1d4a952fc1093fea2109c139cfcba09419af58f10ee",
+    "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md": "1669c54734d446f518999254081a7f93073b96d4499515cfc02e35260ec9e846",
+    "src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs": "bdfb36b99a61a92d8b3036a5ce2c1a4da446dfacca44872fb635f327cc58c527"
+  },
+  "preCommitBase": "9968e657fa5d1f4e640991e1b0e7fbc98de071a6",
+  "validatedInputTree": "be86f92aa22bde7076cf02b77959ae59d2e224a8",
+  "preCommitInputTree": "be86f92aa22bde7076cf02b77959ae59d2e224a8"
+}

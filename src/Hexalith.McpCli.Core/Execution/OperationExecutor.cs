@@ -111,7 +111,7 @@ public sealed class OperationExecutor(
             return Fail(call, prefillValidation.Violations);
         }
 
-        // Public tenant input follows AD-27 normalization; declared fixed values remain exact.
+        // Public tenant input follows local AD-22 normalization; declared scopes and fixed values remain exact.
         string? perCallTenant = module.FixedTenant is null && operation.PlatformScope is null
             ? call.Tenant?.ToLowerInvariant() : call.Tenant;
         EnvelopeContext tenantContext = module.FixedTenant is null && operation.PlatformScope is null

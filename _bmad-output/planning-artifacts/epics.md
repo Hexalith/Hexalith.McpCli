@@ -54,6 +54,8 @@ approvedStories:
   - "4.16"
   - "4.17"
   - "4.18"
+changeProposals:
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md
@@ -66,15 +68,17 @@ inputDocuments:
 
 This document provides the complete epic and story breakdown for mcpcli, decomposing the requirements from the PRD, UX Design if it exists, and Architecture requirements into implementable stories.
 
+**Approved reconciliation (2026-11-06):** P1–P8 in the [platform-scope change proposal](sprint-change-proposal-2026-11-06.md) reconcile already shipped execution scopes and profile-home behavior in the existing stories below. Story IDs, completion history and frozen implementation-spec intent are retained; this does not assert that implementation had prior planning approval. The existing retrospective action tracks this reconciliation; no Story 2.14 or new epic is created.
+
 ## Requirements Inventory
 
 ### Functional Requirements
 
-FR1: A Module author can decorate a Contracts class or record as a Command or Query with a required description and optional valid JSON example; the Catalog exposes it as `write` or `read`, excludes missing descriptions or invalid examples with startup diagnostics, and a bundled analyzer warns on missing descriptions when available.
+FR1: A Module author can decorate a Contracts class or record as a Command or Query with a required description, optional valid JSON example and optional exact platform request scope; the Catalog exposes it as `write` or `read`, excludes missing descriptions or invalid examples with startup diagnostics, and a bundled analyzer warns on missing descriptions when available.
 
 FR2: The Catalog resolves each Gateway routing value from its contract interface, then its decoration attribute, then the Module's Wire Type convention where applicable; it reports missing, redundant, and conflicting values and supports explicit Query aggregate identifier properties or constants, with an explicit call argument required when neither is declared.
 
-FR3: A Contracts assembly declares its canonical Module Name, description, `IdentifierKind`, and optional fixed Tenant, Wire Type convention, and serializer options provider; only marked assemblies are scanned, and the declared Identifier Kind and fixed Tenant govern every Operation in that Module.
+FR3: A Contracts assembly declares its canonical Module Name, description, `IdentifierKind`, and optional fixed Tenant, Wire Type convention, and serializer options provider; only marked assemblies are scanned, and the declared Identifier Kind and fixed Tenant govern every Operation in that Module, and an Operation platform scope cannot coexist with its Module's fixed tenant.
 
 FR4: Property descriptions appear in each Operation Schema; `describe_operation` and CLI `describe` always include specific lint findings for missing nested property descriptions, unmarked identifier-like properties, Payload paging members, and hollow Operation descriptions; `describe --lint` exits 1 when findings exist.
 
@@ -86,7 +90,7 @@ FR7: Derive a closed JSON Schema for each Operation's serializable Payload, incl
 
 FR8: Give each Operation a stable `<module>.<kebab-case-operation>` name derived from its type after removing a Command or Query suffix, unless overridden by its decoration; keep that name distinct from the Gateway Wire Type and reject later duplicates with diagnostics.
 
-FR9: Expose exactly five generic MCP tools (`list_modules`, `list_operations`, `describe_operation`, `send_command`, `run_query`), or four in Read-only Mode, with the addendum §E arguments and §G results, descriptive tool text and annotations, Module and kind filtering, operation Schema and Envelope discovery, and correct `submittable` state.
+FR9: Expose exactly five generic MCP tools (`list_modules`, `list_operations`, `describe_operation`, `send_command`, `run_query`), or four in Read-only Mode, with the addendum §E arguments and §G results, descriptive tool text and annotations, Module and kind filtering, operation Schema and Envelope discovery (including exact declared platform/fixed scope), and correct `submittable` state.
 
 FR10: Run the MCP Server over stdio with JSON-RPC alone on stdout, logging on stderr, no interactive startup, SDK-driven legacy initialization or 2026-07-28 discovery and list/call behavior, and structured stderr-only failure before request serving versus MCP errors afterward.
 
@@ -100,11 +104,11 @@ FR14: Use CLI exit 0 for a result, exit 1 only for a `describe --lint` result wi
 
 FR15: Validate every Payload against its Operation Schema and every resolved Envelope value against Gateway rules before submission, return all violations with JSON Pointers, validate aggregate identifiers by Module Identifier Kind, and make no Gateway call on invalid input.
 
-FR16: Build each Gateway Envelope with one generated ULID message identifier, an optional caller-supplied ULID idempotency key, command correlation resolved to the supplied ULID or message identifier, fixed/gated/session Tenant precedence, a compiled aggregate identifier accessor or Query constant, operator-resolved Actor, allowed Command extensions, and query paging; reject disagreements and invalid values, fill declared Payload fields, and revalidate the rebuilt Payload.
+FR16: Build each Gateway Envelope with one generated ULID message identifier, an optional caller-supplied ULID idempotency key, command correlation resolved to the supplied ULID or message identifier, declared platform/fixed scope and canonical operator-gated public Tenant precedence, a compiled aggregate identifier accessor or Query constant, operator-resolved Actor, allowed Command extensions, and query paging; reject disagreements and invalid values, fill declared Payload fields, and revalidate the rebuilt Payload.
 
 FR17: Submit Commands and Queries exactly once through `Hexalith.EventStore.Client`, with no executor retry or other outbound HTTP client; return canonical Command identifiers and status, caller idempotency key only when supplied, Query document and available paging metadata, and preserve Gateway error details without inferring replay or duplicate status.
 
-FR18: Manage this tool's own `~/.eventstore/mcpcli.json` Profiles through `config use`, `current`, `profile list|add|remove`, and `set`; support URL, token, format, Tenant, Actor, Tenant override gate, and allowed extension keys, and never expose tokens in output or logs.
+FR18: Manage this tool's own Profiles, default `~/.eventstore/mcpcli.json` and relocatable with absolute `MCPCLI_HOME` under FR18's safe path-selection rules, through `config use`, `current`, `profile list|add|remove`, and `set`; support URL, token, format, Tenant, Actor, Tenant override gate, and allowed extension keys, and never expose tokens in output or logs.
 
 FR19: In Read-only Mode, omit `send_command` from MCP tool registration, make CLI `send` fail with `read_only`, and enforce the same refusal inside the executor without a Gateway call while leaving discovery and Queries available.
 
@@ -149,7 +153,7 @@ NFR8: Ensure each exposed description is understandable without source-code cont
 - Compose the live AppHost with EventStore and Tenants through published Aspire helpers and Parties once a server-code-free `Hexalith.Parties.Aspire` package exists; require an upstream bounded source-build path in Hexalith.Builds or helper-managed build before claiming the blocking Aspire CI gate (AD16, open questions).
 - Coordinate upstream `JsonSchema.Net 9.4.0` and `HexalithMcpCliVersion` catalog additions, first decorated Tenants and Parties Contracts releases, exact version pins, and Parties Aspire helper publication; these are explicit release dependencies, not substitutes for local implementation (AD15–AD17, open questions).
 - Package and publish the dependency-free Decoration Package first through an Abstractions-only bootstrap gate; after upstream decorations, use one version for Abstractions and tool packages, validate exact staged IDs and versions, install the staged tool for smoke checks, and publish only from a green source SHA (AD17–AD18).
-- Pin the architecture Stack versions, use `.NET 10`, C# 14, `xUnit v3`/Shouldly/NSubstitute, source-generated logging, one C# type per file, and the Hexalith.Builds build conventions; keep the tool framework-dependent and untrimmed (Architecture Stack, conventions, AD17).
+- Consume and verify the effective tracked versions from `global.json`, root build overrides, the root-declared Builds catalog and dependency policy rather than downgrading to historical architecture Stack rows; use `.NET 10`, C# 14, `xUnit v3`/Shouldly/NSubstitute, source-generated logging, one C# type per file, and the Hexalith.Builds build conventions; keep the tool framework-dependent and untrimmed (Architecture Stack, conventions, AD17).
 - Treat HTTP authentication, hosted transport, additional typed tools and CLI subcommands, MCP resources/prompts, plug-in loading, event-stream reads, retries, and advanced Query arguments as deferred; v1 returns `unsupported_transport` for HTTP (Architecture Deferred; PRD §8.2).
 
 ### UX Design Requirements
@@ -265,6 +269,11 @@ So that I can declare agent-facing Commands and Queries without adding a per-Mod
 **Then** it produces the architecture's canonical kebab-case name parts, including `TLSConfig` → `tls-config`,
 **And** it removes only a trailing `Command` or `Query` suffix.
 
+**Given** a Command or Query attribute with optional `PlatformScope`,
+**When** a Contracts author declares a canonical `platform:` request scope,
+**Then** the declaration compiles without adding a Module-specific executor or changing the Module marker,
+**And** scope eligibility and authorization remain the Gateway's independent responsibility (AD-22).
+
 ### Story 1.2: Enroll a Contracts Package by Reference
 
 As a tool maintainer,
@@ -370,6 +379,11 @@ So that both Heads can discover the same stable Operations and routing details.
 **Then** those declared values and the Schema from Story 1.3 are retained for the executor and both Heads,
 **And** no Head has to reflect over the Contracts type again.
 
+**Given** a valid Operation platform scope,
+**When** the Catalog builds and describes the Operation,
+**Then** its exact scope is retained in the immutable descriptor and exposed as `envelope.platformScope`,
+**And** `tenant` is omitted from Envelope arguments; an ordinary Operation retains that argument.
+
 ### Story 1.5: Diagnose Catalog Declarations
 
 As a Module author,
@@ -419,6 +433,11 @@ So that I can fix gaps before agents rely on them.
 **When** the Catalog is first built,
 **Then** it is logged once to stderr through structured logging and is absent from public discovery documents,
 **And** strict validation returns `catalog_invalid` for warnings as well as errors while normal mode retains valid Operations.
+
+**Given** a malformed platform scope or one combined with Module `FixedTenant`,
+**When** the Catalog validates the declaration,
+**Then** it excludes the Operation with `invalid_routing_value`,
+**And** valid ordinary and declared-scope Operations remain available without new diagnostic categories.
 
 ### Story 1.6: Inspect Description Quality
 
@@ -546,6 +565,11 @@ So that I can verify the Gateway target and execution context before submitting 
 **Then** it builds one Host container with one `ResolvedSettings` singleton,
 **And** Core and Heads receive settings from DI rather than reading environment variables or the Profile file themselves.
 
+**Given** the default home or a valid absolute `MCPCLI_HOME`,
+**When** session configuration is read,
+**Then** FR18/AD-14 select only this tool's profile file under that home,
+**And** home selection does not become a per-call identity value or alter flag/environment/Profile setting precedence.
+
 ### Story 2.2: Add and Select a Private Profile
 
 As an operator,
@@ -581,6 +605,11 @@ So that I can switch environments without exposing credentials or editing JSON b
 **Then** it fails without following the symlink or overwriting the target,
 **And** a stale temporary file is ignored.
 
+**Given** a valid absolute `MCPCLI_HOME`,
+**When** `config profile add`, `profile list`, `use`, or `current` runs,
+**Then** each uses `<MCPCLI_HOME>/.eventstore/mcpcli.json` with the existing private-file protections,
+**And** invalid empty, relative, control-character-containing or existing-file home values return `configuration_invalid` without exposing the supplied value or falling back to the real home.
+
 ### Story 2.3: Update and Remove Profiles Safely
 
 As an operator,
@@ -615,6 +644,11 @@ So that my CLI configuration stays accurate without losing concurrent edits.
 **When** Profile files are created and updated,
 **Then** tests verify the required permissions or ACLs on the directory, target, temporary, and lock files,
 **And** the tool never opens the admin CLI's Profile path.
+
+**Given** an explicitly selected store file, an absolute `MCPCLI_HOME`, or an unset override,
+**When** Profiles are read or mutated,
+**Then** selection follows explicit constructor path, home override, then user-profile home on every supported OS,
+**And** atomicity, concurrent-write protection, permissions/ACLs, link refusal and admin-profile isolation still apply at the selected path.
 
 ### Story 2.4: Browse the Catalog from the CLI
 
@@ -681,15 +715,20 @@ So that I can read business data with the same routing the agent will use.
 **Then** it uses explicit argument, accessor, then constant in that order; an explicit value may override the constant,
 **And** a disagreement with an accessor value or a missing result returns `validation_failed` without a Gateway call.
 
-**Given** a Module with `fixedTenant`, session Tenant, and optional per-call Tenant in the Core argument record,
+**Given** an Operation platform scope or Module `fixedTenant`, session Tenant, and optional per-call Tenant in the Core argument record,
 **When** the executor resolves the Tenant,
-**Then** fixed Tenant wins, while a per-call Tenant is honored only when no session Tenant exists or the operator enabled override,
-**And** a differing disallowed per-call value or missing Tenant returns `validation_failed` before submission.
+**Then** the exact declaration wins and ignores the session; any per-call value must match it ordinally regardless of the override gate,
+**And** without a declaration, canonical public per-call input is honored only when no session Tenant exists or the operator enabled override; a matching canonical value needs no override, and a differing disallowed value or missing Tenant returns `validation_failed` before submission.
 
 **Given** a successful Gateway Query response,
 **When** the CLI writes the result,
 **Then** it emits the addendum §G `run_query` document with required `operation`, `tenant`, and `document` fields, including a JSON null document when returned,
 **And** Query requests and results contain no synthesized correlation identifier or extensions.
+
+**Given** a declared platform scope or fixed tenant and any session Tenant,
+**When** MCP omits its per-call tenant or supplies an exact ordinal match,
+**Then** the declaration supplies the Envelope tenant and the session value is ignored,
+**And** a conflicting per-call value fails at `/tenant` with zero Gateway calls even when tenant override is enabled.
 
 ### Story 2.6: Validate and Page Query Calls
 
@@ -735,6 +774,11 @@ So that a failed call is actionable and a successful read preserves Gateway pagi
 **When** execution reaches the Query preflight,
 **Then** it returns `configuration_invalid` without creating a Gateway request,
 **And** offline Catalog discovery remains available.
+
+**Given** variable-scope public session/per-call tenants differing only in ASCII case,
+**When** they resolve without override permission,
+**Then** invariant lowercasing without trimming makes matching values one canonical tenant before comparison,
+**And** a disallowed different tenant, whitespace-invalid tenant, missing tenant or public `system` fails before submission; declared platform scopes use AD-22's separate grammar and exact matching. The separately tracked F7 non-ASCII-before-lowercasing fix is not closed by this reconciliation.
 
 ### Story 2.7: Submit a Command Once
 
@@ -835,6 +879,11 @@ So that an agent cannot silently impersonate an Actor or change the Tenant.
 **When** a Command is submitted,
 **Then** there is one Gateway `HttpClient` registration with the host's static bearer handler,
 **And** Core does not read the token or register an authentication handler.
+
+**Given** an Operation with a mapped tenant Payload member and a resolved canonical tenant or declared platform scope,
+**When** the caller omits that member or supplies an exactly matching JSON string,
+**Then** Core fills it from the trusted request scope before rebuilt-Payload validation,
+**And** a conflicting or non-string raw value fails without submission; Payload never supplies tenant authority.
 
 ### Story 2.9: Explain Execution Failures with Stable Documents
 
@@ -974,6 +1023,11 @@ So that I can understand available Modules and Operations without a tool per Ope
 **When** the agent calls `list_operations`,
 **Then** the former returns `unknown_module` with suggestions and the latter fails MCP input binding before Catalog dispatch,
 **And** the server adds no per-Operation tools as the Catalog grows.
+
+**Given** platform-scoped, fixed-tenant and variable-scope Operations,
+**When** `describe_operation` returns their Envelope metadata,
+**Then** it exposes optional `platformScope` or `fixedTenant` mutually exclusively and omits the `tenant` argument for either declaration,
+**And** the tool set, Core input records and the Gateway's independent authorization boundary remain unchanged.
 
 ### Story 3.2: Run the MCP Server over Clean Stdio
 
@@ -1285,7 +1339,7 @@ So that the generic tool can expose tenant operations without Tenants-specific c
 
 **Given** the published Decoration Package,
 **When** the Tenants Contracts library is updated in its owning repository,
-**Then** its Module marker declares `name: tenants`, `identifierKind: String`, and `fixedTenant: system`,
+**Then** its Module marker declares `name: tenants`, `identifierKind: String`, and no `FixedTenant`; current Tenants 7.0.4 Commands and cross-tenant reads declare `platform:tenants`, while single-tenant reads use the selected matching public tenant and managed-tenant aggregate identifier,
 **And** every v1 agent-facing Command and Query has a reviewed description, valid example, and stable canonical Operation Name.
 
 **Given** per-tenant and list-style Tenants Queries,
@@ -1320,8 +1374,13 @@ So that the generic tool can expose tenant operations without Tenants-specific c
 
 **Given** the generated Tenants Catalog dump,
 **When** someone unfamiliar with its source reviews descriptions,
-**Then** every exposed description is understandable without source context and the review is recorded in the Tenants pull request,
+**Then** every exposed description is understandable without source context and the review and owning-maintainer approval are recorded in the Tenants pull request or versioned McpCli evidence under the single-maintainer model accepted in retrospective F11 on 2026-11-06,
 **And** hollow-description lint findings are resolved or explicitly tracked before release.
+
+**Given** current Tenants 7.0.4 declarations and the built tool,
+**When** cross-tenant and single-tenant Operations are described and executed through their existing conformance gates,
+**Then** Commands, `tenants.list-tenants` and `tenants.get-user-tenants` use exact `platform:tenants`, while `tenants.get-tenant`, `tenants.get-tenant-users` and `tenants.get-tenant-audit` use the selected matching public tenant,
+**And** no module fixed `system` scope or module-specific generic executor branch is introduced; all artifact, inventory, audit/paging, vector and live acceptance gates remain required.
 
 ### Story 4.9: Declare Parties Commands for the Gateway
 
@@ -1389,7 +1448,7 @@ So that v1 can expose the full approved Parties surface through the Gateway.
 
 **Given** the generated Parties Catalog dump,
 **When** someone unfamiliar with its source reviews descriptions,
-**Then** every exposed Command and Query description is understandable without source context and the review is recorded in the Parties pull request,
+**Then** every exposed Command and Query description is understandable without source context and the review and owning-maintainer approval are recorded in the Parties pull request or versioned McpCli evidence under the single-maintainer model accepted in retrospective F11 on 2026-11-06,
 **And** hollow-description lint findings are resolved or explicitly tracked before release.
 
 ### Story 4.11: Prove Both Heads Agree Against a Loopback Gateway
