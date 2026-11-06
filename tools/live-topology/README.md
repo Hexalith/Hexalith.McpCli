@@ -168,7 +168,7 @@ fails preparation.
 
 `prepare-ci.sh` authenticates the complete native runtime selection in
 `native-runtime.json`: exact public EventStore **4.1.0** archives, public Tenants
-**7.0.4** archives and their embedded repository commits, plus the separately
+**7.0.5** archives and their embedded repository commits, plus the separately
 qualified Parties and Platform source revisions. The independent
 Testing.Integration **3.128.4** package continues to own the test lifecycle.
 

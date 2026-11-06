@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.remove-tenant-configuration",
-  "vectorSha256": "df94e4a9c999fb83f62a5ada872b8bd1e440df7b6f84d0e46520648c8f387d13",
+  "vectorSha256": "ac8ef4d3c0139bc3aec96658cff2d4e7d6d9a1d537da9d7244e1de508f484f86",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [

@@ -7,7 +7,7 @@
     },
     "Hexalith.Tenants": {
       "repository": "https://github.com/Hexalith/Hexalith.Tenants.git",
-      "commit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+      "commit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
     },
     "Hexalith.Parties": {
       "repository": "https://github.com/Hexalith/Hexalith.Parties.git",
@@ -15,7 +15,7 @@
     },
     "Hexalith.Platform": {
       "repository": "https://github.com/Hexalith/Hexalith.Platform.git",
-      "commit": "ee6f477c595defb79e17ca6ea3e5790de24c114e"
+      "commit": "01e5b6530af96ad6eaa69cc1867d43def56c43ca"
     }
   },
   "packages": [
@@ -105,33 +105,33 @@
     },
     {
       "id": "Hexalith.Tenants.Aspire",
-      "version": "7.0.4",
-      "sha256": "97f6f65eda909e3797f873b4fd1c446f57fab1dd14685069e124b6ab83c7aae5",
-      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+      "version": "7.0.5",
+      "sha256": "8fe8966d472ea0451dec6ca9c3674d67440fa5f1fb908c1db779f651eed1d3d9",
+      "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
     },
     {
       "id": "Hexalith.Tenants.Client",
-      "version": "7.0.4",
-      "sha256": "36ca4232d215d95bdcd0e6ff4867df7c844079bb538425d43f9e618fabd5e5a6",
-      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+      "version": "7.0.5",
+      "sha256": "9ff8434395afb9aa3a68cb8dcb84820ebd141f56bd4475898cd07758299234d3",
+      "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
     },
     {
       "id": "Hexalith.Tenants.Contracts",
-      "version": "7.0.4",
-      "sha256": "04989ef3b9755c8af217517c7964a75796903d2c21c517ff76d7d46c574861a7",
-      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+      "version": "7.0.5",
+      "sha256": "4694e203a54afe8a80c160d92fcf0156da78228a00c67218e3dd88c420fa1c07",
+      "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
     },
     {
       "id": "Hexalith.Tenants.Server",
-      "version": "7.0.4",
-      "sha256": "6daeac9fde718cdc84d804f132ec33aeae49c9b9fbeaf91e876dbaec7c4302be",
-      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+      "version": "7.0.5",
+      "sha256": "c054e8a2adce736fc583b650b0765385fcb548831089429902c2813f129e90a3",
+      "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
     },
     {
       "id": "Hexalith.Tenants.Testing",
-      "version": "7.0.4",
-      "sha256": "454cb5126dfdaf7c3fa38b470527f5a602bed8dbd0d21409aeb46995673802c3",
-      "sourceCommit": "8e20524574901d71ad5f4876804c64c3c6c87b88"
+      "version": "7.0.5",
+      "sha256": "90b7907e03caad49e8c30f95a8a21e03dab797fbf0e6f07ede95aa718d013693",
+      "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
     }
   ]
 }

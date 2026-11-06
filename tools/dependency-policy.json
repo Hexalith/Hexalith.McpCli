@@ -72,7 +72,7 @@
   },
   "modules": {
     "Hexalith.Parties.Contracts": "1.5.1",
-    "Hexalith.Tenants.Contracts": "7.0.4"
+    "Hexalith.Tenants.Contracts": "7.0.5"
   },
   "aspireHelperSupportPackages": {
     "Hexalith.Commons.UniqueIds": "2.30.10",

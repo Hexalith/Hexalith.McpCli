@@ -47,7 +47,7 @@ public sealed class DependencyPolicyTests
         string[] helpers = ["Hexalith.EventStore.Aspire", "Hexalith.Parties.Aspire", "Hexalith.Tenants.Aspire"];
         Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckAspireHelperClosure(policy, graph, helpers));
         Assert.Equal(graph.RootId, Assert.Single(graph.Nodes.Values, node => node.Type == "project").Id);
-        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/2.30.10", "Hexalith.EventStore.Aspire/4.1.0", "Hexalith.EventStore.Client/4.1.0", "Hexalith.EventStore.Contracts/4.1.0", "Hexalith.EventStore.ServiceDefaults/4.1.0", "Hexalith.Parties.Aspire/2.0.0", "Hexalith.Tenants.Aspire/7.0.4" },
+        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/2.30.10", "Hexalith.EventStore.Aspire/4.1.0", "Hexalith.EventStore.Client/4.1.0", "Hexalith.EventStore.Contracts/4.1.0", "Hexalith.EventStore.ServiceDefaults/4.1.0", "Hexalith.Parties.Aspire/2.0.0", "Hexalith.Tenants.Aspire/7.0.5" },
             graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase))
                 .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }
@@ -1065,8 +1065,8 @@ public sealed class DependencyPolicyTests
             "Hexalith.EventStore.Testing.Integration/3.128.4",
             "Hexalith.McpCli.Abstractions/2.0.0",
             "Hexalith.Parties.Aspire/2.0.0",
-            "Hexalith.Tenants.Aspire/7.0.4",
-            "Hexalith.Tenants.Contracts/7.0.4",
+            "Hexalith.Tenants.Aspire/7.0.5",
+            "Hexalith.Tenants.Contracts/7.0.5",
         }, graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase))
             .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }

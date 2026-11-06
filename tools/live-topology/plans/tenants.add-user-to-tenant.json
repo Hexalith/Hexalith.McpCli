@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "operation": "tenants.add-user-to-tenant",
-  "vectorSha256": "7e8666ee1a2a5e8e89e82e5ed7df9ba1c917c8d08777703240f78fbab2556b62",
+  "vectorSha256": "1ee25a7fc2d2c023b7c1b394ec06a907b9fc4484d67ba0118d45afe4f1009519",
   "deadlineSeconds": 45,
   "pollSeconds": 0.5,
   "actions": [

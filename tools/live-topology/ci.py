@@ -252,9 +252,9 @@ def gateway_package_provenance() -> dict:
     adapter = restored_cohort(ROOT / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                               'Hexalith.EventStore.DomainService', deployed_required=True)
     composition = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj',
-                                                      selection, 'Hexalith.Tenants.Aspire/7.0.4')
+                                                      selection, 'Hexalith.Tenants.Aspire/7.0.5')
     client = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
-                                                 selection, 'Hexalith.Tenants.Contracts/7.0.4')
+                                                 selection, 'Hexalith.Tenants.Contracts/7.0.5')
     source = ROOT / 'references/Hexalith.EventStore'
     host = (ROOT / PACKAGE_GATEWAY).parent
     manifest = host / 'Configuration/provenance.json'
