@@ -1,0 +1,2 @@
+[91merror: Filter expression 'Hexalith.McpCli.Manifest.Tests.NativeCatalogToolTests.*Redacted*' is not valid: wildcards may only be at the beginning and/or end of a filter expression (Parameter 'query')
+[0m

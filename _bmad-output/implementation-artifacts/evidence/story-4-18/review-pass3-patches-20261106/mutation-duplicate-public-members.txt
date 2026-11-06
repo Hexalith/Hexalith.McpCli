@@ -1,0 +1,15 @@
+test_duplicate_public_archive_member_refuses_even_when_consumer_bytes_match (test_paired_publication.PublicationTests.test_duplicate_public_archive_member_refuses_even_when_consumer_bytes_match) ... FAIL
+
+======================================================================
+FAIL: test_duplicate_public_archive_member_refuses_even_when_consumer_bytes_match (test_paired_publication.PublicationTests.test_duplicate_public_archive_member_refuses_even_when_consumer_bytes_match)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 205, in test_duplicate_public_archive_member_refuses_even_when_consumer_bytes_match
+    with self.assertWarnsRegex(UserWarning, 'Duplicate name'), self.assertRaisesRegex(ValueError, 'duplicate archive members'):
+                                                               ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.070s
+
+FAILED (failures=1)

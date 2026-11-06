@@ -1,0 +1,15 @@
+test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record (test_paired_publication.PublicationTests.test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record) ... FAIL
+
+======================================================================
+FAIL: test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record (test_paired_publication.PublicationTests.test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 440, in test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record
+    with self.controls(), self.assertRaisesRegex(ValueError, 'does not equal recomputed acceptance'):
+                          ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.023s
+
+FAILED (failures=1)

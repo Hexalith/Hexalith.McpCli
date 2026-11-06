@@ -1,0 +1,11 @@
+test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json (test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json) ... ok
+test_decoded_nested_bearer_credentials_are_refused_and_redacted (test_paired_publication.PublicationBoundaryTests.test_decoded_nested_bearer_credentials_are_refused_and_redacted) ... ok
+test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) ... ok
+test_safe_operator_recording_and_retention_preserve_exact_input_bytes (test_paired_publication.PublicationBoundaryTests.test_safe_operator_recording_and_retention_preserve_exact_input_bytes) ... ok
+test_fresh_credentials_are_refused_and_redacted_without_changing_originals (test_paired_publication.PublicationBoundaryTests.test_fresh_credentials_are_refused_and_redacted_without_changing_originals) ... ok
+test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets (test_paired_publication.PublicationBoundaryTests.test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 0.069s
+
+OK

@@ -1,0 +1,22 @@
+{
+  "argv": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "candidate_sha256": "89c9d980160ccd25a5475a237d97a030a76f2b3da1be31658ab5e7a9862c8bd1",
+  "exit_code": 0,
+  "pinned_version": "21.2.4",
+  "npm_ci": {
+    "argv": [
+      "npm",
+      "ci",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "exit_code": 0
+  }
+}

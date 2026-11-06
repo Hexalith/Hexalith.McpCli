@@ -776,3 +776,19 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
   summary: The synchronized agent entry points still describe a published-helper-only live topology.
   evidence: Medium (code review pass 3, 2026-11-06); deferred because the fix edits the three agent-instruction files, which must stay byte-identical. `CLAUDE.md:82` (with `AGENTS.md` and `.github/copilot-instructions.md`) says the topology "uses published server-free Aspire helpers … never sibling source project references". After native source preparation, `tests/Hexalith.McpCli.AppHost/Program.cs:95` launches Tenants through `AddProject` from `references/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj`. An agent following the entry points could revert that launch or refuse topology changes. To fix, edit `AGENTS.md`, copy it to the other two files, and run `scripts/check-agent-instructions-sync.sh`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
+  summary: Python CI diagnostics preserve opaque bearer credentials from child output.
+  evidence: High; inherited at the original 4.18 baseline. `tools/live-topology/ci.py:43` redacts JWTs but `sanitized("Authorization: Bearer syntheticOpaqueToken123")` returns the credential unchanged. Extend the existing sanitizer and add direct/escaped child-output and retained-artifact regression cases.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
+  summary: Python CI diagnostics preserve truncated PEM private-key blocks.
+  evidence: High; inherited at the original 4.18 baseline. `tools/live-topology/ci.py:45` requires a closing END delimiter; a timeout-truncated BEGIN PRIVATE KEY block survives. Redact through end-of-input and verify direct, escaped and cancellation-retained diagnostics.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
+  summary: Malformed topology XML can preserve named private-key element contents.
+  evidence: High; inherited at the original 4.18 baseline. `tools/live-topology/ci.py:78` falls back to the text sanitizer after ParseError; a PrivateKey element followed by an unfinished element retains its synthetic key. Add a conservative malformed-XML fallback and cancellation regression without weakening well-formed XML handling.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
+  summary: CI capture may exhaust memory when a bounded command emits very large output.
+  evidence: Medium, unverified; inherited at the original 4.18 baseline. `tools/live-topology/ci.py:148` reads each complete temporary channel into memory before sanitization, while vectors can run for 270 minutes. A controlled large-output invocation measuring peak memory would establish the practical limit; if needed, design bounded or streaming capture with explicit truncation evidence and credential-safe boundary handling.

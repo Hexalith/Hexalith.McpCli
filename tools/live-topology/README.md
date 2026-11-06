@@ -259,6 +259,15 @@ the domain code; the snapshot manifest records its exact configuration source.
 The separate gateway package source commit identifies the deployed gateway
 implementation.
 
+For a local run, first place each clean direct root checkout for
+`Hexalith.EventStore`, `Hexalith.Tenants`, `Hexalith.Parties` and
+`Hexalith.Platform` at its exact selected commit in
+[`native-runtime.json`](native-runtime.json). A normal root submodule
+initialization follows the root gitlinks, which can differ from these qualified
+runtime selections. The local hook refuses to change source revisions; only
+disposable GitHub-hosted CI selects them automatically. Keep nested submodules
+uninitialized.
+
 From the repository root, after the focused Release checks and the workflow's
 full `dapr init --runtime-version 1.18.7`, run the same preparation and execution
 path:

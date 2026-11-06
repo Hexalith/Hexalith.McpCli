@@ -62,7 +62,7 @@ def sanitized(text: str) -> str:
                   r'\1"[REDACTED]"', text)
     text = re.sub(r'(?i)((?:SigningKey|PrivateKey)(?:=|:|\s)+)[^\s,\]"}]+', r'\1[REDACTED]', text)
     for key, value in os.environ.items():
-        if value and len(value) >= 8 and re.search(r'TOKEN|PASSWORD|SECRET|CERT_KEY|SIGNINGKEY|PRIVATE_?KEY', key, re.I):
+        if value and len(value) >= 8 and re.search(r'TOKEN|PASSWORD|SECRET|CERT_KEY|SIGNINGKEY|PRIVATE_?KEY|API_KEY', key, re.I):
             text = text.replace(value, '[REDACTED]')
     return text
 

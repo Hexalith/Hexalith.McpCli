@@ -1,0 +1,16 @@
+test_after_preparation_source_and_selection_drift_refuse_before_vectors (test_ci.CiHooksTests.test_after_preparation_source_and_selection_drift_refuse_before_vectors) ... 
+  test_after_preparation_source_and_selection_drift_refuse_before_vectors (test_ci.CiHooksTests.test_after_preparation_source_and_selection_drift_refuse_before_vectors) (mode='selection') ... FAIL
+
+======================================================================
+FAIL: test_after_preparation_source_and_selection_drift_refuse_before_vectors (test_ci.CiHooksTests.test_after_preparation_source_and_selection_drift_refuse_before_vectors) (mode='selection')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/live-topology/test_ci.py", line 733, in test_after_preparation_source_and_selection_drift_refuse_before_vectors
+    self.assertNotEqual(0, result.returncode)
+    ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 0 == 0
+
+----------------------------------------------------------------------
+Ran 1 test in 16.564s
+
+FAILED (failures=1)

@@ -1,0 +1,17 @@
+test_real_paired_source_producer_writes_evidence_accepted_by_publication (test_paired_publication.PublicationTests.test_real_paired_source_producer_writes_evidence_accepted_by_publication) ... ERROR
+
+======================================================================
+ERROR: test_real_paired_source_producer_writes_evidence_accepted_by_publication (test_paired_publication.PublicationTests.test_real_paired_source_producer_writes_evidence_accepted_by_publication)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 480, in test_real_paired_source_producer_writes_evidence_accepted_by_publication
+    validate_source_evidence(document, SHA)
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/paired_release.py", line 54, in validate_source_evidence
+    raise ValueError('Source evidence lacks exact current-main blocking gates.')
+ValueError: Source evidence lacks exact current-main blocking gates.
+
+----------------------------------------------------------------------
+Ran 1 test in 0.015s
+
+FAILED (errors=1)

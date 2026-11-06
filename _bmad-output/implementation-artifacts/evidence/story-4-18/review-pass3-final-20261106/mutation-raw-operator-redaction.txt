@@ -1,0 +1,36 @@
+test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) ... 
+  test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"schema":"x","note":"Authorization: Bearer opaqueSecretToken123","note":"clean"}') ... FAIL
+  test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"nested":[{"note":"Authorization: \\u0042earer\\topaqueSecretToken123","note":"clean"}]}') ... FAIL
+  test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"note":"Authorization: Bearer opaqueSecretToken123","\\u006eote":"clean"}') ... FAIL
+
+======================================================================
+FAIL: test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"schema":"x","note":"Authorization: Bearer opaqueSecretToken123","note":"clean"}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 622, in test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value
+    self.assertNotIn('opaqueSecretToken123', retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'opaqueSecretToken123' unexpectedly found in '{"schema":"x","note":"Authorization: Bearer opaqueSecretToken123","note":"clean"}'
+
+======================================================================
+FAIL: test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"nested":[{"note":"Authorization: \\u0042earer\\topaqueSecretToken123","note":"clean"}]}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 622, in test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value
+    self.assertNotIn('opaqueSecretToken123', retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'opaqueSecretToken123' unexpectedly found in '{"nested":[{"note":"Authorization: \\u0042earer\\topaqueSecretToken123","note":"clean"}]}'
+
+======================================================================
+FAIL: test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"note":"Authorization: Bearer opaqueSecretToken123","\\u006eote":"clean"}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 622, in test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value
+    self.assertNotIn('opaqueSecretToken123', retained)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'opaqueSecretToken123' unexpectedly found in '{"note":"Authorization: Bearer opaqueSecretToken123","\\u006eote":"clean"}'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.008s
+
+FAILED (failures=3)

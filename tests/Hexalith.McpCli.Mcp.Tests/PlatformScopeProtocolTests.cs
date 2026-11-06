@@ -105,23 +105,42 @@ public sealed class PlatformScopeProtocolTests
 
     /// <summary>Conflicting command and query scope input is rejected before gateway submission.</summary>
     [Theory]
-    [InlineData("2025-06-18", false)]
-    [InlineData("2025-06-18", true)]
-    [InlineData("2026-07-28", false)]
-    [InlineData("2026-07-28", true)]
-    public async Task ConflictingPerCallScopeIsRefusedAsync(string version, bool command)
+    [InlineData("2025-06-18", false, "platform:other")]
+    [InlineData("2025-06-18", true, "platform:other")]
+    [InlineData("2026-07-28", false, "platform:other")]
+    [InlineData("2026-07-28", true, "platform:other")]
+    [InlineData("2025-06-18", false, "Platform:routing")]
+    [InlineData("2025-06-18", true, "Platform:routing")]
+    [InlineData("2026-07-28", false, "Platform:routing")]
+    [InlineData("2026-07-28", true, "Platform:routing")]
+    [InlineData("2025-06-18", false, "platform:Routing")]
+    [InlineData("2025-06-18", true, "platform:Routing")]
+    [InlineData("2026-07-28", false, "platform:Routing")]
+    [InlineData("2026-07-28", true, "platform:Routing")]
+    [InlineData("2025-06-18", false, "PLATFORM:ROUTING")]
+    [InlineData("2025-06-18", true, "PLATFORM:ROUTING")]
+    [InlineData("2026-07-28", false, "PLATFORM:ROUTING")]
+    [InlineData("2026-07-28", true, "PLATFORM:ROUTING")]
+    public async Task ConflictingPerCallScopeIsRefusedAsync(string version, bool command, string suppliedScope)
     {
         await using McpTestSession session = await CreateAsync(version);
         string toolName = command ? "send_command" : "run_query";
+        string operation = command ? "routing-fixture.colon-wire" : "routing-fixture.items-list";
         OperationCall call = command
-            ? new SendCommandArguments("routing-fixture.colon-wire", QueryPayload, Tenant: "platform:other")
-            : new RunQueryArguments("routing-fixture.items-list", "{}", Tenant: "platform:other");
+            ? new SendCommandArguments(operation, QueryPayload, Tenant: suppliedScope)
+            : new RunQueryArguments(operation, "{}", Tenant: suppliedScope);
         IList<McpClientTool> tools = await session.Client.ListToolsAsync(cancellationToken: session.Token);
-        JsonElement result = AssertSchema(await session.CallAsync(toolName, call),
-            tools.Single(tool => tool.Name == toolName), isError: true);
-        result.GetProperty("error").GetProperty("code").GetString().ShouldBe("validation_failed");
-        result.GetProperty("error").GetProperty("violations").EnumerateArray().ShouldHaveSingleItem()
-            .GetProperty("path").GetString().ShouldBe("/tenant");
+        CallToolResult result = await session.CallAsync(toolName, call);
+        AssertDocument(result, new
+        {
+            error = new
+            {
+                code = "validation_failed",
+                operation,
+                violations = new[] { new { path = "/tenant", message = "The per-call tenant disagrees with the operation's platform scope." } },
+            },
+        }, isError: true);
+        AssertSchema(result, tools.Single(tool => tool.Name == toolName), isError: true);
         session.Gateway.ReceivedCalls().ShouldBeEmpty();
     }
 

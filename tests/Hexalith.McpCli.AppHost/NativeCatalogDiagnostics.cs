@@ -31,7 +31,7 @@ internal static class NativeCatalogDiagnostics
         foreach (DictionaryEntry entry in Environment.GetEnvironmentVariables())
         {
             if (entry.Key is string key && entry.Value is string value && value.Length >= 8
-                && Regex.IsMatch(key, "TOKEN|PASSWORD|SECRET|CERT_KEY|SIGNINGKEY|PRIVATE_?KEY", RegexOptions.IgnoreCase))
+                && Regex.IsMatch(key, "TOKEN|PASSWORD|SECRET|CERT_KEY|SIGNINGKEY|PRIVATE_?KEY|API_KEY", RegexOptions.IgnoreCase))
                 text = text.Replace(value, "[REDACTED]", StringComparison.Ordinal);
         }
         return text.Length <= 16_384 ? text : text[..16_384] + " [TRUNCATED]";

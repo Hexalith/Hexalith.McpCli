@@ -1,0 +1,140 @@
+[
+  {
+    "name": "ci-api-key",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tools/live-topology",
+      "-p",
+      "test_ci.py",
+      "-k",
+      "test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text",
+      "-v"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.093
+  },
+  {
+    "name": "build-manifest",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-p:BuildProjectReferences=false"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.901
+  },
+  {
+    "name": "manifest-redaction",
+    "argv": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.NativeCatalogToolTests.*Redacted*"
+    ],
+    "exit_code": 3,
+    "elapsed_seconds": 0.073
+  },
+  {
+    "name": "manifest-redaction-fixed-filter",
+    "argv": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.NativeCatalogToolTests.NamedJsonKeyDiagnosticsAreRedacted",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.NativeCatalogToolTests.OpaqueBearerDiagnosticsAreRedacted",
+      "-method",
+      "Hexalith.McpCli.Manifest.Tests.NativeCatalogToolTests.EnvironmentApiKeysAreRedactedWithoutChangingSafeText"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.258
+  },
+  {
+    "name": "build-core",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-p:BuildProjectReferences=false"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.448
+  },
+  {
+    "name": "core-casing",
+    "argv": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "Hexalith.McpCli.Core.Tests.PlatformScopeTests.PlatformScopeConflictIsRefusedAsync"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.476
+  },
+  {
+    "name": "build-mcp",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror",
+      "-p:BuildProjectReferences=false"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 1.318
+  },
+  {
+    "name": "mcp-casing",
+    "argv": [
+      "dotnet",
+      "tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll",
+      "-method",
+      "Hexalith.McpCli.Mcp.Tests.PlatformScopeProtocolTests.ConflictingPerCallScopeIsRefusedAsync"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.904
+  },
+  {
+    "name": "final-operator-tests",
+    "argv": [
+      "python3",
+      "-m",
+      "unittest",
+      "-v",
+      "test_paired_publication.PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json",
+      "test_paired_publication.PublicationBoundaryTests.test_decoded_nested_bearer_credentials_are_refused_and_redacted",
+      "test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value",
+      "test_paired_publication.PublicationBoundaryTests.test_safe_operator_recording_and_retention_preserve_exact_input_bytes",
+      "test_paired_publication.PublicationBoundaryTests.test_fresh_credentials_are_refused_and_redacted_without_changing_originals",
+      "test_paired_publication.PublicationBoundaryTests.test_operator_recording_refuses_known_credentials_and_retention_redacts_rejected_packets"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.153
+  },
+  {
+    "name": "whitespace",
+    "argv": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exit_code": 0,
+    "elapsed_seconds": 0.103
+  }
+]
