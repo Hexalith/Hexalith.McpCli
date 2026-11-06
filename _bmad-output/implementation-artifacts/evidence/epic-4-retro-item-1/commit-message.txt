@@ -1,0 +1,4 @@
+fix(ci): align native dependencies and workflow pins
+
+Keep source owners on the AppHost Abstractions version and seal the frozen
+Platform reader source inventory. Preserve the blocking live acceptance gates.

@@ -368,8 +368,10 @@ def reader_audit_provenance() -> dict:
     inputs = ['global.json', 'Directory.Build.props', 'Directory.Packages.props',
               'references/Hexalith.Builds/Props/Directory.Packages.props',
               'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj',
-              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs',
-              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs']
+              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs']
+    cohort_source = 'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs'
+    if (ROOT / cohort_source).is_file():
+        inputs.append(cohort_source)
     return {'schemaVersion': 1, 'result': 'audited', 'sdkVersion': EVENTSTORE_COHORT,
             'sources': sources, 'packages': packages, 'archives': archives,
             'inputs': {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in inputs}}
@@ -532,6 +534,9 @@ def prepare(evidence: Path) -> None:
                  if item.get('Update') == 'StackExchange.Redis']
         if not catalog.is_file() or redis != ['3.4.31']:
             raise ValueError('The qualified source catalog requires the exact root Redis 3.4.31 override.')
+        mcpcli = [item.text for item in own_versions.iter('HexalithMcpCliVersion')]
+        if mcpcli != ['2.0.0']:
+            raise ValueError('The qualified source catalog requires the exact root McpCli 2.0.0 pin.')
         overlay = private / 'source-runtime-packages.props'
         project_xml = ET.Element('Project')
         ET.SubElement(project_xml, 'Import', {'Project': str(catalog)})
@@ -548,6 +553,10 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(ET.SubElement(overrides_xml, 'PropertyGroup'), 'WarningsNotAsErrors')
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
                       {'Update': 'StackExchange.Redis', 'Version': redis[0]})
+        # The AppHost loads the root's Abstractions assembly. Source owners must
+        # compile against that same version, including later SDK/Aspire rebuilds.
+        ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
+                      {'Update': 'Hexalith.McpCli.Abstractions', 'Version': mcpcli[0]})
         ET.ElementTree(overrides_xml).write(overrides, encoding='utf-8', xml_declaration=True)
         os.environ['CustomAfterMicrosoftCommonTargets'] = str(overrides)
         receipt['sourcePackageCatalog'] = {'buildsCommit': actual_builds,
@@ -566,6 +575,7 @@ def prepare(evidence: Path) -> None:
                           '-p:WarningsNotAsErrors=',
                           '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
                           '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
+            properties.append('-p:HexalithMcpCliVersion=' + mcpcli[0])
             if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
                 properties.append('-p:HexalithBuildPackageVersions1=' + str(overlay))
             if module == 'Hexalith.Parties':

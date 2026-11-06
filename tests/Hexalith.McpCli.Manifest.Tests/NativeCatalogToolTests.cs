@@ -82,6 +82,9 @@ public sealed class NativeCatalogToolTests : IDisposable
     [InlineData("copy-cohort-after-generation")]
     [InlineData("extra-source-after-generation")]
     [InlineData("matching-generated")]
+    [InlineData("matching-frozen-generated")]
+    [InlineData("copy-before-seal-frozen-cohort")]
+    [InlineData("copy-before-seal-frozen-source")]
     [InlineData("copy-before-seal-program")]
     [InlineData("copy-before-seal-cohort")]
     [InlineData("copy-before-seal-project")]
@@ -100,6 +103,7 @@ public sealed class NativeCatalogToolTests : IDisposable
         File.WriteAllText(Path.Combine(template, "Program.cs"), "// inert managed reader template");
         string cohort = Path.Combine(template, "PublishedCatalogArtifactCohort.cs");
         File.WriteAllText(cohort, "// inert managed cohort source");
+        if (kind.Contains("frozen", StringComparison.Ordinal)) File.Delete(cohort);
         foreach (string input in new[] { "global.json", "Directory.Build.props", "Directory.Packages.props" })
             File.WriteAllText(Path.Combine(_root, input), input == "global.json" ? "{}" : "<Project />");
         string catalog = Path.Combine(_root, "references", "Hexalith.Builds", "Props", "Directory.Packages.props");
@@ -123,7 +127,8 @@ public sealed class NativeCatalogToolTests : IDisposable
             "references/Hexalith.Builds/Props/Directory.Packages.props",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs",
-            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs" }.ToDictionary(name => name,
+            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs" }
+            .Where(name => File.Exists(Path.Combine(_root, name))).ToDictionary(name => name,
                 name => Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(_root, name)))));
         string audit = Path.Combine(_root, "audit.json");
         string auditedIdentity = kind == "uncovered" ? "Other/1.0.0" : identity;
@@ -157,7 +162,8 @@ public sealed class NativeCatalogToolTests : IDisposable
             ["MCPCLI_TEST_READER_ASSETS"] = restored, ["MCPCLI_TEST_READER_CALLS"] = calls,
             ["MCPCLI_TEST_READER_BEHAVIOR"] = kind.Contains("-generation", StringComparison.Ordinal)
                 || kind.EndsWith("-after-build", StringComparison.Ordinal)
-                || kind is "matching-generated" or "copy-cohort-before-build" or "catalog-source-after-restore" ? kind : null,
+                || kind is "matching-generated" or "matching-frozen-generated" or "copy-cohort-before-build" or "catalog-source-after-restore"
+                ? kind == "matching-frozen-generated" ? "matching-generated" : kind : null,
             ["MCPCLI_TEST_READER_CATALOG_SOURCE"] = catalog,
             ["CustomAfterMicrosoftCommonTargets"] = fallback,
             ["MCPCLI_TEST_READER_COHORT_SOURCE"] = cohort,
@@ -171,10 +177,11 @@ public sealed class NativeCatalogToolTests : IDisposable
         NativeCatalogTool.InputsCopiedObserver.Value = reader =>
         {
             copyStageCalls++;
+            if (kind == "copy-before-seal-frozen-source") File.WriteAllText(cohort, "// source added after audit");
             string? name = kind switch
             {
                 "copy-before-seal-program" => "Program.cs",
-                "copy-before-seal-cohort" => "PublishedCatalogArtifactCohort.cs",
+                "copy-before-seal-cohort" or "copy-before-seal-frozen-cohort" => "PublishedCatalogArtifactCohort.cs",
                 "copy-before-seal-project" => "Hexalith.Platform.CatalogBuilder.csproj",
                 "copy-before-seal-bindings" => "bindings.props",
                 "copy-before-seal-global" => "global.json",
@@ -191,7 +198,7 @@ public sealed class NativeCatalogToolTests : IDisposable
                     [(owner, owner, "parties")], TestContext.Current.CancellationToken, Path.Combine(bin, OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet"));
             }));
             string[][] commands = File.Exists(calls) ? File.ReadAllLines(calls).Select(line => JsonSerializer.Deserialize<string[]>(line)!).ToArray() : [];
-            if (kind == "matching-generated")
+            if (kind is "matching-generated" or "matching-frozen-generated")
             {
                 Assert.Null(failure);
                 Assert.Equal(3, commands.Length);
@@ -214,6 +221,13 @@ public sealed class NativeCatalogToolTests : IDisposable
                     ("Cohort", cohort, Path.Combine(reader, "PublishedCatalogArtifactCohort.cs")),
                 })
                 {
+                    if (name == "Cohort" && kind == "matching-frozen-generated")
+                    {
+                        Assert.False(File.Exists(copy));
+                        Assert.Equal(JsonValueKind.Null, prepared.RootElement.GetProperty("templateCohortSha256").ValueKind);
+                        Assert.Equal(JsonValueKind.Null, prepared.RootElement.GetProperty("readerCohortSha256").ValueKind);
+                        continue;
+                    }
                     string originalHash = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(original)));
                     string copiedHash = Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(copy)));
                     Assert.Equal(originalHash, copiedHash);
@@ -229,7 +243,7 @@ public sealed class NativeCatalogToolTests : IDisposable
             }
             bool beforeProcess = kind is "cohort-source-missing" or "cohort-source-changed" or "catalog-source-missing" or "catalog-source-changed"
                 || kind.StartsWith("copy-before-seal-", StringComparison.Ordinal);
-            if (kind is "cohort-source-missing" or "catalog-source-missing") Assert.IsType<FileNotFoundException>(failure);
+            if (kind == "catalog-source-missing") Assert.IsType<FileNotFoundException>(failure);
             else Assert.IsType<InvalidDataException>(failure);
             if (kind.StartsWith("copy-before-seal-", StringComparison.Ordinal)) Assert.Equal(1, copyStageCalls);
             if (beforeProcess) Assert.Empty(commands);

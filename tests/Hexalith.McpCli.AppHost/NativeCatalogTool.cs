@@ -39,8 +39,9 @@ internal static class NativeCatalogTool
         string project = Path.Combine(build, "Hexalith.Platform.CatalogBuilder.csproj");
         string program = Path.Combine(build, "Program.cs");
         string cohort = Path.Combine(build, "PublishedCatalogArtifactCohort.cs");
-        string[] templatePaths = [template, Path.Combine(Path.GetDirectoryName(template)!, "Program.cs"),
-            Path.Combine(Path.GetDirectoryName(template)!, "PublishedCatalogArtifactCohort.cs")];
+        string cohortSource = Path.Combine(Path.GetDirectoryName(template)!, "PublishedCatalogArtifactCohort.cs");
+        string[] templatePaths = [template, Path.Combine(Path.GetDirectoryName(template)!, "Program.cs")];
+        if (File.Exists(cohortSource)) templatePaths = [.. templatePaths, cohortSource];
         Dictionary<string, byte[]> templateBytes = templatePaths.ToDictionary(path => path, File.ReadAllBytes, StringComparer.Ordinal);
         Dictionary<string, string> templateHashes = templateBytes.ToDictionary(pair =>
             Path.GetRelativePath(repositoryRoot.FullName, pair.Key).Replace(Path.DirectorySeparatorChar, '/'), pair => Digest(pair.Value), StringComparer.Ordinal);
@@ -79,9 +80,10 @@ internal static class NativeCatalogTool
         byte[] projectBytes = SerializeDocument(xml);
         Dictionary<string, byte[]> readerInputBytes = new(StringComparer.Ordinal)
         {
-            [project] = projectBytes, [program] = templateBytes[templatePaths[1]], [cohort] = templateBytes[templatePaths[2]],
+            [project] = projectBytes, [program] = templateBytes[templatePaths[1]],
             [bindings] = bindingsBytes, [Path.Combine(build, "global.json")] = globalJsonBytes,
         };
+        if (templateBytes.TryGetValue(cohortSource, out byte[]? cohortBytes)) readerInputBytes[cohort] = cohortBytes;
         // Expected digests precede every write/readback; copied drift cannot become a new baseline.
         Dictionary<string, string> readerInputHashes = readerInputBytes.ToDictionary(pair => pair.Key, pair => Digest(pair.Value), StringComparer.Ordinal);
         foreach ((string path, byte[] bytes) in readerInputBytes)
@@ -165,8 +167,8 @@ internal static class NativeCatalogTool
             templateHash = readerInputHashes[program],
             templateProgramSha256 = templateHashes[Path.GetRelativePath(repositoryRoot.FullName, templatePaths[1]).Replace(Path.DirectorySeparatorChar, '/')],
             readerProgramSha256 = readerInputHashes[program],
-            templateCohortSha256 = templateHashes[Path.GetRelativePath(repositoryRoot.FullName, templatePaths[2]).Replace(Path.DirectorySeparatorChar, '/')],
-            readerCohortSha256 = readerInputHashes[cohort],
+            templateCohortSha256 = cohortBytes is null ? null : Digest(cohortBytes),
+            readerCohortSha256 = readerInputHashes.GetValueOrDefault(cohort),
             inputHashes,
         }), token).ConfigureAwait(false);
         return JsonDocument.Parse(await File.ReadAllBytesAsync(Path.Combine(directory, "receipt.json"), token).ConfigureAwait(false));
@@ -186,7 +188,7 @@ internal static class NativeCatalogTool
         if (templateHashes.Any(pair => audit.RootElement.GetProperty("inputs").GetProperty(pair.Key).GetString() != pair.Value)
             || readerInputHashes.Any(pair => !File.Exists(pair.Key) || Digest(File.ReadAllBytes(pair.Key)) != pair.Value))
             throw new InvalidDataException("The copied catalog reader inputs differ from their exact online audit seal.");
-        string[] allowed = [Path.Combine(build, "Program.cs"), Path.Combine(build, "PublishedCatalogArtifactCohort.cs")];
+        string[] allowed = readerInputHashes.Keys.Where(path => Path.GetExtension(path).Equals(".cs", StringComparison.OrdinalIgnoreCase)).ToArray();
         if (Directory.EnumerateFiles(build, "*", SearchOption.AllDirectories).Any(path =>
             Path.GetExtension(path).Equals(".cs", StringComparison.OrdinalIgnoreCase)
             && !Path.GetRelativePath(build, path).StartsWith("obj" + Path.DirectorySeparatorChar, StringComparison.Ordinal)

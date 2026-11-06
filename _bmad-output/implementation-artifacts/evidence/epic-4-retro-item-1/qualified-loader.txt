@@ -1,0 +1,6 @@
+Preloaded Hexalith.McpCli.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null
+Owner refs: Hexalith.McpCli.Abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=null
+Resolving Hexalith.EventStore.Contracts, Version=4.1.0.0, Culture=neutral, PublicKeyToken=null
+Compiled declaration read succeeded: 41
+All owner attributes: 16
+Routes getter succeeded: 41
