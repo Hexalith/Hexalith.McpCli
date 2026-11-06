@@ -1,0 +1,67 @@
+{
+  "schema": "mcpcli-administrator-readiness-hypothesis/v1",
+  "source_commit": "078fd22bbbe591d6b912fa6e33967b174b61379a",
+  "hypothesis": "A 15-second HttpClient request timeout prematurely aborts the existing 60-second administrator authority poll.",
+  "result": "disproved",
+  "prototype": "A real 250-millisecond HttpClient timeout followed by a missing-administrator document and then the expected persisted administrator.",
+  "unchanged_helper_sha256": "a5dafdb46dc4bfe7b9a624cbd2cd3a18edf7ad318fb619f30aed2a66c3aa18a3",
+  "restored_client": "Hexalith.EventStore.Client 4.1.0",
+  "restored_client_source": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+  "observation": "The unchanged helper already polls ordinary HttpClient.Timeout failures because the effective Gateway client converts send-time TaskCanceledException into EventStoreGatewayException 503 while the caller token remains active.",
+  "checks": [
+    {
+      "command": "dotnet restore tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "exit_code": 0,
+      "log": "restore.txt"
+    },
+    {
+      "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+      "exit_code": 0,
+      "log": "prototype-build.txt"
+    },
+    {
+      "command": "dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -method Hexalith.McpCli.Core.Tests.AdministratorAuthorityBootstrapTests.RequestTimeoutKeepsPollingUntilPersistedAdministratorAppears",
+      "exit_code": 0,
+      "passed": 1,
+      "elapsed_seconds": 1.406,
+      "log": "unchanged-helper-test.txt",
+      "qualification": "Passed before any helper change; there is no red regression or catch fix."
+    },
+    {
+      "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+      "exit_code": 0,
+      "log": "final-build.txt",
+      "qualification": "After removing both prototype test files and Compile link; local Release output again matches tracked code."
+    }
+  ],
+  "baseline_run_id": 42221463909,
+  "baseline_failed_test_durations": [
+    {
+      "entry": "20b9538c7ad64cdd81adad9f7c986db3/vectors/0a609e875b4248f6b805724d911bb531/parties.create-party/tests.xml",
+      "test": "Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: \\\"parties.create-party\\\")",
+      "elapsed_seconds": 61.751
+    },
+    {
+      "entry": "20b9538c7ad64cdd81adad9f7c986db3/vectors/0a609e875b4248f6b805724d911bb531/parties.search-parties/tests.xml",
+      "test": "Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: \\\"parties.search-parties\\\")",
+      "elapsed_seconds": 61.546
+    },
+    {
+      "entry": "20b9538c7ad64cdd81adad9f7c986db3/vectors/0a609e875b4248f6b805724d911bb531/parties.update-party/tests.xml",
+      "test": "Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: \\\"parties.update-party\\\")",
+      "elapsed_seconds": 61.547
+    },
+    {
+      "entry": "20b9538c7ad64cdd81adad9f7c986db3/vectors/0a609e875b4248f6b805724d911bb531/tenants.change-user-role/tests.xml",
+      "test": "Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: \\\"tenants.change-user-role\\\")",
+      "elapsed_seconds": 61.755
+    },
+    {
+      "entry": "20b9538c7ad64cdd81adad9f7c986db3/vectors/0a609e875b4248f6b805724d911bb531/tenants.get-tenant-audit/tests.xml",
+      "test": "Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: \\\"tenants.get-tenant-audit\\\")",
+      "elapsed_seconds": 61.339
+    }
+  ],
+  "conclusion": "All five hosted failures exceeded 61 seconds, supporting expiry of the real 60-second authority deadline rather than a premature per-request timeout.",
+  "disposition": "Prototype Core test files and Compile link removed. Integration helper, deadline, persisted authority assertion, discovery, dependencies and completed release closure unchanged. Await fresh task-source hosted qualification."
+}

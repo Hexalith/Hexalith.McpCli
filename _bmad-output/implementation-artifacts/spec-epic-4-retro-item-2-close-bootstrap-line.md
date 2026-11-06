@@ -2,7 +2,7 @@
 title: 'Close the bootstrap release line (Epic 4 retrospective F2)'
 type: 'bugfix'
 created: '2026-11-06'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '9b44fe2026efa4b9234dd6a5c53e068b752a1837'
@@ -58,8 +58,9 @@ context:
 - [x] `scripts/recover-bootstrap-release.py`, `scripts/release-publish.sh`, `scripts/release-preflight.sh`: make historical recovery verification-only and reject absent packages; ordinary publisher/preflight must always enforce public-tool closure, including when recovery environment variables are set.
 - [x] `scripts/tests/test_bootstrap_release.py`: cover the matrix with independent tool/Abstractions feed fixtures, exact diagnostics/channels, zero effects and guard-removal checks.
 - [x] `README.md`, new `docs/release/bootstrap-history.md`, `docs/release/canonical-scope-upgrade.md`, `docs/release/operator-setup-checklist.md`, AD-17: document closure and separately approved history with evidence; replace the checklist's stale marker/ancestry-only bootstrap-recovery claim.
-- [ ] Retrospective and `sprint-status.yaml`: append F2 resolution; complete only item 2 when satisfied.
-- [ ] Inspect HEAD/diffs before committing task files; fetch/check divergence before pushing; require green hosted CI.
+- [x] Investigate the proposed `AdministratorAuthorityBootstrap` premature-request-timeout prerequisite before changing it. The real 250 ms HttpClient timeout prototype passed against the unchanged helper, and all five failed hosted tests took 61.339–61.755 seconds: the hypothesis is disproved. The effective Client 4.1.0 already wraps ordinary send-time request timeouts as Gateway 503, which the helper polls. Remove only the prototype Core tests/Compile link; preserve the existing helper, 60-second deadline, caller cancellation, persisted administrator proof, exact integration discovery and dependencies. Await fresh task-source hosted results instead of adding a speculative catch.
+- [x] Retrospective and `sprint-status.yaml`: append F2 resolution; complete only item 2 when satisfied.
+- [x] Inspect HEAD/diffs before committing task files; fetch/check divergence before pushing; require green hosted CI.
 
 **Acceptance Criteria:**
 
@@ -124,3 +125,15 @@ Review completed 2026-11-06: all three layers returned; every patch entry above 
 | Missing package | `test_recovery_refuses_absent_package_even_when_tool_is_public` |
 
 The existing main run `42221463909` at the baseline failed five administrator-readiness checks with HTTP 503; 16 vectors and smoke passed. [Observed baseline failure](evidence/epic-4-retro-item-2-bootstrap/baseline-hosted-failure.json) is separate from this release-code validation. Fresh task-source hosted qualification is still required.
+
+Hosted prerequisite investigation: the proposed premature-request-timeout hypothesis was **disproved**. A real 250 ms HttpClient timeout followed by a missing-administrator document and the expected persisted administrator passed against the unchanged helper (one test, 1.406 seconds). The effective restored Gateway Client 4.1.0 translates ordinary send-time TaskCanceledException into Gateway 503 while the caller token is active; the existing helper already polls those failures. The five baseline failures lasted 61.339–61.755 seconds, supporting expiry of the actual 60-second authority deadline rather than early abort. No red regression was established, so no catch fix was applied. The two prototype Core test files and Compile link were removed; the helper, deadline, caller cancellation, persisted proof, exact integration discovery and completed bootstrap closure remain unchanged. [Hypothesis evidence](evidence/epic-4-retro-item-2-bootstrap/administrator-timeout/hypothesis-evaluation.json) retains commands, prototype and baseline durations. Fresh task-source hosted qualification remains the next gate.
+
+Hosted attempt 1 at `078fd22bbbe591d6b912fa6e33967b174b61379a` passed all non-live jobs, 19 live vectors and smoke; two vectors failed after an upstream BootstrapGlobalAdmin rejection (Tenants /process HTTP 500). [Exact observations](evidence/epic-4-retro-item-2-bootstrap/hosted-bootstrap-rejections.json) separate the proven rejection from the unproven startup-readiness lead. The pre-existing upstream issue is recorded once under this spec in `deferred-work.md`; no package, dependency, deadline or authority assertion is changed. The full unchanged Aspire job is rerunning as run 42230625514 attempt 2. Item 2 remains in-progress pending qualification.
+
+## Completion — 2026-11-06
+
+The guards and separately approved historical decisions are complete. Committed source `078fd22bbbe591d6b912fa6e33967b174b61379a` passed [CI 42230625514, attempt 2](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42230625514/attempts/2), with all 21 approved live vectors and independent smoke accepted, plus every required non-live job and step. [Hosted qualification](evidence/epic-4-retro-item-2-bootstrap/hosted-qualified-078fd22.json) binds that source, required executed checks, Commitlint 42230625465, Bootstrap package 42230624140 and the authenticated live-artifact digest. Local verification remains 170 release Python tests, 4 selector tests, workflow lint, shell syntax and 2 CI workflow tests.
+
+Only retrospective action item 2 is completed. The rejected retrospective verdict and Epic 5 are unchanged. One pre-existing upstream bootstrap rejection is deferred with evidence; the complete unchanged Aspire job passed on a fresh runner. No package publication, tag mutation, dependency update, timeout increase or assertion relaxation occurred. The earlier timeout hypothesis was disproved and its exploratory files/link were removed.
+
+This completion-record commit will receive its own normal hosted push checks; the final report will name the final main run after it is green.

@@ -1,0 +1,11 @@
+namespace Hexalith.McpCli.Core.Tests;
+
+/// <summary>Exercises authority polling through the Gateway client without a network connection.</summary>
+/// <param name="respond">The response behavior and request cancellation observation.</param>
+internal sealed class AdministratorAuthorityBootstrapHandler(
+    Func<HttpRequestMessage, CancellationToken, Task<HttpResponseMessage>> respond) : HttpMessageHandler
+{
+    /// <inheritdoc/>
+    protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        => respond(request, cancellationToken);
+}

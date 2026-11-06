@@ -1,0 +1,23 @@
+{
+  "source_sha": "078fd22bbbe591d6b912fa6e33967b174b61379a",
+  "run_id": 42230625514,
+  "run_attempt": 1,
+  "artifact_id": 13512257856,
+  "result": "failed",
+  "vectors_passed": 19,
+  "vectors_failed": 2,
+  "smoke": "passed",
+  "failures": [
+    {
+      "operation": "parties.reactivate-party",
+      "elapsed_seconds": 61.845,
+      "diagnostic": "System.TimeoutException : Bootstrap authority did not converge in 60 seconds. Privileged query HTTP 503.\n---- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n-------- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n------------ System.IO.IOException : Unable to read data from the transport connection: Operation canceled.\n---------------- System.Net.Sockets.SocketException : Operation canceled"
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "elapsed_seconds": 60.841,
+      "diagnostic": "System.TimeoutException : Bootstrap authority did not converge in 60 seconds. Privileged query HTTP 503.\n---- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n-------- System.Threading.Tasks.TaskCanceledException : The operation was canceled.\n------------ System.IO.IOException : Unable to read data from the transport connection: Operation canceled.\n---------------- System.Net.Sockets.SocketException : Operation canceled"
+    }
+  ],
+  "next_action": "Rerun the full unchanged Aspire job on a fresh runner; no test, deadline, gate or dependency relaxation."
+}

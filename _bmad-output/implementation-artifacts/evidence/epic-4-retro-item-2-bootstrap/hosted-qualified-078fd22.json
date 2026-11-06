@@ -1,0 +1,245 @@
+{
+  "schema": "mcpcli-bootstrap-hosted-qualification/v1",
+  "source_sha": "078fd22bbbe591d6b912fa6e33967b174b61379a",
+  "ci": {
+    "run_id": 42230625514,
+    "run_attempt": 2,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42230625514",
+    "status": "completed",
+    "conclusion": "success",
+    "required_jobs": [
+      {
+        "name": "release-automation",
+        "status": "completed",
+        "conclusion": "success",
+        "required_steps": [
+          {
+            "name": "Verify pinned release automation and refusal guards",
+            "conclusion": "success"
+          },
+          {
+            "name": "Verify detached-source semantic-release version selection",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "ci / build-and-test",
+        "status": "completed",
+        "conclusion": "success",
+        "required_steps": [
+          {
+            "name": "Unit tests (Tier 1, Microsoft.Testing.Platform)",
+            "conclusion": "success"
+          },
+          {
+            "name": "Fail on blocking test failures",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "ci / aspire-tests",
+        "status": "completed",
+        "conclusion": "success",
+        "required_steps": [
+          {
+            "name": "Prepare Aspire tier",
+            "conclusion": "success"
+          },
+          {
+            "name": "Run Aspire hook",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "conformance-vector-contract",
+        "status": "completed",
+        "conclusion": "success",
+        "required_steps": [
+          {
+            "name": "Pack and validate the shared vector contract without a Head or Gateway",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "conformance-vector-loopback",
+        "status": "completed",
+        "conclusion": "success",
+        "required_steps": [
+          {
+            "name": "Run packaged Contracts through CLI and MCP against reset Gateway replay",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "enrolled-module-conformance",
+        "status": "completed",
+        "conclusion": "success",
+        "required_steps": [
+          {
+            "name": "Restore and build exact production catalog",
+            "conclusion": "success"
+          },
+          {
+            "name": "Benchmark first v1 Catalog construction in a fresh process",
+            "conclusion": "success"
+          },
+          {
+            "name": "Validate approved artifacts, complete vectors and both heads",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "name": "topology-vector-discovery",
+        "status": "completed",
+        "conclusion": "success",
+        "required_steps": [
+          {
+            "name": "Build and discover every live vector plus the independent smoke without starting source services",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "commitlint": {
+    "run_id": 42230625465,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42230625465",
+    "conclusion": "success",
+    "jobs": [
+      "commitlint / commitlint"
+    ]
+  },
+  "bootstrap": {
+    "run_id": 42230624140,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42230624140",
+    "conclusion": "success"
+  },
+  "live": {
+    "artifact_id": 13517682393,
+    "artifact_digest": "sha256:474acf4d731cc09a09878dd4e11389e9d17fc87984b434d228accf2eb317ec5c",
+    "fullLiveAccepted": true,
+    "smoke": "passed",
+    "lane": {
+      "runId": "947603aba9a74ea1a7835e775499c5b4",
+      "result": "passed",
+      "fullLiveAccepted": true,
+      "vectors": [
+        {
+          "operation": "parties.create-party",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "parties.deactivate-party",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "parties.get-party",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "parties.list-parties",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "parties.reactivate-party",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "parties.search-parties",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "parties.update-party",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.add-user-to-tenant",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.change-user-role",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.create-tenant",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.disable-tenant",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.enable-tenant",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.get-tenant-audit",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.get-tenant-users",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.get-tenant",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.get-user-tenants",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.list-tenants",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.remove-tenant-configuration",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.remove-user-from-tenant",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.set-tenant-configuration",
+          "result": "passed",
+          "exitCode": 0
+        },
+        {
+          "operation": "tenants.update-tenant",
+          "result": "passed",
+          "exitCode": 0
+        }
+      ]
+    },
+    "vectors_passed": 21
+  },
+  "prior_failure": "Attempt 1 rejected two upstream bootstraps. Entire unchanged Aspire job reran on a fresh runner; no gate, timeout, dependency or source relaxation. Issue retained in deferred-work.md.",
+  "publication_performed": false,
+  "tag_mutation_performed": false
+}

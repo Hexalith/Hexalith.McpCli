@@ -1,0 +1,53 @@
+{
+  "schema": "mcpcli-live-bootstrap-rejection-observation/v1",
+  "run_id": 42230625514,
+  "run_attempt": 1,
+  "source_sha": "078fd22bbbe591d6b912fa6e33967b174b61379a",
+  "artifact_id": 13512257856,
+  "artifact_zip_sha256": "f807edc5e1acc418ab41d2bf522bf0e9e8ad73f112eaea34e3630ca01d922abc",
+  "observations": [
+    {
+      "operation": "parties.reactivate-party",
+      "entry": "23a5f4c3a5d14edf93b1c5c2434ce151/runtime-diagnostics/20261106T143301Z-edd30cf7/command.stdout.txt",
+      "excerpts": [
+        {
+          "line": 1728,
+          "text": "      273: 2026-11-06T14:33:20.3130000Z {\"EventId\":101,\"LogLevel\":\"Information\",\"Category\":\"System.Net.Http.HttpClient.domain-service-invocation.ClientHandler\",\"Message\":\"Received HTTP response headers after 127.6449ms - 500\",\"State\":{\"ElapsedMilliseconds\":127.6449,\"StatusCode\":500,\"{OriginalFormat}\":\"Received HTTP response headers after {ElapsedMilliseconds}ms - {StatusCode}\"}}"
+        },
+        {
+          "line": 1756,
+          "text": "      287: 2026-11-06T14:33:20.3420000Z {\"EventId\":2004,\"LogLevel\":\"Information\",\"Category\":\"Hexalith.EventStore.Server.Actors.AggregateActor\",\"Message\":\"Command completed summary: CorrelationId=01M6RMECKWM7ABFT0M8HF4YS5K, CausationId=01M6RMECKKZX9S1K9MBBKZW5WN, TenantId=system, Domain=global-administrators, AggregateId=global-administrators, CommandType=BootstrapGlobalAdmin, Status=Rejected, DurationMs=334.1412, Stage=CommandCompleted\",\"State\":{\"Message\":\"DurationMs=334.1412,Status=Rejected,CommandType=BootstrapGlobalAdmin,AggregateId=global-administrators,Domain=global-administrators,TenantId=system,CausationId=01M6RMECKKZX9S1K9MBBKZW5WN,CorrelationId=01M6RMECKWM7ABFT0M8HF4YS5K,{OriginalFormat}=Command completed summary: CorrelationId={CorrelationId}, CausationId={CausationId}, TenantId={TenantId}, Domain={Domain}, AggregateId={AggregateId}, CommandType={CommandType}, Status={Status}, DurationMs={DurationMs}, Stage=CommandCompleted\",\"DurationMs\":334.1412,\"Status\":\"Rejected\",\"CommandType\":\"BootstrapGlobalAdmin\",\"AggregateId\":\"global-administrators\",\"Domain\":\"global-administrators\",\"TenantId\":\"system\",\"CausationId\":\"01M6RMECKKZX9S1K9MBBKZW5WN\",\"CorrelationId\":\"01M6RMECKWM7ABFT0M8HF4YS5K\",\"{OriginalFormat}\":\"Command completed summary: CorrelationId={CorrelationId}, CausationId={CausationId}, TenantId={TenantId}, Domain={Domain}, AggregateId={AggregateId}, CommandType={CommandType}, Status={Status}, DurationMs={DurationMs}, Stage=CommandCompleted\"}}"
+        },
+        {
+          "line": 1946,
+          "text": "      135: 2026-11-06T14:33:20.6450000Z {\"EventId\":2003,\"LogLevel\":\"Warning\",\"Category\":\"Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\",\"Message\":\"Bootstrap unexpected response: StatusCode=500, ResponseKind=problem-internal-error, ResponseCode=none, ValidationField=none. Verify command status and projected membership before explicit operator recovery\",\"State\":{\"Message\":\"ValidationField=none,ResponseCode=none,ResponseKind=problem-internal-error,StatusCode=500,{OriginalFormat}=Bootstrap unexpected response: StatusCode={StatusCode}, ResponseKind={ResponseKind}, ResponseCode={ResponseCode}, ValidationField={ValidationField}. Verify command status and projected membership before explicit operator recovery\",\"ValidationField\":\"none\",\"ResponseCode\":\"none\",\"ResponseKind\":\"problem-internal-error\",\"StatusCode\":500,\"{OriginalFormat}\":\"Bootstrap unexpected response: StatusCode={StatusCode}, ResponseKind={ResponseKind}, ResponseCode={ResponseCode}, ValidationField={ValidationField}. Verify command status and projected membership before explicit operator recovery\"}}"
+        }
+      ]
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "entry": "23a5f4c3a5d14edf93b1c5c2434ce151/runtime-diagnostics/20261106T143712Z-a97305bc/command.stdout.txt",
+      "excerpts": [
+        {
+          "line": 1746,
+          "text": "      285: 2026-11-06T14:37:31.6080000Z {\"EventId\":101,\"LogLevel\":\"Information\",\"Category\":\"System.Net.Http.HttpClient.domain-service-invocation.ClientHandler\",\"Message\":\"Received HTTP response headers after 144.2955ms - 500\",\"State\":{\"ElapsedMilliseconds\":144.2955,\"StatusCode\":500,\"{OriginalFormat}\":\"Received HTTP response headers after {ElapsedMilliseconds}ms - {StatusCode}\"}}"
+        },
+        {
+          "line": 1774,
+          "text": "      299: 2026-11-06T14:37:31.6380000Z {\"EventId\":2004,\"LogLevel\":\"Information\",\"Category\":\"Hexalith.EventStore.Server.Actors.AggregateActor\",\"Message\":\"Command completed summary: CorrelationId=01M6RMP2ERVBKD97XWYKWBQF2T, CausationId=01M6RMP2EPX0XRPQ73V8Y42877, TenantId=system, Domain=global-administrators, AggregateId=global-administrators, CommandType=BootstrapGlobalAdmin, Status=Rejected, DurationMs=389.5888, Stage=CommandCompleted\",\"State\":{\"Message\":\"DurationMs=389.5888,Status=Rejected,CommandType=BootstrapGlobalAdmin,AggregateId=global-administrators,Domain=global-administrators,TenantId=system,CausationId=01M6RMP2EPX0XRPQ73V8Y42877,CorrelationId=01M6RMP2ERVBKD97XWYKWBQF2T,{OriginalFormat}=Command completed summary: CorrelationId={CorrelationId}, CausationId={CausationId}, TenantId={TenantId}, Domain={Domain}, AggregateId={AggregateId}, CommandType={CommandType}, Status={Status}, DurationMs={DurationMs}, Stage=CommandCompleted\",\"DurationMs\":389.5888,\"Status\":\"Rejected\",\"CommandType\":\"BootstrapGlobalAdmin\",\"AggregateId\":\"global-administrators\",\"Domain\":\"global-administrators\",\"TenantId\":\"system\",\"CausationId\":\"01M6RMP2EPX0XRPQ73V8Y42877\",\"CorrelationId\":\"01M6RMP2ERVBKD97XWYKWBQF2T\",\"{OriginalFormat}\":\"Command completed summary: CorrelationId={CorrelationId}, CausationId={CausationId}, TenantId={TenantId}, Domain={Domain}, AggregateId={AggregateId}, CommandType={CommandType}, Status={Status}, DurationMs={DurationMs}, Stage=CommandCompleted\"}}"
+        },
+        {
+          "line": 1860,
+          "text": "      123: 2026-11-06T14:37:31.9370000Z {\"EventId\":2003,\"LogLevel\":\"Warning\",\"Category\":\"Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\",\"Message\":\"Bootstrap unexpected response: StatusCode=500, ResponseKind=problem-internal-error, ResponseCode=none, ValidationField=none. Verify command status and projected membership before explicit operator recovery\",\"State\":{\"Message\":\"ValidationField=none,ResponseCode=none,ResponseKind=problem-internal-error,StatusCode=500,{OriginalFormat}=Bootstrap unexpected response: StatusCode={StatusCode}, ResponseKind={ResponseKind}, ResponseCode={ResponseCode}, ValidationField={ValidationField}. Verify command status and projected membership before explicit operator recovery\",\"ValidationField\":\"none\",\"ResponseCode\":\"none\",\"ResponseKind\":\"problem-internal-error\",\"StatusCode\":500,\"{OriginalFormat}\":\"Bootstrap unexpected response: StatusCode={StatusCode}, ResponseKind={ResponseKind}, ResponseCode={ResponseCode}, ValidationField={ValidationField}. Verify command status and projected membership before explicit operator recovery\"}}"
+        }
+      ]
+    }
+  ],
+  "upstream_source": {
+    "Tenants": "8e20524574901d71ad5f4876804c64c3c6c87b88",
+    "EventStore": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+  },
+  "verified_outcome": "BootstrapGlobalAdmin was rejected after tenants /process returned HTTP 500; startup bootstrap did not dispatch again, and persisted authority remained unavailable for the 60-second gate.",
+  "unresolved": "The upstream invoker discarded the HTTP 500 response body. Timing near first healthy app-channel state supports a readiness lead but does not prove the precise 500 cause.",
+  "constraint": "An upstream fix and approved published cohort update require separate work; no module source, dependencies, deadlines or persisted-state assertions are changed here."
+}

@@ -1,0 +1,80 @@
+using System.Net;
+using System.Text.Json;
+
+using Hexalith.McpCli.Integration.Tests;
+
+namespace Hexalith.McpCli.Core.Tests;
+
+/// <summary>Protects request-timeout polling and caller cancellation at the persisted authority barrier.</summary>
+public sealed class AdministratorAuthorityBootstrapTests
+{
+    private const string AdministratorId = "mcpcli-live-admin";
+
+    /// <summary>A short request timeout keeps polling, and only the expected persisted administrator releases the barrier.</summary>
+    [Fact]
+    public async Task RequestTimeoutKeepsPollingUntilPersistedAdministratorAppears()
+    {
+        int calls = 0;
+        using var handler = new AdministratorAuthorityBootstrapHandler(async (request, cancellationToken) =>
+        {
+            Assert.Equal(HttpMethod.Post, request.Method);
+            Assert.Equal("/api/v1/queries", request.RequestUri!.AbsolutePath);
+            using JsonDocument body = JsonDocument.Parse(await request.Content!.ReadAsStringAsync(cancellationToken).ConfigureAwait(false));
+            Assert.Equal("platform:global-administrators", body.RootElement.GetProperty("tenant").GetString());
+            Assert.Equal("global-administrators", body.RootElement.GetProperty("aggregateId").GetString());
+            if (++calls == 1)
+                await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken).ConfigureAwait(false);
+            return Response(calls == 2 ? "another-administrator" : AdministratorId);
+        });
+        using var http = new HttpClient(handler)
+        {
+            BaseAddress = new Uri("http://127.0.0.1:1234/"),
+            Timeout = TimeSpan.FromMilliseconds(250),
+        };
+
+        await AdministratorAuthorityBootstrap.RequireAsync(http, AdministratorId, TestContext.Current.CancellationToken)
+            .WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken);
+
+        Assert.Equal(3, calls);
+        Assert.Equal(TimeSpan.FromSeconds(60), AdministratorAuthorityBootstrap.RequestTimeout);
+    }
+
+    /// <summary>Caller cancellation after a request timeout still escapes immediately and prevents another poll.</summary>
+    [Fact]
+    public async Task CallerCancellationAfterRequestTimeoutStopsPolling()
+    {
+        int calls = 0;
+        using var caller = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        using var handler = new AdministratorAuthorityBootstrapHandler(async (_, cancellationToken) =>
+        {
+            if (++calls == 1)
+                await Task.Delay(Timeout.InfiniteTimeSpan, cancellationToken).ConfigureAwait(false);
+            caller.Cancel();
+            cancellationToken.ThrowIfCancellationRequested();
+            return Response(AdministratorId);
+        });
+        using var http = new HttpClient(handler)
+        {
+            BaseAddress = new Uri("http://127.0.0.1:1234/"),
+            Timeout = TimeSpan.FromMilliseconds(250),
+        };
+
+        await Assert.ThrowsAnyAsync<OperationCanceledException>(() =>
+            AdministratorAuthorityBootstrap.RequireAsync(http, AdministratorId, caller.Token)
+                .WaitAsync(TimeSpan.FromSeconds(10), TestContext.Current.CancellationToken));
+
+        Assert.True(caller.IsCancellationRequested);
+        Assert.Equal(2, calls);
+    }
+
+    private static HttpResponseMessage Response(string userId)
+        => new(HttpStatusCode.OK)
+        {
+            Content = new StringContent(JsonSerializer.Serialize(new
+            {
+                correlationId = "01ARZ3NDEKTSV4RRFFQ69G5FAV",
+                success = true,
+                payload = new { items = new[] { new { userId } } },
+            })),
+        };
+}
