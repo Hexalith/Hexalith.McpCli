@@ -54,7 +54,7 @@ The independent [Bootstrap package workflow](https://github.com/Hexalith/Hexalit
 [`Hexalith.McpCli.Abstractions`](https://www.nuget.org/packages/Hexalith.McpCli.Abstractions) has no consumer-visible package dependencies. A standalone .NET 10 Contracts consumer pins one verified published version with a single exact reference, for example:
 
 ```xml
-<PackageReference Include="Hexalith.McpCli.Abstractions" Version="[1.0.0]" />
+<PackageReference Include="Hexalith.McpCli.Abstractions" Version="[2.0.1]" />
 ```
 
 Hexalith Contracts repositories use central package management. Their Builds catalog supplies `HexalithMcpCliVersion` and `<PackageVersion Include="Hexalith.McpCli.Abstractions" Version="$(HexalithMcpCliVersion)" />`; the Contracts project uses a versionless reference:
@@ -321,7 +321,7 @@ claude mcp get hexalith
 
 If .NET is installed in your home directory (for example `~/.dotnet`), add `--env DOTNET_ROOT=/absolute/path/.dotnet` before `--`. Open Claude Code in that project, inspect `/mcp`, and approve the intended server/tools. Local scope is private to that project. Record the actual initialization/connection result and expand the returned tool calls in the conversation.
 
-For [Claude Desktop](https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers), open **Settings → Developer → Edit Config** and merge this entry into `mcpServers` in `claude_desktop_config.json`, preserving other servers. Fully quit and reopen Desktop, then inspect its connector/tool list and server logs. Desktop's Code tab is a separate harness and does not count as the Desktop conversation session. Story 4.17's accepted Desktop session ran in the Cowork tab, where the tools appear as `mcp__remote-devices__hexalith__*`.
+For [Claude Desktop](https://modelcontextprotocol.io/docs/2026-07-28/develop/connect-local-servers), open **Settings → Developer → Edit Config** and merge this entry into `mcpServers` in `claude_desktop_config.json`, preserving other servers. Fully quit and reopen Desktop, then inspect its connector/tool list and server logs. Desktop's Code tab is a separate harness and does not count as the Desktop conversation session. In the Cowork tab, the tools appear as `mcp__remote-devices__hexalith__*`.
 
 ```json
 {
@@ -335,7 +335,7 @@ For [Claude Desktop](https://modelcontextprotocol.io/docs/2026-07-28/develop/con
 }
 ```
 
-For [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers), record **Help → About**, the Copilot extension version and the selected agent harness. Run **MCP: Add Server → Command (stdio)** with the absolute launch command. The current **Global → Copilot Global** destination uses `~/.copilot/mcp-config.json` (or `$COPILOT_HOME/mcp-config.json`) and the same `mcpServers` entry above. Its portable format does not support `inputs` or `envFile`. For the **Local** harness, open the user-profile `mcp.json` or a private test workspace's `.vscode/mcp.json` and merge the following `servers` entry. Select that harness in Chat, trust/start `hexalith`, enable its tools and inspect the actual tool output. Do not commit a personal workspace configuration. With a Windows `wsl.exe` registration (see Windows/WSL below), run the Copilot CLI harness from a local VS Code window, not a WSL remote window. In a WSL remote window that harness runs inside Linux, receives the Windows definition and cannot start `wsl.exe` (`No such file or directory` in its runtime log). Story 4.17's passing VS Code session used the Copilot CLI harness in a local window, reading the user-profile `mcp.json` entry.
+For [VS Code](https://code.visualstudio.com/docs/agent-customization/mcp-servers), record **Help → About**, the Copilot extension version and the selected agent harness. Run **MCP: Add Server → Command (stdio)** with the absolute launch command. The current **Global → Copilot Global** destination uses `~/.copilot/mcp-config.json` (or `$COPILOT_HOME/mcp-config.json`) and the same `mcpServers` entry above. Its portable format does not support `inputs` or `envFile`. For the **Local** harness, open the user-profile `mcp.json` or a private test workspace's `.vscode/mcp.json` and merge the following `servers` entry. Select that harness in Chat, trust/start `hexalith`, enable its tools and inspect the actual tool output. Do not commit a personal workspace configuration. With a Windows `wsl.exe` registration (see Windows/WSL below), run the Copilot CLI harness from a local VS Code window, not a WSL remote window. In a WSL remote window that harness runs inside Linux, receives the Windows definition and cannot start `wsl.exe` (`No such file or directory` in its runtime log). In a local window, the Copilot CLI harness reads the user-profile `mcp.json` entry.
 
 ```json
 {

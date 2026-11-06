@@ -17,7 +17,7 @@ The [three-service preparation status](../../_bmad-output/implementation-artifac
 
 ## Story 4.17 acceptance
 
-Story [4.17](../../_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md) has all required rows evidenced, with the timing exception below accepted by the user. Use the [README operator setup](../../README.md#operator-setup-with-an-accepted-staged-tool) as the operator's instructions. This document is the observer's procedure and evidence index. Offline protocol smoke cannot satisfy a client row.
+Story [4.17](../../_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md) has all required rows evidenced, with the timing exception below accepted by the user. Its operators followed the [README operator setup](../../README.md#operator-setup-with-an-accepted-staged-tool) at the README revision recorded for each session below; the current README targets later packages and cannot replay these sessions. This document is the observer's procedure and evidence index. Offline protocol smoke cannot satisfy a client row.
 
 The approved staged tool is 1.2.0 from `32fb5dbf75216adaf21551bcfa36439741c41e01`; recheck both package hashes and prepared/accepted receipt hashes against the hash table above, and the clean-source binding against the accepted staging packet, before installing that historical pair. Story 4.17 prohibited publishing that pair or enabling paired publication; current publication follows the [operator checklist](operator-setup-checklist.md).
 
