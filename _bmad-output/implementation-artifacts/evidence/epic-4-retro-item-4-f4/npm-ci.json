@@ -1,0 +1,10 @@
+{
+  "command": [
+    "npm",
+    "ci"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "started_utc": "2026-11-06T22:32:30.329437+00:00",
+  "exit_code": 0,
+  "elapsed_seconds": 6.51
+}

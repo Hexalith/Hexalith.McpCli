@@ -1,0 +1,22 @@
+{
+  "initial_head": "27ad6b75689bbcf56f424ab40c786f7e9c3fc5bb",
+  "preserved_remote_commit": "a133f603790375ff51a03f3d0844c7218da36ced",
+  "remote_integration": "Fast-forward only; no overlapping F4 files. Clean root Builds, Platform and Tenants checkouts aligned to the inherited gitlinks without nested initialization.",
+  "review_layers": {
+    "blind_hunter": {
+      "finding_floor": 4,
+      "findings": 4,
+      "patched": [
+        "F4-B1",
+        "F4-B4"
+      ],
+      "rejected_low": [
+        "F4-B2",
+        "F4-B3"
+      ]
+    },
+    "edge_case_hunter": [],
+    "verification_gap_reviewer": []
+  },
+  "gate_sha256": "902ea825054c4915ca3f6756e22d48bd9d8c6ba4cfe8997db9f36466ed94839c"
+}

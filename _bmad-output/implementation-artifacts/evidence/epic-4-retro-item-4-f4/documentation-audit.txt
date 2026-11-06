@@ -1,0 +1,32 @@
+F4 documentation audit — 2026-11-06
+
+Read tools/inventory-coverage/v1/README.md against InventoryCoverageGate.cs
+and src/Hexalith.McpCli.Core/Catalog/CatalogProvider.cs.
+
+The README now distinguishes internal Get(false), which filters error diagnostics,
+from strict Get(true), which rejects any diagnostic. It requires usable non-strict
+public discovery for warnings-only acceptance and explicitly retains the production
+enrollment test's strict public discovery policy. Existing warnings-only inventory
+and strict provider tests pass; no policy or gate was changed.
+
+Every InventoryCoverageGate finding begins with the file label and one of:
+$: / $.<path>:
+row <ID>:
+row <ID> ($.legacyRows[<index>].id):
+target <ID>:
+target <ID> ($.targets[<index>].id):
+catalog:
+catalog <TypeName>:
+public:
+public operation <name>:
+internal operation <name>:
+All ten forms are now listed with their emitted meanings. Public errors, absent
+documents, mismatched modules and duplicate public entries are included. The two
+examples are expressly from separate checks and are shown in ordinal order.
+
+Exact comment/comma diagnostics match executed tests: invalid JSON at line 0,
+byte 19. Complete collection equality excludes unexpected findings.
+
+The existing Core.Tests CI lane runs InventoryCoverageTests, unchanged. actionlint,
+CiWorkflowTests (both workflow inputs and Builds gitlink pins), and agent entry
+point synchronization passed after incorporating the remote maintenance commit.

@@ -71,7 +71,7 @@ development_status:
   4-2-approve-the-folders-migration-inventory: done
   4-3-approve-projects-and-frontcomposer-migration-inventories: done
   4-4-approve-chatbot-and-memories-migration-inventories: done
-  4-5-gate-module-coverage-against-the-approved-inventory: done
+  4-5-gate-module-coverage-against-the-approved-inventory: done # F4: seven second-pass patches closed; 100 inventory tests, six guard mutations and full verification pass.
   4-6-publish-the-bootstrap-decoration-package: done
   4-7-enforce-the-production-dependency-boundary: done
   4-8-make-tenants-gateway-ready-for-v1: done
@@ -261,7 +261,7 @@ action_items:
     action: "Apply the seven open Story 4.5 second-pass review patches with exact-diagnostic
       tests, then reconcile the spec status with sprint status (F4)."
     owner: "McpCli maintainer"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-06.md"
   - id: "epic-4-retro-item-5-harden-ci-redaction"
     epic: 4

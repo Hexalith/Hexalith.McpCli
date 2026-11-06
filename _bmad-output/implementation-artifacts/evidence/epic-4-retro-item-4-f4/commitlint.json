@@ -1,0 +1,11 @@
+{
+  "command": [
+    "bash",
+    "-c",
+    "msg=$(cat /tmp/mcpcli-f4-commit-message.txt); printf '%s\\n' \"$msg\" | npx --no -- commitlint --verbose"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "started_utc": "2026-11-06T22:42:01.389820+00:00",
+  "exit_code": 0,
+  "elapsed_seconds": 0.366
+}

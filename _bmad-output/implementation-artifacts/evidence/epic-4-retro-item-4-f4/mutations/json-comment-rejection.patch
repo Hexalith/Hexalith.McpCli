@@ -1,0 +1,11 @@
+--- InventoryCoverageGate.cs.original
++++ InventoryCoverageGate.cs.mutated
+@@ -49,7 +49,7 @@
+         JsonDocument parsed;
+         try
+         {
+-            parsed = JsonDocument.Parse(json);
++            parsed = JsonDocument.Parse(json, new JsonDocumentOptions { CommentHandling = JsonCommentHandling.Skip });
+         }
+         catch (JsonException exception)
+         {

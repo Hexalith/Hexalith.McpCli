@@ -1,0 +1,11 @@
+--- InventoryCoverageGate.cs.original
++++ InventoryCoverageGate.cs.mutated
+@@ -162,7 +162,7 @@
+             Unique(ids, target.Id, identityLocation, "id", add);
+             Unique(names, target.Name, location, "name", add);
+             Unique(types, target.ContractType, location, "contractType", add);
+-            if (!Regex.IsMatch(target.Name, "\\A" + Regex.Escape(inventory.Module) + "\\." + canonicalPart + "\\z", RegexOptions.CultureInvariant))
++            if (!Regex.IsMatch(target.Name, Regex.Escape(inventory.Module) + "\\." + canonicalPart + "\\z", RegexOptions.CultureInvariant))
+             {
+                 add(location, $"name must be canonical in module '{inventory.Module}'; actual '{target.Name}'.");
+             }

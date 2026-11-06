@@ -2,7 +2,7 @@
 title: '4.5 Gate module coverage against the approved inventory'
 type: 'feature'
 created: '2026-10-17'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 baseline_commit: '9681ef84c9d06adfac4f0bb1ea3e398953f6666e'
 review_loop_iteration: 0
@@ -98,6 +98,22 @@ remain undelivered. Never invent approvals or substitute vector coverage.
 
 ## Implementation Notes
 
+- 2026-11-06 F4 resumption: close only the seven unchecked second-pass
+  `[Review][Patch]` items below in `InventoryCoverageTests.cs` and the inventory
+  README. Preserve the existing implementation and historical evidence. Add full
+  diagnostic collection assertions for the independently unavailable internal
+  Catalog, directory read denial, unknown exclusion disposition, target-name
+  start anchor, JSON comments and trailing commas. Verify each guard by removing
+  or narrowing it temporarily and retaining the resulting failed-test evidence;
+  restore every mutation. Document warnings-only acceptance versus strict mode
+  and every diagnostic prefix emitted by `InventoryCoverageGate`. Do not change
+  production code, dependencies, other retrospective actions or Epic 5. Leave
+  review checkboxes and status reconciliation to the parent after implementation,
+  independent review and verification. The parent will retain evidence, close
+  retrospective item 4, validate the exact commit message, commit, push and wait
+  for green exact-SHA hosted CI on main. Resumption HEAD:
+  `27ad6b75689bbcf56f424ab40c786f7e9c3fc5bb`; retain the original baseline above.
+
 - 2026-10-17: The requesting user answered "approve and stop" at Checkpoint 1.
   Approved intent is frozen; this spec and sprint tracking are `ready-for-dev`.
   Implementation has not started. Resume with `bmad-build 4.5` in a fresh session.
@@ -139,6 +155,23 @@ or deferral is required.
 | B07 | Invalid UTF-8 silently becomes replacement text | medium | patch | The parent reran the review probe: a rationale containing raw byte `0xFF` passes `CheckFile` because `File.ReadAllText` replaces invalid UTF-8. Strict decoding and an exact diagnostic must reject this demonstrated malformed-file state. |
 | B08 | Privacy assertions confuse payload property names with metadata | low | patch | `CheckPublicFields` recursively rejects schema property keys and example keys containing `contractType`/`clrType`, including legitimate payload names. Skip payload schema/example bodies when asserting metadata field names, retain the full CLR-name assertion, and test valid payload fields plus metadata leakage. |
 | B09 | Canonical regex ending anchors lack regression protection | low | patch | Existing uppercase/wrong-module cases do not require end anchoring; the newline is rejected by `Text` earlier. Add ordinary valid-prefix-plus-invalid-suffix cases for module and target names. |
+
+### F4 resumption review (2026-11-06)
+
+The three independent Build review layers examined this resumption's diff from
+`27ad6b75689bbcf56f424ab40c786f7e9c3fc5bb`, rather than unrelated later work
+since the original story baseline. Edge Case Hunter returned `[]`; Verification
+Gap Reviewer found no gaps. Blind Hunter returned the four findings below.
+
+| ID | Finding | Verdict | Route | Evidence |
+| --- | --- | --- | --- | --- |
+| F4-B1 | Warnings-only acceptance must account for the supplied public Catalog policy | low | patch | `Compare` uses `Get(false)` internally but also rejects public errors; `EnrolledModuleCoverageTests` supplies a strict `CatalogService`. Qualify warnings-only acceptance and explicitly retain production enrollment's strict policy in the README. |
+| F4-B2 | All JSON syntax tests use line zero | low | reject | The missing later-line case predates this resumption; `Check` forwards `JsonException.LineNumber` unchanged. The requested comment/comma cases now assert their complete findings and both parser-acceptance mutations fail. A new line-number mutation case adds coverage beyond these F4 guards without demonstrating incorrect output. |
+| F4-B3 | JSON syntax tests do not distinguish byte from character offsets | low | reject | `Check` directly forwards `JsonException.BytePositionInLine`; no changed formatter or incorrect offset was demonstrated. A new multibyte-input case would cover a pre-existing, separate formatter mutation rather than one of the seven F4 patches. |
+| F4-B4 | Diagnostic examples look like one unsorted collection although validation short-circuits comparison | low | patch | The two examples predate F4, but the diagnostics documentation is being edited here. Label them as separate checks and place the lines in ordinal order. |
+
+Both documentation patches were applied and inspected. No additional deferral
+was created; the original story decisions and deferred findings remain intact.
 
 ## Verification
 
@@ -262,13 +295,13 @@ Code review 2026-10-17 (range `9681ef8..20c8893`, full mode; Blind Hunter, Edge 
 
 Code review 2026-10-17 (range `9681ef8..c457561`, full mode; Blind Hunter, Edge Case Hunter, Verification Gap, Acceptance Auditor).
 
-- [ ] [Review][Patch] Early-return guard `access.Catalog is null` has no protecting test — removing the clause leaves every test green, but a usable public document with an unavailable internal Catalog then throws `NullReferenceException` at `access.Catalog.Modules`. Add a mocked-`ICatalog` case with an empty provider and assert the single `catalog: internal Catalog error 'catalog_empty'` finding. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:269]
-- [ ] [Review][Patch] `UnauthorizedAccessException` branch of `CheckFile` has no protecting test — only `FileNotFoundException` is exercised; probe confirms `File.ReadAllBytes(AppContext.BaseDirectory)` throws `UnauthorizedAccessException` on Linux. Assert the exact `cannot read inventory (UnauthorizedAccessException).` finding for a directory path. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:33]
-- [ ] [Review][Patch] `exclude` with an unknown disposition is untested — narrowing the exclude clause to `Disposition == "replace"` keeps every test green, so a typo such as `withdrawn/exclude` would pass as an approved exclusion. Add `RejectsInvalidScope("exclude-unknown")` on L04. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:184]
-- [ ] [Review][Patch] Target-name `\A` anchor is untested — dropping it keeps every test green and accepts `other.sample.withdrawn-operation` on an excluded target. Add `RejectsInvalidScope("target-prefix")` on T04. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:165]
-- [ ] [Review][Patch] Comment and trailing-comma test asserts only a message prefix — the project rule requires the full diagnostic; probe confirms both inputs yield `line 0, byte 19`. Assert the exact finding. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageTests.cs:382]
-- [ ] [Review][Patch] README implies the gate matches strict mode — `CatalogProvider.Get(true)` rejects any diagnostic, warnings included, while the gate accepts warnings-only Catalogs; state that difference explicitly. [tools/inventory-coverage/v1/README.md:67]
-- [ ] [Review][Patch] README diagnostics prefixes omit emitted forms — `catalog:` (internal access error), `public:` (ListOperations error, missing document, module mismatch) and `public operation <name>` duplicate entries are not listed. [tools/inventory-coverage/v1/README.md:72]
+- [x] [Review][Patch] Early-return guard `access.Catalog is null` has no protecting test — removing the clause leaves every test green, but a usable public document with an unavailable internal Catalog then throws `NullReferenceException` at `access.Catalog.Modules`. Add a mocked-`ICatalog` case with an empty provider and assert the single `catalog: internal Catalog error 'catalog_empty'` finding. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:269]
+- [x] [Review][Patch] `UnauthorizedAccessException` branch of `CheckFile` has no protecting test — only `FileNotFoundException` is exercised; probe confirms `File.ReadAllBytes(AppContext.BaseDirectory)` throws `UnauthorizedAccessException` on Linux. Assert the exact `cannot read inventory (UnauthorizedAccessException).` finding for a directory path. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:33]
+- [x] [Review][Patch] `exclude` with an unknown disposition is untested — narrowing the exclude clause to `Disposition == "replace"` keeps every test green, so a typo such as `withdrawn/exclude` would pass as an approved exclusion. Add `RejectsInvalidScope("exclude-unknown")` on L04. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:184]
+- [x] [Review][Patch] Target-name `\A` anchor is untested — dropping it keeps every test green and accepts `other.sample.withdrawn-operation` on an excluded target. Add `RejectsInvalidScope("target-prefix")` on T04. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs:165]
+- [x] [Review][Patch] Comment and trailing-comma test asserts only a message prefix — the project rule requires the full diagnostic; probe confirms both inputs yield `line 0, byte 19`. Assert the exact finding. [tests/Hexalith.McpCli.Core.Tests/InventoryCoverageTests.cs:382]
+- [x] [Review][Patch] README implies the gate matches strict mode — `CatalogProvider.Get(true)` rejects any diagnostic, warnings included, while the gate accepts warnings-only Catalogs; state that difference explicitly. [tools/inventory-coverage/v1/README.md:67]
+- [x] [Review][Patch] README diagnostics prefixes omit emitted forms — `catalog:` (internal access error), `public:` (ListOperations error, missing document, module mismatch) and `public operation <name>` duplicate entries are not listed. [tools/inventory-coverage/v1/README.md:72]
 - [x] [Review][Defer] Nothing ties enrolled modules to a required inventory [tools/inventory-coverage/v1/README.md:92] — deferred: no module is enrolled yet (`tools/dependency-policy.json` `modules: {}`); the enrolling story must decide how an enrolled module without an approved inventory fails CI and how that stays configuration-only.
 
 #### Rejected (second pass)
@@ -288,3 +321,39 @@ Code review 2026-10-17 (range `9681ef8..c457561`, full mode; Blind Hunter, Edge 
 - Privacy skip covers schema keyword level (Acceptance Auditor) — low; hypothetical metadata key, full CLR names still caught, precise skip adds schema-walking branches.
 - Spec verification record stale after `c457561` (Acceptance Auditor) — fix edits the spec under review.
 - JSON v1 omits security class and replacement/gap fields (Acceptance Auditor) — false; the frozen field list omits them and Markdown inventories remain authoritative.
+
+### F4 closure verification (2026-11-06)
+
+All seven second-pass patches are implemented and reviewed. The complete
+[retained evidence](evidence/epic-4-retro-item-4-f4/README.md) includes exact
+commands, exit codes, complete output, six guard mutations and restoration hashes.
+The resumption preserves original baseline `9681ef84c9d06adfac4f0bb1ea3e398953f6666e`.
+Remote maintenance commit `a133f603790375ff51a03f3d0844c7218da36ced` arrived
+independently, touched no F4 files and was retained by fast-forward. Final local
+checks ran on that combined tree. This F4 change introduces no dependency update.
+
+| Check | Final result |
+| --- | --- |
+| Fresh solution restore and Release build with `-warnaserror` | Passed; zero warnings/errors. |
+| `InventoryCoverageTests`, built assembly invoked from `/tmp` | 100 passed; zero skips/failures. |
+| Six individually removed/narrowed guards | All mutation builds passed; each targeted run failed exactly the intended case; restored gate SHA-256 matches its original bytes. |
+| Full Core project | 752 passed; three Windows ACL skips and one benchmark child-only skip. |
+| Abstractions / Analyzers / MCP / CLI / Manifest | 20 / 19 / 92 / 489 / 362 passed; CLI has two Windows-only skips. Manifest ran after another fresh restore. |
+| Documentation audit / `actionlint` / `test_ci.CiWorkflowTests` / agent instruction sync | Passed; both workflow contract tests executed. |
+| Three independent review layers | Two documentation corrections applied; no unresolved findings or new deferrals. |
+| Exact commit message validation after `npm ci` | Pinned `npx --no -- commitlint --verbose` passed with zero problems/warnings. |
+
+Every original matrix row has executed coverage in the 100-case focused suite:
+matching scope, mismatch, duplicate, invalid scope, invalid document and hidden
+declaration. New exact collection assertions prevent secondary failures from
+masking the null guard and exclude any unexpected findings. Both JSON syntax
+cases report exactly `inventory.json:$: invalid JSON at line 0, byte 19.`
+The warnings-only and strict production policies remain distinct and unchanged;
+the README documents every emitted diagnostic prefix and independent examples.
+
+The spec and sprint story are now both `done`; retrospective item 4 is `done`.
+The original deferred findings, all other retrospective actions, Epic 5 and the
+retrospective verdict are unchanged. No production, sample-contract or gateway
+wire behavior changed, so additional local conformance runs are not required.
+Hosted exact-source CI is checked after the authorized commit and push; its run
+identifier and final source SHA are reported in the completion response.

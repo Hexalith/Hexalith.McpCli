@@ -1,0 +1,7 @@
+{
+  "file": "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/InventoryCoverageGate.cs",
+  "original_sha256": "902ea825054c4915ca3f6756e22d48bd9d8c6ba4cfe8997db9f36466ed94839c",
+  "restored_sha256": "902ea825054c4915ca3f6756e22d48bd9d8c6ba4cfe8997db9f36466ed94839c",
+  "byte_identical": true,
+  "note": "Null-forgiving operator in the internal-catalog mutation only suppresses the nullable compiler warning to allow runtime guard verification."
+}

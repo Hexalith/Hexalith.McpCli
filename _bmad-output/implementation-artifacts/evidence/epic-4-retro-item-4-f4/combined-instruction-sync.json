@@ -1,0 +1,10 @@
+{
+  "command": [
+    "bash",
+    "scripts/check-agent-instructions-sync.sh"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "started_utc": "2026-11-06T22:35:33.445489+00:00",
+  "exit_code": 0,
+  "elapsed_seconds": 0.006
+}

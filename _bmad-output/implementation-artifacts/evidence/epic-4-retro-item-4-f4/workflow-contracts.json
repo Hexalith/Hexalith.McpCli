@@ -1,0 +1,16 @@
+{
+  "command": [
+    "env",
+    "PYTHONDONTWRITEBYTECODE=1",
+    "PYTHONPATH=tools/live-topology",
+    "python3",
+    "-m",
+    "unittest",
+    "-v",
+    "test_ci.CiWorkflowTests"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "started_utc": "2026-11-06T22:32:30.213922+00:00",
+  "exit_code": 0,
+  "elapsed_seconds": 0.06
+}

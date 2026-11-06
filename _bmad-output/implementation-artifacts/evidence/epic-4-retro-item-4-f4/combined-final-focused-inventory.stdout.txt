@@ -1,0 +1,208 @@
+The '-verbose' switch has been deprecated in favor of '-reporter verbose' and will be removed in the next major version
+
+  Discovering: Hexalith.McpCli.Core.Tests
+  Discovered:  Hexalith.McpCli.Core.Tests
+  Starting:    Hexalith.McpCli.Core.Tests
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "formatVersion") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "formatVersion") [FINISHED] Time: 0.018s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "targets") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "targets") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "legacyRows") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "legacyRows") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "legacyRows.0.targetIds") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "legacyRows.0.targetIds") [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "legacyRows.0.approval") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingContainersAndVersion(path: "legacyRows.0.approval") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPresentExclusionByNameWithDifferentClrType [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPresentExclusionByNameWithDifferentClrType [FINISHED] Time: 0.093s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsContractTypeFieldsInPublicMetadata(json: "{\"contractType\":\"leak\"}") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsContractTypeFieldsInPublicMetadata(json: "{\"contractType\":\"leak\"}") [FINISHED] Time: 0.013s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsContractTypeFieldsInPublicMetadata(json: "{\"modules\":[{\"contractType\":\"leak\"}]}") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsContractTypeFieldsInPublicMetadata(json: "{\"modules\":[{\"contractType\":\"leak\"}]}") [FINISHED] Time: 0.03s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsContractTypeFieldsInPublicMetadata(json: "{\"operations\":[{\"clrType\":\"leak\"}]}") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsContractTypeFieldsInPublicMetadata(json: "{\"operations\":[{\"clrType\":\"leak\"}]}") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsContractTypeFieldsInPublicMetadata(json: "{\"envelope\":{\"schema\":{\"contractType\":\"leak\"}}}") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsContractTypeFieldsInPublicMetadata(json: "{\"envelope\":{\"schema\":{\"contractType\":\"leak\"}}}") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.ApprovedSampleMatchesUnfilteredBuiltCatalog [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.ApprovedSampleMatchesUnfilteredBuiltCatalog [FINISHED] Time: 0.005s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMappedFullClrNamesInsidePayloadBodies(body: "schema") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMappedFullClrNamesInsidePayloadBodies(body: "schema") [FINISHED] Time: 0.009s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMappedFullClrNamesInsidePayloadBodies(body: "example") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMappedFullClrNamesInsidePayloadBodies(body: "example") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsCatalogErrorsDespiteMatchingSurvivors [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsCatalogErrorsDespiteMatchingSurvivors [FINISHED] Time: 0.004s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[]", path: "root", expected: "$: expected object.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[]", path: "root", expected: "$: expected object.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "2", path: "formatVersion", expected: "$.formatVersion: expected supported integer format"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "2", path: "formatVersion", expected: "$.formatVersion: expected supported integer format"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "\"1\"", path: "formatVersion", expected: "$.formatVersion: expected supported integer format"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "\"1\"", path: "formatVersion", expected: "$.formatVersion: expected supported integer format"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "1.5", path: "formatVersion", expected: "$.formatVersion: expected supported integer format"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "1.5", path: "formatVersion", expected: "$.formatVersion: expected supported integer format"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "{}", path: "targets", expected: "$.targets: expected nonempty array.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "{}", path: "targets", expected: "$.targets: expected nonempty array.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[]", path: "targets", expected: "$.targets: expected nonempty array.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[]", path: "targets", expected: "$.targets: expected nonempty array.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "null", path: "legacyRows", expected: "$.legacyRows: expected nonempty array.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "null", path: "legacyRows", expected: "$.legacyRows: expected nonempty array.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[]", path: "legacyRows", expected: "$.legacyRows: expected nonempty array.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[]", path: "legacyRows", expected: "$.legacyRows: expected nonempty array.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "false", path: "legacyRows.0.targetIds", expected: "$.legacyRows[0].targetIds: expected nonempty array"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "false", path: "legacyRows.0.targetIds", expected: "$.legacyRows[0].targetIds: expected nonempty array"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[]", path: "legacyRows.0.targetIds", expected: "$.legacyRows[0].targetIds: expected nonempty array"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[]", path: "legacyRows.0.targetIds", expected: "$.legacyRows[0].targetIds: expected nonempty array"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[null]", path: "legacyRows.0.targetIds", expected: "$.legacyRows[0].targetIds[0]: expected nonempty st"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "[null]", path: "legacyRows.0.targetIds", expected: "$.legacyRows[0].targetIds[0]: expected nonempty st"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "null", path: "legacyRows.0.approval", expected: "$.legacyRows[0].approval: expected object.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedDocumentShapes(json: "null", path: "legacyRows.0.approval", expected: "$.legacyRows[0].approval: expected object.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPresentExclusion(sameName: True) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPresentExclusion(sameName: True) [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPresentExclusion(sameName: False) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPresentExclusion(sameName: False) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.PublicDocumentsDoNotExposeContractTypes [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.PublicDocumentsDoNotExposeContractTypes [FINISHED] Time: 0.006s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnreadableAndInvalidJson [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnreadableAndInvalidJson [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInventoryDirectoryReadDenied [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInventoryDirectoryReadDenied [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnavailableInternalCatalogDespiteUsablePublicDocument [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnavailableInternalCatalogDespiteUsablePublicDocument [FINISHED] Time: 0.038s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.AcceptsMatchingCatalogWithWarningsOnly [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.AcceptsMatchingCatalogWithWarningsOnly [FINISHED] Time: 0.007s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "missing") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "missing") [FINISHED] Time: 0.002s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "extra") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "extra") [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "duplicate") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "duplicate") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "ordinal") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "ordinal") [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "module") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "module") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "error") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "error") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "no-document") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsPublicDiscoveryMismatch(mutation: "no-document") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsNonObjectEntries(field: "targets") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsNonObjectEntries(field: "targets") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsNonObjectEntries(field: "legacyRows") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsNonObjectEntries(field: "legacyRows") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas(json: "{\"formatVersion\":1 // comment\n}") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas(json: "{\"formatVersion\":1 // comment\n}") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas(json: "{\"formatVersion\":1,}") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas(json: "{\"formatVersion\":1,}") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.ReusesCheckerForAnotherOwnerApprovedModule [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.ReusesCheckerForAnotherOwnerApprovedModule [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsCatalogErrorsFromOtherModules [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsCatalogErrorsFromOtherModules [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.ChecksInternalNamesIndependently [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.ChecksInternalNamesIndependently [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsSyntheticReleaseApproval [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsSyntheticReleaseApproval [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsLoneSurrogateEscapes(json: "{\"formatVersion\":1,\"module\":\"\\ud800\"}", expected: "$.module: invalid Unicode string.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsLoneSurrogateEscapes(json: "{\"formatVersion\":1,\"module\":\"\\ud800\"}", expected: "$.module: invalid Unicode string.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsLoneSurrogateEscapes(json: "{\"formatVersion\":1,\"targets\":[\"\\udc00\"]}", expected: "$.targets[0]: invalid Unicode string.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsLoneSurrogateEscapes(json: "{\"formatVersion\":1,\"targets\":[\"\\udc00\"]}", expected: "$.targets[0]: invalid Unicode string.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsLoneSurrogateEscapes(json: "{\"\\ud800\":1}", expected: "$: invalid Unicode property name.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsLoneSurrogateEscapes(json: "{\"\\ud800\":1}", expected: "$: invalid Unicode property name.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "row-id", expected: "row L01 ($.legacyRows[1].id): duplicate id 'L01'; "···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "row-id", expected: "row L01 ($.legacyRows[1].id): duplicate id 'L01'; "···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-canonical", expected: "target T01: name must be canonical in module 'samp"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-canonical", expected: "target T01: name must be canonical in module 'samp"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-prefix", expected: "target T04: name must be canonical in module 'samp"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-prefix", expected: "target T04: name must be canonical in module 'samp"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-suffix", expected: "target T01: name must be canonical in module 'samp"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-suffix", expected: "target T01: name must be canonical in module 'samp"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "module-suffix", expected: "$.module: expected canonical module name; actual '"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "module-suffix", expected: "$.module: expected canonical module name; actual '"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "module", expected: "$.module: expected canonical module name; actual '"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "module", expected: "$.module: expected canonical module name; actual '"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "purpose", expected: "$.purpose: expected 'fixture' or 'release'.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "purpose", expected: "$.purpose: expected 'fixture' or 'release'.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "unknown-authority", expected: "row L01: approval.authority must be 'owning-mainta"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "unknown-authority", expected: "row L01: approval.authority must be 'owning-mainta"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "authority", expected: "row L01: approval.authority must be 'owning-mainta"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "authority", expected: "row L01: approval.authority must be 'owning-mainta"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "excluded-approval", expected: "row L04: approval.status must be 'approved'; actua"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "excluded-approval", expected: "row L04: approval.status must be 'approved'; actua"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "approval", expected: "row L01: approval.status must be 'approved'; actua"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "approval", expected: "row L01: approval.status must be 'approved'; actua"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "coverage", expected: "row L01: coverage must be 'include' or 'exclude'; "···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "coverage", expected: "row L01: coverage must be 'include' or 'exclude'; "···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "disposition", expected: "row L01: invalid disposition/coverage 'unknown/inc"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "disposition", expected: "row L01: invalid disposition/coverage 'unknown/inc"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "exclude-unknown", expected: "row L04: invalid disposition/coverage 'withdrawn/e"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "exclude-unknown", expected: "row L04: invalid disposition/coverage 'withdrawn/e"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "exclude-replace", expected: "row L04: invalid disposition/coverage 'replace/exc"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "exclude-replace", expected: "row L04: invalid disposition/coverage 'replace/exc"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "include-defer", expected: "row L01: invalid disposition/coverage 'defer/inclu"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "include-defer", expected: "row L01: invalid disposition/coverage 'defer/inclu"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "include-withdraw", expected: "row L01: invalid disposition/coverage 'withdraw/in"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "include-withdraw", expected: "row L01: invalid disposition/coverage 'withdraw/in"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "conflict", expected: "target T02: conflicting coverage in rows L02, L03.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "conflict", expected: "target T02: conflicting coverage in rows L02, L03.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "orphan", expected: "target T05: orphan target has no legacy row refere"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "orphan", expected: "target T05: orphan target has no legacy row refere"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "dangling", expected: "row L01: dangling target reference 'T99'.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "dangling", expected: "row L01: dangling target reference 'T99'.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "reference", expected: "row L01: duplicate target reference 'T01'.") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "reference", expected: "row L01: duplicate target reference 'T01'.") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-type", expected: "target T02: duplicate contractType 'Hexalith.McpCl"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-type", expected: "target T02: duplicate contractType 'Hexalith.McpCl"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-name", expected: "target T02: duplicate name 'sample.create-item'; f"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-name", expected: "target T02: duplicate name 'sample.create-item'; f"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-id", expected: "target T01 ($.targets[1].id): duplicate id 'T01'; "···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-id", expected: "target T01 ($.targets[1].id): duplicate id 'T01'; "···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-module", expected: "target T01: name must be canonical in module 'samp"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-module", expected: "target T01: name must be canonical in module 'samp"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-newline", expected: "$.targets[0].name: expected nonempty string withou"···) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-newline", expected: "$.targets[0].name: expected nonempty string withou"···) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "module") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "module") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "purpose") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "purpose") [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "targets.0.id") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "targets.0.id") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "targets.0.name") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "targets.0.name") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "targets.0.contractType") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "targets.0.contractType") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.id") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.id") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.legacyOperation") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.legacyOperation") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.disposition") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.disposition") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.coverage") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.coverage") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.rationale") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.rationale") [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.approval.status") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.approval.status") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.approval.authority") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.approval.authority") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.approval.reference") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMissingOrMalformedStringFields(path: "legacyRows.0.approval.reference") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.AcceptsContractTypeNamesInPayloadFieldKeys [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.AcceptsContractTypeNamesInPayloadFieldKeys [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.AcceptsValidUtf8WithByteOrderMark [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.AcceptsValidUtf8WithByteOrderMark [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedUtf8Encoding(withBom: False) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedUtf8Encoding(withBom: False) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedUtf8Encoding(withBom: True) [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsMalformedUtf8Encoding(withBom: True) [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsWrongClrTypeDespiteMatchingPublicNames [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsWrongClrTypeDespiteMatchingPublicNames [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnknownAndDuplicateKeys(path: "") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnknownAndDuplicateKeys(path: "") [FINISHED] Time: 0.001s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnknownAndDuplicateKeys(path: "targets.0") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnknownAndDuplicateKeys(path: "targets.0") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnknownAndDuplicateKeys(path: "legacyRows.0") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnknownAndDuplicateKeys(path: "legacyRows.0") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnknownAndDuplicateKeys(path: "legacyRows.0.approval") [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnknownAndDuplicateKeys(path: "legacyRows.0.approval") [FINISHED] Time: 0s
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsEmptyCatalog [STARTING]
+    Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsEmptyCatalog [FINISHED] Time: 0s
+  Finished:    Hexalith.McpCli.Core.Tests (ID = 'ae0c0868f52edca51b7ef4dbc399fbca06f32fd0f28fc32fc8408f57f3b1d1f3')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Core.Tests  Total: 100, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 0.384s

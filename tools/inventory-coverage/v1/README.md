@@ -65,21 +65,40 @@ name must appear once publicly and once internally with exactly the recorded
 `OperationDescriptor.ContractType.FullName`. Excluded names/types must be absent;
 extra public or internal operations fail. Any Catalog declaration error fails,
 even if the surviving operations match, and the check is global: a declaration
-error in any enrolled module fails every module's gate, as strict mode does for the
-Catalog. Catalog warnings alone are not errors.
+error in any enrolled module fails every module's gate. Internal comparison uses
+`CatalogProvider.Get(false)` and rejects only error diagnostics. A warnings-only
+Catalog can pass when the caller supplies usable non-strict public discovery.
+A strict `CatalogService` uses `CatalogProvider.Get(true)` and rejects any
+diagnostic, including warnings, so its public discovery failure also fails the
+gate. `EnrolledModuleCoverageTests` retains this strict public discovery policy
+for the production manifest.
 The test also checks that public module, list and describe JSON expose neither
 contract-type fields nor mapped full CLR names.
 
-Findings are ordinally sorted strings, prefixed by the supplied file path/label
-and a JSON path, stable `row ID`, `target ID`, Catalog diagnostic type, or unexpected
-operation name. Messages identify the field, conflicting identity, or expected and
-actual value. Invalid documents fail before comparison; malformed JSON reports
+Findings are ordinally sorted strings. Every finding begins with the supplied
+file path/label followed by `:` and one of these location prefixes:
+
+| Location prefix | Finding |
+| --- | --- |
+| `$:` or a JSON path such as `$.targets[0].name:` | File reading, UTF-8, JSON syntax, Unicode, document shape, field or canonical module validation. |
+| `row <ID>:` | Scope decisions, approval fields, or duplicate/dangling target references. |
+| `row <ID> ($.legacyRows[<index>].id):` | A duplicate row ID, with the first source location in the message. |
+| `target <ID>:` | Canonical names, duplicate names/types, orphan/conflicting references, or public/internal coverage mismatches. |
+| `target <ID> ($.targets[<index>].id):` | A duplicate target ID, with the first source location in the message. |
+| `catalog:` | An unavailable internal Catalog, including its access error code and message. |
+| `catalog <TypeName>:` | A Catalog declaration error, including its diagnostic category and message. |
+| `public:` | A `ListOperations` error, missing public document, or mismatched document module. |
+| `public operation <name>:` | A duplicate public entry or unexpected public operation. |
+| `internal operation <name>:` | An unexpected internal operation, including its CLR identity. |
+
+Messages identify the field, conflicting identity, or expected and actual value.
+Invalid documents fail before comparison; malformed JSON reports
 zero-based line and byte positions. Empty findings mean the recorded scope matches.
-For example:
+Examples from separate checks, shown in ordinal order:
 
 ```text
-inventory.json:target T01: public name expected 'sample.create-item' once; actual missing.
 inventory.json:row L01: dangling target reference 'T99'.
+inventory.json:target T01: public name expected 'sample.create-item' once; actual missing.
 ```
 
 ## Future owner handoff

@@ -1,0 +1,334 @@
+[
+  {
+    "name": "baseline-build",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/baseline-build.log",
+    "test_execution_summary": []
+  },
+  {
+    "name": "baseline-inventory-tests-from-tmp",
+    "argv": [
+      "dotnet",
+      "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-class",
+      "*InventoryCoverageTests",
+      "-verbose",
+      "-noLogo"
+    ],
+    "command": "dotnet /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -class '*InventoryCoverageTests' -verbose -noLogo",
+    "cwd": "/tmp",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/baseline-inventory-tests-from-tmp.log",
+    "test_execution_summary": [
+      "Hexalith.McpCli.Core.Tests  Total: 100, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 0.374s"
+    ]
+  },
+  {
+    "name": "internal-catalog-null-guard-build",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/internal-catalog-null-guard-build.log",
+    "test_execution_summary": []
+  },
+  {
+    "name": "internal-catalog-null-guard-tests",
+    "argv": [
+      "dotnet",
+      "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "*InventoryCoverageTests.RejectsUnavailableInternalCatalogDespiteUsablePublicDocument",
+      "-verbose",
+      "-noLogo"
+    ],
+    "command": "dotnet /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -method '*InventoryCoverageTests.RejectsUnavailableInternalCatalogDespiteUsablePublicDocument' -verbose -noLogo",
+    "cwd": "/tmp",
+    "exit_code": 1,
+    "expected": "test-failure",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/internal-catalog-null-guard-tests.log",
+    "test_execution_summary": [
+      "Hexalith.McpCli.Core.Tests  Total: 1, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.228s"
+    ],
+    "failing_test_cases": [
+      "Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnavailableInternalCatalogDespiteUsablePublicDocument [FAIL]"
+    ]
+  },
+  {
+    "name": "unauthorized-access-catch-build",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/unauthorized-access-catch-build.log",
+    "test_execution_summary": []
+  },
+  {
+    "name": "unauthorized-access-catch-tests",
+    "argv": [
+      "dotnet",
+      "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "*InventoryCoverageTests.RejectsInventoryDirectoryReadDenied",
+      "-verbose",
+      "-noLogo"
+    ],
+    "command": "dotnet /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -method '*InventoryCoverageTests.RejectsInventoryDirectoryReadDenied' -verbose -noLogo",
+    "cwd": "/tmp",
+    "exit_code": 1,
+    "expected": "test-failure",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/unauthorized-access-catch-tests.log",
+    "test_execution_summary": [
+      "Hexalith.McpCli.Core.Tests  Total: 1, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.110s"
+    ],
+    "failing_test_cases": [
+      "Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInventoryDirectoryReadDenied [FAIL]"
+    ]
+  },
+  {
+    "name": "unknown-exclusion-disposition-build",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/unknown-exclusion-disposition-build.log",
+    "test_execution_summary": []
+  },
+  {
+    "name": "unknown-exclusion-disposition-tests",
+    "argv": [
+      "dotnet",
+      "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "*InventoryCoverageTests.RejectsInvalidScope",
+      "-verbose",
+      "-noLogo"
+    ],
+    "command": "dotnet /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -method '*InventoryCoverageTests.RejectsInvalidScope' -verbose -noLogo",
+    "cwd": "/tmp",
+    "exit_code": 1,
+    "expected": "test-failure",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/unknown-exclusion-disposition-tests.log",
+    "test_execution_summary": [
+      "Hexalith.McpCli.Core.Tests  Total: 26, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.243s"
+    ],
+    "failing_test_cases": [
+      "Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: \"exclude-unknown\", expected: \"row L04: invalid disposition/coverage 'withdrawn/e\"\u00b7\u00b7\u00b7) [FAIL]"
+    ]
+  },
+  {
+    "name": "target-name-start-anchor-build",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/target-name-start-anchor-build.log",
+    "test_execution_summary": []
+  },
+  {
+    "name": "target-name-start-anchor-tests",
+    "argv": [
+      "dotnet",
+      "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "*InventoryCoverageTests.RejectsInvalidScope",
+      "-verbose",
+      "-noLogo"
+    ],
+    "command": "dotnet /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -method '*InventoryCoverageTests.RejectsInvalidScope' -verbose -noLogo",
+    "cwd": "/tmp",
+    "exit_code": 1,
+    "expected": "test-failure",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/target-name-start-anchor-tests.log",
+    "test_execution_summary": [
+      "Hexalith.McpCli.Core.Tests  Total: 26, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.234s"
+    ],
+    "failing_test_cases": [
+      "Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: \"target-prefix\", expected: \"target T04: name must be canonical in module 'samp\"\u00b7\u00b7\u00b7) [FAIL]"
+    ]
+  },
+  {
+    "name": "json-comment-rejection-build",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/json-comment-rejection-build.log",
+    "test_execution_summary": []
+  },
+  {
+    "name": "json-comment-rejection-tests",
+    "argv": [
+      "dotnet",
+      "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "*InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas",
+      "-verbose",
+      "-noLogo"
+    ],
+    "command": "dotnet /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -method '*InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas' -verbose -noLogo",
+    "cwd": "/tmp",
+    "exit_code": 1,
+    "expected": "test-failure",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/json-comment-rejection-tests.log",
+    "test_execution_summary": [
+      "Hexalith.McpCli.Core.Tests  Total: 2, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.128s"
+    ],
+    "failing_test_cases": [
+      "Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas(json: \"{\\\"formatVersion\\\":1 // comment\\n}\") [FAIL]"
+    ]
+  },
+  {
+    "name": "json-trailing-comma-rejection-build",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/json-trailing-comma-rejection-build.log",
+    "test_execution_summary": []
+  },
+  {
+    "name": "json-trailing-comma-rejection-tests",
+    "argv": [
+      "dotnet",
+      "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "*InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas",
+      "-verbose",
+      "-noLogo"
+    ],
+    "command": "dotnet /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -method '*InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas' -verbose -noLogo",
+    "cwd": "/tmp",
+    "exit_code": 1,
+    "expected": "test-failure",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/json-trailing-comma-rejection-tests.log",
+    "test_execution_summary": [
+      "Hexalith.McpCli.Core.Tests  Total: 2, Errors: 0, Failed: 1, Skipped: 0, Not Run: 0, Time: 0.130s"
+    ],
+    "failing_test_cases": [
+      "Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas(json: \"{\\\"formatVersion\\\":1,}\") [FAIL]"
+    ]
+  },
+  {
+    "name": "restored-final-build",
+    "argv": [
+      "dotnet",
+      "build",
+      "tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj",
+      "--no-restore",
+      "--configuration",
+      "Release",
+      "-warnaserror"
+    ],
+    "command": "dotnet build tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj --no-restore --configuration Release -warnaserror",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/restored-final-build.log",
+    "test_execution_summary": []
+  },
+  {
+    "name": "restored-final-inventory-tests-from-tmp",
+    "argv": [
+      "dotnet",
+      "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-class",
+      "*InventoryCoverageTests",
+      "-verbose",
+      "-noLogo"
+    ],
+    "command": "dotnet /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -class '*InventoryCoverageTests' -verbose -noLogo",
+    "cwd": "/tmp",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/restored-final-inventory-tests-from-tmp.log",
+    "test_execution_summary": [
+      "Hexalith.McpCli.Core.Tests  Total: 100, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 0.343s"
+    ]
+  },
+  {
+    "name": "review-readme-policy-check",
+    "command": "dotnet /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -method '*InventoryCoverageTests.AcceptsMatchingCatalogWithWarningsOnly' -method '*EnrolledModuleCoverageTests.EveryProductionModuleHasApprovedExactCoverageAndReviewedDescriptions' -verbose -noLogo",
+    "argv": [
+      "dotnet",
+      "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+      "-method",
+      "*InventoryCoverageTests.AcceptsMatchingCatalogWithWarningsOnly",
+      "-method",
+      "*EnrolledModuleCoverageTests.EveryProductionModuleHasApprovedExactCoverageAndReviewedDescriptions",
+      "-verbose",
+      "-noLogo"
+    ],
+    "cwd": "/tmp",
+    "exit_code": 0,
+    "expected": "pass",
+    "log": "/tmp/mcpcli-f4-inventory-coverage-20261106-bou0lw89/review-readme-policy-check.log"
+  }
+]

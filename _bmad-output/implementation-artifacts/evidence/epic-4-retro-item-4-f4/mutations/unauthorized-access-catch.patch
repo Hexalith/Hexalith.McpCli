@@ -1,0 +1,11 @@
+--- InventoryCoverageGate.cs.original
++++ InventoryCoverageGate.cs.mutated
+@@ -30,7 +30,7 @@
+         {
+             return [$"{path}:$: malformed UTF-8 encoding."];
+         }
+-        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
++        catch (Exception exception) when (exception is IOException)
+         {
+             return [$"{path}:$: cannot read inventory ({exception.GetType().Name})."];
+         }

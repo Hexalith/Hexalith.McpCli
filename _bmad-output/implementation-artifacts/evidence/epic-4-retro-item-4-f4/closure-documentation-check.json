@@ -1,0 +1,10 @@
+{
+  "command": [
+    "python3",
+    "/tmp/mcpcli-f4-closure-check.py"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "started_utc": "2026-11-06T22:42:01.134545+00:00",
+  "exit_code": 0,
+  "elapsed_seconds": 0.225
+}

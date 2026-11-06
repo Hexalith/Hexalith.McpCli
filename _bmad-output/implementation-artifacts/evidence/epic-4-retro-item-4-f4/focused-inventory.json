@@ -1,0 +1,14 @@
+{
+  "command": [
+    "dotnet",
+    "/home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Core.Tests.InventoryCoverageTests",
+    "-noLogo",
+    "-verbose"
+  ],
+  "cwd": "/tmp",
+  "started_utc": "2026-11-06T22:32:04.659897+00:00",
+  "exit_code": 0,
+  "elapsed_seconds": 0.531
+}

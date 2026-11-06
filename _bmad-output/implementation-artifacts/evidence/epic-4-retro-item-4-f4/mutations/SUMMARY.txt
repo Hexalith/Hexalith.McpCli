@@ -1,0 +1,14 @@
+F4 inventory coverage implementation verification
+
+All commands and working directories are preserved in commands.json.
+All six mutation builds passed; every targeted mutation produced exactly one failing case.
+InventoryCoverageGate.cs was restored byte-for-byte; see restoration.json.
+Final focused Release build passed, followed by 100 inventory cases passing from /tmp.
+
+Mutation failures:
+- internal-catalog-null-guard-tests: exit 1; Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsUnavailableInternalCatalogDespiteUsablePublicDocument [FAIL]
+- unauthorized-access-catch-tests: exit 1; Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInventoryDirectoryReadDenied [FAIL]
+- unknown-exclusion-disposition-tests: exit 1; Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "exclude-unknown", expected: "row L04: invalid disposition/coverage 'withdrawn/e"···) [FAIL]
+- target-name-start-anchor-tests: exit 1; Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsInvalidScope(mutation: "target-prefix", expected: "target T04: name must be canonical in module 'samp"···) [FAIL]
+- json-comment-rejection-tests: exit 1; Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas(json: "{\"formatVersion\":1 // comment\n}") [FAIL]
+- json-trailing-comma-rejection-tests: exit 1; Hexalith.McpCli.Core.Tests.InventoryCoverageTests.RejectsJsonCommentsAndTrailingCommas(json: "{\"formatVersion\":1,}") [FAIL]

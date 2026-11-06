@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/tmp/mcpcli-f4-closure-check.py", line 31, in <module>
+    item = next(item for item in before['action_items'] if item['id'] == 'epic-4-retro-item-4-finish-story-4-5')
+  File "/tmp/mcpcli-f4-closure-check.py", line 31, in <genexpr>
+    item = next(item for item in before['action_items'] if item['id'] == 'epic-4-retro-item-4-finish-story-4-5')
+                                                           ~~~~^^^^^^
+KeyError: 'id'

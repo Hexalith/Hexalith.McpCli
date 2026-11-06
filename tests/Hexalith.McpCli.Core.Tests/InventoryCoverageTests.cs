@@ -240,6 +240,7 @@ public sealed class InventoryCoverageTests
     [InlineData("include-withdraw", "row L01: invalid disposition/coverage 'withdraw/include'; include requires replace; exclude requires withdraw or defer.")]
     [InlineData("include-defer", "row L01: invalid disposition/coverage 'defer/include'; include requires replace; exclude requires withdraw or defer.")]
     [InlineData("exclude-replace", "row L04: invalid disposition/coverage 'replace/exclude'; include requires replace; exclude requires withdraw or defer.")]
+    [InlineData("exclude-unknown", "row L04: invalid disposition/coverage 'withdrawn/exclude'; include requires replace; exclude requires withdraw or defer.")]
     [InlineData("disposition", "row L01: invalid disposition/coverage 'unknown/include'; include requires replace; exclude requires withdraw or defer.")]
     [InlineData("coverage", "row L01: coverage must be 'include' or 'exclude'; actual 'unknown'.")]
     [InlineData("approval", "row L01: approval.status must be 'approved'; actual 'pending'.")]
@@ -250,6 +251,7 @@ public sealed class InventoryCoverageTests
     [InlineData("module", "$.module: expected canonical module name; actual 'Sample'.")]
     [InlineData("module-suffix", "$.module: expected canonical module name; actual 'sample!'.")]
     [InlineData("target-suffix", "target T01: name must be canonical in module 'sample'; actual 'sample.create-item!'.")]
+    [InlineData("target-prefix", "target T04: name must be canonical in module 'sample'; actual 'other.sample.withdrawn-operation'.")]
     [InlineData("target-canonical", "target T01: name must be canonical in module 'sample'; actual 'sample.Create-item'.")]
     [InlineData("target-module", "target T01: name must be canonical in module 'sample'; actual 'other.create-item'.")]
     [InlineData("target-newline", "$.targets[0].name: expected nonempty string without surrounding whitespace.")]
@@ -271,6 +273,7 @@ public sealed class InventoryCoverageTests
             case "include-withdraw": rows[0]!["disposition"] = "withdraw"; break;
             case "include-defer": rows[0]!["disposition"] = "defer"; break;
             case "exclude-replace": rows[3]!["disposition"] = "replace"; break;
+            case "exclude-unknown": rows[3]!["disposition"] = "withdrawn"; break;
             case "disposition": rows[0]!["disposition"] = "unknown"; break;
             case "coverage": rows[0]!["coverage"] = "unknown"; break;
             case "approval": rows[0]!["approval"]!["status"] = "pending"; break;
@@ -281,6 +284,7 @@ public sealed class InventoryCoverageTests
             case "module": inventory["module"] = "Sample"; break;
             case "module-suffix": inventory["module"] = "sample!"; break;
             case "target-suffix": targets[0]!["name"] = "sample.create-item!"; break;
+            case "target-prefix": targets[3]!["name"] = "other.sample.withdrawn-operation"; break;
             case "target-canonical": targets[0]!["name"] = "sample.Create-item"; break;
             case "target-module": targets[0]!["name"] = "other.create-item"; break;
             case "target-newline": targets[0]!["name"] = "sample.create-item\n"; break;
@@ -379,8 +383,8 @@ public sealed class InventoryCoverageTests
     [InlineData("{\"formatVersion\":1 // comment\n}")]
     [InlineData("{\"formatVersion\":1,}")]
     public void RejectsJsonCommentsAndTrailingCommas(string json)
-        => InventoryCoverageGate.Check(json, FileLabel, Service(Provider()), Provider()).ShouldHaveSingleItem()
-            .ShouldStartWith(FileLabel + ":$: invalid JSON at line ");
+        => InventoryCoverageGate.Check(json, FileLabel, Service(Provider()), Provider())
+            .ShouldBe(Diagnostics("$: invalid JSON at line 0, byte 19."));
 
     /// <summary>Required container and version fields cannot be omitted.</summary>
     /// <param name="path">The required field to remove.</param>
@@ -453,6 +457,17 @@ public sealed class InventoryCoverageTests
             .ShouldBe(new[] { absent + ":$: cannot read inventory (FileNotFoundException)." });
         InventoryCoverageGate.Check("{", FileLabel, Service(provider), provider)
             .ShouldBe(Diagnostics("$: invalid JSON at line 0, byte 1."));
+    }
+
+    /// <summary>A directory path reports read denial as an exact finding instead of throwing.</summary>
+    [Fact]
+    public void RejectsInventoryDirectoryReadDenied()
+    {
+        CatalogProvider provider = Provider();
+        string path = AppContext.BaseDirectory;
+
+        InventoryCoverageGate.CheckFile(path, Service(provider), provider)
+            .ShouldBe(new[] { path + ":$: cannot read inventory (UnauthorizedAccessException)." });
     }
 
     /// <summary>An invalid raw byte in otherwise valid rationale text fails strict UTF-8 decoding.</summary>
@@ -566,6 +581,20 @@ public sealed class InventoryCoverageTests
         Check(Inventory(), Service(provider), provider).ShouldBe(Diagnostics(
             "catalog: internal Catalog error 'catalog_empty': The Catalog exposes no valid Operations.",
             "public: ListOperations error 'catalog_empty': The Catalog exposes no valid Operations."));
+    }
+
+    /// <summary>A usable public document cannot hide an independently unavailable internal Catalog.</summary>
+    [Fact]
+    public void RejectsUnavailableInternalCatalogDespiteUsablePublicDocument()
+    {
+        OperationsDocument document = Service(Provider()).ListOperations("sample").Document.ShouldNotBeNull();
+        ICatalog catalog = Substitute.For<ICatalog>();
+        catalog.ListOperations("sample").Returns(new CatalogLookupResult<OperationsDocument>(document, null));
+        var provider = new CatalogProvider(() => [], new RecordingLogger<CatalogProvider>());
+
+        Check(Inventory(), catalog, provider).ShouldBe(Diagnostics(
+            "catalog: internal Catalog error 'catalog_empty': The Catalog exposes no valid Operations."));
+        catalog.Received(1).ListOperations("sample", null);
     }
 
     private static JsonObject SingleOperationInventory(string module)

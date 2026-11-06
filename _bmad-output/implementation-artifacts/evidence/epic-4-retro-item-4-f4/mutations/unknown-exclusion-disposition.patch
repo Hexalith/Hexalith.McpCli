@@ -1,0 +1,11 @@
+--- InventoryCoverageGate.cs.original
++++ InventoryCoverageGate.cs.mutated
+@@ -181,7 +181,7 @@
+                 add(location, $"coverage must be 'include' or 'exclude'; actual '{row.Coverage}'.");
+             }
+             else if ((row.Coverage == "include" && row.Disposition != "replace")
+-                || (row.Coverage == "exclude" && row.Disposition is not ("withdraw" or "defer")))
++                || (row.Coverage == "exclude" && row.Disposition == "replace"))
+             {
+                 add(location, $"invalid disposition/coverage '{row.Disposition}/{row.Coverage}'; include requires replace; exclude requires withdraw or defer.");
+             }
