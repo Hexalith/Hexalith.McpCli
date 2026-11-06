@@ -1,0 +1,56 @@
+{
+  "mutations": [
+    {
+      "name": "duplicate-operator-keys",
+      "test": "PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value",
+      "detected": true,
+      "failures": 4,
+      "errors": 0,
+      "mutation": {
+        "file": "scripts/verify-paired-publication.py",
+        "removed": "decision = json.loads(serialized, object_pairs_hook=unique_operator_keys)",
+        "replacement": "decision = json.loads(serialized)"
+      },
+      "log_sha256": "7c4cc1d55dfe1595df9a73e018422bec24a479dc4418144b24de7be8617ba7a2"
+    },
+    {
+      "name": "raw-operator-redaction",
+      "test": "PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value",
+      "detected": true,
+      "failures": 3,
+      "errors": 0,
+      "mutation": {
+        "file": "scripts/verify-paired-publication.py",
+        "removed": "        retained = redact_operator_text(decoded)",
+        "replacement": "        document = json.loads(decoded)\n        sanitized = redact_operator_values(document)\n        retained = json.dumps(sanitized) if sanitized != document else decoded"
+      },
+      "log_sha256": "53c30922ebdb2895fb13a461acfbf2f43bf7aa25476d132df23164a5b1951f51"
+    },
+    {
+      "name": "named-private-operator-values",
+      "test": "PublicationBoundaryTests.test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json",
+      "detected": true,
+      "failures": 24,
+      "errors": 0,
+      "mutation": {
+        "file": "scripts/verify-paired-publication.py",
+        "removed": "    return isinstance(key, str) and re.search(r'(?:SigningKey|PrivateKey)\\Z', key, re.I) is not None",
+        "replacement": "    return False"
+      },
+      "log_sha256": "879ab76fbae38e7cf83f3de776ec97ec3b1420afbd663b6ba38c8953dc7298fa"
+    },
+    {
+      "name": "api-key-environment",
+      "test": "CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text",
+      "detected": true,
+      "failures": 4,
+      "errors": 0,
+      "mutation": {
+        "file": "tools/live-topology/ci.py",
+        "removed": "|API_KEY",
+        "replacement": ""
+      },
+      "log_sha256": "fdbec1a7195c4dd771efd21290a5197a98a7fbd44701e99289e5b27e0f843857"
+    }
+  ]
+}

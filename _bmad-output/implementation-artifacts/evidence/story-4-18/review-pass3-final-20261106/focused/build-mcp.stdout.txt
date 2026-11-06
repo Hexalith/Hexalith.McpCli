@@ -1,0 +1,7 @@
+  Hexalith.McpCli.Mcp.Tests -> /home/administrator/projects/hexalith/mcpcli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.10

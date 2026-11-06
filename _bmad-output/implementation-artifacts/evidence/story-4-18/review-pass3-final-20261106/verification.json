@@ -1,0 +1,338 @@
+{
+  "schema": "mcpcli-story-4-18-parent-final-verification/v1",
+  "recorded_at_utc": "2026-11-06T00:09:37.322141+00:00",
+  "scope": "Local review corrections; historical public acceptance remains source-bound.",
+  "commands": [
+    {
+      "name": "restore",
+      "argv": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.168,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "release-build",
+      "argv": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 5.103,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "tests-abstractions",
+      "argv": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Abstractions.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.167,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "tests-analyzers",
+      "argv": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Analyzers.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 9.44,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "tests-core",
+      "argv": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 2.219,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "tests-manifest",
+      "argv": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 125.114,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "tests-cli",
+      "argv": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 14.553,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "tests-mcp",
+      "argv": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 1.869,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "release-python",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/tests",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 82.861,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "note": "Superseded for operator sanitization by release-python-final after the named-container correction."
+    },
+    {
+      "name": "topology-hooks",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tools/live-topology",
+        "-p",
+        "test_ci.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 441.335,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "selector",
+      "argv": [
+        "node",
+        "--test",
+        "scripts/tests/select-release-version.test.mjs"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 10.57,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "actionlint",
+      "argv": [
+        "actionlint",
+        ".github/workflows/release.yml",
+        ".github/workflows/ci.yml",
+        ".github/workflows/commitlint.yml"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.521,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "instruction-sync",
+      "argv": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.01,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.221,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "release-python-final",
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/tests",
+        "-p",
+        "test_*.py",
+        "-v"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 103.622,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    },
+    {
+      "name": "credential-guard-controls",
+      "argv": [
+        "python3",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-4-18/review-pass3-final-20261106/guard-controls.py"
+      ],
+      "exit_code": 0,
+      "elapsed_seconds": 0.216,
+      "source_before": "cadc4d1911df304964b3a54e79b8c138ecc51abd",
+      "source_after": "cadc4d1911df304964b3a54e79b8c138ecc51abd"
+    }
+  ],
+  "status": "passed",
+  "working_tree_sha256": {
+    "README.md": "3de566fc88e2615938fa2810710c8d9110ccc17aa6587d5ba0978f8544c46de3",
+    "_bmad-output/implementation-artifacts/deferred-work.md": "f72c8e1e4b19a346037a285ced927d5ec0fd3044c016e8b0602924f241660d7e",
+    "_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md": "0731d9a7bb8bb8a5bc04d6ef08d9a59c664124617163ac95c1947f1e0144af35",
+    "_bmad-output/implementation-artifacts/sprint-status.yaml": "7ecbf8773c4808498ab3dbf5074f7b7237898a04cb6c958feb9702322dcc2344",
+    "docs/release/operator-setup-checklist.md": "0cd21e95afc4ddd90233132e39ceaddc9c8e2aecfeb88691be533d677db3f3da",
+    "scripts/tests/test_paired_publication.py": "3ba382b8ca81573569e0e8d5af4cfe09ff27a59cfaf52a997384df7c6d4bb403",
+    "scripts/verify-paired-publication.py": "20fe1123b4cd3dbac9d84806ce45edc4c30ef021a5ee47d7e6b7bc3b0cb49128",
+    "tests/Hexalith.McpCli.AppHost/NativeCatalogDiagnostics.cs": "d0b08db4281d4df9058b00bd6542858a908a16fd179129b5cbe6b2868e29dd1a",
+    "tests/Hexalith.McpCli.Core.Tests/PlatformScopeTests.cs": "c56d9dd962de5def94f3b4303e819d5e23394cf59a813c14207e02edf40280ce",
+    "tests/Hexalith.McpCli.Manifest.Tests/NativeCatalogToolTests.cs": "aafe24c866fe29ef112606dc819b6e495c9c823360090b69d14e0de3f7927391",
+    "tests/Hexalith.McpCli.Mcp.Tests/PlatformScopeProtocolTests.cs": "1b56486a4c73bcb2318c8243396da0d08b727eec5856a4c9655cf04a480d72cc",
+    "tools/conformance-vectors/v1/README.md": "95ea253b9edf4db2298190d51feb4550e184f258daf2eb97e45bca8d7340dd99",
+    "tools/live-topology/README.md": "292d0b6511eeb0e2676f51086c1e246d400302ae6b14bf8286e7cba90096bc4a",
+    "tools/live-topology/ci.py": "b2ddf7ed5f9f6df83f1aacb3f8e7c785b83da40617df15da316a66b929b4666f",
+    "tools/live-topology/test_ci.py": "d4dd1c092831b0bb02069aed0d5b17e2605297a037f64b38b7cb17ffb21edac3"
+  },
+  "test_counts": {
+    "ordinary_passed": 1700,
+    "ordinary_expected_skips": 6,
+    "release_python_final": 158,
+    "controlled_topology": 87,
+    "node_selector": 4,
+    "focused_credential_guard_removals": 4
+  },
+  "ordinary_skip_reason": "Five Windows-only cases and the benchmark method run through its separate passing child-process harness.",
+  "review": {
+    "layers_completed": 3,
+    "individual_findings": 12,
+    "patch_groups_resolved": 4,
+    "inherited_deferrals": 4,
+    "rejected": 4,
+    "spec_status": "done",
+    "sprint_status": "review"
+  },
+  "matrix_coverage": {
+    "rows": [
+      {
+        "state": "Accepted exact pair and candidate-specific approval",
+        "tests": [
+          "test_paired_publication.PublicationTests.test_complete_preflight_and_exact_byte_two_pushes_verify_signed_public_contents",
+          "test_paired_publication.PublicationTests.test_automated_authorization_publishes_only_exact_candidate_without_claiming_sessions"
+        ],
+        "result": "passed",
+        "log": "release-python-final.stderr.txt"
+      },
+      {
+        "state": "Missing/tampered evidence or mismatched/failed gate",
+        "tests": [
+          "test_paired_publication.PublicationTests.test_original_staging_archive_source_version_and_acceptance_source_must_match",
+          "test_paired_publication.PublicationTests.test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record",
+          "test_paired_publication.PublicationTests.test_mutated_import_receipt_package_or_extra_package_never_pushes",
+          "test_paired_publication.PublicationBoundaryTests.test_original_run_and_artifact_metadata_must_be_exact_and_jobs_executed"
+        ],
+        "result": "passed",
+        "log": "release-python-final.stderr.txt"
+      },
+      {
+        "state": "Missing key, occupied version, uncertain feed, or first-ever absence",
+        "tests": [
+          "test_paired_publication.PublicationTests.test_missing_key_or_uncertain_registry_never_pushes_and_retains_refusal",
+          "test_paired_publication.PublicationBoundaryTests.test_both_registry_identities_are_checked_and_occupied_version_fails",
+          "test_paired_publication.PublicationBoundaryTests.test_first_ever_absence_requires_both_explicit_404s"
+        ],
+        "result": "passed",
+        "log": "release-python-final.stderr.txt"
+      },
+      {
+        "state": "First push succeeds and second fails/is uncertain",
+        "tests": [
+          "test_paired_publication.PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry"
+        ],
+        "result": "passed",
+        "log": "release-python-final.stderr.txt"
+      },
+      {
+        "state": "Bootstrap requested after paired publication starts",
+        "tests": [
+          "test_paired_publication.PublicationBoundaryTests.test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible",
+          "test_paired_publication.PublicationTests.test_configured_shell_hooks_publish_pair_and_first_source_bound_markers"
+        ],
+        "result": "passed",
+        "log": "release-python-final.stderr.txt"
+      }
+    ],
+    "all_rows_executed_and_passed": true
+  },
+  "spec_integrity": {
+    "baseline_commit": "b8cf5d8e4093df4f1a4b565c2425ff929c45d578",
+    "frozen_unchanged": true,
+    "frozen_sha256": "f468f3e2dcadbad78d34fe0a76ab71124e1fa648384810823cbf68cc4b44e6cf"
+  },
+  "immutable_public_release": {
+    "version": "2.0.1",
+    "source_sha": "aa2845edbea23444a1d362060b8d0f5dc05a132e",
+    "new_publication_or_acceptance_transfer": false
+  },
+  "commit_message_validation": "commitlint.json"
+}

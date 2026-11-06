@@ -1,0 +1,52 @@
+{
+  "rows": [
+    {
+      "state": "Accepted exact pair and candidate-specific approval",
+      "tests": [
+        "test_paired_publication.PublicationTests.test_complete_preflight_and_exact_byte_two_pushes_verify_signed_public_contents",
+        "test_paired_publication.PublicationTests.test_automated_authorization_publishes_only_exact_candidate_without_claiming_sessions"
+      ],
+      "result": "passed",
+      "log": "release-tests.stderr.txt"
+    },
+    {
+      "state": "Missing/tampered evidence or mismatched/failed gate",
+      "tests": [
+        "test_paired_publication.PublicationTests.test_original_staging_archive_source_version_and_acceptance_source_must_match",
+        "test_paired_publication.PublicationTests.test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record",
+        "test_paired_publication.PublicationTests.test_mutated_import_receipt_package_or_extra_package_never_pushes",
+        "test_paired_publication.PublicationBoundaryTests.test_original_run_and_artifact_metadata_must_be_exact_and_jobs_executed"
+      ],
+      "result": "passed",
+      "log": "release-tests.stderr.txt"
+    },
+    {
+      "state": "Missing key, occupied version, uncertain feed, or first-ever absence",
+      "tests": [
+        "test_paired_publication.PublicationTests.test_missing_key_or_uncertain_registry_never_pushes_and_retains_refusal",
+        "test_paired_publication.PublicationBoundaryTests.test_both_registry_identities_are_checked_and_occupied_version_fails",
+        "test_paired_publication.PublicationBoundaryTests.test_first_ever_absence_requires_both_explicit_404s"
+      ],
+      "result": "passed",
+      "log": "release-tests.stderr.txt"
+    },
+    {
+      "state": "First push succeeds and second fails/is uncertain",
+      "tests": [
+        "test_paired_publication.PublicationTests.test_partial_uncertain_and_public_mismatch_outcomes_are_retained_without_retry"
+      ],
+      "result": "passed",
+      "log": "release-tests.stderr.txt"
+    },
+    {
+      "state": "Bootstrap requested after paired publication starts",
+      "tests": [
+        "test_paired_publication.PublicationBoundaryTests.test_global_marker_closes_new_bootstrap_and_second_paired_version_remains_possible",
+        "test_paired_publication.PublicationTests.test_configured_shell_hooks_publish_pair_and_first_source_bound_markers"
+      ],
+      "result": "passed",
+      "log": "release-tests.stderr.txt"
+    }
+  ],
+  "all_rows_executed_and_passed": true
+}

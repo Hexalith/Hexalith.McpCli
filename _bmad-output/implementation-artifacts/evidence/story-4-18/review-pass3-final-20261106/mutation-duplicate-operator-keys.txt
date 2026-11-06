@@ -1,0 +1,46 @@
+test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) ... 
+  test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"schema":"x","note":"Authorization: Bearer opaqueSecretToken123","note":"clean"}') ... FAIL
+  test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"nested":[{"note":"Authorization: \\u0042earer\\topaqueSecretToken123","note":"clean"}]}') ... FAIL
+  test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"note":"Authorization: Bearer opaqueSecretToken123","\\u006eote":"clean"}') ... FAIL
+  test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"note":"first","note":"clean"}') ... FAIL
+
+======================================================================
+FAIL: test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"schema":"x","note":"Authorization: Bearer opaqueSecretToken123","note":"clean"}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 604, in test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value
+    with self.assertRaisesRegex(ValueError, 'duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"nested":[{"note":"Authorization: \\u0042earer\\topaqueSecretToken123","note":"clean"}]}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 604, in test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value
+    with self.assertRaisesRegex(ValueError, 'duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"note":"Authorization: Bearer opaqueSecretToken123","\\u006eote":"clean"}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 604, in test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value
+    with self.assertRaisesRegex(ValueError, 'duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value (test_paired_publication.PublicationBoundaryTests.test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value) (packet='{"note":"first","note":"clean"}')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/scripts/tests/test_paired_publication.py", line 604, in test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value
+    with self.assertRaisesRegex(ValueError, 'duplicate JSON keys'):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.005s
+
+FAILED (failures=4)

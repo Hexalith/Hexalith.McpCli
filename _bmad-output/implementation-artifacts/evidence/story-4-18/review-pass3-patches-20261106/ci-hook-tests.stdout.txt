@@ -1,0 +1,5 @@
+Running (1s): inert-child
+Running (1s): inert-child
+Running (1s): inert-child
+Running (16200s): /tmp/tmp7gr0mhry/mcpcli-live-ci-1es156ez/venv/bin/python /tmp/tmp7gr0mhry/tools/live-topology/run-vectors.py --output /tmp/tmp7gr0mhry/evidence/9903e67799b848f08ae4c3ccd2bba48f/vectors
+Running (16200s): /tmp/tmp7gr0mhry/mcpcli-live-ci-1es156ez/venv/bin/python /tmp/tmp7gr0mhry/tools/live-topology/run-vectors.py --output /tmp/tmp7gr0mhry/evidence/ad390186bf094680a3542714d427e0a7/vectors

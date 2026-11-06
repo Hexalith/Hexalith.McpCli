@@ -1,0 +1,159 @@
+{
+  "schema": "mcpcli-guard-mutations/v1",
+  "python_target": "scripts/verify-paired-publication.py",
+  "python_command": "python3 -m unittest test_paired_publication (cwd scripts/tests), once per mutation; exact original bytes restored",
+  "python": [
+    {
+      "mutation": "automated-bot",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_explicit_automated_authorization_binds_staging_without_claiming_client_sessions (test_paired_publication.PublicationTests.test_explicit_automated_authorization_binds_staging_without_claiming_client_sessions) (actor='fixture-app[bot]')"
+      ]
+    },
+    {
+      "mutation": "actual-bot",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions (test_paired_publication.PublicationTests.test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions) (actor='fixture-app[bot]')"
+      ]
+    },
+    {
+      "mutation": "automated-empty-actor",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_explicit_automated_authorization_binds_staging_without_claiming_client_sessions (test_paired_publication.PublicationTests.test_explicit_automated_authorization_binds_staging_without_claiming_client_sessions) (actor='')"
+      ]
+    },
+    {
+      "mutation": "actual-empty-actor",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions (test_paired_publication.PublicationTests.test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions) (actor='')"
+      ]
+    },
+    {
+      "mutation": "actual-future",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions (test_paired_publication.PublicationTests.test_operator_decision_requires_fresh_complete_hash_bound_actual_sessions) (index=15)"
+      ]
+    },
+    {
+      "mutation": "extract-duplicate",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction (test_paired_publication.PublicationBoundaryTests.test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction) (name='duplicate')"
+      ]
+    },
+    {
+      "mutation": "extract-absolute",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction (test_paired_publication.PublicationBoundaryTests.test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction) (name='absolute')"
+      ]
+    },
+    {
+      "mutation": "extract-parent",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction (test_paired_publication.PublicationBoundaryTests.test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction) (name='parent')"
+      ]
+    },
+    {
+      "mutation": "extract-backslash",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction (test_paired_publication.PublicationBoundaryTests.test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction) (name='backslash')"
+      ]
+    },
+    {
+      "mutation": "extract-drive",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction (test_paired_publication.PublicationBoundaryTests.test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction) (name='drive')"
+      ]
+    },
+    {
+      "mutation": "extract-symlink",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction (test_paired_publication.PublicationBoundaryTests.test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction) (name='symlink')"
+      ]
+    },
+    {
+      "mutation": "package-duplicate",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_staged_package_with_duplicate_or_unsafe_members_is_refused (test_paired_publication.PublicationTests.test_staged_package_with_duplicate_or_unsafe_members_is_refused) (member='fixture.dll')"
+      ]
+    },
+    {
+      "mutation": "package-absolute",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_staged_package_with_duplicate_or_unsafe_members_is_refused (test_paired_publication.PublicationTests.test_staged_package_with_duplicate_or_unsafe_members_is_refused) (member='/absolute.txt')"
+      ]
+    },
+    {
+      "mutation": "package-parent",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_staged_package_with_duplicate_or_unsafe_members_is_refused (test_paired_publication.PublicationTests.test_staged_package_with_duplicate_or_unsafe_members_is_refused) (member='../escape.txt')"
+      ]
+    },
+    {
+      "mutation": "package-backslash",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_staged_package_with_duplicate_or_unsafe_members_is_refused (test_paired_publication.PublicationTests.test_staged_package_with_duplicate_or_unsafe_members_is_refused) (member='lib\\\\escape.dll')"
+      ]
+    },
+    {
+      "mutation": "candidate-symlink",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_candidate_symlink_or_extra_entry_is_refused_before_import (test_paired_publication.PublicationTests.test_candidate_symlink_or_extra_entry_is_refused_before_import)"
+      ]
+    },
+    {
+      "mutation": "candidate-listing",
+      "exit": 1,
+      "detected": true,
+      "failing": [
+        "FAIL: test_candidate_symlink_or_extra_entry_is_refused_before_import (test_paired_publication.PublicationTests.test_candidate_symlink_or_extra_entry_is_refused_before_import)"
+      ]
+    }
+  ],
+  "csharp_target": "src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs",
+  "csharp_command": "dotnet build tests/Hexalith.McpCli.Core.Tests --no-restore --configuration Release -warnaserror; dotnet <Core.Tests.dll> -method Hexalith.McpCli.Core.Tests.PlatformScopeTests.FixedTenantRequiresExactPerCallValueAsync",
+  "csharp": [
+    {
+      "mutation": "lowercase per-call tenant for fixed-tenant modules",
+      "exit": 1,
+      "detected": true,
+      "failing_cases": [
+        "Hexalith.McpCli.Core.Tests.PlatformScopeTests.FixedTenantRequiresExactPerCallValueAsync(fixedTenant: \"fixed-tenant\", callTenant: \"Fixed-Tenant\", refused: True)",
+        "Hexalith.McpCli.Core.Tests.PlatformScopeTests.FixedTenantRequiresExactPerCallValueAsync(fixedTenant: \"fixed-tenant\", callTenant: \"FIXED-TENANT\", refused: True)",
+        "Hexalith.McpCli.Core.Tests.PlatformScopeTests.FixedTenantRequiresExactPerCallValueAsync(fixedTenant: \"system\", callTenant: \"System\", refused: True)",
+        "Hexalith.McpCli.Core.Tests.PlatformScopeTests.FixedTenantRequiresExactPerCallValueAsync(fixedTenant: \"system\", callTenant: \"SYSTEM\", refused: True)"
+      ],
+      "restored_exit": 0
+    }
+  ]
+}

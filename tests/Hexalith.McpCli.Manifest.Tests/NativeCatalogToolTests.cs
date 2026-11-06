@@ -291,6 +291,35 @@ public sealed class NativeCatalogToolTests : IDisposable
         }
     }
 
+    /// <summary>Ambient publication keys are removed from direct and escaped diagnostics while safe text stays intact.</summary>
+    [Theory]
+    [InlineData("opaque-api-credential")]
+    [InlineData("quoted-\"credential\"")]
+    [InlineData("back\\slash-credential")]
+    [InlineData("new\nline-credential")]
+    public void EnvironmentApiKeysAreRedactedWithoutChangingSafeText(string secret)
+    {
+        string? prior = Environment.GetEnvironmentVariable("NUGET_API_KEY");
+        const string ordinary = "retain \"quotes\", back\\slashes and new\nlines";
+        try
+        {
+            Environment.SetEnvironmentVariable("NUGET_API_KEY", secret);
+            string diagnostic = JsonSerializer.Serialize(new { diagnostic = secret, ordinary });
+            for (int escapes = 0; escapes < 3; escapes++)
+            {
+                string sanitized = NativeCatalogDiagnostics.Sanitize(diagnostic);
+                for (int level = 0; level < escapes; level++) sanitized = JsonSerializer.Deserialize<string>(sanitized)!;
+                using JsonDocument document = JsonDocument.Parse(sanitized);
+                Assert.Equal("[REDACTED]", document.RootElement.GetProperty("diagnostic").GetString());
+                Assert.Equal(ordinary, document.RootElement.GetProperty("ordinary").GetString());
+                diagnostic = JsonSerializer.Serialize(diagnostic);
+            }
+            Assert.Equal("before [REDACTED] after", NativeCatalogDiagnostics.Sanitize("before " + secret + " after"));
+            Assert.Equal(ordinary, NativeCatalogDiagnostics.Sanitize(ordinary));
+        }
+        finally { Environment.SetEnvironmentVariable("NUGET_API_KEY", prior); }
+    }
+
     /// <summary>An exited parent with inherited open pipes retains process ownership and the preparation directory.</summary>
     [Fact]
     public async Task OpenDescendantPipesRetainOwnedPreparation()

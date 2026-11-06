@@ -14,12 +14,13 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from urllib.error import HTTPError
-from zipfile import ZipFile
+import warnings
+from zipfile import ZipFile, ZipInfo
 
 import test_paired_release as fixtures
 import test_bootstrap_release as shell_fixtures
 from test_paired_release import SHA, VERSION, jobs
-from paired_release import PAIR, digest, module, packages, write_new
+from paired_release import PAIR, digest, module, packages, validate_source_evidence, write_new
 
 
 class PublicationTests(unittest.TestCase):
@@ -140,6 +141,7 @@ class PublicationTests(unittest.TestCase):
             archive.writestr('.signature.p7s', 'fixture NuGet repository signature')
             archive.writestr('package/services/metadata/core-properties/nuget.psmdcp', 'fixture NuGet metadata')
             if self.mode == 'public-mismatch': archive.writestr('unapproved.txt', 'different consumer bytes')
+            if self.mode == 'public-duplicate': archive.writestr('fixture.dll', archive.read('fixture.dll'))
 
     @contextlib.contextmanager
     def controls(self):
@@ -183,6 +185,32 @@ class PublicationTests(unittest.TestCase):
             self.publisher.publish(VERSION)
         self.assertEqual(self.download_push_counts, [2, 2])
         self.assertEqual(self.preflight_count, 5)
+
+    def test_changed_valid_operator_decision_refuses_import_after_initial_preflight(self):
+        with self.controls() as reserve:
+            self.real_preflight(self.candidate, self.operator, VERSION, self.initial)
+            self.change_json(self.operator, lambda document: document.update(decided_at_utc='2026-11-01T00:03:01Z'))
+            with self.assertRaisesRegex(ValueError, 'Preflight bindings changed before import'):
+                self.publisher.prepare(VERSION)
+        self.assertEqual(self.preflight_count, 2)
+        self.assertTrue((self.publisher.IMPORTED / 'preflight.json').exists())
+        self.assertFalse((self.publisher.IMPORTED / 'import.json').exists())
+        self.assertFalse((self.publisher.IMPORTED / 'packages').exists())
+        self.assertEqual(self.pushes, [])
+        reserve.assert_not_called()
+
+    def test_duplicate_public_archive_member_refuses_even_when_consumer_bytes_match(self):
+        self.mode = 'public-duplicate'
+        with self.controls():
+            self.import_pair()
+            with self.assertWarnsRegex(UserWarning, 'Duplicate name'), self.assertRaisesRegex(ValueError, 'duplicate archive members'):
+                self.publisher.publish(VERSION)
+        self.assertEqual(len(self.pushes), 2)
+        outcome = json.loads((self.publisher.OUTCOMES / 'outcome.json').read_text())
+        self.assertEqual(outcome['status'], 'partial-or-uncertain')
+        self.assertEqual([outcome['packages'][identity]['status'] for identity in PAIR],
+                         ['push-succeeded-public-unverified'] * 2)
+        self.assertFalse(list(self.publisher.OUTCOMES.glob('*-public-verification.json')))
 
     def test_configured_shell_hooks_publish_pair_and_first_source_bound_markers(self):
         shell = shell_fixtures.BootstrapReleaseTests()
@@ -318,6 +346,12 @@ assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTS
                 with self.assertRaises(ValueError):
                     self.verifier.operator_acceptance(path, self.prepared, self.accepted_path,
                                                       self.origin, 'fixture-owner')
+        # A self-consistent decision from a bot or an unauthenticated actor never attests the bypass.
+        for index, actor in enumerate(('fixture-app[bot]', '')):
+            path = self.root / f'automated-actor-{index}.json'
+            write_new(path, {**decision, 'approved_by': actor})
+            with self.subTest(actor=actor), self.assertRaisesRegex(ValueError, 'Automated authorization must bind'):
+                self.verifier.operator_acceptance(path, self.prepared, self.accepted_path, self.origin, actor)
 
     def test_automated_authorization_publishes_only_exact_candidate_without_claiming_sessions(self):
         decision = {'schema': 'mcpcli-paired-automated-acceptance/v1', 'decision': 'approved',
@@ -349,6 +383,7 @@ assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTS
             lambda d: d['timing_exception'].update(unassisted_success=True), lambda d: d['timing_exception'].update(first_time_operator=True),
             lambda d: d['sessions'].pop(), lambda d: d['sessions'][0].update(actual_client=False),
             lambda d: d['sessions'][0].update(status='not-executed'), lambda d: d.update(decided_at_utc=None),
+            lambda d: d.update(decided_at_utc='9999-01-01T00:00:00Z'),
             lambda d: d.update(sessions=[None, None, None]), lambda d: d['sessions'][0].update(version='1.2.0'),
             lambda d: d['sessions'][0].update(started_at_utc='2026-10-31T00:01:00Z'),
             lambda d: d['sessions'][0]['environment_approval'].update(ready=False),
@@ -373,6 +408,17 @@ assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTS
                 with self.assertRaises(ValueError): self.real_preflight(self.candidate, self.operator, VERSION, output)
                 self.assertFalse(output.exists())
         self.assertEqual(self.pushes, [])
+        # Session evidence approved by a bot or an unauthenticated actor is refused even when self-consistent.
+        for index, actor in enumerate(('fixture-owner', 'fixture-app[bot]', '')):
+            path = self.root / f'actual-actor-{index}.json'
+            write_new(path, {**copy.deepcopy(self.decision), 'approved_by': actor})
+            with self.subTest(actor=actor):
+                if actor == 'fixture-owner':
+                    accepted = self.verifier.operator_acceptance(path, self.prepared, self.accepted_path, self.origin, actor)
+                    self.assertEqual(accepted['approved_by'], actor)
+                    continue
+                with self.assertRaisesRegex(ValueError, 'Explicit authenticated operator decision'):
+                    self.verifier.operator_acceptance(path, self.prepared, self.accepted_path, self.origin, actor)
 
     def test_original_staging_archive_source_version_and_acceptance_source_must_match(self):
         with self.controls():
@@ -396,6 +442,67 @@ assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTS
         with self.controls(), self.assertRaisesRegex(ValueError, 'Required step'):
             self.real_preflight(self.candidate, self.operator, VERSION, self.root / 'bad.json')
 
+    def test_recomputed_acceptance_must_equal_authenticated_and_operator_bound_record(self):
+        self.change_json(self.accepted_path, lambda document: document.update(publication='changed acceptance'))
+        acceptance_hash = digest(self.accepted_path)
+        self.decision['acceptance_sha256'] = acceptance_hash
+        for session in self.decision['sessions']:
+            session['acceptance_sha256'] = acceptance_hash
+        self.operator.write_text(json.dumps(self.decision))
+        archive_path = self.candidate / 'accepted-staging-only.zip'
+        with ZipFile(archive_path, 'w') as archive:
+            archive.write(self.accepted_path, 'accepted-pair.json')
+            archive.write(self.acceptance_source, 'acceptance-source.json')
+        next(item for item in self.origin['artifacts'] if item['name'] == 'accepted-staging-only')['digest'] = 'sha256:' + digest(archive_path)
+        (self.candidate / 'staging-origin.json').write_text(json.dumps(self.origin))
+        output = self.root / 'refused-acceptance.json'
+        with self.controls(), self.assertRaisesRegex(ValueError, 'does not equal recomputed acceptance'):
+            self.real_preflight(self.candidate, self.operator, VERSION, output)
+        self.assertFalse(output.exists())
+        self.assertEqual(self.pushes, [])
+
+    def test_real_paired_source_producer_writes_evidence_accepted_by_publication(self):
+        gate = module('verify-release-source')
+        output = self.root / 'produced-source.json'
+        requested = []
+        workflow_runs = {workflow: {'id': index + 10, 'run_number': 1, 'run_attempt': 1,
+            'head_sha': SHA, 'head_branch': 'main', 'event': 'push', 'status': 'completed',
+            'conclusion': 'success', 'html_url': 'https://example.invalid/' + workflow}
+            for index, workflow in enumerate(('ci.yml', 'commitlint.yml'))}
+        def github(endpoint, *parameters):
+            requested.append(endpoint)
+            if endpoint.endswith('/git/ref/heads/main'):
+                return {'object': {'sha': SHA}}
+            for workflow, run in workflow_runs.items():
+                if endpoint.endswith('/workflows/' + workflow + '/runs'):
+                    return {'workflow_runs': [run]}
+                if endpoint.endswith(f'/runs/{run["id"]}/attempts/1/jobs'):
+                    required = gate.STAGING_JOBS if workflow == 'ci.yml' else gate.STAGING_COMMITLINT_JOBS
+                    result = jobs(required)
+                    return {'total_count': len(result), 'jobs': result}
+            self.fail('Unexpected GitHub request: ' + endpoint)
+        def git(argv, **kwargs):
+            values = {('git', 'rev-parse', 'HEAD'): SHA, ('git', 'branch', '--show-current'): '',
+                      ('git', 'status', '--porcelain', '--untracked-files=normal'): ''}
+            self.assertIn(tuple(argv), values)
+            return subprocess.CompletedProcess(argv, 0, stdout=values[tuple(argv)] + '\n', stderr='')
+        prerequisite = module('verify-paired-prerequisites')
+        with patch.dict(os.environ, {'REPOSITORY': 'fixture/repo'}), \
+                patch.object(sys, 'argv', ['verify-release-source.py', '--output', str(output), '--', SHA, 'refs/heads/main', 'paired']), \
+                patch.object(gate, 'github_json', side_effect=github), patch.object(subprocess, 'run', side_effect=git), \
+                patch('paired_release.module', return_value=prerequisite), \
+                patch.object(prerequisite, 'verify', return_value=self.source_gate['fr22']) as verify, \
+                contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(gate.main(), 0)
+        verify.assert_called_once_with()
+        document = json.loads(output.read_text())
+        validate_source_evidence(document, SHA)
+        self.assertEqual(set(document['gates']), {'ci.yml', 'commitlint.yml'})
+        self.assertEqual(document['current_main'], SHA)
+        self.assertEqual(len(requested), 5)
+        self.assertFalse(any('bootstrap-package.yml' in endpoint for endpoint in requested))
+        self.assertEqual(self.pushes, [])
+
     def test_credentials_are_refused_before_operator_packet_is_copied_into_import(self):
         with self.controls():
             self.real_preflight(self.candidate, self.operator, VERSION, self.initial)
@@ -415,9 +522,187 @@ assert sys.argv[1:] == ["merge-base", "--is-ancestor", os.environ["EARLIER_BOOTS
             with self.subTest(mode=mode), self.assertRaisesRegex(ValueError, 'README|source'):
                 self.verifier.validate_pair_content(self.staging, VERSION, SHA)
 
+    def test_staged_package_with_duplicate_or_unsafe_members_is_refused(self):
+        path = self.staging / f'{PAIR[0]}.{VERSION}.nupkg'
+        original = path.read_bytes()
+        self.verifier.validate_pair_content(self.staging, VERSION, SHA)
+        for member in ('fixture.dll', '../escape.txt', '/absolute.txt', 'lib\\escape.dll'):
+            path.write_bytes(original)
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', UserWarning)
+                with ZipFile(path, 'a') as archive: archive.writestr(member, 'unapproved member')
+            with self.subTest(member=member), self.assertRaisesRegex(ValueError, 'unsafe or duplicate members'):
+                self.verifier.validate_pair_content(self.staging, VERSION, SHA)
+
+    def test_candidate_symlink_or_extra_entry_is_refused_before_import(self):
+        link = self.root / 'candidate-link'
+        link.symlink_to(self.candidate, target_is_directory=True)
+        refusal = 'only authenticated original staging archives'
+        with self.controls():
+            output = self.root / 'symlink-preflight.json'
+            with self.assertRaisesRegex(ValueError, refusal):
+                self.real_preflight(link, self.operator, VERSION, output)
+            self.assertFalse(output.exists())
+            self.real_preflight(self.candidate, self.operator, VERSION, self.initial)
+            (self.candidate / 'unauthenticated.txt').write_text('not a staging archive')
+            output = self.root / 'extra-preflight.json'
+            with self.assertRaisesRegex(ValueError, refusal):
+                self.real_preflight(self.candidate, self.operator, VERSION, output)
+            self.assertFalse(output.exists())
+            with self.assertRaisesRegex(ValueError, refusal):
+                self.publisher.prepare(VERSION)
+        self.assertFalse((self.publisher.IMPORTED / 'import.json').exists())
+        self.assertFalse((self.publisher.IMPORTED / 'packages').exists())
+        self.assertEqual(self.pushes, [])
+
 
 
 class PublicationBoundaryTests(unittest.TestCase):
+    def test_unsafe_or_duplicate_staging_archive_members_are_refused_before_extraction(self):
+        verifier = module('verify-paired-publication')
+        def archive(*members):
+            buffer = io.BytesIO()
+            with warnings.catch_warnings():
+                warnings.simplefilter('ignore', UserWarning)
+                with ZipFile(buffer, 'w') as zipped:
+                    for member in members: zipped.writestr(member, 'fixture')
+            return buffer.getvalue()
+        link = ZipInfo('link')
+        link.external_attr = 0o120777 << 16
+        cases = {'duplicate': archive('a.txt', 'a.txt'), 'absolute': archive('/absolute.txt'),
+                 'parent': archive('../escape.txt'), 'backslash': archive('dir\\escape.txt'),
+                 'drive': archive('C:escape.txt'), 'symlink': archive(link)}
+        with tempfile.TemporaryDirectory() as temporary:
+            safe = Path(temporary) / 'safe'
+            verifier.extract(archive('dir/a.txt', 'b.txt'), safe)
+            self.assertEqual((safe / 'dir/a.txt').read_text(), 'fixture')
+            for name, data in cases.items():
+                target = Path(temporary) / name
+                with self.subTest(name=name):
+                    with self.assertRaisesRegex(ValueError, 'Unsafe or duplicate staging artifact member'):
+                        verifier.extract(data, target)
+                    self.assertFalse(target.exists())
+
+    def test_named_private_containers_are_redacted_including_duplicates_and_encoded_json(self):
+        verifier = module('verify-paired-publication')
+        component = 'synthetic-private-key-component'
+        for key in ('PrivateKey', 'SigningKey'):
+            for value in ({'d': component}, [component, {'nested': [component]}]):
+                for depth in range(3):
+                    for duplicate in (False, True):
+                        with self.subTest(key=key, value=value, depth=depth, duplicate=duplicate), tempfile.TemporaryDirectory() as temporary:
+                            root = Path(temporary)
+                            inner = '{' + json.dumps(key) + ':' + json.dumps(value)
+                            if duplicate:
+                                inner += ',' + json.dumps(key) + ':"[REDACTED]"'
+                            inner += ',"message":"safe container evidence"}'
+                            for _ in range(depth):
+                                inner = json.dumps(inner)
+                            raw = '{"evidence":' + inner + ',"safe":[{"unchanged":true}]}'
+                            recorded = root / 'recorded.json'
+                            with self.assertRaisesRegex(ValueError, 'credential|duplicate JSON keys'):
+                                verifier.record_operator(raw, recorded)
+                            self.assertFalse(recorded.exists())
+                            source = root / 'source.json'
+                            source.write_text(raw)
+                            verifier.retain_operator([source], root / 'retained')
+                            retained = (root / 'retained/1-source.json').read_text()
+                            self.assertNotIn(component, retained)
+                            document = json.loads(retained)
+                            self.assertEqual(document['safe'], [{'unchanged': True}])
+                            nested = document['evidence']
+                            for _ in range(depth):
+                                nested = json.loads(nested)
+                            self.assertEqual(nested, {key: '[REDACTED]', 'message': 'safe container evidence'})
+                            self.assertEqual(source.read_text(), raw)
+                            entry = json.loads((root / 'retained/retention.json').read_text())['entries'][0]
+                            self.assertTrue(entry['redacted'])
+                            self.assertEqual(entry['original_sha256'], digest(source))
+                            self.assertEqual(entry['retained_sha256'], digest(root / 'retained/1-source.json'))
+
+    def test_named_private_operator_values_are_refused_and_redacted_in_raw_and_encoded_json(self):
+        verifier = module('verify-paired-publication')
+        secret, duplicate_secret = 'unbound-named-key-first-20261106', 'unbound-named-key-second-20261106'
+        ordinary = 'retain "quotes", back\\slashes and new\nlines; SigningKey is configured'
+        self.assertNotIn(secret, verifier.credentials())
+        self.assertNotIn(duplicate_secret, verifier.credentials())
+        for key in ('SigningKey', 'PrivateKey', 'Authentication:JwtBearer:SigningKey', 'pRiVaTeKeY'):
+            for depth in range(3):
+                for duplicate in (False, True):
+                    with self.subTest(key=key, depth=depth, duplicate=duplicate), tempfile.TemporaryDirectory() as temporary:
+                        root = Path(temporary)
+                        inner = '{' + json.dumps(key) + ':' + json.dumps(secret)
+                        if duplicate:
+                            inner += ',' + json.dumps(key) + ':' + json.dumps(duplicate_secret)
+                        inner += ',"message":' + json.dumps(ordinary) + '}'
+                        for _ in range(depth):
+                            inner = json.dumps(inner)
+                        serialized = '{"evidence":' + inner + ',"message":' + json.dumps(ordinary) + '}'
+                        recorded = root / 'recorded.json'
+                        stdout, stderr = io.StringIO(), io.StringIO()
+                        reason = ('Operator acceptance contains duplicate JSON keys.' if duplicate and depth == 0 else
+                                  'Operator acceptance contains a credential or private key; redact the source evidence first.')
+                        with patch.dict(os.environ, {'OPERATOR_ACCEPTANCE': serialized, 'GITHUB_EVENT_PATH': ''}), \
+                                patch.object(sys, 'argv', ['verify-paired-publication.py', 'record-operator', '--output', str(recorded)]), \
+                                contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                            self.assertEqual(verifier.main(), 1)
+                        self.assertEqual(stdout.getvalue(), '')
+                        self.assertEqual(stderr.getvalue(), 'Paired publication refused: ' + reason + '\n')
+                        self.assertEqual(json.loads(recorded.with_name('recorded.json.failure.json').read_text()),
+                            {'schema': 'mcpcli-paired-publication-refusal/v1', 'status': 'refused', 'reason': reason})
+                        self.assertFalse(recorded.exists())
+                        source = root / 'source.json'
+                        source.write_text(serialized)
+                        verifier.retain_operator([source], root / 'retained')
+                        retained = (root / 'retained/1-source.json').read_text()
+                        self.assertNotIn(secret, retained)
+                        self.assertNotIn(duplicate_secret, retained)
+                        document = json.loads(retained)
+                        self.assertEqual(document['message'], ordinary)
+                        nested = document['evidence']
+                        for _ in range(depth):
+                            nested = json.loads(nested)
+                        self.assertEqual(nested, {key: '[REDACTED]', 'message': ordinary})
+                        self.assertEqual(source.read_text(), serialized)
+                        entry = json.loads((root / 'retained/retention.json').read_text())['entries'][0]
+                        self.assertTrue(entry['redacted'])
+                        self.assertEqual(entry['original_sha256'], digest(source))
+                        self.assertEqual(entry['retained_sha256'], digest(root / 'retained/1-source.json'))
+
+    def test_duplicate_operator_keys_refuse_recording_and_raw_retention_redacts_every_value(self):
+        verifier = module('verify-paired-publication')
+        for packet in ('{"schema":"x","note":"Authorization: Bearer opaqueSecretToken123","note":"clean"}',
+                       '{"nested":[{"note":"Authorization: \\u0042earer\\topaqueSecretToken123","note":"clean"}]}',
+                       '{"note":"Authorization: Bearer opaqueSecretToken123","\\u006eote":"clean"}',
+                       '{"note":"first","note":"clean"}'):
+            with self.subTest(packet=packet), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                recorded = root / 'recorded.json'
+                with self.assertRaisesRegex(ValueError, 'duplicate JSON keys'):
+                    verifier.record_operator(packet, recorded)
+                self.assertFalse(recorded.exists())
+                stdout, stderr = io.StringIO(), io.StringIO()
+                with patch.dict(os.environ, {'OPERATOR_ACCEPTANCE': packet, 'GITHUB_EVENT_PATH': ''}), \
+                        patch.object(sys, 'argv', ['verify-paired-publication.py', 'record-operator', '--output', str(recorded)]), \
+                        contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                    self.assertEqual(verifier.main(), 1)
+                self.assertEqual(stdout.getvalue(), '')
+                self.assertEqual(stderr.getvalue(), 'Paired publication refused: Operator acceptance contains duplicate JSON keys.\n')
+                self.assertEqual(json.loads(recorded.with_name('recorded.json.failure.json').read_text()),
+                    {'schema': 'mcpcli-paired-publication-refusal/v1', 'status': 'refused',
+                     'reason': 'Operator acceptance contains duplicate JSON keys.'})
+                self.assertFalse(recorded.exists())
+                source = root / 'source.json'
+                source.write_text(packet)
+                verifier.retain_operator([source], root / 'retained')
+                retained = (root / 'retained/1-source.json').read_text()
+                self.assertNotIn('opaqueSecretToken123', retained)
+                self.assertEqual(source.read_text(), packet)
+                entry = json.loads((root / 'retained/retention.json').read_text())['entries'][0]
+                self.assertEqual(entry['redacted'], 'opaqueSecretToken123' in packet)
+                self.assertEqual(entry['original_sha256'], digest(source))
+                self.assertEqual(entry['retained_sha256'], digest(root / 'retained/1-source.json'))
+
     def test_decoded_nested_bearer_credentials_are_refused_and_redacted(self):
         verifier = module('verify-paired-publication')
         for separator in ('\t', '\n', '\r\n'):
@@ -440,7 +725,7 @@ class PublicationBoundaryTests(unittest.TestCase):
 
     def test_safe_operator_recording_and_retention_preserve_exact_input_bytes(self):
         verifier = module('verify-paired-publication')
-        raw = b'{\r\n  "evidence": ["safe\\ttext", {"nested": "\\u0061"}]\r\n}\r\n'
+        raw = b'{\r\n  "evidence": ["safe\\ttext", {"nested": "\\u0061"}],\r\n  "SigningKey": "\\u005bREDACTED]"\r\n}\r\n'
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
             recorded = root / 'recorded.json'

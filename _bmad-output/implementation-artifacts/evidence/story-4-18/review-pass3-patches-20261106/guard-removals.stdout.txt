@@ -1,0 +1,14 @@
+duplicate-operator-keys detected
+raw-operator-redaction detected
+paired-source-phase detected
+paired-source-current-main detected
+recomputed-acceptance detected
+import-preflight-bindings detected
+duplicate-public-members detected
+prepared-selection detected
+prepared-head detected
+prepared-status detected
+prepared-remote detected
+before-smoke-provenance detected
+root-redis-override detected
+Detected 13 of 13 guard removals.
