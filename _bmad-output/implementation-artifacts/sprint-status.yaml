@@ -89,7 +89,7 @@ development_status:
   epic-4-retrospective: done
 
   epic-5: in-progress
-  5-1-inventory-eventstore-admin-and-technical-tool-operations: in-progress # 2026-11-06: candidate inventories and static checks pass; blocked on owner approval of all 156 A0 rows.
+  5-1-inventory-eventstore-admin-and-technical-tool-operations: in-progress # 2026-11-07: candidate.2 review corrections and static checks pass (386 anchors, 23 damage cases); blocked on owner approval of all 156 A0 rows.
   5-2-decide-generic-non-gateway-capability-contracts: backlog
   5-3-enroll-replacement-contracts-and-profiles: backlog
   5-4-prove-shared-head-parity-and-safety: backlog

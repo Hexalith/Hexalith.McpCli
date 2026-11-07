@@ -5,7 +5,7 @@ This evidence belongs to
 It verifies the candidate
 [EventStore Admin inventory](../../eventstore-admin-migration-inventory-v1.md) and
 [technical-tools inventory](../../technical-tools-migration-inventory-v1.md),
-both `1.0.0-candidate.1` with approval **pending**. The unapproved planning
+both `1.0.0-candidate.2` with approval **pending**. The unapproved planning
 findings that preceded them are indexed in [planning/README.md](planning/README.md).
 
 Run the block below from the McpCli root with Python 3 and Git. It reads tracked
@@ -24,10 +24,20 @@ publication or retirement permission.
 
 ## Pins and census scope
 
-McpCli baseline `ad7bf9ee415d09b16b47616740e2cc38fb3d6d9a`; checked at HEAD
-`c8f97ddd5c12c90f990f616b30acb00db0395a78`, whose `references/` gitlinks and
-`.gitmodules` are identical to the baseline. Every checkout below is clean and
-equals its committed gitlink.
+McpCli implementation baseline `ad7bf9ee415d09b16b47616740e2cc38fb3d6d9a`;
+reviewed at HEAD `ae4a317f208829681dc8eec36a308bc36f3f9715` on 2026-11-07.
+The earlier 2026-11-06 observation at
+`c8f97ddd5c12c90f990f616b30acb00db0395a78` used the baseline gitlinks.
+Since then Builds moved from `beb85e497957fedc66854013efd2cc4bd216ecbc`,
+Tenants from `cf36618a2c27b5722a1ff811cfbbce4528c3c105` and Platform from
+`019f593544ad157036b7d12173ff89a16464f3cc` to the full revisions below.
+The root `.gitmodules` and other gitlinks are unchanged. Every checkout below
+is clean and equals its committed gitlink. The refreshed scan finds the same
+production surfaces and owners; Builds' exempt CLI source/project metadata,
+Tenants' project/client-config metadata and Platform's production project
+metadata, CODEOWNERS and governing architecture are unchanged between these
+pins. Among the compared project and authority paths, only Platform's test
+project changed (package downloads and one embedded fixture).
 
 | Root reference | Full revision | Role in this story |
 | --- | --- | --- |
@@ -37,8 +47,8 @@ equals its committed gitlink.
 | `references/Hexalith.Conversations` | `9a5c684de5ee4876448faa26737f6afd36cf33e7` | PN04 |
 | `references/Hexalith.EventStore` | `3d4ba67db99f2f0bcd64b7d353609b555870cc9b` | Admin heads AC/AU/AM, Admin.Server routes; PS01–PS02 |
 | `references/Hexalith.Memories` | `246157a7ff8e2dcd8d356c833a77a02514490d2f` | PS06–PS07 |
-| `references/Hexalith.Tenants` | `cf36618a2c27b5722a1ff811cfbbce4528c3c105` | PN05 |
-| `references/Hexalith.Builds` | `beb85e497957fedc66854013efd2cc4bd216ecbc` | Exempt PE01–PE02 |
+| `references/Hexalith.Tenants` | `d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35` | PN05 |
+| `references/Hexalith.Builds` | `567604b616613ba429be0609636d805db776a709` | Exempt PE01–PE02 |
 | `references/Hexalith.FrontComposer` | `fbb9c3822dfa407e72739238cd472567f45f1e82` | FH/FD/FC/FV rows; PS03–PS04; FK02, FK04 |
 | `references/Hexalith.Parties` | `1308ad000c79ebc394fc395588f9af91092e8c4c` | PS05; FK03 |
 | `references/Hexalith.Agents` | `7957108c30d38b8e82eb072cf3437b6a67627cd7` | PN06 |
@@ -47,7 +57,7 @@ equals its committed gitlink.
 | `references/Hexalith.ChatBot` | `b13c58006d292836a9c8b242de476765676e5fb2` | PS12–PS13 |
 | `references/Hexalith.Works` | `2e9fafba151a184eb4552796db7eecc25ffaf8c7` | PN07 |
 | `references/Hexalith.Timesheets` | `f5bee2c91bec6e1e78d81b604cea6af0cee764fe` | PN08 |
-| `references/Hexalith.Platform` | `019f593544ad157036b7d12173ff89a16464f3cc` | AD-11/AD-14 authority (read only); PN09 |
+| `references/Hexalith.Platform` | `01e5b6530af96ad6eaa69cc1867d43def56c43ca` | AD-11/AD-14 authority (read only); PN09 |
 
 The FrontComposer historical pin `81a440a8890a17edb39924bd0cf676eb6f6b5c25`
 and the companion inventory pins are read from this workspace's object stores.
@@ -91,7 +101,7 @@ other repositories, unpublished forks or uninspected dynamic hosts.
 - **Anchors and links:** every backticked `path:line` and `:line` continuation,
   including the `references/` anchors for Platform AD-11/AD-14, the AI.Tools
   rule and plan 1.1.0, EventStore AD-22 and the census routing points,
-  resolves to a non-blank line at the pin; 38 load-bearing anchors also match
+  resolves to a non-blank line at the pin; 52 load-bearing anchors also match
   expected content; row anchors point at their command, tool or metadata line;
   every local link and heading fragment resolves.
 - **State:** both inventories are candidates with pending approval and no
@@ -104,7 +114,7 @@ other repositories, unpublished forks or uninspected dynamic hosts.
   `epic-5-context.md` and the five planning files) are LF with no trailing
   whitespace, because the closing `git diff --check` covers tracked files only.
   The Story 5.2 handoff below assigns every AC and AM row to exactly one class.
-  22 deliberately damaged inputs must be rejected.
+  23 deliberately damaged inputs must be rejected.
 
 ## Reproducible check
 
@@ -169,7 +179,7 @@ def frontmatter(text):
 
 def check_pending(text):
     meta = frontmatter(text)
-    assert meta['inventory_version'] == '1.0.0-candidate.1'
+    assert meta['inventory_version'] == '1.0.0-candidate.2'
     assert meta['status'] == 'draft'
     assert meta['approval_status'] == 'pending'
     assert meta['approval_ref'] == '#a0-approval-pending'
@@ -702,6 +712,20 @@ CONTENT = {
     'Cli/PathUtilities.cs:61': 'HasNestedRepositorySegment',
     'src/Hexalith.Projects.Mcp/ProjectsMcpModule.cs:51': 'AddFrontComposerMcp',
     'deferred-work.md:677': 'Four of the six approved migration inventories',
+    'Cli/Formatting/JsonOutputFormatter.cs:42': 'IsRawPropertyWithDescriptor',
+    'Cli/Formatting/JsonOutputFormatter.cs:68': 'IsRawPropertyWithDescriptor',
+    'Cli/Formatting/TableOutputFormatter.cs:148': 'SafeOutputValueFormatter.Format',
+    'Cli/Formatting/CsvOutputFormatter.cs:91': 'SafeOutputValueFormatter.Format',
+    'Cli/Profiles/ProfileManager.cs:74': 'catch (JsonException)',
+    'Cli/Profiles/ProfileManager.cs:109': 'File.WriteAllText',
+    'Cli/GlobalOptionsBinding.cs:114': 'IOException or UnauthorizedAccessException',
+    'Mcp/Tools/ToolHelper.cs:124': 'ValidateTenantId',
+    'Mcp/Tools/ToolHelper.cs:143': 'ValidatePathSegments',
+    'Mcp/Tools/ToolHelper.cs:343': 'continuationToken',
+    'Mcp/Tools/StreamTools.cs:135': 'value.Trim()',
+    'Cli/ProjectSelection.cs:7': 'PathUtilities.Canonical',
+    'Cli/ProjectSelection.cs:26': 'PathUtilities.Canonical',
+    'Cli/ProjectSelection.cs:52': 'PathUtilities.Canonical',
 }
 
 
@@ -794,7 +818,16 @@ def frozen_digest(spec):
     return hashlib.sha256(block.encode()).hexdigest()
 
 
+def check_census_pins(evidence):
+    pins = dict(re.findall(r'^\| `(references/[^`]+)` \| `([0-9a-f]{40})` \|', evidence, re.M))
+    assert sorted(pins) == sorted(ROOTS), 'census pin coverage'
+    for rel, sha in pins.items():
+        assert git(root / rel, 'rev-parse', 'HEAD') == sha, ('stale census pin', rel, sha)
+    return pins
+
+
 def check_repository():
+    check_census_pins((base / 'evidence/story-5-1/verification.md').read_text())
     gitlinks = {path: sha for sha, path in re.findall(r'^160000 commit (\w+)\t(\S+)$', git(root, 'ls-tree', 'HEAD', 'references/'), re.M)}
     assert sorted(gitlinks) == sorted(ROOTS) and len(ROOTS) == 17
     for rel in ROOTS:
@@ -888,6 +921,7 @@ damages = [
     (check_admin, admin_text.replace('`GetCorrelationTraceMap`', 'GetCorrelationTraceMap'), 'HTTP-only action omitted'),
     (check_technical, tech_text.replace(line_of(tech_text, 'PN04') + '\n', ''), 'missing root census row'),
     (check_technical, tech_text.replace(line_of(tech_text, 'PS10'), line_of(tech_text, 'PS10').replace('`PackAsTool` `folders`', '`PackAsTool` `folder`')), 'wrong packaging metadata'),
+    (check_census_pins, (base / 'evidence/story-5-1/verification.md').read_text().replace('| `567604b616613ba429be0609636d805db776a709` |', '| `beb85e497957fedc66854013efd2cc4bd216ecbc` |'), 'stale exempt Builds census pin'),
 ]
 for check, damaged, label in damages:
     rejects(check, damaged, label)
@@ -897,18 +931,22 @@ print(f"PASS: 68 Admin.Server actions parsed; 29 reached by the heads with match
 print(f"PASS: FrontComposer {FC_SHA} vs historical {FC_OLD}: Mcp and corpus trees identical, 6 CLI files changed; 1 lifecycle tool, 2 families, 13 resources, 2 compiler leaves, 9 variants, 4 consumers.")
 print(f"PASS: census of {len(ROOTS)} root references: 13 production surfaces in 7 repositories, 2 exempt Builds tools, 9 roots without surfaces, executables and configs classified; owners recorded.")
 print(f"PASS: {anchor_counts[0][0] + anchor_counts[1][0]} source anchors resolve to non-blank lines ({len(CONTENT)} content-checked); local links resolve; historical inventories unchanged; working-tree changes confined to _bmad-output/implementation-artifacts/; {len(authored_files)} story files are LF without trailing whitespace.")
-print(f"PASS: rejected {len(damages)} damaged inputs (missing, duplicate, extra, incomplete, approval claims, wrong policy, lost effect/confirmation, hidden mismatch, invented replacement, census/resource omissions, drift, packaging, anchors, premature completion).")
+print(f"PASS: rejected {len(damages)} damaged inputs (missing, duplicate, extra, incomplete, approval claims, wrong policy, lost effect/confirmation, hidden mismatch, invented replacement, census/resource omissions, drift, packaging, anchors, census pins, premature completion).")
 print(f"BLOCKED: {pending_rows} rows carry A0 (approval pending); owner approval is required before Story 5.1 completion. Workflow states: spec={spec_status}; sprint={sprint_status}. Frozen block sha256={digest}.")
 PY
 git diff --check
 ```
 
-## Recorded execution (2026-11-06)
+## Recorded execution (2026-11-07)
 
-The block above was extracted from this file and executed with
-`bash -e` from the McpCli root; it exited 0. `git diff --check` reported
+The initial rerun of the previous block, extracted from this file and invoked
+with `bash -e` from the McpCli root, exited 1 at Python line 524:
+`assert git(repo, 'rev-parse', 'HEAD') == sha` in `check_technical`.
+That exposed the stale PN pins; no inventory approval was inferred.
+After refreshing the census and the review corrections, the block above was
+extracted again and executed with `bash -e` from the McpCli root; it exited 0. `git diff --check` reported
 no whitespace error; it covers tracked files only, so the Python block checks
-the untracked story files itself. Git also prints the pre-existing
+all 11 story files itself. Git also prints the pre-existing
 `warning: unable to find all commit-graph files`; command exit codes determine
 the result. Output:
 
@@ -917,8 +955,8 @@ PASS: EventStore 3d4ba67db99f2f0bcd64b7d353609b555870cc9b clean; CLI graph 31 re
 PASS: 68 Admin.Server actions parsed; 29 reached by the heads with matching policies, tenant filters and platform scope; 39 HTTP-only actions listed; stream-list root GET has no server route.
 PASS: FrontComposer fbb9c3822dfa407e72739238cd472567f45f1e82 vs historical 81a440a8890a17edb39924bd0cf676eb6f6b5c25: Mcp and corpus trees identical, 6 CLI files changed; 1 lifecycle tool, 2 families, 13 resources, 2 compiler leaves, 9 variants, 4 consumers.
 PASS: census of 17 root references: 13 production surfaces in 7 repositories, 2 exempt Builds tools, 9 roots without surfaces, executables and configs classified; owners recorded.
-PASS: 353 source anchors resolve to non-blank lines (38 content-checked); local links resolve; historical inventories unchanged; working-tree changes confined to _bmad-output/implementation-artifacts/; 11 story files are LF without trailing whitespace.
-PASS: rejected 22 damaged inputs (missing, duplicate, extra, incomplete, approval claims, wrong policy, lost effect/confirmation, hidden mismatch, invented replacement, census/resource omissions, drift, packaging, anchors, premature completion).
+PASS: 386 source anchors resolve to non-blank lines (52 content-checked); local links resolve; historical inventories unchanged; working-tree changes confined to _bmad-output/implementation-artifacts/; 11 story files are LF without trailing whitespace.
+PASS: rejected 23 damaged inputs (missing, duplicate, extra, incomplete, approval claims, wrong policy, lost effect/confirmation, hidden mismatch, invented replacement, census/resource omissions, drift, packaging, anchors, census pins, premature completion).
 BLOCKED: 156 rows carry A0 (approval pending); owner approval is required before Story 5.1 completion. Workflow states: spec=in-review; sprint=in-progress. Frozen block sha256=8be7892597e4e5f0aeb4a1aa8acef4d57eacffac4b75de417c882494a557a105.
 ```
 
@@ -940,10 +978,17 @@ tool was run; this change is documentation only.
   - local credential and profile configuration: AC25–AC30 (Admin G6, Story 5.3);
   - shell completion, out of McpCli v1 under PRD §8.2: AC31.
 
+  The Admin behavior handoff also includes AV02's corrupt-store overwrite and
+  profile-load fallback, AV03's conditional CLI redaction, AV06's error and
+  cancellation categories, AV07's input guards, AV08's trim-before-fallback
+  and AM22's unavailable cursor paging. Preserve each or obtain the owning
+  maintainer's explicit change decision.
+
   The technical classes are lifecycle status (FH01, FV01), the manifest
   command family (FH02, classified by each consumer), documentation and
   projection resources (FD01–FD13, FH03) and local compiler tooling
-  (FC01–FC02). The decision must keep Platform AD-14's public-client denial of
+  (FC01–FC02, including inspect's changed project selection in FV09).
+  The decision must keep Platform AD-14's public-client denial of
   UI-only and confirmation-required operations, define treatment of the
   destructive set and name which operations become Gateway contracts and which
   need another authenticated transport. MCP resources and prompts,
