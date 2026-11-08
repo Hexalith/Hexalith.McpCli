@@ -1,0 +1,12 @@
+{
+  "command": [
+    "/tmp/mcpcli-epic3-output-contract-venv/bin/python",
+    "-m",
+    "pip",
+    "install",
+    "-r",
+    "tools/conformance-vectors/v1/requirements.txt"
+  ],
+  "exitCode": 0,
+  "seconds": 0.98
+}

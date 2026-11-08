@@ -346,7 +346,7 @@ Public member types and constraints:
 | `operationCount`, `paging.offset`, `paging.totalCount` | integer greater than or equal to zero |
 | `paging.pageSize` | integer greater than zero |
 | `kind` | string enum: `read`, `write` |
-| `schema` | JSON object produced by FR-7 |
+| `schema` | JSON object produced by FR-7; contents remain open, including nested boolean schemas (owner clarification, 2026-11-08) |
 | `example` | JSON object that validates against `schema` |
 | `envelope` | JSON object; `fixedTenant` is an exact Gateway-valid ordinary Tenant string; `platformScope` is an exact declared `platform:` scope under PRD §5.1; the two optional members are mutually exclusive; `aggregateIdRequired` and `idempotencyKeyRequired` are booleans; `idempotencyKeyRequired` is true exactly when the Operation names a non-nullable or serializer-required `idempotencyKeyProperty` (effective `JsonPropertyInfo.IsRequired` under its Payload options); `arguments` is a duplicate-free array of applicable §E argument-name strings |
 | `lintFindings` | array of objects defined below; empty when no finding exists |
@@ -444,7 +444,9 @@ protocol revisions.
 Error member types and constraints:
 
 - `error` is an object; `code` is exactly the row's string discriminator.
-- `operation` follows the Operation Name contract above. For
+- `operation` follows the Operation Name contract above except that
+  `unknown_operation.operation` preserves the exact non-empty requested name,
+  including noncanonical spelling (owner decision, 2026-11-08). For
   `unknown_operation`, `suggestions` is an array of at most three canonical
   Operation Name strings. For `unknown_module`, `module` is the exact non-empty
   requested Module Name and `suggestions` is an array of at most three declared

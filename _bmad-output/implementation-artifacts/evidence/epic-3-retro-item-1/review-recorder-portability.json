@@ -1,0 +1,48 @@
+{
+  "command": [
+    "python3",
+    "-c",
+    "from pathlib import Path; assert Path('tools/live-topology/ci.py').is_file(); print('Recorder resolved its repository while launched outside the checkout.')"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "seconds": 0.01,
+  "hashAlgorithm": "sha256",
+  "hashesRecordedAt": "command completion",
+  "hashes": {
+    "sources": {
+      "src/Hexalith.McpCli.Core/Serialization/ResultDocumentSchema.cs": "0596e9f5589e5378683108bdea87dc69f12ae637db3b28c8da997e75d246e416",
+      "src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs": "9bdcf0c0ad40f2c2dd7605f9506f352ca5b7c93d627cacdb0465a49f73af31ee",
+      "src/Hexalith.McpCli.Core/Catalog/RoutingResolver.cs": "701874c4846b71fef04d249edae9489d97fb915016310d8ac113e2319ee5321d",
+      "src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs": "8d1df8cab9fe322c6851cea25ffd814b39d97b89091a9ee97415c1462c9f1a7d",
+      "src/Hexalith.McpCli.Mcp/McpOutputSchema.cs": "73c211130a15434f7409fe283ff754aafdba1c86e90181d06cc2848f4956c014",
+      "src/Hexalith.McpCli/Cli/CliRunner.cs": "70636040faf7b1ec0559bd61eea9410205e47b6240ad4d38c0bcb08c4eaf8e2d",
+      "src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs": "59be671c661c8497478d545a512c9b3fe4b6fba7464ef41f990093fae49b48ae",
+      "tests/Hexalith.McpCli.Core.Tests/ResultDocumentSchemaTests.cs": "5617b95cccf53b132f56bd6be7b3ae5d7a7d374d929b402d56c79da00f688b0b",
+      "tests/Hexalith.McpCli.Mcp.Tests/McpOutputSchemaTests.cs": "ebcaa7a23b54c3382622413cd5a19ae70a87770534cc7f102a1f6f68c6d15c2c",
+      "tools/live-topology/ci.py": "db5842db9f15874ba959544df4e618eecc6d1ffed5fee0531e5aee011adddfa2"
+    },
+    "probes": {
+      "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/audit-evidence.py": "ba6b3bd0d6297cec141ec2f1d94c401382a6e767ab819b28af4389ec77f3ba28",
+      "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/capture-advertisements.py": "1a0875aa8cfa497fb22e2f846dcaf64e3eeef9a3386e083d1e76d1502471bb3d",
+      "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/record-command.py": "4b8106bbcf9c8233b1343d108e83c8fd57bd54d7ae15f921855cc3c351d8dec0",
+      "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/verify-javascript-patterns.mjs": "9d22676f66699572222b9b068831995d86d97a77616c76936c38edc0a10ed5ce",
+      "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/verify-production-catalog.py": "2dba2b4df142582b31ab045ebf680e63b7cf6409f890ec62cb4434345eec9c60"
+    },
+    "binaries": {
+      "src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll": "a6fa60ad0b8ff07321f9647a77c95bdc08cc98f865cf2e94e93c3dfd057d3ff8",
+      "src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll": "20d045f767ede7483eec30052428640655b16dede8ebd3faab698c6e67904eb5",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll": "0bc56d88937ee50a1b09b2c0382cccd92306d2acb2780d73f7fda31bd0582470",
+      "tests/fixtures/StdioHost/bin/Release/net10.0/Hexalith.McpCli.StdioHost.dll": "8e54619f00289b47d23521980f152fa452f697d7933c3da886849cd1228c39c0",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll": "ecf6851892adde02992ecc9793a5548d623aea3774f5990bc7ff56cfb7d22b62",
+      "tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll": "2b1277846b25574395ddc1182b882a0012e5de65f83143ae15102562461eb297",
+      "tests/fixtures/StdioHost/bin/Release/net10.0/Hexalith.McpCli.Core.dll": "a6fa60ad0b8ff07321f9647a77c95bdc08cc98f865cf2e94e93c3dfd057d3ff8",
+      "tests/fixtures/StdioHost/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll": "20d045f767ede7483eec30052428640655b16dede8ebd3faab698c6e67904eb5",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.Core.dll": "a6fa60ad0b8ff07321f9647a77c95bdc08cc98f865cf2e94e93c3dfd057d3ff8",
+      "src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll": "20d045f767ede7483eec30052428640655b16dede8ebd3faab698c6e67904eb5",
+      "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.dll": "a6fa60ad0b8ff07321f9647a77c95bdc08cc98f865cf2e94e93c3dfd057d3ff8",
+      "tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.dll": "a6fa60ad0b8ff07321f9647a77c95bdc08cc98f865cf2e94e93c3dfd057d3ff8",
+      "tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll": "20d045f767ede7483eec30052428640655b16dede8ebd3faab698c6e67904eb5"
+    }
+  }
+}

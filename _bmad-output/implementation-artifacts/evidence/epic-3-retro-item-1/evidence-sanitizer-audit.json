@@ -1,0 +1,839 @@
+{
+  "sanitizer": "tools/live-topology/ci.py:sanitized",
+  "sanitizerSha256": "db5842db9f15874ba959544df4e618eecc6d1ffed5fee0531e5aee011adddfa2",
+  "filesAudited": 166,
+  "filesRedacted": 0,
+  "sharedSanitizerClean": true,
+  "files": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-abstractions-tests.json",
+      "redactionsApplied": false,
+      "sha256": "491268aa1a90cb74cb14980a87b88c9ad164a2acea53c6e900777e524ed4860a"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-abstractions-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-abstractions-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "9585cae61143eacb883ff890c45eae7b9a669fdbe14310f1a23f342056e0f919"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-analyzers-tests.json",
+      "redactionsApplied": false,
+      "sha256": "4473a1f82cf013de46295bf984346880ed8226232de1bf20e070755a85c9b02b"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-analyzers-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-analyzers-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "79b4c3a2e463dd513f7558cc97e1bc89f0f78cffa34b8d39c89378b117e6dd06"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-build-before-conformance.json",
+      "redactionsApplied": false,
+      "sha256": "e777831aa6bd33910bb3c91a59c2130d3b143e7b448c1b547c43ade60877970f"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-build-before-conformance.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-build-before-conformance.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "fe22e9ad84a0c5aaf7eac31b3095e437f8527c9ef1200ab6cb0257c351b384ce"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-capture.json",
+      "redactionsApplied": false,
+      "sha256": "054470270c680d9142b82c2688c0304f765880a4876d0f0e1c0e979783571fef"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-capture.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-capture.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "0c9bae99f9761fbfab47de9afab2613d3ceee4d76368a87891c1d15eae91b228"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-cli-tests.json",
+      "redactionsApplied": false,
+      "sha256": "76128739e6f98f0862bc8f2659c8c81ffe03eaafafb4dcf95b96e80d1f0bb81e"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-cli-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-cli-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "ea69f7f31f471bef173dfc81cbe1ab1e1d8eb700788c6ce263e89b65daf7fc2b"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-core-tests.json",
+      "redactionsApplied": false,
+      "sha256": "c0eb24711ff799e0f14fe396f7906ee9aad9fa83b417f9fa244ca01901e5fc85"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-core-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-core-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "5dd98e9c3a5040bd8f20b78013380bee134da94c8b03b88180c4910007a0ccfe"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-diff-check.json",
+      "redactionsApplied": false,
+      "sha256": "bcbd6dbb4a8e8ff3436219281aa7bbd5cbb433ab4f374ce841ce9a0940c0e992"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-diff-check.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-diff-check.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-javascript.json",
+      "redactionsApplied": false,
+      "sha256": "b87e97ff6702e66da16a6cefdae942ee81e718e4cbe9b93ec22ec312d28c6f65"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-javascript.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-javascript.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "50789a70f744aa8dab36f0c80b24352d9ca9e94c6ea72bcbac5a1ac49e8f12d3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-manifest-fresh-restore.json",
+      "redactionsApplied": false,
+      "sha256": "7da4d5d9582467d5a62c9781a74c6f53c3029c4233fb74a489dbb062c0652de3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-manifest-fresh-restore.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-manifest-fresh-restore.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-manifest-tests.json",
+      "redactionsApplied": false,
+      "sha256": "3fdba640b8e6ccbf06aea15824efc4cdf7929aa1d827b7a291801870295525a4"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-manifest-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-manifest-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "dcddbaa0cc595df8172ad900a178bf7912425372e92b0f4cfe91b54dcaa51f4a"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-mcp-tests.json",
+      "redactionsApplied": false,
+      "sha256": "4ec6255b193dbe0f769f0c0686cd7a5de74d8e022127a5ec0f920f32406ebbd9"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-mcp-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-mcp-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "e31c8a0fd7880550f1bdb6509b050b0eec971aca4b11097c9e2a7834b032b59f"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-production-build.json",
+      "redactionsApplied": false,
+      "sha256": "df2fba15d7025d0abf22d6298d1082121072cfd70bd0c9059004e4ff4a3ec3fe"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-production-build.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-production-build.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "da958fb47b81905f39300b32c96511dbe6a134b0f6501c5e8daac1e18a1ddc95"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-production-catalog.json",
+      "redactionsApplied": false,
+      "sha256": "db7b673385f1a1fc9a04613b14a838050a7366cd1194cc8c8f2203ca9921362c"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-production-catalog.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-production-catalog.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "6f31c914b4fab86010a5686892b3f5c02347a4ef97696f639922863320d2a6da"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-production-restore.json",
+      "redactionsApplied": false,
+      "sha256": "eebf6004c994bfd5b220e86674018d282898be052f23efe006561278734854c3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-production-restore.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-production-restore.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "ba46d17cefe7edafaf0a6aa8b3ed4b1ecb56b9209df21f1e21e7ee43d97ee182"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-restore-before-conformance.json",
+      "redactionsApplied": false,
+      "sha256": "15eabac3fc828a022de54518f562f7dadbb6013fd42670b8abdfa414e03e015e"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-restore-before-conformance.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-restore-before-conformance.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-sample-loopback.json",
+      "redactionsApplied": false,
+      "sha256": "0034421ca892696d6c91e4c24cce4d9c8322409aa07a331fcf5a2433ba9253e6"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-sample-loopback.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "58f0a4c433aea02e50127b9f36d3ade5fc4a627973ff02c24594fa8cd724eb78"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-sample-loopback.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "79aa272c11fce65bb237644419ec485c06469ab879a86703ed3427c5bb9534fa"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-sample-validation.json",
+      "redactionsApplied": false,
+      "sha256": "a0a9bbf6526bfd6cff42de6ffc3d097358226a2c5bb9de3efa8b98eacb83cc65"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-sample-validation.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "b0721267d99793f77073023d0a1fe02c6c9313fb1da9f8e9893d9f57c2ca58a6"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/acceptance-sample-validation.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "047caa0aa99928c2318ce143afd47bd075ccbd258370c85d7ea7312efca5af01"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/advertised-tools.json",
+      "redactionsApplied": false,
+      "sha256": "4b0c8485b63e4b88e8d993505c397598d1116661f92921ec4bf293ab5372e373"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/advertisement-host.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "f15b8d9d04d773fe9c15cc931c239e11000bf8e263243e7d0bcc9b41f8411069"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/audit-evidence.py",
+      "redactionsApplied": false,
+      "sha256": "ba6b3bd0d6297cec141ec2f1d94c401382a6e767ab819b28af4389ec77f3ba28"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/build-final.json",
+      "redactionsApplied": false,
+      "sha256": "9132cf8a6395f5541114aed042de28c5a1d5bac92f1bfcd8e285cdccdd08e601"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/build-final.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/build-final.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "64dfffded977d894c0182836299bb0686c907d346ad8bf76ea3fed671a562320"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/build-fixtures.json",
+      "redactionsApplied": false,
+      "sha256": "5008b8a9507353e9615375d06bf4f6e5a8e3a97c66769653dce8ac8ff505efe3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/build-fixtures.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/build-fixtures.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "77f7c3ae017e9793463c2e2fcafa032985a2f7d8737b62182e550d100ffe18e8"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/build.json",
+      "redactionsApplied": false,
+      "sha256": "1adb1273bfa9d8d37e71c19a02ab98d53ef3a7279963696b8b9344150ef48543"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/build.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/build.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "6ec5441d73754f192e186f0dfaccae838f3bc24de26af24bc9ad1aa3584a088c"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/capture-advertisements.json",
+      "redactionsApplied": false,
+      "sha256": "569d8757d36d1f26ddf021b23fde935c05043e9139ea13f917024c7b2b7ea438"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/capture-advertisements.py",
+      "redactionsApplied": false,
+      "sha256": "1a0875aa8cfa497fb22e2f846dcaf64e3eeef9a3386e083d1e76d1502471bb3d"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/capture-advertisements.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/capture-advertisements.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "0c9bae99f9761fbfab47de9afab2613d3ceee4d76368a87891c1d15eae91b228"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/cli-tests.json",
+      "redactionsApplied": false,
+      "sha256": "b76382ec1c12bed0d5849c127c93ca619974a57b80ab28594fcad6b9b3e32f19"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/cli-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/cli-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "5395b9c7870b7a164e3bc9139a7413ca9373815e6e138e833b243012f73dae86"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/commit-tooling-install.json",
+      "redactionsApplied": false,
+      "sha256": "de90d6b97d6e7276f2d2588c106a6e3d6a9ca6acd0e4f1d5f07646c390d7d841"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/commit-tooling-install.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/commit-tooling-install.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "c6097ddd380ac48ce96ccf02545c97a3c1e51b7b6af798f24dd7041879aed55b"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/commitlint-validation.json",
+      "redactionsApplied": false,
+      "sha256": "eb4df79c08907a282071273102a8df8ed536ce5f4115fddf5be086f904b74427"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/commitlint-validation.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/commitlint-validation.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "bf140bb6c1284c114da10117c0ef66b4b10a0664c52fcdd6fd461b2b03794254"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/core-focused.json",
+      "redactionsApplied": false,
+      "sha256": "928d541bbca0b58562d8262a93ae3741c634485f7bbd7e50966d1128465b4e20"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/core-focused.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/core-focused.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "b2f28223988d311ab44fe7a8adc5610f664ebf5b038f5480d9dbce5af1feb2b0"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/core-tests.json",
+      "redactionsApplied": false,
+      "sha256": "cd744680b7054995ceae3e785e6f36520f5764eb744a0e1c1a6f1186935360a5"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/core-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/core-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "78e716ecc0644dfde47d3d2fe9988423148fd25fef9723f75664d20d224b1ca3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/final-diff-check.json",
+      "redactionsApplied": false,
+      "sha256": "c56be1bac54c8e9a939cceff49d60cca0f464f0d276e153cd138aeae69832159"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/final-diff-check.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/final-diff-check.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/javascript-patterns.json",
+      "redactionsApplied": false,
+      "sha256": "e767e49f1bf019034c5984332cc7596a47ce944d04a899db0860a9b10cd495c1"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/javascript-patterns.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/javascript-patterns.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "50789a70f744aa8dab36f0c80b24352d9ca9e94c6ea72bcbac5a1ac49e8f12d3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/manifest-restore.json",
+      "redactionsApplied": false,
+      "sha256": "c6325bfbcb924f5c9e5984472222781018b89d45e682baf2ea8569b650176a6c"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/manifest-restore.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/manifest-restore.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/manifest-tests.json",
+      "redactionsApplied": false,
+      "sha256": "cfb54d7d0e4a412e2799064d8524f9fc2e9d1b71163f57499d173dcf8e149ea7"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/manifest-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/manifest-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "01fa1e6b40fe7267964b788982cbfc309cf2c536af3dff84246bbf78f3dd9d15"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/mcp-final-tests.json",
+      "redactionsApplied": false,
+      "sha256": "2a8b645f9c5630f622f7eebe564378985223cb787e3b8942d3605bef561c6b0f"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/mcp-final-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/mcp-final-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "8ba07a2c5a71477fc3e16fc667ff6f950987db05d417f8374692ea190ff6240c"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/mcp-focused.json",
+      "redactionsApplied": false,
+      "sha256": "a375e72e0b1280de04047a2b05293ddc366069889cbd13ac55a4a6a83560fe9c"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/mcp-focused.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/mcp-focused.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "0991110526c4e031751d62fa037586f5b9312275c743b0ac9b90d3ebf95559f1"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/mcp-tests.json",
+      "redactionsApplied": false,
+      "sha256": "c71acc4e6e4e2cfd1ba48d3aabb215a931b4154336ed27c11c524937eab12f1f"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/mcp-tests.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/mcp-tests.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "95b371e156f6ae1a76b51ca1fdb260bda331d351d8f3dd2811c75eaf8155d1e0"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/post-loopback-build.json",
+      "redactionsApplied": false,
+      "sha256": "b5585a88964b5460a0f4e1e8c4cf98b495ea7dfa5e2f51dabd093a9c5cd86ebe"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/post-loopback-build.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/post-loopback-build.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "b398082f285bb3c2d55f3e6b69015fde278fbc8e4e5ea5d42b867b237909b0b9"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/post-loopback-restore.json",
+      "redactionsApplied": false,
+      "sha256": "44b722e7d0dbef53d95aca48c653cc927363687e145cf22148634030c664991f"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/post-loopback-restore.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/post-loopback-restore.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "69c9c60c7de074a27721a48be416ce82a168743f20328c10645e64aafffc1b01"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/production-catalog.json",
+      "redactionsApplied": false,
+      "sha256": "9d2b4f0cf74641f8794c1a042722f80008a0efffe49460786edeed9e3d4c8997"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/production-catalog.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/production-catalog.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "6f31c914b4fab86010a5686892b3f5c02347a4ef97696f639922863320d2a6da"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/production-discovery.json",
+      "redactionsApplied": false,
+      "sha256": "007f3daa2e205c977ea5ffbb391cedc318c3377e0107b8a8368f1fde0b4ad152"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/production-final-catalog.json",
+      "redactionsApplied": false,
+      "sha256": "a6be030d8ca592b654437dcfbcd9f254ccaf0a0400ad3cec1cbeb2f2b545ca7d"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/production-final-catalog.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/production-final-catalog.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "6f31c914b4fab86010a5686892b3f5c02347a4ef97696f639922863320d2a6da"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/production-host.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "0ff4eb8c45bdc5339c0001c84e9a42f50076ee4af9e4da7398e9c965335494dc"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/python-tooling.json",
+      "redactionsApplied": false,
+      "sha256": "f55d9396eed1ddf2a2bce2308912de0e79c6958bca9834e3b67df637b8c7df25"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/python-tooling.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/python-tooling.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "75b62f73e4ea3cff24b777a0482dc2e7a4fa89e06c0fe5ba67c0b29bdc5f6e40"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/record-command.py",
+      "redactionsApplied": false,
+      "sha256": "4b8106bbcf9c8233b1343d108e83c8fd57bd54d7ae15f921855cc3c351d8dec0"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/restore.json",
+      "redactionsApplied": false,
+      "sha256": "b6beffb0aab05540969178f98fcd3a11391503ce9d367f92a81119fc6858565a"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/restore.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/restore.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-capture.json",
+      "redactionsApplied": false,
+      "sha256": "ff07289554b6c80a04dcc241b8a5ae65c08970b22d9c2f2eee672bd43473cc45"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-capture.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-capture.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "0c9bae99f9761fbfab47de9afab2613d3ceee4d76368a87891c1d15eae91b228"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-core-build.json",
+      "redactionsApplied": false,
+      "sha256": "1ce65011dcd916960c01fd379bce3ac9bf1d8d2a61ebbfcc73da807989098624"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-core-build.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-core-build.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "d769ca8e46afbdc302306d527fb55ecd2ccfa7960d4d797122f52ed366dac172"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-core-focused.json",
+      "redactionsApplied": false,
+      "sha256": "449f5cdb3eeaf41f44b47ef09a1b9799314cc994bc2f6c4413b4f88324af8456"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-core-focused.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-core-focused.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "5eeb3eccf77aace46e47f7f28431471edd57e73aa117a87a63c2da37876a4023"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-diff-check.json",
+      "redactionsApplied": false,
+      "sha256": "bcbd6dbb4a8e8ff3436219281aa7bbd5cbb433ab4f374ce841ce9a0940c0e992"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-diff-check.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-diff-check.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-evidence-audit.json",
+      "redactionsApplied": false,
+      "sha256": "47164df1ac551ab32b6cc8d7d1ce870f9e8e8f78ccfd9bf14e1de77b60b70b05"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-evidence-audit.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-evidence-audit.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "ae60d5f80bcfd8ba2c2537bda42db1d88640def26d1138768b58266a74b5de3a"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-javascript.json",
+      "redactionsApplied": false,
+      "sha256": "eb8b48c6409ca1d37029dfe6c32e354e290b0139ddf1f39af504ab78881c3e31"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-javascript.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-javascript.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "50789a70f744aa8dab36f0c80b24352d9ca9e94c6ea72bcbac5a1ac49e8f12d3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-mcp-build.json",
+      "redactionsApplied": false,
+      "sha256": "47d4aa88b393a996219ad5bd011a457bd05a2bfa48473701aaf506795b8933b9"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-mcp-build.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-mcp-build.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "3b2777083f1e2b8a2db72ffa7fd78fc818896adb60c797c154b37b8a038be734"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-mcp-focused.json",
+      "redactionsApplied": false,
+      "sha256": "afa10e936e3c0aafe00f4bdbe25f99084504e299431e36b4bf7773feea97df44"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-mcp-focused.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-mcp-focused.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "1649040b3f8dc173f60e1f49b644cacfff210940a5342cb903b330b2c05fee0e"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-production-catalog.json",
+      "redactionsApplied": false,
+      "sha256": "0bcd81649bf899ad80df09ff67cd967e4471339c162eb5c22f830b71fb70f6ce"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-production-catalog.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-production-catalog.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "6f31c914b4fab86010a5686892b3f5c02347a4ef97696f639922863320d2a6da"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-recorder-portability.json",
+      "redactionsApplied": false,
+      "sha256": "7852e659d4d0442966022f09c918b3b59686b06d5fbb29ed9cbf4d69fbc1ccd6"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-recorder-portability.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-recorder-portability.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "f248c175b5556a5ab6919d74dd497c69aad7f969761b0a2548b1bdef0af46d66"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-stdio-build.json",
+      "redactionsApplied": false,
+      "sha256": "bdd1c9551e395784289c524aa9f4ca2d8f77d7f873f9cf8f528548fcf8eaa272"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-stdio-build.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/review-stdio-build.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "87532711f4fa4e4c68c046ae4a9fb66fad6a17cdb5953eb9cc3988e2e8ed7e8e"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/sample-loopback.json",
+      "redactionsApplied": false,
+      "sha256": "c913d588bfae53a18f525938fbdc9563cac6a6ce732651e8d6008ec42a1c72aa"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/sample-loopback.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "1dddb591c3358b5c9e36ee4d4631ccb7d3b5e2e77ccfa0901f379d4075185a33"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/sample-loopback.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "9f636cca819e0a17f91815b755c5d882d6817fce3e6afa980bd2b1ad76a5adea"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/sample-validation.json",
+      "redactionsApplied": false,
+      "sha256": "a70880df4c460f172a1a823c322c903cafc938065137dbdb63571f188281371c"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/sample-validation.stderr.txt",
+      "redactionsApplied": false,
+      "sha256": "cd0851216e4bb284cbe52b83dde965cce0ff2ad12ff8cda43c944d16ea66045a"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/sample-validation.stdout.txt",
+      "redactionsApplied": false,
+      "sha256": "30a9b888f241b2e1f6db19cc8ff01d2bcecacc801fb2febe1f83637eb1aba180"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/verification-summary.json",
+      "redactionsApplied": false,
+      "sha256": "028ad622edb93f0c67442632cb0e75727bcf83cf72fd8441733dfecdbf677efd"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/verify-javascript-patterns.mjs",
+      "redactionsApplied": false,
+      "sha256": "9d22676f66699572222b9b068831995d86d97a77616c76936c38edc0a10ed5ce"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/epic-3-retro-item-1/verify-production-catalog.py",
+      "redactionsApplied": false,
+      "sha256": "2dba2b4df142582b31ab045ebf680e63b7cf6409f890ec62cb4434345eec9c60"
+    }
+  ]
+}

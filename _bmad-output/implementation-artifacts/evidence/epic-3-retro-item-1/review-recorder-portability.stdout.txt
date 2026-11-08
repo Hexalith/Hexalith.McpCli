@@ -1,0 +1,1 @@
+Recorder resolved its repository while launched outside the checkout.

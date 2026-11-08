@@ -1,0 +1,24 @@
+info: ModelContextProtocol.Server.StdioServerTransport[857250842]
+      Server (stream) (hexalith) transport reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application started. Press Ctrl+C to shut down.
+info: Microsoft.Hosting.Lifetime[0]
+      Hosting environment: Production
+info: Microsoft.Hosting.Lifetime[0]
+      Content root path: /home/administrator/projects/hexalith/mcpcli
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 2.0.0+aac815ed7423ea1f674a4e47cdfa79a13aaadf3d) method 'initialize' request handler called.
+info: ModelContextProtocol.Server.McpServer[570385771]
+      Server (hexalith 2.0.0+aac815ed7423ea1f674a4e47cdfa79a13aaadf3d), Client (output-contract-probe 1.0) method 'tools/list' request handler called.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 2.0.0+aac815ed7423ea1f674a4e47cdfa79a13aaadf3d), Client (output-contract-probe 1.0) method 'initialize' request handler completed in 10.2211ms.
+info: ModelContextProtocol.Server.McpServer[1867955179]
+      Server (hexalith 2.0.0+aac815ed7423ea1f674a4e47cdfa79a13aaadf3d), Client (output-contract-probe 1.0) method 'tools/list' request handler completed in 7.2751ms.
+info: ModelContextProtocol.Server.StdioServerTransport[1221292038]
+      Server (stream) (hexalith) transport completed reading messages.
+info: Microsoft.Hosting.Lifetime[0]
+      Application is shutting down...
+info: ModelContextProtocol.Server.StdioServerTransport[1375634372]
+      Server (stream) (hexalith) shutting down.
+info: ModelContextProtocol.Server.StdioServerTransport[1256455528]
+      Server (stream) (hexalith) shut down.

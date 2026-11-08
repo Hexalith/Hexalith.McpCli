@@ -1,0 +1,8 @@
+{
+  "command": [
+    "/tmp/mcpcli-epic3-output-contract-venv/bin/python",
+    "/tmp/mcpcli-output-schema-capture.py"
+  ],
+  "exitCode": 0,
+  "seconds": 2.39
+}

@@ -1,0 +1,1 @@
+Built production catalog: 2 modules, 21 operation descriptions (21 examples); all 24 discovery documents validate against actual advertisements and match structured/text JSON. Every embedded schema/example root is an object. No live services used.

@@ -1,0 +1,8 @@
+{
+  "command": [
+    "node",
+    "/tmp/mcpcli-output-patterns.mjs"
+  ],
+  "exitCode": 0,
+  "seconds": 0.02
+}

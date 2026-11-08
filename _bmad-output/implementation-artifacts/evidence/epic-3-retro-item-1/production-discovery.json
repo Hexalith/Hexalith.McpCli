@@ -1,0 +1,3551 @@
+{
+  "operations": [
+    "parties.create-party",
+    "parties.deactivate-party",
+    "parties.get-party",
+    "parties.list-parties",
+    "parties.reactivate-party",
+    "parties.search-parties",
+    "parties.update-party",
+    "tenants.add-user-to-tenant",
+    "tenants.change-user-role",
+    "tenants.create-tenant",
+    "tenants.disable-tenant",
+    "tenants.enable-tenant",
+    "tenants.get-tenant",
+    "tenants.get-tenant-audit",
+    "tenants.get-tenant-users",
+    "tenants.get-user-tenants",
+    "tenants.list-tenants",
+    "tenants.remove-tenant-configuration",
+    "tenants.remove-user-from-tenant",
+    "tenants.set-tenant-configuration",
+    "tenants.update-tenant"
+  ],
+  "examples": 21,
+  "documents": [
+    {
+      "tool": "list_modules",
+      "arguments": {},
+      "document": {
+        "modules": [
+          {
+            "name": "parties",
+            "description": "Manage people and organizations, their contact channels, identifiers and active status.",
+            "operationCount": 7
+          },
+          {
+            "name": "tenants",
+            "description": "Manage tenant lifecycle, memberships, roles, configuration and audit. Commands and cross-tenant reads use their declared platform scope; single-tenant reads require an explicit canonical tenant. A global administrator may manage every tenant.",
+            "operationCount": 14
+          }
+        ]
+      }
+    },
+    {
+      "tool": "list_operations",
+      "arguments": {
+        "module": "parties"
+      },
+      "document": {
+        "module": "parties",
+        "operations": [
+          {
+            "name": "parties.create-party",
+            "kind": "write",
+            "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100."
+          },
+          {
+            "name": "parties.deactivate-party",
+            "kind": "write",
+            "description": "Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks."
+          },
+          {
+            "name": "parties.get-party",
+            "kind": "read",
+            "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible."
+          },
+          {
+            "name": "parties.list-parties",
+            "kind": "read",
+            "description": "List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+          },
+          {
+            "name": "parties.reactivate-party",
+            "kind": "write",
+            "description": "Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks."
+          },
+          {
+            "name": "parties.search-parties",
+            "kind": "read",
+            "description": "Search visible display names in the envelope tenant using trimmed, case-insensitive, diacritic-normalized exact, prefix, contains and fuzzy matching. Type and Active apply before paging; totals exclude erased parties. Empty query returns no matches. Date filters and advanced search modes reject. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+          },
+          {
+            "name": "parties.update-party",
+            "kind": "write",
+            "description": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "parties.create-party"
+      },
+      "document": {
+        "name": "parties.create-party",
+        "kind": "write",
+        "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            },
+            "Type": {
+              "enum": [
+                "Unknown",
+                "Person",
+                "Organization"
+              ],
+              "description": "The explicit party kind: Person or Organization; Unknown is rejected."
+            },
+            "PersonDetails": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "FirstName": {
+                  "type": "string",
+                  "description": "The person's supplied first name."
+                },
+                "LastName": {
+                  "type": "string",
+                  "description": "The person's supplied last name."
+                },
+                "DateOfBirth": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "The optional date of birth with an explicit UTC offset."
+                },
+                "Prefix": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name prefix, such as a title."
+                },
+                "Suffix": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name suffix."
+                }
+              },
+              "required": [
+                "FirstName",
+                "LastName"
+              ],
+              "additionalProperties": false,
+              "description": "Complete person details, required when Type is Person; optional otherwise and stored if supplied. These details do not override the declared Type."
+            },
+            "OrganizationDetails": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "LegalName": {
+                  "type": "string",
+                  "description": "The organization's complete legal name."
+                },
+                "TradingName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name the organization trades under."
+                },
+                "LegalForm": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional legal form of the organization."
+                },
+                "RegistrationNumber": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional organization registration number."
+                },
+                "IsNaturalPerson": {
+                  "type": "boolean",
+                  "description": "Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification."
+                }
+              },
+              "required": [
+                "LegalName"
+              ],
+              "additionalProperties": false,
+              "description": "Complete organization details, required when Type is Organization; optional otherwise and stored if supplied. These details do not override the declared Type."
+            },
+            "ContactChannels": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "PartyId": {
+                    "type": "string",
+                    "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                  },
+                  "ContactChannelId": {
+                    "type": "string",
+                    "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                  },
+                  "Type": {
+                    "enum": [
+                      "Email",
+                      "Phone",
+                      "PostalAddress",
+                      "SocialMedia"
+                    ],
+                    "description": "The contact-channel kind: Email, Phone, PostalAddress or SocialMedia."
+                  },
+                  "Value": {
+                    "type": "string",
+                    "description": "A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming."
+                  },
+                  "IsPreferred": {
+                    "type": "boolean",
+                    "description": "Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins."
+                  }
+                },
+                "required": [
+                  "PartyId",
+                  "ContactChannelId",
+                  "Type",
+                  "Value"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Contact channels to add atomically with the party; supply each child ID and the same PartyId as the root."
+            },
+            "Identifiers": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "PartyId": {
+                    "type": "string",
+                    "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                  },
+                  "IdentifierId": {
+                    "type": "string",
+                    "description": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                  },
+                  "Type": {
+                    "enum": [
+                      "VAT",
+                      "SIRET",
+                      "NationalId",
+                      "CompanyRegistration",
+                      "TaxId",
+                      "Other"
+                    ],
+                    "description": "The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other."
+                  },
+                  "Value": {
+                    "type": "string",
+                    "description": "The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+                  }
+                },
+                "required": [
+                  "PartyId",
+                  "IdentifierId",
+                  "Type",
+                  "Value"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Business identifiers to add atomically with the party; supply each child ID and the same PartyId as the root."
+            }
+          },
+          "required": [
+            "PartyId",
+            "Type"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          }
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "parties.deactivate-party"
+      },
+      "document": {
+        "name": "parties.deactivate-party",
+        "kind": "write",
+        "description": "Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId of the party to soft-deactivate, at most 128 characters; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            }
+          },
+          "required": [
+            "PartyId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "parties.get-party"
+      },
+      "document": {
+        "name": "parties.get-party",
+        "kind": "read",
+        "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters; tenant comes from the envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID IDs before submission, although Parties accepts them."
+            }
+          },
+          "required": [
+            "PartyId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "parties.list-parties"
+      },
+      "document": {
+        "name": "parties.list-parties",
+        "kind": "read",
+        "description": "List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "Type": {
+              "enum": [
+                "Unknown",
+                "Person",
+                "Organization",
+                null
+              ],
+              "description": "Optional party kind: Person or Organization; Unknown and other values reject. Applied before paging."
+            },
+            "Active": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Optional active-status filter, applied before paging; omitted includes active and inactive parties."
+            },
+            "CreatedAfter": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Inclusive earliest creation instant, with an explicit UTC or numeric offset; omitted leaves this bound open. Each lower bound must not exceed its upper bound."
+            },
+            "CreatedBefore": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Inclusive latest creation instant, with an explicit UTC or numeric offset; omitted leaves this bound open. Each lower bound must not exceed its upper bound."
+            },
+            "ModifiedAfter": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Inclusive earliest modification instant, with an explicit UTC or numeric offset; omitted leaves this bound open. Each lower bound must not exceed its upper bound."
+            },
+            "ModifiedBefore": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Inclusive latest modification instant, with an explicit UTC or numeric offset; omitted leaves this bound open. Each lower bound must not exceed its upper bound."
+            }
+          },
+          "additionalProperties": false
+        },
+        "example": {
+          "Type": "Person",
+          "Active": true,
+          "CreatedAfter": "2026-01-01T00:00:00Z"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "parties.reactivate-party"
+      },
+      "document": {
+        "name": "parties.reactivate-party",
+        "kind": "write",
+        "description": "Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId of the party to reactivate, at most 128 characters; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            }
+          },
+          "required": [
+            "PartyId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "parties.search-parties"
+      },
+      "document": {
+        "name": "parties.search-parties",
+        "kind": "read",
+        "description": "Search visible display names in the envelope tenant using trimmed, case-insensitive, diacritic-normalized exact, prefix, contains and fuzzy matching. Type and Active apply before paging; totals exclude erased parties. Empty query returns no matches. Date filters and advanced search modes reject. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "Query": {
+              "type": "string",
+              "description": "Display-name query, at most 512 UTF-16 units including whitespace before trimming. Oversized input rejects; empty or whitespace returns no matches. Contact channels and business identifiers are not searched."
+            },
+            "Type": {
+              "enum": [
+                "Unknown",
+                "Person",
+                "Organization",
+                null
+              ],
+              "description": "Optional party kind: Person or Organization; Unknown and other values reject. Applied before paging."
+            },
+            "Active": {
+              "type": [
+                "boolean",
+                "null"
+              ],
+              "description": "Optional active-status filter, applied before paging; omitted includes active and inactive parties."
+            }
+          },
+          "required": [
+            "Query"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "Query": "Ada",
+          "Type": "Person",
+          "Active": true
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "parties.update-party"
+      },
+      "document": {
+        "name": "parties.update-party",
+        "kind": "write",
+        "description": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "PartyId": {
+              "type": "string",
+              "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+            },
+            "PersonDetails": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "FirstName": {
+                  "type": "string",
+                  "description": "The person's supplied first name."
+                },
+                "LastName": {
+                  "type": "string",
+                  "description": "The person's supplied last name."
+                },
+                "DateOfBirth": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "format": "date-time",
+                  "description": "The optional date of birth with an explicit UTC offset."
+                },
+                "Prefix": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name prefix, such as a title."
+                },
+                "Suffix": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name suffix."
+                }
+              },
+              "required": [
+                "FirstName",
+                "LastName"
+              ],
+              "additionalProperties": false,
+              "description": "Complete replacement for an existing Person party only. Omitting this object or supplying null leaves details unchanged; supplying this for another party type rejects the whole update. Inside a supplied replacement, omitted optional members become null. Party type cannot change."
+            },
+            "OrganizationDetails": {
+              "type": [
+                "object",
+                "null"
+              ],
+              "properties": {
+                "LegalName": {
+                  "type": "string",
+                  "description": "The organization's complete legal name."
+                },
+                "TradingName": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional name the organization trades under."
+                },
+                "LegalForm": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional legal form of the organization."
+                },
+                "RegistrationNumber": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The optional organization registration number."
+                },
+                "IsNaturalPerson": {
+                  "type": "boolean",
+                  "description": "Natural-person classification (an individual rather than a legal entity), default false. Create initializes the party classification. Detail replacement changes this nested value but does not change the established party classification."
+                }
+              },
+              "required": [
+                "LegalName"
+              ],
+              "additionalProperties": false,
+              "description": "Complete replacement for an existing Organization party only. Omitting this object or supplying null leaves details unchanged; supplying this for another party type rejects the whole update. Inside a supplied replacement, omitted optional members become null and IsNaturalPerson defaults to false. The established root classification remains unchanged. Party type cannot change."
+            },
+            "AddContactChannels": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "PartyId": {
+                    "type": "string",
+                    "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                  },
+                  "ContactChannelId": {
+                    "type": "string",
+                    "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                  },
+                  "Type": {
+                    "enum": [
+                      "Email",
+                      "Phone",
+                      "PostalAddress",
+                      "SocialMedia"
+                    ],
+                    "description": "The contact-channel kind: Email, Phone, PostalAddress or SocialMedia."
+                  },
+                  "Value": {
+                    "type": "string",
+                    "description": "A raw string with at least one non-whitespace character for every kind, including PostalAddress and SocialMedia; no structured address or social object format is defined. Stored without trimming."
+                  },
+                  "IsPreferred": {
+                    "type": "boolean",
+                    "description": "Defaults to false. True makes this channel preferred and clears preference on other channels of the same type; the last true addition for that type wins."
+                  }
+                },
+                "required": [
+                  "PartyId",
+                  "ContactChannelId",
+                  "Type",
+                  "Value"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Contact channels to add with explicit child IDs and matching PartyId. An existing exact ID is skipped even when also listed in UpdateContactChannels; that update still applies."
+            },
+            "UpdateContactChannels": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "PartyId": {
+                    "type": "string",
+                    "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                  },
+                  "ContactChannelId": {
+                    "type": "string",
+                    "description": "The supplied ContactChannelId, at most 128 characters; additions must be unique ignoring case, while updates address exact case. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                  },
+                  "Type": {
+                    "enum": [
+                      "Email",
+                      "Phone",
+                      "PostalAddress",
+                      "SocialMedia",
+                      null
+                    ],
+                    "description": "The replacement kind: Email, Phone, PostalAddress or SocialMedia. Omitted or null preserves the kind. When moving a preferred channel to another kind, also supply IsPreferred=true to reconcile preferences."
+                  },
+                  "Value": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "Omitted or null preserves the value; a supplied string replaces it verbatim, including an empty string to clear it. All kinds, including PostalAddress and SocialMedia, use raw strings without a defined structured format."
+                  },
+                  "IsPreferred": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ],
+                    "description": "Omitted or null preserves preference; false clears only this channel. True selects this channel within its target type and clears other preferences when becoming preferred or changing type. Supply true with a type change to reconcile preferences."
+                  }
+                },
+                "required": [
+                  "PartyId",
+                  "ContactChannelId"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Existing contact channels to change; each entry must supply at least one non-null Type, Value or IsPreferred. False is a supported preference change; omitted or null members preserve existing values."
+            },
+            "RemoveContactChannelIds": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "description": "Exact existing ContactChannelId values to remove, at most 128 characters each; case is significant. An ID also in AddContactChannels or UpdateContactChannels rejects the whole update. Null entries reject."
+            },
+            "AddIdentifiers": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "properties": {
+                  "PartyId": {
+                    "type": "string",
+                    "description": "The supplied PartyId, at most 128 characters, shared by the root and every child operation; tenant comes from the gateway envelope. Use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. McpCli refuses legacy braced, parenthesized and X-format GUID PartyId values before Gateway submission, although Parties accepts them."
+                  },
+                  "IdentifierId": {
+                    "type": "string",
+                    "description": "The supplied IdentifierId, at most 128 characters; distinct from the business identifier Value, which has a 512 UTF-16-unit limit. For new IDs use ASCII letters or digits plus '.', '_' or '-'; start and end with an ASCII letter or digit. Parties accepts legacy braced, parenthesized and X-format GUID IDs, but their McpCli/Gateway reachability remains unproven."
+                  },
+                  "Type": {
+                    "enum": [
+                      "VAT",
+                      "SIRET",
+                      "NationalId",
+                      "CompanyRegistration",
+                      "TaxId",
+                      "Other"
+                    ],
+                    "description": "The business identifier kind: VAT, SIRET, NationalId, CompanyRegistration, TaxId or Other."
+                  },
+                  "Value": {
+                    "type": "string",
+                    "description": "The business identifier Value, with at least one non-whitespace character and at most 512 UTF-16 units, stored without trimming; the 128-character IdentifierId limit does not apply to this value."
+                  }
+                },
+                "required": [
+                  "PartyId",
+                  "IdentifierId",
+                  "Type",
+                  "Value"
+                ],
+                "additionalProperties": false
+              },
+              "description": "Business identifiers to add in this atomic update, with explicit child IDs and matching PartyId."
+            },
+            "RemoveIdentifierIds": {
+              "type": "array",
+              "items": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "description": "Exact existing IdentifierId values to remove, at most 128 characters each; case is significant. An ID also in AddIdentifiers rejects the whole update. Null entries reject."
+            }
+          },
+          "required": [
+            "PartyId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "PartyId": "party-49",
+          "PersonDetails": {
+            "FirstName": "Augusta Ada",
+            "LastName": "Lovelace"
+          }
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "list_operations",
+      "arguments": {
+        "module": "tenants"
+      },
+      "document": {
+        "module": "tenants",
+        "operations": [
+          {
+            "name": "tenants.add-user-to-tenant",
+            "kind": "write",
+            "description": "Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member's role."
+          },
+          {
+            "name": "tenants.change-user-role",
+            "kind": "write",
+            "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+          },
+          {
+            "name": "tenants.create-tenant",
+            "kind": "write",
+            "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected."
+          },
+          {
+            "name": "tenants.disable-tenant",
+            "kind": "write",
+            "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected."
+          },
+          {
+            "name": "tenants.enable-tenant",
+            "kind": "write",
+            "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected."
+          },
+          {
+            "name": "tenants.get-tenant",
+            "kind": "read",
+            "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users."
+          },
+          {
+            "name": "tenants.get-tenant-audit",
+            "kind": "read",
+            "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. Global-administrator grants have a separate audit route. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.get-tenant-users",
+            "kind": "read",
+            "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.get-user-tenants",
+            "kind": "read",
+            "description": "List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.list-tenants",
+            "kind": "read",
+            "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.remove-tenant-configuration",
+            "kind": "write",
+            "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected."
+          },
+          {
+            "name": "tenants.remove-user-from-tenant",
+            "kind": "write",
+            "description": "Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+          },
+          {
+            "name": "tenants.set-tenant-configuration",
+            "kind": "write",
+            "description": "Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets."
+          },
+          {
+            "name": "tenants.update-tenant",
+            "kind": "write",
+            "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected."
+          }
+        ]
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.add-user-to-tenant"
+      },
+      "document": {
+        "name": "tenants.add-user-to-tenant",
+        "kind": "write",
+        "description": "Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member's role.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to add the user to."
+            },
+            "UserId": {
+              "type": "string",
+              "description": "Identifier of the user to add: the subject (sub) claim the identity provider issues for that user. It is not checked against the identity provider."
+            },
+            "Role": {
+              "enum": [
+                "Unknown",
+                "TenantOwner",
+                "TenantContributor",
+                "TenantReader"
+              ],
+              "description": "Role to grant. Every role can read the tenant and its members; TenantContributor can also update its name and description; TenantOwner can also manage its members, roles and configuration. Unknown is rejected."
+            }
+          },
+          "required": [
+            "TenantId",
+            "UserId",
+            "Role"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme",
+          "UserId": "8d3f2a61-5b7e-4c0a-9e21-3f4b6c7d8e90",
+          "Role": "TenantContributor"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.change-user-role"
+      },
+      "document": {
+        "name": "tenants.change-user-role",
+        "kind": "write",
+        "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant whose member changes role."
+            },
+            "UserId": {
+              "type": "string",
+              "description": "Identifier of the member whose role changes: the subject (sub) claim the identity provider issues for that user."
+            },
+            "NewRole": {
+              "enum": [
+                "Unknown",
+                "TenantOwner",
+                "TenantContributor",
+                "TenantReader"
+              ],
+              "description": "Role that replaces the member's current role. Every role can read the tenant and its members; TenantContributor can also update its name and description; TenantOwner can also manage its members, roles and configuration. Unknown is rejected."
+            }
+          },
+          "required": [
+            "TenantId",
+            "UserId",
+            "NewRole"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme",
+          "UserId": "8d3f2a61-5b7e-4c0a-9e21-3f4b6c7d8e90",
+          "NewRole": "TenantOwner"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.create-tenant"
+      },
+      "document": {
+        "name": "tenants.create-tenant",
+        "kind": "write",
+        "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the new tenant: 1 to 256 ASCII letters, digits, '.', '_' or '-', starting and ending with a letter or digit. It is case-sensitive and cannot be changed later."
+            },
+            "Name": {
+              "type": "string",
+              "description": "Display name of the tenant."
+            },
+            "Description": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Free-text description of the tenant. The key is required; send null for no description."
+            }
+          },
+          "required": [
+            "TenantId",
+            "Name",
+            "Description"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme",
+          "Name": "Acme Corporation",
+          "Description": "Production workspace for Acme"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.disable-tenant"
+      },
+      "document": {
+        "name": "tenants.disable-tenant",
+        "kind": "write",
+        "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to disable."
+            }
+          },
+          "required": [
+            "TenantId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.enable-tenant"
+      },
+      "document": {
+        "name": "tenants.enable-tenant",
+        "kind": "write",
+        "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to enable."
+            }
+          },
+          "required": [
+            "TenantId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.get-tenant"
+      },
+      "document": {
+        "name": "tenants.get-tenant",
+        "kind": "read",
+        "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to read. Required; a call without it is rejected."
+            }
+          },
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.get-tenant-audit"
+      },
+      "document": {
+        "name": "tenants.get-tenant-audit",
+        "kind": "read",
+        "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. Global-administrator grants have a separate audit route. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant whose audit trail is read. Required; a call without it is rejected."
+            },
+            "From": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Optional inclusive lower bound on the entry time, as an ISO 8601 date and time with an offset."
+            },
+            "To": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "format": "date-time",
+              "description": "Optional inclusive upper bound on the entry time, as an ISO 8601 date and time with an offset."
+            },
+            "Category": {
+              "enum": [
+                "Access",
+                "Administrative",
+                null
+              ],
+              "description": "Optional category filter: Access keeps membership and role changes; Administrative keeps tenant creation, name and description changes, disabling, enabling and configuration changes. Omit it for both."
+            },
+            "Stream": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Has no effect for calls made with this tool. Leave unset."
+            },
+            "Cursor": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Has no effect: use the pageSize and cursor call arguments instead."
+            },
+            "PageSize": {
+              "type": "integer",
+              "description": "Has no effect: use the pageSize and cursor call arguments instead."
+            }
+          },
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2026-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [
+          {
+            "code": "payload_paging_member",
+            "severity": "warning",
+            "message": "Move paging member Cursor to the query envelope argument.",
+            "property": "/properties/Cursor"
+          },
+          {
+            "code": "payload_paging_member",
+            "severity": "warning",
+            "message": "Move paging member PageSize to the query envelope argument.",
+            "property": "/properties/PageSize"
+          }
+        ],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.get-tenant-users"
+      },
+      "document": {
+        "name": "tenants.get-tenant-users",
+        "kind": "read",
+        "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant whose members are listed. Required; a call without it is rejected."
+            },
+            "Cursor": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Has no effect: use the pageSize and cursor call arguments instead."
+            },
+            "PageSize": {
+              "type": "integer",
+              "description": "Has no effect: use the pageSize and cursor call arguments instead."
+            }
+          },
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "tenant",
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ]
+        },
+        "lintFindings": [
+          {
+            "code": "payload_paging_member",
+            "severity": "warning",
+            "message": "Move paging member Cursor to the query envelope argument.",
+            "property": "/properties/Cursor"
+          },
+          {
+            "code": "payload_paging_member",
+            "severity": "warning",
+            "message": "Move paging member PageSize to the query envelope argument.",
+            "property": "/properties/PageSize"
+          }
+        ],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.get-user-tenants"
+      },
+      "document": {
+        "name": "tenants.get-user-tenants",
+        "kind": "read",
+        "description": "List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "UserId": {
+              "type": "string",
+              "description": "Identifier of the user whose memberships are listed: the subject (sub) claim the identity provider issues for that user. Always set it, including for your own memberships: an omitted UserId does not default to you and usually returns an empty list. To list your own tenants without knowing your subject, use tenants.list-tenants; it returns no roles, and a global administrator gets every tenant there."
+            },
+            "Cursor": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Has no effect: use the pageSize and cursor call arguments instead."
+            },
+            "PageSize": {
+              "type": "integer",
+              "description": "Has no effect: use the pageSize and cursor call arguments instead."
+            }
+          },
+          "additionalProperties": false
+        },
+        "example": {
+          "UserId": "8d3f2a61-5b7e-4c0a-9e21-3f4b6c7d8e90"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [
+          {
+            "code": "payload_paging_member",
+            "severity": "warning",
+            "message": "Move paging member Cursor to the query envelope argument.",
+            "property": "/properties/Cursor"
+          },
+          {
+            "code": "payload_paging_member",
+            "severity": "warning",
+            "message": "Move paging member PageSize to the query envelope argument.",
+            "property": "/properties/PageSize"
+          }
+        ],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.list-tenants"
+      },
+      "document": {
+        "name": "tenants.list-tenants",
+        "kind": "read",
+        "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported.",
+        "schema": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "properties": {
+            "Cursor": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Has no effect: use the pageSize and cursor call arguments instead."
+            },
+            "PageSize": {
+              "type": "integer",
+              "description": "Has no effect: use the pageSize and cursor call arguments instead."
+            }
+          },
+          "additionalProperties": false
+        },
+        "example": {},
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "entityId",
+            "pageSize",
+            "offset",
+            "cursor"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [
+          {
+            "code": "payload_paging_member",
+            "severity": "warning",
+            "message": "Move paging member Cursor to the query envelope argument.",
+            "property": "/properties/Cursor"
+          },
+          {
+            "code": "payload_paging_member",
+            "severity": "warning",
+            "message": "Move paging member PageSize to the query envelope argument.",
+            "property": "/properties/PageSize"
+          }
+        ],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.remove-tenant-configuration"
+      },
+      "document": {
+        "name": "tenants.remove-tenant-configuration",
+        "kind": "write",
+        "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant whose setting is deleted."
+            },
+            "Key": {
+              "type": "string",
+              "description": "Exact, case-sensitive configuration key to delete."
+            }
+          },
+          "required": [
+            "TenantId",
+            "Key"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme",
+          "Key": "billing.plan"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.remove-user-from-tenant"
+      },
+      "document": {
+        "name": "tenants.remove-user-from-tenant",
+        "kind": "write",
+        "description": "Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to remove the user from."
+            },
+            "UserId": {
+              "type": "string",
+              "description": "Identifier of the member to remove: the subject (sub) claim the identity provider issues for that user."
+            }
+          },
+          "required": [
+            "TenantId",
+            "UserId"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme",
+          "UserId": "8d3f2a61-5b7e-4c0a-9e21-3f4b6c7d8e90"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.set-tenant-configuration"
+      },
+      "document": {
+        "name": "tenants.set-tenant-configuration",
+        "kind": "write",
+        "description": "Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to configure."
+            },
+            "Key": {
+              "type": "string",
+              "description": "Configuration key, at most 256 characters, case-sensitive. An existing key is overwritten."
+            },
+            "Value": {
+              "type": "string",
+              "description": "Configuration value, at most 1024 characters; an empty string is allowed."
+            }
+          },
+          "required": [
+            "TenantId",
+            "Key",
+            "Value"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme",
+          "Key": "billing.plan",
+          "Value": "enterprise"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    },
+    {
+      "tool": "describe_operation",
+      "arguments": {
+        "operation": "tenants.update-tenant"
+      },
+      "document": {
+        "name": "tenants.update-tenant",
+        "kind": "write",
+        "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "TenantId": {
+              "type": "string",
+              "description": "Identifier of the tenant to update."
+            },
+            "Name": {
+              "type": "string",
+              "description": "New display name; replaces the current one."
+            },
+            "Description": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "New description; replaces the current one and null clears it. To keep the current description while renaming, send it again (read it with tenants.get-tenant)."
+            }
+          },
+          "required": [
+            "TenantId",
+            "Name",
+            "Description"
+          ],
+          "additionalProperties": false
+        },
+        "example": {
+          "TenantId": "acme",
+          "Name": "Acme Corporation EMEA",
+          "Description": "European production workspace"
+        },
+        "envelope": {
+          "aggregateIdRequired": false,
+          "idempotencyKeyRequired": false,
+          "arguments": [
+            "aggregateId",
+            "correlationId",
+            "idempotencyKey",
+            "extensions"
+          ],
+          "platformScope": "platform:tenants"
+        },
+        "lintFindings": [],
+        "submittable": false,
+        "reason": "configuration_invalid"
+      }
+    }
+  ],
+  "schemas": {
+    "list_modules": {
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "modules": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "operationCount": {
+                    "type": "integer",
+                    "minimum": 0
+                  }
+                },
+                "required": [
+                  "name",
+                  "description",
+                  "operationCount"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "modules"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "validation_failed"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                    },
+                    "violations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                          },
+                          "message": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "message"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "default": null,
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "violations"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "gateway_error"
+                      ]
+                    },
+                    "status": {
+                      "type": "integer",
+                      "default": null
+                    },
+                    "detail": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "default": null
+                    },
+                    "clientAction": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "correlationId": {
+                      "type": "string",
+                      "minLength": 26,
+                      "maxLength": 26,
+                      "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_operation"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_module"
+                      ]
+                    },
+                    "module": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "module",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "invalid_arguments"
+                      ]
+                    },
+                    "argument": {
+                      "type": "string",
+                      "enum": [
+                        "module",
+                        "kind",
+                        "operation",
+                        "payload",
+                        "tenant",
+                        "aggregateId",
+                        "correlationId",
+                        "idempotencyKey",
+                        "extensions",
+                        "entityId",
+                        "pageSize",
+                        "offset",
+                        "cursor",
+                        "lint",
+                        "url",
+                        "token",
+                        "actor",
+                        "allowTenantOverride",
+                        "profile",
+                        "format",
+                        "output",
+                        "readOnly",
+                        "strict",
+                        "name",
+                        "set",
+                        "arguments",
+                        "clear",
+                        "transport",
+                        "extension"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "argument",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "read_only",
+                        "catalog_empty",
+                        "catalog_invalid",
+                        "unsupported_transport",
+                        "configuration_invalid",
+                        "internal_error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "list_operations": {
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "module": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+            },
+            "operations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": [
+                      "read",
+                      "write"
+                    ]
+                  },
+                  "description": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                },
+                "required": [
+                  "name",
+                  "kind",
+                  "description"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "module",
+            "operations"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "validation_failed"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                    },
+                    "violations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                          },
+                          "message": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "message"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "default": null,
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "violations"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "gateway_error"
+                      ]
+                    },
+                    "status": {
+                      "type": "integer",
+                      "default": null
+                    },
+                    "detail": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "default": null
+                    },
+                    "clientAction": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "correlationId": {
+                      "type": "string",
+                      "minLength": 26,
+                      "maxLength": 26,
+                      "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_operation"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_module"
+                      ]
+                    },
+                    "module": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "module",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "invalid_arguments"
+                      ]
+                    },
+                    "argument": {
+                      "type": "string",
+                      "enum": [
+                        "module",
+                        "kind",
+                        "operation",
+                        "payload",
+                        "tenant",
+                        "aggregateId",
+                        "correlationId",
+                        "idempotencyKey",
+                        "extensions",
+                        "entityId",
+                        "pageSize",
+                        "offset",
+                        "cursor",
+                        "lint",
+                        "url",
+                        "token",
+                        "actor",
+                        "allowTenantOverride",
+                        "profile",
+                        "format",
+                        "output",
+                        "readOnly",
+                        "strict",
+                        "name",
+                        "set",
+                        "arguments",
+                        "clear",
+                        "transport",
+                        "extension"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "argument",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "read_only",
+                        "catalog_empty",
+                        "catalog_invalid",
+                        "unsupported_transport",
+                        "configuration_invalid",
+                        "internal_error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "describe_operation": {
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+            },
+            "kind": {
+              "type": "string",
+              "enum": [
+                "read",
+                "write"
+              ]
+            },
+            "description": {
+              "type": "string",
+              "minLength": 1
+            },
+            "schema": {
+              "type": "object"
+            },
+            "example": {
+              "type": "object"
+            },
+            "envelope": {
+              "type": "object",
+              "properties": {
+                "fixedTenant": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?(?![\\s\\S])"
+                },
+                "aggregateIdRequired": {
+                  "type": "boolean"
+                },
+                "idempotencyKeyRequired": {
+                  "type": "boolean"
+                },
+                "arguments": {
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "tenant",
+                      "aggregateId",
+                      "correlationId",
+                      "idempotencyKey",
+                      "extensions",
+                      "entityId",
+                      "pageSize",
+                      "offset",
+                      "cursor"
+                    ]
+                  },
+                  "uniqueItems": true
+                },
+                "platformScope": {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^platform:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                }
+              },
+              "required": [
+                "aggregateIdRequired",
+                "idempotencyKeyRequired",
+                "arguments"
+              ],
+              "additionalProperties": false,
+              "not": {
+                "required": [
+                  "fixedTenant",
+                  "platformScope"
+                ]
+              },
+              "if": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "fixedTenant"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "platformScope"
+                    ]
+                  }
+                ]
+              },
+              "then": {
+                "properties": {
+                  "arguments": {
+                    "not": {
+                      "contains": {
+                        "const": "tenant"
+                      }
+                    }
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "arguments": {
+                    "contains": {
+                      "const": "tenant"
+                    }
+                  }
+                }
+              }
+            },
+            "lintFindings": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "code": {
+                    "type": "string"
+                  },
+                  "severity": {
+                    "type": "string",
+                    "const": "warning"
+                  },
+                  "message": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "property": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                  }
+                },
+                "required": [
+                  "code",
+                  "severity",
+                  "message"
+                ],
+                "additionalProperties": false,
+                "oneOf": [
+                  {
+                    "properties": {
+                      "code": {
+                        "const": "hollow_description"
+                      }
+                    },
+                    "not": {
+                      "required": [
+                        "property"
+                      ]
+                    }
+                  },
+                  {
+                    "properties": {
+                      "code": {
+                        "enum": [
+                          "missing_property_description",
+                          "unmarked_identifier_like_property",
+                          "payload_paging_member"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "property"
+                    ]
+                  }
+                ]
+              }
+            },
+            "submittable": {
+              "type": "boolean"
+            },
+            "reason": {
+              "type": "string",
+              "enum": [
+                "read_only",
+                "configuration_invalid"
+              ]
+            }
+          },
+          "required": [
+            "name",
+            "kind",
+            "description",
+            "schema",
+            "envelope",
+            "lintFindings",
+            "submittable"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "submittable": {
+                    "const": true
+                  }
+                },
+                "required": [
+                  "submittable"
+                ]
+              },
+              "then": {
+                "not": {
+                  "required": [
+                    "reason"
+                  ]
+                }
+              },
+              "else": {
+                "required": [
+                  "reason"
+                ]
+              }
+            },
+            {
+              "if": {
+                "properties": {
+                  "kind": {
+                    "const": "read"
+                  }
+                },
+                "required": [
+                  "kind"
+                ]
+              },
+              "then": {
+                "properties": {
+                  "envelope": {
+                    "properties": {
+                      "arguments": {
+                        "items": {
+                          "enum": [
+                            "tenant",
+                            "aggregateId",
+                            "entityId",
+                            "pageSize",
+                            "offset",
+                            "cursor"
+                          ]
+                        },
+                        "allOf": [
+                          {
+                            "contains": {
+                              "const": "aggregateId"
+                            }
+                          },
+                          {
+                            "contains": {
+                              "const": "entityId"
+                            }
+                          },
+                          {
+                            "contains": {
+                              "const": "pageSize"
+                            }
+                          },
+                          {
+                            "contains": {
+                              "const": "offset"
+                            }
+                          },
+                          {
+                            "contains": {
+                              "const": "cursor"
+                            }
+                          }
+                        ]
+                      },
+                      "idempotencyKeyRequired": {
+                        "const": false
+                      }
+                    }
+                  },
+                  "reason": {
+                    "const": "configuration_invalid"
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "envelope": {
+                    "properties": {
+                      "arguments": {
+                        "items": {
+                          "enum": [
+                            "tenant",
+                            "aggregateId",
+                            "correlationId",
+                            "idempotencyKey",
+                            "extensions"
+                          ]
+                        },
+                        "allOf": [
+                          {
+                            "contains": {
+                              "const": "aggregateId"
+                            }
+                          },
+                          {
+                            "contains": {
+                              "const": "correlationId"
+                            }
+                          },
+                          {
+                            "contains": {
+                              "const": "idempotencyKey"
+                            }
+                          },
+                          {
+                            "contains": {
+                              "const": "extensions"
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "validation_failed"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                    },
+                    "violations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                          },
+                          "message": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "message"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "default": null,
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "violations"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "gateway_error"
+                      ]
+                    },
+                    "status": {
+                      "type": "integer",
+                      "default": null
+                    },
+                    "detail": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "default": null
+                    },
+                    "clientAction": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "correlationId": {
+                      "type": "string",
+                      "minLength": 26,
+                      "maxLength": 26,
+                      "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_operation"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_module"
+                      ]
+                    },
+                    "module": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "module",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "invalid_arguments"
+                      ]
+                    },
+                    "argument": {
+                      "type": "string",
+                      "enum": [
+                        "module",
+                        "kind",
+                        "operation",
+                        "payload",
+                        "tenant",
+                        "aggregateId",
+                        "correlationId",
+                        "idempotencyKey",
+                        "extensions",
+                        "entityId",
+                        "pageSize",
+                        "offset",
+                        "cursor",
+                        "lint",
+                        "url",
+                        "token",
+                        "actor",
+                        "allowTenantOverride",
+                        "profile",
+                        "format",
+                        "output",
+                        "readOnly",
+                        "strict",
+                        "name",
+                        "set",
+                        "arguments",
+                        "clear",
+                        "transport",
+                        "extension"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "argument",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "read_only",
+                        "catalog_empty",
+                        "catalog_invalid",
+                        "unsupported_transport",
+                        "configuration_invalid",
+                        "internal_error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "send_command": {
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+            },
+            "messageId": {
+              "type": "string",
+              "minLength": 26,
+              "maxLength": 26,
+              "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+            },
+            "correlationId": {
+              "type": "string",
+              "minLength": 26,
+              "maxLength": 26,
+              "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+            },
+            "tenant": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?(?![\\s\\S])"
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^platform:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                }
+              ]
+            },
+            "aggregateId": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9._-]{0,254}[A-Za-z0-9])?(?![\\s\\S])"
+            },
+            "status": {
+              "type": "string",
+              "const": "accepted"
+            },
+            "idempotencyKey": {
+              "type": "string",
+              "minLength": 26,
+              "maxLength": 26,
+              "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+            },
+            "result": {
+              "default": null
+            }
+          },
+          "required": [
+            "operation",
+            "messageId",
+            "correlationId",
+            "tenant",
+            "aggregateId",
+            "status"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "validation_failed"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                    },
+                    "violations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                          },
+                          "message": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "message"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "default": null,
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "violations"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "gateway_error"
+                      ]
+                    },
+                    "status": {
+                      "type": "integer",
+                      "default": null
+                    },
+                    "detail": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "default": null
+                    },
+                    "clientAction": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "correlationId": {
+                      "type": "string",
+                      "minLength": 26,
+                      "maxLength": 26,
+                      "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_operation"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_module"
+                      ]
+                    },
+                    "module": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "module",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "invalid_arguments"
+                      ]
+                    },
+                    "argument": {
+                      "type": "string",
+                      "enum": [
+                        "module",
+                        "kind",
+                        "operation",
+                        "payload",
+                        "tenant",
+                        "aggregateId",
+                        "correlationId",
+                        "idempotencyKey",
+                        "extensions",
+                        "entityId",
+                        "pageSize",
+                        "offset",
+                        "cursor",
+                        "lint",
+                        "url",
+                        "token",
+                        "actor",
+                        "allowTenantOverride",
+                        "profile",
+                        "format",
+                        "output",
+                        "readOnly",
+                        "strict",
+                        "name",
+                        "set",
+                        "arguments",
+                        "clear",
+                        "transport",
+                        "extension"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "argument",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "read_only",
+                        "catalog_empty",
+                        "catalog_invalid",
+                        "unsupported_transport",
+                        "configuration_invalid",
+                        "internal_error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "run_query": {
+      "type": "object",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "operation": {
+              "type": "string",
+              "minLength": 1,
+              "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+            },
+            "tenant": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?(?![\\s\\S])"
+                },
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "pattern": "^platform:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                }
+              ]
+            },
+            "document": true,
+            "paging": {
+              "type": "object",
+              "properties": {
+                "pageSize": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "offset": {
+                  "type": "integer",
+                  "default": null,
+                  "minimum": 0
+                },
+                "nextCursor": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "totalCount": {
+                  "type": "integer",
+                  "default": null,
+                  "minimum": 0
+                },
+                "hasMore": {
+                  "type": "boolean",
+                  "default": null
+                }
+              },
+              "required": [
+                "pageSize"
+              ],
+              "default": null,
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "operation",
+            "tenant",
+            "document"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "error": {
+              "type": "object",
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "validation_failed"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                    },
+                    "violations": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "path": {
+                            "type": "string",
+                            "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                          },
+                          "message": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "required": [
+                          "path",
+                          "message"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "default": null,
+                      "minItems": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "violations"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "gateway_error"
+                      ]
+                    },
+                    "status": {
+                      "type": "integer",
+                      "default": null
+                    },
+                    "detail": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "reason": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryable": {
+                      "type": "boolean",
+                      "default": null
+                    },
+                    "clientAction": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "retryAfter": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "correlationId": {
+                      "type": "string",
+                      "minLength": 26,
+                      "maxLength": 26,
+                      "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "status",
+                    "detail"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_operation"
+                      ]
+                    },
+                    "operation": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "operation",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "unknown_module"
+                      ]
+                    },
+                    "module": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "suggestions": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "default": null,
+                      "maxItems": 3
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "module",
+                    "suggestions"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "invalid_arguments"
+                      ]
+                    },
+                    "argument": {
+                      "type": "string",
+                      "enum": [
+                        "module",
+                        "kind",
+                        "operation",
+                        "payload",
+                        "tenant",
+                        "aggregateId",
+                        "correlationId",
+                        "idempotencyKey",
+                        "extensions",
+                        "entityId",
+                        "pageSize",
+                        "offset",
+                        "cursor",
+                        "lint",
+                        "url",
+                        "token",
+                        "actor",
+                        "allowTenantOverride",
+                        "profile",
+                        "format",
+                        "output",
+                        "readOnly",
+                        "strict",
+                        "name",
+                        "set",
+                        "arguments",
+                        "clear",
+                        "transport",
+                        "extension"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "argument",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "enum": [
+                        "read_only",
+                        "catalog_empty",
+                        "catalog_invalid",
+                        "unsupported_transport",
+                        "configuration_invalid",
+                        "internal_error"
+                      ]
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "error"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  }
+}

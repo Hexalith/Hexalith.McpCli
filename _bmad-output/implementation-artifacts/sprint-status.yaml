@@ -215,7 +215,7 @@ action_items:
       ranges, canonical identity, cardinalities, availability conditions and lint
       discriminator/property rules."
     owner: "McpCli maintainer and architecture owner"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-3-retro-2026-10-16.md"
   - id: "epic-3-retro-item-2-validate-call-envelopes"
     epic: 3

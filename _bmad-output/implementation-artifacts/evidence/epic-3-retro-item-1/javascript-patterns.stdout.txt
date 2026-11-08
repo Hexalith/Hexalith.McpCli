@@ -1,0 +1,1 @@
+Native JavaScript compiled 42 advertised patterns and passed 10 valid/invalid boundary checks, including strict ends.

@@ -1,0 +1,1989 @@
+{
+  "tools": [
+    {
+      "name": "list_modules",
+      "description": "Purpose: List modules, descriptions, and operation counts. Use when: Starting catalog discovery. Next: Call list_operations with a module name.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {}
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "modules": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "operationCount": {
+                      "type": "integer",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "description",
+                    "operationCount"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "modules"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string",
+                              "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                            },
+                            "message": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null,
+                        "minItems": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "reason": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "minLength": 26,
+                        "maxLength": 26,
+                        "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "enum": [
+                          "module",
+                          "kind",
+                          "operation",
+                          "payload",
+                          "tenant",
+                          "aggregateId",
+                          "correlationId",
+                          "idempotencyKey",
+                          "extensions",
+                          "entityId",
+                          "pageSize",
+                          "offset",
+                          "cursor",
+                          "lint",
+                          "url",
+                          "token",
+                          "actor",
+                          "allowTenantOverride",
+                          "profile",
+                          "format",
+                          "output",
+                          "readOnly",
+                          "strict",
+                          "name",
+                          "set",
+                          "arguments",
+                          "clear",
+                          "transport",
+                          "extension"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "list_operations",
+      "description": "Purpose: List a module's operations, optionally filtered by read or write kind. Use when: Choosing an operation in a known module. Next: Call describe_operation with an operation name.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "module": {
+            "type": "string"
+          },
+          "kind": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "module"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "module": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+              },
+              "operations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                    },
+                    "kind": {
+                      "type": "string",
+                      "enum": [
+                        "read",
+                        "write"
+                      ]
+                    },
+                    "description": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  },
+                  "required": [
+                    "name",
+                    "kind",
+                    "description"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "module",
+              "operations"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string",
+                              "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                            },
+                            "message": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null,
+                        "minItems": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "reason": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "minLength": 26,
+                        "maxLength": 26,
+                        "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "enum": [
+                          "module",
+                          "kind",
+                          "operation",
+                          "payload",
+                          "tenant",
+                          "aggregateId",
+                          "correlationId",
+                          "idempotencyKey",
+                          "extensions",
+                          "entityId",
+                          "pageSize",
+                          "offset",
+                          "cursor",
+                          "lint",
+                          "url",
+                          "token",
+                          "actor",
+                          "allowTenantOverride",
+                          "profile",
+                          "format",
+                          "output",
+                          "readOnly",
+                          "strict",
+                          "name",
+                          "set",
+                          "arguments",
+                          "clear",
+                          "transport",
+                          "extension"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "describe_operation",
+      "description": "Purpose: Show payload schema, optional example, envelope arguments, lint findings, and availability. Use when: Preparing a selected operation. Next: If submittable, call run_query for a read or send_command for a write.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "operation"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+              },
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "read",
+                  "write"
+                ]
+              },
+              "description": {
+                "type": "string",
+                "minLength": 1
+              },
+              "schema": {
+                "type": "object"
+              },
+              "example": {
+                "type": "object"
+              },
+              "envelope": {
+                "type": "object",
+                "properties": {
+                  "fixedTenant": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?(?![\\s\\S])"
+                  },
+                  "aggregateIdRequired": {
+                    "type": "boolean"
+                  },
+                  "idempotencyKeyRequired": {
+                    "type": "boolean"
+                  },
+                  "arguments": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "tenant",
+                        "aggregateId",
+                        "correlationId",
+                        "idempotencyKey",
+                        "extensions",
+                        "entityId",
+                        "pageSize",
+                        "offset",
+                        "cursor"
+                      ]
+                    },
+                    "uniqueItems": true
+                  },
+                  "platformScope": {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^platform:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                  }
+                },
+                "required": [
+                  "aggregateIdRequired",
+                  "idempotencyKeyRequired",
+                  "arguments"
+                ],
+                "additionalProperties": false,
+                "not": {
+                  "required": [
+                    "fixedTenant",
+                    "platformScope"
+                  ]
+                },
+                "if": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "fixedTenant"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "platformScope"
+                      ]
+                    }
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "arguments": {
+                      "not": {
+                        "contains": {
+                          "const": "tenant"
+                        }
+                      }
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "arguments": {
+                      "contains": {
+                        "const": "tenant"
+                      }
+                    }
+                  }
+                }
+              },
+              "lintFindings": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string"
+                    },
+                    "severity": {
+                      "type": "string",
+                      "const": "warning"
+                    },
+                    "message": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "property": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "severity",
+                    "message"
+                  ],
+                  "additionalProperties": false,
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "code": {
+                          "const": "hollow_description"
+                        }
+                      },
+                      "not": {
+                        "required": [
+                          "property"
+                        ]
+                      }
+                    },
+                    {
+                      "properties": {
+                        "code": {
+                          "enum": [
+                            "missing_property_description",
+                            "unmarked_identifier_like_property",
+                            "payload_paging_member"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "property"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "submittable": {
+                "type": "boolean"
+              },
+              "reason": {
+                "type": "string",
+                "enum": [
+                  "read_only",
+                  "configuration_invalid"
+                ]
+              }
+            },
+            "required": [
+              "name",
+              "kind",
+              "description",
+              "schema",
+              "envelope",
+              "lintFindings",
+              "submittable"
+            ],
+            "additionalProperties": false,
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "submittable": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "submittable"
+                  ]
+                },
+                "then": {
+                  "not": {
+                    "required": [
+                      "reason"
+                    ]
+                  }
+                },
+                "else": {
+                  "required": [
+                    "reason"
+                  ]
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "kind": {
+                      "const": "read"
+                    }
+                  },
+                  "required": [
+                    "kind"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "envelope": {
+                      "properties": {
+                        "arguments": {
+                          "items": {
+                            "enum": [
+                              "tenant",
+                              "aggregateId",
+                              "entityId",
+                              "pageSize",
+                              "offset",
+                              "cursor"
+                            ]
+                          },
+                          "allOf": [
+                            {
+                              "contains": {
+                                "const": "aggregateId"
+                              }
+                            },
+                            {
+                              "contains": {
+                                "const": "entityId"
+                              }
+                            },
+                            {
+                              "contains": {
+                                "const": "pageSize"
+                              }
+                            },
+                            {
+                              "contains": {
+                                "const": "offset"
+                              }
+                            },
+                            {
+                              "contains": {
+                                "const": "cursor"
+                              }
+                            }
+                          ]
+                        },
+                        "idempotencyKeyRequired": {
+                          "const": false
+                        }
+                      }
+                    },
+                    "reason": {
+                      "const": "configuration_invalid"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "envelope": {
+                      "properties": {
+                        "arguments": {
+                          "items": {
+                            "enum": [
+                              "tenant",
+                              "aggregateId",
+                              "correlationId",
+                              "idempotencyKey",
+                              "extensions"
+                            ]
+                          },
+                          "allOf": [
+                            {
+                              "contains": {
+                                "const": "aggregateId"
+                              }
+                            },
+                            {
+                              "contains": {
+                                "const": "correlationId"
+                              }
+                            },
+                            {
+                              "contains": {
+                                "const": "idempotencyKey"
+                              }
+                            },
+                            {
+                              "contains": {
+                                "const": "extensions"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string",
+                              "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                            },
+                            "message": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null,
+                        "minItems": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "reason": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "minLength": 26,
+                        "maxLength": 26,
+                        "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "enum": [
+                          "module",
+                          "kind",
+                          "operation",
+                          "payload",
+                          "tenant",
+                          "aggregateId",
+                          "correlationId",
+                          "idempotencyKey",
+                          "extensions",
+                          "entityId",
+                          "pageSize",
+                          "offset",
+                          "cursor",
+                          "lint",
+                          "url",
+                          "token",
+                          "actor",
+                          "allowTenantOverride",
+                          "profile",
+                          "format",
+                          "output",
+                          "readOnly",
+                          "strict",
+                          "name",
+                          "set",
+                          "arguments",
+                          "clear",
+                          "transport",
+                          "extension"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": true
+      }
+    },
+    {
+      "name": "send_command",
+      "description": "Purpose: Submit a write through EventStore. Use when: describe_operation shows a submittable write and the payload and envelope are ready. Next: Inspect the accepted result or error before any further action; a gateway-timeout or gateway-unreachable error does not prove rejection, so do not resubmit automatically.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "string"
+          },
+          "tenant": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "aggregateId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "correlationId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "idempotencyKey": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "extensions": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "additionalProperties": {
+              "type": [
+                "string",
+                "null"
+              ]
+            },
+            "default": null
+          }
+        },
+        "required": [
+          "operation",
+          "payload"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+              },
+              "messageId": {
+                "type": "string",
+                "minLength": 26,
+                "maxLength": 26,
+                "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+              },
+              "correlationId": {
+                "type": "string",
+                "minLength": 26,
+                "maxLength": 26,
+                "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+              },
+              "tenant": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?(?![\\s\\S])"
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^platform:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                  }
+                ]
+              },
+              "aggregateId": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[A-Za-z0-9](?:[A-Za-z0-9._-]{0,254}[A-Za-z0-9])?(?![\\s\\S])"
+              },
+              "status": {
+                "type": "string",
+                "const": "accepted"
+              },
+              "idempotencyKey": {
+                "type": "string",
+                "minLength": 26,
+                "maxLength": 26,
+                "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+              },
+              "result": {
+                "default": null
+              }
+            },
+            "required": [
+              "operation",
+              "messageId",
+              "correlationId",
+              "tenant",
+              "aggregateId",
+              "status"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string",
+                              "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                            },
+                            "message": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null,
+                        "minItems": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "reason": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "minLength": 26,
+                        "maxLength": 26,
+                        "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "enum": [
+                          "module",
+                          "kind",
+                          "operation",
+                          "payload",
+                          "tenant",
+                          "aggregateId",
+                          "correlationId",
+                          "idempotencyKey",
+                          "extensions",
+                          "entityId",
+                          "pageSize",
+                          "offset",
+                          "cursor",
+                          "lint",
+                          "url",
+                          "token",
+                          "actor",
+                          "allowTenantOverride",
+                          "profile",
+                          "format",
+                          "output",
+                          "readOnly",
+                          "strict",
+                          "name",
+                          "set",
+                          "arguments",
+                          "clear",
+                          "transport",
+                          "extension"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "readOnlyHint": false
+      }
+    },
+    {
+      "name": "run_query",
+      "description": "Purpose: Read through EventStore and return a document with optional paging. Use when: describe_operation shows a submittable read and the payload and envelope are ready. Next: Inspect the document and use the returned cursor for another page when present.",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "type": "string"
+          },
+          "payload": {
+            "type": "string"
+          },
+          "tenant": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "aggregateId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "entityId": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          },
+          "pageSize": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "default": null
+          },
+          "offset": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "default": null
+          },
+          "cursor": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "default": null
+          }
+        },
+        "required": [
+          "operation",
+          "payload"
+        ]
+      },
+      "outputSchema": {
+        "type": "object",
+        "oneOf": [
+          {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+              },
+              "tenant": {
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^[a-z0-9](?:[a-z0-9-]{0,62}[a-z0-9])?(?![\\s\\S])"
+                  },
+                  {
+                    "type": "string",
+                    "minLength": 1,
+                    "pattern": "^platform:[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                  }
+                ]
+              },
+              "document": true,
+              "paging": {
+                "type": "object",
+                "properties": {
+                  "pageSize": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "offset": {
+                    "type": "integer",
+                    "default": null,
+                    "minimum": 0
+                  },
+                  "nextCursor": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "totalCount": {
+                    "type": "integer",
+                    "default": null,
+                    "minimum": 0
+                  },
+                  "hasMore": {
+                    "type": "boolean",
+                    "default": null
+                  }
+                },
+                "required": [
+                  "pageSize"
+                ],
+                "default": null,
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "operation",
+              "tenant",
+              "document"
+            ],
+            "additionalProperties": false
+          },
+          {
+            "type": "object",
+            "properties": {
+              "error": {
+                "type": "object",
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "validation_failed"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1,
+                        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                      },
+                      "violations": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "path": {
+                              "type": "string",
+                              "pattern": "^(?:/(?:[^~/]|~[01])*)*(?![\\s\\S])"
+                            },
+                            "message": {
+                              "type": "string",
+                              "minLength": 1
+                            }
+                          },
+                          "required": [
+                            "path",
+                            "message"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "default": null,
+                        "minItems": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "violations"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "gateway_error"
+                        ]
+                      },
+                      "status": {
+                        "type": "integer",
+                        "default": null
+                      },
+                      "detail": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "reason": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryable": {
+                        "type": "boolean",
+                        "default": null
+                      },
+                      "clientAction": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "retryAfter": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "correlationId": {
+                        "type": "string",
+                        "minLength": 26,
+                        "maxLength": 26,
+                        "pattern": "^[0-7][0-9A-HJKMNP-TV-Z]{25}$"
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "status",
+                      "detail"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_operation"
+                        ]
+                      },
+                      "operation": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "operation",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "unknown_module"
+                        ]
+                      },
+                      "module": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "suggestions": {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1,
+                          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*(?![\\s\\S])"
+                        },
+                        "default": null,
+                        "maxItems": 3
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "module",
+                      "suggestions"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "invalid_arguments"
+                        ]
+                      },
+                      "argument": {
+                        "type": "string",
+                        "enum": [
+                          "module",
+                          "kind",
+                          "operation",
+                          "payload",
+                          "tenant",
+                          "aggregateId",
+                          "correlationId",
+                          "idempotencyKey",
+                          "extensions",
+                          "entityId",
+                          "pageSize",
+                          "offset",
+                          "cursor",
+                          "lint",
+                          "url",
+                          "token",
+                          "actor",
+                          "allowTenantOverride",
+                          "profile",
+                          "format",
+                          "output",
+                          "readOnly",
+                          "strict",
+                          "name",
+                          "set",
+                          "arguments",
+                          "clear",
+                          "transport",
+                          "extension"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "argument",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "code": {
+                        "type": "string",
+                        "enum": [
+                          "read_only",
+                          "catalog_empty",
+                          "catalog_invalid",
+                          "unsupported_transport",
+                          "configuration_invalid",
+                          "internal_error"
+                        ]
+                      },
+                      "message": {
+                        "type": "string",
+                        "minLength": 1
+                      }
+                    },
+                    "required": [
+                      "code",
+                      "message"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            },
+            "required": [
+              "error"
+            ],
+            "additionalProperties": false
+          }
+        ]
+      },
+      "annotations": {
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "readOnlyHint": true
+      }
+    }
+  ]
+}

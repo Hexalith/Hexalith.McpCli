@@ -1,0 +1,9 @@
+{
+  "command": [
+    "dotnet",
+    "restore",
+    "Hexalith.McpCli.slnx"
+  ],
+  "exitCode": 0,
+  "seconds": 1.25
+}

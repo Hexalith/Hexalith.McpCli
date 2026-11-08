@@ -1,0 +1,10 @@
+{
+  "command": [
+    "env",
+    "PATH=/tmp/mcpcli-epic3-output-contract-venv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+    "bash",
+    "tools/conformance-vectors/v1/run-sample-loopback.sh"
+  ],
+  "exitCode": 0,
+  "seconds": 575.65
+}

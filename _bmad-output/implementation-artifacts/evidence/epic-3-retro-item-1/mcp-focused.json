@@ -1,0 +1,10 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Mcp.Tests.McpOutputSchemaTests"
+  ],
+  "exitCode": 0,
+  "seconds": 1.65
+}

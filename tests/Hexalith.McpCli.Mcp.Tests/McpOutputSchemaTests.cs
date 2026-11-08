@@ -197,6 +197,15 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
         JsonElement description = (await offline.CallAsync("describe_operation", new { operation = "sample.get-item" })).StructuredContent!.Value;
         AssertValid(descriptionSchema, description, "describe_operation");
         AssertClosedObjects(descriptionSchema, JsonNode.Parse(description.GetRawText())!, "describe_operation");
+
+        await using McpTestSession readOnly = await CreateAsync(version, Settings(hasUrl: false, readOnly: true));
+        foreach ((string name, string reason) in new[] { ("sample.create-item", "read_only"), ("sample.get-item", "configuration_invalid") })
+        {
+            OperationDescriptionDocument expected = readOnly.Provider.GetRequiredService<ICatalog>().Describe(name).Document!;
+            JsonElement actual = AssertDocument(await readOnly.CallAsync("describe_operation", new { operation = name }), expected);
+            actual.GetProperty("reason").GetString().ShouldBe(reason);
+            AssertValid(descriptionSchema, actual, "describe_operation");
+        }
     }
 
     private static string[] RequiredMembers(string tool) => tool switch
@@ -235,13 +244,13 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
         JsonSchema describeSchema = JsonSchema.FromText(tools.Single(item => item.Name == "describe_operation").ProtocolTool.OutputSchema!.Value.GetRawText());
         JsonNode description = JsonNode.Parse((await session.CallAsync("describe_operation", new { operation = "sample.get-item" }))
             .StructuredContent!.Value.GetRawText())!;
-        foreach (string valid in new[] { "true", "false", "{\"custom\":{\"open\":[1,null,true]}}" })
+        foreach (string valid in new[] { "{\"custom\":{\"open\":[1,null,true]},\"properties\":{\"nested\":false}}" })
         {
             description["schema"] = JsonNode.Parse(valid);
             AssertValid(describeSchema, JsonSerializer.SerializeToElement(description), "describe_operation");
         }
 
-        foreach (string invalid in new[] { "42", "null", "[]", "\"schema\"" })
+        foreach (string invalid in new[] { "true", "false", "42", "null", "[]", "\"schema\"" })
         {
             description["schema"] = JsonNode.Parse(invalid);
             describeSchema.Evaluate(JsonSerializer.SerializeToElement(description)).IsValid.ShouldBeFalse($"schema root {invalid} must fail");
@@ -277,6 +286,198 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
                 actual["error"]!["code"] = "unknown_error_code";
                 schema.Evaluate(JsonSerializer.SerializeToElement(actual)).IsValid.ShouldBeFalse($"{tool.Name}: unknown error codes must fail");
             }
+        }
+    }
+
+
+    /// <summary>Independent forbidden documents and accepted boundaries enforce every retrospective F1 rule under both flows.</summary>
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task SemanticContractFixturesValidateAgainstAdvertisementsAsync(string version)
+    {
+        await using McpTestSession session = await CreateAsync(version);
+        IList<McpClientTool> tools = await session.Client.ListToolsAsync(cancellationToken: session.Token);
+        Dictionary<string, JsonSchema> schemas = tools.ToDictionary(tool => tool.Name,
+            tool => JsonSchema.FromText(tool.ProtocolTool.OutputSchema!.Value.GetRawText()));
+        foreach ((string tool, string json, bool valid) in new (string, string, bool)[]
+        {
+            ("run_query", """{"operation":"sample.get-item","tenant":"acme","document":null,"paging":{"pageSize":0}}""", false),
+            ("run_query", """{"operation":"sample.get-item","tenant":"acme","document":null,"paging":{"pageSize":1,"offset":-1}}""", false),
+            ("run_query", """{"operation":"sample.get-item","tenant":"acme","document":null,"paging":{"pageSize":1,"totalCount":-1}}""", false),
+            ("run_query", """{"operation":"sample.get-item","tenant":"acme","document":null,"paging":{"pageSize":1,"nextCursor":""}}""", false),
+            ("run_query", """{"operation":"sample.get-item","tenant":"platform:scope-1","document":{"operation":"","messageId":null},"paging":{"pageSize":1,"offset":0,"totalCount":0,"nextCursor":"next","hasMore":false}}""", true),
+            ("list_modules", """{"modules":[{"name":"sample","description":"Items.","operationCount":-1}]}""", false),
+            ("list_modules", """{"modules":[{"name":"","description":"Items.","operationCount":0}]}""", false),
+            ("list_modules", """{"modules":[{"name":"Sample","description":"Items.","operationCount":0}]}""", false),
+            ("list_modules", """{"modules":[{"name":"sample","description":"","operationCount":0}]}""", false),
+            ("list_modules", """{"modules":[{"name":"sample","description":"Items.","operationCount":0}]}""", true),
+            ("list_operations", """{"module":"sample","operations":[{"name":"sample.Bad","kind":"read","description":"Reads."}]}""", false),
+            ("list_operations", """{"module":"bad--module","operations":[]}""", false),
+            ("send_command", """{"operation":"sample.create-item","messageId":"not-a-ulid","correlationId":"01ARZ3NDEKTSV4RRFFQ69G5FAV","tenant":"acme","aggregateId":"item-42","status":"accepted"}""", false),
+            ("send_command", """{"operation":"sample.create-item","messageId":"01ARZ3NDEKTSV4RRFFQ69G5FAV","correlationId":"01ARZ3NDEKTSV4RRFFQ69G5FAV","tenant":"platform:scope-1","aggregateId":"Item_42.v1","status":"accepted","result":{"messageId":"arbitrary","paging":{"pageSize":-1}}}""", true),
+            ("run_query", """{"error":{"code":"validation_failed","operation":"sample.get-item","violations":[]}}""", false),
+            ("run_query", """{"error":{"code":"validation_failed","operation":"sample.get-item","violations":[{"path":"/a~1b/~0name","message":"Invalid."}]}}""", true),
+            ("run_query", """{"error":{"code":"validation_failed","operation":"sample.get-item","violations":[{"path":"/bad~2escape","message":"Invalid."}]}}""", false),
+            ("list_operations", """{"error":{"code":"unknown_module","module":"Sample?","suggestions":["sample","one","two","three"]}}""", false),
+            ("describe_operation", """{"error":{"code":"unknown_operation","operation":"Sample ?","suggestions":["sample.one","sample.two","sample.three","sample.four"]}}""", false),
+            ("describe_operation", """{"error":{"code":"unknown_operation","operation":"Sample ?","suggestions":["sample.Bad"]}}""", false),
+        })
+        {
+            Check(tool, JsonNode.Parse(json)!, valid);
+        }
+
+        foreach ((string value, bool tenant, bool aggregate) in new (string, bool, bool)[]
+        {
+            ("a", true, true), ("A", false, true), ("-a", false, false), ("a-", false, false),
+            ("a.b", false, true), ("a_b", false, true), ("a:b", false, false), ("a\n", false, false),
+            (new string('a', 64), true, true), (new string('a', 65), false, true),
+            (new string('a', 256), false, true), (new string('a', 257), false, false),
+            ("a" + new string('.', 254) + "Z", false, true), ("." + new string('a', 255), false, false),
+            (new string('a', 255) + "_", false, false), ("platform:a", true, false),
+            ("platform:-a", false, false), ("platform:a-", false, false), ("platform:a--b", false, false),
+        })
+        {
+            JsonNode query = JsonNode.Parse("""{"operation":"sample.get-item","tenant":"acme","document":null}""")!;
+            query["tenant"] = value;
+            Check("run_query", query, tenant);
+            JsonNode command = JsonNode.Parse("""{"operation":"sample.create-item","messageId":"01ARZ3NDEKTSV4RRFFQ69G5FAV","correlationId":"01ARZ3NDEKTSV4RRFFQ69G5FAV","tenant":"acme","aggregateId":"item-42","status":"accepted"}""")!;
+            command["aggregateId"] = value;
+            Check("send_command", command, aggregate);
+        }
+
+        foreach (string tool in schemas.Keys)
+        {
+            foreach (string name in new[] { "module", "kind", "operation", "payload", "tenant", "aggregateId", "correlationId",
+                "idempotencyKey", "extensions", "entityId", "pageSize", "offset", "cursor", "lint", "url", "token", "actor",
+                "allowTenantOverride", "profile", "format", "output", "readOnly", "strict", "name", "set", "arguments", "clear", "transport", "extension" })
+            {
+                Check(tool, JsonSerializer.SerializeToNode(new { error = new { code = "invalid_arguments", argument = name, message = "Invalid." } })!, true);
+            }
+
+            foreach (string name in new[] { "unknown", "--page-size", "page-size", "Extension", "field", "value", "allowedExtensions" })
+            {
+                Check(tool, JsonSerializer.SerializeToNode(new { error = new { code = "invalid_arguments", argument = name, message = "Invalid." } })!, false);
+            }
+        }
+
+        foreach (string requested in new[] { "Sample.GET-ITEM", "not canonical ?", "sample.get-item\n" })
+        {
+            CallToolResult result = await session.CallAsync("describe_operation", new { operation = requested });
+            JsonElement actual = result.StructuredContent!.Value;
+            actual.GetProperty("error").GetProperty("operation").GetString().ShouldBe(requested);
+            AssertDocument(result, actual, isError: true);
+            AssertValid(schemas["describe_operation"], actual, "describe_operation");
+        }
+
+        for (int count = 0; count <= 3; count++)
+        {
+            Check("list_operations", JsonSerializer.SerializeToNode(new
+            {
+                error = new { code = "unknown_module", module = "Sample ?", suggestions = new[] { "sample", "one", "two" }.Take(count) },
+            })!, true);
+            Check("describe_operation", JsonSerializer.SerializeToNode(new
+            {
+                error = new { code = "unknown_operation", operation = "Sample ?", suggestions = new[] { "sample.one", "sample.two", "sample.three" }.Take(count) },
+            })!, true);
+        }
+
+        JsonNode description = JsonNode.Parse("""
+            {"name":"sample.get-item","kind":"read","description":"Reads an item.",
+             "schema":{"type":"object","properties":{"a/b":{"properties":{"~key":false}}},"examples":[{"messageId":"bad","paging":{"pageSize":-1}}]},
+             "example":{"a/b":{"open":{"messageId":42,"values":[null,true]}},"envelope":{"arguments":["arbitrary"]}},
+             "envelope":{"aggregateIdRequired":false,"idempotencyKeyRequired":false,"arguments":["tenant","aggregateId","entityId","pageSize","offset","cursor"]},
+             "lintFindings":[],"submittable":true}
+            """)!;
+        JsonSchema.FromText(description["schema"]!.ToJsonString()).Evaluate(
+            JsonSerializer.SerializeToElement(description["example"])).IsValid.ShouldBeTrue();
+        Check("describe_operation", description, true);
+        Description(node => node["name"] = "Sample.get-item", false);
+        Description(node => node["submittable"] = false, false);
+        Description(node => { node["submittable"] = false; node["reason"] = "unsupported"; }, false);
+        Description(node => { node["submittable"] = false; node["reason"] = "read_only"; }, false);
+        Description(node => node["reason"] = "configuration_invalid", false);
+        Description(node => { node["submittable"] = false; node["reason"] = "configuration_invalid"; }, true);
+        Description(node => node["envelope"]!["arguments"]!.AsArray().Add("tenant"), false);
+        Description(node => node["envelope"]!["arguments"]!.AsArray().Add("correlationId"), false);
+        Description(node => node["envelope"]!["arguments"]!.AsArray().Add("unknown"), false);
+        Description(node => node["envelope"]!["arguments"]!.AsArray().RemoveAt(0), false);
+        Description(node => node["envelope"]!["arguments"]!.AsArray().RemoveAt(1), false);
+        Description(node => node["envelope"]!["idempotencyKeyRequired"] = true, false);
+        Description(node => node["envelope"]!["fixedTenant"] = "acme", false);
+        Description(node => { Scoped(node, "fixedTenant", "acme"); node["envelope"]!["platformScope"] = "platform:scope"; }, false);
+        Description(node => Scoped(node, "fixedTenant", "Acme"), false);
+        Description(node => Scoped(node, "platformScope", "platform:bad--scope"), false);
+        Description(node => Scoped(node, "fixedTenant", "system"), true);
+        Description(node => Scoped(node, "fixedTenant", new string('a', 64)), true);
+        Description(node => Scoped(node, "fixedTenant", new string('a', 65)), false);
+        Description(node => Scoped(node, "fixedTenant", "-acme"), false);
+        Description(node => Scoped(node, "fixedTenant", "acme-"), false);
+        Description(node => Scoped(node, "platformScope", "platform:scope-1"), true);
+        foreach (string code in new[] { "missing_property_description", "unmarked_identifier_like_property", "payload_paging_member" })
+        {
+            Description(node => Finding(node, code, "warning", null), false);
+            Description(node => Finding(node, code, "warning", "properties/Name"), false);
+            Description(node => Finding(node, code, "warning", "/properties/bad~2escape"), false);
+            Description(node => Finding(node, code, "warning", ""), false);
+            Description(node => Finding(node, code, "warning", "/properties/a~1b/properties/~0key"), true);
+            Description(node => Finding(node, code, "warning", "/a~1b/~0key"), true);
+        }
+
+        Description(node => Finding(node, "not-a-code", "warning", null), false);
+        Description(node => Finding(node, "hollow_description", "fatal", null), false);
+        Description(node => Finding(node, "hollow_description", "warning", "/properties/Name"), false);
+        Description(node => Finding(node, "hollow_description", "warning", null), true);
+        foreach (string invalid in new[] { "true", "false", "null", "[]", "42", "\"text\"" })
+        {
+            Description(node => node["schema"] = JsonNode.Parse(invalid), false);
+            Description(node => node["example"] = JsonNode.Parse(invalid), false);
+        }
+
+        foreach (bool scoped in new[] { false, true })
+        {
+            Action<JsonNode> write = node =>
+            {
+                node["kind"] = "write";
+                node["envelope"]!["arguments"] = new JsonArray("tenant", "aggregateId", "correlationId", "idempotencyKey", "extensions");
+                node["envelope"]!["idempotencyKeyRequired"] = true;
+                node["submittable"] = false;
+                node["reason"] = "read_only";
+                if (scoped)
+                {
+                    Scoped(node, "platformScope", "platform:scope");
+                }
+            };
+            Description(write, true);
+            Description(node => { write(node); node["envelope"]!["arguments"]!.AsArray().Add("entityId"); }, false);
+            Description(node => { write(node); node["envelope"]!["arguments"]!.AsArray().RemoveAt(1); }, false);
+        }
+
+        void Check(string tool, JsonNode document, bool valid)
+            => schemas[tool].Evaluate(JsonSerializer.SerializeToElement(document)).IsValid.ShouldBe(valid, $"{tool}: {document}");
+
+        void Description(Action<JsonNode> edit, bool valid)
+        {
+            JsonNode fixture = description.DeepClone();
+            edit(fixture);
+            Check("describe_operation", fixture, valid);
+        }
+
+        static void Scoped(JsonNode node, string declaration, string value)
+        {
+            node["envelope"]![declaration] = value;
+            node["envelope"]!["arguments"]!.AsArray().RemoveAt(0);
+        }
+
+        static void Finding(JsonNode node, string code, string severity, string? property)
+        {
+            var finding = new JsonObject { ["code"] = code, ["severity"] = severity, ["message"] = "Explain this member." };
+            if (property is not null)
+            {
+                finding["property"] = property;
+            }
+
+            node["lintFindings"] = new JsonArray(finding);
         }
     }
 
@@ -326,6 +527,14 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
                 Locate(nullMember, path)[name] = null;
                 schema.Evaluate(JsonSerializer.SerializeToElement(nullMember)).IsValid.ShouldBeFalse(
                     $"{tool}: null /{string.Join('/', path)}/{name} must fail");
+                if (value?.GetValueKind() == JsonValueKind.String && name != "path")
+                {
+                    JsonNode emptyMember = document.DeepClone();
+                    Locate(emptyMember, path)[name] = string.Empty;
+                    schema.Evaluate(JsonSerializer.SerializeToElement(emptyMember)).IsValid.ShouldBeFalse(
+                        $"{tool}: empty /{string.Join('/', path)}/{name} must fail");
+                }
+
                 if (value?.GetValueKind() == JsonValueKind.Number)
                 {
                     JsonNode stringNumber = document.DeepClone();

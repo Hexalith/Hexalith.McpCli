@@ -1,0 +1,253 @@
+{
+  "baselineCommit": "aac815ed7423ea1f674a4e47cdfa79a13aaadf3d",
+  "protocolVersions": [
+    "2025-06-18",
+    "2026-07-28"
+  ],
+  "ownerClarifications": [
+    "unknown_operation.operation echoes the exact nonempty request; success names and suggestions remain canonical",
+    "embedded schema roots are objects with open contents and nested boolean schemas"
+  ],
+  "artifacts": [
+    "advertised-tools.json",
+    "production-discovery.json"
+  ],
+  "probeSources": [
+    "capture-advertisements.py",
+    "verify-javascript-patterns.mjs",
+    "verify-production-catalog.py",
+    "record-command.py",
+    "audit-evidence.py"
+  ],
+  "limits": [
+    "Four Core skips cover Windows ACL cases and the dedicated benchmark entry point; two CLI skips require Windows file/ACL behavior.",
+    "Production discovery is read-only and offline; sample loopback uses controlled Gateway replay. No new live topology acceptance is claimed."
+  ],
+  "preservedUserEdits": [
+    "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-06.md",
+    "_bmad-output/implementation-artifacts/sprint-status.yaml",
+    "_bmad-output/planning-artifacts/epics.md",
+    "_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-08.md"
+  ],
+  "priorImplementationChecks": [
+    {
+      "evidence": "post-loopback-restore.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "post-loopback-build.json",
+      "result": "passed; Release, warnings as errors, zero warnings/errors"
+    },
+    {
+      "evidence": "core-focused.json",
+      "passed": 40,
+      "skipped": 0
+    },
+    {
+      "evidence": "core-tests.json",
+      "passed": 792,
+      "skipped": 4
+    },
+    {
+      "evidence": "mcp-final-tests.json",
+      "passed": 94,
+      "skipped": 0
+    },
+    {
+      "evidence": "cli-tests.json",
+      "passed": 489,
+      "skipped": 2
+    },
+    {
+      "evidence": "manifest-tests.json",
+      "passed": 362,
+      "skipped": 0,
+      "freshRestore": "manifest-restore.json"
+    },
+    {
+      "evidence": "sample-validation.json",
+      "result": "passed; 161 Python tests and three vectors"
+    },
+    {
+      "evidence": "sample-loopback.json",
+      "result": "passed; 161 Python tests, sample replay, SDK response boundaries, combined enrollment replay, and negative artifact guards"
+    },
+    {
+      "evidence": "javascript-patterns.json",
+      "result": "passed; 42 actual advertised patterns compile in native JavaScript, 10 accepted/rejected boundary pairs and strict-end checks"
+    },
+    {
+      "evidence": "production-final-catalog.json",
+      "result": "passed; offline built production catalog, 2 modules, 21 descriptions, 21 object examples, 24 schema-valid discovery documents with structured/text parity"
+    },
+    {
+      "evidence": "final-diff-check.json",
+      "result": "passed"
+    }
+  ],
+  "verificationScope": "Final parent verification after all review fixes: clean Release build, all six ordinary test projects, fresh Manifest restore, both sample conformance gates, current preserved probes, production discovery, and diff checks. Production assets restored after loopback.",
+  "checks": [
+    {
+      "evidence": "acceptance-abstractions-tests.json",
+      "result": "passed",
+      "passed": 20,
+      "skipped": 0
+    },
+    {
+      "evidence": "acceptance-analyzers-tests.json",
+      "result": "passed",
+      "passed": 19,
+      "skipped": 0
+    },
+    {
+      "evidence": "acceptance-build-before-conformance.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-capture.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-cli-tests.json",
+      "result": "passed",
+      "passed": 489,
+      "skipped": 2
+    },
+    {
+      "evidence": "acceptance-core-tests.json",
+      "result": "passed",
+      "passed": 853,
+      "skipped": 4
+    },
+    {
+      "evidence": "acceptance-diff-check.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-javascript.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-manifest-fresh-restore.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-manifest-tests.json",
+      "result": "passed",
+      "passed": 362,
+      "skipped": 0
+    },
+    {
+      "evidence": "acceptance-mcp-tests.json",
+      "result": "passed",
+      "passed": 94,
+      "skipped": 0
+    },
+    {
+      "evidence": "acceptance-production-build.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-production-catalog.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-production-restore.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-restore-before-conformance.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-sample-loopback.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "acceptance-sample-validation.json",
+      "result": "passed"
+    }
+  ],
+  "reviewedByteBindings": {
+    "receipt": "acceptance-production-catalog.json",
+    "member": "hashes",
+    "algorithm": "sha256",
+    "groups": [
+      "sources",
+      "probes",
+      "binaries"
+    ],
+    "recordedAt": "command completion; includes executed host/test Core and MCP runtime copies"
+  },
+  "sanitizerAudit": "evidence-sanitizer-audit.json",
+  "reviewFixes": [
+    "Closed invalid_arguments.argument to the 29 names emitted by current semantic/management/fallback/parser binding without binding changes.",
+    "Added independent ModuleSummary uppercase, argument-name and tenant/aggregate syntax/endpoint/length cases against Core and both advertised protocol flows, plus differential Core routing checks.",
+    "Corrected the synthetic example and now assert it validates against its nested false schema.",
+    "Portable preserved probes/recorder reuse tools/live-topology/ci.py sanitized and retain current SHA-256 source/probe/binary bindings."
+  ],
+  "priorReviewChecks": [
+    {
+      "evidence": "review-core-build.json",
+      "result": "passed; focused project Release build, zero warnings/errors"
+    },
+    {
+      "evidence": "review-core-focused.json",
+      "passed": 101,
+      "skipped": 0
+    },
+    {
+      "evidence": "review-mcp-build.json",
+      "result": "passed; focused project Release build, zero warnings/errors"
+    },
+    {
+      "evidence": "review-mcp-focused.json",
+      "passed": 14,
+      "skipped": 0,
+      "protocolVersions": [
+        "2025-06-18",
+        "2026-07-28"
+      ]
+    },
+    {
+      "evidence": "review-stdio-build.json",
+      "result": "passed; refresh the probe host and its Core/MCP runtime copies"
+    },
+    {
+      "evidence": "review-capture.json",
+      "result": "passed; preserved repository-path probe, actual advertisements refreshed"
+    },
+    {
+      "evidence": "review-javascript.json",
+      "result": "passed; preserved repository-path native JavaScript probe, 42 patterns and 10 boundary pairs"
+    },
+    {
+      "evidence": "review-production-catalog.json",
+      "result": "passed; preserved repository-path offline probe, 21 valid descriptions/examples and 24 matching discovery documents"
+    },
+    {
+      "evidence": "review-recorder-portability.json",
+      "result": "passed; recorder launched outside the checkout and resolved its own repository"
+    },
+    {
+      "evidence": "review-diff-check.json",
+      "result": "passed"
+    },
+    {
+      "evidence": "review-evidence-audit.json",
+      "result": "passed; retained text audited with the shared sanitizer, see evidence-sanitizer-audit.json"
+    }
+  ],
+  "testSummary": {
+    "passed": 1837,
+    "skipped": 6,
+    "projects": 6,
+    "failed": 0
+  },
+  "reviewResult": {
+    "findingsTriaged": 13,
+    "deferred": 0,
+    "patchesVerified": true
+  },
+  "commitMessageValidation": "commitlint-validation.json"
+}
