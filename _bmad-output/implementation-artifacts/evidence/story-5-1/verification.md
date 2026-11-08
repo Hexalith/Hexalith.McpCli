@@ -5,12 +5,18 @@ This evidence belongs to
 It verifies the approved
 [EventStore Admin inventory](../../eventstore-admin-migration-inventory-v1.md) and
 [technical-tools inventory](../../technical-tools-migration-inventory-v1.md),
-both `1.0.0`, finalized from approved `1.0.0-candidate.3`. The unapproved planning
+Admin `1.0.0` and technical `1.0.1`, amended from the approved `1.0.0`
+inventories finalized from `1.0.0-candidate.3`. The unapproved planning
 findings that preceded them are indexed in [planning/README.md](planning/README.md).
 
-Run the block below from the McpCli root with Python 3 and Git. It reads tracked
-files of the 17 root-declared checkouts through `git ls-files`, the first eight
-metadata lines of each FrontComposer corpus document, and the local inventories.
+Run the block below from the McpCli root with Python 3 and Git. Census,
+consumer, configuration and ownership scans enumerate tracked files of the
+17 root-declared checkouts through `git ls-files`. Admin CLI, MCP and server
+registration scans and the PS project source scan use working-tree globbing
+(the PS scan skips `obj`); the clean-checkout and exact-pin checks bind those
+reads to the source state. At the inspected pins those source directories
+contain no ignored files. The block also reads the first eight metadata lines
+of each FrontComposer corpus document and the local inventories.
 It never discovers or loads an agent `SKILL.md`, restores, builds or tests
 anything, runs a legacy CLI, MCP server, migration or service, initializes a
 nested submodule, or changes a reference checkout.
@@ -107,18 +113,38 @@ other repositories, unpublished forks or uninspected dynamic hosts.
   resolves to a non-blank line at the pin; 65 load-bearing anchors also match
   expected content; row anchors point at their command, tool or metadata line;
   every local link and heading fragment resolves.
-- **State and approval:** both inventories are approved `1.0.0` with A1 on
-  every row and the requesting user's explicitly confirmed owning-maintainer
-  authority. The approval receipt binds all 156 row IDs, both preserved
-  candidate.3 snapshots, final inventory bytes, McpCli revision and all 17
+- **State and approval:** Admin `1.0.0` and technical `1.0.1` are approved with
+  A1 on every row and Jérôme Piquot's (GitHub `jpiquot`) confirmed identity
+  and owning-maintainer authority, including the McpCli roles. The approval
+  receipt binds all 156 row IDs, both preserved candidate.3 and approved 1.0.0
+  snapshots, final inventory bytes, candidate provenance and all 17
   census pins. The spec's frozen block and historical inventories are unchanged;
   working-tree changes stay under `_bmad-output/implementation-artifacts/`.
-  The 15 named story, planning and approval files have LF endings and no trailing
+  The 17 named story, planning and approval files have LF endings and no trailing
   whitespace; `git diff --check` covers the other tracked documentation.
-  The Story 5.2 handoff assigns each AC/AM row once. The 29 damaged inputs
+  The Story 5.2 handoff assigns each AC/AM row once. The damaged inputs
   include missing approval, corrupt receipts and completion while pending.
 
 ## Reproducible check
+
+The source assertions reproduce the approved state committed at
+`0ce515ccc3f2414d1c98435745dac80479a42252` (`0ce515c`), or a later commit
+that moves no reference gitlink or anchored ledger line. The block below
+includes the 1.0.1 amendment checks and therefore runs against that amended
+documentation state; use the block from `0ce515c` for the original 1.0.0
+documentation. All 17 source checkouts must be clean at the recorded gitlinks;
+the McpCli working tree may contain this story's documentation changes.
+Moving a reference or an anchored ledger line requires a corresponding
+versioned inventory/evidence update before rerunning this block at HEAD.
+
+Extract and execute the Bash block with this command from the repository root:
+
+    python3 - <<'PY' > /tmp/mcpcli-story-5-1-static-check.sh
+    from pathlib import Path
+    text = Path('_bmad-output/implementation-artifacts/evidence/story-5-1/verification.md').read_text()
+    print(text.split('```bash\n', 1)[1].split('\n```', 1)[0])
+    PY
+    bash -e /tmp/mcpcli-story-5-1-static-check.sh
 
 ```bash
 set -e
@@ -142,6 +168,13 @@ FC_SHA = 'fbb9c3822dfa407e72739238cd472567f45f1e82'
 FC_OLD = '81a440a8890a17edb39924bd0cf676eb6f6b5c25'
 FROZEN_SHA256 = '8be7892597e4e5f0aeb4a1aa8acef4d57eacffac4b75de417c882494a557a105'
 FC_BASE = 'b06f86d554363ea5b8192cbc149a75c820dab2b8'
+APPROVED_VERSIONS = {'eventstore-admin': '1.0.0', 'technical-tools': '1.0.1'}
+PRESERVED_100_HASHES = {
+    'eventstore-admin': '26ac7486cba8c52a0496147c6b90bda953dda31fd644ac199c433e49b834c90e',
+    'technical-tools': '6a7d325f6927b8b0f6692c05b71b54728bc1281b871dc073712586d172d41f58',
+}
+APPROVAL_COMMIT = '0ce515ccc3f2414d1c98435745dac80479a42252'
+MCPCLI_ROLES = ['McpCli maintainer', 'McpCli security maintainer', 'McpCli contract/transport/security maintainer']
 refs = root / 'references'
 es = refs / 'Hexalith.EventStore'
 fc = refs / 'Hexalith.FrontComposer'
@@ -181,7 +214,7 @@ def frontmatter(text):
 
 def check_approval(text):
     meta = frontmatter(text)
-    assert meta['inventory_version'] == '1.0.0'
+    assert meta['inventory_version'] == APPROVED_VERSIONS[meta['module']]
     assert meta['status'] == 'approved'
     assert meta['approval_status'] == 'approved'
     assert meta['approval_ref'] == '#a1-owning-maintainer-approval-2026-11-08'
@@ -566,11 +599,11 @@ def check_technical(text):
         packable = re.search(r'`IsPackable` (true|false)', packaging)
         if packable:
             assert f'<IsPackable>{packable[1]}</IsPackable>' in csproj, project
-        release = (repo / 'tools/release-packages.json').read_text() if (repo / 'tools/release-packages.json').exists() else ''
-        if 'listed in `tools/release-packages.json`' in packaging:
-            assert f'"project": "{project}"' in release, project
+        release = json.loads((repo / 'tools/release-packages.json').read_text()) if (repo / 'tools/release-packages.json').exists() else {}
+        listed = any(entry['project'] == project for entry in release.get('packages', []))
+        assert listed == ('listed in `tools/release-packages.json`' in packaging), ('release listing', project)
         if 'not in `tools/release-packages.json`' in packaging:
-            assert project not in release, project
+            assert not listed, project
         container = re.search(r'container `([^`]+)`', packaging)
         if container:
             assert f'<ContainerRepository>{container[1]}</ContainerRepository>' in csproj, project
@@ -858,7 +891,7 @@ def check_repository():
                 'evidence/story-5-1/verification.md', 'evidence/story-5-1/commitlint-validation.txt', spec_name, 'sprint-status.yaml', 'epic-5-context.md',
                 *sorted(str(f.relative_to(base)) for f in (base / 'evidence/story-5-1/planning').iterdir()),
                 *sorted(str(f.relative_to(base)) for f in (base / 'evidence/story-5-1/approval').rglob('*') if f.is_file())]
-    assert len(authored) == 15, authored
+    assert len(authored) == 17, authored
     for name in authored:
         data = (base / name).read_bytes()
         assert b'\r' not in data and data.endswith(b'\n') and not data.endswith(b'\n\n'), name
@@ -900,12 +933,28 @@ approved_rows = sum(len(v) for v in admin.values()) + sum(len(v) for v in techni
 
 
 def check_receipt(receipt):
-    assert receipt['decision'] == 'approved' and receipt['inventory_version'] == '1.0.0'
+    assert receipt['decision'] == 'approved' and receipt['inventory_versions'] == APPROVED_VERSIONS
+    assert receipt['approver'] == 'Jérôme Piquot (GitHub jpiquot)'
+    owner = receipt['approver_source']
+    assert owner == {'path': 'references/Hexalith.Platform/.github/CODEOWNERS', 'line': 2,
+                     'text': '* @jpiquot', 'revision': '01e5b6530af96ad6eaa69cc1867d43def56c43ca'}
+    assert (root / owner['path']).read_text().splitlines()[owner['line'] - 1] == owner['text']
+    assert receipt['identity_and_role_confirmation']['source_spec'] == str(base.relative_to(root) / spec_name)
+    assert receipt['identity_and_role_confirmation']['confirmed_on'] == '2026-11-08'
+    assert receipt['identity_and_role_confirmation']['approver'] == receipt['approver']
+    assert receipt['identity_and_role_confirmation']['additional_roles'] == MCPCLI_ROLES
+    assert receipt['authority_scope'] == ['EventStore owning maintainer', 'platform/operator maintainer',
+                                         'FrontComposer owning maintainer', 'all census owning maintainer roles', *MCPCLI_ROLES]
     assert receipt['reviewed_candidate_version'] == '1.0.0-candidate.3'
     assert receipt['approval_authority'] == 'requesting-user-owning-maintainer'
     assert receipt['exact_approval_instruction'] == 'I approve'
     assert receipt['exact_authority_confirmation'] == 'Authorized for all listed maintainer roles'
     assert receipt['mcpcli_revision'] == 'fa7c51601041ee6cf0d2f9d4613fb405758f2f7c'
+    provenance = receipt['reviewed_candidate_state']
+    assert provenance['base_revision'] == receipt['mcpcli_revision']
+    assert provenance['base_inventory_version'] == '1.0.0-candidate.2'
+    assert provenance['reviewed_state'] == 'uncommitted working tree over mcpcli_revision; candidate.3 is not contained in that commit'
+    assert provenance['first_committed_revision'] == APPROVAL_COMMIT
     assert receipt['source_revisions'] == check_census_pins((base / 'evidence/story-5-1/verification.md').read_text())
     expected = {
         str(base.relative_to(root) / 'eventstore-admin-migration-inventory-v1.md'): admin,
@@ -914,12 +963,31 @@ def check_receipt(receipt):
     assert len(receipt['inventories']) == 2
     assert {entry['path'] for entry in receipt['inventories']} == set(expected)
     for entry in receipt['inventories']:
+        module = frontmatter((root / entry['path']).read_text())['module']
+        assert entry['inventory_version'] == APPROVED_VERSIONS[module]
         assert hashlib.sha256((root / entry['path']).read_bytes()).hexdigest() == entry['approved_sha256']
+        assert entry['preserved_version'] == '1.0.0'
+        assert entry['preserved_path'] == str(base.relative_to(root) / 'evidence/story-5-1/approval/1.0.0' / Path(entry['path']).name)
+        preserved = (root / entry['preserved_path']).read_bytes()
+        assert hashlib.sha256(preserved).hexdigest() == entry['preserved_sha256'] == PRESERVED_100_HASHES[module]
+        assert frontmatter(preserved.decode())['inventory_version'] == '1.0.0'
+        committed_100 = git(root, 'show', f"{APPROVAL_COMMIT}:{entry['path']}")
+        assert committed_100 == preserved.decode().strip()
+        baseline = git(root, 'show', f"{receipt['mcpcli_revision']}:{entry['path']}")
+        assert frontmatter(baseline)['inventory_version'] == provenance['base_inventory_version']
         assert entry['candidate_path'] == str(base.relative_to(root) / 'evidence/story-5-1/approval/candidate.3' / Path(entry['path']).name)
         candidate = (root / entry['candidate_path']).read_bytes()
         assert hashlib.sha256(candidate).hexdigest() == entry['candidate_sha256']
+        assert git(root, 'show', f"{APPROVAL_COMMIT}:{entry['candidate_path']}") == candidate.decode().strip()
         assert frontmatter(candidate.decode())['inventory_version'] == '1.0.0-candidate.3'
         assert entry['row_ids'] == [key for group in expected[entry['path']].values() for key in group]
+    amendment, = receipt['amendments']
+    assert amendment['inventory'] == 'technical-tools' and amendment['from_version'] == '1.0.0' and amendment['to_version'] == '1.0.1'
+    assert amendment['approved_on'] == '2026-11-08' and amendment['approver'] == receipt['approver']
+    assert amendment['approval_decision'] == 'option (a), Versioned 1.0.1'
+    assert amendment['source_spec'] == str(base.relative_to(root) / spec_name)
+    assert amendment['changed_rows'] == ['PS07', 'PS01', 'PS02', 'FV09', 'PE03', 'PE04']
+    assert amendment['narrative_changes'] == ['inventory version and A1 amendment', 'source-pin candidate wording']
 
 
 receipt = json.loads((base / 'evidence/story-5-1/approval/approval.json').read_text())
@@ -962,14 +1030,20 @@ damages = [
     (check_admin, admin_text.replace('`GetCorrelationTraceMap`', 'GetCorrelationTraceMap'), 'HTTP-only action omitted'),
     (check_technical, tech_text.replace(line_of(tech_text, 'PN04') + '\n', ''), 'missing root census row'),
     (check_technical, tech_text.replace(line_of(tech_text, 'PS10'), line_of(tech_text, 'PS10').replace('`PackAsTool` `folders`', '`PackAsTool` `folder`')), 'wrong packaging metadata'),
+    (check_technical, tech_text.replace(line_of(tech_text, 'PS07'), line_of(tech_text, 'PS07').replace('; listed in `tools/release-packages.json`', '')), 'omitted release listing'),
+    (check_technical, tech_text.replace(line_of(tech_text, 'PS10'), line_of(tech_text, 'PS10').replace('not in `tools/release-packages.json`', 'listed in `tools/release-packages.json`')), 'invented release listing'),
     (check_census_pins, (base / 'evidence/story-5-1/verification.md').read_text().replace('| `567604b616613ba429be0609636d805db776a709` |', '| `beb85e497957fedc66854013efd2cc4bd216ecbc` |'), 'stale exempt Builds census pin'),
 ]
-for field, replacement in [('exact_authority_confirmation', 'Session reviewer only'),
+for field, replacement in [('approver', 'requesting user in the current conversation'),
+                           ('authority_scope', []), ('identity_and_role_confirmation', {}),
+                           ('approver_source', {}), ('reviewed_candidate_state', {}), ('amendments', []),
+                           ('inventory_versions', {'eventstore-admin': '1.0.1', 'technical-tools': '1.0.1'}),
+                           ('exact_authority_confirmation', 'Session reviewer only'),
                            ('source_revisions', {}), ('inventories', [])]:
     damaged = json.loads(json.dumps(receipt))
     damaged[field] = replacement
     damages.append((check_receipt, damaged, 'approval receipt ' + field))
-for field in ['approved_sha256', 'candidate_sha256', 'row_ids']:
+for field in ['approved_sha256', 'candidate_sha256', 'preserved_sha256', 'row_ids']:
     damaged = json.loads(json.dumps(receipt))
     damaged['inventories'][0][field] = [] if field == 'row_ids' else '0' * 64
     damages.append((check_receipt, damaged, 'approval receipt ' + field))
@@ -987,7 +1061,10 @@ PY
 git diff --check
 ```
 
-## Recorded execution (2026-11-07)
+## Recorded execution (2026-11-07, superseded)
+
+Historical pre-approval result; superseded by the owning-maintainer approval
+and final verification section below. Its A0 blocker is no longer current.
 
 At that review, the initial rerun of the previous block, extracted from this
 file and invoked with `bash -e` from the McpCli root, exited 1 at Python line 524:
@@ -1010,16 +1087,19 @@ PASS: rejected 23 damaged inputs (missing, duplicate, extra, incomplete, approva
 BLOCKED: 156 rows carry A0 (approval pending); owner approval is required before Story 5.1 completion. Workflow states: spec=in-review; sprint=in-progress. Frozen block sha256=8be7892597e4e5f0aeb4a1aa8acef4d57eacffac4b75de417c882494a557a105.
 ```
 
-The `BLOCKED` line is the expected state: the static checks are complete, but
-no owner approval exists. No .NET build, test suite, live topology or legacy
+The `BLOCKED` line was the expected state at that run: the static checks were
+complete, but no owner approval existed then. No .NET build, test suite, live topology or legacy
 tool was run; this change is documentation only.
 
-## Recorded execution (2026-11-08)
+## Recorded execution (2026-11-08, superseded)
+
+Historical pre-approval result; superseded by the owning-maintainer approval
+and final verification section below. Its A0 blocker is no longer current.
 
 Resumed the three review layers at McpCli HEAD
 `fa7c51601041ee6cf0d2f9d4613fb405758f2f7c`. The edge-case and verification-gap
 layers returned no findings; the blind layer reported ten. Nine documentation
-corrections are applied as P28–P36 in the spec; both inventories are now
+corrections were applied as P28–P36 in the spec; both inventories were then
 `1.0.0-candidate.3`. The remaining finding concerns pre-existing Epic 4 code
 and is explicitly unverified, as described below.
 
@@ -1040,7 +1120,7 @@ BLOCKED: 156 rows carry A0 (approval pending); owner approval is required before
 
 No repository .NET build or test suite, legacy command, migration or live host
 ran for these corrections. Source revisions, registrations and dispositions
-are unchanged; all 156 A0 approval references remain pending.
+were unchanged; all 156 A0 approval references were pending at that run.
 
 ### Inherited review follow-up
 
@@ -1079,6 +1159,37 @@ question, recorded under the owning Epic 4 source spec at
   and AM22's unavailable cursor paging. Preserve each or obtain the owning
   maintainer's explicit change decision.
 
+  AV04/G4 safety clarification: safe nonempty-body ProblemDetails filtering
+  does not redact URL diagnostics. The CLI derives `resolvedUrl` from
+  `HttpClient.BaseAddress` and interpolates it into connection, cancellation,
+  timeout, status and generic-failure messages; URL credentials or query
+  values can therefore be disclosed even when response fields are filtered
+  (`references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Cli/Client/AdminApiClient.cs:67`,
+  `:73`, `:80`, `:83`, `:95`, `:478`). Carry this privacy gap into G4's safety
+  decision; preserving diagnostics does not require preserving disclosure.
+
+  AC01 timing clarification: `health --wait --timeout` checks elapsed time
+  before admitting another polling iteration; it does not impose that value
+  as a deadline on the request already admitted. Each request has the client's
+  separate ten-second timeout, and an unsuccessful iteration then delays before
+  rechecking the loop, so elapsed wall time can exceed `--timeout`
+  (`references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Cli/Commands/HealthCommand.cs:140`,
+  `:144`, `:165`;
+  `references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Cli/Client/AdminApiClient.cs:26`).
+
+  AM04–AM06 consistency clarification: detail returns the stored result, not
+  proof that every stream/event was checked. Trigger refuses a same-tenant
+  Pending/Running check found by its best-effort index lookup; expired Running
+  checks are ignored and lookup failures allow a trigger
+  (`references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Server/Services/DaprConsistencyCommandService.cs:132`,
+  `:236`, `:239`, `:253`). The index holds at most 100 checks, retained anomalies
+  cap at 500, timeout is 30 minutes and result TTL is 30 days (`:37`, `:39`,
+  `:42`, `:43`, `:922`). Stream discovery requests one bounded 10,000-item
+  result; timeline checks have paging guards and can report Inconclusive
+  coverage (`:292`, `:631`, `:644`). Preserve bounded/truncated/inconclusive
+  outcomes and retention limits as decision inputs, rather than equating a
+  complete stored document or Completed status with exhaustive consistency.
+
   The technical classes are lifecycle status (FH01, FV01), the manifest
   command family (FH02, classified by each consumer), documentation and
   projection resources (FD01–FD13, FH03) and local compiler tooling
@@ -1086,6 +1197,59 @@ question, recorded under the owning Epic 4 source spec at
   Without an explicit build, inspection establishes no source freshness; migration
   omits import-only files and warns on detected top-level MSBuild imports.
   Preserve those diagnostics and limits or obtain an explicit owner change.
+
+  FV01 lifecycle decision inputs include synthetic terminal outcomes, not
+  just expiry/history limits. After the default 30-second in-progress budget,
+  the store synthesizes `timed_out`; active-capacity pressure synthesizes
+  `needs_review` for an older handle. Both use terminal Rejected state with
+  an unconfirmed outcome and unknown data impact, not proven domain rejection
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpLifecycleStore.cs:187`,
+  `:219`, `:323`, `:462`;
+  `references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/McpLifecycleModels.cs:179`,
+  `:192`). Defaults are 32 retained transitions, 1,000 active entries and
+  1,000 retained terminal entries, with a 30,000 ms budget
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/FrontComposerMcpOptions.cs:64`,
+  `:66`, `:68`, `:70`). History drops oldest transitions and marks truncation;
+  terminal-capacity eviction removes both correlation and message mappings,
+  after which a lookup has the hidden/unknown shape
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpLifecycleStore.cs:237`,
+  `:242`, `:245`, `:491`;
+  `references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpLifecycleTracker.cs:46`,
+  `:51`). These bounded observations need an explicit downstream decision.
+
+  FH02/FV04 argument admission defaults to a 32 KiB serialized UTF-8 argument
+  limit (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/FrontComposerMcpOptions.cs:22`).
+  Before dispatch it rejects unknown names, case-insensitive duplicate names,
+  caller-supplied derivable fields, object/array values, missing or null
+  required values, incorrect string/number/integer/boolean shapes and invalid
+  enum values; declared names themselves match case-sensitively
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpCommandInvoker.cs:66`,
+  `:86`, `:221`, `:226`, `:230`, `:232`, `:245`, `:259`, `:272`).
+
+  FH02/FV04 also require command schema negotiation, not only projection
+  negotiation. The shared `x-frontcomposer-schema-fingerprint` header is
+  admitted once per request; multiple/malformed values fail closed, including
+  unsupported algorithms or noncanonical digest syntax
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/HttpFrontComposerMcpAgentContextAccessor.cs:15`,
+  `:43`, `:64`, `:113`, `:138`, `:149`). Absent/blank hints select the no-hint
+  path. For an admitted command, negotiation evaluates its descriptor against
+  the client hint/baseline; a result that disallows side effects returns a
+  structured schema failure before argument application or dispatch
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Schema/SchemaNegotiationRuntimeGate.cs:47`,
+  `:52`, `:71`, `:79`;
+  `references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpCommandInvoker.cs:60`,
+  `:62`). Preserve failure categories and remediation fields or approve changes.
+
+  FH02 discovery is also an execution boundary: the visible command catalog
+  defaults to 50 entries, and exact-name execution resolution searches that
+  capped catalog, so an otherwise eligible command beyond the cap is not
+  resolved (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/FrontComposerMcpOptions.cs:44`;
+  `references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpToolAdmissionService.cs:50`,
+  `:76`, `:82`). Ordinary `tools/list` adds the lifecycle tool to that catalog
+  but emits no pagination cursor. The unknown-tool document's
+  `continuation: visible-list-truncated` is informational, not a usable cursor
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpServiceCollectionExtensions.cs:100`;
+  `references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpToolAdmissionService.cs:130`).
   The decision must keep Platform AD-14's public-client denial of
   UI-only and confirmation-required operations, define treatment of the
   destructive set and name which operations become Gateway contracts and which
@@ -1102,6 +1266,32 @@ question, recorded under the owning Epic 4 source spec at
   (confirmation-required) through McpCli. The AV10 and AV11 source gaps must be
   resolved upstream before either head can serve as a parity baseline. The
   cross-head table records that similar names prove no equivalence.
+
+  FV04 machine-result parity must distinguish domain rejection (`rejected`,
+  abort/no retry), command-contract validation (`validation`, correct-input/
+  retry after correction), caller cancellation, timeout (including a
+  non-caller-canceled OperationCanceledException), and downstream failure
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpCommandInvoker.cs:111`,
+  `:125`, `:141`, `:147`, `:163`). Rejection/contract-validation envelopes
+  include framework message/correlation identifiers only when allocated;
+  earlier admission/argument/schema failures can lack them (`:36`, `:76`,
+  `:483`, `:487`). Argument-guard ValidationFailed uses the generic failure
+  path, not necessarily the structured command-contract-validation envelope.
+  Do not infer uniform retry guidance or identifier fields across failures.
+  Lifecycle `timed_out` suggests retry with unknown impact; `needs_review`
+  suggests review/no retry
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/McpLifecycleModels.cs:179`,
+  `:192`). Generic failures set IsError with safe text and may have no
+  structured payload; the protocol maps IsError, optional StructuredContent
+  and a text Content block separately and does not separately serialize the
+  internal Category enum
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/FrontComposerMcpResult.cs:15`;
+  `references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/FrontComposerMcpProtocolMapper.cs:24`).
+  A successfully read lifecycle snapshot has IsError false even when its
+  structured terminal outcome is rejected/unconfirmed
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpLifecycleTracker.cs:63`).
+  Preserve these distinctions or obtain a specific downstream parity decision;
+  retry advice grants no executor-retry or execution authority.
 - **Story 5.5, retirement.** Keep the compatibility binaries listed in PS01–PS13
   versioned and labeled with their removal gates, outside every Platform
   composition, and stop routing them from the Parties and Memories AppHosts
@@ -1111,7 +1301,16 @@ question, recorded under the owning Epic 4 source spec at
   evidence; the FrontComposer host and Projects plug-in retire together;
   Memories waits for forwarded per-user identity. Technical G5 uses this census
   as the baseline for rejecting new proprietary MCP/CLI projects or release
-  entries. A deferred row is never counted as retired.
+  entries. Memories closure cleanup must also remove the obsolete base
+  Kustomize includes for the MCP deployment and Dapr config
+  (`references/Hexalith.Memories/deploy/kubernetes/base/kustomization.yaml:7`,
+  `:14`) and the `memories-mcp-token-reader` Role/RoleBinding granting the
+  `memories-mcp` service account get access to `app-api-token` and
+  `dapr-api-token` secrets
+  (`references/Hexalith.Memories/deploy/kubernetes/base/service-accounts-rbac.yaml:68`,
+  `:75`, `:78`, `:84`, `:89`), alongside the already listed deployment paths.
+  This is a downstream retirement handoff, not authority to remove resources
+  or credentials now. A deferred row is never counted as retired.
 
 ## Unresolved gaps
 
@@ -1119,10 +1318,6 @@ These remain open. Each inventory gap is retained in a row or gate, without a
 duplicate ledger entry. The separate inherited, unverified source-seal question
 is recorded under its owning Epic 4 source spec (`deferred-work.md:806`).
 
-- **Owner inventory approval resolved:** A1 records the requesting user's
-  approval and explicit authority confirmation for all 156 rows. The approval
-  receipt binds the reviewed candidate, final inventory bytes and source pins.
-  Downstream implementation and retirement gates remain unresolved.
 - **Admin health platform scope (AV10, G4):** from source, `GET
   /api/v1/admin/health` is denied without an admitted `X-Hexalith-Scope`
   header, which only Admin.UI sends, so the pinned server source denies AC01,
@@ -1165,6 +1360,10 @@ existing capability.
 
 ## Owning-maintainer approval and final verification (2026-11-08)
 
+Owner inventory approval is resolved: A1 covers all 156 rows. The 1.0.1
+amendment and current verification are recorded in the following section;
+the original 1.0.0 execution below remains historical evidence.
+
 The requesting user approved both reviewed candidate.3 inventories with
 "I approve", then confirmed "Authorized for all listed maintainer roles" for
 EventStore, platform/operator, FrontComposer and every census owner. Both
@@ -1200,3 +1399,88 @@ candidate hashes, and missing row IDs. The earlier completion-while-pending
 negative check still applies. No repository .NET build, legacy command or live
 service was required or run. The inherited Epic 4 question remains explicitly
 unverified and deferred at `deferred-work.md:806`.
+
+## Approved 1.0.1 amendment verification (2026-11-08)
+
+All seven post-approval review patches are applied. The receipt identifies
+Jérôme Piquot (GitHub `jpiquot`), binds the confirmed McpCli maintainer,
+security and contract/transport/security roles, and verifies Platform's
+CODEOWNERS line 2 (`* @jpiquot`). That repository ownership evidence supports
+the GitHub identity; the recorded user confirmation supplies the broader
+maintainer-role authority.
+
+The user selected option (a), "Versioned 1.0.1", for PS07's release-list
+correction and the stale technical-inventory wording. Technical A1 records
+that dated amendment, its changed rows and approval. Admin remains 1.0.0.
+Both exact approved 1.0.0 files are preserved under `approval/1.0.0/` and bound
+by their original SHA-256 values; candidate.3 snapshots are unchanged. The
+receipt distinguishes candidate.3's uncommitted working tree over `fa7c516`
+(which contains candidate.2) from its first committed snapshots in `0ce515c`.
+The gate checks both committed relationships and per-inventory versions.
+
+Ran the extraction command documented above, then
+`bash -e /tmp/mcpcli-story-5-1-static-check.sh` from the McpCli root: exit 0.
+All source, registration, census, row, approval, anchor and whitespace checks
+passed. The final lines were:
+
+```text
+PASS: 408 source anchors resolve to non-blank lines (65 content-checked); local links resolve; historical inventories unchanged; working-tree changes confined to _bmad-output/implementation-artifacts/; 17 story files are LF without trailing whitespace.
+PASS: rejected 39 damaged inputs (missing, duplicate, extra, incomplete, approval claims, wrong policy, lost effect/confirmation, hidden mismatch, invented replacement, census/resource omissions, drift, packaging, anchors, census pins, premature completion, approval receipt).
+PASS: 156 rows carry A1 owning-maintainer approval; receipt binds candidate/final hashes, exact instructions, row IDs and all source pins. Workflow states: spec=in-progress; sprint=in-progress. Frozen block sha256=8be7892597e4e5f0aeb4a1aa8acef4d57eacffac4b75de417c882494a557a105.
+```
+
+Ten additional damaged-input cases cover omitted and invented release-list
+claims, anonymized approvers, missing role coverage or confirmation, missing
+ownership evidence or candidate provenance, missing amendment approval,
+incorrect per-inventory versions and corrupted preserved hashes. The original
+completion-while-pending check remains. `git diff --check` passed. Spec and
+sprint remain `in-progress` for the parent review transition; this run does not
+record that review as completed. No runtime, dependency, reference, historical
+inventory or ledger changed, and no .NET build, legacy command, migration or
+live service ran. The downstream replacement and retirement gates and the
+inherited Epic 4 follow-up remain unresolved as documented above.
+
+## Supplemental handoff review fixes (2026-11-08)
+
+Added source-pinned downstream decision inputs for AV04 URL disclosure,
+AC01 polling deadlines, AM04–AM06 bounded consistency results, FV01 lifecycle
+terminalization/retention, FV04 argument and schema admission, FH02 capped
+command resolution, FV04 result channels and remediation, and the Memories
+Kustomize/RBAC retirement closure. These clarifications change neither
+approved inventory bytes nor the approval receipt and confer no execution or
+retirement authority.
+
+Focused validation only: `python3 /tmp/mcpcli-story-5-1-handoff-check.py`
+exited 0, checking all 87 added citations (85 unique source anchors) against
+expected content and the existing EventStore, FrontComposer and Memories
+pins, plus unchanged SHA-256 values for both approved inventories and the
+receipt. `git diff --check -- _bmad-output/implementation-artifacts/evidence/story-5-1/verification.md`
+passed. The initial focused run's final bookkeeping assertion counted 85
+unique anchors as 85 citations; correcting it to 87 citations / 85 unique
+anchors produced the passing run above. No full static gate, build, test
+suite, legacy command or service was run for these documentation fixes; the
+parent review performs the full verification.
+
+## Parent build review completion (2026-11-08)
+
+All three rendered build review layers completed against the saved-baseline
+unified diff. Edge-case and verification-gap layers returned no findings.
+Nine blind-review documentation findings are addressed in the compatibility
+handoffs above, without changing approved inventory or receipt bytes. The
+catalog-reader source-seal question retains its prior unverified verdict and
+existing Epic 4 ledger entry (`deferred-work.md:806`); no duplicate entry was
+added. The standalone first-build experiment still does not establish an
+injection point in the actual reader preparation path.
+
+The parent extracted the current first Bash block using the documented
+command (task-owned output `/tmp/mcpcli-story-5-1-parent-final.sh`) and ran
+`bash -e /tmp/mcpcli-story-5-1-parent-final.sh`: exit 0, including
+`git diff --check`. All 408 inventory anchors (65 content-checked), 39 damaged
+inputs, 17 clean pinned roots and 156 A1-approved rows passed. Independent
+byte comparisons against McpCli revision
+`0ce515ccc3f2414d1c98435745dac80479a42252` confirmed that both preserved
+1.0.0 files are exact originals and the current Admin inventory is unchanged.
+The earlier parent check caught the temporary `in-review` / `in-progress`
+workflow-state pair; syncing the sprint to the actual review phase resolved
+that transition before the passing run. Spec completion and sprint `review`
+record this documentation work; replacement and retirement gates remain open.

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "decision": "approved",
   "approved_on": "2026-11-08",
-  "approver": "requesting user in the current conversation",
+  "approver": "Jérôme Piquot (GitHub jpiquot)",
   "approval_authority": "requesting-user-owning-maintainer",
   "exact_approval_instruction": "I approve",
   "exact_authority_confirmation": "Authorized for all listed maintainer roles",
@@ -10,9 +10,11 @@
     "EventStore owning maintainer",
     "platform/operator maintainer",
     "FrontComposer owning maintainer",
-    "all census owning maintainer roles"
+    "all census owning maintainer roles",
+    "McpCli maintainer",
+    "McpCli security maintainer",
+    "McpCli contract/transport/security maintainer"
   ],
-  "inventory_version": "1.0.0",
   "reviewed_candidate_version": "1.0.0-candidate.3",
   "mcpcli_revision": "fa7c51601041ee6cf0d2f9d4613fb405758f2f7c",
   "source_revisions": {
@@ -132,13 +134,17 @@
         "G4",
         "G5",
         "G6"
-      ]
+      ],
+      "inventory_version": "1.0.0",
+      "preserved_version": "1.0.0",
+      "preserved_path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/eventstore-admin-migration-inventory-v1.md",
+      "preserved_sha256": "26ac7486cba8c52a0496147c6b90bda953dda31fd644ac199c433e49b834c90e"
     },
     {
       "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
       "candidate_path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/candidate.3/technical-tools-migration-inventory-v1.md",
       "candidate_sha256": "3531917d7664210c034b05d3bb8b78bf857c07afb48c636c1654bf33496c5d83",
-      "approved_sha256": "6a7d325f6927b8b0f6692c05b71b54728bc1281b871dc073712586d172d41f58",
+      "approved_sha256": "0472f2c4ba12049c89e582ed5162279f989160d62b4499bc766efde8e85b93ca",
       "row_ids": [
         "FH01",
         "FH02",
@@ -205,12 +211,68 @@
         "G3",
         "G4",
         "G5"
-      ]
+      ],
+      "inventory_version": "1.0.1",
+      "preserved_version": "1.0.0",
+      "preserved_path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/technical-tools-migration-inventory-v1.md",
+      "preserved_sha256": "6a7d325f6927b8b0f6692c05b71b54728bc1281b871dc073712586d172d41f58"
     }
   ],
   "limits": [
     "Inventory completeness and retaining defer / exclude dispositions only.",
     "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
     "No runtime exposure, execution, enrollment, publication or retirement authority."
+  ],
+  "approver_source": {
+    "path": "references/Hexalith.Platform/.github/CODEOWNERS",
+    "line": 2,
+    "text": "* @jpiquot",
+    "revision": "01e5b6530af96ad6eaa69cc1867d43def56c43ca"
+  },
+  "identity_and_role_confirmation": {
+    "confirmed_on": "2026-11-08",
+    "approver": "Jérôme Piquot (GitHub jpiquot)",
+    "additional_roles": [
+      "McpCli maintainer",
+      "McpCli security maintainer",
+      "McpCli contract/transport/security maintainer"
+    ],
+    "source_spec": "_bmad-output/implementation-artifacts/spec-5-1-inventory-eventstore-admin-and-technical-tool-operations.md",
+    "record": "The user selected Name the approver and confirmed this identity and McpCli-role coverage in the review decision."
+  },
+  "inventory_versions": {
+    "eventstore-admin": "1.0.0",
+    "technical-tools": "1.0.1"
+  },
+  "reviewed_candidate_state": {
+    "base_revision": "fa7c51601041ee6cf0d2f9d4613fb405758f2f7c",
+    "base_inventory_version": "1.0.0-candidate.2",
+    "reviewed_state": "uncommitted working tree over mcpcli_revision; candidate.3 is not contained in that commit",
+    "first_committed_revision": "0ce515ccc3f2414d1c98435745dac80479a42252",
+    "first_committed_location": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/candidate.3/"
+  },
+  "amendments": [
+    {
+      "inventory": "technical-tools",
+      "from_version": "1.0.0",
+      "to_version": "1.0.1",
+      "approved_on": "2026-11-08",
+      "approver": "Jérôme Piquot (GitHub jpiquot)",
+      "approval_decision": "option (a), Versioned 1.0.1",
+      "source_spec": "_bmad-output/implementation-artifacts/spec-5-1-inventory-eventstore-admin-and-technical-tool-operations.md",
+      "changed_rows": [
+        "PS07",
+        "PS01",
+        "PS02",
+        "FV09",
+        "PE03",
+        "PE04"
+      ],
+      "narrative_changes": [
+        "inventory version and A1 amendment",
+        "source-pin candidate wording"
+      ],
+      "limits": "Source revisions, row identities, dispositions and downstream gates are unchanged; no execution or retirement authority."
+    }
   ]
 }

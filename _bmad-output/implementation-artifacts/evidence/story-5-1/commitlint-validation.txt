@@ -5,3 +5,9 @@ Exit: 0
 ⧗   --- input ---
 docs(inventory): complete story 5.1 with owner approval
 ✔   found 0 problems, 0 warnings
+
+2026-11-08 post-approval amendment completion
+Tooling: npm ci (exit 0), pinned @commitlint/cli 21.2.4
+Command: npx --no -- commitlint --verbose < /tmp/mcpcli-story-5-1-commit-message.txt
+Exact full candidate: docs(inventory): amend story 5.1 technical tools and approval evidence
+Result: exit 0; found 0 problems, 0 warnings
