@@ -5,8 +5,8 @@ This evidence belongs to
 It verifies the approved
 [EventStore Admin inventory](../../eventstore-admin-migration-inventory-v1.md) and
 [technical-tools inventory](../../technical-tools-migration-inventory-v1.md),
-Admin `1.0.0` and technical `1.0.1`, amended from the approved `1.0.0`
-inventories finalized from `1.0.0-candidate.3`. The unapproved planning
+Admin `1.0.1` and technical `1.0.2`, amended from the approved `1.0.0`
+inventories (technical through `1.0.1`) finalized from `1.0.0-candidate.3`. The unapproved planning
 findings that preceded them are indexed in [planning/README.md](planning/README.md).
 
 Run the block below from the McpCli root with Python 3 and Git. Census,
@@ -23,7 +23,8 @@ nested submodule, or changes a reference checkout.
 
 The checks require A1 owning-maintainer approval on every row, with a receipt
 binding the exact approving instruction, authority confirmation, reviewed
-candidate and final inventory hashes, row IDs and all source revisions.
+candidate and final inventory hashes, row IDs, all source revisions and each
+versioned amendment's hashes and changed rows.
 Missing approval, source drift and incomplete or inconsistent rows fail.
 Static checks and inventory approval do not establish generic contract, Gateway
 readiness, live authorization or behavior parity, publication or retirement.
@@ -70,8 +71,10 @@ project changed (package downloads and one embedded fixture).
 The FrontComposer historical pin `81a440a8890a17edb39924bd0cf676eb6f6b5c25`
 and the companion inventory pins are read from this workspace's object stores.
 Census scope is the root `.gitmodules` only: tracked `src/` projects in each
-root, excluding test projects, nested gitlinks and captured `_bmad`,
-`evidence` and `docs/implementation` artifacts. It asserts no completeness for
+root plus tracked executable, web, MCP-referencing or tool-packed projects
+outside `src/`, excluding test projects, nested gitlinks, captured `_bmad`,
+`evidence` and `docs/implementation` artifacts and the captured Conversations
+`module/validation` proofs. It asserts no completeness for
 other repositories, unpublished forks or uninspected dynamic hosts.
 
 ## What the block checks
@@ -101,26 +104,35 @@ other repositories, unpublished forks or uninspected dynamic hosts.
   tool name, the 12 corpus documents' metadata plus the synthetic manifest, the
   two CLI verbs, and every manifest registration and package consumer.
 - **Census:** every production surface in the 17 roots is a PS row, an exempt
-  Builds tool or the FK03 dependency consumer; packaging claims match project
-  metadata and release lists; companion drift numbers match Git; other
+  Builds tool or the FK03 dependency consumer; every tracked executable, web,
+  MCP-referencing or tool-packed project outside `src/` is PS14, a PE08 or
+  PE09 project, the FK02 sample or a captured Conversations validation proof,
+  and none of the PE08/PE09 projects registers MCP or uses System.CommandLine;
+  packaging claims match project metadata and release lists; companion drift numbers match Git; other
   executables, test projects and developer MCP configs (JSON files and
   `.codex/config.toml` `[mcp_servers.*]` tables) are classified; the nine
   surface-free roots equal PN01–PN09; Platform's CODEOWNERS is the only
   ownership file.
 - **Anchors and links:** every backticked `path:line` and `:line` continuation,
   including the `references/` anchors for Platform AD-11/AD-14, the AI.Tools
-  rule and plan 1.1.0, EventStore AD-22 and the census routing points,
-  resolves to a non-blank line at the pin; 65 load-bearing anchors also match
+  rule and plan 1.1.0, EventStore AD-22 and the census routing points, plus
+  every citation in this file's compatibility handoffs, gaps and absent
+  evidence, resolves to a non-blank line at the pin; 65 load-bearing anchors also match
   expected content; row anchors point at their command, tool or metadata line;
-  every local link and heading fragment resolves.
-- **State and approval:** Admin `1.0.0` and technical `1.0.1` are approved with
+  every local link and heading fragment resolves. Handoff citations are
+  content-checked against the expected source text.
+- **State and approval:** Admin `1.0.1` and technical `1.0.2` are approved with
   A1 on every row and Jérôme Piquot's (GitHub `jpiquot`) confirmed identity
   and owning-maintainer authority, including the McpCli roles. The approval
-  receipt binds all 156 row IDs, both preserved candidate.3 and approved 1.0.0
-  snapshots, final inventory bytes, candidate provenance and all 17
-  census pins. The spec's frozen block and historical inventories are unchanged;
+  receipt binds all 159 row IDs, both preserved candidate.3 and approved 1.0.0
+  snapshots, the preserved technical 1.0.1, final inventory bytes, candidate
+  provenance and all 17 census pins. Each amendment's from/to hashes chain
+  from the preserved 1.0.0 to the final bytes, and the rows that differ
+  between consecutive versions equal its declared changed and added rows.
+  The spec's frozen block is unchanged, and the historical inventories are
+  unchanged since baseline `ad7bf9e`;
   working-tree changes stay under `_bmad-output/implementation-artifacts/`.
-  The 17 named story, planning and approval files have LF endings and no trailing
+  The 18 named story, planning and approval files have LF endings and no trailing
   whitespace; `git diff --check` covers the other tracked documentation.
   The Story 5.2 handoff assigns each AC/AM row once. The damaged inputs
   include missing approval, corrupt receipts and completion while pending.
@@ -130,21 +142,26 @@ other repositories, unpublished forks or uninspected dynamic hosts.
 The source assertions reproduce the approved state committed at
 `0ce515ccc3f2414d1c98435745dac80479a42252` (`0ce515c`), or a later commit
 that moves no reference gitlink or anchored ledger line. The block below
-includes the 1.0.1 amendment checks and therefore runs against that amended
+includes the Admin 1.0.1 and technical 1.0.1/1.0.2 amendment checks and therefore
+runs against that amended
 documentation state; use the block from `0ce515c` for the original 1.0.0
-documentation. All 17 source checkouts must be clean at the recorded gitlinks;
+documentation and from `6ee68af` for technical 1.0.1 with Admin 1.0.0. All 17 source checkouts must be clean at the recorded gitlinks;
 the McpCli working tree may contain this story's documentation changes.
 Moving a reference or an anchored ledger line requires a corresponding
 versioned inventory/evidence update before rerunning this block at HEAD.
 
-Extract and execute the Bash block with this command from the repository root:
+Extract and execute the Bash block with this command from the repository root.
+It writes to a fresh task-owned `mktemp` file, so concurrent sessions cannot
+run each other's extracted script:
 
-    python3 - <<'PY' > /tmp/mcpcli-story-5-1-static-check.sh
+    script=$(mktemp "${TMPDIR:-/tmp}/mcpcli-story-5-1-static-check.XXXXXX")
+    python3 - "$script" <<'PY'
+    import sys
     from pathlib import Path
     text = Path('_bmad-output/implementation-artifacts/evidence/story-5-1/verification.md').read_text()
-    print(text.split('```bash\n', 1)[1].split('\n```', 1)[0])
+    Path(sys.argv[1]).write_text(text.split('```bash\n', 1)[1].split('\n```', 1)[0] + '\n')
     PY
-    bash -e /tmp/mcpcli-story-5-1-static-check.sh
+    bash -e "$script"
 
 ```bash
 set -e
@@ -168,13 +185,30 @@ FC_SHA = 'fbb9c3822dfa407e72739238cd472567f45f1e82'
 FC_OLD = '81a440a8890a17edb39924bd0cf676eb6f6b5c25'
 FROZEN_SHA256 = '8be7892597e4e5f0aeb4a1aa8acef4d57eacffac4b75de417c882494a557a105'
 FC_BASE = 'b06f86d554363ea5b8192cbc149a75c820dab2b8'
-APPROVED_VERSIONS = {'eventstore-admin': '1.0.0', 'technical-tools': '1.0.1'}
+APPROVED_VERSIONS = {'eventstore-admin': '1.0.1', 'technical-tools': '1.0.2'}
 PRESERVED_100_HASHES = {
     'eventstore-admin': '26ac7486cba8c52a0496147c6b90bda953dda31fd644ac199c433e49b834c90e',
     'technical-tools': '6a7d325f6927b8b0f6692c05b71b54728bc1281b871dc073712586d172d41f58',
 }
 APPROVAL_COMMIT = '0ce515ccc3f2414d1c98435745dac80479a42252'
 MCPCLI_ROLES = ['McpCli maintainer', 'McpCli security maintainer', 'McpCli contract/transport/security maintainer']
+BASELINE = 'ad7bf9ee415d09b16b47616740e2cc38fb3d6d9a'
+AMENDMENT_101_COMMIT = '6ee68afe1440e3318dde93328012dd8f5cd00388'
+CLARIFY = '(evidence/story-5-1/verification.md#row-clarification-index)'
+VALIDATION = 'module/validation/'
+EVIDENCE_SCOPE = ('GitHub identity and Platform repository ownership only; authority for the other listed roles rests on '
+                  'exact_authority_confirmation and identity_and_role_confirmation')
+PASS2_BASIS = 'Exact amended bytes and SHA-256 presented to the owner after review pass 2 and approved before this receipt bound them.'
+AMENDMENT_APPROVALS = {
+    ('technical-tools', '1.0.1'): ('option (a), Versioned 1.0.1',
+                                   'Selection of the versioned amendment with the patch wording prescribed in the source spec review findings; '
+                                   'the resulting bytes are bound by to_sha256 and verified by the static gate, without a separate byte review.'),
+    ('eventstore-admin', '1.0.1'): ('review pass 2 option (a): Amend AV04/G4 + pointers; Point A1 to receipt', PASS2_BASIS),
+    ('technical-tools', '1.0.2'): ('review pass 2 option (a): Classify in amendment; Amend AV04/G4 + pointers; Extend in amendment; '
+                                   'Point A1 to receipt', PASS2_BASIS),
+}
+PASS2_INSTRUCTION = 'Approve Admin 1.0.1 and technical 1.0.2'
+AMENDMENT_INSTRUCTIONS = {('eventstore-admin', '1.0.1'): PASS2_INSTRUCTION, ('technical-tools', '1.0.2'): PASS2_INSTRUCTION}
 refs = root / 'references'
 es = refs / 'Hexalith.EventStore'
 fc = refs / 'Hexalith.FrontComposer'
@@ -226,6 +260,9 @@ def check_approval(text):
     assert 'evidence/story-5-1/approval/approval.json' in text
     for claim in ['| replace |', '| include |', '| withdraw |']:
         assert claim not in text, claim
+    flat = ' '.join(text.split())
+    assert 'later identity and role confirmation: the approver is Jérôme Piquot (GitHub `jpiquot`)' in flat, 'A1 identity pointer'
+    assert 'McpCli contract/transport/security maintainer roles' in flat, 'A1 McpCli roles'
 
 
 # ---------------------------------------------------------------- sources
@@ -353,6 +390,9 @@ def check_admin(text):
     ax = rows(section(text, '## Absent surfaces and scope evidence'), 'AX', 6)
     g = rows(section(text, '## Retirement and replacement prerequisites'), 'G', 4)
     assert (len(ac), len(au), len(am), len(av), len(ax), len(g)) == (31, 6, 28, 13, 7, 6)
+    assert 'interpolates its configured base address' in av['AV04'][1] and '(G4)' in av['AV04'][3], 'AV04 URL disclosure'
+    assert "AV04's base-address disclosure in CLI error messages" in g['G4'][1], 'Admin G4 URL disclosure'
+    assert all(CLARIFY in {**ac, **am}[key][10] for key in ['AC01', 'AM04', 'AM05', 'AM06']) and CLARIFY in av['AV04'][3]
 
     leaves, helpers, classes = cli_graph()
     assert [r[1].strip('`') for r in ac.values()] == [p for p, _, _ in leaves], 'CLI registration graph'
@@ -480,20 +520,31 @@ def tracked(repo, *patterns):
 
 
 def census():
-    surfaces, executables = {}, {}
+    surfaces, executables, outside, validation = {}, {}, {}, []
     for rel in ROOTS:
         repo = root / rel
         for f in tracked(repo, '*.csproj'):
-            if not f.startswith('src/') or 'Tests' in f:
+            if 'Tests' in f:
                 continue
             t = (repo / f).read_text(errors='ignore')
+            runnable = ('<OutputType>Exe' in t or 'Sdk.Web' in t or 'ModelContextProtocol' in t
+                        or 'FrontComposer.Mcp' in t or re.search(r'<PackAsTool>\s*true', t, re.I))
+            if not f.startswith('src/'):
+                # Test fixtures and captured evidence snapshots are PE05/PE07 scope, not surfaces.
+                if re.search(r'(?:^|/)(?:tests?|evidence)/', f) or not runnable:
+                    continue
+                if rel == 'references/Hexalith.Conversations' and f.startswith(VALIDATION):
+                    validation.append(f)
+                else:
+                    outside.setdefault(rel, []).append(f)
+                continue
             surface = (re.search(r'\.(?:Cli|Mcp)\.csproj$', f) or 'ModelContextProtocol' in t
                        or 'FrontComposer.Mcp' in t or re.search(r'<PackAsTool>\s*true', t, re.I))
             if surface:
                 surfaces.setdefault(rel, []).append(f)
             elif '<OutputType>Exe' in t and 'Sdk.Web' not in t and 'Aspire.AppHost.Sdk' not in t:
                 executables.setdefault(rel, []).append(f)
-    return surfaces, executables
+    return surfaces, executables, outside, validation
 
 
 def check_technical(text):
@@ -509,7 +560,10 @@ def check_technical(text):
     pe = rows(section(text, '### Exempt, test and non-surface tooling'), 'PE', 5)
     pn = rows(section(text, '### Root references without a production surface'), 'PN', 6)
     g = rows(section(text, '## Retirement and replacement prerequisites'), 'G', 4)
-    assert (len(fh), len(fd), len(fcl), len(fv), len(fk), len(ps), len(pe), len(pn), len(g)) == (3, 13, 2, 9, 4, 13, 7, 9, 5)
+    assert (len(fh), len(fd), len(fcl), len(fv), len(fk), len(ps), len(pe), len(pn), len(g)) == (3, 13, 2, 9, 4, 14, 9, 9, 5)
+    assert CLARIFY in fh['FH02'][8] and all(CLARIFY in fv[key][5] for key in ['FV01', 'FV04', 'FV08'])
+    assert 'inventory the four PS14 operator modes' in g['G3'][1]
+    assert 'every AppHost, startup, deployment, release-publication, central-package and sample point' in g['G4'][1]
     for group in (fh, fd, fcl):
         for key, r in group.items():
             disposition = r.index('defer')
@@ -575,19 +629,34 @@ def check_technical(text):
                    for f in tracked(projects_repo, '*.cs') if not f.startswith('src/Hexalith.Projects.Mcp/') and 'Tests' not in f)
 
     # Census: every production surface is a PS row, an exempt Builds tool or the FK03 dependency consumer.
-    surfaces, executables = census()
+    surfaces, executables, outside, validation = census()
     recorded = {r[1].strip('`'): r for r in ps.values()}
     expected = {f for fs in surfaces.values() for f in fs}
+    # Outside src/: one operator CLI (PS14), PE08/PE09 classified executables, the FK02 sample and captured proofs.
+    operator = {('references/Hexalith.Memories', 'tools/MigrateEmbeddingVectors/MigrateEmbeddingVectors.csproj')}
+    short = {Path(rel).name.removeprefix('Hexalith.'): rel for rel in ROOTS}
+    classified = {(short[name], f) for key in ('PE08', 'PE09') for name, f in re.findall(r'(\w+) `([^`]+\.csproj)`', pe[key][1])}
+    found = {(rel, f) for rel, fs in outside.items() for f in fs}
+    sample = ('references/Hexalith.FrontComposer', 'samples/Counter/Counter.Web/Counter.Web.csproj')
+    assert found == classified | operator | {sample}, sorted(found ^ (classified | operator | {sample}))
+    assert len(classified) == 17 and not classified & (operator | {sample})
+    for rel, f in classified:
+        assert not re.search(r'ModelContextProtocol|FrontComposer\.Mcp|System\.CommandLine|<PackAsTool>', (root / rel / f).read_text(), re.I), (rel, f)
+        for source in tracked(root / rel, str(Path(f).parent)):
+            if source.endswith('.cs'):
+                assert not re.search(r'\b(?:AddMcpServer|MapMcp|AddFrontComposerMcp|MapFrontComposerMcp)\(|McpServerTool|System\.CommandLine',
+                                     (root / rel / source).read_text(errors='ignore')), (rel, source)
+    assert len(validation) == 733 and '733 executable projects captured under Conversations `module/validation`' in pe['PE07'][1]
     exempt = {'src/libraries/Hexalith.Builds.Evidence.Cli/Hexalith.Builds.Evidence.Cli.csproj',
               'src/libraries/Hexalith.Builds.Module.Cli/Hexalith.Builds.Module.Cli.csproj'}
-    assert expected == set(recorded) | exempt | {'src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj'}, expected
+    assert expected | {f for _, f in operator} == set(recorded) | exempt | {'src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj'}, expected
     assert {rel for rel in surfaces} == {f'references/Hexalith.{n}' for n in
                                           ['EventStore', 'Memories', 'Builds', 'FrontComposer', 'Parties', 'Projects', 'Folders', 'ChatBot']}
-    assert sum(1 for f in recorded) == 13 and len({r[2].split('`')[1] for r in ps.values()}) == 7
+    assert sum(1 for f in recorded) == 14 and len({r[2].split('`')[1] for r in ps.values()}) == 7
     for project, r in recorded.items():
         rel, sha = r[2].split('`')[1], r[2].split('`')[3]
         repo = root / rel
-        assert git(repo, 'rev-parse', 'HEAD') == sha and project in surfaces[rel], project
+        assert git(repo, 'rev-parse', 'HEAD') == sha and (project in surfaces[rel] or (rel, project) in operator), project
         csproj = (repo / project).read_text()
         packaging = r[4]
         kind = 'Web' if 'Sdk.Web' in csproj else 'Exe' if '<OutputType>Exe' in csproj else 'Library'
@@ -701,6 +770,7 @@ ABBREV = {
                          'ServerTests': 'tests/Hexalith.EventStore.Admin.Server.Tests'},
     'technical-tools': {'Mcp': 'src/Hexalith.FrontComposer.Mcp', 'Cli': 'src/Hexalith.FrontComposer.Cli',
                         'Corpus': 'docs/skills/frontcomposer'},
+    'verification': {},
 }
 SPINE = 'references/Hexalith.Platform/_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md'
 PLAN = 'references/Hexalith.AI.Tools/hexalith-mcpcli-migration-instructions.md'
@@ -773,12 +843,76 @@ CONTENT = {
     'Cli/GeneratedOutputLoader.cs:49': 'Directory.EnumerateFiles',
     'Cli/MigrationCommand.cs:33': 'HasTopLevelImports',
     'Cli/ProjectDocumentLoader.cs:6': 'HasTopLevelImports',
+    'Cli/Client/AdminApiClient.cs:67': 'BaseAddress',
+    'Cli/Client/AdminApiClient.cs:73': 'resolvedUrl',
+    'Cli/Client/AdminApiClient.cs:80': 'resolvedUrl',
+    'Cli/Client/AdminApiClient.cs:83': 'resolvedUrl',
+    'Cli/Client/AdminApiClient.cs:95': 'resolvedUrl',
+    'Cli/Client/AdminApiClient.cs:478': 'resolvedUrl',
+    f'{MEM}/tools/MigrateEmbeddingVectors/Program.cs:47': '!options.Yes && options.Interactive',
+    f'{MEM}/tools/MigrateEmbeddingVectors/Program.cs:75': 'ToolResources.CreateAsync',
+    f'{MEM}/tools/MigrateEmbeddingVectors/Program.cs:366': '--dry-run|--live|--rollback|--abort',
+    f'{MEM}/src/Hexalith.Memories.Server/Migration/EmbeddingVectorMigrationService.cs:98': 'EmbeddingMigrationMode.Live',
+    f'{MEM}/src/Hexalith.Memories.Server/Migration/EmbeddingVectorMigrationService.cs:104': '!options.Yes',
+    f'{MEM}/docs/operations/embedding-providers.md:207': 'Redis and the DAPR sidecar directly',
+    'references/Hexalith.Parties/.github/workflows/release.yml:352': 'Hexalith.Parties.Mcp.csproj|parties-mcp',
+    'references/Hexalith.Parties/.github/workflows/release.yml:379': 'Hexalith.Parties.Mcp.csproj|parties-mcp',
+    f'{MEM}/tools/release-containers.json:7': '"repository": "memories-mcp"',
+    f'{MEM}/tools/publish-containers.ps1:82': 'Hexalith.Memories.Mcp.csproj',
+    f'{MEM}/src/Hexalith.Memories.AppHost/Program.cs:496': 'Hexalith_Memories_Mcp',
+    'references/Hexalith.Builds/Props/Directory.Packages.props:87': 'Include="Hexalith.FrontComposer.Mcp"',
+    'references/Hexalith.FrontComposer/samples/Counter/Counter.Web/Program.cs:232': 'MapFrontComposerMcp',
+    'deferred-work.md:144': 'Migration planning artifacts disagree',
+    'deferred-work.md:806': 'catalog-reader inputs under obj',
+    'epic-5-context.md:26': 'Preserve REST/Dapr semantics',
 }
+# Expected content of the compatibility-handoff citations in this file (moved from the review-time /tmp checker).
+ESC = 'references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Cli'
+FCM = 'references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp'
+HANDOFF = {
+    f'{ESC}/Client/AdminApiClient.cs': {26: 'FromSeconds(10)', 67: 'BaseAddress', 73: 'resolvedUrl', 80: 'resolvedUrl', 83: 'resolvedUrl',
+                                        95: 'resolvedUrl', 478: 'resolvedUrl'},
+    f'{ESC}/Commands/HealthCommand.cs': {140: 'sw.Elapsed.TotalSeconds < timeout', 144: 'GetAsync', 165: 'Task.Delay'},
+    'references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Server/Services/DaprConsistencyCommandService.cs': {
+        132: 'HasActiveCheckForTenantAsync', 236: 'Pending or ConsistencyCheckStatus.Running', 239: 'TimeoutUtc', 253: 'Allowing trigger',
+        37: 'AnomalyCap = 500', 39: 'IndexCap = 100', 42: 'TimeoutMinutes = 30', 43: 'TtlDays = 30', 922: 'ttlInSeconds',
+        292: 'count: 10000', 631: 'MaxTimelinePages', 644: 'Inconclusive'},
+    f'{FCM}/FrontComposerMcpOptions.cs': {22: '32 * 1024', 44: '= 50', 64: '= 32', 66: '= 1_000', 68: '= 1_000', 70: '= 30_000'},
+    f'{FCM}/Invocation/FrontComposerMcpLifecycleStore.cs': {187: 'MaxLifecycleInProgressMs', 219: 'MarkNeedsReview', 323: 'MarkTimedOut',
+                                                            462: 'CommandLifecycleState.Rejected', 237: '_terminalCount', 242: 'TryRemove',
+                                                            245: 'TryRemove', 491: '_history.Count > _maxHistory'},
+    f'{FCM}/Invocation/McpLifecycleModels.cs': {179: 'TimedOut()', 192: 'NeedsReview()'},
+    f'{FCM}/Invocation/FrontComposerMcpLifecycleTracker.cs': {46: 'TryReadSnapshot', 51: 'HiddenUnknown', 63: 'Success('},
+    f'{FCM}/Invocation/FrontComposerMcpCommandInvoker.cs': {
+        60: 'SchemaNegotiation', 62: 'AllowsSideEffects', 66: 'ValidateArguments', 86: 'DispatchAsync', 221: 'SerializeToUtf8Bytes',
+        226: 'OrdinalIgnoreCase', 230: 'Ordinal', 232: 'seen.Add', 245: 'IsRequired', 259: 'ValidatePrimitiveShape', 272: 'EnumValues',
+        111: 'CommandRejectedException', 125: 'CommandValidationException', 141: 'OperationCanceledException', 147: 'TimeoutException',
+        163: 'Exception ex', 36: 'capture messageId/correlationId', 76: 'ApplyDerivableValues', 483: 'IsNullOrWhiteSpace(messageId)',
+        487: 'IsNullOrWhiteSpace(correlationId)'},
+    f'{FCM}/HttpFrontComposerMcpAgentContextAccessor.cs': {15: 'x-frontcomposer-schema-fingerprint', 43: 'ClientFingerprintHint',
+                                                           64: 'values.Count != 1', 113: 'ParseClientFingerprint',
+                                                           138: 'SupportedAlgorithms.Contains', 149: 'IsLowercaseSha256Hex'},
+    f'{FCM}/Schema/SchemaNegotiationRuntimeGate.cs': {47: 'EvaluateCommand', 52: 'client is null', 71: 'ToStructuredFailure',
+                                                      79: 'BuildStructuredPayload'},
+    f'{FCM}/Invocation/FrontComposerMcpToolAdmissionService.cs': {50: 'visible.Count >= maxItems', 76: 'BuildVisibleCatalogAsync',
+                                                                  82: 'catalog.Tools', 130: 'IsVisibleListTruncated'},
+    f'{FCM}/Extensions/FrontComposerMcpServiceCollectionExtensions.cs': {100: 'new ListToolsResult'},
+    f'{FCM}/FrontComposerMcpResult.cs': {15: 'Failure('},
+    f'{FCM}/FrontComposerMcpProtocolMapper.cs': {24: 'ToCallToolResult'},
+    f'{MEM}/deploy/kubernetes/base/kustomization.yaml': {7: 'mcp-deployment.yaml', 14: 'dapr/mcp-config.yaml'},
+    f'{MEM}/deploy/kubernetes/base/service-accounts-rbac.yaml': {68: 'rbac.authorization.k8s.io', 75: 'app-api-token',
+                                                                 78: 'rbac.authorization.k8s.io', 84: 'memories-mcp',
+                                                                 89: 'memories-mcp-token-reader'},
+    'references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Cli/CliApplication.cs': {
+        13: 'IsNullOrWhiteSpace(args[0])', 31: 'catch (OperationCanceledException)', 33: 'ExitCodes.ApplyWriteFailure',
+        35: 'IOException or UnauthorizedAccessException', 37: 'ExitCodes.ApplyWriteFailure'},
+}
+CONTENT.update({f'{path}:{number}': expected for path, lines in HANDOFF.items() for number, expected in lines.items()})
 
 
 def resolve(doc, path):
     first = path.split('/', 1)[0]
-    if path.startswith('deferred-work.md'):
+    if path.startswith(('deferred-work.md', 'epic-5-context.md')):
         return base / path
     if path.startswith('references/'):
         return root / path
@@ -802,7 +936,7 @@ def check_anchors(doc, text):
         # A continuation binds to the last explicit path in the same table row or prose paragraph.
         if line.startswith('|') or not line.strip():
             current = None
-        for m in re.finditer(r'`(?:([^`\s:]+(?:\.(?:cs|csproj|md|json|yaml)|CODEOWNERS))|):(\d+)`', line):
+        for m in re.finditer(r'`(?:([^`\s:]+(?:\.(?:cs|csproj|md|json|yaml|yml|ps1|props)|CODEOWNERS))|):(\d+)`', line):
             path, number = m.group(1), int(m.group(2))
             if path:
                 current = path
@@ -815,9 +949,10 @@ def check_anchors(doc, text):
                 assert CONTENT[key] in lines[number - 1], (doc, key)
                 checked.add(key)
             count += 1
+    link_base = base / 'evidence/story-5-1' if doc == 'verification' else base
     for target in re.findall(r'\]\(([^)]+)\)', text):
         path, _, fragment = target.partition('#')
-        location = base / path if path else base / f'{doc}-migration-inventory-v1.md'
+        location = link_base / path if path else base / f'{doc}-migration-inventory-v1.md'
         assert location.exists(), target
         if fragment:
             headings = re.findall(r'^#{1,6} (.+)$', location.read_text(), re.M)
@@ -873,6 +1008,14 @@ def check_census_pins(evidence):
     return pins
 
 
+HISTORICAL = [str(base / f'{m}-migration-inventory-v1.md') for m in ['parties', 'folders', 'projects', 'frontcomposer', 'chatbot', 'memories']]
+
+
+def check_historical(revision):
+    # Compare the working tree with the story baseline, so committed and uncommitted edits both fail.
+    assert subprocess.run(['git', '-C', str(root), 'diff', '--quiet', revision, '--', *HISTORICAL]).returncode == 0, revision
+
+
 def check_repository():
     check_census_pins((base / 'evidence/story-5-1/verification.md').read_text())
     gitlinks = {path: sha for sha, path in re.findall(r'^160000 commit (\w+)\t(\S+)$', git(root, 'ls-tree', 'HEAD', 'references/'), re.M)}
@@ -880,8 +1023,7 @@ def check_repository():
     for rel in ROOTS:
         assert git(root / rel, 'rev-parse', 'HEAD') == gitlinks[rel], rel
         assert not git(root / rel, 'status', '--porcelain'), rel
-    historical = [f'{m}-migration-inventory-v1.md' for m in ['parties', 'folders', 'projects', 'frontcomposer', 'chatbot', 'memories']]
-    assert subprocess.run(['git', '-C', str(root), 'diff', '--quiet', 'HEAD', '--', *[str(base / h) for h in historical]]).returncode == 0
+    check_historical(BASELINE)
     status = subprocess.check_output(['git', '-C', str(root), 'status', '--porcelain', '-z', '--untracked-files=all'], text=True)
     changed = [entry[3:] for entry in status.split('\0') if entry]
     # A clean post-commit checkout has no changes; any working-tree change must stay in this story's area.
@@ -891,7 +1033,7 @@ def check_repository():
                 'evidence/story-5-1/verification.md', 'evidence/story-5-1/commitlint-validation.txt', spec_name, 'sprint-status.yaml', 'epic-5-context.md',
                 *sorted(str(f.relative_to(base)) for f in (base / 'evidence/story-5-1/planning').iterdir()),
                 *sorted(str(f.relative_to(base)) for f in (base / 'evidence/story-5-1/approval').rglob('*') if f.is_file())]
-    assert len(authored) == 17, authored
+    assert len(authored) == 18, authored
     for name in authored:
         data = (base / name).read_bytes()
         assert b'\r' not in data and data.endswith(b'\n') and not data.endswith(b'\n\n'), name
@@ -905,13 +1047,19 @@ admin_text = (base / 'eventstore-admin-migration-inventory-v1.md').read_text()
 tech_text = (base / 'technical-tools-migration-inventory-v1.md').read_text()
 admin = check_admin(admin_text)
 technical = check_technical(tech_text)
-def check_all_anchors(admin_doc, tech_doc):
-    counts = [check_anchors('eventstore-admin', admin_doc), check_anchors('technical-tools', tech_doc)]
-    assert set(CONTENT) == counts[0][1] | counts[1][1], set(CONTENT) - counts[0][1] - counts[1][1]
+def handoff_region(evidence):
+    return evidence.split('\n## Compatibility handoffs\n', 1)[1].split('\n## Owning-maintainer approval and final verification', 1)[0]
+
+
+def check_all_anchors(admin_doc, tech_doc, evidence_doc):
+    counts = [check_anchors('eventstore-admin', admin_doc), check_anchors('technical-tools', tech_doc),
+              check_anchors('verification', handoff_region(evidence_doc))]
+    assert set(CONTENT) == counts[0][1] | counts[1][1] | counts[2][1], set(CONTENT) - counts[0][1] - counts[1][1] - counts[2][1]
     return counts
 
 
-anchor_counts = check_all_anchors(admin_text, tech_text)
+evidence_text = (base / 'evidence/story-5-1/verification.md').read_text()
+anchor_counts = check_all_anchors(admin_text, tech_text, evidence_text)
 check_row_anchor_content(admin, technical)
 
 
@@ -937,7 +1085,8 @@ def check_receipt(receipt):
     assert receipt['approver'] == 'Jérôme Piquot (GitHub jpiquot)'
     owner = receipt['approver_source']
     assert owner == {'path': 'references/Hexalith.Platform/.github/CODEOWNERS', 'line': 2,
-                     'text': '* @jpiquot', 'revision': '01e5b6530af96ad6eaa69cc1867d43def56c43ca'}
+                     'text': '* @jpiquot', 'revision': '01e5b6530af96ad6eaa69cc1867d43def56c43ca',
+                     'evidence_scope': EVIDENCE_SCOPE}
     assert (root / owner['path']).read_text().splitlines()[owner['line'] - 1] == owner['text']
     assert receipt['identity_and_role_confirmation']['source_spec'] == str(base.relative_to(root) / spec_name)
     assert receipt['identity_and_role_confirmation']['confirmed_on'] == '2026-11-08'
@@ -981,13 +1130,52 @@ def check_receipt(receipt):
         assert git(root, 'show', f"{APPROVAL_COMMIT}:{entry['candidate_path']}") == candidate.decode().strip()
         assert frontmatter(candidate.decode())['inventory_version'] == '1.0.0-candidate.3'
         assert entry['row_ids'] == [key for group in expected[entry['path']].values() for key in group]
-    amendment, = receipt['amendments']
-    assert amendment['inventory'] == 'technical-tools' and amendment['from_version'] == '1.0.0' and amendment['to_version'] == '1.0.1'
-    assert amendment['approved_on'] == '2026-11-08' and amendment['approver'] == receipt['approver']
-    assert amendment['approval_decision'] == 'option (a), Versioned 1.0.1'
-    assert amendment['source_spec'] == str(base.relative_to(root) / spec_name)
-    assert amendment['changed_rows'] == ['PS07', 'PS01', 'PS02', 'FV09', 'PE03', 'PE04']
-    assert amendment['narrative_changes'] == ['inventory version and A1 amendment', 'source-pin candidate wording']
+    assert [(a['inventory'], a['from_version'], a['to_version']) for a in receipt['amendments']] == [
+        ('technical-tools', '1.0.0', '1.0.1'), ('eventstore-admin', '1.0.0', '1.0.1'), ('technical-tools', '1.0.1', '1.0.2')]
+    for amendment in receipt['amendments']:
+        key = (amendment['inventory'], amendment['to_version'])
+        assert amendment['approved_on'] == '2026-11-08' and amendment['approver'] == receipt['approver'], key
+        assert amendment['source_spec'] == str(base.relative_to(root) / spec_name), key
+        assert (amendment['approval_decision'], amendment['approval_basis']) == AMENDMENT_APPROVALS[key], key
+        assert amendment.get('exact_approval_instruction') == AMENDMENT_INSTRUCTIONS.get(key), key
+    assert receipt['amendments'][0]['narrative_changes'] == ['inventory version and A1 amendment', 'source-pin candidate wording']
+    for module in APPROVED_VERSIONS:
+        check_amendment_chain(receipt, module, (base / f'{module}-migration-inventory-v1.md').read_text())
+
+
+def row_lines(text):
+    found = {}
+    for line in text.splitlines():
+        m = re.match(r'^\| ([A-Z]{2}\d{2}|G\d+|none) \|', line)
+        if m:
+            found.setdefault(m[1], []).append(line)
+    return found
+
+
+def check_amendment_chain(receipt, module, current):
+    # Walk preserved 1.0.0 -> each amendment -> final bytes; the rows that differ must equal the declared rows.
+    entry = next(e for e in receipt['inventories'] if Path(e['path']).name == f'{module}-migration-inventory-v1.md')
+    version, digest = '1.0.0', PRESERVED_100_HASHES[module]
+    text = (root / entry['preserved_path']).read_text()
+    assert hashlib.sha256(text.encode()).hexdigest() == digest, module
+    chain = [a for a in receipt['amendments'] if a['inventory'] == module]
+    for index, amendment in enumerate(chain):
+        assert amendment['from_version'] == version and amendment['from_sha256'] == digest, (module, amendment['to_version'])
+        if index == len(chain) - 1:
+            assert amendment['to_path'] == entry['path'], module
+            following = current
+        else:
+            following = (root / amendment['to_path']).read_text()
+            assert git(root, 'show', f"{amendment['to_first_committed_revision']}:{entry['path']}") == following.strip(), module
+        assert hashlib.sha256(following.encode()).hexdigest() == amendment['to_sha256'], (module, amendment['to_version'])
+        old, new = row_lines(text), row_lines(following)
+        changed = sorted(k for k in old.keys() & new.keys() if old[k] != new[k])
+        assert changed == sorted(amendment['changed_rows']), (module, amendment['to_version'], changed)
+        assert sorted(new.keys() - old.keys()) == sorted(amendment['added_rows']) and not old.keys() - new.keys(), (module, amendment['to_version'])
+        assert frontmatter(following)['inventory_version'] == amendment['to_version'], module
+        version, digest, text = amendment['to_version'], amendment['to_sha256'], following
+    assert version == entry['inventory_version'] == APPROVED_VERSIONS[module], module
+    assert digest == entry['approved_sha256'] == hashlib.sha256(current.encode()).hexdigest(), module
 
 
 receipt = json.loads((base / 'evidence/story-5-1/approval/approval.json').read_text())
@@ -1024,9 +1212,16 @@ damages = [
     (check_technical, tech_text.replace(line_of(tech_text, 'PS06'), line_of(tech_text, 'PS06').replace('(34 insertions)', '(35 insertions)')), 'wrong drift'),
     (check_technical, tech_text.replace('external_maintainer_approval: approved', 'external_maintainer_approval: pending'), 'missing owner approval'),
     (lambda _: check_workflow('done', 'review', pending=True), None, 'completion while pending'),
-    (lambda s: check_all_anchors(s, tech_text), admin_text.replace('`Cli/Commands/HealthCommand.cs:47`', '`Cli/Commands/HealthCommand.cs:9999`'), 'out-of-range anchor'),
-    (lambda s: check_all_anchors(s, tech_text), admin_text.replace('`Server/Controllers/AdminStreamsController.cs:350`', '`Server/Controllers/AdminStreamsController.cs:351`'), 'moved content anchor'),
-    (lambda s: check_all_anchors(admin_text, s), tech_text.replace('`Cli/PathUtilities.cs:32`', '`Cli/PathUtilities.cs:33`'), 'moved technical anchor'),
+    (lambda s: check_all_anchors(s, tech_text, evidence_text), admin_text.replace('`Cli/Commands/HealthCommand.cs:47`', '`Cli/Commands/HealthCommand.cs:9999`'), 'out-of-range anchor'),
+    (lambda s: check_all_anchors(s, tech_text, evidence_text), admin_text.replace('`Server/Controllers/AdminStreamsController.cs:350`', '`Server/Controllers/AdminStreamsController.cs:351`'), 'moved content anchor'),
+    (lambda s: check_all_anchors(admin_text, s, evidence_text), tech_text.replace('`Cli/PathUtilities.cs:32`', '`Cli/PathUtilities.cs:33`'), 'moved technical anchor'),
+    (lambda s: check_all_anchors(admin_text, tech_text, s), evidence_text.replace('`references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Cli/Commands/HealthCommand.cs:140`', '`references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Cli/Commands/HealthCommand.cs:141`'), 'moved handoff anchor'),
+    (lambda s: check_all_anchors(admin_text, s, evidence_text), tech_text.replace('(`references/Hexalith.Memories/src/Hexalith.Memories.AppHost/Program.cs:496`)', '(Memories AppHost)'), 'missing routing point'),
+    (check_admin, admin_text.replace("AV05's verbatim invalid-URL disclosure and AV04's base-address disclosure in CLI error messages", "and AV05's verbatim invalid-URL disclosure"), 'Admin G4 URL disclosure removed'),
+    (check_technical, tech_text.replace('later identity and role confirmation: the approver is Jérôme Piquot (GitHub', 'later identity and role confirmation: the approver is (GitHub'), 'A1 identity pointer removed'),
+    (check_technical, tech_text.replace('| PS14 | `tools/MigrateEmbeddingVectors/MigrateEmbeddingVectors.csproj` |', '| PS14 | `tools/MigrateEmbeddingVectors/Renamed.csproj` |'), 'operator CLI census mismatch'),
+    (check_technical, tech_text.replace('Memories `tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj`, ', ''), 'unclassified executable outside src'),
+    (check_historical, git(root, 'log', '-1', '--format=%H', BASELINE, '--', *HISTORICAL) + '^', 'historical inventory changed since baseline'),
     (check_admin, admin_text.replace('`GetCorrelationTraceMap`', 'GetCorrelationTraceMap'), 'HTTP-only action omitted'),
     (check_technical, tech_text.replace(line_of(tech_text, 'PN04') + '\n', ''), 'missing root census row'),
     (check_technical, tech_text.replace(line_of(tech_text, 'PS10'), line_of(tech_text, 'PS10').replace('`PackAsTool` `folders`', '`PackAsTool` `folder`')), 'wrong packaging metadata'),
@@ -1043,6 +1238,25 @@ for field, replacement in [('approver', 'requesting user in the current conversa
     damaged = json.loads(json.dumps(receipt))
     damaged[field] = replacement
     damages.append((check_receipt, damaged, 'approval receipt ' + field))
+
+
+def amended(module, text, key, old, new):
+    changed = text.replace(line_of(text, key), line_of(text, key).replace(old, new, 1))
+    assert changed != text, (module, key)
+    damaged = json.loads(json.dumps(receipt))
+    digest = hashlib.sha256(changed.encode()).hexdigest()
+    next(e for e in damaged['inventories'] if Path(e['path']).name.startswith(module))['approved_sha256'] = digest
+    [a for a in damaged['amendments'] if a['inventory'] == module][-1]['to_sha256'] = digest
+    return damaged, changed
+
+
+damages.append((lambda d: check_amendment_chain(d[0], 'technical-tools', d[1]),
+                amended('technical-tools', tech_text, 'PS05', 'Stateless HTTP MCP server', 'Stateless HTTP MCP host'), 'undeclared technical amendment row'))
+damages.append((lambda d: check_amendment_chain(d[0], 'eventstore-admin', d[1]),
+                amended('eventstore-admin', admin_text, 'AC14', '| defer | exclude |', '| defer | exclude  |'), 'undeclared Admin amendment row'))
+basis = json.loads(json.dumps(receipt))
+basis['amendments'][0]['approval_basis'] = 'owner approved the exact bytes'
+damages.append((check_receipt, basis, 'approval receipt amendment basis'))
 for field in ['approved_sha256', 'candidate_sha256', 'preserved_sha256', 'row_ids']:
     damaged = json.loads(json.dumps(receipt))
     damaged['inventories'][0][field] = [] if field == 'row_ids' else '0' * 64
@@ -1053,10 +1267,10 @@ for check, damaged, label in damages:
 print(f"PASS: EventStore {ES_SHA} clean; CLI graph 31 registered (21 remote, 7 local, 3 stubs) = AC01-AC31; 6 unregistered helpers = AU01-AU06; 28 MCP tools (18 read, 7 confirm-gated, 3 process-local) = AM01-AM28; 0 resources/prompts.")
 print(f"PASS: 68 Admin.Server actions parsed; 29 reached by the heads with matching policies, tenant filters and platform scope; 39 HTTP-only actions listed; stream-list root GET has no server route.")
 print(f"PASS: FrontComposer {FC_SHA} vs historical {FC_OLD}: Mcp and corpus trees identical, 6 CLI files changed; 1 lifecycle tool, 2 families, 13 resources, 2 compiler leaves, 9 variants, 4 consumers.")
-print(f"PASS: census of {len(ROOTS)} root references: 13 production surfaces in 7 repositories, 2 exempt Builds tools, 9 roots without surfaces, executables and configs classified; owners recorded.")
-print(f"PASS: {anchor_counts[0][0] + anchor_counts[1][0]} source anchors resolve to non-blank lines ({len(CONTENT)} content-checked); local links resolve; historical inventories unchanged; working-tree changes confined to _bmad-output/implementation-artifacts/; {len(authored_files)} story files are LF without trailing whitespace.")
-print(f"PASS: rejected {len(damages)} damaged inputs (missing, duplicate, extra, incomplete, approval claims, wrong policy, lost effect/confirmation, hidden mismatch, invented replacement, census/resource omissions, drift, packaging, anchors, census pins, premature completion, approval receipt).")
-print(f"PASS: {approved_rows} rows carry A1 owning-maintainer approval; receipt binds candidate/final hashes, exact instructions, row IDs and all source pins. Workflow states: spec={spec_status}; sprint={sprint_status}. Frozen block sha256={digest}.")
+print(f"PASS: census of {len(ROOTS)} root references: 14 production surfaces in 7 repositories (one outside src/), 2 exempt Builds tools, 17 classified executables outside src/ plus the FK02 sample and 733 captured Conversations proofs, 9 roots without surfaces, executables and configs classified; owners recorded.")
+print(f"PASS: {anchor_counts[0][0] + anchor_counts[1][0]} inventory anchors and {anchor_counts[2][0]} handoff/gap citations resolve to non-blank lines ({len(CONTENT)} content-checked); local links resolve; historical inventories unchanged since {BASELINE[:7]}; working-tree changes confined to _bmad-output/implementation-artifacts/; {len(authored_files)} story files are LF without trailing whitespace.")
+print(f"PASS: rejected {len(damages)} damaged inputs (missing, duplicate, extra, incomplete, approval claims, wrong policy, lost effect/confirmation, hidden mismatch, invented replacement, census/resource omissions, drift, packaging, anchors, census pins, premature completion, approval receipt, amendment deltas, historical baseline).")
+print(f"PASS: {approved_rows} rows carry A1 owning-maintainer approval; receipt binds candidate/final hashes, exact instructions, row IDs, amendment chains and all source pins. Workflow states: spec={spec_status}; sprint={sprint_status}. Frozen block sha256={digest}.")
 PY
 git diff --check
 ```
@@ -1122,20 +1336,6 @@ No repository .NET build or test suite, legacy command, migration or live host
 ran for these corrections. Source revisions, registrations and dispositions
 were unchanged; all 156 A0 approval references were pending at that run.
 
-### Inherited review follow-up
-
-The broad saved review baseline also includes the earlier Epic 4 catalog-reader
-repairs. The blind reviewer noted that the source seal excludes generated
-`obj/` C# inputs. Its standalone .NET 10 experiment in
-`/tmp/mcpcli-blind-obj-input-hgsp8wm2` built a project once, appended a module
-initializer to its generated AssemblyInfo file, advanced that file's timestamp
-by one hour, then built again with `--no-restore`. Both builds and execution
-exited 0; the initializer wrote `unsealed obj code executed` to stderr.
-The reviewer confirmed that this did not exercise `GenerateAsync` or establish
-an injection point in its fresh-directory, first-build flow. It is an unverified
-question, recorded under the owning Epic 4 source spec at
-`deferred-work.md:806`. No runtime defect or live acceptance is inferred.
-
 ## Compatibility handoffs
 
 - **Story 5.2, generic non-gateway capability decision.** Inputs are Admin G2
@@ -1165,8 +1365,8 @@ question, recorded under the owning Epic 4 source spec at
   timeout, status and generic-failure messages; URL credentials or query
   values can therefore be disclosed even when response fields are filtered
   (`references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Cli/Client/AdminApiClient.cs:67`,
-  `:73`, `:80`, `:83`, `:95`, `:478`). Carry this privacy gap into G4's safety
-  decision; preserving diagnostics does not require preserving disclosure.
+  `:73`, `:80`, `:83`, `:95`, `:478`). Admin 1.0.1 records this privacy gap in
+  AV04 and G4; preserving diagnostics does not require preserving disclosure.
 
   AC01 timing clarification: `health --wait --timeout` checks elapsed time
   before admitting another polling iteration; it does not impose that value
@@ -1260,7 +1460,8 @@ question, recorded under the owning Epic 4 source spec at
   enrollable. Admin G6 forbids automatic migration of `~/.eventstore/profiles.json`
   credentials; profiles bind one environment. Technical G3 asks the Projects,
   Memories, Folders and ChatBot owners to re-pin or confirm their companion
-  inventories before their rows are used as enrollment inputs.
+  inventories before their rows are used as enrollment inputs, and the
+  Memories owner to inventory PS14's four `MigrateEmbeddingVectors` modes.
 - **Story 5.4, parity and safety.** Negative evidence must deny every Admin
   remote row (UI-only) and the seven `confirm`-gated MCP writes
   (confirmation-required) through McpCli. The AV10 and AV11 source gaps must be
@@ -1292,11 +1493,22 @@ question, recorded under the owning Epic 4 source spec at
   (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpLifecycleTracker.cs:63`).
   Preserve these distinctions or obtain a specific downstream parity decision;
   retry advice grants no executor-retry or execution authority.
-- **Story 5.5, retirement.** Keep the compatibility binaries listed in PS01–PS13
+
+  FV08 exit-code clarification: a blank or whitespace-only first argument also
+  prints help with exit 0, and cancellation or I/O/access failures in either
+  verb, `inspect` included, return exit 4 after a sanitized stderr message, so
+  exit 4 is not apply-only
+  (`references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Cli/CliApplication.cs:13`,
+  `:31`, `:33`, `:35`, `:37`). Preserve or explicitly change this mapping in
+  any exit-code parity decision.
+- **Story 5.5, retirement.** Keep the compatibility binaries listed in PS01–PS14
   versioned and labeled with their removal gates, outside every Platform
-  composition, and stop routing them from the Parties and Memories AppHosts
-  and the Memories Kubernetes base and production overlay listed under the
-  technical census. Admin G5 and technical G4 restate the ordering: EventStore Admin
+  composition, and stop routing them from every AppHost, startup, deployment,
+  release-publication, central-package and sample point listed under the
+  technical census: the Parties and Memories AppHosts, the Memories
+  Kubernetes base and production overlay, the Parties release workflow and
+  Memories container publication, the Builds central package pin and the
+  FK02 sample. Admin G5 and technical G4 restate the ordering: EventStore Admin
   waits for its administration contract and destructive-operation safety
   evidence; the FrontComposer host and Projects plug-in retire together;
   Memories waits for forwarded per-user identity. Technical G5 uses this census
@@ -1312,6 +1524,24 @@ question, recorded under the owning Epic 4 source spec at
   This is a downstream retirement handoff, not authority to remove resources
   or credentials now. A deferred row is never counted as retired.
 
+### Row clarification index
+
+The amended inventories point here for post-approval clarifications of
+approved rows. Each entry names the row, the clarification paragraph above and
+the handoff that carries it; none changes a disposition or confers authority.
+
+- AC01: "AC01 timing clarification" (Story 5.2 handoff).
+- AV04: "AV04/G4 safety clarification" (Story 5.2 handoff); Admin 1.0.1 also
+  records the base-address disclosure in AV04 and G4.
+- AM04–AM06: "AM04–AM06 consistency clarification" (Story 5.2 handoff).
+- FH02: the FH02/FV04 argument-admission and command schema-negotiation
+  paragraphs and "FH02 discovery is also an execution boundary" (Story 5.2
+  handoff).
+- FV01: "FV01 lifecycle decision inputs" (Story 5.2 handoff).
+- FV04: the FH02/FV04 argument-admission and schema-negotiation paragraphs
+  (Story 5.2 handoff) and "FV04 machine-result parity" (Story 5.4 handoff).
+- FV08: "FV08 exit-code clarification" (Story 5.4 handoff).
+
 ## Unresolved gaps
 
 These remain open. Each inventory gap is retained in a row or gate, without a
@@ -1325,9 +1555,10 @@ is recorded under its owning Epic 4 source spec (`deferred-work.md:806`).
   is static reading; no request was sent. Not previously in the ledger.
 - **Stream-list route mismatch (AV11, G4):** AC03 and AM23 request a root GET
   the controller does not register. Not previously in the ledger.
-- **Token and URL exposure (AC26, AC27, AC30, AV05, G4):** raw-token
-  JSON, complete short-token display in other CLI formats and verbatim
-  invalid-URL startup diagnostics are legacy privacy gaps. No target parity
+- **Token and URL exposure (AC26, AC27, AC30, AV04, AV05, G4):** raw-token
+  JSON, complete short-token display in other CLI formats, verbatim
+  invalid-URL startup diagnostics and base-address interpolation in CLI error
+  messages are legacy privacy gaps. No target parity
   requirement is inferred. Not previously in the ledger.
 - **Local file safety (AV02, AV03, G6):** profile saves and optional output
   writes follow links and truncate in place without atomic replacement or
@@ -1338,6 +1569,10 @@ is recorded under its owning Epic 4 source spec (`deferred-work.md:806`).
   exclusions need compatibility decisions, not inferred parity.
 - **Backup backend deferred (AV12, G3):** AM01 submits to a backend that returns
   `Deferred`.
+- **Uninventoried Memories operator CLI (PS14, technical G3):** the
+  `MigrateEmbeddingVectors` dry-run, live, rollback and abort modes exist at
+  the Memories inventory pin but are absent from that inventory; a versioned
+  Memories inventory update must cover them. Not previously in the ledger.
 - **Companion inventory drift (technical G3):** surface source changed since
   the Projects, Memories, Folders and ChatBot inventory pins; whether a
   versioned update is required is undecided. Not previously in the ledger.
@@ -1345,6 +1580,20 @@ is recorded under its owning Epic 4 source spec (`deferred-work.md:806`).
   ChatBot inventory pins are unpublished upstream (`deferred-work.md:677`); the
   planning artifacts' conflicting EventStore Admin timing statements
   (`deferred-work.md:144`).
+
+### Inherited review follow-up
+
+The broad saved review baseline also includes the earlier Epic 4 catalog-reader
+repairs. The blind reviewer noted that the source seal excludes generated
+`obj/` C# inputs. Its standalone .NET 10 experiment in
+`/tmp/mcpcli-blind-obj-input-hgsp8wm2` built a project once, appended a module
+initializer to its generated AssemblyInfo file, advanced that file's timestamp
+by one hour, then built again with `--no-restore`. Both builds and execution
+exited 0; the initializer wrote `unsealed obj code executed` to stderr.
+The reviewer confirmed that this did not exercise `GenerateAsync` or establish
+an injection point in its fresh-directory, first-build flow. It is an unverified
+question, recorded under the owning Epic 4 source spec at
+`deferred-work.md:806`. No runtime defect or live acceptance is inferred.
 
 ## Evidence still absent
 
@@ -1459,7 +1708,9 @@ passed. The initial focused run's final bookkeeping assertion counted 85
 unique anchors as 85 citations; correcting it to 87 citations / 85 unique
 anchors produced the passing run above. No full static gate, build, test
 suite, legacy command or service was run for these documentation fixes; the
-parent review performs the full verification.
+parent review performs the full verification. Review pass 2 moved these
+citation and expected-content checks into the reproducible block, so the
+untracked `/tmp` script is no longer required.
 
 ## Parent build review completion (2026-11-08)
 
@@ -1484,3 +1735,46 @@ The earlier parent check caught the temporary `in-review` / `in-progress`
 workflow-state pair; syncing the sprint to the actual review phase resolved
 that transition before the passing run. Spec completion and sprint `review`
 record this documentation work; replacement and retirement gates remain open.
+
+## Review pass 2 amendment verification (2026-11-08)
+
+The second Story 5.1 code review (deliverables `ad7bf9e..6ee68af`) resolved
+four owner decisions with versioned amendments. Jérôme Piquot (GitHub
+`jpiquot`) reviewed the word-level diffs against Admin 1.0.0 and technical
+1.0.1 and approved the exact bytes with "Approve Admin 1.0.1 and technical
+1.0.2": Admin 1.0.1 SHA-256
+`7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18` and
+technical 1.0.2 SHA-256
+`8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6`. The
+receipt records that instruction, each amendment's from/to hashes, changed
+and added rows and approval basis, and the preserved technical 1.0.1 under
+`approval/1.0.1/` (first committed in `6ee68af`).
+
+The block now also verifies the amendment chain from the preserved 1.0.0
+bytes, the census outside `src/`, every handoff and gap citation in this file
+with its expected content, and the historical inventories against baseline
+`ad7bf9e`. Each new damaged input was confirmed to fail at its own assertion
+(handoff anchor, routing point, G4 disclosure, A1 identity pointer, PS14
+census row, unclassified executable, historical baseline, undeclared
+technical and Admin amendment rows, amendment basis), not on an incidental
+error.
+
+Final-state run: the documented `mktemp` extraction, then `bash -e` on the
+extracted script from the McpCli root, exited 0, including `git diff --check`.
+Git's pre-existing `warning: unable to find all commit-graph files` on stderr
+does not affect exit codes. Full stdout:
+
+```text
+PASS: EventStore 3d4ba67db99f2f0bcd64b7d353609b555870cc9b clean; CLI graph 31 registered (21 remote, 7 local, 3 stubs) = AC01-AC31; 6 unregistered helpers = AU01-AU06; 28 MCP tools (18 read, 7 confirm-gated, 3 process-local) = AM01-AM28; 0 resources/prompts.
+PASS: 68 Admin.Server actions parsed; 29 reached by the heads with matching policies, tenant filters and platform scope; 39 HTTP-only actions listed; stream-list root GET has no server route.
+PASS: FrontComposer fbb9c3822dfa407e72739238cd472567f45f1e82 vs historical 81a440a8890a17edb39924bd0cf676eb6f6b5c25: Mcp and corpus trees identical, 6 CLI files changed; 1 lifecycle tool, 2 families, 13 resources, 2 compiler leaves, 9 variants, 4 consumers.
+PASS: census of 17 root references: 14 production surfaces in 7 repositories (one outside src/), 2 exempt Builds tools, 17 classified executables outside src/ plus the FK02 sample and 733 captured Conversations proofs, 9 roots without surfaces, executables and configs classified; owners recorded.
+PASS: 427 inventory anchors and 97 handoff/gap citations resolve to non-blank lines (177 content-checked); local links resolve; historical inventories unchanged since ad7bf9e; working-tree changes confined to _bmad-output/implementation-artifacts/; 18 story files are LF without trailing whitespace.
+PASS: rejected 49 damaged inputs (missing, duplicate, extra, incomplete, approval claims, wrong policy, lost effect/confirmation, hidden mismatch, invented replacement, census/resource omissions, drift, packaging, anchors, census pins, premature completion, approval receipt, amendment deltas, historical baseline).
+PASS: 159 rows carry A1 owning-maintainer approval; receipt binds candidate/final hashes, exact instructions, row IDs, amendment chains and all source pins. Workflow states: spec=done; sprint=done. Frozen block sha256=8be7892597e4e5f0aeb4a1aa8acef4d57eacffac4b75de417c882494a557a105.
+```
+
+No runtime, dependency, reference, historical inventory or ledger changed,
+and no .NET build, legacy command, migration or live service ran. The
+inventories remain documentation; downstream replacement, authorization,
+parity and retirement gates are unchanged in scope.

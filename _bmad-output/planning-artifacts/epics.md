@@ -1,4 +1,5 @@
 ---
+status: final
 stepsCompleted:
   - step-01-validate-prerequisites
   - step-02-design-epics
@@ -60,6 +61,47 @@ inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md
   - _bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md
+  - _bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md
+  - _bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md
+  - _bmad-output/implementation-artifacts/spec-5-1-inventory-eventstore-admin-and-technical-tool-operations.md
+  - _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md
+  - _bmad-output/implementation-artifacts/folders-migration-inventory-v1.md
+  - _bmad-output/implementation-artifacts/projects-migration-inventory-v1.md
+  - _bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md
+  - _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md
+  - _bmad-output/implementation-artifacts/memories-migration-inventory-v1.md
+  - _bmad-output/implementation-artifacts/epic-4-retro-2026-11-06.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md
+  - references/Hexalith.AI.Tools/hexalith-mcpcli-migration-instructions.md
+  - references/Hexalith.Platform/_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md
+refinement:
+  date: 2026-11-08
+  scope: Epic 5 stories 5.2-5.6
+  authority: user-directed planning refinement; separate from sprint-change-proposal-2026-11-06, which left Epic 5 unchanged
+  preserved: Epics 1-4 and Story 5.1 unchanged
+  stepsCompleted:
+    - step-01-validate-prerequisites
+    - step-02-design-epics
+    - step-03-create-stories
+    - step-04-final-validation
+  approvedStories:
+    - "5.2"
+    - "5.3"
+    - "5.4"
+    - "5.5"
+    - "5.6"
+    - "5.7"
+    - "5.8"
+    - "5.9"
+    - "5.10"
+    - "5.11"
+  validation: "2026-11-08: 6 step-4 checks fixed and re-validated (forward references, MR4 coverage, behavior preservation, label refresh, AD-22 wording, Folders split)"
+  storyNumbering: "citation-preserving: 5.2-5.5 keep the subjects cited by approved Story 5.1 artifacts; reconciliation moved from 5.6 to 5.11; Folders split into its own story"
+  epicDecisions:
+    - "D1: one Epic 5; keep 5.2-5.6 slots, add stories only where a finding requires one"
+    - "D2: Parties is the only committed retirement (SM-3); other surfaces exit as labeled compatibility binaries"
+    - "D3: HTTP transport and forwarded per-user identity stay outside Epic 5"
+    - "D4: retro item 8 is an explicit entry gate for Story 5.2 and later"
 ---
 
 # mcpcli - Epic Breakdown
@@ -156,6 +198,29 @@ NFR8: Ensure each exposed description is understandable without source-code cont
 - Consume and verify the effective tracked versions from `global.json`, root build overrides, the root-declared Builds catalog and dependency policy rather than downgrading to historical architecture Stack rows; use `.NET 10`, C# 14, `xUnit v3`/Shouldly/NSubstitute, source-generated logging, one C# type per file, and the Hexalith.Builds build conventions; keep the tool framework-dependent and untrimmed (Architecture Stack, conventions, AD17).
 - Treat HTTP authentication, hosted transport, additional typed tools and CLI subcommands, MCP resources/prompts, plug-in loading, event-stream reads, retries, and advanced Query arguments as deferred; v1 returns `unsupported_transport` for HTTP (Architecture Deferred; PRD §8.2).
 
+#### Epic 5 Migration Requirements (refinement 2026-11-08)
+
+- **MR1:** Before retiring any legacy surface that exposes infrastructure administration, MCP resources, migration diagnostics, or REST/Dapr-only behavior, approve a generic catalog/transport extension with contract versioning, actor and surface authorization, audit, and conformance evidence; until then the first-increment gateway and dependency rules remain binding and no unsupported capability is represented as migrated (Spine Design Paradigm, 2026-09-27).
+- **MR2:** McpCli's CLI and MCP heads form one public `agent` surface that never executes UI-only or confirmation-required operations; a caller-supplied confirmation proves no human authority, and admitting any administrative capability to McpCli requires a Platform AD under AD-14 (Platform AD-14; Admin inventory G2/G3).
+- **MR3:** Every inventory row records `replace`, `withdraw`, or `defer`, rationale, security class, exact replacement contract or unresolved gap, and the owning maintainer's approval reference; `include` requires `replace`, `exclude` requires an approved `withdraw` or `defer` and never means deletion, and any disposition change is a versioned, owner-approved inventory amendment. Stream and file resources and the deferred search, filter, order-by, and freshness variants remain tracked gaps (PRD FR-21; migration plan 1.1.0 "Approval limits").
+- **MR4:** Task and actor context that legacy surfaces carry travels as ordinary Payload properties, through `actorProperty`, or in allowed Envelope extensions, never in module-specific code (PRD FR-21).
+- **MR5:** Each inventory states its approval authority explicitly. Under the accepted single-maintainer model, requesting-user approval satisfies owning-maintainer authority when it names the roles it covers, as Story 5.1's approval does; the five Epic 4 inventories that record `external_maintainer_approval: unasserted` carry session-scope approval only and need such an owner approval before any completeness, enrollment, or retirement claim, and the release coverage gate rejects `scope-only` authority (Epic 4 retro F11; migration plan "Approval limits"; `tools/inventory-coverage/v1/README.md`).
+- **MR6:** A surface retires only after its owning maintainer approves an exact replacement or explicit withdrawal and the selected-environment authorization, behavior, conformance, release, and rollback evidence passes. FrontComposer's host and the Projects plug-in retire together after other host consumers are accounted for; forwarded per-user identity is necessary but insufficient for Memories; EventStore Admin also waits for its approved administration contract and destructive-operation safety evidence (migration plan "Retirement and release prerequisites"; PRD FR-21).
+- **MR7:** Every change to the Hexalith.AI.Tools migration plan is published under a new `plan_version` and moves `inventory_revision` when an indexed inventory is re-pinned or added; plan 1.1.0 still lists the EventStore Admin successor inventory as outstanding (migration plan 1.1.0).
+- **MR8:** At least one Legacy Server is deleted within three months of v1, and the product owner decides deletion order (PRD SM-3, OQ-6).
+- **MR9:** HTTP transport with forwarded per-user identity is the separately committed next release after the OQ-1 authentication design; MCP resources and prompts, event-stream reading, plug-in loading, and executor retries stay out unless the PRD changes; the tool never calls a Module's REST or Dapr API (PRD §8.2, §8.3).
+- **MR10:** Epic 5 stories do not start while a previous retrospective verdict is `rejected` without a recorded human decision; the Epic 4 verdict is `rejected`, and its open items 5 (CI redaction), 6 (release acceptance binding), 8 (this gate), and 9 (ASCII tenant input) bear on Epic 5 evidence, release, and tenant-isolation claims (Epic 4 retro F10; `sprint-status.yaml` action items).
+- **MR11:** Evidence committed to this public repository uses one shared redactor and secret scanning; live-topology runners stay generic with no module-name branching or fixed vector counts; approvals hash-bind companion live plans (Epic 4 retro F6, F8, F13, F14).
+
+#### Epic 5 Baseline Facts (Story 5.1 and Epic 4 evidence, 2026-11-08)
+
+- No `replace` or `withdraw` row exists in the EventStore Admin inventory 1.0.1 (91 rows), the technical-tools inventory 1.0.2 (68 rows), or the Folders, Projects, FrontComposer, ChatBot, and Memories inventories 1.0.0; Parties has five `replace` rows and Tenants and Parties are the only enrolled Modules. Parties compatibility gates C06–C08 remain open.
+- All 46 remote Admin rows require `EventStoreHuman` and are UI-only; the destructive set is AC13, AC20, AC21, AC25, AC28, AM14, and FrontComposer `migrate --apply` (FC02); confirmation-required rows are AM01, AM03, AM06, AM12–AM15, plus the PS14 live/rollback/abort modes.
+- Non-gateway gap classes beyond administration, resource-like reads, and diagnostics: lifecycle/status observation, documentation delivery, local compiler, wizard, and preview tooling, streamed content and files, query freshness and extensions, idempotency-key format, erasure, and key rotation.
+- Source pins for Projects, Folders, ChatBot, and Memories are stale or unassessed, and the Memories `tools/MigrateEmbeddingVectors` operator CLI (PS14) lacks an operation inventory (technical inventory G3).
+- Admin inventory G4 upstream EventStore source gaps (AV10, AV11, token display, URL disclosure) precede any parity claim; the FrontComposer compiler CLI is not removed with its host; CI rejection of new proprietary surfaces uses the Story 5.1 census as its baseline beyond `src/` (technical inventory G4/G5).
+- `deferred-work.md:143-145` records that migration planning artifacts disagree on dispositions, EventStore Admin timing, and the no-new-surface rule.
+
 ### UX Design Requirements
 
 No UX design contract exists for this CLI and MCP product; no separate UX-DR items were extracted.
@@ -181,7 +246,7 @@ FR16: Epic 2 — Resolve Tenant, Actor, aggregate identity, identifiers, extensi
 FR17: Epic 2 — Submit once through the EventStore gateway client and map its result.
 FR18: Epic 2 — Manage separate, secret-safe Profiles.
 FR19: Epic 2 — Refuse writes inside the executor and CLI; Epic 3 omits the MCP write tool.
-FR20: Epic 1 — Approve the shared conformance-vector contract and validator before upstream authoring; Epic 4 — Prove approved Tenants and Parties coverage and v1 release readiness.
+FR20: Epic 1 — Approve the shared conformance-vector contract and validator before upstream authoring; Epic 4 — Prove approved Tenants and Parties coverage and v1 release readiness; Epic 5 — Extend Parties vectors for replacement parity and safety.
 FR21: Epic 4 — Produce approved first-increment migration inventories and enforce inventory-to-Catalog parity; Epic 5 — cover administration and non-gateway gaps, then retire obsolete surfaces.
 FR22: Epic 4 — Merge the authoritative no-new-proprietary-MCP/CLI rule; Epic 5 — verify adoption across module plans and release packaging.
 
@@ -221,9 +286,11 @@ Maintainers can demonstrate that approved Tenants and Parties Operations work th
 
 ### Epic 5: Migrate and Retire Proprietary Hexalith MCP and CLI Surfaces
 
-Module owners and McpCli maintainers can replace each proprietary Hexalith MCP server, plug-in, and CLI with approved McpCli behavior or an explicit product withdrawal, prove authorization and parity, and remove obsolete packages and Platform routes. The first-increment gateway-only design remains binding until a separately approved generic extension covers administration, resources, diagnostics, and other non-gateway behavior.
+Operators and agents lose no supported capability while proprietary Hexalith MCP servers, plug-ins, and CLIs give way to McpCli: every legacy operation carries a current owner-approved disposition, gateway-ready replacements are proven through both heads and the first Legacy Server (Parties) is retired, every non-gateway capability class has an approved generic decision or explicit withdrawal, and each surface that cannot yet retire remains a labeled, versioned compatibility binary with a named removal gate. The first-increment gateway-only design and dependency rules remain binding until an approved generic extension changes them (MR1).
 
-**FRs covered:** FR21, FR22. **Entry:** the Epic 4 initial release and owner-approved operation inventories. **Exit:** no active Hexalith module PRD or architecture plans a proprietary module MCP/CLI implementation; all old operations have approved dispositions and every retired surface has verified replacement or withdrawal evidence.
+**FRs covered:** FR20 (Parties replacement parity vectors), FR21, FR22. **Entry:** Epic 4's v1 release (2.0.1) and Story 5.1's approved inventories; while the Epic 4 retrospective verdict remains `rejected`, Story 5.2 and later stories become `ready-for-dev` only after a recorded product-owner decision on Epic 4 retro item 8 (MR10). **Exit:** every inventoried operation has a current owner-approved disposition; `Parties.Mcp` is retired with verified replacement evidence, or the product owner records why SM-3 slips; CI rejects new proprietary surfaces against the Story 5.1 census beyond `src/`; the Hexalith.AI.Tools migration plan index is re-versioned (MR7); and no active Hexalith module PRD or architecture plans a proprietary module MCP/CLI implementation. **Out of scope:** HTTP transport and forwarded per-user identity (MR9), so Memories retirement and identity-dependent variants remain blocked; MCP resources and prompts, event-stream reading, and retries unless an approved PRD change in this epic admits them; any module-specific code in McpCli.
+
+**Implementation notes:** After Story 5.1, two independent tracks run. The gateway-ready track needs no new decision: Parties is already enrolled, so it closes compatibility gates C06–C08, proves parity and safety, and retires `Parties.Mcp` and its routes. In the non-gateway track, one generic-capability decision covering every gap class, admitted by a Platform AD under AD-14 and paired with the PRD change it needs, precedes any re-disposition of administration, resource, lifecycle, or tooling rows to `replace`. Re-pinning stale inventories, inventorying PS14, and every disposition change are versioned owner amendments. UI-only and confirmation-required Admin rows are expected to move to a confidential UI or be withdrawn rather than migrate. Open Epic 4 retro items 5, 6, and 9 apply wherever this epic adds evidence, releases, or tenant-isolation claims.
 
 ## Epic 1: Module Authors Can Publish Discoverable Operations
 
@@ -1651,7 +1718,9 @@ So that operators can install the exact pair proven by CI and smoke checks.
 
 ## Epic 5: Migrate and Retire Proprietary Hexalith MCP and CLI Surfaces
 
-The owning modules publish approved McpCli replacements or withdrawals for every proprietary MCP/CLI operation. McpCli remains generic, and the legacy surface is retired only after the selected-environment authorization, parity, and release gates pass.
+Operators and agents lose no supported capability while proprietary Hexalith MCP and CLI surfaces give way to McpCli. Every legacy operation carries a current owner-approved disposition; Parties, the only Module with gateway-ready `replace` rows, is the committed first retirement; every non-gateway capability class receives an approved generic decision or explicit withdrawal; and every surface that cannot yet retire stays a labeled, versioned compatibility binary with a named removal gate. McpCli remains generic, and a legacy surface is retired only after the selected-environment authorization, parity, release, and rollback gates pass.
+
+**Story numbering (refinement 2026-11-08):** Stories 5.2–5.5 keep the subjects that the approved Story 5.1 inventories and verification handoffs cite. Technical inventory G5's CI rejection ("Story 5.5") is Story 5.6; the G3 companion re-pins and PS14 inventory that `evidence/story-5-1/verification.md:1461-1464` hands to "Story 5.3" are Stories 5.8–5.10; the FV04 and FV08 parity clarifications handed to "Story 5.4" apply wherever Story 5.9 re-dispositions a FrontComposer row to `replace`; reconciliation, formerly Story 5.6, is Story 5.11.
 
 ### Story 5.1: Inventory EventStore Admin and Technical-Tool Operations
 
@@ -1667,60 +1736,340 @@ As a McpCli migration owner, I want a versioned operation inventory for EventSto
 
 ### Story 5.2: Decide Generic Non-Gateway Capability Contracts
 
-As a solution architect, I want an approved McpCli catalog and transport extension for capability classes outside v1 gateway Commands and Queries so that administration, resources, and diagnostics can migrate without module-specific branches.
+As a McpCli solution architect,
+I want one approved decision for every capability class that the inventories cannot migrate as v1 gateway Commands and Queries,
+So that each class gains a generic McpCli path, an explicit withdrawal, or a named retention, with no module-specific branch.
 
-**Requirements:** FR21, FR22. **Dependencies:** Story 5.1 and module inventory gap rows.
+**Requirements:** FR21, FR22; MR1, MR2, MR3, MR9. **Dependencies:** Story 5.1 (Admin inventory G2/G3, technical inventory G2); the Epic 5 entry gate (MR10).
 
 **Acceptance Criteria:**
 
-- The architecture decision defines versioned declaration, discovery, execution, errors, authorization class, audit, and conformance for infrastructure administration, resource-like reads, and operator diagnostics; it names which operations become EventStore Gateway contracts and which need another authenticated generic transport.
-- The decision preserves Platform AD-14's denial of UI-only and human-confirmation operations through the public McpCli client and defines treatment of destructive administrative operations.
-- The extension keeps one shared CLI/MCP core and no module-specific runtime branch. Until approved, the v1 dependency and gateway rules remain binding and no unsupported capability is marked migrated.
+**Given** the gap classes recorded by the EventStore Admin 1.0.1, technical-tools 1.0.2, and Epic 4 inventories (Epic 5 Baseline Facts),
+**When** the decision is adopted as a McpCli architecture decision,
+**Then** each class has exactly one outcome — decorated Gateway contract, named generic authenticated transport, exempt local tooling, confidential UI only, withdrawal, or continued deferral with a named gap — and every inventory row maps to exactly one class,
+**And** each admitted class defines versioned declaration, discovery, execution, error documents, authorization class, audit, and conformance evidence without a module-specific runtime branch.
+
+**Given** an outcome that admits any capability to the McpCli `agent` surface beyond v1 decorated Commands and Queries,
+**When** the decision is proposed for adoption,
+**Then** it is adopted only after the Platform AD that admits it under AD-14 is merged in Hexalith.Platform and the PRD change it needs, such as resource or stream reads beyond PRD §8.2, is approved through a change proposal,
+**And** a decision that admits nothing new records that no Platform or PRD change is required.
+
+**Given** the UI-only, confirmation-required, and destructive operations AC13, AC20, AC21, AC25, AC28, AM01, AM03, AM06, AM12–AM15, FC02, and the PS14 live, rollback, and abort modes,
+**When** their treatment is decided,
+**Then** each is assigned to a confidential UI, owner-held local tooling, or withdrawal, and none becomes executable through McpCli on a caller-supplied confirmation,
+**And** the decision names the negative evidence that any later parity proof for these classes collects.
+
+**Given** a class decided as exempt local tooling, such as the FrontComposer compiler CLI,
+**When** the exemption is recorded,
+**Then** it is published as a versioned amendment to the Hexalith.AI.Tools ownership rule and migration plan beside the existing Hexalith.Builds exemptions,
+**And** the surface remains a frozen compatibility source in the census until that amendment merges.
+
+**Given** the decision is not yet adopted,
+**When** McpCli CI and the inventory gates run,
+**Then** production `src/` gains no MCP resource, prompt, stream reader, executor retry, plug-in loader, module-specific adapter, or new production dependency,
+**And** no inventory row is re-dispositioned on the strength of a draft decision.
 
 ### Story 5.3: Enroll Replacement Contracts and Profiles
 
-As a module maintainer, I want approved operations enrolled in McpCli with selected-environment contracts and credentials so that legacy transport behavior can move to the shared heads.
+As a Parties maintainer,
+I want the enrolled Parties replacement contracts to close the compatibility gates the inventory left open and McpCli profiles to bind to one environment,
+So that `Parties.Mcp` callers can move to McpCli without losing error privacy, legacy-identifier reach, or credential safety.
 
-**Requirements:** FR20, FR21. **Dependencies:** Story 5.2 for non-gateway rows; owning module Contracts and EventStore readiness.
+**Requirements:** FR16, FR18, FR20, FR21; MR3, MR5. **Dependencies:** Story 5.1; Parties inventory gates C06–C07; Admin inventory G6.
 
 **Acceptance Criteria:**
 
-- Each `replace` row names an immutable contract version, operation identity, eligibility, destination, and conformance vector; Gateway-ready rows appear in `list_operations` and match their decorated type exactly.
-- REST/Dapr-only behavior, freshness, redaction, task context, actor attribution, paging, token-budget, and idempotency semantics are preserved or explicitly approved as changed by the owning product owner.
-- Profiles and credentials bind to one environment; cross-environment and actor-spoof attempts fail closed.
+**Given** Parties gate C06,
+**When** a Parties Operation fails at the Gateway or downstream through either head,
+**Then** the public error document carries only the sanitized message that an upstream Parties/Gateway release returns, and McpCli adds no module-specific error mapping,
+**And** a guard test fails if raw downstream detail reaches stdout, stderr, or the MCP result.
+
+**Given** Parties gate C07 and legacy Party IDs in support-safe string or braced, parenthesized, or X-format GUID forms,
+**When** a caller addresses such a party through either head,
+**Then** the Operation reaches it under the Module's String identifier kind, or an owner-approved conversion with migration evidence is recorded,
+**And** no silent ULID conversion or McpCli validator change is introduced.
+
+**Given** the open ledger entries `deferred-work.md:476` (no expected outcome for deleting a missing or erased party) and `deferred-work.md:569` (inventory eligibility wording contradicts enrollment),
+**When** the Parties inventory is amended,
+**Then** a versioned, owner-approved Parties inventory defines those delete outcomes as vector oracles and corrects the eligibility wording,
+**And** both ledger entries record their resolution.
+
+**Given** an upstream Parties Contracts release that closes C06 or C07,
+**When** McpCli enrolls it,
+**Then** the exact version, dependency policy, release inventory, vectors, approval hashes, and companion live plans update together under the README enrollment rules,
+**And** the coverage and enrolled-replay gates pass.
+
+**Given** Admin inventory G6,
+**When** an operator moves from `eventstore-admin` or `Parties.Mcp` to McpCli,
+**Then** McpCli never reads or imports `~/.eventstore/profiles.json` or the admin CLI environment, each Profile binds one Gateway URL, token, and tenant, and a Payload tenant or actor that disagrees with the resolved Envelope fails closed with zero Gateway calls (FR16; AD-22 for tenant),
+**And** README documents the manual profile setup.
 
 ### Story 5.4: Prove Shared-Head Parity and Safety
 
-As a release owner, I want positive and negative evidence for each migrated operation so that retirement does not break supported access or weaken security.
+As a Parties release owner,
+I want positive and negative evidence that McpCli covers every `Parties.Mcp` operation on the selected environment,
+So that retiring the legacy server neither breaks supported access nor weakens authorization.
 
-**Requirements:** FR21. **Dependencies:** Story 5.3.
+**Requirements:** FR20, FR21; NFR5, NFR7; MR2, MR6, MR10, MR11. **Dependencies:** Story 5.3.
 
 **Acceptance Criteria:**
 
-- The shared CLI and MCP heads pass the owner-approved operation vectors against the selected environment, including equivalent authorized outcomes, stable machine documents and exit/error semantics, audit attribution, tenant isolation, and denial of disabled, mismatched, UI-only, confirmation-required, and unauthorized operations.
-- Capability classes without an approved equivalent remain marked `defer`; no parity claim is made from operation-name matching alone.
-- Each module owner signs the result and records the exact McpCli candidate, Contracts versions, gateway/catalog digest, environment, and test evidence.
+**Given** the owner-named selected environment and the approved Parties vectors,
+**When** the evidence runs,
+**Then** every Parties `replace` row succeeds through the CLI head against that environment with its semantic checks, and both heads produce equal canonical documents and captured requests against the reset loopback Gateway,
+**And** live MCP-head execution is included, or the owner re-accepts and records the Epic 4 deviation (CLI-only live lane, loopback parity) for this retirement.
+
+**Given** the legacy behavior variants and compatibility obligations C01–C08 recorded in the Parties inventory,
+**When** the evidence is reviewed,
+**Then** each variant, including redaction, task context, actor attribution, paging, freshness, token-budget, and idempotency semantics where the legacy surface has them, is preserved or matches an owner-approved change recorded in the Parties inventory,
+**And** an unrecorded behavior difference blocks retirement.
+
+**Given** the legacy weaknesses recorded by Parties gate C08,
+**When** negative cases run,
+**Then** missing or invalid credentials, an unauthorized principal, a disallowed tenant override, a platform scope requested through a tenant input, reserved public `system`, and non-ASCII look-alike tenant input each fail closed with the documented error document and no Gateway mutation,
+**And** while Epic 4 retro item 9 is open, the owner records explicit acceptance of the F7 limitation or the story stays blocked.
+
+**Given** the EventStore Admin and technical-tools inventory rows,
+**When** McpCli discovery and execution are probed,
+**Then** no Admin, UI-only, or confirmation-required operation appears in `list_operations` or can be submitted, including with a caller-supplied `confirm: true`,
+**And** no parity is claimed from operation-name matching alone.
+
+**Given** the evidence set,
+**When** it is committed,
+**Then** it passes the shared redactor and secret scan and binds the exact McpCli candidate, Parties Contracts version, Catalog digest, environment, vectors, and companion live plans by hash,
+**And** the Parties owning maintainer approves it under the single-maintainer model (Epic 4 retro F11).
 
 ### Story 5.5: Retire Legacy Packages and Platform Routes
 
-As a platform maintainer, I want obsolete module MCP servers, plug-ins, and CLIs removed after proven replacement or approved withdrawal so that only McpCli remains the supported proprietary CLI/MCP path.
+As a platform maintainer,
+I want `Parties.Mcp` removed from every publication and routing point once its replacement is proven, and every retained surface labeled with its removal gate,
+So that McpCli becomes the supported Parties path and no remaining legacy binary is mistaken for a supported or retired surface.
 
-**Requirements:** FR21, FR22. **Dependencies:** Story 5.4 and owner-approved withdrawal rows.
-
-**Acceptance Criteria:**
-
-- Publication, deployment, package manifests, startup, samples, and operator setup no longer advertise or route the retired packages. FrontComposer MCP host and Projects plug-in retire together; Memories waits for per-user identity support; EventStore Admin waits for its approved administration contract and destructive-operation safety evidence.
-- A module with a deferred operation keeps the needed old compatibility binary clearly labeled and versioned, with a removal gate; it is not counted as retired.
-- CI rejects new proprietary per-module MCP/CLI projects or release entries unless an explicit migration exception names its owner and expiry.
-
-### Story 5.6: Reconcile Product and UX Claims
-
-As a product owner, I want PRDs, architecture, UX, and operator guidance to describe the actual shared surface so that users and release gates do not assume unavailable module-specific adapters.
-
-**Requirements:** FR21, FR22. **Dependencies:** Stories 5.1–5.5 evidence.
+**Requirements:** FR21, FR22; MR6, MR8. **Dependencies:** Story 5.4.
 
 **Acceptance Criteria:**
 
-- Every active Hexalith PRD and architecture topic about proprietary MCP/CLI names `Hexalith.McpCli` as the target; historical component names are explicitly labeled migration sources.
-- Module MVP gates and machine-facing UX flows name available operations, output/error behavior, setup through the `hexalith` tool and stdio server, and safe refusal or UI handoff for restricted actions.
-- Release notes distinguish the initial McpCli gateway-only increment from completed module retirements and list remaining compatibility binaries without claiming ecosystem migration is finished.
+**Given** Story 5.4's approved evidence,
+**When** Parties retires its legacy server,
+**Then** a merged upstream Parties release no longer routes or advertises `Parties.Mcp` from its AppHost reference, `parties-mcp` container publication, startup, samples, or operator documentation,
+**And** the release records a rollback path to the last legacy version and whether its date meets SM-3 (MR8).
+
+**Given** a release candidate that still routes `Parties.Mcp` from any routing point listed in technical inventory G4 or found by source search,
+**When** retirement is verified,
+**Then** verification fails and names that routing point.
+
+**Given** every surface still inventoried as `defer` (PS01–PS04 and PS06–PS14),
+**When** this story completes,
+**Then** each is labeled in its upstream README or package description as a versioned compatibility binary with the inventory gate that removes it, stays outside every Platform composition, and is not counted as retired,
+**And** the Memories label states that forwarded per-user identity is necessary but not sufficient, and the FrontComposer host and Projects plug-in labels state that they retire together.
+
+### Story 5.6: Reject New Proprietary Surfaces in CI
+
+As a McpCli maintainer,
+I want CI to fail when a root-declared reference adds a proprietary MCP server, plug-in, or CLI absent from the approved census,
+So that SM-C1 holds without relying on review alone.
+
+**Requirements:** FR22; MR11. **Dependencies:** Story 5.1 census (technical inventory PS, PE, and PN rows; G5).
+
+**Acceptance Criteria:**
+
+**Given** the approved census as a versioned baseline data file outside `src/`,
+**When** the generic census check runs in McpCli CI over every root-declared reference at its gitlink, including paths beyond `src/`,
+**Then** a project, tool package, container, or release entry exposing an MCP server, plug-in, or CLI that is not in the baseline fails with its repository, path, and detection signal,
+**And** the exempt classes recorded in the PE rows pass.
+
+**Given** a migration exception,
+**When** it names an owner, a reason, and an expiry date,
+**Then** the check accepts the surface until the expiry and fails after it, evaluated in code against the run date,
+**And** an exception without an owner or expiry fails.
+
+**Given** a surface removed from a reference,
+**When** the check runs,
+**Then** it reports the stale baseline entry,
+**And** the baseline changes only through a versioned census amendment.
+
+**Given** the check implementation,
+**When** it is inspected,
+**Then** it contains no module name, path, or count literal outside its baseline data and reads only root-declared references without initializing nested submodules,
+**And** tests flag a synthetic new surface, an expired exception, and a missing exception owner, and removing each guard makes its test fail.
+
+### Story 5.7: Re-disposition EventStore Admin and Technical-Tool Inventories
+
+As the EventStore and platform/operator owner,
+I want the EventStore Admin and technical-tools inventories amended with the Story 5.2 outcomes,
+So that every administration, diagnostic, documentation, lifecycle, and tooling row has a current approved disposition.
+
+**Requirements:** FR21; MR3, MR5, MR7. **Dependencies:** Story 5.2.
+
+**Acceptance Criteria:**
+
+**Given** the adopted Story 5.2 decision,
+**When** the Admin 1.0.2 and technical-tools 1.0.3 amendments are produced,
+**Then** every row carries its class outcome: `replace` with exact contract and eligibility, `withdraw` with owner rationale, or `defer` with its remaining gap,
+**And** prior versions are preserved byte-for-byte with hash-chained approval records.
+
+**Given** the stale technical-inventory references (PS01 and PS02 cite Admin 1.0.0; a summary lists 65 rows against 68),
+**When** the amendment is produced,
+**Then** the new version corrects them,
+**And** the approved prior bytes remain unchanged.
+
+**Given** any Admin row re-dispositioned to `replace`,
+**When** it is recorded,
+**Then** it names Admin inventory G4's upstream fixes (AV10, AV11, token display, and URL disclosure) as preconditions of its parity evidence.
+
+**Given** a removal gate that an amendment changes,
+**When** the amendment is approved,
+**Then** the matching Story 5.5 compatibility label is updated upstream before the amendment counts as complete.
+
+**Given** the Story 5.1 static gate,
+**When** it runs against the amendments,
+**Then** its row, destructive-set, confirmation, anchor, and approval checks pass,
+**And** it rejects damaged inputs extended for each new disposition value.
+
+**Given** owner approval,
+**When** it is recorded,
+**Then** it names the roles it covers under the single-maintainer model,
+**And** it grants no execution, enrollment, or retirement authority beyond the recorded dispositions.
+
+### Story 5.8: Refresh and Re-disposition the Folders Inventory
+
+As the Folders owner,
+I want the Folders inventory re-pinned to current source and amended with the Story 5.2 outcomes and an explicit owner approval,
+So that every Folders tool, resource, CLI leaf, and variant has a current disposition before any replacement or retirement is planned.
+
+**Requirements:** FR21; MR3, MR4, MR5, MR6, MR7. **Dependencies:** Story 5.2.
+
+**Acceptance Criteria:**
+
+**Given** the Folders 1.0.0 inventory and the drift recorded by technical inventory G3 (PS10),
+**When** it is re-pinned to its current root-declared reference,
+**Then** a new version records every added, removed, or changed tool, resource, CLI leaf, and variant with anchors at the new pin,
+**And** unchanged rows say so explicitly.
+
+**Given** the Story 5.2 outcomes and the 48 roadmap candidates C01–C13 and Q01–Q35,
+**When** rows are re-dispositioned,
+**Then** each becomes `replace` with decorated contract type, exact Gateway route, and eligibility, `withdraw` with owner rationale, or `defer` with a named gap,
+**And** `include` appears only with `replace`, and a roadmap candidate counts as a replacement only once its decorated contract is named.
+
+**Given** Folders legacy lowercase identifiers, `sha256` idempotency keys, and the `taskId` extension,
+**When** their treatment is recorded,
+**Then** envelope correlation and idempotency keys follow McpCli's canonical uppercase ULID rule, payload identifiers follow the Module's declared Identifier Kind, and task context travels only as Payload properties, through `actorProperty`, or in allowed Envelope extensions,
+**And** any legacy format the target cannot accept stays a named gap or an owner-approved change with migration evidence, never a silent conversion.
+
+**Given** a removal gate that the amendment changes,
+**When** the amendment is approved,
+**Then** the matching Story 5.5 compatibility label is updated upstream before the amendment counts as complete.
+
+**Given** owner approval,
+**When** it is recorded,
+**Then** it names the Folders roles it covers under the single-maintainer model and supersedes the 1.0.0 session approval,
+**And** this story enrolls nothing, so a machine-readable release inventory arrives only with a later enrollment.
+
+### Story 5.9: Refresh and Re-disposition Projects and FrontComposer Inventories
+
+As the Projects and FrontComposer owner,
+I want their inventories re-pinned to current source and amended with the Story 5.2 outcomes and an explicit owner approval,
+So that every legacy operation in these Modules has a current disposition and the coupled host and plug-in retirement has a defined gate.
+
+**Requirements:** FR21; MR3, MR4, MR5, MR6, MR7. **Dependencies:** Story 5.2.
+
+**Acceptance Criteria:**
+
+**Given** the Projects and FrontComposer 1.0.0 inventories and the drift recorded by technical inventory G3 (FK01),
+**When** each is re-pinned to its current root-declared reference,
+**Then** a new version records every added, removed, or changed tool, resource, CLI leaf, and variant with anchors at the new pin,
+**And** unchanged rows say so explicitly.
+
+**Given** the Story 5.2 outcomes,
+**When** rows are re-dispositioned,
+**Then** each becomes `replace` with decorated contract type, exact Gateway route, and eligibility, `withdraw` with owner rationale, or `defer` with a named gap,
+**And** `include` appears only with `replace`, and a Projects row becomes `replace` only with a decorated Contracts package that satisfies the dependency allowlist.
+
+**Given** Projects task and actor context, including variant V09's `taskId` extension and Query reads that have no extension channel,
+**When** the affected rows are re-dispositioned,
+**Then** that context travels only as Payload properties, through `actorProperty`, or in allowed Envelope extensions,
+**And** a read that needs context without such a channel stays `defer` with that gap.
+
+**Given** the FrontComposer host consumers FK01–FK04, including the `Parties.UI` package dependency and the Counter.Web `/mcp` sample,
+**When** the coupled retirement gate is recorded,
+**Then** the amendments name every consumer that must move before the host and the Projects plug-in retire together,
+**And** they record the compiler CLI's separate treatment.
+
+**Given** a FrontComposer row re-dispositioned to `replace`,
+**When** it is recorded,
+**Then** it carries the FV04 and FV08 machine-result and exit-code parity clarifications from `evidence/story-5-1/verification.md:1471-1503`.
+
+**Given** a removal gate that an amendment changes,
+**When** the amendment is approved,
+**Then** the matching Story 5.5 compatibility label is updated upstream before the amendment counts as complete.
+
+**Given** owner approval,
+**When** it is recorded,
+**Then** it replaces `external_maintainer_approval: unasserted` with an approval naming the roles it covers under the single-maintainer model,
+**And** this story enrolls nothing, so machine-readable release inventories arrive only with a later enrollment.
+
+### Story 5.10: Refresh and Re-disposition ChatBot and Memories Inventories
+
+As the ChatBot and Memories owner,
+I want their inventories re-pinned, the Memories operator CLI inventoried, and every row amended with the Story 5.2 outcomes,
+So that governed workflows and identity-dependent operations keep accurate dispositions and removal gates.
+
+**Requirements:** FR21; MR3, MR4, MR5, MR6, MR9. **Dependencies:** Story 5.2.
+
+**Acceptance Criteria:**
+
+**Given** the ChatBot and Memories 1.0.0 inventories and the drift recorded by technical inventory G3 (PS06, PS07, PS12),
+**When** each is re-pinned to its current root-declared reference,
+**Then** a new version records every changed surface with anchors at the new pin.
+
+**Given** the `tools/MigrateEmbeddingVectors` operator CLI (PS14),
+**When** the Memories amendment is produced,
+**Then** it inventories the dry-run, live, rollback, and abort modes with security class, the `--tenant` and `--yes` or interactive confirmation requirements, and direct Redis/Dapr access,
+**And** it assigns them the Story 5.2 outcome for destructive, confirmation-required local operator tooling.
+
+**Given** Memories rows that depend on forwarded per-user identity,
+**When** they are re-dispositioned,
+**Then** they remain `defer` with the HTTP release recorded as a necessary but insufficient prerequisite alongside tenant and user authorization, administrative scope, semantic behavior, and release and rollback evidence.
+
+**Given** ChatBot's governed workflows,
+**When** they are re-dispositioned,
+**Then** plain Commands and REST DTOs do not count as decorated Gateway readiness,
+**And** task and correlation context use only Payload properties, `actorProperty`, or allowed Envelope extensions.
+
+**Given** a removal gate that an amendment changes,
+**When** the amendment is approved,
+**Then** the matching Story 5.5 compatibility label is updated upstream before the amendment counts as complete.
+
+**Given** owner approval,
+**When** it is recorded,
+**Then** it replaces `external_maintainer_approval: unasserted` with an approval naming the roles it covers under the single-maintainer model,
+**And** this story enrolls nothing.
+
+### Story 5.11: Reconcile Product Claims and the Migration Plan
+
+As a product owner,
+I want the authoritative migration plan, module plans, and release notes to describe the actual shared surface and remaining compatibility binaries,
+So that users and release gates do not assume migrations or adapters that do not exist.
+
+**Requirements:** FR21, FR22; MR7, MR8. **Dependencies:** Stories 5.2–5.10.
+
+**Acceptance Criteria:**
+
+**Given** the current inventory versions and the Parties retirement outcome,
+**When** the Hexalith.AI.Tools migration plan is updated,
+**Then** it is published under a new `plan_version` with a moved `inventory_revision`, indexes the Story 5.1 inventories and every amended inventory, and records `Parties.Mcp` as retired or states why SM-3 slipped,
+**And** this repository's root-declared Hexalith.AI.Tools reference contains the merged revision and `scripts/check-agent-instructions-sync.sh` passes.
+
+**Given** every active Hexalith module PRD and architecture topic about proprietary MCP or CLI surfaces,
+**When** it is reviewed,
+**Then** it names `Hexalith.McpCli` as the target and labels historical component names as migration sources,
+**And** module MVP gates and machine-facing flows name the available operations, setup through `hexalith` and the stdio server, and safe refusal or UI handoff for restricted actions.
+
+**Given** `deferred-work.md:143-145` and every Epic 5 intra-epic deferral,
+**When** the epic closes,
+**Then** each has a recorded disposition — resolved, already tracked, or accepted (Epic 4 retro F12).
+
+**Given** any McpCli release during Epic 5,
+**When** its release notes are published,
+**Then** they distinguish the gateway-only increment from completed retirements and list remaining compatibility binaries with their removal gates,
+**And** they do not claim that ecosystem migration is finished.

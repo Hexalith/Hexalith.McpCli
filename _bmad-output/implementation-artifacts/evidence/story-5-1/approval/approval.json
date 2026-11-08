@@ -41,7 +41,7 @@
       "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
       "candidate_path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/candidate.3/eventstore-admin-migration-inventory-v1.md",
       "candidate_sha256": "0c864efd5a0ecaae090265a784a1a671c4440112367766ec2d899fa39076243a",
-      "approved_sha256": "26ac7486cba8c52a0496147c6b90bda953dda31fd644ac199c433e49b834c90e",
+      "approved_sha256": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
       "row_ids": [
         "AC01",
         "AC02",
@@ -135,7 +135,7 @@
         "G5",
         "G6"
       ],
-      "inventory_version": "1.0.0",
+      "inventory_version": "1.0.1",
       "preserved_version": "1.0.0",
       "preserved_path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/eventstore-admin-migration-inventory-v1.md",
       "preserved_sha256": "26ac7486cba8c52a0496147c6b90bda953dda31fd644ac199c433e49b834c90e"
@@ -144,7 +144,7 @@
       "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
       "candidate_path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/candidate.3/technical-tools-migration-inventory-v1.md",
       "candidate_sha256": "3531917d7664210c034b05d3bb8b78bf857c07afb48c636c1654bf33496c5d83",
-      "approved_sha256": "0472f2c4ba12049c89e582ed5162279f989160d62b4499bc766efde8e85b93ca",
+      "approved_sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
       "row_ids": [
         "FH01",
         "FH02",
@@ -190,6 +190,7 @@
         "PS11",
         "PS12",
         "PS13",
+        "PS14",
         "PE01",
         "PE02",
         "PE03",
@@ -197,6 +198,8 @@
         "PE05",
         "PE06",
         "PE07",
+        "PE08",
+        "PE09",
         "PN01",
         "PN02",
         "PN03",
@@ -212,7 +215,7 @@
         "G4",
         "G5"
       ],
-      "inventory_version": "1.0.1",
+      "inventory_version": "1.0.2",
       "preserved_version": "1.0.0",
       "preserved_path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/technical-tools-migration-inventory-v1.md",
       "preserved_sha256": "6a7d325f6927b8b0f6692c05b71b54728bc1281b871dc073712586d172d41f58"
@@ -227,7 +230,8 @@
     "path": "references/Hexalith.Platform/.github/CODEOWNERS",
     "line": 2,
     "text": "* @jpiquot",
-    "revision": "01e5b6530af96ad6eaa69cc1867d43def56c43ca"
+    "revision": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+    "evidence_scope": "GitHub identity and Platform repository ownership only; authority for the other listed roles rests on exact_authority_confirmation and identity_and_role_confirmation"
   },
   "identity_and_role_confirmation": {
     "confirmed_on": "2026-11-08",
@@ -241,8 +245,8 @@
     "record": "The user selected Name the approver and confirmed this identity and McpCli-role coverage in the review decision."
   },
   "inventory_versions": {
-    "eventstore-admin": "1.0.0",
-    "technical-tools": "1.0.1"
+    "eventstore-admin": "1.0.1",
+    "technical-tools": "1.0.2"
   },
   "reviewed_candidate_state": {
     "base_revision": "fa7c51601041ee6cf0d2f9d4613fb405758f2f7c",
@@ -256,9 +260,14 @@
       "inventory": "technical-tools",
       "from_version": "1.0.0",
       "to_version": "1.0.1",
+      "from_sha256": "6a7d325f6927b8b0f6692c05b71b54728bc1281b871dc073712586d172d41f58",
+      "to_sha256": "0472f2c4ba12049c89e582ed5162279f989160d62b4499bc766efde8e85b93ca",
+      "to_path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.1/technical-tools-migration-inventory-v1.md",
+      "to_first_committed_revision": "6ee68afe1440e3318dde93328012dd8f5cd00388",
       "approved_on": "2026-11-08",
       "approver": "Jérôme Piquot (GitHub jpiquot)",
       "approval_decision": "option (a), Versioned 1.0.1",
+      "approval_basis": "Selection of the versioned amendment with the patch wording prescribed in the source spec review findings; the resulting bytes are bound by to_sha256 and verified by the static gate, without a separate byte review.",
       "source_spec": "_bmad-output/implementation-artifacts/spec-5-1-inventory-eventstore-admin-and-technical-tool-operations.md",
       "changed_rows": [
         "PS07",
@@ -268,11 +277,77 @@
         "PE03",
         "PE04"
       ],
+      "added_rows": [],
       "narrative_changes": [
         "inventory version and A1 amendment",
         "source-pin candidate wording"
       ],
       "limits": "Source revisions, row identities, dispositions and downstream gates are unchanged; no execution or retirement authority."
+    },
+    {
+      "inventory": "eventstore-admin",
+      "from_version": "1.0.0",
+      "to_version": "1.0.1",
+      "from_sha256": "26ac7486cba8c52a0496147c6b90bda953dda31fd644ac199c433e49b834c90e",
+      "to_sha256": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
+      "to_path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+      "approved_on": "2026-11-08",
+      "approver": "Jérôme Piquot (GitHub jpiquot)",
+      "approval_decision": "review pass 2 option (a): Amend AV04/G4 + pointers; Point A1 to receipt",
+      "approval_basis": "Exact amended bytes and SHA-256 presented to the owner after review pass 2 and approved before this receipt bound them.",
+      "exact_approval_instruction": "Approve Admin 1.0.1 and technical 1.0.2",
+      "source_spec": "_bmad-output/implementation-artifacts/spec-5-1-inventory-eventstore-admin-and-technical-tool-operations.md",
+      "changed_rows": [
+        "AC01",
+        "AV04",
+        "AM04",
+        "AM05",
+        "AM06",
+        "G4"
+      ],
+      "added_rows": [],
+      "narrative_changes": [
+        "inventory version and A1 amendment 1.0.1",
+        "A1 approver identity and role pointer",
+        "A1 version note"
+      ],
+      "limits": "Source revisions, row identities and dispositions are unchanged; no execution or retirement authority."
+    },
+    {
+      "inventory": "technical-tools",
+      "from_version": "1.0.1",
+      "to_version": "1.0.2",
+      "from_sha256": "0472f2c4ba12049c89e582ed5162279f989160d62b4499bc766efde8e85b93ca",
+      "to_sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+      "to_path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+      "approved_on": "2026-11-08",
+      "approver": "Jérôme Piquot (GitHub jpiquot)",
+      "approval_decision": "review pass 2 option (a): Classify in amendment; Amend AV04/G4 + pointers; Extend in amendment; Point A1 to receipt",
+      "approval_basis": "Exact amended bytes and SHA-256 presented to the owner after review pass 2 and approved before this receipt bound them.",
+      "exact_approval_instruction": "Approve Admin 1.0.1 and technical 1.0.2",
+      "source_spec": "_bmad-output/implementation-artifacts/spec-5-1-inventory-eventstore-admin-and-technical-tool-operations.md",
+      "changed_rows": [
+        "FH02",
+        "FV01",
+        "FV04",
+        "FV08",
+        "PE07",
+        "G3",
+        "G4"
+      ],
+      "added_rows": [
+        "PS14",
+        "PE08",
+        "PE09"
+      ],
+      "narrative_changes": [
+        "inventory version and A1 amendment 1.0.2",
+        "A1 approver identity and role pointer",
+        "A1 version note",
+        "census definition beyond src/",
+        "release-publication, startup, central-package and sample routing points"
+      ],
+      "limits": "Source revisions, existing row identities and dispositions are unchanged; three census rows are added; no execution or retirement authority."
     }
   ]
 }

@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-08-2026 12:54'
+last_updated: '11-08-2026 18:05'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -89,12 +89,17 @@ development_status:
   epic-4-retrospective: done
 
   epic-5: in-progress
-  5-1-inventory-eventstore-admin-and-technical-tool-operations: review # 2026-11-08: Admin 1.0.0 and technical 1.0.1 approved; named approver and role coverage bound by A1; seven review patches and nine handoff clarifications verified; one inherited unverified deferral already tracked; spec done.
+  5-1-inventory-eventstore-admin-and-technical-tool-operations: done # Code review pass 2 2026-11-08: all 13 patches applied; owner-approved Admin 1.0.1 and technical 1.0.2 amendments (CLI URL disclosure in G4, census beyond src/ with PS14, release/startup routing, A1 approver pointer); static gate passes with 159 A1 rows and 49 damaged inputs rejected.
   5-2-decide-generic-non-gateway-capability-contracts: backlog
   5-3-enroll-replacement-contracts-and-profiles: backlog
   5-4-prove-shared-head-parity-and-safety: backlog
   5-5-retire-legacy-packages-and-platform-routes: backlog
-  5-6-reconcile-product-and-ux-claims: backlog
+  5-6-reject-new-proprietary-surfaces-in-ci: backlog
+  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: backlog
+  5-8-refresh-and-re-disposition-the-folders-inventory: backlog
+  5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent: backlog
+  5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: backlog
+  5-11-reconcile-product-claims-and-the-migration-plan: backlog
   epic-5-retrospective: optional
 
 # Readiness action items (09-23-2026); criteria are assigned, implementation remains open.
