@@ -57,6 +57,7 @@ approvedStories:
   - "4.18"
 changeProposals:
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-08.md
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md
@@ -209,7 +210,7 @@ NFR8: Ensure each exposed description is understandable without source-code cont
 - **MR7:** Every change to the Hexalith.AI.Tools migration plan is published under a new `plan_version` and moves `inventory_revision` when an indexed inventory is re-pinned or added; plan 1.1.0 still lists the EventStore Admin successor inventory as outstanding (migration plan 1.1.0).
 - **MR8:** At least one Legacy Server is deleted within three months of v1, and the product owner decides deletion order (PRD SM-3, OQ-6).
 - **MR9:** HTTP transport with forwarded per-user identity is the separately committed next release after the OQ-1 authentication design; MCP resources and prompts, event-stream reading, plug-in loading, and executor retries stay out unless the PRD changes; the tool never calls a Module's REST or Dapr API (PRD §8.2, §8.3).
-- **MR10:** Epic 5 stories do not start while a previous retrospective verdict is `rejected` without a recorded human decision; the Epic 4 verdict is `rejected`, and its open items 5 (CI redaction), 6 (release acceptance binding), 8 (this gate), and 9 (ASCII tenant input) bear on Epic 5 evidence, release, and tenant-isolation claims (Epic 4 retro F10; `sprint-status.yaml` action items).
+- **MR10:** Epic 5 stories do not start while a previous retrospective verdict is `rejected` without a recorded human decision; the Epic 4 verdict is `rejected`, and its open items 5 (CI redaction), 6 (release acceptance binding), 8 (this gate), and 9 (ASCII tenant input) bear on Epic 5 evidence, release, and tenant-isolation claims (Epic 4 retro F10; `sprint-status.yaml` action items). Item 8 was decided on 2026-11-08 (see the Epic 5 Entry); items 5, 6 and 9 remain open.
 - **MR11:** Evidence committed to this public repository uses one shared redactor and secret scanning; live-topology runners stay generic with no module-name branching or fixed vector counts; approvals hash-bind companion live plans (Epic 4 retro F6, F8, F13, F14).
 
 #### Epic 5 Baseline Facts (Story 5.1 and Epic 4 evidence, 2026-11-08)
@@ -288,7 +289,7 @@ Maintainers can demonstrate that approved Tenants and Parties Operations work th
 
 Operators and agents lose no supported capability while proprietary Hexalith MCP servers, plug-ins, and CLIs give way to McpCli: every legacy operation carries a current owner-approved disposition, gateway-ready replacements are proven through both heads and the first Legacy Server (Parties) is retired, every non-gateway capability class has an approved generic decision or explicit withdrawal, and each surface that cannot yet retire remains a labeled, versioned compatibility binary with a named removal gate. The first-increment gateway-only design and dependency rules remain binding until an approved generic extension changes them (MR1).
 
-**FRs covered:** FR20 (Parties replacement parity vectors), FR21, FR22. **Entry:** Epic 4's v1 release (2.0.1) and Story 5.1's approved inventories; while the Epic 4 retrospective verdict remains `rejected`, Story 5.2 and later stories become `ready-for-dev` only after a recorded product-owner decision on Epic 4 retro item 8 (MR10). **Exit:** every inventoried operation has a current owner-approved disposition; `Parties.Mcp` is retired with verified replacement evidence, or the product owner records why SM-3 slips; CI rejects new proprietary surfaces against the Story 5.1 census beyond `src/`; the Hexalith.AI.Tools migration plan index is re-versioned (MR7); and no active Hexalith module PRD or architecture plans a proprietary module MCP/CLI implementation. **Out of scope:** HTTP transport and forwarded per-user identity (MR9), so Memories retirement and identity-dependent variants remain blocked; MCP resources and prompts, event-stream reading, and retries unless an approved PRD change in this epic admits them; any module-specific code in McpCli.
+**FRs covered:** FR20 (Parties replacement parity vectors), FR21, FR22. **Entry:** Epic 4's v1 release (2.0.1) and Story 5.1's approved inventories; while the Epic 4 retrospective verdict remains `rejected`, Story 5.2 and later stories become `ready-for-dev` only after a recorded product-owner decision on Epic 4 retro item 8 (MR10). **Gate decision (2026-11-08):** recorded in the [sprint change proposal](sprint-change-proposal-2026-11-08.md) and the Epic 4 retrospective's F10 follow-up; Stories 5.2–5.11 may become `ready-for-dev`, the Epic 3 §G output-schema gap is accepted for 2.0.1 only, and no McpCli version after 2.0.1 is published until `epic-3-retro-item-1-complete-output-contract` is done. **Exit:** every inventoried operation has a current owner-approved disposition; `Parties.Mcp` is retired with verified replacement evidence, or the product owner records why SM-3 slips; CI rejects new proprietary surfaces against the Story 5.1 census beyond `src/`; the Hexalith.AI.Tools migration plan index is re-versioned (MR7); and no active Hexalith module PRD or architecture plans a proprietary module MCP/CLI implementation. **Out of scope:** HTTP transport and forwarded per-user identity (MR9), so Memories retirement and identity-dependent variants remain blocked; MCP resources and prompts, event-stream reading, and retries unless an approved PRD change in this epic admits them; any module-specific code in McpCli.
 
 **Implementation notes:** After Story 5.1, two independent tracks run. The gateway-ready track needs no new decision: Parties is already enrolled, so it closes compatibility gates C06–C08, proves parity and safety, and retires `Parties.Mcp` and its routes. In the non-gateway track, one generic-capability decision covering every gap class, admitted by a Platform AD under AD-14 and paired with the PRD change it needs, precedes any re-disposition of administration, resource, lifecycle, or tooling rows to `replace`. Re-pinning stale inventories, inventorying PS14, and every disposition change are versioned owner amendments. UI-only and confirmation-required Admin rows are expected to move to a confidential UI or be withdrawn rather than migrate. Open Epic 4 retro items 5, 6, and 9 apply wherever this epic adds evidence, releases, or tenant-isolation claims.
 
@@ -1860,7 +1861,7 @@ So that McpCli becomes the supported Parties path and no remaining legacy binary
 
 **Given** every surface still inventoried as `defer` (PS01–PS04 and PS06–PS14),
 **When** this story completes,
-**Then** each is labeled in its upstream README or package description as a versioned compatibility binary with the inventory gate that removes it, stays outside every Platform composition, and is not counted as retired,
+**Then** each is labeled in its upstream README or package description as a versioned compatibility binary with the removal gate from its latest approved inventory version when this story completes, stays outside every Platform composition, and is not counted as retired,
 **And** the Memories label states that forwarded per-user identity is necessary but not sufficient, and the FrontComposer host and Projects plug-in labels state that they retire together.
 
 ### Story 5.6: Reject New Proprietary Surfaces in CI
@@ -1919,7 +1920,8 @@ So that every administration, diagnostic, documentation, lifecycle, and tooling 
 
 **Given** a removal gate that an amendment changes,
 **When** the amendment is approved,
-**Then** the matching Story 5.5 compatibility label is updated upstream before the amendment counts as complete.
+**Then** if Story 5.5 has already labeled the affected surface, that compatibility label is updated upstream before the amendment counts as complete,
+**And** otherwise the amendment completes without a label change, and Story 5.5 labels the surface from the latest approved inventory version.
 
 **Given** the Story 5.1 static gate,
 **When** it runs against the amendments,
@@ -1958,7 +1960,8 @@ So that every Folders tool, resource, CLI leaf, and variant has a current dispos
 
 **Given** a removal gate that the amendment changes,
 **When** the amendment is approved,
-**Then** the matching Story 5.5 compatibility label is updated upstream before the amendment counts as complete.
+**Then** if Story 5.5 has already labeled the affected surface, that compatibility label is updated upstream before the amendment counts as complete,
+**And** otherwise the amendment completes without a label change, and Story 5.5 labels the surface from the latest approved inventory version.
 
 **Given** owner approval,
 **When** it is recorded,
@@ -2001,7 +2004,8 @@ So that every legacy operation in these Modules has a current disposition and th
 
 **Given** a removal gate that an amendment changes,
 **When** the amendment is approved,
-**Then** the matching Story 5.5 compatibility label is updated upstream before the amendment counts as complete.
+**Then** if Story 5.5 has already labeled the affected surface, that compatibility label is updated upstream before the amendment counts as complete,
+**And** otherwise the amendment completes without a label change, and Story 5.5 labels the surface from the latest approved inventory version.
 
 **Given** owner approval,
 **When** it is recorded,
@@ -2038,7 +2042,8 @@ So that governed workflows and identity-dependent operations keep accurate dispo
 
 **Given** a removal gate that an amendment changes,
 **When** the amendment is approved,
-**Then** the matching Story 5.5 compatibility label is updated upstream before the amendment counts as complete.
+**Then** if Story 5.5 has already labeled the affected surface, that compatibility label is updated upstream before the amendment counts as complete,
+**And** otherwise the amendment completes without a label change, and Story 5.5 labels the surface from the latest approved inventory version.
 
 **Given** owner approval,
 **When** it is recorded,
