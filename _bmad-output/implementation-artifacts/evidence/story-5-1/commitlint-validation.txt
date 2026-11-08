@@ -1,0 +1,7 @@
+Command: npx --no -- commitlint --verbose
+Exact full message:
+docs(inventory): complete story 5.1 with owner approval
+Exit: 0
+⧗   --- input ---
+docs(inventory): complete story 5.1 with owner approval
+✔   found 0 problems, 0 warnings

@@ -2,7 +2,7 @@
 title: '5.1 Inventory EventStore Admin and technical-tool operations'
 type: 'chore'
 created: '2026-11-06'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'ad7bf9ee415d09b16b47616740e2cc38fb3d6d9a'
@@ -39,7 +39,7 @@ context:
 **Execution:**
 - [x] `_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md` — enumerate both reachable Admin surfaces and their variants, current routes, security/confirmation/destructive classifications, observed limitations and proposed dispositions; retain unregistered helpers separately.
 - [x] `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md` — reconcile current FrontComposer compiler, resource, skill-resource and lifecycle behavior with the historical pin; inventory manifest host consumers and all remaining proprietary packages with owning maintainers and removal gates.
-- [ ] Both inventories — obtain concrete-row review; bind actual approval instructions, authority and versions. Session approval alone leaves owning-maintainer acceptance pending; unapproved rows block completion.
+- [x] Both inventories — obtain concrete-row review; bind actual approval instructions, authority and versions. Session approval alone leaves owning-maintainer acceptance pending; unapproved rows block completion.
 - [x] `_bmad-output/implementation-artifacts/evidence/story-5-1/verification.md` — retain reproducible static source/registration/row checks and their results, full pins, census scope and compatibility handoffs to Stories 5.2–5.5. Verify every source anchor and retain unresolved gaps without duplicating earlier ledger entries.
 - [x] This spec and `_bmad-output/implementation-artifacts/sprint-status.yaml` — record verification and workflow state; leave completion open while an owner approval or completeness check is missing.
 
@@ -57,6 +57,10 @@ context:
 - 2026-11-06 (blocker): The concrete-row review task stays open. Neither the EventStore/platform-operator maintainers nor the FrontComposer and census owners have approved any row, and this build instruction authorizes preparation only. Replace A0 with an approval record binding the instruction, authority, inventory version and revisions before completion; a session approval would still leave owning-maintainer acceptance pending.
 
 - 2026-11-07 (resumed review): Earlier P1–P18 corrections were already present. Three independent review layers produced 11 findings: nine patch groups (P19–P27), one carried rejection (BH2/earlier EC6), and the duplicate pin finding grouped into P19. Refreshed Builds, Platform and Tenants census pins, corrected CLI redaction, MCP paging/normalization/input/error variants, profile failure/overwrite behavior and inspect's shared path canonicalization. Both inventories are now `1.0.0-candidate.2`; all 156 A0 approval references remain pending. Added a damaged-input case for stale exempt-tool pins. The complete static block exits 0 with 386 source anchors (52 content-checked), 23 damaged inputs rejected and `git diff --check` passing. No runtime, dependency, reference, historical inventory or ledger changed; no .NET or live command ran. The concrete-row approval task stays open, spec `in-review`, sprint `in-progress`.
+
+- 2026-11-08 (resumed review): Three independent layers reviewed the full baseline diff; edge-case and verification-gap layers returned no findings. The blind layer reported ten findings: nine direct documentation corrections (P28–P36) and one unverified inherited catalog-reader follow-up. Both inventories are now `1.0.0-candidate.3`; record short-token and invalid-URL disclosure, actual startup token checks, profile/output link and overwrite behavior, default CLI redirects, empty-body HTTP errors, compiler import exclusions and inspection freshness. The standalone second-build experiment does not prove an actual GenerateAsync defect; track that question under the owning Epic 4 source spec in `deferred-work.md:806`. Static verification exits 0 with 408 anchors (65 content-checked), 23 rejected damaged inputs and `git diff --check` passing. All 156 A0 references still need owning-maintainer approval; the approval task stays open, spec `in-review`, sprint `in-progress`. No runtime, dependency, reference, historical inventory, publication or enrollment changed; no repository .NET build or live/legacy host ran.
+
+- 2026-11-08 (owning-maintainer approval): The requesting user said "I approve" after presentation of both candidate.3 inventories, then explicitly confirmed "Authorized for all listed maintainer roles" for EventStore, platform/operator, FrontComposer and every census owner. A1 records that authority and covers all 156 rows. Finalized both inventories as `1.0.0`, preserving reviewed candidate bytes and binding candidate/final hashes, row IDs, McpCli revision and all 17 source revisions in `evidence/story-5-1/approval/approval.json`. Dispositions stay `defer / exclude`; downstream capability, authorization, parity and retirement gates are unresolved. The concrete-row approval task is complete; spec `done`, sprint `review` under the build workflow. The inherited unverified Epic 4 follow-up remains deferred.
 
 ## Spec Change Log
 
@@ -113,6 +117,21 @@ Pass 2, 2026-11-07. Layers: blind (BH), edge case (EC), verification gap (VG; no
 | BH10 — ordinary MCP error cases omitted | low | patch (P27) | `ToolHelper.HandleException`/`HandleHttpException` implement the listed status categories, malformed-JSON handling and a timeout document for every caught `TaskCanceledException`, including caller cancellation. Add these observable variants to AV06. |
 | EC1 — stale pins invalidate the reproducibility claim | medium | patch (P19) | Independently confirmed the same three full revision mismatches and the resulting verifier failure; shared root cause with BH1. |
 
+Pass 3, 2026-11-08. Layers: blind (BH; ten findings), edge case (no findings), verification gap (no findings). The review diff spans all changes since the saved baseline, including earlier Epic 4 repairs; findings against those pre-existing runtime changes do not become Story 5.1 runtime work. Every finding is triaged separately below; none duplicates a logged location and claim.
+
+| Finding | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| BH1 — obj-generated source excluded from the private reader seal | maybe-false (medium if reachable, unverified) | defer | `NativeCatalogTool.cs:194` excludes obj, but preparation creates a fresh private directory and builds once. The reviewer confirmed its initializer proof used a standalone project's second build and a future timestamp, not GenerateAsync; an actual first-build injection point remains unproven. Pre-existing Epic 4 code; tracked under its owning source spec (`deferred-work.md:806`). |
+| BH2 — short tokens described as masked | medium | patch (P28) | `Cli/Profiles/ProfileManager.cs:88` returns the whole token plus an ellipsis for length at most four; list, show and current use it. Record this privacy limit alongside raw JSON, including G4 and the handoff. |
+| BH3 — profile save links, atomicity and permission timing omitted | medium | patch (P29) | `ProfileManager.Save` writes directly at line 109 with no link refusal or atomic replacement, then sets file permissions at 112; only newly created directories get mode 700. Clarify AC25, AV02 and G6 for all three save callers. |
+| BH4 — invalid MCP URL echoed verbatim | medium | patch (P30) | `Mcp/Program.cs:19` interpolates the supplied value into the startup errors written to stderr. Record AV05's disclosure and owner safety gate rather than inheriting it as target behavior. |
+| BH5 — startup token validation overstated | low | patch (P31) | `Mcp/Program.cs:11`, `:25` trim then check nonblank; header construction at 89 and API admission happen later. Replace the broad invalid-token claim with those exact boundaries. |
+| BH6 — CLI ordinary error handling overstated | medium | patch (P32) | Verified for empty-body 400/409/422: `AdminApiClient.cs:384` returns null and `:104` calls EnsureSuccessStatusCode outside the network catch; command handlers catch AdminApiException. Nonempty non-ProblemDetails bodies do become generic AdminApiException, and parser/top-level handling still applies; narrow the documented exception accordingly. |
+| BH7 — CLI redirect difference omitted | low | patch (P33) | The CLI creates a default HttpClient (`Cli/Client/AdminApiClient.cs:24`) with automatic redirects; MCP explicitly disables them. Add this transport difference to AV04 and downstream decisions. |
+| BH8 — destructive output-file variant omitted from safety gates | medium | patch (P34) | `Cli/Formatting/OutputWriter.cs:28` directly truncates the supplied path, follows links and has no confirmation. Record AV03 separately from intrinsic operation effects and add local-file treatment to G6. |
+| BH9 — imported-file migration limitation omitted | medium | patch (P35) | `Cli/MigrationCommand.cs:33` warns on detected top-level imports; ProjectDocumentLoader does not evaluate imports. FC02/FV07 and the handoff must preserve that limitation without treating success as complete project coverage. |
+| BH10 — generated-output inspection freshness omitted | medium | patch (P36) | `GeneratedOutputLoader.cs:25` builds only when requested, then reads existing output at 49 without a source-freshness check. Record the stale-output possibility in FC01/FV06 and the freshness handoff. |
+
 ## Verification
 
 - Reconcile source-derived registration sets against inventory row identities, rejecting omissions, extras, duplicates, incomplete fields and unsupported approval claims.
@@ -120,3 +139,9 @@ Pass 2, 2026-11-07. Layers: blind (BH), edge case (EC), verification gap (VG; no
 - Run the reproducible Python source/row check documented in the evidence file, then `git diff --check` and inspect the changed-path set. This documentation-only change needs no .NET build or live topology.
 
 **Result (2026-11-07):** the block in [evidence/story-5-1/verification.md](evidence/story-5-1/verification.md) exited 0 against both `1.0.0-candidate.2` inventories, with all PASS lines, 386 resolved source anchors (52 content-checked), 23 rejected damaged inputs and `git diff --check` passing. It ends with `BLOCKED: 156 rows carry A0`, so completion remains open; spec `in-review`, sprint `in-progress`.
+
+**Result (2026-11-08):** the updated reproducible block exits 0 against both `1.0.0-candidate.3` inventories: 408 resolved source anchors (65 content-checked), 23 rejected damaged inputs, all pinned-source/census checks and `git diff --check` pass. Nine review patches are applied; one inherited first-build source-seal question is explicitly unverified and deferred. The expected `BLOCKED: 156 rows carry A0` line keeps completion open pending owning-maintainer approval.
+
+**Approval result (2026-11-08):** A1 resolves the owner-review blocker for both `1.0.0` inventories. The updated static gate verifies the approval receipt and retains the negative completion-while-pending check; no runtime or retirement acceptance is inferred.
+
+**Final verification (2026-11-08):** the approved-inventory static gate exits 0: 408 source anchors (65 content-checked), 29 rejected damaged inputs, 156 A1-approved rows and hash-bound candidate/final inventories with exact source pins. The frozen intent digest and historical inventories are unchanged. The pinned commitlint CLI accepts the exact local commit message with zero problems or warnings; its evidence is retained at `evidence/story-5-1/commitlint-validation.txt`.
