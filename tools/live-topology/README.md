@@ -241,7 +241,14 @@ independent gates.
 Preparation seals actual archive hashes, all deployed host DLL/JSON hashes,
 selected sources and used settings/sidecar configurations. Execution rechecks
 those identities before vectors and again before independent smoke. The
-sanitized `native-catalog.json` records the source-selection/preparation digests,
+`head-catalog.json` receipt also captures discovery from those compiled CLI and
+MCP heads, requiring equal documents, and records SHA-256 for every head DLL and
+each module's exact `list_operations` structured content. Its full Catalog digest
+hashes the module-name-to-structured-content map. All Catalog digests use sorted
+keys, compact separators and UTF-8 JSON with `ensure_ascii=false`. Discovery
+submits no Command or Query. Preparation binds the receipt's exact file hash;
+the capture refuses binary drift while reading discovery. The sanitized
+`native-catalog.json` records the source-selection/preparation digests,
 actual SDK artifacts and matching credential-free peer readback. Private custody,
 keys, RDB bytes and raw operational state remain outside uploaded evidence.
 This is infrastructure for native acceptance; public artifact approval and a

@@ -48,4 +48,47 @@ public sealed class BoundaryProcessHarnessTests
         }
         finally { Directory.Delete(directory, recursive: true); }
     }
+
+    /// <summary>The live acceptance assertion preserves optional Gateway business results on both process heads.</summary>
+    /// <param name="withResult">Whether the Gateway returns a business result.</param>
+    [Theory]
+    [InlineData(false)]
+    [InlineData(true)]
+    public async Task AcceptedCommandsPreserveCompleteGatewayResultsAsync(bool withResult)
+    {
+        string directory = Path.Combine(Path.GetTempPath(), "mcpcli-command-result-boundary-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        string? responseBody = null;
+        try
+        {
+            await using var gateway = new ScriptedGateway(request =>
+            {
+                using JsonDocument sent = JsonDocument.Parse(request.Body);
+                responseBody = JsonSerializer.Serialize(new
+                {
+                    messageId = sent.RootElement.GetProperty("messageId").GetString(),
+                    correlationId = sent.RootElement.GetProperty("correlationId").GetString(),
+                    resultPayload = withResult ? new { id = "process-party", isActive = false, identifiers = new[] { "kept-result" } } : null,
+                });
+                return ScriptedGateway.Response(202, "Accepted", "application/json", responseBody);
+            });
+            var environment = new Dictionary<string, string?> { ["EVENTSTORE_URL"] = gateway.Url };
+            string profile = Path.Combine(directory, "mcpcli.json");
+            const string operation = "parties.deactivate-party";
+            const string payload = """{"PartyId":"process-party"}""";
+            foreach (bool mcp in new[] { false, true })
+            {
+                int before = gateway.Requests.Count;
+                HeadResult result = mcp
+                    ? await BoundaryHeads.InvokeMcpAsync(profile, environment, ["--tenant", "tenant-a"], "send_command",
+                        new Dictionary<string, object?> { ["operation"] = operation, ["payload"] = payload })
+                    : await BoundaryHeads.InvokeCliAsync(profile, environment,
+                        ["send", operation, "--payload", payload, "--tenant", "tenant-a"]);
+                gateway.Requests.Count.ShouldBe(before + 1);
+                BoundaryHeads.AssertCommandAccepted(result, operation, "tenant-a", "process-party", gateway.Requests[^1], responseBody!);
+                HeadDiagnostics.AssertGatewayOnly(result, gateway.Url, "/api/v1/commands", 202, process: true);
+            }
+        }
+        finally { Directory.Delete(directory, recursive: true); }
+    }
 }

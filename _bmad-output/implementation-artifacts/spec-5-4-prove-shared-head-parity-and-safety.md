@@ -214,3 +214,31 @@ records the state before that prerequisite. Story 5.4 remains **in-progress**:
 its dedicated live CI run, final hash-bound packet and its own scan receipt, and
 exact-byte owner approval/verdict remain pending. This prerequisite's receipt
 does not establish Story 5.4 live acceptance or authorize retirement.
+
+### Committed live qualification follow-up (2026-11-09)
+
+The prior CI run `42614718738` passed all 21 approved live vectors and the
+independent smoke, then exposed a boundary-test assertion defect before its
+negative cases ran: the qualified Gateway includes a business `resultPayload`
+on create acceptance, while the test expected an acceptance document without
+`result`. The boundary now checks the complete copied result against the
+captured response and exact submitted identifiers. Concurrent acceptances are
+paired with their originating requests. The process-harness regression runs
+both heads with and without the optional result; it preserves every public
+channel and request-count assertion. Production behavior and approved inputs
+are unchanged. A fresh dedicated PR lane is required; the failed historical
+lane establishes no full live acceptance.
+
+CI preparation now retains `head-catalog.json`: equal CLI/MCP discovery from
+the actual hosted binaries, every head DLL hash, each module's sorted-key
+compact `list_operations` structured-content SHA-256, and the digest of the
+complete module-to-content map. This generic read-only capture supplies the
+final packet's exact candidate/Catalog binding without relying on a local
+rebuild. Offline tests cover discovery failure/mismatch, empty Catalog and
+binary drift; CI-hook coverage pins the bounded capture and failure path.
+
+Fresh local follow-up checks passed: solution restore and Release build with
+zero warnings/errors; Core 877 passed (four OS skips), CLI 584 passed (two OS
+skips), MCP 94 passed and Manifest 362 passed. The six process-harness cases,
+seven capture-helper regressions and focused CI capture/failure-path case all
+passed. Full affected CI-hook verification continues before final evidence.

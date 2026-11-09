@@ -89,6 +89,27 @@ internal static class BoundaryHeads
         AssertJson(result.Tool.Content.ShouldHaveSingleItem().ShouldBeOfType<TextContentBlock>().Text, expected, mask);
     }
 
+    /// <summary>Checks an accepted Command against its captured request and the complete Gateway result payload.</summary>
+    internal static void AssertCommandAccepted(HeadResult result, string operation, string tenant, string aggregateId,
+        GatewayRequest request, string responseBody)
+    {
+        using JsonDocument sent = JsonDocument.Parse(request.Body);
+        using JsonDocument received = JsonDocument.Parse(responseBody);
+        var expected = new JsonObject
+        {
+            ["operation"] = operation,
+            ["messageId"] = received.RootElement.TryGetProperty("messageId", out JsonElement messageId)
+                && messageId.ValueKind != JsonValueKind.Null ? messageId.GetString() : sent.RootElement.GetProperty("messageId").GetString(),
+            ["correlationId"] = sent.RootElement.GetProperty("correlationId").GetString(),
+            ["tenant"] = tenant,
+            ["aggregateId"] = aggregateId,
+            ["status"] = "accepted",
+        };
+        if (received.RootElement.TryGetProperty("resultPayload", out JsonElement payload) && payload.ValueKind != JsonValueKind.Null)
+            expected["result"] = JsonNode.Parse(payload.GetRawText());
+        AssertDocument(result, expected.ToJsonString(), isError: false);
+    }
+
     private static void AssertJson(string actual, string expected, string[] mask)
     {
         JsonNode actualNode = JsonNode.Parse(actual)!;

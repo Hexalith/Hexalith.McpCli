@@ -314,6 +314,10 @@ class CiHooksTests(unittest.TestCase):
         shutil.copyfile(HERE.parents[1] / 'scripts/evidence_redaction.py', self.root / 'scripts/evidence_redaction.py')
         for name, content in [('bootstrap-runtime.py', BOOTSTRAP), ('run-vectors.py', RUNNERS), ('run-isolated.py', RUNNERS)]:
             (self.tools / name).write_text(content)
+        (self.tools / 'capture_heads.py').write_text('''import json, pathlib, sys
+if __import__('os').environ.get('FIXTURE_MODE') == 'catalog-capture-failure': raise SystemExit(21)
+pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'result': 'passed', 'catalogSha256': 'a' * 64}))
+''')
         binaries = [{'source': '/' + name, 'sha256': hashlib.sha256(b'qualified-fixture').hexdigest()}
                     for name in ('redis-server', 'sentry', 'placement', 'scheduler')]
         (self.tools / 'binaries.json').write_text(json.dumps(binaries))
@@ -598,6 +602,25 @@ class CiHooksTests(unittest.TestCase):
                           'python3', 'tools/live-topology/ci.py', 'prepare'], calls[0])
         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())
         self.assertNotIn('fixture-secret-token', json.dumps(prepared))
+
+    def test_preparation_binds_the_hosted_head_catalog_and_capture_failure_stops_it(self):
+        prepared = self.prepare()
+        capture = self.evidence / 'head-catalog.json'
+        self.assertEqual({'path': str(capture), 'sha256': hashlib.sha256(capture.read_bytes()).hexdigest()},
+                         prepared['headCatalog'])
+        calls = self.calls()
+        position = next(index for index, call in enumerate(calls) if call[0] == 'timeout'
+                        and any(value.endswith('capture_heads.py') for value in call))
+        self.assertIn('--host', calls[position])
+        self.assertEqual('180', calls[position][4])
+        self.assertTrue(any(any(value.endswith('bootstrap-runtime.py') for value in call)
+                            for call in calls[position + 1:]))
+        self.fresh_evidence()
+        failed = self.invoke('prepare-ci.sh', 'catalog-capture-failure')
+        self.assertNotEqual(0, failed.returncode)
+        receipt = json.loads((self.evidence / 'preparation.json').read_text())
+        self.assertEqual('failed', receipt['result'])
+        self.assertNotIn('headCatalog', receipt)
 
     def test_native_builds_inherit_one_fresh_task_owned_package_cache(self):
         self.env['NUGET_PACKAGES'] = str(self.root / 'unpublished-global-candidates')

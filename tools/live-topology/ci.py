@@ -554,6 +554,11 @@ def prepare(evidence: Path) -> None:
         tools['python'] = bounded([str(python), '--version'], 30, evidence / 'python-version')
         tools['jsonschema'] = bounded([str(python), '-c', 'import importlib.metadata; print(importlib.metadata.version("jsonschema"))'],
                                      30, evidence / 'jsonschema-version')
+        catalog_path = evidence / 'head-catalog.json'
+        bounded([str(python), str(ROOT / 'tools/live-topology/capture_heads.py'), '--host',
+                 str(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'),
+                 '--output', str(catalog_path)], 180, evidence / 'head-catalog-capture')
+        receipt['headCatalog'] = {'path': str(catalog_path.resolve()), 'sha256': hashlib.sha256(catalog_path.read_bytes()).hexdigest()}
         runtime = private / 'runtime'
         bounded([str(python), str(ROOT / 'tools/live-topology/bootstrap-runtime.py'), str(runtime)], 900, evidence / 'runtime-bootstrap')
         binaries = json.loads((ROOT / 'tools/live-topology/binaries.json').read_text())

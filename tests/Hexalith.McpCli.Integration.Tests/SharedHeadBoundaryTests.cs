@@ -43,7 +43,10 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
             string create = JsonSerializer.Serialize(new { PartyId = Party, Type = "Person",
                 PersonDetails = new { FirstName = "BoundaryPrivateMarker", LastName = "MustNotBeDisclosed" } });
             HeadResult created = await InvokeAsync(false, true, "parties.create-party", create, "tenant-b", authorizedToken);
-            AssertAccepted(created, "parties.create-party", "tenant-b", Party);
+            var creation = forwarder.Responses.ShouldHaveSingleItem();
+            creation.Status.ShouldBe(202);
+            BoundaryHeads.AssertCommandAccepted(created, "parties.create-party", "tenant-b", Party, creation.Request, creation.Body);
+            HeadDiagnostics.AssertGatewayOnly(created, forwarder.Url, "/api/v1/commands", 202, process: true);
             JsonElement active = await ReadAsync(Party, active: true);
             foreach (bool mcp in new[] { false, true })
             foreach (bool command in new[] { false, true })
@@ -113,8 +116,16 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
             // Separate processes are required for truly concurrent CLI calls: Console capture is process-global.
             int beforeConcurrent = forwarder.Requests.Count;
             HeadResult[] concurrent = await Task.WhenAll(ConcurrentDeactivateAsync(), ConcurrentDeactivateAsync());
-            foreach (HeadResult result in concurrent) AssertAccepted(result, "parties.deactivate-party", "tenant-b", Party);
             forwarder.Requests.Count.ShouldBe(beforeConcurrent + 2);
+            foreach (var response in forwarder.Responses.Skip(beforeConcurrent))
+            {
+                response.Status.ShouldBe(202);
+                using JsonDocument request = JsonDocument.Parse(response.Request.Body);
+                string messageId = request.RootElement.GetProperty("messageId").GetString()!;
+                HeadResult result = concurrent.Single(candidate => JsonDocument.Parse(candidate.Document).RootElement
+                    .GetProperty("messageId").GetString() == messageId);
+                BoundaryHeads.AssertCommandAccepted(result, "parties.deactivate-party", "tenant-b", Party, response.Request, response.Body);
+            }
             string[] messageIds = forwarder.Requests.Skip(beforeConcurrent).Select(request =>
                 JsonDocument.Parse(request.Body).RootElement.GetProperty("messageId").GetString()!).ToArray();
             messageIds.Distinct(StringComparer.Ordinal).Count().ShouldBe(2);
@@ -215,12 +226,6 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
     private static string Payload(string id) => JsonSerializer.Serialize(new { PartyId = id });
     private static string Hash(JsonElement value) => Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(value.GetRawText())));
     private static string Channels(HeadResult result) => result.Output + result.Error + result.Tool?.StructuredContent + JsonSerializer.Serialize(result.Tool?.Content);
-    private static void AssertAccepted(HeadResult result, string operation, string tenant, string party)
-    {
-        string expected = JsonSerializer.Serialize(new { operation, messageId = "generated", correlationId = "generated", tenant,
-            aggregateId = party, status = "accepted" });
-        BoundaryHeads.AssertDocument(result, expected, isError: false, "messageId", "correlationId");
-    }
     private static void AssertLocal(HeadResult result, string operation, string message)
     {
         BoundaryHeads.AssertDocument(result, JsonSerializer.Serialize(new { error = new { code = "validation_failed", operation,
@@ -231,7 +236,7 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
         int status, string? reason, string operation)
     {
         forwarder.Requests.Count.ShouldBe(before + 1);
-        (int receivedStatus, string body) = forwarder.Responses[^1];
+        (_, int receivedStatus, string body) = forwarder.Responses[^1];
         receivedStatus.ShouldBe(status);
         var error = new Dictionary<string, object?> { ["code"] = "gateway_error", ["status"] = status };
         if (status == 401) error["detail"] = "Unauthorized";
