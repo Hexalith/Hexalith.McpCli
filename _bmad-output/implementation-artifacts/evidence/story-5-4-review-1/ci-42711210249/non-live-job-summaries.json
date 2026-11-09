@@ -1,0 +1,46 @@
+{
+  "result": "passed",
+  "retention": "Selected exact lines from completed hosted job logs; original log hashes retained.",
+  "summaries": [
+    {
+      "focusedRegressionLines": [
+        "2026-11-09T22:27:53.3279304Z test_execution_refuses_missing_changed_or_inconsistent_head_catalog_capture (test_ci.CiHooksTests.test_execution_refuses_missing_changed_or_inconsistent_head_catalog_capture) ... ok",
+        "2026-11-09T22:33:58.3016687Z test_late_valid_cli_or_mcp_observation_cannot_pass_or_commit_captures (test_live_runner.RunnerTests.test_late_valid_cli_or_mcp_observation_cannot_pass_or_commit_captures) ... ok"
+      ],
+      "job": "topology",
+      "jobId": 129480910846,
+      "originalBytes": 80077,
+      "originalLogSha256": "19f5985e51c2c39f3b0a7e205ecdb1b9b885dae0509adcebd4b0dd56fd155ccd",
+      "summaryLines": [
+        "2026-11-09T22:34:03.3697408Z Ran 218 tests in 633.473s",
+        "2026-11-09T22:34:03.3697652Z OK",
+        "2026-11-09T22:34:03.5940991Z Discovered 21 live vectors and the independent Gateway smoke and shared-head boundary."
+      ],
+      "testCount": 218
+    },
+    {
+      "focusedRegressionLines": [],
+      "job": "release",
+      "jobId": 129480911365,
+      "originalBytes": 19141,
+      "originalLogSha256": "c250a74fb302f0a216b1e19c3e3006e8183ebb5ccf829f3a5eabacc1a4dd1c6b",
+      "summaryLines": [
+        "2026-11-09T22:24:27.2909058Z Ran 194 tests in 133.243s",
+        "2026-11-09T22:24:27.3186384Z OK"
+      ],
+      "testCount": 194
+    },
+    {
+      "focusedRegressionLines": [],
+      "job": "loopback",
+      "jobId": 129480911231,
+      "originalBytes": 27849,
+      "originalLogSha256": "6a06338db71ea88931d7f0fc338c82658e3759cac5a3c0dff7691cda1f5410c0",
+      "summaryLines": [
+        "2026-11-09T22:23:16.4863785Z Ran 164 tests in 33.677s",
+        "2026-11-09T22:23:16.4864041Z OK"
+      ],
+      "testCount": 164
+    }
+  ]
+}

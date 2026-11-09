@@ -2,8 +2,8 @@
 title: '5.4 Prove shared-head parity and safety'
 type: 'feature'
 created: '2026-11-09'
-updated: '2026-11-09T22:33:10+01:00'
-status: 'in-review'
+updated: '2026-11-10T00:25:01+01:00'
+status: 'done'
 baseline_commit: 'f6c8e0e3a2105f555e6eec3c667b088085c47fc4'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -177,7 +177,7 @@ Each row preserves the individual reviewer claim before grouping. B = blind hunt
 | V01 | medium | patch | Pre-verified regression gap: PersistedPartyEventsTests exercises only valid streams, while Single/DoesNotContain assertions are the claimed safety oracles. Add zero/duplicate deactivation and forbidden creation/deactivation cases; grouped with B11. |
 
 
-**Patch disposition:** B01, B07, B08, B09, B10, B11/V01 and E04 are fixed. The release validator now matches the workflow; all MCP stdout frames are retained; head-catalog bytes/hash/DLL inventory are rechecked; durable sequence equality supplements projection reads; a bounded forwarding barrier establishes the concurrent pair; unsafe event streams are rejected by explicit regressions; and MCP uses one invocation deadline with late-success refusal. All 45 focused C# cases and 28 focused Python cases pass; removing the barrier wait causes both barrier regressions to fail. Full post-review restore/Release build, Core (877), CLI (623), MCP (94), Manifest (362), 194 release-script tests, 164 conformance Python tests and 218 topology Python tests pass. Six expected OS skips remain. Fresh enrolled replay and a dedicated post-review live qualification are recorded separately when complete.
+**Patch disposition:** B01, B07, B08, B09, B10, B11/V01 and E04 are fixed. The release validator now matches the workflow; all MCP stdout frames are retained; head-catalog bytes/hash/DLL inventory are rechecked; durable sequence equality supplements projection reads; a bounded forwarding barrier establishes the concurrent pair; unsafe event streams are rejected by explicit regressions; and MCP uses one invocation deadline with late-success refusal. All 45 focused C# cases and 28 focused Python cases pass; removing the barrier wait causes both barrier regressions to fail. Full post-review restore/Release build, Core (877), CLI (623), MCP (94), Manifest (362), 194 release-script tests, 164 conformance Python tests and 218 topology Python tests pass. Six expected OS skips remain. Fresh enrolled replay reports `fullV1Accepted: true`. Dedicated post-review CI `42711210249` is fully green; independent receipt verification passed 21 vectors, 235 declared phases, 45 boundary rows, 44 durable-sequence comparisons and 23 fresh runtime cleanup receipts. Supplementary validation is retained separately from the exact-byte owner-approved snapshot.
 
 **Deferred groups:** R54-D1 = B02; R54-D2 = B03/E01; R54-D3 = B04; R54-D4 = B05/E03; R54-D5 = B06; R54-D6 = E02. These are six reproduced, pre-existing prerequisite root causes with their own ledger entries, not new owner waivers or changes to G01–G06. E05 is rejected on the frozen CLI-only concurrency decision. The approved original packet and its separate owner-approval receipt are unchanged.
 
@@ -352,3 +352,9 @@ The complete packet is `evidence/story-5-4/`: manifest, C01–C08/seven-variant 
 **The exact-byte owner checkpoint is complete.** The owner answered exactly `approve` to the request bound by scan-receipt SHA-256 `1edc78fd37ede85498e7d8a9a7b1ea3537175bb470259a729bf0a8a8aa1ac0c3`, approving the verdict `retirement-blocked` and retaining G01–G06 as blocking with their named ledger owners. `evidence/story-5-4-owner-approval/owner-approval.json` records the response, original commit and digest bindings, and each retained gap disposition. Every original `evidence/story-5-4/` byte and its scan remain unchanged; their pending-owner text is the historical pre-approval snapshot. No inventory 1.3.0 amendment, release, publication or retirement is approved.
 
 Implementation tasks are complete under the approved `retirement-blocked` verdict. The workflow status remains unchanged pending the normal review transition. The separate approval packet’s `verification.json`, `verification.md` and `secret-scan.json` record binding, snapshot-preservation and hygiene checks.
+
+### Build completion (2026-11-10)
+
+The owner’s verbatim `approve` response binds the original scanned snapshot and verdict `retirement-blocked`, keeping G01–G06 open. The separate owner receipt and its scan remain unchanged. Review pass 1 classified every finding individually, resolved seven patch groups, rejected the contradictory MCP-concurrent claim, and recorded six pre-existing redactor/scanner root causes for separate follow-up. No inventory amendment or release/retirement authorization was added.
+
+Post-review code commit `4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d` passed CI `42711210249`, including the strengthened live boundary. The current local restore/Release build, Core, CLI, MCP, Manifest, 194 release-script, 164 conformance and 218 topology Python tests, preflight and fresh enrolled replay all pass. The supplemental evidence documents the stricter guards without modifying or claiming additional owner approval for the original packet. The spec is done; sprint tracking is advanced to review per the Build workflow. Story 5.5 retirement remains blocked by the six retained gaps.
