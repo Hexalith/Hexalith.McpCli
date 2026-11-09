@@ -1,0 +1,2 @@
+From https://github.com/Hexalith/Hexalith.Parties
+ * branch            d4415715b2517927655c538e6d41e05d71d4207e -> FETCH_HEAD

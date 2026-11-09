@@ -1,0 +1,58 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.get-party/preflight/inputs/Hexalith.Parties.Contracts/get-party.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M70JAH36PN9CVAJPBCKJ4G89",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.get-party/preflight/inputs/Hexalith.Parties.Contracts/get-party.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "entityId": "party-story49",
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    }
+  ]
+}

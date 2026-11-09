@@ -1,0 +1,87 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.reactivate-party/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M70JESYCP2FD37XQ5VW7Z7SV",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.CreatePartyComposite",
+        "payload": {
+          "PartyId": "party-story49",
+          "Type": "Person",
+          "PersonDetails": {
+            "FirstName": "Ada",
+            "LastName": "Lovelace"
+          },
+          "ContactChannels": [
+            {
+              "PartyId": "party-story49",
+              "ContactChannelId": "email-story49",
+              "Type": "Email",
+              "Value": "ada@example.test",
+              "IsPreferred": true
+            }
+          ],
+          "Identifiers": [
+            {
+              "PartyId": "party-story49",
+              "IdentifierId": "external-story49",
+              "Type": "Other",
+              "Value": "customer-49"
+            }
+          ]
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.reactivate-party/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M70JESYQP7QRBB1H6J0P0BZX",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.DeactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.reactivate-party/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "messageId": "01M70JESYRGE2QBCZWZSQXBQ65",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.ReactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.reactivate-party/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "queryType": "PartyDetail",
+        "projectionType": "party-detail",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "projectionActorType": "PartyDetailProjectionQueryActor"
+      }
+    }
+  ]
+}

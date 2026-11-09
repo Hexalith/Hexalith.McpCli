@@ -1,0 +1,12 @@
+{
+  "command": [
+    "git",
+    "checkout",
+    "--no-recurse-submodules",
+    "--detach",
+    "d4415715b2517927655c538e6d41e05d71d4207e"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Parties",
+  "timeoutSeconds": 30,
+  "exitCode": 0
+}

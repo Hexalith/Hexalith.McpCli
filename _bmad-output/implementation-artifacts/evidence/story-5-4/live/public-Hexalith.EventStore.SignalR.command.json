@@ -1,0 +1,19 @@
+{
+  "command": [
+    "curl",
+    "--fail",
+    "--silent",
+    "--show-error",
+    "--location",
+    "--connect-timeout",
+    "15",
+    "--max-time",
+    "120",
+    "https://api.nuget.org/v3-flatcontainer/hexalith.eventstore.signalr/4.1.0/hexalith.eventstore.signalr.4.1.0.nupkg",
+    "-o",
+    "/home/runner/work/_temp/mcpcli-live-ci-4_6vrva6/public-archives/hexalith.eventstore.signalr.4.1.0.nupkg"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 130,
+  "exitCode": 0
+}

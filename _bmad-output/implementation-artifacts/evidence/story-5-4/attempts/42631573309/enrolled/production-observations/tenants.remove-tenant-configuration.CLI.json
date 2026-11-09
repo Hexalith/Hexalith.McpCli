@@ -1,0 +1,108 @@
+{
+  "source": "/home/runner/work/_temp/enrolled-evidence/Hexalith.Tenants.Contracts/inputs-lrw6www9/vectors/10/remove-tenant-configuration.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M70AMYPT2XG3NWT7DCMKSN18",
+      "correlationId": "01M70AMYPT2XG3NWT7DCMKSN18",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-config-removal",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "messageId": "01M70AMZ7341ADVMZ1D7ZZNCZ0",
+      "correlationId": "01M70AMZ7341ADVMZ1D7ZZNCZ0",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-config-removal",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.remove-tenant-configuration",
+      "messageId": "01M70AMZQFN0V0GZVHARS7VPAD",
+      "correlationId": "01M70AMZQFN0V0GZVHARS7VPAD",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-config-removal",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "tenant": "vector-config-removal",
+      "document": {
+        "tenantId": "vector-config-removal",
+        "name": "Vector Configuration Removal",
+        "description": null,
+        "status": "Active",
+        "members": [],
+        "configuration": {},
+        "createdAt": "2026-10-19T08:00:00+00:00"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70AMYPT2XG3NWT7DCMKSN18",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-config-removal",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Configuration Removal",
+          "TenantId": "vector-config-removal"
+        },
+        "correlationId": "01M70AMYPT2XG3NWT7DCMKSN18"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70AMZ7341ADVMZ1D7ZZNCZ0",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-config-removal",
+        "commandType": "set-tenant-configuration",
+        "payload": {
+          "Key": "billing.plan",
+          "TenantId": "vector-config-removal",
+          "Value": "enterprise"
+        },
+        "correlationId": "01M70AMZ7341ADVMZ1D7ZZNCZ0"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70AMZQFN0V0GZVHARS7VPAD",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-config-removal",
+        "commandType": "remove-tenant-configuration",
+        "payload": {
+          "Key": "billing.plan",
+          "TenantId": "vector-config-removal"
+        },
+        "correlationId": "01M70AMZQFN0V0GZVHARS7VPAD"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "vector-config-removal",
+        "domain": "tenants",
+        "aggregateId": "vector-config-removal",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "command": [
+    "git",
+    "rev-parse",
+    "d4415715b2517927655c538e6d41e05d71d4207e^{commit}"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Parties",
+  "timeoutSeconds": 10,
+  "exitCode": 0
+}

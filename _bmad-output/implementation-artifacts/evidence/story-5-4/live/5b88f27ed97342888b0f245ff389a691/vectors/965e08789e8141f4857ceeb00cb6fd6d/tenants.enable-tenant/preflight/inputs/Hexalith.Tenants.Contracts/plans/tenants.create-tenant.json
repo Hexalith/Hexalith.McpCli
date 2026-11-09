@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.create-tenant",
+  "vectorSha256": "32e75065acb3cb80435c7afb97878b9cea807e43f97efff19d090e199d3d60c0",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-create"
+        },
+        "envelope": {
+          "tenant": "vector-create"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-create"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Create Corporation"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": "Created by the McpCli v1 vector"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

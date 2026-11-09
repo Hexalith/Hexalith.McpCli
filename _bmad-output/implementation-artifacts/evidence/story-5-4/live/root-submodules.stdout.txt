@@ -1,0 +1,17 @@
+submodule.references/Hexalith.AI.Tools.path references/Hexalith.AI.Tools
+submodule.references/Hexalith.Commons.path references/Hexalith.Commons
+submodule.references/Hexalith.PolymorphicSerializations.path references/Hexalith.PolymorphicSerializations
+submodule.references/Hexalith.Conversations.path references/Hexalith.Conversations
+submodule.references/Hexalith.EventStore.path references/Hexalith.EventStore
+submodule.references/Hexalith.Memories.path references/Hexalith.Memories
+submodule.references/Hexalith.Tenants.path references/Hexalith.Tenants
+submodule.references/Hexalith.Builds.path references/Hexalith.Builds
+submodule.references/Hexalith.FrontComposer.path references/Hexalith.FrontComposer
+submodule.references/Hexalith.Parties.path references/Hexalith.Parties
+submodule.references/Hexalith.Agents.path references/Hexalith.Agents
+submodule.references/Hexalith.Projects.path references/Hexalith.Projects
+submodule.references/Hexalith.Folders.path references/Hexalith.Folders
+submodule.references/Hexalith.ChatBot.path references/Hexalith.ChatBot
+submodule.references/Hexalith.Works.path references/Hexalith.Works
+submodule.references/Hexalith.Timesheets.path references/Hexalith.Timesheets
+submodule.references/Hexalith.Platform.path references/Hexalith.Platform

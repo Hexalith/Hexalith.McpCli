@@ -1,0 +1,523 @@
+{
+  "result": "passed",
+  "identityAuthority": "Gateway checks exact signed tenant grants; administrator bootstrap independently reads persisted membership.",
+  "cases": [
+    {
+      "scenario": "missing-token",
+      "head": "cli",
+      "kind": "query",
+      "status": 401,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 401,
+          "detail": "Authentication is required to access this resource.",
+          "reason": "authentication_required"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "forged-token",
+      "head": "cli",
+      "kind": "query",
+      "status": 401,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 401,
+          "detail": "The provided authentication token is invalid.",
+          "reason": "authentication_required"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "tenant-a-grant",
+      "head": "cli",
+      "kind": "query",
+      "status": 403,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 403,
+          "detail": "Not authorized for tenant \u0027tenant-b\u0027.",
+          "reason": "tenant_mismatch",
+          "correlationId": "01M70J0Q2XHS7QCKYT4P8RYEF5"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "nonmember",
+      "head": "cli",
+      "kind": "query",
+      "status": 403,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 403,
+          "detail": "Not authorized for tenant \u0027tenant-b\u0027. No tenant authorization claims found. Access denied.",
+          "reason": "principal_not_member",
+          "correlationId": "01M70J0S8QP474W9FVM5Y9WSJV"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "platform:tenants",
+      "head": "cli",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "system",
+      "head": "cli",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "SYSTEM",
+      "head": "cli",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "tenant-\u0430",
+      "head": "cli",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "\u0130",
+      "head": "cli",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "\uFF54\uFF45\uFF4E\uFF41\uFF4E\uFF54",
+      "head": "cli",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "missing-token",
+      "head": "cli",
+      "kind": "command",
+      "status": 401,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 401,
+          "detail": "Authentication is required to access this resource.",
+          "reason": "authentication_required"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "forged-token",
+      "head": "cli",
+      "kind": "command",
+      "status": 401,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 401,
+          "detail": "The provided authentication token is invalid.",
+          "reason": "authentication_required"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "tenant-a-grant",
+      "head": "cli",
+      "kind": "command",
+      "status": 403,
+      "gatewayRequests": 1,
+      "responseFormat": "empty",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 403,
+          "detail": "Forbidden"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "nonmember",
+      "head": "cli",
+      "kind": "command",
+      "status": 403,
+      "gatewayRequests": 1,
+      "responseFormat": "empty",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 403,
+          "detail": "Forbidden"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "platform:tenants",
+      "head": "cli",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "system",
+      "head": "cli",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "SYSTEM",
+      "head": "cli",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "tenant-\u0430",
+      "head": "cli",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "\u0130",
+      "head": "cli",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "\uFF54\uFF45\uFF4E\uFF41\uFF4E\uFF54",
+      "head": "cli",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "missing-token",
+      "head": "mcp",
+      "kind": "query",
+      "status": 401,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 401,
+          "detail": "Authentication is required to access this resource.",
+          "reason": "authentication_required"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "forged-token",
+      "head": "mcp",
+      "kind": "query",
+      "status": 401,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 401,
+          "detail": "The provided authentication token is invalid.",
+          "reason": "authentication_required"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "tenant-a-grant",
+      "head": "mcp",
+      "kind": "query",
+      "status": 403,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 403,
+          "detail": "Not authorized for tenant \u0027tenant-b\u0027.",
+          "reason": "tenant_mismatch",
+          "correlationId": "01M70J1T6KW2HQ7PQ5EJRRVVBR"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "nonmember",
+      "head": "mcp",
+      "kind": "query",
+      "status": 403,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 403,
+          "detail": "Not authorized for tenant \u0027tenant-b\u0027. No tenant authorization claims found. Access denied.",
+          "reason": "principal_not_member",
+          "correlationId": "01M70J1WBSNK6YCH0TC18A0XFV"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "mcp-override-disabled-and-authorized-selection-denied",
+      "kind": "query",
+      "gatewayRequests": 1,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "platform:tenants",
+      "head": "mcp",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "system",
+      "head": "mcp",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "SYSTEM",
+      "head": "mcp",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "tenant-\u0430",
+      "head": "mcp",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "\u0130",
+      "head": "mcp",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "\uFF54\uFF45\uFF4E\uFF41\uFF4E\uFF54",
+      "head": "mcp",
+      "kind": "query",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "missing-token",
+      "head": "mcp",
+      "kind": "command",
+      "status": 401,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 401,
+          "detail": "Authentication is required to access this resource.",
+          "reason": "authentication_required"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "forged-token",
+      "head": "mcp",
+      "kind": "command",
+      "status": 401,
+      "gatewayRequests": 1,
+      "responseFormat": "problem\u002Bjson",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 401,
+          "detail": "The provided authentication token is invalid.",
+          "reason": "authentication_required"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "tenant-a-grant",
+      "head": "mcp",
+      "kind": "command",
+      "status": 403,
+      "gatewayRequests": 1,
+      "responseFormat": "empty",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 403,
+          "detail": "Forbidden"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "nonmember",
+      "head": "mcp",
+      "kind": "command",
+      "status": 403,
+      "gatewayRequests": 1,
+      "responseFormat": "empty",
+      "publicError": {
+        "error": {
+          "code": "gateway_error",
+          "status": 403,
+          "detail": "Forbidden"
+        }
+      },
+      "persistedBeforeSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738",
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "mcp-override-disabled-and-authorized-selection-denied",
+      "kind": "command",
+      "gatewayRequests": 1,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "platform:tenants",
+      "head": "mcp",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "system",
+      "head": "mcp",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "SYSTEM",
+      "head": "mcp",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "tenant-\u0430",
+      "head": "mcp",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "\u0130",
+      "head": "mcp",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "invalid-public-tenant",
+      "tenant": "\uFF54\uFF45\uFF4E\uFF41\uFF4E\uFF54",
+      "head": "mcp",
+      "kind": "command",
+      "gatewayRequests": 0,
+      "persistedAfterSha256": "6dbf216b1676e7ef0d5fe44287c2336b030042ce74385d9ffa9371a51b913738"
+    },
+    {
+      "scenario": "C05-missing",
+      "head": "cli",
+      "status": 404,
+      "reason": "party-not-found",
+      "persistedPartyAbsentBeforeAndAfter": true
+    },
+    {
+      "scenario": "C05-missing",
+      "head": "mcp",
+      "status": 404,
+      "reason": "party-not-found",
+      "persistedPartyAbsentBeforeAndAfter": true
+    },
+    {
+      "scenario": "C05-concurrent-repeat",
+      "accepted": 2,
+      "distinctMessageIds": [
+        "01M70J39HWJ5JYWBS8CDX5C636",
+        "01M70J39K9YACEVB1TRWYAG187"
+      ],
+      "persistedDeactivationEvents": 1,
+      "sequence": 3,
+      "persistedAfterSha256": "7ef9db680ea30a6d8006eecc6e4ec13d55ddfb0787684fa8a61db3fc909af473"
+    }
+  ]
+}

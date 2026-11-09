@@ -1,0 +1,85 @@
+{
+  "githubRunId": 42652261452,
+  "htmlUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452",
+  "event": "pull_request",
+  "headSha": "3e8f6a4e681018c7ca8356997d4fd28378217d37",
+  "status": "completed",
+  "conclusion": "success",
+  "runAttempt": 1,
+  "createdAt": "2026-11-09T16:11:42Z",
+  "updatedAt": "2026-11-09T17:01:10Z",
+  "jobs": [
+    {
+      "id": 129281437992,
+      "name": "conformance-vector-loopback",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-09T16:11:45Z",
+      "completedAt": "2026-11-09T16:26:30Z",
+      "htmlUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452/job/129281437992"
+    },
+    {
+      "id": 129281438370,
+      "name": "release-automation",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-09T16:11:46Z",
+      "completedAt": "2026-11-09T16:14:53Z",
+      "htmlUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452/job/129281438370"
+    },
+    {
+      "id": 129281438418,
+      "name": "enrolled-module-conformance",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-09T16:11:45Z",
+      "completedAt": "2026-11-09T16:19:11Z",
+      "htmlUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452/job/129281438418"
+    },
+    {
+      "id": 129281438429,
+      "name": "conformance-vector-contract",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-09T16:11:46Z",
+      "completedAt": "2026-11-09T16:13:05Z",
+      "htmlUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452/job/129281438429"
+    },
+    {
+      "id": 129281438443,
+      "name": "ci / build-and-test",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-09T16:11:45Z",
+      "completedAt": "2026-11-09T16:18:49Z",
+      "htmlUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452/job/129281438443"
+    },
+    {
+      "id": 129281438461,
+      "name": "topology-vector-discovery",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-09T16:11:45Z",
+      "completedAt": "2026-11-09T16:23:38Z",
+      "htmlUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452/job/129281438461"
+    },
+    {
+      "id": 129285697315,
+      "name": "ci / aspire-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-09T16:18:53Z",
+      "completedAt": "2026-11-09T17:01:10Z",
+      "htmlUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452/job/129285697315"
+    },
+    {
+      "id": 129285701124,
+      "name": "ci / performance-tests",
+      "status": "completed",
+      "conclusion": "skipped",
+      "startedAt": "2026-11-09T16:18:49Z",
+      "completedAt": "2026-11-09T16:18:49Z",
+      "htmlUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452/job/129285701124"
+    }
+  ]
+}

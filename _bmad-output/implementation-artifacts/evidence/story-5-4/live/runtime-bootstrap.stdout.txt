@@ -1,0 +1,39 @@
+docker.io/daprio/dapr@sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc: Pulling from daprio/dapr
+Digest: sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc
+Status: Downloaded newer image for daprio/dapr@sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc
+docker.io/daprio/dapr@sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc
+docker.io/library/redis@sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf: Pulling from library/redis
+5d5d22859aa5: Pulling fs layer
+7c97629f31c9: Pulling fs layer
+c8d70ddedb79: Pulling fs layer
+d716dc14921c: Pulling fs layer
+5a8a1ddac675: Pulling fs layer
+4f4fb700ef54: Pulling fs layer
+c02d17997ce3: Pulling fs layer
+413f71042199: Pulling fs layer
+4f4fb700ef54: Already exists
+7c97629f31c9: Download complete
+5a8a1ddac675: Download complete
+c8d70ddedb79: Download complete
+5d5d22859aa5: Download complete
+413f71042199: Download complete
+d716dc14921c: Download complete
+c02d17997ce3: Download complete
+0e6e493a8909: Download complete
+90434470027f: Download complete
+5a8a1ddac675: Pull complete
+c8d70ddedb79: Pull complete
+413f71042199: Pull complete
+c02d17997ce3: Pull complete
+4f4fb700ef54: Pull complete
+7c97629f31c9: Pull complete
+5d5d22859aa5: Pull complete
+d716dc14921c: Pull complete
+Digest: sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf
+Status: Downloaded newer image for redis@sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf
+docker.io/library/redis@sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf
+aac8374cbc499544d37aca92cf1e501c71a2b2a631cbedf4eac79411d0650890
+2dad82f20921ad7103d5e4ecbf6267cb44c91f53170fc0a5bdffd2fc4914bc34
+c8810392ee0767dbb853e1c976a94f5f4b5eeb6415ed598e01ebd7daee1c3fd9
+5756e484accecfe6ec4ce1dada6fa46c52157ebe9d080718968981ea9226bbfe
+Verified four private runtime binaries in /home/runner/work/_temp/mcpcli-live-ci-4_6vrva6/runtime

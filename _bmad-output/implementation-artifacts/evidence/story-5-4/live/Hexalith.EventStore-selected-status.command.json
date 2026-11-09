@@ -1,0 +1,12 @@
+{
+  "command": [
+    "git",
+    "status",
+    "--porcelain",
+    "--untracked-files=normal",
+    "--ignore-submodules=all"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.EventStore",
+  "timeoutSeconds": 10,
+  "exitCode": 0
+}

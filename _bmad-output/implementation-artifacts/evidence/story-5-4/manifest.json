@@ -1,0 +1,972 @@
+{
+  "schema": "mcpcli-story-5-4-evidence/v1",
+  "state": "frozen-pending-exact-byte-owner-verdict",
+  "candidate": {
+    "headCommit": "3e8f6a4e681018c7ca8356997d4fd28378217d37",
+    "checkoutCommit": "7ae71f03d98f1280060fe197f320dcb055e1d7f1",
+    "headTreeSha1": "b24ed6004ce0824252bc3504a2d2a5923db3f2fe",
+    "checkoutTreeSha1": "b24ed6004ce0824252bc3504a2d2a5923db3f2fe",
+    "equalTrees": true,
+    "pullRequest": "https://github.com/Hexalith/Hexalith.McpCli/pull/5",
+    "pullRequestNumber": 5,
+    "baselineCommit": "f6c8e0e3a2105f555e6eec3c667b088085c47fc4"
+  },
+  "heads": {
+    "host": "Hexalith.McpCli.ConformanceHost.dll",
+    "binariesSha256": {
+      "ByteAether.Ulid.dll": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590",
+      "Dapr.Client.dll": "701c6ec09bd7fa54690b1aca6bfbe3b5ece2c8376699145a1fb0e7be610ea981",
+      "Dapr.Common.dll": "a17129663d6fa08f2d8117343fc6a859a86fc3c60743215633813ebdb0d2bf6f",
+      "Dapr.Protos.dll": "bf96cf02107221910bb6760b29fdcc9131604a260cb79b7c1487240367dba0a0",
+      "Google.Api.CommonProtos.dll": "329cf0f2b66c5cbf675321f0d6b33c17d1092e5761f32d3d2c1307a110c0dbbd",
+      "Google.Protobuf.dll": "e9b892ac667931162ffefa411ef8dc3eae777d634d8bfe8beddc28b1de95a612",
+      "Grpc.Core.Api.dll": "5674c1203706b5a261e8bbd3499147d94fc80b5f077bf45f9934ca28a9c8574b",
+      "Grpc.Net.Client.dll": "f884d8444feb888656cbb7de87ee8f53a50811329bb32c6e7a7a81cb1de008ef",
+      "Grpc.Net.Common.dll": "fdff383bbd8e5015f3c4aaaa7508b769228f33c92ba14fec4e59d35c5d78e6ae",
+      "Grpc.Reflection.dll": "87795d17c1385e7c05469c447ad8eecc883c3c71b4804319c5918a5a490c8d57",
+      "Hexalith.Commons.UniqueIds.dll": "06f7eea141c9399cd410d05d2d2897de6c612691644ddffab1147c3abfea3de9",
+      "Hexalith.EventStore.Client.dll": "702dfb7537e990a2065fe37c0b06301cdb70c26907af42faa6acdae331a7bce6",
+      "Hexalith.EventStore.Contracts.dll": "f3f2d7f6e7edf54e187af15edec8b4f13bf7e255b186b999efa0836a0c86a739",
+      "Hexalith.McpCli.Abstractions.dll": "54efaf3d07bfe25728d0ff7c006012ec2ff99383ecb95b17679f671d1feee628",
+      "Hexalith.McpCli.ConformanceHost.dll": "4feac6bc762e12f50ba17a081277adb70f73a5914356e3773bf01c2cacf4ff39",
+      "Hexalith.McpCli.Core.dll": "de4a2bedca9a917952316e919c9d5e62d605bf3e49c8243c9bd9c63fa1edf8cf",
+      "Hexalith.McpCli.Mcp.dll": "732d1c3309592d2971da9dcdd7b5a7b8d34aacca4c2a2d3afdb711132b4d3a97",
+      "Hexalith.McpCli.dll": "94e49cd94dd04af006a323980bf8f950c34fda56d9b322b05a79ff9b17634682",
+      "Hexalith.Parties.Contracts.dll": "d443e1a66c19ee4cdddf896c1b5b2e490426274a925d64f8e1672a34253c375e",
+      "Hexalith.Tenants.Contracts.dll": "adedcc49d81f2ceb6855f365dddb05e8f1f550e303c5f0e92c4d3153ff672d45",
+      "Humanizer.dll": "2769ed8265b691a5482c72506ed274dc52446fa1641997a8c12c66f5b9263d39",
+      "Json.More.dll": "80b6cd50331fa2ded4fbacdbf80dcedd2b142dee679df227c30299d2a3c3840f",
+      "JsonPointer.Net.dll": "e5b129abd47347643a903c37faa2e4aff919f7d31bd56ad5c20d1b90451be796",
+      "JsonSchema.Net.dll": "9aad41d8d1bb4df0f97d9870f37856afe22d5e884f86453ab3995f00893dd1b7",
+      "Microsoft.AspNetCore.DataProtection.Abstractions.dll": "539c51c603ade45c7bcb807777f8aadfaba6a1b6e211dde9fbb452a5b4649ca0",
+      "Microsoft.Extensions.AI.Abstractions.dll": "a3216886dec2b2528b2d7212c438d21c3d6de2061b500bd2ea505a41f896f8d3",
+      "Microsoft.Extensions.Caching.Abstractions.dll": "db8df1f8f824028eba680511df8e3724a104df9955b515f322fd60bb372b2bf2",
+      "Microsoft.Extensions.Configuration.Abstractions.dll": "7f6c40319b264b18060c1216fa02e3665ac486810a3c8d3133a23c9164cd7544",
+      "Microsoft.Extensions.Configuration.Binder.dll": "af2c49e574eda5ac57f822691115be6efc3e41ac138938d7d192a24f72a84b5d",
+      "Microsoft.Extensions.Configuration.CommandLine.dll": "e872ff645f0804c8a162c42e03fea23388a89cea6684138f050cc7a62a4f2cb9",
+      "Microsoft.Extensions.Configuration.EnvironmentVariables.dll": "7a0b77736d19a2e5398e951c2222b6028c5ff50376832608bf8f0a66f6dd96a7",
+      "Microsoft.Extensions.Configuration.FileExtensions.dll": "011b49bb5892810df1fde3ff227cea45df8c9abe7443c433afd0b30ddb901f3f",
+      "Microsoft.Extensions.Configuration.Json.dll": "d642f189228b56d45a01808c061d42ce66ee03b12aa60115188d277cef5f2cc0",
+      "Microsoft.Extensions.Configuration.UserSecrets.dll": "77151f4dbeaf50efe3613e51dacb939aa9fac549556705acc2a64018d26b7997",
+      "Microsoft.Extensions.Configuration.dll": "a725409e8645836161661dc584ba2e825f38f8c0fced35b0a8cb2f362050cb3b",
+      "Microsoft.Extensions.DependencyInjection.Abstractions.dll": "6674a200ae49ee36af214cfaef4a511674d0a17828482e0f3eb5f1c21c241c75",
+      "Microsoft.Extensions.DependencyInjection.dll": "913f764318b64e6167e2be5554496db490adf0d0e2d0bcab7e8bf69bfa8562c6",
+      "Microsoft.Extensions.Diagnostics.Abstractions.dll": "13c0468501ca0efdb2ade8685fe4e77379faebd6778d82f6fb761b4b84052eeb",
+      "Microsoft.Extensions.Diagnostics.dll": "518ae085cbf9ed498a83e942ef859fa05e2121222761fe4c422f612c7ca24fac",
+      "Microsoft.Extensions.FileProviders.Abstractions.dll": "817d6c1513ec67f84980aa4fa520830e1b088906fc904e1d1b5d18e8b809ee63",
+      "Microsoft.Extensions.FileProviders.Physical.dll": "29f95ef485b1c54613300821ea6ac2ace033795ba7f48a0f22905c56b1117714",
+      "Microsoft.Extensions.FileSystemGlobbing.dll": "fbaeef3e8988c18bed5fee14179fa983233f8504f73e27156be4ea7146b96a75",
+      "Microsoft.Extensions.Hosting.Abstractions.dll": "8808515cfd675a49d1ed1fc29c00cdb935445bb973a5f9f5dcbb2c29797099e6",
+      "Microsoft.Extensions.Hosting.dll": "823c35d93b69dd36caa58f6a1b295bdcd5c940c7b5c6ca56566dc2033b3e51f0",
+      "Microsoft.Extensions.Http.dll": "4b6a81424d994bbbf70a2b24feaf7e1977f716081fa374fb872311f2e65401b9",
+      "Microsoft.Extensions.Logging.Abstractions.dll": "1e28c2090e866ef94bf05c57a7ec934604ab1b69dc080e9af52d18284d6368ed",
+      "Microsoft.Extensions.Logging.Configuration.dll": "a9c88a84d0d988d1a07a2f9fb121d4dae23074dbda0c35de662b9d9905e56d9d",
+      "Microsoft.Extensions.Logging.Console.dll": "87cfb75e9d0561980043e29cd3400336f73eda4806244f0a8fa74d6a8118f474",
+      "Microsoft.Extensions.Logging.Debug.dll": "b2f95d2f0414e467b353d0e0aebd43763b88564fdded74ea84328ffa20e0fa20",
+      "Microsoft.Extensions.Logging.EventLog.dll": "613d2b02feac51fb45d877cd925448194c04c646dc290c5c6f7af929a81d89ee",
+      "Microsoft.Extensions.Logging.EventSource.dll": "2b971ee034a405af2da115ab5c1e5d4395c2c91bdd49dc88c8d28c1523a3ae0a",
+      "Microsoft.Extensions.Logging.dll": "845b9b3d9162628a3c9c6e3a62797ad6bc44d015e1482a614662a89e2b15236d",
+      "Microsoft.Extensions.Options.ConfigurationExtensions.dll": "ec9ddfaa5e87b05f938f09b27a9a93a70a0bfcf0053a68300c526a7950fd8f97",
+      "Microsoft.Extensions.Options.dll": "24c2020f9a864e8fbac14ca31c7728a5a04602fa68f9c96b8846f54a767c6d04",
+      "Microsoft.Extensions.Primitives.dll": "24e9693a50422334e826e9e0b2a693ed6006e3d63de5b3a9b60dae753130e105",
+      "ModelContextProtocol.Core.dll": "0b22f1331cf8bfb0b4de2a34f283ca015648f431e719cffb6a2c230e40cbcc91",
+      "ModelContextProtocol.dll": "b35f769741350446c1dbb70264af903ae628e8cb9cb1359475abecca29fdc782",
+      "System.CommandLine.dll": "313d3376dca9c0e5eaf6f78118b765f1f877ae280056ecf56131bb19cfca8a90",
+      "System.Diagnostics.EventLog.dll": "e6cce0a9cbc22d6fd6d91eb67b4247cab1d29353db8d84fed51fdde4e964ed07"
+    },
+    "catalogAlgorithm": "SHA-256(sorted-key compact UTF-8 JSON; ensure_ascii=false)",
+    "catalogSha256": "15f8d0a93989eeede7bcd26911318f9cfb1cff8b93612e09c6df4fc2f0912612",
+    "listOperationsSha256": {
+      "parties": "eb35ff14bbd00321f5ea0413603a3380159b8e272552190682445d393864839b",
+      "tenants": "aa162b254eaf25b1bd7b97cc07e21b101da6107daf0027c0c8edcb7437446cb5"
+    },
+    "receipt": "live/head-catalog.json"
+  },
+  "partiesContracts": {
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+    "archiveSha256": "2b521a3bb58a1904a662bc47bc850ba28737f13a753021c0366a79a4956b3a0c",
+    "repositoryCommitFromNuspec": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+    "binaryArchiveRetention": "Not embedded in this text packet; exact bytes bound by verified GitHub ZIP and per-file hashes in ci/artifacts.json."
+  },
+  "environment": {
+    "name": "CI disposable isolated Aspire topology",
+    "preparationRunId": "80b212999e8a442ab0544cb12a10810e",
+    "liveRunId": "5b88f27ed97342888b0f245ff389a691",
+    "sources": [
+      {
+        "module": "Hexalith.EventStore",
+        "path": "references/Hexalith.EventStore",
+        "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+        "status": "",
+        "repository": "https://github.com/Hexalith/Hexalith.EventStore.git",
+        "selectedCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+        "HexalithEventStoreVersion": "4.1.0"
+      },
+      {
+        "module": "Hexalith.Tenants",
+        "path": "references/Hexalith.Tenants",
+        "commit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35",
+        "status": "",
+        "repository": "https://github.com/Hexalith/Hexalith.Tenants.git",
+        "selectedCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35",
+        "HexalithEventStoreVersion": "4.1.0"
+      },
+      {
+        "module": "Hexalith.Parties",
+        "path": "references/Hexalith.Parties",
+        "commit": "d4415715b2517927655c538e6d41e05d71d4207e",
+        "status": "",
+        "repository": "https://github.com/Hexalith/Hexalith.Parties.git",
+        "selectedCommit": "d4415715b2517927655c538e6d41e05d71d4207e",
+        "HexalithEventStoreVersion": "4.1.0"
+      },
+      {
+        "module": "Hexalith.Platform",
+        "path": "references/Hexalith.Platform",
+        "commit": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+        "status": "",
+        "repository": "https://github.com/Hexalith/Hexalith.Platform.git",
+        "selectedCommit": "01e5b6530af96ad6eaa69cc1867d43def56c43ca"
+      }
+    ],
+    "tools": {
+      "sdkPolicy": {
+        "version": "10.0.403",
+        "rollForward": "latestPatch"
+      },
+      "dotnet": "10.0.403",
+      "dapr": "CLI version: 1.18.2 \nRuntime version: 1.18.7",
+      "aspireArchive": {
+        "url": "https://github.com/microsoft/aspire/releases/download/v13.6.1/aspire-cli-linux-x64-13.6.1.tar.gz",
+        "sha256": "f5498a1b30f894186a805c08798d9ca4f112dfc3b5f24ab0acef3f8aa5d009b8"
+      },
+      "aspire": "13.6.1+3751e615ad660621f2a7aa4c390ef48e08a0eed8",
+      "hostPython": "3.14.4 (main, Aug 20 2026, 10:41:58) [GCC 15.2.0]",
+      "executables": {
+        "aspire": {
+          "path": "/home/runner/work/_temp/mcpcli-live-ci-4_6vrva6/aspire-cli/aspire",
+          "sha256": "82d2aacd2432040cb3f9391e39e3ea7ed3d6e6c0143c4e0dfe38cfbb04b02bc0"
+        },
+        "dapr": {
+          "path": "/opt/hostedtoolcache/dapr/1.18.2/x64/dapr",
+          "sha256": "43429557ff18a7230737b945699417ec391ad41bd431244c175b79ab3c904ce5"
+        },
+        "dotnet": {
+          "path": "/usr/share/dotnet/dotnet",
+          "sha256": "db40da462b13ec4c07df7a75c4b0395223d360b8dc9a477d9e31fb71759b05f4"
+        }
+      },
+      "daprdSha256": "e988a6f53abec017fc9ebcb4f89de9bed11bce005eb49bd8e85e8d3d6adbf488",
+      "dcp/dcp": {
+        "path": "/home/runner/.aspire/bundle/dcp/dcp",
+        "sha256": "3a64784ef47718959f8410a164b9e3a981ea6617b2af5dd0f11398a7a11e47f5"
+      },
+      "dashboard/Aspire.Dashboard": {
+        "path": "/home/runner/.aspire/bundle/dashboard/Aspire.Dashboard",
+        "sha256": "72e006b4f19c87c369315a908797926b4f633107d585aec4a5878ed0acd1201d"
+      },
+      "python": "Python 3.14.4",
+      "jsonschema": "4.26.0"
+    },
+    "qualifiedSelection": {
+      "eventStoreVersion": "4.1.0",
+      "sources": {
+        "Hexalith.EventStore": {
+          "repository": "https://github.com/Hexalith/Hexalith.EventStore.git",
+          "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        "Hexalith.Tenants": {
+          "repository": "https://github.com/Hexalith/Hexalith.Tenants.git",
+          "commit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
+        },
+        "Hexalith.Parties": {
+          "repository": "https://github.com/Hexalith/Hexalith.Parties.git",
+          "commit": "d4415715b2517927655c538e6d41e05d71d4207e"
+        },
+        "Hexalith.Platform": {
+          "repository": "https://github.com/Hexalith/Hexalith.Platform.git",
+          "commit": "01e5b6530af96ad6eaa69cc1867d43def56c43ca"
+        }
+      },
+      "packages": [
+        {
+          "id": "Hexalith.EventStore.Admin.Abstractions",
+          "version": "4.1.0",
+          "sha256": "fbad15a2a09282b438d7c8594a2c0206e85eb7691bc91053f57da5e91f0fb928",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.Admin.Cli",
+          "version": "4.1.0",
+          "sha256": "4623f699c38ff5ce725b9ab42216932c9ee4b1ace86bf78601c68be43e27e40a",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.Admin.Server",
+          "version": "4.1.0",
+          "sha256": "910b31d7014c3e11789ae3672b8fde353af5fe8653ec76a71e589f054f5e3d3e",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.Aspire",
+          "version": "4.1.0",
+          "sha256": "c498671d461b0342d76be0b02bd76c4ad0cf8fd1ba7017ec3b6bdc67bb0746b1",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.Client",
+          "version": "4.1.0",
+          "sha256": "efab5fd7b4e7d5bbafc2a09adc92e98b985ca750ee888323585892c33cab50cc",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.Contracts",
+          "version": "4.1.0",
+          "sha256": "e2c09e4f00340f26dd3c1509167c83f41ca757f2442f6624bc58edace1fe9a70",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.DomainService",
+          "version": "4.1.0",
+          "sha256": "da40e1e05461bac67bbbf9f3a839085e0f8c65e726168b33f2dc955e0c2d1fb0",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.Gateway",
+          "version": "4.1.0",
+          "sha256": "ba571748d713eeab11bdaa310385ac20602566a2538fd364befb2ff1ea5c2d81",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.RestApi.Generators",
+          "version": "4.1.0",
+          "sha256": "c15f859665aebfd18844f7fd9eee4bd38f07cea61aad3310371b391a1b093467",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.Server",
+          "version": "4.1.0",
+          "sha256": "fce322ee16345aa1c150375065bc2665c34f38d1bab6086d1144dd275dc25da4",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.ServiceDefaults",
+          "version": "4.1.0",
+          "sha256": "bdd2fd1e6eb19e45f488da2654673acc662a4d3c8e4b5e8465e90aac3ce901d5",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.SignalR",
+          "version": "4.1.0",
+          "sha256": "ae1a8be64e86e6fd9bac9e6d8e08271971756f6edf376ff055677101a3360246",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.Testing",
+          "version": "4.1.0",
+          "sha256": "7b8346041a1e36b41186b3dc239a72e8976c56b2971b8adc6ad54d8e77c29b3f",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.EventStore.Testing.Integration",
+          "version": "4.1.0",
+          "sha256": "4f799b95b5272415e679c7b368fa078348ec3f83b8bf6befddfc4caf0eed96fe",
+          "sourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a"
+        },
+        {
+          "id": "Hexalith.Tenants.Aspire",
+          "version": "7.0.5",
+          "sha256": "8fe8966d472ea0451dec6ca9c3674d67440fa5f1fb908c1db779f651eed1d3d9",
+          "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
+        },
+        {
+          "id": "Hexalith.Tenants.Client",
+          "version": "7.0.5",
+          "sha256": "9ff8434395afb9aa3a68cb8dcb84820ebd141f56bd4475898cd07758299234d3",
+          "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
+        },
+        {
+          "id": "Hexalith.Tenants.Contracts",
+          "version": "7.0.5",
+          "sha256": "4694e203a54afe8a80c160d92fcf0156da78228a00c67218e3dd88c420fa1c07",
+          "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
+        },
+        {
+          "id": "Hexalith.Tenants.Server",
+          "version": "7.0.5",
+          "sha256": "c054e8a2adce736fc583b650b0765385fcb548831089429902c2813f129e90a3",
+          "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
+        },
+        {
+          "id": "Hexalith.Tenants.Testing",
+          "version": "7.0.5",
+          "sha256": "90b7907e03caad49e8c30f95a8a21e03dab797fbf0e6f07ede95aa718d013693",
+          "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35"
+        }
+      ]
+    },
+    "sourcePackageCatalog": {
+      "buildsCommit": "567604b616613ba429be0609636d805db776a709",
+      "catalogSha256": "e06410af1a663a2d7bf03381aafa207d89326447a9ea18bfaa7dd4fa76771e3c",
+      "overlaySha256": "fc7a9ffe77c94774ebc7eb31ff04fdce12e533826220e129c5a8265c2a787a6f",
+      "overridesSha256": "fe5fdcb860b6df16c66ebfe48610c62f08688b7fc06f5796316c2ed1b0cbb5cc"
+    },
+    "gatewayProfile": "published",
+    "privateRuntimeBinaries": [
+      {
+        "image": "daprio/dapr:1.18.7",
+        "imageId": "sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc",
+        "source": "/placement",
+        "sha256": "323907a7321bdce7f87652c7665708a7e897a5bcc87c050fbf29e693f4e834b5"
+      },
+      {
+        "image": "daprio/dapr:1.18.7",
+        "imageId": "sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc",
+        "source": "/scheduler",
+        "sha256": "7ef9285180a3073e70f711ff030fb0b56f04df18a830aa61aadedbdec2c9ade5"
+      },
+      {
+        "image": "redis:6",
+        "imageId": "sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf",
+        "source": "/usr/local/bin/redis-server",
+        "sha256": "0211f2f28f138d2d4253b7c2eaadb57e7371c047f4bc6e0a8a78d2221506befd"
+      },
+      {
+        "image": "daprio/dapr:1.18.7",
+        "imageId": "sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc",
+        "source": "/sentry",
+        "sha256": "6f9a569c5e476bbe25f661cc13ab6df6e0cd38a87c3928fd8792726b6a78a703"
+      }
+    ],
+    "preparationReceipt": "live/preparation.json",
+    "isolatedOwnedRuntimeCount": 23,
+    "allRuntimeCleanupPassed": true
+  },
+  "ci": {
+    "runId": 42652261452,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42652261452",
+    "conclusion": "success",
+    "summary": "ci/github-run.json",
+    "artifacts": [
+      {
+        "name": "enrolled-module-evidence",
+        "id": 13691685497,
+        "sha256": "0b5b00028e8b40279b02b14d8aaf9b243bd5e58c85425b1227cebc004cc21c36",
+        "advertisedDigestVerified": true
+      },
+      {
+        "name": "blocking-test-results",
+        "id": 13691606337,
+        "sha256": "abd098b25b9feda735a4a3d7493e3aacaf8ef44bb1057bd5c21515ba65d4b467",
+        "advertisedDigestVerified": true
+      },
+      {
+        "name": "live-preflight-evidence",
+        "id": 13689499814,
+        "sha256": "d944bd0d6ab30067f24d7744d6cd445e318f8d660617d77a0fa7c2355b18b327",
+        "advertisedDigestVerified": true
+      },
+      {
+        "name": "aspire-hook-evidence",
+        "id": 13693877612,
+        "sha256": "635e60353a4d78a7c74398d52cbe2275e315361f1b22139ee30eda4aed34cb70",
+        "advertisedDigestVerified": true
+      }
+    ],
+    "fileHashIndex": "ci/artifacts.json"
+  },
+  "acceptanceEvidence": {
+    "fullLiveAccepted": true,
+    "fullV1Accepted": true,
+    "approvedVectorCount": 21,
+    "independentCaseCount": 2,
+    "liveVerifier": "live-verification.json",
+    "ordinaryTests": [
+      {
+        "project": "Hexalith.McpCli.Abstractions.Tests",
+        "passed": 20,
+        "skipped": 0,
+        "total": 20,
+        "receipt": "ci/ordinary-tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx.xml"
+      },
+      {
+        "project": "Hexalith.McpCli.Analyzers.Tests",
+        "passed": 19,
+        "skipped": 0,
+        "total": 19,
+        "receipt": "ci/ordinary-tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx.xml"
+      },
+      {
+        "project": "Hexalith.McpCli.Cli.Tests",
+        "passed": 613,
+        "skipped": 2,
+        "total": 615,
+        "receipt": "ci/ordinary-tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx.xml"
+      },
+      {
+        "project": "Hexalith.McpCli.Core.Tests",
+        "passed": 877,
+        "skipped": 4,
+        "total": 881,
+        "receipt": "ci/ordinary-tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx.xml"
+      },
+      {
+        "project": "Hexalith.McpCli.Manifest.Tests",
+        "passed": 362,
+        "skipped": 0,
+        "total": 362,
+        "receipt": "ci/ordinary-tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx.xml"
+      },
+      {
+        "project": "Hexalith.McpCli.Mcp.Tests",
+        "passed": 94,
+        "skipped": 0,
+        "total": 94,
+        "receipt": "ci/ordinary-tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx.xml"
+      }
+    ],
+    "localVerification": "local-verification.json",
+    "upstreamTests": "Source evidence only; not executed in this task."
+  },
+  "vectors": [
+    {
+      "operation": "parties.create-party",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.create-party/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Parties.Contracts",
+        "version": "1.5.1",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "vectorSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+        "planSha256": "e85d89636c8500bf4c450c51491f4daf35e6e2c5a4f455450ed6384d1528c93a",
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+      },
+      "cliQueryPhases": 2,
+      "mcpQueryPhases": 2,
+      "commandSubmissions": 1
+    },
+    {
+      "operation": "parties.deactivate-party",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.deactivate-party/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Parties.Contracts",
+        "version": "1.5.1",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "vectorSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+        "planSha256": "fb500e2e2e81ff7010c3e85aa8c6d66e7f04c8b2885147741942fd88f627a4fe",
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+      },
+      "cliQueryPhases": 4,
+      "mcpQueryPhases": 4,
+      "commandSubmissions": 3
+    },
+    {
+      "operation": "parties.get-party",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.get-party/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Parties.Contracts",
+        "version": "1.5.1",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "vectorSha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+        "planSha256": "dd2621f83ceea13132ca4cb9f80dbddba876585087a25d5040d9ba16be2e2114",
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+      },
+      "cliQueryPhases": 2,
+      "mcpQueryPhases": 2,
+      "commandSubmissions": 1
+    },
+    {
+      "operation": "parties.list-parties",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.list-parties/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Parties.Contracts",
+        "version": "1.5.1",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "vectorSha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+        "planSha256": "9dab3b9dc8e58eee937b788def5c6a8c73e44f4a4914bad38d9f7d1db5eeb13c",
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+      },
+      "cliQueryPhases": 6,
+      "mcpQueryPhases": 6,
+      "commandSubmissions": 1
+    },
+    {
+      "operation": "parties.reactivate-party",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.reactivate-party/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Parties.Contracts",
+        "version": "1.5.1",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "vectorSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+        "planSha256": "e4b481be8bfc8e7489611fa2ad9df09e36b814d64ae299954dbda72e3cf94849",
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+      },
+      "cliQueryPhases": 4,
+      "mcpQueryPhases": 4,
+      "commandSubmissions": 3
+    },
+    {
+      "operation": "parties.search-parties",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.search-parties/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Parties.Contracts",
+        "version": "1.5.1",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "vectorSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+        "planSha256": "8e5940ac30b110464e770637efd308c0d3cbb6bddf73e32bf150b0f24ef8285e",
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+      },
+      "cliQueryPhases": 6,
+      "mcpQueryPhases": 6,
+      "commandSubmissions": 1
+    },
+    {
+      "operation": "parties.update-party",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/parties.update-party/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Parties.Contracts",
+        "version": "1.5.1",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "vectorSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+        "planSha256": "ac52d8e21f71cdd5cbf1eb7883c294831b0f8a2c6919ea1fb58334edfdb0252c",
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b"
+      },
+      "cliQueryPhases": 3,
+      "mcpQueryPhases": 3,
+      "commandSubmissions": 2
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.add-user-to-tenant/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "1ee25a7fc2d2c023b7c1b394ec06a907b9fc4484d67ba0118d45afe4f1009519",
+        "planSha256": "fc6ad0da98c6d5a05c02a7f326d6bf3f3cdaacd43d5dd8d4b80f3ab5f9b2bd85",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 3,
+      "mcpQueryPhases": 3,
+      "commandSubmissions": 2
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.change-user-role/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "65e9e7b37366e02387e5eebff44189c48b35346683a730704bde3b0bd8d05b40",
+        "planSha256": "1e30c03d4aac13702b2e401a747d50c6c121ded049b2c1c0ef04521027fb22e7",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 4,
+      "mcpQueryPhases": 4,
+      "commandSubmissions": 3
+    },
+    {
+      "operation": "tenants.create-tenant",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.create-tenant/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "32e75065acb3cb80435c7afb97878b9cea807e43f97efff19d090e199d3d60c0",
+        "planSha256": "a883f07ba0297500cbee309821dfabfb4c6872e20731b70ddb04f90af4860a14",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 2,
+      "mcpQueryPhases": 2,
+      "commandSubmissions": 1
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.disable-tenant/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "a529d902cb579a1f2fdbfd8a8e1aea14dd175e2bb96655ca3a97103d22d86790",
+        "planSha256": "a751ad0d9f509104281482bc1227007a609eb07aace047988c953c98eaa451d6",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 3,
+      "mcpQueryPhases": 3,
+      "commandSubmissions": 2
+    },
+    {
+      "operation": "tenants.enable-tenant",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.enable-tenant/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "573d6209f013c7a8f3ed97182a4d980fa47167e9b9406a80d70042577d814d7f",
+        "planSha256": "78250d3740aa84fb72e8bc93d19f87f417dbe8e1764e8561829a2d0b714d929c",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 4,
+      "mcpQueryPhases": 4,
+      "commandSubmissions": 3
+    },
+    {
+      "operation": "tenants.get-tenant-audit",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-tenant-audit/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "7b70b2720c55b3bd65be8574914c2bad50f9af81ca3bb371479f7739d2b13391",
+        "planSha256": "f558532e1c25ac3a197da2b5d1c809c04fe90149413d75136b85a1f02f35b404",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 11,
+      "mcpQueryPhases": 11,
+      "commandSubmissions": 4
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-tenant-users/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "f7a9b984378fb50b79780afe4fac4be68fe0b04ad6f21caab070cb2223a204eb",
+        "planSha256": "97552629a80c2cdd5dd03d282e93e465b0ce9f1d059be8e35296c439abbe7c05",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 6,
+      "mcpQueryPhases": 6,
+      "commandSubmissions": 4
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-tenant/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "0773189da1da32300c0e49ae47a7f5d5367ced465bfb44cbc1388f6d18d7459a",
+        "planSha256": "8d1f3ea2a528911b85ab86ff7e6cc878d6fe359661a36f9bfafb4f9a8245d7f2",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 4,
+      "mcpQueryPhases": 4,
+      "commandSubmissions": 3
+    },
+    {
+      "operation": "tenants.get-user-tenants",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-user-tenants/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "95b97f32865d33b931fa4f24066e834c2062fda7cf0bf3b0fbdca3ff46f91339",
+        "planSha256": "6305968cc9a52c7c2556b1c31e3128e7b17d22a7bfbf90cacab993ad6c4e5df0",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 8,
+      "mcpQueryPhases": 8,
+      "commandSubmissions": 6
+    },
+    {
+      "operation": "tenants.list-tenants",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.list-tenants/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "63c8c59207af384aa978b158b7b40fd3c24a84a247682d21413dc1e6e5e1766e",
+        "planSha256": "cfe0f68fc844031e2a9c6e6ecd23ce55da796dc8845b1129816b99f9b5d54264",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 5,
+      "mcpQueryPhases": 5,
+      "commandSubmissions": 3
+    },
+    {
+      "operation": "tenants.remove-tenant-configuration",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.remove-tenant-configuration/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "ac8ef4d3c0139bc3aec96658cff2d4e7d6d9a1d537da9d7244e1de508f484f86",
+        "planSha256": "7dde3834820f03284c556033320910e8849db0a1ffd97410e69d90331caeb89b",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 4,
+      "mcpQueryPhases": 4,
+      "commandSubmissions": 3
+    },
+    {
+      "operation": "tenants.remove-user-from-tenant",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.remove-user-from-tenant/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "bef4e476189a18822a47944c3a6473d980a4d5cfb0a5c9466daa85377549c5dc",
+        "planSha256": "4bef2e1160b14f11d2100864eaa677c979dd677aa95496bcbc3edb83a50e7556",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 4,
+      "mcpQueryPhases": 4,
+      "commandSubmissions": 3
+    },
+    {
+      "operation": "tenants.set-tenant-configuration",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.set-tenant-configuration/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "19b8ebd4f174abaf3d9cd10a5872fc4e7af34ed380521bdbed5e9ecfad5c983f",
+        "planSha256": "c485d5e99c6f64e03ffee74be8cd4c6d661ed6bf0de4b04e9ac9336fc5126660",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 3,
+      "mcpQueryPhases": 3,
+      "commandSubmissions": 2
+    },
+    {
+      "operation": "tenants.update-tenant",
+      "receipt": "live/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.update-tenant/live-result.json",
+      "binding": {
+        "packageId": "Hexalith.Tenants.Contracts",
+        "version": "7.0.5",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "vectorSha256": "5090b29559addfe7d74e224767de3f8917cdd9d13c5aabaff3372131b6871810",
+        "planSha256": "44aed12505c31bb9dcd33a7d9d8d0bfc71ef7db8baa6c5d7fcb9c6ed1a8dc41f",
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+      },
+      "cliQueryPhases": 3,
+      "mcpQueryPhases": 3,
+      "commandSubmissions": 2
+    }
+  ],
+  "sourceBindings": [
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "21fac8c09c48828360925fe4c13693e2efb483ba404af74bdbb3b1a2bff9cf30"
+    },
+    {
+      "path": "README.md",
+      "sha256": "a1317fe95152f5ec851606028fa38f31c383b0eb8690eb972c20d7d9b98cabd7"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs",
+      "sha256": "1cb0d0708c95ad28a78eec1287091a5befd838ccbdd223f01dfe5aa901b2e9ce"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Cli.Tests/PartiesMigrationCompatibilityTests.cs",
+      "sha256": "84c6d588173bf201a370dae5099a79951a34d87e1ec1d7aafcb5522d69f8ba02"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Cli.Tests/BoundaryProcessHarnessTests.cs",
+      "sha256": "e26cf1eba062e782f843d797155960aa5739765bb8c3a668113c2fd91d6ad651"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Cli.Tests/CliMcpQueryParityTests.cs",
+      "sha256": "94d3f98a040fc257e8a570f2502d73a86360264e3feb45a5c2f65cad6eca140f"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Cli.Tests/PersistedPartyEventsTests.cs",
+      "sha256": "ed8d6868cbc2eb6b1c6b4cad781debb3fbe88f60e9821ccc8d2a27de7b25c3d9"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj",
+      "sha256": "4a15466ef49b8a80bcbfcc7c712108d3e8d658dfb1e4fd9140c691e9c4cb8325"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs",
+      "sha256": "126348c5fc21a05f0758d11700d4d42cb60ce9c285e4339b47f5cb4e003dcff9"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/GatewaySidecarEndpoint.cs",
+      "sha256": "ac0fb4db5fb992f4a49fa10ca17a02cf53f443943d39dbb156f8ba1bc718e40f"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/BoundaryHeads.cs",
+      "sha256": "b2fe2d1facc9cb5561f1fe045a9c597359b6abae0778f6df8666271e831662ce"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs",
+      "sha256": "677f8d8c1f8be8eac0ef36b31ca2114e5624199db7e6cafde1162c0d5a8c96d6"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/LiveGatewayForwarder.cs",
+      "sha256": "719b0f7b375120c5ffc7511954d68ac6299bbc779ee7b04d3e1348d6ddba638e"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs",
+      "sha256": "655dedaabd27f5586a0434d1e40c0b07d066f8972136b3e2f7fd11af2d63c6f9"
+    },
+    {
+      "path": "tools/live-topology/run_live.py",
+      "sha256": "da0b3e85733e5bf9bd27a0263ba4590cf2a899b473aa0819c363d783957cbca8"
+    },
+    {
+      "path": "tools/live-topology/live_plans.py",
+      "sha256": "2811af4243008d795f2965006e13c752b0a11f28c7074daa07973dae1a3a211f"
+    },
+    {
+      "path": "tools/live-topology/ci.py",
+      "sha256": "6aaaeaa722f088ce5297b8406282f0bab186c59db0c54d2b4dbd47a018c20c00"
+    },
+    {
+      "path": "tools/live-topology/capture_heads.py",
+      "sha256": "973f6346f099b19b9c5158d1c06fcd5c06b34cc0e794ac43b07a09b6eede5718"
+    },
+    {
+      "path": "tools/live-topology/native-runtime.json",
+      "sha256": "54c8bedc4671d94ed7d64193cb1338d64a8afdcf26ac0b7891033e3952baa4f0"
+    },
+    {
+      "path": "tools/live-topology/binaries.json",
+      "sha256": "00cec44c8b4ffed1e969f71031c5f8f54f8654fafab3aafc06797c964b98ca05"
+    },
+    {
+      "path": "scripts/evidence_redaction.py",
+      "sha256": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+    },
+    {
+      "path": "scripts/scan-evidence-secrets.py",
+      "sha256": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b"
+    }
+  ],
+  "contextBindings": [
+    {
+      "path": "_bmad-output/implementation-artifacts/epic-5-context.md",
+      "sha256": "ba7a68ca000fcd20d6472b4d56a0190961995eabe7eb2c8ed10c466679afd4e0"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md",
+      "sha256": "f48011bb679303bb0f77ada0ea8ee9b6244019a0e98f1b4f5292b29b962f2757"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/deferred-work.md",
+      "sha256": "9754d59b3db66ebbb668392a4c3424abc43e9b61f69d60b2e53eebfddd914cea"
+    }
+  ],
+  "f7Acceptance": {
+    "receipt": "f7-acceptance.json",
+    "sha256": "6559a11d4e350c4faf18c308a30bfce99978f9e84ab3008cbd76535cfe9d6133",
+    "item9RemainsOpen": true
+  },
+  "upstreamTestAudit": {
+    "receipt": "upstream-test-audit.json",
+    "sha256": "0676881377bd4d20c1ae1a41f4eca70b9ec0d3ee2100d383bd3ad8fe035e5e07"
+  },
+  "gatewayRefusalAudit": {
+    "receipt": "gateway-refusal-audit.json",
+    "sha256": "04731a16c5f601eb89407dcd01ac3d9c3c0aa9c29510d9cdc452c2c79984a08c"
+  },
+  "stateReaderAudit": {
+    "receipt": "state-reader-audit.json",
+    "sha256": "7c3c8a6e8bb4cf6c6b46f820c56df965d66fde6b1edb7232483ac3b0e3fdeac4"
+  },
+  "frozenIntent": {
+    "referenceCommit": "296617072ab3fb632d2bddb9189b52fd94286f83",
+    "sha256": "b3c8b3e4a498cb7ce6a1b4b9882b5532c7b2906574d5a1b8deca665205448079",
+    "unchanged": true
+  },
+  "protectedInputs": {
+    "comparedFrom": "f6c8e0e3a2105f555e6eec3c667b088085c47fc4",
+    "comparedTo": "3e8f6a4e681018c7ca8356997d4fd28378217d37",
+    "paths": [
+      "src",
+      "Directory.Build.props",
+      "Directory.Packages.props",
+      "tools/dependency-policy.json",
+      "tools/conformance-vectors/v1/modules",
+      "tools/inventory-coverage/v1",
+      "tools/live-topology/plans",
+      "references"
+    ],
+    "changed": []
+  },
+  "ownerCheckpoint": {
+    "approval": "pending",
+    "approvedVerdict": null,
+    "proposal": "retirement-blocked",
+    "proposedGapDisposition": [
+      {
+        "id": "G01",
+        "gap": "Repeated missing-target rejection-only streams",
+        "owner": "Parties maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:556",
+        "proposal": "remain blocking; no inventory 1.3.0 amendment is asserted"
+      },
+      {
+        "id": "G02",
+        "gap": "Forced stale projections and erased/restricted delete/pre-read execution",
+        "owner": "Parties maintainer and EventStore Gateway maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:853",
+        "proposal": "remain blocking; no inventory 1.3.0 amendment is asserted"
+      },
+      {
+        "id": "G03",
+        "gap": "Downstream public Query-error detail/title privacy",
+        "owner": "EventStore Gateway maintainer and Parties maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:824",
+        "proposal": "remain blocking; no inventory 1.3.0 amendment is asserted"
+      },
+      {
+        "id": "G04",
+        "gap": "Persisted event/audit actor attribution",
+        "owner": "Parties maintainer and EventStore Gateway maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:859",
+        "proposal": "remain blocking; no inventory 1.3.0 amendment is asserted"
+      },
+      {
+        "id": "G05",
+        "gap": "Raw versus trimmed input-bound policy approval",
+        "owner": "Parties maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:865",
+        "proposal": "remain blocking; no inventory 1.3.0 amendment is asserted"
+      },
+      {
+        "id": "G06",
+        "gap": "Mixed-profile operator identity",
+        "owner": "McpCli maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:833",
+        "proposal": "remain blocking; no inventory 1.3.0 amendment is asserted"
+      }
+    ],
+    "rule": "Owner must approve exact packet bytes and disposition each gap, either by versioned approved inventory 1.3.0 amendment or by retaining it blocking with a named owner."
+  },
+  "limits": [
+    "Story 5.5 owns retirement.",
+    "No release, publication or retirement claim.",
+    "Existing release gate epic-4-retro-item-6 remains binding.",
+    "Prior failed attempts are retained separately and do not establish current live acceptance."
+  ]
+}

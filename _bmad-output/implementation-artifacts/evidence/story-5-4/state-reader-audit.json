@@ -1,0 +1,194 @@
+{
+  "purpose": "Qualified-source audit of the remaining C05 raw persisted-event reader assumptions; source inspection is not a claim of upstream tests executed.",
+  "eventStoreVersion": "4.1.0",
+  "eventStoreSourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+  "partiesRuntimeSourceCommit": "d4415715b2517927655c538e6d41e05d71d4207e",
+  "files": [
+    {
+      "path": "src/Hexalith.EventStore.Server/Configuration/EventStoreActorOptions.cs",
+      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "sha256": "e645dc468757bd906274769422b7152f9fb6afa30f919ab4b6f1338b1c757590",
+      "anchors": [
+        {
+          "line": 12,
+          "contains": "AggregateActorTypeName { get; set; } = nameof(AggregateActor)"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore.Server/Configuration/ServiceCollectionExtensions.cs",
+      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "sha256": "f5d2a780a4e27dedf464036992831984fd97298ca8b60615ac398804e2a3f0fb",
+      "anchors": [
+        {
+          "line": 344,
+          "contains": "options.Actors.RegisterActor<AggregateActor>"
+        },
+        {
+          "line": 346,
+          "contains": "? nameof(AggregateActor)"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore.Contracts/Identity/AggregateIdentity.cs",
+      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "sha256": "eac15dd1466aa44cdb217794ca46321158325434a84508dcb9e46fc5ffb9906d",
+      "anchors": [
+        {
+          "line": 55,
+          "contains": "public string ActorId =>"
+        },
+        {
+          "line": 63,
+          "contains": "public string EventStreamKeyPrefix =>"
+        },
+        {
+          "line": 71,
+          "contains": "public string MetadataKey =>"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore.Server/Events/AggregateMetadata.cs",
+      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "sha256": "db5c27508ecaa1a617823f464744699b73c808c07665ea4035d7b0ec446bdd89",
+      "anchors": [
+        {
+          "line": 12,
+          "contains": "public record AggregateMetadata(long CurrentSequence"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore.Server/Events/EventPersister.cs",
+      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "sha256": "a38504ceaace235b9eee06cdf4a93af89f3ca274c13a256779f69df8e274d16b",
+      "anchors": [
+        {
+          "line": 63,
+          "contains": ": eventPayload.GetType().FullName ?? eventPayload.GetType().Name"
+        },
+        {
+          "line": 229,
+          "contains": "long sequenceNumber = currentSequence + 1 + i"
+        },
+        {
+          "line": 267,
+          "contains": "string key = $\"{identity.EventStreamKeyPrefix}{sequenceNumber}\""
+        },
+        {
+          "line": 272,
+          "contains": "SetStateAsync(key, envelope"
+        },
+        {
+          "line": 279,
+          "contains": "SetStateAsync(identity.MetadataKey, new AggregateMetadata("
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore.Server/Events/EventEnvelope.cs",
+      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "sha256": "511732120413ba95d41c665a7390a01d5dc4778a26e0c3ead2574194c6d048a4",
+      "anchors": [
+        {
+          "line": 29,
+          "contains": "public record EventEnvelope("
+        },
+        {
+          "line": 42,
+          "contains": "[property: DataMember] string EventTypeName,"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore.Contracts/Results/DomainServiceWireResult.cs",
+      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "sha256": "979445fb9c8f94531263339c64c2d1c715d68d1a6bcb891d01758dd1a422f41b",
+      "anchors": [
+        {
+          "line": 48,
+          "contains": ": payloadType.FullName ?? payloadType.Name;"
+        },
+        {
+          "line": 57,
+          "contains": "new DomainServiceWireEvent(eventTypeName, payloadBytes, format)"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.Parties.Contracts/Events/PartyCreated.cs",
+      "commit": "d4415715b2517927655c538e6d41e05d71d4207e",
+      "sha256": "27449374c8bf2f16ec55ff4b51f843c7787eb04dce6a4f521bd3aa9a06cc84b3",
+      "anchors": [
+        {
+          "line": 4,
+          "contains": "namespace Hexalith.Parties.Contracts.Events;"
+        },
+        {
+          "line": 6,
+          "contains": "public sealed record PartyCreated : IEventPayload"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.Parties.Contracts/Events/PartyDeactivated.cs",
+      "commit": "d4415715b2517927655c538e6d41e05d71d4207e",
+      "sha256": "587693e80dc1793024acc114aebed0a1e50e4777ca8506c5295d7c6eece9ee34",
+      "anchors": [
+        {
+          "line": 3,
+          "contains": "namespace Hexalith.Parties.Contracts.Events;"
+        },
+        {
+          "line": 5,
+          "contains": "public sealed record PartyDeactivated : IEventPayload"
+        }
+      ]
+    }
+  ],
+  "contracts": {
+    "actorType": "AggregateActor (default registration; no test-owned override)",
+    "actorId": "{tenant}:party:{partyId}",
+    "metadataKey": "{tenant}:party:{partyId}:metadata",
+    "eventKey": "{tenant}:party:{partyId}:events:{sequence}; 1-based sequence through CurrentSequence inclusive",
+    "metadataSequence": "Top-level CurrentSequence, Int64; saved directly as AggregateMetadata. The reader accepts either property-name casing and reads the JSON numeric value with GetInt64().",
+    "eventEnvelope": "Persisted Server.Events.EventEnvelope is flat; its top-level EventTypeName differs from the nested public Contracts.Events.EventEnvelope metadata view.",
+    "typedEventNames": [
+      "Hexalith.Parties.Contracts.Events.PartyCreated",
+      "Hexalith.Parties.Contracts.Events.PartyDeactivated"
+    ],
+    "suffixChecks": "Both selected typed IEventPayload records use their CLR FullName in DomainServiceWireResult, and EventPersister preserves that EventTypeName; ordinal PartyCreated / PartyDeactivated suffix checks match those exact names.",
+    "retentionScope": "Fresh disposable untrimmed boundary stream; the helper does not claim to traverse erased or retained-floor-trimmed history."
+  },
+  "testOwnedConfiguration": {
+    "actorTypeOverrideFound": false,
+    "files": [
+      {
+        "path": "tests/Hexalith.McpCli.AppHost/Program.cs",
+        "sha256": "e8ee676b3bd2fe83b472eda849afe90e5b12e5069cceaa3f35102023e7c833a8"
+      },
+      {
+        "path": "tests/Hexalith.McpCli.AppHost/appsettings.json",
+        "sha256": "773ac6d5b7ea2989a41ff768eecca145013a7b1f726c5d5a35f188164086a7ef"
+      },
+      {
+        "path": "tests/Hexalith.McpCli.EventStoreGateway.TestHost/Program.cs",
+        "sha256": "0930ddf96889c08ff79f2bd3c6cd98e02343a38587951447b97a71e97b1b09b9"
+      }
+    ]
+  },
+  "daprStateGet": {
+    "version": "1.18.7",
+    "source": "https://github.com/dapr/dapr/blob/v1.18.7/pkg/api/http/actors.go",
+    "sourceSha256": "f371ab8ddc85f03ceee69fce5da38596d2fe40bd7c31f11e121857a91991c40c",
+    "behavior": "onGetActorState returns empty success when the state response is nil or Data is empty; otherwise it returns stored JSON bytes directly. The reader treats empty response as absent state."
+  },
+  "localRegression": "PersistedPartyEventsTests in local/offline-cases.xml and local/sidecar-cases.xml exercises both readers against exact expected escaped actor/state GET keys, mixed-case metadata/event member names, numeric sequences and optional Dapr API token at an ephemeral discovered endpoint.",
+  "limits": [
+    "This source audit supports the reader oracle; only the final passing CI boundary receipt establishes executed C05 acceptance.",
+    "No persisted actor-attribution proof is inferred from event type/sequence inspection (G04 remains).",
+    "No repeated-missing or erased/trimmed history safety is claimed (G01/G02 remain)."
+  ]
+}

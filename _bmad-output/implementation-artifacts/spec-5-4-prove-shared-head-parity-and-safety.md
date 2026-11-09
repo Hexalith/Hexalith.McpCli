@@ -2,7 +2,7 @@
 title: '5.4 Prove shared-head parity and safety'
 type: 'feature'
 created: '2026-11-09'
-updated: '2026-11-09T11:55:41+01:00'
+updated: '2026-11-09T18:04:03+01:00'
 status: 'in-progress'
 baseline_commit: 'f6c8e0e3a2105f555e6eec3c667b088085c47fc4'
 route: 'dispatch'
@@ -125,7 +125,7 @@ context:
   - Derive the counts.
   - Extend the discovery assertion.
   - Cover each change in `test_*.py`.
-- [ ] After the split redactor change lands: push a branch, open the PR, and download and verify the live artifact.
+- [x] After the split redactor change lands: push a branch, open the PR, and download and verify the live artifact.
 - [ ] `_bmad-output/implementation-artifacts/evidence/story-5-4/`:
   - `manifest.json`: the full commit; SHA-256 of the head binaries; the Parties 1.5.1 artifact hash; the Catalog digest (SHA-256 of the sorted-key, compact `list_operations` structured content); the components and revisions of the environment; the vector, plan, approval and inventory hashes; and the CI run ID and artifact hash.
   - `parity-matrix.md`: C01–C08 and the seven variants. Admin and technical rows are marked "absent; name similarity proves nothing".
@@ -146,7 +146,7 @@ context:
 - The selected cohort’s absent detail returns `500/query_internal_error` with `actor-not-found-infrastructure`, as inventory C05 records. Missing deactivation returns `404/party-not-found`; separate CLI/MCP absent targets also verify persisted events contain no creation/deactivation effect (a rejection-only stream can remain). Before/after comparisons remove only observation-time `freshness`, retaining every business member.
 - Concurrent CLI processes use distinct generated message IDs. The qualified Gateway awaits the owner’s `ProcessCommandAsync` before returning acceptance; after both return, the boundary waits for the authorized inactive projection and requires exactly one persisted deactivation event in the actor’s stream. The actor ID and state keys follow qualified EventStore `dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`. Any configured sidecar `DAPR_API_TOKEN` is retained for state reads; app-channel authentication is unchanged.
 - The generic runner executes every Query observation through MCP as well as CLI, while every vector Command stays CLI-only. Semantic receipts require both Query heads. CI derives expected counts from approved vectors and its independent-case registry; it allocates each independent case 960 seconds and reserves 600 seconds within the unchanged 17700-second outer budget.
-- [Review][Resolved prerequisite] The separate redactor/committed secret-scan change closes the existing planning deferral in `deferred-work.md` under this spec's heading; see `spec-epic-4-retro-item-5-harden-ci-redaction.md` and `evidence/epic-4-retro-item-5/verification.md`. Story 5.4's committed live CI, final hash-bound evidence (including its own scan receipt) and exact-byte owner approval remain pending. The rejection-only-stream and mixed-profile-identity work is already tracked (`deferred-work.md:556`, `deferred-work.md:833`). No final evidence manifest or retirement verdict is asserted.
+- [Review][Resolved prerequisite] The separate redactor/committed secret-scan change closes the existing planning deferral in `deferred-work.md` under this spec's heading; see `spec-epic-4-retro-item-5-harden-ci-redaction.md` and `evidence/epic-4-retro-item-5/verification.md`. Story 5.4's dedicated live CI and final hash-bound scanned packet are now retained; its exact-byte owner approval/verdict remains pending. The rejection-only-stream and mixed-profile-identity work is already tracked (`deferred-work.md:556`, `deferred-work.md:833`). The final manifest binds executed evidence; no approved retirement verdict is asserted.
 
 ## Spec Change Log
 
@@ -163,6 +163,8 @@ context:
 
 ### Local implementation verification (2026-11-09)
 
+> Historical snapshot before the redactor prerequisite and dedicated PR runs. The final CI qualification below supersedes its pending-live statements.
+
 The story remains **in-progress**. The live boundary is compiled and discovered, but has not executed. The frozen redactor/secret-scan prerequisite prevents the committed CI run, final evidence binding and owner approval/verdict. No `fullLiveAccepted` or retirement verdict is claimed.
 
 - Normal solution restore and Release build with `-warnaserror`: passed, zero warnings/errors (`/tmp/story54-restore.log`, `/tmp/story54-build-final.log`).
@@ -173,7 +175,9 @@ The story remains **in-progress**. The live boundary is compiled and discovered,
 - Preflight-only passed with `fullLiveAccepted: false` (`/tmp/mcpcli-story54-live-preflight/live-lane.json`). Discovery matched exactly every approved vector plus smoke and boundary: 23 cases today (`/tmp/story54-discovery.txt`). These checks start no live services.
 - `check_enrolled.py --output /tmp/mcpcli-story54-enrolled` passed: Parties 1.5.1 (7 operations), Tenants 7.0.5 (14 operations), aggregate `fullV1Accepted: true` (`/tmp/mcpcli-story54-enrolled/enrolled.json`, `/tmp/story54-enrolled.log`). The 203-case full Python sweep and 27-case affected-runner rerun above passed. No production Core validation, Sample.Contracts or Gateway wire behavior changed, so sample conformance gates are not required by this implementation.
 
-### Frozen matrix audit
+### Frozen matrix audit (historical implementation snapshot)
+
+This table records coverage before dedicated CI qualification. The final executed coverage and remaining gaps are in `evidence/story-5-4/parity-matrix.md`.
 
 `Safety` below means `tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs`; all named safety tests executed in the passing 26-case head run. `Live` means `SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety`; it is built/discovered only. Every offline refusal checks complete stdout/stderr, MCP Content/StructuredContent and Gateway request cardinality.
 
@@ -307,3 +311,13 @@ to the sidecar API. Offline regressions require an ephemeral discovered port,
 reject missing/duplicate/invalid registrations and prove both C05 helpers read
 the expected state keys with and without the API token. No runner, production
 source, approved input or dependency changed.
+
+### Final CI qualification and pending owner checkpoint (2026-11-09)
+
+Candidate `3e8f6a4e681018c7ca8356997d4fd28378217d37` passed CI run `42652261452` on draft PR #5. All 21 approved vectors, independent shared-head boundary and Gateway smoke passed; both live Query heads are required and each live Command is submitted once. Hosted `check_enrolled.py` reports `fullV1Accepted: true`; live receipts report `fullLiveAccepted: true`. All 216 hosted topology checks passed and discovery matched the 21 vectors plus the two independent cases. The six ordinary projects passed 1,985 tests with six OS-only skips; Manifest and enrolled inventory checks remain unchanged.
+
+The latest Release build has zero warnings/errors. All 77 named offline safety, compatibility, process and identity cases passed without skips, including 22 process cases through both heads. The clean 99-hook sweep applies to unchanged Python source. Initial failing sweeps and earlier live attempts retain their own status and exact artifact bindings; none is promoted into final acceptance.
+
+The complete packet is `evidence/story-5-4/`: manifest, C01–C08/seven-variant matrix, F7 acceptance, source audit, full text receipts and logs, verification and secret scan. It binds the actual hosted checkout and equal candidate tree, every head DLL, exact Catalog content, Contracts artifact, environment/source revisions, approved inputs, CI run/artifact digests and retained text hashes. The source audit clearly distinguishes upstream tests at the enrolled revision from tests executed in this run. Production source, dependencies, identifiers, approved vectors/plans/approvals/inventories and reference gitlinks are unchanged.
+
+**HALT remains at the frozen owner checkpoint.** Exact-byte approval and an approved `retirement-ready` or `retirement-blocked` verdict are not recorded. The proposal is `retirement-blocked`, keeping G01–G06 open with the matrix’s named ledger owners; no inventory 1.3.0 amendment is asserted. Story 5.4 remains in-progress until that response and its bound receipt. No release, publication or retirement is claimed.

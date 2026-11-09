@@ -1,0 +1,2321 @@
+[
+  {
+    "name": "enrolled-module-evidence",
+    "githubArtifactId": 13690340163,
+    "githubRunId": 42648730822,
+    "downloadedArchiveSha256": "bd496caebc8ea446eb86cea2c18103bc1e990082cf1b5cf7f66835c85080eaae",
+    "githubAdvertisedSha256": "bd496caebc8ea446eb86cea2c18103bc1e990082cf1b5cf7f66835c85080eaae",
+    "advertisedDigestVerified": true,
+    "archiveBytes": 366033,
+    "files": [
+      {
+        "archivePath": "Hexalith.Parties.Contracts/artifact.sha512",
+        "originalBytes": 136,
+        "originalSha256": "1a9e27aeec3dd34af9e5e9803e3d6fc7be42f93925c2e2964b9f3e739fbc933b",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/artifact.sha512",
+        "sha256": "1a9e27aeec3dd34af9e5e9803e3d6fc7be42f93925c2e2964b9f3e739fbc933b",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/build.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/build.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/build.stdout.txt",
+        "originalBytes": 824,
+        "originalSha256": "4918666ae5e783ff49f7a03d7f4586d43c676ae32ca4a0b5bfdf33028321b5da",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/build.stdout.txt",
+        "sha256": "4918666ae5e783ff49f7a03d7f4586d43c676ae32ca4a0b5bfdf33028321b5da",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/catalog.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/catalog.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/catalog.stdout.txt",
+        "originalBytes": 37287,
+        "originalSha256": "2a74a453c940c4134f891e1a3de572058737f79a68f7eda90229fb070e603e43",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/catalog.stdout.txt",
+        "sha256": "2a74a453c940c4134f891e1a3de572058737f79a68f7eda90229fb070e603e43",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inputs-oc5tzusc/artifacts/Hexalith.Parties.Contracts.1.5.1.nupkg",
+        "originalBytes": 129134,
+        "originalSha256": "2b521a3bb58a1904a662bc47bc850ba28737f13a753021c0366a79a4956b3a0c",
+        "retention": "binary omitted; exact bytes are bound by the downloaded artifact digest and this file hash"
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/0/create-party.vector.json",
+        "originalBytes": 5285,
+        "originalSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/0/create-party.vector.json",
+        "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/1/deactivate-party.vector.json",
+        "originalBytes": 6680,
+        "originalSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/1/deactivate-party.vector.json",
+        "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/2/get-party.vector.json",
+        "originalBytes": 5128,
+        "originalSha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/2/get-party.vector.json",
+        "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/3/list-parties.vector.json",
+        "originalBytes": 5399,
+        "originalSha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/3/list-parties.vector.json",
+        "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/4/reactivate-party.vector.json",
+        "originalBytes": 6678,
+        "originalSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/4/reactivate-party.vector.json",
+        "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/5/search-parties.vector.json",
+        "originalBytes": 5639,
+        "originalSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/5/search-parties.vector.json",
+        "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/6/update-party.vector.json",
+        "originalBytes": 6889,
+        "originalSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inputs-oc5tzusc/vectors/6/update-party.vector.json",
+        "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inventory.input.json",
+        "originalBytes": 4362,
+        "originalSha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inventory.input.json",
+        "sha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inventory.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inventory.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/inventory.stdout.txt",
+        "originalBytes": 3,
+        "originalSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/inventory.stdout.txt",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/modules.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/modules.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/modules.stdout.txt",
+        "originalBytes": 198,
+        "originalSha256": "a9935d3f23fb378ed34e57b06c1788fae2bed2139ba59a84091f6ae6526ea036",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/modules.stdout.txt",
+        "sha256": "a9935d3f23fb378ed34e57b06c1788fae2bed2139ba59a84091f6ae6526ea036",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/operations-parties.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/operations-parties.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/operations-parties.stdout.txt",
+        "originalBytes": 3524,
+        "originalSha256": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/operations-parties.stdout.txt",
+        "sha256": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.create-party.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.create-party.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.create-party.stdout.txt",
+        "originalBytes": 9246,
+        "originalSha256": "b062261ef5be1fe6be1c34d8e7ff422dcf1359ff0d4f288602bb583165fa100c",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.create-party.stdout.txt",
+        "sha256": "b062261ef5be1fe6be1c34d8e7ff422dcf1359ff0d4f288602bb583165fa100c",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.deactivate-party.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.deactivate-party.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.deactivate-party.stdout.txt",
+        "originalBytes": 1236,
+        "originalSha256": "af67d71ebc562e6c741bd37422c5196ce7ce7112678018493ac015a9ea03e62a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.deactivate-party.stdout.txt",
+        "sha256": "af67d71ebc562e6c741bd37422c5196ce7ce7112678018493ac015a9ea03e62a",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.get-party.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.get-party.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.get-party.stdout.txt",
+        "originalBytes": 1150,
+        "originalSha256": "9ed996fb8235dc5dba8860eb0cea7eb0add4b037ac4e97757595b71fb620c9ab",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.get-party.stdout.txt",
+        "sha256": "9ed996fb8235dc5dba8860eb0cea7eb0add4b037ac4e97757595b71fb620c9ab",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.list-parties.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.list-parties.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.list-parties.stdout.txt",
+        "originalBytes": 2775,
+        "originalSha256": "4b1879c5f3e0b9f8a9f080456d30a3effd9ffdf7edcc60935c3525101fced6ac",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.list-parties.stdout.txt",
+        "sha256": "4b1879c5f3e0b9f8a9f080456d30a3effd9ffdf7edcc60935c3525101fced6ac",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.reactivate-party.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.reactivate-party.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.reactivate-party.stdout.txt",
+        "originalBytes": 1203,
+        "originalSha256": "f297bad18e687d7feda1a86c1a46aa027e84711ae1d9145a49b20578a1666056",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.reactivate-party.stdout.txt",
+        "sha256": "f297bad18e687d7feda1a86c1a46aa027e84711ae1d9145a49b20578a1666056",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.search-parties.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.search-parties.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.search-parties.stdout.txt",
+        "originalBytes": 1953,
+        "originalSha256": "b4d15b2c75397cc7d75db60fe9fd1424748ff75e6e5ea14ab46a99b4a867d269",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.search-parties.stdout.txt",
+        "sha256": "b4d15b2c75397cc7d75db60fe9fd1424748ff75e6e5ea14ab46a99b4a867d269",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.update-party.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.update-party.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/parties.update-party.stdout.txt",
+        "originalBytes": 13137,
+        "originalSha256": "4fa014790069345c9c918e771726edb662ccdf6dc8c189c725032056b6b44bb6",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/parties.update-party.stdout.txt",
+        "sha256": "4fa014790069345c9c918e771726edb662ccdf6dc8c189c725032056b6b44bb6",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/replay.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/replay.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/replay.stdout.txt",
+        "originalBytes": 819,
+        "originalSha256": "edb38b0789b483ea8d6caefce6d272e909bf6bd56ecb55bc0648f39f5925ec7b",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/replay.stdout.txt",
+        "sha256": "edb38b0789b483ea8d6caefce6d272e909bf6bd56ecb55bc0648f39f5925ec7b",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/restore.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/restore.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/restore.stdout.txt",
+        "originalBytes": 662,
+        "originalSha256": "78b2c73344cbff0f25a899fb36814ab5598ceb102f1e1ab9cb8265e3112f4d2d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/restore.stdout.txt",
+        "sha256": "78b2c73344cbff0f25a899fb36814ab5598ceb102f1e1ab9cb8265e3112f4d2d",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Parties.Contracts/verification.json",
+        "originalBytes": 33617,
+        "originalSha256": "9150be8a472b8121655a67ba6d38e2ca1c082270d976dc8f5674b8f5e799554e",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Parties.Contracts/verification.json",
+        "sha256": "9150be8a472b8121655a67ba6d38e2ca1c082270d976dc8f5674b8f5e799554e",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/acceptedLint.input.json",
+        "originalBytes": 1947,
+        "originalSha256": "85958c8470a19567599ff525a25a70a5b62bffe6afab2ddfd608b0eb60dd1352",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/acceptedLint.input.json",
+        "sha256": "85958c8470a19567599ff525a25a70a5b62bffe6afab2ddfd608b0eb60dd1352",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/artifact.sha512",
+        "originalBytes": 136,
+        "originalSha256": "a492187d018cdcd4d1c2a89506d5d30a9509cc4c51d658005e4a1cdf991b4b37",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/artifact.sha512",
+        "sha256": "a492187d018cdcd4d1c2a89506d5d30a9509cc4c51d658005e4a1cdf991b4b37",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/build.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/build.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/build.stdout.txt",
+        "originalBytes": 824,
+        "originalSha256": "d4fbc4129470caa4ea9878f905caf3668b2b5b6df19569e119894e5b0bbc47c7",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/build.stdout.txt",
+        "sha256": "d4fbc4129470caa4ea9878f905caf3668b2b5b6df19569e119894e5b0bbc47c7",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/catalog.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/catalog.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/catalog.stdout.txt",
+        "originalBytes": 29555,
+        "originalSha256": "640130dc81d70c480910ea1e4e34e7d971fb8fe86f4a311a0effaaf2fd5ce1fd",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/catalog.stdout.txt",
+        "sha256": "640130dc81d70c480910ea1e4e34e7d971fb8fe86f4a311a0effaaf2fd5ce1fd",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/artifacts/Hexalith.Tenants.Contracts.7.0.5.nupkg",
+        "originalBytes": 61150,
+        "originalSha256": "4694e203a54afe8a80c160d92fcf0156da78228a00c67218e3dd88c420fa1c07",
+        "retention": "binary omitted; exact bytes are bound by the downloaded artifact digest and this file hash"
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/0/add-user-to-tenant.vector.json",
+        "originalBytes": 5006,
+        "originalSha256": "1ee25a7fc2d2c023b7c1b394ec06a907b9fc4484d67ba0118d45afe4f1009519",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/0/add-user-to-tenant.vector.json",
+        "sha256": "1ee25a7fc2d2c023b7c1b394ec06a907b9fc4484d67ba0118d45afe4f1009519",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/1/change-user-role.vector.json",
+        "originalBytes": 6431,
+        "originalSha256": "65e9e7b37366e02387e5eebff44189c48b35346683a730704bde3b0bd8d05b40",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/1/change-user-role.vector.json",
+        "sha256": "65e9e7b37366e02387e5eebff44189c48b35346683a730704bde3b0bd8d05b40",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/10/remove-tenant-configuration.vector.json",
+        "originalBytes": 6640,
+        "originalSha256": "ac8ef4d3c0139bc3aec96658cff2d4e7d6d9a1d537da9d7244e1de508f484f86",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/10/remove-tenant-configuration.vector.json",
+        "sha256": "ac8ef4d3c0139bc3aec96658cff2d4e7d6d9a1d537da9d7244e1de508f484f86",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/11/remove-user-from-tenant.vector.json",
+        "originalBytes": 6316,
+        "originalSha256": "bef4e476189a18822a47944c3a6473d980a4d5cfb0a5c9466daa85377549c5dc",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/11/remove-user-from-tenant.vector.json",
+        "sha256": "bef4e476189a18822a47944c3a6473d980a4d5cfb0a5c9466daa85377549c5dc",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/12/set-tenant-configuration.vector.json",
+        "originalBytes": 4870,
+        "originalSha256": "19b8ebd4f174abaf3d9cd10a5872fc4e7af34ed380521bdbed5e9ecfad5c983f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/12/set-tenant-configuration.vector.json",
+        "sha256": "19b8ebd4f174abaf3d9cd10a5872fc4e7af34ed380521bdbed5e9ecfad5c983f",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/13/update-tenant.vector.json",
+        "originalBytes": 5081,
+        "originalSha256": "5090b29559addfe7d74e224767de3f8917cdd9d13c5aabaff3372131b6871810",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/13/update-tenant.vector.json",
+        "sha256": "5090b29559addfe7d74e224767de3f8917cdd9d13c5aabaff3372131b6871810",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/2/create-tenant.vector.json",
+        "originalBytes": 3992,
+        "originalSha256": "32e75065acb3cb80435c7afb97878b9cea807e43f97efff19d090e199d3d60c0",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/2/create-tenant.vector.json",
+        "sha256": "32e75065acb3cb80435c7afb97878b9cea807e43f97efff19d090e199d3d60c0",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/3/disable-tenant.vector.json",
+        "originalBytes": 4627,
+        "originalSha256": "a529d902cb579a1f2fdbfd8a8e1aea14dd175e2bb96655ca3a97103d22d86790",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/3/disable-tenant.vector.json",
+        "sha256": "a529d902cb579a1f2fdbfd8a8e1aea14dd175e2bb96655ca3a97103d22d86790",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/4/enable-tenant.vector.json",
+        "originalBytes": 6026,
+        "originalSha256": "573d6209f013c7a8f3ed97182a4d980fa47167e9b9406a80d70042577d814d7f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/4/enable-tenant.vector.json",
+        "sha256": "573d6209f013c7a8f3ed97182a4d980fa47167e9b9406a80d70042577d814d7f",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/5/get-tenant-audit.vector.json",
+        "originalBytes": 13084,
+        "originalSha256": "7b70b2720c55b3bd65be8574914c2bad50f9af81ca3bb371479f7739d2b13391",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/5/get-tenant-audit.vector.json",
+        "sha256": "7b70b2720c55b3bd65be8574914c2bad50f9af81ca3bb371479f7739d2b13391",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/6/get-tenant-users.vector.json",
+        "originalBytes": 11273,
+        "originalSha256": "f7a9b984378fb50b79780afe4fac4be68fe0b04ad6f21caab070cb2223a204eb",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/6/get-tenant-users.vector.json",
+        "sha256": "f7a9b984378fb50b79780afe4fac4be68fe0b04ad6f21caab070cb2223a204eb",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/7/get-tenant.vector.json",
+        "originalBytes": 7091,
+        "originalSha256": "0773189da1da32300c0e49ae47a7f5d5367ced465bfb44cbc1388f6d18d7459a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/7/get-tenant.vector.json",
+        "sha256": "0773189da1da32300c0e49ae47a7f5d5367ced465bfb44cbc1388f6d18d7459a",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/8/get-user-tenants.vector.json",
+        "originalBytes": 14851,
+        "originalSha256": "95b97f32865d33b931fa4f24066e834c2062fda7cf0bf3b0fbdca3ff46f91339",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/8/get-user-tenants.vector.json",
+        "sha256": "95b97f32865d33b931fa4f24066e834c2062fda7cf0bf3b0fbdca3ff46f91339",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/9/list-tenants.vector.json",
+        "originalBytes": 9323,
+        "originalSha256": "63c8c59207af384aa978b158b7b40fd3c24a84a247682d21413dc1e6e5e1766e",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/9/list-tenants.vector.json",
+        "sha256": "63c8c59207af384aa978b158b7b40fd3c24a84a247682d21413dc1e6e5e1766e",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inventory.input.json",
+        "originalBytes": 15563,
+        "originalSha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inventory.input.json",
+        "sha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inventory.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inventory.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/inventory.stdout.txt",
+        "originalBytes": 3,
+        "originalSha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/inventory.stdout.txt",
+        "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/modules.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/modules.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/modules.stdout.txt",
+        "originalBytes": 354,
+        "originalSha256": "50002e7c5e4c28b09b3711f053ea23d9facb65d194a1c705c94b715e318729d1",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/modules.stdout.txt",
+        "sha256": "50002e7c5e4c28b09b3711f053ea23d9facb65d194a1c705c94b715e318729d1",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/operations-tenants.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/operations-tenants.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/operations-tenants.stdout.txt",
+        "originalBytes": 7065,
+        "originalSha256": "330f7c3f313acfaea63b37ccf3fec3a71d371df7d7581dd5a3c70cd81dabbaa8",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/operations-tenants.stdout.txt",
+        "sha256": "330f7c3f313acfaea63b37ccf3fec3a71d371df7d7581dd5a3c70cd81dabbaa8",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/replay.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/replay.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/replay.stdout.txt",
+        "originalBytes": 1687,
+        "originalSha256": "3288d92bacce919f053e1199f073620f42b6fd150b7e1d73def0f5ca714cc7ed",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/replay.stdout.txt",
+        "sha256": "3288d92bacce919f053e1199f073620f42b6fd150b7e1d73def0f5ca714cc7ed",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/restore.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/restore.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/restore.stdout.txt",
+        "originalBytes": 664,
+        "originalSha256": "384305d1df6fc13b6ad6519a309400533ec88052867e4577c4027bc9620721e2",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/restore.stdout.txt",
+        "sha256": "384305d1df6fc13b6ad6519a309400533ec88052867e4577c4027bc9620721e2",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.add-user-to-tenant.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.add-user-to-tenant.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.add-user-to-tenant.stdout.txt",
+        "originalBytes": 1770,
+        "originalSha256": "2c684d13de7d16c4dafcf96dadd512ff440523f7e6c13464f2f5b97d3db3e79f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.add-user-to-tenant.stdout.txt",
+        "sha256": "2c684d13de7d16c4dafcf96dadd512ff440523f7e6c13464f2f5b97d3db3e79f",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.change-user-role.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.change-user-role.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.change-user-role.stdout.txt",
+        "originalBytes": 1851,
+        "originalSha256": "760729c13e36499c405f4941a8051052a53de0626a33a125670876779e915a87",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.change-user-role.stdout.txt",
+        "sha256": "760729c13e36499c405f4941a8051052a53de0626a33a125670876779e915a87",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.create-tenant.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.create-tenant.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.create-tenant.stdout.txt",
+        "originalBytes": 1556,
+        "originalSha256": "d50f42a5c5b87dc206219e5c702af86922c6378f9e216ff140b4941deffdc6b1",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.create-tenant.stdout.txt",
+        "sha256": "d50f42a5c5b87dc206219e5c702af86922c6378f9e216ff140b4941deffdc6b1",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.disable-tenant.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.disable-tenant.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.disable-tenant.stdout.txt",
+        "originalBytes": 982,
+        "originalSha256": "ce85c4f1a0f3938b92eb46162a9ab86ed597f1fd9ce993cb1d62245c52c1d535",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.disable-tenant.stdout.txt",
+        "sha256": "ce85c4f1a0f3938b92eb46162a9ab86ed597f1fd9ce993cb1d62245c52c1d535",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.enable-tenant.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.enable-tenant.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.enable-tenant.stdout.txt",
+        "originalBytes": 929,
+        "originalSha256": "ef98ebbfdecc3e29d278c3e67092f1d2836e2f3d053758637c5c007ffd186e34",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.enable-tenant.stdout.txt",
+        "sha256": "ef98ebbfdecc3e29d278c3e67092f1d2836e2f3d053758637c5c007ffd186e34",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.get-tenant-audit.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.get-tenant-audit.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.get-tenant-audit.stdout.txt",
+        "originalBytes": 3278,
+        "originalSha256": "4b007a7121ab6d07d0d998854d48e0bee5e4ad55ef896215b8ddc758915e1736",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.get-tenant-audit.stdout.txt",
+        "sha256": "4b007a7121ab6d07d0d998854d48e0bee5e4ad55ef896215b8ddc758915e1736",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.get-tenant-users.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.get-tenant-users.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.get-tenant-users.stdout.txt",
+        "originalBytes": 2016,
+        "originalSha256": "74db10e677c4d0ced358dc5ca40a1cbae7cacb95ebc12e6b1f7afc23f39799b9",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.get-tenant-users.stdout.txt",
+        "sha256": "74db10e677c4d0ced358dc5ca40a1cbae7cacb95ebc12e6b1f7afc23f39799b9",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.get-tenant.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.get-tenant.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.get-tenant.stdout.txt",
+        "originalBytes": 1188,
+        "originalSha256": "ceb909991e8bb3995730658fe64d5d4c0633ddde6c5914571dc1fbfb0a7a2f2a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.get-tenant.stdout.txt",
+        "sha256": "ceb909991e8bb3995730658fe64d5d4c0633ddde6c5914571dc1fbfb0a7a2f2a",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.get-user-tenants.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.get-user-tenants.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.get-user-tenants.stdout.txt",
+        "originalBytes": 2518,
+        "originalSha256": "4948299c083045fc665176b0aebfb11caa260e76bf811002b804616e97eb7bda",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.get-user-tenants.stdout.txt",
+        "sha256": "4948299c083045fc665176b0aebfb11caa260e76bf811002b804616e97eb7bda",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.list-tenants.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.list-tenants.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.list-tenants.stdout.txt",
+        "originalBytes": 1834,
+        "originalSha256": "75963b8d97adc731fd6bde828ed2df70ebeac4b43670482d5638f600db0eecbf",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.list-tenants.stdout.txt",
+        "sha256": "75963b8d97adc731fd6bde828ed2df70ebeac4b43670482d5638f600db0eecbf",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.remove-tenant-configuration.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.remove-tenant-configuration.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.remove-tenant-configuration.stdout.txt",
+        "originalBytes": 1078,
+        "originalSha256": "b7eb1421d81084bfd78b61c2ad58441ef3c79e8952cd282aedaa7dcc3010e77a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.remove-tenant-configuration.stdout.txt",
+        "sha256": "b7eb1421d81084bfd78b61c2ad58441ef3c79e8952cd282aedaa7dcc3010e77a",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.remove-user-from-tenant.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.remove-user-from-tenant.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.remove-user-from-tenant.stdout.txt",
+        "originalBytes": 1344,
+        "originalSha256": "514e6af81fe3ef7dd3d790a3e95f1d98052e895ae26ee74dd0f140799ce1c8e6",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.remove-user-from-tenant.stdout.txt",
+        "sha256": "514e6af81fe3ef7dd3d790a3e95f1d98052e895ae26ee74dd0f140799ce1c8e6",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.set-tenant-configuration.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.set-tenant-configuration.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.set-tenant-configuration.stdout.txt",
+        "originalBytes": 1531,
+        "originalSha256": "e175c18e3e17dd002c30539dcbdae1102c47c07861d600969a9960acf6b1f149",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.set-tenant-configuration.stdout.txt",
+        "sha256": "e175c18e3e17dd002c30539dcbdae1102c47c07861d600969a9960acf6b1f149",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.update-tenant.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.update-tenant.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/tenants.update-tenant.stdout.txt",
+        "originalBytes": 1448,
+        "originalSha256": "68ce132c00aeccedfdef23a53fe95436c4a575ff9acfea7e4046299cb57a769b",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/tenants.update-tenant.stdout.txt",
+        "sha256": "68ce132c00aeccedfdef23a53fe95436c4a575ff9acfea7e4046299cb57a769b",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.Tenants.Contracts/verification.json",
+        "originalBytes": 40431,
+        "originalSha256": "a92a3bb5fb84e10da131279097a89348603bddf87e0e29331999f4d0fe76aaf6",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/Hexalith.Tenants.Contracts/verification.json",
+        "sha256": "a92a3bb5fb84e10da131279097a89348603bddf87e0e29331999f4d0fe76aaf6",
+        "transformed": false
+      },
+      {
+        "archivePath": "catalog-benchmark.json",
+        "originalBytes": 745,
+        "originalSha256": "8c86093a3d26b407f9944fe38a092cc3ea658f8c33f8c539c714ade0b492f4d2",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/catalog-benchmark.json",
+        "sha256": "8c86093a3d26b407f9944fe38a092cc3ea658f8c33f8c539c714ade0b492f4d2",
+        "transformed": false
+      },
+      {
+        "archivePath": "enrolled.json",
+        "originalBytes": 80713,
+        "originalSha256": "77e89c7daca07cbfa1d7e83bb7de18421e4e941968159c581439c011ced45470",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/enrolled.json",
+        "sha256": "77e89c7daca07cbfa1d7e83bb7de18421e4e941968159c581439c011ced45470",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-build.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-build.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-build.stdout.txt",
+        "originalBytes": 1015,
+        "originalSha256": "5d113532241389fe5106ace629c97645319ed361a2bfe326de4dd5c355a01bb6",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-build.stdout.txt",
+        "sha256": "5d113532241389fe5106ace629c97645319ed361a2bfe326de4dd5c355a01bb6",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.create-party.CLI.gateway-error.json",
+        "originalBytes": 1405,
+        "originalSha256": "4ac63477db8076ac4cceec55eefbd387c28f20311336363463c76a3b98de5271",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.create-party.CLI.gateway-error.json",
+        "sha256": "4ac63477db8076ac4cceec55eefbd387c28f20311336363463c76a3b98de5271",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.create-party.CLI.json",
+        "originalBytes": 2576,
+        "originalSha256": "67a8e4bac606c8b74541a934e9e435a6e3469b9d6b0a31fb0d7dda46fa13edf1",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.create-party.CLI.json",
+        "sha256": "67a8e4bac606c8b74541a934e9e435a6e3469b9d6b0a31fb0d7dda46fa13edf1",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.create-party.MCP.gateway-error.json",
+        "originalBytes": 1405,
+        "originalSha256": "d79974b8b136bdb5903b36e3e9850d4bfc4a98dec8697dbcd1890eb940a94c23",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.create-party.MCP.gateway-error.json",
+        "sha256": "d79974b8b136bdb5903b36e3e9850d4bfc4a98dec8697dbcd1890eb940a94c23",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.create-party.MCP.json",
+        "originalBytes": 2576,
+        "originalSha256": "0226d6888eb664488af2fb7bd4b853133c271f315fbbb7ee713c937dc7182b5e",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.create-party.MCP.json",
+        "sha256": "0226d6888eb664488af2fb7bd4b853133c271f315fbbb7ee713c937dc7182b5e",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.deactivate-party.CLI.gateway-error.json",
+        "originalBytes": 766,
+        "originalSha256": "ca2381b5e60f73ef9f0b524ac4e077266e06a96fe0c10f31576233e9719400cd",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.deactivate-party.CLI.gateway-error.json",
+        "sha256": "ca2381b5e60f73ef9f0b524ac4e077266e06a96fe0c10f31576233e9719400cd",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.deactivate-party.CLI.json",
+        "originalBytes": 3616,
+        "originalSha256": "7f30d372de3a1e6828bc14065cfc0ce48310ce5ae0bc3142e1c1e5513a1021f6",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.deactivate-party.CLI.json",
+        "sha256": "7f30d372de3a1e6828bc14065cfc0ce48310ce5ae0bc3142e1c1e5513a1021f6",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.deactivate-party.MCP.gateway-error.json",
+        "originalBytes": 766,
+        "originalSha256": "56bbf21ffa31b698858a45c5f0ff23ab07b0ab0c47d23681f25ed146736502ac",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.deactivate-party.MCP.gateway-error.json",
+        "sha256": "56bbf21ffa31b698858a45c5f0ff23ab07b0ab0c47d23681f25ed146736502ac",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.deactivate-party.MCP.json",
+        "originalBytes": 3616,
+        "originalSha256": "8f44c8a56c7be0789984c06452319159bfd62365dbeabd50559d635e5e82c9cd",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.deactivate-party.MCP.json",
+        "sha256": "8f44c8a56c7be0789984c06452319159bfd62365dbeabd50559d635e5e82c9cd",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.get-party.CLI.gateway-error.json",
+        "originalBytes": 755,
+        "originalSha256": "93f759897050a03041799a57cf8bcbbad8458ca965f74045955147d6f846d648",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.get-party.CLI.gateway-error.json",
+        "sha256": "93f759897050a03041799a57cf8bcbbad8458ca965f74045955147d6f846d648",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.get-party.CLI.json",
+        "originalBytes": 2610,
+        "originalSha256": "ddffb13f8baef2e4ba2de8ba447fece6dab215806ae161a05471706b4d9fac2f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.get-party.CLI.json",
+        "sha256": "ddffb13f8baef2e4ba2de8ba447fece6dab215806ae161a05471706b4d9fac2f",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.get-party.MCP.gateway-error.json",
+        "originalBytes": 755,
+        "originalSha256": "93f759897050a03041799a57cf8bcbbad8458ca965f74045955147d6f846d648",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.get-party.MCP.gateway-error.json",
+        "sha256": "93f759897050a03041799a57cf8bcbbad8458ca965f74045955147d6f846d648",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.get-party.MCP.json",
+        "originalBytes": 2610,
+        "originalSha256": "da951c331a234e7f013adddc3d3a400c164a1f857a6efa04d583dcfb43910709",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.get-party.MCP.json",
+        "sha256": "da951c331a234e7f013adddc3d3a400c164a1f857a6efa04d583dcfb43910709",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.list-parties.CLI.gateway-error.json",
+        "originalBytes": 887,
+        "originalSha256": "1beae9d0970ac73bf37b9dc6ca41144fe227a46e034705a6a0bf75b3caef35fd",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.list-parties.CLI.gateway-error.json",
+        "sha256": "1beae9d0970ac73bf37b9dc6ca41144fe227a46e034705a6a0bf75b3caef35fd",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.list-parties.CLI.json",
+        "originalBytes": 2632,
+        "originalSha256": "e1bf0764efe984320a565fcbf0785eafa238986f3baa96d32741b9569b6585ad",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.list-parties.CLI.json",
+        "sha256": "e1bf0764efe984320a565fcbf0785eafa238986f3baa96d32741b9569b6585ad",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.list-parties.MCP.gateway-error.json",
+        "originalBytes": 887,
+        "originalSha256": "1beae9d0970ac73bf37b9dc6ca41144fe227a46e034705a6a0bf75b3caef35fd",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.list-parties.MCP.gateway-error.json",
+        "sha256": "1beae9d0970ac73bf37b9dc6ca41144fe227a46e034705a6a0bf75b3caef35fd",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.list-parties.MCP.json",
+        "originalBytes": 2632,
+        "originalSha256": "ff6e070e15b0278d28adbd81c5916e1f7c20aa5790c7f6fae733823647f635b4",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.list-parties.MCP.json",
+        "sha256": "ff6e070e15b0278d28adbd81c5916e1f7c20aa5790c7f6fae733823647f635b4",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.reactivate-party.CLI.gateway-error.json",
+        "originalBytes": 766,
+        "originalSha256": "f001ae1c3a49ea77af86d8660b36d2f1fba934aac2ace389e4e9a1907d4203e4",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.reactivate-party.CLI.gateway-error.json",
+        "sha256": "f001ae1c3a49ea77af86d8660b36d2f1fba934aac2ace389e4e9a1907d4203e4",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.reactivate-party.CLI.json",
+        "originalBytes": 3615,
+        "originalSha256": "0a923c551be3a88cba1beb590ee4da051e0840a96fbb374341ff9164f71d013f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.reactivate-party.CLI.json",
+        "sha256": "0a923c551be3a88cba1beb590ee4da051e0840a96fbb374341ff9164f71d013f",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.reactivate-party.MCP.gateway-error.json",
+        "originalBytes": 766,
+        "originalSha256": "a23baa995f6ddba95c39299dc96fc945f8d1c74be229836c36a4352b304a3b5d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.reactivate-party.MCP.gateway-error.json",
+        "sha256": "a23baa995f6ddba95c39299dc96fc945f8d1c74be229836c36a4352b304a3b5d",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.reactivate-party.MCP.json",
+        "originalBytes": 3615,
+        "originalSha256": "e41702d756d8bfd68ba339118794980c33e77663dfcc843c38e08a7bb318a837",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.reactivate-party.MCP.json",
+        "sha256": "e41702d756d8bfd68ba339118794980c33e77663dfcc843c38e08a7bb318a837",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.search-parties.CLI.gateway-error.json",
+        "originalBytes": 868,
+        "originalSha256": "41d257381ef9cca26fa140d80f75b2ea2be25d583db2989ecf5f4386e15832b1",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.search-parties.CLI.gateway-error.json",
+        "sha256": "41d257381ef9cca26fa140d80f75b2ea2be25d583db2989ecf5f4386e15832b1",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.search-parties.CLI.json",
+        "originalBytes": 2852,
+        "originalSha256": "57e64c87fba00f4c99b7bba93cbdabf47b7e4760b76d921b34731bfdfc621c0f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.search-parties.CLI.json",
+        "sha256": "57e64c87fba00f4c99b7bba93cbdabf47b7e4760b76d921b34731bfdfc621c0f",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.search-parties.MCP.gateway-error.json",
+        "originalBytes": 868,
+        "originalSha256": "41d257381ef9cca26fa140d80f75b2ea2be25d583db2989ecf5f4386e15832b1",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.search-parties.MCP.gateway-error.json",
+        "sha256": "41d257381ef9cca26fa140d80f75b2ea2be25d583db2989ecf5f4386e15832b1",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.search-parties.MCP.json",
+        "originalBytes": 2852,
+        "originalSha256": "62d59a39d117a564c6c6fa4e0184d25758ac3ea44304879c01177175ba39244c",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.search-parties.MCP.json",
+        "sha256": "62d59a39d117a564c6c6fa4e0184d25758ac3ea44304879c01177175ba39244c",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.update-party.CLI.gateway-error.json",
+        "originalBytes": 1180,
+        "originalSha256": "970884c97db2c86b02e100edb77ac486a8b6c288acf5d47cf390ffc7c75a2d86",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.update-party.CLI.gateway-error.json",
+        "sha256": "970884c97db2c86b02e100edb77ac486a8b6c288acf5d47cf390ffc7c75a2d86",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.update-party.CLI.json",
+        "originalBytes": 3566,
+        "originalSha256": "feb7650cde8c13722c1452f7af25f5bbde4845b0409cd6a89804036a36dc4c5d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.update-party.CLI.json",
+        "sha256": "feb7650cde8c13722c1452f7af25f5bbde4845b0409cd6a89804036a36dc4c5d",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.update-party.MCP.gateway-error.json",
+        "originalBytes": 1180,
+        "originalSha256": "2c46a4728a3c2c48b2f5620613b83a263c590961fc794c9de7b27511029f36db",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.update-party.MCP.gateway-error.json",
+        "sha256": "2c46a4728a3c2c48b2f5620613b83a263c590961fc794c9de7b27511029f36db",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/parties.update-party.MCP.json",
+        "originalBytes": 3566,
+        "originalSha256": "768282fc604d02770f2fb48ab678ff6ea50be4c3c306721879b876fc0203d854",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/parties.update-party.MCP.json",
+        "sha256": "768282fc604d02770f2fb48ab678ff6ea50be4c3c306721879b876fc0203d854",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/preflight.json",
+        "originalBytes": 50059,
+        "originalSha256": "d4533701396424a8ade30294285a7c2447c46952ffa96707a6ce6807293709fb",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/preflight.json",
+        "sha256": "d4533701396424a8ade30294285a7c2447c46952ffa96707a6ce6807293709fb",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.add-user-to-tenant.CLI.gateway-error.json",
+        "originalBytes": 836,
+        "originalSha256": "6dbfad67ceb2aefa6f1329125ce69a8dc64a5bbd1600c5bdef656c87d15a0498",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.add-user-to-tenant.CLI.gateway-error.json",
+        "sha256": "6dbfad67ceb2aefa6f1329125ce69a8dc64a5bbd1600c5bdef656c87d15a0498",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.add-user-to-tenant.CLI.json",
+        "originalBytes": 2374,
+        "originalSha256": "e91995e14f6d2faacb4ecae1646ebba6d5ff0c7a3118f48906522eef58e29a03",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.add-user-to-tenant.CLI.json",
+        "sha256": "e91995e14f6d2faacb4ecae1646ebba6d5ff0c7a3118f48906522eef58e29a03",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.add-user-to-tenant.MCP.gateway-error.json",
+        "originalBytes": 836,
+        "originalSha256": "0e8338f664c536a20170d4232bff785516fbffb32b69b48038c5497b36f01d37",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.add-user-to-tenant.MCP.gateway-error.json",
+        "sha256": "0e8338f664c536a20170d4232bff785516fbffb32b69b48038c5497b36f01d37",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.add-user-to-tenant.MCP.json",
+        "originalBytes": 2374,
+        "originalSha256": "bc4fa38d39d17be5b092090c22ed2a0838c83c16ea9cb9bcd2b25cb5ad184e74",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.add-user-to-tenant.MCP.json",
+        "sha256": "bc4fa38d39d17be5b092090c22ed2a0838c83c16ea9cb9bcd2b25cb5ad184e74",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.change-user-role.CLI.gateway-error.json",
+        "originalBytes": 825,
+        "originalSha256": "cec51b3c18a06dee69742114868408ec1f787b58f0ad29851f1c0b3ecda0ba2a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.change-user-role.CLI.gateway-error.json",
+        "sha256": "cec51b3c18a06dee69742114868408ec1f787b58f0ad29851f1c0b3ecda0ba2a",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.change-user-role.CLI.json",
+        "originalBytes": 3104,
+        "originalSha256": "64dbd114ec753cab3973b30db12087a83fde1a01cdbea261e0ece7425db6602e",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.change-user-role.CLI.json",
+        "sha256": "64dbd114ec753cab3973b30db12087a83fde1a01cdbea261e0ece7425db6602e",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.change-user-role.MCP.gateway-error.json",
+        "originalBytes": 825,
+        "originalSha256": "3e97f5e1253a09034e9a7aed4aeb6a60003105d583996a51340401004f5987a5",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.change-user-role.MCP.gateway-error.json",
+        "sha256": "3e97f5e1253a09034e9a7aed4aeb6a60003105d583996a51340401004f5987a5",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.change-user-role.MCP.json",
+        "originalBytes": 3104,
+        "originalSha256": "d3a6d602d711ca3eb5dde650df7dfa052d757db6fca27281376d485c38fc551e",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.change-user-role.MCP.json",
+        "sha256": "d3a6d602d711ca3eb5dde650df7dfa052d757db6fca27281376d485c38fc551e",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.create-tenant.CLI.gateway-error.json",
+        "originalBytes": 843,
+        "originalSha256": "49f125080aa8b72a61048caf9352aa3ebb07f783ee9b5cb1ffbea83fdf300c28",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.create-tenant.CLI.gateway-error.json",
+        "sha256": "49f125080aa8b72a61048caf9352aa3ebb07f783ee9b5cb1ffbea83fdf300c28",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.create-tenant.CLI.json",
+        "originalBytes": 1687,
+        "originalSha256": "228384803dd35629b2ea1fd744a2e12a7b7a5d54a5af652256b072987945640d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.create-tenant.CLI.json",
+        "sha256": "228384803dd35629b2ea1fd744a2e12a7b7a5d54a5af652256b072987945640d",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.create-tenant.MCP.gateway-error.json",
+        "originalBytes": 843,
+        "originalSha256": "4a81d06792120fecbc7313dd50846600980a8a0aa6c285beeae1f4bf3290b5da",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.create-tenant.MCP.gateway-error.json",
+        "sha256": "4a81d06792120fecbc7313dd50846600980a8a0aa6c285beeae1f4bf3290b5da",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.create-tenant.MCP.json",
+        "originalBytes": 1687,
+        "originalSha256": "d49d91ad475a57cdd2931131e2d8382de29818c54db7426aff3ec14480e2a342",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.create-tenant.MCP.json",
+        "sha256": "d49d91ad475a57cdd2931131e2d8382de29818c54db7426aff3ec14480e2a342",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.disable-tenant.CLI.gateway-error.json",
+        "originalBytes": 740,
+        "originalSha256": "3b9d53ce6bb6c90de30b50a09793695d169643bef0f749df40309c6299a916b5",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.disable-tenant.CLI.gateway-error.json",
+        "sha256": "3b9d53ce6bb6c90de30b50a09793695d169643bef0f749df40309c6299a916b5",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.disable-tenant.CLI.json",
+        "originalBytes": 2300,
+        "originalSha256": "35d2d515d165fc2598c4a0e85335e97b9e7f4aeda01b988c0c6941adbce916e8",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.disable-tenant.CLI.json",
+        "sha256": "35d2d515d165fc2598c4a0e85335e97b9e7f4aeda01b988c0c6941adbce916e8",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.disable-tenant.MCP.gateway-error.json",
+        "originalBytes": 740,
+        "originalSha256": "21fd9fa12d56962b61b1ba0256682d3b69692baf2233a26dc7550ab92ccbbec0",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.disable-tenant.MCP.gateway-error.json",
+        "sha256": "21fd9fa12d56962b61b1ba0256682d3b69692baf2233a26dc7550ab92ccbbec0",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.disable-tenant.MCP.json",
+        "originalBytes": 2300,
+        "originalSha256": "d2c7a54f5620e2e32b29dfc5b8021485a58827c2e7b66cdf4345452dabc4af6a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.disable-tenant.MCP.json",
+        "sha256": "d2c7a54f5620e2e32b29dfc5b8021485a58827c2e7b66cdf4345452dabc4af6a",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.enable-tenant.CLI.gateway-error.json",
+        "originalBytes": 736,
+        "originalSha256": "e3a62710dbee9f73f03bac14e84b22c2496b580fe70cb5c09b30d76f00f29e7b",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.enable-tenant.CLI.gateway-error.json",
+        "sha256": "e3a62710dbee9f73f03bac14e84b22c2496b580fe70cb5c09b30d76f00f29e7b",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.enable-tenant.CLI.json",
+        "originalBytes": 2961,
+        "originalSha256": "4adb75b0fc6673aa41df5f9f0adda917d64b9a1af98121b8398bd68d908a8466",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.enable-tenant.CLI.json",
+        "sha256": "4adb75b0fc6673aa41df5f9f0adda917d64b9a1af98121b8398bd68d908a8466",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.enable-tenant.MCP.gateway-error.json",
+        "originalBytes": 736,
+        "originalSha256": "bca16f9a70ca5a8e0b14196b104e4669559f7e573ac03ea03ed1662367a3988c",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.enable-tenant.MCP.gateway-error.json",
+        "sha256": "bca16f9a70ca5a8e0b14196b104e4669559f7e573ac03ea03ed1662367a3988c",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.enable-tenant.MCP.json",
+        "originalBytes": 2961,
+        "originalSha256": "5c9c658e321ac29f82bdcb07145c890b2ab749e980ca52611f26706b0b0e8287",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.enable-tenant.MCP.json",
+        "sha256": "5c9c658e321ac29f82bdcb07145c890b2ab749e980ca52611f26706b0b0e8287",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant-audit.CLI.gateway-error.json",
+        "originalBytes": 833,
+        "originalSha256": "efbd02c900911900e2fec6c192501d9f3101370f01912b5381cece83b18340fa",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant-audit.CLI.gateway-error.json",
+        "sha256": "efbd02c900911900e2fec6c192501d9f3101370f01912b5381cece83b18340fa",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant-audit.CLI.json",
+        "originalBytes": 6289,
+        "originalSha256": "533cb457db4b6c3b095c140ea2ced422a05c04a479298edf52f92a3101e28ab7",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant-audit.CLI.json",
+        "sha256": "533cb457db4b6c3b095c140ea2ced422a05c04a479298edf52f92a3101e28ab7",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant-audit.MCP.gateway-error.json",
+        "originalBytes": 833,
+        "originalSha256": "efbd02c900911900e2fec6c192501d9f3101370f01912b5381cece83b18340fa",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant-audit.MCP.gateway-error.json",
+        "sha256": "efbd02c900911900e2fec6c192501d9f3101370f01912b5381cece83b18340fa",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant-audit.MCP.json",
+        "originalBytes": 6289,
+        "originalSha256": "d1a1cff7ea1765e6a75294e578751890ce80e29b65714608b9d2f8fc5f98ac3a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant-audit.MCP.json",
+        "sha256": "d1a1cff7ea1765e6a75294e578751890ce80e29b65714608b9d2f8fc5f98ac3a",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant-users.CLI.gateway-error.json",
+        "originalBytes": 719,
+        "originalSha256": "95dbd875597405ad6077223fbc88e72b372113080b756906bf6aa01889a9d8c8",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant-users.CLI.gateway-error.json",
+        "sha256": "95dbd875597405ad6077223fbc88e72b372113080b756906bf6aa01889a9d8c8",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant-users.CLI.json",
+        "originalBytes": 5040,
+        "originalSha256": "691561720411dfd29c788674e7d8cccbc99843e5abb4fc6ec036292a596a1a90",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant-users.CLI.json",
+        "sha256": "691561720411dfd29c788674e7d8cccbc99843e5abb4fc6ec036292a596a1a90",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant-users.MCP.gateway-error.json",
+        "originalBytes": 719,
+        "originalSha256": "95dbd875597405ad6077223fbc88e72b372113080b756906bf6aa01889a9d8c8",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant-users.MCP.gateway-error.json",
+        "sha256": "95dbd875597405ad6077223fbc88e72b372113080b756906bf6aa01889a9d8c8",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant-users.MCP.json",
+        "originalBytes": 5040,
+        "originalSha256": "8885a033aa1f5e16c1663e1ecd7ff4547e453099a5cdb7b24d02633bddd27fff",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant-users.MCP.json",
+        "sha256": "8885a033aa1f5e16c1663e1ecd7ff4547e453099a5cdb7b24d02633bddd27fff",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant.CLI.gateway-error.json",
+        "originalBytes": 649,
+        "originalSha256": "1d3e93457a38d02c030ecc3b3f56325d7bce3c884c850dbfedea77357c5a1c92",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant.CLI.gateway-error.json",
+        "sha256": "1d3e93457a38d02c030ecc3b3f56325d7bce3c884c850dbfedea77357c5a1c92",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant.CLI.json",
+        "originalBytes": 3302,
+        "originalSha256": "1cdb9484ff69df6c617f898f852c0a43fbc7a78170ce2d5de51dffa394b78733",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant.CLI.json",
+        "sha256": "1cdb9484ff69df6c617f898f852c0a43fbc7a78170ce2d5de51dffa394b78733",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant.MCP.gateway-error.json",
+        "originalBytes": 649,
+        "originalSha256": "1d3e93457a38d02c030ecc3b3f56325d7bce3c884c850dbfedea77357c5a1c92",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant.MCP.gateway-error.json",
+        "sha256": "1d3e93457a38d02c030ecc3b3f56325d7bce3c884c850dbfedea77357c5a1c92",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-tenant.MCP.json",
+        "originalBytes": 3302,
+        "originalSha256": "b309272eb8c3da768a4ad0795a796a0c849a188b4cc9afa769b235c6f8da9635",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-tenant.MCP.json",
+        "sha256": "b309272eb8c3da768a4ad0795a796a0c849a188b4cc9afa769b235c6f8da9635",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-user-tenants.CLI.gateway-error.json",
+        "originalBytes": 732,
+        "originalSha256": "18a476010a343b059786230a6b134fffac7c5f61917e7130a5e7fc36ac43f125",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-user-tenants.CLI.gateway-error.json",
+        "sha256": "18a476010a343b059786230a6b134fffac7c5f61917e7130a5e7fc36ac43f125",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-user-tenants.CLI.json",
+        "originalBytes": 6904,
+        "originalSha256": "7886f427f740fccff8e7b46fa31dac89bdc73c287c841841d2c848b1e9532ba6",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-user-tenants.CLI.json",
+        "sha256": "7886f427f740fccff8e7b46fa31dac89bdc73c287c841841d2c848b1e9532ba6",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-user-tenants.MCP.gateway-error.json",
+        "originalBytes": 732,
+        "originalSha256": "18a476010a343b059786230a6b134fffac7c5f61917e7130a5e7fc36ac43f125",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-user-tenants.MCP.gateway-error.json",
+        "sha256": "18a476010a343b059786230a6b134fffac7c5f61917e7130a5e7fc36ac43f125",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.get-user-tenants.MCP.json",
+        "originalBytes": 6904,
+        "originalSha256": "5781d6bc4d352edecefbfd1065fb00da07a842a4f6f3bbf3c9b909c5cd0044eb",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.get-user-tenants.MCP.json",
+        "sha256": "5781d6bc4d352edecefbfd1065fb00da07a842a4f6f3bbf3c9b909c5cd0044eb",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.list-tenants.CLI.gateway-error.json",
+        "originalBytes": 667,
+        "originalSha256": "e6c2445ecbf15a04ce8db85c1da23afaeb90c168f181ea1278366932b59d2bd2",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.list-tenants.CLI.gateway-error.json",
+        "sha256": "e6c2445ecbf15a04ce8db85c1da23afaeb90c168f181ea1278366932b59d2bd2",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.list-tenants.CLI.json",
+        "originalBytes": 4190,
+        "originalSha256": "4d30f45f78627f5f678c9f466e8b73abacf3bc34d6491efc5706bad1c90d02da",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.list-tenants.CLI.json",
+        "sha256": "4d30f45f78627f5f678c9f466e8b73abacf3bc34d6491efc5706bad1c90d02da",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.list-tenants.MCP.gateway-error.json",
+        "originalBytes": 667,
+        "originalSha256": "e6c2445ecbf15a04ce8db85c1da23afaeb90c168f181ea1278366932b59d2bd2",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.list-tenants.MCP.gateway-error.json",
+        "sha256": "e6c2445ecbf15a04ce8db85c1da23afaeb90c168f181ea1278366932b59d2bd2",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.list-tenants.MCP.json",
+        "originalBytes": 4190,
+        "originalSha256": "4efaa4a6815a849652f19f4c80e6debb22eee61a983e785205c44b27e01e671d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.list-tenants.MCP.json",
+        "sha256": "4efaa4a6815a849652f19f4c80e6debb22eee61a983e785205c44b27e01e671d",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.remove-tenant-configuration.CLI.gateway-error.json",
+        "originalBytes": 814,
+        "originalSha256": "be3f281d899840bf72cac95ad6cde997df38fedf6d96f75c3b499160ba488f59",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.remove-tenant-configuration.CLI.gateway-error.json",
+        "sha256": "be3f281d899840bf72cac95ad6cde997df38fedf6d96f75c3b499160ba488f59",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.remove-tenant-configuration.CLI.json",
+        "originalBytes": 3265,
+        "originalSha256": "f67af7584c6173ff15e7440a254c8440d7f1a045c4c07f1f0f375f5b3589e9f2",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.remove-tenant-configuration.CLI.json",
+        "sha256": "f67af7584c6173ff15e7440a254c8440d7f1a045c4c07f1f0f375f5b3589e9f2",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.remove-tenant-configuration.MCP.gateway-error.json",
+        "originalBytes": 814,
+        "originalSha256": "0cc0d0f9abdbdccbac0bce5a78026a0842938ad498366ac8c82b66733c5862b4",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.remove-tenant-configuration.MCP.gateway-error.json",
+        "sha256": "0cc0d0f9abdbdccbac0bce5a78026a0842938ad498366ac8c82b66733c5862b4",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.remove-tenant-configuration.MCP.json",
+        "originalBytes": 3265,
+        "originalSha256": "2722767792923ea65a641fac7165bbae7acce3a263ace37c2b1d370793edfa7c",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.remove-tenant-configuration.MCP.json",
+        "sha256": "2722767792923ea65a641fac7165bbae7acce3a263ace37c2b1d370793edfa7c",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.remove-user-from-tenant.CLI.gateway-error.json",
+        "originalBytes": 808,
+        "originalSha256": "f950fa1eb37d38fe451289dbb9c383a56b4832c12ebb258b56ffc2620e4ccd9d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.remove-user-from-tenant.CLI.gateway-error.json",
+        "sha256": "f950fa1eb37d38fe451289dbb9c383a56b4832c12ebb258b56ffc2620e4ccd9d",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.remove-user-from-tenant.CLI.json",
+        "originalBytes": 3000,
+        "originalSha256": "006597004d3b74282c652cda3fd0e79605d4e3f9b1b05dcb741642a6d0964731",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.remove-user-from-tenant.CLI.json",
+        "sha256": "006597004d3b74282c652cda3fd0e79605d4e3f9b1b05dcb741642a6d0964731",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.remove-user-from-tenant.MCP.gateway-error.json",
+        "originalBytes": 808,
+        "originalSha256": "8a1a81206bf63e75fad3ec1bf11661a1f0ff17638258b33f6ae18a7b7e5cdf34",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.remove-user-from-tenant.MCP.gateway-error.json",
+        "sha256": "8a1a81206bf63e75fad3ec1bf11661a1f0ff17638258b33f6ae18a7b7e5cdf34",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.remove-user-from-tenant.MCP.json",
+        "originalBytes": 3000,
+        "originalSha256": "7de245b58daee747a4f3ef0e64412b02ab17e6dba33d226b53b8bd3614493e23",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.remove-user-from-tenant.MCP.json",
+        "sha256": "7de245b58daee747a4f3ef0e64412b02ab17e6dba33d226b53b8bd3614493e23",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.set-tenant-configuration.CLI.gateway-error.json",
+        "originalBytes": 825,
+        "originalSha256": "9baf42a0cbd1304ee384bf7363775e227975a961d71009ee81d4e99d2b5b4da6",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.set-tenant-configuration.CLI.gateway-error.json",
+        "sha256": "9baf42a0cbd1304ee384bf7363775e227975a961d71009ee81d4e99d2b5b4da6",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.set-tenant-configuration.CLI.json",
+        "originalBytes": 2444,
+        "originalSha256": "94d63bd801be34de34af30e02d937e97b9a9e00a629a63b64bf19c396a377d15",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.set-tenant-configuration.CLI.json",
+        "sha256": "94d63bd801be34de34af30e02d937e97b9a9e00a629a63b64bf19c396a377d15",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.set-tenant-configuration.MCP.gateway-error.json",
+        "originalBytes": 825,
+        "originalSha256": "29d426e8e29782f7aabf16dc9248f4a3af9a88db579d5f2ba6354b76b354e8d6",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.set-tenant-configuration.MCP.gateway-error.json",
+        "sha256": "29d426e8e29782f7aabf16dc9248f4a3af9a88db579d5f2ba6354b76b354e8d6",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.set-tenant-configuration.MCP.json",
+        "originalBytes": 2444,
+        "originalSha256": "8da946094a4908e15259a6133ac2e96361c95a7eb3e891724592714051a46207",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.set-tenant-configuration.MCP.json",
+        "sha256": "8da946094a4908e15259a6133ac2e96361c95a7eb3e891724592714051a46207",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.update-tenant.CLI.gateway-error.json",
+        "originalBytes": 811,
+        "originalSha256": "d2d216ed3047ce0d131799183fcc4d3e0f3a81b54409db0519de02cea97afc35",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.update-tenant.CLI.gateway-error.json",
+        "sha256": "d2d216ed3047ce0d131799183fcc4d3e0f3a81b54409db0519de02cea97afc35",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.update-tenant.CLI.json",
+        "originalBytes": 2405,
+        "originalSha256": "f1a2f34fed4a45dff1d94a19b81c12966996bb61410cf195f0bc4cbcb4c6aa1f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.update-tenant.CLI.json",
+        "sha256": "f1a2f34fed4a45dff1d94a19b81c12966996bb61410cf195f0bc4cbcb4c6aa1f",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.update-tenant.MCP.gateway-error.json",
+        "originalBytes": 811,
+        "originalSha256": "9ef39311c36e6126199e010b2542a7aeaacb4cc573ed8aec80a9b1d14cd3c2d2",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.update-tenant.MCP.gateway-error.json",
+        "sha256": "9ef39311c36e6126199e010b2542a7aeaacb4cc573ed8aec80a9b1d14cd3c2d2",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-observations/tenants.update-tenant.MCP.json",
+        "originalBytes": 2405,
+        "originalSha256": "951b310ecdb2baa8ef55382f673e771ec9fe9d07b5bade5cb7491b795c053018",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-observations/tenants.update-tenant.MCP.json",
+        "sha256": "951b310ecdb2baa8ef55382f673e771ec9fe9d07b5bade5cb7491b795c053018",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-replay.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-replay.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-replay.stdout.txt",
+        "originalBytes": 2506,
+        "originalSha256": "2ff57a5ab4c21479933c49ad154e99bda7ab91e68861aa7b2f4d6a99413b3ce5",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-replay.stdout.txt",
+        "sha256": "2ff57a5ab4c21479933c49ad154e99bda7ab91e68861aa7b2f4d6a99413b3ce5",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-restore.stderr.txt",
+        "originalBytes": 0,
+        "originalSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-restore.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "transformed": false
+      },
+      {
+        "archivePath": "production-restore.stdout.txt",
+        "originalBytes": 80,
+        "originalSha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/enrolled/production-restore.stdout.txt",
+        "sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+        "transformed": false
+      }
+    ],
+    "artifactApiMetadata": {
+      "id": 13690340163,
+      "node_id": "MDg6QXJ0aWZhY3QxMzY5MDM0MDE2Mw==",
+      "name": "enrolled-module-evidence",
+      "size_in_bytes": 366033,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13690340163",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13690340163/zip",
+      "expired": false,
+      "digest": "sha256:bd496caebc8ea446eb86cea2c18103bc1e990082cf1b5cf7f66835c85080eaae",
+      "created_at": "2026-11-09T15:59:55Z",
+      "updated_at": "2026-11-09T15:59:55Z",
+      "expires_at": "2027-02-07T15:50:43Z",
+      "workflow_run": {
+        "id": 42648730822,
+        "repository_id": 1379417482,
+        "head_repository_id": 1379417482,
+        "head_branch": "feat/story-5-4-shared-head-evidence",
+        "head_sha": "fc9bbe35fc418addf6878df7fad0837ae9b94e26"
+      }
+    }
+  },
+  {
+    "name": "blocking-test-results",
+    "githubArtifactId": 13688354287,
+    "githubRunId": 42648730822,
+    "downloadedArchiveSha256": "636e3dc476a7c498aa8bb5853eb25710195a3e1c9dcd0bd5fa8b57a19af35629",
+    "githubAdvertisedSha256": "636e3dc476a7c498aa8bb5853eb25710195a3e1c9dcd0bd5fa8b57a19af35629",
+    "advertisedDigestVerified": true,
+    "archiveBytes": 282474,
+    "files": [
+      {
+        "archivePath": "Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx",
+        "originalBytes": 30180,
+        "originalSha256": "4fb0c4b26fcba6c3ce0c1023ad7c990f0eb3a03f33c25220adea1f627fd9e9b7",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/ci/ordinary-tests/Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx.xml",
+        "sha256": "4fb0c4b26fcba6c3ce0c1023ad7c990f0eb3a03f33c25220adea1f627fd9e9b7",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx",
+        "originalBytes": 29902,
+        "originalSha256": "94104e1981a7110c7210e405423f6e9f06addf4a245ac43e50cc649d6427498a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/ci/ordinary-tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx.xml",
+        "sha256": "94104e1981a7110c7210e405423f6e9f06addf4a245ac43e50cc649d6427498a",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx",
+        "originalBytes": 898196,
+        "originalSha256": "51f510b34a5d9da4a3295e77474aef5c2d42ac758056ec98d215737407157984",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/ci/ordinary-tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx.xml",
+        "sha256": "51f510b34a5d9da4a3295e77474aef5c2d42ac758056ec98d215737407157984",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx",
+        "originalBytes": 1289367,
+        "originalSha256": "9c4d806cce1519eb5d9a1f9b36883e5d0cfabd664d2bda70ea698193944b747f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/ci/ordinary-tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx.xml",
+        "sha256": "9c4d806cce1519eb5d9a1f9b36883e5d0cfabd664d2bda70ea698193944b747f",
+        "transformed": false
+      },
+      {
+        "archivePath": "Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx",
+        "originalBytes": 529046,
+        "originalSha256": "a2a59a099de858d0c5fc54dc9ba92be9b8b6447e7a10943de0d1548079bb50f2",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/ci/ordinary-tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx.xml",
+        "sha256": "783c27dadb8c674d122b813f7c061105cda53a2b4432ed0cfcf4185a2e808644",
+        "transformed": true
+      },
+      {
+        "archivePath": "Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx",
+        "originalBytes": 140147,
+        "originalSha256": "efc3772718928b6c19dd1123712b59a9a1a798c8b5fa18ee6edb429c23b04a06",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/ci/ordinary-tests/Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx.xml",
+        "sha256": "efc3772718928b6c19dd1123712b59a9a1a798c8b5fa18ee6edb429c23b04a06",
+        "transformed": false
+      }
+    ],
+    "artifactApiMetadata": {
+      "id": 13688354287,
+      "node_id": "MDg6QXJ0aWZhY3QxMzY4ODM1NDI4Nw==",
+      "name": "blocking-test-results",
+      "size_in_bytes": 282474,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13688354287",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13688354287/zip",
+      "expired": false,
+      "digest": "sha256:636e3dc476a7c498aa8bb5853eb25710195a3e1c9dcd0bd5fa8b57a19af35629",
+      "created_at": "2026-11-09T15:58:39Z",
+      "updated_at": "2026-11-09T15:58:39Z",
+      "expires_at": "2026-11-16T15:58:37Z",
+      "workflow_run": {
+        "id": 42648730822,
+        "repository_id": 1379417482,
+        "head_repository_id": 1379417482,
+        "head_branch": "feat/story-5-4-shared-head-evidence",
+        "head_sha": "fc9bbe35fc418addf6878df7fad0837ae9b94e26"
+      }
+    }
+  },
+  {
+    "name": "live-preflight-evidence",
+    "githubArtifactId": 13689671531,
+    "githubRunId": 42648730822,
+    "downloadedArchiveSha256": "6f46e72b9e57777522a4b19ba4ee3a437ac410a48bf434611a23924f3af1977a",
+    "githubAdvertisedSha256": "6f46e72b9e57777522a4b19ba4ee3a437ac410a48bf434611a23924f3af1977a",
+    "advertisedDigestVerified": true,
+    "archiveBytes": 58027,
+    "files": [
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/bindings.json",
+        "originalBytes": 12547,
+        "originalSha256": "8d0dba1da4e5deba0cc38a8e04a321b94146bb6a88140f71f0f27258a77e48e8",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/bindings.json",
+        "sha256": "8d0dba1da4e5deba0cc38a8e04a321b94146bb6a88140f71f0f27258a77e48e8",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/core-preflight.json",
+        "originalBytes": 51683,
+        "originalSha256": "2c0c10409d54937987a51248dcd76adc20422a89e5944f46c94c0c897d8b8337",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/core-preflight.json",
+        "sha256": "2c0c10409d54937987a51248dcd76adc20422a89e5944f46c94c0c897d8b8337",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/approval.json",
+        "originalBytes": 1463,
+        "originalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/approval.json",
+        "sha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/create-party.vector.json",
+        "originalBytes": 5285,
+        "originalSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/create-party.vector.json",
+        "sha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+        "originalBytes": 6680,
+        "originalSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/deactivate-party.vector.json",
+        "sha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/get-party.vector.json",
+        "originalBytes": 5128,
+        "originalSha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/get-party.vector.json",
+        "sha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/inventory.json",
+        "originalBytes": 4362,
+        "originalSha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/inventory.json",
+        "sha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/list-parties.vector.json",
+        "originalBytes": 5399,
+        "originalSha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/list-parties.vector.json",
+        "sha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.create-party.json",
+        "originalBytes": 2720,
+        "originalSha256": "e85d89636c8500bf4c450c51491f4daf35e6e2c5a4f455450ed6384d1528c93a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.create-party.json",
+        "sha256": "e85d89636c8500bf4c450c51491f4daf35e6e2c5a4f455450ed6384d1528c93a",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.deactivate-party.json",
+        "originalBytes": 2262,
+        "originalSha256": "fb500e2e2e81ff7010c3e85aa8c6d66e7f04c8b2885147741942fd88f627a4fe",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.deactivate-party.json",
+        "sha256": "fb500e2e2e81ff7010c3e85aa8c6d66e7f04c8b2885147741942fd88f627a4fe",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.get-party.json",
+        "originalBytes": 1017,
+        "originalSha256": "dd2621f83ceea13132ca4cb9f80dbddba876585087a25d5040d9ba16be2e2114",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.get-party.json",
+        "sha256": "dd2621f83ceea13132ca4cb9f80dbddba876585087a25d5040d9ba16be2e2114",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.list-parties.json",
+        "originalBytes": 4492,
+        "originalSha256": "9dab3b9dc8e58eee937b788def5c6a8c73e44f4a4914bad38d9f7d1db5eeb13c",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.list-parties.json",
+        "sha256": "9dab3b9dc8e58eee937b788def5c6a8c73e44f4a4914bad38d9f7d1db5eeb13c",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.reactivate-party.json",
+        "originalBytes": 2261,
+        "originalSha256": "e4b481be8bfc8e7489611fa2ad9df09e36b814d64ae299954dbda72e3cf94849",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.reactivate-party.json",
+        "sha256": "e4b481be8bfc8e7489611fa2ad9df09e36b814d64ae299954dbda72e3cf94849",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.search-parties.json",
+        "originalBytes": 4421,
+        "originalSha256": "8e5940ac30b110464e770637efd308c0d3cbb6bddf73e32bf150b0f24ef8285e",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.search-parties.json",
+        "sha256": "8e5940ac30b110464e770637efd308c0d3cbb6bddf73e32bf150b0f24ef8285e",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.update-party.json",
+        "originalBytes": 2668,
+        "originalSha256": "ac52d8e21f71cdd5cbf1eb7883c294831b0f8a2c6919ea1fb58334edfdb0252c",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/plans/parties.update-party.json",
+        "sha256": "ac52d8e21f71cdd5cbf1eb7883c294831b0f8a2c6919ea1fb58334edfdb0252c",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+        "originalBytes": 6678,
+        "originalSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/reactivate-party.vector.json",
+        "sha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/search-parties.vector.json",
+        "originalBytes": 5639,
+        "originalSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/search-parties.vector.json",
+        "sha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/update-party.vector.json",
+        "originalBytes": 6889,
+        "originalSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Parties.Contracts/update-party.vector.json",
+        "sha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+        "originalBytes": 5006,
+        "originalSha256": "1ee25a7fc2d2c023b7c1b394ec06a907b9fc4484d67ba0118d45afe4f1009519",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/add-user-to-tenant.vector.json",
+        "sha256": "1ee25a7fc2d2c023b7c1b394ec06a907b9fc4484d67ba0118d45afe4f1009519",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/approval.json",
+        "originalBytes": 2549,
+        "originalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/approval.json",
+        "sha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+        "originalBytes": 6431,
+        "originalSha256": "65e9e7b37366e02387e5eebff44189c48b35346683a730704bde3b0bd8d05b40",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/change-user-role.vector.json",
+        "sha256": "65e9e7b37366e02387e5eebff44189c48b35346683a730704bde3b0bd8d05b40",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+        "originalBytes": 3992,
+        "originalSha256": "32e75065acb3cb80435c7afb97878b9cea807e43f97efff19d090e199d3d60c0",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/create-tenant.vector.json",
+        "sha256": "32e75065acb3cb80435c7afb97878b9cea807e43f97efff19d090e199d3d60c0",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+        "originalBytes": 4627,
+        "originalSha256": "a529d902cb579a1f2fdbfd8a8e1aea14dd175e2bb96655ca3a97103d22d86790",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/disable-tenant.vector.json",
+        "sha256": "a529d902cb579a1f2fdbfd8a8e1aea14dd175e2bb96655ca3a97103d22d86790",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+        "originalBytes": 6026,
+        "originalSha256": "573d6209f013c7a8f3ed97182a4d980fa47167e9b9406a80d70042577d814d7f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/enable-tenant.vector.json",
+        "sha256": "573d6209f013c7a8f3ed97182a4d980fa47167e9b9406a80d70042577d814d7f",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+        "originalBytes": 13084,
+        "originalSha256": "7b70b2720c55b3bd65be8574914c2bad50f9af81ca3bb371479f7739d2b13391",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json",
+        "sha256": "7b70b2720c55b3bd65be8574914c2bad50f9af81ca3bb371479f7739d2b13391",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+        "originalBytes": 11273,
+        "originalSha256": "f7a9b984378fb50b79780afe4fac4be68fe0b04ad6f21caab070cb2223a204eb",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant-users.vector.json",
+        "sha256": "f7a9b984378fb50b79780afe4fac4be68fe0b04ad6f21caab070cb2223a204eb",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+        "originalBytes": 7091,
+        "originalSha256": "0773189da1da32300c0e49ae47a7f5d5367ced465bfb44cbc1388f6d18d7459a",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/get-tenant.vector.json",
+        "sha256": "0773189da1da32300c0e49ae47a7f5d5367ced465bfb44cbc1388f6d18d7459a",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+        "originalBytes": 14851,
+        "originalSha256": "95b97f32865d33b931fa4f24066e834c2062fda7cf0bf3b0fbdca3ff46f91339",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+        "sha256": "95b97f32865d33b931fa4f24066e834c2062fda7cf0bf3b0fbdca3ff46f91339",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/inventory.json",
+        "originalBytes": 15563,
+        "originalSha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/inventory.json",
+        "sha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+        "originalBytes": 9323,
+        "originalSha256": "63c8c59207af384aa978b158b7b40fd3c24a84a247682d21413dc1e6e5e1766e",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/list-tenants.vector.json",
+        "sha256": "63c8c59207af384aa978b158b7b40fd3c24a84a247682d21413dc1e6e5e1766e",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.add-user-to-tenant.json",
+        "originalBytes": 1770,
+        "originalSha256": "fc6ad0da98c6d5a05c02a7f326d6bf3f3cdaacd43d5dd8d4b80f3ab5f9b2bd85",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.add-user-to-tenant.json",
+        "sha256": "fc6ad0da98c6d5a05c02a7f326d6bf3f3cdaacd43d5dd8d4b80f3ab5f9b2bd85",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.change-user-role.json",
+        "originalBytes": 2349,
+        "originalSha256": "1e30c03d4aac13702b2e401a747d50c6c121ded049b2c1c0ef04521027fb22e7",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.change-user-role.json",
+        "sha256": "1e30c03d4aac13702b2e401a747d50c6c121ded049b2c1c0ef04521027fb22e7",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.create-tenant.json",
+        "originalBytes": 1194,
+        "originalSha256": "a883f07ba0297500cbee309821dfabfb4c6872e20731b70ddb04f90af4860a14",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.create-tenant.json",
+        "sha256": "a883f07ba0297500cbee309821dfabfb4c6872e20731b70ddb04f90af4860a14",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.disable-tenant.json",
+        "originalBytes": 1798,
+        "originalSha256": "a751ad0d9f509104281482bc1227007a609eb07aace047988c953c98eaa451d6",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.disable-tenant.json",
+        "sha256": "a751ad0d9f509104281482bc1227007a609eb07aace047988c953c98eaa451d6",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.enable-tenant.json",
+        "originalBytes": 2425,
+        "originalSha256": "78250d3740aa84fb72e8bc93d19f87f417dbe8e1764e8561829a2d0b714d929c",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.enable-tenant.json",
+        "sha256": "78250d3740aa84fb72e8bc93d19f87f417dbe8e1764e8561829a2d0b714d929c",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.get-tenant-audit.json",
+        "originalBytes": 7845,
+        "originalSha256": "f558532e1c25ac3a197da2b5d1c809c04fe90149413d75136b85a1f02f35b404",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.get-tenant-audit.json",
+        "sha256": "f558532e1c25ac3a197da2b5d1c809c04fe90149413d75136b85a1f02f35b404",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.get-tenant-users.json",
+        "originalBytes": 3393,
+        "originalSha256": "97552629a80c2cdd5dd03d282e93e465b0ce9f1d059be8e35296c439abbe7c05",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.get-tenant-users.json",
+        "sha256": "97552629a80c2cdd5dd03d282e93e465b0ce9f1d059be8e35296c439abbe7c05",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.get-tenant.json",
+        "originalBytes": 2411,
+        "originalSha256": "8d1f3ea2a528911b85ab86ff7e6cc878d6fe359661a36f9bfafb4f9a8245d7f2",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.get-tenant.json",
+        "sha256": "8d1f3ea2a528911b85ab86ff7e6cc878d6fe359661a36f9bfafb4f9a8245d7f2",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.get-user-tenants.json",
+        "originalBytes": 5305,
+        "originalSha256": "6305968cc9a52c7c2556b1c31e3128e7b17d22a7bfbf90cacab993ad6c4e5df0",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.get-user-tenants.json",
+        "sha256": "6305968cc9a52c7c2556b1c31e3128e7b17d22a7bfbf90cacab993ad6c4e5df0",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.list-tenants.json",
+        "originalBytes": 3390,
+        "originalSha256": "cfe0f68fc844031e2a9c6e6ecd23ce55da796dc8845b1129816b99f9b5d54264",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.list-tenants.json",
+        "sha256": "cfe0f68fc844031e2a9c6e6ecd23ce55da796dc8845b1129816b99f9b5d54264",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.remove-tenant-configuration.json",
+        "originalBytes": 2565,
+        "originalSha256": "7dde3834820f03284c556033320910e8849db0a1ffd97410e69d90331caeb89b",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.remove-tenant-configuration.json",
+        "sha256": "7dde3834820f03284c556033320910e8849db0a1ffd97410e69d90331caeb89b",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.remove-user-from-tenant.json",
+        "originalBytes": 2272,
+        "originalSha256": "4bef2e1160b14f11d2100864eaa677c979dd677aa95496bcbc3edb83a50e7556",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.remove-user-from-tenant.json",
+        "sha256": "4bef2e1160b14f11d2100864eaa677c979dd677aa95496bcbc3edb83a50e7556",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.set-tenant-configuration.json",
+        "originalBytes": 1830,
+        "originalSha256": "c485d5e99c6f64e03ffee74be8cd4c6d661ed6bf0de4b04e9ac9336fc5126660",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.set-tenant-configuration.json",
+        "sha256": "c485d5e99c6f64e03ffee74be8cd4c6d661ed6bf0de4b04e9ac9336fc5126660",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.update-tenant.json",
+        "originalBytes": 1971,
+        "originalSha256": "44aed12505c31bb9dcd33a7d9d8d0bfc71ef7db8baa6c5d7fcb9c6ed1a8dc41f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/plans/tenants.update-tenant.json",
+        "sha256": "44aed12505c31bb9dcd33a7d9d8d0bfc71ef7db8baa6c5d7fcb9c6ed1a8dc41f",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+        "originalBytes": 6640,
+        "originalSha256": "ac8ef4d3c0139bc3aec96658cff2d4e7d6d9a1d537da9d7244e1de508f484f86",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/remove-tenant-configuration.vector.json",
+        "sha256": "ac8ef4d3c0139bc3aec96658cff2d4e7d6d9a1d537da9d7244e1de508f484f86",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+        "originalBytes": 6316,
+        "originalSha256": "bef4e476189a18822a47944c3a6473d980a4d5cfb0a5c9466daa85377549c5dc",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/remove-user-from-tenant.vector.json",
+        "sha256": "bef4e476189a18822a47944c3a6473d980a4d5cfb0a5c9466daa85377549c5dc",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+        "originalBytes": 4870,
+        "originalSha256": "19b8ebd4f174abaf3d9cd10a5872fc4e7af34ed380521bdbed5e9ecfad5c983f",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/set-tenant-configuration.vector.json",
+        "sha256": "19b8ebd4f174abaf3d9cd10a5872fc4e7af34ed380521bdbed5e9ecfad5c983f",
+        "transformed": false
+      },
+      {
+        "archivePath": "d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+        "originalBytes": 5081,
+        "originalSha256": "5090b29559addfe7d74e224767de3f8917cdd9d13c5aabaff3372131b6871810",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/d7be838e73c1461f93dfb6a6af6b08d2/preflight/inputs/Hexalith.Tenants.Contracts/update-tenant.vector.json",
+        "sha256": "5090b29559addfe7d74e224767de3f8917cdd9d13c5aabaff3372131b6871810",
+        "transformed": false
+      },
+      {
+        "archivePath": "live-lane.json",
+        "originalBytes": 2598,
+        "originalSha256": "3fe4db929ca00bef20263462dd042fd8fec9e8120e1bc3bbfd51f0e8c3f1910b",
+        "retention": "retained UTF-8 text",
+        "path": "attempts/42648730822/preflight/live-lane.json",
+        "sha256": "3fe4db929ca00bef20263462dd042fd8fec9e8120e1bc3bbfd51f0e8c3f1910b",
+        "transformed": false
+      }
+    ],
+    "artifactApiMetadata": {
+      "id": 13689671531,
+      "node_id": "MDg6QXJ0aWZhY3QxMzY4OTY3MTUzMQ==",
+      "name": "live-preflight-evidence",
+      "size_in_bytes": 58027,
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13689671531",
+      "archive_download_url": "https://api.github.com/repos/Hexalith/Hexalith.McpCli/actions/artifacts/13689671531/zip",
+      "expired": false,
+      "digest": "sha256:6f46e72b9e57777522a4b19ba4ee3a437ac410a48bf434611a23924f3af1977a",
+      "created_at": "2026-11-09T16:04:55Z",
+      "updated_at": "2026-11-09T16:04:55Z",
+      "expires_at": "2027-02-07T15:50:43Z",
+      "workflow_run": {
+        "id": 42648730822,
+        "repository_id": 1379417482,
+        "head_repository_id": 1379417482,
+        "head_branch": "feat/story-5-4-shared-head-evidence",
+        "head_sha": "fc9bbe35fc418addf6878df7fad0837ae9b94e26"
+      }
+    }
+  }
+]

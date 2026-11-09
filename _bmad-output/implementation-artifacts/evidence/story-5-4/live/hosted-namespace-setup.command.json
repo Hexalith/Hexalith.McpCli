@@ -1,0 +1,12 @@
+{
+  "command": [
+    "sudo",
+    "-n",
+    "sysctl",
+    "-w",
+    "kernel.apparmor_restrict_unprivileged_userns=0"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 30,
+  "exitCode": 0
+}

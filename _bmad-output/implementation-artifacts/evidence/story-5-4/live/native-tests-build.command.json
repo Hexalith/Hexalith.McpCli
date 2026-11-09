@@ -1,0 +1,19 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:NuGetAudit=true",
+    "-p:NuGetAuditMode=all",
+    "-p:NuGetAuditLevel=low",
+    "-p:TreatWarningsAsErrors=true",
+    "-p:WarningsNotAsErrors="
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 300,
+  "exitCode": 0
+}

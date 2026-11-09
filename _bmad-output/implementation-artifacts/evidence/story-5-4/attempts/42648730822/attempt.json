@@ -1,0 +1,15 @@
+{
+  "githubRunId": 42648730822,
+  "candidate": "fc9bbe35fc418addf6878df7fad0837ae9b94e26",
+  "githubArtifactId": 13690111476,
+  "downloadedArchiveSha256": "5c7587b50afff46fd9743741f21314ec1b81633527c9fe7feee896558660cc19",
+  "advertisedDigestVerified": true,
+  "result": "failed",
+  "fullLiveAccepted": false,
+  "vectors": "not-run",
+  "boundary": "failed",
+  "failure": "Credential/grant/override/tenant-negative cases passed; first persisted absent-target C05 read failed because the state helper assumed port3501 while Aspire assigned a dynamic sidecar HTTP port.",
+  "replacementCandidate": "3e8f6a4e681018c7ca8356997d4fd28378217d37",
+  "replacementRunId": 42652261452,
+  "limits": "Non-live green receipts do not establish later live acceptance."
+}

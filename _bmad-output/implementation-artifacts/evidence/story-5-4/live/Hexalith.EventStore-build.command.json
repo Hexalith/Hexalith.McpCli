@@ -1,0 +1,24 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:NuGetAudit=true",
+    "-p:NuGetAuditMode=all",
+    "-p:NuGetAuditLevel=low",
+    "-p:TreatWarningsAsErrors=true",
+    "-p:WarningsNotAsErrors=",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true",
+    "-p:HexalithEventStoreFromSource=false",
+    "-p:HexalithEventStoreVersion=4.1.0",
+    "-p:HexalithMcpCliVersion=2.0.0"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 300,
+  "exitCode": 0
+}

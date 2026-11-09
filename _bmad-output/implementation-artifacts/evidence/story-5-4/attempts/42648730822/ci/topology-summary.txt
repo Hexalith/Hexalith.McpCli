@@ -1,0 +1,4 @@
+Excerpt of completed topology-vector-discovery job 129268966305; original log SHA-256 7fc0d57c8e721c4a0358b8048186b310226b8b41507f1d5537fc384ec1bf6b28
+2026-11-09T16:04:53.6920263Z Ran 216 tests in 746.654s
+2026-11-09T16:04:53.6920577Z OK
+2026-11-09T16:04:53.9705217Z Discovered 21 live vectors and the independent Gateway smoke and shared-head boundary.

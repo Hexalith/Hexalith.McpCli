@@ -1,0 +1,3 @@
+time="2026-11-09T16:26:16.293019528Z" level=warning msg="Error receiving from stream [::1]:39176: rpc error: code = Canceled desc = context canceled" instance=runnervmwuk1x scope=dapr.placement.server.loops.stream type=log ver=1.18.7
+time="2026-11-09T16:26:16.296581309Z" level=warning msg="Error receiving from stream [::1]:39186: rpc error: code = Canceled desc = context canceled" instance=runnervmwuk1x scope=dapr.placement.server.loops.stream type=log ver=1.18.7
+time="2026-11-09T16:26:16.312062676Z" level=warning msg="Error receiving from stream [::1]:39200: rpc error: code = Canceled desc = context canceled" instance=runnervmwuk1x scope=dapr.placement.server.loops.stream type=log ver=1.18.7

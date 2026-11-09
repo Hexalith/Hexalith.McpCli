@@ -1,0 +1,159 @@
+{
+  "candidateHeadCommit": "4d0b76adf409c21d6daeee69eb1b55a5aa90541e",
+  "result": "passed",
+  "solution": {
+    "restore": "passed",
+    "ReleaseBuild": "passed",
+    "warnings": 0,
+    "errors": 0
+  },
+  "testProjects": {
+    "Core": {
+      "passed": 877,
+      "skipped": 4
+    },
+    "Cli": {
+      "passed": 584,
+      "skipped": 2
+    },
+    "Mcp": {
+      "passed": 94,
+      "skipped": 0
+    },
+    "Manifest": {
+      "passed": 362,
+      "skipped": 0
+    }
+  },
+  "focusedOfflineCases": {
+    "passed": 48,
+    "failed": 0,
+    "skipped": 0,
+    "xml": "attempts/42631573309/local/offline-cases.xml"
+  },
+  "python": {
+    "affectedCiHooks": 98,
+    "catalogCapture": 7,
+    "failed": 0
+  },
+  "enrolled": {
+    "result": "passed",
+    "fullV1Accepted": true,
+    "operations": 21
+  },
+  "preflight": {
+    "result": "preflight-only",
+    "fullLiveAccepted": false
+  },
+  "discovery": {
+    "approvedVectorCases": 21,
+    "independentCases": 2,
+    "exactMatch": true
+  },
+  "commitlint": {
+    "exactCandidate": "test(evidence): qualify shared heads against the live topology",
+    "problems": 0,
+    "warnings": 0,
+    "evidence": "attempts/42631573309/local/commitlint.txt"
+  },
+  "logs": [
+    {
+      "label": "restore",
+      "path": "attempts/42631573309/local/restore.txt",
+      "sourceSha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+      "sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce",
+      "redacted": false
+    },
+    {
+      "label": "build",
+      "path": "attempts/42631573309/local/build.txt",
+      "sourceSha256": "b31b3e126a2217ef4b51fe0532f9575a47572483418aeaddc3b1edde1077c519",
+      "sha256": "b31b3e126a2217ef4b51fe0532f9575a47572483418aeaddc3b1edde1077c519",
+      "redacted": false
+    },
+    {
+      "label": "Core",
+      "path": "attempts/42631573309/local/Core.txt",
+      "sourceSha256": "a25d00a8f22e0bfc870e735d9aa7ef56d8489f1601843400609741e1a906e873",
+      "sha256": "a25d00a8f22e0bfc870e735d9aa7ef56d8489f1601843400609741e1a906e873",
+      "redacted": false
+    },
+    {
+      "label": "Cli",
+      "path": "attempts/42631573309/local/Cli.txt",
+      "sourceSha256": "88aa29c6e0def003d539dc20b558189ce5d879d745d5bad31d2b5622f1db17e9",
+      "sha256": "88aa29c6e0def003d539dc20b558189ce5d879d745d5bad31d2b5622f1db17e9",
+      "redacted": false
+    },
+    {
+      "label": "Mcp",
+      "path": "attempts/42631573309/local/Mcp.txt",
+      "sourceSha256": "8623033735fe65a36789bdcd00ce1534aa82f122f33aafdc6b6f61d942337e44",
+      "sha256": "8623033735fe65a36789bdcd00ce1534aa82f122f33aafdc6b6f61d942337e44",
+      "redacted": false
+    },
+    {
+      "label": "Manifest",
+      "path": "attempts/42631573309/local/Manifest.txt",
+      "sourceSha256": "0a0a3a8c810fa8369a360cc180e218b9580b75190c1adae51cb5f4b74cbe3e2d",
+      "sha256": "0a0a3a8c810fa8369a360cc180e218b9580b75190c1adae51cb5f4b74cbe3e2d",
+      "redacted": false
+    },
+    {
+      "label": "ci-tests",
+      "path": "attempts/42631573309/local/ci-tests.txt",
+      "sourceSha256": "0ce35c6fc39719b2708f9de4d8a8814b38557504d0219155b573e1f2333e8519",
+      "sha256": "0ce35c6fc39719b2708f9de4d8a8814b38557504d0219155b573e1f2333e8519",
+      "redacted": false
+    },
+    {
+      "label": "capture-tests",
+      "path": "attempts/42631573309/local/capture-tests.txt",
+      "sourceSha256": "9cde9b67b29c2033a65def651133d8c9b31e5f3d087876e05ff8c234b930260d",
+      "sha256": "9cde9b67b29c2033a65def651133d8c9b31e5f3d087876e05ff8c234b930260d",
+      "redacted": false
+    },
+    {
+      "label": "catalog-hook",
+      "path": "attempts/42631573309/local/catalog-hook.txt",
+      "sourceSha256": "9ebee6b0a7a051182403c83aa0c9ac5a9325aeb57be435060906edbc0ebada9c",
+      "sha256": "9ebee6b0a7a051182403c83aa0c9ac5a9325aeb57be435060906edbc0ebada9c",
+      "redacted": false
+    },
+    {
+      "label": "enrolled",
+      "path": "attempts/42631573309/local/enrolled.txt",
+      "sourceSha256": "f82dcaaaa45321986a0e5102c310ac2b0750cfcd33523a62227218db0a2d1cc0",
+      "sha256": "f82dcaaaa45321986a0e5102c310ac2b0750cfcd33523a62227218db0a2d1cc0",
+      "redacted": false
+    },
+    {
+      "label": "preflight",
+      "path": "attempts/42631573309/local/preflight.txt",
+      "sourceSha256": "c00293cb748016e190e40800c597f46ca44e0bb4745c7890edc0b5d0333a9812",
+      "sha256": "c00293cb748016e190e40800c597f46ca44e0bb4745c7890edc0b5d0333a9812",
+      "redacted": false
+    },
+    {
+      "label": "offline-cases",
+      "path": "attempts/42631573309/local/offline-cases.txt",
+      "sourceSha256": "6d7ab617c1fd95777ec8cce5794f6cf49fc697eaba95ea28432f781704303344",
+      "sha256": "6d7ab617c1fd95777ec8cce5794f6cf49fc697eaba95ea28432f781704303344",
+      "redacted": false
+    },
+    {
+      "label": "discovery",
+      "path": "attempts/42631573309/local/discovery.txt",
+      "sourceSha256": "51b37dcd223ed43e5f1af8c2bcc71f272f58319cafd85e496e1fc446f9d9c224",
+      "sha256": "51b37dcd223ed43e5f1af8c2bcc71f272f58319cafd85e496e1fc446f9d9c224",
+      "redacted": false
+    },
+    {
+      "label": "commitlint",
+      "path": "attempts/42631573309/local/commitlint.txt",
+      "sourceSha256": "fefa1829db2b7ab2c2f36c7bea3eb165935bfd2c0243c423b9118e2d6b217e95",
+      "sha256": "fefa1829db2b7ab2c2f36c7bea3eb165935bfd2c0243c423b9118e2d6b217e95",
+      "redacted": false
+    }
+  ]
+}
