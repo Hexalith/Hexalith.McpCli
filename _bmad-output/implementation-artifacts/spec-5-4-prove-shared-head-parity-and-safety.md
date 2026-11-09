@@ -1,0 +1,152 @@
+---
+title: '5.4 Prove shared-head parity and safety'
+type: 'feature'
+created: '2026-11-09'
+status: 'ready-for-dev'
+route: 'dispatch'
+review_loop_iteration: 0
+context:
+  - '{project-root}/_bmad-output/implementation-artifacts/epic-5-context.md'
+  - '{project-root}/_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md'
+---
+
+<frozen-after-approval reason="human-owned intent — do not modify unless human renegotiates">
+
+## Intent
+
+**Problem:** Nothing proves yet that McpCli can replace `Parties.Mcp` safely on a named environment.
+- The live lane runs only the seven happy-path vectors, through the CLI head.
+- No test pins a 401 or 403 document, or any tenant negative, for a Parties operation.
+- C05's delete oracles and C08's cross-tenant denial are never exercised live.
+- Restricted Admin names are never probed, with or without `confirm: true`.
+- No evidence set binds the candidate, Catalog digest and environment by hash.
+
+**Approach:**
+- Add generic offline guards over the enrolled Parties 1.5.1 catalog, run through both heads.
+- Add live boundary cases, and live MCP-head reads, on the CI live topology.
+- Assemble one redacted, hash-bound evidence set with a C01–C08 variant matrix.
+- HALT for the Parties owner's exact-byte approval and verdict.
+- Production `src/` changes only where a guard exposes a defect.
+
+## Boundaries & Constraints
+
+**Always:**
+- Only tests name Parties, Tenants or EventStore.
+- `src/` and the runners in `tools/live-topology/` stay generic: no module names and no fixed vector or runtime counts. Derive the expected runtime count instead of keeping `ci.py`'s literal `22`.
+- Every guard asserts the full error document, stdout, stderr, MCP `Content` and `StructuredContent`, and the Gateway request count. It fails when the guard is removed.
+- Each live Command is submitted once. Head parity comes from loopback (`check_enrolled.py`), never from resubmitting.
+- A no-mutation claim rests on a persisted end-state read with an authorized identity, not on the error alone.
+- Each variant row cites one of these, or is marked a gap: a McpCli test, a loopback or live receipt, or a Parties upstream test at the enrolled revision. Matching operation names proves nothing.
+
+**Never:**
+- Add module-specific code, error mapping, `confirm` handling or dependencies to `src/`.
+- Change identifier validators.
+- Edit `references/`.
+- Change the approved vectors, live plans or `approval.json`, or enroll another Parties version.
+- Claim a release, publication or retirement. Story 5.5 owns retirement, and `epic-4-retro-item-6` binds release claims.
+- Fix F7 or redactor item 5 here.
+
+**Decisions (2026-11-09, user):**
+1. **F7 accepted.** The user, as owner, answered "accept". Until `epic-4-retro-item-9-ascii-tenant-input` closes, U+212A KELVIN SIGN may alias an ASCII tenant; the Gateway's `TenantCanonicalizer` behaves the same way.
+   - Pin this as the accepted limitation and record the acceptance in the evidence.
+   - Every other non-ASCII look-alike must fail closed.
+2. **Selected environment: the CI live topology** ("CI topology via PR").
+   - It is the v1 disposable Aspire topology: public EventStore 4.1.0 and Tenants 7.0.5 archives, plus the qualified Parties source.
+   - GitHub Actions runs it on a PR to `main`, and the evidence is the downloaded `TestResults/live-ci` artifact.
+   - This authorizes pushing a non-`main` branch and opening that PR when the live run is due.
+3. **Live MCP head included.**
+   - `run_live.py` also runs every Parties Query vector through the MCP head (reads only).
+   - The boundary cases run through both heads, including the MCP-only per-call override denial.
+   - Commands stay CLI-only and are submitted once.
+4. **Scope split: redactor item 5 first.**
+   - The hardened redactor and the committed secret scan are a separate change (ledger entry under this spec's heading in `deferred-work.md`).
+   - The offline and live test work proceeds now.
+   - The committed live run and evidence set wait until that change lands, and the evidence must pass its scan.
+5. **Gaps: the owner decides each one** at the approval HALT.
+   - Either a versioned, owner-approved Parties inventory 1.3.0 amendment records an approved change, or the gap stays blocking with a ledger owner.
+   - The story ends with an approved verdict: `retirement-ready` or `retirement-blocked`.
+
+## I/O & Edge-Case Matrix
+
+| Scenario | Input / State | Expected | Error handling |
+|---|---|---|---|
+| No token | Parties Query and Command with no token; the Gateway answers 401 | `gateway_error` with status 401; equal documents from both heads | No `Authorization` header is sent; live, nothing is mutated |
+| Invalid token | Forged signature | 401 `gateway_error`; the token appears on no channel | Live, nothing is mutated |
+| Unauthorized principal | A token granted only `tenant-a`, or a nonmember token, used with session tenant `tenant-b` or an allowed MCP per-call override to `tenant-b` | Gateway refusal through both heads, with the documented status | The `tenant-b` party is neither disclosed nor changed |
+| Override disabled | MCP per-call tenant differs from the session, without `allow-tenant-override` | `validation_failed` at `/tenant` | Zero Gateway calls |
+| Platform scope as tenant | `platform:tenants` as session or per-call tenant on a Parties operation | `validation_failed` at `/tenant` | Zero calls |
+| Reserved tenant | `system` or `SYSTEM` | `validation_failed` at `/tenant`, "…reserved." | Zero calls |
+| Look-alikes | Cyrillic `а`, U+0130, fullwidth letters | `validation_failed` at `/tenant` | Zero calls |
+| F7 limitation | `Kelvin` spelled with U+212A | Wire value `kelvin` (accepted-limitation pin) | The test names item 9, so the fix must flip it |
+| Restricted names | Admin and confirm-gated legacy names, and Tenants-excluded operations, with `confirm: true` in both arguments and payload | Absent from `list_operations` and `operations`; `unknown_operation` through both heads | Zero calls |
+| C05 missing | Live deactivate of a party that was never created | 404 `party-not-found` | No party is created |
+| C05 concurrent repeat | Two concurrent deactivations of one active party, with distinct message IDs | Both accepted; the party is inactive | Exactly one deactivation event is persisted |
+
+</frozen-after-approval>
+
+## Code Map
+
+- `tests/Hexalith.McpCli.Cli.Tests/PartiesMigrationCompatibilityTests.cs`, `BothHeads.cs`, `ScriptedGateway.cs` -- the both-heads harness to reuse.
+  - `PlatformScopeCommandTests.cs:13-41` and `tests/Hexalith.McpCli.Mcp.Tests/PlatformScopeProtocolTests.cs:19-50` show the full-document, zero-call pattern for `system`.
+  - `QueryValidationCommandTests.cs:55` holds the only non-ASCII case (`é`).
+  - No head test pins 401 or 403: `ExecutionFailureCommandTests.cs:34-63` covers only 422, 409, 5xx and 2xx.
+- `src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:115-134` -- lowercases the tenant, then checks the pattern. U+0130 is refused; U+212A aliases. `:316-340` holds the scope and override refusals. Do not change any of it.
+- `README.md` -- the error-code list is at `:559`; a Gateway 401 or 403 is a `gateway_error` carrying that status. CLI `--tenant` is the session tenant (`:531`).
+- `src/Hexalith.McpCli/Cli/CliRunner.cs:87-90` -- an unknown option returns `invalid_arguments`.
+- `src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:81-85`, `:126-139` -- MCP likely ignores extra arguments. Pin that behavior; do not change it, since `epic-3-retro-item-2` owns call-envelope validation.
+- `tests/Hexalith.McpCli.Core.Tests/EnrolledModuleCoverageTests.cs:15-29` with `tools/inventory-coverage/v1/*-approved.json` -- the catalog equals exactly the `include` sets, and Tenants excludes six operations. Admin inventory 1.0.1 has no `include` row (`eventstore-admin-migration-inventory-v1.md:157-258`).
+- Live identities:
+  - `tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:65-130` and `NativeFixtureIdentity.cs:12-46` -- signed tenant, domain, permission and nonmember claims.
+  - `NativeAdministratorBoundary.cs:20-50` -- a refusal with the target checked absent before and after.
+  - `GatewaySmokeTests.cs:29-64` -- the 401 pattern.
+- Live runners:
+  - `tools/live-topology/run_live.py:39` -- `observe` is CLI-only; `tools/conformance-vectors/v1/run_loopback.py:247-279` provides `HeadProcess.cli` and `.mcp`.
+  - `tools/live-topology/ci.py:757-781` -- the independent smoke case and the literal `22`.
+  - `.github/workflows/ci.yml:150-169` -- the exact discovery assertion.
+- `tools/conformance-vectors/v1/check_enrolled.py` → `run_loopback.py:782-864` -- discovery parity, a reset `ReplayGateway` per head, and equal documents and requests for all seven Parties vectors. It computes no Catalog digest.
+- Binding precedent: `tools/live-topology/live_plans.py:25` (`BINDING_KEYS`) and `_bmad-output/implementation-artifacts/evidence/story-4-13/live-complete/*/parties.*/live-result.json`.
+- Variant sources:
+  - Inventory `:178-185` (C01–C08).
+  - `evidence/story-5-3/verification.md:221-311`.
+  - `evidence/story-4-10/matrix-test-audit.md`, for the Parties-side C01, C02 and C04 tests.
+  - Legacy `references/Hexalith.Parties/src/Hexalith.Parties.Mcp/` has no task-context, freshness or output-budget behavior; it only bounds input (`Tools/PartiesMcpTools.cs:566`, C03/C04). Record those variants as "absent at source", with anchors.
+- `deferred-work.md:556` (a rejection-only stream reachable by update and deactivate) and `:827` (profile identity beside a flag or environment connection) bear on C05 and C08. Cite them; do not duplicate them.
+
+## Tasks & Acceptance
+
+**Execution:**
+- [ ] `tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs` -- every offline matrix row, through both heads over the production catalog: 401 and 403 documents from `ScriptedGateway`, override disabled, platform scope, reserved tenant, look-alikes, the F7 pin, and restricted names with `confirm: true`.
+- [ ] `tests/Hexalith.McpCli.Integration.Tests/` -- a boundary class, plus identity helpers, for the live rows through both heads: 401s, cross-tenant refusal, nonmember, C05 missing and C05 concurrent repeat, each followed by an authorized end-state read.
+- [ ] `tools/live-topology/run_live.py`, `ci.py` and `.github/workflows/ci.yml`:
+  - Add MCP reads for Query vectors.
+  - Run the boundary class as an independent isolated case.
+  - Derive the counts.
+  - Extend the discovery assertion.
+  - Cover each change in `test_*.py`.
+- [ ] After the split redactor change lands: push a branch, open the PR, and download and verify the live artifact.
+- [ ] `_bmad-output/implementation-artifacts/evidence/story-5-4/`:
+  - `manifest.json`: the full commit; SHA-256 of the head binaries; the Parties 1.5.1 artifact hash; the Catalog digest (SHA-256 of the sorted-key, compact `list_operations` structured content); the components and revisions of the environment; the vector, plan, approval and inventory hashes; and the CI run ID and artifact hash.
+  - `parity-matrix.md`: C01–C08 and the seven variants. Admin and technical rows are marked "absent; name similarity proves nothing".
+  - The scan receipt, the F7 acceptance and `verification.md`.
+  - HALT for the owner's exact-byte approval and verdict, then record the receipt.
+- [ ] `README.md`, `sprint-status.yaml` and `deferred-work.md` -- document a 401 or 403 as a `gateway_error` and the F7 limitation. Record status, and grep the ledger before appending.
+
+**Acceptance Criteria:**
+- Given the CI live topology, when the lane runs, then all seven Parties vectors, the MCP reads and every boundary case pass with `fullLiveAccepted: true`, and `check_enrolled.py` reports `fullV1Accepted`.
+- Given the evidence set, when the owner reviews it, then every C01–C08 and variant row is preserved, an approved change or a named gap, and the receipt binds the exact bytes and the verdict.
+- Given the whole change, when it is built, then `src/` has no new module name or dependency, and `DependencyPolicyTests` and `EnrolledModuleCoverageTests` pass unchanged.
+
+## Implementation Notes
+
+## Spec Change Log
+
+## Review Triage Log
+
+## Verification
+
+**Commands:**
+- `dotnet restore Hexalith.McpCli.slnx && dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror` -- expected: 0 warnings.
+- `dotnet test tests/<Core|Cli|Mcp|Manifest>.Tests --no-build --configuration Release`, one project at a time -- expected: all pass.
+- `python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'`, then `run-vectors.py --preflight-only`, then the CI discovery listing -- expected: pass, with the new cases listed.
+- `python3 tools/conformance-vectors/v1/check_enrolled.py --output <task-dir>` -- expected: `fullV1Accepted: true`.
+- The split change's secret scan over `evidence/story-5-4/` -- expected: zero findings.
