@@ -17,13 +17,20 @@ class Head:
         self.timeout = 30
         self.calls = []
         self.documents = iter(documents)
+        self.mcp_calls = []
+        self.last_cli = None
 
     def cli(self, *arguments):
         self.calls.append((arguments, self.timeout))
         document = next(self.documents)
         if 'error' not in document:
             document = {'operation': 'fixture.operation', 'tenant': 'test', **document}
+        self.last_cli = document
         return (2 if 'error' in document else 0), document
+
+    def mcp(self, *arguments):
+        self.mcp_calls.append((arguments, self.timeout))
+        return 'error' in self.last_cli, self.last_cli
 
 
 class RunnerTests(unittest.TestCase):
@@ -47,6 +54,26 @@ class RunnerTests(unittest.TestCase):
         self.assertEqual(2, len(head.calls))
         self.assertLessEqual(head.calls[-1][1], .5)
         self.assertEqual(30, head.timeout)
+
+    def test_mcp_query_uses_tool_arguments_and_cannot_submit_commands(self):
+        from unittest.mock import Mock
+        head = Head([])
+        document = {'operation': 'fixture.operation', 'tenant': 'test', 'document': {'value': 7}}
+        head.mcp = Mock(return_value=(False, document))
+        record = {'phase': '/invocation', 'attempts': []}
+        run_live.observe(head, self.call(), None, {}, {}, {'deadlineSeconds': 1, 'pollSeconds': .1},
+                         record, transport='mcp')
+        head.mcp.assert_called_once_with('run_query', {'operation': 'fixture.operation', 'payload': '{}'}, None, 'test', None)
+        self.assertEqual([], head.calls)
+        self.assertEqual('passed', record['result'])
+        with self.assertRaisesRegex(VectorError, 'restricted to Query reads'):
+            run_live.observe(head, self.call('command'), None, {}, {}, {'deadlineSeconds': 1, 'pollSeconds': .1},
+                             {'phase': '/invocation', 'attempts': []}, transport='mcp')
+        self.assertEqual(1, head.mcp.call_count)
+        head.mcp.return_value = (True, document)
+        with self.assertRaisesRegex(VectorError, 'isError disagrees'):
+            run_live.observe(head, self.call(), None, {}, {}, {'deadlineSeconds': 1, 'pollSeconds': .1},
+                             {'phase': '/invocation', 'attempts': []}, transport='mcp')
 
     def test_cli_receives_private_endpoint_and_envelope_identity(self):
         head = Head([{'document': {'value': 7}}])
@@ -217,7 +244,7 @@ class RunnerTests(unittest.TestCase):
             binding = {key: 'bound-' + key for key in BINDING_KEYS}
             selection = {'operation': 'fixture.operation', 'vector': vector,
                          'plan': {'actions': [{'step': '/invocation'}]}, **binding}
-            phases = [{'phase': '/invocation', 'operation': 'fixture.operation', 'kind': 'command',
+            phases = [{'head': 'cli', 'phase': '/invocation', 'operation': 'fixture.operation', 'kind': 'command',
                        'result': 'passed', 'attempts': [{'result': 'passed', 'exitCode': 0}]}]
             def execute(selected, host, url, token, report, *, checkpoint):
                 self.assertEqual(selection, selected)
@@ -342,7 +369,7 @@ class ExecutionTests(unittest.TestCase):
                 patch.object(run_live, 'observe', side_effect=observe):
             run_live.execute(selection, Path('/selected/host.dll'), 'http://127.0.0.1/', 'private-token', report)
         self.assertEqual(len(selection['plan']['actions']), validate.call_count)
-        for checked, phase in zip(validate.call_args_list, report['phases']):
+        for checked, phase in zip(validate.call_args_list, [item for item in report['phases'] if item['head'] == 'cli']):
             self.assertIs(head, checked.args[0])
             self.assertEqual(phase['resolvedCall'], {key: checked.args[1][key] for key in phase['resolvedCall']})
         # The identity and its private endpoint reach the CLI together through one private environment, never as
@@ -350,7 +377,7 @@ class ExecutionTests(unittest.TestCase):
         self.assertEqual('private-token', head.env['EVENTSTORE_TOKEN'])
         self.assertEqual('http://127.0.0.1/', head.env['EVENTSTORE_URL'])
         self.assertEqual([(None, phase['resolvedCall']['envelope']['tenant'], phase['resolvedCall']['envelope'].get('actor'))
-                          for phase in report['phases'] for _ in phase['attempts']],
+                          for phase in report['phases'] if phase['head'] == 'cli' for _ in phase['attempts']],
                          [tuple(arguments[1:]) for arguments, _ in head.calls])
         self.assertNotIn('private-token', json.dumps([arguments for arguments, _ in head.calls]))
         self.assertNotIn('http://127.0.0.1/', json.dumps([arguments for arguments, _ in head.calls]))
@@ -402,7 +429,7 @@ class ExecutionTests(unittest.TestCase):
                 validate_call(core, call)
             with self.assertRaisesRegex(VectorError, 'resolved Core compatibility failed'):
                 self.execute(selection, documents, report, validation=validate)
-        self.assertEqual(rejected_index + 1, len(report['phases']))
+        self.assertEqual(rejected_index + 1, len([phase for phase in report['phases'] if phase['head'] == 'cli']))
         self.assertEqual('failed', report['phases'][-1]['result'])
         self.assertEqual([], report['phases'][-1]['attempts'])
 
@@ -420,6 +447,11 @@ class ExecutionTests(unittest.TestCase):
                 actual = [phase for phase in report['phases'] if phase['kind'] == 'command']
                 self.assertEqual([call['operation'] for call in commands], [phase['operation'] for phase in actual])
                 self.assertTrue(all(len(phase['attempts']) == 1 for phase in actual))
+                queries = [call for call in calls if call['kind'] == 'query']
+                self.assertEqual(len(queries), len(head.mcp_calls))
+                self.assertEqual([call['operation'] for call in queries],
+                    [phase['operation'] for phase in report['phases'] if phase['head'] == 'mcp'])
+                self.assertTrue(all(phase['kind'] == 'query' for phase in report['phases'] if phase['head'] == 'mcp'))
 
     def test_intentional_repeated_noop_is_submitted_and_only_delayed_reads_repeat(self):
         from live_plans import require_phases
@@ -461,6 +493,17 @@ class ExecutionTests(unittest.TestCase):
         with self.assertRaisesRegex(VectorError, '/messageId was reused'):
             self.execute(selection, documents, report)
         self.assertEqual('failed', report['phases'][-1]['result'])
+
+    def test_failed_mcp_read_retains_the_successful_cli_phase(self):
+        selection = self.selection()
+        _, documents = self.documents(selection)
+        report = {'phases': []}
+        with patch.object(Head, 'mcp', return_value=(True, {'error': {'code': 'gateway_error', 'status': 403}})):
+            with self.assertRaisesRegex(VectorError, 'MCP exit 2'):
+                self.execute(selection, documents, report)
+        self.assertEqual(['passed', 'passed', 'failed'], [phase['result'] for phase in report['phases']])
+        self.assertEqual(['cli', 'cli', 'mcp'], [phase['head'] for phase in report['phases']])
+        self.assertNotIn('error', report['phases'][1])
 
     def test_ordinary_failed_observation_marks_its_phase_failed(self):
         selection = self.selection()

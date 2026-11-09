@@ -666,6 +666,25 @@ def copy_diagnostics(runtime: Path, output: Path) -> None:
                     target.write_text(sanitized(path.read_text(errors='replace')))
 
 
+INDEPENDENT_CASE_TIMEOUT = 960
+RUN_TIMEOUT_SECONDS = 17700
+CLEANUP_HEADROOM_SECONDS = 600
+INDEPENDENT_CASES = (
+    ('smoke', 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests', 'AuthenticatedQueryReturnsSuccessfulDocument'),
+    ('boundary', 'Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests', 'SharedHeadsPreserveAuthorizationAndDeactivationSafety'),
+)
+
+
+def require_independent_case(path: Path, class_name: str, method: str) -> None:
+    """Reject skipped, replaced, duplicate or runner-error cases even after a zero process exit."""
+    xml = ET.parse(path).getroot()
+    assemblies, cases = xml.findall('assembly'), xml.findall('.//test')
+    if len(assemblies) != 1 or len(cases) != 1 or any(assemblies[0].get(key) != value for key, value in
+            [('total', '1'), ('passed', '1'), ('failed', '0'), ('skipped', '0'), ('errors', '0')]) \
+            or cases[0].get('result') != 'Pass' or cases[0].get('method') != method or cases[0].get('type') != class_name:
+        raise ValueError(f'Independent case must contain exactly one passing, unskipped {class_name}.{method}.')
+
+
 def run(evidence: Path) -> None:
     report = {'result': 'running', 'fullLiveAccepted': False, 'runId': uuid.uuid4().hex}
     save(evidence / 'ci-live.json', report)
@@ -713,21 +732,22 @@ def run(evidence: Path) -> None:
         vector_error = None
         try:
             bounded([str(python), str(ROOT / 'tools/live-topology/run-vectors.py'), '--output', str(vectors)],
-                    16200, generation / 'vectors-process', environment=environment)
+                    RUN_TIMEOUT_SECONDS - len(INDEPENDENT_CASES) * INDEPENDENT_CASE_TIMEOUT - CLEANUP_HEADROOM_SECONDS,
+                    generation / 'vectors-process', environment=environment)
             lane = json.loads((vectors / 'live-lane.json').read_text())
             expected = sorted(json.loads(path.read_text())['operation'] for path in
                               (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json'))
             outcomes = lane.get('vectors', [])
-            if len(expected) != 21 or len(set(expected)) != 21 or lane.get('coverage') != expected \
+            if not expected or len(set(expected)) != len(expected) or lane.get('coverage') != expected \
                     or lane.get('result') != 'passed' or lane.get('fullLiveAccepted') is not True \
-                    or lane.get('passed') != 21 or lane.get('failed') != 0 \
+                    or lane.get('passed') != len(expected) or lane.get('failed') != 0 \
                     or sorted(item.get('operation', '') for item in outcomes) != expected \
-                    or len({item.get('isolatedReceipt') for item in outcomes}) != 21 \
+                    or len({item.get('isolatedReceipt') for item in outcomes}) != len(expected) \
                     or any(item.get('result') != 'passed' or item.get('exitCode') != 0 for item in outcomes):
-                raise ValueError('Complete current passing evidence for all 21 vectors is required; partial/preflight/skipped evidence is refused.')
+                raise ValueError('Complete current passing evidence for every approved vector is required; partial/preflight/skipped evidence is refused.')
             for item in outcomes:
                 require_owned(Path(item['isolatedReceipt']), runtime)
-            report['vectors'] = {'result': 'passed', 'count': 21, 'receipt': str(vectors / 'live-lane.json')}
+            report['vectors'] = {'result': 'passed', 'count': len(expected), 'receipt': str(vectors / 'live-lane.json')}
         except BaseException as error:
             failures = []
             interrupted = []
@@ -754,30 +774,36 @@ def run(evidence: Path) -> None:
             if not isinstance(error, Exception):
                 print(sanitized(f'Live CI interrupted: {type(error).__name__}: {vector_error}'), file=sys.stderr)
                 raise
-        # Smoke stays independent; even a long or failed vector lane cannot reuse stale inputs.
-        require_prepared_provenance(prepared)
-        smoke = generation / 'smoke'
-        smoke.mkdir()
-        bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),
-                 '-class', 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests', '-failSkips', '-result-xml', str(smoke / 'tests.xml')],
-                960, smoke / 'process', environment={**environment, 'MCPCLI_LIVE_OUTPUT': str(smoke)})
-        xml = ET.parse(smoke / 'tests.xml').getroot()
-        assemblies, cases = xml.findall('assembly'), xml.findall('.//test')
-        if len(assemblies) != 1 or len(cases) != 1 or any(assemblies[0].get(key) != value for key, value in
-                [('total', '1'), ('passed', '1'), ('failed', '0'), ('skipped', '0'), ('errors', '0')]) \
-                or cases[0].get('result') != 'Pass' or cases[0].get('method') != 'AuthenticatedQueryReturnsSuccessfulDocument' \
-                or cases[0].get('type') != 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests':
-            raise ValueError('Independent smoke must contain exactly one passing, unskipped authenticated Gateway case.')
-        lines = (smoke / 'process.stdout.txt').read_text().splitlines()
-        runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
-        if len(runs) != 1:
-            raise ValueError('Independent smoke omitted its isolated runtime receipt.')
-        require_owned(runs[0] / 'result.json', runtime)
-        report['smoke'] = {'result': 'passed', 'receipt': str(runs[0] / 'result.json')}
-        if vector_error:
-            raise vector_error
-        if len(list((runtime / 'runs').iterdir())) != 22:
-            raise ValueError('Expected exactly 21 fresh vector runtimes and one independent smoke runtime.')
+        # Each independent case owns fresh state and rechecks preparation provenance.
+        independent_errors = []
+        independent_receipts = []
+        for name, class_name, method in INDEPENDENT_CASES:
+            case = generation / name
+            case.mkdir()
+            try:
+                require_prepared_provenance(prepared)
+                bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),
+                         '-class', class_name, '-failSkips', '-result-xml', str(case / 'tests.xml')],
+                        INDEPENDENT_CASE_TIMEOUT, case / 'process', environment={**environment, 'MCPCLI_LIVE_OUTPUT': str(case)})
+                require_independent_case(case / 'tests.xml', class_name, method)
+                lines = (case / 'process.stdout.txt').read_text().splitlines()
+                runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
+                if len(runs) != 1:
+                    raise ValueError(f'Independent {name} omitted its isolated runtime receipt.')
+                receipt = runs[0] / 'result.json'
+                require_owned(receipt, runtime)
+                if receipt in independent_receipts:
+                    raise ValueError('Independent cases reused an isolated runtime receipt.')
+                independent_receipts.append(receipt)
+                report[name] = {'result': 'passed', 'receipt': str(receipt)}
+            except Exception as error:
+                report[name] = {'result': 'failed', 'error': f'{type(error).__name__}: {error}'}
+                independent_errors.append(f'independent {name} failed: {error}')
+        if vector_error or independent_errors:
+            raise RuntimeError('; '.join(([str(vector_error)] if vector_error else []) + independent_errors))
+        expected_runtimes = len(expected) + len(INDEPENDENT_CASES)
+        if len(list((runtime / 'runs').iterdir())) != expected_runtimes:
+            raise ValueError(f'Expected exactly {len(expected)} fresh vector runtimes and {len(INDEPENDENT_CASES)} independent runtimes.')
         report.update(result='passed', fullLiveAccepted=True)
     except BaseException as error:
         report.update(result='failed', error=f'{type(error).__name__}: {error}')

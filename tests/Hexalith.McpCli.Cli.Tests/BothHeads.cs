@@ -95,6 +95,8 @@ internal static class BothHeads
         async Task<int> ServeAsync(IHost host, CancellationToken cancellationToken)
         {
             inspect?.Invoke(host);
+            using var completion = new McpCallCompletionLoggerProvider();
+            host.Services.GetRequiredService<ILoggerFactory>().AddProvider(completion);
             if (tool is null)
             {
                 return 0;
@@ -116,6 +118,7 @@ internal static class BothHeads
             {
                 result = await client.CallToolAsync(tool, arguments ?? new Dictionary<string, object?>(),
                     cancellationToken: serving.Token);
+                await completion.Completed.WaitAsync(serving.Token);
             }
 
             await serving.CancelAsync();

@@ -7,5 +7,9 @@
     <PackageReference Include="Hexalith.EventStore.Client" />
     <PackageReference Include="Hexalith.Tenants.Contracts" />
     <Compile Include="../Hexalith.McpCli.AppHost/TopologyConfiguration.cs" Link="TopologyConfiguration.cs" />
+    <Compile Include="../Hexalith.McpCli.Cli.Tests/HeadResult.cs" Link="SharedHeadHarness/HeadResult.cs" />
+    <Compile Include="../Hexalith.McpCli.Cli.Tests/HeadDiagnostics.cs" Link="SharedHeadHarness/HeadDiagnostics.cs" />
+    <Compile Include="../Hexalith.McpCli.Cli.Tests/ScriptedGateway.cs" Link="SharedHeadHarness/ScriptedGateway.cs" />
+    <Compile Include="../Hexalith.McpCli.Cli.Tests/GatewayRequest.cs" Link="SharedHeadHarness/GatewayRequest.cs" />
   </ItemGroup>
 </Project>

@@ -10,5 +10,6 @@
     <ProjectReference Include="../fixtures/Catalog.InvalidProvider.Contracts/Catalog.InvalidProvider.Contracts.csproj" />
     <ProjectReference Include="../fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
     <ProjectReference Include="../fixtures/StdioHost/Hexalith.McpCli.StdioHost.csproj" />
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/BoundaryHeads.cs" Link="SharedHeadHarness/BoundaryHeads.cs" />
   </ItemGroup>
 </Project>

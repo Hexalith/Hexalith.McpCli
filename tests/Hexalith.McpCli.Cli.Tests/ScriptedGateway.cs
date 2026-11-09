@@ -14,12 +14,19 @@ internal sealed class ScriptedGateway : IAsyncDisposable
     private readonly TcpListener _listener = new(IPAddress.Loopback, 0);
     private readonly CancellationTokenSource _stop = new();
     private readonly ConcurrentQueue<GatewayRequest> _requests = new();
-    private readonly Func<GatewayRequest, byte[]> _respond;
+    private readonly Func<GatewayRequest, Task<byte[]>> _respond;
     private readonly Task _accepting;
 
     /// <summary>Starts a gateway that answers every request with the bytes chosen by <paramref name="respond" />.</summary>
     /// <param name="respond">Builds the complete raw response for one captured request.</param>
     internal ScriptedGateway(Func<GatewayRequest, byte[]> respond)
+        : this(request => Task.FromResult(respond(request)))
+    {
+    }
+
+    /// <summary>Starts a capturing gateway with an asynchronous response provider.</summary>
+    /// <param name="respond">Builds the raw response after asynchronous forwarding or inspection.</param>
+    internal ScriptedGateway(Func<GatewayRequest, Task<byte[]>> respond)
     {
         _respond = respond;
         _listener.Start();
@@ -111,7 +118,7 @@ internal sealed class ScriptedGateway : IAsyncDisposable
                 }
 
                 _requests.Enqueue(request);
-                await stream.WriteAsync(_respond(request), _stop.Token);
+                await stream.WriteAsync(await _respond(request), _stop.Token);
                 await stream.FlushAsync(_stop.Token);
                 client.Client.Shutdown(SocketShutdown.Send);
             }

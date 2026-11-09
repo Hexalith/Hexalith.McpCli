@@ -54,6 +54,21 @@ class PlanTests(unittest.TestCase):
             with self.subTest(operation=operation):
                 load_plan(ROOT / 'tools/live-topology/plans' / (operation + '.json'), vector)
 
+    def test_semantic_receipt_requires_each_query_head_and_only_one_command_head(self):
+        from live_plans import declared_phases, require_phases
+        selection = {'vector': self.vector, 'plan': self.plan}
+        phases = [dict(phase, result='passed', attempts=[{'result': 'passed', 'exitCode': 0}])
+                  for phase in declared_phases(selection)]
+        require_phases(selection, phases)
+        self.assertTrue(any(phase['head'] == 'mcp' for phase in phases))
+        self.assertTrue(all(phase['kind'] == 'query' for phase in phases if phase['head'] == 'mcp'))
+        for index, phase in enumerate(phases):
+            if phase['head'] == 'mcp':
+                with self.assertRaises(VectorError): require_phases(selection, phases[:index] + phases[index + 1:])
+                broken = copy.deepcopy(phases)
+                broken[index]['head'] = 'cli'
+                with self.assertRaises(VectorError): require_phases(selection, broken)
+
     def test_unreviewed_or_stale_restored_package_fails_preflight(self):
         policy = {'baselinePackages': {'Gateway.Client': '1.0.0'}, 'modules': {'Example.Contracts': '2.0.0'}}
         approved = {'Gateway.Client/1.0.0': {'type': 'package'}, 'Example.Contracts/2.0.0': {'type': 'package'}}

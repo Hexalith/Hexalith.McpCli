@@ -80,6 +80,13 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     /// <summary>Signs the bounded live role hint for the independent nonmember control.</summary>
     internal string CreateNonmemberIdentity() => CreateIdentity(invalidSignature: false, live: true, nonmember: true);
 
+    /// <summary>Creates the boundary owner's exact two-tenant credential without expanding vector/smoke grants.</summary>
+    internal string CreateBoundaryAuthorizedIdentity() => CreateIdentity(false, live: true, boundaryAuthority: true);
+
+    /// <summary>Creates exact negative-control grants without a global-administrator bypass.</summary>
+    internal string CreateBoundaryIdentity(bool nonmember = false, bool invalidSignature = false)
+        => CreateIdentity(invalidSignature, live: true, boundary: true, nonmember: nonmember);
+
     /// <summary>Activates the standard platform prerequisite before allowing vector writes into fresh state.</summary>
     internal async Task RequireProjectionWriterAsync(CancellationToken cancellationToken)
     {
@@ -121,11 +128,20 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
         await AdministratorAuthorityBootstrap.RequireAsync(http, AdministratorId, cancellationToken).ConfigureAwait(false);
     }
 
-    private string CreateIdentity(bool invalidSignature, bool live, bool maintenance = false, bool authorityRead = false, bool nonmember = false)
+    private string CreateIdentity(bool invalidSignature, bool live, bool maintenance = false, bool authorityRead = false, bool nonmember = false, bool boundary = false, bool boundaryAuthority = false)
     {
         long now = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         string header = Encode(JsonSerializer.SerializeToUtf8Bytes(new { alg = "HS256", typ = "JWT" }));
-        string payload = Encode(JsonSerializer.SerializeToUtf8Bytes(NativeFixtureIdentity.CreateClaims(now, live, maintenance, authorityRead, nonmember)));
+        IReadOnlyDictionary<string, object> claims = NativeFixtureIdentity.CreateClaims(now, live, maintenance, authorityRead, nonmember);
+        if (boundary || boundaryAuthority)
+        {
+            var bounded = new Dictionary<string, object>(claims);
+            if (boundary) bounded.Remove("role");
+            bounded["eventstore:tenant"] = boundaryAuthority ? new[] { "tenant-a", "tenant-b" }
+                : nonmember ? Array.Empty<string>() : new[] { "tenant-a" };
+            claims = bounded;
+        }
+        string payload = Encode(JsonSerializer.SerializeToUtf8Bytes(claims));
         string unsigned = header + "." + payload;
         string signature = Encode(HMACSHA256.HashData(Encoding.UTF8.GetBytes(invalidSignature ? Convert.ToBase64String(RandomNumberGenerator.GetBytes(32)) : _signingKey), Encoding.ASCII.GetBytes(unsigned)));
         return unsigned + "." + signature;

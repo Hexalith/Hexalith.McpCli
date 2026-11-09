@@ -204,7 +204,7 @@ lane.main(['--output',sys.argv[2],'--preflight-only'])
                     (output / 'tests.xml').write_text(self.xml())
                     binding = selection_binding(selection)
                     if broken == 'binding': binding['planSha256'] = 'stale-plan'
-                    phases = [{'phase': '/invocation', 'operation': 'fixture.operation', 'kind': 'command', 'result': 'passed', 'attempts': [{'result': 'passed', 'exitCode': 0}]}]
+                    phases = [{'head': 'cli', 'phase': '/invocation', 'operation': 'fixture.operation', 'kind': 'command', 'result': 'passed', 'attempts': [{'result': 'passed', 'exitCode': 0}]}]
                     if broken == 'phase-missing': phases = []
                     if broken == 'phase-duplicated': phases *= 2
                     if broken == 'command-repeated': phases[0]['attempts'] *= 2

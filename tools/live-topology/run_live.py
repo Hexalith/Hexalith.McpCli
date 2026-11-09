@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Execute one approved vector once through the production CLI against a private live topology."""
+"""Execute each approved Command once and each Query through both heads on a private live topology."""
 from __future__ import annotations
 
 import argparse
@@ -17,8 +17,10 @@ from validate import VectorError, _load_json
 
 
 def observe(head: HeadProcess, call: dict, url: str | None, action: dict, values: dict, plan: dict,
-            record: dict, *, clock=time.monotonic, pause=time.sleep, checkpoint=lambda: None) -> dict:
+            record: dict, *, transport='cli', clock=time.monotonic, pause=time.sleep, checkpoint=lambda: None) -> dict:
     """Submit writes once. Only reads may converge, within an independent hard deadline."""
+    if transport not in ('cli', 'mcp') or (transport == 'mcp' and call['kind'] != 'query'):
+        raise VectorError('Live MCP execution is restricted to Query reads.')
     deadline = clock() + plan['deadlineSeconds']
     last_failure = None
     assertion_paths = json.dumps([assertion['path'] for assertion in call['assertions']])
@@ -34,15 +36,22 @@ def observe(head: HeadProcess, call: dict, url: str | None, action: dict, values
         document = None
         invalid_contract = False
         try:
-            arguments, _, _ = _call_args(call)
+            arguments, tool, mcp_arguments = _call_args(call)
             try:
-                code, document = head.cli(arguments, url, call['envelope']['tenant'], call['envelope'].get('actor'))
+                if transport == 'cli':
+                    code, document = head.cli(arguments, url, call['envelope']['tenant'], call['envelope'].get('actor'))
+                else:
+                    is_error, document = head.mcp(tool, mcp_arguments, url, call['envelope']['tenant'], call['envelope'].get('actor'))
+                    if is_error != ('error' in document):
+                        invalid_contract = True
+                        raise VectorError('MCP isError disagrees with its document.')
+                    code = 2 if is_error else 0
             except VectorError as error:
                 raise VectorError(f"{record['phase']} {call['operation']}: {error}") from error
             attempt.update(exitCode=code, document=document)
             checkpoint()
             if code != 0 or 'error' in document:
-                raise VectorError(f"{record['phase']} {call['operation']}: CLI exit {code}: {document}")
+                raise VectorError(f"{record['phase']} {call['operation']}: {transport.upper()} exit {code}: {document}")
             if document.get('operation') != call['operation'] or document.get('tenant') != call['envelope']['tenant']:
                 invalid_contract = True
                 raise VectorError(f"{record['phase']} {call['operation']}: /operation or /tenant does not match the submitted call")
@@ -117,21 +126,31 @@ def execute(selection: dict, host: Path, url: str, token: str, report: dict, *, 
             phase = action.get('step', action.get('label'))
             call = steps[action['step']] if 'step' in action else action['query']
             call = resolve(call, action.get('bindings', []), values)
-            record = {'phase': phase, 'operation': call['operation'], 'kind': call['kind'],
+            record = {'head': 'cli', 'phase': phase, 'operation': call['operation'], 'kind': call['kind'],
                       'resolvedCall': {key: call[key] for key in ('operation', 'kind', 'payload', 'envelope')},
                       'result': 'running', 'attempts': []}
             report['phases'].append(record)
             checkpoint()
+            active_record = record
             # Validate every resolved dynamic call again before it can reach the live Gateway.
             try:
                 validate_call(head, call)
                 document = observe(head, call, None, action, values, selection['plan'], record, checkpoint=checkpoint)
+                if call['kind'] == 'query':
+                    # Reuse the resolved call and already captured values; reads add no write submission.
+                    mcp_record = {'head': 'mcp', 'phase': phase, 'operation': call['operation'], 'kind': 'query',
+                                  'resolvedCall': record['resolvedCall'], 'result': 'running', 'attempts': []}
+                    report['phases'].append(mcp_record)
+                    checkpoint()
+                    active_record = mcp_record
+                    observe(head, call, None, action, values.copy(), selection['plan'], mcp_record,
+                            transport='mcp', checkpoint=checkpoint)
                 if call['kind'] == 'command':
                     if document['messageId'] in message_ids:
                         raise VectorError(f'{phase} {call["operation"]}: /messageId was reused across Command phases')
                     message_ids.add(document['messageId'])
             except Exception as error:
-                record.update(result='failed', error=f'{type(error).__name__}: {error}')
+                active_record.update(result='failed', error=f'{type(error).__name__}: {error}')
                 checkpoint()
                 raise
             report['captures'] = values.copy()

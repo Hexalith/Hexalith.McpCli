@@ -209,7 +209,7 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         (root / 'cancel-child.json').write_text(json.dumps({'pid': os.getpid(), 'pgid': os.getpgrp()}))
         while True: time.sleep(1)
     outcomes = [{'operation': name, 'result': 'passed', 'exitCode': 0, 'isolatedReceipt': str(owned(name + '-' + str(index)) / 'result.json')} for index, name in enumerate(operations)]
-    receipt = {'result': 'passed', 'fullLiveAccepted': True, 'coverage': operations, 'vectors': outcomes, 'passed': 21, 'failed': 0}
+    receipt = {'result': 'passed', 'fullLiveAccepted': True, 'coverage': operations, 'vectors': outcomes, 'passed': len(operations), 'failed': 0}
     if mode == 'extra-approved-vector': outcomes[-1]['isolatedReceipt'] = outcomes[0]['isolatedReceipt']
     if mode == 'wrong-coverage': receipt['coverage'] = operations[:-1]
     if mode == 'wrong-lane-result': receipt['result'] = 'failed'
@@ -251,12 +251,13 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         'failed-vectors', 'both-fail', 'cancel-smoke-after-vector-failure',
         'lane-preflight', 'lane-admission', 'lane-coverage', 'lane-runtime') else 0)
 else:
+    independent = 'boundary' if 'Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests' in sys.argv else 'smoke'
     output = pathlib.Path(os.environ['MCPCLI_LIVE_OUTPUT'])
     expected = pathlib.Path(sys.argv[sys.argv.index('-result-xml') + 1]).parent
     if output != expected or not output.is_dir():
         raise RuntimeError('Smoke writer bootstrap requires its selected evidence directory.')
-    (root / 'runner-smoke-output.json').write_text(json.dumps(str(output)))
-    path = owned('smoke')
+    (root / ('runner-' + independent + '-output.json')).write_text(json.dumps(str(output)))
+    path = owned(independent)
     if mode == 'cancel-smoke-after-vector-failure':
         def terminate(*_):
             print('independent smoke stopped', flush=True)
@@ -267,6 +268,10 @@ else:
         while True: time.sleep(1)
     result = 'Skip' if mode == 'skipped-smoke' else 'Pass'
     xml = '<assemblies><assembly total="1" passed="1" failed="0" skipped="0" errors="0"><collection><test result="' + result + '" type="Hexalith.McpCli.Integration.Tests.GatewaySmokeTests" method="AuthenticatedQueryReturnsSuccessfulDocument" /></collection></assembly></assemblies>'
+    if independent == 'boundary':
+        xml = xml.replace('GatewaySmokeTests', 'SharedHeadBoundaryTests').replace('AuthenticatedQueryReturnsSuccessfulDocument', 'SharedHeadsPreserveAuthorizationAndDeactivationSafety')
+        if mode == 'wrong-boundary-case': xml = xml.replace('SharedHeadsPreserveAuthorizationAndDeactivationSafety', 'OtherTest')
+        if mode == 'skipped-boundary': xml = xml.replace('result="Pass"', 'result="Skip"')
     if mode == 'wrong-smoke-case': xml = xml.replace('AuthenticatedQueryReturnsSuccessfulDocument', 'OtherTest')
     if mode == 'skipped-smoke-count': xml = xml.replace('skipped="0"', 'skipped="1"')
     if mode == 'empty-smoke': xml = '<assemblies><assembly total="0" passed="0" failed="0" skipped="0" errors="0" /></assemblies>'
@@ -637,7 +642,7 @@ class CiHooksTests(unittest.TestCase):
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         inherited = [json.loads(line) for line in (self.root / 'runner-source-overrides.jsonl').read_text().splitlines()]
-        self.assertEqual([str(override)] * 2, inherited)
+        self.assertEqual([str(override)] * 3, inherited)
 
     def test_online_audit_receipt_reaches_both_runners_and_refuses_drift(self):
         prepared = self.prepare()
@@ -656,7 +661,7 @@ class CiHooksTests(unittest.TestCase):
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         inherited = [json.loads(line) for line in (self.root / 'runner-reader-audit.jsonl').read_text().splitlines()]
-        self.assertEqual([audit] * 2, inherited)
+        self.assertEqual([audit] * 3, inherited)
         Path(audit['path']).write_text('{}')
         with self.assertRaisesRegex(ValueError, 'online audit proof changed'):
             self.ci_module().require_reader_audit(prepared)
@@ -694,7 +699,7 @@ class CiHooksTests(unittest.TestCase):
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         inherited = [json.loads(line) for line in (self.root / 'runner-reader-audit.jsonl').read_text().splitlines()]
-        self.assertEqual(2, len(inherited))
+        self.assertEqual(3, len(inherited))
         self.assertTrue(all(item == prepared['readerAudit'] for item in inherited))
         (self.root / relative).write_text('// unexpected new source')
         with self.assertRaisesRegex(ValueError, 'online audit proof changed'):
@@ -846,7 +851,7 @@ class CiHooksTests(unittest.TestCase):
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         actual = [json.loads(line) for line in (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()]
-        self.assertEqual([{'profile': 'true', 'sourceCommit': 'a' * 40}] * 2, actual)
+        self.assertEqual([{'profile': 'true', 'sourceCommit': 'a' * 40}] * 3, actual)
 
     def test_changed_gateway_package_bytes_refuse_before_any_live_runner(self):
         self.prepare()
@@ -1297,8 +1302,9 @@ class CiHooksTests(unittest.TestCase):
         self.assertIs(True, receipt['fullLiveAccepted'])
         self.assertEqual(21, receipt['vectors']['count'])
         self.assertEqual('passed', receipt['smoke']['result'])
+        self.assertEqual('passed', receipt['boundary']['result'])
         files = list(Path(receipt['output']).rglob('*'))
-        self.assertEqual(22, len([file for file in files if file.name == 'result.json']))
+        self.assertEqual(23, len([file for file in files if file.name == 'result.json']))
         self.assertFalse(any(file.name in ('issuer.key', 'dump.rdb') for file in files))
         content = ''.join(file.read_text() for file in files if file.is_file())
         secrets = ['fixture credential', 'fixture-secret-token', 'eyJfixture.payload.signature',
@@ -1306,7 +1312,7 @@ class CiHooksTests(unittest.TestCase):
         for secret in secrets:
             self.assertNotIn(secret, content)
         deadlines = [call[4] for call in self.calls() if call[0] == 'timeout' and any(value.endswith(('run-vectors.py', 'run-isolated.py')) for value in call)]
-        self.assertEqual(['16200', '960'], deadlines)
+        self.assertEqual(['15180', '960', '960'], deadlines)
         self.assertIn(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '17700',
                        'python3', 'tools/live-topology/ci.py', 'run'], self.calls())
         self.assertTrue(Path(prepared['runtime']).is_dir())
@@ -1315,6 +1321,33 @@ class CiHooksTests(unittest.TestCase):
         self.assertNotEqual(0, failed_preparation.returncode)
         self.assertIn('Dapr CLI 1.18.2 and initialized runtime 1.18.7 are required', failed_preparation.stderr)
         self.assertIs(False, json.loads((self.evidence / 'ci-live.json').read_text())['fullLiveAccepted'])
+
+    def test_boundary_skip_or_wrong_case_cannot_grant_live_acceptance(self):
+        self.prepare()
+        for mode in ('skipped-boundary', 'wrong-boundary-case'):
+            with self.subTest(mode=mode):
+                # One prepared input can be reused only with a fresh empty execution runtime.
+                if mode != 'skipped-boundary':
+                    self.fresh_evidence()
+                    self.prepare()
+                result = self.invoke('run-ci.sh', mode)
+                self.assertNotEqual(0, result.returncode)
+                receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+                self.assertFalse(receipt['fullLiveAccepted'])
+                self.assertEqual('passed', receipt['smoke']['result'])
+                self.assertEqual('failed', receipt['boundary']['result'])
+                self.assertIn('SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety', result.stderr)
+
+    def test_vector_and_runtime_counts_follow_inventory_growth(self):
+        self.prepare()
+        extra = self.root / 'tools/conformance-vectors/v1/modules/additional.vector.json'
+        extra.write_text(json.dumps({'operation': 'fixture.additional'}))
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual(22, receipt['vectors']['count'])
+        self.assertEqual('passed', receipt['boundary']['result'])
+        self.assertEqual(24, len(list((Path(receipt['output']) / 'runtime-diagnostics').glob('*/result.json'))))
 
     def test_vector_nonacceptance_and_nonzero_exits_still_run_smoke(self):
         self.prepare()
@@ -1330,7 +1363,7 @@ class CiHooksTests(unittest.TestCase):
                 expected = {'missing-vectors': 'live-lane.json', 'malformed-vectors': 'Expecting property name enclosed in double quotes',
                             'vector-exit': 'exited 19', 'failed-vectors': 'exited 1',
                             'vector-timeout': 'exited 124', 'stale-isolation': 'Isolated receipt is outside the prepared runtime.'}
-                self.assertIn(expected.get(mode, 'Complete current passing evidence for all 21 vectors is required'), result.stderr)
+                self.assertIn(expected.get(mode, 'Complete current passing evidence for every approved vector is required'), result.stderr)
                 if mode == 'failed-vectors':
                     self.assertIn('failed Operations: sample.operation-00', result.stderr)
                     self.assertEqual([{'operation': 'sample.operation-00', 'result': 'failed',
@@ -1352,7 +1385,7 @@ class CiHooksTests(unittest.TestCase):
                 try:
                     result = self.invoke('run-ci.sh', mode)
                     self.assertNotEqual(0, result.returncode)
-                    self.assertIn('Complete current passing evidence for all 21 vectors is required', result.stderr)
+                    self.assertIn('Complete current passing evidence for every approved vector is required', result.stderr)
                     receipt = json.loads((self.evidence / 'ci-live.json').read_text())
                     self.assertIs(False, receipt['fullLiveAccepted'])
                     self.assertEqual('passed', receipt['smoke']['result'])
@@ -1423,7 +1456,7 @@ class CiHooksTests(unittest.TestCase):
                 self.assertIs(False, json.loads((self.evidence / 'ci-live.json').read_text())['fullLiveAccepted'])
                 expected = {'missing-smoke': 'tests.xml', 'smoke-exit': 'exited 17',
                             'missing-cleanup': 'Private runtime did not prove prerequisites, private namespaces and owned cleanup.'}
-                self.assertIn(expected.get(mode, 'Independent smoke must contain exactly one passing, unskipped authenticated Gateway case.'), result.stderr)
+                self.assertIn(expected.get(mode, 'Independent case must contain exactly one passing, unskipped Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument.'), result.stderr)
 
     def test_smoke_cleanup_proof_is_required_after_all_vectors_pass(self):
         self.prepare()
@@ -1443,7 +1476,7 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual('passed', receipt['vectors']['result'])
         self.assertEqual('passed', receipt['smoke']['result'])
         self.assertIs(False, receipt['fullLiveAccepted'])
-        self.assertIn('Expected exactly 21 fresh vector runtimes and one independent smoke runtime.', result.stderr)
+        self.assertIn('Expected exactly 21 fresh vector runtimes and 2 independent runtimes.', result.stderr)
 
     def test_generation_child_logs_and_xml_are_redacted(self):
         self.prepare()
@@ -1589,7 +1622,7 @@ class CiHooksTests(unittest.TestCase):
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         recorded = [json.loads(line) for line in (self.root / 'runner-environment.jsonl').read_text().splitlines()]
-        self.assertEqual([['run-vectors.py', []], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']]], recorded)
+        self.assertEqual([['run-vectors.py', []], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']]], recorded)
         receipt = json.loads((self.evidence / 'ci-live.json').read_text())
         self.assertEqual(str(Path(receipt['output']) / 'smoke'),
                          json.loads((self.root / 'runner-smoke-output.json').read_text()))
@@ -2051,6 +2084,28 @@ ci.bounded([sys.executable,sys.argv[2],sys.argv[1],sys.argv[3]],120,pathlib.Path
         self.assertEqual([(child.pid, signal.SIGKILL), (child.pid, signal.SIGKILL)], [call.args for call in kill.call_args_list if call.args[1] != 0])
 
 
+class IndependentCaseTests(unittest.TestCase):
+    def test_case_identity_counts_skips_errors_and_budgets_are_enforced(self):
+        spec = importlib.util.spec_from_file_location('ci_independent', HERE / 'ci.py')
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        budget = module.RUN_TIMEOUT_SECONDS - len(module.INDEPENDENT_CASES) * module.INDEPENDENT_CASE_TIMEOUT - module.CLEANUP_HEADROOM_SECONDS
+        self.assertGreater(budget, 0)
+        self.assertEqual(module.RUN_TIMEOUT_SECONDS, budget + len(module.INDEPENDENT_CASES) * module.INDEPENDENT_CASE_TIMEOUT + module.CLEANUP_HEADROOM_SECONDS)
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'tests.xml'
+            for _, class_name, method in module.INDEPENDENT_CASES:
+                xml = f'<assemblies><assembly total="1" passed="1" failed="0" skipped="0" errors="0"><collection><test result="Pass" type="{class_name}" method="{method}" /></collection></assembly></assemblies>'
+                path.write_text(xml)
+                module.require_independent_case(path, class_name, method)
+                for invalid in [xml.replace('result="Pass"', 'result="Skip"'), xml.replace('errors="0"', 'errors="1"'),
+                                xml.replace(method, 'OtherTest'), xml.replace(class_name, 'OtherTests'),
+                                xml.replace('total="1"', 'total="2"'), '<assemblies />']:
+                    path.write_text(invalid)
+                    with self.assertRaisesRegex(ValueError, 'exactly one passing, unskipped'):
+                        module.require_independent_case(path, class_name, method)
+
+
 class CiWorkflowTests(unittest.TestCase):
     def test_required_inputs_and_existing_focused_lanes_remain_configured(self):
         workflow = (HERE.parents[1] / '.github/workflows/ci.yml').read_text()
@@ -2067,7 +2122,8 @@ class CiWorkflowTests(unittest.TestCase):
         for project in ('Abstractions', 'Analyzers', 'Core', 'Manifest', 'Cli', 'Mcp'):
             self.assertIn(f'tests/Hexalith.McpCli.{project}.Tests', caller)
         self.assertRegex(caller, r'uses: Hexalith/Hexalith.Builds/\.github/workflows/domain-ci.yml@[0-9a-f]{40}\n')
-        self.assertIn('len(operations) != 21 or sorted(discovered) != sorted(expected)', workflow)
+        self.assertIn('if not operations or len(set(operations)) != len(operations) or sorted(discovered) != sorted(expected)', workflow)
+        self.assertIn('SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety', workflow)
 
     def test_workflow_pin_matches_builds_gitlink(self):
         root = HERE.parents[1]

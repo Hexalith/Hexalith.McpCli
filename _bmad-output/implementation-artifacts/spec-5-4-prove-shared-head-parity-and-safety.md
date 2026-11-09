@@ -2,7 +2,9 @@
 title: '5.4 Prove shared-head parity and safety'
 type: 'feature'
 created: '2026-11-09'
-status: 'ready-for-dev'
+updated: '2026-11-09T11:55:41+01:00'
+status: 'in-progress'
+baseline_commit: 'f6c8e0e3a2105f555e6eec3c667b088085c47fc4'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -115,9 +117,9 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs` -- every offline matrix row, through both heads over the production catalog: 401 and 403 documents from `ScriptedGateway`, override disabled, platform scope, reserved tenant, look-alikes, the F7 pin, and restricted names with `confirm: true`.
-- [ ] `tests/Hexalith.McpCli.Integration.Tests/` -- a boundary class, plus identity helpers, for the live rows through both heads: 401s, cross-tenant refusal, nonmember, C05 missing and C05 concurrent repeat, each followed by an authorized end-state read.
-- [ ] `tools/live-topology/run_live.py`, `ci.py` and `.github/workflows/ci.yml`:
+- [x] `tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs` -- every offline matrix row, through both heads over the production catalog: 401 and 403 documents from `ScriptedGateway`, override disabled, platform scope, reserved tenant, look-alikes, the F7 pin, and restricted names with `confirm: true`.
+- [x] `tests/Hexalith.McpCli.Integration.Tests/` -- a boundary class, plus identity helpers, for the live rows through both heads: 401s, cross-tenant refusal, nonmember, C05 missing and C05 concurrent repeat, each followed by an authorized end-state read.
+- [x] `tools/live-topology/run_live.py`, `ci.py` and `.github/workflows/ci.yml`:
   - Add MCP reads for Query vectors.
   - Run the boundary class as an independent isolated case.
   - Derive the counts.
@@ -129,7 +131,7 @@ context:
   - `parity-matrix.md`: C01–C08 and the seven variants. Admin and technical rows are marked "absent; name similarity proves nothing".
   - The scan receipt, the F7 acceptance and `verification.md`.
   - HALT for the owner's exact-byte approval and verdict, then record the receipt.
-- [ ] `README.md`, `sprint-status.yaml` and `deferred-work.md` -- document a 401 or 403 as a `gateway_error` and the F7 limitation. Record status, and grep the ledger before appending.
+- [x] `README.md`, `sprint-status.yaml` and `deferred-work.md` -- document a 401 or 403 as a `gateway_error` and the F7 limitation. Record status, and grep the ledger before appending.
 
 **Acceptance Criteria:**
 - Given the CI live topology, when the lane runs, then all seven Parties vectors, the MCP reads and every boundary case pass with `fullLiveAccepted: true`, and `check_enrolled.py` reports `fullV1Accepted`.
@@ -137,6 +139,14 @@ context:
 - Given the whole change, when it is built, then `src/` has no new module name or dependency, and `DependencyPolicyTests` and `EnrolledModuleCoverageTests` pass unchanged.
 
 ## Implementation Notes
+
+- Offline production-catalog safety covers both call kinds, both heads, session/per-call tenant refusals, all inventoried Admin names and six excluded Tenants targets. The accepted Kelvin alias has a dedicated item-9 pin. No production source, identifier validator, dependency policy, approved vector, live plan, approval file or reference checkout was changed.
+- The boundary uses real ConformanceHost CLI and stdio MCP processes, with complete channel assertions, a counting forwarder and authorized before/after business-state reads. A separate offline process-harness regression covers successful and refused calls without topology. The in-process harness waits for the MCP response writer before teardown.
+- Negative-control tokens have tenant-A-only or no tenant grants and omit the administrator role. This proves exact signed-grant authorization, not persisted Parties membership. The existing administrator bootstrap separately verifies persisted native membership. Boundary owner grants are isolated from unchanged vector/smoke grants.
+- The selected cohort’s absent detail returns `500/query_internal_error` with `actor-not-found-infrastructure`, as inventory C05 records. Missing deactivation returns `404/party-not-found`; separate CLI/MCP absent targets also verify persisted events contain no creation/deactivation effect (a rejection-only stream can remain). Before/after comparisons remove only observation-time `freshness`, retaining every business member.
+- Concurrent CLI processes use distinct generated message IDs. The qualified Gateway awaits the owner’s `ProcessCommandAsync` before returning acceptance; after both return, the boundary waits for the authorized inactive projection and requires exactly one persisted deactivation event in the actor’s stream. The actor ID and state keys follow qualified EventStore `dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`. Any configured sidecar `DAPR_API_TOKEN` is retained for state reads; app-channel authentication is unchanged.
+- The generic runner executes every Query observation through MCP as well as CLI, while every vector Command stays CLI-only. Semantic receipts require both Query heads. CI derives expected counts from approved vectors and its independent-case registry; it allocates each independent case 960 seconds and reserves 600 seconds within the unchanged 17700-second outer budget.
+- [Review][Defer] The redactor/committed secret-scan prerequisite is already tracked (`deferred-work.md:834`); committed live CI, hash-bound evidence and exact-byte owner approval remain pending. The rejection-only-stream and mixed-profile-identity work is already tracked (`deferred-work.md:556`, `deferred-work.md:827`). No final evidence manifest or retirement verdict is asserted.
 
 ## Spec Change Log
 
@@ -150,3 +160,35 @@ context:
 - `python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'`, then `run-vectors.py --preflight-only`, then the CI discovery listing -- expected: pass, with the new cases listed.
 - `python3 tools/conformance-vectors/v1/check_enrolled.py --output <task-dir>` -- expected: `fullV1Accepted: true`.
 - The split change's secret scan over `evidence/story-5-4/` -- expected: zero findings.
+
+### Local implementation verification (2026-11-09)
+
+The story remains **in-progress**. The live boundary is compiled and discovered, but has not executed. The frozen redactor/secret-scan prerequisite prevents the committed CI run, final evidence binding and owner approval/verdict. No `fullLiveAccepted` or retirement verdict is claimed.
+
+- Normal solution restore and Release build with `-warnaserror`: passed, zero warnings/errors (`/tmp/story54-restore.log`, `/tmp/story54-build-final.log`).
+- Core: 877 succeeded, four Windows-only skips; final full CLI: 582 succeeded, two Windows-only skips (584 total), including all 26 new safety/process-harness cases; MCP: 94 passed. Logs: `/tmp/story54-core-tests.log`, `/tmp/story54-cli-final.log`, `/tmp/story54-mcp-tests.log`.
+- Manifest: 362 passed with no skips, including unchanged dependency/fixture closure guards (`/tmp/story54-manifest-final.log`, `/tmp/story54-manifest-final.xml`). An earlier shared in-process project-reference attempt changed the reviewed fixture closure; it was removed before the successful run. The final live harness uses the existing ConformanceHost process and no new package or production project reference.
+- New safety/process-harness tests: 26 passed, no skips (`/tmp/story54-head-tests-final.log`); the process cases exercise real CLI and stdio MCP success and 401 documents, every output channel and Gateway counts without topology.
+- Generic runner: 27 Python cases passed; lane: 15 passed; plan/dependency checks: 38 passed. The first 94-case CI-hook run passed 90 and exposed four stale expectations for the added independent case; all four pass after correction (`/tmp/story54-ci-fixes.log`). The clean full sweep passed 203 cases (`/tmp/story54-python-final.log`); the later receipt-attribution fix and its additional test passed all 27 affected runner cases (`/tmp/story54-runner-final.log`). All 204 currently discovered cases are therefore covered by these successful runs.
+- Preflight-only passed with `fullLiveAccepted: false` (`/tmp/mcpcli-story54-live-preflight/live-lane.json`). Discovery matched exactly every approved vector plus smoke and boundary: 23 cases today (`/tmp/story54-discovery.txt`). These checks start no live services.
+- `check_enrolled.py --output /tmp/mcpcli-story54-enrolled` passed: Parties 1.5.1 (7 operations), Tenants 7.0.5 (14 operations), aggregate `fullV1Accepted: true` (`/tmp/mcpcli-story54-enrolled/enrolled.json`, `/tmp/story54-enrolled.log`). The 203-case full Python sweep and 27-case affected-runner rerun above passed. No production Core validation, Sample.Contracts or Gateway wire behavior changed, so sample conformance gates are not required by this implementation.
+
+### Frozen matrix audit
+
+`Safety` below means `tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs`; all named safety tests executed in the passing 26-case head run. `Live` means `SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety`; it is built/discovered only. Every offline refusal checks complete stdout/stderr, MCP Content/StructuredContent and Gateway request cardinality.
+
+| Frozen row | Covering test / evidence | Live status |
+| --- | --- | --- |
+| No token | `Safety.CredentialRefusalsPreserveTheCompleteGatewayErrorAsync`, 401/null token, Command and Query | Live not run—redactor prerequisite; designed authorized before/after reads and absent Authorization header |
+| Invalid token | Same test, 401/forged credential, both call kinds; process harness also passes 401 through each head | Live not run—redactor prerequisite; signed wrong-key control |
+| Unauthorized principal | Same test, complete 403 documents; Live covers tenant-A/no-grant principals and allowed per-call override | Live not run—redactor prerequisite; no persisted Parties-membership claim |
+| Override disabled | `Safety.DisabledMcpOverrideMakesNoGatewayCallsAsync`, both call kinds | Live not run—redactor prerequisite |
+| Platform scope as tenant | `Safety.PublicTenantNegativesHaveNoGatewayCallsAsync`, session and MCP per-call input, both call kinds | Live not run—redactor prerequisite |
+| Reserved tenant | Same test, `system` and `SYSTEM`, both call kinds and tenant sources | Live not run—redactor prerequisite |
+| Look-alikes | Same test, Cyrillic a, U+0130 and fullwidth tenant, both call kinds and tenant sources | Live not run—redactor prerequisite |
+| F7 limitation | `Safety.AcceptedF7Item9KelvinAliasReachesTheGatewayAsAsciiAsync`, exact `kelvin` wire value through both heads | Accepted offline limitation pin; item 9 stays open |
+| Restricted names | `Safety.RestrictedNamesCannotBeDiscoveredOrAuthorizedByConfirmAsync`, every inventoried Admin name and six excluded Tenants names, with/without confirm, both heads/call kinds | Offline zero-call guard passed; no live restricted mutation is attempted |
+| C05 missing | Live uses a different never-created target per head, 404/`party-not-found`, authorized absence read plus persisted creation/deactivation exclusion | Live not run—redactor prerequisite |
+| C05 concurrent repeat | Live starts two CLI processes once each, asserts distinct message IDs, authorized inactive state and exactly one persisted deactivation event | Live not run—redactor prerequisite |
+
+All final local logs and the Manifest XML, discovery listing and summary receipts are preserved under `/tmp/mcpcli-story54-verification/`. `git diff --check` passed. The committed live run, evidence manifest/variant matrix/scan receipt and owner verdict remain unchecked tasks under the frozen prerequisite.

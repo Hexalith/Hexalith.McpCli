@@ -147,7 +147,7 @@ jobs:
         run: |
           python3 -m venv "$RUNNER_TEMP/mcpcli-live-venv"
           "$RUNNER_TEMP/mcpcli-live-venv/bin/python" -m pip install -r tools/conformance-vectors/v1/requirements.txt
-      - name: Build and discover every live vector plus the independent smoke without starting source services
+      - name: Build and discover every live vector plus the independent cases without starting source services
         run: |
           source "$RUNNER_TEMP/mcpcli-live-venv/bin/activate"
           dotnet restore tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
@@ -162,11 +162,12 @@ jobs:
           operations = sorted(json.loads(path.read_text())["operation"] for path in
                               pathlib.Path("tools/conformance-vectors/v1/modules").rglob("*.vector.json"))
           expected = ["Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"]
+          expected += ["Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety"]
           expected += ['Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: "' + operation + '")'
                        for operation in operations]
-          if len(operations) != 21 or sorted(discovered) != sorted(expected):
-              raise SystemExit(f"Expected every approved live vector plus smoke; discovered {discovered!r}")
-          print(f"Discovered {len(operations)} live vectors and the independent Gateway smoke.")
+          if not operations or len(set(operations)) != len(operations) or sorted(discovered) != sorted(expected):
+              raise SystemExit(f"Expected every approved live vector plus independent smoke and boundary; discovered {discovered!r}")
+          print(f"Discovered {len(operations)} live vectors and the independent Gateway smoke and shared-head boundary.")
           PYTHON
       - name: Retain complete live preflight receipts and diagnostics
         if: ${{ always() }}

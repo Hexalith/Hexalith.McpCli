@@ -71,7 +71,7 @@ python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
 After successful qualified preparation, `run-ci.sh` invokes `run-vectors.py`
 with the inherited native profile and fresh package cache. It preflights the entire
 production-enrolled set and launches one new isolated process per approved vector,
-then invokes the independent smoke. Use the bounded preparation/execution hooks
+then invokes the independent smoke and shared-head boundary. Use the bounded preparation/execution hooks
 below; direct default/native launches do not establish the canonical profile.
 
 Each of the 21 children retains its independent 960-second bound. The wrapper retains its existing 900-second child bound. The selected
@@ -89,7 +89,7 @@ handler capability readiness. The same smoke case also sends one valid signed no
 administrator hint through the real owner command boundary. It requires the exact
 permission rejection and independently reads the target tenant as the persisted
 administrator before and after to prove it remains absent. Anonymous and forged
-requests still require 401; the selection remains 21 vectors plus one smoke case. This infrastructure proof does not enroll
+requests still require 401; the selection includes every approved vector plus independent smoke and shared-head boundary cases. This infrastructure proof does not enroll
 the excluded Query in the Catalog. The shared composition binds the finite actual
 SDK domain-service route inventory to EventStore's real sidecar identity and the
 required bound-bootstrap, stream-read and query routes to their actual peer
@@ -140,8 +140,8 @@ when another vector fails. `live-result.json` retains the Operation, phase,
 assertion path, query attempts, sanitized documents and immutable input bindings;
 credentials are excluded. Failed vectors also print their sanitized phase and
 assertion diagnostics so they appear in the selected test failure. Namespace and service cleanup details remain under
-`$private_runtime/runs/`. The non-live CI job discovers all 21 vector cases plus
-smoke; the required CI lane executes them through the hooks below.
+`$private_runtime/runs/`. The non-live CI job discovers every approved vector case plus
+smoke and shared-head boundary; the required CI lane executes them through the hooks below.
 
 ## Required CI lane
 
@@ -196,7 +196,7 @@ adapter remains a separate compiled library. Its ordinary build uses
 closure; every deployed SDK DLL must match its public archive before preparation
 is accepted. Online source, AppHost and client builds explicitly audit all dependencies with warnings as errors.
 Preparation requires low-level auditing without advisory exclusions or NU19xx warning suppression and retains the effective restore policy.
-`native-reader-audit.json` binds both NuGet content hashes and actual archive SHA512 values, plus exact project, Program.cs and any declared PublishedCatalogArtifactCohort.cs input hashes, before both runners. The private reader also binds the actual direct root-declared Builds catalog, forces that path without sibling fallback, disables reader-only automatic Directory.Build/Packages imports and the inherited source-host post-import hook, and preserves that hook for source owners. Expected project/bindings/source/SDK-policy digests come from sealed in-memory bytes before writing. It copies the audited source files present in the frozen Platform revision, refuses extra source files regardless of extension case, and rechecks seals before compilation, immediately after build before generation, and after generation. Safe preparation evidence retains separate original and copied source digests. Each private reader restores first,
+`native-reader-audit.json` binds both NuGet content hashes and actual archive SHA512 values, plus exact project, Program.cs and any declared PublishedCatalogArtifactCohort.cs input hashes, before the vector lane and each independent case. The private reader also binds the actual direct root-declared Builds catalog, forces that path without sibling fallback, disables reader-only automatic Directory.Build/Packages imports and the inherited source-host post-import hook, and preserves that hook for source owners. Expected project/bindings/source/SDK-policy digests come from sealed in-memory bytes before writing. It copies the audited source files present in the frozen Platform revision, refuses extra source files regardless of extension case, and rechecks seals before compilation, immediately after build before generation, and after generation. Safe preparation evidence retains separate original and copied source digests. Each private reader restores first,
 checks every package archive and extracted asset against that proof, then builds with
 `--no-restore`. Only the isolated advisory-feed refresh is disabled; native evidence
 retains the exact audited graph. No server dependency edge or loader exception is added. The source
@@ -245,7 +245,7 @@ sanitized `native-catalog.json` records the source-selection/preparation digests
 actual SDK artifacts and matching credential-free peer readback. Private custody,
 keys, RDB bytes and raw operational state remain outside uploaded evidence.
 This is infrastructure for native acceptance; public artifact approval and a
-complete successful remote 21-plus-smoke lane remain separate requirements.
+complete successful remote vector and independent-case lane remain separate requirements.
 
 Aspire CLI 13.6.1 is installed from its official Linux x64 release archive when
 absent, with a pinned SHA-256 verified before extraction; bounded
@@ -283,8 +283,7 @@ The preparation hook has a 2280-second outer deadline inside its 40-minute step.
 Its prepared runtime must
 have no previous runs and still contain the qualified binaries. The execution
 hook has a 17700-second outer deadline inside its 300-minute step:
-`run-vectors.py` gets 16200 seconds and
-the independent `GatewaySmokeTests` wrapper gets 960 seconds with `-failSkips`.
+`run-vectors.py` gets the outer budget minus 960 seconds for each independent case and 600 seconds of provenance/cleanup headroom (currently 15180 seconds). Both independent wrappers, `GatewaySmokeTests` and `SharedHeadBoundaryTests`, get 960 seconds with `-failSkips`. Each owns a separate isolated runtime; the expected runtime count is derived from the vector inventory plus the independent-case registry.
 The vector runner's 960-second child and wrapper's 900-second command limits
 remain enforced. The 360-minute hosted job budget includes preparation, testing,
 setup and upload. The vector aggregate may time out before the sum of every
@@ -310,11 +309,11 @@ CLI's `setup --force`, including its managed launcher, before this hash comparis
 
 Each run invalidates
 `ci-live.json` before execution and writes a new generation directory. Acceptance
-requires exactly 21 passing vector outcomes, complete coverage, fresh matching
-semantic receipts, successful cleanup and a separate one-case, unskipped passing
-authenticated smoke XML. Vector assertion failures still allow the independent
-smoke attempt; neither smoke nor preflight/subset evidence can replace vectors.
-The smoke child receives its current generation's `smoke/` directory as
+requires every approved vector outcome to pass, complete coverage, fresh matching
+semantic receipts, successful cleanup and separate one-case, unskipped passing
+authenticated smoke and shared-head boundary XML. Each declared Query observation runs through CLI and MCP; MCP never submits a vector Command. Vector assertion failures still allow the independent
+smoke and boundary attempts; neither independent case nor preflight/subset evidence can replace vectors.
+Each independent child receives its current generation's `smoke/` or `boundary/` directory as
 `MCPCLI_LIVE_OUTPUT` for the writer-bootstrap receipt, after inherited live and
 Gateway settings have been removed.
 Pending Operations marked `running` at a deadline or cancellation are retained

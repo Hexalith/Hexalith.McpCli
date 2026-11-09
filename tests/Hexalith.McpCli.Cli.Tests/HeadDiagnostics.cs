@@ -19,12 +19,14 @@ internal static partial class HeadDiagnostics
     /// <param name="path">The Gateway request path.</param>
     /// <param name="status">The received status, or <see langword="null" /> when the request failed in transport.</param>
     /// <param name="requests">The number of Gateway requests the invocation made.</param>
-    internal static void AssertGatewayOnly(HeadResult result, string url, string path, int? status, int requests = 1)
+    /// <param name="process">Whether to require the real stdio process lifecycle entries.</param>
+    internal static void AssertGatewayOnly(HeadResult result, string url, string path, int? status, int requests = 1, bool process = false)
     {
         List<(string Level, string Category, string Id, string Message)> entries = Parse(result.Error);
         entries.ShouldAllBe(entry => entry.Level == "info", result.Error);
         var http = entries.Where(entry => entry.Category.StartsWith(HttpCategory, StringComparison.Ordinal)).ToList();
-        entries.Except(http).ShouldAllBe(entry => result.Tool != null && entry.Category == McpCategory, result.Error);
+        entries.Except(http).ShouldAllBe(entry => result.Tool != null && IsMcpEntry(entry, process), result.Error);
+        AssertProcessLifecycle(entries, result, process);
         http.Count.ShouldBe(4 * requests, result.Error);
         string target = url.TrimEnd('/') + path;
         for (int index = 0; index < http.Count; index += 4)
@@ -50,7 +52,8 @@ internal static partial class HeadDiagnostics
     /// </summary>
     /// <param name="result">The head result.</param>
     /// <param name="catalogWarnings">The number of Catalog diagnostic warnings the manifest produces.</param>
-    internal static void AssertNoGateway(HeadResult result, int catalogWarnings = 0)
+    /// <param name="process">Whether to require the real stdio process lifecycle entries.</param>
+    internal static void AssertNoGateway(HeadResult result, int catalogWarnings = 0, bool process = false)
     {
         if (result.Tool is null && catalogWarnings == 0)
         {
@@ -61,7 +64,40 @@ internal static partial class HeadDiagnostics
         List<(string Level, string Category, string Id, string Message)> entries = Parse(result.Error);
         entries.Count(entry => entry.Level == "warn" && entry.Category == CatalogCategory).ShouldBe(catalogWarnings, result.Error);
         entries.ShouldAllBe(entry => entry.Level == "warn" && entry.Category == CatalogCategory
-            || result.Tool != null && entry.Level == "info" && entry.Category == McpCategory, result.Error);
+            || result.Tool != null && entry.Level == "info" && IsMcpEntry(entry, process), result.Error);
+        AssertProcessLifecycle(entries, result, process);
+    }
+
+    private static bool IsMcpEntry((string Level, string Category, string Id, string Message) entry, bool process)
+        => entry.Category == McpCategory || process && IsLifecycleEntry(entry);
+
+    private static bool IsLifecycleEntry((string Level, string Category, string Id, string Message) entry)
+    {
+        if (entry.Category == "ModelContextProtocol.Server.StdioServerTransport")
+            return (entry.Id, entry.Message) is
+                ("857250842", "Server (stream) (hexalith) transport reading messages.")
+                or ("1221292038", "Server (stream) (hexalith) transport completed reading messages.")
+                or ("1375634372", "Server (stream) (hexalith) shutting down.")
+                or ("1256455528", "Server (stream) (hexalith) shut down.");
+        return entry.Category == "Microsoft.Hosting.Lifetime" && entry.Id == "0"
+            && (entry.Message is "Application started. Press Ctrl+C to shut down." or "Hosting environment: Production"
+                or "Application is shutting down..." || entry.Message == "Content root path: " + RepositoryRoot());
+    }
+
+    private static void AssertProcessLifecycle(List<(string Level, string Category, string Id, string Message)> entries,
+        HeadResult result, bool process)
+    {
+        if (!process || result.Tool is null) return;
+        var lifecycle = entries.Where(IsLifecycleEntry).ToArray();
+        lifecycle.Length.ShouldBe(8, result.Error);
+        lifecycle.Distinct().Count().ShouldBe(8, result.Error);
+    }
+
+    private static string RepositoryRoot()
+    {
+        for (DirectoryInfo? directory = new(AppContext.BaseDirectory); directory is not null; directory = directory.Parent)
+            if (File.Exists(Path.Combine(directory.FullName, "Hexalith.McpCli.slnx"))) return directory.FullName;
+        throw new InvalidOperationException("Repository root is missing.");
     }
 
     private static void AssertEntry((string Level, string Category, string Id, string Message) entry, string handler, string id,

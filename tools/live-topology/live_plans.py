@@ -31,10 +31,13 @@ def selection_binding(selection: dict) -> dict:
 
 def declared_phases(selection: dict) -> list[dict]:
     steps = dict(_steps(_load_json(selection['vector'])))
-    return [{'phase': action.get('step', action.get('label')),
-             'operation': (steps[action['step']] if 'step' in action else action['query'])['operation'],
-             'kind': (steps[action['step']] if 'step' in action else action['query'])['kind']}
-            for action in selection['plan']['actions']]
+    phases = []
+    for action in selection['plan']['actions']:
+        call = steps[action['step']] if 'step' in action else action['query']
+        for head in ('cli', 'mcp') if call['kind'] == 'query' else ('cli',):
+            phases.append({'phase': action.get('step', action.get('label')), 'operation': call['operation'],
+                           'kind': call['kind'], 'head': head})
+    return phases
 
 
 def require_phases(selection: dict, phases: list[dict]) -> None:
