@@ -91,4 +91,61 @@ public sealed class BoundaryProcessHarnessTests
         }
         finally { Directory.Delete(directory, recursive: true); }
     }
+
+    /// <summary>Real CLI and MCP processes preserve every qualified 401/403 challenge and signed-grant error member.</summary>
+    /// <param name="scenario">The Gateway authentication or authorization failure.</param>
+    /// <param name="command">Whether to submit a Command.</param>
+    [Theory]
+    [InlineData("missing-token", false)]
+    [InlineData("missing-token", true)]
+    [InlineData("forged-token", false)]
+    [InlineData("forged-token", true)]
+    [InlineData("tenant_mismatch", false)]
+    [InlineData("tenant_mismatch", true)]
+    [InlineData("principal_not_member", false)]
+    [InlineData("principal_not_member", true)]
+    public async Task QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(string scenario, bool command)
+    {
+        const string correlation = "01J9MZHXT3RKM0VWXRXGSJDATK";
+        string directory = Path.Combine(Path.GetTempPath(), "mcpcli-credential-boundary-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        bool authentication = scenario is "missing-token" or "forged-token";
+        int status = authentication ? 401 : 403;
+        string reason = authentication ? "authentication_required" : scenario;
+        string detail = scenario switch
+        {
+            "missing-token" => "Authentication is required to access this resource.",
+            "forged-token" => "The provided authentication token is invalid.",
+            "tenant_mismatch" => "Not authorized for tenant 'tenant-b'.",
+            _ => "Not authorized for tenant 'tenant-b'. No tenant authorization claims found. Access denied.",
+        };
+        var problem = new Dictionary<string, object?> { ["status"] = status, ["detail"] = detail, ["reasonCode"] = reason };
+        if (!authentication) problem["correlationId"] = correlation;
+        string? token = scenario == "missing-token" ? null : "process-private-credential";
+        try
+        {
+            await using var gateway = new ScriptedGateway(_ => ScriptedGateway.Response(status,
+                authentication ? "Unauthorized" : "Forbidden", "application/problem+json", JsonSerializer.Serialize(problem)));
+            var environment = new Dictionary<string, string?> { ["EVENTSTORE_URL"] = gateway.Url, ["EVENTSTORE_TOKEN"] = token };
+            string profile = Path.Combine(directory, "mcpcli.json");
+            string operation = command ? "parties.deactivate-party" : "parties.get-party";
+            const string payload = """{"PartyId":"process-party"}""";
+            foreach (bool mcp in new[] { false, true })
+            {
+                int before = gateway.Requests.Count;
+                HeadResult result = mcp
+                    ? await BoundaryHeads.InvokeMcpAsync(profile, environment, ["--tenant", "tenant-b"],
+                        command ? "send_command" : "run_query", new Dictionary<string, object?> { ["operation"] = operation, ["payload"] = payload })
+                    : await BoundaryHeads.InvokeCliAsync(profile, environment,
+                        [command ? "send" : "query", operation, "--payload", payload, "--tenant", "tenant-b"]);
+                gateway.Requests.Count.ShouldBe(before + 1);
+                gateway.Requests[^1].Headers.ContainsKey("Authorization").ShouldBe(token is not null);
+                if (authentication) BoundaryHeads.AssertAuthenticationRefusal(result, token is not null);
+                else BoundaryHeads.AssertTenantAuthorizationRefusal(result, "tenant-b", reason, correlation);
+                if (token is not null) result.AllChannels.ShouldNotContain(token);
+                HeadDiagnostics.AssertGatewayOnly(result, gateway.Url, command ? "/api/v1/commands" : "/api/v1/queries", status, process: true);
+            }
+        }
+        finally { Directory.Delete(directory, recursive: true); }
+    }
 }

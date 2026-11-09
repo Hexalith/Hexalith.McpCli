@@ -242,3 +242,29 @@ zero warnings/errors; Core 877 passed (four OS skips), CLI 584 passed (two OS
 skips), MCP 94 passed and Manifest 362 passed. The six process-harness cases,
 seven capture-helper regressions and focused CI capture/failure-path case all
 passed. Full affected CI-hook verification continues before final evidence.
+
+### Qualified authentication oracles and early boundary (2026-11-09)
+
+PR run `42631573309` passed every vector and smoke, then reached a second
+boundary oracle defect: public EventStore 4.1.0 sends structured 401 errors,
+not a bare HTTP reason phrase. Its pinned `ConfigureJwtBearerOptions` supplies
+reason `authentication_required`, distinct missing/invalid-token details and
+no correlation field. The boundary now pins those complete documents and the
+two exact tenant-grant 403 shapes from `AuthorizationExceptionHandler`.
+Eight new process cases exercise all four shapes for Commands and Queries
+through CLI and MCP, including every channel and Gateway cardinality.
+
+The generic pre-vector independent-case registry now runs the boundary once
+before the long vector sweep; a failed boundary stops there. The post-vector
+registry retains smoke, including after vector failures. Preparation provenance
+is rechecked after the early case because it may rebuild hosts. Counts and
+budgets remain derived from the combined registry. Focused CI-hook checks pin
+the new order, refusal before vectors, post-boundary drift and the existing
+vector/smoke failure and cancellation behavior. Production behavior, identifier
+validators, dependencies and approved inputs remain unchanged.
+
+The Release build passes with zero warnings/errors; all 14 process-harness
+cases pass; the full CLI project passes 592 cases with two OS-only skips.
+Five focused ordering/failure/cancellation checks and the new early-drift
+check pass. Broad CI-hook verification continues while the next PR candidate
+is qualified. Prior attempt receipts remain distinct from its final packet.

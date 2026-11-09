@@ -53,8 +53,8 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
             {
                 foreach (var scenario in new[]
                 {
-                    (Name: "missing-token", Token: (string?)null, Status: 401, Reason: (string?)null),
-                    (Name: "forged-token", Token: (string?)fixture.CreateBoundaryIdentity(invalidSignature: true), Status: 401, Reason: (string?)null),
+                    (Name: "missing-token", Token: (string?)null, Status: 401, Reason: (string?)"authentication_required"),
+                    (Name: "forged-token", Token: (string?)fixture.CreateBoundaryIdentity(invalidSignature: true), Status: 401, Reason: (string?)"authentication_required"),
                     (Name: "tenant-a-grant", Token: (string?)fixture.CreateBoundaryIdentity(), Status: 403, Reason: (string?)"tenant_mismatch"),
                     (Name: "nonmember", Token: (string?)fixture.CreateBoundaryIdentity(nonmember: true), Status: 403, Reason: (string?)"principal_not_member"),
                 })
@@ -238,16 +238,22 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
         forwarder.Requests.Count.ShouldBe(before + 1);
         (_, int receivedStatus, string body) = forwarder.Responses[^1];
         receivedStatus.ShouldBe(status);
-        var error = new Dictionary<string, object?> { ["code"] = "gateway_error", ["status"] = status };
-        if (status == 401) error["detail"] = "Unauthorized";
+        using JsonDocument problem = JsonDocument.Parse(body);
+        JsonElement value = problem.RootElement;
+        value.GetProperty("reasonCode").GetString().ShouldBe(reason);
+        if (status == 401)
+        {
+            value.TryGetProperty("correlationId", out _).ShouldBeFalse();
+            BoundaryHeads.AssertAuthenticationRefusal(result, forwarder.Requests[^1].Headers.ContainsKey("Authorization"));
+        }
+        else if (status == 403)
+        {
+            BoundaryHeads.AssertTenantAuthorizationRefusal(result, "tenant-b", reason!, value.GetProperty("correlationId").GetString()!);
+        }
         else
         {
-            using JsonDocument problem = JsonDocument.Parse(body);
-            JsonElement value = problem.RootElement;
-            value.GetProperty("reasonCode").GetString().ShouldBe(reason);
+            var error = new Dictionary<string, object?> { ["code"] = "gateway_error", ["status"] = status };
             string? detail = value.GetProperty("detail").GetString();
-            if (reason == "tenant_mismatch") detail.ShouldBe("Not authorized for tenant 'tenant-b'.");
-            if (reason == "principal_not_member") detail.ShouldBe("Not authorized for tenant 'tenant-b'. No tenant authorization claims found. Access denied.");
             error["detail"] = detail;
             error["reason"] = reason;
             if (value.TryGetProperty("correlationId", out JsonElement correlation))
@@ -256,8 +262,8 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
             }
             foreach (string member in new[] { "retryable", "clientAction", "retryAfter" })
                 if (value.TryGetProperty(member, out JsonElement metadata)) error[member] = metadata.Clone();
+            BoundaryHeads.AssertDocument(result, JsonSerializer.Serialize(new { error }), isError: true);
         }
-        BoundaryHeads.AssertDocument(result, JsonSerializer.Serialize(new { error }), isError: true);
         HeadDiagnostics.AssertGatewayOnly(result, forwarder.Url, operation == "parties.get-party" ? "/api/v1/queries" : "/api/v1/commands", status, process: true);
     }
 }

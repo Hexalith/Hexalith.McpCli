@@ -274,7 +274,7 @@ else:
         raise RuntimeError('Smoke writer bootstrap requires its selected evidence directory.')
     (root / ('runner-' + independent + '-output.json')).write_text(json.dumps(str(output)))
     path = owned(independent)
-    if mode == 'cancel-smoke-after-vector-failure':
+    if mode == 'cancel-smoke-after-vector-failure' and independent == 'smoke':
         def terminate(*_):
             print('independent smoke stopped', flush=True)
             (root / 'cancel-child-stopped').touch()
@@ -282,22 +282,24 @@ else:
         signal.signal(signal.SIGTERM, terminate)
         (root / 'cancel-child.json').write_text(json.dumps({'pid': os.getpid(), 'pgid': os.getpgrp()}))
         while True: time.sleep(1)
-    result = 'Skip' if mode == 'skipped-smoke' else 'Pass'
+    result = 'Skip' if mode == 'skipped-smoke' and independent == 'smoke' else 'Pass'
     xml = '<assemblies><assembly total="1" passed="1" failed="0" skipped="0" errors="0"><collection><test result="' + result + '" type="Hexalith.McpCli.Integration.Tests.GatewaySmokeTests" method="AuthenticatedQueryReturnsSuccessfulDocument" /></collection></assembly></assemblies>'
     if independent == 'boundary':
         xml = xml.replace('GatewaySmokeTests', 'SharedHeadBoundaryTests').replace('AuthenticatedQueryReturnsSuccessfulDocument', 'SharedHeadsPreserveAuthorizationAndDeactivationSafety')
         if mode == 'wrong-boundary-case': xml = xml.replace('SharedHeadsPreserveAuthorizationAndDeactivationSafety', 'OtherTest')
         if mode == 'skipped-boundary': xml = xml.replace('result="Pass"', 'result="Skip"')
     if mode == 'wrong-smoke-case': xml = xml.replace('AuthenticatedQueryReturnsSuccessfulDocument', 'OtherTest')
-    if mode == 'skipped-smoke-count': xml = xml.replace('skipped="0"', 'skipped="1"')
-    if mode == 'empty-smoke': xml = '<assemblies><assembly total="0" passed="0" failed="0" skipped="0" errors="0" /></assemblies>'
-    if mode == 'smoke-assembly-error': xml = xml.replace('errors="0"', 'errors="1"')
+    if mode == 'skipped-smoke-count' and independent == 'smoke': xml = xml.replace('skipped="0"', 'skipped="1"')
+    if mode == 'empty-smoke' and independent == 'smoke': xml = '<assemblies><assembly total="0" passed="0" failed="0" skipped="0" errors="0" /></assemblies>'
+    if mode == 'smoke-assembly-error' and independent == 'smoke': xml = xml.replace('errors="0"', 'errors="1"')
     if mode == 'wrong-smoke-type': xml = xml.replace('GatewaySmokeTests"', 'OtherTests"')
     destination = pathlib.Path(sys.argv[sys.argv.index('-result-xml') + 1])
-    if mode != 'missing-smoke': destination.write_text(xml)
-    if mode != 'missing-smoke-receipt': print('Isolated run: ' + str(path))
-    if mode == 'duplicate-smoke-receipt': print('Isolated run: ' + str(path))
-    sys.exit(17 if mode in ('smoke-exit', 'both-fail') else 0)
+    if mode != 'missing-smoke' or independent != 'smoke': destination.write_text(xml)
+    if mode != 'missing-smoke-receipt' or independent != 'smoke': print('Isolated run: ' + str(path))
+    if mode == 'duplicate-smoke-receipt' and independent == 'smoke': print('Isolated run: ' + str(path))
+    if mode == 'tamper-after-boundary' and independent == 'boundary':
+        (root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll').write_bytes(b'changed-after-boundary')
+    sys.exit(17 if mode in ('smoke-exit', 'both-fail') and independent == 'smoke' else 0)
 '''
 
 
@@ -665,7 +667,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertNotEqual(0, result.returncode)
         self.assertIn('Competing nested Builds catalog', result.stderr)
         actual = (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()
-        self.assertEqual(1, len(actual))
+        self.assertEqual(2, len(actual))
         nested = self.root / 'references/Hexalith.Tenants/references/Hexalith.Builds/.git'
         self.assertEqual(b'untouched nested checkout', nested.read_bytes())
 
@@ -797,7 +799,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         result = self.invoke('run-ci.sh', 'audit-before-smoke')
         self.assertNotEqual(0, result.returncode)
         self.assertIn('online audit proof changed', result.stderr)
-        self.assertEqual(1, len((self.root / 'runner-reader-audit.jsonl').read_text().splitlines()))
+        self.assertEqual(2, len((self.root / 'runner-reader-audit.jsonl').read_text().splitlines()))
 
     def test_source_catalog_and_private_override_drift_refuse_before_live(self):
         prepared = self.prepare()
@@ -865,7 +867,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                     message = 'selection changed after preparation' if mode == 'selection' else 'source identity or clean owned files changed'
                     self.assertIn(message, result.stderr)
                     runners = (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()
-                    self.assertEqual(1, len(runners), 'Independent smoke must not start after source drift.')
+                    self.assertEqual(2, len(runners), 'Only the early boundary and vectors may run before source drift is refused.')
                     self.assertFalse((self.root / 'runner-smoke-output.json').exists())
                     self.assertEqual('failed', json.loads((self.evidence / 'ci-live.json').read_text())['result'])
                 finally:
@@ -1084,7 +1086,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertNotEqual(0, result.returncode)
         self.assertIn('Deployed EventStore binary differs from its archive', result.stderr)
         actual = (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()
-        self.assertEqual(1, len(actual), 'The independent smoke must not start after vector-time drift.')
+        self.assertEqual(2, len(actual), 'Only the early boundary and vectors may run before post-vector drift is refused.')
 
     def test_fresh_pkcs8_private_keys_are_redacted_in_direct_escaped_and_xml_diagnostics(self):
         import base64
@@ -1353,7 +1355,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         for secret in secrets:
             self.assertNotIn(secret, content)
         deadlines = [call[4] for call in self.calls() if call[0] == 'timeout' and any(value.endswith(('run-vectors.py', 'run-isolated.py')) for value in call)]
-        self.assertEqual(['15180', '960', '960'], deadlines)
+        self.assertEqual(['960', '15180', '960'], deadlines)
         self.assertIn(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '17700',
                        'python3', 'tools/live-topology/ci.py', 'run'], self.calls())
         self.assertTrue(Path(prepared['runtime']).is_dir())
@@ -1375,7 +1377,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                 self.assertNotEqual(0, result.returncode)
                 receipt = json.loads((self.evidence / 'ci-live.json').read_text())
                 self.assertFalse(receipt['fullLiveAccepted'])
-                self.assertEqual('passed', receipt['smoke']['result'])
+                self.assertNotIn('smoke', receipt)
+                self.assertEqual('not-run', receipt['vectors']['result'])
+                self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call) for call in self.calls()))
                 self.assertEqual('failed', receipt['boundary']['result'])
                 self.assertIn('SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety', result.stderr)
 
@@ -1389,6 +1393,17 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual(22, receipt['vectors']['count'])
         self.assertEqual('passed', receipt['boundary']['result'])
         self.assertEqual(24, len(list((Path(receipt['output']) / 'runtime-diagnostics').glob('*/result.json'))))
+
+    def test_early_independent_rebuild_drift_is_refused_before_any_vector(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'tamper-after-boundary')
+        self.assertNotEqual(0, result.returncode)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual('passed', receipt['boundary']['result'])
+        self.assertEqual('not-run', receipt['vectors']['result'])
+        self.assertFalse(receipt['fullLiveAccepted'])
+        self.assertIn('Deployed EventStore binary differs from its archive', result.stderr)
+        self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call) for call in self.calls()))
 
     def test_vector_nonacceptance_and_nonzero_exits_still_run_smoke(self):
         self.prepare()
@@ -1680,7 +1695,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         recorded = [json.loads(line) for line in (self.root / 'runner-environment.jsonl').read_text().splitlines()]
-        self.assertEqual([['run-vectors.py', []], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']]], recorded)
+        self.assertEqual([['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']], ['run-vectors.py', []], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']]], recorded)
         receipt = json.loads((self.evidence / 'ci-live.json').read_text())
         self.assertEqual(str(Path(receipt['output']) / 'smoke'),
                          json.loads((self.root / 'runner-smoke-output.json').read_text()))
@@ -2095,7 +2110,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             with self.subTest(error=type(error).__name__):
                 shutil.rmtree(Path(prepared['runtime']) / 'runs', ignore_errors=True)
                 def execute(command, *args, **kwargs):
-                    if any(value.endswith('run-isolated.py') for value in command):
+                    if 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests' in command:
                         raise error
                     return bounded(command, *args, **kwargs)
                 with patch.dict(os.environ, self.env, clear=True), patch.object(module, 'bounded', side_effect=execute):

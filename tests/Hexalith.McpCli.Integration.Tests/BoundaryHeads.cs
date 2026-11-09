@@ -110,6 +110,24 @@ internal static class BoundaryHeads
         AssertDocument(result, expected.ToJsonString(), isError: false);
     }
 
+    /// <summary>Pins the qualified Gateway's complete missing/invalid-token challenge document.</summary>
+    internal static void AssertAuthenticationRefusal(HeadResult result, bool credentialPresent)
+    {
+        string detail = credentialPresent ? "The provided authentication token is invalid."
+            : "Authentication is required to access this resource.";
+        AssertDocument(result, JsonSerializer.Serialize(new { error = new
+        { code = "gateway_error", status = 401, detail, reason = "authentication_required" } }), isError: true);
+    }
+
+    /// <summary>Pins the qualified Gateway's complete signed-grant refusal, including its request correlation.</summary>
+    internal static void AssertTenantAuthorizationRefusal(HeadResult result, string tenant, string reason, string correlationId)
+    {
+        string detail = $"Not authorized for tenant '{tenant}'."
+            + (reason == "principal_not_member" ? " No tenant authorization claims found. Access denied." : string.Empty);
+        AssertDocument(result, JsonSerializer.Serialize(new { error = new
+        { code = "gateway_error", status = 403, detail, reason, correlationId } }), isError: true);
+    }
+
     private static void AssertJson(string actual, string expected, string[] mask)
     {
         JsonNode actualNode = JsonNode.Parse(actual)!;
