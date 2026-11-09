@@ -33,6 +33,8 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
         Directory.CreateDirectory(directory);
         var receipts = new List<object>();
         var missingTokenDocuments = new Dictionary<bool, JsonElement>();
+        using HttpClient persistedState = PersistedPartyEvents.CreateClient(
+            await fixture.DiscoverGatewaySidecarEndpointAsync(cancellation), Environment.GetEnvironmentVariable("DAPR_API_TOKEN"));
         string authorizedToken = fixture.CreateBoundaryAuthorizedIdentity();
         using var authorizedHttp = new HttpClient { BaseAddress = fixture.GatewayEndpoint, Timeout = TimeSpan.FromSeconds(35) };
         authorizedHttp.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizedToken);
@@ -138,7 +140,7 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
                 JsonDocument.Parse(request.Body).RootElement.GetProperty("messageId").GetString()!).ToArray();
             messageIds.Distinct(StringComparer.Ordinal).Count().ShouldBe(2);
             JsonElement inactive = await ReadAsync(Party, active: false);
-            long sequence = await PersistedPartyEvents.RequireOneDeactivationAsync("tenant-b", Party, cancellation);
+            long sequence = await PersistedPartyEvents.RequireOneDeactivationAsync(persistedState, "tenant-b", Party, cancellation);
             receipts.Add(new { scenario = "C05-concurrent-repeat", accepted = 2, distinctMessageIds = messageIds,
                 persistedDeactivationEvents = 1, sequence, persistedAfterSha256 = Hash(inactive) });
             string output = Environment.GetEnvironmentVariable("MCPCLI_LIVE_OUTPUT")
@@ -225,7 +227,7 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
             Assert.Equal(500, missing.StatusCode);
             Assert.Equal(QueryProblemReasonCodes.InternalError, missing.ReasonCode);
             Assert.Equal(QueryAdapterFailureReason.ReadModelUnavailable, missing.Detail);
-            await PersistedPartyEvents.RequireNoPartyCreatedAsync("tenant-b", id, cancellation);
+            await PersistedPartyEvents.RequireNoPartyCreatedAsync(persistedState, "tenant-b", id, cancellation);
         }
     }
 

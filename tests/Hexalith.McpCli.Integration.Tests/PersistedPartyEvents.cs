@@ -6,27 +6,32 @@ namespace Hexalith.McpCli.Integration.Tests;
 internal static class PersistedPartyEvents
 {
     /// <summary>Requires exactly one durable deactivation event and returns its sequence.</summary>
-    internal static async Task<long> RequireOneDeactivationAsync(string tenant, string party, CancellationToken cancellationToken)
+    internal static async Task<long> RequireOneDeactivationAsync(HttpClient http, string tenant, string party, CancellationToken cancellationToken)
     {
-        IReadOnlyList<(long Sequence, string Type)> events = await ReadAsync(tenant, party, cancellationToken);
+        IReadOnlyList<(long Sequence, string Type)> events = await ReadAsync(http, tenant, party, cancellationToken);
         Assert.NotEmpty(events);
         return Assert.Single(events, item => item.Type.EndsWith("PartyDeactivated", StringComparison.Ordinal)).Sequence;
     }
 
     /// <summary>Refuses any creation effect; a rejection-only stream is not an existing business party (ledger item 556).</summary>
-    internal static async Task RequireNoPartyCreatedAsync(string tenant, string party, CancellationToken cancellationToken)
+    internal static async Task RequireNoPartyCreatedAsync(HttpClient http, string tenant, string party, CancellationToken cancellationToken)
     {
-        IReadOnlyList<(long Sequence, string Type)> events = await ReadAsync(tenant, party, cancellationToken);
+        IReadOnlyList<(long Sequence, string Type)> events = await ReadAsync(http, tenant, party, cancellationToken);
         Assert.DoesNotContain(events, item => item.Type.EndsWith("PartyCreated", StringComparison.Ordinal));
         Assert.DoesNotContain(events, item => item.Type.EndsWith("PartyDeactivated", StringComparison.Ordinal));
     }
 
-    private static async Task<IReadOnlyList<(long Sequence, string Type)>> ReadAsync(string tenant, string party, CancellationToken cancellationToken)
+    /// <summary>Creates a state client at the discovered endpoint, preserving only its separate sidecar API credential.</summary>
+    internal static HttpClient CreateClient(Uri endpoint, string? sidecarToken)
     {
-        using var http = new HttpClient { BaseAddress = new Uri("http://127.0.0.1:3501/"), Timeout = TimeSpan.FromSeconds(15) };
-        // APP_API_TOKEN protects sidecar-to-app calls. Preserve the separate sidecar API credential if configured.
-        string? sidecarToken = Environment.GetEnvironmentVariable("DAPR_API_TOKEN");
+        var http = new HttpClient { BaseAddress = endpoint, Timeout = TimeSpan.FromSeconds(15) };
+        // APP_API_TOKEN protects sidecar-to-app calls; DAPR_API_TOKEN protects this sidecar HTTP API.
         if (!string.IsNullOrEmpty(sidecarToken)) http.DefaultRequestHeaders.Add("dapr-api-token", sidecarToken);
+        return http;
+    }
+
+    private static async Task<IReadOnlyList<(long Sequence, string Type)>> ReadAsync(HttpClient http, string tenant, string party, CancellationToken cancellationToken)
+    {
         string identity = $"{tenant}:party:{party}";
         string prefix = "v1.0/actors/AggregateActor/" + Uri.EscapeDataString(identity) + "/state/";
         using JsonDocument? metadata = await ReadStateAsync(identity + ":metadata");

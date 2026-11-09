@@ -293,3 +293,17 @@ Query refusals retain the complete structured tenant-mismatch/nonmember oracle.
 Four additional both-head process cases cover the empty 403 transport for both
 call kinds and both signed-grant scenarios. Vectors stayed unrun after the early
 boundary failure. No production behavior, approved input or runner changed.
+
+### Discovered sidecar endpoint for persisted C05 evidence (2026-11-09)
+
+Run `42648730822` passed the credential, override and tenant-negative rows, then
+found the C05 state helper’s fixed-port assumption (`127.0.0.1:3501`). The
+restored fixture helper exposes no supported sidecar application object. The
+fixture now discovers exactly one `eventstore` sidecar through bounded
+`dapr list --output json` inside the already-required isolated namespace and
+passes its actual HTTP client to both persisted-state oracles. The separate
+`DAPR_API_TOKEN`, when configured, is preserved; no bearer credential is sent
+to the sidecar API. Offline regressions require an ephemeral discovered port,
+reject missing/duplicate/invalid registrations and prove both C05 helpers read
+the expected state keys with and without the API token. No runner, production
+source, approved input or dependency changed.
