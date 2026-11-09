@@ -1,0 +1,15 @@
+{
+  "githubRunId": 42645969397,
+  "candidate": "d34a4d182b5e1f7ea432dd6d4cbda13d3ce2ddfb",
+  "githubArtifactId": 13688676805,
+  "downloadedArchiveSha256": "5384cf9ad5853ff34dcc7c248d807d6914eb0daa7bd3d8ef6aa1d61d60fc2af4",
+  "advertisedDigestVerified": true,
+  "result": "failed",
+  "fullLiveAccepted": false,
+  "vectors": "not-run",
+  "boundary": "failed",
+  "failure": "First signed tenant-A-grant Command returns empty 403 from CommandsController.Forbid() before the structured pipeline; the harness expected a JSON problem.",
+  "limits": "Prior non-live green receipts do not establish acceptance for a later candidate. The next candidate retains structured Query oracles and pins the exact existing empty Command 403 fallback.",
+  "replacementCandidate": "fc9bbe35fc418addf6878df7fad0837ae9b94e26",
+  "replacementRunId": 42648730822
+}

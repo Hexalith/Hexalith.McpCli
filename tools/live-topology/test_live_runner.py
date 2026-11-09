@@ -75,6 +75,28 @@ class RunnerTests(unittest.TestCase):
             run_live.observe(head, self.call(), None, {}, {}, {'deadlineSeconds': 1, 'pollSeconds': .1},
                              {'phase': '/invocation', 'attempts': []}, transport='mcp')
 
+    def test_late_valid_cli_or_mcp_observation_cannot_pass_or_commit_captures(self):
+        for transport in ('cli', 'mcp'):
+            with self.subTest(transport=transport):
+                tick = [0]
+                head = Head([])
+                document = {'operation': 'fixture.operation', 'tenant': 'test', 'document': {'value': 7, 'id': 'late'}}
+                def invoke(*_):
+                    tick[0] = 1.01
+                    return (False if transport == 'mcp' else 0), document
+                setattr(head, transport, invoke)
+                record = {'phase': '/invocation', 'attempts': []}
+                values = {}
+                with self.assertRaisesRegex(VectorError, 'observation deadline'):
+                    run_live.observe(head, self.call(), None,
+                        {'captures': [{'name': 'id', 'path': '/document/id', 'type': 'string'}]}, values,
+                        {'deadlineSeconds': 1, 'pollSeconds': .1}, record, transport=transport,
+                        clock=lambda: tick[0], pause=lambda _: None)
+                self.assertEqual('failed', record['result'])
+                self.assertEqual('failed', record['attempts'][0]['result'])
+                self.assertEqual({}, values)
+                self.assertEqual(30, head.timeout)
+
     def test_cli_receives_private_endpoint_and_envelope_identity(self):
         head = Head([{'document': {'value': 7}}])
         call = self.call()

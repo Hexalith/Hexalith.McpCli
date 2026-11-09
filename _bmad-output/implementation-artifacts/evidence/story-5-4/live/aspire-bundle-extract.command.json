@@ -1,0 +1,13 @@
+{
+  "command": [
+    "aspire",
+    "setup",
+    "--install-path",
+    "/home/runner/work/_temp/mcpcli-live-ci-4_6vrva6/qualified-aspire",
+    "--force",
+    "--non-interactive"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 180,
+  "exitCode": 0
+}

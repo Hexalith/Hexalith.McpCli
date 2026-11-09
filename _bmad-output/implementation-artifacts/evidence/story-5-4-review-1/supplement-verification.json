@@ -1,0 +1,158 @@
+{
+  "applicationTestsRerunDuringEvidenceAssembly": false,
+  "candidateCommit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+  "checkoutCommit": "21bbef096c20d71b2d422e344cdfe3f47b9072a8",
+  "evidenceAssemblyScriptsSha256": {
+    "/tmp/story54-review-finalize.py": "559778c21f93d07e137a57b4df70f0a1dd5e4afdc550905a9e58e01e8f8cf6e0",
+    "/tmp/story54-review-retain.py": "d8444f63e88ed145dbd4417150c12f3b7522b3300e3b257429a1a98b84393b78",
+    "/tmp/story54-review-verify-live.py": "d19c2a1aafc54c77d3f7f9133ff5aaa576a7458bfe021ae56feb9a59fe9cd84f"
+  },
+  "finalScan": "post-ci-secret-scan.json; covers the complete supplemented review folder except its own new receipt.",
+  "frozenFiles": [
+    {
+      "allOriginalBytesUnchanged": true,
+      "originalFileCount": 2723,
+      "originalFileMapSha256": "c4738c8488ad9068120f87189089a7a0a65f26f367dfe421a360ece18cca41f2",
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-4"
+    },
+    {
+      "allOriginalBytesUnchanged": true,
+      "originalFileCount": 4,
+      "originalFileMapSha256": "71308f50c410713e3474dc292e246ac1a729fc8b1cc2a86056d1f4ef9679e180",
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval"
+    },
+    {
+      "allOriginalBytesUnchanged": true,
+      "originalFileCount": 4,
+      "originalFileMapSha256": "6f9140bde372f97dc165f296b55519e44d8900e84224adfc279bdb4b9bc44f8a",
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-4-review-1"
+    }
+  ],
+  "gitTreeSha": "ce0dbe21accb091347f0f910446c691063ca1265",
+  "githubConclusion": "success",
+  "githubRunId": 42711210249,
+  "githubRunUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42711210249",
+  "historicalReviewScan": {
+    "path": "secret-scan.json",
+    "role": "Initial local-evidence scan, preserved as historical; it does not cover later supplementary files.",
+    "sha256": "d02cadda87df2e1d2fa3143e6d6ecc67459d482b97c501aebb67a9532d7e5501"
+  },
+  "live": {
+    "allOwnedRuntimeCleanupPassed": true,
+    "approvedVectorCount": 21,
+    "boundaryCaseReceipts": 45,
+    "catalogSha256": "15f8d0a93989eeede7bcd26911318f9cfb1cff8b93612e09c6df4fc2f0912612",
+    "concurrentPairEvidence": {
+      "accepted": 2,
+      "captureGate": "The passing live case awaited the 15-second barrier and asserted exactly two captured requests. The source-bound forwarder waits for both complete requests before forwarding either; hosted regressions prove both release and timeout branches.",
+      "distinctMessageIds": [
+        "01M717D4343YB1G5E5XH9SCS4V",
+        "01M717D43DEYR1K18E01FZAZT9"
+      ],
+      "limit": "The receipt does not contain per-request capture timestamps. Overlap is established by the executed barrier and source binding, not inferred from Task.WhenAll or response times.",
+      "persistedDeactivationEvents": 1
+    },
+    "durableSequenceComparisons": 44,
+    "fullLiveAccepted": true,
+    "independentCaseCount": 2,
+    "ownedRuntimeCount": 23,
+    "semanticPhaseCount": 235
+  },
+  "localVerification": {
+    "fullV1Accepted": true,
+    "historicalField": "The preserved final-local-verification.json liveQualification.status was in progress when written; this supplementary receipt records the completed CI result.",
+    "path": "final-local-verification.json",
+    "pythonTests": {
+      "conformance": 164,
+      "liveTopology": 218,
+      "release": 194
+    },
+    "result": "passed",
+    "sha256": "e1e11f34c8d71bddfb8e53d27b636b48d7b9d621d12098a88435401c4fd8b260"
+  },
+  "ownerApprovalScope": {
+    "appliesToThisSupplement": false,
+    "approvalReceipt": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json",
+      "sha256": "8bf60a2796f07a7bcb2e95adbe4d3467b8e1cd63164f67d4d8b3c476038d2c40"
+    },
+    "approvedSnapshot": {
+      "candidateHeadCommit": "3e8f6a4e681018c7ca8356997d4fd28378217d37",
+      "checkoutCommit": "7ae71f03d98f1280060fe197f320dcb055e1d7f1",
+      "commit": "4c7267a9b4cb85bf66b2719347a2002b0ebd677a",
+      "githubRunId": 42652261452,
+      "manifest": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-4/manifest.json",
+        "sha256": "d80836b98bc95c548e0c4f1ba20bb6b200e9f0ecad5a591878eed8a6dec7314e"
+      },
+      "originalState": "frozen-pending-exact-byte-owner-verdict",
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-4",
+      "relationship": "This later approval receipt leaves every original packet byte and its historical pending-approval state unchanged.",
+      "scanReceipt": {
+        "inputFileCount": 2722,
+        "manifestSha256": "9fefaddd184e6be1e26c44ef0584911f7644494ecc89aed6f1c6ab3f396166a0",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-4/secret-scan.json",
+        "sha256": "1edc78fd37ede85498e7d8a9a7b1ea3537175bb470259a729bf0a8a8aa1ac0c3"
+      }
+    },
+    "approvedVerdict": "retirement-blocked",
+    "gapDispositionsAmended": false,
+    "newOwnerVerdictRecorded": false,
+    "retainedGapDispositions": [
+      {
+        "disposition": "retained-blocking",
+        "gap": "Repeated missing-target rejection-only streams",
+        "id": "G01",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:556",
+        "owner": "Parties maintainer",
+        "workStatus": "open"
+      },
+      {
+        "disposition": "retained-blocking",
+        "gap": "Forced stale projections and erased/restricted delete/pre-read execution",
+        "id": "G02",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:853",
+        "owner": "Parties maintainer and EventStore Gateway maintainer",
+        "workStatus": "open"
+      },
+      {
+        "disposition": "retained-blocking",
+        "gap": "Downstream public Query-error detail/title privacy",
+        "id": "G03",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:824",
+        "owner": "EventStore Gateway maintainer and Parties maintainer",
+        "workStatus": "open"
+      },
+      {
+        "disposition": "retained-blocking",
+        "gap": "Persisted event/audit actor attribution",
+        "id": "G04",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:859",
+        "owner": "Parties maintainer and EventStore Gateway maintainer",
+        "workStatus": "open"
+      },
+      {
+        "disposition": "retained-blocking",
+        "gap": "Raw versus trimmed input-bound policy approval",
+        "id": "G05",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:865",
+        "owner": "Parties maintainer",
+        "workStatus": "open"
+      },
+      {
+        "disposition": "retained-blocking",
+        "gap": "Mixed-profile operator identity",
+        "id": "G06",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:833",
+        "owner": "McpCli maintainer",
+        "workStatus": "open"
+      }
+    ],
+    "statement": "The owner approval remains bound only to the original exact-byte snapshot. Supplementary validation of the reviewed candidate does not extend that approval, amend or waive G01-G06, authorize retirement or publication, or amend migration inventory 1.2.0."
+  },
+  "recordedAtUtc": "2026-11-09T23:24:47.066349+00:00",
+  "result": "passed",
+  "retention": "Compact selected text receipts with an exact hash index for every member of each digest-verified downloaded archive. Omitted diagnostics remain bound by archive and member hashes; no binary archive is embedded.",
+  "schema": "mcpcli-story-5-4-supplement/v1",
+  "workflowOrSpecStatusChangedBySupplement": false
+}

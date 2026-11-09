@@ -1,0 +1,104 @@
+{
+  "source": "/home/runner/work/_temp/enrolled-evidence/Hexalith.Tenants.Contracts/inputs-_wbxkyep/vectors/11/remove-user-from-tenant.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M70GJAP8CQRMVJTP168CX06A",
+      "correlationId": "01M70GJAP8CQRMVJTP168CX06A",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-removal",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "messageId": "01M70GJB6ZAWK9PR2XFHS22RWY",
+      "correlationId": "01M70GJB6ZAWK9PR2XFHS22RWY",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-removal",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.remove-user-from-tenant",
+      "messageId": "01M70GJBQPESWEH14F149V98JB",
+      "correlationId": "01M70GJBQPESWEH14F149V98JB",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-removal",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "tenant": "vector-removal",
+      "document": {
+        "items": [],
+        "cursor": null,
+        "hasMore": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70GJAP8CQRMVJTP168CX06A",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Removal",
+          "TenantId": "vector-removal"
+        },
+        "correlationId": "01M70GJAP8CQRMVJTP168CX06A"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70GJB6ZAWK9PR2XFHS22RWY",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "Role": "TenantReader",
+          "TenantId": "vector-removal",
+          "UserId": "vector-user-3@example.com"
+        },
+        "correlationId": "01M70GJB6ZAWK9PR2XFHS22RWY"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70GJBQPESWEH14F149V98JB",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "commandType": "remove-user-from-tenant",
+        "payload": {
+          "TenantId": "vector-removal",
+          "UserId": "vector-user-3@example.com"
+        },
+        "correlationId": "01M70GJBQPESWEH14F149V98JB"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "vector-removal",
+        "domain": "tenants",
+        "aggregateId": "vector-removal",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-removal"
+        }
+      }
+    }
+  ]
+}

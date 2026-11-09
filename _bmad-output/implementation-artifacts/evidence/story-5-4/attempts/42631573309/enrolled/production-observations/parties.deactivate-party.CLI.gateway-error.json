@@ -1,0 +1,29 @@
+{
+  "source": "/home/runner/work/_temp/enrolled-evidence/Hexalith.Parties.Contracts/inputs-0zg6on_t/vectors/1/deactivate-party.vector.json",
+  "documents": [
+    {
+      "error": {
+        "code": "gateway_error",
+        "status": 503,
+        "detail": "scripted Gateway failure"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70AG2PWQTT94JMQ74KMG3M6",
+        "tenant": "tenant-a",
+        "domain": "party",
+        "aggregateId": "party-story49",
+        "commandType": "Hexalith.Parties.Contracts.Commands.DeactivateParty",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      }
+    }
+  ]
+}

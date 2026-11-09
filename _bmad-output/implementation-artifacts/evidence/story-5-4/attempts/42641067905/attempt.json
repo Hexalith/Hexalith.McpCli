@@ -1,0 +1,14 @@
+{
+  "githubRunId": 42641067905,
+  "githubArtifactId": 13685668333,
+  "downloadedArchiveSha256": "62d30c7d475b5b29651e82e484886c45dd9382b75b925b47192783c64bf4abdd",
+  "advertisedDigestVerified": true,
+  "result": "failed",
+  "fullLiveAccepted": false,
+  "vectors": "not-run",
+  "boundary": "failed",
+  "failure": "The forged-token Command returned an empty 401 body. The test attempted to parse every challenge as JSON instead of asserting the generic client fallback.",
+  "replacementCandidate": "d34a4d182b5e1f7ea432dd6d4cbda13d3ce2ddfb",
+  "replacementRunId": 42645969397,
+  "limits": "Historical fail-fast attempt; no full live acceptance. Only selected sanitized text is retained."
+}

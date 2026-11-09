@@ -1,0 +1,306 @@
+{
+  "operation": "tenants.set-tenant-configuration",
+  "result": "passed",
+  "phases": [
+    {
+      "head": "cli",
+      "phase": "/prerequisites/0",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-config",
+          "Name": "Vector Configuration",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M70KT1B38Y6X8KCAJRCBAVWQ",
+            "correlationId": "01M70KT1B38Y6X8KCAJRCBAVWQ",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-config",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config"
+        },
+        "envelope": {
+          "tenant": "vector-config"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config",
+            "document": {
+              "tenantId": "vector-config",
+              "name": "Vector Configuration",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:56:06.1826034+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config"
+        },
+        "envelope": {
+          "tenant": "vector-config"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config",
+            "document": {
+              "tenantId": "vector-config",
+              "name": "Vector Configuration",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:56:06.1826034+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/invocation",
+      "operation": "tenants.set-tenant-configuration",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.set-tenant-configuration",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-config",
+          "Key": "billing.plan",
+          "Value": "enterprise"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.set-tenant-configuration",
+            "messageId": "01M70KTE333H5MKC2APN0A35A4",
+            "correlationId": "01M70KTE333H5MKC2APN0A35A4",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-config",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config"
+        },
+        "envelope": {
+          "tenant": "vector-config"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config",
+            "document": {
+              "tenantId": "vector-config",
+              "name": "Vector Configuration",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {
+                "billing.plan": "enterprise"
+              },
+              "createdAt": "2026-11-09T16:56:06.1826034+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config"
+        },
+        "envelope": {
+          "tenant": "vector-config"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config",
+            "document": {
+              "tenantId": "vector-config",
+              "name": "Vector Configuration",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {
+                "billing.plan": "enterprise"
+              },
+              "createdAt": "2026-11-09T16:56:06.1826034+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config"
+        },
+        "envelope": {
+          "tenant": "vector-config"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config",
+            "document": {
+              "tenantId": "vector-config",
+              "name": "Vector Configuration",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {
+                "billing.plan": "enterprise"
+              },
+              "createdAt": "2026-11-09T16:56:06.1826034+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config"
+        },
+        "envelope": {
+          "tenant": "vector-config"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config",
+            "document": {
+              "tenantId": "vector-config",
+              "name": "Vector Configuration",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {
+                "billing.plan": "enterprise"
+              },
+              "createdAt": "2026-11-09T16:56:06.1826034+00:00"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.5",
+    "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+    "vectorSha256": "19b8ebd4f174abaf3d9cd10a5872fc4e7af34ed380521bdbed5e9ecfad5c983f",
+    "planSha256": "c485d5e99c6f64e03ffee74be8cd4c6d661ed6bf0de4b04e9ac9336fc5126660",
+    "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+  },
+  "captures": {}
+}

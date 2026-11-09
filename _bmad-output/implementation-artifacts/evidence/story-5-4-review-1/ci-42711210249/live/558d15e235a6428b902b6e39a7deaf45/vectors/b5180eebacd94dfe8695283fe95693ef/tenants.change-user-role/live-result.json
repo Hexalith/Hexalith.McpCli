@@ -1,0 +1,409 @@
+{
+  "operation": "tenants.change-user-role",
+  "result": "passed",
+  "phases": [
+    {
+      "head": "cli",
+      "phase": "/prerequisites/0",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-roles",
+          "Name": "Vector Roles",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M71881PSSHG451ZMCA8892PN",
+            "correlationId": "01M71881PSSHG451ZMCA8892PN",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-roles",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-roles",
+            "document": {
+              "tenantId": "vector-roles",
+              "name": "Vector Roles",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T22:53:17.4350042+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-roles",
+            "document": {
+              "tenantId": "vector-roles",
+              "name": "Vector Roles",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T22:53:17.4350042+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/prerequisites/1",
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.add-user-to-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-roles",
+          "UserId": "vector-user-2@example.com",
+          "Role": "TenantReader"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.add-user-to-tenant",
+            "messageId": "01M7188JSRACQAA6B1XBYK66FK",
+            "correlationId": "01M7188JSRACQAA6B1XBYK66FK",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-roles",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-roles",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-2@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-roles",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-2@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/invocation",
+      "operation": "tenants.change-user-role",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.change-user-role",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-roles",
+          "UserId": "vector-user-2@example.com",
+          "NewRole": "TenantOwner"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.change-user-role",
+            "messageId": "01M71893TNEM5VWGVJNZRWMTNY",
+            "correlationId": "01M71893TNEM5VWGVJNZRWMTNY",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-roles",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-roles",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-2@example.com",
+                  "role": "TenantOwner"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-roles",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-2@example.com",
+                  "role": "TenantOwner"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-roles",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-2@example.com",
+                  "role": "TenantOwner"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-roles"
+        },
+        "envelope": {
+          "tenant": "vector-roles"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-roles",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-2@example.com",
+                  "role": "TenantOwner"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.5",
+    "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+    "vectorSha256": "65e9e7b37366e02387e5eebff44189c48b35346683a730704bde3b0bd8d05b40",
+    "planSha256": "1e30c03d4aac13702b2e401a747d50c6c121ded049b2c1c0ef04521027fb22e7",
+    "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+  },
+  "captures": {}
+}

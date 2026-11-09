@@ -1,0 +1,28 @@
+<assemblies schema-version="3" id="63c1453d-d9bf-4e4c-a963-5ad32a9ab4b2" user="runner" start-rtf="2026-11-09T14:50:28.8760284+00:00" finish-rtf="2026-11-09T14:51:18.4820024+00:00" timestamp="11/09/2026 14:51:18"><assembly environment="64-bit (x64) .NET 10.0.14 [collection-per-class, parallel (collections, 2 threads)]" id="f48b3bcc-3f78-4227-85da-810b7883d63c" name="/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll" run-date="2026-11-09" run-time="14:50:28" start-rtf="2026-11-09T14:50:28.8760284+00:00" test-framework="xUnit.net v3 4.0.2+0c7aa4991f" target-framework=".NETCoreApp,Version=v10.0" errors="0" failed="1" finish-rtf="2026-11-09T14:51:18.4820024+00:00" not-run="0" passed="0" skipped="0" time="49.606" time-rtf="00:00:49.6060000" total="1"><collection name="AspireTopology" id="328f6ec8-1e83-4d48-a8cc-0ed5d075c24a" failed="1" not-run="0" passed="0" skipped="0" time="25.059" time-rtf="00:00:25.0590000" total="1"><test id="c3679226-62b6-4990-ab5c-dde90202f2fd" name="Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety" result="Fail" time="25.059" time-rtf="00:00:25.0590000" start-rtf="2026-11-09T14:50:45.8838494+00:00" finish-rtf="2026-11-09T14:51:10.9640200+00:00" type="Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests" method="SharedHeadsPreserveAuthorizationAndDeactivationSafety" source-file="/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs" source-line="25"><traits><trait name="Category" value="Integration" /></traits><failure exception-type="Shouldly.ShouldAssertException"><message>Shouldly.ShouldAssertException : JsonElement.DeepEquals(JsonSerializer.SerializeToElement(actualNode), JsonSerializer.SerializeToElement(expectedNode))
+    should be
+True
+    but was
+False
+
+Additional Info:
+    {
+  \"error\": {
+    \"code\": \"gateway_error\",
+    \"status\": 401,
+    \"detail\": \"Authentication is required to access this resource.\",
+    \"reason\": \"authentication_required\"
+  }
+}
+</message><stack-trace>   at Hexalith.McpCli.Integration.Tests.BoundaryHeads.AssertJson(String actual, String expected, String[] mask) in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/BoundaryHeads.cs:line 122
+   at Hexalith.McpCli.Integration.Tests.BoundaryHeads.AssertDocument(HeadResult result, String expected, Boolean isError, String[] mask) in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/BoundaryHeads.cs:line 82
+   at Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests.AssertGatewayRefusal(HeadResult result, LiveGatewayForwarder forwarder, Int32 before, Int32 status, String reason, String operation) in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:line 260
+   at Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:line 65
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety() in /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:line 138
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)
+--- End of stack trace from previous location ---
+   at System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   at System.Runtime.CompilerServices.TaskAwaiter.ThrowForNonSuccess(Task task)
+   at System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task, ConfigureAwaitOptions options)</stack-trace></failure></test></collection></assembly></assemblies>

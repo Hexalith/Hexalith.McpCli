@@ -1,0 +1,373 @@
+{
+  "boundaryHarnessRegressions": [
+    {
+      "duration": "00:00:00.0070000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.IntermediateNotificationIsRetainedForAllChannelAbsenceChecksAsync"
+    },
+    {
+      "duration": "00:00:02.9000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.AcceptedCommandsPreserveCompleteGatewayResultsAsync(withResult: True)"
+    },
+    {
+      "duration": "00:00:02.7790000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.AcceptedCommandsPreserveCompleteGatewayResultsAsync(withResult: False)"
+    },
+    {
+      "duration": "00:00:02.8080000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"tenant_mismatch\", command: False, emptyBody: True)"
+    },
+    {
+      "duration": "00:00:02.7750000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"tenant_mismatch\", command: True, emptyBody: True)"
+    },
+    {
+      "duration": "00:00:02.7910000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"principal_not_member\", command: False, emptyBody: True)"
+    },
+    {
+      "duration": "00:00:02.7930000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"forged-token\", command: False, emptyBody: True)"
+    },
+    {
+      "duration": "00:00:02.8090000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"tenant_mismatch\", command: False, emptyBody: False)"
+    },
+    {
+      "duration": "00:00:02.8160000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"missing-token\", command: False, emptyBody: False)"
+    },
+    {
+      "duration": "00:00:02.8210000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"missing-token\", command: True, emptyBody: False)"
+    },
+    {
+      "duration": "00:00:02.7839999",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"forged-token\", command: True, emptyBody: True)"
+    },
+    {
+      "duration": "00:00:02.8050000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"principal_not_member\", command: True, emptyBody: False)"
+    },
+    {
+      "duration": "00:00:02.7850000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"tenant_mismatch\", command: True, emptyBody: False)"
+    },
+    {
+      "duration": "00:00:02.7670000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"missing-token\", command: True, emptyBody: True)"
+    },
+    {
+      "duration": "00:00:02.7799999",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"forged-token\", command: True, emptyBody: False)"
+    },
+    {
+      "duration": "00:00:02.7940000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"principal_not_member\", command: False, emptyBody: False)"
+    },
+    {
+      "duration": "00:00:02.8070000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"missing-token\", command: False, emptyBody: True)"
+    },
+    {
+      "duration": "00:00:02.7860000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"forged-token\", command: False, emptyBody: False)"
+    },
+    {
+      "duration": "00:00:02.7540000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(scenario: \"principal_not_member\", command: True, emptyBody: True)"
+    },
+    {
+      "duration": "00:00:02.7860000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.ProcessHeadsPreserveCompleteDocumentsAndChannelsAsync(command: True, refused: True)"
+    },
+    {
+      "duration": "00:00:02.7450000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.ProcessHeadsPreserveCompleteDocumentsAndChannelsAsync(command: True, refused: False)"
+    },
+    {
+      "duration": "00:00:02.8230000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.ProcessHeadsPreserveCompleteDocumentsAndChannelsAsync(command: False, refused: False)"
+    },
+    {
+      "duration": "00:00:02.7670000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.BoundaryProcessHarnessTests.ProcessHeadsPreserveCompleteDocumentsAndChannelsAsync(command: False, refused: True)"
+    },
+    {
+      "duration": "00:00:00.1060000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.LiveGatewayForwarderTests.IncompleteConcurrentPairIsBoundedAndNeverForwardedAsync"
+    },
+    {
+      "duration": "00:00:00.1170000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.LiveGatewayForwarderTests.ConcurrentPairIsCapturedBeforeEitherRequestIsForwardedAsync"
+    },
+    {
+      "duration": "00:00:00.0140000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.StateOraclesUseTheDiscoveredEndpointAndApiCredentialAsync(deactivation: False, token: \"private-dapr-api-token\")"
+    },
+    {
+      "duration": "00:00:00.0050000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.StateOraclesUseTheDiscoveredEndpointAndApiCredentialAsync(deactivation: True, token: \"private-dapr-api-token\")"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.StateOraclesUseTheDiscoveredEndpointAndApiCredentialAsync(deactivation: False, token: null)"
+    },
+    {
+      "duration": "00:00:00.0010000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.StateOraclesUseTheDiscoveredEndpointAndApiCredentialAsync(deactivation: True, token: null)"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.InvalidSidecarDiscoveryFailsClosed(snapshot: \"[{\\\"appId\\\":\\\"eventstore\\\",\\\"httpPort\\\":0}]\")"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.InvalidSidecarDiscoveryFailsClosed(snapshot: \"[{\\\"appId\\\":\\\"eventstore\\\",\\\"httpPort\\\":65536}]\")"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.InvalidSidecarDiscoveryFailsClosed(snapshot: \"{}\")"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.InvalidSidecarDiscoveryFailsClosed(snapshot: \"[{\\\"appId\\\":\\\"eventstore\\\",\\\"httpPort\\\":43219},{\\\"appId\\\":\"\u00b7\u00b7\u00b7)"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.InvalidSidecarDiscoveryFailsClosed(snapshot: \"[{\\\"appId\\\":\\\"parties\\\",\\\"httpPort\\\":3501}]\")"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.InvalidSidecarDiscoveryFailsClosed(snapshot: \"[{\\\"appId\\\":\\\"eventstore\\\",\\\"httpPort\\\":\\\"43219\\\"}]\")"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.InvalidSidecarDiscoveryFailsClosed(snapshot: \"[{\\\"appId\\\":\\\"eventstore\\\"}]\")"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.InvalidSidecarDiscoveryFailsClosed(snapshot: \"[]\")"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.SidecarDiscoverySelectsTheExactGatewayHttpPort"
+    },
+    {
+      "duration": "00:00:00.0060000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.ChangedDurableSequenceIsRejectedAsync"
+    },
+    {
+      "duration": "00:00:00.0080000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.MissingPartyOracleRejectsBusinessEffectsAsync(eventType: \"PartyCreated\")"
+    },
+    {
+      "duration": "00:00:00.0010000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.MissingPartyOracleRejectsBusinessEffectsAsync(eventType: \"PartyDeactivated\")"
+    },
+    {
+      "duration": "00:00:00.0020000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.StableDurableSequencePassesAsync"
+    },
+    {
+      "duration": "00:00:00.0020000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.DeactivationOracleRejectsUnsafeStreamsAsync(events: \"PartyCreated\", assertion: \"Assert.Single()\")"
+    },
+    {
+      "duration": "00:00:00.0000000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.DeactivationOracleRejectsUnsafeStreamsAsync(events: \"\", assertion: \"Assert.NotEmpty()\")"
+    },
+    {
+      "duration": "00:00:00.0020000",
+      "outcome": "Passed",
+      "testName": "Hexalith.McpCli.Cli.Tests.PersistedPartyEventsTests.DeactivationOracleRejectsUnsafeStreamsAsync(events: \"PartyCreated,PartyDeactivated,PartyDeactivated\", assertion: \"Assert.Single()\")"
+    }
+  ],
+  "notExecuted": 6,
+  "passed": 1995,
+  "projects": [
+    {
+      "archivePath": "Hexalith.McpCli.Abstractions.Tests/Hexalith.McpCli.Abstractions.Tests.trx",
+      "counters": {
+        "aborted": "0",
+        "completed": "0",
+        "disconnected": "0",
+        "error": "0",
+        "executed": "20",
+        "failed": "0",
+        "inProgress": "0",
+        "inconclusive": "0",
+        "notExecuted": "0",
+        "notRunnable": "0",
+        "passed": "20",
+        "passedButRunAborted": "0",
+        "pending": "0",
+        "timeout": "0",
+        "total": "20",
+        "warning": "0"
+      },
+      "project": "Hexalith.McpCli.Abstractions.Tests",
+      "sha256": "81d07413def2a276a829b2f055386e59d659036331c84aba30938f655f4ed757"
+    },
+    {
+      "archivePath": "Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.trx",
+      "counters": {
+        "aborted": "0",
+        "completed": "0",
+        "disconnected": "0",
+        "error": "0",
+        "executed": "19",
+        "failed": "0",
+        "inProgress": "0",
+        "inconclusive": "0",
+        "notExecuted": "0",
+        "notRunnable": "0",
+        "passed": "19",
+        "passedButRunAborted": "0",
+        "pending": "0",
+        "timeout": "0",
+        "total": "19",
+        "warning": "0"
+      },
+      "project": "Hexalith.McpCli.Analyzers.Tests",
+      "sha256": "6424d3c7455fcabb65b29f814f6e6a3c695ac4bdbe48171816327a2416c41ccd"
+    },
+    {
+      "archivePath": "Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.trx",
+      "counters": {
+        "aborted": "0",
+        "completed": "0",
+        "disconnected": "0",
+        "error": "0",
+        "executed": "623",
+        "failed": "0",
+        "inProgress": "0",
+        "inconclusive": "0",
+        "notExecuted": "2",
+        "notRunnable": "0",
+        "passed": "623",
+        "passedButRunAborted": "0",
+        "pending": "0",
+        "timeout": "0",
+        "total": "625",
+        "warning": "0"
+      },
+      "project": "Hexalith.McpCli.Cli.Tests",
+      "sha256": "d9d1bdc9e294de0bd06611f74967d05f8c34ecb5ff65f5fb5049290358d2a096"
+    },
+    {
+      "archivePath": "Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.trx",
+      "counters": {
+        "aborted": "0",
+        "completed": "0",
+        "disconnected": "0",
+        "error": "0",
+        "executed": "877",
+        "failed": "0",
+        "inProgress": "0",
+        "inconclusive": "0",
+        "notExecuted": "4",
+        "notRunnable": "0",
+        "passed": "877",
+        "passedButRunAborted": "0",
+        "pending": "0",
+        "timeout": "0",
+        "total": "881",
+        "warning": "0"
+      },
+      "project": "Hexalith.McpCli.Core.Tests",
+      "sha256": "a2c4a178d7dbb620d695df9a3da07dc2413fbf157ae2832f519e99989e271f06"
+    },
+    {
+      "archivePath": "Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.trx",
+      "counters": {
+        "aborted": "0",
+        "completed": "0",
+        "disconnected": "0",
+        "error": "0",
+        "executed": "362",
+        "failed": "0",
+        "inProgress": "0",
+        "inconclusive": "0",
+        "notExecuted": "0",
+        "notRunnable": "0",
+        "passed": "362",
+        "passedButRunAborted": "0",
+        "pending": "0",
+        "timeout": "0",
+        "total": "362",
+        "warning": "0"
+      },
+      "project": "Hexalith.McpCli.Manifest.Tests",
+      "sha256": "d8ae6dfe1252bc327065ae91bea58a3c74730a0f827bc73345473ae20720b182"
+    },
+    {
+      "archivePath": "Hexalith.McpCli.Mcp.Tests/Hexalith.McpCli.Mcp.Tests.trx",
+      "counters": {
+        "aborted": "0",
+        "completed": "0",
+        "disconnected": "0",
+        "error": "0",
+        "executed": "94",
+        "failed": "0",
+        "inProgress": "0",
+        "inconclusive": "0",
+        "notExecuted": "0",
+        "notRunnable": "0",
+        "passed": "94",
+        "passedButRunAborted": "0",
+        "pending": "0",
+        "timeout": "0",
+        "total": "94",
+        "warning": "0"
+      },
+      "project": "Hexalith.McpCli.Mcp.Tests",
+      "sha256": "0cb0c47ccc2cd89a0b8cfc9b60065a3cdfa442647644ce1e15c69a6bcf646cd0"
+    }
+  ],
+  "result": "passed",
+  "retention": "Counters and focused regression rows extracted from the exact digest-bound full hosted TRX archive; no additional tests executed during supplement assembly."
+}

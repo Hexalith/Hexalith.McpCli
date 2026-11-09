@@ -1,0 +1,11 @@
+{
+  "command": [
+    "/home/runner/work/_temp/mcpcli-live-ci-4_6vrva6/venv/bin/python",
+    "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tools/live-topology/run-vectors.py",
+    "--output",
+    "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 15180,
+  "exitCode": 0
+}

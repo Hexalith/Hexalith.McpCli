@@ -1,0 +1,9 @@
+{
+  "command": [
+    "dapr",
+    "--version"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 30,
+  "exitCode": 0
+}

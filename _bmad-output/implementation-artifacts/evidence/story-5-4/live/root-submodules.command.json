@@ -1,0 +1,13 @@
+{
+  "command": [
+    "git",
+    "config",
+    "--file",
+    "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/.gitmodules",
+    "--get-regexp",
+    "^submodule\\..*\\.path$"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 10,
+  "exitCode": 0
+}

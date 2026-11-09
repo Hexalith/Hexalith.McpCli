@@ -1,0 +1,191 @@
+{
+  "result": "passed",
+  "algorithm": "SHA-256(sorted-key compact UTF-8 JSON; ensure_ascii=false)",
+  "sourceCommit": "7ae71f03d98f1280060fe197f320dcb055e1d7f1",
+  "host": "Hexalith.McpCli.ConformanceHost.dll",
+  "binariesSha256": {
+    "ByteAether.Ulid.dll": "fc4f3d99e88023ffbd37eea2941ddd81f604611fc967fedb116a4daaf9ae4590",
+    "Dapr.Client.dll": "701c6ec09bd7fa54690b1aca6bfbe3b5ece2c8376699145a1fb0e7be610ea981",
+    "Dapr.Common.dll": "a17129663d6fa08f2d8117343fc6a859a86fc3c60743215633813ebdb0d2bf6f",
+    "Dapr.Protos.dll": "bf96cf02107221910bb6760b29fdcc9131604a260cb79b7c1487240367dba0a0",
+    "Google.Api.CommonProtos.dll": "329cf0f2b66c5cbf675321f0d6b33c17d1092e5761f32d3d2c1307a110c0dbbd",
+    "Google.Protobuf.dll": "e9b892ac667931162ffefa411ef8dc3eae777d634d8bfe8beddc28b1de95a612",
+    "Grpc.Core.Api.dll": "5674c1203706b5a261e8bbd3499147d94fc80b5f077bf45f9934ca28a9c8574b",
+    "Grpc.Net.Client.dll": "f884d8444feb888656cbb7de87ee8f53a50811329bb32c6e7a7a81cb1de008ef",
+    "Grpc.Net.Common.dll": "fdff383bbd8e5015f3c4aaaa7508b769228f33c92ba14fec4e59d35c5d78e6ae",
+    "Grpc.Reflection.dll": "87795d17c1385e7c05469c447ad8eecc883c3c71b4804319c5918a5a490c8d57",
+    "Hexalith.Commons.UniqueIds.dll": "06f7eea141c9399cd410d05d2d2897de6c612691644ddffab1147c3abfea3de9",
+    "Hexalith.EventStore.Client.dll": "702dfb7537e990a2065fe37c0b06301cdb70c26907af42faa6acdae331a7bce6",
+    "Hexalith.EventStore.Contracts.dll": "f3f2d7f6e7edf54e187af15edec8b4f13bf7e255b186b999efa0836a0c86a739",
+    "Hexalith.McpCli.Abstractions.dll": "54efaf3d07bfe25728d0ff7c006012ec2ff99383ecb95b17679f671d1feee628",
+    "Hexalith.McpCli.ConformanceHost.dll": "4feac6bc762e12f50ba17a081277adb70f73a5914356e3773bf01c2cacf4ff39",
+    "Hexalith.McpCli.Core.dll": "de4a2bedca9a917952316e919c9d5e62d605bf3e49c8243c9bd9c63fa1edf8cf",
+    "Hexalith.McpCli.Mcp.dll": "732d1c3309592d2971da9dcdd7b5a7b8d34aacca4c2a2d3afdb711132b4d3a97",
+    "Hexalith.McpCli.dll": "94e49cd94dd04af006a323980bf8f950c34fda56d9b322b05a79ff9b17634682",
+    "Hexalith.Parties.Contracts.dll": "d443e1a66c19ee4cdddf896c1b5b2e490426274a925d64f8e1672a34253c375e",
+    "Hexalith.Tenants.Contracts.dll": "adedcc49d81f2ceb6855f365dddb05e8f1f550e303c5f0e92c4d3153ff672d45",
+    "Humanizer.dll": "2769ed8265b691a5482c72506ed274dc52446fa1641997a8c12c66f5b9263d39",
+    "Json.More.dll": "80b6cd50331fa2ded4fbacdbf80dcedd2b142dee679df227c30299d2a3c3840f",
+    "JsonPointer.Net.dll": "e5b129abd47347643a903c37faa2e4aff919f7d31bd56ad5c20d1b90451be796",
+    "JsonSchema.Net.dll": "9aad41d8d1bb4df0f97d9870f37856afe22d5e884f86453ab3995f00893dd1b7",
+    "Microsoft.AspNetCore.DataProtection.Abstractions.dll": "539c51c603ade45c7bcb807777f8aadfaba6a1b6e211dde9fbb452a5b4649ca0",
+    "Microsoft.Extensions.AI.Abstractions.dll": "a3216886dec2b2528b2d7212c438d21c3d6de2061b500bd2ea505a41f896f8d3",
+    "Microsoft.Extensions.Caching.Abstractions.dll": "db8df1f8f824028eba680511df8e3724a104df9955b515f322fd60bb372b2bf2",
+    "Microsoft.Extensions.Configuration.Abstractions.dll": "7f6c40319b264b18060c1216fa02e3665ac486810a3c8d3133a23c9164cd7544",
+    "Microsoft.Extensions.Configuration.Binder.dll": "af2c49e574eda5ac57f822691115be6efc3e41ac138938d7d192a24f72a84b5d",
+    "Microsoft.Extensions.Configuration.CommandLine.dll": "e872ff645f0804c8a162c42e03fea23388a89cea6684138f050cc7a62a4f2cb9",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables.dll": "7a0b77736d19a2e5398e951c2222b6028c5ff50376832608bf8f0a66f6dd96a7",
+    "Microsoft.Extensions.Configuration.FileExtensions.dll": "011b49bb5892810df1fde3ff227cea45df8c9abe7443c433afd0b30ddb901f3f",
+    "Microsoft.Extensions.Configuration.Json.dll": "d642f189228b56d45a01808c061d42ce66ee03b12aa60115188d277cef5f2cc0",
+    "Microsoft.Extensions.Configuration.UserSecrets.dll": "77151f4dbeaf50efe3613e51dacb939aa9fac549556705acc2a64018d26b7997",
+    "Microsoft.Extensions.Configuration.dll": "a725409e8645836161661dc584ba2e825f38f8c0fced35b0a8cb2f362050cb3b",
+    "Microsoft.Extensions.DependencyInjection.Abstractions.dll": "6674a200ae49ee36af214cfaef4a511674d0a17828482e0f3eb5f1c21c241c75",
+    "Microsoft.Extensions.DependencyInjection.dll": "913f764318b64e6167e2be5554496db490adf0d0e2d0bcab7e8bf69bfa8562c6",
+    "Microsoft.Extensions.Diagnostics.Abstractions.dll": "13c0468501ca0efdb2ade8685fe4e77379faebd6778d82f6fb761b4b84052eeb",
+    "Microsoft.Extensions.Diagnostics.dll": "518ae085cbf9ed498a83e942ef859fa05e2121222761fe4c422f612c7ca24fac",
+    "Microsoft.Extensions.FileProviders.Abstractions.dll": "817d6c1513ec67f84980aa4fa520830e1b088906fc904e1d1b5d18e8b809ee63",
+    "Microsoft.Extensions.FileProviders.Physical.dll": "29f95ef485b1c54613300821ea6ac2ace033795ba7f48a0f22905c56b1117714",
+    "Microsoft.Extensions.FileSystemGlobbing.dll": "fbaeef3e8988c18bed5fee14179fa983233f8504f73e27156be4ea7146b96a75",
+    "Microsoft.Extensions.Hosting.Abstractions.dll": "8808515cfd675a49d1ed1fc29c00cdb935445bb973a5f9f5dcbb2c29797099e6",
+    "Microsoft.Extensions.Hosting.dll": "823c35d93b69dd36caa58f6a1b295bdcd5c940c7b5c6ca56566dc2033b3e51f0",
+    "Microsoft.Extensions.Http.dll": "4b6a81424d994bbbf70a2b24feaf7e1977f716081fa374fb872311f2e65401b9",
+    "Microsoft.Extensions.Logging.Abstractions.dll": "1e28c2090e866ef94bf05c57a7ec934604ab1b69dc080e9af52d18284d6368ed",
+    "Microsoft.Extensions.Logging.Configuration.dll": "a9c88a84d0d988d1a07a2f9fb121d4dae23074dbda0c35de662b9d9905e56d9d",
+    "Microsoft.Extensions.Logging.Console.dll": "87cfb75e9d0561980043e29cd3400336f73eda4806244f0a8fa74d6a8118f474",
+    "Microsoft.Extensions.Logging.Debug.dll": "b2f95d2f0414e467b353d0e0aebd43763b88564fdded74ea84328ffa20e0fa20",
+    "Microsoft.Extensions.Logging.EventLog.dll": "613d2b02feac51fb45d877cd925448194c04c646dc290c5c6f7af929a81d89ee",
+    "Microsoft.Extensions.Logging.EventSource.dll": "2b971ee034a405af2da115ab5c1e5d4395c2c91bdd49dc88c8d28c1523a3ae0a",
+    "Microsoft.Extensions.Logging.dll": "845b9b3d9162628a3c9c6e3a62797ad6bc44d015e1482a614662a89e2b15236d",
+    "Microsoft.Extensions.Options.ConfigurationExtensions.dll": "ec9ddfaa5e87b05f938f09b27a9a93a70a0bfcf0053a68300c526a7950fd8f97",
+    "Microsoft.Extensions.Options.dll": "24c2020f9a864e8fbac14ca31c7728a5a04602fa68f9c96b8846f54a767c6d04",
+    "Microsoft.Extensions.Primitives.dll": "24e9693a50422334e826e9e0b2a693ed6006e3d63de5b3a9b60dae753130e105",
+    "ModelContextProtocol.Core.dll": "0b22f1331cf8bfb0b4de2a34f283ca015648f431e719cffb6a2c230e40cbcc91",
+    "ModelContextProtocol.dll": "b35f769741350446c1dbb70264af903ae628e8cb9cb1359475abecca29fdc782",
+    "System.CommandLine.dll": "313d3376dca9c0e5eaf6f78118b765f1f877ae280056ecf56131bb19cfca8a90",
+    "System.Diagnostics.EventLog.dll": "e6cce0a9cbc22d6fd6d91eb67b4247cab1d29353db8d84fed51fdde4e964ed07"
+  },
+  "catalogSha256": "15f8d0a93989eeede7bcd26911318f9cfb1cff8b93612e09c6df4fc2f0912612",
+  "modules": {
+    "parties": {
+      "sha256": "eb35ff14bbd00321f5ea0413603a3380159b8e272552190682445d393864839b",
+      "structuredContent": {
+        "module": "parties",
+        "operations": [
+          {
+            "name": "parties.create-party",
+            "kind": "write",
+            "description": "Create a person or organization atomically with explicit IDs, typed details, optional contact channels and business identifiers. No IDs are generated. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId and IdentifierId have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is 1 plus every ContactChannels and Identifiers item; the configured cap defaults to 100."
+          },
+          {
+            "name": "parties.deactivate-party",
+            "kind": "write",
+            "description": "Soft-deactivate an existing party without erasing personal data. Processing must be unrestricted and the current erasure status must be Active. An already inactive party is unchanged only after these checks."
+          },
+          {
+            "name": "parties.get-party",
+            "kind": "read",
+            "description": "Read an existing party's detail in the envelope tenant. Missing and erased parties return the same safe not-found result; inactive parties remain visible."
+          },
+          {
+            "name": "parties.list-parties",
+            "kind": "read",
+            "description": "List visible parties in the envelope tenant, ordered by normalized display name then PartyId. Filters apply before paging and totals exclude erased parties. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+          },
+          {
+            "name": "parties.reactivate-party",
+            "kind": "write",
+            "description": "Reactivate an existing inactive party. Processing must be unrestricted and the current erasure status must be Active. An already active party is unchanged only after these checks."
+          },
+          {
+            "name": "parties.search-parties",
+            "kind": "read",
+            "description": "Search visible display names in the envelope tenant using trimmed, case-insensitive, diacritic-normalized exact, prefix, contains and fuzzy matching. Type and Active apply before paging; totals exclude erased parties. Empty query returns no matches. Date filters and advanced search modes reject. Use envelope paging: default size 20 and offset 0, maximum size 100, page-aligned offsets or a scoped continuation cursor. To continue, supply the returned paging.nextCursor without offset, keeping the same query, filters, envelope tenant, user and page size."
+          },
+          {
+            "name": "parties.update-party",
+            "kind": "write",
+            "description": "Atomically replace details for the existing party type; add, update or remove contact channels; add or remove business identifiers. Party type cannot change. Supply at least one supported change; activation is separate. Raw strings are limited to 512 UTF-16 units each and 4096 total, including whitespace and repeated IDs. PartyId, ContactChannelId, IdentifierId and removal ID entries have a tighter 128-character limit; business identifier Value strings use the 512 limit. Null collections or items reject; omitted lists default to empty. Sub-operation count is each non-null PersonDetails or OrganizationDetails object plus every item across the five operation lists; the configured cap defaults to 100."
+          }
+        ]
+      }
+    },
+    "tenants": {
+      "sha256": "aa162b254eaf25b1bd7b97cc07e21b101da6107daf0027c0c8edcb7437446cb5",
+      "structuredContent": {
+        "module": "tenants",
+        "operations": [
+          {
+            "name": "tenants.add-user-to-tenant",
+            "kind": "write",
+            "description": "Add a user to an active tenant with a role. Allowed for a global administrator or a TenantOwner of the tenant; if the tenant has never had a member, any caller may add its first member with any role. A user who is already a member is rejected; use tenants.change-user-role to change an existing member's role."
+          },
+          {
+            "name": "tenants.change-user-role",
+            "kind": "write",
+            "description": "Change the role of an existing member of an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A user who is not a member is rejected, and setting the role the member already has is accepted and changes nothing. Demoting the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+          },
+          {
+            "name": "tenants.create-tenant",
+            "kind": "write",
+            "description": "Create a new tenant with an identifier, a display name and a description (null for none). Only a global administrator can create tenants. The tenant starts active with no members and no configuration; an identifier that already exists is rejected."
+          },
+          {
+            "name": "tenants.disable-tenant",
+            "kind": "write",
+            "description": "Disable an active tenant. Its data stays readable, but changes to its name, description, members, roles and configuration are rejected until it is enabled again. Only a global administrator can disable a tenant; disabling an unknown or already disabled tenant is rejected."
+          },
+          {
+            "name": "tenants.enable-tenant",
+            "kind": "write",
+            "description": "Enable a disabled tenant so changes to its name, description, members, roles and configuration are accepted again. Only a global administrator can enable a tenant; enabling an unknown or already active tenant is rejected."
+          },
+          {
+            "name": "tenants.get-tenant",
+            "kind": "read",
+            "description": "Read one tenant's full details: name, description, status (Active or Disabled), creation time, members with their roles, and configuration settings. The caller must be a member of the tenant or a global administrator. A missing tenant is reported as not found to a global administrator and as forbidden to anyone else. It is not paged: all members are returned and the pageSize, offset and cursor arguments are not used; to page a long member list, use tenants.get-tenant-users."
+          },
+          {
+            "name": "tenants.get-tenant-audit",
+            "kind": "read",
+            "description": "Read the audit trail of one tenant, oldest first: each entry gives the event, its category, the acting user, the time and the affected user or setting. Only a global administrator can read it; an unknown tenant returns an empty trail. Global-administrator grants have a separate audit route. From and To keep entries inside an inclusive time range and Category keeps only Access or Administrative entries; a From later than To is rejected. Results are paged: pageSize takes 1 to 200 (default 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.get-tenant-users",
+            "kind": "read",
+            "description": "List the members of one tenant with their roles, ordered by user identifier. The caller must be a member of the tenant or a global administrator; a missing tenant is reported as not found to a global administrator and as forbidden to anyone else. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.get-user-tenants",
+            "kind": "read",
+            "description": "List the tenants one user is a member of, ordered by tenant identifier, with each tenant's name, status and the user's role. Callers always see their own memberships, a global administrator sees any user's, and a TenantOwner sees another user's memberships only in tenants the caller owns. Memberships the caller may not see are left out, so the list can be empty. Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.list-tenants",
+            "kind": "read",
+            "description": "List the tenants visible to the caller, ordered by tenant identifier: every tenant for a global administrator, otherwise only the tenants the caller is a member of. Each item gives the tenant identifier, name and status (Active or Disabled). Results are paged: pageSize takes 1 to 100 (default 20, larger values are reduced to 100); to read the next page, pass the returned next-page cursor as the cursor argument: it is the result document's cursor, also reported as paging.nextCursor when a paging argument was sent. offset is not supported."
+          },
+          {
+            "name": "tenants.remove-tenant-configuration",
+            "kind": "write",
+            "description": "Delete one configuration setting from an active tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a key the tenant does not have is rejected."
+          },
+          {
+            "name": "tenants.remove-user-from-tenant",
+            "kind": "write",
+            "description": "Remove a user's membership from an active tenant, revoking the user's role in that tenant. Allowed for a global administrator or a TenantOwner of the tenant; removing a user who is not a member is rejected. Removing the last TenantOwner is allowed; afterwards only a global administrator can manage the tenant's members, roles and configuration."
+          },
+          {
+            "name": "tenants.set-tenant-configuration",
+            "kind": "write",
+            "description": "Create or overwrite one configuration setting, a key with a string value, on an active tenant. Allowed for a global administrator or a TenantOwner of the tenant. A tenant holds at most 100 keys, so adding a new key beyond that is rejected while overwriting an existing key still works; setting a key to the value it already has changes nothing. Every tenant member can read the values, so do not store secrets."
+          },
+          {
+            "name": "tenants.update-tenant",
+            "kind": "write",
+            "description": "Replace the display name and description of an existing active tenant. Allowed for a global administrator or a tenant member with the TenantOwner or TenantContributor role. Unknown or disabled tenants are rejected."
+          }
+        ]
+      }
+    }
+  }
+}

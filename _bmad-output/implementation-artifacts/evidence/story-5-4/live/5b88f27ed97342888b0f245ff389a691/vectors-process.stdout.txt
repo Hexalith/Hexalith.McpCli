@@ -1,0 +1,1 @@
+PASSED: full live acceptance=True; receipt: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/live-lane.json

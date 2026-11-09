@@ -1,0 +1,1283 @@
+{
+  "allRuntimeCleanupPassed": true,
+  "approvedVectorCount": 21,
+  "boundaryCaseReceipts": 45,
+  "candidateCommit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+  "catalogSha256": "15f8d0a93989eeede7bcd26911318f9cfb1cff8b93612e09c6df4fc2f0912612",
+  "concurrentDeactivation": {
+    "accepted": 2,
+    "distinctMessageIds": [
+      "01M717D4343YB1G5E5XH9SCS4V",
+      "01M717D43DEYR1K18E01FZAZT9"
+    ],
+    "persistedAfterSha256": "4b650f6fdf5e5249b154d8da4d065f6b4f03e848af4919fc66ea542323190722",
+    "persistedDeactivationEvents": 1,
+    "scenario": "C05-concurrent-repeat",
+    "sequence": 3
+  },
+  "credentialAndTenantStateComparisonsPassed": true,
+  "durableSequenceComparisons": [
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "missing-token"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "forged-token"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "tenant-a-grant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "nonmember"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "missing-token"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "forged-token"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "tenant-a-grant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "nonmember"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "missing-token"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "forged-token"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "tenant-a-grant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "nonmember"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "missing-token"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "forged-token"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "tenant-a-grant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "nonmember"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "cli",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "invalid-public-tenant"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "mcp-override-disabled-and-authorized-selection-denied",
+      "stage": "local"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "query",
+      "scenario": "mcp-override-disabled-and-authorized-selection-denied",
+      "stage": "gateway"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "mcp-override-disabled-and-authorized-selection-denied",
+      "stage": "local"
+    },
+    {
+      "after": 2,
+      "before": 2,
+      "head": "mcp",
+      "kind": "command",
+      "scenario": "mcp-override-disabled-and-authorized-selection-denied",
+      "stage": "gateway"
+    }
+  ],
+  "fullLiveAccepted": true,
+  "githubRunId": 42711210249,
+  "independentCaseCount": 2,
+  "liveExecutionRunId": "558d15e235a6428b902b6e39a7deaf45",
+  "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+  "ownedRuntimeCount": 23,
+  "preparationRunId": "87a6fc9ddec64b10b510e4b64ae2e951",
+  "result": "passed",
+  "retainedLiveReceiptBase": "ci-42711210249/live",
+  "runtimeChecks": [
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "ed3bbdfdb0796edf74138726c6948219b9d90a12d8ee8b7f44febc97d02445d7",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T231200Z-ae81c262",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "f55498ae2cf96bed394fea2282b9bc9b786c678ce872fd7f48c0c49f62c478bd",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T230657Z-6564c52b",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532510]",
+        "net": "net:[4026532512]",
+        "pid": "pid:[4026532511]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "5d1a1b2b75880e8e695801560b39780ab4cf68f2e681f6ce79dbbfbc2e9bbd91",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T223951Z-f3268905",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "87cbb40cb51eaad92bf3f37df8e0f3119221ee7724f841e6e2c3ad6a6a0a4d12",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T224402Z-a0892032",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532512]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "736ad8a3f7537bf2185be7a54c216bbd2734aa6cfdcd69b0ab18b730719e36d3",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T224106Z-6292080d",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532510]",
+        "net": "net:[4026532512]",
+        "pid": "pid:[4026532511]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "0d88d89ea758a8e7f4ac7c948f51775c77072724af076200d44079df392dfc3a",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T223540Z-b1d15598",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "cc1530e8f1a50d217559e15925d77de1e74169263c39adaad30fa8eefc97d590",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T224907Z-b1983fe5",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "4cacaf4b17e70f85e476763e73b24edcccb10944a40dd6e5b5b0095290527f33",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T231556Z-98a58570",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "6c8a41170f7a4690a586bb1faf911507a4242dc6b03584704ba276aabbfb2be6",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T225726Z-a43e4037",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "8eda78df0e7551828b636cd55448ecb0d5435d81d27dd8f89a37c0c27ddabe1e",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T231736Z-9067535f",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "b24874829be6aa1218fe6543100ae64c510847131c139f0d09fe67c8b3bb9122",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T230457Z-e137993e",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "72948498215f3bcc659ba56dedb1182f946799064fd3190f14a551f9bcd0a5dd",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T225924Z-726e6166",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "ca522c4d17ce333887f0bdf523cf8abd22df44b5a96612455bf44fe6ebc93300",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T225420Z-43570a8c",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "d6d107af992910b2c8212304c2d4f74ae587b6697bbbbcbd3ed09ce5cf0b0217",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T230232Z-65e295d6",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "f45d3b6fae2455e800333a95e601fbfa2bd727ca0d4da243f1f8655f6b26e1f3",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T225222Z-c35baf15",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "00cf9848c724adb31cb5b68732a95e1abff3725520cf73b44e8419ff5b854ce3",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T224725Z-8c5984f7",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "fd7892dfd5ddb1c95873351e3f3b640e3ceb2b6ff56daf2a9621751a1586caed",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T224246Z-e8e35eab",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "6e84c464213ab480d639126ff35123634d569ee04d5679cbfd272a1781111908",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T225545Z-8c2dfccd",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "02bde86d07d1a4ac9fd77a656b335aef9fd243439e0af801bdd0c1fe2cc3f1f6",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T230956Z-223f82b4",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "6409ef87868049167a7ae1be57805039c208f1751bbeb170e4ed12cd3b7d4839",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T225040Z-686ad578",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "10d3612ff3a7c9b7b011bd3bc36a2e4a40cd88bf7a24734a97a8c8f95b137783",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T224542Z-58d36479",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532513]",
+        "user": "user:[4026532510]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "ecbdeb1be45041a5e4154c60e6de4e58eb750b795a3789391516eee214405d4d",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T231915Z-d458b097",
+      "supervisorPid": 1
+    },
+    {
+      "commandExitCode": 0,
+      "namespaces": {
+        "mnt": "mnt:[4026532511]",
+        "net": "net:[4026532514]",
+        "pid": "pid:[4026532512]",
+        "user": "user:[4026532509]"
+      },
+      "nativeCatalogRootDigest": "b9cc08700d3599f7cbc5c337ea2c200798012db700f899c4e48ca8bfcd142729",
+      "nativeCatalogSha256": "d1b219a444956981b0bed7666f3830e2558d63c1e02322dabfc7608f9b52ffda",
+      "outsideNamespaces": {
+        "mnt": "mnt:[4026531832]",
+        "net": "net:[4026531833]",
+        "pid": "pid:[4026531836]",
+        "user": "user:[4026531837]"
+      },
+      "ownedInfrastructureStopped": {
+        "placement": 0,
+        "redis": 0,
+        "scheduler": 0,
+        "sentry": 0
+      },
+      "prerequisitesReady": true,
+      "runtime": "20261109T231359Z-2774306e",
+      "supervisorPid": 1
+    }
+  ],
+  "semanticPhaseCount": 235,
+  "sourceCommit": "21bbef096c20d71b2d422e344cdfe3f47b9072a8",
+  "vectors": [
+    {
+      "binding": {
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "packageId": "Hexalith.Parties.Contracts",
+        "planSha256": "e85d89636c8500bf4c450c51491f4daf35e6e2c5a4f455450ed6384d1528c93a",
+        "vectorSha256": "de9110ffdbdd3d522ed1b1b461871e3d0fcb0cf78eecaf67b513f36d1dcd6074",
+        "version": "1.5.1"
+      },
+      "cliQueryPhases": 2,
+      "commandSubmissions": 1,
+      "mcpQueryPhases": 2,
+      "operation": "parties.create-party",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/parties.create-party/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "packageId": "Hexalith.Parties.Contracts",
+        "planSha256": "fb500e2e2e81ff7010c3e85aa8c6d66e7f04c8b2885147741942fd88f627a4fe",
+        "vectorSha256": "a1fb6b4dc93eac5c10a7702cddde4acaa8f4934d6fb5108e60713461949fb15d",
+        "version": "1.5.1"
+      },
+      "cliQueryPhases": 4,
+      "commandSubmissions": 3,
+      "mcpQueryPhases": 4,
+      "operation": "parties.deactivate-party",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/parties.deactivate-party/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "packageId": "Hexalith.Parties.Contracts",
+        "planSha256": "dd2621f83ceea13132ca4cb9f80dbddba876585087a25d5040d9ba16be2e2114",
+        "vectorSha256": "87f496d6238422ed20db05e927081384ad881fa862ba612b19f7a02eba59bb0d",
+        "version": "1.5.1"
+      },
+      "cliQueryPhases": 2,
+      "commandSubmissions": 1,
+      "mcpQueryPhases": 2,
+      "operation": "parties.get-party",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/parties.get-party/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "packageId": "Hexalith.Parties.Contracts",
+        "planSha256": "9dab3b9dc8e58eee937b788def5c6a8c73e44f4a4914bad38d9f7d1db5eeb13c",
+        "vectorSha256": "3caad9f622cc2b88f8228d4aceb9273eeff1565889ff73ee9c0b4b0b232eaa81",
+        "version": "1.5.1"
+      },
+      "cliQueryPhases": 6,
+      "commandSubmissions": 1,
+      "mcpQueryPhases": 6,
+      "operation": "parties.list-parties",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/parties.list-parties/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "packageId": "Hexalith.Parties.Contracts",
+        "planSha256": "e4b481be8bfc8e7489611fa2ad9df09e36b814d64ae299954dbda72e3cf94849",
+        "vectorSha256": "d8f37e96e8c533a126a3e23314e0bc225ed2920ee80c8191193f65ad0dd09428",
+        "version": "1.5.1"
+      },
+      "cliQueryPhases": 4,
+      "commandSubmissions": 3,
+      "mcpQueryPhases": 4,
+      "operation": "parties.reactivate-party",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/parties.reactivate-party/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "packageId": "Hexalith.Parties.Contracts",
+        "planSha256": "8e5940ac30b110464e770637efd308c0d3cbb6bddf73e32bf150b0f24ef8285e",
+        "vectorSha256": "b5af5b9c846234de543783f95023a4af754aba991ddcc624358786698559e8d3",
+        "version": "1.5.1"
+      },
+      "cliQueryPhases": 6,
+      "commandSubmissions": 1,
+      "mcpQueryPhases": 6,
+      "operation": "parties.search-parties",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/parties.search-parties/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "1ab6143ccb452f190590bfc33ebee8b12e2e3490ba1b4c586d196e2f627a7d82",
+        "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
+        "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+        "packageId": "Hexalith.Parties.Contracts",
+        "planSha256": "ac52d8e21f71cdd5cbf1eb7883c294831b0f8a2c6919ea1fb58334edfdb0252c",
+        "vectorSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+        "version": "1.5.1"
+      },
+      "cliQueryPhases": 3,
+      "commandSubmissions": 2,
+      "mcpQueryPhases": 3,
+      "operation": "parties.update-party",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/parties.update-party/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "fc6ad0da98c6d5a05c02a7f326d6bf3f3cdaacd43d5dd8d4b80f3ab5f9b2bd85",
+        "vectorSha256": "1ee25a7fc2d2c023b7c1b394ec06a907b9fc4484d67ba0118d45afe4f1009519",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 3,
+      "commandSubmissions": 2,
+      "mcpQueryPhases": 3,
+      "operation": "tenants.add-user-to-tenant",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.add-user-to-tenant/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "1e30c03d4aac13702b2e401a747d50c6c121ded049b2c1c0ef04521027fb22e7",
+        "vectorSha256": "65e9e7b37366e02387e5eebff44189c48b35346683a730704bde3b0bd8d05b40",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 4,
+      "commandSubmissions": 3,
+      "mcpQueryPhases": 4,
+      "operation": "tenants.change-user-role",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.change-user-role/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "a883f07ba0297500cbee309821dfabfb4c6872e20731b70ddb04f90af4860a14",
+        "vectorSha256": "32e75065acb3cb80435c7afb97878b9cea807e43f97efff19d090e199d3d60c0",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 2,
+      "commandSubmissions": 1,
+      "mcpQueryPhases": 2,
+      "operation": "tenants.create-tenant",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.create-tenant/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "a751ad0d9f509104281482bc1227007a609eb07aace047988c953c98eaa451d6",
+        "vectorSha256": "a529d902cb579a1f2fdbfd8a8e1aea14dd175e2bb96655ca3a97103d22d86790",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 3,
+      "commandSubmissions": 2,
+      "mcpQueryPhases": 3,
+      "operation": "tenants.disable-tenant",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.disable-tenant/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "78250d3740aa84fb72e8bc93d19f87f417dbe8e1764e8561829a2d0b714d929c",
+        "vectorSha256": "573d6209f013c7a8f3ed97182a4d980fa47167e9b9406a80d70042577d814d7f",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 4,
+      "commandSubmissions": 3,
+      "mcpQueryPhases": 4,
+      "operation": "tenants.enable-tenant",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.enable-tenant/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "f558532e1c25ac3a197da2b5d1c809c04fe90149413d75136b85a1f02f35b404",
+        "vectorSha256": "7b70b2720c55b3bd65be8574914c2bad50f9af81ca3bb371479f7739d2b13391",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 11,
+      "commandSubmissions": 4,
+      "mcpQueryPhases": 11,
+      "operation": "tenants.get-tenant-audit",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.get-tenant-audit/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "97552629a80c2cdd5dd03d282e93e465b0ce9f1d059be8e35296c439abbe7c05",
+        "vectorSha256": "f7a9b984378fb50b79780afe4fac4be68fe0b04ad6f21caab070cb2223a204eb",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 6,
+      "commandSubmissions": 4,
+      "mcpQueryPhases": 6,
+      "operation": "tenants.get-tenant-users",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.get-tenant-users/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "8d1f3ea2a528911b85ab86ff7e6cc878d6fe359661a36f9bfafb4f9a8245d7f2",
+        "vectorSha256": "0773189da1da32300c0e49ae47a7f5d5367ced465bfb44cbc1388f6d18d7459a",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 4,
+      "commandSubmissions": 3,
+      "mcpQueryPhases": 4,
+      "operation": "tenants.get-tenant",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.get-tenant/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "6305968cc9a52c7c2556b1c31e3128e7b17d22a7bfbf90cacab993ad6c4e5df0",
+        "vectorSha256": "95b97f32865d33b931fa4f24066e834c2062fda7cf0bf3b0fbdca3ff46f91339",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 8,
+      "commandSubmissions": 6,
+      "mcpQueryPhases": 8,
+      "operation": "tenants.get-user-tenants",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.get-user-tenants/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "cfe0f68fc844031e2a9c6e6ecd23ce55da796dc8845b1129816b99f9b5d54264",
+        "vectorSha256": "63c8c59207af384aa978b158b7b40fd3c24a84a247682d21413dc1e6e5e1766e",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 5,
+      "commandSubmissions": 3,
+      "mcpQueryPhases": 5,
+      "operation": "tenants.list-tenants",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.list-tenants/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "7dde3834820f03284c556033320910e8849db0a1ffd97410e69d90331caeb89b",
+        "vectorSha256": "ac8ef4d3c0139bc3aec96658cff2d4e7d6d9a1d537da9d7244e1de508f484f86",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 4,
+      "commandSubmissions": 3,
+      "mcpQueryPhases": 4,
+      "operation": "tenants.remove-tenant-configuration",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.remove-tenant-configuration/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "4bef2e1160b14f11d2100864eaa677c979dd677aa95496bcbc3edb83a50e7556",
+        "vectorSha256": "bef4e476189a18822a47944c3a6473d980a4d5cfb0a5c9466daa85377549c5dc",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 4,
+      "commandSubmissions": 3,
+      "mcpQueryPhases": 4,
+      "operation": "tenants.remove-user-from-tenant",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.remove-user-from-tenant/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "c485d5e99c6f64e03ffee74be8cd4c6d661ed6bf0de4b04e9ac9336fc5126660",
+        "vectorSha256": "19b8ebd4f174abaf3d9cd10a5872fc4e7af34ed380521bdbed5e9ecfad5c983f",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 3,
+      "commandSubmissions": 2,
+      "mcpQueryPhases": 3,
+      "operation": "tenants.set-tenant-configuration",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.set-tenant-configuration/live-result.json"
+    },
+    {
+      "binding": {
+        "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+        "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+        "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+        "packageId": "Hexalith.Tenants.Contracts",
+        "planSha256": "44aed12505c31bb9dcd33a7d9d8d0bfc71ef7db8baa6c5d7fcb9c6ed1a8dc41f",
+        "vectorSha256": "5090b29559addfe7d74e224767de3f8917cdd9d13c5aabaff3372131b6871810",
+        "version": "7.0.5"
+      },
+      "cliQueryPhases": 3,
+      "commandSubmissions": 2,
+      "mcpQueryPhases": 3,
+      "operation": "tenants.update-tenant",
+      "receipt": "558d15e235a6428b902b6e39a7deaf45/vectors/b5180eebacd94dfe8695283fe95693ef/tenants.update-tenant/live-result.json"
+    }
+  ],
+  "verifierSha256": "d19c2a1aafc54c77d3f7f9133ff5aaa576a7458bfe021ae56feb9a59fe9cd84f"
+}

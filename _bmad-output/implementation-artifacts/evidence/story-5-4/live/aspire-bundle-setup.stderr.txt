@@ -1,0 +1,4 @@
+
+A new version of Aspire is available: 13.6.4
+To update, run: aspire update
+For more information, see: https://aka.ms/aspire/update

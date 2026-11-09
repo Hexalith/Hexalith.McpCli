@@ -1,0 +1,12 @@
+test_abbreviated_candidate_commit_refuses_capture (test_capture_heads.CaptureHeadsTests.test_abbreviated_candidate_commit_refuses_capture) ... ok
+test_binary_drift_during_discovery_refuses_capture (test_capture_heads.CaptureHeadsTests.test_binary_drift_during_discovery_refuses_capture) ... ok
+test_different_head_documents_and_error_exits_refuse_capture (test_capture_heads.CaptureHeadsTests.test_different_head_documents_and_error_exits_refuse_capture) ... ok
+test_duplicate_modules_refuse_capture (test_capture_heads.CaptureHeadsTests.test_duplicate_modules_refuse_capture) ... ok
+test_empty_catalog_refuses_capture (test_capture_heads.CaptureHeadsTests.test_empty_catalog_refuses_capture) ... ok
+test_exact_structured_catalog_and_binary_hashes_are_retained (test_capture_heads.CaptureHeadsTests.test_exact_structured_catalog_and_binary_hashes_are_retained) ... ok
+test_missing_host_refuses_capture (test_capture_heads.CaptureHeadsTests.test_missing_host_refuses_capture) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.006s
+
+OK

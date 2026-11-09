@@ -316,9 +316,11 @@ class CiHooksTests(unittest.TestCase):
         shutil.copyfile(HERE.parents[1] / 'scripts/evidence_redaction.py', self.root / 'scripts/evidence_redaction.py')
         for name, content in [('bootstrap-runtime.py', BOOTSTRAP), ('run-vectors.py', RUNNERS), ('run-isolated.py', RUNNERS)]:
             (self.tools / name).write_text(content)
-        (self.tools / 'capture_heads.py').write_text('''import json, pathlib, sys
+        (self.tools / 'capture_heads.py').write_text('''import hashlib, json, pathlib, sys
 if __import__('os').environ.get('FIXTURE_MODE') == 'catalog-capture-failure': raise SystemExit(21)
-pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'result': 'passed', 'catalogSha256': 'a' * 64}))
+host = pathlib.Path(sys.argv[sys.argv.index('--host') + 1])
+binaries = {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in host.parent.glob('*.dll')}
+pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'result': 'passed', 'catalogSha256': 'a' * 64, 'binariesSha256': binaries}))
 ''')
         binaries = [{'source': '/' + name, 'sha256': hashlib.sha256(b'qualified-fixture').hexdigest()}
                     for name in ('redis-server', 'sentry', 'placement', 'scheduler')]
@@ -623,6 +625,38 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         receipt = json.loads((self.evidence / 'preparation.json').read_text())
         self.assertEqual('failed', receipt['result'])
         self.assertNotIn('headCatalog', receipt)
+
+    def test_execution_refuses_missing_changed_or_inconsistent_head_catalog_capture(self):
+        prepared = self.prepare()
+        capture = Path(prepared['headCatalog']['path'])
+        preparation = self.evidence / 'preparation.json'
+        original_capture, original_preparation = capture.read_bytes(), preparation.read_bytes()
+        for mode in ('missing-binding', 'missing-file', 'changed-bytes', 'inconsistent-dll-map', 'failed-capture'):
+            with self.subTest(mode=mode):
+                try:
+                    document = json.loads(original_preparation)
+                    if mode == 'missing-binding':
+                        document.pop('headCatalog')
+                    elif mode == 'missing-file':
+                        capture.unlink()
+                    elif mode == 'changed-bytes':
+                        capture.write_bytes(original_capture + b' ')
+                    else:
+                        evidence = json.loads(original_capture)
+                        if mode == 'failed-capture':
+                            evidence['result'] = 'failed'
+                        else:
+                            evidence['binariesSha256']['unexpected.dll'] = '0' * 64
+                        capture.write_text(json.dumps(evidence))
+                        document['headCatalog']['sha256'] = hashlib.sha256(capture.read_bytes()).hexdigest()
+                    preparation.write_text(json.dumps(document))
+                    result = self.invoke('run-ci.sh')
+                    self.assertNotEqual(0, result.returncode)
+                    self.assertIn('head Catalog capture', result.stderr)
+                    self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+                finally:
+                    capture.write_bytes(original_capture)
+                    preparation.write_bytes(original_preparation)
 
     def test_native_builds_inherit_one_fresh_task_owned_package_cache(self):
         self.env['NUGET_PACKAGES'] = str(self.root / 'unpublished-global-candidates')

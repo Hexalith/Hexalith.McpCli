@@ -1,0 +1,9 @@
+{
+  "namespaces": {
+    "user": "user:[4026531837]",
+    "pid": "pid:[4026531836]",
+    "net": "net:[4026531833]",
+    "mnt": "mnt:[4026531832]"
+  },
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli"
+}

@@ -80,6 +80,9 @@ def observe(head: HeadProcess, call: dict, url: str | None, action: dict, values
                 expected = call['envelope'].get('correlationId', document['messageId'])
                 if document['correlationId'] != expected:
                     raise VectorError(f"{record['phase']} {call['operation']}: /correlationId differs from submitted/default identity")
+            if clock() >= deadline:
+                record['result'] = 'failed'
+                raise VectorError(f"{record['phase']} {call['operation']}: response arrived after the observation deadline")
             values.update(captured)
             attempt['result'] = 'passed'
             record['result'] = 'passed'

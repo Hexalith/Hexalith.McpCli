@@ -1,0 +1,16 @@
+{
+  "result": "failed",
+  "fullLiveAccepted": false,
+  "runId": "83eda84f57ea4257855d1b1c526de507",
+  "preparationRunId": "1fe8c9aedf9c40f8aceb5509160af7cd",
+  "output": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/83eda84f57ea4257855d1b1c526de507",
+  "vectors": {
+    "result": "not-run",
+    "reason": "Independent safety cases failed before vector execution."
+  },
+  "boundary": {
+    "result": "failed",
+    "error": "RuntimeError: /home/runner/work/_temp/mcpcli-live-ci-eyk3g1bo/venv/bin/python /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tools/live-topology/run-isolated.py -- dotnet /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests -failSkips -result-xml /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/83eda84f57ea4257855d1b1c526de507/boundary/tests.xml exited 1; stdout: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/83eda84f57ea4257855d1b1c526de507/boundary/process.stdout.txt; stderr: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/83eda84f57ea4257855d1b1c526de507/boundary/process.stderr.txt"
+  },
+  "error": "RuntimeError: independent boundary failed: /home/runner/work/_temp/mcpcli-live-ci-eyk3g1bo/venv/bin/python /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tools/live-topology/run-isolated.py -- dotnet /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests -failSkips -result-xml /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/83eda84f57ea4257855d1b1c526de507/boundary/tests.xml exited 1; stdout: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/83eda84f57ea4257855d1b1c526de507/boundary/process.stdout.txt; stderr: /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/83eda84f57ea4257855d1b1c526de507/boundary/process.stderr.txt"
+}

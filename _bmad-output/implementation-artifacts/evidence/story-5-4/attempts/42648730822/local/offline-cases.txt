@@ -1,0 +1,15 @@
+xUnit.net v3 In-Process Runner v4.0.2+0c7aa4991f (64-bit .NET 10.0.14)
+  Discovering: Hexalith.McpCli.Cli.Tests
+  Discovered:  Hexalith.McpCli.Cli.Tests
+  Starting:    Hexalith.McpCli.Cli.Tests
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:46523/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:46523/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 21.1293ms - 200
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 23.7635ms - 200
+  Finished:    Hexalith.McpCli.Cli.Tests (ID = '139ed9b8f7b2035f704084d9f5d4dd8c8f7c157dfb481a28a4e4122a8fc8ed5c')
+=== TEST EXECUTION SUMMARY ===
+   Hexalith.McpCli.Cli.Tests  Total: 64, Errors: 0, Failed: 0, Skipped: 0, Not Run: 0, Time: 45.811s

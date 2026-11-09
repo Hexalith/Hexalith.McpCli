@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Hexalith.McpCli.Cli.Tests;
@@ -32,19 +33,22 @@ internal static class BoundaryHeads
         deadline.CancelAfter(TimeSpan.FromSeconds(45));
         using Process process = Start(profile, environment, ["mcp", "--transport", "stdio", .. globals]);
         Task<string> stderr = process.StandardError.ReadToEndAsync(deadline.Token);
+        var transcript = new StringBuilder();
         try
         {
             await WriteAsync(new { jsonrpc = "2.0", id = 1, method = "initialize", @params = new
             { protocolVersion = "2025-06-18", capabilities = new { }, clientInfo = new { name = "retirement-boundary", version = "1" } } });
-            _ = await ReadReplyAsync(1);
+            _ = await ReadReplyAsync(process.StandardOutput, 1, transcript, deadline.Token);
             await WriteAsync(new { jsonrpc = "2.0", method = "notifications/initialized", @params = new { } });
             await WriteAsync(new { jsonrpc = "2.0", id = 2, method = "tools/call", @params = new { name = tool, arguments } });
-            JsonElement reply = await ReadReplyAsync(2);
+            JsonElement reply = await ReadReplyAsync(process.StandardOutput, 2, transcript, deadline.Token);
             CallToolResult result = reply.GetProperty("result").Deserialize<CallToolResult>(new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
             process.StandardInput.Close();
             Task<string> trailingOutput = process.StandardOutput.ReadToEndAsync(deadline.Token);
             await process.WaitForExitAsync(deadline.Token);
-            return new(process.ExitCode, await trailingOutput, await stderr, result);
+            string trailing = await trailingOutput;
+            transcript.Append(trailing);
+            return new(process.ExitCode, trailing, await stderr, result, transcript.ToString());
         }
         finally { if (!process.HasExited) process.Kill(entireProcessTree: true); }
 
@@ -53,23 +57,26 @@ internal static class BoundaryHeads
             await process.StandardInput.WriteLineAsync(JsonSerializer.Serialize(message).AsMemory(), deadline.Token);
             await process.StandardInput.FlushAsync(deadline.Token);
         }
-        async Task<JsonElement> ReadReplyAsync(int id)
+    }
+
+    /// <summary>Retains every stdout frame while waiting for the requested JSON-RPC response.</summary>
+    internal static async Task<JsonElement> ReadReplyAsync(TextReader output, int id, StringBuilder transcript, CancellationToken cancellationToken)
+    {
+        while (true)
         {
-            while (true)
+            string? line = await output.ReadLineAsync(cancellationToken);
+            Assert.NotNull(line);
+            transcript.AppendLine(line);
+            using JsonDocument message = JsonDocument.Parse(line);
+            JsonElement frame = message.RootElement;
+            frame.GetProperty("jsonrpc").GetString().ShouldBe("2.0");
+            if (frame.TryGetProperty("id", out JsonElement received) && received.GetInt32() == id)
             {
-                string? line = await process.StandardOutput.ReadLineAsync(deadline.Token);
-                Assert.NotNull(line);
-                using JsonDocument message = JsonDocument.Parse(line);
-                JsonElement frame = message.RootElement;
-                frame.GetProperty("jsonrpc").GetString().ShouldBe("2.0");
-                if (frame.TryGetProperty("id", out JsonElement received) && received.GetInt32() == id)
-                {
-                    frame.TryGetProperty("error", out _).ShouldBeFalse();
-                    return frame.Clone();
-                }
-                // Only protocol notifications may precede the matching response; all stdout must be JSON-RPC.
-                frame.TryGetProperty("method", out _).ShouldBeTrue();
+                frame.TryGetProperty("error", out _).ShouldBeFalse();
+                return frame.Clone();
             }
+            // Only protocol notifications may precede the matching response; retain them for absence checks.
+            frame.TryGetProperty("method", out _).ShouldBeTrue();
         }
     }
 

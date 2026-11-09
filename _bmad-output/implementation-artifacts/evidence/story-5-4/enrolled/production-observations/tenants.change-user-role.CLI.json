@@ -1,0 +1,110 @@
+{
+  "source": "/home/runner/work/_temp/enrolled-evidence/Hexalith.Tenants.Contracts/inputs-ohn3axug/vectors/1/change-user-role.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M70HJY9TWHH372A53EEG9KRE",
+      "correlationId": "01M70HJY9TWHH372A53EEG9KRE",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-roles",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "messageId": "01M70HJYP6R22969HTESRXD9QT",
+      "correlationId": "01M70HJYP6R22969HTESRXD9QT",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-roles",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.change-user-role",
+      "messageId": "01M70HJZ2FMTVRZ29X2V8FCBEN",
+      "correlationId": "01M70HJZ2FMTVRZ29X2V8FCBEN",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-roles",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "tenant": "vector-roles",
+      "document": {
+        "items": [
+          {
+            "userId": "vector-user-2@example.com",
+            "role": "TenantOwner"
+          }
+        ],
+        "cursor": null,
+        "hasMore": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70HJY9TWHH372A53EEG9KRE",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Roles",
+          "TenantId": "vector-roles"
+        },
+        "correlationId": "01M70HJY9TWHH372A53EEG9KRE"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70HJYP6R22969HTESRXD9QT",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "Role": "TenantReader",
+          "TenantId": "vector-roles",
+          "UserId": "vector-user-2@example.com"
+        },
+        "correlationId": "01M70HJYP6R22969HTESRXD9QT"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70HJZ2FMTVRZ29X2V8FCBEN",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "commandType": "change-user-role",
+        "payload": {
+          "NewRole": "TenantOwner",
+          "TenantId": "vector-roles",
+          "UserId": "vector-user-2@example.com"
+        },
+        "correlationId": "01M70HJZ2FMTVRZ29X2V8FCBEN"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "vector-roles",
+        "domain": "tenants",
+        "aggregateId": "vector-roles",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-roles"
+        }
+      }
+    }
+  ]
+}

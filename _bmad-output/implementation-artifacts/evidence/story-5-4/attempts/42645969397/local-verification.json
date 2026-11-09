@@ -1,0 +1,160 @@
+{
+  "candidateHeadCommit": "d34a4d182b5e1f7ea432dd6d4cbda13d3ce2ddfb",
+  "result": "passed",
+  "latestCodeChecks": {
+    "ReleaseBuild": {
+      "warnings": 0,
+      "errors": 0
+    },
+    "Cli": {
+      "passed": 596,
+      "skipped": 2,
+      "failed": 0
+    },
+    "focusedOfflineNamedCases": {
+      "passed": 60,
+      "failed": 0,
+      "skipped": 0,
+      "xml": "attempts/42645969397/local/offline-cases.xml"
+    },
+    "focusedProcessCases": 18
+  },
+  "unchangedPythonChecks": {
+    "affectedCiHooks": 99,
+    "failed": 0,
+    "log": "attempts/42645969397/local/ci-hooks-final.txt",
+    "note": "The latest candidate changes only C# test oracles and spec notes; the clean 99-hook sweep applies to unchanged Python files."
+  },
+  "earlierUnchangedProjectChecks": {
+    "Core": {
+      "passed": 877,
+      "skipped": 4
+    },
+    "Mcp": {
+      "passed": 94
+    },
+    "Manifest": {
+      "passed": 362
+    },
+    "evidence": "attempts/42631573309/local-verification.json",
+    "note": "No production, package, dependency-policy or these test-project files changed after these checks; final hosted CI separately reruns all ordinary projects."
+  },
+  "supersededResults": [
+    {
+      "log": "attempts/42645969397/local/ci-hooks-initial-failing.txt",
+      "failedSubcases": 5,
+      "cause": "Stale boundary-first order/count expectations",
+      "disposition": "Corrected focused rerun and clean full 99-hook sweep pass."
+    }
+  ],
+  "commitlint": {
+    "command": "npx --no -- commitlint --verbose < <exact-message-file>",
+    "pinnedToolingInstalledBy": "npm ci",
+    "messages": [
+      {
+        "message": "test(evidence): qualify shared heads against the live topology",
+        "evidence": "attempts/42645969397/local/commitlint-live.txt"
+      },
+      {
+        "message": "test(safety): pin gateway challenges and run the boundary first",
+        "evidence": "attempts/42645969397/local/commitlint-auth.txt"
+      },
+      {
+        "message": "test(safety): pin empty authentication responses in both heads",
+        "evidence": "attempts/42645969397/local/commitlint-empty401.txt"
+      },
+      {
+        "message": "docs(evidence): bind shared-head parity and safety receipts",
+        "evidence": "attempts/42645969397/local/commitlint-evidence.txt"
+      }
+    ],
+    "problems": 0,
+    "warnings": 0
+  },
+  "logs": [
+    {
+      "label": "latest Release build",
+      "path": "attempts/42645969397/local/build.txt",
+      "sourceSha256": "7f41a2e9f97ce040895f0cfdcda7426f84b59858b3e1686a4863cc1946cb9336",
+      "sha256": "7f41a2e9f97ce040895f0cfdcda7426f84b59858b3e1686a4863cc1946cb9336",
+      "transformed": false
+    },
+    {
+      "label": "latest full CLI project",
+      "path": "attempts/42645969397/local/Cli.txt",
+      "sourceSha256": "44faab184d3cf32d6fcad414b2ffb1c4e4e6d2f18b1b7b380aed299efa166e83",
+      "sha256": "44faab184d3cf32d6fcad414b2ffb1c4e4e6d2f18b1b7b380aed299efa166e83",
+      "transformed": false
+    },
+    {
+      "label": "latest focused process cases",
+      "path": "attempts/42645969397/local/process-cases.txt",
+      "sourceSha256": "4f6ac86908d170b07ff4073a5c23cf4a4de5b1e3216f2c20c2b0c56682b3d747",
+      "sha256": "4f6ac86908d170b07ff4073a5c23cf4a4de5b1e3216f2c20c2b0c56682b3d747",
+      "transformed": false
+    },
+    {
+      "label": "latest focused safety/compatibility/process/identity run",
+      "path": "attempts/42645969397/local/offline-cases.txt",
+      "sourceSha256": "e4b7116f1a822bf121f73eea8a9a4404f3e84b52efe4a063bee7fb939b3dc12b",
+      "sha256": "e4b7116f1a822bf121f73eea8a9a4404f3e84b52efe4a063bee7fb939b3dc12b",
+      "transformed": false
+    },
+    {
+      "label": "latest focused named test cases",
+      "path": "attempts/42645969397/local/offline-cases.xml",
+      "sourceSha256": "1294b4661ad4527b38a623e406e864bf659eee9a6e37e8c50389f1d25beb580f",
+      "sha256": "1294b4661ad4527b38a623e406e864bf659eee9a6e37e8c50389f1d25beb580f",
+      "transformed": false
+    },
+    {
+      "label": "clean final 99-hook sweep; Python unchanged by latest commit",
+      "path": "attempts/42645969397/local/ci-hooks-final.txt",
+      "sourceSha256": "0f30a60093be7d2aa594f7e2b79c16238c5ba36bdff27a02256b9530c8f248b5",
+      "sha256": "0f30a60093be7d2aa594f7e2b79c16238c5ba36bdff27a02256b9530c8f248b5",
+      "transformed": false
+    },
+    {
+      "label": "superseded sweep with five stale ordering/count expectations",
+      "path": "attempts/42645969397/local/ci-hooks-initial-failing.txt",
+      "sourceSha256": "68fc6e15beb61b61138ba1dfacf5dda3c61c6d995da0d04bc305d5014c46afab",
+      "sha256": "68fc6e15beb61b61138ba1dfacf5dda3c61c6d995da0d04bc305d5014c46afab",
+      "transformed": false
+    },
+    {
+      "label": "corrected count expectation focused rerun",
+      "path": "attempts/42645969397/local/ci-hooks-corrected-subcases.txt",
+      "sourceSha256": "980664b5b082dcf1b71a09ea7c36badd010eb5cc490c5abe24cee887fda55ed2",
+      "sha256": "980664b5b082dcf1b71a09ea7c36badd010eb5cc490c5abe24cee887fda55ed2",
+      "transformed": false
+    },
+    {
+      "label": "exact first candidate commit message",
+      "path": "attempts/42645969397/local/commitlint-live.txt",
+      "sourceSha256": "fefa1829db2b7ab2c2f36c7bea3eb165935bfd2c0243c423b9118e2d6b217e95",
+      "sha256": "fefa1829db2b7ab2c2f36c7bea3eb165935bfd2c0243c423b9118e2d6b217e95",
+      "transformed": false
+    },
+    {
+      "label": "exact structured authentication candidate commit message",
+      "path": "attempts/42645969397/local/commitlint-auth.txt",
+      "sourceSha256": "8e563e78e5957e0f4c98a2071784e64f9b17ea41aa9dc5dbdb8416eaa1573be4",
+      "sha256": "8e563e78e5957e0f4c98a2071784e64f9b17ea41aa9dc5dbdb8416eaa1573be4",
+      "transformed": false
+    },
+    {
+      "label": "exact empty-401 candidate commit message",
+      "path": "attempts/42645969397/local/commitlint-empty401.txt",
+      "sourceSha256": "3495d5a064f8f5204a2d2227d58a09bec8ebf6351e3b77d52c6b1d4c167b8194",
+      "sha256": "3495d5a064f8f5204a2d2227d58a09bec8ebf6351e3b77d52c6b1d4c167b8194",
+      "transformed": false
+    },
+    {
+      "label": "exact proposed evidence commit message",
+      "path": "attempts/42645969397/local/commitlint-evidence.txt",
+      "sourceSha256": "e1f08abe9740cfcc58d36c93aacf676a9018386cf52a1a635dd6abcff508df42",
+      "sha256": "e1f08abe9740cfcc58d36c93aacf676a9018386cf52a1a635dd6abcff508df42",
+      "transformed": false
+    }
+  ]
+}

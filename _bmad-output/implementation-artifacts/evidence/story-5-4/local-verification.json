@@ -1,0 +1,184 @@
+{
+  "candidateHeadCommit": "3e8f6a4e681018c7ca8356997d4fd28378217d37",
+  "result": "passed",
+  "latestCodeChecks": {
+    "ReleaseBuild": {
+      "warnings": 0,
+      "errors": 0
+    },
+    "Cli": {
+      "passed": 613,
+      "skipped": 2,
+      "failed": 0
+    },
+    "focusedOfflineNamedCases": {
+      "passed": 77,
+      "failed": 0,
+      "skipped": 0,
+      "xml": "local/offline-cases.xml"
+    },
+    "focusedProcessCases": 22,
+    "sidecarDiscoveryAndStateCases": 13
+  },
+  "unchangedPythonChecks": {
+    "affectedCiHooks": 99,
+    "failed": 0,
+    "log": "local/ci-hooks-final.txt",
+    "note": "The latest candidates change only C# tests, linked test files and spec notes; the clean 99-hook sweep applies to unchanged Python files."
+  },
+  "earlierUnchangedProjectChecks": {
+    "Core": {
+      "passed": 877,
+      "skipped": 4
+    },
+    "Mcp": {
+      "passed": 94
+    },
+    "Manifest": {
+      "passed": 362
+    },
+    "evidence": "attempts/42631573309/local-verification.json",
+    "note": "No production, package, dependency-policy or these test-project files changed after these checks; final hosted CI separately reruns all ordinary projects."
+  },
+  "supersededResults": [
+    {
+      "log": "attempts/42645969397/local/ci-hooks-initial-failing.txt",
+      "failedSubcases": 5,
+      "cause": "Stale boundary-first order/count expectations",
+      "disposition": "Corrected focused rerun and clean full 99-hook sweep pass.",
+      "correctedRerun": "attempts/42645969397/local/ci-hooks-corrected-subcases.txt"
+    }
+  ],
+  "commitlint": {
+    "command": "npx --no -- commitlint --verbose < <exact-message-file>",
+    "pinnedToolingInstalledBy": "npm ci",
+    "messages": [
+      {
+        "message": "test(evidence): qualify shared heads against the live topology",
+        "evidence": "local/commitlint-live.txt"
+      },
+      {
+        "message": "test(safety): pin gateway challenges and run the boundary first",
+        "evidence": "local/commitlint-auth.txt"
+      },
+      {
+        "message": "test(safety): pin empty authentication responses in both heads",
+        "evidence": "local/commitlint-empty401.txt"
+      },
+      {
+        "message": "test(safety): pin pre-dispatch command grant refusals",
+        "evidence": "local/commitlint-empty403.txt"
+      },
+      {
+        "message": "test(safety): discover the isolated sidecar for persisted reads",
+        "evidence": "local/commitlint-sidecar.txt"
+      },
+      {
+        "message": "docs(evidence): bind shared-head parity and safety receipts",
+        "evidence": "local/commitlint-evidence.txt"
+      }
+    ],
+    "problems": 0,
+    "warnings": 0
+  },
+  "logs": [
+    {
+      "label": "latest Release build",
+      "path": "local/build.txt",
+      "sourceSha256": "6ed7241131b4c08aae7d6f8039c9a84b93f38d9e4ea93bc12d1071ae489c52b7",
+      "sha256": "6ed7241131b4c08aae7d6f8039c9a84b93f38d9e4ea93bc12d1071ae489c52b7",
+      "transformed": false
+    },
+    {
+      "label": "latest full CLI project",
+      "path": "local/Cli.txt",
+      "sourceSha256": "8ad9581ae516b2419cb1855f2aeab7d1ce91a123e66200d63b114cc9d614ac85",
+      "sha256": "8ad9581ae516b2419cb1855f2aeab7d1ce91a123e66200d63b114cc9d614ac85",
+      "transformed": false
+    },
+    {
+      "label": "latest focused process cases",
+      "path": "local/process-cases.txt",
+      "sourceSha256": "b46d670f49862ea50a15e486bc8a208aca778c1dfe3bde431cfb74e9ea941131",
+      "sha256": "b46d670f49862ea50a15e486bc8a208aca778c1dfe3bde431cfb74e9ea941131",
+      "transformed": false
+    },
+    {
+      "label": "latest focused safety/compatibility/process/identity run",
+      "path": "local/offline-cases.txt",
+      "sourceSha256": "a296663aa1460e00fa554841a6c8c343c29044352e389e3c29fb90e5acfc79dc",
+      "sha256": "a296663aa1460e00fa554841a6c8c343c29044352e389e3c29fb90e5acfc79dc",
+      "transformed": false
+    },
+    {
+      "label": "latest focused named test cases",
+      "path": "local/offline-cases.xml",
+      "sourceSha256": "b8b6c43dbe8495df77e56470b96a689044874830487ce5241e70550a8f6463f8",
+      "sha256": "b8b6c43dbe8495df77e56470b96a689044874830487ce5241e70550a8f6463f8",
+      "transformed": false
+    },
+    {
+      "label": "latest focused sidecar discovery/state cases",
+      "path": "local/sidecar-cases.txt",
+      "sourceSha256": "da0d75b29bb469bf1c55415c678d38de38ae5cec14c216839cff4c63dc01f9f7",
+      "sha256": "da0d75b29bb469bf1c55415c678d38de38ae5cec14c216839cff4c63dc01f9f7",
+      "transformed": false
+    },
+    {
+      "label": "latest focused named sidecar cases",
+      "path": "local/sidecar-cases.xml",
+      "sourceSha256": "ca71de74bffbb996b774d3fb44981aee781075d8e8acbe31383555a411ae50ff",
+      "sha256": "ca71de74bffbb996b774d3fb44981aee781075d8e8acbe31383555a411ae50ff",
+      "transformed": false
+    },
+    {
+      "label": "clean final 99-hook sweep; Python unchanged by latest commits",
+      "path": "local/ci-hooks-final.txt",
+      "sourceSha256": "0f30a60093be7d2aa594f7e2b79c16238c5ba36bdff27a02256b9530c8f248b5",
+      "sha256": "0f30a60093be7d2aa594f7e2b79c16238c5ba36bdff27a02256b9530c8f248b5",
+      "transformed": false
+    },
+    {
+      "label": "exact first candidate commit message",
+      "path": "local/commitlint-live.txt",
+      "sourceSha256": "fefa1829db2b7ab2c2f36c7bea3eb165935bfd2c0243c423b9118e2d6b217e95",
+      "sha256": "fefa1829db2b7ab2c2f36c7bea3eb165935bfd2c0243c423b9118e2d6b217e95",
+      "transformed": false
+    },
+    {
+      "label": "exact structured authentication candidate commit message",
+      "path": "local/commitlint-auth.txt",
+      "sourceSha256": "8e563e78e5957e0f4c98a2071784e64f9b17ea41aa9dc5dbdb8416eaa1573be4",
+      "sha256": "8e563e78e5957e0f4c98a2071784e64f9b17ea41aa9dc5dbdb8416eaa1573be4",
+      "transformed": false
+    },
+    {
+      "label": "exact empty-401 candidate commit message",
+      "path": "local/commitlint-empty401.txt",
+      "sourceSha256": "3495d5a064f8f5204a2d2227d58a09bec8ebf6351e3b77d52c6b1d4c167b8194",
+      "sha256": "3495d5a064f8f5204a2d2227d58a09bec8ebf6351e3b77d52c6b1d4c167b8194",
+      "transformed": false
+    },
+    {
+      "label": "exact pre-dispatch Command grant refusal candidate message",
+      "path": "local/commitlint-empty403.txt",
+      "sourceSha256": "d4d1357703b8ee12846bd3af26530ea67367de9f908de7974a0df60c68dc16ce",
+      "sha256": "d4d1357703b8ee12846bd3af26530ea67367de9f908de7974a0df60c68dc16ce",
+      "transformed": false
+    },
+    {
+      "label": "exact dynamic sidecar discovery candidate message",
+      "path": "local/commitlint-sidecar.txt",
+      "sourceSha256": "24d39267bbca3809131995826ce4b213b5fafdd4c17ff54590a04029011ead2d",
+      "sha256": "24d39267bbca3809131995826ce4b213b5fafdd4c17ff54590a04029011ead2d",
+      "transformed": false
+    },
+    {
+      "label": "exact proposed evidence commit message",
+      "path": "local/commitlint-evidence.txt",
+      "sourceSha256": "e1f08abe9740cfcc58d36c93aacf676a9018386cf52a1a635dd6abcff508df42",
+      "sha256": "e1f08abe9740cfcc58d36c93aacf676a9018386cf52a1a635dd6abcff508df42",
+      "transformed": false
+    }
+  ]
+}

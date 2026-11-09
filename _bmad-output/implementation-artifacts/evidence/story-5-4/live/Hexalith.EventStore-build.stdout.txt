@@ -1,0 +1,9 @@
+  Determining projects to restore...
+  Restored /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj (in 1.02 sec).
+  Hexalith.McpCli.EventStoreGateway.TestHost -> /home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.McpCli.EventStoreGateway.TestHost.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.58

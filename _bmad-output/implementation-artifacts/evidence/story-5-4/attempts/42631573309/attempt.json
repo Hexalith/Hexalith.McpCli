@@ -1,0 +1,15 @@
+{
+  "githubRunId": 42631573309,
+  "githubArtifactId": 13684427559,
+  "downloadedArchiveSha256": "9598350ec4ca215f5cdadccdb9ccf602f248e3149772b64b77184762f96250a6",
+  "advertisedDigestVerified": true,
+  "result": "failed",
+  "fullLiveAccepted": false,
+  "vectors": "passed",
+  "smoke": "passed",
+  "boundary": "failed",
+  "failure": "The boundary expected a bare 401 HTTP reason phrase; the qualified Gateway returns a structured authentication_required document.",
+  "replacementCandidate": "45effeaad55e911e262566c6895c3b0146152048",
+  "replacementRunId": 42641067905,
+  "limits": "This historical attempt does not grant full live acceptance. Only selected sanitized text is retained; the downloaded archive digest binds the original artifact."
+}

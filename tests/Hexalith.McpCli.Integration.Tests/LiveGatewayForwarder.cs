@@ -7,6 +7,7 @@ namespace Hexalith.McpCli.Integration.Tests;
 /// <summary>Counts real head requests while forwarding their exact credential and body to the private Gateway.</summary>
 internal sealed class LiveGatewayForwarder : IAsyncDisposable
 {
+    private RequestPairBarrier? _pairBarrier;
     private readonly HttpClient _http;
     private readonly ScriptedGateway _gateway;
     private readonly ConcurrentQueue<(GatewayRequest Request, int Status, string Body)> _responses = new();
@@ -27,6 +28,15 @@ internal sealed class LiveGatewayForwarder : IAsyncDisposable
     /// <summary>Gets completed real Gateway responses.</summary>
     internal IReadOnlyList<(GatewayRequest Request, int Status, string Body)> Responses => [.. _responses];
 
+    /// <summary>Holds both next requests at a bounded barrier before either reaches the Gateway.</summary>
+    internal Task CaptureConcurrentPairAsync(TimeSpan timeout)
+    {
+        var barrier = new RequestPairBarrier(timeout);
+        if (Interlocked.CompareExchange(ref _pairBarrier, barrier, null) is not null)
+            throw new InvalidOperationException("A concurrent request pair is already pending.");
+        return barrier.Ready;
+    }
+
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
@@ -36,6 +46,17 @@ internal sealed class LiveGatewayForwarder : IAsyncDisposable
 
     private async Task<byte[]> ForwardAsync(GatewayRequest captured)
     {
+        RequestPairBarrier? barrier = Volatile.Read(ref _pairBarrier);
+        if (barrier is not null)
+        {
+            if (Interlocked.Increment(ref barrier.Arrivals) == 2)
+            {
+                barrier.Captured.TrySetResult();
+                Interlocked.CompareExchange(ref _pairBarrier, null, barrier);
+            }
+            try { await barrier.Ready; }
+            catch (TimeoutException error) { throw new IOException("The concurrent request pair did not arrive before its deadline.", error); }
+        }
         using var request = new HttpRequestMessage(HttpMethod.Post, captured.Path)
         { Content = new StringContent(captured.Body, Encoding.UTF8, "application/json") };
         if (captured.Headers.TryGetValue("Authorization", out string? authorization))

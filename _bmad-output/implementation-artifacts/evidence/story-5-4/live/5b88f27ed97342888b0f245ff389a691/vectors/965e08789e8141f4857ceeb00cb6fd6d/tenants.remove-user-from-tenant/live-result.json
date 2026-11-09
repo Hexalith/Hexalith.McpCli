@@ -1,0 +1,388 @@
+{
+  "operation": "tenants.remove-user-from-tenant",
+  "result": "passed",
+  "phases": [
+    {
+      "head": "cli",
+      "phase": "/prerequisites/0",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-removal",
+          "Name": "Vector Removal",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M70KQ6MFWGHR7HFCYYM76Q2F",
+            "correlationId": "01M70KQ6MFWGHR7HFCYYM76Q2F",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-removal",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-removal",
+            "document": {
+              "tenantId": "vector-removal",
+              "name": "Vector Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:54:33.3058202+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-removal",
+            "document": {
+              "tenantId": "vector-removal",
+              "name": "Vector Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:54:33.3058202+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/prerequisites/1",
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.add-user-to-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-removal",
+          "UserId": "vector-user-3@example.com",
+          "Role": "TenantReader"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.add-user-to-tenant",
+            "messageId": "01M70KQKGEAX6S4ZNPY006GX62",
+            "correlationId": "01M70KQKGEAX6S4ZNPY006GX62",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-removal",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-removal",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-3@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-removal",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-3@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/invocation",
+      "operation": "tenants.remove-user-from-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.remove-user-from-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-removal",
+          "UserId": "vector-user-3@example.com"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.remove-user-from-tenant",
+            "messageId": "01M70KQZW4DXKK9MMXG80R07BF",
+            "correlationId": "01M70KQZW4DXKK9MMXG80R07BF",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-removal",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-removal",
+            "document": {
+              "items": [],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-removal",
+            "document": {
+              "items": [],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-removal",
+            "document": {
+              "items": [],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-removal",
+            "document": {
+              "items": [],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.5",
+    "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+    "vectorSha256": "bef4e476189a18822a47944c3a6473d980a4d5cfb0a5c9466daa85377549c5dc",
+    "planSha256": "4bef2e1160b14f11d2100864eaa677c979dd677aa95496bcbc3edb83a50e7556",
+    "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+  },
+  "captures": {}
+}

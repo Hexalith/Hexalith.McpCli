@@ -1,0 +1,1 @@
+PREFLIGHT-ONLY: full live acceptance=False; receipt: /tmp/mcpcli-story54-qualified-preflight/live-lane.json

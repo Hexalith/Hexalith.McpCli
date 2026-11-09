@@ -6,6 +6,7 @@ import hashlib
 import io
 import json
 import os
+import re
 from pathlib import Path
 import shutil
 import subprocess
@@ -966,6 +967,16 @@ class PublicationBoundaryTests(unittest.TestCase):
             elif state == 'skipped': executed[0]['conclusion'] = 'skipped'
             else: next(step for step in executed[0]['steps'] if step['name'] == state)['conclusion'] = 'skipped'
             with self.subTest(state=state), self.assertRaises(ValueError): gate.validate_jobs(executed, gate.STAGING_JOBS)
+
+    def test_topology_discovery_required_step_matches_the_current_workflow(self):
+        gate = module('verify-release-source')
+        workflow = (Path(__file__).resolve().parents[2] / '.github/workflows/ci.yml').read_text()
+        block = workflow.split('  topology-vector-discovery:\n', 1)[1]
+        block = re.split(r'(?m)^  [\w-]+:', block, maxsplit=1)[0]
+        names = re.findall(r'(?m)^      - name: (.+)$', block)
+        required = gate.STAGING_JOBS['topology-vector-discovery']
+        self.assertEqual(1, len(required))
+        self.assertTrue(set(required).issubset(names), (required, names))
 
     def test_workflow_refuses_no_release_or_partial_results_as_paired_completion(self):
         root = Path(__file__).resolve().parents[2]

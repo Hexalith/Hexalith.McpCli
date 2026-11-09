@@ -1,0 +1,35 @@
+{
+  "packageId": "Hexalith.Tenants.Contracts",
+  "version": "7.0.5",
+  "module": "tenants",
+  "status": "approved-published-artifact",
+  "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+  "supersedesPublishedVersion": "7.0.4",
+  "vectorFilesSha256": {
+    "add-user-to-tenant.vector.json": "1ee25a7fc2d2c023b7c1b394ec06a907b9fc4484d67ba0118d45afe4f1009519",
+    "change-user-role.vector.json": "65e9e7b37366e02387e5eebff44189c48b35346683a730704bde3b0bd8d05b40",
+    "create-tenant.vector.json": "32e75065acb3cb80435c7afb97878b9cea807e43f97efff19d090e199d3d60c0",
+    "disable-tenant.vector.json": "a529d902cb579a1f2fdbfd8a8e1aea14dd175e2bb96655ca3a97103d22d86790",
+    "enable-tenant.vector.json": "573d6209f013c7a8f3ed97182a4d980fa47167e9b9406a80d70042577d814d7f",
+    "get-tenant-audit.vector.json": "7b70b2720c55b3bd65be8574914c2bad50f9af81ca3bb371479f7739d2b13391",
+    "get-tenant-users.vector.json": "f7a9b984378fb50b79780afe4fac4be68fe0b04ad6f21caab070cb2223a204eb",
+    "get-tenant.vector.json": "0773189da1da32300c0e49ae47a7f5d5367ced465bfb44cbc1388f6d18d7459a",
+    "get-user-tenants.vector.json": "95b97f32865d33b931fa4f24066e834c2062fda7cf0bf3b0fbdca3ff46f91339",
+    "list-tenants.vector.json": "63c8c59207af384aa978b158b7b40fd3c24a84a247682d21413dc1e6e5e1766e",
+    "remove-tenant-configuration.vector.json": "ac8ef4d3c0139bc3aec96658cff2d4e7d6d9a1d537da9d7244e1de508f484f86",
+    "remove-user-from-tenant.vector.json": "bef4e476189a18822a47944c3a6473d980a4d5cfb0a5c9466daa85377549c5dc",
+    "set-tenant-configuration.vector.json": "19b8ebd4f174abaf3d9cd10a5872fc4e7af34ed380521bdbed5e9ecfad5c983f",
+    "update-tenant.vector.json": "5090b29559addfe7d74e224767de3f8917cdd9d13c5aabaff3372131b6871810"
+  },
+  "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+  "approvalReference": "evidence/release-maintenance-20261106/tenants-7.0.5/approval.json",
+  "publishedArtifactBinding": "evidence/release-maintenance-20261106/tenants-7.0.5/approval.json",
+  "publication": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v7.0.5",
+  "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35",
+  "historicalCandidate": {
+    "status": "historical-local-candidate-not-public-evidence",
+    "artifactHash": "sha512-vovnGv3V6O1JEDXX1Z3oqS3g9iGo8A42hXSxdXNAIQrEvsfI7WkhNTEe7oiLQrM1CbfXhST04oIAp9+ARxjCQA==",
+    "sourceCommit": "ed35296686451f41ee919ca132052ced3315113c",
+    "provenance": "local-committed-source-not-published"
+  }
+}

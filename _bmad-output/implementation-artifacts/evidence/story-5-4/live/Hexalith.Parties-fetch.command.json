@@ -1,0 +1,13 @@
+{
+  "command": [
+    "git",
+    "fetch",
+    "--no-recurse-submodules",
+    "--depth=1",
+    "origin",
+    "d4415715b2517927655c538e6d41e05d71d4207e"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Parties",
+  "timeoutSeconds": 120,
+  "exitCode": 0
+}

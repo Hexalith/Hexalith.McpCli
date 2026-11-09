@@ -1,0 +1,168 @@
+{
+  "purpose": "Static source/test anchors permitted by the Story 5.4 variant matrix; upstream tests were not executed in this task.",
+  "contracts": {
+    "packageId": "Hexalith.Parties.Contracts",
+    "version": "1.5.1",
+    "repositoryCommitFromNuspec": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021"
+  },
+  "upstreamTestsAtEnrolledRevision": [
+    {
+      "repositoryPath": "tests/Hexalith.Parties.Tests/Gateway/PartySdkQueryHandlerTests.cs",
+      "sha256": "3f95010067943b030b5ef2e08d760a8ccdb3f59fd501f4c144e4f2e3418ed85c",
+      "methods": [
+        {
+          "method": "DetailHandlers_ErasedPartyReturnSameSafeMissingResultAsync",
+          "line": 92
+        },
+        {
+          "method": "PublicQueries_FilterErasedAndMixedRowsBeforePagingAndReturnEffectiveTotalsAsync",
+          "line": 2408
+        },
+        {
+          "method": "EnvelopePagingAloneGovernsAndLegacyPayloadPagingRemainsAvailableAsync",
+          "line": 2468
+        },
+        {
+          "method": "PublicPaging_RejectsInvalidBoundsCursorAndOffsetBeforeReadAsync",
+          "line": 2505
+        },
+        {
+          "method": "PublicContinuationRejectsScopeChangesBeforeAnotherReadAsync",
+          "line": 2541
+        }
+      ]
+    },
+    {
+      "repositoryPath": "tests/Hexalith.Parties.Tests/Domain/PartyDomainProcessorValidationTests.cs",
+      "sha256": "0783dcf07f3868dc94bb57eddec15c21b22f95ab5edfcb8f681faf45404aab5f",
+      "methods": [
+        {
+          "method": "ProcessAsync_InvalidGatewayCompositeRejectsBeforeProtectedStateAccess",
+          "line": 1117
+        },
+        {
+          "method": "CompositeUpdatesAcceptEachSupportedListAsTheOnlyChange",
+          "line": 1194
+        },
+        {
+          "method": "ProcessAsync_EmptyContactUpdateHasOnlyTheEntryFailureBeforeProtectedStateAccess",
+          "line": 1215
+        },
+        {
+          "method": "ProcessAsync_NullCompositeCollectionsAndItemsHaveExactFailuresBeforeProtectedStateAccess",
+          "line": 1241
+        },
+        {
+          "method": "ProcessAsync_EveryExposedStringIsBoundedBeforeStateAccess",
+          "line": 1334
+        },
+        {
+          "method": "RepeatedSoftDeactivationDoesNotEraseOrEmitAnotherEvent",
+          "line": 1405
+        },
+        {
+          "method": "CompositeValidatorsAcceptExactRawStringAndTotalBoundaries",
+          "line": 1419
+        },
+        {
+          "method": "CompositeValidatorsCountEveryRepeatedIdAndKeepTheOperationCap",
+          "line": 1440
+        }
+      ]
+    }
+  ],
+  "runtimeSource": "d4415715b2517927655c538e6d41e05d71d4207e",
+  "aggregateCodeSha256": {
+    "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021": "6539733720396dd5380b1f87c043adaee94b24fe271918bb3369c136a64aadbf",
+    "d4415715b2517927655c538e6d41e05d71d4207e": "6539733720396dd5380b1f87c043adaee94b24fe271918bb3369c136a64aadbf"
+  },
+  "legacyAbsentVariants": {
+    "sourceRevision": "493730941329d1bca3b4f6b2f6a67ffe305c2443",
+    "searchedPattern": "task.?context|freshness|token.?budget|max.?tokens|output.?budget",
+    "result": "absent at source",
+    "files": [
+      {
+        "repositoryPath": "src/Hexalith.Parties.Mcp/McpContextForwardingHandler.cs",
+        "sha256": "18f1f79cd25ef8bd14ad2fa716acd891d2d4ccf03e12ca48197c3f45a8c51f25",
+        "matches": []
+      },
+      {
+        "repositoryPath": "src/Hexalith.Parties.Mcp/PartiesMcpHttpClientNames.cs",
+        "sha256": "7b99770442ff6849945bd6ec8a2b369aded9e430b4735b7d3b6601d40b9d9a7b",
+        "matches": []
+      },
+      {
+        "repositoryPath": "src/Hexalith.Parties.Mcp/PartiesMcpOptions.cs",
+        "sha256": "eda13e493b1d933ed43f3bb927a912c780560e3f54854d0bbd8a64e66124c770",
+        "matches": []
+      },
+      {
+        "repositoryPath": "src/Hexalith.Parties.Mcp/PartiesMcpRequestContext.cs",
+        "sha256": "3726db6c24b66f41aa6e7cd5563af46479558230aeaf3621b5a40a41cb5f0c18",
+        "matches": []
+      },
+      {
+        "repositoryPath": "src/Hexalith.Parties.Mcp/Program.cs",
+        "sha256": "75fcc0eb7f6f1f0ac3f5f4918aba066496f347e3578b9d6b701c2d96e709f8b1",
+        "matches": []
+      },
+      {
+        "repositoryPath": "src/Hexalith.Parties.Mcp/Tools/PartiesMcpToolNames.cs",
+        "sha256": "05e303add0bf842c326ff0886361c1022238c3d7873c1feb31942bb46eef147a",
+        "matches": []
+      },
+      {
+        "repositoryPath": "src/Hexalith.Parties.Mcp/Tools/PartiesMcpToolResult.cs",
+        "sha256": "9e54bb6d608f2db4b21759b07bb6f65b044ff4203b4f1e73223e6f667496fa1a",
+        "matches": []
+      },
+      {
+        "repositoryPath": "src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs",
+        "sha256": "1f464aa0c0cd2e89c3d041c5c3f78c0d817fbcb7d9c444af9badb9204002f99e",
+        "matches": []
+      }
+    ]
+  },
+  "runtimeSourceComparisons": [
+    {
+      "repositoryPath": "src/Hexalith.Parties/Domain/PartyAggregate.cs",
+      "sha256": {
+        "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021": "6539733720396dd5380b1f87c043adaee94b24fe271918bb3369c136a64aadbf",
+        "d4415715b2517927655c538e6d41e05d71d4207e": "6539733720396dd5380b1f87c043adaee94b24fe271918bb3369c136a64aadbf"
+      },
+      "identicalBetweenRevisions": true
+    },
+    {
+      "repositoryPath": "src/Hexalith.Parties/Validation/CompositeInputPolicy.cs",
+      "sha256": {
+        "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021": "bc7f407c621c3c19c8b90874da6fb22449a29379b9c926a7727d9d90d1826ec6",
+        "d4415715b2517927655c538e6d41e05d71d4207e": "bc7f407c621c3c19c8b90874da6fb22449a29379b9c926a7727d9d90d1826ec6"
+      },
+      "identicalBetweenRevisions": true
+    },
+    {
+      "repositoryPath": "src/Hexalith.Parties/Validation/CreatePartyCompositeValidator.cs",
+      "sha256": {
+        "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021": "3c9ad9a133596848fd30ead80e29e711467618419af4fc369faa3d6261a8289c",
+        "d4415715b2517927655c538e6d41e05d71d4207e": "3c9ad9a133596848fd30ead80e29e711467618419af4fc369faa3d6261a8289c"
+      },
+      "identicalBetweenRevisions": true
+    },
+    {
+      "repositoryPath": "src/Hexalith.Parties/Validation/UpdatePartyCompositeValidator.cs",
+      "sha256": {
+        "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021": "6ac443d7bd1a7175058d7200a2c0da7a436f6e34c24bae635d33489ea7cb8148",
+        "d4415715b2517927655c538e6d41e05d71d4207e": "6ac443d7bd1a7175058d7200a2c0da7a436f6e34c24bae635d33489ea7cb8148"
+      },
+      "identicalBetweenRevisions": true
+    },
+    {
+      "repositoryPath": "src/Hexalith.Parties/Queries/PartySdkQueryService.cs",
+      "sha256": {
+        "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021": "00e903d3011a8846459f4235e0ce8f4aadf7093d37d3d91502c7e1f96089dcc5",
+        "d4415715b2517927655c538e6d41e05d71d4207e": "6536c03271d9c273183e94bd0f6f03f805ca7bec7119f4ccb9bbdc42a0dd4cea"
+      },
+      "identicalBetweenRevisions": false
+    }
+  ]
+}

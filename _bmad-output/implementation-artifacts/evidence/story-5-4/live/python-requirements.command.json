@@ -1,0 +1,14 @@
+{
+  "command": [
+    "/home/runner/work/_temp/mcpcli-live-ci-4_6vrva6/venv/bin/python",
+    "-m",
+    "pip",
+    "install",
+    "--disable-pip-version-check",
+    "-r",
+    "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tools/conformance-vectors/v1/requirements.txt"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 180,
+  "exitCode": 0
+}
