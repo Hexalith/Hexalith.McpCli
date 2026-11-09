@@ -1,0 +1,68 @@
+--- _bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.1.0/parties-migration-inventory-v1.md
++++ _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md
+@@ -2 +2 @@
+-inventory_version: '1.1.0'
++inventory_version: '1.2.0'
+@@ -9 +9 @@
+-amendment_ref: '#a1-amendment-110-2026-11-08'
++amendment_ref: '#a1-amendment-120-2026-11-09'
+@@ -15,9 +15,10 @@
+-Inventory **1.1.0** amends approved inventory 1.0.0, which records the
+-requesting user's approved first-increment scope and routing decision in
+-[A1](#a1-session-approval-2026-10-16).
+-[A1 amendment 1.1.0](#a1-amendment-110-2026-11-08) rewords the enrollment
+-eligibility rule and records the C05 delete oracles and the C06 and C07
+-resolutions; it changes no row identity, target or disposition. Scope approval
+-does not prove Gateway readiness, published Contracts, authorization, behavior
+-parity, or retirement readiness. The missing declarations, Queries and execution
+-evidence remain explicit downstream gates.
++Inventory **1.2.0** corrects the C05 delete pre-read oracles in approved
++inventory 1.1.0. The 1.2.0 candidate counts only after the owner approves its
++exact bytes through [A1 amendment 1.2.0](#a1-amendment-120-2026-11-09).
++Approved inventory 1.0.0 records the requesting user's first-increment scope
++and routing decision in [A1](#a1-session-approval-2026-10-16), and
++[A1 amendment 1.1.0](#a1-amendment-110-2026-11-08) rewords enrollment
++eligibility and records C06 and C07. No row identity, target or disposition
++changes. Scope approval does not prove Gateway readiness, published Contracts,
++authorization, behavior parity, or retirement readiness. The missing
++declarations, Queries and execution evidence remain explicit downstream gates.
+@@ -89,3 +90,4 @@
+-1.0.0 bytes, preserved under `evidence/story-5-3/approval/1.0.0/`, and these
+-1.1.0 bytes. [Story 5.3 verification](evidence/story-5-3/verification.md)
+-records the checks. The amendment grants no execution, parity or retirement
++1.0.0 bytes, preserved under `evidence/story-5-3/approval/1.0.0/`, and the
++approved 1.1.0 bytes, now preserved with that receipt under
++`evidence/story-5-3/approval/1.1.0/`.
++[Story 5.3 verification](evidence/story-5-3/verification.md) records the checks. The amendment grants no execution, parity or retirement
+@@ -92,0 +95,28 @@
++
++### A1 amendment 1.2.0 (2026-11-09)
++
++This amendment corrects only C05's delete oracles. The 1.1.0 wording omitted
++failure of the legacy tool's mandatory detail pre-read and treated its
++`not_found` and erased-party outcomes as unconditional. Legacy `delete_party`
++reads before deciding whether to submit `DeactivateParty`; the generic heads
++submit the Command directly. C05 now distinguishes failed reads, successful
++inactive reads and successful active reads, including the SDK handler's absent
++or erased detail path. The aggregate guards and legacy tool body are unchanged
++since the inventory source revision; the SDK read behavior is stated separately
++for `4937309` and the cited `1308ad000c79ebc394fc395588f9af91092e8c4c` checkout.
++
++This amendment counts only after the Parties owner approves these exact bytes.
++Its [approval receipt](evidence/story-5-3/approval/amendment-1.2.0.json)
++binds the preserved 1.1.0 inventory and receipt to this 1.2.0 candidate and
++records the owner's verbatim label after approval. The prior inventory and
++receipt stay byte-for-byte unchanged under
++`evidence/story-5-3/approval/1.1.0/`. Until approval, 1.1.0 remains the latest
++approved version and its C05 oracle is known to be incomplete; the ledger item
++remains open. The `status: approved` frontmatter is the proposed final text,
++not evidence that the pending receipt has been approved.
++
++All 24 row identities, seven targets, dispositions, coverage values, source
++revision, routing, C06/C07 text and A1 limits are unchanged. No Contracts,
++vectors, live plans, dependencies, runtime behavior, parity or retirement
++authority changes. The correction requires new execution evidence for the
++selected Gateway/module cohort before any retirement claim.
+@@ -152 +182 @@
+-| C05 / L05 | Pre-read returns success without submission when already inactive; otherwise sends DeactivateParty, reports `soft-deactivation` and `gdprErasurePerformed=false`. The current aggregate returns NoOp for an already-inactive party after its lifecycle/security guards. | Preserve safe repeated soft deactivation through aggregate behavior; a projection pre-read alone cannot prove repeat safety. Generic heads do not pre-read or orchestrate; 4.9/4.10 must establish the safe path, 4.11 tests inactive/repeated cases, and 4.13 must exercise stale-projection and concurrent-repeat cases with persisted aggregate state and event evidence proving a safe no-op without duplicate deactivation effects. Naming T07 proves neither safety nor caller-key deduplication; no retry engine is needed. Never substitute EraseParty. Legacy result flags follow C06. Delete oracles (A1 amendment 1.1.0; the Parties logic is unchanged since `4937309` and is cited at gitlink `1308ad000c79ebc394fc395588f9af91092e8c4c`: `references/Hexalith.Parties/src/Hexalith.Parties/Domain/PartyAggregate.cs:867-890`, `references/Hexalith.Parties/src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs:390-423`): for a missing party, McpCli `parties.deactivate-party` returns `gateway_error` with status 404 and reason `party-not-found`, and legacy `delete_party` returns `not_found`; for a party that is erased or whose erasure is in progress (`references/Hexalith.Parties/src/Hexalith.Parties/Domain/PartyAggregate.cs:1560` rejects `ErasurePending` through `Erased` with the same `PartyErasureInProgress`), McpCli returns 422 with reason `party-erasure-in-progress`, while legacy returns 422, or idempotent success when its projection pre-read already shows the party inactive; for a processing-restricted party (`RejectIfRestricted`, `:1547`, checked after the erasure guard and before the inactive NoOp), McpCli returns 422 with reason `party-processing-restricted`, while legacy `delete_party` has no restriction check, so it submits and gets 422 when the party is active and returns idempotent success when its pre-read shows the party inactive; for an already inactive party, McpCli returns `accepted` (aggregate NoOp) and legacy returns idempotent success. The erased-case and restricted-case differences are recorded migration differences, not parity. | [A1](#a1-session-approval-2026-10-16) |
++| C05 / L05 | Pre-read returns success without submission when already inactive; otherwise sends DeactivateParty, reports `soft-deactivation` and `gdprErasurePerformed=false`. The current aggregate returns NoOp for an already-inactive party after its lifecycle/security guards. | Preserve safe repeated soft deactivation through aggregate behavior; a projection pre-read alone cannot prove repeat safety. Generic heads do not pre-read or orchestrate; 4.9/4.10 must establish the safe path, 4.11 tests inactive/repeated cases, and 4.13 must exercise stale-projection and concurrent-repeat cases with persisted aggregate state and event evidence proving a safe no-op without duplicate deactivation effects. Naming T07 proves neither safety nor caller-key deduplication; no retry engine is needed. Never substitute EraseParty. Legacy result flags follow C06. Delete oracles (A1 amendment 1.2.0): generic `parties.deactivate-party` submits directly, so the aggregate's missing-party rejection yields `gateway_error` 404 with reason `party-not-found`; `ErasurePending` through `Erased` yields 422 `party-erasure-in-progress`; processing restriction yields 422 `party-processing-restricted`; otherwise an inactive aggregate accepts a NoOp. The aggregate guards run in that order (`references/Hexalith.Parties/src/Hexalith.Parties/Domain/PartyAggregate.cs:867-890`, `:1547`, `:1560`, at `1308ad000c79ebc394fc395588f9af91092e8c4c`, unchanged since `4937309`). Legacy `delete_party` first calls `GetPartyAsync` (`references/Hexalith.Parties/src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs:406`, also unchanged since `4937309`). On SDK dispatch, absent detail returns the `actor-not-found-infrastructure` failure sentinel: `4937309:src/Hexalith.Parties/Queries/PartySdkQueryService.cs:341-343` uses `ActorNotFoundInfrastructure`; the cited current checkout's `PartySdkQueryService.cs:324-326` uses `ReadModelUnavailable` and also suppresses erased detail. At EventStore `3d4ba67db99f2f0bcd64b7d353609b555870cc9b`, `QueryRouter.cs:168-170` forwards the failed SDK result with `NotFound: false`; `SubmitQueryHandler.cs:159-162` recognizes spaced not-found messages, not that sentinel, so `:133-141` maps it to HTTP 500. `HttpPartiesQueryClient.cs:157-159` throws on that failed pre-read and `PartiesMcpTools.cs:597` maps 5xx to `downstream_failed`; no deactivate Command is submitted. If a selected query path instead returns 404 or 410, the legacy wrapper maps it to `not_found` (`PartiesMcpTools.cs:594`); this is not the absent-detail SDK oracle. If the pre-read succeeds and shows an inactive party, legacy returns idempotent success without submission, even if the aggregate is now missing, erased or restricted. If it succeeds and shows an active party, legacy submits the Command: a subsequent missing-party 404 maps to `not_found`, and erasure or restriction 422 maps to `validation_failed` (`PartiesMcpTools.cs:591-597`). A stale successful pre-read can therefore choose a different branch from a current read. The pinned `4937309` SDK does not have the current checkout's `IsErased: false` read guard; record the deployed SDK/Gateway dispatch and pre-read state when selecting the erased-case oracle. These differences are recorded migration differences, not parity; no upstream behavior is changed here. | [A1](#a1-session-approval-2026-10-16) |

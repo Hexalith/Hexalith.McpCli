@@ -1,0 +1,72 @@
+{
+  "checked_at": "2026-11-09T08:18:51.265589+00:00",
+  "scope": "Story 5.3 review pass 2 documentation and approval-checker patches; no live execution",
+  "synthetic_approved_branch": "passed in memory during pre-approval validation",
+  "negative_label_cases": [
+    {
+      "case": "1.1.0 exact_approval_instruction",
+      "result": "rejected"
+    },
+    {
+      "case": "1.1.0 exact_authority_confirmation",
+      "result": "rejected"
+    },
+    {
+      "case": "1.1.0 amendment_instruction",
+      "result": "rejected"
+    },
+    {
+      "case": "1.1.0 approval_decision",
+      "result": "rejected"
+    },
+    {
+      "case": "1.1.0 all_labels",
+      "result": "rejected"
+    },
+    {
+      "case": "1.2.0 synthetic approved exact_approval_instruction",
+      "result": "rejected"
+    },
+    {
+      "case": "1.2.0 synthetic approved approval_decision",
+      "result": "rejected"
+    }
+  ],
+  "guard_removal": "bad receipt admitted with exact-label check removed; negative probe protects the check",
+  "profile_recovery": [
+    {
+      "operation": "rename",
+      "before_exit": 2,
+      "after_exit": 0,
+      "stderr": "",
+      "profile_permissions": "0600",
+      "read_preserved_bytes": true
+    },
+    {
+      "operation": "remove",
+      "before_exit": 2,
+      "after_exit": 0,
+      "stderr": "",
+      "profile_permissions": "0600",
+      "read_preserved_bytes": true
+    }
+  ],
+  "inventory_1_2_0_sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28",
+  "prior_inventory_1_1_0_sha256": "8fc4078842d141151c521f0288f1eb7f9b984505c7b4a1458fa40de8dba4c51e",
+  "prior_receipt_sha256": "e377fee92e8016a104d9522cccc9135955eff7936e8a0df27e4ff3f7f3f2f765",
+  "approval_state": "approved",
+  "pre_approval_static_check": "passed in pending mode",
+  "post_approval_static_check": "passed in approved mode with the owner-approved unchanged inventory hash",
+  "post_approval_checked_at": "2026-11-09T08:29:17.007439+00:00",
+  "post_approval_negative_label_cases": [
+    {
+      "case": "actual approved 1.2.0 exact_approval_instruction",
+      "result": "rejected"
+    },
+    {
+      "case": "actual approved 1.2.0 approval_decision",
+      "result": "rejected"
+    }
+  ],
+  "owner_response_verbatim": "approve"
+}

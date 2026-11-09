@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "decision": "approved",
+  "approved_on": "2026-11-09",
+  "approver": "Jérôme Piquot (GitHub jpiquot)",
+  "approval_authority": "requesting-user-owning-maintainer",
+  "exact_approval_instruction": "Approve Parties 1.2.0 as Parties owner",
+  "exact_authority_confirmation": "Approve Parties 1.2.0 as Parties owner",
+  "authority_scope": [
+    "Parties owning maintainer"
+  ],
+  "required_approval_instruction": "Approve Parties 1.2.0 as Parties owner",
+  "required_authority_scope": [
+    "Parties owning maintainer"
+  ],
+  "reviewed_candidate_version": "1.2.0",
+  "mcpcli_revision": "1ff2052653247a5fcca6e322c6da6ea1723a2eb1",
+  "source_revisions": {
+    "references/Hexalith.EventStore": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+    "references/Hexalith.Parties": "1308ad000c79ebc394fc395588f9af91092e8c4c"
+  },
+  "prior_approval": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.1.0/approval.json",
+    "sha256": "e377fee92e8016a104d9522cccc9135955eff7936e8a0df27e4ff3f7f3f2f765",
+    "inventory_version": "1.1.0"
+  },
+  "inventories": [
+    {
+      "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "approved_sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28",
+      "proposed_sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28",
+      "row_ids": [
+        "L01",
+        "L02",
+        "L03",
+        "L04",
+        "L05",
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07",
+        "C08",
+        "N01",
+        "N02",
+        "N03",
+        "N04"
+      ],
+      "inventory_version": "1.2.0",
+      "preserved_version": "1.1.0",
+      "preserved_path": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.1.0/parties-migration-inventory-v1.md",
+      "preserved_sha256": "8fc4078842d141151c521f0288f1eb7f9b984505c7b4a1458fa40de8dba4c51e"
+    }
+  ],
+  "limits": [
+    "Corrects only the C05 legacy delete pre-read oracles and records the selected SDK/Gateway dispatch conditions.",
+    "Preserves approved inventory 1.1.0 and its receipt byte-for-byte; changes no row identity, target, disposition, coverage value, routing or C06/C07 text.",
+    "No Parties Contracts upgrade, vector, live plan, artifact approval, dependency-policy or runtime change.",
+    "No execution, parity, publication or retirement authority."
+  ],
+  "identity_and_role_confirmation": {
+    "confirmed_on": "2026-11-09",
+    "approver": "Jérôme Piquot (GitHub jpiquot)",
+    "roles": [
+      "Parties owning maintainer"
+    ],
+    "identity_source": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.1.0/approval.json",
+    "source_spec": "_bmad-output/implementation-artifacts/spec-5-3-enroll-replacement-contracts-and-profiles.md",
+    "record": "The identity is retained from the prior owner-approved receipt. The current user replied \"approve\" to the immediately preceding explicit Parties-owner approval request for inventory 1.2.0 and its displayed hash."
+  },
+  "inventory_versions": {
+    "parties": "1.2.0"
+  },
+  "reviewed_candidate_state": {
+    "base_revision": "1ff2052653247a5fcca6e322c6da6ea1723a2eb1",
+    "base_inventory_version": "1.1.0",
+    "reviewed_state": "owner-approved exact-byte 1.2.0 working tree over mcpcli_revision; inventory and approval receipt have not yet been committed",
+    "first_committed_revision": null,
+    "first_committed_location": null
+  },
+  "amendments": [
+    {
+      "inventory": "parties",
+      "from_version": "1.1.0",
+      "to_version": "1.2.0",
+      "from_sha256": "8fc4078842d141151c521f0288f1eb7f9b984505c7b4a1458fa40de8dba4c51e",
+      "to_sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28",
+      "to_path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "to_first_committed_revision": null,
+      "approved_on": "2026-11-09",
+      "approver": "Jérôme Piquot (GitHub jpiquot)",
+      "approval_decision": "Approve Parties 1.2.0 as Parties owner",
+      "approval_basis": "After the 1.1.0 to 1.2.0 diff and exact SHA-256 were presented with the explicit action label \"Approve Parties 1.2.0 as Parties owner\", the user replied \"approve\". The accepted action label and verbatim response are recorded separately.",
+      "exact_approval_instruction": "Approve Parties 1.2.0 as Parties owner",
+      "source_spec": "_bmad-output/implementation-artifacts/spec-5-3-enroll-replacement-contracts-and-profiles.md",
+      "changed_rows": [
+        "C05"
+      ],
+      "added_rows": [],
+      "narrative_changes": [
+        "inventory version 1.2.0 and amendment frontmatter",
+        "introduction pointer to A1 amendment 1.2.0",
+        "preserved 1.1.0 inventory and receipt pointer",
+        "A1 amendment 1.2.0 subsection"
+      ],
+      "limits": "All other rows, source revision, row identities, targets, dispositions, coverage values, routing and A1 limits are unchanged."
+    }
+  ],
+  "owner_response_verbatim": "approve",
+  "approval_label_source": "The exact action label presented in the preceding approval request and accepted by the user in context; the raw user response is recorded separately, not represented as that full label.",
+  "approval_request": {
+    "label": "Approve Parties 1.2.0 as Parties owner",
+    "presented_sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28",
+    "presented_diff": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/amendment-1.2.0.diff",
+    "response_verbatim": "approve",
+    "record": "Current session: the user replied approve directly to the request for approval of these exact bytes as Parties owner."
+  },
+  "first_commit_note": "Inventory 1.2.0 and this approved receipt are prepared together; first_committed_revision and to_first_committed_revision remain null until a later receipt update records their first commit."
+}

@@ -2,25 +2,34 @@
 
 This evidence belongs to
 [spec 5.3](../../spec-5-3-enroll-replacement-contracts-and-profiles.md). It
-records the Parties inventory amendment 1.1.0, the C06 and C07 resolutions, the
-G6 profile rules and the gates run for them. It grants no execution, parity,
+records approved Parties inventory amendments 1.1.0 and 1.2.0, including the
+C05 pre-read correction, the C06 and C07 resolutions, the G6 profile rules and their
+verification. It grants no execution, parity,
 publication or retirement authority.
 
 ## Approval state
 
-**Approved (2026-11-09).** After the Story 5.3 review, the final 1.1.0 word
-diff and SHA-256 below were presented, and the owner selected "Approve Parties
-1.1.0 as Parties owner" (Parties owning maintainer, single-maintainer model).
-The [approval receipt](approval/approval.json) has `decision: approved`, binds
-both hashes and records that label verbatim with the approver's identity and
-authority. A later byte change to the inventory requires a new versioned
-amendment and a new approval.
+**1.1.0 approved (2026-11-09).** The owner selected "Approve Parties 1.1.0
+as Parties owner" after seeing its exact word diff and hash. The original
+[receipt](approval/approval.json) and the preserved
+[1.1.0 inventory and receipt](approval/1.1.0/) retain those exact approved bytes.
+
+**1.2.0 approved (2026-11-09).** The user replied "approve" directly to the
+request to approve the displayed 1.2.0 diff and SHA-256 as Parties owner. The
+[approval receipt](approval/amendment-1.2.0.json) records the accepted action
+label "Approve Parties 1.2.0 as Parties owner", the separate verbatim response
+"approve", the existing approver identity, the Parties owning-maintainer
+role, both inventory hashes and the prior receipt hash. The approved inventory
+bytes are unchanged from the presented candidate. Inventory 1.2.0 is now the
+latest approved version; the C05 ledger item and all three review findings are
+closed. A subsequent byte change requires another exact-byte approval.
 
 ## Pins
 
 | Input | Revision |
 | --- | --- |
-| McpCli baseline | `4bc4be5deca889d1594b0d367e313592c9421fe8` (uncommitted working tree on top) |
+| Original implementation baseline | `4bc4be5deca889d1594b0d367e313592c9421fe8` |
+| Review pass 2 baseline | `1ff2052653247a5fcca6e322c6da6ea1723a2eb1` (uncommitted documentation patches on top) |
 | `references/Hexalith.EventStore` gitlink | `3d4ba67db99f2f0bcd64b7d353609b555870cc9b` |
 | `references/Hexalith.Parties` gitlink | `1308ad000c79ebc394fc395588f9af91092e8c4c` |
 | Parties inventory source revision | `493730941329d1bca3b4f6b2f6a67ffe305c2443` (unchanged) |
@@ -40,7 +49,8 @@ are unchanged.
 | Version | Path | SHA-256 |
 | --- | --- | --- |
 | 1.0.0 (approved, A1) | `approval/1.0.0/parties-migration-inventory-v1.md` | `c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f` |
-| 1.1.0 (approved, Story 5.3) | `../../parties-migration-inventory-v1.md` | `8fc4078842d141151c521f0288f1eb7f9b984505c7b4a1458fa40de8dba4c51e` |
+| 1.1.0 (approved, Story 5.3) | `approval/1.1.0/parties-migration-inventory-v1.md` | `8fc4078842d141151c521f0288f1eb7f9b984505c7b4a1458fa40de8dba4c51e` |
+| 1.2.0 (approved, review pass 2) | `../../parties-migration-inventory-v1.md` | `2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28` |
 
 The preserved 1.0.0 bytes equal the inventory at the pinned baseline
 `4bc4be5deca889d1594b0d367e313592c9421fe8`, where it was last changed in
@@ -48,9 +58,13 @@ The preserved 1.0.0 bytes equal the inventory at the pinned baseline
 
     git diff --no-index --word-diff=plain \
       _bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.0.0/parties-migration-inventory-v1.md \
-      _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md
+      _bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.1.0/parties-migration-inventory-v1.md
 
-Changed rows: C05, C06 and C07. Narrative changes: the version and amendment
+For the 1.2.0 correction, compare the preserved 1.1.0 file to the main
+inventory. Only C05's acceptance cell and the version/amendment narrative
+change; C06, C07, every other row, all targets and all dispositions are unchanged.
+
+Changed rows in the historical 1.0.0 to 1.1.0 amendment: C05, C06 and C07. Narrative changes: the version and amendment
 frontmatter, the introduction pointer, the coverage-rule eligibility wording,
 the new **A1 amendment 1.1.0** subsection, and the scope of the Story 4.1
 checker with the pointer to this file. The source revision, the 24 row
@@ -66,14 +80,16 @@ the approved 1.0.0 bytes at its pinned Parties revision and fails on 1.1.0.
 
 ## Reproducible static check
 
-The block below checks the amendment without network access, restores,
-builds or reference changes. It asserts that the preserved 1.0.0 bytes equal
-`git show 4bc4be5deca889d1594b0d367e313592c9421fe8:` of the inventory, prints
-both SHA-256 values, checks the version frontmatter of both versions, requires
-the same 24 row IDs in both, and requires that only the C05, C06 and C07 table
-rows differ, each only by text appended to its acceptance cell. It also checks
-that the receipt binds both hashes, the row IDs and the changed rows, and, once
-approved, the approved hash and the owner's label.
+The block below checks both amendments without network access, restores,
+builds or reference changes. It verifies the preserved 1.0.0 bytes against
+`4bc4be5` and the preserved 1.1.0 bytes against `1ff2052`, retains the 24 row
+IDs, and checks that 1.0.0 to 1.1.0 appends only C05/C06/C07 acceptance text.
+It then checks that 1.1.0 to 1.2.0 changes only C05's acceptance cell, verifies
+all three inventory hashes and the prior receipt hash, and checks the new
+receipt in pending or approved mode. Approved mode requires the exact owner
+label, agreement across the instruction/decision/authority-confirmation fields,
+the same signatory and the Parties owning-maintainer authority. Pending mode
+asserts that no approval has been recorded.
 
 Extract and run it from the repository root. It writes to a fresh task-owned
 `mktemp` file, so concurrent sessions cannot run each other's extracted script:
@@ -103,9 +119,20 @@ A1_CELL = ' | [A1](#a1-session-approval-2026-10-16) |'
 ROW_IDS = ([f'L{i:02d}' for i in range(1, 6)] + [f'T{i:02d}' for i in range(1, 8)]
            + [f'C{i:02d}' for i in range(1, 9)] + [f'N{i:02d}' for i in range(1, 5)])
 
+def check_approval_labels(receipt, amendment, expected_label):
+    assert (receipt['exact_approval_instruction'] == amendment['exact_approval_instruction']
+            == amendment['approval_decision'] == receipt['exact_authority_confirmation'] == expected_label), 'approval labels must match the exact owner instruction'
+    assert receipt['approver'] and receipt['approver'] == amendment['approver'], 'approval signatories differ'
+    assert receipt['approval_authority'] == 'requesting-user-owning-maintainer'
+    assert receipt['authority_scope'] == ['Parties owning maintainer']
+
+
 committed = subprocess.run(['git', 'show', f'{BASE}:{INVENTORY}'], check=True, capture_output=True).stdout
 preserved = (EVIDENCE / '1.0.0/parties-migration-inventory-v1.md').read_bytes()
-current = Path(INVENTORY).read_bytes()
+current = (EVIDENCE / '1.1.0/parties-migration-inventory-v1.md').read_bytes()
+assert current == subprocess.run(['git', 'show', f'1ff2052653247a5fcca6e322c6da6ea1723a2eb1:{INVENTORY}'], check=True, capture_output=True).stdout
+assert (EVIDENCE / '1.1.0/approval.json').read_bytes() == (EVIDENCE / 'approval.json').read_bytes()
+assert (EVIDENCE / '1.1.0/approval.json').read_bytes() == subprocess.run(['git', 'show', f'1ff2052653247a5fcca6e322c6da6ea1723a2eb1:{EVIDENCE}/approval.json'], check=True, capture_output=True).stdout
 assert preserved == committed, 'the preserved 1.0.0 bytes differ from the pinned baseline inventory'
 old_sha = hashlib.sha256(preserved).hexdigest()
 new_sha = hashlib.sha256(current).hexdigest()
@@ -149,35 +176,88 @@ assert amendment['to_sha256'] == new_sha, 'the receipt does not bind the current
 assert inventory['row_ids'] == ROW_IDS and amendment['changed_rows'] == changed and amendment['added_rows'] == []
 if receipt['decision'] == 'approved':
     assert inventory['approved_sha256'] == new_sha
-    assert receipt['exact_approval_instruction'] and amendment['exact_approval_instruction'] and receipt['approver']
+    check_approval_labels(receipt, amendment, 'Approve Parties 1.1.0 as Parties owner')
 else:
     assert inventory['approved_sha256'] is None and receipt['exact_approval_instruction'] is None
 print(f"Static check passed: 24 rows, changed {', '.join(changed)}; receipt decision {receipt['decision']}.")
+
+candidate = Path(INVENTORY).read_bytes()
+candidate_sha = hashlib.sha256(candidate).hexdigest()
+assert version(candidate.decode()) == '1.2.0'
+candidate_rows = rows(candidate.decode())
+assert sorted(candidate_rows) == sorted(ROW_IDS)
+assert [row for row in ROW_IDS if new_rows[row] != candidate_rows[row]] == ['C05']
+before_cells, after_cells = new_rows['C05'].split('|'), candidate_rows['C05'].split('|')
+assert len(before_cells) == len(after_cells)
+assert before_cells[:3] == after_cells[:3] and before_cells[4:] == after_cells[4:], 'C05 changes outside its acceptance cell'
+for field in ('source_repository', 'source_revision', 'source_spec', 'maintainer_approval_ref', 'amendment_source_spec'):
+    pattern = rf'^{field}: (.+)$'
+    assert re.search(pattern, new_text, re.M).group(1) == re.search(pattern, candidate.decode(), re.M).group(1), field
+candidate_receipt = json.loads((EVIDENCE / 'amendment-1.2.0.json').read_text())
+candidate_amendment = candidate_receipt['amendments'][0]
+candidate_inventory = candidate_receipt['inventories'][0]
+assert candidate_receipt['decision'] in ('pending', 'approved')
+assert (candidate_amendment['from_version'], candidate_amendment['to_version']) == ('1.1.0', '1.2.0')
+assert candidate_amendment['from_sha256'] == candidate_inventory['preserved_sha256'] == new_sha
+assert candidate_amendment['to_sha256'] == candidate_inventory['proposed_sha256'] == candidate_sha
+assert candidate_inventory['row_ids'] == ROW_IDS and candidate_amendment['changed_rows'] == ['C05'] and candidate_amendment['added_rows'] == []
+assert candidate_receipt['prior_approval']['sha256'] == hashlib.sha256((EVIDENCE / '1.1.0/approval.json').read_bytes()).hexdigest()
+if candidate_receipt['decision'] == 'approved':
+    assert candidate_inventory['approved_sha256'] == candidate_sha
+    check_approval_labels(candidate_receipt, candidate_amendment, 'Approve Parties 1.2.0 as Parties owner')
+else:
+    assert candidate_inventory['approved_sha256'] is None
+    assert candidate_receipt['exact_approval_instruction'] is None and candidate_receipt['exact_authority_confirmation'] is None
+    assert candidate_receipt['approver'] is None and candidate_receipt['approved_on'] is None
+    assert candidate_receipt['approval_authority'] is None and candidate_receipt['authority_scope'] == []
+    assert candidate_amendment['exact_approval_instruction'] is None and candidate_amendment['approval_decision'] is None
+    assert candidate_amendment['approver'] is None and candidate_amendment['approved_on'] is None
+print(f'1.2.0 sha256 {candidate_sha}')
+print(f"1.1.0 -> 1.2.0 static check passed: 24 rows, changed C05; receipt decision {candidate_receipt['decision']}.")
+
 PY
 ```
 
 ## C05 delete oracles
 
-The Parties delete logic is unchanged since `4937309`; the deactivate handler
-body at `4937309:src/Hexalith.Parties/Domain/PartyAggregate.cs:851-874` equals
-`references/Hexalith.Parties/src/Hexalith.Parties/Domain/PartyAggregate.cs:867-890`,
-and `src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs` has no diff between the
-two revisions (`:390-423`). Inventory C05 now records:
+The aggregate's deactivate guards and legacy tool body are unchanged since
+`4937309`; the SDK detail read must be evaluated separately. Approved 1.1.0
+omitted a pre-read failure and overstated the legacy missing/erased oracles.
+The owner-approved 1.2.0 C05 correction records the following branches and
+supersedes the incomplete 1.1.0 oracle.
 
-| Case | McpCli `parties.deactivate-party` | Legacy `delete_party` |
+| State / selected path | McpCli `parties.deactivate-party` | Legacy `delete_party` |
 | --- | --- | --- |
-| Missing | `gateway_error` 404, reason `party-not-found` | `not_found` |
-| Erased or erasure in progress | 422, reason `party-erasure-in-progress` | 422, or idempotent success when the pre-read shows the party inactive |
-| Processing restricted | 422, reason `party-processing-restricted` | No restriction check: it submits and gets 422 when the party is active, or returns idempotent success when the pre-read shows the party inactive |
-| Inactive | `accepted` (aggregate NoOp) | Idempotent success |
+| Missing aggregate | Direct Command rejection: `gateway_error` 404, reason `party-not-found` | Absent SDK detail causes pre-read HTTP 500 / `downstream_failed`, with no Command submission. `not_found` applies if the selected query path returns 404/410, or an active stale read permits submission and the Command then rejects with 404. |
+| Erased or erasure in progress | Direct Command rejection: 422, reason `party-erasure-in-progress` | The cited current SDK suppresses erased detail, giving pre-read 500 / `downstream_failed`. A successful inactive read gives idempotent success without submission; a successful active read permits a Command whose 422 maps to `validation_failed`. The pinned `4937309` SDK lacks the current `IsErased: false` guard. |
+| Processing restricted | Direct Command rejection: 422, reason `party-processing-restricted` | Successful inactive read: idempotent success without submission. Successful active read: submit, then Command 422 / `validation_failed`. Failed SDK pre-read: `downstream_failed`, no submission. |
+| Inactive, after aggregate guards | `accepted` (aggregate NoOp) | Successful inactive read: idempotent success without submission. A missing/unavailable read model can still fail first with `downstream_failed`. |
 
-`RejectIfErasureInProgress`
-(`references/Hexalith.Parties/src/Hexalith.Parties/Domain/PartyAggregate.cs:1560`)
-rejects every status from `ErasurePending` through `Erased` with the same
-`PartyErasureInProgress`, and `RejectIfRestricted` (`:1547`) runs after it and
-before the inactive NoOp; both helpers are unchanged since `4937309`. The
-erased-case and restricted-case differences are recorded migration differences,
-not parity.
+The complete pre-read trace at the recorded gitlinks is:
+
+- `references/Hexalith.Parties/src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs:406`
+  calls `GetPartyAsync` before checking `IsActive` or submitting a Command.
+- At pinned Parties `4937309`, `PartySdkQueryService.cs:341-343` returns
+  `ActorNotFoundInfrastructure` when detail is absent. At the cited
+  `1308ad000c79ebc394fc395588f9af91092e8c4c` checkout,
+  `references/Hexalith.Parties/src/Hexalith.Parties/Queries/PartySdkQueryService.cs:324-326`
+  returns `ReadModelUnavailable` for absent or erased detail. Both names carry
+  the legacy wire sentinel `actor-not-found-infrastructure`.
+- `references/Hexalith.EventStore/src/Hexalith.EventStore.Server/Queries/QueryRouter.cs:168-170`
+  forwards a failed SDK result with `NotFound: false`.
+  `references/Hexalith.EventStore/src/Hexalith.EventStore.Server/Pipeline/SubmitQueryHandler.cs:159-162`
+  matches spaced not-found messages, so that hyphenated sentinel falls through
+  to HTTP 500 at `:133-141`.
+- `references/Hexalith.Parties/src/Hexalith.Parties.Client/HttpPartiesQueryClient.cs:157-159`
+  throws on the failed pre-read; `PartiesMcpTools.cs:591-597` maps 5xx to
+  `downstream_failed`, 404/410 to `not_found` and 422 to `validation_failed`.
+
+The aggregate handler at `4937309:src/Hexalith.Parties/Domain/PartyAggregate.cs:851-874`
+equals the current `PartyAggregate.cs:867-890`. `RejectIfErasureInProgress`
+(`:1560`) checks `ErasurePending` through `Erased`; `RejectIfRestricted`
+(`:1547`) runs before the inactive NoOp. These source oracles require the
+selected deployed SDK/Gateway dispatch and pre-read state to be recorded in
+execution evidence. No live comparison or upstream behavior change is claimed.
 
 ## C06 error privacy
 
@@ -315,10 +395,11 @@ open (`_bmad-output/implementation-artifacts/sprint-status.yaml:180`,
 For G6's output-file treatment, no admin `--output` semantics migrate, and
 McpCli's own output contract stands. The README migration table records this.
 
-## Gates run (final, 2026-11-09)
+## Implementation gates run for 1.1.0 (2026-11-09)
 
-The parent reran the full verification on the final tree after the review
-fixes, from one fresh restore and one Release build:
+The original implementation parent reran the full verification after review
+pass 1, from one fresh restore and one Release build. These are historical
+1.1.0 results; review pass 2 documentation validation is recorded below:
 
 | Command | Result |
 | --- | --- |
@@ -341,3 +422,34 @@ fixes, from one fresh restore and one Release build:
 pins that the logged request text drops user information, query and fragment.
 No live topology, Aspire lane or Windows suite was run; live acceptance,
 authorization and domain effects remain Story 5.4 and later gates.
+
+
+## Review pass 2 patch validation (2026-11-09)
+
+The [validation receipt](review-pass-2-validation.json) records these checks:
+
+- Both amendments pass the extracted static check in their actual states:
+  historical 1.1.0 approved, and 1.2.0 first pending then approved after the
+  owner response. All 24 row identities remain;
+  only C05's acceptance cell changes in 1.2.0.
+- Seven contradictory-label probes are rejected, including inconsistent
+  instruction/decision fields and matching but negative labels. A synthetic
+  approved 1.2.0 receipt passed in memory during pre-approval validation;
+  the actual approved receipt passes after the owner response, and two further
+  negative probes reject altered instruction/decision labels on that receipt.
+  Removing the exact-label check admits the bad receipt, proving the negative
+  probe protects this correction.
+- Built Release CLI probes confirm the README recovery for both an active
+  invalid profile rename and removal. Each starts with the complete expected
+  `configuration_invalid` document and exit 2, then `config profile list`
+  succeeds with exit 0 and empty stderr. The private file stays 0600 and the
+  read leaves its corrected bytes unchanged.
+- The 1.1.0 inventory and receipt are preserved byte-for-byte from `1ff2052`.
+  Their hashes are bound by `approval/amendment-1.2.0.json`. The original
+  `approval/approval.json` and the 1.0.0 archive remain unchanged.
+- `git diff --check` passes. No production source or dependency changed, so
+  the review's passing Release build and focused tests were not repeated.
+
+[Exact approved 1.1.0 to 1.2.0 diff](approval/amendment-1.2.0.diff). The owner
+approved the unchanged inventory hash in the amendment table above. C05 and
+Story 5.3 are complete; live parity and retirement gates remain separate.

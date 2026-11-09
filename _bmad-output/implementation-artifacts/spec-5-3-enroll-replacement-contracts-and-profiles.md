@@ -105,6 +105,45 @@ context:
 - Given approved inventory 1.0.0, when 1.1.0 is recorded, then the preserved bytes hash to the committed 1.0.0 and the receipt binds both hashes and the owner's verbatim label.
 - Given a migrating operator, when they follow README, then each claim matches the built CLI.
 
+### Review Findings
+
+Pass 2, 2026-11-09. Full review of `4bc4be5..1ff2052`; independent blind-hunter (BH), edge-case-hunter (EC), verification-gap (VG), and acceptance-auditor (AA) passes completed. VG found no verification gaps. Result: 0 decisions, 3 patches, 0 deferrals, 7 rejected candidates. No product changes applied.
+
+- [x] [Review][Patch] R2-P1 (medium): Record the legacy delete pre-read failure in C05. [`_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:182`, `_bmad-output/implementation-artifacts/evidence/story-5-3/verification.md:221`] The new missing-party `not_found` oracle omits the SDK pre-read path: `PartiesMcpTools.cs:406` reads first; absent detail returns `ReadModelUnavailable` at `references/Hexalith.Parties/src/Hexalith.Parties/Queries/PartySdkQueryService.cs:324-326`. Its `actor-not-found-infrastructure` wire value fails the space-based not-found checks at `references/Hexalith.EventStore/src/Hexalith.EventStore.Server/Pipeline/SubmitQueryHandler.cs:159-162`, falls through to 500 at `:133-141`, and becomes legacy `downstream_failed` at `references/Hexalith.Parties/src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs:597`, before a deactivate command runs. The pinned Parties `4937309` service also returns `ActorNotFoundInfrastructure` for absent detail; the cited current service additionally suppresses erased detail. Record the dispatch/read-model conditions for each oracle, correct the verification narrative and ledger resolution, and prepare a new versioned owner-approved amendment while preserving approved 1.1.0 bytes and receipt.
+- [x] [Review][Patch] R2-P2 (low): Complete invalid-profile recovery. [`README.md:432`] Renaming or deleting an active `dev\n` profile key leaves `activeProfile` pointing to the old key. The documented next `config profile list` still exits 2 with `The active mcpcli profile does not exist.` Tell operators to update or clear `activeProfile` as well. Parent reproduced both the failure and successful recovery on the built CLI.
+- [x] [Review][Patch] R2-P3 (low): Validate the exact owner approval label in the static check. [`_bmad-output/implementation-artifacts/evidence/story-5-3/verification.md:122`] Truthiness accepts contradictory nonempty top-level and amendment approval instructions. Replace it with equality to the recorded owner label and consistency with the corresponding decision/authority-confirmation fields. Parent ran the extracted checker with an in-memory receipt containing `Reject amendment` and `Not approved`; it still reported approved-mode success. The committed receipt itself has the correct labels and hashes.
+
+Patch application (2026-11-09, user selected "1"): all three findings are fixed. After the 1.2.0 diff and SHA-256 `2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28` were presented with the explicit Parties-owner action label, the user replied "approve". `evidence/story-5-3/approval/amendment-1.2.0.json` records that accepted label and the separate verbatim reply, preserving the approved inventory bytes and the exact prior 1.1.0 inventory/receipt. The corrected verification and C05 ledger entry are resolved. See `evidence/story-5-3/approval/amendment-1.2.0.diff` and `evidence/story-5-3/review-pass-2-validation.json`. The approved-mode static check and seven negative-label probes pass; both documented recovery paths pass on the built CLI. Story/sprint status is `done`.
+
+Validation in this review: fresh solution restore and Release build with 0 warnings/errors; 281 CLI/MCP tests passed; 124 Core settings/profile tests passed with 3 Windows-only skips; 25 live-runner unit tests passed; approved inventory static/hash check passed; `git diff --check` passed. No live topology or Windows execution. An additional malformed non-2xx Problem Details probe returned the fixed 422 reason phrase with no marker on either CLI channel.
+
+Individual verdicts were assigned before grouping. BH1 and AA1 share R2-P2; BH6 and EC1 share R2-P3.
+
+| ID | Source | Verdict | Evidence and disposition |
+|---|---|---|---|
+| BH1 | blind-hunter | low | Key-only repair leaves a dangling active selection; parent reproduced exit 2, then exit 0 after repairing `activeProfile`. Patch R2-P2. |
+| BH2 | blind-hunter | medium | C05 omits the SDK pre-read 500 / `downstream_failed` chain traced above; missing detail also fails in pinned Parties `4937309`. Patch R2-P1. |
+| BH3 | blind-hunter | false | A credential/query/fragment-bearing request URI cannot reach these loggers through the shipped host: `SettingsResolver.cs:69-74` rejects it before host creation, and Gateway submission uses fixed command/query paths. The formatter has its direct redaction test; no reachable leak from this proposed mutation was shown. Reject. |
+| BH4 | blind-hunter | low | `ScriptedGateway.cs:96` discards connection tasks, so a throwing response callback can fault unobserved. Current callbacks complete in the passing cases, and shutdown cancels network reads; adding task tracking and callback-failure plumbing for failed-test teardown is disproportionate. Reject. |
+| BH5 | blind-hunter | maybe-false | `BothHeads.cs:113-124` skips its explicit task await on client failure, but `await using` still disposes the MCP server and transports. A failed-initialization reproduction proving work survives disposal is needed; any demonstrated impact here would be confined to failed-test cleanup. Reject as unverified and low impact. |
+| BH6 | blind-hunter | low | The static check accepts conflicting nonempty approval labels; parent confirmed this with an in-memory receipt. Patch R2-P3. |
+| BH7 | blind-hunter | low | The static checker does not assert receipt path fields, but all committed paths point to the files it hashes. Extra guards for a manually corrupted receipt are outside this direct correction. Reject. |
+| BH8 | blind-hunter | low | The new matrix lacks a malformed non-2xx JSON case. Parent exercised that existing client-parser path: 422, fixed reason phrase, no privacy marker. Adding another guard case without an observed failure is unnecessary. Reject. |
+| BH9 | blind-hunter | low | D/N GUID positive cases are absent from this new matrix, but current String routing accepts them and the required support-safe positive case is covered. The proposed broad future GUID rejection is hypothetical; no current reachability defect was shown. Reject. |
+| BH10 | blind-hunter | low | Real-process hostile-state cases do not inject `Parties__Mcp__*`, but current operator resolution reads the nine explicit names and has no binding to that host section. Another injection case adds coverage without exposing a current failure. Reject. |
+| EC1 | edge-case-hunter | low | Same contradictory-label acceptance as BH6; independently reproduced by parent. Patch R2-P3. |
+| AA1 | acceptance-auditor | low | README's key-only recovery does not satisfy the built-CLI claim when the invalid key is active. Patch R2-P2. |
+
+**Rejected**
+
+- BH3 — false: invalid sensitive URI components are rejected before the production logger can receive them.
+- BH4 — low: additional connection-task bookkeeping addresses unusual failed-test teardown, with no failure in current cases.
+- BH5 — maybe-false, low if true: surviving work after asynchronous server disposal was not demonstrated; requires a faulted-initialization probe.
+- BH7 — low: committed receipt paths are correct; extra corruption guards add work beyond a direct correction.
+- BH8 — low: the additional malformed-error probe was safe; another test adds no demonstrated regression protection for this change.
+- BH9 — low: supported String-kind routing has no observed D/N GUID rejection; the suggested future mutation is hypothetical.
+- BH10 — low: no production setting binds the Parties host section; another hostile-variable test guards no demonstrated failure.
+
 ## Implementation Notes
 
 - 2026-11-08 (build):
