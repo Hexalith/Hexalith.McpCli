@@ -274,7 +274,7 @@ else:
         raise RuntimeError('Smoke writer bootstrap requires its selected evidence directory.')
     (root / ('runner-' + independent + '-output.json')).write_text(json.dumps(str(output)))
     path = owned(independent)
-    if mode == 'cancel-smoke-after-vector-failure':
+    if mode == 'cancel-smoke-after-vector-failure' and independent == 'smoke':
         def terminate(*_):
             print('independent smoke stopped', flush=True)
             (root / 'cancel-child-stopped').touch()
@@ -282,22 +282,24 @@ else:
         signal.signal(signal.SIGTERM, terminate)
         (root / 'cancel-child.json').write_text(json.dumps({'pid': os.getpid(), 'pgid': os.getpgrp()}))
         while True: time.sleep(1)
-    result = 'Skip' if mode == 'skipped-smoke' else 'Pass'
+    result = 'Skip' if mode == 'skipped-smoke' and independent == 'smoke' else 'Pass'
     xml = '<assemblies><assembly total="1" passed="1" failed="0" skipped="0" errors="0"><collection><test result="' + result + '" type="Hexalith.McpCli.Integration.Tests.GatewaySmokeTests" method="AuthenticatedQueryReturnsSuccessfulDocument" /></collection></assembly></assemblies>'
     if independent == 'boundary':
         xml = xml.replace('GatewaySmokeTests', 'SharedHeadBoundaryTests').replace('AuthenticatedQueryReturnsSuccessfulDocument', 'SharedHeadsPreserveAuthorizationAndDeactivationSafety')
         if mode == 'wrong-boundary-case': xml = xml.replace('SharedHeadsPreserveAuthorizationAndDeactivationSafety', 'OtherTest')
         if mode == 'skipped-boundary': xml = xml.replace('result="Pass"', 'result="Skip"')
     if mode == 'wrong-smoke-case': xml = xml.replace('AuthenticatedQueryReturnsSuccessfulDocument', 'OtherTest')
-    if mode == 'skipped-smoke-count': xml = xml.replace('skipped="0"', 'skipped="1"')
-    if mode == 'empty-smoke': xml = '<assemblies><assembly total="0" passed="0" failed="0" skipped="0" errors="0" /></assemblies>'
-    if mode == 'smoke-assembly-error': xml = xml.replace('errors="0"', 'errors="1"')
+    if mode == 'skipped-smoke-count' and independent == 'smoke': xml = xml.replace('skipped="0"', 'skipped="1"')
+    if mode == 'empty-smoke' and independent == 'smoke': xml = '<assemblies><assembly total="0" passed="0" failed="0" skipped="0" errors="0" /></assemblies>'
+    if mode == 'smoke-assembly-error' and independent == 'smoke': xml = xml.replace('errors="0"', 'errors="1"')
     if mode == 'wrong-smoke-type': xml = xml.replace('GatewaySmokeTests"', 'OtherTests"')
     destination = pathlib.Path(sys.argv[sys.argv.index('-result-xml') + 1])
-    if mode != 'missing-smoke': destination.write_text(xml)
-    if mode != 'missing-smoke-receipt': print('Isolated run: ' + str(path))
-    if mode == 'duplicate-smoke-receipt': print('Isolated run: ' + str(path))
-    sys.exit(17 if mode in ('smoke-exit', 'both-fail') else 0)
+    if mode != 'missing-smoke' or independent != 'smoke': destination.write_text(xml)
+    if mode != 'missing-smoke-receipt' or independent != 'smoke': print('Isolated run: ' + str(path))
+    if mode == 'duplicate-smoke-receipt' and independent == 'smoke': print('Isolated run: ' + str(path))
+    if mode == 'tamper-after-boundary' and independent == 'boundary':
+        (root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll').write_bytes(b'changed-after-boundary')
+    sys.exit(17 if mode in ('smoke-exit', 'both-fail') and independent == 'smoke' else 0)
 '''
 
 
@@ -314,6 +316,10 @@ class CiHooksTests(unittest.TestCase):
         shutil.copyfile(HERE.parents[1] / 'scripts/evidence_redaction.py', self.root / 'scripts/evidence_redaction.py')
         for name, content in [('bootstrap-runtime.py', BOOTSTRAP), ('run-vectors.py', RUNNERS), ('run-isolated.py', RUNNERS)]:
             (self.tools / name).write_text(content)
+        (self.tools / 'capture_heads.py').write_text('''import json, pathlib, sys
+if __import__('os').environ.get('FIXTURE_MODE') == 'catalog-capture-failure': raise SystemExit(21)
+pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'result': 'passed', 'catalogSha256': 'a' * 64}))
+''')
         binaries = [{'source': '/' + name, 'sha256': hashlib.sha256(b'qualified-fixture').hexdigest()}
                     for name in ('redis-server', 'sentry', 'placement', 'scheduler')]
         (self.tools / 'binaries.json').write_text(json.dumps(binaries))
@@ -599,6 +605,25 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())
         self.assertNotIn('fixture-secret-token', json.dumps(prepared))
 
+    def test_preparation_binds_the_hosted_head_catalog_and_capture_failure_stops_it(self):
+        prepared = self.prepare()
+        capture = self.evidence / 'head-catalog.json'
+        self.assertEqual({'path': str(capture), 'sha256': hashlib.sha256(capture.read_bytes()).hexdigest()},
+                         prepared['headCatalog'])
+        calls = self.calls()
+        position = next(index for index, call in enumerate(calls) if call[0] == 'timeout'
+                        and any(value.endswith('capture_heads.py') for value in call))
+        self.assertIn('--host', calls[position])
+        self.assertEqual('180', calls[position][4])
+        self.assertTrue(any(any(value.endswith('bootstrap-runtime.py') for value in call)
+                            for call in calls[position + 1:]))
+        self.fresh_evidence()
+        failed = self.invoke('prepare-ci.sh', 'catalog-capture-failure')
+        self.assertNotEqual(0, failed.returncode)
+        receipt = json.loads((self.evidence / 'preparation.json').read_text())
+        self.assertEqual('failed', receipt['result'])
+        self.assertNotIn('headCatalog', receipt)
+
     def test_native_builds_inherit_one_fresh_task_owned_package_cache(self):
         self.env['NUGET_PACKAGES'] = str(self.root / 'unpublished-global-candidates')
         prepared = self.prepare()
@@ -642,7 +667,7 @@ class CiHooksTests(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
         self.assertIn('Competing nested Builds catalog', result.stderr)
         actual = (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()
-        self.assertEqual(1, len(actual))
+        self.assertEqual(2, len(actual))
         nested = self.root / 'references/Hexalith.Tenants/references/Hexalith.Builds/.git'
         self.assertEqual(b'untouched nested checkout', nested.read_bytes())
 
@@ -774,7 +799,7 @@ class CiHooksTests(unittest.TestCase):
         result = self.invoke('run-ci.sh', 'audit-before-smoke')
         self.assertNotEqual(0, result.returncode)
         self.assertIn('online audit proof changed', result.stderr)
-        self.assertEqual(1, len((self.root / 'runner-reader-audit.jsonl').read_text().splitlines()))
+        self.assertEqual(2, len((self.root / 'runner-reader-audit.jsonl').read_text().splitlines()))
 
     def test_source_catalog_and_private_override_drift_refuse_before_live(self):
         prepared = self.prepare()
@@ -842,7 +867,7 @@ class CiHooksTests(unittest.TestCase):
                     message = 'selection changed after preparation' if mode == 'selection' else 'source identity or clean owned files changed'
                     self.assertIn(message, result.stderr)
                     runners = (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()
-                    self.assertEqual(1, len(runners), 'Independent smoke must not start after source drift.')
+                    self.assertEqual(2, len(runners), 'Only the early boundary and vectors may run before source drift is refused.')
                     self.assertFalse((self.root / 'runner-smoke-output.json').exists())
                     self.assertEqual('failed', json.loads((self.evidence / 'ci-live.json').read_text())['result'])
                 finally:
@@ -1061,7 +1086,7 @@ class CiHooksTests(unittest.TestCase):
         self.assertNotEqual(0, result.returncode)
         self.assertIn('Deployed EventStore binary differs from its archive', result.stderr)
         actual = (self.root / 'runner-gateway-environment.jsonl').read_text().splitlines()
-        self.assertEqual(1, len(actual), 'The independent smoke must not start after vector-time drift.')
+        self.assertEqual(2, len(actual), 'Only the early boundary and vectors may run before post-vector drift is refused.')
 
     def test_fresh_pkcs8_private_keys_are_redacted_in_direct_escaped_and_xml_diagnostics(self):
         import base64
@@ -1330,7 +1355,7 @@ class CiHooksTests(unittest.TestCase):
         for secret in secrets:
             self.assertNotIn(secret, content)
         deadlines = [call[4] for call in self.calls() if call[0] == 'timeout' and any(value.endswith(('run-vectors.py', 'run-isolated.py')) for value in call)]
-        self.assertEqual(['15180', '960', '960'], deadlines)
+        self.assertEqual(['960', '15180', '960'], deadlines)
         self.assertIn(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '17700',
                        'python3', 'tools/live-topology/ci.py', 'run'], self.calls())
         self.assertTrue(Path(prepared['runtime']).is_dir())
@@ -1352,7 +1377,9 @@ class CiHooksTests(unittest.TestCase):
                 self.assertNotEqual(0, result.returncode)
                 receipt = json.loads((self.evidence / 'ci-live.json').read_text())
                 self.assertFalse(receipt['fullLiveAccepted'])
-                self.assertEqual('passed', receipt['smoke']['result'])
+                self.assertNotIn('smoke', receipt)
+                self.assertEqual('not-run', receipt['vectors']['result'])
+                self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call) for call in self.calls()))
                 self.assertEqual('failed', receipt['boundary']['result'])
                 self.assertIn('SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety', result.stderr)
 
@@ -1366,6 +1393,17 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual(22, receipt['vectors']['count'])
         self.assertEqual('passed', receipt['boundary']['result'])
         self.assertEqual(24, len(list((Path(receipt['output']) / 'runtime-diagnostics').glob('*/result.json'))))
+
+    def test_early_independent_rebuild_drift_is_refused_before_any_vector(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'tamper-after-boundary')
+        self.assertNotEqual(0, result.returncode)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual('passed', receipt['boundary']['result'])
+        self.assertEqual('not-run', receipt['vectors']['result'])
+        self.assertFalse(receipt['fullLiveAccepted'])
+        self.assertIn('Deployed EventStore binary differs from its archive', result.stderr)
+        self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call) for call in self.calls()))
 
     def test_vector_nonacceptance_and_nonzero_exits_still_run_smoke(self):
         self.prepare()
@@ -1657,7 +1695,7 @@ class CiHooksTests(unittest.TestCase):
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         recorded = [json.loads(line) for line in (self.root / 'runner-environment.jsonl').read_text().splitlines()]
-        self.assertEqual([['run-vectors.py', []], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']]], recorded)
+        self.assertEqual([['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']], ['run-vectors.py', []], ['run-isolated.py', ['MCPCLI_LIVE_OUTPUT']]], recorded)
         receipt = json.loads((self.evidence / 'ci-live.json').read_text())
         self.assertEqual(str(Path(receipt['output']) / 'smoke'),
                          json.loads((self.root / 'runner-smoke-output.json').read_text()))
@@ -2072,7 +2110,7 @@ class CiHooksTests(unittest.TestCase):
             with self.subTest(error=type(error).__name__):
                 shutil.rmtree(Path(prepared['runtime']) / 'runs', ignore_errors=True)
                 def execute(command, *args, **kwargs):
-                    if any(value.endswith('run-isolated.py') for value in command):
+                    if 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests' in command:
                         raise error
                     return bounded(command, *args, **kwargs)
                 with patch.dict(os.environ, self.env, clear=True), patch.object(module, 'bounded', side_effect=execute):

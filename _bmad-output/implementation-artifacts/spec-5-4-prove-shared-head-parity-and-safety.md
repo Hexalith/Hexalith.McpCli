@@ -214,3 +214,96 @@ records the state before that prerequisite. Story 5.4 remains **in-progress**:
 its dedicated live CI run, final hash-bound packet and its own scan receipt, and
 exact-byte owner approval/verdict remain pending. This prerequisite's receipt
 does not establish Story 5.4 live acceptance or authorize retirement.
+
+### Committed live qualification follow-up (2026-11-09)
+
+The prior CI run `42614718738` passed all 21 approved live vectors and the
+independent smoke, then exposed a boundary-test assertion defect before its
+negative cases ran: the qualified Gateway includes a business `resultPayload`
+on create acceptance, while the test expected an acceptance document without
+`result`. The boundary now checks the complete copied result against the
+captured response and exact submitted identifiers. Concurrent acceptances are
+paired with their originating requests. The process-harness regression runs
+both heads with and without the optional result; it preserves every public
+channel and request-count assertion. Production behavior and approved inputs
+are unchanged. A fresh dedicated PR lane is required; the failed historical
+lane establishes no full live acceptance.
+
+CI preparation now retains `head-catalog.json`: equal CLI/MCP discovery from
+the actual hosted binaries, every head DLL hash, each module's sorted-key
+compact `list_operations` structured-content SHA-256, and the digest of the
+complete module-to-content map. This generic read-only capture supplies the
+final packet's exact candidate/Catalog binding without relying on a local
+rebuild. Offline tests cover discovery failure/mismatch, empty Catalog and
+binary drift; CI-hook coverage pins the bounded capture and failure path.
+
+Fresh local follow-up checks passed: solution restore and Release build with
+zero warnings/errors; Core 877 passed (four OS skips), CLI 584 passed (two OS
+skips), MCP 94 passed and Manifest 362 passed. The six process-harness cases,
+seven capture-helper regressions and focused CI capture/failure-path case all
+passed. Full affected CI-hook verification continues before final evidence.
+
+### Qualified authentication oracles and early boundary (2026-11-09)
+
+PR run `42631573309` passed every vector and smoke, then reached a second
+boundary oracle defect: public EventStore 4.1.0 sends structured 401 errors,
+not a bare HTTP reason phrase. Its pinned `ConfigureJwtBearerOptions` supplies
+reason `authentication_required`, distinct missing/invalid-token details and
+no correlation field. The boundary now pins those complete documents and the
+two exact tenant-grant 403 shapes from `AuthorizationExceptionHandler`.
+Eight new process cases exercise all four shapes for Commands and Queries
+through CLI and MCP, including every channel and Gateway cardinality.
+
+The generic pre-vector independent-case registry now runs the boundary once
+before the long vector sweep; a failed boundary stops there. The post-vector
+registry retains smoke, including after vector failures. Preparation provenance
+is rechecked after the early case because it may rebuild hosts. Counts and
+budgets remain derived from the combined registry. Focused CI-hook checks pin
+the new order, refusal before vectors, post-boundary drift and the existing
+vector/smoke failure and cancellation behavior. Production behavior, identifier
+validators, dependencies and approved inputs remain unchanged.
+
+The Release build passes with zero warnings/errors; all 14 process-harness
+cases pass; the full CLI project passes 592 cases with two OS-only skips.
+Five focused ordering/failure/cancellation checks and the new early-drift
+check pass. Broad CI-hook verification continues while the next PR candidate
+is qualified. Prior attempt receipts remain distinct from its final packet.
+
+### Empty 401 transport response (2026-11-09)
+
+Run `42641067905` passed the Query credential/grant cases, then found an empty
+401 response for the forged-token Command; the early boundary correctly kept
+vectors unrun. The generic client already maps that exact HTTP fallback to
+`gateway_error`, status 401 and detail `Unauthorized`, without a reason field.
+The boundary now asserts that complete fallback for an empty body and retains
+the pinned structured challenge for every nonempty body. Live credential
+receipts record the response format and full public error, and missing-token
+CLI/MCP documents are compared directly per call kind. Four more process cases
+pin empty missing/invalid-token challenges through both heads and call kinds.
+The clean 99-test CI-hook sweep passed; production behavior remains unchanged.
+
+### Command grant refusals before the structured pipeline (2026-11-09)
+
+Run `42645969397` then exposed the first tenant-A-grant Command returning an
+empty 403. Qualified EventStore `dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`
+`CommandsController.cs:146-149` returns `Forbid()` before pipeline dispatch for
+missing tenant grants. The boundary now pins its whole existing public
+`gateway_error` / 403 / `Forbidden` fallback, including absent optional members;
+Query refusals retain the complete structured tenant-mismatch/nonmember oracle.
+Four additional both-head process cases cover the empty 403 transport for both
+call kinds and both signed-grant scenarios. Vectors stayed unrun after the early
+boundary failure. No production behavior, approved input or runner changed.
+
+### Discovered sidecar endpoint for persisted C05 evidence (2026-11-09)
+
+Run `42648730822` passed the credential, override and tenant-negative rows, then
+found the C05 state helper’s fixed-port assumption (`127.0.0.1:3501`). The
+restored fixture helper exposes no supported sidecar application object. The
+fixture now discovers exactly one `eventstore` sidecar through bounded
+`dapr list --output json` inside the already-required isolated namespace and
+passes its actual HTTP client to both persisted-state oracles. The separate
+`DAPR_API_TOKEN`, when configured, is preserved; no bearer credential is sent
+to the sidecar API. Offline regressions require an ephemeral discovered port,
+reject missing/duplicate/invalid registrations and prove both C05 helpers read
+the expected state keys with and without the API token. No runner, production
+source, approved input or dependency changed.

@@ -89,6 +89,55 @@ internal static class BoundaryHeads
         AssertJson(result.Tool.Content.ShouldHaveSingleItem().ShouldBeOfType<TextContentBlock>().Text, expected, mask);
     }
 
+    /// <summary>Checks an accepted Command against its captured request and the complete Gateway result payload.</summary>
+    internal static void AssertCommandAccepted(HeadResult result, string operation, string tenant, string aggregateId,
+        GatewayRequest request, string responseBody)
+    {
+        using JsonDocument sent = JsonDocument.Parse(request.Body);
+        using JsonDocument received = JsonDocument.Parse(responseBody);
+        var expected = new JsonObject
+        {
+            ["operation"] = operation,
+            ["messageId"] = received.RootElement.TryGetProperty("messageId", out JsonElement messageId)
+                && messageId.ValueKind != JsonValueKind.Null ? messageId.GetString() : sent.RootElement.GetProperty("messageId").GetString(),
+            ["correlationId"] = sent.RootElement.GetProperty("correlationId").GetString(),
+            ["tenant"] = tenant,
+            ["aggregateId"] = aggregateId,
+            ["status"] = "accepted",
+        };
+        if (received.RootElement.TryGetProperty("resultPayload", out JsonElement payload) && payload.ValueKind != JsonValueKind.Null)
+            expected["result"] = JsonNode.Parse(payload.GetRawText());
+        AssertDocument(result, expected.ToJsonString(), isError: false);
+    }
+
+    /// <summary>Pins the qualified Gateway's complete missing/invalid-token challenge document.</summary>
+    internal static void AssertAuthenticationRefusal(HeadResult result, bool credentialPresent, bool emptyBody = false)
+    {
+        if (emptyBody)
+        {
+            AssertDocument(result, """{"error":{"code":"gateway_error","status":401,"detail":"Unauthorized"}}""", isError: true);
+            return;
+        }
+        string detail = credentialPresent ? "The provided authentication token is invalid."
+            : "Authentication is required to access this resource.";
+        AssertDocument(result, JsonSerializer.Serialize(new { error = new
+        { code = "gateway_error", status = 401, detail, reason = "authentication_required" } }), isError: true);
+    }
+
+    /// <summary>Pins the qualified Gateway's complete signed-grant refusal, including its request correlation.</summary>
+    internal static void AssertTenantAuthorizationRefusal(HeadResult result, string tenant, string reason, string correlationId, bool emptyBody = false)
+    {
+        if (emptyBody)
+        {
+            AssertDocument(result, """{"error":{"code":"gateway_error","status":403,"detail":"Forbidden"}}""", isError: true);
+            return;
+        }
+        string detail = $"Not authorized for tenant '{tenant}'."
+            + (reason == "principal_not_member" ? " No tenant authorization claims found. Access denied." : string.Empty);
+        AssertDocument(result, JsonSerializer.Serialize(new { error = new
+        { code = "gateway_error", status = 403, detail, reason, correlationId } }), isError: true);
+    }
+
     private static void AssertJson(string actual, string expected, string[] mask)
     {
         JsonNode actualNode = JsonNode.Parse(actual)!;

@@ -9,7 +9,7 @@ internal sealed class LiveGatewayForwarder : IAsyncDisposable
 {
     private readonly HttpClient _http;
     private readonly ScriptedGateway _gateway;
-    private readonly ConcurrentQueue<(int Status, string Body)> _responses = new();
+    private readonly ConcurrentQueue<(GatewayRequest Request, int Status, string Body)> _responses = new();
 
     /// <summary>Starts a test-owned loopback forwarder at the discovered Gateway endpoint.</summary>
     internal LiveGatewayForwarder(Uri endpoint)
@@ -25,7 +25,7 @@ internal sealed class LiveGatewayForwarder : IAsyncDisposable
     internal IReadOnlyList<GatewayRequest> Requests => _gateway.Requests;
 
     /// <summary>Gets completed real Gateway responses.</summary>
-    internal IReadOnlyList<(int Status, string Body)> Responses => [.. _responses];
+    internal IReadOnlyList<(GatewayRequest Request, int Status, string Body)> Responses => [.. _responses];
 
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
@@ -42,7 +42,7 @@ internal sealed class LiveGatewayForwarder : IAsyncDisposable
             request.Headers.TryAddWithoutValidation("Authorization", authorization);
         using HttpResponseMessage response = await _http.SendAsync(request, TestContext.Current.CancellationToken);
         string body = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
-        _responses.Enqueue(((int)response.StatusCode, body));
+        _responses.Enqueue((captured, (int)response.StatusCode, body));
         return ScriptedGateway.Response((int)response.StatusCode, response.ReasonPhrase ?? "Gateway response",
             response.Content.Headers.ContentType?.ToString(), body);
     }

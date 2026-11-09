@@ -554,6 +554,11 @@ def prepare(evidence: Path) -> None:
         tools['python'] = bounded([str(python), '--version'], 30, evidence / 'python-version')
         tools['jsonschema'] = bounded([str(python), '-c', 'import importlib.metadata; print(importlib.metadata.version("jsonschema"))'],
                                      30, evidence / 'jsonschema-version')
+        catalog_path = evidence / 'head-catalog.json'
+        bounded([str(python), str(ROOT / 'tools/live-topology/capture_heads.py'), '--host',
+                 str(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'),
+                 '--output', str(catalog_path)], 180, evidence / 'head-catalog-capture')
+        receipt['headCatalog'] = {'path': str(catalog_path.resolve()), 'sha256': hashlib.sha256(catalog_path.read_bytes()).hexdigest()}
         runtime = private / 'runtime'
         bounded([str(python), str(ROOT / 'tools/live-topology/bootstrap-runtime.py'), str(runtime)], 900, evidence / 'runtime-bootstrap')
         binaries = json.loads((ROOT / 'tools/live-topology/binaries.json').read_text())
@@ -614,10 +619,13 @@ def copy_diagnostics(runtime: Path, output: Path) -> None:
 INDEPENDENT_CASE_TIMEOUT = 960
 RUN_TIMEOUT_SECONDS = 17700
 CLEANUP_HEADROOM_SECONDS = 600
-INDEPENDENT_CASES = (
-    ('smoke', 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests', 'AuthenticatedQueryReturnsSuccessfulDocument'),
+PRE_VECTOR_CASES = (
     ('boundary', 'Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests', 'SharedHeadsPreserveAuthorizationAndDeactivationSafety'),
 )
+POST_VECTOR_CASES = (
+    ('smoke', 'Hexalith.McpCli.Integration.Tests.GatewaySmokeTests', 'AuthenticatedQueryReturnsSuccessfulDocument'),
+)
+INDEPENDENT_CASES = (*PRE_VECTOR_CASES, *POST_VECTOR_CASES)
 
 
 def require_independent_case(path: Path, class_name: str, method: str) -> None:
@@ -674,6 +682,41 @@ def run(evidence: Path) -> None:
         generation.mkdir()
         vectors = generation / 'vectors'
         report.update(preparationRunId=prepared['runId'], output=str(generation))
+        report['vectors'] = {'result': 'not-run', 'reason': 'Pre-vector safety and provenance checks have not passed.'}
+        independent_errors = []
+        independent_receipts = []
+
+        def run_independent(cases):
+            """Run each registered independent case once with fresh state and current provenance."""
+            for name, class_name, method in cases:
+                case = generation / name
+                case.mkdir()
+                try:
+                    require_prepared_provenance(prepared)
+                    bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),
+                             '-class', class_name, '-failSkips', '-result-xml', str(case / 'tests.xml')],
+                            INDEPENDENT_CASE_TIMEOUT, case / 'process', environment={**environment, 'MCPCLI_LIVE_OUTPUT': str(case)})
+                    require_independent_case(case / 'tests.xml', class_name, method)
+                    lines = (case / 'process.stdout.txt').read_text().splitlines()
+                    runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
+                    if len(runs) != 1:
+                        raise ValueError(f'Independent {name} omitted its isolated runtime receipt.')
+                    receipt = runs[0] / 'result.json'
+                    require_owned(receipt, runtime)
+                    if receipt in independent_receipts:
+                        raise ValueError('Independent cases reused an isolated runtime receipt.')
+                    independent_receipts.append(receipt)
+                    report[name] = {'result': 'passed', 'receipt': str(receipt)}
+                except Exception as error:
+                    report[name] = {'result': 'failed', 'error': f'{type(error).__name__}: {error}'}
+                    independent_errors.append(f'independent {name} failed: {error}')
+
+        run_independent(PRE_VECTOR_CASES)
+        if independent_errors:
+            report['vectors'] = {'result': 'not-run', 'reason': 'Independent safety cases failed before vector execution.'}
+            raise RuntimeError('; '.join(independent_errors))
+        # The early isolated cases can rebuild hosts; reseal-check before any vector executes.
+        require_prepared_provenance(prepared)
         vector_error = None
         try:
             bounded([str(python), str(ROOT / 'tools/live-topology/run-vectors.py'), '--output', str(vectors)],
@@ -706,7 +749,7 @@ def run(evidence: Path) -> None:
                     interrupted = [{key: item.get(key) for key in ('operation', 'result', 'error')}
                                    for item in lane.get('vectors', []) if item.get('result') == 'running']
                 except (ValueError, AttributeError, TypeError):
-                    pass  # Retain the original failure and still attempt the independent smoke.
+                    pass  # Retain the original failure and still attempt the post-vector independent cases.
             detail = '; failed Operations: ' + ', '.join(str(item['operation']) for item in failures) if failures else ''
             if interrupted:
                 detail += '; interrupted Operations: ' + ', '.join(str(item['operation']) for item in interrupted)
@@ -719,31 +762,7 @@ def run(evidence: Path) -> None:
             if not isinstance(error, Exception):
                 print(sanitized(f'Live CI interrupted: {type(error).__name__}: {vector_error}'), file=sys.stderr)
                 raise
-        # Each independent case owns fresh state and rechecks preparation provenance.
-        independent_errors = []
-        independent_receipts = []
-        for name, class_name, method in INDEPENDENT_CASES:
-            case = generation / name
-            case.mkdir()
-            try:
-                require_prepared_provenance(prepared)
-                bounded([str(python), str(ROOT / 'tools/live-topology/run-isolated.py'), '--', 'dotnet', str(TESTS),
-                         '-class', class_name, '-failSkips', '-result-xml', str(case / 'tests.xml')],
-                        INDEPENDENT_CASE_TIMEOUT, case / 'process', environment={**environment, 'MCPCLI_LIVE_OUTPUT': str(case)})
-                require_independent_case(case / 'tests.xml', class_name, method)
-                lines = (case / 'process.stdout.txt').read_text().splitlines()
-                runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
-                if len(runs) != 1:
-                    raise ValueError(f'Independent {name} omitted its isolated runtime receipt.')
-                receipt = runs[0] / 'result.json'
-                require_owned(receipt, runtime)
-                if receipt in independent_receipts:
-                    raise ValueError('Independent cases reused an isolated runtime receipt.')
-                independent_receipts.append(receipt)
-                report[name] = {'result': 'passed', 'receipt': str(receipt)}
-            except Exception as error:
-                report[name] = {'result': 'failed', 'error': f'{type(error).__name__}: {error}'}
-                independent_errors.append(f'independent {name} failed: {error}')
+        run_independent(POST_VECTOR_CASES)
         if vector_error or independent_errors:
             raise RuntimeError('; '.join(([str(vector_error)] if vector_error else []) + independent_errors))
         expected_runtimes = len(expected) + len(INDEPENDENT_CASES)
