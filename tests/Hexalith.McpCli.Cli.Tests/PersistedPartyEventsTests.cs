@@ -67,4 +67,72 @@ public sealed class PersistedPartyEventsTests
             if (token is not null) request.Headers["dapr-api-token"].ShouldBe(token);
         }
     }
+
+    /// <summary>A stale projection cannot excuse a newly committed aggregate event.</summary>
+    [Fact]
+    public async Task ChangedDurableSequenceIsRejectedAsync()
+    {
+        int sequence = 0;
+        await using var sidecar = new ScriptedGateway(_ => ScriptedGateway.Response(200, "OK", "application/json",
+            JsonSerializer.Serialize(new { CurrentSequence = Interlocked.Increment(ref sequence) })));
+        using HttpClient client = PersistedPartyEvents.CreateClient(new Uri(sidecar.Url), null);
+        long before = await PersistedPartyEvents.ReadSequenceAsync(client, "tenant-b", "state-party", TestContext.Current.CancellationToken);
+        (await Assert.ThrowsAsync<ShouldAssertException>(() => PersistedPartyEvents.RequireUnchangedSequenceAsync(
+            client, "tenant-b", "state-party", before, TestContext.Current.CancellationToken))).Message.ShouldContain("durable aggregate event sequence");
+        sidecar.Requests.Count.ShouldBe(2);
+    }
+
+    /// <summary>Unchanged durable sequence checks read metadata only.</summary>
+    [Fact]
+    public async Task StableDurableSequencePassesAsync()
+    {
+        await using var sidecar = new ScriptedGateway(_ => ScriptedGateway.Response(200, "OK", "application/json", """{"currentSequence":7}"""));
+        using HttpClient client = PersistedPartyEvents.CreateClient(new Uri(sidecar.Url), null);
+        (await PersistedPartyEvents.RequireUnchangedSequenceAsync(client, "tenant-b", "state-party", 7, TestContext.Current.CancellationToken)).ShouldBe(7);
+        sidecar.Requests.ShouldHaveSingleItem().Path.ShouldEndWith("metadata");
+    }
+
+    /// <summary>The deactivation oracle rejects empty, zero-match and duplicate-event streams.</summary>
+    /// <param name="events">The stored event type names.</param>
+    /// <param name="assertion">The expected rejecting oracle assertion.</param>
+    [Theory]
+    [InlineData("", "Assert.NotEmpty()")]
+    [InlineData("PartyCreated", "Assert.Single()")]
+    [InlineData("PartyCreated,PartyDeactivated,PartyDeactivated", "Assert.Single()")]
+    public async Task DeactivationOracleRejectsUnsafeStreamsAsync(string events, string assertion)
+    {
+        await using var sidecar = EventStream(events);
+        using HttpClient client = PersistedPartyEvents.CreateClient(new Uri(sidecar.Url), null);
+        Exception failure = await Assert.ThrowsAnyAsync<Exception>(() => PersistedPartyEvents.RequireOneDeactivationAsync(
+            client, "tenant-b", "state-party", TestContext.Current.CancellationToken));
+        failure.Message.ShouldStartWith(assertion);
+    }
+
+    /// <summary>The missing-party oracle rejects both creation and deactivation effects.</summary>
+    /// <param name="eventType">The forbidden stored event.</param>
+    [Theory]
+    [InlineData("PartyCreated")]
+    [InlineData("PartyDeactivated")]
+    public async Task MissingPartyOracleRejectsBusinessEffectsAsync(string eventType)
+    {
+        await using var sidecar = EventStream(eventType);
+        using HttpClient client = PersistedPartyEvents.CreateClient(new Uri(sidecar.Url), null);
+        Exception failure = await Assert.ThrowsAnyAsync<Exception>(() => PersistedPartyEvents.RequireNoPartyCreatedAsync(
+            client, "tenant-b", "state-party", TestContext.Current.CancellationToken));
+        failure.Message.ShouldStartWith("Assert.DoesNotContain()");
+    }
+
+    private static ScriptedGateway EventStream(string events)
+    {
+        string[] names = events.Length == 0 ? [] : events.Split(',');
+        return new ScriptedGateway(request =>
+        {
+            string path = Uri.UnescapeDataString(request.Path);
+            string body = path.EndsWith(":metadata", StringComparison.Ordinal)
+                ? JsonSerializer.Serialize(new { CurrentSequence = names.Length })
+                : JsonSerializer.Serialize(new { EventTypeName = names[int.Parse(path.Split(':')[^1], System.Globalization.CultureInfo.InvariantCulture) - 1] });
+            return ScriptedGateway.Response(200, "OK", "application/json", body);
+        });
+    }
+
 }

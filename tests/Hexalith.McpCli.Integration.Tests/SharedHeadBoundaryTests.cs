@@ -63,6 +63,7 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
                 })
                 {
                     JsonElement before = await ReadAsync(Party, active: true);
+                    long durableBefore = await PersistedPartyEvents.ReadSequenceAsync(persistedState, "tenant-b", Party, cancellation);
                     int requests = forwarder.Requests.Count;
                     string operation = command ? "parties.deactivate-party" : "parties.get-party";
                     HeadResult refused = await InvokeAsync(mcp, command, operation, Payload(Party), "tenant-b", scenario.Token);
@@ -76,38 +77,47 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
                     }
                     JsonElement after = await ReadAsync(Party, active: true);
                     JsonElement.DeepEquals(before, after).ShouldBeTrue("A rejected call changed the authorized persisted read.");
+                    long durableAfter = await PersistedPartyEvents.RequireUnchangedSequenceAsync(persistedState, "tenant-b", Party, durableBefore, cancellation);
                     receipts.Add(new { scenario = scenario.Name, head = mcp ? "mcp" : "cli", kind = command ? "command" : "query",
                         status = scenario.Status, gatewayRequests = 1, responseFormat = forwarder.Responses[^1].Body.Length == 0 ? "empty" : "problem+json",
-                        publicError, persistedBeforeSha256 = Hash(before), persistedAfterSha256 = Hash(after) });
+                        publicError, durableSequenceBefore = durableBefore, durableSequenceAfter = durableAfter,
+                        persistedBeforeSha256 = Hash(before), persistedAfterSha256 = Hash(after) });
                 }
                 if (mcp)
                 {
                     int requests = forwarder.Requests.Count;
                     string operation = command ? "parties.deactivate-party" : "parties.get-party";
+                    long localSequenceBefore = await PersistedPartyEvents.ReadSequenceAsync(persistedState, "tenant-b", Party, cancellation);
                     HeadResult denied = await InvokeAsync(true, command, operation, Payload(Party), "tenant-a", authorizedToken,
                         perCallTenant: "tenant-b");
                     AssertLocal(denied, operation, "Per-call tenant override is disabled.");
                     forwarder.Requests.Count.ShouldBe(requests);
                     JsonElement.DeepEquals(active, await ReadAsync(Party, active: true)).ShouldBeTrue();
+                    long localSequenceAfter = await PersistedPartyEvents.RequireUnchangedSequenceAsync(persistedState, "tenant-b", Party, localSequenceBefore, cancellation);
                     requests = forwarder.Requests.Count;
+                    long gatewaySequenceBefore = await PersistedPartyEvents.ReadSequenceAsync(persistedState, "tenant-b", Party, cancellation);
                     HeadResult crossTenant = await InvokeAsync(true, command, operation, Payload(Party), "tenant-a",
                         fixture.CreateBoundaryIdentity(), perCallTenant: "tenant-b", allowOverride: true);
                     AssertGatewayRefusal(crossTenant, forwarder, requests, 403, "tenant_mismatch", operation);
                     JsonElement.DeepEquals(active, await ReadAsync(Party, active: true)).ShouldBeTrue();
+                    long gatewaySequenceAfter = await PersistedPartyEvents.RequireUnchangedSequenceAsync(persistedState, "tenant-b", Party, gatewaySequenceBefore, cancellation);
                     receipts.Add(new { scenario = "mcp-override-disabled-and-authorized-selection-denied", kind = command ? "command" : "query",
-                        gatewayRequests = 1, persistedAfterSha256 = Hash(active) });
+                        gatewayRequests = 1, localSequenceBefore, localSequenceAfter, gatewaySequenceBefore, gatewaySequenceAfter, persistedAfterSha256 = Hash(active) });
                 }
                 foreach (string tenant in new[] { "platform:tenants", "system", "SYSTEM", "tenant-\u0430", "\u0130", "\uff54\uff45\uff4e\uff41\uff4e\uff54" })
                 {
                     int requests = forwarder.Requests.Count;
                     string operation = command ? "parties.deactivate-party" : "parties.get-party";
+                    long durableBefore = await PersistedPartyEvents.ReadSequenceAsync(persistedState, "tenant-b", Party, cancellation);
                     HeadResult refused = await InvokeAsync(mcp, command, operation, Payload(Party), tenant, authorizedToken);
                     AssertLocal(refused, operation, tenant.Equals("system", StringComparison.OrdinalIgnoreCase)
                         ? "The public tenant 'system' is reserved." : "The tenant does not match the Gateway tenant pattern.");
                     forwarder.Requests.Count.ShouldBe(requests);
                     JsonElement.DeepEquals(active, await ReadAsync(Party, active: true)).ShouldBeTrue();
+                    long durableAfter = await PersistedPartyEvents.RequireUnchangedSequenceAsync(persistedState, "tenant-b", Party, durableBefore, cancellation);
                     receipts.Add(new { scenario = "invalid-public-tenant", tenant, head = mcp ? "mcp" : "cli",
-                        kind = command ? "command" : "query", gatewayRequests = 0, persistedAfterSha256 = Hash(active) });
+                        kind = command ? "command" : "query", gatewayRequests = 0, durableSequenceBefore = durableBefore,
+                        durableSequenceAfter = durableAfter, persistedAfterSha256 = Hash(active) });
                 }
             }
             // Missing aggregate: the command is submitted once, and independent authorized reads prove absence.
@@ -125,7 +135,9 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
 
             // Separate processes are required for truly concurrent CLI calls: Console capture is process-global.
             int beforeConcurrent = forwarder.Requests.Count;
+            Task capturedPair = forwarder.CaptureConcurrentPairAsync(TimeSpan.FromSeconds(15));
             HeadResult[] concurrent = await Task.WhenAll(ConcurrentDeactivateAsync(), ConcurrentDeactivateAsync());
+            await capturedPair;
             forwarder.Requests.Count.ShouldBe(beforeConcurrent + 2);
             foreach (var response in forwarder.Responses.Skip(beforeConcurrent))
             {
@@ -235,7 +247,7 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
         JsonSerializer.SerializeToElement(new { PartyId = id }));
     private static string Payload(string id) => JsonSerializer.Serialize(new { PartyId = id });
     private static string Hash(JsonElement value) => Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(value.GetRawText())));
-    private static string Channels(HeadResult result) => result.Output + result.Error + result.Tool?.StructuredContent + JsonSerializer.Serialize(result.Tool?.Content);
+    private static string Channels(HeadResult result) => result.AllChannels;
     private static void AssertLocal(HeadResult result, string operation, string message)
     {
         BoundaryHeads.AssertDocument(result, JsonSerializer.Serialize(new { error = new { code = "validation_failed", operation,

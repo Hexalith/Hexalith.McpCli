@@ -1,4 +1,6 @@
+using System.Text;
 using System.Text.Json;
+using ModelContextProtocol.Protocol;
 using Hexalith.McpCli.Integration.Tests;
 using Shouldly;
 
@@ -7,6 +9,24 @@ namespace Hexalith.McpCli.Cli.Tests;
 /// <summary>Verifies the live process harness's CLI/MCP documents and complete channels without starting topology.</summary>
 public sealed class BoundaryProcessHarnessTests
 {
+    /// <summary>An intermediate protocol notification participates in every-channel privacy assertions.</summary>
+    [Fact]
+    public async Task IntermediateNotificationIsRetainedForAllChannelAbsenceChecksAsync()
+    {
+        const string marker = "sensitive-intermediate-notification";
+        string notification = JsonSerializer.Serialize(new { jsonrpc = "2.0", method = "notifications/message", @params = new { data = marker } });
+        const string response = """{"jsonrpc":"2.0","id":2,"result":{"isError":false,"content":[{"type":"text","text":"{\"safe\":true}"}],"structuredContent":{"safe":true}}}""";
+        var transcript = new StringBuilder();
+        using var stdout = new StringReader(notification + "\n" + response + "\n");
+        JsonElement reply = await BoundaryHeads.ReadReplyAsync(stdout, 2, transcript, TestContext.Current.CancellationToken);
+        var tool = reply.GetProperty("result").Deserialize<CallToolResult>(new JsonSerializerOptions(JsonSerializerDefaults.Web));
+        var result = new HeadResult(0, string.Empty, string.Empty, tool, transcript.ToString());
+        BoundaryHeads.AssertDocument(result, """{"safe":true}""", isError: false);
+        result.ProtocolTranscript.ShouldContain(notification);
+        result.AllChannels.ShouldContain(marker);
+        Should.Throw<ShouldAssertException>(() => result.AllChannels.ShouldNotContain(marker));
+    }
+
     /// <summary>Successful and failed process calls retain all public channels and exactly one request per head.</summary>
     /// <param name="command">Whether to submit a Command.</param>
     /// <param name="refused">Whether the Gateway refuses authentication.</param>

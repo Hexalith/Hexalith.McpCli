@@ -332,6 +332,20 @@ def require_reader_audit(prepared: dict) -> Path:
     return path
 
 
+def require_head_catalog(prepared: dict) -> Path:
+    """Require the sealed capture bytes and exact prepared head DLL inventory."""
+    expected = prepared.get('headCatalog', {})
+    path = Path(expected.get('path', ''))
+    if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected.get('sha256'):
+        raise ValueError('The prepared head Catalog capture changed or is missing.')
+    capture = json.loads(path.read_text())
+    binaries = {name: value for name, value in prepared['gateway']['clientHost']['output'].items()
+                if name.endswith('.dll')}
+    if not binaries or capture.get('result') != 'passed' or capture.get('binariesSha256') != binaries:
+        raise ValueError('The head Catalog capture DLL inventory differs from preparation.')
+    return path
+
+
 def require_prepared_provenance(prepared: dict) -> dict:
     selection = native_cohort.manifest(NATIVE_SELECTION)
     if prepared.get('selection') != selection:
@@ -357,6 +371,7 @@ def require_prepared_provenance(prepared: dict) -> dict:
         changed = first_difference(prepared.get('gateway'), actual)
         raise ValueError('The prepared gateway package identity or bytes changed before isolated execution: ' + changed + '.')
     require_reader_audit(prepared)
+    require_head_catalog(prepared)
     return actual
 
 

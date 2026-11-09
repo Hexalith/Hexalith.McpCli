@@ -1048,5 +1048,60 @@ class SdkTypedResponseTests(unittest.TestCase):
         self.assertEqual(message, _mask_result(document, step, 'result')['messageId'])
 
 
+
+
+
+class McpInvocationBudgetTests(unittest.TestCase):
+    def test_initialize_and_tool_call_share_one_absolute_budget(self):
+        import io
+        from types import SimpleNamespace
+        from unittest.mock import Mock
+        from run_loopback import _JsonRpcClient
+        tick = [0.0]
+        process = SimpleNamespace(stdin=io.BytesIO(), stdout=Mock())
+        process.stdout.fileno.return_value = 7
+        replies = iter([{'jsonrpc': '2.0', 'id': 1, 'result': {}}, {'jsonrpc': '2.0', 'id': 2, 'result': {}}])
+        def read(*_):
+            tick[0] += .6
+            return (json.dumps(next(replies)) + '\n').encode()
+        with patch('run_loopback.time.monotonic', side_effect=lambda: tick[0]), \
+                patch('run_loopback.select.select', return_value=([process.stdout], [], [])), \
+                patch('run_loopback.os.read', side_effect=read):
+            client = _JsonRpcClient(process, 1)
+            client.request('initialize', {})
+            with self.assertRaisesRegex(VectorError, 'timed out'):
+                client.request('tools/call', {})
+        self.assertAlmostEqual(1.2, tick[0])
+
+    def test_buffered_reply_after_the_absolute_deadline_is_refused(self):
+        import io
+        from types import SimpleNamespace
+        from run_loopback import _JsonRpcClient
+        with patch('run_loopback.time.monotonic', return_value=2):
+            client = _JsonRpcClient(SimpleNamespace(stdin=io.BytesIO(), stdout=io.BytesIO()), 1, deadline=1)
+            client.pending = b'{"jsonrpc":"2.0","id":1,"result":{}}\n'
+            with self.assertRaisesRegex(VectorError, 'timed out'):
+                client._read(client.deadline)
+
+    def test_head_refuses_a_valid_result_returned_after_its_invocation_budget(self):
+        from unittest.mock import Mock
+        from run_loopback import HeadProcess
+        tick = [0.0]
+        document = {'safe': True}
+        client = Mock()
+        def request(*_):
+            tick[0] += .6
+            return {'result': {'structuredContent': document, 'content': [{'text': json.dumps(document)}]}}
+        client.request.side_effect = request
+        process = Mock()
+        process.poll.return_value = None
+        with tempfile.TemporaryDirectory() as directory, \
+                patch('run_loopback.time.monotonic', side_effect=lambda: tick[0]), \
+                patch('run_loopback.subprocess.Popen', return_value=process), \
+                patch('run_loopback._JsonRpcClient', return_value=client):
+            with self.assertRaisesRegex(VectorError, 'timed out'):
+                HeadProcess(Path('Host.dll'), directory, 1).mcp('list_modules', {})
+
+
 if __name__ == "__main__":
     unittest.main()

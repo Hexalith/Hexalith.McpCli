@@ -285,10 +285,11 @@ class HeadProcess:
             command += ["--tenant", tenant]
         if actor is not None:
             command += ["--actor", actor]
+        deadline = time.monotonic() + self.timeout
         process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE, env=self.env, bufsize=0)
         try:
-            client = _JsonRpcClient(process, self.timeout)
+            client = _JsonRpcClient(process, self.timeout, deadline=deadline)
             client.request("initialize", {"protocolVersion": "2025-06-18", "capabilities": {},
                                           "clientInfo": {"name": "mcpcli-conformance", "version": "1"}})
             client.notify("notifications/initialized", {})
@@ -300,7 +301,7 @@ class HeadProcess:
             content = result.get("content", [])
             if len(content) != 1 or not _json_equal(json.loads(content[0]["text"]), structured):
                 _fail(f"MCP {tool}: text and structuredContent differ")
-            return bool(result.get("isError", False)), structured
+            outcome = bool(result.get("isError", False)), structured
         except (KeyError, ValueError, OSError) as exc:
             stderr = process.stderr.read(4096).decode("utf-8", errors="replace") if process.poll() is not None else ""
             _fail(f"MCP {tool}: {exc}; stderr {stderr!r}")
@@ -320,12 +321,15 @@ class HeadProcess:
                 process.stdout.close()
             if process.stderr is not None:
                 process.stderr.close()
+        if time.monotonic() >= deadline:
+            _fail("MCP stdio response timed out")
+        return outcome
 
 
 class _JsonRpcClient:
-    def __init__(self, process: subprocess.Popen[bytes], timeout: float) -> None:
+    def __init__(self, process: subprocess.Popen[bytes], timeout: float, *, deadline: float | None = None) -> None:
         self.process = process
-        self.timeout = timeout
+        self.deadline = time.monotonic() + timeout if deadline is None else deadline
         self.next_id = 1
         self.pending = b""
 
@@ -336,9 +340,8 @@ class _JsonRpcClient:
         request_id = self.next_id
         self.next_id += 1
         self._write({"jsonrpc": "2.0", "id": request_id, "method": method, "params": params})
-        deadline = time.monotonic() + self.timeout
         while True:
-            reply = self._read(deadline)
+            reply = self._read(self.deadline)
             if not _json_equal(reply.get("id"), request_id):
                 continue
             if "error" in reply:
@@ -347,11 +350,15 @@ class _JsonRpcClient:
 
     def _write(self, message: dict[str, Any]) -> None:
         assert self.process.stdin is not None
+        if time.monotonic() >= self.deadline:
+            _fail("MCP stdio response timed out")
         self.process.stdin.write((json.dumps(message, separators=(",", ":")) + "\n").encode("utf-8"))
         self.process.stdin.flush()
 
     def _read(self, deadline: float) -> dict[str, Any]:
         assert self.process.stdout is not None
+        if time.monotonic() >= deadline:
+            _fail("MCP stdio response timed out")
         while b"\n" not in self.pending:
             remaining = deadline - time.monotonic()
             if remaining <= 0:
@@ -364,7 +371,10 @@ class _JsonRpcClient:
                 _fail(f"MCP stdio closed before response; process exit {self.process.poll()}")
             self.pending += chunk
         line, self.pending = self.pending.split(b"\n", 1)
-        return json.loads(line)
+        reply = json.loads(line)
+        if time.monotonic() >= deadline:
+            _fail("MCP stdio response timed out")
+        return reply
 
 
 def _call_args(step: dict[str, Any], payload_override: str | None = None) -> tuple[list[str], str, dict[str, Any]]:

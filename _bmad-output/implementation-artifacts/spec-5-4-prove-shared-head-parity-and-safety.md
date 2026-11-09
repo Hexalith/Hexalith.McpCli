@@ -2,8 +2,8 @@
 title: '5.4 Prove shared-head parity and safety'
 type: 'feature'
 created: '2026-11-09'
-updated: '2026-11-09T18:04:03+01:00'
-status: 'in-progress'
+updated: '2026-11-09T22:33:10+01:00'
+status: 'in-review'
 baseline_commit: 'f6c8e0e3a2105f555e6eec3c667b088085c47fc4'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -126,11 +126,11 @@ context:
   - Extend the discovery assertion.
   - Cover each change in `test_*.py`.
 - [x] After the split redactor change lands: push a branch, open the PR, and download and verify the live artifact.
-- [ ] `_bmad-output/implementation-artifacts/evidence/story-5-4/`:
+- [x] `_bmad-output/implementation-artifacts/evidence/story-5-4/`:
   - `manifest.json`: the full commit; SHA-256 of the head binaries; the Parties 1.5.1 artifact hash; the Catalog digest (SHA-256 of the sorted-key, compact `list_operations` structured content); the components and revisions of the environment; the vector, plan, approval and inventory hashes; and the CI run ID and artifact hash.
   - `parity-matrix.md`: C01–C08 and the seven variants. Admin and technical rows are marked "absent; name similarity proves nothing".
   - The scan receipt, the F7 acceptance and `verification.md`.
-  - HALT for the owner's exact-byte approval and verdict, then record the receipt.
+  - HALT for the owner's exact-byte approval and verdict, then record the receipt. Completed: the owner answered `approve` for `retirement-blocked`, retaining G01–G06. The receipt is `evidence/story-5-4-owner-approval/owner-approval.json`; the original packet and scan are preserved unchanged.
 - [x] `README.md`, `sprint-status.yaml` and `deferred-work.md` -- document a 401 or 403 as a `gateway_error` and the F7 limitation. Record status, and grep the ledger before appending.
 
 **Acceptance Criteria:**
@@ -146,11 +146,40 @@ context:
 - The selected cohort’s absent detail returns `500/query_internal_error` with `actor-not-found-infrastructure`, as inventory C05 records. Missing deactivation returns `404/party-not-found`; separate CLI/MCP absent targets also verify persisted events contain no creation/deactivation effect (a rejection-only stream can remain). Before/after comparisons remove only observation-time `freshness`, retaining every business member.
 - Concurrent CLI processes use distinct generated message IDs. The qualified Gateway awaits the owner’s `ProcessCommandAsync` before returning acceptance; after both return, the boundary waits for the authorized inactive projection and requires exactly one persisted deactivation event in the actor’s stream. The actor ID and state keys follow qualified EventStore `dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`. Any configured sidecar `DAPR_API_TOKEN` is retained for state reads; app-channel authentication is unchanged.
 - The generic runner executes every Query observation through MCP as well as CLI, while every vector Command stays CLI-only. Semantic receipts require both Query heads. CI derives expected counts from approved vectors and its independent-case registry; it allocates each independent case 960 seconds and reserves 600 seconds within the unchanged 17700-second outer budget.
-- [Review][Resolved prerequisite] The separate redactor/committed secret-scan change closes the existing planning deferral in `deferred-work.md` under this spec's heading; see `spec-epic-4-retro-item-5-harden-ci-redaction.md` and `evidence/epic-4-retro-item-5/verification.md`. Story 5.4's dedicated live CI and final hash-bound scanned packet are now retained; its exact-byte owner approval/verdict remains pending. The rejection-only-stream and mixed-profile-identity work is already tracked (`deferred-work.md:556`, `deferred-work.md:833`). The final manifest binds executed evidence; no approved retirement verdict is asserted.
+- [Review][Resolved prerequisite] The separate redactor/committed secret-scan change closes the existing planning deferral in `deferred-work.md` under this spec's heading; see `spec-epic-4-retro-item-5-harden-ci-redaction.md` and `evidence/epic-4-retro-item-5/verification.md`. Story 5.4's dedicated live CI and final hash-bound scanned packet are now retained; its exact-byte owner approval is recorded as `retirement-blocked` in `evidence/story-5-4-owner-approval/owner-approval.json`, retaining G01–G06 as blocking. The rejection-only-stream and mixed-profile-identity work is already tracked (`deferred-work.md:556`, `deferred-work.md:833`). The original manifest binds the approved snapshot and retains its historical pending-approval state; the separate receipt records the later approved `retirement-blocked` verdict.
 
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Review pass 1 (2026-11-09)
+
+Each row preserves the individual reviewer claim before grouping. B = blind hunter; E = edge-case hunter; V = verification-gap reviewer. The approved packet and owner receipt remain immutable snapshots; review follow-up evidence is separate.
+
+| Finding | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| B01 | medium | patch | scripts/verify-release-source.py:39 still requires the old topology step label; validate_jobs rejects the renamed successful step. Align the label and pin the workflow/consumer contract. |
+| B02 | high | defer | Reproduced unfinished nested escaped JSON retaining a private-value canary. evidence_redaction.py is byte-identical to the separately landed prerequisite at 296617072ab3fb632d2bddb9189b52fd94286f83; no Story 5.4 change caused it. |
+| B03 | high | defer | Reproduced malformed XML with Private&#75;ey retaining the canary; raw selector matching precedes entity decoding. Same pre-existing prerequisite and root cause as E01. |
+| B04 | high | defer | Reproduced a quoted XML value containing > leaving the private suffix. The malformed-tag regex terminates inside the quoted attribute; pre-existing prerequisite code. |
+| B05 | high | defer | Reproduced --SigningKey VALUE retaining the canary. Whitespace arguments lost the former CI sanitizer coverage in the separate prerequisite; same root cause as E03. |
+| B06 | medium | defer | A task-owned ancestor symlink leading to a regular packet scans clean. The scanner checks its final root/file components only; this is unchanged prerequisite code. |
+| B07 | medium | patch | BoundaryHeads.ReadReplyAsync consumes intermediate stdout notifications without retaining them; HeadResult.AllChannels cannot observe their payloads. Preserve the complete protocol transcript and test notification-marker visibility. |
+| B08 | medium | patch | require_prepared_provenance verifies source, package and host seals but never reads prepared.headCatalog. The new capture receipt can disappear or drift before execution without this gate noticing. Seal-check its bytes and binary map. |
+| B09 | medium | patch | ReadAsync immediately accepts the pre-existing active projection. Because projection convergence is asynchronous, that read alone does not observe an event appended before a refusal. Add durable stream-sequence comparisons around refused calls. |
+| B10 | medium | patch | Task.WhenAll starts two clients but does not hold the first request for the second to arrive. A sequential network arrival can satisfy the repeat assertion. Add a bounded two-request forwarding barrier and regression. |
+| B11 | medium | patch | The event-reader unit fixtures contain only allowed streams; deleting either missing-party rejection assertion or selecting the first duplicate still passes. Same root cause as V01; add forbidden-stream rejection cases. |
+| E01 | high | defer | Independently reproduced Priv&#97;teKey malformed XML retaining the same canary. Duplicate of B03, with the same raw-selector/entity-decoding root cause in the separate prerequisite. |
+| E02 | high | defer | Reproduced a backslash-escaped quote terminating private-argument redaction early and retaining its suffix. This parser is unchanged from the separate prerequisite. |
+| E03 | high | defer | Independently reproduced --PrivateKey VALUE remaining unchanged. Duplicate of B05: whitespace-separated private arguments in the separate prerequisite. |
+| E04 | medium | patch | HeadProcess.mcp gives initialization and tools/call separate self.timeout windows; observe does not reject an otherwise successful result after the observation deadline. Share an absolute MCP budget and reject late success with focused timing regressions. |
+| E05 | false | reject | The frozen Decisions item 3 and Always command rule explicitly keep live Commands CLI-only; the approved packet and Implementation Notes explicitly identify the CLI concurrent pair. The general task wording does not authorize another mutating MCP pair. |
+| V01 | medium | patch | Pre-verified regression gap: PersistedPartyEventsTests exercises only valid streams, while Single/DoesNotContain assertions are the claimed safety oracles. Add zero/duplicate deactivation and forbidden creation/deactivation cases; grouped with B11. |
+
+
+**Patch disposition:** B01, B07, B08, B09, B10, B11/V01 and E04 are fixed. The release validator now matches the workflow; all MCP stdout frames are retained; head-catalog bytes/hash/DLL inventory are rechecked; durable sequence equality supplements projection reads; a bounded forwarding barrier establishes the concurrent pair; unsafe event streams are rejected by explicit regressions; and MCP uses one invocation deadline with late-success refusal. All 45 focused C# cases and 28 focused Python cases pass; removing the barrier wait causes both barrier regressions to fail. Full post-review restore/Release build, Core (877), CLI (623), MCP (94), Manifest (362), 194 release-script tests, 164 conformance Python tests and 218 topology Python tests pass. Six expected OS skips remain. Fresh enrolled replay and a dedicated post-review live qualification are recorded separately when complete.
+
+**Deferred groups:** R54-D1 = B02; R54-D2 = B03/E01; R54-D3 = B04; R54-D4 = B05/E03; R54-D5 = B06; R54-D6 = E02. These are six reproduced, pre-existing prerequisite root causes with their own ledger entries, not new owner waivers or changes to G01–G06. E05 is rejected on the frozen CLI-only concurrency decision. The approved original packet and its separate owner-approval receipt are unchanged.
 
 ## Verification
 
@@ -312,7 +341,7 @@ reject missing/duplicate/invalid registrations and prove both C05 helpers read
 the expected state keys with and without the API token. No runner, production
 source, approved input or dependency changed.
 
-### Final CI qualification and pending owner checkpoint (2026-11-09)
+### Final CI qualification and owner approval (2026-11-09)
 
 Candidate `3e8f6a4e681018c7ca8356997d4fd28378217d37` passed CI run `42652261452` on draft PR #5. All 21 approved vectors, independent shared-head boundary and Gateway smoke passed; both live Query heads are required and each live Command is submitted once. Hosted `check_enrolled.py` reports `fullV1Accepted: true`; live receipts report `fullLiveAccepted: true`. All 216 hosted topology checks passed and discovery matched the 21 vectors plus the two independent cases. The six ordinary projects passed 1,985 tests with six OS-only skips; Manifest and enrolled inventory checks remain unchanged.
 
@@ -320,4 +349,6 @@ The latest Release build has zero warnings/errors. All 77 named offline safety, 
 
 The complete packet is `evidence/story-5-4/`: manifest, C01–C08/seven-variant matrix, F7 acceptance, source audit, full text receipts and logs, verification and secret scan. It binds the actual hosted checkout and equal candidate tree, every head DLL, exact Catalog content, Contracts artifact, environment/source revisions, approved inputs, CI run/artifact digests and retained text hashes. The source audit clearly distinguishes upstream tests at the enrolled revision from tests executed in this run. Production source, dependencies, identifiers, approved vectors/plans/approvals/inventories and reference gitlinks are unchanged.
 
-**HALT remains at the frozen owner checkpoint.** Exact-byte approval and an approved `retirement-ready` or `retirement-blocked` verdict are not recorded. The proposal is `retirement-blocked`, keeping G01–G06 open with the matrix’s named ledger owners; no inventory 1.3.0 amendment is asserted. Story 5.4 remains in-progress until that response and its bound receipt. No release, publication or retirement is claimed.
+**The exact-byte owner checkpoint is complete.** The owner answered exactly `approve` to the request bound by scan-receipt SHA-256 `1edc78fd37ede85498e7d8a9a7b1ea3537175bb470259a729bf0a8a8aa1ac0c3`, approving the verdict `retirement-blocked` and retaining G01–G06 as blocking with their named ledger owners. `evidence/story-5-4-owner-approval/owner-approval.json` records the response, original commit and digest bindings, and each retained gap disposition. Every original `evidence/story-5-4/` byte and its scan remain unchanged; their pending-owner text is the historical pre-approval snapshot. No inventory 1.3.0 amendment, release, publication or retirement is approved.
+
+Implementation tasks are complete under the approved `retirement-blocked` verdict. The workflow status remains unchanged pending the normal review transition. The separate approval packet’s `verification.json`, `verification.md` and `secret-scan.json` record binding, snapshot-preservation and hygiene checks.
