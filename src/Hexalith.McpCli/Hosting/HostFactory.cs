@@ -48,6 +48,13 @@ internal static class HostFactory
         builder.Logging.AddConsole(options => options.LogToStandardErrorThreshold = LogLevel.Trace);
         _ = builder.Services.AddMcpCliCore(settings, manifest ?? ManifestLoader.Load, gateway =>
         {
+            // The default client loggers write failure exceptions, which can quote downstream response content, to stderr.
+            string category = "System.Net.Http.HttpClient." + gateway.Name;
+            _ = gateway.RemoveAllLoggers()
+                .AddLogger(services => new GatewayPipelineHttpLogger(services.GetRequiredService<ILoggerFactory>()
+                    .CreateLogger(category + ".LogicalHandler")), wrapHandlersPipeline: true)
+                .AddLogger(services => new GatewayHandlerHttpLogger(services.GetRequiredService<ILoggerFactory>()
+                    .CreateLogger(category + ".ClientHandler")));
             if (settings.Token is not null)
             {
                 builder.Services.AddTransient(_ => new StaticBearerTokenHandler(settings.Token));

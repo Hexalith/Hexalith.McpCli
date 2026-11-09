@@ -76,6 +76,19 @@ public sealed class SettingsResolver
             }
 
             string? token = Select(input.Token, "EVENTSTORE_TOKEN", profile?.Token, null, "token", sources);
+            SettingsResolution? blankToken = ValidateText(token, "token", sources);
+            if (blankToken is not null)
+            {
+                return blankToken;
+            }
+
+            // A credential travels only with the Gateway URL from its own source, so it cannot reach another environment.
+            if (url is not null && token is not null && SourceClass(sources["url"]) != SourceClass(sources["token"]))
+            {
+                return Failure($"The gateway URL from {sources["url"]} and the token from {sources["token"]} must come "
+                    + "from the same source: flags, environment, or the selected profile.");
+            }
+
             string? tenant = Select(input.Tenant, "EVENTSTORE_TENANT", profile?.Tenant, null, "tenant", sources);
             string? actor = Select(input.Actor, "EVENTSTORE_ACTOR", profile?.Actor, null, "actor", sources);
             string format = Select(input.Format, "EVENTSTORE_FORMAT", profile?.Format, "json", "format", sources)!;
@@ -84,8 +97,7 @@ public sealed class SettingsResolver
                 return Failure($"Invalid format from {sources["format"]}; expected json or table.");
             }
 
-            SettingsResolution? textFailure = ValidateText(token, "token", sources)
-                ?? ValidateText(tenant, "tenant", sources)
+            SettingsResolution? textFailure = ValidateText(tenant, "tenant", sources)
                 ?? ValidateText(actor, "actor", sources);
             if (textFailure is not null)
             {
@@ -173,6 +185,9 @@ public sealed class SettingsResolver
         sources[field] = profile is null ? "default" : "profile";
         return profile;
     }
+
+    private static string SourceClass(string source)
+        => source.StartsWith("EVENTSTORE_", StringComparison.Ordinal) ? "environment" : source;
 
     private static SettingsResolution? ValidateText(
         string? value,

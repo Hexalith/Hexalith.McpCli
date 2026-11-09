@@ -9,9 +9,16 @@ namespace Hexalith.McpCli.Core.Tests;
 /// <summary>Checks shared settings precedence and the one-gateway DI boundary.</summary>
 public sealed class SettingsAndRegistrationTests
 {
-    /// <summary>Explicit options take precedence over environment and the selected profile.</summary>
-    [Fact]
-    public void ResolvesPrecedenceAndRecordsSources()
+    /// <summary>
+    /// Explicit options take precedence over environment and the selected profile, field by field, while the Gateway URL
+    /// and token always come together from one source.
+    /// </summary>
+    /// <param name="source">The single source supplying both the Gateway URL and the token.</param>
+    [Theory]
+    [InlineData("flag")]
+    [InlineData("environment")]
+    [InlineData("profile")]
+    public void ResolvesPrecedenceAndRecordsSources(string source)
     {
         string path = TemporaryPath();
         try
@@ -20,25 +27,28 @@ public sealed class SettingsAndRegistrationTests
             File.WriteAllText(path, """
                 {"version":1,"activeProfile":"dev","profiles":{"dev":{"url":"https://profile.example/","token":"profile-token","tenant":"profile-tenant","allowedExtensions":["task-id"]}}}
                 """);
-            var environment = new Dictionary<string, string?>
+            var environment = new Dictionary<string, string?> { ["EVENTSTORE_TENANT"] = "environment-tenant" };
+            if (source != "profile")
             {
-                ["EVENTSTORE_URL"] = "https://environment.example/",
-                ["EVENTSTORE_TOKEN"] = "environment-token",
-            };
+                environment["EVENTSTORE_URL"] = "https://environment.example/";
+                environment["EVENTSTORE_TOKEN"] = "environment-token";
+            }
 
-            SettingsResolution resolution = new SettingsResolver(new ProfileStore(path), environment)
-                .Resolve(new SettingsInput(Url: "https://flag.example/", Actor: "operator"));
+            SettingsInput input = source == "flag"
+                ? new SettingsInput(Url: "https://flag.example/", Token: "flag-token", Actor: "operator")
+                : new SettingsInput(Actor: "operator");
+            SettingsResolution resolution = new SettingsResolver(new ProfileStore(path), environment).Resolve(input);
 
             resolution.Error.ShouldBeNull();
             ResolvedSettings settings = resolution.Settings.ShouldNotBeNull();
-            settings.Url.ShouldBe(new Uri("https://flag.example/"));
-            settings.Token.ShouldBe("environment-token");
-            settings.Tenant.ShouldBe("profile-tenant");
+            settings.Url.ShouldBe(new Uri($"https://{source}.example/"));
+            settings.Token.ShouldBe(source + "-token");
+            settings.Tenant.ShouldBe("environment-tenant");
             settings.Actor.ShouldBe("operator");
             settings.AllowedExtensions.Contains("TASK-ID").ShouldBeTrue();
-            settings.Sources["url"].ShouldBe("flag");
-            settings.Sources["token"].ShouldBe("EVENTSTORE_TOKEN");
-            settings.Sources["tenant"].ShouldBe("profile");
+            settings.Sources["url"].ShouldBe(source == "environment" ? "EVENTSTORE_URL" : source);
+            settings.Sources["token"].ShouldBe(source == "environment" ? "EVENTSTORE_TOKEN" : source);
+            settings.Sources["tenant"].ShouldBe("EVENTSTORE_TENANT");
             settings.Sources["actor"].ShouldBe("flag");
             settings.Sources["format"].ShouldBe("default");
             settings.Sources["output"].ShouldBe("default");
@@ -48,6 +58,132 @@ public sealed class SettingsAndRegistrationTests
         {
             Directory.Delete(Path.GetDirectoryName(path)!, recursive: true);
         }
+    }
+
+    /// <summary>
+    /// A Gateway URL and token from different sources fail before any host or Gateway exists, naming both sources and
+    /// never the token.
+    /// </summary>
+    /// <param name="urlSource">The source supplying the URL.</param>
+    /// <param name="tokenSource">The source supplying the token.</param>
+    [Theory]
+    [InlineData("flag", "profile")]
+    [InlineData("environment", "profile")]
+    [InlineData("flag", "environment")]
+    [InlineData("profile", "flag")]
+    [InlineData("profile", "environment")]
+    [InlineData("environment", "flag")]
+    public void RejectsGatewayUrlAndTokenFromDifferentSources(string urlSource, string tokenSource)
+    {
+        const string profileToken = "profile-secret-token";
+        const string environmentToken = "environment-secret-token";
+        const string flagToken = "flag-secret-token";
+        var profiles = new Dictionary<string, ConnectionProfile>(StringComparer.Ordinal)
+        {
+            // A profile that supplies the token also keeps its own URL, which a flag or environment URL overrides.
+            ["dev"] = new(Url: "https://profile.example/", Token: tokenSource == "profile" ? profileToken : null),
+        };
+        var environment = new Dictionary<string, string?>();
+        if (urlSource == "environment")
+        {
+            environment["EVENTSTORE_URL"] = "https://environment.example/";
+        }
+
+        if (tokenSource == "environment")
+        {
+            environment["EVENTSTORE_TOKEN"] = environmentToken;
+        }
+
+        var input = new SettingsInput(Url: urlSource == "flag" ? "https://flag.example/" : null,
+            Token: tokenSource == "flag" ? flagToken : null);
+
+        SettingsResolution resolution = new SettingsResolver(() => new ProfileSnapshot(1, "dev", profiles), environment)
+            .Resolve(input);
+
+        resolution.Settings.ShouldBeNull();
+        OperationError error = resolution.Error.ShouldNotBeNull();
+        error.ShouldBe(new OperationError("configuration_invalid", Message:
+            $"The gateway URL from {Name(urlSource, "EVENTSTORE_URL")} and the token from {Name(tokenSource, "EVENTSTORE_TOKEN")} "
+            + "must come from the same source: flags, environment, or the selected profile."));
+        string document = System.Text.Json.JsonSerializer.Serialize(error);
+        foreach (string token in new[] { profileToken, environmentToken, flagToken })
+        {
+            document.ShouldNotContain(token);
+            document.ShouldNotContain(ProfileStore.MaskToken(token)!);
+        }
+
+        static string Name(string source, string environmentName) => source == "environment" ? environmentName : source;
+    }
+
+    /// <summary>A Gateway URL without any token resolves from each source, as does a token without any URL.</summary>
+    /// <param name="source">The source supplying the only connection value.</param>
+    /// <param name="urlOnly">Whether the value is a URL rather than a token.</param>
+    [Theory]
+    [InlineData("flag", true)]
+    [InlineData("environment", true)]
+    [InlineData("profile", true)]
+    [InlineData("flag", false)]
+    [InlineData("environment", false)]
+    [InlineData("profile", false)]
+    public void ResolvesAGatewayUrlOrTokenAlone(string source, bool urlOnly)
+    {
+        var profiles = new Dictionary<string, ConnectionProfile>(StringComparer.Ordinal)
+        {
+            ["dev"] = source == "profile"
+                ? new(Url: urlOnly ? "https://profile.example/" : null, Token: urlOnly ? null : "profile-token")
+                : new(Tenant: "acme"),
+        };
+        var environment = new Dictionary<string, string?>();
+        if (source == "environment")
+        {
+            environment[urlOnly ? "EVENTSTORE_URL" : "EVENTSTORE_TOKEN"] = urlOnly ? "https://environment.example/" : "environment-token";
+        }
+
+        SettingsInput input = source != "flag" ? new SettingsInput()
+            : urlOnly ? new SettingsInput(Url: "https://flag.example/") : new SettingsInput(Token: "flag-token");
+
+        SettingsResolution resolution = new SettingsResolver(() => new ProfileSnapshot(1, "dev", profiles), environment)
+            .Resolve(input);
+
+        resolution.Error.ShouldBeNull();
+        ResolvedSettings settings = resolution.Settings.ShouldNotBeNull();
+        string named = source == "environment" ? (urlOnly ? "EVENTSTORE_URL" : "EVENTSTORE_TOKEN") : source;
+        if (urlOnly)
+        {
+            settings.Url.ShouldBe(new Uri($"https://{source}.example/"));
+            settings.Token.ShouldBeNull();
+            settings.Sources["url"].ShouldBe(named);
+            settings.Sources["token"].ShouldBe("default");
+        }
+        else
+        {
+            settings.Url.ShouldBeNull();
+            settings.Token.ShouldBe(source + "-token");
+            settings.Sources["url"].ShouldBe("default");
+            settings.Sources["token"].ShouldBe(named);
+        }
+    }
+
+    /// <summary>
+    /// A blank token is reported as the blank-token error before the URL and token sources are compared, so a flag URL
+    /// beside a blank <c>EVENTSTORE_TOKEN</c> names the blank value rather than a source mix.
+    /// </summary>
+    [Fact]
+    public void BlankTokenFailsBeforeTheSourceComparison()
+    {
+        var environment = new Dictionary<string, string?> { ["EVENTSTORE_TOKEN"] = " " };
+
+        SettingsResolution resolution = new SettingsResolver(
+            () => new ProfileSnapshot(1, null, new Dictionary<string, ConnectionProfile>()), environment)
+            .Resolve(new SettingsInput(Url: "https://flag.example/"));
+
+        resolution.Settings.ShouldBeNull();
+        OperationError error = resolution.Error.ShouldNotBeNull();
+        System.Text.Json.JsonSerializer.Serialize(new { error }, Hexalith.McpCli.Core.Serialization.McpCliJson.Result)
+            .ShouldBe(System.Text.Json.JsonSerializer.Serialize(new
+            {
+                error = new { code = "configuration_invalid", message = "Invalid token from EVENTSTORE_TOKEN; the value cannot be blank." },
+            }, Hexalith.McpCli.Core.Serialization.McpCliJson.Result));
     }
 
     /// <summary>Profile selection uses flag, environment, then active profile.</summary>

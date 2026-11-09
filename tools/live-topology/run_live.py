@@ -16,7 +16,7 @@ from run_loopback import HeadProcess, _assert_result, _call_args, _pointer, _ste
 from validate import VectorError, _load_json
 
 
-def observe(head: HeadProcess, call: dict, url: str, action: dict, values: dict, plan: dict,
+def observe(head: HeadProcess, call: dict, url: str | None, action: dict, values: dict, plan: dict,
             record: dict, *, clock=time.monotonic, pause=time.sleep, checkpoint=lambda: None) -> dict:
     """Submit writes once. Only reads may converge, within an independent hard deadline."""
     deadline = clock() + plan['deadlineSeconds']
@@ -108,7 +108,9 @@ def execute(selection: dict, host: Path, url: str, token: str, report: dict, *, 
     message_ids = set()
     with tempfile.TemporaryDirectory(prefix='mcpcli-live-home-') as home:
         head = HeadProcess(host, home, 30)
-        # Private inherited environment, never command-line arguments or receipts.
+        # Private inherited environment, never command-line arguments or receipts. The Gateway URL travels in the
+        # same environment because McpCli refuses a URL and token that come from different sources.
+        head.env['EVENTSTORE_URL'] = url
         head.env['EVENTSTORE_TOKEN'] = token
         head.allow_extensions({key for step in steps.values() for key in step['envelope'].get('extensions', {})})
         for index, action in enumerate(selection['plan']['actions']):
@@ -123,7 +125,7 @@ def execute(selection: dict, host: Path, url: str, token: str, report: dict, *, 
             # Validate every resolved dynamic call again before it can reach the live Gateway.
             try:
                 validate_call(head, call)
-                document = observe(head, call, url, action, values, selection['plan'], record, checkpoint=checkpoint)
+                document = observe(head, call, None, action, values, selection['plan'], record, checkpoint=checkpoint)
                 if call['kind'] == 'command':
                     if document['messageId'] in message_ids:
                         raise VectorError(f'{phase} {call["operation"]}: /messageId was reused across Command phases')

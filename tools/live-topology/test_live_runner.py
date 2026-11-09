@@ -345,12 +345,15 @@ class ExecutionTests(unittest.TestCase):
         for checked, phase in zip(validate.call_args_list, report['phases']):
             self.assertIs(head, checked.args[0])
             self.assertEqual(phase['resolvedCall'], {key: checked.args[1][key] for key in phase['resolvedCall']})
-        # The identity reaches the CLI only through its private environment; every attempt names the private endpoint and envelope.
+        # The identity and its private endpoint reach the CLI together through one private environment, never as
+        # arguments, because McpCli refuses a Gateway URL and token from different sources; every attempt names the envelope.
         self.assertEqual('private-token', head.env['EVENTSTORE_TOKEN'])
-        self.assertEqual([('http://127.0.0.1/', phase['resolvedCall']['envelope']['tenant'], phase['resolvedCall']['envelope'].get('actor'))
+        self.assertEqual('http://127.0.0.1/', head.env['EVENTSTORE_URL'])
+        self.assertEqual([(None, phase['resolvedCall']['envelope']['tenant'], phase['resolvedCall']['envelope'].get('actor'))
                           for phase in report['phases'] for _ in phase['attempts']],
                          [tuple(arguments[1:]) for arguments, _ in head.calls])
         self.assertNotIn('private-token', json.dumps([arguments for arguments, _ in head.calls]))
+        self.assertNotIn('http://127.0.0.1/', json.dumps([arguments for arguments, _ in head.calls]))
         return head, report
 
     def test_dynamic_cursor_and_audit_windows_reach_cli_and_actual_core_validation(self):

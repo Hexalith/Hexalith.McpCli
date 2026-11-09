@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "decision": "approved",
+  "first_commit_note": "Inventory 1.1.0 is first committed together with this approved receipt; reviewed_candidate_state.first_committed_revision and amendments[0].to_first_committed_revision stay null until a later receipt update records that commit, as in the Story 5.1 receipt.",
+  "approved_on": "2026-11-09",
+  "approver": "Jérôme Piquot (GitHub jpiquot)",
+  "approval_authority": "requesting-user-owning-maintainer",
+  "exact_approval_instruction": "Approve Parties 1.1.0 as Parties owner",
+  "exact_authority_confirmation": "Approve Parties 1.1.0 as Parties owner",
+  "authority_scope": [
+    "Parties owning maintainer"
+  ],
+  "reviewed_candidate_version": "1.1.0",
+  "mcpcli_revision": "4bc4be5deca889d1594b0d367e313592c9421fe8",
+  "source_revisions": {
+    "references/Hexalith.EventStore": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+    "references/Hexalith.Parties": "1308ad000c79ebc394fc395588f9af91092e8c4c"
+  },
+  "inventories": [
+    {
+      "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "approved_sha256": "8fc4078842d141151c521f0288f1eb7f9b984505c7b4a1458fa40de8dba4c51e",
+      "row_ids": [
+        "L01",
+        "L02",
+        "L03",
+        "L04",
+        "L05",
+        "T01",
+        "T02",
+        "T03",
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05",
+        "C06",
+        "C07",
+        "C08",
+        "N01",
+        "N02",
+        "N03",
+        "N04"
+      ],
+      "inventory_version": "1.1.0",
+      "preserved_version": "1.0.0",
+      "preserved_path": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.0.0/parties-migration-inventory-v1.md",
+      "preserved_sha256": "c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f"
+    }
+  ],
+  "limits": [
+    "Records the C05 delete oracles and the C06 and C07 resolutions for the generic heads only.",
+    "No Parties Contracts upgrade, vector, live plan, artifact approval or dependency-policy change.",
+    "No runtime exposure, execution, parity, publication or retirement authority."
+  ],
+  "approver_source": {
+    "record": "No CODEOWNERS file exists in references/Hexalith.Parties at 1308ad000c79ebc394fc395588f9af91092e8c4c. The approver identity is the one confirmed in evidence/story-5-1/approval/approval.json (identity_and_role_confirmation) and the McpCli commit identity of this checkout.",
+    "evidence_scope": "Identity only; authority for the Parties owning maintainer role rests on exact_authority_confirmation under the single-maintainer model (Epic 4 retro F11)."
+  },
+  "identity_and_role_confirmation": {
+    "confirmed_on": "2026-11-09",
+    "approver": "Jérôme Piquot (GitHub jpiquot)",
+    "roles": [
+      "Parties owning maintainer"
+    ],
+    "source_spec": "_bmad-output/implementation-artifacts/spec-5-3-enroll-replacement-contracts-and-profiles.md",
+    "record": "After the Story 5.3 review, the final 1.1.0 word diff and SHA-256 were presented and the user selected \"Approve Parties 1.1.0 as Parties owner\", whose label names the role it covers."
+  },
+  "inventory_versions": {
+    "parties": "1.1.0"
+  },
+  "reviewed_candidate_state": {
+    "base_revision": "4bc4be5deca889d1594b0d367e313592c9421fe8",
+    "base_inventory_version": "1.0.0",
+    "reviewed_state": "uncommitted working tree over mcpcli_revision; 1.1.0 is not contained in that commit and is first committed with this receipt",
+    "first_committed_revision": null,
+    "first_committed_location": null
+  },
+  "amendments": [
+    {
+      "inventory": "parties",
+      "from_version": "1.0.0",
+      "to_version": "1.1.0",
+      "from_sha256": "c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f",
+      "to_sha256": "8fc4078842d141151c521f0288f1eb7f9b984505c7b4a1458fa40de8dba4c51e",
+      "to_path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "to_first_committed_revision": null,
+      "approved_on": "2026-11-09",
+      "approver": "Jérôme Piquot (GitHub jpiquot)",
+      "approval_decision": "Approve Parties 1.1.0 as Parties owner",
+      "approval_basis": "Final amended bytes and SHA-256 presented to the owner after Story 5.3 review pass 1 (the user chose \"Review first, then approve\") and approved before this receipt bound them.",
+      "exact_approval_instruction": "Approve Parties 1.1.0 as Parties owner",
+      "source_spec": "_bmad-output/implementation-artifacts/spec-5-3-enroll-replacement-contracts-and-profiles.md",
+      "changed_rows": [
+        "C05",
+        "C06",
+        "C07"
+      ],
+      "added_rows": [],
+      "narrative_changes": [
+        "inventory version 1.1.0 and amendment frontmatter",
+        "introduction pointer to A1 amendment 1.1.0",
+        "coverage-rule enrollment eligibility wording",
+        "A1 amendment 1.1.0 subsection",
+        "Story 4.1 checker scope and Story 5.3 verification pointer"
+      ],
+      "limits": "Source revision, row identities, targets, dispositions, coverage values, routing and the A1 limits are unchanged; no execution, parity or retirement authority."
+    }
+  ]
+}

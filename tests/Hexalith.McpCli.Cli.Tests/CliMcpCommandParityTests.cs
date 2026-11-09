@@ -171,6 +171,65 @@ public sealed class CliMcpCommandParityTests
         }
     }
 
+    /// <summary>
+    /// A payload tenant or actor that disagrees with the envelope, or a tenant or actor member the operation does not
+    /// declare, fails with the same complete document through both heads before any Gateway call.
+    /// </summary>
+    /// <param name="module">The fixture module: the routing fixture declares tenant and actor members, Parties declares none.</param>
+    /// <param name="member">The disagreeing or undeclared payload member.</param>
+    [Theory]
+    [InlineData("routing", "tenant/~")]
+    [InlineData("routing", "Actor")]
+    [InlineData("parties", "TenantId")]
+    [InlineData("parties", "Tenant")]
+    [InlineData("parties", "ActorId")]
+    public async Task IdentityMismatchFailsInBothHeadsBeforeTheGatewayAsync(string module, string member)
+    {
+        string directory = Path.Combine(Path.GetTempPath(), "mcpcli-identity-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(directory);
+        try
+        {
+            await using var gateway = new ScriptedGateway(ScriptedGateway.AcceptCommand);
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            bool routing = module == "routing";
+            string operation = routing ? "routing-fixture.envelope-item" : "parties.deactivate-party";
+            Func<IReadOnlyList<System.Reflection.Assembly>> manifest = routing
+                ? () => [typeof(global::Catalog.Routing.Contracts.Module).Assembly]
+                : () => [System.Reflection.Assembly.Load(new System.Reflection.AssemblyName("Hexalith.Parties.Contracts"))];
+            var payload = new JsonObject { [routing ? "ItemId" : "PartyId"] = routing ? ItemId : "party-identity" };
+            payload[member] = member == "Actor" ? "intruder" : "tenant-b";
+            object[] violations = (routing, member) switch
+            {
+                (true, "Actor") => [new { path = "/Actor", message = "The payload actor disagrees with the trusted actor." }],
+                (true, _) => [new { path = "/tenant~1~0", message = "The payload tenant disagrees with the resolved tenant." }],
+                _ =>
+                [
+                    new { path = "/", message = $"Some additional properties did not match the required schema: [\"{member}\"]" },
+                    new { path = "/" + member, message = "All values fail against the false schema" },
+                ],
+            };
+            string expected = JsonSerializer.Serialize(new { error = new { code = "validation_failed", operation, violations } });
+            string[] globals = ["--url", gateway.Url, "--tenant", "session-tenant", "--actor", "operator-1"];
+            IReadOnlyDictionary<string, string?> environment = new Dictionary<string, string?>();
+
+            HeadResult cli = await BothHeads.InvokeCliAsync(store, manifest, environment,
+                ["send", operation, "--payload", payload.ToJsonString(), .. globals]);
+            HeadResult mcp = await BothHeads.InvokeMcpAsync(store, manifest, environment, globals, "send_command",
+                new Dictionary<string, object?> { ["operation"] = operation, ["payload"] = payload.ToJsonString() });
+
+            BothHeads.AssertDocument(cli, expected, isError: true);
+            BothHeads.AssertDocument(mcp, expected, isError: true);
+            // The routing fixture deliberately declares seven conflicting or redundant routing values.
+            HeadDiagnostics.AssertNoGateway(cli, catalogWarnings: routing ? 7 : 0);
+            HeadDiagnostics.AssertNoGateway(mcp, catalogWarnings: routing ? 7 : 0);
+            gateway.Requests.ShouldBeEmpty();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Every CLI payload source sends one catalog-routed command and returns the canonical accepted document.</summary>
     [Theory]
     [InlineData("inline", false, false)]

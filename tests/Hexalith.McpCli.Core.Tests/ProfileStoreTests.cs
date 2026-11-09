@@ -512,6 +512,85 @@ public sealed class ProfileStoreTests
         }
     }
 
+    /// <summary>
+    /// A profile name followed by a trailing newline is invalid for every store entry point, and the rejection leaves the
+    /// profile bytes unchanged; a <c>$</c> anchor would accept it because it also matches before a final newline.
+    /// </summary>
+    /// <param name="operation">The store entry point.</param>
+    [Theory]
+    [InlineData("add")]
+    [InlineData("use")]
+    [InlineData("set")]
+    [InlineData("remove")]
+    [InlineData("validate-add")]
+    [InlineData("validate-use")]
+    [InlineData("validate-set")]
+    [InlineData("validate-remove")]
+    public void NewlineSuffixedNameFailsWithoutChangingBytes(string operation)
+    {
+        const string name = "dev\n";
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/", "secret-token"));
+            store.Use("dev");
+            byte[] previous = File.ReadAllBytes(store.ProfilePath);
+            var profile = new ConnectionProfile("https://other.example/");
+            Action action = operation switch
+            {
+                "add" => () => store.Add(name, profile),
+                "use" => () => store.Use(name),
+                "set" => () => store.Set(name, "tenant", "acme"),
+                "remove" => () => store.Remove(name),
+                "validate-add" => () => store.ValidateAdd(name, profile),
+                "validate-use" => () => store.ValidateUse(name),
+                "validate-set" => () => store.ValidateSet(name, "tenant", "acme"),
+                _ => () => store.ValidateRemove(name),
+            };
+
+            InvalidDataException failure = Should.Throw<InvalidDataException>(action);
+
+            failure.Message.ShouldBe("Profile names must contain 1 to 64 ASCII letters, digits, underscores, or hyphens.");
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+            store.Read().Profiles.Keys.ShouldBe(["dev"]);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A stored profile key with a trailing newline makes the document invalid instead of selectable.</summary>
+    [Fact]
+    public void StoredNewlineSuffixedNameIsAnInvalidEntry()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            Directory.CreateDirectory(directory);
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            File.WriteAllText(store.ProfilePath, """
+                {"version":1,"profiles":{"dev\n":{"url":"https://gateway.example/","token":"secret-token"}}}
+                """);
+            byte[] previous = File.ReadAllBytes(store.ProfilePath);
+
+            Should.Throw<InvalidDataException>(() => store.Read()).Message
+                .ShouldBe("The mcpcli profile document has an invalid profile entry.");
+            SettingsResolution resolution = new SettingsResolver(store, new Dictionary<string, string?>())
+                .Resolve(new SettingsInput());
+
+            resolution.Settings.ShouldBeNull();
+            resolution.Error.ShouldBe(new Hexalith.McpCli.Core.Execution.OperationError("configuration_invalid",
+                Message: "Invalid mcpcli profile file: The mcpcli profile document has an invalid profile entry."));
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>A serialization failure after bytes reach the temporary file leaves the target intact and no temporary file.</summary>
     [Fact]
     public void InterruptedWriteKeepsPreviousTargetAndRemovesTemporaryFile()

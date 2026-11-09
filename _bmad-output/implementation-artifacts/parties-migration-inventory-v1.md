@@ -1,20 +1,26 @@
 ---
-inventory_version: '1.0.0'
+inventory_version: '1.1.0'
 status: approved
 module: parties
 source_repository: 'https://github.com/Hexalith/Hexalith.Parties'
 source_revision: '493730941329d1bca3b4f6b2f6a67ffe305c2443'
 source_spec: '_bmad-output/implementation-artifacts/spec-4-1-approve-the-parties-migration-inventory.md'
 maintainer_approval_ref: '#a1-session-approval-2026-10-16'
+amendment_ref: '#a1-amendment-110-2026-11-08'
+amendment_source_spec: '_bmad-output/implementation-artifacts/spec-5-3-enroll-replacement-contracts-and-profiles.md'
 ---
 
 # Parties migration inventory v1
 
-Inventory **1.0.0** records the requesting user's approved first-increment scope
-and routing decision in [A1](#a1-session-approval-2026-10-16). Scope approval does
-not prove Gateway readiness, published Contracts, authorization, behavior parity,
-or retirement readiness. The missing declarations, Queries and execution evidence
-remain explicit downstream gates.
+Inventory **1.1.0** amends approved inventory 1.0.0, which records the
+requesting user's approved first-increment scope and routing decision in
+[A1](#a1-session-approval-2026-10-16).
+[A1 amendment 1.1.0](#a1-amendment-110-2026-11-08) rewords the enrollment
+eligibility rule and records the C05 delete oracles and the C06 and C07
+resolutions; it changes no row identity, target or disposition. Scope approval
+does not prove Gateway readiness, published Contracts, authorization, behavior
+parity, or retirement readiness. The missing declarations, Queries and execution
+evidence remain explicit downstream gates.
 
 The source checkout was clean at the revision above. It exposes exactly **five
 MCP tools, with six behavioral variants, no MCP resources, and no proprietary
@@ -29,8 +35,12 @@ configuration.
   withdrawal; `defer` retains a gap with an owner and rationale.
 - `include` requires an approved, gateway-ready `replace` mapping. `exclude`
   requires an approved `withdraw` or `defer`. The `include` values below approve
-  intended replacement scope; they become eligible for enrollment only after
-  the missing Contracts, authorization and behavior evidence proves readiness.
+  intended replacement scope. A target becomes eligible for enrollment once its
+  decorated Contracts type, approved vectors and release inventory exist; Story
+  4.10 enrolled all seven targets through `Hexalith.Parties.Contracts` 1.5.1.
+  Enrollment is not parity or retirement readiness: the authorization and
+  behavior evidence required by C01–C08 still gates retirement
+  (A1 amendment 1.1.0).
 - Every legacy, target, compatibility and exclusion row references A1. No
   withdrawal is approved: L01–L05 are `replace` / `include`; N01–N04 are
   `defer` / `exclude`. Missing approval would keep Story 4.1 incomplete.
@@ -62,6 +72,24 @@ configuration.
   downstream credentials, authorization/behavior proof, package publication,
   enrollment or legacy-host retirement. Stories 4.9/4.10 own upstream delivery;
   Stories 4.11/4.13 own execution proof.
+
+### A1 amendment 1.1.0 (2026-11-08)
+
+Story 5.3 amends the approved 1.0.0 inventory in one versioned change. It
+rewords the eligibility rule in the coverage rules, adds the C05 delete oracles
+including the erased-party and processing-restricted differences, and records
+the C06 and C07 resolutions with their test anchors and the reliance on
+upstream Query error handling. The source revision, all row identities, the
+seven targets, every disposition and coverage value, the routing decision and
+the A1 limits are unchanged.
+
+This amendment counts only after the owner approves these exact bytes. The
+[approval receipt](evidence/story-5-3/approval/approval.json) records that
+decision, the owner's verbatim label and the SHA-256 of both the exact approved
+1.0.0 bytes, preserved under `evidence/story-5-3/approval/1.0.0/`, and these
+1.1.0 bytes. [Story 5.3 verification](evidence/story-5-3/verification.md)
+records the checks. The amendment grants no execution, parity or retirement
+authority, and retirement still requires every C01–C08 acceptance requirement.
 
 ## Legacy MCP tool rows
 
@@ -121,9 +149,9 @@ read. These known source rules still require packaged/transport execution proof.
 | C02 / L02 | Empty query lists; nonempty query is trimmed and searches display names. Page is clamped to at least 1, size to 1–100, default size 20. List supports type, active and four created/modified bounds. Search filters type/active after paging, reports a filtered-page count, and ignores date bounds. | Select T02 or T03 explicitly. Story 4.10 defines public Query filters and authoritative envelope paging, validates bounds and documents legacy page/default mapping. Correct totals and apply supported filters upstream before paging; explicitly reject unsupported combinations rather than silently ignore them. This is an accepted semantics correction, not a requirement to preserve the misleading totals/ignored filters. Stories 4.11/4.13 verify non-default pages, filtered totals and continuation contents. | [A1](#a1-session-approval-2026-10-16) |
 | C03 / L03 | AI aliases, person/organization inference, optional/generated party ID, generated child IDs; both create/update wrappers limit each trimmed input field to 512 characters and combined input to 4096. Existing composite validators and aggregate cap sub-operations (default 100). | Accept T04's explicit IDs, declared type and nested payloads in place of wrapper aliases, inference and generation. Preserve domain and bounded validation upstream. Before readiness, 4.9 must publish and verify explicit nested-string, collection/removal and total-input bounds for both T04/T05, accounting for both wrappers' 512/4096 limits and retaining the existing configured composite sub-operation cap (default 100). This assigns a bounded policy decision, not new numeric limits or a claim that existing collections are unbounded. No Parties adapter is added to McpCli. Verify boundary and over-limit cases through 4.11/4.13. | [A1](#a1-session-approval-2026-10-16) |
 | C04 / L04 | Read/merge patch handling, contact/identifier aliases and removals, route ID authority, no-change rejection, the same 512-character trimmed-field/4096-character combined-input wrapper bounds as create, then optional separate (re)activation with all correlations retained. | Accept callers using T01 when needed to construct typed T05 payloads, with activation-only work using T06/T07. Each call has its own result/correlation; the workflow is non-atomic and generic heads submit once per call. Story 4.9 must reject PartyId-only/no-supported-change T05 updates upstream, preserve root/child ID consistency and publish/verify the nested, removal and total-input bounds required by C03, retaining the existing sub-operation cap. Stories 4.11/4.13 must include the empty-update negative case with no state mutation, plus bounded-validation cases. | [A1](#a1-session-approval-2026-10-16) |
-| C05 / L05 | Pre-read returns success without submission when already inactive; otherwise sends DeactivateParty, reports `soft-deactivation` and `gdprErasurePerformed=false`. The current aggregate returns NoOp for an already-inactive party after its lifecycle/security guards. | Preserve safe repeated soft deactivation through aggregate behavior; a projection pre-read alone cannot prove repeat safety. Generic heads do not pre-read or orchestrate; 4.9/4.10 must establish the safe path, 4.11 tests inactive/repeated cases, and 4.13 must exercise stale-projection and concurrent-repeat cases with persisted aggregate state and event evidence proving a safe no-op without duplicate deactivation effects. Naming T07 proves neither safety nor caller-key deduplication; no retry engine is needed. Never substitute EraseParty. Legacy result flags follow C06. | [A1](#a1-session-approval-2026-10-16) |
-| C06 / All | Legacy `PartiesMcpToolResult` has status/category/code/message/toolName plus optional correlation/data, including delete-specific flags. Its client-error mapping emits fixed safe messages rather than raw downstream details; generic `OperationError.FromGateway` copies Gateway detail/title. | Accept the versioned move to shared McpCli result/error documents and per-call results while preserving the legacy error-message privacy guarantee. Parties/Gateway must sanitize public errors before those fields reach generic documents; no module-specific Core changes. Before retirement, 4.11/4.13 must assert personal data and secrets in downstream failures never appear in either head's public error documents or diagnostic channels, including detail/title paths. Document the wrapper-shape replacement; soft-deactivation intent and absence of GDPR erasure remain requirements. Prove both heads in 4.11 and domain effects in 4.13. | [A1](#a1-session-approval-2026-10-16) |
-| C07 / All | Party IDs accept support-safe strings plus braced, parenthesized and X-format GUID representations beyond generic aggregate syntax. | Keep String kind. Preserve reachability of legacy IDs or require an explicitly approved conversion with migration evidence before retirement. Neither conversion details nor a runtime validator change is approved here. Stories 4.9/4.10 resolve compatibility; 4.11/4.13 verify it. No silent ULID conversion. | [A1](#a1-session-approval-2026-10-16) |
+| C05 / L05 | Pre-read returns success without submission when already inactive; otherwise sends DeactivateParty, reports `soft-deactivation` and `gdprErasurePerformed=false`. The current aggregate returns NoOp for an already-inactive party after its lifecycle/security guards. | Preserve safe repeated soft deactivation through aggregate behavior; a projection pre-read alone cannot prove repeat safety. Generic heads do not pre-read or orchestrate; 4.9/4.10 must establish the safe path, 4.11 tests inactive/repeated cases, and 4.13 must exercise stale-projection and concurrent-repeat cases with persisted aggregate state and event evidence proving a safe no-op without duplicate deactivation effects. Naming T07 proves neither safety nor caller-key deduplication; no retry engine is needed. Never substitute EraseParty. Legacy result flags follow C06. Delete oracles (A1 amendment 1.1.0; the Parties logic is unchanged since `4937309` and is cited at gitlink `1308ad000c79ebc394fc395588f9af91092e8c4c`: `references/Hexalith.Parties/src/Hexalith.Parties/Domain/PartyAggregate.cs:867-890`, `references/Hexalith.Parties/src/Hexalith.Parties.Mcp/Tools/PartiesMcpTools.cs:390-423`): for a missing party, McpCli `parties.deactivate-party` returns `gateway_error` with status 404 and reason `party-not-found`, and legacy `delete_party` returns `not_found`; for a party that is erased or whose erasure is in progress (`references/Hexalith.Parties/src/Hexalith.Parties/Domain/PartyAggregate.cs:1560` rejects `ErasurePending` through `Erased` with the same `PartyErasureInProgress`), McpCli returns 422 with reason `party-erasure-in-progress`, while legacy returns 422, or idempotent success when its projection pre-read already shows the party inactive; for a processing-restricted party (`RejectIfRestricted`, `:1547`, checked after the erasure guard and before the inactive NoOp), McpCli returns 422 with reason `party-processing-restricted`, while legacy `delete_party` has no restriction check, so it submits and gets 422 when the party is active and returns idempotent success when its pre-read shows the party inactive; for an already inactive party, McpCli returns `accepted` (aggregate NoOp) and legacy returns idempotent success. The erased-case and restricted-case differences are recorded migration differences, not parity. | [A1](#a1-session-approval-2026-10-16) |
+| C06 / All | Legacy `PartiesMcpToolResult` has status/category/code/message/toolName plus optional correlation/data, including delete-specific flags. Its client-error mapping emits fixed safe messages rather than raw downstream details; generic `OperationError.FromGateway` copies Gateway detail/title. | Accept the versioned move to shared McpCli result/error documents and per-call results while preserving the legacy error-message privacy guarantee. Parties/Gateway must sanitize public errors before those fields reach generic documents; no module-specific Core changes. Before retirement, 4.11/4.13 must assert personal data and secrets in downstream failures never appear in either head's public error documents or diagnostic channels, including detail/title paths. Document the wrapper-shape replacement; soft-deactivation intent and absence of GDPR erasure remain requirements. Prove both heads in 4.11 and domain effects in 4.13. Resolution for the generic heads (A1 amendment 1.1.0): `src/Hexalith.McpCli.Core/Execution/OperationError.cs:41-53` copies only status, detail or title, reason, retryable, clientAction, retryAfter and a canonical correlation ID, `src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:35-42` maps every other exception to a fixed `internal_error`, and `src/Hexalith.McpCli/Hosting/HostFactory.cs:51-57` replaces the HTTP client loggers so a failed Gateway request logs no exception text. `tests/Hexalith.McpCli.Cli.Tests/PartiesMigrationCompatibilityTests.cs:56` proves through both heads over Parties 1.5.1 that markers in `type`, `instance`, `tenantId`, `errors`, `extensions` and `rejectionType`, in a non-JSON body and in inner exceptions reach neither stdout, stderr nor MCP text or structured content, and that each document equals the Sample operation's document for the same failure; no Parties-specific mapping exists. Detail (or title), reason, clientAction and retryAfter are copied as the Gateway sends them, and for a non-JSON response detail is the HTTP reason phrase, so their privacy relies on upstream handling: the Gateway sanitizes Command rejections (`references/Hexalith.EventStore/src/Hexalith.EventStore/ErrorHandling/DomainCommandRejectedExceptionHandler.cs:43-58`) but passes a module's Query error message through as detail for every status except the invalid-page 400 and 403 (`references/Hexalith.EventStore/src/Hexalith.EventStore/ErrorHandling/QueryExecutionFailedExceptionHandler.cs:88-94`), including the 400 malformed-request response built from the module's `sentinel: detail` message (`references/Hexalith.EventStore/src/Hexalith.EventStore.Server/Pipeline/SubmitQueryHandler.cs:104-113`), and Parties returns only sentinel codes there (`references/Hexalith.Parties/src/Hexalith.Parties/Queries/PartySdkQueryService.cs:242`, `:248`). The README documents the shared error document. | [A1](#a1-session-approval-2026-10-16) |
+| C07 / All | Party IDs accept support-safe strings plus braced, parenthesized and X-format GUID representations beyond generic aggregate syntax. | Keep String kind. Preserve reachability of legacy IDs or require an explicitly approved conversion with migration evidence before retirement. Neither conversion details nor a runtime validator change is approved here. Stories 4.9/4.10 resolve compatibility; 4.11/4.13 verify it. No silent ULID conversion. Resolution (A1 amendment 1.1.0): String kind is kept and no conversion is approved. Legacy braced, parenthesized and X-format GUID root `PartyId` values are refused with `validation_failed` at `/PartyId` before any Gateway call (`src/Hexalith.McpCli.Core/Catalog/RoutingResolver.cs:140-143`). They cannot exist as EventStore streams, because `references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts/Identity/AggregateIdentity.cs:11` and `:136` enforce the same rule; `Parties.Mcp` forwards them raw and the Gateway rejects them, although `references/Hexalith.Parties/src/Hexalith.Parties.Contracts/ValueObjects/PartyIdentifier.cs:24-50` admits them. Support-safe root IDs such as `Legacy.party_01-A` and String-kind child identifiers in any of these forms reach the Gateway byte-for-byte (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:322-331`). `tests/Hexalith.McpCli.Cli.Tests/PartiesMigrationCompatibilityTests.cs:124` and `:169` pin both through both heads. | [A1](#a1-session-approval-2026-10-16) |
 | C08 / All | Context accepts claims or raw headers, forwards inbound Authorization and appends identity headers; the host has no explicit authentication middleware. | Never carry these weaknesses into the target. V1 uses configured stdio operator-session/Gateway credentials and envelope tenant authority. Downstream credential acceptance, authenticated authorization, missing-context/credential refusal and no-secret evidence remain open with the Parties operation and McpCli transport/security maintainers; 4.9/4.10 coordinate and 4.11/4.13 prove the supported transport before retirement. Negative proof must show tenant-A credentials denied tenant-B reads and writes through changed session tenants and allowed MCP per-call tenant overrides, with no tenant-B data disclosure or mutation. Local override permission only permits selecting an envelope tenant; Gateway authorization independently decides access. | [A1](#a1-session-approval-2026-10-16) |
 
 These are approved scope and downstream verification requirements, not new McpCli
@@ -182,8 +210,13 @@ replacement/retirement. Payload tenant/actor fields never establish authority.
 
 The complete repeatable source/row checker and its commands are preserved in
 [Story 4.1 verification evidence](evidence/story-4-1/verification.md), executable
-from this repository root with Python and Git. It verifies the static inventory;
-the downstream behavior cases above remain unproven here.
+from this repository root with Python and Git. It covers the approved 1.0.0
+bytes, preserved under `evidence/story-5-3/approval/1.0.0/`, at its pinned
+Parties revision, and asserts version 1.0.0, so it does not check 1.1.0. It
+verifies the static inventory; the downstream behavior cases above remain
+unproven here. [Story 5.3 verification](evidence/story-5-3/verification.md)
+holds the reproducible static check of the 1.1.0 amendment and its source
+anchors.
 
 All following paths are relative to the pinned Parties repository:
 

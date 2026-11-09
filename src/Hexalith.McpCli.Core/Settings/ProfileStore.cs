@@ -394,6 +394,6 @@ public sealed partial class ProfileStore
         }
     }
 
-    [GeneratedRegex("^[a-zA-Z0-9_-]{1,64}$")]
+    [GeneratedRegex(@"^[a-zA-Z0-9_-]{1,64}\z")]
     private static partial Regex ProfileNamePattern();
 }

@@ -408,6 +408,79 @@ public sealed class McpStdioProcessTests
     public void ProtocolTranscriptRejectsVersionOnlyObject()
         => Should.Throw<JsonException>(() => AssertProtocolOutput("{\"jsonrpc\":\"2.0\"}\n"));
 
+    /// <summary>
+    /// The stdio server process ignores a hostile admin <c>profiles.json</c> beside its profile and a hostile
+    /// <c>EVENTSTORE_ADMIN_*</c> environment: discovery stays offline and execution reports no Gateway URL.
+    /// </summary>
+    [Fact]
+    public async Task HostileAdminStateIsIgnoredOverStdioAsync()
+    {
+        const string adminSecret = "admin-secret-value";
+        string directory = TemporaryDirectory();
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+        Process? child = null;
+        try
+        {
+            await using var adminGateway = new ScriptedGateway(ScriptedGateway.AcceptCommand);
+            Directory.CreateDirectory(Path.Combine(directory, ".eventstore"));
+            File.WriteAllText(Path.Combine(directory, ".eventstore", "profiles.json"), JsonSerializer.Serialize(new
+            {
+                version = 1,
+                activeProfile = "admin",
+                profiles = new { admin = new { url = adminGateway.Url, token = adminSecret } },
+            }));
+            Process process = child = Start(directory, new Dictionary<string, string>
+            {
+                ["HOME"] = directory,
+                ["MCPCLI_STDIO_PROFILE_PATH"] = Path.Combine(directory, ".eventstore", "mcpcli.json"),
+                ["EVENTSTORE_ADMIN_URL"] = adminGateway.Url,
+                ["EVENTSTORE_ADMIN_TOKEN"] = adminSecret,
+                ["EVENTSTORE_ADMIN_PROFILE"] = "admin",
+                ["EVENTSTORE_ADMIN_FORMAT"] = "table",
+            }, "mcp", "--transport", "stdio");
+            Task<string> standardError = process.StandardError.ReadToEndAsync(timeout.Token);
+            var standardOutput = new RecordingReadStream(process.StandardOutput.BaseStream);
+            await using (McpClient client = await McpClient.CreateAsync(
+                new StreamClientTransport(process.StandardInput.BaseStream, standardOutput),
+                new McpClientOptions { ProtocolVersion = "2025-06-18" }, cancellationToken: timeout.Token))
+            {
+                CallToolResult description = await client.CallToolAsync("describe_operation",
+                    new Dictionary<string, object?> { ["operation"] = "sample.create-item" }, cancellationToken: timeout.Token);
+                description.IsError.ShouldBe(false);
+                JsonElement operation = description.StructuredContent.ShouldNotBeNull();
+                operation.GetProperty("submittable").GetBoolean().ShouldBeFalse();
+                operation.GetProperty("reason").GetString().ShouldBe("configuration_invalid");
+                CallToolResult send = await client.CallToolAsync("send_command", new Dictionary<string, object?>
+                {
+                    ["operation"] = "sample.create-item",
+                    ["payload"] = "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\",\"Title\":\"Hello\"}",
+                }, cancellationToken: timeout.Token);
+                AssertToolDocument(send, new
+                {
+                    error = new OperationError("configuration_invalid", Message: "Gateway URL is not configured."),
+                }, isError: true);
+            }
+
+            process.StandardInput.Close();
+            await process.WaitForExitAsync(timeout.Token);
+            process.ExitCode.ShouldBe(0);
+            await standardOutput.CopyToAsync(Stream.Null, timeout.Token);
+            AssertProtocolOutput(standardOutput.Transcript);
+            standardOutput.Transcript.ShouldNotContain(adminSecret);
+            standardOutput.Transcript.ShouldNotContain(adminGateway.Url);
+            string diagnostic = await standardError;
+            diagnostic.ShouldNotContain(adminSecret);
+            diagnostic.ShouldNotContain(adminGateway.Url);
+            adminGateway.Requests.ShouldBeEmpty();
+            File.Exists(Path.Combine(directory, ".eventstore", "mcpcli.json")).ShouldBeFalse();
+        }
+        finally
+        {
+            await StopAsync(child);
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     private static void AssertStartupError(string diagnostic, string code, string? argument = null)
     {
         string marker = "{\n  \"error\"";

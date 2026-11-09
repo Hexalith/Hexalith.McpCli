@@ -22,6 +22,12 @@ public sealed class ConfigCommandTests
 
     private const string StoredToken = "stored-secret-value";
 
+    private const string SampleItemId = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
+
+    private const string SampleCommand = """{"ItemId":"01ARZ3NDEKTSV4RRFFQ69G5FAV","Title":"Hello"}""";
+
+    private const string SampleQuery = """{"ItemId":"01ARZ3NDEKTSV4RRFFQ69G5FAV"}""";
+
     /// <summary>A profile can be added, selected, edited, listed, and removed without printing its secret.</summary>
     [Fact]
     public async Task ProfileCommandsRoundTripWithoutExposingTokenAsync()
@@ -1942,7 +1948,7 @@ public sealed class ConfigCommandTests
         }
     }
 
-    /// <summary>Add stores only explicit connection fields and ignores operator settings from the environment.</summary>
+    /// <summary>Add stores only explicit connection fields, refuses a flag URL beside an inherited token, and ignores environment operator settings.</summary>
     [Fact]
     public async Task AddIgnoresEnvironmentOperatorSettingsAsync()
     {
@@ -1969,16 +1975,30 @@ public sealed class ConfigCommandTests
             AssertError(output, "invalid_arguments").GetProperty("argument").GetString().ShouldBe("url");
             Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
 
+            // A flag URL beside an inherited token mixes sources, so add refuses it before writing anything.
             (exit, output, error) = await InvokeAsync(store, environment, null,
                 "config", "profile", "add", "dev", "--url", "https://gateway.example/");
 
+            exit.ShouldBe(2);
+            error.ShouldBeEmpty();
+            output.ShouldBe(JsonSerializer.Serialize(new
+            {
+                error = new OperationError("configuration_invalid", Message: "The gateway URL from flag and the token from "
+                    + "EVENTSTORE_TOKEN must come from the same source: flags, environment, or the selected profile."),
+            }, McpCliJson.Result) + "\n");
+            AssertNoSecret(output, error, environmentToken, ProfileStore.MaskToken(environmentToken)!);
+            Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
+
+            (exit, output, error) = await InvokeAsync(store, environment, null,
+                "config", "profile", "add", "dev", "--url", "https://gateway.example/", "--token", SuppliedToken);
+
             exit.ShouldBe(0, output);
             error.ShouldBeEmpty();
-            AssertNoSecret(output, error, environmentToken);
+            AssertNoSecret(output, error, environmentToken, SuppliedToken);
             JsonDocument.Parse(output).RootElement.TryGetProperty("error", out _).ShouldBeFalse();
             ConnectionProfile profile = store.Read().Profiles["dev"];
             profile.Url.ShouldBe("https://gateway.example/");
-            profile.Token.ShouldBeNull();
+            profile.Token.ShouldBe(SuppliedToken);
             profile.Tenant.ShouldBeNull();
             profile.Actor.ShouldBeNull();
             profile.AllowTenantOverride.ShouldBeNull();
@@ -2108,6 +2128,434 @@ public sealed class ConfigCommandTests
             Directory.Exists(adminPath).ShouldBeTrue();
             Directory.EnumerateFileSystemEntries(adminPath).ShouldBeEmpty();
             new ProfileStore(Path.Combine(directory, ".eventstore", "mcpcli.json")).Read().Profiles.ShouldBeEmpty();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// G6: a Gateway URL and token from different sources fail as <c>configuration_invalid</c> on every executing verb,
+    /// on <c>mcp</c>, on discovery and on <c>config current</c>, before any host or Gateway call, without exposing either
+    /// token on any channel.
+    /// </summary>
+    /// <param name="urlSource">The source supplying the Gateway URL.</param>
+    /// <param name="tokenSource">The source supplying the token.</param>
+    /// <param name="verb">The verb that resolves settings.</param>
+    [Theory]
+    [InlineData("flag", "profile", "send")]
+    [InlineData("flag", "profile", "query")]
+    [InlineData("flag", "profile", "mcp")]
+    [InlineData("environment", "profile", "send")]
+    [InlineData("environment", "profile", "query")]
+    [InlineData("environment", "profile", "mcp")]
+    [InlineData("flag", "environment", "send")]
+    [InlineData("flag", "environment", "query")]
+    [InlineData("flag", "environment", "mcp")]
+    [InlineData("profile", "flag", "send")]
+    [InlineData("profile", "environment", "query")]
+    [InlineData("environment", "flag", "mcp")]
+    [InlineData("flag", "profile", "modules")]
+    [InlineData("flag", "environment", "modules")]
+    [InlineData("environment", "profile", "config-current")]
+    [InlineData("profile", "flag", "config-current")]
+    public async Task MixedGatewayUrlAndTokenSourcesFailBeforeTheGatewayAsync(string urlSource, string tokenSource, string verb)
+    {
+        const string environmentToken = "environment-secret-value";
+        string directory = TemporaryDirectory();
+        try
+        {
+            await using var profileGateway = new ScriptedGateway(ScriptedGateway.AcceptCommand);
+            await using var otherGateway = new ScriptedGateway(ScriptedGateway.AcceptCommand);
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile(profileGateway.Url, tokenSource == "profile" ? StoredToken : null));
+            store.Use("dev");
+            var environment = new Dictionary<string, string?>();
+            var globals = new List<string>();
+            if (urlSource == "flag")
+            {
+                globals.AddRange(["--url", otherGateway.Url]);
+            }
+            else if (urlSource == "environment")
+            {
+                environment["EVENTSTORE_URL"] = otherGateway.Url;
+            }
+
+            if (tokenSource == "flag")
+            {
+                globals.AddRange(["--token", SuppliedToken]);
+            }
+            else if (tokenSource == "environment")
+            {
+                environment["EVENTSTORE_TOKEN"] = environmentToken;
+            }
+
+            string Source(string source, string variable) => source == "environment" ? variable : source;
+            string expected = JsonSerializer.Serialize(new
+            {
+                error = new OperationError("configuration_invalid", Message:
+                    $"The gateway URL from {Source(urlSource, "EVENTSTORE_URL")} and the token from "
+                    + $"{Source(tokenSource, "EVENTSTORE_TOKEN")} must come from the same source: flags, environment, "
+                    + "or the selected profile."),
+            }, McpCliJson.Result) + "\n";
+            Func<IReadOnlyList<Assembly>> manifest = () => [typeof(CreateItemCommand).Assembly];
+            bool served = false;
+            HeadResult result;
+            if (verb == "mcp")
+            {
+                result = await BothHeads.InvokeMcpAsync(store, manifest, environment, globals, "send_command",
+                    new Dictionary<string, object?> { ["operation"] = "sample.create-item", ["payload"] = SampleCommand },
+                    _ => served = true);
+                result.Exit.ShouldBe(2);
+                result.Output.ShouldBeEmpty();
+                result.Error.ShouldBe(expected);
+                result.Tool.ShouldBeNull();
+                served.ShouldBeFalse();
+            }
+            else
+            {
+                string[] call = verb switch
+                {
+                    "send" => ["send", "sample.create-item", "--payload", SampleCommand],
+                    "query" => ["query", "sample.get-item", "--payload", SampleQuery],
+                    "modules" => ["modules"],
+                    _ => ["config", "current"],
+                };
+                result = await BothHeads.InvokeCliAsync(store, manifest, environment, [.. call, .. globals]);
+                result.Exit.ShouldBe(2);
+                result.Output.ShouldBe(expected);
+                result.Error.ShouldBeEmpty();
+            }
+
+            profileGateway.Requests.ShouldBeEmpty();
+            otherGateway.Requests.ShouldBeEmpty();
+            AssertNoSecret(result.Output, result.Error, StoredToken, SuppliedToken, environmentToken,
+                ProfileStore.MaskToken(StoredToken)!, ProfileStore.MaskToken(SuppliedToken)!, ProfileStore.MaskToken(environmentToken)!);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// G6: when the Gateway URL and token come from one source, or a URL comes without any token, both heads resolve as
+    /// before and send exactly that credential, or none, to exactly that Gateway; a lower-precedence profile's URL and
+    /// token are never used.
+    /// </summary>
+    /// <param name="source">The single source supplying the connection values.</param>
+    /// <param name="withToken">Whether that source also supplies a token.</param>
+    /// <param name="verb">The executing verb.</param>
+    [Theory]
+    [InlineData("flag", true, "send")]
+    [InlineData("flag", true, "query")]
+    [InlineData("flag", true, "mcp")]
+    [InlineData("environment", true, "send")]
+    [InlineData("environment", true, "query")]
+    [InlineData("environment", true, "mcp")]
+    [InlineData("profile", true, "send")]
+    [InlineData("profile", true, "query")]
+    [InlineData("profile", true, "mcp")]
+    [InlineData("flag", false, "send")]
+    [InlineData("environment", false, "query")]
+    [InlineData("profile", false, "mcp")]
+    public async Task OneSourceGatewayUrlAndTokenReachOnlyThatGatewayAsync(string source, bool withToken, string verb)
+    {
+        const string correlationId = "01J9MZHXT3RKM0VWXRXGSJDATK";
+        string token = source switch { "flag" => SuppliedToken, "environment" => "environment-secret-value", _ => StoredToken };
+        string directory = TemporaryDirectory();
+        try
+        {
+            static byte[] Respond(GatewayRequest request) => request.Path == "/api/v1/commands"
+                ? ScriptedGateway.AcceptCommand(request)
+                : ScriptedGateway.Response(200, "OK", "application/json",
+                    """{"correlationId":"01J9MZHXT3RKM0VWXRXGSJDATK","payload":{"title":"Hello"},"success":true}""");
+            await using var gateway = new ScriptedGateway(Respond);
+            await using var decoy = new ScriptedGateway(Respond);
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", source == "profile"
+                ? new ConnectionProfile(gateway.Url, withToken ? token : null)
+                : new ConnectionProfile(decoy.Url, withToken ? "decoy-secret-value" : null));
+            store.Use("dev");
+            var environment = new Dictionary<string, string?>();
+            var globals = new List<string>();
+            if (source == "flag")
+            {
+                globals.AddRange(withToken ? ["--url", gateway.Url, "--token", token] : ["--url", gateway.Url]);
+            }
+            else if (source == "environment")
+            {
+                environment["EVENTSTORE_URL"] = gateway.Url;
+                if (withToken)
+                {
+                    environment["EVENTSTORE_TOKEN"] = token;
+                }
+            }
+
+            Func<IReadOnlyList<Assembly>> manifest = () => [typeof(CreateItemCommand).Assembly];
+            bool command = verb != "query";
+            string expected = command
+                ? JsonSerializer.Serialize(new
+                {
+                    operation = "sample.create-item", messageId = "<generated>", correlationId, tenant = "sample-tenant",
+                    aggregateId = SampleItemId, status = "accepted",
+                })
+                : """{"operation":"sample.get-item","tenant":"sample-tenant","document":{"title":"Hello"}}""";
+            HeadResult result;
+            if (verb == "mcp")
+            {
+                ResolvedSettings? settings = null;
+                result = await BothHeads.InvokeMcpAsync(store, manifest, environment, globals, "send_command",
+                    new Dictionary<string, object?>
+                    {
+                        ["operation"] = "sample.create-item", ["payload"] = SampleCommand, ["correlationId"] = correlationId,
+                    },
+                    host => settings = host.Services.GetRequiredService<ResolvedSettings>());
+                ResolvedSettings resolved = settings.ShouldNotBeNull();
+                resolved.Url.ShouldBe(new Uri(gateway.Url));
+                resolved.Token.ShouldBe(withToken ? token : null);
+                resolved.Sources["url"].ShouldBe(source == "environment" ? "EVENTSTORE_URL" : source);
+                resolved.Sources["token"].ShouldBe(!withToken ? "default" : source == "environment" ? "EVENTSTORE_TOKEN" : source);
+            }
+            else
+            {
+                string[] call = command
+                    ? ["send", "sample.create-item", "--payload", SampleCommand, "--correlation-id", correlationId]
+                    : ["query", "sample.get-item", "--payload", SampleQuery];
+                result = await BothHeads.InvokeCliAsync(store, manifest, environment, [.. call, .. globals]);
+            }
+
+            BothHeads.AssertDocument(result, expected, isError: false, "messageId");
+            HeadDiagnostics.AssertGatewayOnly(result, gateway.Url, command ? "/api/v1/commands" : "/api/v1/queries", command ? 202 : 200);
+            GatewayRequest request = gateway.Requests.ShouldHaveSingleItem();
+            if (withToken)
+            {
+                request.Headers["Authorization"].ShouldBe("Bearer " + token);
+            }
+            else
+            {
+                request.Headers.ContainsKey("Authorization").ShouldBeFalse();
+            }
+
+            decoy.Requests.ShouldBeEmpty();
+            AssertNoSecret(result.Output, result.Error, token, ProfileStore.MaskToken(token)!, "decoy-secret-value");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// Host-building verbs behave identically with and without a hostile admin <c>profiles.json</c> and
+    /// <c>EVENTSTORE_ADMIN_*</c> environment, never contact the admin URL, and ask the environment only for the nine
+    /// supported <c>EVENTSTORE_*</c> names.
+    /// </summary>
+    /// <param name="verb">The host-building verb.</param>
+    [Theory]
+    [InlineData("modules")]
+    [InlineData("operations")]
+    [InlineData("describe")]
+    [InlineData("send")]
+    [InlineData("query")]
+    [InlineData("mcp")]
+    public async Task HostBuildingVerbsIgnoreAdminStateAndReadOnlyTheNineVariablesAsync(string verb)
+    {
+        const string adminSecret = "admin-secret-value";
+        string[] supported =
+        [
+            "EVENTSTORE_ACTOR", "EVENTSTORE_ALLOW_TENANT_OVERRIDE", "EVENTSTORE_FORMAT", "EVENTSTORE_PROFILE",
+            "EVENTSTORE_READ_ONLY", "EVENTSTORE_STRICT", "EVENTSTORE_TENANT", "EVENTSTORE_TOKEN", "EVENTSTORE_URL",
+        ];
+        string clean = TemporaryDirectory();
+        string hostile = TemporaryDirectory();
+        try
+        {
+            await using var adminGateway = new ScriptedGateway(ScriptedGateway.AcceptCommand);
+            Directory.CreateDirectory(Path.Combine(hostile, ".eventstore"));
+            string adminProfiles = Path.Combine(hostile, ".eventstore", "profiles.json");
+            File.WriteAllText(adminProfiles, JsonSerializer.Serialize(new
+            {
+                version = 1,
+                activeProfile = "admin",
+                profiles = new { admin = new { url = adminGateway.Url, token = adminSecret, format = "table" } },
+            }));
+            byte[] adminBytes = File.ReadAllBytes(adminProfiles);
+            var admin = new Dictionary<string, string?>
+            {
+                ["EVENTSTORE_ADMIN_URL"] = adminGateway.Url,
+                ["EVENTSTORE_ADMIN_TOKEN"] = adminSecret,
+                ["EVENTSTORE_ADMIN_PROFILE"] = "admin",
+                ["EVENTSTORE_ADMIN_FORMAT"] = "table",
+            };
+            Func<IReadOnlyList<Assembly>> manifest = () => [typeof(CreateItemCommand).Assembly];
+
+            async Task<(HeadResult Result, List<string> Requested)> RunAsync(string home, IReadOnlyDictionary<string, string?> environment)
+            {
+                var requested = new List<string>();
+                string? Read(string name)
+                {
+                    requested.Add(name);
+                    return environment.TryGetValue(name, out string? value) ? value : null;
+                }
+
+                var store = new ProfileStore(Path.Combine(home, ".eventstore", "mcpcli.json"));
+                HeadResult result = verb == "mcp"
+                    ? await BothHeads.InvokeMcpAsync(store, manifest, Read, [], "send_command",
+                        new Dictionary<string, object?> { ["operation"] = "sample.create-item", ["payload"] = SampleCommand })
+                    : await BothHeads.InvokeCliAsync(store, manifest, Read, verb switch
+                    {
+                        "modules" => ["modules"],
+                        "operations" => ["operations", "sample"],
+                        "describe" => ["describe", "sample.create-item"],
+                        "send" => ["send", "sample.create-item", "--payload", SampleCommand],
+                        _ => ["query", "sample.get-item", "--payload", SampleQuery],
+                    });
+                return (result, requested);
+            }
+
+            (HeadResult baseline, List<string> baselineNames) = await RunAsync(clean, new Dictionary<string, string?>());
+            (HeadResult observed, List<string> observedNames) = await RunAsync(hostile, admin);
+
+            observed.Exit.ShouldBe(baseline.Exit);
+            observed.Output.ShouldBe(baseline.Output);
+            Normalize(observed.Error).ShouldBe(Normalize(baseline.Error));
+            observed.Document.ShouldBe(baseline.Document);
+            if (verb is "send" or "query" or "mcp")
+            {
+                BothHeads.AssertDocument(observed, """{"error":{"code":"configuration_invalid","message":"Gateway URL is not configured."}}""",
+                    isError: true);
+            }
+            else
+            {
+                observed.Exit.ShouldBe(0, observed.Output);
+                JsonDocument.Parse(observed.Output).RootElement.TryGetProperty("error", out _).ShouldBeFalse();
+            }
+
+            observedNames.Distinct().Order(StringComparer.Ordinal).ShouldBe(supported);
+            observedNames.ShouldBe(baselineNames);
+            adminGateway.Requests.ShouldBeEmpty();
+            AssertNoSecret(observed.AllChannels, string.Empty, adminSecret, ProfileStore.MaskToken(adminSecret)!, adminGateway.Url);
+            File.ReadAllBytes(adminProfiles).ShouldBe(adminBytes);
+            File.Exists(Path.Combine(hostile, ".eventstore", "mcpcli.json")).ShouldBeFalse();
+        }
+        finally
+        {
+            Directory.Delete(clean, recursive: true);
+            Directory.Delete(hostile, recursive: true);
+        }
+
+        static string Normalize(string text) => System.Text.RegularExpressions.Regex.Replace(text, @"[0-9]+(\.[0-9]+)?ms", "Nms");
+    }
+
+    /// <summary>
+    /// The built executable's host-building verbs ignore a hostile admin <c>profiles.json</c> in the same
+    /// <c>.eventstore</c> directory and a hostile <c>EVENTSTORE_ADMIN_*</c> process environment.
+    /// </summary>
+    [Fact]
+    public async Task ExecutableHostBuildingVerbsIgnoreAdminStateAsync()
+    {
+        const string adminSecret = "admin-secret-value";
+        string directory = TemporaryDirectory();
+        try
+        {
+            await using var adminGateway = new ScriptedGateway(ScriptedGateway.AcceptCommand);
+            Directory.CreateDirectory(Path.Combine(directory, ".eventstore"));
+            File.WriteAllText(Path.Combine(directory, ".eventstore", "profiles.json"), JsonSerializer.Serialize(new
+            {
+                version = 1,
+                activeProfile = "admin",
+                profiles = new { admin = new { url = adminGateway.Url, token = adminSecret, format = "table" } },
+            }));
+            var adminEnvironment = new Dictionary<string, string>
+            {
+                ["HOME"] = directory,
+                ["EVENTSTORE_ADMIN_URL"] = adminGateway.Url,
+                ["EVENTSTORE_ADMIN_TOKEN"] = adminSecret,
+                ["EVENTSTORE_ADMIN_PROFILE"] = "admin",
+                ["EVENTSTORE_ADMIN_FORMAT"] = "table",
+            };
+            const string unavailable = """{"error":{"code":"configuration_invalid","message":"Gateway URL is not configured."}}""";
+            (string[] Arguments, int Exit)[] verbs =
+            [
+                (["modules"], 0),
+                (["describe", "parties.get-party"], 0),
+                (["send", "parties.deactivate-party", "--payload", """{"PartyId":"party-admin"}""", "--tenant", "tenant-a"], 2),
+                (["query", "parties.get-party", "--payload", """{"PartyId":"party-admin"}""", "--tenant", "tenant-a"], 2),
+            ];
+
+            foreach ((string[] arguments, int expectedExit) in verbs)
+            {
+                (int exit, string output, string error) = await RunExecutableAsync(directory, adminEnvironment, arguments);
+                exit.ShouldBe(expectedExit, string.Join(' ', arguments) + ": " + output + error);
+                error.ShouldBeEmpty();
+                AssertNoSecret(output, error, adminSecret, ProfileStore.MaskToken(adminSecret)!, adminGateway.Url);
+                JsonElement document = JsonDocument.Parse(output).RootElement;
+                if (expectedExit == 2)
+                {
+                    BothHeads.AssertJson(output, unavailable);
+                }
+                else if (arguments[0] == "describe")
+                {
+                    document.GetProperty("submittable").GetBoolean().ShouldBeFalse();
+                    document.GetProperty("reason").GetString().ShouldBe("configuration_invalid");
+                }
+                else
+                {
+                    document.GetProperty("modules").EnumerateArray().Select(module => module.GetProperty("name").GetString())
+                        .ShouldBe(["parties", "tenants"]);
+                }
+            }
+
+            adminGateway.Requests.ShouldBeEmpty();
+            File.Exists(Path.Combine(directory, ".eventstore", "mcpcli.json")).ShouldBeFalse();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>
+    /// A profile name with a trailing newline is refused by every naming profile verb with the store's name rule and
+    /// leaves the profile bytes unchanged.
+    /// </summary>
+    /// <param name="verb">The profile verb.</param>
+    [Theory]
+    [InlineData("add")]
+    [InlineData("use")]
+    [InlineData("set")]
+    [InlineData("remove")]
+    public async Task NewlineSuffixedProfileNameIsRejectedWithoutChangesAsync(string verb)
+    {
+        const string name = "dev\n";
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/", StoredToken));
+            store.Use("dev");
+            byte[] previous = File.ReadAllBytes(store.ProfilePath);
+            string[] arguments = verb switch
+            {
+                "add" => ["config", "profile", "add", name, "--url", "https://other.example/"],
+                "use" => ["config", "use", name],
+                "set" => ["config", "set", name, "tenant", "acme"],
+                _ => ["config", "profile", "remove", name],
+            };
+
+            (int exit, string output, string error) = await InvokeAsync(store, arguments);
+
+            exit.ShouldBe(2);
+            error.ShouldBeEmpty();
+            output.ShouldBe(JsonSerializer.Serialize(new
+            {
+                error = new OperationError("configuration_invalid",
+                    Message: "Profile names must contain 1 to 64 ASCII letters, digits, underscores, or hyphens."),
+            }, McpCliJson.Result) + "\n");
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+            AssertNoSecret(output, error, StoredToken);
         }
         finally
         {

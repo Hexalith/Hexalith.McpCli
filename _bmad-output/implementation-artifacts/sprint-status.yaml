@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-08-2026 18:20'
+last_updated: '11-09-2026 00:39'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -91,7 +91,7 @@ development_status:
   epic-5: in-progress
   5-1-inventory-eventstore-admin-and-technical-tool-operations: done # Code review pass 2 2026-11-08: all 13 patches applied; owner-approved Admin 1.0.1 and technical 1.0.2 amendments (CLI URL disclosure in G4, census beyond src/ with PS14, release/startup routing, A1 approver pointer); static gate passes with 159 A1 rows and 49 damaged inputs rejected.
   5-2-decide-generic-non-gateway-capability-contracts: backlog
-  5-3-enroll-replacement-contracts-and-profiles: backlog
+  5-3-enroll-replacement-contracts-and-profiles: review # Review pass 1 2026-11-09: 18 fixes applied, 3 rejected, 2 deferred (Platform reference-runner handoff, profile identity beside flag/environment connection); owner-approved Parties inventory 1.1.0 (C05 delete oracles, C06/C07 resolutions); single-source URL/token rule and C06 logger fix.
   5-4-prove-shared-head-parity-and-safety: backlog
   5-5-retire-legacy-packages-and-platform-routes: backlog
   5-6-reject-new-proprietary-surfaces-in-ci: backlog
@@ -191,7 +191,7 @@ action_items:
     action: "Anchor profile-name validation with absolute end and test trailing-newline
       rejection through Core store and CLI error documents."
     owner: "McpCli maintainer"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-2-retro-2026-10-10.md"
   - id: "epic-2-retro-item-3-platform-verification"
     epic: 2
