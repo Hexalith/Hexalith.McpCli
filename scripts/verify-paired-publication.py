@@ -15,6 +15,8 @@ import tempfile
 from zipfile import BadZipFile, ZipFile
 from xml.etree import ElementTree
 
+from evidence_redaction import known_credentials, private_key, sanitized, sanitized_values
+
 from paired_release import ROOT, digest, module, packages, read_json, validate_source_evidence, write_new
 
 ARTIFACTS = ('paired-preparation', 'paired-consumer-ubuntu-latest', 'paired-consumer-windows-latest',
@@ -114,82 +116,23 @@ def timestamp(value):
 
 
 def credentials():
-    return {os.environ.get(name, '') for name in ('GH_TOKEN', 'GITHUB_TOKEN', 'GH_ENTERPRISE_TOKEN',
-            'GITHUB_ENTERPRISE_TOKEN', 'NUGET_API_KEY')} - {''}
+    return known_credentials()
 
 
 def redact_operator(text):
-    for value in sorted(credentials(), key=len, reverse=True):
-        text = text.replace(value, '[REDACTED]')
-    text = re.sub(r'-----BEGIN (?P<kind>(?:[A-Z0-9]+ )*PRIVATE KEY)-----.*?(?:-----END (?P=kind)-----|\Z)',
-                  '[REDACTED PRIVATE KEY]', text, flags=re.S)
-    text = re.sub(r'\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+', '[REDACTED JWT]', text)
-    text = re.sub(r'(?i)\bBearer\s+[A-Za-z0-9._~+/-]+=*', 'Bearer [REDACTED]', text)
-    return text
+    return sanitized(text)
 
 
 def redact_operator_values(value):
-    if isinstance(value, dict):
-        return {redact_operator_values(key): '[REDACTED]' if private_operator_key(key) else redact_operator_values(item)
-                for key, item in value.items()}
-    if isinstance(value, list):
-        return [redact_operator_values(item) for item in value]
-    if not isinstance(value, str):
-        return value
-    redacted = redact_operator_text(value)
-    try:
-        decoded = json.loads(redacted)
-    except ValueError:
-        return redacted
-    sanitized = redact_operator_values(decoded)
-    return json.dumps(sanitized, ensure_ascii=False) if sanitized != decoded else redacted
+    return sanitized_values(value)
 
 
 def redact_operator_text(text):
-    text = redact_operator(text)
-    strings = r'"(?:[^"\\]|\\.)*"'
-    decoder = json.JSONDecoder()
-    parts, cursor = [], 0
-    # Keep raw spans so duplicate fields cannot hide a private value.
-    for match in re.finditer(strings, text):
-        if match.start() < cursor:
-            continue
-        try:
-            key = json.loads(match.group())
-        except ValueError:
-            continue
-        if not private_operator_key(key):
-            continue
-        separator = re.match(r'\s*:\s*', text[match.end():])
-        if separator is None:
-            continue
-        start = match.end() + separator.end()
-        try:
-            value, end = decoder.raw_decode(text, start)
-        except ValueError:
-            value = re.match(strings, text[start:])
-            if value is None:
-                continue
-            end = start + value.end()
-        if value == '[REDACTED]':
-            continue
-        parts.extend((text[cursor:start], '"[REDACTED]"'))
-        cursor = end
-    text = ''.join([*parts, text[cursor:]])
-
-    # Inspect every raw JSON string, including values hidden by duplicate keys.
-    def sanitize(match):
-        try:
-            value = json.loads(match.group())
-        except ValueError:
-            return match.group()
-        sanitized = redact_operator_values(value)
-        return json.dumps(sanitized, ensure_ascii=False) if sanitized != value else match.group()
-    return re.sub(strings, sanitize, text)
+    return sanitized(text)
 
 
 def private_operator_key(key):
-    return isinstance(key, str) and re.search(r'(?:SigningKey|PrivateKey)\Z', key, re.I) is not None
+    return private_key(key)
 
 
 def unique_operator_keys(pairs):

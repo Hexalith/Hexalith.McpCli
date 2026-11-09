@@ -146,7 +146,7 @@ context:
 - The selected cohort’s absent detail returns `500/query_internal_error` with `actor-not-found-infrastructure`, as inventory C05 records. Missing deactivation returns `404/party-not-found`; separate CLI/MCP absent targets also verify persisted events contain no creation/deactivation effect (a rejection-only stream can remain). Before/after comparisons remove only observation-time `freshness`, retaining every business member.
 - Concurrent CLI processes use distinct generated message IDs. The qualified Gateway awaits the owner’s `ProcessCommandAsync` before returning acceptance; after both return, the boundary waits for the authorized inactive projection and requires exactly one persisted deactivation event in the actor’s stream. The actor ID and state keys follow qualified EventStore `dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`. Any configured sidecar `DAPR_API_TOKEN` is retained for state reads; app-channel authentication is unchanged.
 - The generic runner executes every Query observation through MCP as well as CLI, while every vector Command stays CLI-only. Semantic receipts require both Query heads. CI derives expected counts from approved vectors and its independent-case registry; it allocates each independent case 960 seconds and reserves 600 seconds within the unchanged 17700-second outer budget.
-- [Review][Defer] The redactor/committed secret-scan prerequisite is already tracked (`deferred-work.md:834`); committed live CI, hash-bound evidence and exact-byte owner approval remain pending. The rejection-only-stream and mixed-profile-identity work is already tracked (`deferred-work.md:556`, `deferred-work.md:827`). No final evidence manifest or retirement verdict is asserted.
+- [Review][Resolved prerequisite] The separate redactor/committed secret-scan change closes the existing planning deferral in `deferred-work.md` under this spec's heading; see `spec-epic-4-retro-item-5-harden-ci-redaction.md` and `evidence/epic-4-retro-item-5/verification.md`. Story 5.4's committed live CI, final hash-bound evidence (including its own scan receipt) and exact-byte owner approval remain pending. The rejection-only-stream and mixed-profile-identity work is already tracked (`deferred-work.md:556`, `deferred-work.md:833`). No final evidence manifest or retirement verdict is asserted.
 
 ## Spec Change Log
 
@@ -192,3 +192,25 @@ The story remains **in-progress**. The live boundary is compiled and discovered,
 | C05 concurrent repeat | Live starts two CLI processes once each, asserts distinct message IDs, authorized inactive state and exactly one persisted deactivation event | Live not run—redactor prerequisite |
 
 All final local logs and the Manifest XML, discovery listing and summary receipts are preserved under `/tmp/mcpcli-story54-verification/`. `git diff --check` passed. The committed live run, evidence manifest/variant matrix/scan receipt and owner verdict remain unchecked tasks under the frozen prerequisite.
+
+### Fresh revalidation of the existing implementation (2026-11-09)
+
+The implementation already present at `1c18a42aa9439bfc29009951f29968cac2a71436` satisfies the local execution tasks; no additional production, test, runner, dependency or approved-input changes were necessary. Fresh checks passed:
+
+- Solution restore and Release build with `-warnaserror`: zero warnings or errors.
+- Core: 877 succeeded, four Windows-only skips; CLI: 582 succeeded, two Windows-only skips; MCP: 94 passed; Manifest: 362 passed. The four projects ran one at a time.
+- Complete live-topology Python sweep: all 204 tests passed in 569.967 seconds.
+- Preflight-only: passed with `fullLiveAccepted: false`; discovery matched exactly the 21 approved vectors plus independent smoke and shared-head boundary (23 cases).
+- Enrolled gate: both exact artifact replays and the combined production-manifest replay passed, with 21 operations and `fullV1Accepted: true`.
+
+Fresh command logs are `/tmp/story54-current-{restore,build,Core,Cli,Mcp,Manifest,python,preflight,enrolled}.log`; discovery is `/tmp/story54-current-discovery.txt`. Receipts are under `/tmp/mcpcli-story54-current-live-preflight/` and `/tmp/mcpcli-story54-current-enrolled/`. No live topology was started. The story remains **in-progress**: the separate redactor/committed-secret-scan prerequisite still prevents the committed live run, final hash-bound evidence set and exact-byte owner approval/verdict.
+
+### Separate prerequisite completed (2026-11-09)
+
+`epic-4-retro-item-5-harden-ci-redaction` now supplies the shared Python redactor
+and committed evidence scanner, verified separately in
+`evidence/epic-4-retro-item-5/verification.md`. The preceding revalidation note
+records the state before that prerequisite. Story 5.4 remains **in-progress**:
+its dedicated live CI run, final hash-bound packet and its own scan receipt, and
+exact-byte owner approval/verdict remain pending. This prerequisite's receipt
+does not establish Story 5.4 live acceptance or authorize retirement.

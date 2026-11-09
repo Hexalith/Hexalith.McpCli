@@ -16,6 +16,8 @@ import zipfile
 import jsonschema
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'scripts'))
+from evidence_redaction import sanitized
 sys.path.insert(0, str(ROOT / 'tools/conformance-vectors/v1'))
 from validate import VectorError, _load_json, validate_vectors
 from check_enrolled import approved_inventory, approved_vectors, approval_directory, artifact_for, required_scope
@@ -186,12 +188,8 @@ def validate_call(head: HeadProcess, call: dict) -> None:
         command = head._base() + ['--validate-vectors', str(path)]
         process = subprocess.run(command, env=head.env,
                                  capture_output=True, text=True, timeout=head.timeout, check=False)
-        secrets = [value for key, value in head.env.items() if value and
-                   any(marker in key.upper() for marker in ('TOKEN', 'PASSWORD', 'SECRET', 'SIGNINGKEY'))]
         def sanitize(value: str) -> str:
-            for secret in sorted(secrets, key=len, reverse=True):
-                value = value.replace(secret, '<redacted>')
-            return value
+            return sanitized(value, environment=head.env, marker='<redacted>')
         diagnostic = json.dumps({'command': [sanitize(argument) for argument in command],
                                  'exitCode': process.returncode, 'stdout': sanitize(process.stdout),
                                  'stderr': sanitize(process.stderr)})

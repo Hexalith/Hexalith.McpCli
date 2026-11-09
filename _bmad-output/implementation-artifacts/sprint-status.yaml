@@ -93,7 +93,7 @@ development_status:
   5-2-decide-generic-non-gateway-capability-contracts: backlog
   5-3-enroll-replacement-contracts-and-profiles: done # Review pass 1 2026-11-09: 18 fixes applied, 3 rejected, 2 deferred (Platform reference-runner handoff, profile identity beside flag/environment connection); owner-approved Parties inventory 1.1.0 (C05 delete oracles, C06/C07 resolutions); single-source URL/token rule and C06 logger fix.
   # Review pass 2 complete: all 3 patches fixed; owner approved exact Parties 1.2.0 C05 correction; prior inventory/receipt preserved and approved-mode checks pass.
-  5-4-prove-shared-head-parity-and-safety: in-progress # Local implementation/checks passed 2026-11-09; committed live CI, evidence scan/binding and owner verdict wait for the split redactor prerequisite.
+  5-4-prove-shared-head-parity-and-safety: in-progress # Local implementation/checks passed; redactor/scanner implemented as a separate prerequisite. Dedicated live CI, final evidence scan/binding and owner verdict remain pending.
   5-5-retire-legacy-packages-and-platform-routes: backlog
   5-6-reject-new-proprietary-surfaces-in-ci: backlog
   5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: backlog
@@ -273,9 +273,10 @@ action_items:
     epic: 4
     action: "Redact opaque bearer values, unterminated PEM blocks and malformed-XML
       key elements in tools/live-topology/ci.py, consolidate Python redaction helpers,
-      and test direct, escaped and truncated cases (F6)."
+      and test direct, escaped and truncated cases (F6); add the separate Story 5.4
+      prerequisite evidence secret scanner and exact-file receipt."
     owner: "McpCli maintainer"
-    status: open
+    status: done
     ref: "_bmad-output/implementation-artifacts/epic-4-retro-2026-11-06.md"
   - id: "epic-4-retro-item-6-bind-release-acceptance"
     epic: 4

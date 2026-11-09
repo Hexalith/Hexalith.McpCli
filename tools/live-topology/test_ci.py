@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import contextlib
 import base64
 import importlib.util
 import hashlib
@@ -204,6 +205,12 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
             print('detached vector stderr stopped', file=sys.stderr, flush=True)
             (root / 'cancel-child-stopped').touch()
             sys.exit(143)
+        child = output / operations[0]; child.mkdir()
+        pem = '-----BEGIN EC PRIVATE KEY-----\ncancel-pem-canary'
+        (child / 'child.stdout.txt').write_text('Authorization: Bearer cancel-bearer-canary\n' + pem)
+        (child / 'tests.xml').write_text('<root><PrivateKey>cancel-xml-canary</PrivateKey><unfinished')
+        print('Authorization: Bearer cancel-bearer-canary', flush=True)
+        print(json.dumps({'diagnostic': pem}), file=sys.stderr, flush=True)
         signal.signal(signal.SIGTERM, terminate)
         print('detached vector started', flush=True)
         (root / 'cancel-child.json').write_text(json.dumps({'pid': os.getpid(), 'pgid': os.getpgrp()}))
@@ -242,6 +249,15 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
         (child / 'child.stdout.txt').write_text(content)
         from html import escape
         (child / 'tests.xml').write_text('<test>' + (escape(content) if mode == 'generation-xml-secrets' else content) + '</test>')
+    if mode == 'generation-redaction-regressions':
+        child = output / operations[0]; child.mkdir()
+        pem = '-----BEGIN RSA PRIVATE KEY-----\nretained-pem-canary'
+        content = 'retained child diagnostic\nAuthorization: Bearer retained-bearer-canary\n' + json.dumps({'nested': pem, 'safe': 'retained sibling'})
+        (child / 'child.stdout.txt').write_text(content)
+        (child / 'child.stderr.txt').write_text('retained stderr\n' + pem)
+        (child / 'tests.xml').write_text('<root><ns:PrivateKey>retained-xml-canary</ns:PrivateKey><unfinished')
+        print('retained process stdout Authorization: Bearer retained-bearer-canary', flush=True)
+        print(json.dumps({'stderr': pem, 'safe': 'retained process stderr'}), file=sys.stderr, flush=True)
     if mode != 'missing-vectors':
         (output / 'live-lane.json').write_text('{' if mode == 'malformed-vectors' else json.dumps(receipt))
     if mode == 'tamper-after-vectors':
@@ -294,6 +310,8 @@ class CiHooksTests(unittest.TestCase):
         self.tools.mkdir(parents=True)
         for name in ('prepare-ci.sh', 'run-ci.sh', 'ci.py', 'native_cohort.py'):
             shutil.copyfile(HERE / name, self.tools / name)
+        (self.root / 'scripts').mkdir()
+        shutil.copyfile(HERE.parents[1] / 'scripts/evidence_redaction.py', self.root / 'scripts/evidence_redaction.py')
         for name, content in [('bootstrap-runtime.py', BOOTSTRAP), ('run-vectors.py', RUNNERS), ('run-isolated.py', RUNNERS)]:
             (self.tools / name).write_text(content)
         binaries = [{'source': '/' + name, 'sha256': hashlib.sha256(b'qualified-fixture').hexdigest()}
@@ -1494,6 +1512,23 @@ class CiHooksTests(unittest.TestCase):
             self.assertIn('[REDACTED JWT]', child.read_text())
             self.assertIn('"SigningKey": "[REDACTED]"', child.read_text())
 
+    def test_opaque_bearer_truncated_pem_and_malformed_xml_are_redacted_in_retained_children(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'generation-redaction-regressions')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        output = Path(receipt['output'])
+        content = result.stdout + result.stderr + ''.join(path.read_text() for path in output.rglob('*') if path.is_file())
+        for canary in ('retained-pem-canary', 'retained-bearer-canary', 'retained-xml-canary'):
+            self.assertNotIn(canary, content)
+        child = output / 'vectors/sample.operation-00'
+        self.assertIn('retained child diagnostic', (child / 'child.stdout.txt').read_text())
+        self.assertIn('retained sibling', (child / 'child.stdout.txt').read_text())
+        self.assertIn('[REDACTED PEM]', (child / 'child.stderr.txt').read_text())
+        self.assertIn('[REDACTED]', (child / 'tests.xml').read_text())
+        self.assertIn('retained process stdout', (output / 'vectors-process.stdout.txt').read_text())
+        self.assertIn('retained process stderr', (output / 'vectors-process.stderr.txt').read_text())
+
     def test_missing_preparation_and_reused_runtime_refuse_live(self):
         result = self.invoke('run-ci.sh')
         self.assertNotEqual(0, result.returncode)
@@ -1694,6 +1729,78 @@ class CiHooksTests(unittest.TestCase):
         self.assertEqual(str(Path(prepared['python']).parents[1]), nested['prefix'])
         self.assertEqual('prepared-venv-only', nested['marker'])
 
+    def test_bounded_command_console_and_retained_arguments_are_sanitized(self):
+        module = self.ci_module()
+        output = self.root / 'bounded'
+        stdout, stderr = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+            result = module.bounded([sys.executable, '-c', 'print("retained child")',
+                                     '--PrivateKey=bounded-private-canary'], 5, output)
+        self.assertEqual('retained child', result)
+        self.assertEqual('', stderr.getvalue())
+        self.assertIn('--PrivateKey=[REDACTED]', stdout.getvalue())
+        self.assertNotIn('bounded-private-canary', stdout.getvalue())
+        receipt = json.loads(output.with_suffix('.command.json').read_text())
+        self.assertEqual('--PrivateKey=[REDACTED]', receipt['command'][-1])
+        self.assertEqual('retained child\n', output.with_suffix('.stdout.txt').read_text())
+        self.assertEqual('', output.with_suffix('.stderr.txt').read_text())
+
+    def test_child_only_environment_secrets_are_redacted_on_success_failure_and_cancellation(self):
+        module = self.ci_module()
+        secret = 'child-only-opaque-credential'
+        environment = {**os.environ, 'REVIEW_SECRET': secret}
+        self.assertNotEqual(secret, os.environ.get('REVIEW_SECRET'))
+        real_popen = module.subprocess.Popen
+        for mode in ('success', 'failure', 'cancel'):
+            with self.subTest(mode=mode):
+                output = self.root / ('child-env-' + mode)
+                ready = self.root / ('ready-' + mode)
+                code = ('import os,sys,time; from pathlib import Path; '
+                        'value=os.environ["REVIEW_SECRET"]; print(value,flush=True); '
+                        'print(value,file=sys.stderr,flush=True); Path(sys.argv[1]).touch(); '
+                        + ('time.sleep(60)' if mode == 'cancel' else 'sys.exit(' + ('7' if mode == 'failure' else '0') + ')'))
+                command = [sys.executable, '-c', code, str(ready), secret]
+                def launch(*args, **kwargs):
+                    child = real_popen(*args, **kwargs)
+                    wait = child.wait
+                    interrupted = False
+                    def interrupt(*args, **kwargs):
+                        nonlocal interrupted
+                        if mode == 'cancel' and not interrupted:
+                            deadline = time.monotonic() + 5
+                            while not ready.exists() and child.poll() is None and time.monotonic() < deadline:
+                                time.sleep(.01)
+                            self.assertTrue(ready.exists(), 'Child did not write its diagnostics before cancellation.')
+                            interrupted = True
+                            raise KeyboardInterrupt()
+                        return wait(*args, **kwargs)
+                    child.wait = interrupt
+                    return child
+                stdout, stderr = io.StringIO(), io.StringIO()
+                with patch.object(module.subprocess, 'Popen', side_effect=launch), \
+                        contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                    if mode == 'success':
+                        self.assertEqual('[REDACTED]', module.bounded(command, 10, output, environment=environment))
+                    elif mode == 'failure':
+                        with self.assertRaises(RuntimeError) as failure:
+                            module.bounded(command, 10, output, environment=environment)
+                        self.assertNotIn(secret, str(failure.exception))
+                    else:
+                        with self.assertRaises(KeyboardInterrupt):
+                            module.bounded(command, 10, output, environment=environment)
+                self.assertEqual('', stderr.getvalue())
+                self.assertNotIn(secret, stdout.getvalue())
+                self.assertIn('[REDACTED]', stdout.getvalue())
+                self.assertEqual('[REDACTED]\n', output.with_suffix('.stdout.txt').read_text())
+                self.assertEqual('[REDACTED]\n', output.with_suffix('.stderr.txt').read_text())
+                receipt = json.loads(output.with_suffix('.command.json').read_text())
+                self.assertEqual('[REDACTED]', receipt['command'][-1])
+                self.assertNotIn(secret, json.dumps(receipt))
+                if mode == 'cancel':
+                    self.assertIn(receipt['exitCode'], (-15, 124))
+                else:
+                    self.assertEqual(7 if mode == 'failure' else 0, receipt['exitCode'])
+
     def test_generated_signing_keys_are_redacted_without_breaking_json(self):
         import base64
         module = self.ci_module()
@@ -1868,6 +1975,12 @@ class CiHooksTests(unittest.TestCase):
             self.assertIn('detached vector stopped', (output / 'vectors-process.stdout.txt').read_text())
             self.assertIn('detached vector stderr stopped', (output / 'vectors-process.stderr.txt').read_text())
             self.assertEqual(143, json.loads((output / 'vectors-process.command.json').read_text())['exitCode'])
+            content = stdout + stderr + ''.join(path.read_text() for path in output.rglob('*') if path.is_file())
+            for canary in ('cancel-pem-canary', 'cancel-bearer-canary', 'cancel-xml-canary'):
+                self.assertNotIn(canary, content)
+            child_output = output / 'vectors/sample.operation-00'
+            self.assertIn('[REDACTED PEM]', (child_output / 'child.stdout.txt').read_text())
+            self.assertIn('[REDACTED]', (child_output / 'tests.xml').read_text())
         finally:
             if process.poll() is None:
                 process.kill()

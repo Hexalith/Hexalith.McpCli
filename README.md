@@ -594,6 +594,10 @@ Core owns the advertised result constraints: canonical success names and upperca
 
 ## Live topology and semantic vectors
 
+Retained CI and release diagnostics use the shared Python redactor. Before
+committing an evidence packet, run the [evidence secret scanner](tools/live-topology/README.md#scanning-an-evidence-packet)
+to produce an exact-file scan receipt; detected secrets and incomplete scans fail.
+
 The canonical test lane composes the owned package gateway and qualified Tenants and Parties source hosts through published Aspire helpers, with the separately qualified Platform catalog reader. The AppHost keeps its direct-checkout guards; CI additionally verifies exact source identities, clean owned files and authenticated public archives. Only disposable hosted CI selects revisions from `tools/live-topology/native-runtime.json`. Do not initialize nested dependencies or substitute a locally cached candidate. The AppHost references no server project or implementation package; separate owner metadata preparation does not alter the Parties host graph. The independent integration harness retains its reviewed test-only closure.
 
 Once the exact public dependencies and artifact approvals are available, run these non-launching checks from this repository root:

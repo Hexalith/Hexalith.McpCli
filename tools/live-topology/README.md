@@ -328,10 +328,52 @@ after hook paths have passed upstream validation. It contains `preparation.json`
 per-command sanitized stdout/stderr and exit/deadline records, `ci-live.json`,
 generation-specific vector receipts and smoke XML, and allowlisted runtime logs
 under `<generation>/runtime-diagnostics/`. Runtime keys, certificate material,
-Redis RDB files and scheduler data are excluded; JWTs, PEM material and known
-credential values are redacted from diagnostic text. Raw private runtime state
+Redis RDB files and scheduler data are excluded; JWTs, opaque Bearer credentials,
+complete or truncated PEM material and known credential values are redacted from
+diagnostic text by `scripts/evidence_redaction.py`. Named private-key JSON and XML
+values are redacted even in nested escaped diagnostics or malformed XML. Raw private runtime state
 stays outside uploaded evidence. Keep its location from `preparation.json` until
 diagnostics are complete, then remove only that task-owned directory.
+
+## Scanning an evidence packet
+
+Before recording Story 5.4's final evidence, sanitize the retained diagnostics
+with the shared redactor and scan the complete final packet from the repository
+root. Choose a new receipt path; the scanner never overwrites a receipt or edits
+source evidence:
+
+```sh
+python3 scripts/scan-evidence-secrets.py \
+  _bmad-output/implementation-artifacts/evidence/story-5-4 \
+  --receipt _bmad-output/implementation-artifacts/evidence/story-5-4/secret-scan.json
+```
+
+Exit 0 means clean under `mcpcli-evidence-redaction/v1`; exit 1 means recognized
+sensitive content was detected; exit 2 means the packet could not be completely
+scanned or its receipt could not be written. Findings contain only relative file
+names and rule identifiers, without source snippets or credential values. A
+finding applies to the whole file, including decoded JSON/XML diagnostics.
+
+The JSON receipt is also printed to stdout. It binds every input's relative path,
+byte length and SHA-256, a digest of that sorted manifest, the redaction policy
+and SHA-256 hashes of the scanner and redactor implementations. Output and ordering
+are deterministic for identical input bytes and environment. Known values from
+credential environment variables are checked as well; only their count is
+recorded. The receipt itself is the only excluded path when it is created inside
+the packet. Freeze all other packet files before scanning. Any edit or added file
+requires another scan with a new receipt destination; compare the receipt's
+manifest with the final packet.
+
+There are no extension or hidden-file exclusions. Inputs must be UTF-8 text or
+BOM-marked UTF-16 text; unsupported binary/archive formats, invalid encodings,
+non-whitespace C0 controls and DEL, links, special files, unreadable inputs and
+empty packets fail closed. Render terminal controls as plain text first. Extract
+archives and select the sanitized text packet before scanning; record binary and
+downloaded artifact hashes in the packet. This policy detects the credential and
+private-key forms covered by the shared redactor, rather than arbitrary unknown
+secret strings. Retention-policy changes and a general repository scanning hook
+remain separate work. A clean receipt establishes neither live acceptance nor an
+owner verdict.
 
 Paired package publication requires exact-source CI, a successful staged pair,
 candidate-bound acceptance and production approval; see

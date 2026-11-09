@@ -1,0 +1,54 @@
+{
+  "baselineSource": "1c18a42aa9439bfc29009951f29968cac2a71436",
+  "checks": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -v -s scripts/tests -p 'test_*.py'",
+      "durationSeconds": 93.803,
+      "exitCode": 0,
+      "localLog": "/tmp/mcpcli-redaction-prerequisite-verification/script-tests-complete.txt",
+      "logSha256": "da63b2c1236446dc98d834fb998b1494c549368ba10c8d0f194ed55089323446",
+      "tests": 193
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+      "durationSeconds": 542.469,
+      "exitCode": 0,
+      "localLog": "/tmp/mcpcli-redaction-prerequisite-verification/topology-tests-reviewed.txt",
+      "logSha256": "32fd13e332eaf63658270ea0a92a2a7752f97caa8c7b88e4d113b22442447ff9",
+      "tests": 207
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=scripts:scripts/tests:tools/live-topology python3 -m unittest -v test_evidence_redaction test_ci.CiHooksTests.test_child_only_environment_secrets_are_redacted_on_success_failure_and_cancellation test_ci.CiHooksTests.test_json_escaped_known_environment_secrets_are_redacted_without_changing_ordinary_text test_ci.CiHooksTests.test_generated_signing_keys_are_redacted_without_breaking_json test_live_plans.PlanTests.test_malformed_core_output_retains_sanitized_process_diagnostics test_live_plans.PlanTests.test_failed_core_responses_retain_sanitized_process_diagnostics",
+      "durationSeconds": 0.601,
+      "exitCode": 0,
+      "localLog": "/tmp/mcpcli-redaction-prerequisite-verification/final-focused-tests.txt",
+      "logSha256": "31a4901d2a119a85642563e22638956723fd6c643ec248a2c355d1ea47dfa7e2",
+      "tests": 17
+    }
+  ],
+  "codeSha256": {
+    "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7",
+    "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+    "scripts/tests/test_evidence_redaction.py": "f3ef749f03dcfe0df37c55f80951bd11e4f2d67a2191f4c4b6ae735f99188c73",
+    "scripts/tests/test_evidence_secret_scan.py": "dac7c64f47af2bdf4a151a9bde1e8e0756406832e3b6c27b0120bf0dbc99704a",
+    "scripts/verify-paired-publication.py": "0a47e7db0d343e71e1e4a2721f5b714ff70e7bf59aa55053c819e301aad91a25",
+    "scripts/verify-release-source.py": "f4eccc8476973bb2b92e45202a86fb432801f6a8d6b1edade3ab81aa51823b3e",
+    "tools/live-topology/ci.py": "16d15fd4b4155aed2dda17973e3e543248a3a38fa217fec75d5df22efcb4e7c4",
+    "tools/live-topology/live_plans.py": "2811af4243008d795f2965006e13c752b0a11f28c7074daa07973dae1a3a211f",
+    "tools/live-topology/test_ci.py": "bc36624434ef610e61436e7d56370026f43fe102d3cfa2a11d56ab7bd8773c7d"
+  },
+  "date": "2026-11-09",
+  "result": "passed",
+  "review": {
+    "deferred": 0,
+    "findings": 9,
+    "recheckedByIndependentReviewer": true,
+    "resolved": 9
+  },
+  "schema": "mcpcli-redaction-prerequisite-verification/v1",
+  "story54": {
+    "dedicatedLiveCi": "pending",
+    "finalEvidence": "pending",
+    "ownerVerdict": "pending"
+  }
+}

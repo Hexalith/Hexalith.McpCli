@@ -8,16 +8,15 @@ import re
 import subprocess
 import sys
 
+from evidence_redaction import sanitized
+
 
 def failure_detail(error):
     detail = str(error)
     if isinstance(error, subprocess.CalledProcessError) and error.stderr:
         stderr = error.stderr.decode('utf-8', errors='replace') if isinstance(error.stderr, bytes) else error.stderr
         detail += f"\n{stderr.strip()}"
-    credentials = {os.environ.get(name, "") for name in
-                   ("GH_TOKEN", "GITHUB_TOKEN", "GH_ENTERPRISE_TOKEN", "GITHUB_ENTERPRISE_TOKEN", "NUGET_API_KEY")}
-    for credential in sorted((value for value in credentials if value.strip()), key=len, reverse=True):
-        detail = detail.replace(credential, "[REDACTED]")
+    detail = sanitized(detail)
     return re.sub(r"[\x00-\x08\x0b-\x1f\x7f]", "", detail)
 
 

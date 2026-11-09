@@ -26,6 +26,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import native_cohort
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / 'scripts'))
+from evidence_redaction import sanitized, sanitized_xml
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
 TESTS = ROOT / PROJECT / 'bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
 MODULES = native_cohort.MODULES
@@ -40,72 +42,15 @@ ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v13.6.1/
 ASPIRE_CLI_SHA256 = 'f5498a1b30f894186a805c08798d9ca4f112dfc3b5f24ab0acef3f8aa5d009b8'
 
 
-def sanitized(text: str) -> str:
-    """Retain diagnostics without copying credentials or PEM material into artifacts."""
-    text = re.sub(r'-----BEGIN [^-]+-----.*?-----END [^-]+-----', '[REDACTED PEM]', text, flags=re.S)
-    text = re.sub(r'\beyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+', '[REDACTED JWT]', text)
-    text = re.sub(r'(?i)((?P<quote>\\+)"[^"\r\n]*(?:SigningKey|PrivateKey)(?P=quote)"\s*:\s*)(?P=quote)"[^"\r\n]*(?P=quote)"',
-                  lambda match: match[1] + match['quote'] + '"[REDACTED]' + match['quote'] + '"', text)
-    # A JSON string token can also contain an escaped JSON diagnostic or command.
-    def redact_string(match):
-        if '\\' not in match.group():
-            return match.group()
-        try:
-            decoded = json.loads(match.group())
-            redacted = sanitized(decoded)
-            return json.dumps(redacted) if redacted != decoded else match.group()
-        except json.JSONDecodeError:
-            return match.group()
-    text = re.sub(r'"(?:[^"\\]|\\.)*"', redact_string, text)
-    # Preserve all quote/escape delimiters when the surrounding text is not a JSON document.
-    text = re.sub(r'(?i)("(?:[^"\\]|\\.)*(?:SigningKey|PrivateKey)"\s*:\s*)"(?:[^"\\]|\\.)*"',
-                  r'\1"[REDACTED]"', text)
-    text = re.sub(r'(?i)((?:SigningKey|PrivateKey)(?:=|:|\s)+)[^\s,\]"}]+', r'\1[REDACTED]', text)
-    for key, value in os.environ.items():
-        if value and len(value) >= 8 and re.search(r'TOKEN|PASSWORD|SECRET|CERT_KEY|SIGNINGKEY|PRIVATE_?KEY|API_KEY', key, re.I):
-            text = text.replace(value, '[REDACTED]')
-    return text
-
-
-def save(path: Path, value) -> None:
-    path.write_text(sanitized(json.dumps(value, indent=2)) + '\n')
-
-
-def sanitized_xml(text: str) -> str:
-    """Redact decoded XML values so entity encoding cannot hide credentials."""
-    try:
-        root = ET.fromstring(text)
-    except ET.ParseError:
-        return sanitized(text)
-    changed = False
-    for element in root.iter():
-        private_element = re.search(r'(?i)(SigningKey|PrivateKey)$', element.tag) is not None
-        private_setting = any(re.search(r'(?i)(SigningKey|PrivateKey)$', value)
-                              for key, value in element.attrib.items() if key.lower() in ('name', 'key'))
-        if (private_element or private_setting) and element.text:
-            element.text = '[REDACTED]'
-            changed = True
-        for field in ('text', 'tail'):
-            value = getattr(element, field)
-            if value is not None:
-                redacted = sanitized(value)
-                if redacted != value:
-                    setattr(element, field, redacted)
-                    changed = True
-        for key, value in element.attrib.items():
-            redacted = '[REDACTED]' if re.search(r'(?i)(SigningKey|PrivateKey)$', key) \
-                or private_setting and key.lower() == 'value' else sanitized(value)
-            if redacted != value:
-                element.set(key, redacted)
-                changed = True
-    return sanitized(ET.tostring(root, encoding='unicode') if changed else text)
+def save(path: Path, value, *, environment=None) -> None:
+    path.write_text(sanitized(json.dumps(value, indent=2), environment=environment) + '\n')
 
 
 def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environment=None) -> str:
     """Enforce a process bound, retain both sanitized channels, and propagate failures."""
     output.parent.mkdir(parents=True, exist_ok=True)
     actual = ['timeout', '--signal=TERM', '--kill-after=30s', str(seconds), *map(str, command)]
-    print(f'Running ({seconds}s): {" ".join(map(str, command))}', flush=True)
+    print(sanitized(f'Running ({seconds}s): {" ".join(map(str, command))}', environment=environment), flush=True)
     with tempfile.TemporaryFile() as stdout, tempfile.TemporaryFile() as stderr:
         child = subprocess.Popen(actual, cwd=cwd, env=environment, stdout=stdout, stderr=stderr, start_new_session=True)
         interrupted = False
@@ -148,16 +93,16 @@ def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environ
                 pass
             stdout.seek(0)
             stderr.seek(0)
-            content = sanitized(stdout.read().decode(errors='replace'))
-            error = sanitized(stderr.read().decode(errors='replace'))
+            content = sanitized(stdout.read().decode(errors='replace'), environment=environment)
+            error = sanitized(stderr.read().decode(errors='replace'), environment=environment)
             output.parent.joinpath(output.name + '.stdout.txt').write_text(content)
             output.parent.joinpath(output.name + '.stderr.txt').write_text(error)
             save(output.parent / (output.name + '.command.json'), {'command': list(map(str, command)), 'cwd': str(cwd),
-                 'timeoutSeconds': seconds, 'exitCode': child.returncode})
+                 'timeoutSeconds': seconds, 'exitCode': child.returncode}, environment=environment)
     if code != 0:
-        raise RuntimeError(f'{" ".join(map(str, command))} exited {code}; '
+        raise RuntimeError(sanitized(f'{" ".join(map(str, command))} exited {code}; '
                            f'stdout: {output.parent / (output.name + ".stdout.txt")}; '
-                           f'stderr: {output.parent / (output.name + ".stderr.txt")}')
+                           f'stderr: {output.parent / (output.name + ".stderr.txt")}', environment=environment))
     return content.strip()
 
 
