@@ -32,6 +32,7 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
         string directory = Path.Combine(Path.GetTempPath(), "mcpcli-live-safety-" + Guid.NewGuid().ToString("N"));
         Directory.CreateDirectory(directory);
         var receipts = new List<object>();
+        var missingTokenDocuments = new Dictionary<bool, JsonElement>();
         string authorizedToken = fixture.CreateBoundaryAuthorizedIdentity();
         using var authorizedHttp = new HttpClient { BaseAddress = fixture.GatewayEndpoint, Timeout = TimeSpan.FromSeconds(35) };
         authorizedHttp.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizedToken);
@@ -65,10 +66,17 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
                     HeadResult refused = await InvokeAsync(mcp, command, operation, Payload(Party), "tenant-b", scenario.Token);
                     AssertGatewayRefusal(refused, forwarder, requests, scenario.Status, scenario.Reason, operation);
                     if (scenario.Token is null) forwarder.Requests[^1].Headers.ContainsKey("Authorization").ShouldBeFalse();
+                    JsonElement publicError = JsonSerializer.Deserialize<JsonElement>(refused.Document);
+                    if (scenario.Name == "missing-token")
+                    {
+                        if (mcp) JsonElement.DeepEquals(missingTokenDocuments[command], publicError).ShouldBeTrue();
+                        else missingTokenDocuments[command] = publicError;
+                    }
                     JsonElement after = await ReadAsync(Party, active: true);
                     JsonElement.DeepEquals(before, after).ShouldBeTrue("A rejected call changed the authorized persisted read.");
                     receipts.Add(new { scenario = scenario.Name, head = mcp ? "mcp" : "cli", kind = command ? "command" : "query",
-                        status = scenario.Status, gatewayRequests = 1, persistedBeforeSha256 = Hash(before), persistedAfterSha256 = Hash(after) });
+                        status = scenario.Status, gatewayRequests = 1, responseFormat = forwarder.Responses[^1].Body.Length == 0 ? "empty" : "problem+json",
+                        publicError, persistedBeforeSha256 = Hash(before), persistedAfterSha256 = Hash(after) });
                 }
                 if (mcp)
                 {
@@ -238,31 +246,38 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
         forwarder.Requests.Count.ShouldBe(before + 1);
         (_, int receivedStatus, string body) = forwarder.Responses[^1];
         receivedStatus.ShouldBe(status);
-        using JsonDocument problem = JsonDocument.Parse(body);
-        JsonElement value = problem.RootElement;
-        value.GetProperty("reasonCode").GetString().ShouldBe(reason);
-        if (status == 401)
+        if (status == 401 && body.Length == 0)
         {
-            value.TryGetProperty("correlationId", out _).ShouldBeFalse();
-            BoundaryHeads.AssertAuthenticationRefusal(result, forwarder.Requests[^1].Headers.ContainsKey("Authorization"));
-        }
-        else if (status == 403)
-        {
-            BoundaryHeads.AssertTenantAuthorizationRefusal(result, "tenant-b", reason!, value.GetProperty("correlationId").GetString()!);
+            BoundaryHeads.AssertAuthenticationRefusal(result, forwarder.Requests[^1].Headers.ContainsKey("Authorization"), emptyBody: true);
         }
         else
         {
-            var error = new Dictionary<string, object?> { ["code"] = "gateway_error", ["status"] = status };
-            string? detail = value.GetProperty("detail").GetString();
-            error["detail"] = detail;
-            error["reason"] = reason;
-            if (value.TryGetProperty("correlationId", out JsonElement correlation))
+            using JsonDocument problem = JsonDocument.Parse(body);
+            JsonElement value = problem.RootElement;
+            value.GetProperty("reasonCode").GetString().ShouldBe(reason);
+            if (status == 401)
             {
-                error["correlationId"] = correlation.GetString();
+                value.TryGetProperty("correlationId", out _).ShouldBeFalse();
+                BoundaryHeads.AssertAuthenticationRefusal(result, forwarder.Requests[^1].Headers.ContainsKey("Authorization"));
             }
-            foreach (string member in new[] { "retryable", "clientAction", "retryAfter" })
-                if (value.TryGetProperty(member, out JsonElement metadata)) error[member] = metadata.Clone();
-            BoundaryHeads.AssertDocument(result, JsonSerializer.Serialize(new { error }), isError: true);
+            else if (status == 403)
+            {
+                BoundaryHeads.AssertTenantAuthorizationRefusal(result, "tenant-b", reason!, value.GetProperty("correlationId").GetString()!);
+            }
+            else
+            {
+                var error = new Dictionary<string, object?> { ["code"] = "gateway_error", ["status"] = status };
+                string? detail = value.GetProperty("detail").GetString();
+                error["detail"] = detail;
+                error["reason"] = reason;
+                if (value.TryGetProperty("correlationId", out JsonElement correlation))
+                {
+                    error["correlationId"] = correlation.GetString();
+                }
+                foreach (string member in new[] { "retryable", "clientAction", "retryAfter" })
+                    if (value.TryGetProperty(member, out JsonElement metadata)) error[member] = metadata.Clone();
+                BoundaryHeads.AssertDocument(result, JsonSerializer.Serialize(new { error }), isError: true);
+            }
         }
         HeadDiagnostics.AssertGatewayOnly(result, forwarder.Url, operation == "parties.get-party" ? "/api/v1/queries" : "/api/v1/commands", status, process: true);
     }

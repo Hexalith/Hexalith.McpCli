@@ -95,16 +95,21 @@ public sealed class BoundaryProcessHarnessTests
     /// <summary>Real CLI and MCP processes preserve every qualified 401/403 challenge and signed-grant error member.</summary>
     /// <param name="scenario">The Gateway authentication or authorization failure.</param>
     /// <param name="command">Whether to submit a Command.</param>
+    /// <param name="emptyBody">Whether the 401 challenge has no response body.</param>
     [Theory]
-    [InlineData("missing-token", false)]
-    [InlineData("missing-token", true)]
-    [InlineData("forged-token", false)]
-    [InlineData("forged-token", true)]
-    [InlineData("tenant_mismatch", false)]
-    [InlineData("tenant_mismatch", true)]
-    [InlineData("principal_not_member", false)]
-    [InlineData("principal_not_member", true)]
-    public async Task QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(string scenario, bool command)
+    [InlineData("missing-token", false, false)]
+    [InlineData("missing-token", true, false)]
+    [InlineData("forged-token", false, false)]
+    [InlineData("forged-token", true, false)]
+    [InlineData("tenant_mismatch", false, false)]
+    [InlineData("tenant_mismatch", true, false)]
+    [InlineData("principal_not_member", false, false)]
+    [InlineData("principal_not_member", true, false)]
+    [InlineData("missing-token", false, true)]
+    [InlineData("missing-token", true, true)]
+    [InlineData("forged-token", false, true)]
+    [InlineData("forged-token", true, true)]
+    public async Task QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(string scenario, bool command, bool emptyBody)
     {
         const string correlation = "01J9MZHXT3RKM0VWXRXGSJDATK";
         string directory = Path.Combine(Path.GetTempPath(), "mcpcli-credential-boundary-" + Guid.NewGuid().ToString("N"));
@@ -125,7 +130,8 @@ public sealed class BoundaryProcessHarnessTests
         try
         {
             await using var gateway = new ScriptedGateway(_ => ScriptedGateway.Response(status,
-                authentication ? "Unauthorized" : "Forbidden", "application/problem+json", JsonSerializer.Serialize(problem)));
+                authentication ? "Unauthorized" : "Forbidden", emptyBody ? null : "application/problem+json",
+                emptyBody ? string.Empty : JsonSerializer.Serialize(problem)));
             var environment = new Dictionary<string, string?> { ["EVENTSTORE_URL"] = gateway.Url, ["EVENTSTORE_TOKEN"] = token };
             string profile = Path.Combine(directory, "mcpcli.json");
             string operation = command ? "parties.deactivate-party" : "parties.get-party";
@@ -140,7 +146,7 @@ public sealed class BoundaryProcessHarnessTests
                         [command ? "send" : "query", operation, "--payload", payload, "--tenant", "tenant-b"]);
                 gateway.Requests.Count.ShouldBe(before + 1);
                 gateway.Requests[^1].Headers.ContainsKey("Authorization").ShouldBe(token is not null);
-                if (authentication) BoundaryHeads.AssertAuthenticationRefusal(result, token is not null);
+                if (authentication) BoundaryHeads.AssertAuthenticationRefusal(result, token is not null, emptyBody);
                 else BoundaryHeads.AssertTenantAuthorizationRefusal(result, "tenant-b", reason, correlation);
                 if (token is not null) result.AllChannels.ShouldNotContain(token);
                 HeadDiagnostics.AssertGatewayOnly(result, gateway.Url, command ? "/api/v1/commands" : "/api/v1/queries", status, process: true);

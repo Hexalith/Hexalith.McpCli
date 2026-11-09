@@ -268,3 +268,16 @@ cases pass; the full CLI project passes 592 cases with two OS-only skips.
 Five focused ordering/failure/cancellation checks and the new early-drift
 check pass. Broad CI-hook verification continues while the next PR candidate
 is qualified. Prior attempt receipts remain distinct from its final packet.
+
+### Empty 401 transport response (2026-11-09)
+
+Run `42641067905` passed the Query credential/grant cases, then found an empty
+401 response for the forged-token Command; the early boundary correctly kept
+vectors unrun. The generic client already maps that exact HTTP fallback to
+`gateway_error`, status 401 and detail `Unauthorized`, without a reason field.
+The boundary now asserts that complete fallback for an empty body and retains
+the pinned structured challenge for every nonempty body. Live credential
+receipts record the response format and full public error, and missing-token
+CLI/MCP documents are compared directly per call kind. Four more process cases
+pin empty missing/invalid-token challenges through both heads and call kinds.
+The clean 99-test CI-hook sweep passed; production behavior remains unchanged.

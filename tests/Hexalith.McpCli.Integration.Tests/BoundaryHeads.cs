@@ -111,8 +111,13 @@ internal static class BoundaryHeads
     }
 
     /// <summary>Pins the qualified Gateway's complete missing/invalid-token challenge document.</summary>
-    internal static void AssertAuthenticationRefusal(HeadResult result, bool credentialPresent)
+    internal static void AssertAuthenticationRefusal(HeadResult result, bool credentialPresent, bool emptyBody = false)
     {
+        if (emptyBody)
+        {
+            AssertDocument(result, """{"error":{"code":"gateway_error","status":401,"detail":"Unauthorized"}}""", isError: true);
+            return;
+        }
         string detail = credentialPresent ? "The provided authentication token is invalid."
             : "Authentication is required to access this resource.";
         AssertDocument(result, JsonSerializer.Serialize(new { error = new
