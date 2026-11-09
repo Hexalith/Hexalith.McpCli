@@ -74,6 +74,10 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     /// <summary>The platform-discovered Gateway endpoint; never a configured host topology.</summary>
     internal Uri GatewayEndpoint => Client("eventstore").BaseAddress!;
 
+    /// <summary>Discovers the Gateway sidecar inside this fixture's isolated Dapr process registry.</summary>
+    internal Task<Uri> DiscoverGatewaySidecarEndpointAsync(CancellationToken cancellationToken)
+        => GatewaySidecarEndpoint.DiscoverAsync(cancellationToken);
+
     /// <summary>Creates the short-lived delegated identity shared privately with one runner.</summary>
     internal string CreateLiveIdentity() => CreateIdentity(invalidSignature: false, live: true);
 

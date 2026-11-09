@@ -1,0 +1,27 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "src/Hexalith.Parties/Hexalith.Parties.csproj",
+    "--configuration",
+    "Release",
+    "-warnaserror",
+    "-m:1",
+    "-p:NuGetAudit=true",
+    "-p:NuGetAuditMode=all",
+    "-p:NuGetAuditLevel=low",
+    "-p:TreatWarningsAsErrors=true",
+    "-p:WarningsNotAsErrors=",
+    "-p:UseHexalithProjectReferences=false",
+    "-p:UseNuGetDeps=true",
+    "-p:HexalithEventStoreFromSource=false",
+    "-p:HexalithEventStoreVersion=4.1.0",
+    "-p:HexalithMcpCliVersion=2.0.0",
+    "-p:HexalithBuildPackageVersions1=/home/runner/work/_temp/mcpcli-live-ci-4_6vrva6/source-runtime-packages.props",
+    "-p:HexalithMemoriesVersion=3.0.11",
+    "-p:HexalithTenantsVersion=5.11.2"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.Parties",
+  "timeoutSeconds": 300,
+  "exitCode": 0
+}

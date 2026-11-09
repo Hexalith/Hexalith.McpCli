@@ -2,8 +2,8 @@
 title: '5.4 Prove shared-head parity and safety'
 type: 'feature'
 created: '2026-11-09'
-updated: '2026-11-09T11:55:41+01:00'
-status: 'in-progress'
+updated: '2026-11-10T00:25:01+01:00'
+status: 'done'
 baseline_commit: 'f6c8e0e3a2105f555e6eec3c667b088085c47fc4'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -125,12 +125,12 @@ context:
   - Derive the counts.
   - Extend the discovery assertion.
   - Cover each change in `test_*.py`.
-- [ ] After the split redactor change lands: push a branch, open the PR, and download and verify the live artifact.
-- [ ] `_bmad-output/implementation-artifacts/evidence/story-5-4/`:
+- [x] After the split redactor change lands: push a branch, open the PR, and download and verify the live artifact.
+- [x] `_bmad-output/implementation-artifacts/evidence/story-5-4/`:
   - `manifest.json`: the full commit; SHA-256 of the head binaries; the Parties 1.5.1 artifact hash; the Catalog digest (SHA-256 of the sorted-key, compact `list_operations` structured content); the components and revisions of the environment; the vector, plan, approval and inventory hashes; and the CI run ID and artifact hash.
   - `parity-matrix.md`: C01–C08 and the seven variants. Admin and technical rows are marked "absent; name similarity proves nothing".
   - The scan receipt, the F7 acceptance and `verification.md`.
-  - HALT for the owner's exact-byte approval and verdict, then record the receipt.
+  - HALT for the owner's exact-byte approval and verdict, then record the receipt. Completed: the owner answered `approve` for `retirement-blocked`, retaining G01–G06. The receipt is `evidence/story-5-4-owner-approval/owner-approval.json`; the original packet and scan are preserved unchanged.
 - [x] `README.md`, `sprint-status.yaml` and `deferred-work.md` -- document a 401 or 403 as a `gateway_error` and the F7 limitation. Record status, and grep the ledger before appending.
 
 **Acceptance Criteria:**
@@ -146,11 +146,40 @@ context:
 - The selected cohort’s absent detail returns `500/query_internal_error` with `actor-not-found-infrastructure`, as inventory C05 records. Missing deactivation returns `404/party-not-found`; separate CLI/MCP absent targets also verify persisted events contain no creation/deactivation effect (a rejection-only stream can remain). Before/after comparisons remove only observation-time `freshness`, retaining every business member.
 - Concurrent CLI processes use distinct generated message IDs. The qualified Gateway awaits the owner’s `ProcessCommandAsync` before returning acceptance; after both return, the boundary waits for the authorized inactive projection and requires exactly one persisted deactivation event in the actor’s stream. The actor ID and state keys follow qualified EventStore `dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`. Any configured sidecar `DAPR_API_TOKEN` is retained for state reads; app-channel authentication is unchanged.
 - The generic runner executes every Query observation through MCP as well as CLI, while every vector Command stays CLI-only. Semantic receipts require both Query heads. CI derives expected counts from approved vectors and its independent-case registry; it allocates each independent case 960 seconds and reserves 600 seconds within the unchanged 17700-second outer budget.
-- [Review][Resolved prerequisite] The separate redactor/committed secret-scan change closes the existing planning deferral in `deferred-work.md` under this spec's heading; see `spec-epic-4-retro-item-5-harden-ci-redaction.md` and `evidence/epic-4-retro-item-5/verification.md`. Story 5.4's committed live CI, final hash-bound evidence (including its own scan receipt) and exact-byte owner approval remain pending. The rejection-only-stream and mixed-profile-identity work is already tracked (`deferred-work.md:556`, `deferred-work.md:833`). No final evidence manifest or retirement verdict is asserted.
+- [Review][Resolved prerequisite] The separate redactor/committed secret-scan change closes the existing planning deferral in `deferred-work.md` under this spec's heading; see `spec-epic-4-retro-item-5-harden-ci-redaction.md` and `evidence/epic-4-retro-item-5/verification.md`. Story 5.4's dedicated live CI and final hash-bound scanned packet are now retained; its exact-byte owner approval is recorded as `retirement-blocked` in `evidence/story-5-4-owner-approval/owner-approval.json`, retaining G01–G06 as blocking. The rejection-only-stream and mixed-profile-identity work is already tracked (`deferred-work.md:556`, `deferred-work.md:833`). The original manifest binds the approved snapshot and retains its historical pending-approval state; the separate receipt records the later approved `retirement-blocked` verdict.
 
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Review pass 1 (2026-11-09)
+
+Each row preserves the individual reviewer claim before grouping. B = blind hunter; E = edge-case hunter; V = verification-gap reviewer. The approved packet and owner receipt remain immutable snapshots; review follow-up evidence is separate.
+
+| Finding | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| B01 | medium | patch | scripts/verify-release-source.py:39 still requires the old topology step label; validate_jobs rejects the renamed successful step. Align the label and pin the workflow/consumer contract. |
+| B02 | high | defer | Reproduced unfinished nested escaped JSON retaining a private-value canary. evidence_redaction.py is byte-identical to the separately landed prerequisite at 296617072ab3fb632d2bddb9189b52fd94286f83; no Story 5.4 change caused it. |
+| B03 | high | defer | Reproduced malformed XML with Private&#75;ey retaining the canary; raw selector matching precedes entity decoding. Same pre-existing prerequisite and root cause as E01. |
+| B04 | high | defer | Reproduced a quoted XML value containing > leaving the private suffix. The malformed-tag regex terminates inside the quoted attribute; pre-existing prerequisite code. |
+| B05 | high | defer | Reproduced --SigningKey VALUE retaining the canary. Whitespace arguments lost the former CI sanitizer coverage in the separate prerequisite; same root cause as E03. |
+| B06 | medium | defer | A task-owned ancestor symlink leading to a regular packet scans clean. The scanner checks its final root/file components only; this is unchanged prerequisite code. |
+| B07 | medium | patch | BoundaryHeads.ReadReplyAsync consumes intermediate stdout notifications without retaining them; HeadResult.AllChannels cannot observe their payloads. Preserve the complete protocol transcript and test notification-marker visibility. |
+| B08 | medium | patch | require_prepared_provenance verifies source, package and host seals but never reads prepared.headCatalog. The new capture receipt can disappear or drift before execution without this gate noticing. Seal-check its bytes and binary map. |
+| B09 | medium | patch | ReadAsync immediately accepts the pre-existing active projection. Because projection convergence is asynchronous, that read alone does not observe an event appended before a refusal. Add durable stream-sequence comparisons around refused calls. |
+| B10 | medium | patch | Task.WhenAll starts two clients but does not hold the first request for the second to arrive. A sequential network arrival can satisfy the repeat assertion. Add a bounded two-request forwarding barrier and regression. |
+| B11 | medium | patch | The event-reader unit fixtures contain only allowed streams; deleting either missing-party rejection assertion or selecting the first duplicate still passes. Same root cause as V01; add forbidden-stream rejection cases. |
+| E01 | high | defer | Independently reproduced Priv&#97;teKey malformed XML retaining the same canary. Duplicate of B03, with the same raw-selector/entity-decoding root cause in the separate prerequisite. |
+| E02 | high | defer | Reproduced a backslash-escaped quote terminating private-argument redaction early and retaining its suffix. This parser is unchanged from the separate prerequisite. |
+| E03 | high | defer | Independently reproduced --PrivateKey VALUE remaining unchanged. Duplicate of B05: whitespace-separated private arguments in the separate prerequisite. |
+| E04 | medium | patch | HeadProcess.mcp gives initialization and tools/call separate self.timeout windows; observe does not reject an otherwise successful result after the observation deadline. Share an absolute MCP budget and reject late success with focused timing regressions. |
+| E05 | false | reject | The frozen Decisions item 3 and Always command rule explicitly keep live Commands CLI-only; the approved packet and Implementation Notes explicitly identify the CLI concurrent pair. The general task wording does not authorize another mutating MCP pair. |
+| V01 | medium | patch | Pre-verified regression gap: PersistedPartyEventsTests exercises only valid streams, while Single/DoesNotContain assertions are the claimed safety oracles. Add zero/duplicate deactivation and forbidden creation/deactivation cases; grouped with B11. |
+
+
+**Patch disposition:** B01, B07, B08, B09, B10, B11/V01 and E04 are fixed. The release validator now matches the workflow; all MCP stdout frames are retained; head-catalog bytes/hash/DLL inventory are rechecked; durable sequence equality supplements projection reads; a bounded forwarding barrier establishes the concurrent pair; unsafe event streams are rejected by explicit regressions; and MCP uses one invocation deadline with late-success refusal. All 45 focused C# cases and 28 focused Python cases pass; removing the barrier wait causes both barrier regressions to fail. Full post-review restore/Release build, Core (877), CLI (623), MCP (94), Manifest (362), 194 release-script tests, 164 conformance Python tests and 218 topology Python tests pass. Six expected OS skips remain. Fresh enrolled replay reports `fullV1Accepted: true`. Dedicated post-review CI `42711210249` is fully green; independent receipt verification passed 21 vectors, 235 declared phases, 45 boundary rows, 44 durable-sequence comparisons and 23 fresh runtime cleanup receipts. Supplementary validation is retained separately from the exact-byte owner-approved snapshot.
+
+**Deferred groups:** R54-D1 = B02; R54-D2 = B03/E01; R54-D3 = B04; R54-D4 = B05/E03; R54-D5 = B06; R54-D6 = E02. These are six reproduced, pre-existing prerequisite root causes with their own ledger entries, not new owner waivers or changes to G01–G06. E05 is rejected on the frozen CLI-only concurrency decision. The approved original packet and its separate owner-approval receipt are unchanged.
 
 ## Verification
 
@@ -163,6 +192,8 @@ context:
 
 ### Local implementation verification (2026-11-09)
 
+> Historical snapshot before the redactor prerequisite and dedicated PR runs. The final CI qualification below supersedes its pending-live statements.
+
 The story remains **in-progress**. The live boundary is compiled and discovered, but has not executed. The frozen redactor/secret-scan prerequisite prevents the committed CI run, final evidence binding and owner approval/verdict. No `fullLiveAccepted` or retirement verdict is claimed.
 
 - Normal solution restore and Release build with `-warnaserror`: passed, zero warnings/errors (`/tmp/story54-restore.log`, `/tmp/story54-build-final.log`).
@@ -173,7 +204,9 @@ The story remains **in-progress**. The live boundary is compiled and discovered,
 - Preflight-only passed with `fullLiveAccepted: false` (`/tmp/mcpcli-story54-live-preflight/live-lane.json`). Discovery matched exactly every approved vector plus smoke and boundary: 23 cases today (`/tmp/story54-discovery.txt`). These checks start no live services.
 - `check_enrolled.py --output /tmp/mcpcli-story54-enrolled` passed: Parties 1.5.1 (7 operations), Tenants 7.0.5 (14 operations), aggregate `fullV1Accepted: true` (`/tmp/mcpcli-story54-enrolled/enrolled.json`, `/tmp/story54-enrolled.log`). The 203-case full Python sweep and 27-case affected-runner rerun above passed. No production Core validation, Sample.Contracts or Gateway wire behavior changed, so sample conformance gates are not required by this implementation.
 
-### Frozen matrix audit
+### Frozen matrix audit (historical implementation snapshot)
+
+This table records coverage before dedicated CI qualification. The final executed coverage and remaining gaps are in `evidence/story-5-4/parity-matrix.md`.
 
 `Safety` below means `tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs`; all named safety tests executed in the passing 26-case head run. `Live` means `SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety`; it is built/discovered only. Every offline refusal checks complete stdout/stderr, MCP Content/StructuredContent and Gateway request cardinality.
 
@@ -214,3 +247,114 @@ records the state before that prerequisite. Story 5.4 remains **in-progress**:
 its dedicated live CI run, final hash-bound packet and its own scan receipt, and
 exact-byte owner approval/verdict remain pending. This prerequisite's receipt
 does not establish Story 5.4 live acceptance or authorize retirement.
+
+### Committed live qualification follow-up (2026-11-09)
+
+The prior CI run `42614718738` passed all 21 approved live vectors and the
+independent smoke, then exposed a boundary-test assertion defect before its
+negative cases ran: the qualified Gateway includes a business `resultPayload`
+on create acceptance, while the test expected an acceptance document without
+`result`. The boundary now checks the complete copied result against the
+captured response and exact submitted identifiers. Concurrent acceptances are
+paired with their originating requests. The process-harness regression runs
+both heads with and without the optional result; it preserves every public
+channel and request-count assertion. Production behavior and approved inputs
+are unchanged. A fresh dedicated PR lane is required; the failed historical
+lane establishes no full live acceptance.
+
+CI preparation now retains `head-catalog.json`: equal CLI/MCP discovery from
+the actual hosted binaries, every head DLL hash, each module's sorted-key
+compact `list_operations` structured-content SHA-256, and the digest of the
+complete module-to-content map. This generic read-only capture supplies the
+final packet's exact candidate/Catalog binding without relying on a local
+rebuild. Offline tests cover discovery failure/mismatch, empty Catalog and
+binary drift; CI-hook coverage pins the bounded capture and failure path.
+
+Fresh local follow-up checks passed: solution restore and Release build with
+zero warnings/errors; Core 877 passed (four OS skips), CLI 584 passed (two OS
+skips), MCP 94 passed and Manifest 362 passed. The six process-harness cases,
+seven capture-helper regressions and focused CI capture/failure-path case all
+passed. Full affected CI-hook verification continues before final evidence.
+
+### Qualified authentication oracles and early boundary (2026-11-09)
+
+PR run `42631573309` passed every vector and smoke, then reached a second
+boundary oracle defect: public EventStore 4.1.0 sends structured 401 errors,
+not a bare HTTP reason phrase. Its pinned `ConfigureJwtBearerOptions` supplies
+reason `authentication_required`, distinct missing/invalid-token details and
+no correlation field. The boundary now pins those complete documents and the
+two exact tenant-grant 403 shapes from `AuthorizationExceptionHandler`.
+Eight new process cases exercise all four shapes for Commands and Queries
+through CLI and MCP, including every channel and Gateway cardinality.
+
+The generic pre-vector independent-case registry now runs the boundary once
+before the long vector sweep; a failed boundary stops there. The post-vector
+registry retains smoke, including after vector failures. Preparation provenance
+is rechecked after the early case because it may rebuild hosts. Counts and
+budgets remain derived from the combined registry. Focused CI-hook checks pin
+the new order, refusal before vectors, post-boundary drift and the existing
+vector/smoke failure and cancellation behavior. Production behavior, identifier
+validators, dependencies and approved inputs remain unchanged.
+
+The Release build passes with zero warnings/errors; all 14 process-harness
+cases pass; the full CLI project passes 592 cases with two OS-only skips.
+Five focused ordering/failure/cancellation checks and the new early-drift
+check pass. Broad CI-hook verification continues while the next PR candidate
+is qualified. Prior attempt receipts remain distinct from its final packet.
+
+### Empty 401 transport response (2026-11-09)
+
+Run `42641067905` passed the Query credential/grant cases, then found an empty
+401 response for the forged-token Command; the early boundary correctly kept
+vectors unrun. The generic client already maps that exact HTTP fallback to
+`gateway_error`, status 401 and detail `Unauthorized`, without a reason field.
+The boundary now asserts that complete fallback for an empty body and retains
+the pinned structured challenge for every nonempty body. Live credential
+receipts record the response format and full public error, and missing-token
+CLI/MCP documents are compared directly per call kind. Four more process cases
+pin empty missing/invalid-token challenges through both heads and call kinds.
+The clean 99-test CI-hook sweep passed; production behavior remains unchanged.
+
+### Command grant refusals before the structured pipeline (2026-11-09)
+
+Run `42645969397` then exposed the first tenant-A-grant Command returning an
+empty 403. Qualified EventStore `dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`
+`CommandsController.cs:146-149` returns `Forbid()` before pipeline dispatch for
+missing tenant grants. The boundary now pins its whole existing public
+`gateway_error` / 403 / `Forbidden` fallback, including absent optional members;
+Query refusals retain the complete structured tenant-mismatch/nonmember oracle.
+Four additional both-head process cases cover the empty 403 transport for both
+call kinds and both signed-grant scenarios. Vectors stayed unrun after the early
+boundary failure. No production behavior, approved input or runner changed.
+
+### Discovered sidecar endpoint for persisted C05 evidence (2026-11-09)
+
+Run `42648730822` passed the credential, override and tenant-negative rows, then
+found the C05 state helper’s fixed-port assumption (`127.0.0.1:3501`). The
+restored fixture helper exposes no supported sidecar application object. The
+fixture now discovers exactly one `eventstore` sidecar through bounded
+`dapr list --output json` inside the already-required isolated namespace and
+passes its actual HTTP client to both persisted-state oracles. The separate
+`DAPR_API_TOKEN`, when configured, is preserved; no bearer credential is sent
+to the sidecar API. Offline regressions require an ephemeral discovered port,
+reject missing/duplicate/invalid registrations and prove both C05 helpers read
+the expected state keys with and without the API token. No runner, production
+source, approved input or dependency changed.
+
+### Final CI qualification and owner approval (2026-11-09)
+
+Candidate `3e8f6a4e681018c7ca8356997d4fd28378217d37` passed CI run `42652261452` on draft PR #5. All 21 approved vectors, independent shared-head boundary and Gateway smoke passed; both live Query heads are required and each live Command is submitted once. Hosted `check_enrolled.py` reports `fullV1Accepted: true`; live receipts report `fullLiveAccepted: true`. All 216 hosted topology checks passed and discovery matched the 21 vectors plus the two independent cases. The six ordinary projects passed 1,985 tests with six OS-only skips; Manifest and enrolled inventory checks remain unchanged.
+
+The latest Release build has zero warnings/errors. All 77 named offline safety, compatibility, process and identity cases passed without skips, including 22 process cases through both heads. The clean 99-hook sweep applies to unchanged Python source. Initial failing sweeps and earlier live attempts retain their own status and exact artifact bindings; none is promoted into final acceptance.
+
+The complete packet is `evidence/story-5-4/`: manifest, C01–C08/seven-variant matrix, F7 acceptance, source audit, full text receipts and logs, verification and secret scan. It binds the actual hosted checkout and equal candidate tree, every head DLL, exact Catalog content, Contracts artifact, environment/source revisions, approved inputs, CI run/artifact digests and retained text hashes. The source audit clearly distinguishes upstream tests at the enrolled revision from tests executed in this run. Production source, dependencies, identifiers, approved vectors/plans/approvals/inventories and reference gitlinks are unchanged.
+
+**The exact-byte owner checkpoint is complete.** The owner answered exactly `approve` to the request bound by scan-receipt SHA-256 `1edc78fd37ede85498e7d8a9a7b1ea3537175bb470259a729bf0a8a8aa1ac0c3`, approving the verdict `retirement-blocked` and retaining G01–G06 as blocking with their named ledger owners. `evidence/story-5-4-owner-approval/owner-approval.json` records the response, original commit and digest bindings, and each retained gap disposition. Every original `evidence/story-5-4/` byte and its scan remain unchanged; their pending-owner text is the historical pre-approval snapshot. No inventory 1.3.0 amendment, release, publication or retirement is approved.
+
+Implementation tasks are complete under the approved `retirement-blocked` verdict. The workflow status remains unchanged pending the normal review transition. The separate approval packet’s `verification.json`, `verification.md` and `secret-scan.json` record binding, snapshot-preservation and hygiene checks.
+
+### Build completion (2026-11-10)
+
+The owner’s verbatim `approve` response binds the original scanned snapshot and verdict `retirement-blocked`, keeping G01–G06 open. The separate owner receipt and its scan remain unchanged. Review pass 1 classified every finding individually, resolved seven patch groups, rejected the contradictory MCP-concurrent claim, and recorded six pre-existing redactor/scanner root causes for separate follow-up. No inventory amendment or release/retirement authorization was added.
+
+Post-review code commit `4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d` passed CI `42711210249`, including the strengthened live boundary. The current local restore/Release build, Core, CLI, MCP, Manifest, 194 release-script, 164 conformance and 218 topology Python tests, preflight and fresh enrolled replay all pass. The supplemental evidence documents the stricter guards without modifying or claiming additional owner approval for the original packet. The spec is done; sprint tracking is advanced to review per the Build workflow. Story 5.5 retirement remains blocked by the six retained gaps.

@@ -1,0 +1,2 @@
+From https://github.com/Hexalith/Hexalith.EventStore
+ * branch            dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a -> FETCH_HEAD

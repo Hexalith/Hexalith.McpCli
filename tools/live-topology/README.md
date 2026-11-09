@@ -70,11 +70,13 @@ python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
 
 After successful qualified preparation, `run-ci.sh` invokes `run-vectors.py`
 with the inherited native profile and fresh package cache. It preflights the entire
-production-enrolled set and launches one new isolated process per approved vector,
-then invokes the independent smoke and shared-head boundary. Use the bounded preparation/execution hooks
+production-enrolled set, runs the shared-head boundary in a fresh isolated process,
+then launches one new isolated process per approved vector and the independent smoke.
+A failed early boundary stops before the vector sweep. Each case runs once.
+Use the bounded preparation/execution hooks
 below; direct default/native launches do not establish the canonical profile.
 
-Each of the 21 children retains its independent 960-second bound. The wrapper retains its existing 900-second child bound. The selected
+Each vector child retains its independent 960-second bound. The wrapper retains its existing 900-second child bound. The selected
 Python runner has an eight-minute process budget, each CLI process a maximum of
 30 seconds, and each read observation a 45-second deadline. Only Queries poll;
 declared Command steps are submitted once, including intentional repeated
@@ -241,7 +243,14 @@ independent gates.
 Preparation seals actual archive hashes, all deployed host DLL/JSON hashes,
 selected sources and used settings/sidecar configurations. Execution rechecks
 those identities before vectors and again before independent smoke. The
-sanitized `native-catalog.json` records the source-selection/preparation digests,
+`head-catalog.json` receipt also captures discovery from those compiled CLI and
+MCP heads, requiring equal documents, and records SHA-256 for every head DLL and
+each module's exact `list_operations` structured content. Its full Catalog digest
+hashes the module-name-to-structured-content map. All Catalog digests use sorted
+keys, compact separators and UTF-8 JSON with `ensure_ascii=false`. Discovery
+submits no Command or Query. Preparation binds the receipt's exact file hash;
+the capture refuses binary drift while reading discovery. The sanitized
+`native-catalog.json` records the source-selection/preparation digests,
 actual SDK artifacts and matching credential-free peer readback. Private custody,
 keys, RDB bytes and raw operational state remain outside uploaded evidence.
 This is infrastructure for native acceptance; public artifact approval and a
@@ -311,8 +320,8 @@ Each run invalidates
 `ci-live.json` before execution and writes a new generation directory. Acceptance
 requires every approved vector outcome to pass, complete coverage, fresh matching
 semantic receipts, successful cleanup and separate one-case, unskipped passing
-authenticated smoke and shared-head boundary XML. Each declared Query observation runs through CLI and MCP; MCP never submits a vector Command. Vector assertion failures still allow the independent
-smoke and boundary attempts; neither independent case nor preflight/subset evidence can replace vectors.
+authenticated smoke and shared-head boundary XML. Each declared Query observation runs through CLI and MCP; MCP never submits a vector Command. The early boundary already has its own result before vectors;
+vector assertion failures still allow the independent smoke attempt. Neither independent case nor preflight/subset evidence can replace vectors.
 Each independent child receives its current generation's `smoke/` or `boundary/` directory as
 `MCPCLI_LIVE_OUTPUT` for the writer-bootstrap receipt, after inherited live and
 Gateway settings have been removed.

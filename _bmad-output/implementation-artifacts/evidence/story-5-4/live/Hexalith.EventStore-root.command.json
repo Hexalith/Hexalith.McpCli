@@ -1,0 +1,10 @@
+{
+  "command": [
+    "git",
+    "rev-parse",
+    "--show-toplevel"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/references/Hexalith.EventStore",
+  "timeoutSeconds": 10,
+  "exitCode": 0
+}

@@ -1,0 +1,406 @@
+{
+  "operation": "tenants.remove-tenant-configuration",
+  "result": "passed",
+  "phases": [
+    {
+      "head": "cli",
+      "phase": "/prerequisites/0",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-config-removal",
+          "Name": "Vector Configuration Removal",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M70KMAF7NYXD3KSMGRAF6MZE",
+            "correlationId": "01M70KMAF7NYXD3KSMGRAF6MZE",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-config-removal",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        },
+        "envelope": {
+          "tenant": "vector-config-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config-removal",
+            "document": {
+              "tenantId": "vector-config-removal",
+              "name": "Vector Configuration Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:52:59.0277033+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        },
+        "envelope": {
+          "tenant": "vector-config-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config-removal",
+            "document": {
+              "tenantId": "vector-config-removal",
+              "name": "Vector Configuration Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:52:59.0277033+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/prerequisites/1",
+      "operation": "tenants.set-tenant-configuration",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.set-tenant-configuration",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-config-removal",
+          "Key": "billing.plan",
+          "Value": "enterprise"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.set-tenant-configuration",
+            "messageId": "01M70KMQEC5V6EMPBCHC3D1QJ5",
+            "correlationId": "01M70KMQEC5V6EMPBCHC3D1QJ5",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-config-removal",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        },
+        "envelope": {
+          "tenant": "vector-config-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config-removal",
+            "document": {
+              "tenantId": "vector-config-removal",
+              "name": "Vector Configuration Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {
+                "billing.plan": "enterprise"
+              },
+              "createdAt": "2026-11-09T16:52:59.0277033+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        },
+        "envelope": {
+          "tenant": "vector-config-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config-removal",
+            "document": {
+              "tenantId": "vector-config-removal",
+              "name": "Vector Configuration Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {
+                "billing.plan": "enterprise"
+              },
+              "createdAt": "2026-11-09T16:52:59.0277033+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/invocation",
+      "operation": "tenants.remove-tenant-configuration",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.remove-tenant-configuration",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-config-removal",
+          "Key": "billing.plan"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.remove-tenant-configuration",
+            "messageId": "01M70KN3XB3DSMQJTZJKDNZVWV",
+            "correlationId": "01M70KN3XB3DSMQJTZJKDNZVWV",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-config-removal",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        },
+        "envelope": {
+          "tenant": "vector-config-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config-removal",
+            "document": {
+              "tenantId": "vector-config-removal",
+              "name": "Vector Configuration Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:52:59.0277033+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        },
+        "envelope": {
+          "tenant": "vector-config-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config-removal",
+            "document": {
+              "tenantId": "vector-config-removal",
+              "name": "Vector Configuration Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:52:59.0277033+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        },
+        "envelope": {
+          "tenant": "vector-config-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config-removal",
+            "document": {
+              "tenantId": "vector-config-removal",
+              "name": "Vector Configuration Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:52:59.0277033+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-config-removal"
+        },
+        "envelope": {
+          "tenant": "vector-config-removal"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-config-removal",
+            "document": {
+              "tenantId": "vector-config-removal",
+              "name": "Vector Configuration Removal",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:52:59.0277033+00:00"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.5",
+    "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+    "vectorSha256": "ac8ef4d3c0139bc3aec96658cff2d4e7d6d9a1d537da9d7244e1de508f484f86",
+    "planSha256": "7dde3834820f03284c556033320910e8849db0a1ffd97410e69d90331caeb89b",
+    "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+  },
+  "captures": {}
+}

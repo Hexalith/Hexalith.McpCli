@@ -1,0 +1,105 @@
+{
+  "source": "/home/runner/work/_temp/enrolled-evidence/Hexalith.Tenants.Contracts/inputs-mqe0exje/vectors/4/enable-tenant.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M70FKRHJ2HR80AFASRK7Q0Z4",
+      "correlationId": "01M70FKRHJ2HR80AFASRK7Q0Z4",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-enable",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.disable-tenant",
+      "messageId": "01M70FKS6CN40JS3S1GKW7Y0VE",
+      "correlationId": "01M70FKS6CN40JS3S1GKW7Y0VE",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-enable",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.enable-tenant",
+      "messageId": "01M70FKSVD54BVP67TPYJPM257",
+      "correlationId": "01M70FKSVD54BVP67TPYJPM257",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-enable",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant",
+      "tenant": "vector-enable",
+      "document": {
+        "tenantId": "vector-enable",
+        "name": "Vector Enable",
+        "description": null,
+        "status": "Active",
+        "members": [],
+        "configuration": {},
+        "createdAt": "2026-10-19T08:00:00+00:00"
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70FKRHJ2HR80AFASRK7Q0Z4",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Enable",
+          "TenantId": "vector-enable"
+        },
+        "correlationId": "01M70FKRHJ2HR80AFASRK7Q0Z4"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70FKS6CN40JS3S1GKW7Y0VE",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "disable-tenant",
+        "payload": {
+          "TenantId": "vector-enable"
+        },
+        "correlationId": "01M70FKS6CN40JS3S1GKW7Y0VE"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70FKSVD54BVP67TPYJPM257",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "commandType": "enable-tenant",
+        "payload": {
+          "TenantId": "vector-enable"
+        },
+        "correlationId": "01M70FKSVD54BVP67TPYJPM257"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "vector-enable",
+        "domain": "tenants",
+        "aggregateId": "vector-enable",
+        "queryType": "get-tenant",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-enable"
+        }
+      }
+    }
+  ]
+}

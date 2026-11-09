@@ -1,0 +1,7 @@
+  Determining projects to restore...
+  Restored /tmp/mcpcli-artifact-8sspmalz/src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj (in 92 ms).
+  Restored /tmp/mcpcli-artifact-8sspmalz/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj (in 821 ms).
+  Restored /tmp/mcpcli-artifact-8sspmalz/src/Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj (in 715 ms).
+  Restored /tmp/mcpcli-artifact-8sspmalz/src/Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj (in 6 ms).
+  Restored /tmp/mcpcli-artifact-8sspmalz/src/Hexalith.McpCli/Hexalith.McpCli.csproj (in 831 ms).
+  Restored /tmp/mcpcli-artifact-8sspmalz/host/ArtifactHost.csproj (in 831 ms).

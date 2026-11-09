@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using Hexalith.McpCli.Cli.Tests;
@@ -32,19 +33,22 @@ internal static class BoundaryHeads
         deadline.CancelAfter(TimeSpan.FromSeconds(45));
         using Process process = Start(profile, environment, ["mcp", "--transport", "stdio", .. globals]);
         Task<string> stderr = process.StandardError.ReadToEndAsync(deadline.Token);
+        var transcript = new StringBuilder();
         try
         {
             await WriteAsync(new { jsonrpc = "2.0", id = 1, method = "initialize", @params = new
             { protocolVersion = "2025-06-18", capabilities = new { }, clientInfo = new { name = "retirement-boundary", version = "1" } } });
-            _ = await ReadReplyAsync(1);
+            _ = await ReadReplyAsync(process.StandardOutput, 1, transcript, deadline.Token);
             await WriteAsync(new { jsonrpc = "2.0", method = "notifications/initialized", @params = new { } });
             await WriteAsync(new { jsonrpc = "2.0", id = 2, method = "tools/call", @params = new { name = tool, arguments } });
-            JsonElement reply = await ReadReplyAsync(2);
+            JsonElement reply = await ReadReplyAsync(process.StandardOutput, 2, transcript, deadline.Token);
             CallToolResult result = reply.GetProperty("result").Deserialize<CallToolResult>(new JsonSerializerOptions(JsonSerializerDefaults.Web))!;
             process.StandardInput.Close();
             Task<string> trailingOutput = process.StandardOutput.ReadToEndAsync(deadline.Token);
             await process.WaitForExitAsync(deadline.Token);
-            return new(process.ExitCode, await trailingOutput, await stderr, result);
+            string trailing = await trailingOutput;
+            transcript.Append(trailing);
+            return new(process.ExitCode, trailing, await stderr, result, transcript.ToString());
         }
         finally { if (!process.HasExited) process.Kill(entireProcessTree: true); }
 
@@ -53,23 +57,26 @@ internal static class BoundaryHeads
             await process.StandardInput.WriteLineAsync(JsonSerializer.Serialize(message).AsMemory(), deadline.Token);
             await process.StandardInput.FlushAsync(deadline.Token);
         }
-        async Task<JsonElement> ReadReplyAsync(int id)
+    }
+
+    /// <summary>Retains every stdout frame while waiting for the requested JSON-RPC response.</summary>
+    internal static async Task<JsonElement> ReadReplyAsync(TextReader output, int id, StringBuilder transcript, CancellationToken cancellationToken)
+    {
+        while (true)
         {
-            while (true)
+            string? line = await output.ReadLineAsync(cancellationToken);
+            Assert.NotNull(line);
+            transcript.AppendLine(line);
+            using JsonDocument message = JsonDocument.Parse(line);
+            JsonElement frame = message.RootElement;
+            frame.GetProperty("jsonrpc").GetString().ShouldBe("2.0");
+            if (frame.TryGetProperty("id", out JsonElement received) && received.GetInt32() == id)
             {
-                string? line = await process.StandardOutput.ReadLineAsync(deadline.Token);
-                Assert.NotNull(line);
-                using JsonDocument message = JsonDocument.Parse(line);
-                JsonElement frame = message.RootElement;
-                frame.GetProperty("jsonrpc").GetString().ShouldBe("2.0");
-                if (frame.TryGetProperty("id", out JsonElement received) && received.GetInt32() == id)
-                {
-                    frame.TryGetProperty("error", out _).ShouldBeFalse();
-                    return frame.Clone();
-                }
-                // Only protocol notifications may precede the matching response; all stdout must be JSON-RPC.
-                frame.TryGetProperty("method", out _).ShouldBeTrue();
+                frame.TryGetProperty("error", out _).ShouldBeFalse();
+                return frame.Clone();
             }
+            // Only protocol notifications may precede the matching response; retain them for absence checks.
+            frame.TryGetProperty("method", out _).ShouldBeTrue();
         }
     }
 
@@ -87,6 +94,55 @@ internal static class BoundaryHeads
         result.Tool.IsError.ShouldBe(isError);
         AssertJson(result.Tool.StructuredContent.ShouldNotBeNull().GetRawText(), expected, mask);
         AssertJson(result.Tool.Content.ShouldHaveSingleItem().ShouldBeOfType<TextContentBlock>().Text, expected, mask);
+    }
+
+    /// <summary>Checks an accepted Command against its captured request and the complete Gateway result payload.</summary>
+    internal static void AssertCommandAccepted(HeadResult result, string operation, string tenant, string aggregateId,
+        GatewayRequest request, string responseBody)
+    {
+        using JsonDocument sent = JsonDocument.Parse(request.Body);
+        using JsonDocument received = JsonDocument.Parse(responseBody);
+        var expected = new JsonObject
+        {
+            ["operation"] = operation,
+            ["messageId"] = received.RootElement.TryGetProperty("messageId", out JsonElement messageId)
+                && messageId.ValueKind != JsonValueKind.Null ? messageId.GetString() : sent.RootElement.GetProperty("messageId").GetString(),
+            ["correlationId"] = sent.RootElement.GetProperty("correlationId").GetString(),
+            ["tenant"] = tenant,
+            ["aggregateId"] = aggregateId,
+            ["status"] = "accepted",
+        };
+        if (received.RootElement.TryGetProperty("resultPayload", out JsonElement payload) && payload.ValueKind != JsonValueKind.Null)
+            expected["result"] = JsonNode.Parse(payload.GetRawText());
+        AssertDocument(result, expected.ToJsonString(), isError: false);
+    }
+
+    /// <summary>Pins the qualified Gateway's complete missing/invalid-token challenge document.</summary>
+    internal static void AssertAuthenticationRefusal(HeadResult result, bool credentialPresent, bool emptyBody = false)
+    {
+        if (emptyBody)
+        {
+            AssertDocument(result, """{"error":{"code":"gateway_error","status":401,"detail":"Unauthorized"}}""", isError: true);
+            return;
+        }
+        string detail = credentialPresent ? "The provided authentication token is invalid."
+            : "Authentication is required to access this resource.";
+        AssertDocument(result, JsonSerializer.Serialize(new { error = new
+        { code = "gateway_error", status = 401, detail, reason = "authentication_required" } }), isError: true);
+    }
+
+    /// <summary>Pins the qualified Gateway's complete signed-grant refusal, including its request correlation.</summary>
+    internal static void AssertTenantAuthorizationRefusal(HeadResult result, string tenant, string reason, string correlationId, bool emptyBody = false)
+    {
+        if (emptyBody)
+        {
+            AssertDocument(result, """{"error":{"code":"gateway_error","status":403,"detail":"Forbidden"}}""", isError: true);
+            return;
+        }
+        string detail = $"Not authorized for tenant '{tenant}'."
+            + (reason == "principal_not_member" ? " No tenant authorization claims found. Access denied." : string.Empty);
+        AssertDocument(result, JsonSerializer.Serialize(new { error = new
+        { code = "gateway_error", status = 403, detail, reason, correlationId } }), isError: true);
     }
 
     private static void AssertJson(string actual, string expected, string[] mask)

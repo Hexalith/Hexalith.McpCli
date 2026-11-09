@@ -1,0 +1,47 @@
+{
+  "result": "passed",
+  "approvalReceipt": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json",
+    "sha256": "8bf60a2796f07a7bcb2e95adbe4d3467b8e1cd63164f67d4d8b3c476038d2c40"
+  },
+  "verdict": "retirement-blocked",
+  "retainedBlockingGapIds": [
+    "G01",
+    "G02",
+    "G03",
+    "G04",
+    "G05",
+    "G06"
+  ],
+  "originalSnapshot": {
+    "commit": "4c7267a9b4cb85bf66b2719347a2002b0ebd677a",
+    "scanReceiptSha256": "1edc78fd37ede85498e7d8a9a7b1ea3537175bb470259a729bf0a8a8aa1ac0c3",
+    "scanManifestSha256": "9fefaddd184e6be1e26c44ef0584911f7644494ecc89aed6f1c6ab3f396166a0",
+    "manifestJsonSha256": "d80836b98bc95c548e0c4f1ba20bb6b200e9f0ecad5a591878eed8a6dec7314e",
+    "scanInputCount": 2722,
+    "verifiedFileCountIncludingOriginalScan": 2723,
+    "exactFileSet": true,
+    "allByteLengthsAndHashesMatch": true,
+    "allCommittedBlobBytesMatch": true,
+    "scannerImplementationHashesMatch": true,
+    "originalPendingApprovalTextPreserved": true
+  },
+  "implementationMetadata": {
+    "executionTasksCompleted": true,
+    "frozenIntentSha256": "b3c8b3e4a498cb7ce6a1b4b9882b5532c7b2906574d5a1b8deca665205448079",
+    "frozenIntentUnchanged": true,
+    "workflowStatusAndReviewFieldsUnchanged": true,
+    "sprintStatusUnchanged": true,
+    "migrationInventoryUnchanged": true,
+    "specSha256AtRecording": "df3f1c0b56b65ba1ddc0fad6b13ad2153468c1e3cf5915d685cfdd24e03cc587",
+    "deferredWorkSha256AtRecording": "7ef725c6256631c87957a960d98bddac423b8f26bd1720b72918893f4a0ca1fb"
+  },
+  "scope": {
+    "codeChanges": false,
+    "inventoryAmendment": false,
+    "priorApplicationGatesRerun": false,
+    "commitStagePushMergePerformed": false
+  },
+  "verificationCommand": "python3 /tmp/story54-verify-owner-approval.py",
+  "verificationProgramSha256": "78c6108b5cf797d0d5eb8e606273fe0af721e7ea3c3a6e69109fd6f824fbfee2"
+}

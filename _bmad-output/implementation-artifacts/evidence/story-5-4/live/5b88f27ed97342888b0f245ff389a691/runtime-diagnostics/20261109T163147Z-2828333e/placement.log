@@ -1,0 +1,4 @@
+time="2026-11-09T16:33:00.028345429Z" level=warning msg="Error receiving from stream [::1]:53580: rpc error: code = Canceled desc = context canceled" instance=runnervmwuk1x scope=dapr.placement.server.loops.stream type=log ver=1.18.7
+time="2026-11-09T16:33:00.042854558Z" level=warning msg="Error receiving from stream [::1]:53560: rpc error: code = Canceled desc = context canceled" instance=runnervmwuk1x scope=dapr.placement.server.loops.stream type=log ver=1.18.7
+time="2026-11-09T16:33:00.043041047Z" level=error msg="Error handling stream event *loops.DisseminateLock on [::1]:53566: rpc error: code = Unavailable desc = transport is closing" instance=runnervmwuk1x scope=dapr.placement.server.loops.stream type=log ver=1.18.7
+time="2026-11-09T16:33:00.042964042Z" level=warning msg="Error receiving from stream [::1]:53566: rpc error: code = Canceled desc = context canceled" instance=runnervmwuk1x scope=dapr.placement.server.loops.stream type=log ver=1.18.7

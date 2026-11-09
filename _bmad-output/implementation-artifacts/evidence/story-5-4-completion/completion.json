@@ -1,0 +1,33 @@
+{
+  "result": "complete",
+  "story": "5.4",
+  "specStatus": "done",
+  "sprintStatus": "review",
+  "ownerResponse": "approve",
+  "approvedVerdict": "retirement-blocked",
+  "retainedBlockingGaps": [
+    "G01",
+    "G02",
+    "G03",
+    "G04",
+    "G05",
+    "G06"
+  ],
+  "approvedSnapshotUnchanged": true,
+  "ownerApprovalReceipt": "../story-5-4-owner-approval/owner-approval.json",
+  "postReviewCodeCommit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+  "postReviewCI": {
+    "runId": 42711210249,
+    "conclusion": "success",
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/42711210249"
+  },
+  "review": {
+    "individualFindings": 17,
+    "fixedRootCauses": 7,
+    "preExistingDeferredRootCauses": 6,
+    "rejectedClaims": 1
+  },
+  "supplementScanSha256": "8de1d7f4ce6f14d753718a86f90a9868bcc71b41b5ad4c9f9dde89aa71bd1088",
+  "releasePublicationOrRetirementApproved": false,
+  "completionCommitPolicy": "local only per Build present step"
+}

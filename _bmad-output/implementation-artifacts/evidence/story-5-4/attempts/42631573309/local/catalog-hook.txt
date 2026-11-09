@@ -1,0 +1,6 @@
+test_preparation_binds_the_hosted_head_catalog_and_capture_failure_stops_it (test_ci.CiHooksTests.test_preparation_binds_the_hosted_head_catalog_and_capture_failure_stops_it) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 7.719s
+
+OK

@@ -1,0 +1,85 @@
+{
+  "source": "/home/runner/work/_temp/enrolled-evidence/Hexalith.Tenants.Contracts/inputs-mqe0exje/vectors/0/add-user-to-tenant.vector.json",
+  "documents": [
+    {
+      "operation": "tenants.create-tenant",
+      "messageId": "01M70FJH4PWDKYF7X03TJEZ39F",
+      "correlationId": "01M70FJH4PWDKYF7X03TJEZ39F",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-members",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.add-user-to-tenant",
+      "messageId": "01M70FJHZREAZ902TGKNDZ0600",
+      "correlationId": "01M70FJHZREAZ902TGKNDZ0600",
+      "tenant": "platform:tenants",
+      "aggregateId": "vector-members",
+      "status": "accepted"
+    },
+    {
+      "operation": "tenants.get-tenant-users",
+      "tenant": "vector-members",
+      "document": {
+        "items": [
+          {
+            "userId": "vector-user-1@example.com",
+            "role": "TenantContributor"
+          }
+        ],
+        "cursor": null,
+        "hasMore": false
+      }
+    }
+  ],
+  "requests": [
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70FJH4PWDKYF7X03TJEZ39F",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "commandType": "create-tenant",
+        "payload": {
+          "Description": null,
+          "Name": "Vector Members",
+          "TenantId": "vector-members"
+        },
+        "correlationId": "01M70FJH4PWDKYF7X03TJEZ39F"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/commands",
+      "body": {
+        "messageId": "01M70FJHZREAZ902TGKNDZ0600",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "Role": "TenantContributor",
+          "TenantId": "vector-members",
+          "UserId": "vector-user-1@example.com"
+        },
+        "correlationId": "01M70FJHZREAZ902TGKNDZ0600"
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "vector-members",
+        "domain": "tenants",
+        "aggregateId": "vector-members",
+        "queryType": "get-tenant-users",
+        "projectionType": "tenants",
+        "payload": {
+          "TenantId": "vector-members"
+        }
+      }
+    }
+  ]
+}

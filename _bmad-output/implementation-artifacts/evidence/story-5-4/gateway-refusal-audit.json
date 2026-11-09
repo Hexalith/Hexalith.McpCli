@@ -1,0 +1,190 @@
+{
+  "purpose": "Source-bound explanation of complete known public refusals; upstream handler tests were not executed in this task.",
+  "gatewayVersion": "4.1.0",
+  "qualifiedGatewaySourceCommit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+  "repository": "https://github.com/Hexalith/Hexalith.EventStore",
+  "files": [
+    {
+      "path": "src/Hexalith.EventStore/Authentication/ConfigureJwtBearerOptions.cs",
+      "sha256": "80d0ae8f30d51105cbef9898ddd5120b5ded1ec2d1649d70695a6b035dd71968",
+      "anchors": [
+        {
+          "line": 76,
+          "contains": "OnChallenge"
+        },
+        {
+          "line": 163,
+          "contains": "Authentication is required"
+        },
+        {
+          "line": 161,
+          "contains": "The provided authentication"
+        },
+        {
+          "line": 162,
+          "contains": "The provided authentication"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore/Controllers/CommandsController.cs",
+      "sha256": "894f5b858e7f4b2ffdd2fbef1637088d16395fd228d7e7d1c52e543af38148f7",
+      "anchors": [
+        {
+          "line": 146,
+          "contains": "if (!workloadOnly && !platformScope &&"
+        },
+        {
+          "line": 149,
+          "contains": "return Forbid();"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore/Controllers/QueriesController.cs",
+      "sha256": "0a7bf260e145136d409a575ab2bc300e179c3350a749039f1589a90e2aaa7597",
+      "anchors": [
+        {
+          "line": 265,
+          "contains": "ValidateAuthorizationBeforeLookup"
+        },
+        {
+          "line": 598,
+          "contains": "ValidateAuthorizationBeforeLookup"
+        },
+        {
+          "line": 611,
+          "contains": "throw new CommandAuthorizationException"
+        },
+        {
+          "line": 627,
+          "contains": "throw new CommandAuthorizationException"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore/ErrorHandling/AuthorizationExceptionHandler.cs",
+      "sha256": "fd7cff0e24d27854dae37db03e3fd00aeefe88584024e561b064d7d07dc5cc64",
+      "anchors": [
+        {
+          "line": 17,
+          "contains": "TryHandleAsync"
+        },
+        {
+          "line": 48,
+          "contains": "GatewayProblemDetailsExtensions.ReasonCode"
+        },
+        {
+          "line": 61,
+          "contains": "CreateClientDetail"
+        }
+      ]
+    },
+    {
+      "path": "src/Hexalith.EventStore.Client/Gateway/EventStoreGatewayClient.cs",
+      "sha256": "5b5d03cba43b347f348c5b5476cadb8a39bb2c5bc2a827e7499092f4680e3ab9",
+      "anchors": [
+        {
+          "line": 247,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 256,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 305,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 313,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 384,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 488,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 494,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 653,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 712,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 775,
+          "contains": "response.ReasonPhrase"
+        },
+        {
+          "line": 735,
+          "contains": "IsJsonResponse"
+        },
+        {
+          "line": 791,
+          "contains": "IsJsonResponse"
+        }
+      ]
+    }
+  ],
+  "semantics": [
+    {
+      "kind": "Query signed-grant refusal",
+      "source": "QueriesController.ValidateAuthorizationBeforeLookup and AuthorizationExceptionHandler",
+      "format": "Structured 403 problem with exact detail, reasonCode and correlationId; the generic head exposes the documented selected public members."
+    },
+    {
+      "kind": "Command absent tenant grant",
+      "source": "CommandsController.cs:146-149",
+      "format": "Forbid() before pipeline dispatch; observed empty 403 HTTP response. The generic head public document is exactly {\"error\":{\"code\":\"gateway_error\",\"status\":403,\"detail\":\"Forbidden\"}}; no reason or correlation is invented."
+    },
+    {
+      "kind": "Missing or invalid-token challenge",
+      "source": "ConfigureJwtBearerOptions.OnChallenge",
+      "format": "Custom structured 401 authentication_required document with distinct missing/invalid-token detail; no correlationId in that document."
+    },
+    {
+      "kind": "Observed invalid-token Command transport fallback",
+      "source": "Run 42641067905, forged-token Command",
+      "format": "Observed empty 401 HTTP response; EventStoreGatewayClient falls back to HTTP reason phrase. The generic head public document is exactly {\"error\":{\"code\":\"gateway_error\",\"status\":401,\"detail\":\"Unauthorized\"}}. This does not replace the source structured challenge oracle for nonempty bodies."
+    }
+  ],
+  "observations": [
+    {
+      "githubRunId": 42641067905,
+      "artifactId": 13685668333,
+      "archiveSha256": "62d30c7d475b5b29651e82e484886c45dd9382b75b925b47192783c64bf4abdd",
+      "event": "Empty forged-token Command 401; preceding CLI Query missing/invalid-token and tenant/nonmember cases passed."
+    },
+    {
+      "githubRunId": 42645969397,
+      "artifactId": 13688676805,
+      "archiveSha256": "5384cf9ad5853ff34dcc7c248d807d6914eb0daa7bd3d8ef6aa1d61d60fc2af4",
+      "event": "First CLI tenant-A-grant Command returned empty 403 before the structured pipeline."
+    },
+    {
+      "githubRunId": 42648730822,
+      "artifactId": 13690111476,
+      "archiveSha256": "5c7587b50afff46fd9743741f21314ec1b81633527c9fe7feee896558660cc19",
+      "event": "All credential/grant, MCP override and local tenant-negative assertions were reached and passed before the first C05 state-read port failure; earlier success follows from ordered test execution, not a final passing live receipt."
+    }
+  ],
+  "limits": [
+    "No claim that every 401 is structured or every 403 carries a reason code.",
+    "Empty 403 is permitted by the live oracle only for the Command path; Query grant refusals retain their exact structured oracle.",
+    "The final live receipt records full public errors and response formats; prior failed attempts do not establish final live acceptance."
+  ],
+  "genericPublicErrorMapping": {
+    "path": "src/Hexalith.McpCli.Core/Execution/OperationError.cs",
+    "sha256": "c783b7cefc70dbd9b310bf6c8c93791024083261ea6af7316a70b713ff85a9e3",
+    "anchor": "FromGateway copies nonempty Gateway detail/title and supplied selected metadata without inventing a reason or correlation."
+  }
+}

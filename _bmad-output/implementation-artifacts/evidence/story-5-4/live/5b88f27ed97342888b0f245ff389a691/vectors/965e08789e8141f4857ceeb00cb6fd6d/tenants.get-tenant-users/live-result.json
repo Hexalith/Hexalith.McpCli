@@ -1,0 +1,648 @@
+{
+  "operation": "tenants.get-tenant-users",
+  "result": "passed",
+  "phases": [
+    {
+      "head": "cli",
+      "phase": "/prerequisites/0",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-users",
+          "Name": "Vector Users",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M70K6Q528VTDHZYME2R63CRG",
+            "correlationId": "01M70K6Q528VTDHZYME2R63CRG",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-users",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-users",
+            "document": {
+              "tenantId": "vector-users",
+              "name": "Vector Users",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:45:33.1553677+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-users",
+            "document": {
+              "tenantId": "vector-users",
+              "name": "Vector Users",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T16:45:33.1553677+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/prerequisites/1",
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.add-user-to-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-users",
+          "UserId": "vector-user-a@example.com",
+          "Role": "TenantOwner"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.add-user-to-tenant",
+            "messageId": "01M70K7350XS5WACNYQ9BR5ESE",
+            "correlationId": "01M70K7350XS5WACNYQ9BR5ESE",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-users",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-a@example.com",
+                  "role": "TenantOwner"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-a@example.com",
+                  "role": "TenantOwner"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/prerequisites/2",
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.add-user-to-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-users",
+          "UserId": "vector-user-b@example.com",
+          "Role": "TenantContributor"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.add-user-to-tenant",
+            "messageId": "01M70K7FGNGXJEDVZ1APQ5FAWR",
+            "correlationId": "01M70K7FGNGXJEDVZ1APQ5FAWR",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-users",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-2",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-a@example.com",
+                  "role": "TenantOwner"
+                },
+                {
+                  "userId": "vector-user-b@example.com",
+                  "role": "TenantContributor"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-2",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-a@example.com",
+                  "role": "TenantOwner"
+                },
+                {
+                  "userId": "vector-user-b@example.com",
+                  "role": "TenantContributor"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/prerequisites/3",
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.add-user-to-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-users",
+          "UserId": "vector-user-c@example.com",
+          "Role": "TenantReader"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.add-user-to-tenant",
+            "messageId": "01M70K7W387G0JXWNRYN62XJ68",
+            "correlationId": "01M70K7W387G0JXWNRYN62XJ68",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-users",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-3",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-a@example.com",
+                  "role": "TenantOwner"
+                },
+                {
+                  "userId": "vector-user-b@example.com",
+                  "role": "TenantContributor"
+                },
+                {
+                  "userId": "vector-user-c@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-3",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-a@example.com",
+                  "role": "TenantOwner"
+                },
+                {
+                  "userId": "vector-user-b@example.com",
+                  "role": "TenantContributor"
+                },
+                {
+                  "userId": "vector-user-c@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/invocation",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users",
+          "pageSize": 2
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-a@example.com",
+                  "role": "TenantOwner"
+                },
+                {
+                  "userId": "vector-user-b@example.com",
+                  "role": "TenantContributor"
+                }
+              ],
+              "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAABcFQsTH5NaAig0DP0DDtnUjI59cB-AibPfBYb_9e3ca0vwtAUCy-u55-3senG82ZzRmP_7ZFMTsDRkUB3W26tUPRlp3jN4_7gHrlS4hVWruLwS_9-ZBLWhHQef-RD3eYMhyJfVKUxRwnwUjas-ORi0s-l0HH3QgVVggc65z5ygKAlP20p7KP5uzT5ZKuN38ZLwi2u-VNfl6gkb2n8VFz015zYLZx7qPZGPK60ih28xbjWG234vqBuYU4-xzSfi5ix_G5JJqL2i4egZM0cgRpC_xE7VJsoQwjmmXUKSp2hCnUaJZnoCi9_aWdAt54athz4",
+              "hasMore": true
+            },
+            "paging": {
+              "pageSize": 2,
+              "nextCursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAABcFQsTH5NaAig0DP0DDtnUjI59cB-AibPfBYb_9e3ca0vwtAUCy-u55-3senG82ZzRmP_7ZFMTsDRkUB3W26tUPRlp3jN4_7gHrlS4hVWruLwS_9-ZBLWhHQef-RD3eYMhyJfVKUxRwnwUjas-ORi0s-l0HH3QgVVggc65z5ygKAlP20p7KP5uzT5ZKuN38ZLwi2u-VNfl6gkb2n8VFz015zYLZx7qPZGPK60ih28xbjWG234vqBuYU4-xzSfi5ix_G5JJqL2i4egZM0cgRpC_xE7VJsoQwjmmXUKSp2hCnUaJZnoCi9_aWdAt54athz4",
+              "hasMore": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "/invocation",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users",
+          "pageSize": 2
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-a@example.com",
+                  "role": "TenantOwner"
+                },
+                {
+                  "userId": "vector-user-b@example.com",
+                  "role": "TenantContributor"
+                }
+              ],
+              "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAADkG_0PhJRlv6CiBWQcWOC2W63RThP1QrdozLH_IM1JWL8Hx7VudHuMtTLLz-MqthNYbbwgMSyjeL5MDkwHGV2JcM3b0gMpy_ubu_1d9m74gu48Up4KVav4Q_sckZoTJWB5LwZZ5LYKVbiUs35iRSU8n2L03rrStAVYlb-4fWsaxpYZt5V449RPZ7QlqRc-ET_sKRoy3iIcRXF7flVwxd4Kv1P9YddC7zIpoQ6OrN6GHdP23fVvmF1eW8lgh_xhulDGPiGodeqhE68IWBkItbzXepglN-2Z1Xrsbl_YA2NGd1DoaMfibP8P82zeCY8c1Kw",
+              "hasMore": true
+            },
+            "paging": {
+              "pageSize": 2,
+              "nextCursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAADkG_0PhJRlv6CiBWQcWOC2W63RThP1QrdozLH_IM1JWL8Hx7VudHuMtTLLz-MqthNYbbwgMSyjeL5MDkwHGV2JcM3b0gMpy_ubu_1d9m74gu48Up4KVav4Q_sckZoTJWB5LwZZ5LYKVbiUs35iRSU8n2L03rrStAVYlb-4fWsaxpYZt5V449RPZ7QlqRc-ET_sKRoy3iIcRXF7flVwxd4Kv1P9YddC7zIpoQ6OrN6GHdP23fVvmF1eW8lgh_xhulDGPiGodeqhE68IWBkItbzXepglN-2Z1Xrsbl_YA2NGd1DoaMfibP8P82zeCY8c1Kw",
+              "hasMore": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users",
+          "pageSize": 2,
+          "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAABcFQsTH5NaAig0DP0DDtnUjI59cB-AibPfBYb_9e3ca0vwtAUCy-u55-3senG82ZzRmP_7ZFMTsDRkUB3W26tUPRlp3jN4_7gHrlS4hVWruLwS_9-ZBLWhHQef-RD3eYMhyJfVKUxRwnwUjas-ORi0s-l0HH3QgVVggc65z5ygKAlP20p7KP5uzT5ZKuN38ZLwi2u-VNfl6gkb2n8VFz015zYLZx7qPZGPK60ih28xbjWG234vqBuYU4-xzSfi5ix_G5JJqL2i4egZM0cgRpC_xE7VJsoQwjmmXUKSp2hCnUaJZnoCi9_aWdAt54athz4"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-c@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 2,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-users"
+        },
+        "envelope": {
+          "tenant": "vector-users",
+          "pageSize": 2,
+          "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAABcFQsTH5NaAig0DP0DDtnUjI59cB-AibPfBYb_9e3ca0vwtAUCy-u55-3senG82ZzRmP_7ZFMTsDRkUB3W26tUPRlp3jN4_7gHrlS4hVWruLwS_9-ZBLWhHQef-RD3eYMhyJfVKUxRwnwUjas-ORi0s-l0HH3QgVVggc65z5ygKAlP20p7KP5uzT5ZKuN38ZLwi2u-VNfl6gkb2n8VFz015zYLZx7qPZGPK60ih28xbjWG234vqBuYU4-xzSfi5ix_G5JJqL2i4egZM0cgRpC_xE7VJsoQwjmmXUKSp2hCnUaJZnoCi9_aWdAt54athz4"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-users",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-user-c@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 2,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.5",
+    "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+    "vectorSha256": "f7a9b984378fb50b79780afe4fac4be68fe0b04ad6f21caab070cb2223a204eb",
+    "planSha256": "97552629a80c2cdd5dd03d282e93e465b0ce9f1d059be8e35296c439abbe7c05",
+    "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+  },
+  "captures": {
+    "continuation": "CfDJ8AAAAAAAAAAAAAAAAAAAAABcFQsTH5NaAig0DP0DDtnUjI59cB-AibPfBYb_9e3ca0vwtAUCy-u55-3senG82ZzRmP_7ZFMTsDRkUB3W26tUPRlp3jN4_7gHrlS4hVWruLwS_9-ZBLWhHQef-RD3eYMhyJfVKUxRwnwUjas-ORi0s-l0HH3QgVVggc65z5ygKAlP20p7KP5uzT5ZKuN38ZLwi2u-VNfl6gkb2n8VFz015zYLZx7qPZGPK60ih28xbjWG234vqBuYU4-xzSfi5ix_G5JJqL2i4egZM0cgRpC_xE7VJsoQwjmmXUKSp2hCnUaJZnoCi9_aWdAt54athz4"
+  }
+}

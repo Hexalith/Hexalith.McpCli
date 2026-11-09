@@ -11,5 +11,9 @@
     <ProjectReference Include="../fixtures/Manifest.MarkedEmpty.Contracts/Manifest.MarkedEmpty.Contracts.csproj" />
     <ProjectReference Include="../fixtures/StdioHost/Hexalith.McpCli.StdioHost.csproj" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/BoundaryHeads.cs" Link="SharedHeadHarness/BoundaryHeads.cs" />
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/LiveGatewayForwarder.cs" Link="SharedHeadHarness/LiveGatewayForwarder.cs" />
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/RequestPairBarrier.cs" Link="SharedHeadHarness/RequestPairBarrier.cs" />
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/GatewaySidecarEndpoint.cs" Link="SharedHeadHarness/GatewaySidecarEndpoint.cs" />
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs" Link="SharedHeadHarness/PersistedPartyEvents.cs" />
   </ItemGroup>
 </Project>

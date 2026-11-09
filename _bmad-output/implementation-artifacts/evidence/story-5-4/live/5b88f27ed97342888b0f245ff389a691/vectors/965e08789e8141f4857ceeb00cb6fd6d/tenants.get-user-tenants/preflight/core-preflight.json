@@ -1,0 +1,142 @@
+{
+  "findings": [],
+  "requests": [
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/0",
+      "body": {
+        "messageId": "01M70KCWW73GKBRGFKXF40BWHS",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-a",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-membership-a",
+          "Name": "Vector Membership A",
+          "Description": null
+        },
+        "correlationId": "01M70KCWW73GKBRGFKXF40BWHS"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/1",
+      "body": {
+        "messageId": "01M70KCWWQFKWDF28Q6923NCYT",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-a",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-membership-a",
+          "UserId": "vector-member@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M70KCWWQFKWDF28Q6923NCYT"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/2",
+      "body": {
+        "messageId": "01M70KCWWTDYN6DS60G6C6F9AX",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-b",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-membership-b",
+          "Name": "Vector Membership B",
+          "Description": null
+        },
+        "correlationId": "01M70KCWWTDYN6DS60G6C6F9AX"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/3",
+      "body": {
+        "messageId": "01M70KCWWVZYD1JV5GHRPX8XS0",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-b",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-membership-b",
+          "UserId": "vector-member@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M70KCWWVZYD1JV5GHRPX8XS0"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/4",
+      "body": {
+        "messageId": "01M70KCWWVZYD1JV5GHRPX8XS1",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-c",
+        "commandType": "create-tenant",
+        "payload": {
+          "TenantId": "vector-membership-c",
+          "Name": "Vector Membership C",
+          "Description": null
+        },
+        "correlationId": "01M70KCWWVZYD1JV5GHRPX8XS1"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/prerequisites/5",
+      "body": {
+        "messageId": "01M70KCWWVZYD1JV5GHRPX8XS2",
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "vector-membership-c",
+        "commandType": "add-user-to-tenant",
+        "payload": {
+          "TenantId": "vector-membership-c",
+          "UserId": "vector-member@example.com",
+          "Role": "TenantReader"
+        },
+        "correlationId": "01M70KCWWVZYD1JV5GHRPX8XS2"
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/invocation",
+      "body": {
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "get-user-tenants",
+        "projectionType": "tenant-index",
+        "payload": {
+          "UserId": "vector-member@example.com"
+        },
+        "paging": {
+          "pageSize": 2
+        }
+      }
+    },
+    {
+      "source": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/5b88f27ed97342888b0f245ff389a691/vectors/965e08789e8141f4857ceeb00cb6fd6d/tenants.get-user-tenants/preflight/inputs/Hexalith.Tenants.Contracts/get-user-tenants.vector.json",
+      "pointer": "/postconditions/0",
+      "body": {
+        "tenant": "platform:tenants",
+        "domain": "tenants",
+        "aggregateId": "index",
+        "queryType": "get-user-tenants",
+        "projectionType": "tenant-index",
+        "payload": {
+          "UserId": "vector-member@example.com"
+        },
+        "paging": {
+          "pageSize": 2,
+          "cursor": "scripted-user-tenants-cursor-1"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "candidate": {
+    "parents": [
+      "4c7267a9b4cb85bf66b2719347a2002b0ebd677a"
+    ],
+    "sha": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+    "treeSha": "ce0dbe21accb091347f0f910446c691063ca1265"
+  },
+  "hostedCheckout": {
+    "parents": [
+      "296617072ab3fb632d2bddb9189b52fd94286f83",
+      "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d"
+    ],
+    "sha": "21bbef096c20d71b2d422e344cdfe3f47b9072a8",
+    "treeSha": "ce0dbe21accb091347f0f910446c691063ca1265"
+  },
+  "identicalGitTrees": true
+}

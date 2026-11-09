@@ -1,0 +1,107 @@
+{
+  "schema": "mcpcli-story-5-4-owner-approval/v1",
+  "recordedAtUtc": "2026-11-09T21:33:10+00:00",
+  "authority": {
+    "role": "Parties owner",
+    "source": "Explicit user response to the exact-byte packet checkpoint in this conversation, relayed by the coordinating agent.",
+    "responseVerbatim": "approve"
+  },
+  "approvalScope": "Approve the packet bound by its exact scan-receipt SHA-256 as retirement-blocked, retaining G01–G06 as blocking with their named ledger owners.",
+  "decision": {
+    "approval": "approved",
+    "verdict": "retirement-blocked",
+    "retainedBlockingGapIds": [
+      "G01",
+      "G02",
+      "G03",
+      "G04",
+      "G05",
+      "G06"
+    ],
+    "inventoryAmendment": null
+  },
+  "approvedSnapshot": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-4",
+    "commit": "4c7267a9b4cb85bf66b2719347a2002b0ebd677a",
+    "scanReceipt": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-4/secret-scan.json",
+      "sha256": "1edc78fd37ede85498e7d8a9a7b1ea3537175bb470259a729bf0a8a8aa1ac0c3",
+      "manifestSha256": "9fefaddd184e6be1e26c44ef0584911f7644494ecc89aed6f1c6ab3f396166a0",
+      "inputFileCount": 2722
+    },
+    "manifest": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-4/manifest.json",
+      "sha256": "d80836b98bc95c548e0c4f1ba20bb6b200e9f0ecad5a591878eed8a6dec7314e"
+    },
+    "candidateHeadCommit": "3e8f6a4e681018c7ca8356997d4fd28378217d37",
+    "checkoutCommit": "7ae71f03d98f1280060fe197f320dcb055e1d7f1",
+    "githubRunId": 42652261452,
+    "originalState": "frozen-pending-exact-byte-owner-verdict",
+    "relationship": "This later approval receipt leaves every original packet byte and its historical pending-approval state unchanged."
+  },
+  "gapDispositions": [
+    {
+      "id": "G01",
+      "gap": "Repeated missing-target rejection-only streams",
+      "owner": "Parties maintainer",
+      "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:556",
+      "disposition": "retained-blocking",
+      "workStatus": "open"
+    },
+    {
+      "id": "G02",
+      "gap": "Forced stale projections and erased/restricted delete/pre-read execution",
+      "owner": "Parties maintainer and EventStore Gateway maintainer",
+      "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:853",
+      "disposition": "retained-blocking",
+      "workStatus": "open"
+    },
+    {
+      "id": "G03",
+      "gap": "Downstream public Query-error detail/title privacy",
+      "owner": "EventStore Gateway maintainer and Parties maintainer",
+      "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:824",
+      "disposition": "retained-blocking",
+      "workStatus": "open"
+    },
+    {
+      "id": "G04",
+      "gap": "Persisted event/audit actor attribution",
+      "owner": "Parties maintainer and EventStore Gateway maintainer",
+      "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:859",
+      "disposition": "retained-blocking",
+      "workStatus": "open"
+    },
+    {
+      "id": "G05",
+      "gap": "Raw versus trimmed input-bound policy approval",
+      "owner": "Parties maintainer",
+      "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:865",
+      "disposition": "retained-blocking",
+      "workStatus": "open"
+    },
+    {
+      "id": "G06",
+      "gap": "Mixed-profile operator identity",
+      "owner": "McpCli maintainer",
+      "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:833",
+      "disposition": "retained-blocking",
+      "workStatus": "open"
+    }
+  ],
+  "effect": {
+    "implementationOwnerCheckpoint": "complete",
+    "replacementRetirement": "blocked",
+    "originalPacketModified": false,
+    "approvedMigrationInventoryVersion": "1.2.0",
+    "inventoryAmended": false,
+    "releasePublicationOrRetirementApproved": false,
+    "retirementStory": "5.5",
+    "separateReleaseGate": "epic-4-retro-item-6"
+  },
+  "limits": [
+    "All six gaps remain open and retirement-blocking; no gap is closed or waived.",
+    "The F7 acceptance and open item-9 limitation are unchanged.",
+    "This records the owner decision only; workflow review/status transitions are separate."
+  ]
+}

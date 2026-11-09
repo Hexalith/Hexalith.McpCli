@@ -1,0 +1,16 @@
+{
+  "decision": "accepted-limitation",
+  "ownerResponseVerbatim": "accept",
+  "recordedOn": "2026-11-09",
+  "sourceSpec": "_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md",
+  "sourceDecision": "Frozen Decisions (2026-11-09), item 1",
+  "acceptedBehavior": "U+212A KELVIN SIGN in tenant input may alias ASCII kelvin after invariant lowercasing. The Gateway canonicalizer behaves the same way.",
+  "guard": "tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs:127",
+  "backlogItem": "epic-4-retro-item-9-ascii-tenant-input",
+  "backlogRemainsOpen": true,
+  "limits": [
+    "No acceptance of any other non-ASCII look-alike.",
+    "No release, publication or retirement authority.",
+    "The item-9 regression must flip when the input-before-lowercasing fix lands."
+  ]
+}

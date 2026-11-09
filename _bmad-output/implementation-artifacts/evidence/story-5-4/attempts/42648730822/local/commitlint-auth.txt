@@ -1,0 +1,3 @@
+⧗   --- input ---
+test(safety): pin gateway challenges and run the boundary first
+✔   found 0 problems, 0 warnings

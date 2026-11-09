@@ -1,0 +1,386 @@
+{
+  "anchors": [
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        32
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/LiveGatewayForwarder.cs",
+      "text": "internal Task CaptureConcurrentPairAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        47
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/LiveGatewayForwarder.cs",
+      "text": "private async Task<byte[]> ForwardAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        57
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/LiveGatewayForwarder.cs",
+      "text": "await barrier.Ready"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        64
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/LiveGatewayForwarder.cs",
+      "text": "await _http.SendAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        4
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/RequestPairBarrier.cs",
+      "text": "internal sealed class RequestPairBarrier"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        10
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/RequestPairBarrier.cs",
+      "text": "internal TaskCompletionSource Captured"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        17
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/RequestPairBarrier.cs",
+      "text": "internal RequestPairBarrier"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        138
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs",
+      "text": "Task capturedPair ="
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        140
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs",
+      "text": "await capturedPair;"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        141
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs",
+      "text": "forwarder.Requests.Count.ShouldBe(beforeConcurrent + 2)"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        80,
+        96,
+        103,
+        117
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs",
+      "text": "RequireUnchangedSequenceAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        155
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs",
+      "text": "RequireOneDeactivationAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        26,
+        37
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs",
+      "text": "ReadSequenceAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        34
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs",
+      "text": "RequireUnchangedSequenceAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        18
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs",
+      "text": "RequireNoPartyCreatedAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        10
+      ],
+      "path": "tests/Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs",
+      "text": "RequireOneDeactivationAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        13
+      ],
+      "path": "tests/Hexalith.McpCli.Cli.Tests/LiveGatewayForwarderTests.cs",
+      "text": "ConcurrentPairIsCapturedBeforeEitherRequestIsForwardedAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        46
+      ],
+      "path": "tests/Hexalith.McpCli.Cli.Tests/LiveGatewayForwarderTests.cs",
+      "text": "IncompleteConcurrentPairIsBoundedAndNeverForwardedAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        14
+      ],
+      "path": "tests/Hexalith.McpCli.Cli.Tests/BoundaryProcessHarnessTests.cs",
+      "text": "IntermediateNotificationIsRetainedForAllChannelAbsenceChecksAsync"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        335
+      ],
+      "path": "tools/live-topology/ci.py",
+      "text": "def require_head_catalog"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        374
+      ],
+      "path": "tools/live-topology/ci.py",
+      "text": "require_head_catalog(prepared)"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        729
+      ],
+      "path": "tools/live-topology/ci.py",
+      "text": "run_independent(PRE_VECTOR_CASES)"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        1054
+      ],
+      "path": "tools/conformance-vectors/v1/test_loopback.py",
+      "text": "class McpInvocationBudgetTests"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        1055
+      ],
+      "path": "tools/conformance-vectors/v1/test_loopback.py",
+      "text": "def test_initialize_and_tool_call_share_one_absolute_budget"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "lines": [
+        1086
+      ],
+      "path": "tools/conformance-vectors/v1/test_loopback.py",
+      "text": "def test_head_refuses_a_valid_result_returned_after_its_invocation_budget"
+    }
+  ],
+  "files": [
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 8949,
+      "committedSha256": "21fac8c09c48828360925fe4c13693e2efb483ba404af74bdbb3b1a2bff9cf30",
+      "path": ".github/workflows/ci.yml",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "21fac8c09c48828360925fe4c13693e2efb483ba404af74bdbb3b1a2bff9cf30"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 12860,
+      "committedSha256": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7",
+      "path": "scripts/evidence_redaction.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 6100,
+      "committedSha256": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+      "path": "scripts/scan-evidence-secrets.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 74079,
+      "committedSha256": "ca0f4532ea62bce497d6d689f80695a2390c2887783aca6556ec4c41d3143cef",
+      "path": "scripts/tests/test_paired_publication.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "ca0f4532ea62bce497d6d689f80695a2390c2887783aca6556ec4c41d3143cef"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 10696,
+      "committedSha256": "e8243a189f4fd0219bbff5bbfb1d73b1887154281fc6e0467ce5a1dec1bc8aa9",
+      "path": "scripts/verify-release-source.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "e8243a189f4fd0219bbff5bbfb1d73b1887154281fc6e0467ce5a1dec1bc8aa9"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 11666,
+      "committedSha256": "dae0f64ecd49a45ee326b7a6149271eccab57bde555543038375b85482227e66",
+      "path": "tests/Hexalith.McpCli.Cli.Tests/BoundaryProcessHarnessTests.cs",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "29cf90535e9151c96d3f5f75c9180ff37bb141fc30ec5dd29a1e9aeb1030b79e"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 1339,
+      "committedSha256": "2a1bd504da72a692283889938acde7120b1ba095f43a506dab8583db83779b74",
+      "path": "tests/Hexalith.McpCli.Cli.Tests/HeadResult.cs",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "f28816834faaeaf9203325e8ca5fe1de3097275ba6c506d2bb8f685b07c1392a"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 1783,
+      "committedSha256": "035183952388e765c65ded94f44d392872380908ddda1ad4deec2f77cc208cda",
+      "path": "tests/Hexalith.McpCli.Cli.Tests/Hexalith.McpCli.Cli.Tests.csproj",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "035183952388e765c65ded94f44d392872380908ddda1ad4deec2f77cc208cda"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 3196,
+      "committedSha256": "5aad5d39bb80e4db20ec4f03db2b50af6002dc18b1ac4bd69d53bc791df8966b",
+      "path": "tests/Hexalith.McpCli.Cli.Tests/LiveGatewayForwarderTests.cs",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "166246eb8c49e16bb3805a2f5b48920d35a6ec411f5f449823e4659d6ed8b5f1"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 8229,
+      "committedSha256": "9e9c136c7c615d28f25a756a431c7ad0b66a1afddd98bd5c2c1cad484820fa68",
+      "path": "tests/Hexalith.McpCli.Cli.Tests/PersistedPartyEventsTests.cs",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "abdb0c6ac2aa20ac365fd346348993fd7861a081ffabfce266834a925b104e43"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 10649,
+      "committedSha256": "1f638fbf670c3f52236206bd9474e31071bc49b874ce0f9e9925a112e5202624",
+      "path": "tests/Hexalith.McpCli.Integration.Tests/BoundaryHeads.cs",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "5b6528f43261f0798c94f22773d43c71eb0b62419e246551874b1078acb5ce5b"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 3351,
+      "committedSha256": "51dfd733f15c2d658c2b1417b0d2e821f90df5f48a47b3de494535a17e8b1492",
+      "path": "tests/Hexalith.McpCli.Integration.Tests/LiveGatewayForwarder.cs",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "b6475ee33170df553ed072728137ae3b7d658db9d65ea4eb9d9e2758fbc155a9"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 4704,
+      "committedSha256": "800bc1af6536c94d15fd30b00542325b62769330bb37ab29978f0b1f57c0ac7e",
+      "path": "tests/Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "fc4f7ff21b64f12c375df7398b761cfeaade25e18819144647ecf1178f61eccb"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 998,
+      "committedSha256": "cea4b1b08126c1672596dbda111cbce83eb772b52daa36451c5558c6f2026127",
+      "path": "tests/Hexalith.McpCli.Integration.Tests/RequestPairBarrier.cs",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "5b445d225e969ba2e47f68615f24e32e4a88bc0e79da83e8cad4626c62089dad"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 22124,
+      "committedSha256": "cf363ac84380d5f33a72c95fa277eb4804597ebdd87599f2b3d0aeaded068d11",
+      "path": "tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "4c17765469029ccd7a0b9e4191173de6a58ec94b20a15f7e652dbd4599f76399"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 51432,
+      "committedSha256": "fee15580c0d99727dd839751b2f0ecc50fa657c987a3cc9096abadc8b1d0e967",
+      "path": "tools/conformance-vectors/v1/run_loopback.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "fee15580c0d99727dd839751b2f0ecc50fa657c987a3cc9096abadc8b1d0e967"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 71461,
+      "committedSha256": "f161da2c8eece1721d9267a89e661ee2eb2e7f076c88714172a5e767c998ca8e",
+      "path": "tools/conformance-vectors/v1/test_loopback.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "f161da2c8eece1721d9267a89e661ee2eb2e7f076c88714172a5e767c998ca8e"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 55540,
+      "committedSha256": "fa7d36803bbb02f30c2571ac0d7e3837d5bf6621f135590a142f7ee6a0244651",
+      "path": "tools/live-topology/ci.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "fa7d36803bbb02f30c2571ac0d7e3837d5bf6621f135590a142f7ee6a0244651"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 25537,
+      "committedSha256": "2811af4243008d795f2965006e13c752b0a11f28c7074daa07973dae1a3a211f",
+      "path": "tools/live-topology/live_plans.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "2811af4243008d795f2965006e13c752b0a11f28c7074daa07973dae1a3a211f"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 12385,
+      "committedSha256": "d1820a1fd64b65a6153b93a25be9bdbee825b74be436359c92f97bf30b93f1db",
+      "path": "tools/live-topology/run_live.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "d1820a1fd64b65a6153b93a25be9bdbee825b74be436359c92f97bf30b93f1db"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 152321,
+      "committedSha256": "9906b0c0316d50d6a4ca23add064c5603101e2885b68c601e9f4c676d49ef325",
+      "path": "tools/live-topology/test_ci.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "9906b0c0316d50d6a4ca23add064c5603101e2885b68c601e9f4c676d49ef325"
+    },
+    {
+      "commit": "4ddfedbca7be2922c109c9cedc1ffc6dbe1bf82d",
+      "committedBytes": 37658,
+      "committedSha256": "eb5ca1c398e000dbcc62a408bd10cc29fb471ed49ea2e021244e76325255f162",
+      "path": "tools/live-topology/test_live_runner.py",
+      "worktreeMatchesCommitAfterLineEndingNormalization": true,
+      "worktreeSha256": "eb5ca1c398e000dbcc62a408bd10cc29fb471ed49ea2e021244e76325255f162"
+    }
+  ]
+}

@@ -1,0 +1,3 @@
+⧗   --- input ---
+test(safety): pin pre-dispatch command grant refusals
+✔   found 0 problems, 0 warnings

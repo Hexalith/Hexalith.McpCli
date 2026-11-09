@@ -1,0 +1,1238 @@
+{
+  "operation": "tenants.get-tenant-audit",
+  "result": "passed",
+  "phases": [
+    {
+      "head": "cli",
+      "phase": "/prerequisites/0",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-audit",
+          "Name": "Vector Audit",
+          "Description": null
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M718N3PSNX0PGQDS4B7AQ1FC",
+            "correlationId": "01M718N3PSNX0PGQDS4B7AQ1FC",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-audit",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "vector-audit"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-audit",
+            "document": {
+              "tenantId": "vector-audit",
+              "name": "Vector Audit",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T23:00:25.4286347+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "vector-audit"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-audit",
+            "document": {
+              "tenantId": "vector-audit",
+              "name": "Vector Audit",
+              "description": null,
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-09T23:00:25.4286347+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/prerequisites/1",
+      "operation": "tenants.add-user-to-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.add-user-to-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-audit",
+          "UserId": "vector-audited@example.com",
+          "Role": "TenantReader"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.add-user-to-tenant",
+            "messageId": "01M718NMHSA4DBTPQS8R4P1T2S",
+            "correlationId": "01M718NMHSA4DBTPQS8R4P1T2S",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-audit",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "vector-audit"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-audited@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-1",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "vector-audit"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-audited@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/prerequisites/2",
+      "operation": "tenants.set-tenant-configuration",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.set-tenant-configuration",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-audit",
+          "Key": "audit.marker",
+          "Value": "administrative"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.set-tenant-configuration",
+            "messageId": "01M718P5K0SXZE2JN41ZXPEVFB",
+            "correlationId": "01M718P5K0SXZE2JN41ZXPEVFB",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-audit",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-2",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "vector-audit"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-audit",
+            "document": {
+              "tenantId": "vector-audit",
+              "name": "Vector Audit",
+              "description": null,
+              "status": "Active",
+              "members": [
+                {
+                  "userId": "vector-audited@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "configuration": {
+                "audit.marker": "administrative"
+              },
+              "createdAt": "2026-11-09T23:00:25.4286347+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-2",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "vector-audit"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-audit",
+            "document": {
+              "tenantId": "vector-audit",
+              "name": "Vector Audit",
+              "description": null,
+              "status": "Active",
+              "members": [
+                {
+                  "userId": "vector-audited@example.com",
+                  "role": "TenantReader"
+                }
+              ],
+              "configuration": {
+                "audit.marker": "administrative"
+              },
+              "createdAt": "2026-11-09T23:00:25.4286347+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/prerequisites/3",
+      "operation": "tenants.change-user-role",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.change-user-role",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-audit",
+          "UserId": "vector-audited@example.com",
+          "NewRole": "TenantContributor"
+        },
+        "envelope": {
+          "tenant": "platform:tenants"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.change-user-role",
+            "messageId": "01M718PNSCXQFX9TJ3Z57ENFS3",
+            "correlationId": "01M718PNSCXQFX9TJ3Z57ENFS3",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-audit",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-prerequisites-3",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "vector-audit"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-audited@example.com",
+                  "role": "TenantContributor"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-prerequisites-3",
+      "operation": "tenants.get-tenant-users",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit"
+        },
+        "envelope": {
+          "tenant": "vector-audit"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-users",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "userId": "vector-audited@example.com",
+                  "role": "TenantContributor"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/invocation",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 1
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718NQ0Z7TE44M36CVREPTA0",
+                  "eventType": "UserAddedToTenant",
+                  "category": "Access",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:00:42.6557357+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "userId": "vector-audited@example.com",
+                    "role": "TenantReader"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audited@example.com",
+                  "scope": "vector-audit",
+                  "outcome": "UserAddedToTenant"
+                }
+              ],
+              "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAAAHb92tn9NHGApPx9yFD_CSiV8UkWnTWOTUeVW96FMHkbKp0zE5Dvu16bZakP_D6hB9AX1k007HQEcIjJm2GCss_8EkoN2OGUrMva6YANsX7PvcYwjEF9rfhP8PYCRJbH1H3jSvAGDWidU2-Q1Bu9V6FPT2nFvrdXXkyf-4-4W_crc6NhDjQz2RFuA-tYXWLk7r38jub3ci6ATbJYwiYBenIQbrjt-K3_Q5nLyvwKwpk1rr9OJRzNqwNy2skAG4rxnJL3RqXDZsqXaD5d7svQCD29GpC9KNclcY4SaEYQg_ZHfyTpIkamfjAvSXN-SQLKhIHcsyN_cTZtnYVB7mtbmjONzXub8imuzaHNF-oTzdaFalmI8dV0aLvxtbfGQOZgug_kKmqYhhQfY7G-BBLvS09u6Ls23MxktD_PJU0u5xGKGKOzmUGBP5L9USBlD2UJcvUpX1__DQbSuaJR3dOZP4ri6fs7Z1_fa41W5w0BFx-g",
+              "hasMore": true
+            },
+            "paging": {
+              "pageSize": 1,
+              "nextCursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAAAHb92tn9NHGApPx9yFD_CSiV8UkWnTWOTUeVW96FMHkbKp0zE5Dvu16bZakP_D6hB9AX1k007HQEcIjJm2GCss_8EkoN2OGUrMva6YANsX7PvcYwjEF9rfhP8PYCRJbH1H3jSvAGDWidU2-Q1Bu9V6FPT2nFvrdXXkyf-4-4W_crc6NhDjQz2RFuA-tYXWLk7r38jub3ci6ATbJYwiYBenIQbrjt-K3_Q5nLyvwKwpk1rr9OJRzNqwNy2skAG4rxnJL3RqXDZsqXaD5d7svQCD29GpC9KNclcY4SaEYQg_ZHfyTpIkamfjAvSXN-SQLKhIHcsyN_cTZtnYVB7mtbmjONzXub8imuzaHNF-oTzdaFalmI8dV0aLvxtbfGQOZgug_kKmqYhhQfY7G-BBLvS09u6Ls23MxktD_PJU0u5xGKGKOzmUGBP5L9USBlD2UJcvUpX1__DQbSuaJR3dOZP4ri6fs7Z1_fa41W5w0BFx-g",
+              "hasMore": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "/invocation",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 1
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718NQ0Z7TE44M36CVREPTA0",
+                  "eventType": "UserAddedToTenant",
+                  "category": "Access",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:00:42.6557357+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "userId": "vector-audited@example.com",
+                    "role": "TenantReader"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audited@example.com",
+                  "scope": "vector-audit",
+                  "outcome": "UserAddedToTenant"
+                }
+              ],
+              "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAAA5CtUhn8TFnPqNEDapj1I2IPFf_3B79kKeJ8QHO7ngJKXv-DpVVpEfMVPpv3voPcNGd0VTYmN5L2bQexjbXJ9-4aCHJtwVz5GDNN_BqDtpOVwXYL98KXxEBe0j3oERVrUJElhmqbyV3lmaDqevfjP0BxEsL4m_7DlnKV3M0jl4EunC_dhdoL5P8jJIRSugxWNjvckUCaYfHEsodzqT09ia6C-LplHSnBEv35wnwTciChNVQtYvOIp-QT3qAVr6dnxc0ZqsXhxYj6Yg37_g50jHkCyWGBUWbkAs14BzZ7roI8w8pJOVGHmAX1W-evaQ2OSOLsAr_dethAfdSwadyMkErOZKbpoK6s11ZsurfUm6CZ0ZtqOzSmJWhIWWHABXhRTcxWkDHY6TdJLqJ8MCrwiDVem_qKHR3y_DuhpHmq1KW0ZlhfZo7p69J8kI8U_jhCe3rAS7ze1UQxhcCokzETqbksWi8GRRbZi66Den6sQjhw",
+              "hasMore": true
+            },
+            "paging": {
+              "pageSize": 1,
+              "nextCursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAAA5CtUhn8TFnPqNEDapj1I2IPFf_3B79kKeJ8QHO7ngJKXv-DpVVpEfMVPpv3voPcNGd0VTYmN5L2bQexjbXJ9-4aCHJtwVz5GDNN_BqDtpOVwXYL98KXxEBe0j3oERVrUJElhmqbyV3lmaDqevfjP0BxEsL4m_7DlnKV3M0jl4EunC_dhdoL5P8jJIRSugxWNjvckUCaYfHEsodzqT09ia6C-LplHSnBEv35wnwTciChNVQtYvOIp-QT3qAVr6dnxc0ZqsXhxYj6Yg37_g50jHkCyWGBUWbkAs14BzZ7roI8w8pJOVGHmAX1W-evaQ2OSOLsAr_dethAfdSwadyMkErOZKbpoK6s11ZsurfUm6CZ0ZtqOzSmJWhIWWHABXhRTcxWkDHY6TdJLqJ8MCrwiDVem_qKHR3y_DuhpHmq1KW0ZlhfZo7p69J8kI8U_jhCe3rAS7ze1UQxhcCokzETqbksWi8GRRbZi66Den6sQjhw",
+              "hasMore": true
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 1,
+          "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAAAHb92tn9NHGApPx9yFD_CSiV8UkWnTWOTUeVW96FMHkbKp0zE5Dvu16bZakP_D6hB9AX1k007HQEcIjJm2GCss_8EkoN2OGUrMva6YANsX7PvcYwjEF9rfhP8PYCRJbH1H3jSvAGDWidU2-Q1Bu9V6FPT2nFvrdXXkyf-4-4W_crc6NhDjQz2RFuA-tYXWLk7r38jub3ci6ATbJYwiYBenIQbrjt-K3_Q5nLyvwKwpk1rr9OJRzNqwNy2skAG4rxnJL3RqXDZsqXaD5d7svQCD29GpC9KNclcY4SaEYQg_ZHfyTpIkamfjAvSXN-SQLKhIHcsyN_cTZtnYVB7mtbmjONzXub8imuzaHNF-oTzdaFalmI8dV0aLvxtbfGQOZgug_kKmqYhhQfY7G-BBLvS09u6Ls23MxktD_PJU0u5xGKGKOzmUGBP5L9USBlD2UJcvUpX1__DQbSuaJR3dOZP4ri6fs7Z1_fa41W5w0BFx-g"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718PR675DY4MQFC063A9A3A",
+                  "eventType": "UserRoleChanged",
+                  "category": "Access",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:01:16.6153839+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "userId": "vector-audited@example.com",
+                    "oldRole": "TenantReader",
+                    "newRole": "TenantContributor"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audited@example.com",
+                  "scope": "vector-audit",
+                  "outcome": "UserRoleChanged"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 1,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 1,
+          "cursor": "CfDJ8AAAAAAAAAAAAAAAAAAAAAAHb92tn9NHGApPx9yFD_CSiV8UkWnTWOTUeVW96FMHkbKp0zE5Dvu16bZakP_D6hB9AX1k007HQEcIjJm2GCss_8EkoN2OGUrMva6YANsX7PvcYwjEF9rfhP8PYCRJbH1H3jSvAGDWidU2-Q1Bu9V6FPT2nFvrdXXkyf-4-4W_crc6NhDjQz2RFuA-tYXWLk7r38jub3ci6ATbJYwiYBenIQbrjt-K3_Q5nLyvwKwpk1rr9OJRzNqwNy2skAG4rxnJL3RqXDZsqXaD5d7svQCD29GpC9KNclcY4SaEYQg_ZHfyTpIkamfjAvSXN-SQLKhIHcsyN_cTZtnYVB7mtbmjONzXub8imuzaHNF-oTzdaFalmI8dV0aLvxtbfGQOZgug_kKmqYhhQfY7G-BBLvS09u6Ls23MxktD_PJU0u5xGKGKOzmUGBP5L9USBlD2UJcvUpX1__DQbSuaJR3dOZP4ri6fs7Z1_fa41W5w0BFx-g"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718PR675DY4MQFC063A9A3A",
+                  "eventType": "UserRoleChanged",
+                  "category": "Access",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:01:16.6153839+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "userId": "vector-audited@example.com",
+                    "oldRole": "TenantReader",
+                    "newRole": "TenantContributor"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audited@example.com",
+                  "scope": "vector-audit",
+                  "outcome": "UserRoleChanged"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 1,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "category-administrative",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Administrative"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718N67YQHHNN8NW3CTYD1BX",
+                  "eventType": "TenantCreated",
+                  "category": "Administrative",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:00:25.4707337+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "name": "Vector Audit",
+                    "createdAt": "2026-11-09T23:00:25.4286347+00:00"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audit",
+                  "scope": "vector-audit",
+                  "outcome": "TenantCreated"
+                },
+                {
+                  "eventId": "01M718P833WWDBF2MA2E27758F",
+                  "eventType": "TenantConfigurationSet",
+                  "category": "Administrative",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:01:00.1320825+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "key": "audit.marker"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "audit.marker",
+                  "scope": "vector-audit",
+                  "outcome": "TenantConfigurationSet"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "category-administrative",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Administrative"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718N67YQHHNN8NW3CTYD1BX",
+                  "eventType": "TenantCreated",
+                  "category": "Administrative",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:00:25.4707337+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "name": "Vector Audit",
+                    "createdAt": "2026-11-09T23:00:25.4286347+00:00"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audit",
+                  "scope": "vector-audit",
+                  "outcome": "TenantCreated"
+                },
+                {
+                  "eventId": "01M718P833WWDBF2MA2E27758F",
+                  "eventType": "TenantConfigurationSet",
+                  "category": "Administrative",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:01:00.1320825+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "key": "audit.marker"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "audit.marker",
+                  "scope": "vector-audit",
+                  "outcome": "TenantConfigurationSet"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "time-upper-inclusive",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2026-11-09T23:00:42.6557357+00:00",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718NQ0Z7TE44M36CVREPTA0",
+                  "eventType": "UserAddedToTenant",
+                  "category": "Access",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:00:42.6557357+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "userId": "vector-audited@example.com",
+                    "role": "TenantReader"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audited@example.com",
+                  "scope": "vector-audit",
+                  "outcome": "UserAddedToTenant"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "time-upper-inclusive",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2026-11-09T23:00:42.6557357+00:00",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718NQ0Z7TE44M36CVREPTA0",
+                  "eventType": "UserAddedToTenant",
+                  "category": "Access",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:00:42.6557357+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "userId": "vector-audited@example.com",
+                    "role": "TenantReader"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audited@example.com",
+                  "scope": "vector-audit",
+                  "outcome": "UserAddedToTenant"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "time-lower-inclusive",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-11-09T23:01:16.6153839+00:00",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718PR675DY4MQFC063A9A3A",
+                  "eventType": "UserRoleChanged",
+                  "category": "Access",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:01:16.6153839+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "userId": "vector-audited@example.com",
+                    "oldRole": "TenantReader",
+                    "newRole": "TenantContributor"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audited@example.com",
+                  "scope": "vector-audit",
+                  "outcome": "UserRoleChanged"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "time-lower-inclusive",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-11-09T23:01:16.6153839+00:00",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [
+                {
+                  "eventId": "01M718PR675DY4MQFC063A9A3A",
+                  "eventType": "UserRoleChanged",
+                  "category": "Access",
+                  "actorId": "mcpcli-live-admin",
+                  "timestamp": "2026-11-09T23:01:16.6153839+00:00",
+                  "tenantId": "vector-audit",
+                  "narrativePayload": {
+                    "userId": "vector-audited@example.com",
+                    "oldRole": "TenantReader",
+                    "newRole": "TenantContributor"
+                  },
+                  "commandCorrelationId": null,
+                  "aggregateSequence": null,
+                  "target": "vector-audited@example.com",
+                  "scope": "vector-audit",
+                  "outcome": "UserRoleChanged"
+                }
+              ],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "time-before-first",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2026-11-09T23:00:42.654735+00:00",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "time-before-first",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-01-01T00:00:00Z",
+          "To": "2026-11-09T23:00:42.654735+00:00",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "time-after-last",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-11-09T23:01:16.616383+00:00",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "time-after-last",
+      "operation": "tenants.get-tenant-audit",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant-audit",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-audit",
+          "From": "2026-11-09T23:01:16.616383+00:00",
+          "To": "2099-12-31T23:59:59Z",
+          "Category": "Access"
+        },
+        "envelope": {
+          "tenant": "vector-audit",
+          "pageSize": 100
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant-audit",
+            "tenant": "vector-audit",
+            "document": {
+              "items": [],
+              "cursor": null,
+              "hasMore": false
+            },
+            "paging": {
+              "pageSize": 100,
+              "hasMore": false
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.5",
+    "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
+    "vectorSha256": "7b70b2720c55b3bd65be8574914c2bad50f9af81ca3bb371479f7739d2b13391",
+    "planSha256": "f558532e1c25ac3a197da2b5d1c809c04fe90149413d75136b85a1f02f35b404",
+    "approvalSha256": "443ffcb4583c4855bfb3f469f69cf61835e71ee96e3147a46c7437169772680e",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+  },
+  "captures": {
+    "continuation": "CfDJ8AAAAAAAAAAAAAAAAAAAAAAHb92tn9NHGApPx9yFD_CSiV8UkWnTWOTUeVW96FMHkbKp0zE5Dvu16bZakP_D6hB9AX1k007HQEcIjJm2GCss_8EkoN2OGUrMva6YANsX7PvcYwjEF9rfhP8PYCRJbH1H3jSvAGDWidU2-Q1Bu9V6FPT2nFvrdXXkyf-4-4W_crc6NhDjQz2RFuA-tYXWLk7r38jub3ci6ATbJYwiYBenIQbrjt-K3_Q5nLyvwKwpk1rr9OJRzNqwNy2skAG4rxnJL3RqXDZsqXaD5d7svQCD29GpC9KNclcY4SaEYQg_ZHfyTpIkamfjAvSXN-SQLKhIHcsyN_cTZtnYVB7mtbmjONzXub8imuzaHNF-oTzdaFalmI8dV0aLvxtbfGQOZgug_kKmqYhhQfY7G-BBLvS09u6Ls23MxktD_PJU0u5xGKGKOzmUGBP5L9USBlD2UJcvUpX1__DQbSuaJR3dOZP4ri6fs7Z1_fa41W5w0BFx-g",
+    "firstTime": "2026-11-09T23:00:42.6557357+00:00",
+    "lastTime": "2026-11-09T23:01:16.6153839+00:00"
+  }
+}

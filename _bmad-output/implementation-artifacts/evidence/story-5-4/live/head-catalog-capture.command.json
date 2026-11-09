@@ -1,0 +1,13 @@
+{
+  "command": [
+    "/home/runner/work/_temp/mcpcli-live-ci-4_6vrva6/venv/bin/python",
+    "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tools/live-topology/capture_heads.py",
+    "--host",
+    "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll",
+    "--output",
+    "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/TestResults/live-ci/head-catalog.json"
+  ],
+  "cwd": "/home/runner/work/Hexalith.McpCli/Hexalith.McpCli",
+  "timeoutSeconds": 180,
+  "exitCode": 0
+}

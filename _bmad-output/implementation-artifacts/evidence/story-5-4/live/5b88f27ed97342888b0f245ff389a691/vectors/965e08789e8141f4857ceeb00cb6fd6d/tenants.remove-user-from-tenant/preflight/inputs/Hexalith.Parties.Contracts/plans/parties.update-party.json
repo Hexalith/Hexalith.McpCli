@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "operation": "parties.update-party",
+  "vectorSha256": "1c4c6397f5c1189ede215ded5a7ca8dbb889b502a02f020d1a87a1f506f34031",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        },
+        "assertions": [
+          {
+            "path": "/document/id",
+            "operator": "equals",
+            "value": "party-story49"
+          },
+          {
+            "path": "/document/isActive",
+            "operator": "equals",
+            "value": true
+          },
+          {
+            "path": "/document/personDetails/firstName",
+            "operator": "equals",
+            "value": "Ada"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        },
+        "assertions": [
+          {
+            "path": "/document/id",
+            "operator": "equals",
+            "value": "party-story49"
+          },
+          {
+            "path": "/document/personDetails/firstName",
+            "operator": "equals",
+            "value": "Augusta Ada"
+          },
+          {
+            "path": "/document/contactChannels/0/value",
+            "operator": "equals",
+            "value": "augusta@example.test"
+          },
+          {
+            "path": "/document/identifiers",
+            "operator": "arrayLength",
+            "value": 0
+          },
+          {
+            "path": "/document/personDetails/lastName",
+            "operator": "equals",
+            "value": "Lovelace"
+          },
+          {
+            "path": "/document/type",
+            "operator": "equals",
+            "value": "Person"
+          },
+          {
+            "path": "/document/contactChannels/0/id",
+            "operator": "equals",
+            "value": "email-story49"
+          },
+          {
+            "path": "/document/contactChannels/0/type",
+            "operator": "equals",
+            "value": "Email"
+          },
+          {
+            "path": "/document/contactChannels/0/isPreferred",
+            "operator": "equals",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

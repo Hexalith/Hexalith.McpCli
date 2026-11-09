@@ -1,0 +1,145 @@
+{
+  "phase": "post-review-local-verification",
+  "result": "passed",
+  "dotnet": [
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exitCode": 0,
+      "seconds": 1.209,
+      "log": "/tmp/mcpcli-story54-postreview/dotnet-0.log"
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exitCode": 0,
+      "seconds": 2.775,
+      "log": "/tmp/mcpcli-story54-postreview/dotnet-1.log"
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "seconds": 2.765,
+      "log": "/tmp/mcpcli-story54-postreview/dotnet-2.log"
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "seconds": 65.183,
+      "log": "/tmp/mcpcli-story54-postreview/dotnet-3.log"
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "seconds": 2.817,
+      "log": "/tmp/mcpcli-story54-postreview/dotnet-4.log"
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "exitCode": 0,
+      "seconds": 126.41,
+      "log": "/tmp/mcpcli-story54-postreview/dotnet-5.log"
+    }
+  ],
+  "python": {
+    "releaseScriptTests": 194,
+    "conformanceTests": 164,
+    "topologyTests": 218
+  },
+  "focused": {
+    "csharp": 45,
+    "python": 28,
+    "barrierMutation": "both tests reject missing barrier wait"
+  },
+  "enrollment": "pending separate fresh replay",
+  "live": "pending dedicated post-review CI",
+  "approvedSnapshot": "unchanged; owner approved retirement-blocked for the original packet only",
+  "logs": [
+    {
+      "path": "/tmp/mcpcli-story54-postreview/coverage.log",
+      "sha256": "6b645b6fc88df91c30a2a2eb348f7db8737ca3400a7442d4dc1266b8e16654d1"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/dotnet-0.log",
+      "sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/dotnet-1.log",
+      "sha256": "1a97639ae6a4d77365d9971642950cfc571e99db0f8050baf77f1c8dd6d79de5"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/dotnet-2.log",
+      "sha256": "f02615ff840f1ffd0b95be77406b78a710d65119977592ac3a7497e3a83f5776"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/dotnet-3.log",
+      "sha256": "b426d4602fb9008cc72ae82144262ffce532241c38bfb641451cd539d0168126"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/dotnet-4.log",
+      "sha256": "e529a6b9daffec4e816d0eba46bdc7f0291beacd2aab960e33273cb3b89ed6dd"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/dotnet-5.log",
+      "sha256": "9df8222293f6836585b13d4c216c287316e1278ffb8a7c4603194d6dffdd5e7d"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/enrolled.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/preflight.log",
+      "sha256": "58791a6bd5da57f77144704cdbf07f35027131606c8f987d029b133fa4716d2a"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/python-conformance.log",
+      "sha256": "d411fe356652a3eba5746cd0f101bb15a5b3a3e7bf5f3ee54c2fd3008d6968cc"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/python-live.log",
+      "sha256": "553057b49215f4dc942b18855aca414d88305ba73f18ecc1084e3a940bb66105"
+    },
+    {
+      "path": "/tmp/mcpcli-story54-postreview/python-release.log",
+      "sha256": "90a1f6a3405312541183d6b739fe2e3938e58c279213c3e4549964f9b56a851e"
+    }
+  ]
+}

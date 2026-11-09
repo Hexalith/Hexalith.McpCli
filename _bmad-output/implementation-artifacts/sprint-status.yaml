@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-09-2026 11:55'
+last_updated: '11-10-2026 00:25'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -93,7 +93,7 @@ development_status:
   5-2-decide-generic-non-gateway-capability-contracts: backlog
   5-3-enroll-replacement-contracts-and-profiles: done # Review pass 1 2026-11-09: 18 fixes applied, 3 rejected, 2 deferred (Platform reference-runner handoff, profile identity beside flag/environment connection); owner-approved Parties inventory 1.1.0 (C05 delete oracles, C06/C07 resolutions); single-source URL/token rule and C06 logger fix.
   # Review pass 2 complete: all 3 patches fixed; owner approved exact Parties 1.2.0 C05 correction; prior inventory/receipt preserved and approved-mode checks pass.
-  5-4-prove-shared-head-parity-and-safety: in-progress # Local implementation/checks passed; redactor/scanner implemented as a separate prerequisite. Dedicated live CI, final evidence scan/binding and owner verdict remain pending.
+  5-4-prove-shared-head-parity-and-safety: review # Build complete; exact-byte owner verdict retirement-blocked, G01–G06 retained. Post-review CI 42711210249 green; six prerequisite follow-ups deferred.
   5-5-retire-legacy-packages-and-platform-routes: backlog
   5-6-reject-new-proprietary-surfaces-in-ci: backlog
   5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: backlog

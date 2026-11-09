@@ -1,0 +1,5 @@
+⧗   --- input ---
+test(safety): harden shared-head verification guards
+
+Record the owner-approved retirement-blocked verdict separately from the immutable packet. Strengthen protocol, state, concurrency, deadline, and preparation evidence checks found during Build review.
+✔   found 0 problems, 0 warnings
