@@ -281,3 +281,15 @@ receipts record the response format and full public error, and missing-token
 CLI/MCP documents are compared directly per call kind. Four more process cases
 pin empty missing/invalid-token challenges through both heads and call kinds.
 The clean 99-test CI-hook sweep passed; production behavior remains unchanged.
+
+### Command grant refusals before the structured pipeline (2026-11-09)
+
+Run `42645969397` then exposed the first tenant-A-grant Command returning an
+empty 403. Qualified EventStore `dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`
+`CommandsController.cs:146-149` returns `Forbid()` before pipeline dispatch for
+missing tenant grants. The boundary now pins its whole existing public
+`gateway_error` / 403 / `Forbidden` fallback, including absent optional members;
+Query refusals retain the complete structured tenant-mismatch/nonmember oracle.
+Four additional both-head process cases cover the empty 403 transport for both
+call kinds and both signed-grant scenarios. Vectors stayed unrun after the early
+boundary failure. No production behavior, approved input or runner changed.

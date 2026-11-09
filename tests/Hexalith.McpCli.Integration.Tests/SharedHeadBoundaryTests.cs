@@ -250,6 +250,12 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
         {
             BoundaryHeads.AssertAuthenticationRefusal(result, forwarder.Requests[^1].Headers.ContainsKey("Authorization"), emptyBody: true);
         }
+        else if (status == 403 && body.Length == 0)
+        {
+            // The qualified Command controller refuses absent tenant grants before the structured pipeline.
+            operation.ShouldBe("parties.deactivate-party");
+            BoundaryHeads.AssertTenantAuthorizationRefusal(result, "tenant-b", reason!, string.Empty, emptyBody: true);
+        }
         else
         {
             using JsonDocument problem = JsonDocument.Parse(body);

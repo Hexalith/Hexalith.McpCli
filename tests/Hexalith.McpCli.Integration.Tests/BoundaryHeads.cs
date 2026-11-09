@@ -125,8 +125,13 @@ internal static class BoundaryHeads
     }
 
     /// <summary>Pins the qualified Gateway's complete signed-grant refusal, including its request correlation.</summary>
-    internal static void AssertTenantAuthorizationRefusal(HeadResult result, string tenant, string reason, string correlationId)
+    internal static void AssertTenantAuthorizationRefusal(HeadResult result, string tenant, string reason, string correlationId, bool emptyBody = false)
     {
+        if (emptyBody)
+        {
+            AssertDocument(result, """{"error":{"code":"gateway_error","status":403,"detail":"Forbidden"}}""", isError: true);
+            return;
+        }
         string detail = $"Not authorized for tenant '{tenant}'."
             + (reason == "principal_not_member" ? " No tenant authorization claims found. Access denied." : string.Empty);
         AssertDocument(result, JsonSerializer.Serialize(new { error = new

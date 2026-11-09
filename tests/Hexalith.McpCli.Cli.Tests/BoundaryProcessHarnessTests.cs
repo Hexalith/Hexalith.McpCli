@@ -95,7 +95,7 @@ public sealed class BoundaryProcessHarnessTests
     /// <summary>Real CLI and MCP processes preserve every qualified 401/403 challenge and signed-grant error member.</summary>
     /// <param name="scenario">The Gateway authentication or authorization failure.</param>
     /// <param name="command">Whether to submit a Command.</param>
-    /// <param name="emptyBody">Whether the 401 challenge has no response body.</param>
+    /// <param name="emptyBody">Whether the refusal has no response body.</param>
     [Theory]
     [InlineData("missing-token", false, false)]
     [InlineData("missing-token", true, false)]
@@ -109,6 +109,10 @@ public sealed class BoundaryProcessHarnessTests
     [InlineData("missing-token", true, true)]
     [InlineData("forged-token", false, true)]
     [InlineData("forged-token", true, true)]
+    [InlineData("tenant_mismatch", false, true)]
+    [InlineData("tenant_mismatch", true, true)]
+    [InlineData("principal_not_member", false, true)]
+    [InlineData("principal_not_member", true, true)]
     public async Task QualifiedCredentialRefusalsPreserveCompleteDocumentsAsync(string scenario, bool command, bool emptyBody)
     {
         const string correlation = "01J9MZHXT3RKM0VWXRXGSJDATK";
@@ -147,7 +151,7 @@ public sealed class BoundaryProcessHarnessTests
                 gateway.Requests.Count.ShouldBe(before + 1);
                 gateway.Requests[^1].Headers.ContainsKey("Authorization").ShouldBe(token is not null);
                 if (authentication) BoundaryHeads.AssertAuthenticationRefusal(result, token is not null, emptyBody);
-                else BoundaryHeads.AssertTenantAuthorizationRefusal(result, "tenant-b", reason, correlation);
+                else BoundaryHeads.AssertTenantAuthorizationRefusal(result, "tenant-b", reason, correlation, emptyBody);
                 if (token is not null) result.AllChannels.ShouldNotContain(token);
                 HeadDiagnostics.AssertGatewayOnly(result, gateway.Url, command ? "/api/v1/commands" : "/api/v1/queries", status, process: true);
             }
