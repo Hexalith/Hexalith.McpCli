@@ -253,8 +253,9 @@ class VerifierFailureTests(unittest.TestCase):
         self.assert_failed_without_old_success()
 
     def test_wrong_artifact_hash_retains_failed_identity(self):
-        with self.assertRaisesRegex(RuntimeError, 'hash differs'):
+        with self.assertRaises(RuntimeError) as failure:
             verify(self.repo, self.artifact, [], self.output, expected_hash='old approved bytes')
+        self.assertEqual('Artifact hash differs from --expected-hash.', str(failure.exception))
         self.assertEqual('Module.Contracts', self.assert_failed_without_old_success()['packageId'])
 
     def test_duplicate_vector_paths_cannot_be_hidden_by_snapshot_capture(self):

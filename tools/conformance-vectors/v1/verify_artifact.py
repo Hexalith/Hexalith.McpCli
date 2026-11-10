@@ -181,7 +181,7 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
                        retainedInputs={'artifact': artifact.relative_to(output).as_posix(), 'vectors': {}})
         save()
         if expected_hash is not None and digest != expected_hash:
-            raise RuntimeError('Artifact hash differs from the approved receipt.')
+            raise RuntimeError('Artifact hash differs from --expected-hash.')
         if expected_vector_hashes is not None and vector_hashes != expected_vector_hashes:
             raise RuntimeError('Vector files differ from approval during snapshot capture.')
         vectors = []

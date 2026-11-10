@@ -63,6 +63,82 @@ context:
 - Given current paired-release source evidence, when census execution is absent or unsuccessful, then staging and publication eligibility fail; historical bootstrap gates retain their existing behavior.
 - Given inspection of the change, when source and tests are examined, then no module-specific checker branch or nested initialization exists and each new refusal has a failing negative control.
 
+### Review Findings
+
+Independent code review — 2026-11-10. Scope: committed Story 5.6 changes from
+`c9a46a11a8317dd1903e3a3ef2f27791942b316a` through
+`dedc826`; concurrent Story 5.12 changes and uncommitted work are excluded.
+All four layers completed: Blind Hunter (BH), Edge Case Hunter (EC),
+Verification Gap (VG), and Acceptance Auditor (AA). Each of the 24 submitted
+findings received its own verdict before grouping into the 20 actions below.
+Outcome: 0 decision-needed, 20 patch, 0 defer, 0 rejected. P1 is high; P2–P20
+are medium. These findings remain open; no implementation patches were applied.
+
+- [ ] [Review][Patch] P1 — Validate amendment authority against the approved lineage [tools/proprietary-surfaces/v1/check.py:200]. A hash-bound, untracked JSON file containing only `{"decision":"approved","source_revisions":{}}`, or an incomplete v2 receipt with just schema and decision, can authorize a new executable allowance. Validate authority structure, provenance and authorized scope rather than accepting the presence of a revision dictionary or schema name. Sources: BH7; high.
+- [ ] [Review][Patch] P2 — Read SDK identities from XML declarations [tools/proprietary-surfaces/v1/check.py:547]. Adding `<!-- Microsoft.NET.Sdk.Web -->` to a neutral executable under `src/` makes it disappear from the census; an AppHost SDK name in a comment also suppresses executable detection. Inspect actual SDK declarations and protect both comment cases. Sources: BH1; medium.
+- [ ] [Review][Patch] P3 — Resolve local imports independently of metadata filename extensions [tools/proprietary-surfaces/v1/check.py:458]. Committed imports such as `eng/runtime.xml` and `eng/Hidden.PROPS` can declare `OutputType=Exe` while the scan reports no surface. The `.props`/`.targets` filename filter also omits these imports from fixture compilation closures. Resolve literal local imports against committed blobs and validate their XML. Sources: BH2, EC4, AA1; medium.
+- [ ] [Review][Patch] P4 — Evaluate targets after project properties [tools/proprietary-surfaces/v1/check.py:420]. `Directory.Build.targets` is visited before the project, so its `$(HostDir)/*.props` import cannot use the project's `HostDir` and is never revisited. A local imported `OutputType=$(HostKind)` with project `HostKind=Exe` then passes without a candidate. Preserve props/project/targets ordering or refuse unresolved classification imports. Sources: BH3; medium.
+- [ ] [Review][Patch] P5 — Track effective default package identities [tools/proprietary-surfaces/v1/check.py:624]. Replacing an approved explicit `PackageId=old` with `AssemblyName=new` leaves the executable approved and reports only the old package as stale; the new effective package identity is never emitted. Include SDK default package/assembly identities in discovery and rename checks. Sources: BH4; medium.
+- [ ] [Review][Patch] P6 — Recognize F# and VB MCP attributes without arguments [tools/proprietary-surfaces/v1/check.py:27]. `[<McpServerTool>]` and `<McpServerTool>` terminate the name with `>`, which the pattern excludes. Adding these attributes to an approved dependency consumer therefore adds no registration signal. Cover the supported languages' attribute syntax. Sources: BH5; medium.
+- [ ] [Review][Patch] P7 — Detect direct MCP server construction [tools/proprietary-surfaces/v1/check.py:595]. An approved executable dependency consumer can add `McpServer.Create(new StdioServerTransport(options), options)` and `RunAsync()` without gaining a registration signal. The exact source compiled against ModelContextProtocol.Core 2.4.0 and completed a stdio MCP initialize exchange, while its committed census fixture remained approved. Detect the public direct server/transport construction APIs as server signals. Sources: BH6; medium.
+- [ ] [Review][Patch] P8 — Match MSBuild recursive globs in fixture closures [tools/proprietary-surfaces/v1/check.py:494]. Python `fnmatch` omits `shared/Root.cs` for `shared/**/*.cs`, whereas MSBuild's `**` permits zero intermediate directories. Changing that compiled source passes a source-bound fixture allowance because its hash is absent. Use MSBuild-compatible glob semantics for imports and Compile items. Sources: BH8; medium.
+- [ ] [Review][Patch] P9 — Inspect container publication action inputs [tools/proprietary-surfaces/v1/check.py:699]. A workflow using `docker/build-push-action`, `push: true`, and literal `tags: registry.invalid/neutral:latest` passes without a publication candidate. Inspect the action's publication inputs and bind each image identity. Sources: BH9; medium.
+- [ ] [Review][Patch] P10 — Inspect supported YAML image structures [tools/proprietary-surfaces/v1/check.py:721]. Flow mappings such as `containers: [{name: neutral, image: registry.invalid/neutral:latest}]`, inline Compose mappings, and Kustomize `images`/`newName` entries pass without candidates. Extend structural image discovery beyond the current line-oriented `image:` and `repository:` forms. Sources: BH10, AA4; medium.
+- [ ] [Review][Patch] P11 — Preserve conditional property alias alternatives [tools/proprietary-surfaces/v1/check.py:436]. `Kind=Exe` for Release followed by `Kind=Library` for another configuration collapses to the last value before `OutputType=$(Kind)` is resolved. The census passes with no surfaces although `dotnet msbuild -getProperty:OutputType -p:Configuration=Release` returns `Exe`. Retain all classification-relevant conditional possibilities or fail closed. Sources: EC1; medium.
+- [ ] [Review][Patch] P12 — Resolve imported Compile paths against the consuming project [tools/proprietary-surfaces/v1/check.py:485]. An imported `eng/linked.props` with `Compile Include="../../shared/Secondary.cs"` in `tests/Neutral/Neutral.csproj` compiles the repository's shared file, but the census resolves the path relative to `eng/` and omits it. Subsequent compiled behavior changes pass the fixture's source hashes. Apply project-relative item semantics while preserving explicitly expanded `MSBuildThisFileDirectory` paths. Sources: EC2; medium.
+- [ ] [Review][Patch] P13 — Resolve aliases in unconsumed classification metadata [tools/proprietary-surfaces/v1/check.py:570]. An unresolved `$(ExternalDir)/*.props` import with local metadata defining `Kind=Exe` and `OutputType=$(Kind)` passes without a surface or prerequisite diagnostic. The fallback sees only the literal expression. Expand local aliases conservatively or refuse unresolved classification values. Sources: EC3; medium.
+- [ ] [Review][Patch] P14 — Inspect both supported JSON server sections [tools/proprietary-surfaces/v1/check.py:660]. A document with `mcpServers: {}` and a populated `servers` object passes without inspecting the latter. Validate and inspect both present sections instead of choosing the first. Sources: EC5; medium.
+- [ ] [Review][Patch] P15 — Recognize equals-form Docker tags [tools/proprietary-surfaces/v1/check.py:767]. Both `docker build --tag=registry.invalid/neutral:1 .` and `docker buildx build --tag=registry.invalid/neutral:1 --push .` pass without candidates because the parser only handles separate tag/value tokens. Support literal equals-form options and bind their exact image identities. Sources: EC6, AA3; medium.
+- [ ] [Review][Patch] P16 — Inspect executable scripts without filename extensions [tools/proprietary-surfaces/v1/check.py:518]. A committed executable `scripts/ship` with a shell shebang and literal `docker push registry.invalid/neutral:latest` passes without inspection. Include executable shell scripts identified by their interpreter, with regression coverage for tool and container commands. Sources: EC7; medium.
+- [ ] [Review][Patch] P17 — Protect independent container-identity detection [tools/proprietary-surfaces/v1/test_census.py:147]. Removing the `ContainerRepository`-only signal leaves all 53 fixtures and the real scan passing, but changes a neutral project's sole `<ContainerRepository>neutral-mcp</ContainerRepository>` case from rejected to passed. Add an independent refusal fixture asserting both the project signal and publication identity. Sources: VG1; medium.
+- [ ] [Review][Patch] P18 — Protect F# and VB project recognition [tools/proprietary-surfaces/v1/test_census.py:135]. Restricting `PROJECT` to `.csproj` leaves all fixtures and the real scan passing; an executable `.fsproj` then disappears. Parameterize executable and orphan-project coverage over the supported `.csproj`, `.fsproj` and `.vbproj` formats. Sources: VG2; medium.
+- [ ] [Review][Patch] P19 — Refuse unsafe publication paths instead of skipping them [tools/proprietary-surfaces/v1/check.py:710]. Literal `dotnet publish /tmp/Neutral.csproj` and `dotnet publish ../Neutral.csproj` both pass without candidates or diagnostics because the loop explicitly continues on these paths. Enforce the spec's unsafe-path refusal and retain an actionable diagnostic. Sources: AA2; medium.
+- [ ] [Review][Patch] P20 — Associate workflow matrix projects with publication commands [tools/proprietary-surfaces/v1/check.py:704]. A workflow `ship.yml` with matrix project `missing/Neutral.csproj` and `dotnet publish ${{ matrix.project }}` passes without an orphan candidate: expression removal disconnects the command from the literal project. Track supported local workflow substitutions or refuse unresolved publication targets. Sources: AA5; medium.
+
+#### Individual triage verdicts
+
+IDs below are sequential across the four independent layers. Each verdict was
+rendered before grouping; repeated findings retain their own evidence and route.
+
+| ID | Source | Verdict | Verified outcome | Route |
+|---|---|---|---|---|
+| 1 | blind-hunter / BH1 | medium | A Web/AppHost SDK name in a comment suppresses a neutral executable; a disposable committed fixture returned passed with no surfaces. | P2 |
+| 2 | blind-hunter / BH2 | medium | A literal local XML import setting OutputType=Exe is absent from the metadata candidate set and the scan passes. | P3 |
+| 3 | blind-hunter / BH3 | medium | Targets run before project-defined import properties; the reproduced local executable declaration is omitted. | P4 |
+| 4 | blind-hunter / BH4 | medium | Removing explicit PackageId in favor of AssemblyName admits the new implicit package and makes only the old identity stale. | P5 |
+| 5 | blind-hunter / BH5 | medium | The registration regex excludes the argument-free F#/VB attribute terminator; the reproduced F# consumer remains approved. | P6 |
+| 6 | blind-hunter / BH6 | medium | Follow-up compilation and an actual MCP initialize response establish a usable direct server; its identical source adds no census signal. The initial factory-only evidence was strengthened before this verdict. | P7 |
+| 7 | blind-hunter / BH7 | high | Hash-bound empty-revision and incomplete-v2 authority files both admit a new allowance without approved lineage; parent reproduction independently confirmed the empty-revision case. | P1 |
+| 8 | blind-hunter / BH8 | medium | A recursive Compile glob omits its zero-directory source; modifying that file leaves the source-bound allowance approved. | P8 |
+| 9 | blind-hunter / BH9 | medium | A literal build-push action tag with push enabled yields no publication candidate. | P9 |
+| 10 | blind-hunter / BH10 | medium | A valid flow-mapping container image yields no publication candidate. | P10 |
+| 11 | edge-case-hunter / EC1 | medium | Release MSBuild selects Exe while the conditional-alias census fixture passes with no surfaces. | P11 |
+| 12 | edge-case-hunter / EC2 | medium | Project-relative imported Compile source is absent from the closure and its subsequent mutation passes. | P12 |
+| 13 | edge-case-hunter / EC3 | medium | Unconsumed metadata declaring OutputType through a local alias evades the unresolved-import fallback. | P13 |
+| 14 | edge-case-hunter / EC4 | medium | The uppercase .PROPS import is a real MSBuild executable declaration but is excluded by the same metadata filename filter as finding 2. | P3 |
+| 15 | edge-case-hunter / EC5 | medium | Empty mcpServers shadows a populated supported servers section; the reproduced scan has no candidates. | P14 |
+| 16 | edge-case-hunter / EC6 | medium | Docker --tag=value yields no publication candidate in the reproduced committed script. | P15 |
+| 17 | edge-case-hunter / EC7 | medium | An executable shell script without an extension is outside interesting paths despite its literal publication command. | P16 |
+| 18 | verification-gap / VG1 | medium | Pre-verified mutation: removing independent container identity detection leaves all 53 tests and the real scan passing while the sole-signal fixture stops rejecting. | P17 |
+| 19 | verification-gap / VG2 | medium | Pre-verified mutation: removing F#/VB project recognition leaves all tests and the real scan passing while an executable F# project stops rejecting. | P18 |
+| 20 | acceptance-auditor / AA1 | medium | The auditor independently reproduced the XML-import executable omission; this violates inherited-metadata coverage and AC1. | P3 |
+| 21 | acceptance-auditor / AA2 | medium | Absolute and parent-relative publication paths are explicitly skipped and return passed, contrary to the unsafe-path matrix. | P19 |
+| 22 | acceptance-auditor / AA3 | medium | Ordinary Docker and buildx equals-form tags both evade literal-container publication discovery under AC1. | P15 |
+| 23 | acceptance-auditor / AA4 | medium | Inline Compose images and Kustomize newName entries both evade the line-oriented image scanner under AC1. | P10 |
+| 24 | acceptance-auditor / AA5 | medium | A missing matrix project used by dotnet publish yields no orphan candidate, violating absent-project workflow coverage. | P20 |
+
+#### Review verification
+
+- `python3 -m unittest discover -v -s tools/proprietary-surfaces/v1 -p 'test_*.py'` — 53 passed.
+- `PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'` — 195 passed.
+- `python3 tools/proprietary-surfaces/v1/check.py --output /tmp/mcpcli-story-5-6-review-census.json` — passed; 17 root references, 460 surfaces, 39 stale allowances, no errors. Passing the current pins does not settle the reproduced negative cases above.
+- Parent disposable Git fixtures independently confirmed the XML/uppercase imports, SDK comment, targets ordering, conditional alias, implicit package rename, both source-closure gaps, F# attribute, dual server sections, container action/YAML/tag formats, extensionless script, unsafe paths, matrix publication and malformed authority outcomes.
+- The direct-server follow-up built against ModelContextProtocol.Core 2.4.0 with zero warnings/errors and received a successful stdio initialize response with empty stderr. Inspected reference code was never executed; this probe used newly constructed disposable source.
+
+#### Rejected
+
+None.
+
 ## Implementation Notes
 
 - Added a committed-object census with data-only classifications, separate exact project/package/tool/container identities, static inherited/imported metadata and registration discovery, and fail-closed metadata/policy checks.

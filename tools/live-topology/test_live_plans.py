@@ -46,12 +46,14 @@ class PlanTests(unittest.TestCase):
             with self.assertRaisesRegex(VectorError, message):
                 load_plan(path, self.vector)
 
-    def test_all_21_companion_plans_are_valid_for_approved_vectors(self):
+    def test_all_21_v1_companion_plans_and_every_plan_are_valid_for_approved_vectors(self):
         # Only companion plans are counted and loaded; an approved vector without a plan is loopback-only.
         vectors = {json.loads(path.read_text())['operation']: path
                    for path in (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json')}
         plans = sorted((ROOT / 'tools/live-topology/plans').glob('*.json'))
-        self.assertEqual(21, len(plans))
+        # The pin counts only the v1 modules' plans, so a new enrollment's plans never move it.
+        v1_modules = set(json.loads((ROOT / 'tools/conformance-vectors/v1/v1-scope.json').read_text())['requiredModules'])
+        self.assertEqual(21, len([plan for plan in plans if plan.name.split('.', 1)[0] in v1_modules]))
         for plan in plans:
             operation = plan.name.removesuffix('.json')
             with self.subTest(operation=operation):
@@ -409,10 +411,47 @@ class LiveKindCoverageTests(unittest.TestCase):
         self.assertEqual([], reports)
 
     def test_missing_live_kind_fails_naming_the_module_and_kind(self):
+        # Derived from the approved vectors, so a Parties amendment that adds a planned query needs no edit here.
+        documents = (json.loads(path.read_text()) for path in
+                     (ROOT / 'tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts').glob('*.vector.json'))
+        queries = {document['operation'] for document in documents if document['kind'] == 'query'}
+        self.assertTrue(queries)
         with self.assertRaises(VectorError) as failure:
-            self.preflight(lambda real: {name for name in real if name not in
-                                         ('parties.get-party', 'parties.list-parties', 'parties.search-parties')})
+            self.preflight(lambda real: real - queries)
         self.assertEqual("parties: Operation kind 'query' has no approved live vector with a companion plan.", str(failure.exception))
+
+    def test_live_preflight_rechecks_operation_shape_coverage_with_the_host_shapes(self):
+        import live_plans
+        real_shapes = live_plans._manifest_shapes
+
+        def with_uncovered_shape(head, package):
+            shapes = real_shapes(head, package)
+            return dict(shapes, **{'parties.extra': 'uncovered-shape'}) if package.casefold() == 'hexalith.parties.contracts' else shapes
+        with self.assertRaises(VectorError) as failure:
+            self.preflight(_manifest_shapes=with_uncovered_shape)
+        self.assertEqual("parties: Operation Shape 'uncovered-shape' has no approved vector (operations: parties.extra).",
+                         str(failure.exception))
+
+    def test_vector_version_differences_reach_the_preflight_reports(self):
+        import validate
+        from unittest.mock import patch
+        real_load = validate._load_json
+        older = []
+
+        def older_vectors(path):
+            document = real_load(path)
+            if not Path(path).name.endswith('.vector.json'):
+                return document
+            if str(path) not in [item[0] for item in older]:
+                older.append((str(path), document['package']['id']))
+            return dict(document, package=dict(document['package'], version='0.0.1'))
+        self.enterContext(patch.object(validate, '_load_json', older_vectors))
+        selections, bindings, reports = self.preflight()
+        restored = {binding['packageId'].casefold(): binding['version'] for binding in bindings}
+        self.assertEqual(len(list((ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json'))), len(older))
+        self.assertEqual([f'{path}:/package/version: vector {package}@0.0.1 differs from release artifact version '
+                          f'{restored[package.casefold()]}; reported, not failed' for path, package in older], reports)
+        self.assertEqual(['parties.list-parties'], [item['operation'] for item in selections])
 
     def test_orphan_plan_fails_preflight(self):
         with self.assertRaises(VectorError) as failure:

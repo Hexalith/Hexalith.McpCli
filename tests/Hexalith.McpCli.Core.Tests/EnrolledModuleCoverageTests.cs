@@ -34,11 +34,15 @@ public sealed class EnrolledModuleCoverageTests(ITestOutputHelper output)
 
         ICatalog catalog = new CatalogService(provider, new ExecutionAvailability(false, false), strict: true);
         var reports = new List<string>();
-        EnrolledInventoryCoverageGate.Check(Path.Combine(AppContext.BaseDirectory, "inventory-coverage", "v1"), catalog, provider, reports).ShouldBeEmpty();
+        IReadOnlyList<string> inventoryFindings = EnrolledInventoryCoverageGate.Check(
+            Path.Combine(AppContext.BaseDirectory, "inventory-coverage", "v1"), catalog, provider, reports);
+        // Reports reach the test output before any assertion, so a failing run still shows them.
         foreach (string report in reports)
         {
             output.WriteLine("reported: " + report);
         }
+
+        inventoryFindings.ShouldBeEmpty();
 
         CatalogSnapshot snapshot = provider.Get(false).Catalog.ShouldNotBeNull();
         snapshot.Diagnostics.Where(d => d.Severity == "error").ShouldBeEmpty();
@@ -68,11 +72,14 @@ public sealed class EnrolledModuleCoverageTests(ITestOutputHelper output)
 
         CatalogSnapshot snapshot = ProductionSnapshot(entries);
         var reports = new List<string>();
-        ShapeCoverageGate.Check(ProductionVectors, entries.Select(entry => entry.PackageId), snapshot, reports).ShouldBeEmpty();
+        IReadOnlyList<string> shapeFindings = ShapeCoverageGate.Check(ProductionVectors, entries.Select(entry => entry.PackageId), snapshot, reports);
+        // Covered shapes reach the test output before any assertion, so a failing run still shows them.
         foreach (string report in reports)
         {
             output.WriteLine("covered: " + report);
         }
+
+        shapeFindings.ShouldBeEmpty();
 
         var findings = new List<string>();
         IReadOnlyList<ShapeCoverage> shapes = ShapeCoverageGate.Coverage(ProductionVectors, entries.Select(entry => entry.PackageId), snapshot, findings);

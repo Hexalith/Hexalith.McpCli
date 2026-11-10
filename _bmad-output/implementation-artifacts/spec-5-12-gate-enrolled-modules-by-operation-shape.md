@@ -214,7 +214,7 @@ Independent re-checks during triage:
 - `38fbc43` is local only, one commit ahead of `origin/main`, so no CI run covers it. The last green run is 42849005018 at `c9a46a1`.
 - During triage, a concurrent Story 5.6 session again had uncommitted edits to `.github/workflows/ci.yml`, `scripts/tests/test_paired_publication.py` and `tools/proprietary-surfaces/v1/`. No patch below edits those files.
 
-- [ ] [Review][Patch] P1: no live preflight test runs the real `validate_vectors` with an uncovered shape or a vector version difference
+- [x] [Review][Patch] P1: no live preflight test runs the real `validate_vectors` with an uncovered shape or a vector version difference
   - `live_plans.preflight` passes `_manifest_shapes(head, package)` to `validate_vectors` and forwards the result with `report(vector_reports)`.
   - The mocked test (`test_live_plans.py:343-346`) ignores the arguments. `LiveKindCoverageTests` runs only the complete production set at matching versions.
   - `test_version_difference_is_reported_and_the_binding_uses_the_restored_package` patches `live_plans._load_json` for `approval.json` only, but `validate_vectors` reads vectors through `validate._load_json`.
@@ -223,24 +223,24 @@ Independent re-checks during triage:
     - Patch `live_plans._manifest_shapes` to add `parties.extra` with its own key for the Parties package. Assert the exact `VectorError` `parties: Operation Shape '<key>' has no approved vector (operations: parties.extra).`
     - Patch `validate._load_json` so every vector's `package.version` is `0.0.1`. Assert the exact `…:/package/version: … differs from release artifact version …; reported, not failed` reports, built from the frozen vector paths and the restored versions.
   - (V2, A1; medium) [tools/live-topology/live_plans.py:391]
-- [ ] [Review][Patch] P2: the companion-plan count pin counts every plan, so Folders enrollment must edit it
+- [x] [Review][Patch] P2: the companion-plan count pin counts every plan, so Folders enrollment must edit it
   - Design Notes say "Folders enrollment must not edit a count".
   - After pass 2 P7, `test_all_21_companion_plans_are_valid_for_approved_vectors` counts every `plans/*.json`. README says to update it "whenever a plan is added or removed, including when a new enrollment adds plans", and every enrollment needs at least one plan per declared kind.
   - Fix: count only plans whose module prefix is in `tools/conformance-vectors/v1/v1-scope.json` `requiredModules`, and still load and check every plan. README should say the pin moves only when a v1 module's plan is added or removed.
   - (A2; low) [tools/live-topology/test_live_plans.py:54]
-- [ ] [Review][Patch] P3: `test_missing_live_kind_fails_naming_the_module_and_kind` hard-codes the current Parties query plans
+- [x] [Review][Patch] P3: `test_missing_live_kind_fails_naming_the_module_and_kind` hard-codes the current Parties query plans
   - It removes exactly `parties.get-party`, `parties.list-parties` and `parties.search-parties`. A Parties vector amendment that adds a planned query leaves one in place, so no `VectorError` is raised and the test fails. That goes against the pass 2 P6 rule that a module release needs no test edit.
   - Fix: derive the removed set from the approved Parties vectors whose `kind` is `query`.
   - (A4; low) [tools/live-topology/test_live_plans.py:414]
-- [ ] [Review][Patch] P4: `verify_artifact.py` still raises "Artifact hash differs from the approved receipt."
+- [x] [Review][Patch] P4: `verify_artifact.py` still raises "Artifact hash differs from the approved receipt."
   - Receipts can no longer carry an artifact hash, and enrollment never passes `expected_hash` (`test_enrolled.py:483`). The vector README calls `--expected-hash` a standalone candidate check.
   - Fix: name `--expected-hash` in the message, and assert the exact text in `test_wrong_artifact_hash_retains_failed_identity`, which matches only `hash differs` today.
   - (B12; low) [tools/conformance-vectors/v1/verify_artifact.py:184]
-- [ ] [Review][Patch] P5: README says a newly decorated operation with an existing shape "needs no vector, plan, inventory or approval change", but a lint finding still needs an approved row
+- [x] [Review][Patch] P5: README says a newly decorated operation with an existing shape "needs no vector, plan, inventory or approval change", but a lint finding still needs an approved row
   - `DescriptionLintGate` in `EnrolledModuleCoverageTests` and `check_lint` (`verify_artifact.py:73-86`) require an operation's description lint findings to equal the `<module>-accepted-lint.json` rows exactly, each with an `approvalReference`. `tenants-accepted-lint.json` already holds eight rows.
   - Fix: a direct wording correction stating that a lint finding on the new operation still needs an approved accepted-lint row.
   - (E8; low) [README.md:468]
-- [ ] [Review][Patch] P6: `EnrolledModuleCoverageTests` writes its reports only after its assertions pass
+- [x] [Review][Patch] P6: `EnrolledModuleCoverageTests` writes its reports only after its assertions pass
   - Both production facts call `ShouldBeEmpty()` before writing their `reported:` or `covered:` lines, so a failing run never shows them.
   - Example: a renamed operation fails as a missing `include` row, and the report naming the new, unmentioned operation never reaches the test output.
   - Fix: collect the findings, write every report, then assert.
@@ -267,6 +267,22 @@ Rejected:
 - E7 low: restored integrity relies on sidecars written by the restore. This is excluded by the frozen intent and was surfaced to the product owner (pass 1 BH1, pass 2 B2).
 - A3 low: the CLI tests discard stdout. The `redirect_stdout(io.StringIO())` helper predates the story (`a851118` `test_enrolled.py:413`). Findings and reports are asserted in `enrolled.json`, `live-lane.json` and on stderr, and the stdout summary line is not a guard.
 - A5 low: the artifact `/metadata/version` difference is a third report kind. The vector README documents it ("a different version is reported", `tools/conformance-vectors/v1/README.md:98`), `test_validate.py:204,778` pins it, and runner flows cannot reach it because the artifact is the restored package.
+
+**Pass 3 patch outcome.** All six patches were applied and are uncommitted. While the patches were applied, concurrent commits `dedc826` (Story 5.6) and `66c31df` (these pass 3 findings) landed. Neither touches a patched file.
+- **P1:** two new `LiveKindCoverageTests` cases: `test_live_preflight_rechecks_operation_shape_coverage_with_the_host_shapes` and `test_vector_version_differences_reach_the_preflight_reports`. The second derives its vector count from the vector files.
+- **P2:** the renamed `test_all_21_v1_companion_plans_and_every_plan_are_valid_for_approved_vectors` counts only `v1-scope.json` module plans, and README states the rule.
+- **P3:** the Parties query set is derived from the approved vectors.
+- **P4:** the `--expected-hash` message is asserted exactly.
+- **P5:** README covers the accepted-lint row.
+- **P6:** reports are written before the assertions. CRLF is preserved.
+
+Re-verification:
+- The Core.Tests Release build with `-warnaserror` passed with 0 warnings.
+- `EnrolledModuleCoverageTests`: 14 of 14 passed. Full Core.Tests: 916 total, 912 passed, 4 skipped, 0 failed.
+- `test_live_plans.py`: 50 of 50 passed. The conformance-vector suite: 185 OK.
+- In-memory guard removal (shape map replaced with `None`, `vector_reports` dropped) fails each new P1 test with `VectorError not raised` or a report-list mismatch.
+
+Not re-run: Manifest tests, the full live-topology suite, `check_enrolled.py` and the live preflight. No vector, plan, inventory or production `src/` file changed. D1 remains tracked at `deferred-work.md:989`.
 
 ## Spec Change Log
 
