@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
@@ -178,29 +177,18 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
                 else result = await BoundaryHeads.InvokeCliAsync(profile, environment,
                     [command ? "send" : "query", operation, "--payload", payload, .. globals]);
                 if (token is not null) Channels(result).ShouldNotContain(token);
-                if (operation != "parties.create-party") Channels(result).ShouldNotContain("BoundaryPrivateMarker");
+                if (operation != "parties.create-party")
+                    foreach (string marker in new[] { "BoundaryPrivateMarker", "MustNotBeDisclosed" })
+                        Channels(result).ShouldNotContain(marker);
                 return result;
             }
 
             async Task<HeadResult> ConcurrentDeactivateAsync()
             {
-                var start = new ProcessStartInfo("dotnet") { RedirectStandardOutput = true, RedirectStandardError = true };
-                string root = RepositoryProjectPaths.GetRepositoryRoot();
-                foreach (string argument in new[] { Path.Combine(root, "tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll"),
-                    "send", "parties.deactivate-party", "--payload", Payload(Party), "--tenant", "tenant-b" }) start.ArgumentList.Add(argument);
-                foreach (string key in start.Environment.Keys.Where(key => key.StartsWith("EVENTSTORE_", StringComparison.Ordinal)
-                    || key.StartsWith("MCPCLI_", StringComparison.Ordinal)).ToArray()) start.Environment.Remove(key);
-                start.Environment["EVENTSTORE_URL"] = forwarder.Url;
-                start.Environment["EVENTSTORE_TOKEN"] = authorizedToken;
-                start.Environment["MCPCLI_CONFORMANCE_PROFILE_PATH"] = Path.Combine(directory, Guid.NewGuid().ToString("N") + ".json");
-                using Process process = Process.Start(start)!;
-                Task<string> stdout = process.StandardOutput.ReadToEndAsync(cancellation);
-                Task<string> stderr = process.StandardError.ReadToEndAsync(cancellation);
-                using var deadline = CancellationTokenSource.CreateLinkedTokenSource(cancellation);
-                deadline.CancelAfter(TimeSpan.FromSeconds(45));
-                try { await process.WaitForExitAsync(deadline.Token); }
-                finally { if (!process.HasExited) process.Kill(entireProcessTree: true); }
-                var result = new HeadResult(process.ExitCode, await stdout, await stderr, null);
+                // The shared launcher pins the working directory and Production environment; each process keeps its own profile path.
+                HeadResult result = await BoundaryHeads.InvokeCliAsync(Path.Combine(directory, Guid.NewGuid().ToString("N") + ".json"),
+                    new Dictionary<string, string?> { ["EVENTSTORE_URL"] = forwarder.Url, ["EVENTSTORE_TOKEN"] = authorizedToken },
+                    ["send", "parties.deactivate-party", "--payload", Payload(Party), "--tenant", "tenant-b"]);
                 Channels(result).ShouldNotContain(authorizedToken);
                 HeadDiagnostics.AssertGatewayOnly(result, forwarder.Url, "/api/v1/commands", 202);
                 return result;

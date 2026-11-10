@@ -2,7 +2,7 @@
 title: '5.4 Prove shared-head parity and safety'
 type: 'feature'
 created: '2026-11-09'
-updated: '2026-11-10T00:25:01+01:00'
+updated: '2026-11-10T02:39:42+01:00'
 status: 'done'
 baseline_commit: 'f6c8e0e3a2105f555e6eec3c667b088085c47fc4'
 route: 'dispatch'
@@ -137,6 +137,78 @@ context:
 - Given the CI live topology, when the lane runs, then all seven Parties vectors, the MCP reads and every boundary case pass with `fullLiveAccepted: true`, and `check_enrolled.py` reports `fullV1Accepted`.
 - Given the evidence set, when the owner reviews it, then every C01–C08 and variant row is preserved, an approved change or a named gap, and the receipt binds the exact bytes and the verdict.
 - Given the whole change, when it is built, then `src/` has no new module name or dependency, and `DependencyPolicyTests` and `EnrolledModuleCoverageTests` pass unchanged.
+
+### Review Findings
+
+Code review pass 2 (bmad-code-review, 2026-11-10), code-only scope `f6c8e0e..c70ca97` excluding `_bmad-output/` and `references/` (4,329 diff lines, 40 files). This scope includes the separately specified redactor prerequisite `2966170`. Four layers ran and none failed: Blind Hunter (B1–B21), Edge Case Hunter (E1–E17), Verification Gap (V1–V2 gaps, V3–V5 other) and Acceptance Auditor (A1–A9). Of 52 findings, 7 are patches and 7 are deferrals (6 new, R54-D7–D12, filed under this spec's ledger heading, and 1 already tracked); 30 are rejected. Under the frozen Never rule, findings in the redactor and scanner code owned by the prerequisite are deferred, as in pass 1.
+
+- [x] [Review][Patch] The MCP head's deadline counts host shutdown — `HeadProcess.mcp` checks the deadline again after `finally`, where `wait(2)`/`terminate`/`kill` can add about 6 s, so a `tools/call` reply that arrived in time is refused as "MCP stdio response timed out"; `_read` already enforces the reply deadline. Check the deadline right after the `tools/call` reply, inside `try`, and add a regression for an in-time reply whose shutdown outlasts the budget (A8, B9, V4, E7) [tools/conformance-vectors/v1/run_loopback.py:324]
+- [x] [Review][Patch] The 5.4 approval, completion and review packets are not protected from line-ending conversion — only `evidence/story-5-4/**` is `-text`. `story-5-4-owner-approval/`, `story-5-4-completion/` and `story-5-4-review-1/` report `text: unspecified`, yet their `owner-approval.json` and `secret-scan.json` receipts bind file SHA-256s, so a Git for Windows `core.autocrlf=true` checkout breaks those bindings. Extend the attribute line to `story-5-4*/**` (A2) [.gitattributes:34]
+- [x] [Review][Patch] The independent-case receipt-reuse guard has no test — no `test_*.py` reaches `Independent cases reused an isolated runtime receipt.` Add a CI-hook case where two independent cases print the same `Isolated run:` path, and assert the refusal and `fullLiveAccepted: false` (A6) [tools/live-topology/ci.py:722]
+- [x] [Review][Patch] The root README states the wrong live-lane order — it says the hooks run every vector "and then the separate smoke and shared-head boundary", but `PRE_VECTOR_CASES` runs the boundary first, and a boundary failure leaves the vectors unrun (A7) [README.md:626]
+- [x] [Review][Patch] The non-disclosure check covers only one private party name — `InvokeAsync` checks only `BoundaryPrivateMarker`. Add `MustNotBeDisclosed`; nothing else pins the content of MCP server log messages or notification frames (A5) [tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:181]
+- [x] [Review][Patch] The F7 Kelvin pin covers only the session tenant — `OperationExecutor.cs:116` lowercases the per-call tenant and `:118` lowercases the session tenant, separately, and the item-9 tripwire exercises only the session path. Add an MCP call with per-call `tenant: "\u212Aelvin"` and no session tenant, expecting wire `kelvin`. The alias-set concern was also checked: under ICU and invariant globalization, U+212A is the only code point that lowercases into ASCII (B14) [tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs:127]
+- [x] [Review][Patch] The concurrent C05 pair bypasses the shared process launcher — `ConcurrentDeactivateAsync` duplicates `BoundaryHeads.Start` without `WorkingDirectory` or `DOTNET_ENVIRONMENT=Production`, so its hosts load `appsettings.json` from the Integration.Tests bin directory and any ambient environment, unlike every other boundary row. Call `BoundaryHeads.InvokeCliAsync` with a per-call profile path instead (E10, B16) [tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:185]
+- [x] [Review][Defer] R54-D7 — Quoted spans that fail to decode bypass all syntactic redaction [scripts/evidence_redaction.py:163] — deferred: code owned by the separate prerequisite (item 5). A quoted span containing a raw tab or newline, or an invalid escape such as `"C:\Users\x"`, fails `json.loads`. `string()` then returns it unchanged, and the raw-span pass (`:178-183`) appends it unsanitized, so JWT, Bearer and PEM values inside it survive (reproduced) (E1).
+- [x] [Review][Defer] R54-D8 — The `<` protection scan is quadratic [scripts/evidence_redaction.py:131] — deferred: prerequisite code. Each `<` inside a JSON string is tested against every string span. Measured: 74 KB took 0.39 s, 148 KB 1.39 s and 296 KB 5.15 s, so multi-megabyte diagnostics can exhaust the 600-second cleanup reserve (B5, E2).
+- [x] [Review][Defer] R54-D9 — Known-credential matching has no minimum length [scripts/evidence_redaction.py:25] — deferred: prerequisite code. The replaced `ci.py` rule required at least 8 characters. Now `X_TOKEN_TTL=12` turns `ab12cd34ef` into `ab[REDACTED]cd34ef`, and `SECRET_ENABLED=true` turns `{"ok": true}` into invalid JSON, so retained hashes get corrupted and scan results depend on the environment (B1, E5).
+- [x] [Review][Defer] R54-D10 — The scanner's `sensitive-path` rule has no test [scripts/scan-evidence-secrets.py:70] — deferred: prerequisite code; a pre-verified gap. If the rule is removed, a credential-bearing file name gets a clean receipt and a rewritten manifest path (V1).
+- [x] [Review][Defer] R54-D11 — The scanner's receipt-write failure path has no test [scripts/scan-evidence-secrets.py:125] — deferred: prerequisite code; a pre-verified gap. If the handler is removed, exit 2 becomes an uncaught traceback with exit 1, the same code as secrets-detected (V2).
+- [x] [Review][Defer] R54-D12 — The paired-publication verifier keeps dead redaction wrappers [scripts/verify-paired-publication.py:118] — deferred: prerequisite code. `redact_operator` and `private_operator_key` have no callers, and only tests use `credentials()` (B20).
+- [x] [Review][Defer] Private arguments separated by whitespace are not redacted [scripts/evidence_redaction.py:34] — deferred: already tracked (`deferred-work.md:888`, R54-D4) (B2, V3, E17).
+
+**Pass 2 patch disposition (2026-11-10):** the user chose **Apply every patch**, and all 7 are fixed.
+- `HeadProcess.mcp` now checks the deadline right after the `tools/call` reply. A new regression accepts an in-time reply whose host shutdown outlasts the budget.
+- `.gitattributes` covers `story-5-4*/**`; every tracked file in the four packets reports `text: unset`, and no evidence bytes changed.
+- A CI-hook mode makes smoke reuse the boundary's runtime receipt, and the run is refused.
+- The README states the boundary → vectors → smoke order.
+- The boundary checks both private names, and its concurrent pair uses `BoundaryHeads.InvokeCliAsync`.
+- The Kelvin pin adds an MCP per-call case. The ledger anchors to `SharedHeadBoundaryTests.cs` moved by one line (now `:123`, `:136`, `:154`).
+
+Mutation checks:
+- With the old post-`finally` deadline check restored, the new loopback regression fails.
+- With the receipt-reuse guard removed, the new CI-hook test fails.
+- With per-call lowercasing removed at `OperationExecutor.cs:116`, the Kelvin pin fails.
+- Each mutation was reverted, and `src/` and `ci.py` have no diff against HEAD.
+
+Verification:
+- Fresh restore and Release `-warnaserror` build: 0 warnings, 0 errors.
+- CLI tests: 623 passed, 2 skipped (OS-only). The focused safety, process-harness, persisted-state and forwarder classes: 67 passed.
+- Conformance Python: 165 passed. Live-topology Python: 219 passed.
+- `check_enrolled.py` reports `fullV1Accepted: true` for Parties 1.5.1 and Tenants 7.0.5.
+
+The changed live boundary test (P5, P7) is compiled, but it has not been re-run on the CI live topology. The original owner-approved packet and its receipts are unchanged.
+
+Rejected:
+
+- A1, the concurrent C05 pair is CLI-only although the task says "through both heads" — low: the frozen Decision 3 and the owner-approved packet keep the concurrent Commands CLI-only, and each MCP C05-missing Command is a boundary case submitted once per head. Reconciling the wording would edit the spec (pass 1 E05).
+- A3, the Admin AU01–AU06 helper names are not probed — low: those rows are "not an operation", and unqualified names can never match a catalog name (V5).
+- A4, B11 and E11, the forwarder drops headers — low: Parties variable-scope requests carry only `Authorization` and a JSON body (the client adds `X-Hexalith-Scope` only for platform scopes), and the tested 401, 403 and 404 responses carry no header-derived error member. For B11's barrier part, see E12.
+- A9, the owner approval binds `3e8f6a4`, not the review-fix commit — false: the Build completion note and the pass-1 log record that the approval binds the original snapshot, and that supplementary evidence (CI `42711210249`) covers `4ddfedb`.
+- B3, the C# diagnostics redactor is not shared — false: `copy_diagnostics` (`tools/live-topology/ci.py:631`) re-sanitizes `native-catalog.json` and the other retained runtime files with the shared Python redactor, so the README claim holds.
+- B4, password, Basic and `access_token` forms are not detected — false: `tools/live-topology/README.md:381-383` limits the policy to the redactor's credential and private-key forms, "rather than arbitrary unknown secret strings".
+- B6, the lane never requires `boundary-result.json` — low: the test writes that receipt as its last step and fails without `MCPCLI_LIVE_OUTPUT`, so a passing single-case XML implies it exists; the packet verifier checks its rows.
+- B7, an interrupted independent case is not named — low: SIGTERM becomes `sys.exit(143)` and is recorded as `SystemExit: 143`, as `README.md:639` documents. Only vector Operations are promised by name, and tracking the case would add branches.
+- B8, the 17700 literal is duplicated and the budget was not re-evaluated — low: `tools/live-topology/test_ci.py:1392-1393` pins both the `run-ci.sh` literal and the derived 960/15180/960 split, and the MCP reads passed CI twice within budget.
+- B10, live MCP reads are not compared with CLI reads — false: the frozen Always rule assigns head parity to loopback (`check_enrolled.py`), never to a live resubmission; the live MCP read is an execution check.
+- B12, the refusal oracle accepts either 401 shape — false: this is deliberate (see the "Empty 401 transport response" note), and the complete document for each shape is pinned.
+- B13, the completion wait depends on SDK log text — low: ModelContextProtocol is pinned, and an upgrade that changes the text makes every in-process MCP test fail loudly.
+- B15, the Admin name count is not pinned — low: a parsing loss would only shrink a set that cannot match a qualified catalog name (V5).
+- B17, the test projects share linked sources — false: a breaking change to a helper fails both builds, and the links deliberately keep the reviewed fixture closure unchanged.
+- B18, the before/after reads poll until the state matches — low: a wrongful change still fails (by timeout), and the durable-sequence check covers stale projections; only the failure message is weaker.
+- B19, the scanner has no verify mode — false: this is a feature request, not a defect.
+- B21, the CLI process's stdin is left open — false: the CLI reads stdin only for `--payload -` (`src/Hexalith.McpCli/Cli/CliRunner.cs:856-858`), which no boundary call uses, and a regression would still fail at the 45-second deadline.
+- V5, the Admin half of the restricted-names test cannot fail — low: none of the 59 extracted names contains `.`, so none can match a catalog name. But `EnrolledModuleCoverageTests` already pins the catalog to the approved `include` sets, and Admin 1.0.1 has none.
+- E3, prose containing `Bearer` is redacted — low: this is a fail-closed false positive, and every `Bearer` in the 5.4 packet is part of `JwtBearer`, which does not match. A fix needs a policy decision.
+- E4, null or empty private settings are flagged — low: fail-closed, and unlikely in retained diagnostics.
+- E6, private names with suffixes are not redacted — false: the policy covers exactly the named settings (`_PRIVATE`), and `_PEM` catches PEM bodies whatever their name.
+- E8, an MCP attempt that times out is not retried — low: it requires an MCP attempt over 30 s (`run_live.py:122`) within a 45-second read deadline, and distinguishing timeouts would add branches.
+- E9, the authorized token can expire — low: the boundary took 153.5 s in CI `42711210249`, against a 600-second token lifetime.
+- E12, the barrier stays installed after a timeout — false: a timeout fails the request and the test, which then disposes the forwarder; no later request reaches it.
+- E13, a JSON-RPC id that is not a number — false: the server never sends this client a frame with a string or null id, and the test would still fail.
+- E14, the prebuilt Release host is not checked (also B16's first half) — low: the documented Release solution build produces it, and a project reference would change the reviewed fixture closure.
+- E15, a symlinked checkout breaks the content-root match — low: it requires a symlinked repository path, and resolving links would need new code.
+- E16, the oracle assumes `detail` and a canonical correlation ID — false: the qualified Gateway's 404 supplies both (CI passed), and a different response fails loudly.
 
 ## Implementation Notes
 

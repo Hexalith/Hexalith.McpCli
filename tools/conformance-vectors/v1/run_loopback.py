@@ -294,6 +294,9 @@ class HeadProcess:
                                           "clientInfo": {"name": "mcpcli-conformance", "version": "1"}})
             client.notify("notifications/initialized", {})
             reply = client.request("tools/call", {"name": tool, "arguments": arguments})
+            # Bound the response, not host shutdown: cleanup below has its own bounded waits.
+            if time.monotonic() >= deadline:
+                _fail("MCP stdio response timed out")
             result = reply["result"]
             structured = result.get("structuredContent")
             if not isinstance(structured, dict):
@@ -321,8 +324,6 @@ class HeadProcess:
                 process.stdout.close()
             if process.stderr is not None:
                 process.stderr.close()
-        if time.monotonic() >= deadline:
-            _fail("MCP stdio response timed out")
         return outcome
 
 

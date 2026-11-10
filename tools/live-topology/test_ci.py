@@ -295,6 +295,7 @@ else:
     if mode == 'wrong-smoke-type': xml = xml.replace('GatewaySmokeTests"', 'OtherTests"')
     destination = pathlib.Path(sys.argv[sys.argv.index('-result-xml') + 1])
     if mode != 'missing-smoke' or independent != 'smoke': destination.write_text(xml)
+    if mode == 'reused-independent-receipt' and independent == 'smoke': path = runtime / 'runs/boundary'
     if mode != 'missing-smoke-receipt' or independent != 'smoke': print('Isolated run: ' + str(path))
     if mode == 'duplicate-smoke-receipt' and independent == 'smoke': print('Isolated run: ' + str(path))
     if mode == 'tamper-after-boundary' and independent == 'boundary':
@@ -1416,6 +1417,18 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                 self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call) for call in self.calls()))
                 self.assertEqual('failed', receipt['boundary']['result'])
                 self.assertIn('SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety', result.stderr)
+
+    def test_independent_cases_cannot_share_one_runtime_receipt(self):
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'reused-independent-receipt')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('Independent cases reused an isolated runtime receipt.', result.stderr)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual('passed', receipt['boundary']['result'])
+        self.assertEqual('passed', receipt['vectors']['result'])
+        self.assertEqual('failed', receipt['smoke']['result'])
+        self.assertIn('Independent cases reused an isolated runtime receipt.', receipt['smoke']['error'])
+        self.assertIs(False, receipt['fullLiveAccepted'])
 
     def test_vector_and_runtime_counts_follow_inventory_growth(self):
         self.prepare()

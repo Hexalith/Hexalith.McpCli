@@ -853,13 +853,13 @@ status: open
   summary: Supply selected-cohort C05 execution evidence for forced stale projections and erased or processing-restricted delete/pre-read branches, or record an exact-byte owner-approved inventory disposition.
   owner: Parties maintainer and EventStore Gateway maintainer.
   status: open; retirement-blocking, retained by the Story 5.4 owner's exact-byte approval (2026-11-09); see `evidence/story-5-4-owner-approval/owner-approval.json`.
-  evidence: `tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:124` covers first-missing targets and `:137` covers concurrent deactivation with persisted event counting, but neither forces a stale projection or sets an erased/restricted lifecycle state. `_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:182` distinguishes those mandatory pre-read/aggregate branches. The enrolled-revision source/test audit in `_bmad-output/implementation-artifacts/evidence/story-5-4/upstream-test-audit.json` identifies repeated-inactive NoOp coverage, without claiming the omitted selected-environment cases executed. The separate rejection-only-stream defect is already tracked (`deferred-work.md:556`) and is not duplicated here.
+  evidence: `tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:123` covers first-missing targets and `:136` covers concurrent deactivation with persisted event counting, but neither forces a stale projection or sets an erased/restricted lifecycle state. `_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:182` distinguishes those mandatory pre-read/aggregate branches. The enrolled-revision source/test audit in `_bmad-output/implementation-artifacts/evidence/story-5-4/upstream-test-audit.json` identifies repeated-inactive NoOp coverage, without claiming the omitted selected-environment cases executed. The separate rejection-only-stream defect is already tracked (`deferred-work.md:556`) and is not duplicated here.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: Prove persisted actor attribution for the configured operator credential, or record an exact-byte owner-approved inventory disposition for the actor-attribution variant.
   owner: Parties maintainer and EventStore Gateway maintainer.
   status: open; retirement-blocking, retained by the Story 5.4 owner's exact-byte approval (2026-11-09); see `evidence/story-5-4-owner-approval/owner-approval.json`.
-  evidence: `tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:155` proves a durable deactivation count, while `tests/Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs:51` retains only sequence and event type. No assertion checks the persisted event/audit user against the configured signed principal. `tests/Hexalith.McpCli.Cli.Tests/CliMcpQueryParityTests.cs:37` refuses an undeclared ActorId but establishes no persisted attribution. Legacy `PartiesMcpRequestContext.cs:35` and `McpContextForwardingHandler.cs:16` at inventory revision `493730941329d1bca3b4f6b2f6a67ffe305c2443` obtain and forward user context. Signed tenant-grant refusals alone do not establish this behavior.
+  evidence: `tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:154` proves a durable deactivation count, while `tests/Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs:51` retains only sequence and event type. No assertion checks the persisted event/audit user against the configured signed principal. `tests/Hexalith.McpCli.Cli.Tests/CliMcpQueryParityTests.cs:37` refuses an undeclared ActorId but establishes no persisted attribution. Legacy `PartiesMcpRequestContext.cs:35` and `McpContextForwardingHandler.cs:16` at inventory revision `493730941329d1bca3b4f6b2f6a67ffe305c2443` obtain and forward user context. Signed tenant-grant refusals alone do not establish this behavior.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: Explicitly disposition the published raw-string bounds versus the legacy trimmed-input bounds in an owner-approved Parties inventory amendment, or retain the difference as blocking.
@@ -902,3 +902,39 @@ status: open
   owner: McpCli maintainer / CI redaction maintainer.
   status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/evidence_redaction.py:34; A quoted --PrivateKey containing an escaped quote retains its synthetic canary suffix after sanitization and scans clean. Reproduced during Story 5.4 review. The relevant implementation is byte-identical to the separately landed prerequisite at `296617072ab3fb632d2bddb9189b52fd94286f83`; the frozen intent explicitly excludes fixing redactor item 5 here. This is a new specific counterexample, not a reconfirmation of the older resolved generic redactor rows.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
+  summary: R54-D7 — Sanitize quoted spans that fail JSON decoding instead of passing them through unchanged.
+  owner: McpCli maintainer / CI redaction maintainer.
+  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  evidence: scripts/evidence_redaction.py:163; `string()` returns a `_STRINGS` match unchanged when `json.loads` fails, and the raw-span pass at `:178-183` appends every match without `_scalar`. A quoted span containing a raw tab or newline, or an invalid escape such as `"C:\Users\x"`, therefore keeps JWT, Bearer and PEM values; `sanitized('msg "token eyJabc.def.ghi\tfoo"', environment={})` returns its input. Reproduced during Story 5.4 review pass 2. Prerequisite code from `296617072ab3fb632d2bddb9189b52fd94286f83`; the frozen intent excludes fixing redactor item 5 here.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
+  summary: R54-D8 — Make the redactor's protected-`<` scan linear in the number of JSON string spans.
+  owner: McpCli maintainer / CI redaction maintainer.
+  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  evidence: scripts/evidence_redaction.py:131; for each `<`, `any(start <= match.start() < end ...)` scans every string span until one `<` lies outside a string. JSON-lines logs with `<` only inside strings took 0.39 s at 74 KB, 1.39 s at 148 KB and 5.15 s at 296 KB (about 4x per doubling), so multi-megabyte runtime diagnostics sanitized by `tools/live-topology/ci.py:631` can exhaust the 600-second cleanup reserve. Reproduced during Story 5.4 review pass 2. Prerequisite code from `296617072ab3fb632d2bddb9189b52fd94286f83`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
+  summary: R54-D9 — Restore a minimum length for known environment credentials, or fail closed on short values, instead of rewriting substrings.
+  owner: McpCli maintainer / CI redaction maintainer.
+  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  evidence: scripts/evidence_redaction.py:25; `known_credentials` accepts any nonblank value whose name matches `_ENVIRONMENT`, while the replaced `ci.py` rule required at least 8 characters. With `X_TOKEN_TTL=12`, `{"sha256":"ab12cd34ef"}` becomes `ab[REDACTED]cd34ef`; with `SECRET_ENABLED=true`, `{"ok": true}` becomes invalid JSON. Retained hashes such as those in `preparation.json` can be corrupted, and scan verdicts depend on ambient variables. Reproduced during Story 5.4 review pass 2. Prerequisite code from `296617072ab3fb632d2bddb9189b52fd94286f83`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
+  summary: R54-D10 — Test the evidence scanner's `sensitive-path` finding for credential-bearing file names.
+  owner: McpCli maintainer / CI redaction maintainer.
+  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  evidence: scripts/scan-evidence-secrets.py:70; no test in `scripts/tests/test_evidence_secret_scan.py` uses a credential-bearing file name. A clean file named `eyJabc.payload.sig.log` returns `secrets-detected`, exit 1, with `[REDACTED JWT].log`; with `:70-71` deleted it would return `clean`, exit 0, and a silently rewritten manifest path. Pre-verified gap from Story 5.4 review pass 2; add a JWT-name case and a known-environment-value case, both asserting no raw-name echo on stdout or stderr.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
+  summary: R54-D11 — Test the evidence scanner's receipt-write failure exit 2.
+  owner: McpCli maintainer / CI redaction maintainer.
+  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  evidence: scripts/scan-evidence-secrets.py:125; only an existing destination is tested (`scripts/tests/test_evidence_secret_scan.py:172`). Without the `OSError` handler, an unwritable receipt raises a traceback with exit 1, the secrets-detected code, contradicting `tools/live-topology/README.md:360-362`. Pre-verified gap from Story 5.4 review pass 2; use a receipt whose parent is a regular file and assert `(2, '', 'Secret scan failed: receipt could not be written.\n')`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
+  summary: R54-D12 — Remove the unused redaction wrappers from the paired-publication verifier.
+  owner: McpCli maintainer / CI redaction maintainer.
+  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  evidence: scripts/verify-paired-publication.py:118; `redact_operator` (`:122`) and `private_operator_key` (`:134`) have no callers, and `credentials()` (`:118`) is used only by `scripts/tests/test_paired_publication.py:621-622`. Found during Story 5.4 review pass 2; delete them, or have the tests import `known_credentials` directly.

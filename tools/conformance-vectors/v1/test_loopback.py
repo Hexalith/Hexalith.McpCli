@@ -1102,6 +1102,30 @@ class McpInvocationBudgetTests(unittest.TestCase):
             with self.assertRaisesRegex(VectorError, 'timed out'):
                 HeadProcess(Path('Host.dll'), directory, 1).mcp('list_modules', {})
 
+    def test_head_accepts_an_in_time_result_despite_slow_host_shutdown(self):
+        from unittest.mock import Mock
+        from run_loopback import HeadProcess
+        tick = [0.0]
+        document = {'safe': True}
+        client = Mock()
+        def request(*_):
+            tick[0] += .3
+            return {'result': {'structuredContent': document, 'content': [{'text': json.dumps(document)}]}}
+        client.request.side_effect = request
+        process = Mock()
+        process.poll.return_value = None
+        def wait(*_, **__):
+            tick[0] += 2
+        process.wait.side_effect = wait
+        with tempfile.TemporaryDirectory() as directory, \
+                patch('run_loopback.time.monotonic', side_effect=lambda: tick[0]), \
+                patch('run_loopback.subprocess.Popen', return_value=process), \
+                patch('run_loopback._JsonRpcClient', return_value=client):
+            outcome = HeadProcess(Path('Host.dll'), directory, 1).mcp('list_modules', {})
+        self.assertEqual((False, document), outcome)
+        # Shutdown ended after the budget; only the reply time decides acceptance.
+        self.assertGreater(tick[0], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

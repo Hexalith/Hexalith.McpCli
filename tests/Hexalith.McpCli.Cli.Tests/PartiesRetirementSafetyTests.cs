@@ -122,7 +122,7 @@ public sealed class PartiesRetirementSafetyTests
         });
     }
 
-    /// <summary>Accepted F7 limitation: epic-4-retro-item-9-ascii-tenant-input must flip this Kelvin alias pin when fixed.</summary>
+    /// <summary>Accepted F7 limitation: epic-4-retro-item-9-ascii-tenant-input must flip this Kelvin alias pin when fixed, for session and MCP per-call tenants.</summary>
     [Fact]
     public async Task AcceptedF7Item9KelvinAliasReachesTheGatewayAsAsciiAsync()
     {
@@ -134,12 +134,15 @@ public sealed class PartiesRetirementSafetyTests
             HeadResult mcp = await BothHeads.InvokeMcpAsync(store, Manifest, EmptyEnvironment,
                 ["--url", gateway.Url, "--tenant", "\u212Aelvin"], "send_command", new Dictionary<string, object?>
                 { ["operation"] = "parties.deactivate-party", ["payload"] = Payload, ["correlationId"] = Correlation });
-            foreach (HeadResult result in new[] { cli, mcp })
+            HeadResult perCall = await BothHeads.InvokeMcpAsync(store, Manifest, EmptyEnvironment,
+                ["--url", gateway.Url], "send_command", new Dictionary<string, object?>
+                { ["operation"] = "parties.deactivate-party", ["payload"] = Payload, ["tenant"] = "\u212Aelvin", ["correlationId"] = Correlation });
+            foreach (HeadResult result in new[] { cli, mcp, perCall })
             {
                 BothHeads.AssertDocument(result, expected, isError: false, "messageId");
                 HeadDiagnostics.AssertGatewayOnly(result, gateway.Url, "/api/v1/commands", 202);
             }
-            gateway.Requests.Count.ShouldBe(2);
+            gateway.Requests.Count.ShouldBe(3);
             foreach (GatewayRequest request in gateway.Requests)
                 JsonDocument.Parse(request.Body).RootElement.GetProperty("tenant").GetString().ShouldBe("kelvin");
         });
