@@ -26,7 +26,7 @@ After the Build review, the Decision 3 procedure below ran once, on 2026-11-10. 
 | Parties | `4c9fb0a03a81694afe24beaed1ea0552348405fc` | `64085d9f3b24f56bcffe63a9c2d7eb84f38e1fca` | `ci-red`. Pushed `64085d9f..4c9fb0a0`. Release Candidate Gate, Commitlint and CodeQL pass. CI fails in "Lifecycle controller tests", on `test_qualification_is_explicit_package_suite_excluded_from_ordinary_solution_build` (`ValueError: substring not found`). That failure is pre-existing: the same job and test fail on the parent `64085d9f` (run 42786199007) and on `87a7b600` (run 42782819039). |
 | Folders | `f4f5ce0ce9676cd5674e75093476df2ba4fde585`, merged as `f1f639090a4e6b8cbeacb246e7052968dbc75836` | `e88c940000446e13d17d86a7288649d8653a7138` | `ci-red`; the gate was already red before this story. A concurrent Cursor `/pushall` merged the local label branch into `main` before the review, pushed it and `a87d0a0d`, and removed the worktree and branch. `contract-spine-gates` had already failed at `e88c9400` (run 42109497136): Folders' own changes drifted PD10-bound files, including `FoldersDevelopmentOwnerMetadata.cs` (3078 to 3207 bytes), and left `OwnerSourceCompositionAssertionIssuer.cs` unlisted. The Description prefix adds one more drift, `Hexalith.Folders.Cli.csproj` from 1206 to 1324 bytes, which masks the earlier one in runs 42788931487 and 42789278621. A local revert of only the prefix still leaves 5 of 24 PD10 tests failing. Regenerating the approval-bound PD10 v2 conformance set passes 24 of 24. The user kept the label (2026-11-10). The `a87d0a0d` CI failure (run 42789279473) is unrelated: `dotnet format` WHITESPACE errors across 11 files. |
 | EventStore | `7422ce56a56a742ff9acc57eeaf8b144a07daf05`, rebased onto `a940fb61` and revalidated with commitlint | `a940fb6167cc70526ba413782ec9fbe91ad64a8d` | `push-rejected` |
-| FrontComposer | `c9af83ed5b5466a362e60be406510084929f96d0` | `e972d0f06a8eec3446db0b2270fdb14eef4c1186` | `push-rejected` |
+| FrontComposer | `01fc48e3955a8cec47ab1602f5cd5c8e286801da` (README-only; amended from the refused `c9af83ed`) | `e972d0f06a8eec3446db0b2270fdb14eef4c1186` | `push-rejected` |
 | Memories | `1143ba17a2336f0d718fcff71e049c06350a45a2` | `4ff3e6866ecb6d1a497e7063e972c24259252c40` | `push-rejected` |
 | Projects | `77067782154d35a794ea50d86af1c5e73c8351b6` | `9ae0571529cb4a9f3ad9750c8b834e6284d4f76b` | `push-rejected` |
 | ChatBot | `82f20d5ecca74993f93e73151a6ae3766d3d6a1d` | `b13c58006d292836a9c8b242de476765676e5fb2` | `push-rejected` |
@@ -37,9 +37,17 @@ After the Build review, the Decision 3 procedure below ran once, on 2026-11-10. 
 - The PS01–PS04, PS06–PS09 and PS12–PS13 labels are not on their `main` yet.
 - Folders `main` stays red until the Folders maintainer requalifies the approval-bound PD10 v2 conformance set. That set was already stale before this story, and it must also rebind the labeled `Hexalith.Folders.Cli.csproj`, which is now 1324 bytes.
 - Neither failure was patched around (Decision 3).
-- Before the five refused commits are pushed, run the repository tests that read the changed `.csproj` files, because the Folders PD10 binding was missed:
-  - FrontComposer: `McpRuntimePackageBoundaryTests`, `CiGovernanceTests`, `ToolPackagingSmokeTests` and `eng/release_contract.py`.
-  - Memories: `tools/verify-cli-pack.sh`.
+
+### Pre-push sweep (2026-11-10)
+
+The Folders PD10 binding was missed before delivery. So before the five refused commits are pushed again, each repository's tests and CI gates that could bind a changed file were run against the exact label commits, and every failure was compared with the parent commit.
+
+| Repository | Result | Evidence |
+| --- | --- | --- |
+| FrontComposer | **Not safe with the `.csproj` hunks; safe README-only.** | The dependency policy seals a digest of every tracked `.csproj`, `.props`, `.targets`, `.proj`, `.slnx`, `.user` and `.rsp` file (`eng/dependency_graph.py:353-363`, `consumer_configuration_sha256` in `eng/dependency-graph-policy.json`). With the hunks, `eng/dependency_graph.py diff --event push` and `validate` fail with "consumer Compile/ProjectReference configuration changed from its sealed source projection". That gate is CI `dependency-governance` and quality Gate 2b `InfrastructureGovernanceTests`. The parent passes, and a reseal cannot authorize itself. Restore, Release `-warnaserror` build, pack, `validate-nuget-packages.py`, `validate-consumer-package-references.py`, `ToolPackagingSmokeTests` and `McpRuntimePackageBoundaryTests` all pass. The remaining test failures are identical on the parent and environmental. By user decision, the commit was amended to README-only (`01fc48e3`), and the PS03/PS04 Description labels wait for FrontComposer's reseal procedure (`eng/dependency-governance.md`). |
+| Memories | Safe to push. | `tools/qualify-builds-publication.py` (all 6 checkpoints) and `test-publish-containers.ps1` pass. Release build; `tools/test.sh --filter "Category!=Integration"`: 8 projects, 5,416 tests, 0 failed, including `ProductionDeploymentArtifactsTests`. `PublicSurfaceStabilityTests` and `AppHostProjectResolutionTests` pass 6 of 6. `pack-release.ps1 -PackageOnly` reports "Release package validation passed.". All 20 `tests/tooling/*` suites pass. |
+| EventStore | No seal found. | Targeted search only, not a full sweep. The only `.csproj` hash is a NuGet cache key (`.github/workflows/integration.yml:151`). No package-governance test or script reads the Admin.Cli Description. Its README tests passed earlier. |
+| Projects, ChatBot | README-only. | No test or script pins root README text (see "Pinned text"). |
 
 ### Delivery procedure
 
@@ -88,8 +96,8 @@ holds byte-identical copies of every cited file.
 | --- | --- | --- | --- |
 | PS01 | EventStore `README.md:164` | `src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj:11` | EventStore Admin 1.0.1 |
 | PS02 | EventStore `README.md:165` | not packable | EventStore Admin 1.0.1 |
-| PS03 | FrontComposer `README.md:32` | `src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj:10` | FrontComposer 1.0.0 |
-| PS04 | FrontComposer `README.md:33` | `src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj:6` (new Description) | FrontComposer 1.0.0 |
+| PS03 | FrontComposer `README.md:32` | none: FrontComposer seals `.csproj` digests (user decision, 2026-11-10) | FrontComposer 1.0.0 |
+| PS04 | FrontComposer `README.md:33` | none: FrontComposer seals `.csproj` digests (user decision, 2026-11-10) | FrontComposer 1.0.0 |
 | PS05 | Parties `README.md:164` | not packable | Parties 1.2.0 |
 | PS06 | Memories `README.md:134` | `src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj:17` | Memories 1.0.0 |
 | PS07 | Memories `README.md:135` | `src/Hexalith.Memories.Mcp/Hexalith.Memories.Mcp.csproj:8` | Memories 1.0.0 |
@@ -113,9 +121,13 @@ Some rows add statements:
 
 No label names McpCli as a replacement.
 
-Each new Description reaches NuGet only with that package's release: the next
-release for PS01, PS03, PS04, PS06 and PS07, and the first release for PS10,
-which has never been published. Five repositories also pack the root README
+Decision 4 placed a Description prefix on six packable projects. After the
+FrontComposer seal finding, the user kept it on four of them (2026-11-10): PS01,
+PS06, PS07 and PS10. PS03 and PS04 carry the README label only, and their
+Description labels wait for FrontComposer's reseal procedure. Each new
+Description reaches NuGet only with that package's release: the next release
+for PS01, PS06 and PS07, and the first release for PS10, which has never been
+published. Five repositories also pack the root README
 into every packable package, so the new section will appear on the NuGet pages
 of their non-legacy packages at their next release:
 

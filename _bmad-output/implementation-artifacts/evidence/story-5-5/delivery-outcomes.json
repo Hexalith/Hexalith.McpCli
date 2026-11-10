@@ -9,7 +9,7 @@
     "status": "push-rejected",
     "mergedCommit": null,
     "mainCiRuns": null,
-    "note": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.FrontComposer.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used."
+    "note": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.FrontComposer.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used. After the refusal, a pre-push sweep found that FrontComposer's dependency policy seals every tracked .csproj digest (eng/dependency-graph-policy.json consumer_configuration_sha256). The Description hunks failed eng/dependency_graph.py diff and validate (\"consumer Compile/ProjectReference configuration changed from its sealed source projection\"), and a reseal cannot authorize itself. By user decision (2026-11-10), the unpushed commit was amended to README-only: c9af83ed became 01fc48e3955a8cec47ab1602f5cd5c8e286801da, still on e972d0f0. The PS03/PS04 Description labels are deferred to FrontComposer's reseal procedure."
   },
   "memories": {
     "status": "push-rejected",

@@ -3,7 +3,7 @@
   "sourceSpec": "_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md",
   "generator": "_bmad-output/implementation-artifacts/evidence/story-5-5/build-labels.py",
   "register": "Authoritative register of the PS01-PS14 compatibility labels. Each of the following updates the owning upstream label and this register, with new sources and hashes, before it counts as complete: a versioned amendment that changes a removal gate (Stories 5.7-5.10); a change of the Story 5.4 verdict or of the status of any of G01-G06; and a newly approved version of a cited technical-tools or module inventory.",
-  "deliveryState": "eventstore: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.EventStore.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); frontcomposer: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.FrontComposer.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); parties: ci-red as 4c9fb0a03a81694afe24beaed1ea0552348405fc (Pushed 64085d9f..4c9fb0a0 after rebasing onto origin/main 64085d9f. CI fails only in job 'Lifecycle controller tests' on test_workflow_boundaries.WorkflowBoundaryTests.test_qualification_is_explicit_package_suite_excluded_from_ordinary_solution_build (ValueError: substring not found). The same job and test fail on the parent 64085d9f (run 42786199007) and on 87a7b600 (run 42782819039), so the failure is pre-existing and not caused by the README-only label commit. Not patched (Decision 3).); memories: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Memories.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); projects: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Projects.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); folders: ci-red as f1f639090a4e6b8cbeacb246e7052968dbc75836 (A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. contract-spine-gates fails because of this story: Pd10V2ContractTests.ConformanceSetBindsEveryCandidateArtifactWithoutChangingReleaseAuthority, Pd10ConformanceSetTests.ManifestBindsEveryListedCandidateArtifactAndOrderedSetDigest and Pd10ConformanceSetTests.InventoryCoversEveryRuntimeAndTestCompileInputIncludingExtractedHelpers bind src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj at 1206 bytes, and the Description prefix makes it 1324. The gate had also failed at e88c9400 (run 42109497136) before the merge. The a87d0a0d CI failure is unrelated: dotnet format WHITESPACE errors in tests/tools/Task36FoldObserver/LifecycleRequestCorrelation.cs. Not patched (Decision 3).); chatbot: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.ChatBot.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.)",
+  "deliveryState": "eventstore: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.EventStore.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); frontcomposer: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.FrontComposer.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used. After the refusal, a pre-push sweep found that FrontComposer's dependency policy seals every tracked .csproj digest (eng/dependency-graph-policy.json consumer_configuration_sha256). The Description hunks failed eng/dependency_graph.py diff and validate (\"consumer Compile/ProjectReference configuration changed from its sealed source projection\"), and a reseal cannot authorize itself. By user decision (2026-11-10), the unpushed commit was amended to README-only: c9af83ed became 01fc48e3955a8cec47ab1602f5cd5c8e286801da, still on e972d0f0. The PS03/PS04 Description labels are deferred to FrontComposer's reseal procedure.); parties: ci-red as 4c9fb0a03a81694afe24beaed1ea0552348405fc (Pushed 64085d9f..4c9fb0a0 after rebasing onto origin/main 64085d9f. CI fails only in job 'Lifecycle controller tests' on test_workflow_boundaries.WorkflowBoundaryTests.test_qualification_is_explicit_package_suite_excluded_from_ordinary_solution_build (ValueError: substring not found). The same job and test fail on the parent 64085d9f (run 42786199007) and on 87a7b600 (run 42782819039), so the failure is pre-existing and not caused by the README-only label commit. Not patched (Decision 3).); memories: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Memories.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); projects: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Projects.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); folders: ci-red as f1f639090a4e6b8cbeacb246e7052968dbc75836 (A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. contract-spine-gates was already red before the label: at e88c9400 (run 42109497136) the same PD10 conformance tests fail because Folders' own changes drifted src/Hexalith.Folders.Server/FoldersDevelopmentOwnerMetadata.cs (3078 to 3207 bytes), two Server test files, and the unlisted tests/Hexalith.Folders.Server.Tests/OwnerSourceCompositionAssertionIssuer.cs. The label adds one more drift: its Description prefix grows src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj from 1206 to 1324 bytes. That file sorts first, so it masks the earlier drift in runs 42788931487 and 42789278621. Reverting only the prefix leaves 5 of the 24 PD10 tests failing, so it does not turn the gate green. Regenerating the approval-bound PD10 v2 conformance set (approval_status pending-a6b) does turn it green, 24 of 24. Decision (user, 2026-11-10): keep the label, add no Folders commit, and have that requalification also rebind Folders.Cli.csproj. The a87d0a0d CI failure (run 42789279473) is unrelated: dotnet format WHITESPACE errors across 11 files, including tests/tools/Task36FoldObserver/LifecycleRequestCorrelation.cs and src/Hexalith.Folders.AppHost/Program.cs. Not patched (Decision 3).); chatbot: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.ChatBot.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.)",
   "deliveryProcedure": [
     "Run only after the Build review passes, one repository at a time.",
     "Fetch origin. If origin/main moved past the recorded base, rebase the label commit onto it, revalidate the exact message with that repository's commitlint, and rerun its pinned README tests if the rebase changed README.md, a modified .csproj or a test that reads them. Parties already needs this: its origin/main is 64085d9f, not the recorded base 87a7b600.",
@@ -88,8 +88,8 @@
       "branch": "docs/mcpcli-5-5-compatibility-labels",
       "localCommit": "7422ce56a56a742ff9acc57eeaf8b144a07daf05",
       "base": "a940fb6167cc70526ba413782ec9fbe91ad64a8d",
-      "originMainWhenRecorded": "a940fb6167cc70526ba413782ec9fbe91ad64a8d",
-      "baseIsOriginMain": true,
+      "originMainWhenRecorded": "39ebd8b4f709a65213e0022275c29c110a82275e",
+      "baseIsOriginMain": false,
       "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "mainCiRuns": null,
@@ -126,21 +126,19 @@
     "frontcomposer": {
       "repository": "https://github.com/Hexalith/Hexalith.FrontComposer",
       "branch": "docs/mcpcli-5-5-compatibility-labels",
-      "localCommit": "c9af83ed5b5466a362e60be406510084929f96d0",
+      "localCommit": "01fc48e3955a8cec47ab1602f5cd5c8e286801da",
       "base": "e972d0f06a8eec3446db0b2270fdb14eef4c1186",
       "originMainWhenRecorded": "e972d0f06a8eec3446db0b2270fdb14eef4c1186",
       "baseIsOriginMain": true,
       "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "mainCiRuns": null,
-      "deliveryNote": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.FrontComposer.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.",
+      "deliveryNote": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.FrontComposer.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used. After the refusal, a pre-push sweep found that FrontComposer's dependency policy seals every tracked .csproj digest (eng/dependency-graph-policy.json consumer_configuration_sha256). The Description hunks failed eng/dependency_graph.py diff and validate (\"consumer Compile/ProjectReference configuration changed from its sealed source projection\"), and a reseal cannot authorize itself. By user decision (2026-11-10), the unpushed commit was amended to README-only: c9af83ed became 01fc48e3955a8cec47ab1602f5cd5c8e286801da, still on e972d0f0. The PS03/PS04 Description labels are deferred to FrontComposer's reseal procedure.",
       "changedFiles": [
-        "README.md",
-        "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj",
-        "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj"
+        "README.md"
       ],
       "subject": "docs: label legacy compatibility surfaces",
-      "messageSha256": "0a4b01e0b0132ce179a019a9dba8ee52b8af594becccb666bc645994223e4efa",
+      "messageSha256": "b7df1d4df3e4ac35c2c07ce1bb5496e4672c9eed3f33c82b1b82c5ce14131735",
       "commitlint": {
         "result": "found 0 problems, 0 warnings",
         "validator": "owner checkout node_modules/.bin/commitlint (@commitlint/cli 21.2.4), run read-only; its lockfile and config are unchanged from origin/main"
@@ -169,7 +167,7 @@
       "branch": "docs/mcpcli-5-5-compatibility-labels",
       "localCommit": "4c9fb0a03a81694afe24beaed1ea0552348405fc",
       "base": "64085d9f3b24f56bcffe63a9c2d7eb84f38e1fca",
-      "originMainWhenRecorded": "4c9fb0a03a81694afe24beaed1ea0552348405fc",
+      "originMainWhenRecorded": "3eccce242d27c2f8248824354a1f403c7b4ea57b",
       "baseIsOriginMain": false,
       "deliveryStatus": "ci-red",
       "mergedCommit": "4c9fb0a03a81694afe24beaed1ea0552348405fc",
@@ -309,7 +307,7 @@
       "branch": "docs/mcpcli-5-5-compatibility-labels",
       "localCommit": "f4f5ce0ce9676cd5674e75093476df2ba4fde585",
       "base": "e88c940000446e13d17d86a7288649d8653a7138",
-      "originMainWhenRecorded": "a87d0a0d31d4c5a7e7a286ac9d8d0bdc3f7da3d5",
+      "originMainWhenRecorded": "d873861677982a737d131180bcf79f06caee034d",
       "baseIsOriginMain": false,
       "deliveryStatus": "ci-red",
       "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
@@ -363,7 +361,7 @@
           "conclusion": "failure"
         }
       ],
-      "deliveryNote": "A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. contract-spine-gates fails because of this story: Pd10V2ContractTests.ConformanceSetBindsEveryCandidateArtifactWithoutChangingReleaseAuthority, Pd10ConformanceSetTests.ManifestBindsEveryListedCandidateArtifactAndOrderedSetDigest and Pd10ConformanceSetTests.InventoryCoversEveryRuntimeAndTestCompileInputIncludingExtractedHelpers bind src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj at 1206 bytes, and the Description prefix makes it 1324. The gate had also failed at e88c9400 (run 42109497136) before the merge. The a87d0a0d CI failure is unrelated: dotnet format WHITESPACE errors in tests/tools/Task36FoldObserver/LifecycleRequestCorrelation.cs. Not patched (Decision 3).",
+      "deliveryNote": "A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. contract-spine-gates was already red before the label: at e88c9400 (run 42109497136) the same PD10 conformance tests fail because Folders' own changes drifted src/Hexalith.Folders.Server/FoldersDevelopmentOwnerMetadata.cs (3078 to 3207 bytes), two Server test files, and the unlisted tests/Hexalith.Folders.Server.Tests/OwnerSourceCompositionAssertionIssuer.cs. The label adds one more drift: its Description prefix grows src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj from 1206 to 1324 bytes. That file sorts first, so it masks the earlier drift in runs 42788931487 and 42789278621. Reverting only the prefix leaves 5 of the 24 PD10 tests failing, so it does not turn the gate green. Regenerating the approval-bound PD10 v2 conformance set (approval_status pending-a6b) does turn it green, 24 of 24. Decision (user, 2026-11-10): keep the label, add no Folders commit, and have that requalification also rebind Folders.Cli.csproj. The a87d0a0d CI failure (run 42789279473) is unrelated: dotnet format WHITESPACE errors across 11 files, including tests/tools/Task36FoldObserver/LifecycleRequestCorrelation.cs and src/Hexalith.Folders.AppHost/Program.cs. Not patched (Decision 3).",
       "changedFiles": [
         "README.md",
         "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj"
@@ -521,7 +519,7 @@
       "repository": "https://github.com/Hexalith/Hexalith.FrontComposer",
       "surface": "Hexalith.FrontComposer.Cli",
       "project": "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj",
-      "commit": "c9af83ed5b5466a362e60be406510084929f96d0",
+      "commit": "01fc48e3955a8cec47ab1602f5cd5c8e286801da",
       "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
@@ -551,22 +549,14 @@
         "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
         "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9"
       },
-      "description": {
-        "file": "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj",
-        "line": 10,
-        "anchor": "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj:10",
-        "sha256": "6606c229114b6972da8633fb89c69ba45cb85a275a0350ed8b0b1c83fb9cb129",
-        "prefix": "Compatibility binary, not retired; see \"Legacy compatibility surfaces\" in the repository README for its removal gate. ",
-        "added": false,
-        "nugetVisibility": "after the next release of this package"
-      }
+      "description": null
     },
     {
       "id": "PS04",
       "repository": "https://github.com/Hexalith/Hexalith.FrontComposer",
       "surface": "Hexalith.FrontComposer.Mcp",
       "project": "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj",
-      "commit": "c9af83ed5b5466a362e60be406510084929f96d0",
+      "commit": "01fc48e3955a8cec47ab1602f5cd5c8e286801da",
       "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
@@ -597,15 +587,7 @@
         "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
         "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9"
       },
-      "description": {
-        "file": "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj",
-        "line": 6,
-        "anchor": "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj:6",
-        "sha256": "4ed9bec619efcdd20bef51e6af2e21d7e9c795e4e6585acf6ed094d142ad1ac7",
-        "prefix": "Compatibility binary, not retired; see \"Legacy compatibility surfaces\" in the repository README for its removal gate. ",
-        "added": true,
-        "nugetVisibility": "after the next release of this package"
-      }
+      "description": null
     },
     {
       "id": "PS05",

@@ -133,6 +133,12 @@ context:
 
 - **Correction (2026-11-10): the Folders attribution.** The delivery note above says Folders is "red from this story", which is wrong. `contract-spine-gates` was already red at `e88c9400` (run 42109497136), from Folders' own PD10 drift. The Description prefix adds one more drift, which masks the earlier one. A revert of only the prefix still fails 5 of the 24 PD10 tests. The user kept the label and made no Folders commit. The approval-bound PD10 v2 requalification, owned by the Folders maintainer, must rebind `Hexalith.Folders.Cli.csproj` at 1324 bytes, and Decision 4 is unchanged.
 
+- **User decisions after delivery (2026-11-10).**
+  - **Folders:** keep the label and make no Folders commit.
+  - **FrontComposer README-only:** this narrows frozen Decision 4 from six Description prefixes to four (PS01, PS06, PS07, PS10). A pre-push sweep showed that FrontComposer seals every tracked `.csproj` digest (`consumer_configuration_sha256`). The Description hunks would have failed `dependency-governance`, and a reseal cannot authorize itself. The unpushed commit `c9af83ed` became `01fc48e3`.
+  - **PS03/PS04 Descriptions:** deferred to FrontComposer's reseal procedure (ledger).
+  - **Rest of the sweep:** Memories passed in full (5,416 unit tests, publication qualification and package validation). EventStore had a targeted search and showed no seal. `build-labels.py` and `verify-labels.py` now enforce README-only for FrontComposer.
+
 ## Spec Change Log
 
 ## Review Triage Log

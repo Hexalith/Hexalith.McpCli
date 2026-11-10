@@ -36,8 +36,8 @@ EXPECTED = {
 }
 DESCRIPTIONS = {
     'eventstore': ['src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj'],
-    'frontcomposer': ['src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj',
-                      'src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj'],
+    # FrontComposer is README-only: its dependency policy seals every tracked .csproj digest, so any
+    # .csproj change there is reported as an unexpected changed file (user decision, 2026-11-10).
     'memories': ['src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj',
                  'src/Hexalith.Memories.Mcp/Hexalith.Memories.Mcp.csproj'],
     'folders': ['src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj'],
@@ -130,7 +130,7 @@ def main():
         for csproj in DESCRIPTIONS.get(repo, []):
             body = git(repo, 'show', f'{commit}:{csproj}')
             base = git(repo, 'show', f'{parent}:{csproj}')
-            if body.count('<Description>' + PREFIX) != 1 or body.replace(PREFIX, '', 1) != base and not csproj.endswith('FrontComposer.Mcp.csproj'):
+            if body.count('<Description>' + PREFIX) != 1 or body.replace(PREFIX, '', 1) != base:
                 failures.append(f'{csproj}: prefix is not the only change')
     if labeled != set(cells):
         failures.append(f'labeled {sorted(labeled)} != inventory {sorted(cells)}')

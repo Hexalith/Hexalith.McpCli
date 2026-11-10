@@ -49,10 +49,11 @@ SURFACES = [
     ('PS02', 'eventstore', '`Hexalith.EventStore.Admin.Mcp` (stdio MCP server)',
      'src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj', 'eventstore-admin', None, False, None),
     ('PS03', 'frontcomposer', '`Hexalith.FrontComposer.Cli` (.NET tool `frontcomposer`)',
-     'src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj', 'frontcomposer', None, True, 'next'),
+     # No Description prefix: FrontComposer seals every tracked .csproj digest (user decision, 2026-11-10).
+     'src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj', 'frontcomposer', None, False, None),
     ('PS04', 'frontcomposer', '`Hexalith.FrontComposer.Mcp` (HTTP MCP host library)',
      'src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj', 'frontcomposer',
-     'The FrontComposer host and the Projects plug-in (`Hexalith.Projects.Mcp`) retire together.', True, 'next'),
+     'The FrontComposer host and the Projects plug-in (`Hexalith.Projects.Mcp`) retire together.', False, None),
     ('PS05', 'parties', '`Hexalith.Parties.Mcp` (container `parties-mcp`)',
      'src/Hexalith.Parties.Mcp/Hexalith.Parties.Mcp.csproj', 'parties',
      'Retirement is blocked: the McpCli Story 5.4 verdict is `retirement-blocked`, with G01–G06 open '
@@ -293,7 +294,7 @@ def main():
                 raise SystemExit(f'{ps}: Description prefix not found once')
             row['description'] = {'file': project, 'line': found[0], 'anchor': f'{project}:{found[0]}',
                                   'sha256': sha(lines[found[0] - 1].encode('utf-8')), 'prefix': DESCRIPTION_PREFIX,
-                                  'added': ps == 'PS04', 'nugetVisibility': VISIBILITY[visibility]}
+                                  'added': False, 'nugetVisibility': VISIBILITY[visibility]}
         rows.append(row)
 
     pending = [repo for repo, value in commits.items() if value['deliveryStatus'] == 'pendingPush']
