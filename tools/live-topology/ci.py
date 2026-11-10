@@ -738,8 +738,10 @@ def run(evidence: Path) -> None:
                     RUN_TIMEOUT_SECONDS - len(INDEPENDENT_CASES) * INDEPENDENT_CASE_TIMEOUT - CLEANUP_HEADROOM_SECONDS,
                     generation / 'vectors-process', environment=environment)
             lane = json.loads((vectors / 'live-lane.json').read_text())
-            expected = sorted(json.loads(path.read_text())['operation'] for path in
+            # The live set is every approved vector with a companion plan; a vector without one is loopback-only.
+            expected = sorted(operation for operation in (json.loads(path.read_text())['operation'] for path in
                               (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json'))
+                              if (ROOT / 'tools/live-topology/plans' / (operation + '.json')).is_file())
             outcomes = lane.get('vectors', [])
             if not expected or len(set(expected)) != len(expected) or lane.get('coverage') != expected \
                     or lane.get('result') != 'passed' or lane.get('fullLiveAccepted') is not True \
@@ -747,7 +749,7 @@ def run(evidence: Path) -> None:
                     or sorted(item.get('operation', '') for item in outcomes) != expected \
                     or len({item.get('isolatedReceipt') for item in outcomes}) != len(expected) \
                     or any(item.get('result') != 'passed' or item.get('exitCode') != 0 for item in outcomes):
-                raise ValueError('Complete current passing evidence for every approved vector is required; partial/preflight/skipped evidence is refused.')
+                raise ValueError('Complete current passing evidence for every approved live vector is required; partial/preflight/skipped evidence is refused.')
             for item in outcomes:
                 require_owned(Path(item['isolatedReceipt']), runtime)
             report['vectors'] = {'result': 'passed', 'count': len(expected), 'receipt': str(vectors / 'live-lane.json')}

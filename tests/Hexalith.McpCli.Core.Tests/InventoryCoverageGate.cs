@@ -13,8 +13,9 @@ internal static class InventoryCoverageGate
     /// <param name="path">The inventory file path.</param>
     /// <param name="catalog">The public, unfiltered discovery service.</param>
     /// <param name="provider">The provider of the independently checked internal snapshot.</param>
+    /// <param name="reports">Receives non-failing, file-qualified reports in ordinal order, when supplied.</param>
     /// <returns>Deterministically ordered, file- and location-qualified findings; empty means coverage matches.</returns>
-    internal static IReadOnlyList<string> CheckFile(string path, ICatalog catalog, CatalogProvider provider)
+    internal static IReadOnlyList<string> CheckFile(string path, ICatalog catalog, CatalogProvider provider, ICollection<string>? reports = null)
     {
         try
         {
@@ -24,7 +25,7 @@ internal static class InventoryCoverageGate
                 bytes = bytes[3..];
             }
 
-            return Check(new UTF8Encoding(false, true).GetString(bytes), path, catalog, provider);
+            return Check(new UTF8Encoding(false, true).GetString(bytes), path, catalog, provider, reports);
         }
         catch (DecoderFallbackException)
         {
@@ -41,11 +42,14 @@ internal static class InventoryCoverageGate
     /// <param name="file">The stable source label used in every diagnostic.</param>
     /// <param name="catalog">The public, unfiltered discovery service.</param>
     /// <param name="provider">The provider supplying real internal descriptors and declaration diagnostics.</param>
+    /// <param name="reports">Receives non-failing reports, such as a cataloged operation that no row mentions, in ordinal order.</param>
     /// <returns>The exact coverage and validation findings in ordinal order.</returns>
-    internal static IReadOnlyList<string> Check(string json, string file, ICatalog catalog, CatalogProvider provider)
+    internal static IReadOnlyList<string> Check(string json, string file, ICatalog catalog, CatalogProvider provider, ICollection<string>? reports = null)
     {
         var findings = new List<string>();
+        var reported = new List<string>();
         void Add(string location, string message) => findings.Add($"{file}:{location}: {message}");
+        void Report(string location, string message) => reported.Add($"{file}:{location}: {message}");
         JsonDocument parsed;
         try
         {
@@ -74,9 +78,14 @@ internal static class InventoryCoverageGate
                 Validate(inventory, Add);
                 if (findings.Count == 0)
                 {
-                    Compare(inventory, catalog, provider, Add);
+                    Compare(inventory, catalog, provider, Add, Report);
                 }
             }
+        }
+
+        foreach (string report in reported.Order(StringComparer.Ordinal))
+        {
+            reports?.Add(report);
         }
 
         return findings.OrderBy(item => item, StringComparer.Ordinal).ToArray();
@@ -237,7 +246,8 @@ internal static class InventoryCoverageGate
         }
     }
 
-    private static void Compare(InventoryCoverageDocument inventory, ICatalog catalog, CatalogProvider provider, Action<string, string> add)
+    private static void Compare(InventoryCoverageDocument inventory, ICatalog catalog, CatalogProvider provider, Action<string, string> add,
+        Action<string, string> report)
     {
         CatalogAccess access = provider.Get(false);
         if (access.Catalog is null)
@@ -281,7 +291,6 @@ internal static class InventoryCoverageGate
                 $"duplicate public entry; expected once, actual {group.Count()}."));
         }
 
-        var includedNames = new HashSet<string>(StringComparer.Ordinal);
         foreach (InventoryCoverageTarget target in inventory.Targets)
         {
             bool included = inventory.LegacyRows.Any(row => row.Coverage == "include" && row.TargetIds.Contains(target.Id, StringComparer.Ordinal));
@@ -289,7 +298,6 @@ internal static class InventoryCoverageGate
             OperationDescriptor[] matchingInternal = descriptors.Where(item => string.Equals(item.Name, target.Name, StringComparison.Ordinal)).ToArray();
             if (included)
             {
-                includedNames.Add(target.Name);
                 if (matchingPublic.Length == 0)
                 {
                     add($"target {target.Id}", $"public name expected '{target.Name}' once; actual missing.");
@@ -319,14 +327,36 @@ internal static class InventoryCoverageGate
             }
         }
 
-        foreach (string name in operations.Select(item => item.Name).Distinct(StringComparer.Ordinal).Where(name => !includedNames.Contains(name)))
+        // The inventory gates retirement, not exposure: decorating a type is the owner's consent, so an unmentioned operation
+        // present on both surfaces is reported. A surface divergence still fails.
+        var mentionedNames = inventory.Targets.Select(target => target.Name).ToHashSet(StringComparer.Ordinal);
+        var mentionedTypes = inventory.Targets.Select(target => target.ContractType).ToHashSet(StringComparer.Ordinal);
+        bool Mentioned(OperationDescriptor descriptor)
+            => mentionedNames.Contains(descriptor.Name) || mentionedTypes.Contains(descriptor.ContractType.FullName ?? string.Empty);
+        foreach (string name in operations.Select(item => item.Name).Distinct(StringComparer.Ordinal)
+            .Where(name => !mentionedNames.Contains(name) && !descriptors.Any(item => item.Name == name && Mentioned(item))))
         {
-            add($"public operation {name}", "unexpected operation; no approved included target.");
+            if (descriptors.Any(item => string.Equals(item.Name, name, StringComparison.Ordinal)))
+            {
+                report($"public operation {name}", "reported, not failed; no inventory row mentions this cataloged operation.");
+            }
+            else
+            {
+                add($"public operation {name}", "public discovery lists an operation absent from the internal Catalog.");
+            }
         }
 
-        foreach (OperationDescriptor descriptor in descriptors.Where(item => !includedNames.Contains(item.Name)))
+        foreach (OperationDescriptor descriptor in descriptors.Where(item => !Mentioned(item)))
         {
-            add($"internal operation {descriptor.Name}", $"unexpected operation / '{descriptor.ContractType.FullName}'; no approved included target.");
+            if (operations.Any(item => string.Equals(item.Name, descriptor.Name, StringComparison.Ordinal)))
+            {
+                report($"internal operation {descriptor.Name}",
+                    $"reported, not failed; no inventory row mentions this cataloged operation / '{descriptor.ContractType.FullName}'.");
+            }
+            else
+            {
+                add($"internal operation {descriptor.Name}", $"descriptor / '{descriptor.ContractType.FullName}' is absent from public discovery.");
+            }
         }
     }
 

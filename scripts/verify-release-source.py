@@ -35,7 +35,7 @@ STAGING_JOBS = {
     'ci / aspire-tests': ['Prepare Aspire tier', 'Run Aspire hook'],
     'conformance-vector-contract': ['Pack and validate the shared vector contract without a Head or Gateway'],
     'conformance-vector-loopback': ['Run packaged Contracts through CLI and MCP against reset Gateway replay'],
-    'enrolled-module-conformance': ['Restore and build exact production catalog', 'Benchmark first v1 Catalog construction in a fresh process', 'Validate approved artifacts, complete vectors and both heads'],
+    'enrolled-module-conformance': ['Restore and build exact production catalog', 'Benchmark first v1 Catalog construction in a fresh process', 'Validate restored-package integrity, Operation Shape coverage and both heads'],
     'topology-vector-discovery': ['Build and discover every live vector plus the independent cases without starting source services'],
 }
 

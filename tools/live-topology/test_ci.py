@@ -195,7 +195,8 @@ if pathlib.Path(__file__).name == 'run-vectors.py':
     nested = subprocess.check_output(['python3', '-c', 'import ci_prepared_only,json,sys; print(json.dumps({"prefix":sys.prefix,"executable":sys.executable,"marker":ci_prepared_only.marker}))'], text=True)
     (root / 'nested-python.json').write_text(nested)
     output = pathlib.Path(sys.argv[sys.argv.index('--output') + 1]); output.mkdir()
-    operations = sorted(json.loads(path.read_text())['operation'] for path in (root / 'tools/conformance-vectors/v1/modules').glob('*.vector.json'))
+    operations = sorted(operation for operation in (json.loads(path.read_text())['operation'] for path in (root / 'tools/conformance-vectors/v1/modules').glob('*.vector.json'))
+                        if (root / 'tools/live-topology/plans' / (operation + '.json')).is_file())
     if mode == 'cancel-vectors':
         outcomes = [{'operation': name, 'result': 'not-run'} for name in operations]
         outcomes[0]['result'] = 'running'
@@ -329,8 +330,11 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         modules = self.root / 'tools/conformance-vectors/v1/modules'
         modules.mkdir(parents=True)
         (modules.parent / 'requirements.txt').write_text('jsonschema==4.26.0\n')
+        plans = self.tools / 'plans'
+        plans.mkdir()
         for index in range(21):
             (modules / f'{index}.vector.json').write_text(json.dumps({'operation': f'sample.operation-{index:02}'}))
+            (plans / f'sample.operation-{index:02}.json').write_text('{}')
         (self.root / 'global.json').write_text('{"sdk":{"version":"10.0.402","rollForward":"latestPatch"}}')
         (self.root / '.gitmodules').touch()
         (self.root / 'Directory.Build.props').write_text(
@@ -1434,12 +1438,23 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.prepare()
         extra = self.root / 'tools/conformance-vectors/v1/modules/additional.vector.json'
         extra.write_text(json.dumps({'operation': 'fixture.additional'}))
+        (self.tools / 'plans/fixture.additional.json').write_text('{}')
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         receipt = json.loads((self.evidence / 'ci-live.json').read_text())
         self.assertEqual(22, receipt['vectors']['count'])
         self.assertEqual('passed', receipt['boundary']['result'])
         self.assertEqual(24, len(list((Path(receipt['output']) / 'runtime-diagnostics').glob('*/result.json'))))
+
+    def test_approved_vector_without_a_plan_is_loopback_only_and_not_expected_live(self):
+        self.prepare()
+        extra = self.root / 'tools/conformance-vectors/v1/modules/additional.vector.json'
+        extra.write_text(json.dumps({'operation': 'fixture.loopback-only'}))
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual(21, receipt['vectors']['count'])
+        self.assertEqual(23, len(list((Path(receipt['output']) / 'runtime-diagnostics').glob('*/result.json'))))
 
     def test_early_independent_rebuild_drift_is_refused_before_any_vector(self):
         self.prepare()
@@ -1466,7 +1481,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                 expected = {'missing-vectors': 'live-lane.json', 'malformed-vectors': 'Expecting property name enclosed in double quotes',
                             'vector-exit': 'exited 19', 'failed-vectors': 'exited 1',
                             'vector-timeout': 'exited 124', 'stale-isolation': 'Isolated receipt is outside the prepared runtime.'}
-                self.assertIn(expected.get(mode, 'Complete current passing evidence for every approved vector is required'), result.stderr)
+                self.assertIn(expected.get(mode, 'Complete current passing evidence for every approved live vector is required'), result.stderr)
                 if mode == 'failed-vectors':
                     self.assertIn('failed Operations: sample.operation-00', result.stderr)
                     self.assertEqual([{'operation': 'sample.operation-00', 'result': 'failed',
@@ -1488,7 +1503,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                 try:
                     result = self.invoke('run-ci.sh', mode)
                     self.assertNotEqual(0, result.returncode)
-                    self.assertIn('Complete current passing evidence for every approved vector is required', result.stderr)
+                    self.assertIn('Complete current passing evidence for every approved live vector is required', result.stderr)
                     receipt = json.loads((self.evidence / 'ci-live.json').read_text())
                     self.assertIs(False, receipt['fullLiveAccepted'])
                     self.assertEqual('passed', receipt['smoke']['result'])

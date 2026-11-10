@@ -47,12 +47,16 @@ class PlanTests(unittest.TestCase):
                 load_plan(path, self.vector)
 
     def test_all_21_approved_vectors_have_valid_plans(self):
-        vectors = sorted((ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json'))
-        self.assertEqual(21, len(vectors))
-        for vector in vectors:
-            operation = json.loads(vector.read_text())['operation']
+        # Only companion plans are counted and loaded; an approved vector without a plan is loopback-only.
+        vectors = {json.loads(path.read_text())['operation']: path
+                   for path in (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json')}
+        plans = sorted((ROOT / 'tools/live-topology/plans').glob('*.json'))
+        self.assertEqual(21, len(plans))
+        for plan in plans:
+            operation = plan.name.removesuffix('.json')
             with self.subTest(operation=operation):
-                load_plan(ROOT / 'tools/live-topology/plans' / (operation + '.json'), vector)
+                self.assertIn(operation, vectors)
+                load_plan(plan, vectors[operation])
 
     def test_semantic_receipt_requires_each_query_head_and_only_one_command_head(self):
         from live_plans import declared_phases, require_phases
@@ -353,6 +357,158 @@ class PlanTests(unittest.TestCase):
                     if 'query' in action:
                         with self.subTest(operation=name, label=action['label']):
                             validate_call(head, action['query'])
+
+
+class LiveKindCoverageTests(unittest.TestCase):
+    """Per-kind live coverage, plan-backed selections, orphan plans, reports and the restored binding."""
+    HOST = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+
+    def test_each_declared_kind_needs_a_plan_backed_vector(self):
+        from live_plans import require_live_kinds
+        operations = {'module.write': 'command', 'module.read': 'query', 'module.list': 'query'}
+        require_live_kinds('module', operations, {'module.write', 'module.list'})
+        for planned, kind in [({'module.write'}, 'query'), ({'module.read', 'other.write'}, 'command'), (set(), 'command')]:
+            with self.subTest(planned=planned):
+                with self.assertRaises(VectorError) as failure:
+                    require_live_kinds('module', operations, planned)
+                self.assertEqual(f"module: Operation kind '{kind}' has no approved live vector with a companion plan.",
+                                 str(failure.exception))
+        require_live_kinds('module', {'module.read': 'query'}, {'module.read'})
+
+    def test_every_plan_needs_an_approved_vector(self):
+        from live_plans import plan_operations, require_plans_have_vectors
+        require_plans_have_vectors({'module.read'}, {'module.read', 'module.loopback-only'})
+        with self.assertRaises(VectorError) as failure:
+            require_plans_have_vectors({'module.read', 'module.zeta', 'module.orphan'}, {'module.read'})
+        self.assertEqual('Live plan(s) without an approved vector: module.orphan, module.zeta.', str(failure.exception))
+        with tempfile.TemporaryDirectory() as directory:
+            for name in ['module.read.json', 'module.write.json', 'notes.txt']:
+                (Path(directory) / name).write_text('{}')
+            self.assertEqual({'module.read', 'module.write'}, plan_operations(Path(directory)))
+
+    def preflight(self, plans=None, **patches):
+        import live_plans
+        from unittest.mock import patch
+        real = live_plans.plan_operations(ROOT / 'tools/live-topology/plans')
+        with tempfile.TemporaryDirectory() as directory, patch.object(live_plans, 'check_dependencies'), \
+                patch.object(live_plans, 'plan_operations', return_value=real if plans is None else plans(real)):
+            for name, value in patches.items():
+                self.enterContext(patch.object(live_plans, name, value))
+            reports = []
+            selections = live_plans.preflight(self.HOST, Path(directory), operation='parties.list-parties', reports=reports)
+            return selections, json.loads((Path(directory) / 'bindings.json').read_text()), reports
+
+    def test_vector_without_a_plan_stays_loopback_only(self):
+        selections, bindings, reports = self.preflight(lambda real: real - {'parties.get-party'})
+        self.assertEqual(['parties.list-parties'], [item['operation'] for item in selections])
+        operations = sorted(item['operation'] for item in bindings)
+        self.assertNotIn('parties.get-party', operations)
+        self.assertEqual(sorted(json.loads(path.read_text())['operation'] for path in
+                                (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json')
+                                if path.name != 'get-party.vector.json'), operations)
+        self.assertEqual([], reports)
+
+    def test_missing_live_kind_fails_naming_the_module_and_kind(self):
+        with self.assertRaises(VectorError) as failure:
+            self.preflight(lambda real: {name for name in real if name not in
+                                         ('parties.get-party', 'parties.list-parties', 'parties.search-parties')})
+        self.assertEqual("parties: Operation kind 'query' has no approved live vector with a companion plan.", str(failure.exception))
+
+    def test_orphan_plan_fails_preflight(self):
+        with self.assertRaises(VectorError) as failure:
+            self.preflight(lambda real: real | {'parties.retired-operation'})
+        self.assertEqual('Live plan(s) without an approved vector: parties.retired-operation.', str(failure.exception))
+
+    def test_version_difference_is_reported_and_the_binding_uses_the_restored_package(self):
+        import live_plans
+        real_load = live_plans._load_json
+        def older_receipt(path):
+            document = real_load(path)
+            return dict(document, version='0.0.1') if Path(path).name == 'approval.json' else document
+        selections, bindings, reports = self.preflight(_load_json=older_receipt)
+        self.assertEqual(['Hexalith.Parties.Contracts: approval receipt version 0.0.1 differs from restored package version 1.5.1; reported, not failed.',
+                          'Hexalith.Tenants.Contracts: approval receipt version 0.0.1 differs from restored package version 7.0.5; reported, not failed.'],
+                         reports)
+        restored = {binding['packageId']: (binding['version'], binding['artifactHash']) for binding in bindings}
+        assets = json.loads((ROOT / 'src/Hexalith.McpCli/obj/project.assets.json').read_text())
+        for package, (version, artifact_hash) in restored.items():
+            identity = f'{package}/{version}'
+            self.assertIn(identity, assets['libraries'])
+            self.assertEqual(live_plans.restored_package(assets, identity, assets['libraries'][identity])[1]['artifactHash'], artifact_hash)
+        self.assertEqual(['parties.list-parties'], [item['operation'] for item in selections])
+
+    def test_discovery_must_equal_the_flagged_package_manifests(self):
+        import live_plans
+        real_cli = live_plans.HeadProcess.cli
+        def cli(head, arguments, *rest, **kwargs):
+            code, document = real_cli(head, arguments, *rest, **kwargs)
+            if arguments[:2] == ['operations', 'tenants']:
+                document = dict(document, operations=document['operations'][1:])
+            return code, document
+        with self.assertRaises(VectorError) as failure:
+            self.preflight(HeadProcess=type('Head', (live_plans.HeadProcess,), {'cli': cli}))
+        self.assertEqual('Complete production Catalog discovery differs from the flagged package manifests.', str(failure.exception))
+
+    def test_inventory_reports_are_forwarded_without_failing(self):
+        import live_plans
+        import subprocess
+        real_run = subprocess.run
+        def run(arguments, **kwargs):
+            result = real_run(arguments, **kwargs)
+            if '--inventory' in arguments:
+                return subprocess.CompletedProcess(arguments, result.returncode, result.stdout,
+                                                   result.stderr + 'reported: inventory.json:public operation x: reported\nother line\n')
+            return result
+        from unittest.mock import patch
+        with patch.object(live_plans.subprocess, 'run', side_effect=run):
+            _, _, reports = self.preflight()
+        self.assertEqual(['inventory.json:public operation x: reported'], reports)
+
+
+class InventoryAdapterReportTests(unittest.TestCase):
+    """The real built adapter keeps its stdout findings array and exit code and reports on stderr."""
+    HOST = LiveKindCoverageTests.HOST
+
+    def inventory(self, home, mutate):
+        document = json.loads((ROOT / 'tools/inventory-coverage/v1/parties-approved.json').read_text())
+        mutate(document)
+        path = Path(home) / 'inventory.json'
+        path.write_text(json.dumps(document))
+        return path
+
+    def run_adapter(self, home, path):
+        import subprocess
+        from live_plans import HeadProcess
+        head = HeadProcess(self.HOST, home, 30)
+        return subprocess.run(head._base() + ['--inventory', str(path)], env=head.env, capture_output=True, text=True,
+                              timeout=60, check=False)
+
+    def test_unmentioned_operation_is_reported_on_stderr_without_a_finding(self):
+        removed = {}
+        def drop_target(document):
+            removed.update(next(target for target in document['targets'] if target['name'] == 'parties.list-parties'))
+            document['targets'].remove(removed)
+            for row in document['legacyRows']:
+                row['targetIds'] = [identity for identity in row['targetIds'] if identity != removed['id']]
+        with tempfile.TemporaryDirectory() as home:
+            path = self.inventory(home, drop_target)
+            result = self.run_adapter(home, path)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual('[]\n', result.stdout)
+        self.assertEqual(f"reported: {path}:internal operation parties.list-parties: reported, not failed; no inventory row "
+                         f"mentions this cataloged operation / '{removed['contractType']}'.\n"
+                         f"reported: {path}:public operation parties.list-parties: reported, not failed; no inventory row "
+                         "mentions this cataloged operation.\n", result.stderr)
+
+    def test_findings_stay_on_stdout_with_a_failing_exit_code(self):
+        def pending(document):
+            document['legacyRows'][0]['approval']['status'] = 'pending'
+        with tempfile.TemporaryDirectory() as home:
+            path = self.inventory(home, pending)
+            result = self.run_adapter(home, path)
+        self.assertEqual(1, result.returncode)
+        self.assertEqual([f"{path}:row L01: approval.status must be 'approved'; actual 'pending'."], json.loads(result.stdout))
+        self.assertEqual('', result.stderr)
 
 
 class AdapterDependencyTests(unittest.TestCase):

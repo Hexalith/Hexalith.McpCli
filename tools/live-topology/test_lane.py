@@ -7,7 +7,7 @@ from pathlib import Path
 import tempfile
 import unittest
 from unittest.mock import patch
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 
 from live_plans import VectorError, BINDING_KEYS, selection_binding
 
@@ -22,7 +22,8 @@ class LaneTests(unittest.TestCase):
         lane.require_coverage([{'operation': op} for op in expected], expected)
         for selections in [[], [{'operation': 'fixture.second'}],
                            [{'operation': op} for op in expected + ['fixture.first']]]:
-            with self.subTest(selections=selections), self.assertRaisesRegex(VectorError, 'complete approved vector coverage'):
+            with self.subTest(selections=selections), self.assertRaisesRegex(
+                    VectorError, '^Preflight execution selections differ from complete approved live vector coverage\\.$'):
                 lane.require_coverage(selections, expected)
         with tempfile.TemporaryDirectory() as directory, \
                 patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
@@ -32,6 +33,49 @@ class LaneTests(unittest.TestCase):
             self.assertEqual(1, lane.main(['--output', directory]))
             child.assert_not_called()
             self.assertFalse(json.loads((Path(directory) / 'live-lane.json').read_text())['fullLiveAccepted'])
+
+    def test_expected_live_set_is_every_approved_vector_with_a_companion_plan(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            modules = root / 'tools/conformance-vectors/v1/modules/Module.Contracts'
+            plans = root / 'tools/live-topology/plans'
+            modules.mkdir(parents=True)
+            plans.mkdir(parents=True)
+            for name in ['module.write', 'module.read', 'module.loopback-only']:
+                (modules / (name + '.vector.json')).write_text(json.dumps({'operation': name}))
+            for name in ['module.write', 'module.read']:
+                (plans / (name + '.json')).write_text('{}')
+            with patch.object(lane, 'ROOT', root):
+                self.assertEqual(['module.read', 'module.write'], lane.expected_operations())
+                (modules / 'copy.vector.json').write_text(json.dumps({'operation': 'module.read'}))
+                with self.assertRaisesRegex(VectorError, '^Approved live vector coverage is empty or duplicated\\.$'):
+                    lane.expected_operations()
+                for path in plans.glob('*.json'):
+                    path.unlink()
+                with self.assertRaisesRegex(VectorError, '^Approved live vector coverage is empty or duplicated\\.$'):
+                    lane.expected_operations()
+
+    def test_preflight_reports_reach_live_lane_json_and_stderr_without_changing_the_exit_code(self):
+        def report_then(result):
+            def preflight(host, output, reports):
+                reports.extend(['first report', 'second report'])
+                if isinstance(result, Exception):
+                    raise result
+                return result
+            return preflight
+        for result, code, outcome in [([{'operation': 'fixture.operation'}], 0, 'preflight-only'),
+                                      (VectorError('specific preflight failure'), 1, 'failed')]:
+            with self.subTest(outcome=outcome), tempfile.TemporaryDirectory() as directory, \
+                    patch.object(lane, 'preflight', side_effect=report_then(result)), \
+                    patch.object(lane, 'expected_operations', return_value=['fixture.operation']), \
+                    patch.object(lane, 'bounded_child') as child, \
+                    redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()) as stderr:
+                self.assertEqual(code, lane.main(['--output', directory, '--preflight-only']))
+                child.assert_not_called()
+                report = json.loads((Path(directory) / 'live-lane.json').read_text())
+                self.assertEqual(outcome, report['result'])
+                self.assertEqual(['first report', 'second report'], report['reported'])
+                self.assertEqual('reported: first report\nreported: second report\n', stderr.getvalue())
 
     def xml(self, **changes):
         values = dict(total='1', passed='1', failed='0', skipped='0', errors='0', result='Pass', operation='fixture.operation')
@@ -88,7 +132,7 @@ import importlib.util,pathlib,sys,time
 sys.path.insert(0,sys.argv[1])
 spec=importlib.util.spec_from_file_location('lane',pathlib.Path(sys.argv[1])/'run-vectors.py')
 lane=importlib.util.module_from_spec(spec); spec.loader.exec_module(lane)
-def preflight(*args):
+def preflight(*args, **kwargs):
  pathlib.Path(sys.argv[2],'blocked').touch()
  time.sleep(60)
 lane.preflight=preflight
@@ -291,7 +335,7 @@ spec=importlib.util.spec_from_file_location('lane',pathlib.Path(sys.argv[1])/'ru
 lane=importlib.util.module_from_spec(spec); spec.loader.exec_module(lane)
 from live_plans import BINDING_KEYS
 selection={'operation':'fixture.operation',**{key:key for key in BINDING_KEYS}}
-lane.preflight=lambda *args:[selection]
+lane.preflight=lambda *args, **kwargs:[selection]
 lane.expected_operations=lambda:['fixture.operation']
 sleeper=[sys.executable,'-c','import os,pathlib,sys,time; pathlib.Path(sys.argv[1]).write_text(str(os.getpid())); time.sleep(60)',str(pathlib.Path(sys.argv[2])/'child.pid')]
 bounded_child=lane.bounded_child

@@ -15,7 +15,7 @@ import sys
 import tempfile
 import xml.etree.ElementTree as ET
 
-from verify_artifact import resolve_builds_props
+from verify_artifact import copy_host_sources, resolve_builds_props
 
 
 def run(command, cwd, env, expected=0):
@@ -184,9 +184,7 @@ def fixture(repo: Path, artifact: Path):
         (root / 'tools/conformance-vectors/v1/v1-scope.json').write_text(json.dumps({'requiredModules': ['sample']}))
         core = root / 'tests/Hexalith.McpCli.Core.Tests'
         core.mkdir(parents=True)
-        for source in (repo / 'tests/Hexalith.McpCli.Core.Tests').glob('InventoryCoverage*.cs'):
-            if source.name not in ('InventoryCoverageTests.cs', 'InventoryCoverageContractsAssembly.cs'):
-                shutil.copy2(source, core / source.name)
+        copy_host_sources(repo / 'tests/Hexalith.McpCli.Core.Tests', core)
         project = root / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
         tree = ET.parse(project)
         enroll_fixture(tree.getroot(), package_id)
@@ -219,7 +217,8 @@ def fixture(repo: Path, artifact: Path):
         accepted = inventories / 'sample-accepted-lint.json'
         accepted.write_text('[]')
         digest = 'sha512-' + base64.b64encode(hashlib.sha512(artifact.read_bytes()).digest()).decode('ascii')
-        receipt = {'packageId': package_id, 'version': version, 'module': 'sample', 'artifactHash': digest,
+        # Receipts bind the inventory and vector hashes only; restored-package integrity binds the artifact.
+        receipt = {'packageId': package_id, 'version': version, 'module': 'sample',
                    'inventorySha256': hashlib.sha256(inventory.read_bytes()).hexdigest(),
                    'approvalReference': 'temporary synthetic sample fixture only; no owner release approval',
                    'vectorFilesSha256': {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in vectors}}
@@ -239,7 +238,19 @@ def fixture(repo: Path, artifact: Path):
                 raise RuntimeError(f'{kind} input bytes were not bound to the verification receipt.')
         if not any(check['label'] == 'replay' and check['exitCode'] == 0 for check in verified['checks']):
             raise RuntimeError('Nonempty orchestration did not execute complete replay.')
-        print(f'PASS nonempty enrollment: exact packaged sample, {len(verified["resolvedPackages"])} resolved packages, approval input hashes and complete replay.', flush=True)
+        # The real built host derives these keys through the C# OperationShape (pinned in EnrolledModuleCoverageTests).
+        command_shape = ('kind=command;identifierKind=ulid;wireTypeConvention=kebabCase;tenantSource=fixedTenant;'
+                         'aggregateIdSource=property;projectionSelector=none;idempotencyKey=optional')
+        query_shape = ('kind=query;identifierKind=ulid;wireTypeConvention=kebabCase;tenantSource=fixedTenant;'
+                       'aggregateIdSource=property;projectionSelector=projectionType;idempotencyKey=optional')
+        expected_shapes = [
+            {'module': 'sample', 'shape': command_shape, 'operations': ['sample.create-item', 'sample.rename-item'],
+             'vectors': ['sample.create-item', 'sample.rename-item']},
+            {'module': 'sample', 'shape': query_shape, 'operations': ['sample.get-item'], 'vectors': ['sample.get-item']},
+        ]
+        if report['shapes'] != expected_shapes or verified['shapes'] != expected_shapes:
+            raise RuntimeError('Enrolled sample Operation Shapes differ from the exact C# keys: ' + json.dumps(report['shapes']))
+        print(f'PASS nonempty enrollment: exact packaged sample, {len(verified["resolvedPackages"])} resolved packages, approval input hashes, both Operation Shapes and complete replay.', flush=True)
 
         # The real Core adapter must reject every incompatible step before any Gateway exists.
         host_dll = host / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'

@@ -4,7 +4,14 @@
 
 ## Goal
 
-Move every proprietary Hexalith MCP server, plug-in, and CLI to McpCli without losing a supported capability. Every legacy operation gets a current owner-approved `replace`, `withdraw`, or `defer` disposition. Parties, the only Module with gateway-ready `replace` rows and already enrolled, is the one committed retirement. Every non-gateway capability class gets one approved generic decision or an explicit withdrawal. Each surface that cannot retire yet stays a labeled, versioned compatibility binary with a named removal gate. McpCli stays generic and gateway-only until an approved extension changes that, and nothing retires before its authorization, parity, release, and rollback gates pass. After Story 5.1, two independent tracks run: the gateway-ready Parties chain and the non-gateway decision and re-disposition chain. CI census enforcement and a closing reconciliation complete the epic.
+Replace every proprietary Hexalith MCP server, plug-in, and CLI with McpCli without losing a supported capability:
+
+- Every legacy operation gets a current owner-approved `replace`, `withdraw`, or `defer` disposition.
+- Parties, already enrolled, is the committed first retirement.
+- Each non-gateway capability class gets one approved generic decision or a withdrawal.
+- Any surface that cannot retire yet stays a labeled, versioned compatibility binary with a named removal gate.
+
+Story 5.12 rebases the enrollment gates on operation shapes. After that, a module can add or release decorated operations without a matching McpCli change; Folders (Epic 6) is the first to rely on this. McpCli stays generic and gateway-only.
 
 ## Stories
 
@@ -19,80 +26,106 @@ Move every proprietary Hexalith MCP server, plug-in, and CLI to McpCli without l
 - Story 5.9: Refresh and Re-disposition Projects and FrontComposer Inventories
 - Story 5.10: Refresh and Re-disposition ChatBot and Memories Inventories
 - Story 5.11: Reconcile Product Claims and the Migration Plan
+- Story 5.12: Gate Enrolled Modules by Operation Shape
 
-The stories were renumbered on 2026-11-08 so that citations in the approved Story 5.1 artifacts still resolve, but some of those citations now point elsewhere. The CI rejection that the technical inventory hands to "Story 5.5" is Story 5.6. The re-pins and PS14 inventory handed to "Story 5.3" are Stories 5.8–5.10. The FV04/FV08 parity clarifications handed to "Story 5.4" apply wherever Story 5.9 re-dispositions a FrontComposer row to `replace`.
+The Story 5.1 artifacts cite old story numbers. Their "5.5" CI rejection is now 5.6, their "5.3" re-pins are now 5.8–5.10, and their "5.4" FV04/FV08 notes now apply in 5.9.
 
 ## Requirements & Constraints
 
-- **Gates and release.** The entry gate opened on 2026-11-08. The Epic 4 retrospective verdict stays `rejected`, and opening the gate grants no execution, enrollment, or retirement authority. Three open Epic 4 items still bind every evidence, release, or tenant-isolation claim: CI redaction hardening, release-acceptance binding, and refusing non-ASCII tenant input before lowercasing (F7). No McpCli version after 2.0.1 may be published until `epic-3-retro-item-1-complete-output-contract` is done.
-- **Inventory rows.** Every row records the legacy operation, `replace`/`withdraw`/`defer`, rationale, security class, the exact replacement contract or a named gap, and the owner's approval reference.
-  - `include` appears only with `replace`. `exclude` needs an approved withdraw or defer, and it never means deletion.
-  - Each disposition change is a new versioned, owner-approved amendment. Prior versions stay byte-for-byte unchanged, and approvals are hash-chained.
-  - Stream and file resources stay tracked gaps, as do the deferred search, filter, order-by, and freshness variants.
-- **Approval authority.** Each inventory states its approval authority. Under the single-maintainer model, requesting-user approval is owner authority only when it names the roles it covers. Inventories marked `external_maintainer_approval: unasserted` carry session-scope approval only, and the coverage gate rejects `scope-only` authority.
-- **What counts as a replacement.** A candidate counts only once a decorated contract that satisfies the dependency allowlist is named, with its type, exact Gateway route, and eligibility. Plain Commands and REST DTOs do not qualify.
-- **Context and identifiers.** Task, actor, and correlation context travel only as Payload properties, through `actorProperty`, or in allowed Envelope extensions. A read that needs context and has no such channel stays `defer`.
-  - Envelope correlation and idempotency keys are canonical uppercase ULIDs, and payload identifiers follow the Module's declared Identifier Kind.
-  - A legacy format the target cannot accept stays a named gap or becomes an owner-approved change with migration evidence. Never convert it silently and never change McpCli validators to fit it.
-- **Restricted operations.** The CLI and MCP heads are one public `agent` surface. UI-only, confirmation-required, and destructive operations never execute through it, and a caller-supplied `confirm: true` proves no human authority. Each such operation goes to a confidential UI, owner-held local tooling, or withdrawal. None may appear in `list_operations` or be submittable.
-- **Retirement.** A surface retires only with an owner-approved replacement or withdrawal for every operation, plus authorization, behavior, conformance, release, and rollback evidence on the selected environment.
-  - An unrecorded behavior difference blocks retirement. Matching operation names proves nothing.
-  - The FrontComposer host and the Projects plug-in retire together, after other host consumers move. The FrontComposer compiler CLI is handled separately.
-  - Forwarded per-user identity is necessary but not sufficient for Memories.
-  - EventStore Admin also waits for an approved administration contract, destructive-operation safety evidence, and its upstream source fixes (AV10, AV11, token display, URL disclosure).
-- **Success measures.** At least one Legacy Server is deleted within three months of v1; if Parties slips, the product owner records why. No new per-module server or CLI appears after 2026-09-21.
-- **Committed evidence.** It passes the shared redactor and the secret scan. It binds by hash the exact McpCli candidate, Contracts version, Catalog digest, environment, vectors, and companion live plans.
-- **Exit criteria.**
-  - Every inventoried operation has a current approved disposition.
-  - Parties is retired, or the slip is recorded.
-  - CI rejects new proprietary surfaces beyond `src/`.
-  - The migration plan is re-versioned.
-  - No active module PRD or architecture still plans a proprietary MCP/CLI.
+- **Gates.** The Epic 4 verdict stays `rejected`. The opened entry gate grants no execution, enrollment, or retirement authority. Two Epic 4 items stay open and bind every release and tenant-isolation claim: release-acceptance binding, and rejecting non-ASCII tenant input before lowercasing (F7).
+- **Inventory rows** record:
+  - the legacy operation and its disposition
+  - the rationale and security class
+  - the exact replacement contract, or a named gap
+  - the owner approval, naming the roles it covers
+
+  `include` requires `replace`. `exclude` requires an approved `withdraw` or `defer` and never means deletion. Each change is a new versioned amendment: prior bytes stay unchanged and approvals are hash-chained. A candidate counts as `replace` only once its decorated type exists in source at the pin.
+- **Context and identifiers.** Task and actor context travel only in Payload properties, through `actorProperty`, or in allowed Envelope extensions; otherwise the row stays `defer`. Envelope keys are canonical uppercase ULIDs, and payload identifiers follow the Module's Identifier Kind. Legacy formats are never converted silently.
+- **Restricted operations.** The CLI and MCP heads are one `agent` surface.
+  - UI-only, confirmation-required, and destructive operations never appear in `list_operations` and cannot be submitted.
+  - A caller's `confirm: true` proves nothing.
+  - Such operations go to a confidential UI, owner-held tooling, or withdrawal.
+- **Retirement** requires two things:
+  - every operation replaced or withdrawn with owner approval
+  - selected-environment evidence for authorization, behavior, conformance, release, and rollback
+
+  An unrecorded behavior difference blocks retirement. FrontComposer and Projects retire together. Per-user identity alone does not unblock Memories. EventStore Admin also needs an admin contract and its G4 upstream fixes.
+- **Success measures.** SM-3: at least one Legacy Server is deleted within three months of v1, or the slip is recorded. SM-C1: no new per-module server or CLI is created.
+- **Evidence** passes the shared redactor and secret scan. It is hash-bound to the candidate, Contracts version, Catalog digest, environment, vectors, and live plans.
 
 ## Technical Decisions
 
-- **Gateway-only boundary.** The gateway-only design and the production dependency allowlist stay binding. Without an approved decision, production `src/` gains none of the following: MCP resources or prompts, stream readers, executor retries, plug-in loaders, module-specific adapters, branches, or error mappings, or new dependencies. The tool never calls a Module's REST or Dapr API.
-- **Admitting new capabilities.** To admit anything beyond decorated Commands and Queries to the `agent` surface, two things are needed. A Hexalith.Platform architecture decision under its AD-14 must be merged, and the matching PRD change must be approved through a change proposal. A decision that admits nothing records that no such change is required. Each admitted class defines generic versioned declaration, discovery, execution, error documents, authorization class, audit, and conformance evidence.
-- **Gap classes.** These are the gap classes to decide: administration, resource-like reads, diagnostics, lifecycle and status observation, documentation delivery, local compiler/wizard/preview tooling, streamed content and files, query freshness and extensions, idempotency-key format, erasure, and key rotation.
-  - Each class gets exactly one outcome: decorated Gateway contract, named generic authenticated transport, exempt local tooling, confidential UI only, withdrawal, or continued deferral with a named gap.
-  - Every inventory row maps to exactly one class.
-  - No row is re-dispositioned on the strength of a draft decision.
-- **Exempt local tooling.** An exemption is published as a versioned amendment to the Hexalith.AI.Tools ownership rule, beside the existing Builds exemptions (`hexalith-module`, `hexalith-evidence`). Until that amendment merges, the surface stays a frozen compatibility source in the census.
-- **Enrollment.** These change together under the README enrollment rules: exact version, dependency policy, release inventory, vectors, approval hashes, and companion live plans. The coverage gate and the enrolled-replay gate must pass.
-- **Profiles and tenant.** McpCli never reads `~/.eventstore/profiles.json` or the admin CLI's environment. Each profile binds one Gateway URL, one token, and one tenant. A Payload tenant or actor that disagrees with the resolved Envelope fails closed with zero Gateway calls, and the tenant follows the declared-scope and public-tenant rules.
-- **Parity and safety evidence.** Loopback runs need equal canonical documents and captured requests from both heads. The live lane runs each vector once and never submits a Command twice just to compare output. Live MCP-head execution is included, or the owner re-accepts the Epic 4 deviation of a CLI-only live lane with loopback parity.
-- **Negative cases.** Each of these must fail closed, with the documented error and no mutation:
-  - missing or invalid credentials
+- **Gateway-only boundary.** Without an approved decision, production `src/` gains none of the following:
+  - MCP resources or prompts
+  - stream readers
+  - retries
+  - plug-in loaders
+  - module-specific branches or error mappings
+  - new dependencies
+
+  McpCli never calls a Module's REST or Dapr API, and paging stays in the Envelope.
+- **New capability classes.** Admitting anything beyond decorated Commands and Queries needs a merged Platform decision under its AD-14 and an approved PRD change. Each class gets exactly one outcome:
+  - a Gateway contract
+  - a generic authenticated transport
+  - exempt local tooling, recorded as a versioned AI.Tools amendment
+  - confidential UI only
+  - withdrawal
+  - deferral with a named gap
+
+  Every inventory row maps to one class, and no row is re-dispositioned on a draft decision.
+- **Operation-shape coverage (AD-16, amended 2026-11-10).** Vectors cover every Operation Shape rather than every operation. A shape is a tuple derived from the Catalog:
+  - kind
+  - Identifier Kind
+  - Wire Type convention
+  - tenant source: exact `platformScope`, `fixedTenant`, or public
+  - aggregate-id source: property, constant, or none
+  - projection selector: `projectionType`, `projectionActorType`, or none
+  - whether an idempotency key is required
+
+  The gate fails on an uncovered shape and on a duplicate or stale vector. A vector is stale only if its operation is absent or the Catalog rejects its inputs. The existing 21 vectors should cover six shapes.
+- **Vector versions are informational.** A version mismatch is reported, and the vector still runs. `approval.json` binds only the inventory and vector hashes, with no artifact hash. Re-approval is needed only when vector bytes or the inventory change. Package-integrity checks and release validation are unchanged.
+- **Inventory gate (AD-21, amended).** The inventory gates retirement, not exposure.
+  - Each `include` row appears exactly once, both publicly and internally, with its contract type.
+  - `withdraw` and `defer` rows stay absent from the Catalog.
+  - Missing, mismatched, duplicate, or unapproved rows fail.
+  - A cataloged operation that no row mentions is reported and never fails. This supersedes older wording that failed "extra" rows.
+- **Decoration is consent.** Decorating a type is the owner's consent to expose it to agents and operators through the Gateway without human confirmation. UI-only and confirmation-required operations are never decorated. The Gateway still authorizes every call. The rule is documented, not mechanically enforced.
+- **Live lane.**
+  - Each approved live vector runs once, and no Command is submitted twice to compare output.
+  - Each module needs at least one live vector, with a companion plan, for every Operation kind it declares.
+  - For new enrollments, the live Command vector creates an aggregate, submits a second Command with a caller-supplied idempotency key, and reads the result back with a Query.
+  - Existing Parties and Tenants vectors and plans stay unchanged, with one deferred entry to adopt this pattern.
+- **Loopback parity.** For every vector, both heads must produce equal canonical documents and captured requests. Only generated message and correlation IDs are masked. Live MCP-head runs are included, or the owner re-accepts a CLI-only lane.
+- **Fail-closed cases** return zero mutations:
+  - bad or missing credentials
   - an unauthorized principal
   - a disallowed tenant override
   - a platform scope requested through tenant input
-  - the reserved public `system` tenant
+  - the public `system` tenant
   - non-ASCII look-alike tenants
-- **Census check.** The baseline is a versioned data file outside `src/`. The check scans every root-declared reference at its gitlink, including paths beyond `src/`, and never initializes nested submodules.
-  - Exceptions need an owner, a reason, and an expiry, which code evaluates against the run date.
-  - Stale entries are reported, and the baseline changes only through a census amendment.
-  - The code contains no module names, paths, or count literals.
-  - Each guard has a test that fails when the guard is removed.
-- **Generic live-topology runners.** The runners never branch on module names or use fixed vector counts.
-- **Migration plan versioning.** Every migration-plan change gets a new `plan_version`, and `inventory_revision` moves when an inventory is re-pinned or added. The root-declared Hexalith.AI.Tools reference must contain the merged revision, and `scripts/check-agent-instructions-sync.sh` must pass.
+  - a Payload tenant or actor that disagrees with the Envelope
+
+  McpCli never reads the admin `profiles.json`.
+- **Census check.** The baseline is versioned data outside `src/`, scanned at each root-declared gitlink without initializing nested submodules. Exceptions need an owner, a reason, and an expiry.
+- **Generic gates.** No module names, paths, or counts appear in code, and every guard has a test that fails when the guard is removed.
+- **Migration plan.** Every change gets a new `plan_version`. `inventory_revision` moves when an inventory is re-pinned or added.
 
 ## UX & Interaction Patterns
 
-- Machine-facing guidance and module MVP gates name the available operations, setup through `hexalith` and the stdio server, and a safe refusal or UI handoff for restricted actions.
-- The README documents manual profile setup for operators moving off `eventstore-admin` or `Parties.Mcp`.
-- Release notes during Epic 5 separate the gateway-only increment from completed retirements and list the remaining compatibility binaries with their removal gates. They never claim that ecosystem migration is finished.
+- Machine-facing guidance names:
+  - the available operations
+  - setup through `hexalith` and the stdio server
+  - safe refusal or UI handoff for restricted actions
+- Release notes separate the gateway-only increment from completed retirements. They list the remaining compatibility binaries and never claim the migration is finished.
 
 ## Cross-Story Dependencies
 
-- **Story 5.1** supplies the approved inventories (Admin 1.0.1 with 91 rows, technical tools 1.0.2 with 68 rows), the census, and the static gate that the amendments reuse.
-- **Gateway track: 5.3 → 5.4 → 5.5.**
-  - 5.3 closes Parties gates C06 and C07 and Admin G6, and it may need an upstream Parties Contracts release. It must also account for the open `epic-2-retro-item-1-protect-profile-output` and `epic-2-retro-item-2-anchor-profile-names`, or record why they do not apply.
-  - 5.4 stays blocked unless the owner records acceptance of the F7 limitation.
-  - 5.5 needs a merged upstream Parties release, and it labels every deferred surface.
-- **Non-gateway track: 5.2 → 5.7, 5.8, 5.9, 5.10.** These four stories are independent of each other and of 5.5.
-  - Label ordering: if 5.5 has already labeled a surface, an amendment that changes its removal gate updates that label upstream before it counts as complete.
-  - Otherwise 5.5 labels the surface from the latest approved inventory version.
-- **Story 5.6** depends only on the Story 5.1 census.
-- **Story 5.11** depends on 5.2–5.10. It gives `deferred-work.md:143-145` and every intra-epic deferral a recorded disposition: resolved, already tracked, or accepted.
-- **Upstream work** belongs to the owning repositories (Parties, EventStore, FrontComposer, Projects, Folders, ChatBot, Memories, Hexalith.AI.Tools, Hexalith.Platform), and `references/` stays read-only here.
-- **Out of scope:** the HTTP transport and forwarded per-user identity, which keep Memories and identity-dependent variants blocked.
+- **5.1** supplies the Admin 1.0.1 and technical-tools 1.0.2 inventories, the census, and the static gate.
+- **Parties track: 5.3 → 5.4 → 5.5.** If owner gates G01–G06 keep `Parties.Mcp` from retiring, Folders (Epic 6) may become the first deletion that satisfies SM-3.
+- **Non-gateway track: 5.2 → 5.7, 5.8, 5.9, 5.10.** These four are independent of each other.
+  - 5.8 also waits on Hexalith.Folders Story 5.12.
+  - If an amendment changes a removal gate that 5.5 has already labeled, the upstream label is updated first.
+- **5.6** depends only on the 5.1 census.
+- **5.12** has no dependencies. Story 6.1 waits on 5.12, 5.2, and 5.8.
+- **5.11** depends on 5.2–5.7, 5.9, and 5.10, plus 5.8 once it is done. It records a disposition for every Epic 5 deferral.
+- **Out of scope:** upstream work belongs in the owning repositories, and `references/` stays read-only. HTTP transport and forwarded per-user identity are out of scope.

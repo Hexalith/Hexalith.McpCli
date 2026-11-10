@@ -18,11 +18,13 @@ from validate import VectorError, _load_json
 
 
 def expected_operations() -> list[str]:
-    """Independently require the complete vector inventory, never a returned subset."""
-    operations = [_load_json(path)['operation'] for path in
-                  (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json')]
+    """Independently require every approved vector that has a companion plan, never a returned subset."""
+    plans = ROOT / 'tools/live-topology/plans'
+    operations = [operation for operation in (_load_json(path)['operation'] for path in
+                  (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json'))
+                  if (plans / (operation + '.json')).is_file()]
     if not operations or len(operations) != len(set(operations)):
-        raise VectorError('Approved vector coverage is empty or duplicated.')
+        raise VectorError('Approved live vector coverage is empty or duplicated.')
     return sorted(operations)
 
 
@@ -30,7 +32,7 @@ def require_coverage(selections: list[dict], expected: list[str]) -> None:
     """Catch omitted or duplicate execution selections independently of preflight."""
     actual = [item['operation'] for item in selections]
     if sorted(actual) != sorted(expected):
-        raise VectorError('Preflight execution selections differ from complete approved vector coverage.')
+        raise VectorError('Preflight execution selections differ from complete approved live vector coverage.')
 
 
 def require_case(path: Path, operation: str) -> None:
@@ -94,7 +96,7 @@ def main(argv=None) -> int:
     args = parser.parse_args(argv)
     args.output = args.output.resolve()
     args.output.mkdir(parents=True, exist_ok=True)
-    report = {'runId': uuid.uuid4().hex, 'result': 'pending', 'fullLiveAccepted': False, 'vectors': []}
+    report = {'runId': uuid.uuid4().hex, 'result': 'pending', 'fullLiveAccepted': False, 'vectors': [], 'reported': []}
     receipt = args.output / 'live-lane.json'
     # Invalidate the public receipt before any fallible preflight. Child outputs use a unique generation.
     receipt.write_text(json.dumps(report, indent=2) + '\n')
@@ -113,7 +115,12 @@ def main(argv=None) -> int:
             raise VectorError('--child-timeout must be between 1 and 960 seconds.')
         if not args.preflight_only and not os.environ.get('MCPCLI_ISOLATED_RUNTIME_DIR', '').strip():
             raise VectorError('MCPCLI_ISOLATED_RUNTIME_DIR must name a prepared private runtime.')
-        selections = preflight(args.host.resolve(), generation / 'preflight')
+        try:
+            selections = preflight(args.host.resolve(), generation / 'preflight', reports=report['reported'])
+        finally:
+            # Reports never change the exit code or acceptance.
+            for item in report['reported']:
+                print(f'reported: {item}', file=sys.stderr)
         report['coverage'] = expected_operations()
         require_coverage(selections, report['coverage'])
         if args.operation is not None:

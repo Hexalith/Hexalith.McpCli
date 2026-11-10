@@ -21,7 +21,6 @@
     "set-tenant-configuration.vector.json": "19b8ebd4f174abaf3d9cd10a5872fc4e7af34ed380521bdbed5e9ecfad5c983f",
     "update-tenant.vector.json": "5090b29559addfe7d74e224767de3f8917cdd9d13c5aabaff3372131b6871810"
   },
-  "artifactHash": "sha512-Rw7W/bMwDBFwA1/wT6iOjNHd/PqSPAFQ2+ZUhWY7XXaIPlzKxiB+X/YALpHy1f6p/SoxAWCGq2Jlg4EEOTrY4w==",
   "approvalReference": "evidence/release-maintenance-20261106/tenants-7.0.5/approval.json",
   "publishedArtifactBinding": "evidence/release-maintenance-20261106/tenants-7.0.5/approval.json",
   "publication": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v7.0.5",

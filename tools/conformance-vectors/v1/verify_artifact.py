@@ -17,7 +17,36 @@ import tempfile
 import xml.etree.ElementTree as ET
 import zipfile
 
-from validate import _load_json, package_identity, validate_vectors
+from validate import _load_json, package_identity, shape_coverage, validate_vectors
+
+# Generic test-only sources the isolated host compiles beside the ConformanceHost adapter.
+HOST_SOURCES = ('InventoryCoverage*.cs', 'OperationShape.cs')
+HOST_SOURCE_EXCLUSIONS = ('InventoryCoverageTests.cs', 'InventoryCoverageContractsAssembly.cs')
+
+
+def copy_host_sources(core_tests: Path, destination: Path) -> None:
+    """Copy the generic inventory gate and the single Operation Shape derivation the adapter compiles."""
+    for pattern in HOST_SOURCES:
+        for source in core_tests.glob(pattern):
+            if source.name not in HOST_SOURCE_EXCLUSIONS:
+                shutil.copy2(source, destination / source.name)
+
+
+def stderr_reports(text: str) -> list[str]:
+    """Collect the adapter's non-failing ``reported: …`` stderr lines."""
+    return [line.removeprefix('reported: ') for line in text.splitlines() if line.startswith('reported: ')]
+
+
+def manifest_shapes(manifest: list, package_id: str) -> dict[str, str]:
+    """Read one package's operation-to-Operation-Shape map from the adapter's --manifest-catalog document."""
+    matching = [item for item in manifest if isinstance(item, dict) and str(item.get('packageId', '')).casefold() == package_id.casefold()]
+    if len(matching) != 1:
+        raise RuntimeError(f'{package_id}: manifest Catalog must contain exactly one entry for the package; found {len(matching)}.')
+    shapes = {item.get('name'): item.get('shape') for item in matching[0].get('operations', [])}
+    if not shapes or len(shapes) != len(matching[0]['operations']) or any(
+            not isinstance(name, str) or not isinstance(shape, str) or not shape for name, shape in shapes.items()):
+        raise RuntimeError(f'{package_id}: manifest Catalog requires unique operations, each with an Operation Shape.')
+    return shapes
 
 
 def resolve_builds_props(repo: Path) -> Path:
@@ -96,12 +125,20 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
     output.mkdir(parents=True, exist_ok=True)
     # Invalidate stale success before even resolving the new artifact or reading inputs.
     (output / 'artifact.sha512').unlink(missing_ok=True)
-    receipt = {'result': 'pending', 'checks': [],
+    receipt = {'result': 'pending', 'checks': [], 'reported': [],
                'approvalInputs': {'inventory': None, 'acceptedLint': None},
                'evidenceLimit': 'Scripted Gateway replay proves head routing and result parity; it does not prove live authorization or domain effects.'}
 
     def save():
         (output / 'verification.json').write_text(json.dumps(receipt, indent=2) + '\n')
+
+    def report(items):
+        """Record and print each new non-failing report; reports never change the result."""
+        for item in items:
+            if item not in receipt['reported']:
+                receipt['reported'].append(item)
+                print(f'reported: {item}', file=sys.stderr)
+        save()
 
     save()
 
@@ -211,9 +248,7 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             host.mkdir()
             for source in (repo / 'tests/Hexalith.McpCli.ConformanceHost').glob('*.cs'):
                 shutil.copy2(source, host / source.name)
-            for source in (repo / 'tests/Hexalith.McpCli.Core.Tests').glob('InventoryCoverage*.cs'):
-                if source.name not in ('InventoryCoverageTests.cs', 'InventoryCoverageContractsAssembly.cs'):
-                    shutil.copy2(source, host / source.name)
+            copy_host_sources(repo / 'tests/Hexalith.McpCli.Core.Tests', host)
             project = ET.Element('Project', Sdk='Microsoft.NET.Sdk')
             group = ET.SubElement(project, 'PropertyGroup')
             for key, value in [('OutputType', 'Exe'), ('IsPackable', 'false'), ('RequireContractsFlag', 'true')]:
@@ -245,11 +280,17 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
                 findings.extend(dict(finding, operation=operation) for finding in description['lintFindings'])
             check_lint(findings, _load_json(frozen_inputs['acceptedLint']) if accepted_lint is not None else [])
             receipt['acceptedLint'] = str(accepted_lint) if accepted_lint is not None else None
-            findings = validate_vectors(vectors, artifact, (package_id, version), operations)
+            shapes = manifest_shapes(json.loads(run([*command, '--manifest-catalog'], scratch, env, 'manifest-catalog')), package_id)
+            reports = []
+            findings = validate_vectors(vectors, artifact, (package_id, version), shapes, reports)
+            report(reports)
             if findings:
                 raise RuntimeError('\n'.join(findings))
+            receipt['shapes'] = shape_coverage({_load_json(path)['operation'] for path in vectors}, shapes)
+            save()
             if inventory is not None:
                 run([*command, '--inventory', frozen_inputs['inventory']], scratch, env, 'inventory')
+                report(stderr_reports((output / 'inventory.stderr.txt').read_text()))
             run([sys.executable, repo / 'tools/conformance-vectors/v1/run_loopback.py', '--host', command[1],
                  '--assets', host / 'obj/project.assets.json', '--artifact', artifact,
                  '--expected-package-id', package_id, '--expected-package-version', version, *vectors], repo, env, 'replay')

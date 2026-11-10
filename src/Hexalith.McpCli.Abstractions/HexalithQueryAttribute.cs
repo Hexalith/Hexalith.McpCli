@@ -2,6 +2,9 @@ namespace Hexalith.McpCli.Abstractions;
 
 /// <summary>
 /// Declares an agent-facing gateway query on a Contracts class or record.
+/// Decorating a type is the owning maintainer's consent to expose it to agents and operators through the Gateway
+/// without human confirmation; never decorate UI-only or confirmation-required operations.
+/// The Gateway still authorizes every call.
 /// </summary>
 /// <param name="description">What the query reads for a reader unfamiliar with the source.</param>
 [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = false)]

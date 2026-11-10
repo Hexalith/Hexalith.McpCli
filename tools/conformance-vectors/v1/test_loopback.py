@@ -5,10 +5,12 @@ from __future__ import annotations
 import base64
 import copy
 import hashlib
+import io
 import json
 import tempfile
 import unittest
 import zipfile
+from contextlib import redirect_stderr
 from pathlib import Path
 from unittest.mock import patch
 
@@ -382,6 +384,7 @@ class ProductionReplayOrderingTests(unittest.TestCase):
         head.mcp.side_effect = [(False, modules), (False, listed)]
         with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
                 patch('run_loopback._manifest_operations', return_value={'sample.get-item': 'query'}), \
+                patch('run_loopback._manifest_shapes', return_value={'sample.get-item': 'opaque-shape'}), \
                 patch('run_loopback.HeadProcess', return_value=head), \
                 patch('run_loopback._preflight_vectors', side_effect=AssertionError('Core preflight must not run')) as preflight, \
                 patch('run_loopback.ReplayGateway') as gateway, \
@@ -405,6 +408,7 @@ class ProductionReplayOrderingTests(unittest.TestCase):
         head.mcp.side_effect = [(False, modules), (False, listed)]
         with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
                 patch('run_loopback._manifest_operations', return_value={'sample.get-item': 'query'}), \
+                patch('run_loopback._manifest_shapes', return_value={'sample.get-item': 'opaque-shape'}), \
                 patch('run_loopback.HeadProcess', return_value=head), \
                 patch('run_loopback._preflight_vectors', side_effect=AssertionError('Core preflight must not run')) as preflight, \
                 patch('run_loopback.ReplayGateway') as gateway, \
@@ -458,6 +462,7 @@ class ProductionReplayOrderingTests(unittest.TestCase):
 
         with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
                 patch('run_loopback._manifest_operations', return_value={step['operation']: 'query'}), \
+                patch('run_loopback._manifest_shapes', return_value={step['operation']: 'opaque-shape'}), \
                 patch('run_loopback._preflight_vectors'), patch('run_loopback.HeadProcess', return_value=head), \
                 patch('run_loopback._run_step', side_effect=run_step), \
                 patch('run_loopback.ReplayGateway', return_value=gateway), \
@@ -484,6 +489,7 @@ class ProductionReplayOrderingTests(unittest.TestCase):
             'findings': [f'{last}:/postconditions/0: Core compatibility failed: schema mismatch'], 'requests': []}), '')
         with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
              patch('run_loopback._manifest_operations', return_value=operations), \
+             patch('run_loopback._manifest_shapes', return_value=dict.fromkeys(operations, 'opaque-shape')), \
              patch('run_loopback.HeadProcess', return_value=head), \
              patch('run_loopback.subprocess.run', side_effect=[malformed, incompatible]), \
              patch('run_loopback.ReplayGateway') as gateway:
@@ -635,6 +641,7 @@ class RetainedFailureEvidenceTests(unittest.TestCase):
             with tempfile.TemporaryDirectory() as directory, \
                     patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
                     patch('run_loopback._manifest_operations', return_value={step['operation']: 'query'}), \
+                    patch('run_loopback._manifest_shapes', return_value={step['operation']: 'opaque-shape'}), \
                     patch('run_loopback._preflight_vectors'), patch('run_loopback.HeadProcess', return_value=head), \
                     patch('run_loopback.ReplayGateway', return_value=gateway), \
                     patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
@@ -715,6 +722,7 @@ class GeneratedMessageReuseExecutionTests(unittest.TestCase):
             source.write_text(json.dumps(vector))
             with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
                     patch('run_loopback._manifest_operations', return_value={step['operation']: 'command'}), \
+                    patch('run_loopback._manifest_shapes', return_value={step['operation']: 'opaque-shape'}), \
                     patch('run_loopback._preflight_vectors'), patch('run_loopback.HeadProcess', return_value=head), \
                     patch('run_loopback.ReplayGateway', Gateway), \
                     patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
@@ -762,6 +770,7 @@ class GeneratedMessageReuseExecutionTests(unittest.TestCase):
             source.write_text(json.dumps(vector))
             with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
                     patch('run_loopback._manifest_operations', return_value={step['operation']: 'command'}), \
+                    patch('run_loopback._manifest_shapes', return_value={step['operation']: 'opaque-shape'}), \
                     patch('run_loopback._preflight_vectors'), patch('run_loopback.HeadProcess', return_value=head), \
                     patch('run_loopback.ReplayGateway', return_value=gateway), \
                     patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
@@ -782,6 +791,7 @@ class ReceiptModuleBindingTests(unittest.TestCase):
         head.mcp.side_effect = [(False, modules), (False, operations)]
         with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', return_value=[]), \
                 patch('run_loopback._manifest_operations', return_value={'sample.get-item': 'query'}), \
+                patch('run_loopback._manifest_shapes', return_value={'sample.get-item': 'opaque-shape'}), \
                 patch('run_loopback.HeadProcess', return_value=head), \
                 patch('run_loopback._preflight_vectors') as preflight, patch('run_loopback.ReplayGateway') as gateway, \
                 patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
@@ -790,6 +800,58 @@ class ReceiptModuleBindingTests(unittest.TestCase):
                             expected_modules={'Sample.Contracts': 'tenants'})
         preflight.assert_not_called()
         gateway.assert_not_called()
+
+
+class ShapeCoverageReplayTests(unittest.TestCase):
+    def test_manifest_shapes_reach_the_validator_and_an_uncovered_shape_stops_replay(self):
+        import subprocess
+        from unittest.mock import Mock
+        from run_loopback import run_catalog
+        modules = {'modules': [{'name': 'sample'}]}
+        operations = {'operations': [{'name': 'sample.get-item', 'kind': 'read'}, {'name': 'sample.other', 'kind': 'write'}]}
+        head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
+        head.cli.side_effect = [(0, modules), (0, operations)]
+        head.mcp.side_effect = [(False, modules), (False, operations)]
+        shapes = {'sample.get-item': 'covered', 'sample.other': 'uncovered'}
+        finding = "sample: Operation Shape 'uncovered' has no approved vector (operations: sample.other)."
+        calls = []
+
+        def validate(paths, artifact, package, expected_shapes=None, reports=None):
+            calls.append(expected_shapes)
+            if expected_shapes is None:
+                reports.append('vector version report')
+                return []
+            return [finding]
+        with patch('run_loopback._verify_artifact_in_host'), patch('run_loopback.validate_vectors', side_effect=validate), \
+                patch('run_loopback._manifest_operations', return_value={'sample.get-item': 'query', 'sample.other': 'command'}), \
+                patch('run_loopback._manifest_shapes', return_value=shapes), \
+                patch('run_loopback.HeadProcess', return_value=head), \
+                patch('run_loopback._preflight_vectors') as preflight, patch('run_loopback.ReplayGateway') as gateway, \
+                patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')), \
+                redirect_stderr(io.StringIO()) as stderr:
+            with self.assertRaises(VectorError) as failure:
+                run_catalog(Path('Host.dll'), [(Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [HERE / 'sample-query.json'])])
+        self.assertEqual(finding, str(failure.exception))
+        self.assertEqual([None, shapes], calls)
+        self.assertEqual('reported: vector version report\n', stderr.getvalue())
+        preflight.assert_not_called()
+        gateway.assert_not_called()
+
+    def test_manifest_shapes_require_a_shape_for_every_flagged_operation(self):
+        import subprocess
+        from unittest.mock import Mock
+        from run_loopback import _manifest_shapes
+        head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
+        operation = {'name': 'sample.get-item', 'kind': 'query', 'shape': 'opaque-key'}
+        def manifest(operations):
+            return subprocess.CompletedProcess([], 0, json.dumps([{'packageId': 'Sample.Contracts', 'operations': operations}]), '')
+        with patch('run_loopback.subprocess.run', return_value=manifest([operation])):
+            self.assertEqual({'sample.get-item': 'opaque-key'}, _manifest_shapes(head, 'sample.CONTRACTS'))
+        for broken in [{'name': 'sample.get-item', 'kind': 'query'}, dict(operation, shape=''), dict(operation, shape=None)]:
+            with self.subTest(operation=broken), patch('run_loopback.subprocess.run', return_value=manifest([broken])):
+                with self.assertRaises(VectorError) as failure:
+                    _manifest_shapes(head, 'Sample.Contracts')
+                self.assertEqual('test host flagged manifest omits an Operation Shape for Sample.Contracts', str(failure.exception))
 
 
 class GeneratedErrorCorrelationTests(unittest.TestCase):
@@ -859,12 +921,18 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
 
             head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
             head.cli.side_effect, head.mcp.side_effect = cli, mcp
+
+            def validate(paths, artifact, package, shapes=None, reports=None):
+                if reports is not None:
+                    reports.append('vector version report')
+                return []
             with tempfile.TemporaryDirectory() as directory:
                 source = Path(directory) / 'command-204.vector.json'
                 source.write_text(json.dumps(vector))
                 with self.subTest(supplied=supplied, reuse_503=reuse_503), patch('run_loopback._verify_artifact_in_host'), \
-                        patch('run_loopback.validate_vectors', return_value=[]), \
+                        patch('run_loopback.validate_vectors', side_effect=validate), redirect_stderr(io.StringIO()) as stderr, \
                         patch('run_loopback._manifest_operations', return_value={step['operation']: 'command'}), \
+                        patch('run_loopback._manifest_shapes', return_value={step['operation']: 'opaque-shape'}), \
                         patch('run_loopback.HeadProcess', return_value=head), \
                         patch('run_loopback._preflight_vectors'), patch('run_loopback.ReplayGateway', Gateway), \
                         patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
@@ -872,8 +940,10 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
                         with self.assertRaisesRegex(VectorError, 'gateway-error/messageId:.*reused across distinct calls'):
                             run_catalog(Path('Host.dll'), [(Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])])
                     else:
-                        self.assertEqual(['sample'], run_catalog(Path('Host.dll'), [
-                            (Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])])['modules'])
+                        self.assertEqual({'modules': ['sample'], 'packageModules': {'Sample.Contracts': ['sample']},
+                                          'reported': ['vector version report']}, run_catalog(Path('Host.dll'), [
+                            (Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])]))
+                    self.assertEqual('reported: vector version report\n', stderr.getvalue())
 
     def test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation(self):
         from run_loopback import _assert_result_contract, _assert_result_request_binding

@@ -115,7 +115,7 @@ jobs:
           MCPCLI_BENCHMARK_REQUIRE_V1: 'true'
           MCPCLI_BENCHMARK_OUTPUT: ${{ runner.temp }}/enrolled-evidence/catalog-benchmark.json
         run: dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll -class Hexalith.McpCli.Core.Tests.CatalogPerformanceTests
-      - name: Validate approved artifacts, complete vectors and both heads
+      - name: Validate restored-package integrity, Operation Shape coverage and both heads
         if: ${{ !cancelled() }}
         run: |
           python3 -m venv "$RUNNER_TEMP/mcpcli-enrolled-venv"
@@ -159,8 +159,10 @@ jobs:
           import json, pathlib, sys
           discovered = [line for line in pathlib.Path(sys.argv[1]).read_text().splitlines()
                         if line.startswith("Hexalith.McpCli.Integration.Tests.")]
-          operations = sorted(json.loads(path.read_text())["operation"] for path in
+          # The expected live set is every approved vector that has a companion plan.
+          operations = sorted(operation for operation in (json.loads(path.read_text())["operation"] for path in
                               pathlib.Path("tools/conformance-vectors/v1/modules").rglob("*.vector.json"))
+                              if pathlib.Path("tools/live-topology/plans", operation + ".json").is_file())
           expected = ["Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"]
           expected += ["Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety"]
           expected += ['Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: "' + operation + '")'

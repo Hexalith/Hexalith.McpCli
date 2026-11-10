@@ -58,12 +58,18 @@ approval or release claim is delivered or altered by this fixture.
 
 ## Comparison and diagnostics
 
-`InventoryCoverageGate.CheckFile(path, catalog, provider)` loads strict JSON,
+`InventoryCoverageGate.CheckFile(path, catalog, provider, reports)` loads strict JSON,
 validates scope, calls unfiltered public `ICatalog.ListOperations(module)`, and
 independently reads `provider.Get(false)` for internal descriptors. Every included
 name must appear once publicly and once internally with exactly the recorded
-`OperationDescriptor.ContractType.FullName`. Excluded names/types must be absent;
-extra public or internal operations fail. Any Catalog declaration error fails,
+`OperationDescriptor.ContractType.FullName`. Excluded (`withdraw` or `defer`)
+names/types must be absent. The inventory gates retirement, not exposure:
+decorating a type is the owning maintainer's consent to expose it to agents
+without human confirmation, so a cataloged operation that no inventory row
+mentions is reported, never failed, when it is present on both surfaces. An
+unmentioned public name with no internal descriptor, or an unmentioned internal
+descriptor absent from public discovery, still fails. An operation counts as
+mentioned when its name, or its descriptor's CLR type, matches any target. Any Catalog declaration error fails,
 even if the surviving operations match, and the check is global: a declaration
 error in any enrolled module fails every module's gate. Internal comparison uses
 `CatalogProvider.Get(false)` and rejects only error diagnostics. A warnings-only
@@ -88,8 +94,8 @@ file path/label followed by `:` and one of these location prefixes:
 | `catalog:` | An unavailable internal Catalog, including its access error code and message. |
 | `catalog <TypeName>:` | A Catalog declaration error, including its diagnostic category and message. |
 | `public:` | A `ListOperations` error, missing public document, or mismatched document module. |
-| `public operation <name>:` | A duplicate public entry or unexpected public operation. |
-| `internal operation <name>:` | An unexpected internal operation, including its CLR identity. |
+| `public operation <name>:` | A duplicate public entry, or an unmentioned public name absent from the internal Catalog. |
+| `internal operation <name>:` | An unmentioned internal descriptor absent from public discovery, including its CLR identity. |
 
 Messages identify the field, conflicting identity, or expected and actual value.
 Invalid documents fail before comparison; malformed JSON reports
@@ -100,6 +106,22 @@ Examples from separate checks, shown in ordinal order:
 inventory.json:row L01: dangling target reference 'T99'.
 inventory.json:target T01: public name expected 'sample.create-item' once; actual missing.
 ```
+
+Reports never fail. When the caller supplies a `reports` collection, the gate adds
+one ordinally sorted, file-qualified report per surface for each cataloged operation
+that no row mentions and that both surfaces list:
+
+```text
+inventory.json:internal operation sample.rename-item: reported, not failed; no inventory row mentions this cataloged operation / 'Hexalith.McpCli.Sample.Contracts.RenameItemCommand'.
+inventory.json:public operation sample.rename-item: reported, not failed; no inventory row mentions this cataloged operation.
+```
+
+`EnrolledInventoryCoverageGate` forwards each module's reports, and
+`EnrolledModuleCoverageTests` writes them to the test output. The ConformanceHost
+`--inventory <path>` adapter keeps its stdout JSON array of findings and exit code
+(0 when empty, 1 otherwise) and writes each report to stderr as a `reported: …`
+line; `verify_artifact.py` and the live preflight copy those lines into their
+`reported` arrays.
 
 ## Future owner handoff
 
@@ -122,9 +144,13 @@ Contracts pins, Gateway behavior and retirement gates remain separate work.
 `EnrolledModuleCoverageTests` reads the built production manifest and checks every
 module with the generic `EnrolledInventoryCoverageGate`. Each requires
 `<module>-approved.json`, purpose `release`, recorded `owning-maintainer`
-decisions and exact public-name/internal-type coverage. A missing inventory fails
-independently of the dependency-policy gate; synthetic fixture approval cannot
-authorize shipping.
+decisions and exact public-name/internal-type coverage of every `include` row;
+a cataloged operation that no row mentions is reported, not failed. A missing
+inventory fails independently of the dependency-policy gate; synthetic fixture
+approval cannot authorize shipping. The same test class runs the generic
+`ShapeCoverageGate`, which requires a hash-approved vector for every Operation
+Shape of each enrolled module (see the
+[conformance vector contract](../../conformance-vectors/v1/README.md#operation-shape-coverage)).
 The shipped manifest enrolls the verified `Hexalith.Parties.Contracts` 1.5.1
 artifact. Its seven operations are checked against `parties-approved.json`.
 

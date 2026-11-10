@@ -2,7 +2,25 @@
 
 This directory is the McpCli-owned, test-only contract for Module conformance vectors. Only `formatVersion: 1` is supported. `schema.json` defines structural rules; `validate.py` applies them with strict integer typing and adds cross-field consistency and artifact identity checks. Authors and runners must use this shared validator for the complete approval rules; schema validation alone is insufficient. Production code never loads these files. An incompatible format needs a new versioned directory and an explicit validator update. Tightening validation of malformed v1 inputs does not introduce a new format.
 
-Each vector names one canonical decorated Operation and its owning Contracts **package ID and exact version**. Package IDs compare case-insensitively; versions compare exactly, without case folding or version normalization. A vector approved for one version is stale when its package version changes, even if its Operation Name is reused. The owning Module repository stores and approves its real vectors. The three `sample-*.json` vectors cover the local synthetic Contracts fixture; they do not enroll a production Module.
+Each vector names one canonical decorated Operation, its owning Contracts **package ID** and the **version** it was authored against. Package IDs compare case-insensitively, and a different package ID fails. The version is informational: it compares exactly, without case folding or version normalization, and a difference from the release artifact or the restored package is reported, not failed, and needs no re-approval. A vector is stale only when its Operation is absent from the restored Catalog or Core rejects its inputs. A module's vectors together cover every [Operation Shape](#operation-shape-coverage) in its Catalog, not every Operation. The owning Module repository stores and approves its real vectors. The three `sample-*.json` vectors cover the local synthetic Contracts fixture; they do not enroll a production Module.
+
+## Operation Shape coverage
+
+An Operation Shape is the module-scoped tuple that McpCli's generic translation branches on:
+
+| Component | Values |
+| --- | --- |
+| `kind` | `command`, `query` |
+| `identifierKind` | `ulid`, `string` (the Module's Identifier Kind) |
+| `wireTypeConvention` | `explicit`, `fullTypeName`, `kebabCase` |
+| `tenantSource` | `platformScope` (the operation's exact declared scope), `fixedTenant` (the Module's), `public` |
+| `aggregateIdSource` | `property`, `constant`, `none` |
+| `projectionSelector` | `projectionActorType`, `projectionType`, `none` |
+| `idempotencyKey` | `required`, `optional` |
+
+Only `tests/Hexalith.McpCli.Core.Tests/OperationShape.cs` derives a shape, from Catalog descriptors; its key reads like `kind=query;identifierKind=string;…`. The ConformanceHost compiles that file and emits each operation's `shape` from `--manifest-catalog`; every Python gate treats the key as an opaque string. A shape that no approved vector covers fails with `<module>: Operation Shape '<key>' has no approved vector (operations: <names>).` A duplicate or stale vector also fails. `EnrolledModuleCoverageTests` applies the same rule to the production Catalog, counting only vectors whose bytes match `vectorFilesSha256`, and writes each covered shape to the test output. No gate pins the number of shapes; the 21 Parties and Tenants vectors cover six, three per module.
+
+A report is a non-failing observation: a vector or receipt version that differs from the restored package, or a cataloged operation that no inventory row mentions. Each report appears on stderr as a `reported: …` line and in the `reported` array of `enrolled.json`, `verification.json` and the live lane's `live-lane.json`. A report never changes an exit code.
 
 ## Contract rules
 
@@ -40,8 +58,15 @@ python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'
 
 ## Module author approval
 
-1. Store the vector set in the owning Module repository and name the immutable owning Contracts `.nupkg` package ID and exact version in every vector. Use postcondition Queries to assert a Command's observable effect without submitting that live Command twice.
-2. Obtain that immutable artifact and run the shared validator against it. No Head, Catalog assembly loading, Gateway, or AppHost is required for author approval:
+1. Store the vector set in the owning Module repository and name the owning Contracts package ID, and the version you authored against, in every vector. Use postcondition Queries to assert a Command's observable effect without submitting that live Command twice.
+2. Cover every Operation Shape your Catalog uses, and give each Operation kind you declare at least one live vector with a companion plan in `tools/live-topology/plans/<operation>.json`. Test each Operation's handler semantics, routing strings and wire types in your Module repository. Decorate only Operations you consent to expose to agents and operators without human confirmation; never decorate UI-only or confirmation-required operations.
+3. For a new enrollment, the live Command vector must:
+   - create an aggregate in a prerequisite;
+   - submit a second Command to it with a caller-supplied idempotency key;
+   - read the effect back with a postcondition Query.
+
+   The CI gate checks only that each declared kind has a plan-backed live vector; this scenario is an authoring and approval rule. The Parties and Tenants vectors and plans approved before 2026-11-10 keep running unchanged until their next vector amendment.
+4. Obtain that immutable artifact and run the shared validator against it. No Head, Catalog assembly loading, Gateway, or AppHost is required for author approval:
 
    ```sh
    python3 tools/conformance-vectors/v1/validate.py \
@@ -61,59 +86,72 @@ python3 -m unittest discover -s tools/conformance-vectors/v1 -p 'test_*.py'
    PY
    ```
 
-3. Resolve every finding and rerun until exit 0. Invalid or incompatible vectors exit 1, with source, location, and reason diagnostics. CLI usage errors exit 2. Package identity comes from the artifact's root `.nuspec`, never a project file.
-4. Record maintainer approval with `formatVersion: 1`, the vector repository revision, validator revision, owning package ID and exact version, immutable artifact location and NuGet-compatible `sha512-` base64 hash, exact validation command, successful output/exit code, and approving maintainer. Keep the artifact available for downstream checks; the temporary sample artifact is illustrative evidence only.
+5. Resolve every finding and rerun until exit 0. Invalid or incompatible vectors exit 1, with source, location, and reason diagnostics; reports print as `reported: …` stderr lines without changing the exit code. CLI usage errors exit 2. Package identity comes from the artifact's root `.nuspec`, never a project file.
+6. Record maintainer approval with `formatVersion: 1`, the vector repository revision, validator revision, owning package ID and the version the vectors were authored against, the validated artifact location and NuGet-compatible `sha512-` base64 hash, exact validation command, successful output/exit code, and approving maintainer. That hash is author evidence only: McpCli's `approval.json` binds the inventory and vector hashes and must not bind an artifact hash. Re-approval is needed only when vector bytes or the inventory change. The temporary sample artifact is illustrative evidence only.
 
 Approval establishes format, script consistency, and artifact identity compatibility. It does not establish that an Operation exists in the owning Catalog, that its kind or Payload matches the decorated Contracts schema, or that a handler produces the scripted semantic result. Those checks belong to the downstream gates below.
 
 ## Runner handoff
 
-The reusable entry point `validate_vectors(paths, artifact, expected_package, expected_operations)` applies the same schema, consistency, and artifact checks as the CLI. A JSON array of canonical Catalog names can be passed with `--operations-file` to reject missing, extra, or duplicate vectors. The validator itself has no production Catalog dependency.
+The reusable entry point `validate_vectors(paths, artifact, expected_package, expected_shapes, reports)` applies the same schema, consistency, and artifact checks as the CLI. `expected_shapes` maps each canonical restored Catalog operation name to its Operation Shape key; the validator fails an uncovered shape, a duplicate vector and a vector whose operation is absent, and appends version differences to `reports`. On the CLI, `--operations-file` takes the same JSON object; the former array of names is refused with exit 1. The validator itself has no production Catalog dependency and never derives a shape.
 
-**Story 4.11** implements production restored-package rechecks and deterministic cross-head parity. Before execution, the runner supplies the restored flagged production package ID and exact version to the shared validator (`--expected-package-id` and `--expected-package-version` on the CLI), checks coverage and kinds against the owning Catalog, and checks Payload compatibility. It also verifies that the immutable artifact matches the package restored into the host. This catches a stale approval after a package update.
+**Story 4.11** implements production restored-package rechecks and deterministic cross-head parity. Before execution, the runner supplies the restored flagged production package ID and version to the shared validator (`--expected-package-id` and `--expected-package-version` on the CLI), checks shape coverage and kinds against the owning Catalog, and checks Payload compatibility. A different package ID fails; a different version is reported. The runner also verifies that the immutable artifact matches the package restored into the host.
 
 The existing sample parity gate remains available independently as `bash tools/conformance-vectors/v1/run-sample-loopback.sh`, and CI retains it in the separate `conformance-vector-loopback` job. It packs the sample and Abstractions into a temporary feed, restores the test-only host into an isolated NuGet cache, builds it, runs the validator tests, and executes all three vectors through separate CLI and MCP stdio processes. The generated manifest contains only the flagged sample package; production source and its package manifest stay unchanged. The test host invokes the actual CLI/MCP composition through a reflection adapter because the sample package is intentionally absent from the production tool. The runner compares the immutable artifact's SHA-512 with the package restored into that host.
 
 `run_loopback.py` drives both Heads out of process. For every vector it compares discovery documents, invokes each prerequisite, invocation, and postcondition against separately reset HTTP response scripts, checks semantic result assertions, compares complete captured Gateway requests and their required fields, and checks malformed-Payload error parity without a Gateway request. Only generated Command message and correlation ULIDs are masked; caller-supplied values remain exact. The single-package entry point still verifies each owning package independently. Enrollment additionally invokes `run_catalog` against the complete production manifest with every approved vector and no sample injection. All prerequisite, invocation and postcondition kinds, payload schemas, envelope arguments and complete expected requests pass Core validation before a replay gateway starts. Payload JSON has Core's depth limit of 64, counted independently of the vector framing. An isolated profile allowlists only the vector extension keys. Required success/error result fields, supplied identifiers and key omission are checked independently of head equality. Passing offline author approval does not require running this parity gate.
 
-**Story 4.13** owns the separate live EventStore/Aspire semantic lane. It rechecks the approved vectors against the restored owning package using the shared validator, runs each vector once, and verifies actual Query contents and persistent Command effects. The synthetic sample's scripted Query response illustrates assertions; it does not prove a real handler's persistent effect. Live Commands are not submitted twice solely for cross-head byte equality.
+**Story 4.13** owns the separate live EventStore/Aspire semantic lane. It rechecks the approved vectors against the restored owning package using the shared validator, runs each approved live vector (one with a companion plan) once, and verifies actual Query contents and persistent Command effects. Each module needs at least one plan-backed live vector per declared Operation kind; a vector without a plan runs in loopback only, and a plan without an approved vector fails the live preflight. The synthetic sample's scripted Query response illustrates assertions; it does not prove a real handler's persistent effect. Live Commands are not submitted twice solely for cross-head byte equality.
 
 ## Exact artifact and enrolled-module gates
 
 `verify_artifact.py --artifact <Contracts.nupkg> --output <evidence-directory>
-[--inventory <approved-inventory.json>] [--expected-hash <sha512-receipt>]
+[--inventory <approved-inventory.json>] [--expected-hash <sha512-of-a-candidate>]
 [--accepted-lint <module>-accepted-lint.json]
 <vector.json>...` creates an isolated generic host around that exact package.
-It verifies restored bytes, complete Catalog coverage, strict discovery, every
-operation's description lint, and complete CLI/MCP replay without removing Query
-postconditions. Artifact dependency versions and the evidence limit are recorded
-in `verification.json`; candidate dependency overrides do not enroll a package.
-An optional inventory runs the same strict C# coverage checker as Core.Tests.
+It verifies restored bytes, Operation Shape coverage from the host's
+`--manifest-catalog`, strict discovery, every operation's description lint, and
+complete CLI/MCP replay without removing Query postconditions. The optional
+`--expected-hash` checks a standalone candidate; enrollment never passes one.
+`verification.json` records artifact dependency versions, the evidence limit,
+each covered `shapes` entry (module, opaque key, operations and covering vectors)
+and the `reported` array; candidate dependency overrides do not enroll a package.
+An optional inventory runs the same strict C# coverage checker as Core.Tests; its
+`reported: …` stderr lines join the receipt's reports.
 
 The `enrolled-module-conformance` CI job evaluates every flagged production
 PackageReference, requires its exact restored `.nupkg`, and calls
 `check_enrolled.py`. Each package needs a directory
 `tools/conformance-vectors/v1/modules/<PackageId>/` containing complete
-`*.vector.json` files and `approval.json` with `packageId`, `version`, `module`,
-`artifactHash` (`sha512-` plus base64 SHA-512) and an owning-maintainer
+`*.vector.json` files and `approval.json` with `packageId`, `version` (the
+version the vectors were approved against), `module` and an owning-maintainer
 `approvalReference`, plus `inventorySha256` (the lowercase SHA-256 of the exact
 approved inventory input) and `vectorFilesSha256`: an exact map of relative
 `*.vector.json` names (including subdirectories) to lowercase SHA-256 hex digests.
-Added, removed, renamed or changed vectors require fresh approval. The artifact
-receipt hash must match exact restored package bytes. The NuGet restore content
-hash independently matches `project.assets.json` and cache metadata. The module also needs its approved release inventory under
-`tools/inventory-coverage/v1/<module>-approved.json`. Missing vectors, receipt,
-inventory, coverage or approval fail; the dependency gate remains independent.
-Inventory bytes must match the approved digest before verification, and the
-verifier checks that digest again when freezing its input. Package IDs and their
-approval directory names compare case-insensitively; versions remain exact.
-`Hexalith.Parties.Contracts` 1.5.1 has all seven vectors and its exact signed-archive
-receipt under `modules/Hexalith.Parties.Contracts/`. `Hexalith.Tenants.Contracts`
-7.0.4 has fourteen vectors with only package-version metadata refreshed and its
-authentic signed public-archive receipt under `modules/Hexalith.Tenants.Contracts/`. That receipt links the
-[automated approval evidence](../../../_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/approval.json),
-including the exact source, archive, inventory and vector hashes, strict validator
-result, authenticated account and delegated Codex identity. The user explicitly
+Added, removed, renamed or changed vectors require fresh approval. A receipt with
+a top-level `artifactHash` fails: an ignored field would look like a binding, so
+the receipt binds only the inventory and vector hashes. Restored-package integrity
+is the artifact binding: the NuGet restore content hash must match
+`project.assets.json` and cache metadata, and differing archive bytes need a
+matching `.nupkg.sha512` sidecar. A receipt `version` that differs from the restored
+package is reported and the vectors still run. The module also needs its approved
+release inventory under `tools/inventory-coverage/v1/<module>-approved.json`.
+Missing vectors, receipt, inventory, shape coverage or approval fail; the dependency
+gate remains independent. Inventory bytes must match the approved digest before
+verification, and the verifier checks that digest again when freezing its input.
+Package IDs and their approval directory names compare case-insensitively.
+`enrolled.json` lists every package's covered `shapes` and a deduplicated
+`reported` array; `check_enrolled.py` prints each report it adds as a `reported: …`
+stderr line, and its summary names the shape and report counts.
+`Hexalith.Parties.Contracts` 1.5.1 has all seven vectors and its approval receipt
+under `modules/Hexalith.Parties.Contracts/`. `Hexalith.Tenants.Contracts`
+7.0.5 has fourteen vectors with only package-version metadata refreshed and its
+approval receipt under `modules/Hexalith.Tenants.Contracts/`. That receipt links the
+[automated 7.0.5 approval evidence](../../../evidence/release-maintenance-20261106/tenants-7.0.5/approval.json);
+the [7.0.4 approval evidence](../../../_bmad-output/implementation-artifacts/evidence/story-4-18/tenants704-public-artifact/approval.json)
+records the exact source, archive, inventory and vector hashes, strict validator
+result, authenticated account and delegated Codex identity. The approval evidence
+files keep the archive hashes they recorded; the receipts no longer bind them. The user explicitly
 authorized bypass of human validation; no separate human review or actual
 operator-client session is claimed. Historical local-candidate hashes and sources
 remain identified as historical evidence.

@@ -21,7 +21,7 @@ from evidence_redaction import sanitized
 sys.path.insert(0, str(ROOT / 'tools/conformance-vectors/v1'))
 from validate import VectorError, _load_json, validate_vectors
 from check_enrolled import approved_inventory, approved_vectors, approval_directory, artifact_for, required_scope
-from run_loopback import HeadProcess, _manifest_operations, _pointer, _preflight_vectors, _steps, _verify_artifact_in_host
+from run_loopback import HeadProcess, _manifest_operations, _manifest_shapes, _pointer, _preflight_vectors, _steps, _verify_artifact_in_host
 from verify_artifact import restored_package
 
 BINDING_KEYS = ('packageId', 'version', 'artifactHash', 'vectorSha256', 'planSha256', 'approvalSha256', 'inventorySha256')
@@ -318,8 +318,39 @@ def execution_selection(selections: list[dict], operation: str | None) -> list[d
     return selected
 
 
-def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | None = None) -> list[dict]:
-    """Recheck the entire enrollment, immutable approvals, inventories, Catalog and plans."""
+def plan_operations(directory: Path) -> set[str]:
+    """The Operations that have a companion live plan."""
+    return {path.name.removesuffix('.json') for path in directory.glob('*.json')}
+
+
+def require_live_kinds(module: str, operations: dict[str, str], planned: set[str]) -> None:
+    """Each Operation kind a module declares needs at least one approved vector with a companion plan."""
+    for kind in sorted(set(operations.values())):
+        if not any(operations[name] == kind for name in planned if name in operations):
+            raise VectorError(f"{module}: Operation kind '{kind}' has no approved live vector with a companion plan.")
+
+
+def require_plans_have_vectors(plans: set[str], approved: set[str]) -> None:
+    """A companion plan is only meaningful beside an approved vector for the same Operation."""
+    orphans = sorted(plans - approved)
+    if orphans:
+        raise VectorError('Live plan(s) without an approved vector: ' + ', '.join(orphans) + '.')
+
+
+def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | None = None,
+              reports: list[str] | None = None) -> list[dict]:
+    """Recheck the enrollment, approvals, inventories, Operation Shape coverage, per-kind live coverage and plans.
+
+    Live selections are the approved vectors that have a companion plan; a vector without one stays loopback-only.
+    Non-failing reports, such as a version difference or an uninventoried operation, are appended to ``reports``.
+    """
+    reported: list[str] = [] if reports is None else reports
+
+    def report(items) -> None:
+        for item in items:
+            if item not in reported:
+                reported.append(item)
+
     output.mkdir(parents=True, exist_ok=True)
     project = repo / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
     evaluated = subprocess.run(['dotnet', 'msbuild', str(project), '-p:Configuration=Release', '-getItem:PackageReference'],
@@ -331,7 +362,9 @@ def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | N
     assets = _load_json(project.parent / 'obj/project.assets.json')
     check_dependencies(assets, _load_json(repo / 'tools/dependency-policy.json'))
     check_adapter_dependencies(host, assets)
-    selections, catalog, modules = [], {}, set()
+    selections, catalog, modules, approved_operations = [], {}, set(), set()
+    plans_directory = repo / 'tools/live-topology/plans'
+    plans = plan_operations(plans_directory)
     with tempfile.TemporaryDirectory(prefix='mcpcli-live-preflight-') as home:
         head = HeadProcess(host, home, 30)
         manifest = subprocess.run(head._base() + ['--manifest-catalog'], env=head.env,
@@ -342,7 +375,9 @@ def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | N
             directory = approval_directory(repo / 'tools/conformance-vectors/v1/modules', package)
             receipt_path = freeze_input(directory / 'approval.json', output / 'inputs' / package / 'approval.json')
             receipt = _load_json(receipt_path)
-            artifact = artifact_for(assets, package, receipt)
+            receipt_reports: list[str] = []
+            artifact, restored = artifact_for(assets, package, receipt, receipt_reports)
+            report(receipt_reports)
             vectors = approved_vectors(directory, receipt)
             vectors = [freeze_input(source, output / 'inputs' / package / source.relative_to(directory),
                                     receipt['vectorFilesSha256'][source.relative_to(directory).as_posix()])
@@ -350,9 +385,12 @@ def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | N
             inventory_source = repo / 'tools/inventory-coverage/v1' / (receipt['module'] + '-approved.json')
             inventory = freeze_input(inventory_source, output / 'inputs' / package / 'inventory.json', receipt['inventorySha256'])
             approved_inventory(inventory, receipt)
-            _verify_artifact_in_host(host, artifact, (package, receipt['version']))
+            _verify_artifact_in_host(host, artifact, (package, restored['version']))
             operations = _manifest_operations(head, package)
-            findings = validate_vectors(vectors, artifact, (package, receipt['version']), list(operations))
+            vector_reports: list[str] = []
+            findings = validate_vectors(vectors, artifact, (package, restored['version']), _manifest_shapes(head, package),
+                                        vector_reports)
+            report(vector_reports)
             if findings:
                 raise VectorError('\n'.join(findings))
             inventory_check = subprocess.run(head._base() + ['--inventory', str(inventory)], env=head.env,
@@ -360,21 +398,28 @@ def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | N
             if inventory_check.returncode or json.loads(inventory_check.stdout):
                 raise VectorError(f'{package}: inventory coverage failed (exit {inventory_check.returncode}); '
                                   f'stdout: {inventory_check.stdout!r}; stderr: {inventory_check.stderr!r}')
+            report(line.removeprefix('reported: ') for line in inventory_check.stderr.splitlines() if line.startswith('reported: '))
             for catalog_operation, kind in operations.items():
                 if catalog_operation in catalog or catalog_operation.split('.')[0] != receipt['module']:
                     raise VectorError('Duplicate or mismatched owning Catalog Operation.')
                 catalog[catalog_operation] = 'write' if kind == 'command' else 'read'
             modules.add(receipt['module'])
+            planned = set()
             for source in vectors:
                 vector = _load_json(source)
-                plan_path = freeze_input(repo / 'tools/live-topology/plans' / (vector['operation'] + '.json'),
+                approved_operations.add(vector['operation'])
+                if vector['operation'] not in plans:
+                    continue  # Loopback-only: an approved vector without a companion plan has no live case.
+                planned.add(vector['operation'])
+                plan_path = freeze_input(plans_directory / (vector['operation'] + '.json'),
                                          output / 'inputs' / package / 'plans' / (vector['operation'] + '.json'))
                 plan = load_plan(plan_path, source)
                 selections.append({'operation': vector['operation'], 'vector': source, 'planPath': plan_path,
-                                   'plan': plan, 'packageId': package, 'version': receipt['version'],
-                                   'artifactHash': receipt['artifactHash'], 'inventorySha256': digest(inventory),
+                                   'plan': plan, 'packageId': package, 'version': restored['version'],
+                                   'artifactHash': restored['artifactHash'], 'inventorySha256': digest(inventory),
                                    'approvalSha256': digest(receipt_path),
                                    'vectorSha256': digest(source), 'planSha256': digest(plan_path)})
+            require_live_kinds(receipt['module'], operations, planned)
         if required_scope(repo / 'tools/conformance-vectors/v1/v1-scope.json', modules):
             raise VectorError('Full v1 scope is missing required modules.')
         exit_code, discovered = head.cli(['modules', '--strict'])
@@ -386,10 +431,9 @@ def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | N
             if exit_code:
                 raise VectorError('Complete production Catalog discovery failed.')
             found.update({op['name']: op['kind'] for op in document['operations']})
-        if found != catalog or {item['operation'] for item in selections} != set(catalog):
-            raise VectorError('Live vectors do not cover the complete production Catalog.')
-        if {p.name for p in (repo / 'tools/live-topology/plans').glob('*.json')} != {i['operation'] + '.json' for i in selections}:
-            raise VectorError('Live plan inventory differs from complete vector coverage.')
+        if found != catalog:
+            raise VectorError('Complete production Catalog discovery differs from the flagged package manifests.')
+        require_plans_have_vectors(plans, approved_operations)
         selected = execution_selection(selections, operation)
         _preflight_vectors(head, [item['vector'] for item in selected], catalog, output / 'core-preflight.json')
         for item in selected:

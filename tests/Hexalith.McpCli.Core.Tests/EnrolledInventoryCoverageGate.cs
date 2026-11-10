@@ -7,7 +7,12 @@ namespace Hexalith.McpCli.Core.Tests;
 internal static class EnrolledInventoryCoverageGate
 {
     /// <summary>Checks every unfiltered module; an absent inventory is a blocking finding.</summary>
-    internal static IReadOnlyList<string> Check(string directory, ICatalog catalog, CatalogProvider provider)
+    /// <param name="directory">The directory holding each module's release inventory.</param>
+    /// <param name="catalog">The public, unfiltered discovery service.</param>
+    /// <param name="provider">The provider of the independently checked internal snapshot.</param>
+    /// <param name="reports">Receives each module's non-failing inventory reports, when supplied.</param>
+    /// <returns>The blocking findings in ordinal order.</returns>
+    internal static IReadOnlyList<string> Check(string directory, ICatalog catalog, CatalogProvider provider, ICollection<string>? reports = null)
     {
         var findings = new List<string>();
         CatalogAccess access = provider.Get(false);
@@ -26,7 +31,7 @@ internal static class EnrolledInventoryCoverageGate
                 continue;
             }
 
-            IReadOnlyList<string> moduleFindings = InventoryCoverageGate.CheckFile(path, catalog, provider);
+            IReadOnlyList<string> moduleFindings = InventoryCoverageGate.CheckFile(path, catalog, provider, reports);
             findings.AddRange(moduleFindings);
             if (moduleFindings.Count == 0)
             {

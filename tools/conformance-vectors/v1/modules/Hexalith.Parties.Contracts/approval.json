@@ -2,7 +2,6 @@
   "packageId": "Hexalith.Parties.Contracts",
   "version": "1.5.1",
   "module": "parties",
-  "artifactHash": "sha512-ed4HU6YJ2b6zwl0CJ5UbGILqaoi/5GXoVtyqf5YSeCRTbt+F9ozom+jIOdJjE0MjRcUsemeNQNgs2KZkHZgZUw==",
   "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
   "approvalReference": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/refreshed-candidate-approval.json",
   "publishedArtifactBinding": "_bmad-output/implementation-artifacts/evidence/story-4-10/release-readiness/approved-dependency-continuation/published-artifact-binding.json",

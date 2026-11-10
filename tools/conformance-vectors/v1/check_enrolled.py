@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check every production-enrolled package against its approved exact artifact and vectors."""
+"""Check every production-enrolled package against its restored artifact, approved vectors and Operation Shape coverage."""
 from __future__ import annotations
 
 import argparse
@@ -16,11 +16,14 @@ from validate import _load_json
 from run_loopback import run_catalog
 
 
-def artifact_for(assets: dict, package_id: str, receipt: dict) -> Path:
+def artifact_for(assets: dict, package_id: str, receipt: dict, reports: list[str] | None = None) -> tuple[Path, dict]:
+    """Return the integrity-checked restored package; a receipt version that differs is reported, never failed."""
     if not isinstance(receipt, dict):
         raise RuntimeError(f'{package_id}: approval receipt must be a JSON object.')
     if receipt.get('status') not in (None, 'approved-published-artifact'):
         raise RuntimeError(f'{package_id}: candidate vectors require published-artifact owner approval.')
+    if 'artifactHash' in receipt:
+        raise RuntimeError(f'{package_id}: approval receipt must not bind an artifact hash; it binds only the inventory and vector hashes.')
     matches = [(key, library) for key, library in assets['libraries'].items()
                if key.rsplit('/', 1)[0].casefold() == package_id.casefold() and library['type'] == 'package']
     if len(matches) != 1:
@@ -28,14 +31,19 @@ def artifact_for(assets: dict, package_id: str, receipt: dict) -> Path:
     identity, library = matches[0]
     version = identity.rsplit('/', 1)[1]
     approved_id = receipt.get('packageId')
-    if not isinstance(approved_id, str) or approved_id.casefold() != package_id.casefold() or receipt.get('version') != version:
-        raise RuntimeError(f'{package_id}: approval receipt does not match the restored package version.')
+    if not isinstance(approved_id, str) or approved_id.casefold() != package_id.casefold():
+        raise RuntimeError(f'{package_id}: approval receipt does not match the restored package ID.')
+    approved_version = receipt.get('version')
+    if not isinstance(approved_version, str) or not approved_version.strip():
+        raise RuntimeError(f'{package_id}: approval receipt requires the version its vectors were approved against.')
     if not isinstance(receipt.get('approvalReference'), str) or not receipt['approvalReference'].strip():
         raise RuntimeError(f'{package_id}: missing owning-maintainer approval reference.')
+    # Restored-package integrity (assets content hash, cached archive hash) stays the artifact binding.
     artifact, restored = restored_package(assets, identity, library)
-    if restored['artifactHash'] != receipt.get('artifactHash'):
-        raise RuntimeError(f'{package_id}: restored bytes differ from the approved artifact hash.')
-    return artifact
+    if approved_version != version and reports is not None:
+        reports.append(f'{package_id}: approval receipt version {approved_version} differs from restored package version '
+                       f'{version}; reported, not failed.')
+    return artifact, restored
 
 
 def approved_vectors(directory: Path, receipt: dict) -> list[Path]:
@@ -148,9 +156,18 @@ def main():
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[3]
     args.output.mkdir(parents=True, exist_ok=True)
-    status = {'result': 'pending', 'fullV1Accepted': False, 'packages': [], 'results': []}
+    status = {'result': 'pending', 'fullV1Accepted': False, 'packages': [], 'results': [], 'shapes': [], 'reported': []}
     report = args.output / 'enrolled.json'
     report.write_text(json.dumps(status, indent=2) + '\n')
+
+    def collect(items, echo):
+        """Reports never change the exit code; each appears once in enrolled.json and as a stderr line."""
+        for item in items:
+            if item not in status['reported']:
+                status['reported'].append(item)
+                if echo:
+                    print(f'reported: {item}', file=sys.stderr)
+
     try:
         invalidate_children(args.output)
         for stale in (args.output / 'production-observations').glob('*.json'):
@@ -172,7 +189,9 @@ def main():
         for package_id in packages:
             directory = approval_directory(repo / 'tools/conformance-vectors/v1/modules', package_id)
             receipt = _load_json(directory / 'approval.json')
-            artifact = artifact_for(assets, package_id, receipt)
+            receipt_reports = []
+            artifact, _ = artifact_for(assets, package_id, receipt, receipt_reports)
+            collect(receipt_reports, echo=True)
             module = receipt.get('module')
             if not isinstance(module, str) or not module or '/' in module or '\\' in module:
                 raise RuntimeError(f'{package_id}: receipt requires a canonical module name.')
@@ -182,27 +201,31 @@ def main():
             vector_hashes = {str((directory / name).resolve()): digest for name, digest in receipt['vectorFilesSha256'].items()}
             accepted = repo / 'tools/inventory-coverage/v1' / (module + '-accepted-lint.json')
             results.append(verify(repo, artifact, vectors, args.output.resolve() / package_id,
-                                  inventory, receipt['artifactHash'], accepted if accepted.exists() else None,
+                                  inventory, accepted_lint=accepted if accepted.exists() else None,
                                   align_candidate_dependencies=False, expected_inventory_hash=inventory_hash,
                                   expected_vector_hashes=vector_hashes))
             results[-1]['approvedModule'] = module
+            # The verifier already printed its own reports.
+            collect(results[-1].get('reported', []), echo=False)
         args.output.mkdir(parents=True, exist_ok=True)
         if not packages:
             raise RuntimeError('Production manifest has no enrolled Contracts packages.')
-        status.update(results=results)
+        status.update(results=results, shapes=[shape for result in results for shape in result.get('shapes', [])])
         report.write_text(json.dumps(status, indent=2) + '\n')
         def record_production(progress):
             status['productionReplay'] = progress
             report.write_text(json.dumps(status, indent=2) + '\n')
 
         status['productionReplay'] = production_replay(repo, args.output.resolve(), results, record_production)
+        collect(status['productionReplay'].get('reported', []), echo=True)
         missing = required_scope(repo / 'tools/conformance-vectors/v1/v1-scope.json', set(status['productionReplay']['modules']))
         status.update(missingRequiredModules=missing, fullV1Accepted=not missing and not args.local)
         if missing and not args.local:
             raise RuntimeError('Full-v1 gate: missing required production module(s): ' + ', '.join(missing))
         status.update(result='local-only' if args.local else 'passed', packages=packages, results=results)
         report.write_text(json.dumps(status, indent=2) + '\n')
-        print(f'Validated {len(packages)} enrolled production package(s); full-v1 acceptance: {status["fullV1Accepted"]}.')
+        print(f'Validated {len(packages)} enrolled production package(s) covering {len(status["shapes"])} Operation Shape(s); '
+              f'{len(status["reported"])} reported; full-v1 acceptance: {status["fullV1Accepted"]}.')
     except (RuntimeError, OSError, ValueError, KeyError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
         status.update(result='failed', error=str(error))
         report.write_text(json.dumps(status, indent=2) + '\n')

@@ -22,8 +22,10 @@ public sealed class InventoryCoverageTests
     {
         CatalogProvider provider = Provider();
         ICatalog catalog = Service(provider);
+        var reports = new List<string>();
 
-        InventoryCoverageGate.CheckFile(ArtifactPath, catalog, provider).ShouldBeEmpty();
+        InventoryCoverageGate.CheckFile(ArtifactPath, catalog, provider, reports).ShouldBeEmpty();
+        reports.ShouldBeEmpty();
         catalog.ListOperations("sample").Document.ShouldNotBeNull().Operations.Count.ShouldBe(3);
         catalog.Describe("sample.create-item").Document.ShouldNotBeNull().Submittable.ShouldBeFalse();
         Path.IsPathFullyQualified(ArtifactPath).ShouldBeTrue();
@@ -118,7 +120,7 @@ public sealed class InventoryCoverageTests
                 break;
             case "extra":
                 document = original with { Operations = [.. original.Operations, new("sample.extra", "read", "Extra.")] };
-                expected = ["public operation sample.extra: unexpected operation; no approved included target."];
+                expected = ["public operation sample.extra: public discovery lists an operation absent from the internal Catalog."];
                 break;
             case "duplicate":
                 document = original with { Operations = [.. original.Operations, original.Operations[0]] };
@@ -126,7 +128,7 @@ public sealed class InventoryCoverageTests
                 break;
             case "ordinal":
                 document = original with { Operations = [original.Operations[0] with { Name = "sample.Create-item" }, .. original.Operations.Skip(1)] };
-                expected = ["public operation sample.Create-item: unexpected operation; no approved included target.",
+                expected = ["public operation sample.Create-item: public discovery lists an operation absent from the internal Catalog.",
                     "target T01: public name expected 'sample.create-item' once; actual missing."];
                 break;
             case "module":
@@ -148,8 +150,60 @@ public sealed class InventoryCoverageTests
             "no-document" => new(null, null),
             _ => new CatalogLookupResult<OperationsDocument>(document, null),
         });
-        Check(Inventory(), mutated, provider).ShouldBe(Diagnostics(expected));
+        var reports = new List<string>();
+        Check(Inventory(), mutated, provider, reports).ShouldBe(Diagnostics(expected));
+        reports.ShouldBeEmpty();
         mutated.Received(1).ListOperations("sample", null);
+    }
+
+    /// <summary>A cataloged operation that no inventory row mentions is reported on both surfaces and never fails.</summary>
+    [Fact]
+    public void ReportsUnmentionedCatalogedOperationWithoutFailing()
+    {
+        JsonObject inventory = Inventory();
+        inventory["targets"]!.AsArray().RemoveAt(2);
+        inventory["legacyRows"]![2]!["targetIds"] = new JsonArray("T02");
+        var reports = new List<string>();
+
+        Check(inventory, reports: reports).ShouldBeEmpty();
+        reports.ShouldBe(Diagnostics(
+            "internal operation sample.rename-item: reported, not failed; no inventory row mentions this cataloged operation / 'Hexalith.McpCli.Sample.Contracts.RenameItemCommand'.",
+            "public operation sample.rename-item: reported, not failed; no inventory row mentions this cataloged operation."));
+    }
+
+    /// <summary>An unmentioned internal descriptor that public discovery omits fails instead of being reported.</summary>
+    [Fact]
+    public void RejectsUnmentionedInternalOperationAbsentFromPublicDiscovery()
+    {
+        JsonObject inventory = Inventory();
+        inventory["targets"]!.AsArray().RemoveAt(2);
+        inventory["legacyRows"]![2]!["targetIds"] = new JsonArray("T02");
+        CatalogProvider provider = Provider();
+        OperationsDocument original = Service(provider).ListOperations("sample").Document.ShouldNotBeNull();
+        ICatalog mutated = Substitute.For<ICatalog>();
+        mutated.ListOperations("sample").Returns(new CatalogLookupResult<OperationsDocument>(original with
+        {
+            Operations = original.Operations.Where(operation => operation.Name != "sample.rename-item").ToArray(),
+        }, null));
+        var reports = new List<string>();
+
+        Check(inventory, mutated, provider, reports).ShouldBe(Diagnostics(
+            "internal operation sample.rename-item: descriptor / 'Hexalith.McpCli.Sample.Contracts.RenameItemCommand' is absent from public discovery."));
+        reports.ShouldBeEmpty();
+    }
+
+    /// <summary>An included row still fails when its name is missing, even though its type alone keeps the operation from being reported.</summary>
+    [Fact]
+    public void IncludedTypeMentionStillRequiresTheRecordedName()
+    {
+        JsonObject inventory = Inventory();
+        inventory["targets"]![2]!["name"] = "sample.renamed-item";
+        var reports = new List<string>();
+
+        Check(inventory, reports: reports).ShouldBe(Diagnostics(
+            "target T03: internal name expected 'sample.renamed-item' once; actual 0.",
+            "target T03: public name expected 'sample.renamed-item' once; actual missing."));
+        reports.ShouldBeEmpty();
     }
 
     /// <summary>CLR full names are checked ordinally even when every public canonical name matches.</summary>
@@ -158,7 +212,9 @@ public sealed class InventoryCoverageTests
     {
         JsonObject inventory = Inventory();
         inventory["targets"]![0]!["contractType"] = "Hexalith.McpCli.Sample.Contracts.CreateItemcommand";
-        Check(inventory).ShouldBe(Diagnostics("target T01: contractType for 'sample.create-item' expected 'Hexalith.McpCli.Sample.Contracts.CreateItemcommand'; actual 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'."));
+        var reports = new List<string>();
+        Check(inventory, reports: reports).ShouldBe(Diagnostics("target T01: contractType for 'sample.create-item' expected 'Hexalith.McpCli.Sample.Contracts.CreateItemcommand'; actual 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'."));
+        reports.ShouldBeEmpty();
     }
 
     /// <summary>An internal omission cannot be hidden by a mutated public list with matching names.</summary>
@@ -175,9 +231,10 @@ public sealed class InventoryCoverageTests
             Operations = [original.Operations[0] with { Name = "sample.absent" }, .. original.Operations.Skip(1)],
         }, null));
 
-        Check(inventory, mutated, provider).ShouldBe(Diagnostics(
-            "internal operation sample.create-item: unexpected operation / 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'; no approved included target.",
+        var reports = new List<string>();
+        Check(inventory, mutated, provider, reports).ShouldBe(Diagnostics(
             "target T01: internal name expected 'sample.absent' once; actual 0."));
+        reports.ShouldBeEmpty();
     }
 
     /// <summary>Approved exclusions must remain absent on both surfaces, including CLR identity aliases.</summary>
@@ -188,13 +245,12 @@ public sealed class InventoryCoverageTests
     public void RejectsPresentExclusion(bool sameName)
     {
         JsonObject inventory = Inventory();
+        var reports = new List<string>();
         if (sameName)
         {
             inventory["legacyRows"]![0]!["disposition"] = "defer";
             inventory["legacyRows"]![0]!["coverage"] = "exclude";
-            Check(inventory).ShouldBe(Diagnostics(
-                "internal operation sample.create-item: unexpected operation / 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'; no approved included target.",
-                "public operation sample.create-item: unexpected operation; no approved included target.",
+            Check(inventory, reports: reports).ShouldBe(Diagnostics(
                 "target T01: excluded name 'sample.create-item' is publicly present.",
                 "target T01: excluded target is internally present as 'sample.create-item' / 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'."));
         }
@@ -203,11 +259,12 @@ public sealed class InventoryCoverageTests
             inventory["targets"]!.AsArray().RemoveAt(0);
             inventory["legacyRows"]!.AsArray().RemoveAt(0);
             inventory["targets"]![2]!["contractType"] = typeof(CreateItemCommand).FullName;
-            Check(inventory).ShouldBe(Diagnostics(
-                "internal operation sample.create-item: unexpected operation / 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'; no approved included target.",
-                "public operation sample.create-item: unexpected operation; no approved included target.",
+            Check(inventory, reports: reports).ShouldBe(Diagnostics(
                 "target T04: excluded target is internally present as 'sample.create-item' / 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'."));
         }
+
+        // The excluded row mentions the operation by name or CLR type, so the failure is not also reported.
+        reports.ShouldBeEmpty();
     }
 
     /// <summary>An excluded name that is internally present fails even when the excluded CLR identity differs.</summary>
@@ -218,11 +275,11 @@ public sealed class InventoryCoverageTests
         inventory["targets"]!.AsArray().RemoveAt(0);
         inventory["legacyRows"]!.AsArray().RemoveAt(0);
         inventory["targets"]![2]!["name"] = "sample.create-item";
-        Check(inventory).ShouldBe(Diagnostics(
-            "internal operation sample.create-item: unexpected operation / 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'; no approved included target.",
-            "public operation sample.create-item: unexpected operation; no approved included target.",
+        var reports = new List<string>();
+        Check(inventory, reports: reports).ShouldBe(Diagnostics(
             "target T04: excluded name 'sample.create-item' is publicly present.",
             "target T04: excluded target is internally present as 'sample.create-item' / 'Hexalith.McpCli.Sample.Contracts.CreateItemCommand'."));
+        reports.ShouldBeEmpty();
     }
 
     /// <summary>Conflicting identities and all invalid scope decisions fail with their stable row or target.</summary>
@@ -657,10 +714,11 @@ public sealed class InventoryCoverageTests
         return (current.AsObject(), parts[^1], location + "." + parts[^1]);
     }
 
-    private static IReadOnlyList<string> Check(JsonObject inventory, ICatalog? catalog = null, CatalogProvider? provider = null)
+    private static IReadOnlyList<string> Check(JsonObject inventory, ICatalog? catalog = null, CatalogProvider? provider = null,
+        ICollection<string>? reports = null)
     {
         provider ??= Provider();
-        return InventoryCoverageGate.Check(inventory.ToJsonString(), FileLabel, catalog ?? Service(provider), provider);
+        return InventoryCoverageGate.Check(inventory.ToJsonString(), FileLabel, catalog ?? Service(provider), provider, reports);
     }
 
     private static string[] Diagnostics(params string[] messages) => messages.Select(message => FileLabel + ":" + message).Order(StringComparer.Ordinal).ToArray();

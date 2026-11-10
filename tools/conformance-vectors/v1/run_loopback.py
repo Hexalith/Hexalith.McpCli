@@ -740,7 +740,7 @@ def _verify_artifact_in_host(host: Path, artifact: Path, package: tuple[str, str
                 _fail(f"{output}: host runtime DLL bytes differ from immutable artifact entry {asset}")
 
 
-def _manifest_operations(head: HeadProcess, package_id: str) -> dict[str, str]:
+def _manifest_entry(head: HeadProcess, package_id: str) -> list[dict[str, Any]]:
     process = subprocess.run(head._base() + ["--manifest-catalog"], capture_output=True, text=True,
                              timeout=head.timeout, env=head.env, check=False)
     if process.returncode != 0:
@@ -753,7 +753,19 @@ def _manifest_operations(head: HeadProcess, package_id: str) -> dict[str, str]:
     names = [item["name"] for item in operations]
     if len(names) != len(set(names)) or not names:
         _fail(f"test host flagged manifest has duplicate or no Operations for {package_id}")
-    return {item["name"]: item["kind"] for item in operations}
+    return operations
+
+
+def _manifest_operations(head: HeadProcess, package_id: str) -> dict[str, str]:
+    return {item["name"]: item["kind"] for item in _manifest_entry(head, package_id)}
+
+
+def _manifest_shapes(head: HeadProcess, package_id: str) -> dict[str, str]:
+    """Each flagged operation's opaque Operation Shape key, derived by the C# host from Catalog descriptors."""
+    operations = _manifest_entry(head, package_id)
+    if any(not isinstance(item.get("shape"), str) or not item["shape"] for item in operations):
+        _fail(f"test host flagged manifest omits an Operation Shape for {package_id}")
+    return {item["name"]: item["shape"] for item in operations}
 
 
 def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path], timeout: float = 15,
@@ -764,11 +776,15 @@ def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path
 def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[Path]]], timeout: float = 15,
                 assets_path: Path | None = None, complete: bool = True, evidence_dir: Path | None = None,
                 expected_modules: dict[str, str] | None = None) -> dict:
+    reports: list[str] = []
     for artifact, package, vectors in selections:
         _verify_artifact_in_host(host, artifact, package, assets_path)
-        findings = validate_vectors(vectors, artifact, package)
+        findings = validate_vectors(vectors, artifact, package, reports=reports)
         if findings:
             _fail("\n".join(findings))
+    # A version difference is reported, never failed; the vector still runs.
+    for report in reports:
+        print(f"reported: {report}", file=sys.stderr)
     vectors = [source for _, _, sources in selections for source in sources]
     with tempfile.TemporaryDirectory(prefix="mcpcli-conformance-home-") as home:
         head = HeadProcess(host, home, timeout)
@@ -809,7 +825,7 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
                 if operation in owned or catalog.get(operation) != ("write" if kind == "command" else "read"):
                     _fail(f"flagged package {package[0]} operation {operation} differs from built combined Catalog")
                 owned[operation] = kind
-            findings = validate_vectors(sources, artifact, package, list(operations))
+            findings = validate_vectors(sources, artifact, package, _manifest_shapes(head, package[0]))
             if findings:
                 _fail("\n".join(findings))
         if complete and set(owned) != set(catalog):
@@ -917,7 +933,7 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
             _assert_request_parity(
                 normalized_error_requests[0], normalized_error_requests[1], f"{source}: Gateway error")
             print(f"PASS {operation}: discovery, {len(steps)} reset Gateway step(s), documents, requests, validation/Gateway error parity")
-        return {"modules": sorted(discovered_modules), "packageModules": package_modules}
+        return {"modules": sorted(discovered_modules), "packageModules": package_modules, "reported": reports}
 
 
 

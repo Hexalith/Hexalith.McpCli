@@ -14,6 +14,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="../../tools/conformance-vectors/v1/v1-scope.json" Link="conformance/v1-scope.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/conformance-vectors/v1/modules/**" Link="conformance/modules/%(RecursiveDir)%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="../../tools/conformance-vectors/v1/sample-*.json" Link="conformance/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../tools/inventory-coverage/v1/*-approved.json" Link="inventory-coverage/v1/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <None Include="../../tools/inventory-coverage/v1/*-accepted-lint.json" Link="inventory-coverage/v1/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

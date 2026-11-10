@@ -71,7 +71,7 @@ python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
 After successful qualified preparation, `run-ci.sh` invokes `run-vectors.py`
 with the inherited native profile and fresh package cache. It preflights the entire
 production-enrolled set, runs the shared-head boundary in a fresh isolated process,
-then launches one new isolated process per approved vector and the independent smoke.
+then launches one new isolated process per approved live vector and the independent smoke.
 A failed early boundary stops before the vector sweep. Each case runs once.
 Use the bounded preparation/execution hooks
 below; direct default/native launches do not establish the canonical profile.
@@ -91,7 +91,7 @@ handler capability readiness. The same smoke case also sends one valid signed no
 administrator hint through the real owner command boundary. It requires the exact
 permission rejection and independently reads the target tenant as the persisted
 administrator before and after to prove it remains absent. Anonymous and forged
-requests still require 401; the selection includes every approved vector plus independent smoke and shared-head boundary cases. This infrastructure proof does not enroll
+requests still require 401; the selection includes every approved live vector plus independent smoke and shared-head boundary cases. This infrastructure proof does not enroll
 the excluded Query in the Catalog. The shared composition binds the finite actual
 SDK domain-service route inventory to EventStore's real sidecar identity and the
 required bound-bootstrap, stream-read and query routes to their actual peer
@@ -110,7 +110,14 @@ Parties' SDK named projections; a legacy `actor-not-found-infrastructure` query
 error can mean a missing SDK read model rather than actor routing.
 
 `plans/*.json` are test-only companions bound to exact approved vector SHA-256
-digests. Every original step occurs once in the original order. Read barriers
+digests. An approved live vector is an approved vector with a companion plan; a
+vector without one runs in loopback only. The preflight fails a plan that has no
+approved vector, and fails a module unless every Operation kind it declares has at
+least one approved live vector. It validates every approved vector against the
+restored package and its Operation Shapes, and binds each selection to the restored
+package version and archive hash. A version difference or an operation that no
+inventory row mentions is reported as a `reported: …` stderr line and in the
+`reported` array of `live-lane.json`; it never changes the exit code. Every original step occurs once in the original order. Read barriers
 check persisted state after Commands. A repeated idempotent Command step is
 proven by its single accepted submission plus unchanged persisted state; all
 original static assertions remain.
@@ -142,7 +149,7 @@ when another vector fails. `live-result.json` retains the Operation, phase,
 assertion path, query attempts, sanitized documents and immutable input bindings;
 credentials are excluded. Failed vectors also print their sanitized phase and
 assertion diagnostics so they appear in the selected test failure. Namespace and service cleanup details remain under
-`$private_runtime/runs/`. The non-live CI job discovers every approved vector case plus
+`$private_runtime/runs/`. The non-live CI job discovers every approved live vector case plus
 smoke and shared-head boundary; the required CI lane executes them through the hooks below.
 
 ## Required CI lane
@@ -318,7 +325,7 @@ CLI's `setup --force`, including its managed launcher, before this hash comparis
 
 Each run invalidates
 `ci-live.json` before execution and writes a new generation directory. Acceptance
-requires every approved vector outcome to pass, complete coverage, fresh matching
+requires every approved live vector outcome to pass, complete coverage, fresh matching
 semantic receipts, successful cleanup and separate one-case, unskipped passing
 authenticated smoke and shared-head boundary XML. Each declared Query observation runs through CLI and MCP; MCP never submits a vector Command. The early boundary already has its own result before vectors;
 vector assertion failures still allow the independent smoke attempt. Neither independent case nor preflight/subset evidence can replace vectors.

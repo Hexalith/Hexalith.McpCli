@@ -40,7 +40,14 @@ internal static class Program
             var provider = new CatalogProvider(() => ManifestAssemblies(),
                 Microsoft.Extensions.Logging.Abstractions.NullLogger<CatalogProvider>.Instance);
             var catalog = new CatalogService(provider, new ExecutionAvailability(false, false), strict: true);
-            var findings = Hexalith.McpCli.Core.Tests.InventoryCoverageGate.CheckFile(inventory, catalog, provider);
+            var reports = new List<string>();
+            var findings = Hexalith.McpCli.Core.Tests.InventoryCoverageGate.CheckFile(inventory, catalog, provider, reports);
+            // Reports never change the exit code; stdout stays the findings array.
+            foreach (string report in reports)
+            {
+                Console.Error.WriteLine("reported: " + report);
+            }
+
             Console.Out.WriteLine(JsonSerializer.Serialize(findings));
             return findings.Count == 0 ? 0 : 1;
         }
@@ -52,8 +59,12 @@ internal static class Program
                 packageId = entry.PackageId,
                 assemblyName = entry.AssemblyName,
                 operations = CatalogBuilder.Build([Assembly.Load(new AssemblyName(entry.AssemblyName))])
-                    .Modules.SelectMany(module => module.Operations)
-                    .Select(operation => new { name = operation.Name, kind = operation.Kind.ToString().ToLowerInvariant() })
+                    .Modules.SelectMany(module => module.Operations.Select(operation => new
+                    {
+                        name = operation.Name,
+                        kind = operation.Kind.ToString().ToLowerInvariant(),
+                        shape = Hexalith.McpCli.Core.Tests.OperationShape.From(module, operation).Key,
+                    }))
                     .ToArray(),
             }).Cast<object>().ToArray();
             Console.Out.WriteLine(JsonSerializer.Serialize(packages));

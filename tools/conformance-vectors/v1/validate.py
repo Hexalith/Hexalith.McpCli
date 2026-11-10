@@ -217,11 +217,37 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
             findings.append(f"{pointer}/expectedGateway/body/paging: must equal supplied envelope paging")
 
 
+def shape_coverage(declared: Any, expected_shapes: dict[str, str]) -> list[dict[str, Any]]:
+    """Group restored Catalog operations by module-scoped, opaque Operation Shape key with the vectors that cover each.
+
+    The C# Core.Tests ``OperationShape`` is the only shape derivation; the key is compared here only as a string.
+    """
+    groups: dict[tuple[str, str], dict[str, Any]] = {}
+    for operation, shape in sorted(expected_shapes.items()):
+        module = operation.split(".", 1)[0]
+        group = groups.setdefault((module, shape), {"module": module, "shape": shape, "operations": [], "vectors": []})
+        group["operations"].append(operation)
+        if operation in declared:
+            group["vectors"].append(operation)
+    return [groups[key] for key in sorted(groups)]
+
+
+def _shape_map_error(expected_shapes: Any) -> str | None:
+    if not isinstance(expected_shapes, dict) or not all(
+            isinstance(name, str) and isinstance(shape, str) and shape.strip() for name, shape in expected_shapes.items()):
+        return ("/operations: expected an object mapping each canonical restored Catalog operation name "
+                "to its nonblank Operation Shape key")
+    return None
+
+
 def validate_vectors(
     paths: list[Path], artifact: Path, expected_package: tuple[str, str] | None = None,
-    expected_operations: list[str] | None = None,
+    expected_shapes: dict[str, str] | None = None, reports: list[str] | None = None,
 ) -> list[str]:
-    """Apply identical schema, semantic, artifact and optional Catalog coverage checks."""
+    """Apply identical schema, semantic, artifact and optional Operation Shape coverage checks.
+
+    A package version that differs while the package ID matches is appended to ``reports`` and never fails.
+    """
     if not paths:
         return ["/: at least one vector path is required"]
     try:
@@ -229,10 +255,13 @@ def validate_vectors(
     except VectorError as exc:
         return [str(exc)]
     findings: list[str] = []
+    reported: list[str] = []
     if expected_package is not None:
         expected_id, expected_version = expected_package
-        if (artifact_id.casefold(), artifact_version) != (expected_id.casefold(), expected_version):
+        if artifact_id.casefold() != expected_id.casefold():
             findings.append(f"{artifact}:/metadata: artifact {artifact_id}@{artifact_version} does not match restored package {expected_id}@{expected_version}")
+        elif artifact_version != expected_version:
+            reported.append(f"{artifact}:/metadata/version: artifact {artifact_id}@{artifact_version} differs from restored package version {expected_version}; reported, not failed")
     schema = _load_json(SCHEMA_PATH)
     Draft202012Validator.check_schema(schema)
     validator = VectorValidator(schema)
@@ -250,8 +279,10 @@ def validate_vectors(
         if errors or not isinstance(document, dict):
             continue
         package = document["package"]
-        if (package["id"].casefold(), package["version"]) != (artifact_id.casefold(), artifact_version):
+        if package["id"].casefold() != artifact_id.casefold():
             findings.append(f"{source}:/package: vector {package['id']}@{package['version']} does not match release artifact {artifact_id}@{artifact_version}")
+        elif package["version"] != artifact_version:
+            reported.append(f"{source}:/package/version: vector {package['id']}@{package['version']} differs from release artifact version {artifact_version}; reported, not failed")
         operation = document["operation"]
         if operation in seen:
             findings.append(f"{source}:/operation: duplicate {operation!r}; first declared in {seen[operation]}")
@@ -263,15 +294,19 @@ def validate_vectors(
             for index, step in enumerate(document[group]):
                 _check_step(step, f"{source}:/{group}/{index}", findings)
         _check_step(invocation, f"{source}:/invocation", findings)
-    if expected_operations is not None:
-        declared = set(seen)
-        expected = set(expected_operations)
-        if len(expected_operations) != len(expected):
-            findings.append("/operations: restored Catalog operation names contain duplicates")
-        for operation in sorted(expected - declared):
-            findings.append(f"/operations/{operation}: missing conformance vector")
-        for operation in sorted(declared - expected):
-            findings.append(f"{seen[operation]}:/operation: {operation!r} is absent from the restored Catalog")
+    if expected_shapes is not None:
+        error = _shape_map_error(expected_shapes)
+        if error is not None:
+            findings.append(error)
+        else:
+            for group in shape_coverage(seen, expected_shapes):
+                if not group["vectors"]:
+                    findings.append(f"{group['module']}: Operation Shape '{group['shape']}' has no approved vector "
+                                    f"(operations: {', '.join(group['operations'])}).")
+            for operation in sorted(set(seen) - set(expected_shapes)):
+                findings.append(f"{seen[operation]}:/operation: {operation!r} is absent from the restored Catalog")
+    if reports is not None:
+        reports.extend(item for item in reported if item not in reports)
     return findings
 
 
@@ -280,23 +315,33 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--artifact", type=Path, required=True, help="immutable owning Contracts .nupkg")
     parser.add_argument("--expected-package-id", help="runner's restored flagged package ID")
     parser.add_argument("--expected-package-version", help="runner's restored flagged exact package version")
-    parser.add_argument("--operations-file", type=Path, help="JSON array of canonical restored Catalog names for coverage")
+    parser.add_argument("--operations-file", type=Path,
+                        help="JSON object mapping canonical restored Catalog operation names to Operation Shape keys")
     parser.add_argument("vectors", nargs="+", type=Path)
     args = parser.parse_args(argv)
     if (args.expected_package_id is None) != (args.expected_package_version is None):
         parser.error("--expected-package-id and --expected-package-version must be supplied together")
-    operations = None
+    shapes = None
     if args.operations_file is not None:
         try:
-            operations = _load_json(args.operations_file)
+            shapes = _load_json(args.operations_file)
         except VectorError as exc:
             print(exc, file=sys.stderr)
             return 1
-        if not isinstance(operations, list) or not all(isinstance(item, str) for item in operations):
-            print(f"{args.operations_file}:/: expected an array of canonical operation names", file=sys.stderr)
+        if isinstance(shapes, list):
+            print(f"{args.operations_file}:/: the array form is refused; expected an object mapping each canonical "
+                  "restored Catalog operation name to its Operation Shape key", file=sys.stderr)
+            return 1
+        if _shape_map_error(shapes) is not None:
+            print(f"{args.operations_file}:/: expected an object mapping each canonical restored Catalog operation name "
+                  "to its nonblank Operation Shape key", file=sys.stderr)
             return 1
     expected = (args.expected_package_id, args.expected_package_version) if args.expected_package_id is not None else None
-    findings = validate_vectors(args.vectors, args.artifact, expected, operations)
+    reports: list[str] = []
+    findings = validate_vectors(args.vectors, args.artifact, expected, shapes, reports)
+    # Reports never change the exit code.
+    for report in reports:
+        print(f"reported: {report}", file=sys.stderr)
     if findings:
         print("\n".join(findings), file=sys.stderr)
         return 1

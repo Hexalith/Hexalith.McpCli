@@ -17,6 +17,10 @@ from validate import validate_vectors
 HERE = Path(__file__).parent
 PACKAGE = ("Hexalith.McpCli.Sample.Contracts", "1.0.0")
 POSITIONS = ("invocation", "prerequisites", "postconditions")
+# Python never derives shapes; these opaque keys stand in for the C# OperationShape keys of the sample Catalog.
+COMMAND_SHAPE = "kind=command;opaque-sample-command-shape"
+QUERY_SHAPE = "kind=query;opaque-sample-query-shape"
+SHAPES = {"sample.create-item": COMMAND_SHAPE, "sample.get-item": QUERY_SHAPE, "sample.rename-item": COMMAND_SHAPE}
 
 
 class VectorContractTests(unittest.TestCase):
@@ -53,17 +57,54 @@ class VectorContractTests(unittest.TestCase):
         document[position] = [copy.deepcopy(template["invocation"])]
         return document, document[position][0], f"/{position}/0"
 
-    def _cli(self, paths: list[Path], expected: tuple[str, str] = PACKAGE) -> subprocess.CompletedProcess:
+    def _cli(self, paths: list[Path], expected: tuple[str, str] = PACKAGE,
+             operations: object | None = None) -> subprocess.CompletedProcess:
+        arguments = []
+        if operations is not None:
+            operations_file = self.directory / "operations.json"
+            operations_file.write_text(json.dumps(operations), encoding="utf-8")
+            arguments = ["--operations-file", str(operations_file)]
         return subprocess.run(
             [sys.executable, str(HERE / "validate.py"), "--artifact", str(self.artifact),
              "--expected-package-id", expected[0], "--expected-package-version", expected[1],
-             *map(str, paths)], capture_output=True, text=True, check=False,
+             *arguments, *map(str, paths)], capture_output=True, text=True, check=False,
         )
 
     def test_synthetic_command_and_query_are_compatible_with_release_and_catalog(self) -> None:
         paths = [HERE / "sample-command.json", HERE / "sample-query.json", HERE / "sample-rename.json"]
-        self.assertEqual([], validate_vectors(paths, self.artifact, PACKAGE,
-                                              ["sample.create-item", "sample.get-item", "sample.rename-item"]))
+        reports: list[str] = []
+        self.assertEqual([], validate_vectors(paths, self.artifact, PACKAGE, SHAPES, reports))
+        self.assertEqual([], reports)
+
+    def test_one_vector_covers_every_operation_of_its_shape(self) -> None:
+        paths = [HERE / "sample-command.json", HERE / "sample-query.json"]
+        self.assertEqual([], validate_vectors(paths, self.artifact, PACKAGE, SHAPES))
+
+    def test_uncovered_shape_names_its_module_key_and_operations(self) -> None:
+        shapes = dict(SHAPES, **{"sample.archive-item": "kind=command;uncovered", "sample.purge-item": "kind=command;uncovered"})
+        self.assertEqual(["sample: Operation Shape 'kind=command;uncovered' has no approved vector "
+                          "(operations: sample.archive-item, sample.purge-item)."],
+                         validate_vectors([HERE / "sample-command.json", HERE / "sample-query.json"], self.artifact, PACKAGE, shapes))
+        self.assertEqual([f"sample: Operation Shape '{QUERY_SHAPE}' has no approved vector (operations: sample.get-item)."],
+                         validate_vectors([HERE / "sample-command.json"], self.artifact, PACKAGE, SHAPES))
+
+    def test_shapes_are_scoped_per_module(self) -> None:
+        shapes = dict(SHAPES, **{"other.get-item": QUERY_SHAPE})
+        self.assertEqual([f"other: Operation Shape '{QUERY_SHAPE}' has no approved vector (operations: other.get-item)."],
+                         validate_vectors([HERE / "sample-command.json", HERE / "sample-query.json"], self.artifact, PACKAGE, shapes))
+
+    def test_vector_for_an_operation_absent_from_the_restored_catalog_is_stale(self) -> None:
+        shapes = {"sample.get-item": QUERY_SHAPE}
+        source = HERE / "sample-command.json"
+        self.assertEqual([f"{source}:/operation: 'sample.create-item' is absent from the restored Catalog"],
+                         validate_vectors([source, HERE / "sample-query.json"], self.artifact, PACKAGE, shapes))
+
+    def test_coverage_requires_an_operation_to_shape_object(self) -> None:
+        for shapes in (["sample.create-item"], {"sample.create-item": ""}, {"sample.create-item": None}, {"sample.create-item": 1}):
+            with self.subTest(shapes=shapes):
+                self.assertEqual(["/operations: expected an object mapping each canonical restored Catalog operation name "
+                                  "to its nonblank Operation Shape key"],
+                                 validate_vectors([HERE / "sample-command.json"], self.artifact, PACKAGE, shapes))
 
     def test_unsupported_format_version_is_located(self) -> None:
         self.command["formatVersion"] = 2
@@ -151,18 +192,25 @@ class VectorContractTests(unittest.TestCase):
         self.command["invocation"]["expectedGateway"]["maskGenerated"].append("/correlationId")
         self._assert_rejected(self.command, "caller-supplied correlationId cannot be masked")
 
-    def test_artifact_package_identity_and_restored_version_are_checked(self) -> None:
+    def test_vector_and_restored_version_differences_are_reported_not_failed(self) -> None:
         self.command["package"]["version"] = "1.0.1"
-        self._assert_rejected(self.command, "/package: vector")
-        findings = validate_vectors([HERE / "sample-command.json"], self.artifact, (PACKAGE[0], "1.0.1"))
-        self.assertTrue(any("does not match restored package" in finding for finding in findings), findings)
+        source = self._write(self.command)
+        reports: list[str] = []
+        self.assertEqual([], validate_vectors([source], self.artifact, PACKAGE, reports=reports))
+        self.assertEqual([f"{source}:/package/version: vector {PACKAGE[0]}@1.0.1 differs from release artifact version 1.0.0; "
+                          "reported, not failed"], reports)
+        reports = []
+        self.assertEqual([], validate_vectors([HERE / "sample-command.json"], self.artifact, (PACKAGE[0], "1.0.1"), reports=reports))
+        self.assertEqual([f"{self.artifact}:/metadata/version: artifact {PACKAGE[0]}@1.0.0 differs from restored package "
+                          "version 1.0.1; reported, not failed"], reports)
+        self.assertEqual([], validate_vectors([HERE / "sample-command.json"], self.artifact, (PACKAGE[0], "1.0.1")))
 
-    def test_duplicate_and_missing_operation_vectors_are_rejected(self) -> None:
+    def test_duplicate_and_uncovered_shape_vectors_are_rejected(self) -> None:
         first = self._write(self.command, "first.json")
         second = self._write(copy.deepcopy(self.command), "second.json")
-        findings = validate_vectors([first, second], self.artifact, PACKAGE, ["sample.create-item", "sample.get-item"])
-        self.assertTrue(any("duplicate 'sample.create-item'" in finding for finding in findings), findings)
-        self.assertTrue(any("missing conformance vector" in finding for finding in findings), findings)
+        findings = validate_vectors([first, second], self.artifact, PACKAGE, SHAPES)
+        self.assertEqual([f"{second}:/operation: duplicate 'sample.create-item'; first declared in {first}",
+                          f"sample: Operation Shape '{QUERY_SHAPE}' has no approved vector (operations: sample.get-item)."], findings)
 
     def test_query_cannot_mix_cursor_and_offset(self) -> None:
         self.query["invocation"]["envelope"]["cursor"] = "next"
@@ -629,18 +677,30 @@ class VectorContractTests(unittest.TestCase):
         self.command["package"]["id"] = PACKAGE[0].lower()
         self.assertEqual([], self._validate(self.command, (PACKAGE[0].upper(), PACKAGE[1])))
 
-    def test_package_id_and_exact_version_mismatches_are_rejected(self) -> None:
-        for field, value in (("id", "Other.Contracts"), ("version", "1.0.1"), ("version", "1.0.0.0")):
-            with self.subTest(field=field):
+    def test_package_id_mismatches_are_rejected_and_exact_version_differences_reported(self) -> None:
+        document = copy.deepcopy(self.command)
+        document["package"]["id"] = "Other.Contracts"
+        source = self._write(document)
+        self.assertEqual([f"{source}:/package: vector Other.Contracts@1.0.0 does not match release artifact {PACKAGE[0]}@1.0.0"],
+                         validate_vectors([source], self.artifact, PACKAGE))
+        self.assertEqual([f"{self.artifact}:/metadata: artifact {PACKAGE[0]}@1.0.0 does not match restored package Other.Contracts@1.0.0"],
+                         self._validate(self.command, ("Other.Contracts", "1.0.0")))
+        for version in ("1.0.1", "1.0.0.0"):
+            with self.subTest(version=version):
                 document = copy.deepcopy(self.command)
-                document["package"][field] = value
-                self._assert_rejected(document, "/package: vector")
-        for expected in (("Other.Contracts", "1.0.0"), (PACKAGE[0], "1.0.1")):
-            findings = self._validate(self.command, expected)
-            self.assertTrue(any(f"{self.artifact}:/metadata:" in item for item in findings), findings)
+                document["package"]["version"] = version
+                source = self._write(document)
+                reports: list[str] = []
+                self.assertEqual([], validate_vectors([source], self.artifact, PACKAGE, reports=reports))
+                self.assertEqual([f"{source}:/package/version: vector {PACKAGE[0]}@{version} differs from release artifact "
+                                  "version 1.0.0; reported, not failed"], reports)
         self.artifact = self._package(PACKAGE[0], "1.0.0-RC")
         self.command["package"]["version"] = "1.0.0-rc"
-        self._assert_rejected(self.command, "/package: vector")
+        source = self._write(self.command)
+        reports = []
+        self.assertEqual([], validate_vectors([source], self.artifact, None, reports=reports))
+        self.assertEqual([f"{source}:/package/version: vector {PACKAGE[0]}@1.0.0-rc differs from release artifact "
+                          "version 1.0.0-RC; reported, not failed"], reports)
 
     def test_vector_header_must_match_invocation(self) -> None:
         for field, value in (("operation", "sample.other"), ("kind", "query")):
@@ -674,8 +734,54 @@ class VectorContractTests(unittest.TestCase):
     def test_cli_accepts_all_three_samples(self) -> None:
         result = self._cli([HERE / "sample-command.json", HERE / "sample-query.json", HERE / "sample-rename.json"])
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertIn("Validated 3 vector(s)", result.stdout)
+        self.assertEqual(f"Validated 3 vector(s) against {self.artifact}\n", result.stdout)
         self.assertEqual("", result.stderr)
+
+    def test_cli_operations_file_object_covers_shapes(self) -> None:
+        paths = [HERE / "sample-command.json", HERE / "sample-query.json"]
+        result = self._cli(paths, operations=SHAPES)
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual(f"Validated 2 vector(s) against {self.artifact}\n", result.stdout)
+        self.assertEqual("", result.stderr)
+        result = self._cli([HERE / "sample-command.json"], operations=SHAPES)
+        self.assertEqual(1, result.returncode)
+        self.assertEqual("", result.stdout)
+        self.assertEqual(f"sample: Operation Shape '{QUERY_SHAPE}' has no approved vector (operations: sample.get-item).\n",
+                         result.stderr)
+
+    def test_cli_refuses_the_operations_array_form_and_malformed_shape_maps(self) -> None:
+        operations_file = self.directory / "operations.json"
+        result = self._cli([HERE / "sample-command.json"], operations=list(SHAPES))
+        self.assertEqual(1, result.returncode)
+        self.assertEqual("", result.stdout)
+        self.assertEqual(f"{operations_file}:/: the array form is refused; expected an object mapping each canonical "
+                         "restored Catalog operation name to its Operation Shape key\n", result.stderr)
+        for malformed in ({"sample.create-item": ""}, {"sample.create-item": 3}, "sample.create-item"):
+            with self.subTest(malformed=malformed):
+                result = self._cli([HERE / "sample-command.json"], operations=malformed)
+                self.assertEqual(1, result.returncode)
+                self.assertEqual("", result.stdout)
+                self.assertEqual(f"{operations_file}:/: expected an object mapping each canonical restored Catalog operation "
+                                 "name to its nonblank Operation Shape key\n", result.stderr)
+
+    def test_cli_prints_reports_to_stderr_without_changing_the_exit_code(self) -> None:
+        self.command["package"]["version"] = "1.0.1"
+        source = self._write(self.command)
+        report = (f"reported: {source}:/package/version: vector {PACKAGE[0]}@1.0.1 differs from release artifact version 1.0.0; "
+                  "reported, not failed")
+        result = self._cli([source])
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual(f"Validated 1 vector(s) against {self.artifact}\n", result.stdout)
+        self.assertEqual(report + "\n", result.stderr)
+        result = self._cli([HERE / "sample-command.json"], (PACKAGE[0], "1.0.1"))
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual(f"reported: {self.artifact}:/metadata/version: artifact {PACKAGE[0]}@1.0.0 differs from restored "
+                         "package version 1.0.1; reported, not failed\n", result.stderr)
+        result = self._cli([source], operations={"sample.create-item": COMMAND_SHAPE, "sample.get-item": QUERY_SHAPE})
+        self.assertEqual(1, result.returncode)
+        self.assertEqual("", result.stdout)
+        self.assertEqual([report, f"sample: Operation Shape '{QUERY_SHAPE}' has no approved vector (operations: sample.get-item)."],
+                         result.stderr.splitlines())
 
     def test_json_syntax_and_parser_limits_return_identical_cli_and_api_findings(self) -> None:
         cases = [
@@ -723,7 +829,6 @@ class VectorContractTests(unittest.TestCase):
         incompatible = copy.deepcopy(self.command)
         incompatible["package"]["id"] = "Other.Contracts"
         cases.append((incompatible, PACKAGE))
-        cases.append((self.command, (PACKAGE[0], "1.0.1")))
         cases.append((self.command, ("", PACKAGE[1])))
         for document, expected in cases:
             with self.subTest(document=document, expected=expected):
