@@ -75,7 +75,7 @@ Before working in a Hexalith repository, locate, read, and follow
 
 ## Hexalith.McpCli
 
-One generic MCP server and one thin CLI, both driven by a catalog of commands and queries discovered from decorated `*.Contracts` assemblies and submitted through the EventStore gateway client. .NET 10, ModelContextProtocol 2.3.1, System.CommandLine 2.0.14, xUnit v3; package versions use the central catalog in `references/Hexalith.Builds/Props/Directory.Packages.props`, with EventStore, Parties, and Tenants pins set first in root `Directory.Build.props`. Planning (brief, PRD, architecture spine, epics) lives in `_bmad-output/planning-artifacts/`; story specs and the deferred-work ledger in `_bmad-output/implementation-artifacts/`.
+One generic MCP server and one thin CLI, both driven by a catalog of commands and queries discovered from decorated `*.Contracts` assemblies and submitted through the EventStore gateway client. .NET 10, ModelContextProtocol 2.4.0, System.CommandLine 2.0.14, xUnit v3; package versions use the central catalog in `references/Hexalith.Builds/Props/Directory.Packages.props`, with EventStore, Parties, and Tenants pins set first in root `Directory.Build.props`. Planning (brief, PRD, architecture spine, epics) lives in `_bmad-output/planning-artifacts/`; story specs and the deferred-work ledger in `_bmad-output/implementation-artifacts/`.
 
 ## Policy
 
