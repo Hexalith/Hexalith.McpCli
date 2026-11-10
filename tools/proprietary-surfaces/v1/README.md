@@ -27,15 +27,28 @@ and Story 5.1 approval receipt hashes are checked against the parent commit.
 
 Discovery includes C#, F# and VB project identities, executable projects,
 packages and project references, packed tools and command names, local
-`Directory.Build.props`/targets and imports, MCP registration/tool attributes,
+`Directory.Build.props`/targets and imports, MCP registration/tool attributes
+(including F# and VB attribute forms), direct MCP server/transport construction,
 System.CommandLine source, linked source files, MCP client definitions, .NET
 and npm tool manifests, package/container release manifests, workflow/script
-project references and literal package/container identities. Outside-`src`
+project references and literal package/container identities. Literal Docker
+`--tag=value` options, executable shell scripts identified by a shell shebang,
+build-push action tags, YAML flow image mappings and Kustomize `newName` image
+identities are included. Both JSON server sections are inspected when present.
+Workflow project matrix values are resolved per job; unresolved project-target
+expressions and unsafe publication paths fail with the metadata path, while
+unrelated configuration/output expressions remain outside target resolution. Outside-`src`
 executables and web hosts are included. Ordinary present web/service/library
 projects without a tool or MCP signal are not proprietary surfaces.
 
-Local imports are read conservatively, including literal filenames embedded in
-property functions and globs. Unconsumed local props/targets declaring an
+Local imports are read conservatively from committed blobs regardless of filename
+extension, including literal filenames embedded in property functions and globs.
+Props are inspected before the project and targets afterward. Classification
+aliases and conditional imports retain alternatives; unconditional property
+replacements and empty assignments control effective package defaults.
+Reference item lists are split before classification. Recursive `**/` globs include zero
+intermediate directories. SDK identities come from XML declarations; comments
+provide no SDK authority. Unconsumed local props/targets declaring an
 executable, packed tool, command name, MCP/CLI dependency or MCP container
 identity become independent candidates, including when an import directory
 cannot be resolved. SDK and unavailable nested-reference imports
@@ -43,7 +56,9 @@ are never evaluated. This is a static source census: it cannot establish the
 behavior of dynamically generated code or remote deployment composition.
 
 Each candidate binds an exact repository, path, kind and identity. Package IDs,
-tool commands and container repositories have separate identities, so approving
+tool commands and container repositories have separate identities, including
+SDK package defaults from the effective assembly/project name for packable
+projects and packed-tool command defaults from TargetName or AssemblyName. Approving
 a project never permits it to acquire another published name. An allowance
 also limits its detection signals; a dependency consumer gaining an MCP
 registration fails. External developer tools and the two approved Builds tools
@@ -62,8 +77,17 @@ sources, including committed glob matches outside the fixture directory.
 Allowance data sets `compilationClosure: true`, keeps `sourcePrefix` equal to
 the project's directory, and lists every closure file under `sources` as a
 repository-relative `path` and SHA-256. Changed inherited, imported, linked or
-secondary sources and added/removed closure files fail. SDK and external/nested
+secondary sources and added/removed closure files fail. Imported Compile paths
+use the consuming project directory unless `MSBuildThisFileDirectory` supplies an
+explicit local base. When a directory alias is unknown, every committed local
+source matching its literal suffix is included conservatively. SDK and external/nested
 reference contents remain outside the local closure and are never initialized.
+Unresolved Compile item expressions are refused with their metadata path.
+Unresolved import globs inspect committed local suffix matches regardless of
+extension. Shell, PowerShell and batch continuation lines are joined before
+publication discovery; quoted project arguments retain their complete path,
+and Docker push options do not obscure its image argument. VB registration
+identifiers follow its case-insensitive language rules.
 
 Correction 1.0.2 also records exact historical test observations at their already
 approved census pins and exact captured/test metadata files. It grants no new
@@ -115,8 +139,12 @@ are an append-only chain referenced by `amendments.json`.
    `schema: "mcpcli-census-amendment-approval/v2"`, `decision: "approved"`, and the same
    `owner` as the amendment header. Its `authority` is a nonempty array of
    `{ "path": "...", "sha256": "..." }` bindings to existing approved inventory
-   or census approval JSON. Hashes and approved decisions are checked; merely
-   naming a receipt confers no authority. Its `authorization` must match the
+   or previously validated census approval JSON in this same lineage. An authority
+   must exactly match committed baseline provenance or a previously validated
+   receipt binding; an untracked authority file or an incomplete receipt cannot
+   nominate itself. Inventory authority must bind the complete approved root/pin
+   map. Hashes and approved decisions are checked; merely naming a receipt
+   confers no authority. Its `authorization` must match the
    amendment's complete mutation arrays exactly, including all allowance
    fields, source hashes and exception owner/reason/expiry scope:
 
@@ -133,7 +161,12 @@ are an append-only chain referenced by `amendments.json`.
    Include `addExclusions: []` in the receipt even when that optional array is
    absent from the amendment. Rejected, malformed, non-JSON, unrelated and
    differently scoped receipts fail. The retained v1 receipt format is limited
-   to the original exact fixture scope; use v2 for future amendments.
+   to the original exact fixture scope and its committed historical receipt;
+   an untracked v1 receipt is refused. `legacy-receipts.json` additionally freezes
+   the exact retained receipt path/hash against this baseline's SHA-256.
+   Committing a newly fabricated v1 receipt does not add it to that registry.
+   The registry adds no allowance or new owner authority; preserve its bytes
+   alongside the prior lineage and use v2 for future amendments.
 5. If existing approval covers a captured or deliberately malformed metadata
    file, use an exact hash-bound entry in the amendment's `addExclusions`.
    Include `repository`, `prefix` (the complete file path), approved `row`,

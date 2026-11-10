@@ -1,0 +1,27 @@
+[
+  {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/proprietary-surfaces/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "stdout": "final-census-tests.stdout.txt",
+    "stderr": "final-census-tests.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/patch-pass-2-20261110/mutation-guards.py"
+    ],
+    "exitCode": 1,
+    "stdout": "final-original-mutations.stdout.txt",
+    "stderr": "final-original-mutations.stderr.txt"
+  }
+]

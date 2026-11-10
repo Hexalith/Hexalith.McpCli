@@ -1,0 +1,213 @@
+{
+  "parentRevision": "26ed7584a437f5de92f4d7456428d948b565362e",
+  "status": "failed",
+  "rootCount": 17,
+  "rejected": [
+    {
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "package-metadata"
+      ],
+      "sources": [
+        "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj"
+      ],
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.EventStoreHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "package-metadata"
+      ],
+      "sources": [
+        "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj"
+      ],
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.UiHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "sources": [
+        ".mcp.json"
+      ],
+      "surface": {
+        "identity": "fluent-ui-blazor:3c0ffdb9f97e6cedfbc5bc45acefe323575ae2f944c1c5ea2162214b0b3cd9bc",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.ChatBot"
+      }
+    },
+    {
+      "changedSources": [],
+      "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "reason": "allowance-signal-or-source-drift",
+      "signals": [
+        "mcp-or-cli-dependency",
+        "mcp-registration",
+        "project-identity"
+      ],
+      "sources": [
+        "tests/Hexalith.ChatBot.Mcp.Tests/ChatBotMcpServiceTests.cs",
+        "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj"
+      ],
+      "surface": {
+        "identity": "Hexalith.ChatBot.Mcp.Tests",
+        "kind": "project",
+        "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+        "repository": "references/Hexalith.ChatBot"
+      },
+      "unexpectedSignals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "gitlink": "3de922e1140e26fe2e0151682ee656fcf675b26b",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "package-metadata"
+      ],
+      "sources": [
+        "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj"
+      ],
+      "surface": {
+        "identity": "package:Hexalith.EventStore.Admin.Cli",
+        "kind": "publication",
+        "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+        "repository": "references/Hexalith.EventStore"
+      }
+    },
+    {
+      "gitlink": "d873861677982a737d131180bcf79f06caee034d",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "sources": [
+        ".mcp.json"
+      ],
+      "surface": {
+        "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Folders"
+      }
+    },
+    {
+      "gitlink": "d873861677982a737d131180bcf79f06caee034d",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "package-metadata"
+      ],
+      "sources": [
+        "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj"
+      ],
+      "surface": {
+        "identity": "package:Hexalith.Folders.Cli",
+        "kind": "publication",
+        "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+        "repository": "references/Hexalith.Folders"
+      }
+    },
+    {
+      "gitlink": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "container-image"
+      ],
+      "sources": [
+        "deploy/kubernetes/overlays/production/kustomization.yaml"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/memories",
+        "kind": "publication",
+        "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "gitlink": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "container-image"
+      ],
+      "sources": [
+        "deploy/kubernetes/overlays/production/kustomization.yaml"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/memories-mcp",
+        "kind": "publication",
+        "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "gitlink": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "package-metadata"
+      ],
+      "sources": [
+        "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj"
+      ],
+      "surface": {
+        "identity": "package:GenerateBenchmarkVectors",
+        "kind": "publication",
+        "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "gitlink": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "package-metadata"
+      ],
+      "sources": [
+        "examples/DeserializeFileMessages/DeserializeFileMessages.csproj"
+      ],
+      "surface": {
+        "identity": "package:DeserializeFileMessages",
+        "kind": "publication",
+        "path": "examples/DeserializeFileMessages/DeserializeFileMessages.csproj",
+        "repository": "references/Hexalith.PolymorphicSerializations"
+      }
+    },
+    {
+      "gitlink": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "sources": [
+        ".mcp.json"
+      ],
+      "surface": {
+        "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Timesheets"
+      }
+    }
+  ],
+  "errors": [
+    {
+      "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "repository": "references/Hexalith.Projects",
+      "rule": "unsafe-publication-path:.github/workflows/ci.yml"
+    }
+  ]
+}

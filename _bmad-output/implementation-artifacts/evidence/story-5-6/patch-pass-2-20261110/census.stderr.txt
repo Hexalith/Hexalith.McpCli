@@ -1,0 +1,13 @@
+rejected: references/Hexalith.Builds@52ea174c70f1afe77b52a2ccf06bb53afa5e962d src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj [package:Hexalith.Builds.Module.EventStoreHost] signals=package-metadata
+rejected: references/Hexalith.Builds@52ea174c70f1afe77b52a2ccf06bb53afa5e962d src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj [package:Hexalith.Builds.Module.UiHost] signals=package-metadata
+rejected: references/Hexalith.ChatBot@82f20d5ecca74993f93e73151a6ae3766d3d6a1d .mcp.json [fluent-ui-blazor:3c0ffdb9f97e6cedfbc5bc45acefe323575ae2f944c1c5ea2162214b0b3cd9bc] signals=developer-server-configuration
+rejected: references/Hexalith.ChatBot@82f20d5ecca74993f93e73151a6ae3766d3d6a1d tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj [Hexalith.ChatBot.Mcp.Tests] signals=mcp-or-cli-dependency,mcp-registration,project-identity
+rejected: references/Hexalith.EventStore@3de922e1140e26fe2e0151682ee656fcf675b26b src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj [package:Hexalith.EventStore.Admin.Cli] signals=package-metadata
+rejected: references/Hexalith.Folders@d873861677982a737d131180bcf79f06caee034d .mcp.json [fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118] signals=developer-server-configuration
+rejected: references/Hexalith.Folders@d873861677982a737d131180bcf79f06caee034d src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj [package:Hexalith.Folders.Cli] signals=package-metadata
+rejected: references/Hexalith.Memories@1143ba17a2336f0d718fcff71e049c06350a45a2 deploy/kubernetes/overlays/production/kustomization.yaml [registry.hexalith.com/memories] signals=container-image
+rejected: references/Hexalith.Memories@1143ba17a2336f0d718fcff71e049c06350a45a2 deploy/kubernetes/overlays/production/kustomization.yaml [registry.hexalith.com/memories-mcp] signals=container-image
+rejected: references/Hexalith.Memories@1143ba17a2336f0d718fcff71e049c06350a45a2 tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj [package:GenerateBenchmarkVectors] signals=package-metadata
+rejected: references/Hexalith.PolymorphicSerializations@bce4eb9f45c6b131b960ab4fa39e50ff01e51960 examples/DeserializeFileMessages/DeserializeFileMessages.csproj [package:DeserializeFileMessages] signals=package-metadata
+rejected: references/Hexalith.Timesheets@f5bee2c91bec6e1e78d81b604cea6af0cee764fe .mcp.json [fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118] signals=developer-server-configuration
+error: {"gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6", "repository": "references/Hexalith.Projects", "rule": "unsafe-publication-path:.github/workflows/ci.yml"}

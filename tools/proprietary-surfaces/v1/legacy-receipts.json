@@ -1,0 +1,10 @@
+{
+  "schema": "mcpcli-census-legacy-receipts/v1",
+  "baselineSha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+  "receipts": [
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1-approval.json",
+      "sha256": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203"
+    }
+  ]
+}

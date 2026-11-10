@@ -1,0 +1,127 @@
+{
+  "schema": "mcpcli-census-mutation-controls/v1",
+  "result": "passed",
+  "mutationCount": 20,
+  "controls": [
+    {
+      "patch": "P1",
+      "test": "test_amendment_authority_must_belong_to_validated_lineage",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P2",
+      "test": "test_sdk_comments_do_not_suppress_neutral_executables",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P3",
+      "test": "test_import_xml_and_uppercase_extensions_are_metadata_and_closure",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P4",
+      "test": "test_targets_import_uses_project_defined_properties",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P5",
+      "test": "test_effective_sdk_package_identity_cannot_be_renamed_through_assembly",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P6",
+      "test": "test_fsharp_vb_attributes_and_direct_construction_add_registration_signal",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P7",
+      "test": "test_fsharp_vb_attributes_and_direct_construction_add_registration_signal",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P8",
+      "test": "test_recursive_globs_include_zero_directory_sources_and_imports",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P9",
+      "test": "test_container_action_and_supported_yaml_structures_bind_each_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P10",
+      "test": "test_container_action_and_supported_yaml_structures_bind_each_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P11",
+      "test": "test_conditional_alias_alternatives_cannot_hide_release_executable",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P12",
+      "test": "test_imported_compile_paths_are_relative_to_consuming_project",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P13",
+      "test": "test_unconsumed_metadata_expands_local_classification_aliases",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P14",
+      "test": "test_both_json_server_sections_are_validated_and_inspected",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P15",
+      "test": "test_docker_equals_tags_and_extensionless_executable_scripts",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P16",
+      "test": "test_docker_equals_tags_and_extensionless_executable_scripts",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P17",
+      "test": "test_container_identity_alone_has_project_and_publication_candidates",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P18",
+      "test": "test_each_project_language_executable_and_orphan_reference_is_inspected",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P19",
+      "test": "test_unsafe_and_unresolved_publication_paths_fail_with_context",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P20",
+      "test": "test_workflow_matrix_project_publications_cannot_hide_orphan_projects",
+      "result": "detected",
+      "exitCode": 1
+    }
+  ]
+}

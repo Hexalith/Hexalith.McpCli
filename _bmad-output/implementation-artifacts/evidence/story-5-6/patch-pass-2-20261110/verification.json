@@ -1,0 +1,62 @@
+{
+  "schema": "mcpcli-story-5-6-patch-verification/v1",
+  "status": "blocked",
+  "parentRevision": "26ed7584a437f5de92f4d7456428d948b565362e",
+  "preservedBaselineCommit": "c9a46a11a8317dd1903e3a3ef2f27791942b316a",
+  "censusTests": 85,
+  "releaseTests": 195,
+  "mutationControls": 34,
+  "review": {
+    "findings": 17,
+    "patchGroups": 14,
+    "applied": 14,
+    "deferred": 0,
+    "rejected": 0
+  },
+  "commands": "verified-commands.json",
+  "blockers": "verified-acceptance-blockers.json",
+  "sourceHashes": {
+    "README.md": "dbffb807ced2cba478a51d66d6a66a2f20fcd0cf2c122867a3a6a04167f8790f",
+    "tools/proprietary-surfaces/v1/README.md": "192413cf14a85928eb1a0c4a4cb9571f90649a2748e8642edf108c1131dfe30b",
+    "tools/proprietary-surfaces/v1/check.py": "1a67b8e495d4fb220f4b694ce91742a1543b357700a9f9e557216f5eef72700d",
+    "tools/proprietary-surfaces/v1/test_census.py": "2d3b2311f19b6c50d2485159d37add3007c604619299014956a8aca71593757f"
+  },
+  "policy": [
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1-approval.json",
+      "sha256": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1.json",
+      "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+      "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+      "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments.json",
+      "sha256": "98c37c5dd11041da07575b14870fb20ae93084962489e00dbf33f472fec6de0d",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/baseline.json",
+      "sha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+      "unchangedFromHead": true
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/legacy-receipts.json",
+      "sha256": "22055d14e2e5590d27be70291bf03045f3df8d9bf48a3b8f90cf84135f2f12ce",
+      "unchangedFromHead": null
+    }
+  ],
+  "referenceChanges": []
+}

@@ -47,7 +47,10 @@ CI enforces this rule with the blocking `proprietary-surface-census` job. The
 [census guide](tools/proprietary-surfaces/v1/README.md) documents committed-pin
 scope, detection signals, exact exemptions and UTC exception expiry. Run it
 locally with `python3 tools/proprietary-surfaces/v1/check.py --output /tmp/mcpcli-census.json`.
-The report names new surfaces and stale allowances; baseline changes require a
+The scan covers inherited/imported project metadata, effective package names,
+MCP registrations and direct construction, and literal workflow/script/container
+publication identities. Unsafe publication paths and unresolved workflow project
+targets fail with source context. The report names new surfaces and stale allowances; baseline changes require a
 versioned, hash-chained amendment. Successful census execution is required for
 paired-release staging and publication.
 

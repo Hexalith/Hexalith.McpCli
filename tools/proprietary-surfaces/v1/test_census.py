@@ -75,7 +75,7 @@ class CensusTests(unittest.TestCase):
             self.index.write_text('[]\n')
 
     def project(self, path=PROJECT, metadata='<OutputType>Exe</OutputType>', source=None):
-        self.write(self.repo, path, '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup>' + metadata + '</PropertyGroup></Project>')
+        self.write(self.repo, path, '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><IsPackable>false</IsPackable>' + metadata + '</PropertyGroup></Project>')
         if source is not None:
             self.write(self.repo, str(Path(path).parent / 'Program.cs'), source)
         self.commit(self.repo)
@@ -178,7 +178,7 @@ class CensusTests(unittest.TestCase):
         self.write(self.repo, 'Directory.Build.props', '<Project><Import Project="$(Unknown)/*.props" /></Project>')
         self.commit(self.repo); self.pin()
         entries = self.run_cli(1)['surfaces']
-        self.assertTrue(any('unresolved-tool-metadata' in s['signals'] for s in entries))
+        self.assertTrue(any(s['signals'] == ['packed-tool','tool-command'] for s in entries))
 
     def test_named_external_tool_exemption_is_data_and_does_not_allow_other_tools(self):
         self.policy['toolIdentities']=[dict(identity='External.Cli', classification='external-developer-tool', row='PE06',owner='owner',reason='Approved developer tool')]
@@ -190,7 +190,7 @@ class CensusTests(unittest.TestCase):
         self.commit(self.repo);self.pin();self.run_cli(1)
 
     def test_mcp_dependency_and_linked_registration_are_associated_with_project(self):
-        self.write(self.repo, 'eng/Inherited.props', '<Project><ItemGroup><Compile Include="Linked.cs" /></ItemGroup></Project>')
+        self.write(self.repo, 'eng/Inherited.props', '<Project><ItemGroup><Compile Include="$(MSBuildThisFileDirectory)Linked.cs" /></ItemGroup></Project>')
         self.write(self.repo, 'eng/Linked.cs', 'services.AddNeutralMcp(); app.MapNeutralMcp();')
         self.write(self.repo, 'Directory.Build.props', '<Project><Import Project="eng/Inherited.props" /></Project>')
         self.project(metadata='')
@@ -489,8 +489,8 @@ class CensusTests(unittest.TestCase):
         self.write(self.repo,'Directory.Build.props','<Project><Import Project="$(ExternalDir)/*.props"/></Project>')
         self.write(self.repo,'eng/Hidden.props','<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
         self.project(metadata='')
-        self.assertEqual(self.run_cli(1)['surfaces'],[dict(surface=self.binding('eng/Hidden.props','source','eng/Hidden.props'),
-            signals=['unresolved-tool-metadata'],sources=['eng/Hidden.props'],gitlink=self.git(self.repo,'rev-parse','HEAD'),
+        self.assertEqual(self.run_cli(1)['surfaces'],[dict(surface=self.binding(),
+            signals=['executable-project'],sources=[PROJECT],gitlink=self.git(self.repo,'rev-parse','HEAD'),
             status='rejected',classification='unapproved',reason='new-proprietary-surface')])
 
     def test_unresolved_directory_glob_cannot_hide_mcp_or_cli_references(self):
@@ -502,8 +502,8 @@ class CensusTests(unittest.TestCase):
                 self.write(self.repo,'eng/Hidden.props','<Project><ItemGroup>'+reference+'</ItemGroup></Project>')
                 self.commit(self.repo);self.pin()
                 entry=self.run_cli(1)['surfaces'][0]
-                self.assertEqual(entry['surface'],self.binding('eng/Hidden.props','source','eng/Hidden.props'))
-                self.assertEqual(entry['signals'],['unresolved-tool-metadata'])
+                self.assertEqual(entry['surface'],self.binding())
+                self.assertEqual(entry['signals'],['command-line-dependency'] if 'system.commandline' in reference else ['mcp-or-cli-dependency'])
 
     def test_case_insensitive_properties_and_aliased_reference_identities(self):
         self.write(self.repo,PROJECT,'<Project><PropertyGroup><KiNd>Exe</KiNd><outputTYPE>$(kInD)</outputTYPE><protocol>ModelContextProtocol</protocol><target>../Opaque.Mcp/Opaque.Mcp.csproj</target></PropertyGroup><ItemGroup><packageREFERENCE include="$(PROTOCOL)"/><PROJECTreference Include="$(TARGET)"/></ItemGroup></Project>')
@@ -582,14 +582,14 @@ class CensusTests(unittest.TestCase):
 
     def test_compilation_closure_binds_inherited_imported_linked_and_added_source(self):
         self.write(self.repo,'Directory.Build.props','<Project><Import Project="shared/*.props"/></Project>')
-        self.write(self.repo,'shared/local.props','<Project><ItemGroup><Compile Include="*.cs"/></ItemGroup></Project>')
+        self.write(self.repo,'shared/local.props','<Project><ItemGroup><Compile Include="$(MSBuildThisFileDirectory)*.cs"/></ItemGroup></Project>')
         self.write(self.repo,'shared/Secondary.cs','class Secondary {}')
         self.project()
         tree=census.Tree(self.repo,self.git(self.repo,'rev-parse','HEAD'))
         entry=self.allowance(sources=census.compilation_closure(tree,PROJECT),classification='non-surface-qualification-fixture',row='PA02')
         entry.update(sourcePrefix=str(Path(PROJECT).parent),compilationClosure=True);self.save()
         self.run_cli(0)
-        for path,original,changed in [('Directory.Build.props','<Project><Import Project="shared/*.props"/></Project>','<Project><Import Project="shared/*.props"/><PropertyGroup><Marker>changed</Marker></PropertyGroup></Project>'),('shared/local.props','<Project><ItemGroup><Compile Include="*.cs"/></ItemGroup></Project>','<Project><ItemGroup><Compile Include="*.cs"/></ItemGroup><PropertyGroup><Marker>changed</Marker></PropertyGroup></Project>'),('shared/Secondary.cs','class Secondary {}','class Secondary { int Changed; }')]:
+        for path,original,changed in [('Directory.Build.props','<Project><Import Project="shared/*.props"/></Project>','<Project><Import Project="shared/*.props"/><PropertyGroup><Marker>changed</Marker></PropertyGroup></Project>'),('shared/local.props','<Project><ItemGroup><Compile Include="$(MSBuildThisFileDirectory)*.cs"/></ItemGroup></Project>','<Project><ItemGroup><Compile Include="$(MSBuildThisFileDirectory)*.cs"/></ItemGroup><PropertyGroup><Marker>changed</Marker></PropertyGroup></Project>'),('shared/Secondary.cs','class Secondary {}','class Secondary { int Changed; }')]:
             self.write(self.repo,path,changed);self.commit(self.repo);self.pin()
             self.assertIn(path,self.run_cli(1)['surfaces'][0]['changedSources'])
             self.write(self.repo,path,original)
@@ -629,10 +629,13 @@ class CensusTests(unittest.TestCase):
         pin=self.commit(later)
         with (self.root/'.gitmodules').open('a') as output:output.write('[submodule "zeta"]\n path = references/zeta\n url = https://example.invalid/zeta.git\n'.replace('\\n','\n'))
         self.git(self.root,'add','.gitmodules');self.git(self.root,'update-index','--add','--cacheinfo',f'160000,{pin},references/zeta');self.git(self.root,'commit','-q','-m','test: add second committed census root')
-        self.policy['roots'].append(dict(repository='references/zeta',gitlink=pin,classification='PN02',owner='fixture owner'));self.save()
+        self.policy['roots'].append(dict(repository='references/zeta',gitlink=pin,classification='PN02',owner='fixture owner'))
+        approval=json.loads((self.root/'approval.json').read_text());approval['source_revisions']['references/zeta']=pin
+        self.write(self.root,'approval.json',json.dumps(approval));self.git(self.root,'add','approval.json');self.git(self.root,'commit','-q','-m','test: bind complete authority roots')
+        self.policy['provenance'][1]['sha256']=census.digest((self.root/'approval.json').read_bytes());self.save()
         report=self.run_cli(1)
         self.assertEqual([r['repository'] for r in report['repositories']],['references/opaque','references/zeta'])
-        self.assertEqual([s['surface']['repository'] for s in report['surfaces']],['references/zeta'])
+        self.assertEqual({s['surface']['repository'] for s in report['surfaces']},{'references/zeta'})
 
     def test_toml_servers_require_exact_approval_and_malformed_toml_fails(self):
         path='.codex/config.toml';original='[mcp_servers.neutral]\ncommand="neutral"\nargs=["old"]\n'.replace('\\n','\n')
@@ -677,8 +680,27 @@ class CensusTests(unittest.TestCase):
         target,amendment=self.amendment([entry])
         receipt=dict(schema='mcpcli-census-amendment-approval/v1',decision='approved',owner='fixture owner',fixtures=[dict(repository='references/opaque',gitlink=self.git(self.repo,'rev-parse','HEAD'),project=PROJECT,sourceClosure=dict(prefix=str(Path(PROJECT).parent),sources=sources))])
         (self.root/'decision.json').write_text(json.dumps(receipt));amendment['approval']['evidence']['sha256']=census.digest((self.root/'decision.json').read_bytes())
+        self.git(self.root,'add','decision.json');self.git(self.root,'commit','-q','-m','test: preserve legacy receipt before correction')
+        self.write(self.baseline.parent,'legacy-receipts.json',json.dumps(dict(schema='mcpcli-census-legacy-receipts/v1',baselineSha256=census.digest(self.baseline.read_bytes()),receipts=[amendment['approval']['evidence']])))
         target.write_text(json.dumps(amendment));self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
         self.run_cli(0)
+        registry_path=self.baseline.with_name('legacy-receipts.json')
+        registry=json.loads(registry_path.read_text())
+        invalid=[dict(registry,schema='other'),dict(registry,baselineSha256='0'*64),
+                 dict(registry,receipts={}),dict(registry,receipts=[{}]),
+                 dict(registry,receipts=[dict(path='decision.json',sha256='invalid')]),
+                 dict(registry,receipts=registry['receipts']*2)]
+        for value in invalid:
+            registry_path.write_text(json.dumps(value))
+            self.assertEqual(self.run_cli(1)['errors'],[{'rule':'invalid-legacy-receipt-registry'}])
+        registry_path.write_text(json.dumps(dict(registry,receipts=[dict(path='../outside.json',sha256='0'*64)])))
+        self.assertEqual(self.run_cli(1)['errors'],[{'rule':'unsafe-path'}])
+        registry_path.unlink()
+        self.assertEqual(self.run_cli(1)['errors'],[{'rule':'legacy-receipt-registry-required'}])
+        registry_copy=self.root/'retained-registry.json';registry_copy.write_text(json.dumps(registry))
+        registry_path.symlink_to(registry_copy)
+        self.assertEqual(self.run_cli(1)['errors'],[{'rule':'legacy-receipt-registry-required'}])
+        registry_path.unlink();registry_path.write_text(json.dumps(registry))
         amendment['addAllowances'][0]['surface']['identity']='unrelated'
         target.write_text(json.dumps(amendment));self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
         self.assertEqual(self.run_cli(1)['errors'],[{'rule':'amendment-authorization-scope-mismatch'}])
@@ -695,6 +717,333 @@ class CensusTests(unittest.TestCase):
             if receipt['schema'].endswith('/v2'):
                 self.assertEqual(receipt['authorization'],{key:amendment.get(key,[]) for key in ('addAllowances','removeAllowances','addExceptions','removeExceptions','addExclusions')})
             previous=item['sha256']
+
+    def test_amendment_authority_must_belong_to_validated_lineage(self):
+        self.project()
+        entry=dict(surface=self.binding(),signals=['executable-project'],classification='test-fixture',
+                   row='PE05',owner='fixture owner',reason='Exact fixture')
+        for authority in ({'decision':'approved','source_revisions':{}},
+                          {'schema':'mcpcli-census-amendment-approval/v2','decision':'approved'},
+                          {'decision':'approved','source_revisions':{'references/opaque':self.git(self.repo,'rev-parse','HEAD')}}):
+            with self.subTest(authority=authority):
+                target, amendment=self.amendment([entry])
+                self.write(self.root,'fabricated.json',json.dumps(authority))
+                receipt=json.loads((self.root/'decision.json').read_text())
+                receipt['authority']=[dict(path='fabricated.json',sha256=census.digest((self.root/'fabricated.json').read_bytes()))]
+                self.write(self.root,'decision.json',json.dumps(receipt))
+                amendment['approval']['evidence']['sha256']=census.digest((self.root/'decision.json').read_bytes())
+                target.write_text(json.dumps(amendment));self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
+                self.assertEqual(self.run_cli(1)['errors'],[{'rule':'untrusted-amendment-authority'}])
+
+    def test_inventory_authority_requires_complete_approved_root_scope(self):
+        for revisions in ({}, {'references/opaque':'0'*40}, {'other/root':'0'*40}):
+            with self.subTest(revisions=revisions):
+                self.write(self.root,'approval.json',json.dumps(dict(decision='approved',source_revisions=revisions)))
+                self.git(self.root,'add','approval.json');self.git(self.root,'commit','-q','-m','test: malformed authority scope')
+                self.policy['provenance'][1]['sha256']=census.digest((self.root/'approval.json').read_bytes());self.save()
+                self.assertEqual(self.run_cli(1)['errors'],[{'rule':'invalid-inventory-authority-scope'}])
+
+    def test_sdk_comments_do_not_suppress_neutral_executables(self):
+        for sdk in ('Microsoft.NET.Sdk.Web','Aspire.AppHost.Sdk'):
+            with self.subTest(sdk=sdk):
+                path='src/Neutral/Neutral.csproj'
+                self.project(path)
+                self.write(self.repo,path,(self.repo/path).read_text().replace('<Project ',f'<!-- {sdk} --><Project ',1))
+                self.commit(self.repo);self.pin()
+                self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],['executable-project'])
+        self.write(self.repo,path,'<Project><Sdk Name="Microsoft.NET.Sdk.Web"/><PropertyGroup><OutputType>Exe</OutputType><IsPackable>false</IsPackable></PropertyGroup></Project>')
+        self.commit(self.repo);self.pin();self.assertEqual(self.run_cli(0)['surfaces'],[])
+
+    def test_import_xml_and_uppercase_extensions_are_metadata_and_closure(self):
+        for imported in ('eng/runtime.xml','eng/Hidden.PROPS'):
+            with self.subTest(imported=imported):
+                self.write(self.repo,imported,'<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+                self.write(self.repo,'Directory.Build.props',f'<Project><Import Project="{imported}"/></Project>')
+                self.project(metadata='')
+                report=self.run_cli(1)
+                project=next(surface for surface in report['surfaces'] if surface['surface']['kind']=='project')
+                self.assertEqual(project['signals'],['executable-project'])
+                tree=census.Tree(self.repo,self.git(self.repo,'rev-parse','HEAD'))
+                self.assertIn(imported,{source['path'] for source in census.compilation_closure(tree,PROJECT)})
+                self.write(self.repo,imported,'<Project>');self.commit(self.repo);self.pin()
+                self.assertIn('malformed-project-metadata:'+imported,self.run_cli(1)['errors'][0]['rule'])
+                self.write(self.repo,imported,'<Project/>')
+
+    def test_targets_import_uses_project_defined_properties(self):
+        self.write(self.repo,'Directory.Build.targets','<Project><Import Project="$(HostDir)/*.xml"/></Project>')
+        self.write(self.repo,'eng/host/actual.xml','<Project><PropertyGroup><OutputType>$(HostKind)</OutputType></PropertyGroup></Project>')
+        self.write(self.repo,'unrelated/other.xml','<Project/>')
+        self.project(metadata='<HostDir>eng/host</HostDir><HostKind>Exe</HostKind>')
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],['executable-project'])
+        tree=census.Tree(self.repo,self.git(self.repo,'rev-parse','HEAD'))
+        paths={source['path'] for source in census.compilation_closure(tree,PROJECT)}
+        self.assertIn('eng/host/actual.xml',paths)
+        self.assertNotIn('unrelated/other.xml',paths)
+
+    def test_effective_sdk_package_identity_cannot_be_renamed_through_assembly(self):
+        self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><PackageId>old</PackageId></PropertyGroup></Project>')
+        self.commit(self.repo);self.pin()
+        for candidate in self.run_cli(1)['surfaces']:
+            self.allowance(surface=candidate['surface'],signals=candidate['signals'])
+        self.run_cli(0)
+        self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><AssemblyName>new</AssemblyName></PropertyGroup></Project>')
+        self.commit(self.repo);self.pin()
+        report=self.run_cli(1)
+        self.assertEqual([surface['surface']['identity'] for surface in report['surfaces'] if surface['status']=='rejected'],['package:new'])
+        self.assertEqual([surface['surface']['identity'] for surface in report['stale']],['package:old'])
+        self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.commit(self.repo);self.pin()
+        self.assertIn('package:Runner',[surface['surface']['identity'] for surface in self.run_cli(1)['surfaces']])
+
+    def test_fsharp_vb_attributes_and_direct_construction_add_registration_signal(self):
+        self.write(self.repo,PROJECT,'<Project><ItemGroup><PackageReference Include="ModelContextProtocol"/></ItemGroup></Project>')
+        self.commit(self.repo);self.pin();self.allowance(signals=['mcp-or-cli-dependency'],classification='dependency-consumer',row='FK03')
+        cases=[('Tools.fs','[<McpServerTool>]'),('Tools.vb','<McpServerTool>'),
+               ('Tools.cs','McpServer.Create(new StdioServerTransport(options), options); server.RunAsync();'),
+               ('Tools.cs','McpServer.Create(transport, options);'),('Tools.vb','<mcpservertool>'),
+               ('Tools.cs','new StdioServerTransport(options);')]
+        for filename,source in cases:
+            with self.subTest(source=source):
+                for previous,_ in cases:
+                    (self.repo/Path(PROJECT).parent/previous).unlink(missing_ok=True)
+                self.write(self.repo,str(Path(PROJECT).parent/filename),source);self.commit(self.repo);self.pin()
+                self.assertEqual(self.run_cli(1)['surfaces'][0]['unexpectedSignals'],['mcp-registration'])
+
+    def test_recursive_globs_include_zero_directory_sources_and_imports(self):
+        self.write(self.repo,'Directory.Build.props','<Project><Import Project="eng/**/*.xml"/></Project>')
+        self.write(self.repo,'eng/root.xml','<Project/>')
+        self.write(self.repo,'eng/nested/root.xml','<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup><ItemGroup><Compile Include="$(MSBuildThisFileDirectory)../../shared/**/*.cs"/></ItemGroup></Project>')
+        self.write(self.repo,'shared/Root.cs','class Root {}')
+        self.project(metadata='')
+        tree=census.Tree(self.repo,self.git(self.repo,'rev-parse','HEAD'))
+        entry=self.allowance(sources=census.compilation_closure(tree,PROJECT),classification='non-surface-qualification-fixture',row='PA02')
+        self.assertTrue({'eng/root.xml','eng/nested/root.xml','shared/Root.cs'} <= {source['path'] for source in entry['sources']})
+        entry.update(sourcePrefix=str(Path(PROJECT).parent),compilationClosure=True);self.save();self.run_cli(0)
+        self.write(self.repo,'shared/Root.cs','class Root { int Changed; }');self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['changedSources'],['shared/Root.cs'])
+        self.write(self.repo,'shared/Root.cs','class Root {}')
+        self.write(self.repo,'shared/nested/deeper/Added.cs','class Added {}');self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['changedSources'],['shared/nested/deeper/Added.cs'])
+
+    def test_imported_compile_paths_are_relative_to_consuming_project(self):
+        project='tests/Neutral/Neutral.csproj'
+        self.write(self.repo,'Directory.Build.props','<Project><Import Project="eng/linked.xml"/></Project>')
+        self.write(self.repo,'eng/linked.xml','<Project><ItemGroup><Compile Include="../../shared/Secondary.cs"/></ItemGroup></Project>')
+        self.write(self.repo,'shared/Secondary.cs','class Secondary {}');self.project(project)
+        tree=census.Tree(self.repo,self.git(self.repo,'rev-parse','HEAD'))
+        sources=census.compilation_closure(tree,project)
+        self.assertIn('shared/Secondary.cs',{source['path'] for source in sources})
+        entry=self.allowance(surface=self.binding(project,identity='Neutral'),sources=sources)
+        entry.update(sourcePrefix='tests/Neutral',compilationClosure=True);self.save();self.run_cli(0)
+        self.write(self.repo,'shared/Secondary.cs','class Secondary { int Changed; }');self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['changedSources'],['shared/Secondary.cs'])
+
+    def test_conditional_alias_alternatives_cannot_hide_release_executable(self):
+        self.project(metadata='<Kind Condition="Release">Exe</Kind><Kind Condition="Debug">Library</Kind><OutputType>$(Kind)</OutputType>')
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],['executable-project'])
+
+    def test_unconsumed_metadata_expands_local_classification_aliases(self):
+        self.write(self.repo,'Directory.Build.props','<Project/>')
+        self.write(self.repo,'eng/Hidden.props','<Project><PropertyGroup><Kind>Exe</Kind><OutputType>$(Kind)</OutputType></PropertyGroup></Project>')
+        self.project(metadata='')
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],['unresolved-tool-metadata'])
+
+    def test_both_json_server_sections_are_validated_and_inspected(self):
+        self.write(self.repo,'settings.json',json.dumps(dict(mcpServers={},servers={'neutral':{'command':'neutral'}})))
+        self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],['developer-server-configuration'])
+        self.write(self.repo,'settings.json',json.dumps(dict(mcpServers={},servers=[])))
+        self.commit(self.repo);self.pin()
+        self.assertIn('malformed-server-configuration:settings.json',self.run_cli(1)['errors'][0]['rule'])
+
+    def test_container_action_and_supported_yaml_structures_bind_each_identity(self):
+        cases=[('.github/workflows/ship.yml','jobs:\n  ship:\n    steps:\n      - uses: docker/build-push-action@v6\n        with:\n          push: true\n          tags: |\n            registry.invalid/neutral:latest\n            registry.invalid/second:latest\n',{'registry.invalid/neutral:latest','registry.invalid/second:latest'}),
+               ('deploy/pod.yaml','containers: [{name: neutral, image: registry.invalid/neutral:latest}]',{'registry.invalid/neutral:latest'}),
+               ('compose.yaml','services: {neutral: {image: registry.invalid/neutral:latest}}',{'registry.invalid/neutral:latest'}),
+               ('kustomization.yaml','images:\n  - name: neutral\n    newName: registry.invalid/neutral\n',{'registry.invalid/neutral'}),
+               ('deploy/quoted.yaml','{"containers": [{"image": "registry.invalid/neutral:latest"}]}',{'registry.invalid/neutral:latest'}),
+               ('deploy/helm.yaml','image: {repository: registry.invalid/neutral, tag: latest}',{'registry.invalid/neutral'})]
+        for path,content,identities in cases:
+            with self.subTest(path=path):
+                self.write(self.repo,path,content);self.commit(self.repo);self.pin()
+                entries=[entry for entry in self.run_cli(1)['surfaces'] if entry['surface']['path']==path]
+                self.assertEqual({entry['surface']['identity'] for entry in entries},identities)
+
+    def test_docker_equals_tags_and_extensionless_executable_scripts(self):
+        for command in ('docker build --tag=registry.invalid/neutral:1 .',
+                        'docker buildx build --tag=registry.invalid/neutral:1 --push .',
+                        'docker push registry.invalid/neutral:1','dotnet tool install neutral'):
+            with self.subTest(command=command):
+                self.write(self.repo,'scripts/ship','#!/usr/bin/env bash\n'+command+'\n')
+                (self.repo/'scripts/ship').chmod(0o755);self.commit(self.repo);self.pin()
+                entry=self.run_cli(1)['surfaces'][0]
+                self.assertEqual(entry['surface']['identity'],'neutral' if 'tool install' in command else 'registry.invalid/neutral:1')
+                self.assertEqual(entry['signals'],['tool-install'] if 'tool install' in command else ['container-image'])
+
+    def test_container_identity_alone_has_project_and_publication_candidates(self):
+        self.project(metadata='<ContainerRepository>neutral-mcp</ContainerRepository>')
+        entries=self.run_cli(1)['surfaces']
+        self.assertEqual([(entry['surface']['kind'],entry['surface']['identity'],entry['signals']) for entry in entries],
+                         [('project','Runner',['container-identity']),('publication','container:neutral-mcp',['container-metadata'])])
+
+    def test_each_project_language_executable_and_orphan_reference_is_inspected(self):
+        for suffix in ('csproj','fsproj','vbproj'):
+            with self.subTest(suffix=suffix):
+                path=f'outside/Neutral/Neutral.{suffix}';self.project(path)
+                self.write(self.repo,'scripts/ship.sh',f'dotnet publish missing/Orphan.{suffix}');self.commit(self.repo);self.pin()
+                entries=self.run_cli(1)['surfaces']
+                self.assertTrue(any(entry['surface']['path']==path and entry['signals']==['executable-project'] for entry in entries))
+                self.assertTrue(any(entry['surface']['identity']==f'missing/Orphan.{suffix}' and entry['signals']==['orphan-project-reference'] for entry in entries))
+
+    def test_unsafe_and_unresolved_publication_paths_fail_with_context(self):
+        for target in ('/tmp/Neutral.csproj','../Neutral.csproj',r'C:\tmp\Neutral.csproj',r'C:tmp\Neutral.csproj'):
+            self.write(self.repo,'scripts/ship.sh','dotnet publish '+target);self.commit(self.repo);self.pin()
+            self.assertIn('unsafe-publication-path:scripts/ship.sh',self.run_cli(1)['errors'][0]['rule'])
+
+    def test_workflow_matrix_project_publications_cannot_hide_orphan_projects(self):
+        for matrix in ('project: [missing/Neutral.csproj, missing/Second.fsproj]',
+                       'project:\n          - missing/Neutral.csproj\n          - missing/Second.fsproj',
+                       'include:\n          - project: missing/Neutral.csproj\n          - project: missing/Second.fsproj'):
+            with self.subTest(matrix=matrix):
+                self.write(self.repo,'.github/workflows/ship.yml','jobs:\n  ship:\n    strategy:\n      matrix:\n        '+matrix+'\n    steps:\n      - run: dotnet publish ${{ matrix.project }}\n')
+                self.commit(self.repo);self.pin()
+                self.assertEqual({entry['surface']['identity'] for entry in self.run_cli(1)['surfaces']},{'missing/Neutral.csproj','missing/Second.fsproj'})
+        self.write(self.repo,'.github/workflows/ship.yml','jobs:\n  ship:\n    steps:\n      - run: dotnet publish ${{ matrix.unknown }}\n');self.commit(self.repo);self.pin()
+        self.assertIn('unresolved-publication-target:.github/workflows/ship.yml',self.run_cli(1)['errors'][0]['rule'])
+
+    def test_workflow_non_target_expressions_do_not_obscure_literal_projects(self):
+        self.write(self.repo,'.github/workflows/ship.yml','jobs:\n  ship:\n    steps:\n      - run: dotnet publish missing/Neutral.csproj -c ${{ inputs.configuration }} -p:Version=${{ inputs.version }}\n')
+        self.commit(self.repo);self.pin()
+        report=self.run_cli(1)
+        self.assertEqual(report['errors'],[])
+        self.assertEqual([entry['surface']['identity'] for entry in report['surfaces']],['missing/Neutral.csproj'])
+
+    def test_superseded_unconditional_assembly_name_does_not_add_default_package(self):
+        self.write(self.repo,'Directory.Build.props','<Project><PropertyGroup><AssemblyName>Old</AssemblyName></PropertyGroup></Project>')
+        self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><AssemblyName>Current</AssemblyName><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.commit(self.repo);self.pin()
+        self.assertEqual([entry['surface']['identity'] for entry in self.run_cli(1)['surfaces']],['Runner','package:Current'])
+
+    def test_new_legacy_receipt_cannot_create_untracked_authority(self):
+        self.project()
+        sources=[dict(path=PROJECT,sha256=census.digest((self.repo/PROJECT).read_bytes()))]
+        entry=dict(surface=self.binding(),signals=['executable-project'],classification='non-surface-qualification-fixture',
+                   row='PA01',owner='fixture owner',reason='Exact fixture',sourcePrefix=str(Path(PROJECT).parent),sources=sources)
+        target,amendment=self.amendment([entry])
+        receipt=dict(schema='mcpcli-census-amendment-approval/v1',decision='approved',owner='fixture owner',
+                     fixtures=[dict(repository='references/opaque',gitlink=self.git(self.repo,'rev-parse','HEAD'),
+                                    project=PROJECT,sourceClosure=dict(prefix=str(Path(PROJECT).parent),sources=sources))])
+        self.write(self.root,'decision.json',json.dumps(receipt))
+        amendment['approval']['evidence']['sha256']=census.digest((self.root/'decision.json').read_bytes())
+        target.write_text(json.dumps(amendment));self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
+        self.assertEqual(self.run_cli(1)['errors'],[{'rule':'legacy-amendment-evidence-not-committed'}])
+        self.git(self.root,'add','decision.json');self.git(self.root,'commit','-q','-m','test: preserve legacy receipt before correction')
+        self.write(self.baseline.parent,'legacy-receipts.json',json.dumps(dict(schema='mcpcli-census-legacy-receipts/v1',baselineSha256=census.digest(self.baseline.read_bytes()),receipts=[])))
+        self.assertEqual(self.run_cli(1)['errors'],[{'rule':'untrusted-legacy-amendment-evidence'}])
+
+    def test_unknown_compile_directory_binds_all_local_suffix_matches(self):
+        self.write(self.repo,'shared/Secondary.cs','class Secondary {}')
+        self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><IsPackable>false</IsPackable></PropertyGroup><ItemGroup><Compile Include="$(ExternalDir)/shared/**/*.cs"/></ItemGroup></Project>')
+        self.commit(self.repo);self.pin()
+        tree=census.Tree(self.repo,self.git(self.repo,'rev-parse','HEAD'))
+        entry=self.allowance(sources=census.compilation_closure(tree,PROJECT))
+        entry.update(sourcePrefix=str(Path(PROJECT).parent),compilationClosure=True);self.save();self.run_cli(0)
+        self.write(self.repo,'shared/Secondary.cs','class Secondary { int Changed; }');self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['changedSources'],['shared/Secondary.cs'])
+
+    def test_sdk_default_assembly_name_is_available_to_package_aliases(self):
+        self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><PackageId>$(AssemblyName)</PackageId></PropertyGroup></Project>')
+        self.commit(self.repo);self.pin()
+        report=self.run_cli(1)
+        self.assertEqual(report['errors'],[])
+        self.assertEqual([entry['surface']['identity'] for entry in report['surfaces']],['Runner','package:Runner'])
+
+    def test_conditional_sdk_import_cannot_suppress_executable(self):
+        for sdk in ('Microsoft.NET.Sdk.Web','Aspire.AppHost.Sdk'):
+            with self.subTest(sdk=sdk):
+                self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><IsPackable>false</IsPackable></PropertyGroup>'
+                           f'<Import Project="Sdk.props" Sdk="{sdk}" Condition="false"/></Project>')
+                self.commit(self.repo);self.pin()
+                self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],['executable-project'])
+
+    def test_empty_package_assignment_reapplies_sdk_default(self):
+        self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><PackageId>old</PackageId></PropertyGroup></Project>')
+        self.commit(self.repo);self.pin()
+        for entry in self.run_cli(1)['surfaces']:
+            self.allowance(surface=entry['surface'],signals=entry['signals'])
+        self.run_cli(0)
+        self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><PackageId>old</PackageId><PackageId/></PropertyGroup></Project>')
+        self.commit(self.repo);self.pin()
+        report=self.run_cli(1)
+        self.assertEqual([entry['surface']['identity'] for entry in report['surfaces'] if entry['status']=='rejected'],['package:Runner'])
+        self.assertEqual([entry['surface']['identity'] for entry in report['stale']],['package:old'])
+
+    def test_default_tool_command_tracks_assembly_and_target_name(self):
+        def write_tool(name,target=''):
+            self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><PackAsTool>true</PackAsTool><PackageId>fixed</PackageId>'
+                       f'<AssemblyName>{name}</AssemblyName>{target}</PropertyGroup></Project>')
+            self.commit(self.repo);self.pin()
+        write_tool('old')
+        for entry in self.run_cli(1)['surfaces']:
+            self.allowance(surface=entry['surface'],signals=entry['signals'])
+        self.run_cli(0)
+        write_tool('new')
+        self.assertEqual([entry['surface']['identity'] for entry in self.run_cli(1)['surfaces'] if entry['status']=='rejected'],['tool:new'])
+        write_tool('new','<TargetName>target</TargetName>')
+        self.assertEqual([entry['surface']['identity'] for entry in self.run_cli(1)['surfaces'] if entry['status']=='rejected'],['tool:target'])
+
+    def test_reference_item_lists_split_before_classification(self):
+        for items in ('<PackageReference Include="Neutral;System.CommandLine"/>',
+                      '<ProjectReference Include="../Neutral/Neutral.csproj;../Hidden.Mcp/Hidden.Mcp.csproj"/>'):
+            self.write(self.repo,PROJECT,'<Project><ItemGroup>'+items+'</ItemGroup></Project>')
+            self.commit(self.repo);self.pin()
+            expected='command-line-dependency' if 'PackageReference' in items else 'mcp-or-cli-dependency'
+            self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],[expected])
+
+    def test_unresolved_compile_item_alias_fails_with_context(self):
+        self.write(self.repo,'shared/Extra.cs','class Extra {}')
+        self.write(self.repo,PROJECT,'<Project><ItemGroup><SharedSource Include="../../../shared/Extra.cs"/><Compile Include="@(SharedSource)"/></ItemGroup></Project>')
+        self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['errors'][0]['rule'],'unresolved-classification-metadata:'+PROJECT)
+
+    def test_unresolved_xml_directory_glob_includes_local_executable_metadata(self):
+        self.write(self.repo,'eng/Hidden.xml','<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.project(metadata='')
+        self.write(self.repo,PROJECT,'<Project><Import Project="$(ExternalDir)/*.xml"/></Project>')
+        self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],['executable-project'])
+
+    def test_import_conditions_preserve_release_and_debug_alternatives(self):
+        self.write(self.repo,'eng/Release.xml','<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.write(self.repo,'eng/Debug.xml','<Project><PropertyGroup><OutputType>Library</OutputType></PropertyGroup></Project>')
+        self.write(self.repo,PROJECT,'<Project><Import Project="../../../eng/Release.xml" Condition="Release"/>'
+                   '<Import Project="../../../eng/Debug.xml" Condition="Debug"/></Project>')
+        self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],['executable-project'])
+
+    def test_continued_container_commands_and_push_options_bind_images(self):
+        for command in ('docker build \\\n  --tag registry.invalid/neutral:1 .',
+                        'docker buildx build \\\n  --tag=registry.invalid/neutral:1 --push .',
+                        'docker push --all-tags registry.invalid/neutral:1',
+                        'docker push -a --quiet registry.invalid/neutral:1'):
+            with self.subTest(command=command):
+                self.write(self.repo,'scripts/ship.sh',command);self.commit(self.repo);self.pin()
+                entries=self.run_cli(1)['surfaces']
+                self.assertEqual([(entry['surface']['identity'],entry['signals']) for entry in entries],
+                                 [('registry.invalid/neutral:1',['container-image'])])
+
+    def test_quoted_project_targets_preserve_full_path_identity(self):
+        for filename,prefix in (('scripts/ship.sh',''),('.github/workflows/ship.yml','jobs:\n  ship:\n    steps:\n      - run: ')):
+            with self.subTest(filename=filename):
+                self.write(self.repo,filename,prefix+'dotnet publish "missing/Old Runner.csproj"')
+                self.commit(self.repo);self.pin()
+                candidates=[entry for entry in self.run_cli(1)['surfaces'] if entry['surface']['path']==filename]
+                self.assertEqual([entry['surface']['identity'] for entry in candidates],['missing/Old Runner.csproj'])
+                self.allowance(surface=candidates[0]['surface'],signals=candidates[0]['signals'])
+                self.write(self.repo,filename,prefix+'dotnet publish "missing/New Runner.csproj"')
+                self.commit(self.repo);self.pin()
+                entries=[entry for entry in self.run_cli(1)['surfaces'] if entry['surface']['path']==filename and entry['status']=='rejected']
+                self.assertEqual([entry['surface']['identity'] for entry in entries],['missing/New Runner.csproj'])
 
 
 if __name__=='__main__':
