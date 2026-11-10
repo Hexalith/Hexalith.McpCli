@@ -133,6 +133,22 @@ public sealed class EnrolledModuleCoverageTests(ITestOutputHelper output)
         });
     }
 
+    /// <summary>One approved vector covers every operation of its shape, so a shape-mate without its own vector does not fail.</summary>
+    [Fact]
+    public void OneVectorCoversEveryOperationOfItsSampleShape()
+    {
+        using SampleApproval approval = new();
+        File.Delete(approval.Vector("sample-rename"));
+        var reports = new List<string>();
+
+        ShapeCoverageGate.Check(approval.Modules, [SamplePackage], SampleSnapshot(), reports).ShouldBeEmpty();
+        reports.ShouldBe(new[]
+        {
+            $"sample: Operation Shape '{SampleCommandShape}' is covered by approved vector(s) for sample.create-item (operations: sample.create-item, sample.rename-item).",
+            $"sample: Operation Shape '{SampleQueryShape}' is covered by approved vector(s) for sample.get-item (operations: sample.get-item).",
+        });
+    }
+
     /// <summary>Removing the only vector of a shape fails with that shape and its operations named.</summary>
     [Fact]
     public void RemovingTheOnlyVectorOfASampleShapeFailsNamingThatShape()

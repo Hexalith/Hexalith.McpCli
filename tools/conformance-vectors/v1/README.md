@@ -6,7 +6,7 @@ Each vector names one canonical decorated Operation, its owning Contracts **pack
 
 ## Operation Shape coverage
 
-An Operation Shape is the module-scoped tuple that McpCli's generic translation branches on:
+An Operation Shape is the module-scoped tuple of routing and envelope fields that McpCli's generic translation branches on. Payload role bindings (actor, tenant and idempotency-key properties) and envelope-filled members are not shape components; Core executor tests cover them, not vectors. The components are:
 
 | Component | Values |
 | --- | --- |
@@ -18,7 +18,7 @@ An Operation Shape is the module-scoped tuple that McpCli's generic translation 
 | `projectionSelector` | `projectionActorType`, `projectionType`, `none` |
 | `idempotencyKey` | `required`, `optional` |
 
-Only `tests/Hexalith.McpCli.Core.Tests/OperationShape.cs` derives a shape, from Catalog descriptors; its key reads like `kind=query;identifierKind=string;…`. The ConformanceHost compiles that file and emits each operation's `shape` from `--manifest-catalog`; every Python gate treats the key as an opaque string. A shape that no approved vector covers fails with `<module>: Operation Shape '<key>' has no approved vector (operations: <names>).` A duplicate or stale vector also fails. `EnrolledModuleCoverageTests` applies the same rule to the production Catalog, counting only vectors whose bytes match `vectorFilesSha256`, and writes each covered shape to the test output. No gate pins the number of shapes; the 21 Parties and Tenants vectors cover six, three per module.
+Only `tests/Hexalith.McpCli.Core.Tests/OperationShape.cs` derives a shape, from Catalog descriptors; its key reads like `kind=query;identifierKind=string;…`. The ConformanceHost compiles that file and emits each operation's `shape` from `--manifest-catalog`; every Python gate treats the key as an opaque string. A shape that no approved vector covers fails with `<module>: Operation Shape '<key>' has no approved vector (operations: <names>).` A duplicate or stale vector also fails. `EnrolledModuleCoverageTests` applies the same uncovered-shape rule to the production Catalog, counting only vectors whose bytes match `vectorFilesSha256`, and writes each covered shape to the test output. It ignores other vector files. Only the Python gates fail a duplicate, stale, unlisted or changed vector file. No gate pins the number of shapes; the 21 Parties and Tenants vectors cover six, three per module.
 
 A report is a non-failing observation: a vector or receipt version that differs from the restored package, or a cataloged operation that no inventory row mentions. Each report appears on stderr as a `reported: …` line and in the `reported` array of `enrolled.json`, `verification.json` and the live lane's `live-lane.json`. A report never changes an exit code.
 

@@ -46,7 +46,7 @@ class PlanTests(unittest.TestCase):
             with self.assertRaisesRegex(VectorError, message):
                 load_plan(path, self.vector)
 
-    def test_all_21_approved_vectors_have_valid_plans(self):
+    def test_all_21_companion_plans_are_valid_for_approved_vectors(self):
         # Only companion plans are counted and loaded; an approved vector without a plan is loopback-only.
         vectors = {json.loads(path.read_text())['operation']: path
                    for path in (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json')}
@@ -426,11 +426,14 @@ class LiveKindCoverageTests(unittest.TestCase):
             document = real_load(path)
             return dict(document, version='0.0.1') if Path(path).name == 'approval.json' else document
         selections, bindings, reports = self.preflight(_load_json=older_receipt)
-        self.assertEqual(['Hexalith.Parties.Contracts: approval receipt version 0.0.1 differs from restored package version 1.5.1; reported, not failed.',
-                          'Hexalith.Tenants.Contracts: approval receipt version 0.0.1 differs from restored package version 7.0.5; reported, not failed.'],
-                         reports)
         restored = {binding['packageId']: (binding['version'], binding['artifactHash']) for binding in bindings}
         assets = json.loads((ROOT / 'src/Hexalith.McpCli/obj/project.assets.json').read_text())
+        # The expected versions come from the restored assets, so a version-only module release needs no edit here.
+        restored_versions = {key.rsplit('/', 1)[0].casefold(): key.rsplit('/', 1)[1]
+                             for key, library in assets['libraries'].items() if library['type'] == 'package'}
+        self.assertTrue(restored)
+        self.assertEqual([f'{package}: approval receipt version 0.0.1 differs from restored package version '
+                          f'{restored_versions[package.casefold()]}; reported, not failed.' for package in restored], reports)
         for package, (version, artifact_hash) in restored.items():
             identity = f'{package}/{version}'
             self.assertIn(identity, assets['libraries'])

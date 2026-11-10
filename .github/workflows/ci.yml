@@ -53,6 +53,37 @@ jobs:
       - name: Verify detached-source semantic-release version selection
         run: node --test scripts/tests/select-release-version.test.mjs
 
+  proprietary-surface-census:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          submodules: false
+      - name: Initialize committed root-declared references without recursion
+        run: |
+          python3 - <<'PYTHON'
+          import importlib.util, pathlib, subprocess
+          path = pathlib.Path('tools/proprietary-surfaces/v1/check.py')
+          spec = importlib.util.spec_from_file_location('census', path)
+          census = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(census)
+          revision = census.git('.', 'rev-parse', '--verify', 'HEAD^{commit}')
+          roots = census.declarations(census.Tree('.', revision))
+          subprocess.run(['git', '-c', 'submodule.recurse=false', 'submodule', 'update',
+                          '--init', '--checkout', '--', *roots], check=True)
+          PYTHON
+      - name: Verify proprietary surface census refusal fixtures
+        run: python3 -m unittest discover -v -s tools/proprietary-surfaces/v1 -p 'test_*.py'
+      - name: Scan committed root reference pins for proprietary surfaces
+        run: python3 tools/proprietary-surfaces/v1/check.py --output "$RUNNER_TEMP/proprietary-surface-census/census.json"
+      - name: Retain sanitized proprietary surface census report
+        if: ${{ always() }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: proprietary-surface-census
+          path: ${{ runner.temp }}/proprietary-surface-census/
+          if-no-files-found: warn
+
   conformance-vector-contract:
     runs-on: ubuntu-latest
     steps:

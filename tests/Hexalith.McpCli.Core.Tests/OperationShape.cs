@@ -5,7 +5,9 @@ using DeclaredWireTypeConvention = Hexalith.McpCli.Abstractions.WireTypeConventi
 namespace Hexalith.McpCli.Core.Tests;
 
 /// <summary>
-/// The module-scoped Operation Shape that McpCli's generic translation branches on; the single source of shape derivation.
+/// The module-scoped Operation Shape: the routing and envelope fields that McpCli's generic translation branches on.
+/// Payload role bindings and envelope-filled members are not components; Core executor tests cover them. This is the single
+/// source of shape derivation.
 /// </summary>
 /// <param name="Kind">The operation kind: <c>command</c> or <c>query</c>.</param>
 /// <param name="IdentifierKind">The module Identifier Kind: <c>ulid</c> or <c>string</c>.</param>

@@ -16,6 +16,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import textwrap
 import time
 import unittest
 import xml.etree.ElementTree as ET
@@ -2337,6 +2338,39 @@ class CiWorkflowTests(unittest.TestCase):
         self.assertRegex(caller, r'uses: Hexalith/Hexalith.Builds/\.github/workflows/domain-ci.yml@[0-9a-f]{40}\n')
         self.assertIn('if not operations or len(set(operations)) != len(operations) or sorted(discovered) != sorted(expected)', workflow)
         self.assertIn('SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety', workflow)
+
+    def test_discovery_assertion_expects_only_approved_vectors_with_a_companion_plan(self):
+        workflow = (HERE.parents[1] / '.github/workflows/ci.yml').read_text()
+        job = workflow.split('\n  topology-vector-discovery:\n', 1)[1]
+        script = textwrap.dedent(job.split("<<'PYTHON'\n", 1)[1].split('\n          PYTHON\n', 1)[0] + '\n')
+        prefix = 'Hexalith.McpCli.Integration.Tests.'
+        independent = [prefix + 'GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument',
+                       prefix + 'SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety']
+        live = prefix + 'LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: "module.live")'
+        loopback = prefix + 'LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: "module.loopback-only")'
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            modules = root / 'tools/conformance-vectors/v1/modules/Module.Contracts'
+            plans = root / 'tools/live-topology/plans'
+            modules.mkdir(parents=True)
+            plans.mkdir(parents=True)
+            for name in ('module.live', 'module.loopback-only'):
+                (modules / (name + '.vector.json')).write_text(json.dumps({'operation': name}))
+            (plans / 'module.live.json').write_text('{}')
+            discovery = root / 'discovery.txt'
+
+            def discover(cases):
+                discovery.write_text('\n'.join(['Discovering tests', *cases]) + '\n')
+                return subprocess.run([sys.executable, '-', str(discovery)], input=script, cwd=root,
+                                      capture_output=True, text=True, timeout=60)
+
+            accepted = discover([*independent, live])
+            self.assertEqual((0, 'Discovered 1 live vectors and the independent Gateway smoke and shared-head boundary.\n', ''),
+                             (accepted.returncode, accepted.stdout, accepted.stderr))
+            refused = discover([*independent, live, loopback])
+            self.assertEqual((1, '', 'Expected every approved live vector plus independent smoke and boundary; discovered '
+                              + repr([*independent, live, loopback]) + '\n'),
+                             (refused.returncode, refused.stdout, refused.stderr))
 
     def test_workflow_pin_matches_builds_gitlink(self):
         root = HERE.parents[1]

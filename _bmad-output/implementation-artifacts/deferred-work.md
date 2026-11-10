@@ -979,3 +979,15 @@ status: open
   owner: Parties and Tenants maintainers, for the amended vectors and companion plans; McpCli maintainer, for the re-approval.
   status: open; deferred by the approved shape-coverage proposal, which keeps the existing 21 vectors, their plans and inventories unchanged. Pick it up with the next vector amendment of each module, not as a standalone rebind.
   evidence: `tools/conformance-vectors/v1/README.md` "Module author approval" step 3 makes the scenario an authoring rule for new enrollments only; the live preflight (`tools/live-topology/live_plans.py` `require_live_kinds`) checks only that each declared Operation kind has a plan-backed live vector. No current vector sends an idempotency key: `grep -l idempotencyKey tools/conformance-vectors/v1/modules/*/*.vector.json` finds none. The keyed admission 503 was found only in a human session (`spec-4-17`, cited in `sprint-change-proposal-2026-11-10-shape-coverage.md` section 2.5), and the Parties host acknowledgement defect showed only in second-Command vectors (`spec-4-13`).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-12-gate-enrolled-modules-by-operation-shape.md`
+  summary: `AGENTS.md` (and its byte-identical copies `CLAUDE.md` and `.github/copilot-instructions.md`) still says "`run-vectors.py` invokes that wrapper for every vector". After Story 5.12 the live lane runs only approved vectors that have a companion plan; a vector without one is loopback-only.
+  owner: McpCli maintainer (agent-instruction entry points).
+  status: open; deferred by the Story 5.12 code review pass 2 (D1, A3), because the fix edits the agent-context files.
+  evidence: `AGENTS.md:102`. The README and `tools/live-topology/README.md` already say "every approved live vector". Edit `AGENTS.md`, copy it to the other two entry points, and run `scripts/check-agent-instructions-sync.sh`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-12-gate-enrolled-modules-by-operation-shape.md`
+  summary: No test checks that the `enrolled-module-conformance` step names in `STAGING_JOBS` match the job's `- name:` lines in `.github/workflows/ci.yml`. A rename in only one file passes every test and first fails when `verify-release-source.py` runs during a paired release, at `validate_jobs` ("Required step … was missing").
+  owner: McpCli maintainer (paired-release source gate).
+  status: open; pre-existing gap, deferred by the Story 5.12 code review pass 2 (D2, V2). Story 5.12 renamed the step correctly in both files. Generalize the check after the concurrent Story 5.6 edits to `scripts/tests/test_paired_publication.py` land, so the two changes do not collide.
+  evidence: `scripts/verify-release-source.py:38` (`STAGING_JOBS['enrolled-module-conformance']`) and the `ci.yml` step "Validate restored-package integrity, Operation Shape coverage and both heads". Only `test_topology_discovery_required_step_matches_the_current_workflow` (`scripts/tests/test_paired_publication.py:971` at `c9a46a1`) and the `release-automation` assertions compare `STAGING_JOBS` with `ci.yml`. Extending that parser to every `STAGING_JOBS` job defined in `ci.yml` closes the gap.

@@ -964,9 +964,45 @@ class PublicationBoundaryTests(unittest.TestCase):
         for state in ('missing', 'skipped', *required):
             executed = jobs(gate.STAGING_JOBS)
             if state == 'missing': executed = [job for job in executed if job['name'] != 'release-automation']
-            elif state == 'skipped': executed[0]['conclusion'] = 'skipped'
-            else: next(step for step in executed[0]['steps'] if step['name'] == state)['conclusion'] = 'skipped'
+            elif state == 'skipped': next(job for job in executed if job['name'] == 'release-automation')['conclusion'] = 'skipped'
+            else: next(step for job in executed if job['name'] == 'release-automation' for step in job['steps'] if step['name'] == state)['conclusion'] = 'skipped'
             with self.subTest(state=state), self.assertRaises(ValueError): gate.validate_jobs(executed, gate.STAGING_JOBS)
+
+    def test_census_job_and_each_executed_step_are_required_for_staging_and_publication(self):
+        gate = module('verify-release-source')
+        name = 'proprietary-surface-census'
+        self.assertIn(name, gate.STAGING_JOBS)
+        workflow = (Path(__file__).resolve().parents[2] / '.github/workflows/ci.yml').read_text()
+        block = workflow.split('  proprietary-surface-census:\n', 1)[1].split('  conformance-vector-contract:', 1)[0]
+        required = gate.STAGING_JOBS[name]
+        self.assertEqual(len(required), 3)
+        self.assertTrue(set(required).issubset(re.findall(r'(?m)^      - name: (.+)$', block)))
+        self.assertIn("'submodule.recurse=false'", block)
+        self.assertNotIn('--recursive', block)
+        self.assertIn('if: ${{ always() }}', block)
+        self.assertIn('submodules: false', block)
+        for scope in ('job', *required):
+            for state in ('missing', 'skipped', 'failure'):
+                with self.subTest(scope=scope, state=state):
+                    document = {'schema': 'mcpcli-paired-source/v1', 'source_sha': SHA, 'current_main': SHA, 'source_clean': True,
+                        'gates': {workflow: {'source_sha': SHA, 'status': 'completed', 'conclusion': 'success', 'jobs': jobs(mapping)}
+                            for workflow, mapping in [('ci.yml', gate.STAGING_JOBS), ('commitlint.yml', gate.STAGING_COMMITLINT_JOBS)]},
+                        'fr22': {'source_sha': SHA, 'source_clean': True, 'baseline_revision': 'b' * 40, 'upstream_main': 'c' * 40,
+                            'required_revision': module('verify-paired-prerequisites').REQUIRED,
+                            'synchronization': {path: 'd' * 64 for path in ('AGENTS.md', 'CLAUDE.md', '.github/copilot-instructions.md')}}}
+                    executed = document['gates']['ci.yml']['jobs']
+                    job = next(j for j in executed if j['name'] == name)
+                    if scope == 'job':
+                        if state == 'missing': executed.remove(job)
+                        else: job['conclusion'] = state
+                    else:
+                        step = next(step for step in job['steps'] if step['name'] == scope)
+                        if state == 'missing': job['steps'].remove(step)
+                        else: step['conclusion'] = state
+                    with self.assertRaisesRegex(ValueError, 'Required (?:job|step) proprietary-surface-census'):
+                        gate.validate_jobs(executed, gate.STAGING_JOBS)
+                    with self.assertRaisesRegex(ValueError, 'Required (?:job|step) proprietary-surface-census'):
+                        validate_source_evidence(document, SHA)
 
     def test_topology_discovery_required_step_matches_the_current_workflow(self):
         gate = module('verify-release-source')

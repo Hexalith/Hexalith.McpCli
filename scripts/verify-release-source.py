@@ -30,6 +30,7 @@ def github_json(endpoint: str, *parameters: str):
 
 # Job and step names are the executed blocking lanes in the pinned CI workflows.
 STAGING_JOBS = {
+    'proprietary-surface-census': ['Initialize committed root-declared references without recursion', 'Verify proprietary surface census refusal fixtures', 'Scan committed root reference pins for proprietary surfaces'],
     'release-automation': ['Verify pinned release automation and refusal guards', 'Verify detached-source semantic-release version selection'],
     'ci / build-and-test': ['Unit tests (Tier 1, Microsoft.Testing.Platform)', 'Fail on blocking test failures'],
     'ci / aspire-tests': ['Prepare Aspire tier', 'Run Aspire hook'],

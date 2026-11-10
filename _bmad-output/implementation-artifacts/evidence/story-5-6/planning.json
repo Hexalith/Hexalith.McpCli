@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "status": "planning-findings-only",
+  "parentRevision": "c9a46a11a8317dd1903e3a3ef2f27791942b316a",
+  "inventory": {
+    "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+    "version": "1.0.2",
+    "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+    "approvalReceipt": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+    "approvalReceiptSha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+  },
+  "unclassifiedFixtures": [
+    {
+      "repository": "references/Hexalith.Builds",
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "project": "Samples/PublishSpike/PublishSpike.csproj",
+      "finding": "Local archive fixture; Program.cs prints its own assembly name; project description prohibits publication.",
+      "proposedClassification": "non-surface qualification fixture; requires explicit disposition",
+      "approval": "pending",
+      "sources": [
+        {
+          "path": "Samples/PublishSpike/PublishSpike.csproj",
+          "sha256": "0791395ac5fe9088b63a055b7eed7691af4ecee5225f00aec0795c8a5d575a13",
+          "bytes": 1203
+        },
+        {
+          "path": "Samples/PublishSpike/Program.cs",
+          "sha256": "7b4b4efb34dca99090ef1fec43b2332e66e9105dbee230f0996f06b0a3ceb61c",
+          "bytes": 300
+        }
+      ]
+    },
+    {
+      "repository": "references/Hexalith.Conversations",
+      "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+      "project": "_bmad/scripts/epic16_native_helper/Epic16.NativeHelper.csproj",
+      "finding": "Fixed JSON oracle and metadata inspector used for qualification; inspected assemblies are not loaded or executed.",
+      "proposedClassification": "non-surface qualification fixture; requires explicit disposition",
+      "approval": "pending",
+      "sources": [
+        {
+          "path": "_bmad/scripts/epic16_native_helper/Epic16.NativeHelper.csproj",
+          "sha256": "f3057cab73b03ec077940f41c8b23a30032c563c1989dc680ac7b60764d4fcb5",
+          "bytes": 294
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/README.md",
+          "sha256": "e65d5be2a5597753bc167e6ebcebd4ce48a71e100d87e3e329601246d55138ac",
+          "bytes": 12721
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/Program.cs",
+          "sha256": "ca06233bdb4466306b9f0f329f1c087fec71a3f46005562454410503491a5e9a",
+          "bytes": 17934
+        }
+      ]
+    }
+  ],
+  "scope": "No runtime, inventory, baseline, reference or owner source changed; no approval inferred."
+}
