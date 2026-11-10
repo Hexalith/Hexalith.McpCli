@@ -135,39 +135,39 @@ Independent re-checks during triage:
 - The Acceptance Auditor reproduced AC1 at HEAD: `EnrolledModuleCoverageTests` passed 13 of 13 with six covered shapes, three per module. AC3: `scripts/check-agent-instructions-sync.sh` exit 0.
 - A concurrent Story 5.6 session has uncommitted edits to `.github/workflows/ci.yml`, `scripts/verify-release-source.py`, `scripts/tests/test_paired_publication.py`, `.gitattributes` and `sprint-status.yaml`. No patch below edits those files, except the P2 test, which only reads `ci.yml`.
 
-- [ ] [Review][Patch] P1: no C# test pins pooled shape coverage, where one vector covers every operation of its shape
+- [x] [Review][Patch] P1: no C# test pins pooled shape coverage, where one vector covers every operation of its shape
   - `ShapeCoverageGate.Check` fails a shape only when no hash-approved vector exists for any of its operations. That rule is what lets a newly decorated operation with an existing shape ship without a vector.
   - Every C# fixture gives each operation its own vector: `SampleApproval` writes all three sample vectors, the removal cases touch only the single-operation query shape, and production has 21 vectors for 21 operations.
   - So changing the test to `shape.VectorOperations.Count != shape.Operations.Count`, which is the old per-operation rule, passes every C# test. Only Python pins the pooled rule (`test_validate.py` `test_one_vector_covers_every_operation_of_its_shape`).
   - Fix: add a fact `OneVectorCoversEveryOperationOfItsSampleShape` that deletes `sample-rename`. It should assert no findings and the exact reports: `… covered by approved vector(s) for sample.create-item (operations: sample.create-item, sample.rename-item).` plus the unchanged query report.
   - (V1, medium) [tests/Hexalith.McpCli.Core.Tests/ShapeCoverageGate.cs:23]
-- [ ] [Review][Patch] P2: no test runs the `topology-vector-discovery` live-set filter
+- [x] [Review][Patch] P2: no test runs the `topology-vector-discovery` live-set filter
   - The inline heredoc keeps only vectors with `tools/live-topology/plans/<operation>.json`.
   - `CiWorkflowTests` only checks that the final condition string is in the text (`test_ci.py:2338`). With 21 plans for 21 vectors, dropping the filter changes nothing and every test passes. That breaks the frozen "Tested guards" constraint.
   - The same filter is tested in `ci.py` (`test_approved_vector_without_a_plan_is_loopback_only_and_not_expected_live`) and in `run-vectors.py` (`test_expected_live_set_is_every_approved_vector_with_a_companion_plan`).
   - Fix: in `CiWorkflowTests`, extract the `<<'PYTHON'` block from the job and run it with `python3 - <discovery.txt>` in a fixture root that holds one planned and one loopback-only vector. Accept the list without the loopback-only case, and reject it with exit 1 and the exact message when that case is expected.
   - Not changed: the C# two-directory branch from A1 (rejected below).
   - (V3, A1 part; low) [.github/workflows/ci.yml:165]
-- [ ] [Review][Patch] P3: the vector README says `EnrolledModuleCoverageTests` "applies the same rule", but the C# gate fails neither duplicate nor stale vectors
+- [x] [Review][Patch] P3: the vector README says `EnrolledModuleCoverageTests` "applies the same rule", but the C# gate fails neither duplicate nor stale vectors
   - The preceding sentence is "A duplicate or stale vector also fails". `ShapeCoverageGate` silently drops a missing or hash-mismatched file, an unlisted file, a vector whose operation is absent, and duplicates. Only the Python gates (`approved_vectors`, `validate_vectors`) fail those cases, in the same CI job.
   - Fix: a direct wording correction. The C# test applies the same uncovered-shape rule, and the Python gates alone fail duplicate, stale, unlisted or changed vector files.
   - (B4, E7; low) [tools/conformance-vectors/v1/README.md:21]
-- [ ] [Review][Patch] P4: "the module-scoped tuple that McpCli's generic translation branches on" overclaims
+- [x] [Review][Patch] P4: "the module-scoped tuple that McpCli's generic translation branches on" overclaims
   - `OperationExecutor.cs:102-182` also branches on `PropertyBindings` (Actor, Tenant and IdempotencyKey roles) and `EnvelopeFilledProperties`, which the frozen seven-component tuple leaves out.
   - The approved proposal (§1) says "the routing and envelope fields that McpCli's generic code branches on".
   - Fix: use the proposal's wording in the README and in the `OperationShape` summary. Core executor tests, not vectors, cover payload role bindings.
   - Not changed: adding components (intent-fixed, rejected in pass 1 BH3+ECH1).
   - (B1; low) [tools/conformance-vectors/v1/README.md:9]
-- [ ] [Review][Patch] P5: README says "A Contracts version change that alters no vector or inventory is reported, not failed", but the required live lane hard-requires Tenants Contracts 7.0.5
+- [x] [Review][Patch] P5: README says "A Contracts version change that alters no vector or inventory is reported, not failed", but the required live lane hard-requires Tenants Contracts 7.0.5
   - `ci.py` calls `native_cohort.verify_runtime_assets(…, 'Hexalith.Tenants.Contracts/7.0.5')`, and `native_cohort.manifest` requires `('Hexalith.Tenants.Contracts', '7.0.5')` from `native-runtime.json`.
   - So a version-only Tenants bump turns `ci / aspire-tests` red until the native cohort moves. The ledger note in pass 1 already calls that a separate selection.
   - Fix: a direct wording correction. The report-only rule covers the enrollment gates. The live lane's native runtime cohort (`tools/live-topology/native-runtime.json`) is a separate selection that moves with a Tenants release.
   - (E6; low) [README.md:460]
-- [ ] [Review][Patch] P6: the new live-plan test pins the restored module versions
+- [x] [Review][Patch] P6: the new live-plan test pins the restored module versions
   - `test_version_difference_is_reported_and_the_binding_uses_the_restored_package` asserts report text containing `restored package version 1.5.1` and `7.0.5`. A version-only Parties or Tenants bump then breaks it, against the story's intent that a release changing no operation needs no McpCli change beyond the pin.
   - Fix: build the expected report strings from the restored bindings, whose versions the test already checks against `project.assets.json`. Keep the full-text assertion.
   - (A2; low) [tools/live-topology/test_live_plans.py:429]
-- [ ] [Review][Patch] P7: the count-pin test name and its README trigger describe vectors, but the pin now counts companion plans
+- [x] [Review][Patch] P7: the count-pin test name and its README trigger describe vectors, but the pin now counts companion plans
   - `test_all_21_approved_vectors_have_valid_plans` asserts 21 plan files, each with an approved vector. It no longer checks that every approved vector has a plan.
   - README "Update the v1 count pin … only when the approved v1 scope changes" misses that adding or removing a plan changes the pin even when v1 scope does not. For example, Epic 6 enrollment adds plans.
   - Fix: rename the test (for example `test_all_21_companion_plans_are_valid_for_approved_vectors`) and say that the pin counts companion plans and moves with each added or removed plan.
@@ -197,6 +197,76 @@ Rejected:
 - A5 low: the `test_live_plans.py:49` change is a recorded deviation, approved as pass 1 BH2. Reverting it would edit the spec.
 - A6 low: the `STAGING_JOBS` rename follows the CI step rename and leaves behavior unchanged (recorded in pass 1).
 - A7 false: AC2 at HEAD. CI run 42849005018 at `c9a46a1` passed every gate job, including live `aspire-tests`.
+
+Code review pass 3 (bmad-code-review, 2026-11-10).
+- **Pass 2 patches.** P1–P7 above were applied by another session in the local commit `38fbc43 fix: stories 5.12 5.6`, which also carries Story 5.6, so their rows are now checked.
+- **Scope: code-only.** The diff is `fdfe6a3` plus only the 5.12 hunks of `38fbc43`: the C# tests, the `OperationShape` summary, both READMEs, `test_ci.py` and `test_live_plans.py`. It was built as a tree-snapshot diff from `fdfe6a3^`: 39 files, 3,354 lines.
+- **Left out:** `_bmad-output/`, `references/`, the Story 5.6 hunks (census README paragraph, `ci.yml` census job, `STAGING_JOBS` census entry) and non-story commit `c9a46a1`.
+- **Snapshot check.** The snapshot equals HEAD for every file except those that `c9a46a1` and 5.6 touch.
+
+Four layers ran and none failed: Blind Hunter (B1–B13), Edge Case Hunter (E1–E8), Verification Gap (V1–V2 gaps) and Acceptance Auditor (A1–A5).
+
+Of 28 findings, 7 group into 6 patches and 1 is deferred as already tracked. There is no decision, and 20 are rejected.
+
+Independent re-checks during triage:
+- The Acceptance Auditor reproduced AC1 at HEAD: `EnrolledModuleCoverageTests` passed 14 of 14, with six covered shapes, three per module. AC3: `scripts/check-agent-instructions-sync.sh` exit 0.
+- AC2 was re-checked in part. The conformance-vector suite (185 tests), `test_live_plans.py` (48), and `CiWorkflowTests` plus `test_lane` (20) passed, and no vector, plan or inventory changed since `a851118`. Manifest tests, `check_enrolled.py`, the live preflight and the discovery job were not re-run.
+- `38fbc43` is local only, one commit ahead of `origin/main`, so no CI run covers it. The last green run is 42849005018 at `c9a46a1`.
+- During triage, a concurrent Story 5.6 session again had uncommitted edits to `.github/workflows/ci.yml`, `scripts/tests/test_paired_publication.py` and `tools/proprietary-surfaces/v1/`. No patch below edits those files.
+
+- [ ] [Review][Patch] P1: no live preflight test runs the real `validate_vectors` with an uncovered shape or a vector version difference
+  - `live_plans.preflight` passes `_manifest_shapes(head, package)` to `validate_vectors` and forwards the result with `report(vector_reports)`.
+  - The mocked test (`test_live_plans.py:343-346`) ignores the arguments. `LiveKindCoverageTests` runs only the complete production set at matching versions.
+  - `test_version_difference_is_reported_and_the_binding_uses_the_restored_package` patches `live_plans._load_json` for `approval.json` only, but `validate_vectors` reads vectors through `validate._load_json`.
+  - So every test still passes if the shape map is replaced with `None` or `report(vector_reports)` is deleted. The first drops the live lane's shape and stale-vector recheck. The second drops every vector-version report from `live-lane.json` after a version-only module release. Both break the frozen "Tested guards" constraint.
+  - Fix: add two `LiveKindCoverageTests` cases.
+    - Patch `live_plans._manifest_shapes` to add `parties.extra` with its own key for the Parties package. Assert the exact `VectorError` `parties: Operation Shape '<key>' has no approved vector (operations: parties.extra).`
+    - Patch `validate._load_json` so every vector's `package.version` is `0.0.1`. Assert the exact `…:/package/version: … differs from release artifact version …; reported, not failed` reports, built from the frozen vector paths and the restored versions.
+  - (V2, A1; medium) [tools/live-topology/live_plans.py:391]
+- [ ] [Review][Patch] P2: the companion-plan count pin counts every plan, so Folders enrollment must edit it
+  - Design Notes say "Folders enrollment must not edit a count".
+  - After pass 2 P7, `test_all_21_companion_plans_are_valid_for_approved_vectors` counts every `plans/*.json`. README says to update it "whenever a plan is added or removed, including when a new enrollment adds plans", and every enrollment needs at least one plan per declared kind.
+  - Fix: count only plans whose module prefix is in `tools/conformance-vectors/v1/v1-scope.json` `requiredModules`, and still load and check every plan. README should say the pin moves only when a v1 module's plan is added or removed.
+  - (A2; low) [tools/live-topology/test_live_plans.py:54]
+- [ ] [Review][Patch] P3: `test_missing_live_kind_fails_naming_the_module_and_kind` hard-codes the current Parties query plans
+  - It removes exactly `parties.get-party`, `parties.list-parties` and `parties.search-parties`. A Parties vector amendment that adds a planned query leaves one in place, so no `VectorError` is raised and the test fails. That goes against the pass 2 P6 rule that a module release needs no test edit.
+  - Fix: derive the removed set from the approved Parties vectors whose `kind` is `query`.
+  - (A4; low) [tools/live-topology/test_live_plans.py:414]
+- [ ] [Review][Patch] P4: `verify_artifact.py` still raises "Artifact hash differs from the approved receipt."
+  - Receipts can no longer carry an artifact hash, and enrollment never passes `expected_hash` (`test_enrolled.py:483`). The vector README calls `--expected-hash` a standalone candidate check.
+  - Fix: name `--expected-hash` in the message, and assert the exact text in `test_wrong_artifact_hash_retains_failed_identity`, which matches only `hash differs` today.
+  - (B12; low) [tools/conformance-vectors/v1/verify_artifact.py:184]
+- [ ] [Review][Patch] P5: README says a newly decorated operation with an existing shape "needs no vector, plan, inventory or approval change", but a lint finding still needs an approved row
+  - `DescriptionLintGate` in `EnrolledModuleCoverageTests` and `check_lint` (`verify_artifact.py:73-86`) require an operation's description lint findings to equal the `<module>-accepted-lint.json` rows exactly, each with an `approvalReference`. `tenants-accepted-lint.json` already holds eight rows.
+  - Fix: a direct wording correction stating that a lint finding on the new operation still needs an approved accepted-lint row.
+  - (E8; low) [README.md:468]
+- [ ] [Review][Patch] P6: `EnrolledModuleCoverageTests` writes its reports only after its assertions pass
+  - Both production facts call `ShouldBeEmpty()` before writing their `reported:` or `covered:` lines, so a failing run never shows them.
+  - Example: a renamed operation fails as a missing `include` row, and the report naming the new, unmentioned operation never reaches the test output.
+  - Fix: collect the findings, write every report, then assert.
+  - (B5; low) [tests/Hexalith.McpCli.Core.Tests/EnrolledModuleCoverageTests.cs:37]
+- [x] [Review][Defer] D1: no test ties the `enrolled-module-conformance` `STAGING_JOBS` step names to `ci.yml` [scripts/verify-release-source.py:39] — deferred: already tracked (`deferred-work.md:989`). The concurrent Story 5.6 session again has uncommitted edits to `scripts/tests/test_paired_publication.py` and `.github/workflows/ci.yml`, which is the collision that entry waits out (V1, low).
+
+Rejected:
+- B1 false: Python takes the module from the operation-name prefix. Catalog names are always `<module>.<part>` (`CatalogBuilder.cs:245`), and module names are dot-free kebab-case (`IsCanonicalPart`, `CatalogBuilder.cs:253,276-280`), so the Python and C# groupings agree.
+- B2 low: `publishedArtifactBinding` stays in both receipts. It is an evidence pointer, not a hash (pass 1 BH10, pass 2 B3).
+- B3 low: `ShapeCoverageGate` throws on a missing or malformed receipt and does not refuse `../` keys. A throw fails the test loudly, and Python `approved_vectors` fails non-exact names in the same job. The fix adds guards (pass 2 B5).
+- B4 false: the shape facts return on an empty manifest. Zero modules have zero shapes, and the sibling fact asserts the generic empty-Catalog error (pass 2 B9).
+- B6 low: queries carry `idempotencyKey=optional`. The frozen tuple allows only `required` or `optional`.
+- B7 low: role bindings and envelope-filled members are not shape components, by the frozen seven-component intent (pass 1 BH3+ECH1, pass 2 B1).
+- B8 low: the keyed second-Command scenario is not gated. It is an authoring rule by intent, tracked by the 5.12 ledger entry (pass 1 BH8, pass 2 B8).
+- B9 low: the host launches twice per package. Efficiency only (pass 1 BH11, pass 2 B12).
+- B10 low: the host source list lives in both the csproj and `HOST_SOURCES`. The pattern predates the story, and drift fails the isolated host loudly (pass 1 BH12).
+- B11 false: the packaged fixture pins the C# key on purpose. It is pass 1's VG1 real-host check (pass 2 B13).
+- B13 false: "replays all 21 operations" and "the seven approved Parties operations" are true today. Every current operation is an included row with its own vector, and a new operation moves the README list anyway (pass 2 B10).
+- E1, E2 low: same as B3.
+- E3 false: the hash read and the parse read both read committed repository files inside a test process, and no concurrent writer can reach them.
+- E4 low: a case-only directory rename leaves a stale `PreserveNewest` copy. The inventories follow the same pattern, and CI builds fresh (pass 1 ECH4).
+- E5 low: an empty production vector directory is never created before `finally`. That only happens when the vectors are missing from the build output, and the test fails either way (pass 2 E3).
+- E6 low: blank or unqualified `--operations-file` keys are accepted. The file comes from the repository's own host, a misuse still fails loudly with shape or stale findings, and the fix adds a guard.
+- E7 low: restored integrity relies on sidecars written by the restore. This is excluded by the frozen intent and was surfaced to the product owner (pass 1 BH1, pass 2 B2).
+- A3 low: the CLI tests discard stdout. The `redirect_stdout(io.StringIO())` helper predates the story (`a851118` `test_enrolled.py:413`). Findings and reports are asserted in `enrolled.json`, `live-lane.json` and on stderr, and the stdout summary line is not a guard.
+- A5 low: the artifact `/metadata/version` difference is a third report kind. The vector README documents it ("a different version is reported", `tools/conformance-vectors/v1/README.md:98`), `test_validate.py:204,778` pins it, and runner flows cannot reach it because the artifact is the restored package.
 
 ## Spec Change Log
 
