@@ -106,7 +106,7 @@
   "compatibilityLabels": {
     "register": "_bmad-output/implementation-artifacts/evidence/story-5-5/labels.json",
     "rows": "PS01-PS14",
-    "deliveryStatus": "per repository in labels.json: Parties and Folders reached main (both ci-red); EventStore, FrontComposer, Memories, Projects and ChatBot push-rejected (HTTP 403 on the session credential)"
+    "deliveryStatus": "all PS01-PS14 labels on their repositories' main (Memories green; the other red runs pre-existing, except the Folders PD10 drift the label adds to an already-red gate); see labels.json"
   },
   "finalOutcome": {
     "owner": "Story 5.11",

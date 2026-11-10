@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-10-2026 12:09'
+last_updated: '11-10-2026 13:14'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -95,7 +95,7 @@ development_status:
   # Review pass 2 complete: all 3 patches fixed; owner approved exact Parties 1.2.0 C05 correction; prior inventory/receipt preserved and approved-mode checks pass.
   5-4-prove-shared-head-parity-and-safety: done # Build complete; exact-byte owner verdict retirement-blocked, G01–G06 retained. Post-review CI 42711210249 green; six prerequisite follow-ups deferred.
   # Code review pass 2 2026-11-10: all 7 patches applied (MCP reply deadline, 5.4 packet gitattributes, receipt-reuse test, README order, private-name and per-call Kelvin pins, shared concurrent launcher); R54-D7–D12 prerequisite follow-ups deferred; live boundary edits not re-run on CI.
-  5-5-retire-legacy-packages-and-platform-routes: review # Build review pass 1 2026-11-10: 8 patch groups applied, 1 deferred, 7 rejected. Delivery 2026-11-10: Parties label pushed (4c9fb0a0; main CI red on a pre-existing lifecycle test); Folders merged out of band (contract-spine-gates already red from Folders' own PD10 drift; the label adds the Folders.Cli.csproj drift, kept by user decision for the PD10 requalification); EventStore, FrontComposer (now README-only by user decision; FC seals .csproj digests), Memories, Projects and ChatBot pushes refused (HTTP 403, session token); pre-push sweep clean for those five. Platform census clean; Parties.Mcp retirement retained blocked by G01–G06 (deferred-work.md:944); SM-3 deadline 2027-02-05.
+  5-5-retire-legacy-packages-and-platform-routes: review # Build review pass 1 2026-11-10: 8 patch groups applied, 1 deferred, 7 rejected. Delivery complete 2026-11-10: all PS01–PS14 labels on main in 7 owner repos (FrontComposer README-only; PS03/PS04 Descriptions await its reseal). Memories main green; EventStore, FrontComposer, Projects, ChatBot and Parties red runs pre-existing (identical on parents); Folders contract-spine-gates already red from its own PD10 drift, plus the label's csproj drift for its requalification. Platform census clean; Parties.Mcp retirement retained blocked by G01–G06 (deferred-work.md:944); SM-3 deadline 2027-02-05.
   5-6-reject-new-proprietary-surfaces-in-ci: backlog
   5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: backlog
   5-8-refresh-and-re-disposition-the-folders-inventory: backlog # 2026-11-10: waits on Hexalith.Folders Story 5.12 (sprint-change-proposal-2026-11-10).

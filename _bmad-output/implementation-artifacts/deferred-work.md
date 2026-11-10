@@ -962,7 +962,8 @@ status: open
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md`
   summary: Push the five remaining Story 5.5 label commits to `main`: EventStore `7422ce56`, FrontComposer `01fc48e3` (README-only), Memories `1143ba17`, Projects `77067782` and ChatBot `82f20d5e`. Each is on branch `docs/mcpcli-5-5-compatibility-labels` in its owner repository.
   owner: McpCli maintainer (user credential).
-  status: open; pushes refused on 2026-11-10 with HTTP 403 through the session's `gh-cicd-agent` token. The pre-push sweep found Memories, Projects and ChatBot safe, and EventStore clear of seals on a targeted search. FrontComposer was amended to README-only.
+  status: resolved 2026-11-10. All five were pushed with the user's credential after the user's "push all changes": EventStore `3de922e1` (rebased again), FrontComposer `01fc48e3`, Memories `1143ba17`, Projects `77067782` and ChatBot `82f20d5e`. Memories `main` is green. The red EventStore, FrontComposer, Projects and ChatBot runs match their parent commits test for test, so they are pre-existing.
+  resolution: `evidence/story-5-5/delivery-outcomes.json` and `labels.json` record every merged commit and `main` run, the read-back passes 14 of 14, and the evidence is rescanned.
   evidence: `evidence/story-5-5/delivery-outcomes.json`, and the `verification.md` sections "Delivery outcome" and "Pre-push sweep". After pushing, follow the delivery procedure: check `main` CI, regenerate `labels.json` with `build-labels.py`, rerun `verify-labels.py`, and rescan.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md`

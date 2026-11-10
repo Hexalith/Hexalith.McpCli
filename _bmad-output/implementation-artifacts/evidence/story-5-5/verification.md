@@ -17,30 +17,32 @@ unpublished, and no retirement is claimed.
 | [sm3-status.json](sm3-status.json) | SM-3 status, the deadline 2027-02-05, the retained G01–G06 block and the deferred entry |
 | [secret-scan.json](secret-scan.json) | The scan receipt for every other file in this directory |
 
-## Delivery outcome (2026-11-10): one push, two red `main` runs, five refused pushes
+## Delivery outcome (2026-11-10): all 14 labels on `main`
 
-After the Build review, the Decision 3 procedure below ran once, on 2026-11-10. Every outcome is in `delivery-outcomes.json`, and `labels.json` was regenerated from these commits. The read-back passes for all 14 rows against them.
+After the Build review, the Decision 3 procedure below delivered every label to its repository's `main`. `delivery-outcomes.json` records each outcome and every `main` run. `labels.json` was regenerated from these commits, and the read-back passes for all 14 rows against them. No repository published a release: each latest release predates 2026-11-10.
 
-| Repository | Label commit | Base | Outcome |
+| Repository | Label commit on `main` | Base | `main` CI |
 | --- | --- | --- | --- |
-| Parties | `4c9fb0a03a81694afe24beaed1ea0552348405fc` | `64085d9f3b24f56bcffe63a9c2d7eb84f38e1fca` | `ci-red`. Pushed `64085d9f..4c9fb0a0`. Release Candidate Gate, Commitlint and CodeQL pass. CI fails in "Lifecycle controller tests", on `test_qualification_is_explicit_package_suite_excluded_from_ordinary_solution_build` (`ValueError: substring not found`). That failure is pre-existing: the same job and test fail on the parent `64085d9f` (run 42786199007) and on `87a7b600` (run 42782819039). |
-| Folders | `f4f5ce0ce9676cd5674e75093476df2ba4fde585`, merged as `f1f639090a4e6b8cbeacb246e7052968dbc75836` | `e88c940000446e13d17d86a7288649d8653a7138` | `ci-red`; the gate was already red before this story. A concurrent Cursor `/pushall` merged the local label branch into `main` before the review, pushed it and `a87d0a0d`, and removed the worktree and branch. `contract-spine-gates` had already failed at `e88c9400` (run 42109497136): Folders' own changes drifted PD10-bound files, including `FoldersDevelopmentOwnerMetadata.cs` (3078 to 3207 bytes), and left `OwnerSourceCompositionAssertionIssuer.cs` unlisted. The Description prefix adds one more drift, `Hexalith.Folders.Cli.csproj` from 1206 to 1324 bytes, which masks the earlier one in runs 42788931487 and 42789278621. A local revert of only the prefix still leaves 5 of 24 PD10 tests failing. Regenerating the approval-bound PD10 v2 conformance set passes 24 of 24. The user kept the label (2026-11-10). The `a87d0a0d` CI failure (run 42789279473) is unrelated: `dotnet format` WHITESPACE errors across 11 files. |
-| EventStore | `7422ce56a56a742ff9acc57eeaf8b144a07daf05`, rebased onto `a940fb61` and revalidated with commitlint | `a940fb6167cc70526ba413782ec9fbe91ad64a8d` | `push-rejected` |
-| FrontComposer | `01fc48e3955a8cec47ab1602f5cd5c8e286801da` (README-only; amended from the refused `c9af83ed`) | `e972d0f06a8eec3446db0b2270fdb14eef4c1186` | `push-rejected` |
-| Memories | `1143ba17a2336f0d718fcff71e049c06350a45a2` | `4ff3e6866ecb6d1a497e7063e972c24259252c40` | `push-rejected` |
-| Projects | `77067782154d35a794ea50d86af1c5e73c8351b6` | `9ae0571529cb4a9f3ad9750c8b834e6284d4f76b` | `push-rejected` |
-| ChatBot | `82f20d5ecca74993f93e73151a6ae3766d3d6a1d` | `b13c58006d292836a9c8b242de476765676e5fb2` | `push-rejected` |
+| Memories | `1143ba17a2336f0d718fcff71e049c06350a45a2` | `4ff3e686` | `pushed`; every run succeeds, including Qualify Builds publication |
+| Parties | `4c9fb0a03a81694afe24beaed1ea0552348405fc` | `64085d9f` | `ci-red`, pre-existing. CI "Lifecycle controller tests" fails `test_qualification_is_explicit_package_suite_excluded_from_ordinary_solution_build`, as on the parent (run 42786199007). |
+| EventStore | `3de922e1140e26fe2e0151682ee656fcf675b26b` (rebased twice; no label file touched upstream) | `39ebd8b4` | `ci-red`, pre-existing. CI fails only `SecretsProtectionTests.TrackedReusableContent_DoesNotContainUsableSecrets`, on `tests/Hexalith.EventStore.PayloadProtection.LiveSidecar.Tests/KubernetesCryptoFixture.cs:46`, with assertion output identical to the parent (run 42795999515). |
+| FrontComposer | `01fc48e3955a8cec47ab1602f5cd5c8e286801da` (README-only) | `e972d0f0` | `ci-red`, pre-existing. Quality Gate 2b fails `AnalyzerPolicyGovernanceTests` on an unledgered `pragma` in `src/Hexalith.FrontComposer.Cli/MigrationDiagnostics.cs`, with a signature identical to the parent (run 42320750256). CI passes. |
+| Projects | `77067782154d35a794ea50d86af1c5e73c8351b6` | `9ae0571` | `ci-red`, pre-existing. "Validate workflow policy" story-governance assertions, the same 249 lines as the parent (run 42791196821). |
+| ChatBot | `82f20d5ecca74993f93e73151a6ae3766d3d6a1d` | `b13c580` | `ci-red`, pre-existing. `ci` and `release` fail on `Hexalith.Platform.Composition` compile errors (CS1061, missing `QualificationOwners`), with signatures identical to the parent (runs 42463556156 and 41868435964). |
+| Folders | `f4f5ce0ce9676cd5674e75093476df2ba4fde585`, merged as `f1f639090a4e6b8cbeacb246e7052968dbc75836` by a concurrent `/pushall` | `e88c9400` | `ci-red`. The gate was already red at `e88c9400` (run 42109497136) from Folders' own PD10 drift, and the Description prefix adds the `Hexalith.Folders.Cli.csproj` drift (1206 to 1324 bytes). The label is kept by user decision; Folders' PD10 v2 requalification must rebind it. CI also fails on unrelated `dotnet format` WHITESPACE errors. |
 
-**Refused pushes.** Each refused push returned HTTP 403 "Permission to Hexalith/Hexalith.<Repo>.git denied to jpiquot". This session authenticates through `GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent`, and that token has no write access to the five repositories. The account itself has push rights (`permissions.push` true). Parties succeeded because its repository-local credential helper selects `GH_CONFIG_DIR=/home/administrator/.config/gh`. No other credential was used. Each label commit stays on the owner repository's local branch `docs/mcpcli-5-5-compatibility-labels`, at the commit listed.
+Each failure was compared with its parent commit by failing test and assertion text, not by job name alone, because a pre-existing failure can mask a new one (as in Folders).
+
+**Credentials.** The session's `gh-cicd-agent` token was refused with HTTP 403 by EventStore, FrontComposer, Memories, Projects, ChatBot and McpCli. Those six were then pushed with the user's credential (`GH_CONFIG_DIR=/home/administrator/.config/gh`) after the user's instruction "push all changes". Parties pushes through that credential by its repository-local helper.
 
 **Still open.**
-- The PS01–PS04, PS06–PS09 and PS12–PS13 labels are not on their `main` yet.
-- Folders `main` stays red until the Folders maintainer requalifies the approval-bound PD10 v2 conformance set. That set was already stale before this story, and it must also rebind the labeled `Hexalith.Folders.Cli.csproj`, which is now 1324 bytes.
-- Neither failure was patched around (Decision 3).
+- Folders `main` stays red until the Folders maintainer requalifies the approval-bound PD10 v2 conformance set. That set was already stale before this story, and it must also rebind the labeled `Hexalith.Folders.Cli.csproj`, now 1324 bytes.
+- The PS03/PS04 Description labels wait for FrontComposer's reseal procedure.
+- The other red runs are pre-existing and not patched around (Decision 3).
 
 ### Pre-push sweep (2026-11-10)
 
-The Folders PD10 binding was missed before delivery. So before the five refused commits are pushed again, each repository's tests and CI gates that could bind a changed file were run against the exact label commits, and every failure was compared with the parent commit.
+The Folders PD10 binding was missed before delivery. So before the five refused commits were pushed again, each repository's tests and CI gates that could bind a changed file were run against the exact label commits, and every failure was compared with the parent commit.
 
 | Repository | Result | Evidence |
 | --- | --- | --- |

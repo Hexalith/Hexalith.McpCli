@@ -139,6 +139,12 @@ context:
   - **PS03/PS04 Descriptions:** deferred to FrontComposer's reseal procedure (ledger).
   - **Rest of the sweep:** Memories passed in full (5,416 unit tests, publication qualification and package validation). EventStore had a targeted search and showed no seal. `build-labels.py` and `verify-labels.py` now enforce README-only for FrontComposer.
 
+- **Delivery complete (2026-11-10, user "push all changes").**
+  - **Pushes:** EventStore (rebased again, to `3de922e1`), FrontComposer `01fc48e3`, Memories `1143ba17`, Projects `77067782`, ChatBot `82f20d5e` and McpCli went out with the user's credential. All 14 labels are on `main`, and no release was cut.
+  - **CI:** Memories is green. The red EventStore, FrontComposer, Projects and ChatBot runs match their parents test for test, so they are pre-existing.
+  - **Open items:** Folders keeps its pre-existing PD10 red, plus the label's csproj drift (owner requalification), and the PS03/PS04 Descriptions wait for FrontComposer's reseal.
+  - **Evidence:** the register is regenerated and verified against all seven `main` commits, and rescanned.
+
 ## Spec Change Log
 
 ## Review Triage Log
