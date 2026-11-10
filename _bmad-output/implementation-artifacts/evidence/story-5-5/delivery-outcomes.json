@@ -1,8 +1,114 @@
 {
-  "folders": {
-    "status": "merged-unreviewed",
-    "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
+  "eventstore": {
+    "status": "push-rejected",
+    "mergedCommit": null,
     "mainCiRuns": null,
-    "note": "A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. README.md and the Cli .csproj at origin/main a87d0a0d equal the label commit. main CI was not checked, because this phase allows no remote operation."
+    "note": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.EventStore.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used."
+  },
+  "frontcomposer": {
+    "status": "push-rejected",
+    "mergedCommit": null,
+    "mainCiRuns": null,
+    "note": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.FrontComposer.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used."
+  },
+  "memories": {
+    "status": "push-rejected",
+    "mergedCommit": null,
+    "mainCiRuns": null,
+    "note": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Memories.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used."
+  },
+  "projects": {
+    "status": "push-rejected",
+    "mergedCommit": null,
+    "mainCiRuns": null,
+    "note": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Projects.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used."
+  },
+  "chatbot": {
+    "status": "push-rejected",
+    "mergedCommit": null,
+    "mainCiRuns": null,
+    "note": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.ChatBot.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used."
+  },
+  "parties": {
+    "status": "ci-red",
+    "mergedCommit": "4c9fb0a03a81694afe24beaed1ea0552348405fc",
+    "mainCiRuns": [
+      {
+        "id": 42790989721,
+        "workflow": "Release Candidate Gate",
+        "conclusion": "success"
+      },
+      {
+        "id": 42790990214,
+        "workflow": "Commitlint",
+        "conclusion": "success"
+      },
+      {
+        "id": 42790989911,
+        "workflow": "CodeQL",
+        "conclusion": "success"
+      },
+      {
+        "id": 42790989915,
+        "workflow": "CI",
+        "conclusion": "failure"
+      }
+    ],
+    "note": "Pushed 64085d9f..4c9fb0a0 after rebasing onto origin/main 64085d9f. CI fails only in job 'Lifecycle controller tests' on test_workflow_boundaries.WorkflowBoundaryTests.test_qualification_is_explicit_package_suite_excluded_from_ordinary_solution_build (ValueError: substring not found). The same job and test fail on the parent 64085d9f (run 42786199007) and on 87a7b600 (run 42782819039), so the failure is pre-existing and not caused by the README-only label commit. Not patched (Decision 3)."
+  },
+  "folders": {
+    "status": "ci-red",
+    "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
+    "mainCiRuns": [
+      {
+        "id": 42788931965,
+        "workflow": "Commitlint",
+        "commit": "f1f63909",
+        "conclusion": "success"
+      },
+      {
+        "id": 42788932022,
+        "workflow": "CodeQL",
+        "commit": "f1f63909",
+        "conclusion": "cancelled"
+      },
+      {
+        "id": 42788932138,
+        "workflow": "CI",
+        "commit": "f1f63909",
+        "conclusion": "cancelled"
+      },
+      {
+        "id": 42788931487,
+        "workflow": "contract-spine-gates",
+        "commit": "f1f63909",
+        "conclusion": "failure"
+      },
+      {
+        "id": 42789279239,
+        "workflow": "Commitlint",
+        "commit": "a87d0a0d",
+        "conclusion": "success"
+      },
+      {
+        "id": 42789279382,
+        "workflow": "CodeQL",
+        "commit": "a87d0a0d",
+        "conclusion": "success"
+      },
+      {
+        "id": 42789279473,
+        "workflow": "CI",
+        "commit": "a87d0a0d",
+        "conclusion": "failure"
+      },
+      {
+        "id": 42789278621,
+        "workflow": "contract-spine-gates",
+        "commit": "a87d0a0d",
+        "conclusion": "failure"
+      }
+    ],
+    "note": "A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. contract-spine-gates fails because of this story: Pd10V2ContractTests.ConformanceSetBindsEveryCandidateArtifactWithoutChangingReleaseAuthority, Pd10ConformanceSetTests.ManifestBindsEveryListedCandidateArtifactAndOrderedSetDigest and Pd10ConformanceSetTests.InventoryCoversEveryRuntimeAndTestCompileInputIncludingExtractedHelpers bind src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj at 1206 bytes, and the Description prefix makes it 1324. The gate had also failed at e88c9400 (run 42109497136) before the merge. The a87d0a0d CI failure is unrelated: dotnet format WHITESPACE errors in tests/tools/Task36FoldObserver/LifecycleRequestCorrelation.cs. Not patched (Decision 3)."
   }
 }

@@ -162,18 +162,21 @@ def check_outcome(repo, commit, outcome, git):
     status = outcome.get('status')
     runs = outcome.get('mainCiRuns') or []
     conclusions = [run.get('conclusion') for run in runs]
+    merged = outcome.get('mergedCommit') or ''
+
+    def ancestor(older, newer):
+        return subprocess.run(['git', 'merge-base', '--is-ancestor', older, newer], cwd=git,
+                              capture_output=True).returncode == 0
     if status == 'pushed':
-        ok = outcome.get('mergedCommit') == commit and runs and all(c == 'success' for c in conclusions)
+        ok = merged == commit and runs and all(c == 'success' for c in conclusions)
     elif status == 'ci-red':
-        ok = outcome.get('mergedCommit') == commit and any(c != 'success' for c in conclusions)
+        # A red main run after our own push, or after an out-of-band merge that contains the label commit.
+        reached = merged == commit or (bool(outcome.get('note')) and bool(merged) and ancestor(commit, merged)
+                                       and ancestor(merged, 'origin/main'))
+        ok = reached and any(c != 'success' for c in conclusions)
     elif status == 'push-rejected':
         ok = outcome.get('mergedCommit') is None and bool(outcome.get('note'))
     elif status == 'merged-unreviewed':
-        merged = outcome.get('mergedCommit') or ''
-
-        def ancestor(older, newer):
-            return subprocess.run(['git', 'merge-base', '--is-ancestor', older, newer], cwd=git,
-                                  capture_output=True).returncode == 0
         ok = bool(outcome.get('note')) and bool(merged) and ancestor(commit, merged) and ancestor(merged, 'origin/main') \
             and all(c == 'success' for c in conclusions)
     else:

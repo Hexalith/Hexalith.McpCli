@@ -952,3 +952,15 @@ status: open
   owner: each owning module maintainer (Parties, Memories, ChatBot), reconciled with Story 5.11's product claims.
   status: open; pre-existing text, deferred by the Story 5.5 review pass 1 (BH7).
   evidence: The sentences predate Story 5.5, and its labels add one root README section per repository (frozen Decision 4). At each repository's `origin/main` used for the label commits: Parties `README.md:28` ("Separate MCP host -- `parties-mcp` exposes …") and `:138`; Memories `README.md:47-48` and `:118-119` (`dotnet pack` / `dotnet tool install` steps for `Hexalith.Memories.Cli`); ChatBot `README.md:3` ("the production CLI adapter, the governed MCP tool surface") and `:78`. Parties pins part of that README text in `SampleOnboardingGuardrailTests`, so a rewording needs those tests updated upstream.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md`
+  summary: Folders `main` `contract-spine-gates` is red because the Story 5.5 Description prefix changed the byte length of `src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj`, which the PD10 conformance set binds.
+  owner: Folders maintainer, with the McpCli maintainer for the label.
+  status: open; caused by Story 5.5 and not patched around (Decision 3). Choose one: rebind the PD10 conformance set to the labeled file through Folders' own approval path, or revert only the Folders.Cli Description prefix and keep the README label.
+  evidence: Runs 42788931487 (`f1f63909`) and 42789278621 (`a87d0a0d`) fail `Pd10V2ContractTests.ConformanceSetBindsEveryCandidateArtifactWithoutChangingReleaseAuthority` (`tests/Hexalith.Folders.Contracts.Tests/OpenApi/Pd10V2ContractTests.cs:309`), `Pd10ConformanceSetTests.ManifestBindsEveryListedCandidateArtifactAndOrderedSetDigest` (`Pd10ConformanceSetTests.cs:72`) and `InventoryCoversEveryRuntimeAndTestCompileInputIncludingExtractedHelpers` with "1324L should be 1206L" for that file. The label reached `main` through a concurrent `/pushall` merge before review; see `evidence/story-5-5/delivery-outcomes.json`.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md`
+  summary: Push the five remaining Story 5.5 label commits to `main`: EventStore `7422ce56`, FrontComposer `c9af83ed`, Memories `1143ba17`, Projects `77067782` and ChatBot `82f20d5e`. Each is on branch `docs/mcpcli-5-5-compatibility-labels` in its owner repository.
+  owner: McpCli maintainer (user credential).
+  status: open; pushes refused on 2026-11-10 with HTTP 403 through the session's `gh-cicd-agent` token.
+  evidence: `evidence/story-5-5/delivery-outcomes.json` and `verification.md` "Delivery outcome". Before pushing, run the tests that read the changed `.csproj` files: FrontComposer `McpRuntimePackageBoundaryTests`, `CiGovernanceTests`, `ToolPackagingSmokeTests` and `eng/release_contract.py`; Memories `tools/verify-cli-pack.sh`. Then follow the delivery procedure: regenerate `labels.json` with `build-labels.py`, rerun `verify-labels.py`, and rescan.

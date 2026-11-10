@@ -124,6 +124,13 @@ context:
 - **After the Build review (Decision 3).** Follow the delivery procedure in `evidence/story-5-5/verification.md`, also recorded as `deliveryProcedure` in `labels.json`. For each repository, it rebases, revalidates and pushes the label commit, records every `main` run, and halts for the user on a rejected push or a red run. It then regenerates the register from the pushed commits with `build-labels.py`, reruns `verify-labels.py` against them, and rescans.
 - **Folders merged out of band.** A concurrent Cursor `/pushall` in the Folders owner checkout merged the local label branch into Folders `main` as `f1f63909`, pushed it before the review, and removed the worktree and branch. The merged `main` carries the labels unchanged, and the register records the merge as `merged-unreviewed`. The other six label branches are equally exposed to `/pushall`.
 
+- **Delivery (2026-11-10, user "push all changes").**
+  - **Parties:** rebased onto `64085d9f`, revalidated and pushed as `4c9fb0a0`. Its `main` CI is red, but only on a pre-existing "Lifecycle controller tests" failure that also fails on the parent.
+  - **Folders:** `main` is red from this story. `contract-spine-gates` PD10 conformance tests bind `Hexalith.Folders.Cli.csproj` at 1206 bytes, and the Description prefix makes it 1324. Both the planning sweep and review pass 1 missed that binding. Its CI failure is an unrelated format error.
+  - **EventStore (rebased to `7422ce56`), FrontComposer, Memories, Projects and ChatBot:** the pushes were refused with HTTP 403. The session's `gh-cicd-agent` token has no write access to them. No other credential was used.
+  - Nothing was patched around. `labels.json` was regenerated from these commits, and the read-back passes 14 of 14. The evidence was rescanned clean.
+  - The outcomes and remaining steps are in `evidence/story-5-5/verification.md`.
+
 ## Spec Change Log
 
 ## Review Triage Log

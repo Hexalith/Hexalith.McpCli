@@ -3,7 +3,7 @@
   "sourceSpec": "_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md",
   "generator": "_bmad-output/implementation-artifacts/evidence/story-5-5/build-labels.py",
   "register": "Authoritative register of the PS01-PS14 compatibility labels. Each of the following updates the owning upstream label and this register, with new sources and hashes, before it counts as complete: a versioned amendment that changes a removal gate (Stories 5.7-5.10); a change of the Story 5.4 verdict or of the status of any of G01-G06; and a newly approved version of a cited technical-tools or module inventory.",
-  "deliveryState": "pendingPush (eventstore, frontcomposer, parties, memories, projects, chatbot): the label commit exists only on the local branch docs/mcpcli-5-5-compatibility-labels of an isolated worktree; folders: merged-unreviewed as f1f639090a4e6b8cbeacb246e7052968dbc75836 (A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. README.md and the Cli .csproj at origin/main a87d0a0d equal the label commit. main CI was not checked, because this phase allows no remote operation.)",
+  "deliveryState": "eventstore: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.EventStore.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); frontcomposer: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.FrontComposer.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); parties: ci-red as 4c9fb0a03a81694afe24beaed1ea0552348405fc (Pushed 64085d9f..4c9fb0a0 after rebasing onto origin/main 64085d9f. CI fails only in job 'Lifecycle controller tests' on test_workflow_boundaries.WorkflowBoundaryTests.test_qualification_is_explicit_package_suite_excluded_from_ordinary_solution_build (ValueError: substring not found). The same job and test fail on the parent 64085d9f (run 42786199007) and on 87a7b600 (run 42782819039), so the failure is pre-existing and not caused by the README-only label commit. Not patched (Decision 3).); memories: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Memories.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); projects: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Projects.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.); folders: ci-red as f1f639090a4e6b8cbeacb246e7052968dbc75836 (A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. contract-spine-gates fails because of this story: Pd10V2ContractTests.ConformanceSetBindsEveryCandidateArtifactWithoutChangingReleaseAuthority, Pd10ConformanceSetTests.ManifestBindsEveryListedCandidateArtifactAndOrderedSetDigest and Pd10ConformanceSetTests.InventoryCoversEveryRuntimeAndTestCompileInputIncludingExtractedHelpers bind src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj at 1206 bytes, and the Description prefix makes it 1324. The gate had also failed at e88c9400 (run 42109497136) before the merge. The a87d0a0d CI failure is unrelated: dotnet format WHITESPACE errors in tests/tools/Task36FoldObserver/LifecycleRequestCorrelation.cs. Not patched (Decision 3).); chatbot: push-rejected as None (git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.ChatBot.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.)",
   "deliveryProcedure": [
     "Run only after the Build review passes, one repository at a time.",
     "Fetch origin. If origin/main moved past the recorded base, rebase the label commit onto it, revalidate the exact message with that repository's commitlint, and rerun its pinned README tests if the rebase changed README.md, a modified .csproj or a test that reads them. Parties already needs this: its origin/main is 64085d9f, not the recorded base 87a7b600.",
@@ -86,14 +86,14 @@
     "eventstore": {
       "repository": "https://github.com/Hexalith/Hexalith.EventStore",
       "branch": "docs/mcpcli-5-5-compatibility-labels",
-      "localCommit": "84f928c47ebf1e1ed3a6e5105867e60bdcbf4d55",
-      "base": "aa16227bd07f0564a3026d619a5abd973e02656f",
+      "localCommit": "7422ce56a56a742ff9acc57eeaf8b144a07daf05",
+      "base": "a940fb6167cc70526ba413782ec9fbe91ad64a8d",
       "originMainWhenRecorded": "a940fb6167cc70526ba413782ec9fbe91ad64a8d",
-      "baseIsOriginMain": false,
-      "deliveryStatus": "pendingPush",
+      "baseIsOriginMain": true,
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "mainCiRuns": null,
-      "deliveryNote": null,
+      "deliveryNote": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.EventStore.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.",
       "changedFiles": [
         "README.md",
         "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj"
@@ -130,10 +130,10 @@
       "base": "e972d0f06a8eec3446db0b2270fdb14eef4c1186",
       "originMainWhenRecorded": "e972d0f06a8eec3446db0b2270fdb14eef4c1186",
       "baseIsOriginMain": true,
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "mainCiRuns": null,
-      "deliveryNote": null,
+      "deliveryNote": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.FrontComposer.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.",
       "changedFiles": [
         "README.md",
         "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj",
@@ -167,14 +167,35 @@
     "parties": {
       "repository": "https://github.com/Hexalith/Hexalith.Parties",
       "branch": "docs/mcpcli-5-5-compatibility-labels",
-      "localCommit": "e23951d52aadb468038a208e95ff19eee8a97e6c",
-      "base": "87a7b600353b8967ab7b537c1e8dbd4a4b1b5cdc",
-      "originMainWhenRecorded": "64085d9f3b24f56bcffe63a9c2d7eb84f38e1fca",
+      "localCommit": "4c9fb0a03a81694afe24beaed1ea0552348405fc",
+      "base": "64085d9f3b24f56bcffe63a9c2d7eb84f38e1fca",
+      "originMainWhenRecorded": "4c9fb0a03a81694afe24beaed1ea0552348405fc",
       "baseIsOriginMain": false,
-      "deliveryStatus": "pendingPush",
-      "mergedCommit": null,
-      "mainCiRuns": null,
-      "deliveryNote": null,
+      "deliveryStatus": "ci-red",
+      "mergedCommit": "4c9fb0a03a81694afe24beaed1ea0552348405fc",
+      "mainCiRuns": [
+        {
+          "id": 42790989721,
+          "workflow": "Release Candidate Gate",
+          "conclusion": "success"
+        },
+        {
+          "id": 42790990214,
+          "workflow": "Commitlint",
+          "conclusion": "success"
+        },
+        {
+          "id": 42790989911,
+          "workflow": "CodeQL",
+          "conclusion": "success"
+        },
+        {
+          "id": 42790989915,
+          "workflow": "CI",
+          "conclusion": "failure"
+        }
+      ],
+      "deliveryNote": "Pushed 64085d9f..4c9fb0a0 after rebasing onto origin/main 64085d9f. CI fails only in job 'Lifecycle controller tests' on test_workflow_boundaries.WorkflowBoundaryTests.test_qualification_is_explicit_package_suite_excluded_from_ordinary_solution_build (ValueError: substring not found). The same job and test fail on the parent 64085d9f (run 42786199007) and on 87a7b600 (run 42782819039), so the failure is pre-existing and not caused by the README-only label commit. Not patched (Decision 3).",
       "changedFiles": [
         "README.md"
       ],
@@ -210,10 +231,10 @@
       "base": "4ff3e6866ecb6d1a497e7063e972c24259252c40",
       "originMainWhenRecorded": "4ff3e6866ecb6d1a497e7063e972c24259252c40",
       "baseIsOriginMain": true,
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "mainCiRuns": null,
-      "deliveryNote": null,
+      "deliveryNote": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Memories.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.",
       "changedFiles": [
         "README.md",
         "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
@@ -251,10 +272,10 @@
       "base": "9ae0571529cb4a9f3ad9750c8b834e6284d4f76b",
       "originMainWhenRecorded": "9ae0571529cb4a9f3ad9750c8b834e6284d4f76b",
       "baseIsOriginMain": true,
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "mainCiRuns": null,
-      "deliveryNote": null,
+      "deliveryNote": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.Projects.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.",
       "changedFiles": [
         "README.md"
       ],
@@ -290,10 +311,59 @@
       "base": "e88c940000446e13d17d86a7288649d8653a7138",
       "originMainWhenRecorded": "a87d0a0d31d4c5a7e7a286ac9d8d0bdc3f7da3d5",
       "baseIsOriginMain": false,
-      "deliveryStatus": "merged-unreviewed",
+      "deliveryStatus": "ci-red",
       "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
-      "mainCiRuns": null,
-      "deliveryNote": "A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. README.md and the Cli .csproj at origin/main a87d0a0d equal the label commit. main CI was not checked, because this phase allows no remote operation.",
+      "mainCiRuns": [
+        {
+          "id": 42788931965,
+          "workflow": "Commitlint",
+          "commit": "f1f63909",
+          "conclusion": "success"
+        },
+        {
+          "id": 42788932022,
+          "workflow": "CodeQL",
+          "commit": "f1f63909",
+          "conclusion": "cancelled"
+        },
+        {
+          "id": 42788932138,
+          "workflow": "CI",
+          "commit": "f1f63909",
+          "conclusion": "cancelled"
+        },
+        {
+          "id": 42788931487,
+          "workflow": "contract-spine-gates",
+          "commit": "f1f63909",
+          "conclusion": "failure"
+        },
+        {
+          "id": 42789279239,
+          "workflow": "Commitlint",
+          "commit": "a87d0a0d",
+          "conclusion": "success"
+        },
+        {
+          "id": 42789279382,
+          "workflow": "CodeQL",
+          "commit": "a87d0a0d",
+          "conclusion": "success"
+        },
+        {
+          "id": 42789279473,
+          "workflow": "CI",
+          "commit": "a87d0a0d",
+          "conclusion": "failure"
+        },
+        {
+          "id": 42789278621,
+          "workflow": "contract-spine-gates",
+          "commit": "a87d0a0d",
+          "conclusion": "failure"
+        }
+      ],
+      "deliveryNote": "A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. contract-spine-gates fails because of this story: Pd10V2ContractTests.ConformanceSetBindsEveryCandidateArtifactWithoutChangingReleaseAuthority, Pd10ConformanceSetTests.ManifestBindsEveryListedCandidateArtifactAndOrderedSetDigest and Pd10ConformanceSetTests.InventoryCoversEveryRuntimeAndTestCompileInputIncludingExtractedHelpers bind src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj at 1206 bytes, and the Description prefix makes it 1324. The gate had also failed at e88c9400 (run 42109497136) before the merge. The a87d0a0d CI failure is unrelated: dotnet format WHITESPACE errors in tests/tools/Task36FoldObserver/LifecycleRequestCorrelation.cs. Not patched (Decision 3).",
       "changedFiles": [
         "README.md",
         "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj"
@@ -330,10 +400,10 @@
       "base": "b13c58006d292836a9c8b242de476765676e5fb2",
       "originMainWhenRecorded": "b13c58006d292836a9c8b242de476765676e5fb2",
       "baseIsOriginMain": true,
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "mainCiRuns": null,
-      "deliveryNote": null,
+      "deliveryNote": "git push origin HEAD:main was refused on 2026-11-10: HTTP 403 'Permission to Hexalith/Hexalith.ChatBot.git denied to jpiquot'. This session authenticates through GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent, whose token has no write access to this repository; the account itself has push rights (GitHub API permissions.push true). The label commit stays on the local branch; no other credential was used.",
       "changedFiles": [
         "README.md"
       ],
@@ -369,8 +439,8 @@
       "repository": "https://github.com/Hexalith/Hexalith.EventStore",
       "surface": "Hexalith.EventStore.Admin.Cli",
       "project": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
-      "commit": "84f928c47ebf1e1ed3a6e5105867e60bdcbf4d55",
-      "deliveryStatus": "pendingPush",
+      "commit": "7422ce56a56a742ff9acc57eeaf8b144a07daf05",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -414,8 +484,8 @@
       "repository": "https://github.com/Hexalith/Hexalith.EventStore",
       "surface": "Hexalith.EventStore.Admin.Mcp",
       "project": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
-      "commit": "84f928c47ebf1e1ed3a6e5105867e60bdcbf4d55",
-      "deliveryStatus": "pendingPush",
+      "commit": "7422ce56a56a742ff9acc57eeaf8b144a07daf05",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -452,7 +522,7 @@
       "surface": "Hexalith.FrontComposer.Cli",
       "project": "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj",
       "commit": "c9af83ed5b5466a362e60be406510084929f96d0",
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -497,7 +567,7 @@
       "surface": "Hexalith.FrontComposer.Mcp",
       "project": "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj",
       "commit": "c9af83ed5b5466a362e60be406510084929f96d0",
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -542,9 +612,9 @@
       "repository": "https://github.com/Hexalith/Hexalith.Parties",
       "surface": "Hexalith.Parties.Mcp",
       "project": "src/Hexalith.Parties.Mcp/Hexalith.Parties.Mcp.csproj",
-      "commit": "e23951d52aadb468038a208e95ff19eee8a97e6c",
-      "deliveryStatus": "pendingPush",
-      "mergedCommit": null,
+      "commit": "4c9fb0a03a81694afe24beaed1ea0552348405fc",
+      "deliveryStatus": "ci-red",
+      "mergedCommit": "4c9fb0a03a81694afe24beaed1ea0552348405fc",
       "label": {
         "file": "README.md",
         "line": 164,
@@ -586,7 +656,7 @@
       "surface": "Hexalith.Memories.Cli",
       "project": "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
       "commit": "1143ba17a2336f0d718fcff71e049c06350a45a2",
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -632,7 +702,7 @@
       "surface": "Hexalith.Memories.Mcp",
       "project": "src/Hexalith.Memories.Mcp/Hexalith.Memories.Mcp.csproj",
       "commit": "1143ba17a2336f0d718fcff71e049c06350a45a2",
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -678,7 +748,7 @@
       "surface": "Hexalith.Projects.Cli",
       "project": "src/Hexalith.Projects.Cli/Hexalith.Projects.Cli.csproj",
       "commit": "77067782154d35a794ea50d86af1c5e73c8351b6",
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -715,7 +785,7 @@
       "surface": "Hexalith.Projects.Mcp",
       "project": "src/Hexalith.Projects.Mcp/Hexalith.Projects.Mcp.csproj",
       "commit": "77067782154d35a794ea50d86af1c5e73c8351b6",
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -753,7 +823,7 @@
       "surface": "Hexalith.Folders.Cli",
       "project": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
       "commit": "f4f5ce0ce9676cd5674e75093476df2ba4fde585",
-      "deliveryStatus": "merged-unreviewed",
+      "deliveryStatus": "ci-red",
       "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
       "label": {
         "file": "README.md",
@@ -798,7 +868,7 @@
       "surface": "Hexalith.Folders.Mcp",
       "project": "src/Hexalith.Folders.Mcp/Hexalith.Folders.Mcp.csproj",
       "commit": "f4f5ce0ce9676cd5674e75093476df2ba4fde585",
-      "deliveryStatus": "merged-unreviewed",
+      "deliveryStatus": "ci-red",
       "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
       "label": {
         "file": "README.md",
@@ -835,7 +905,7 @@
       "surface": "Hexalith.ChatBot.Cli",
       "project": "src/Hexalith.ChatBot.Cli/Hexalith.ChatBot.Cli.csproj",
       "commit": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -872,7 +942,7 @@
       "surface": "Hexalith.ChatBot.Mcp",
       "project": "src/Hexalith.ChatBot.Mcp/Hexalith.ChatBot.Mcp.csproj",
       "commit": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",
@@ -909,7 +979,7 @@
       "surface": "tools/MigrateEmbeddingVectors",
       "project": "tools/MigrateEmbeddingVectors/MigrateEmbeddingVectors.csproj",
       "commit": "1143ba17a2336f0d718fcff71e049c06350a45a2",
-      "deliveryStatus": "pendingPush",
+      "deliveryStatus": "push-rejected",
       "mergedCommit": null,
       "label": {
         "file": "README.md",

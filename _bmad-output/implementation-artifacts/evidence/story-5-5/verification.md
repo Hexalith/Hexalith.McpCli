@@ -10,60 +10,36 @@ unpublished, and no retirement is claimed.
 | --- | --- |
 | [labels.json](labels.json) | The label register: for each PS row, the repository, commit, README and Description `file:line`, label SHA-256, gate source and inventory hashes |
 | [build-labels.py](build-labels.py) | Generates `labels.json` from the committed label blobs |
-| [delivery-outcomes.json](delivery-outcomes.json) | Delivery outcomes recorded so far, as input to `build-labels.py` (currently only the Folders out-of-band merge) |
+| [delivery-outcomes.json](delivery-outcomes.json) | Delivery outcome of every repository, as input to `build-labels.py` |
 | [verify-labels.py](verify-labels.py) | Independent read-back of the committed labels |
 | [platform-census.json](platform-census.json) | 118 classified Platform hits, exclusion counts and supplementary checks at Platform `a9c3555cd178c0a46cdfb5e1ea7a2b3eafec02cd` |
 | [platform-census.py](platform-census.py) | Generates `platform-census.json` |
 | [sm3-status.json](sm3-status.json) | SM-3 status, the deadline 2027-02-05, the retained G01–G06 block and the deferred entry |
 | [secret-scan.json](secret-scan.json) | The scan receipt for every other file in this directory |
 
-## Delivery state: `pendingPush`, except Folders
+## Delivery outcome (2026-11-10): one push, two red `main` runs, five refused pushes
 
-Each label commit was made on the local branch
-`docs/mcpcli-5-5-compatibility-labels` of an isolated worktree, created with
-`git worktree add --no-track -b docs/mcpcli-5-5-compatibility-labels <worktree> origin/main`
-from the owner's already-fetched `origin/main`. This story ran no fetch, push or
-other remote operation, and changed no owner checkout file.
+After the Build review, the Decision 3 procedure below ran once, on 2026-11-10. Every outcome is in `delivery-outcomes.json`, and `labels.json` was regenerated from these commits. The read-back passes for all 14 rows against them.
 
-**Folders was merged out of band, before the Build review.** A concurrent
-Cursor `/pushall` session in the Folders owner checkout did this, not this
-story:
-
-- At 2026-11-10 10:12 +0100 it merged the local label branch into `main` as
-  `f1f639090a4e6b8cbeacb246e7052968dbc75836`, whose second parent is the label
-  commit `f4f5ce0c`.
-- It pushed that merge, then `a87d0a0d31d4c5a7e7a286ac9d8d0bdc3f7da3d5`, which
-  changes only two gitlinks.
-- It removed the Folders label worktree and branch.
-
-`git -C <folders owner> diff f4f5ce0c origin/main -- README.md src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj`
-is empty, so the merged `main` carries the PS10 and PS11 labels unchanged.
-`delivery-outcomes.json` records the merge as `merged-unreviewed`.
-`build-labels.py` checks that the label commit is an ancestor of the merge and
-that the merge is an ancestor of `origin/main`. Its `main` CI has not been
-checked, because this phase allows no remote operation.
-
-The six other label branches still exist in their owner repositories, so a
-`/pushall` there could merge and push them the same way.
-
-| Repository | Local commit | Recorded base | Changed files |
+| Repository | Label commit | Base | Outcome |
 | --- | --- | --- | --- |
-| EventStore | `84f928c47ebf1e1ed3a6e5105867e60bdcbf4d55` | `aa16227bd07f0564a3026d619a5abd973e02656f` | `README.md`; Admin.Cli `.csproj` Description |
-| FrontComposer | `c9af83ed5b5466a362e60be406510084929f96d0` | `e972d0f06a8eec3446db0b2270fdb14eef4c1186` | `README.md`; Cli `.csproj` Description; Mcp `.csproj` new Description |
-| Parties | `e23951d52aadb468038a208e95ff19eee8a97e6c` | `87a7b600353b8967ab7b537c1e8dbd4a4b1b5cdc` | `README.md` |
-| Memories | `1143ba17a2336f0d718fcff71e049c06350a45a2` | `4ff3e6866ecb6d1a497e7063e972c24259252c40` | `README.md`; Cli and Mcp `.csproj` Descriptions |
-| Projects | `77067782154d35a794ea50d86af1c5e73c8351b6` | `9ae0571529cb4a9f3ad9750c8b834e6284d4f76b` | `README.md` |
-| Folders | `f4f5ce0ce9676cd5674e75093476df2ba4fde585`, merged as `f1f63909` | `e88c940000446e13d17d86a7288649d8653a7138` | `README.md`; Cli `.csproj` Description |
-| ChatBot | `82f20d5ecca74993f93e73151a6ae3766d3d6a1d` | `b13c58006d292836a9c8b242de476765676e5fb2` | `README.md` |
+| Parties | `4c9fb0a03a81694afe24beaed1ea0552348405fc` | `64085d9f3b24f56bcffe63a9c2d7eb84f38e1fca` | `ci-red`. Pushed `64085d9f..4c9fb0a0`. Release Candidate Gate, Commitlint and CodeQL pass. CI fails in "Lifecycle controller tests", on `test_qualification_is_explicit_package_suite_excluded_from_ordinary_solution_build` (`ValueError: substring not found`). That failure is pre-existing: the same job and test fail on the parent `64085d9f` (run 42786199007) and on `87a7b600` (run 42782819039). |
+| Folders | `f4f5ce0ce9676cd5674e75093476df2ba4fde585`, merged as `f1f639090a4e6b8cbeacb246e7052968dbc75836` | `e88c940000446e13d17d86a7288649d8653a7138` | `ci-red`, caused by this story. A concurrent Cursor `/pushall` merged the local label branch into `main` before the review, pushed it and `a87d0a0d`, and removed the worktree and branch. `contract-spine-gates` fails on both commits (runs 42788931487 and 42789278621). The cause is three PD10 conformance tests that bind `src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj` at 1206 bytes: the Description prefix makes it 1324. The gate had also failed at `e88c9400` (run 42109497136), before the merge. The `a87d0a0d` CI failure (run 42789279473) is unrelated: `dotnet format` WHITESPACE errors in `tests/tools/Task36FoldObserver/LifecycleRequestCorrelation.cs`. |
+| EventStore | `7422ce56a56a742ff9acc57eeaf8b144a07daf05`, rebased onto `a940fb61` and revalidated with commitlint | `a940fb6167cc70526ba413782ec9fbe91ad64a8d` | `push-rejected` |
+| FrontComposer | `c9af83ed5b5466a362e60be406510084929f96d0` | `e972d0f06a8eec3446db0b2270fdb14eef4c1186` | `push-rejected` |
+| Memories | `1143ba17a2336f0d718fcff71e049c06350a45a2` | `4ff3e6866ecb6d1a497e7063e972c24259252c40` | `push-rejected` |
+| Projects | `77067782154d35a794ea50d86af1c5e73c8351b6` | `9ae0571529cb4a9f3ad9750c8b834e6284d4f76b` | `push-rejected` |
+| ChatBot | `82f20d5ecca74993f93e73151a6ae3766d3d6a1d` | `b13c58006d292836a9c8b242de476765676e5fb2` | `push-rejected` |
 
-Parties `origin/main` moved twice through owner pushes while the story ran.
-The label commit was first rebased locally from `57ac6b8d` onto `87a7b600`,
-without a fetch. It was then amended to link the PS05 verdict, revalidated with
-commitlint, and its README tests were rerun. The ref has since moved again, to
-`64085d9f3b24f56bcffe63a9c2d7eb84f38e1fca`, so `labels.json` records
-`baseIsOriginMain: false` for Parties. EventStore `origin/main` has also moved,
-to `a940fb6167cc70526ba413782ec9fbe91ad64a8d`. Folders now carries the merge, and the other four bases equal
-their current `origin/main`.
+**Refused pushes.** Each refused push returned HTTP 403 "Permission to Hexalith/Hexalith.<Repo>.git denied to jpiquot". This session authenticates through `GH_CONFIG_DIR=/home/administrator/.config/gh-cicd-agent`, and that token has no write access to the five repositories. The account itself has push rights (`permissions.push` true). Parties succeeded because its repository-local credential helper selects `GH_CONFIG_DIR=/home/administrator/.config/gh`. No other credential was used. Each label commit stays on the owner repository's local branch `docs/mcpcli-5-5-compatibility-labels`, at the commit listed.
+
+**Still open.**
+- The PS01–PS04, PS06–PS09 and PS12–PS13 labels are not on their `main` yet.
+- Folders `main` is red until its PD10 conformance binding and the Folders.Cli Description agree.
+- Neither failure was patched around (Decision 3).
+- Before the five refused commits are pushed, run the repository tests that read the changed `.csproj` files, because the Folders PD10 binding was missed:
+  - FrontComposer: `McpRuntimePackageBoundaryTests`, `CiGovernanceTests`, `ToolPackagingSmokeTests` and `eng/release_contract.py`.
+  - Memories: `tools/verify-cli-pack.sh`.
 
 ### Delivery procedure
 
