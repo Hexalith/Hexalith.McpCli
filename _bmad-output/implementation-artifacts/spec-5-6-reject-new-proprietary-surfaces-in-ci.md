@@ -2,7 +2,7 @@
 title: '5.6 Reject new proprietary surfaces in CI'
 type: 'feature'
 created: '2026-11-10'
-status: 'done'
+status: 'in-progress'
 baseline_commit: 'c9a46a11a8317dd1903e3a3ef2f27791942b316a'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -73,6 +73,10 @@ Verification Gap (VG), and Acceptance Auditor (AA). Each of the 24 submitted
 findings received its own verdict before grouping into the 20 actions below.
 Outcome: 0 decision-needed, 20 patch, 0 defer, 0 rejected. P1 is high; P2–P20
 are medium. These findings remain open; no implementation patches were applied.
+
+User decision — 2026-11-10: option 2, leave all 20 patch findings as action
+items. All checkboxes remain open. Story and sprint status are `in-progress`;
+issues fixed: 0; deferred: 0; rejected: 0.
 
 - [ ] [Review][Patch] P1 — Validate amendment authority against the approved lineage [tools/proprietary-surfaces/v1/check.py:200]. A hash-bound, untracked JSON file containing only `{"decision":"approved","source_revisions":{}}`, or an incomplete v2 receipt with just schema and decision, can authorize a new executable allowance. Validate authority structure, provenance and authorized scope rather than accepting the presence of a revision dictionary or schema name. Sources: BH7; high.
 - [ ] [Review][Patch] P2 — Read SDK identities from XML declarations [tools/proprietary-surfaces/v1/check.py:547]. Adding `<!-- Microsoft.NET.Sdk.Web -->` to a neutral executable under `src/` makes it disappear from the census; an AppHost SDK name in a comment also suppresses executable detection. Inspect actual SDK declarations and protect both comment cases. Sources: BH1; medium.
