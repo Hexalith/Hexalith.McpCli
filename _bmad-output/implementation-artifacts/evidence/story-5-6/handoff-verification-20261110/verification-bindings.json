@@ -1,0 +1,11 @@
+{
+  "parentRevision": "09ba8ce1ada39de9cd3f5073137cc399979e62d1",
+  "files": {
+    "tools/proprietary-surfaces/v1/check.py": "1a67b8e495d4fb220f4b694ce91742a1543b357700a9f9e557216f5eef72700d",
+    "tools/proprietary-surfaces/v1/test_census.py": "2d3b2311f19b6c50d2485159d37add3007c604619299014956a8aca71593757f",
+    "scripts/verify-release-source.py": "9458e9c4251a34706186b8f9f743aa3dc0684da7188c7e0ac0bf48899df76479",
+    "scripts/tests/test_paired_publication.py": "f03d367cbf23d7e027437ca9458ce25fbfaf2e186635a53402e4a3a867bc8983",
+    ".github/workflows/ci.yml": "fb410312e0abdfed262ebb9626ae1930cac461f9346bb2cd2d6f67c6716d4aa0"
+  },
+  "scope": "Existing implementation verified without code changes; new evidence only"
+}

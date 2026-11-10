@@ -1,0 +1,80 @@
+[
+  {
+    "matrixRow": "New unapproved project, tool, container or release entry",
+    "allRanAndPassed": true,
+    "executedTests": [
+      {
+        "name": "test_each_independent_project_signal_refuses_new_surface",
+        "passed": true
+      },
+      {
+        "name": "test_orphan_package_tool_container_and_workflow_publications_fail",
+        "passed": true
+      },
+      {
+        "name": "test_container_action_and_supported_yaml_structures_bind_each_identity",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "matrixRow": "Approved exemption or exact unexpired exception",
+    "allRanAndPassed": true,
+    "executedTests": [
+      {
+        "name": "test_each_approved_classification_is_retained_without_broadening",
+        "passed": true
+      },
+      {
+        "name": "test_exception_is_exact_including_kind_identity_path_and_root",
+        "passed": true
+      },
+      {
+        "name": "test_expiry_is_inclusive_and_production_uses_utc",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "matrixRow": "Missing owner/reason/expiry, malformed or expired exception",
+    "allRanAndPassed": true,
+    "executedTests": [
+      {
+        "name": "test_invalid_exception_fails_even_when_target_is_already_allowed",
+        "passed": true
+      },
+      {
+        "name": "test_expiry_is_inclusive_and_production_uses_utc",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "matrixRow": "Removed baseline surface",
+    "allRanAndPassed": true,
+    "executedTests": [
+      {
+        "name": "test_stale_allowances_are_reported_and_never_rewritten",
+        "passed": true
+      }
+    ]
+  },
+  {
+    "matrixRow": "Missing root/object, malformed metadata or unsafe path",
+    "allRanAndPassed": true,
+    "executedTests": [
+      {
+        "name": "test_missing_root_uninitialized_root_and_missing_committed_object_fail",
+        "passed": true
+      },
+      {
+        "name": "test_malformed_metadata_and_unsafe_xml_fail_instead_of_skipping",
+        "passed": true
+      },
+      {
+        "name": "test_unsafe_and_unresolved_publication_paths_fail_with_context",
+        "passed": true
+      }
+    ]
+  }
+]

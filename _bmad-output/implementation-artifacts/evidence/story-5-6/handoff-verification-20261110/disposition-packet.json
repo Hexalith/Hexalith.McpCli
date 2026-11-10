@@ -1,0 +1,2056 @@
+{
+  "checker": {
+    "path": "tools/proprietary-surfaces/v1/check.py",
+    "sha256": "1a67b8e495d4fb220f4b694ce91742a1543b357700a9f9e557216f5eef72700d"
+  },
+  "currentRejectedCount": 9,
+  "decisions": [
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "exempt-build-tooling",
+          "owner": "Hexalith.Builds owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE01; exact identity and signal set only.",
+          "row": "PE01",
+          "signals": [
+            "executable-project"
+          ],
+          "surface": {
+            "identity": "Host",
+            "kind": "project",
+            "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 1510,
+          "gitBlob": "21b75814f1eaca768cf47c0ff71776971b5eb950",
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+          "sha256": "a03945c7044bee30586a80d9a8326dd4a60f58363ee2af1e9ea1abef21810827"
+        }
+      ],
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "historicalApproval": {
+        "applicabilityLimit": "PE01 explicitly names both packaging templates. These identities were rejected by an earlier scanner; the current root fails before returning complete results, and its standalone metadata probe emits no PackageId after the SDK-import handling correction.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "567604b616613ba429be0609636d805db776a709",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE01",
+            "line": 295
+          }
+        ]
+      },
+      "id": "O01",
+      "inventoryPinSources": [
+        {
+          "bytes": 1510,
+          "gitBlob": "21b75814f1eaca768cf47c0ff71776971b5eb950",
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+          "sha256": "a03945c7044bee30586a80d9a8326dd4a60f58363ee2af1e9ea1abef21810827"
+        }
+      ],
+      "metadata": {
+        "current": {
+          "committedMetadata": [
+            {
+              "bytes": 724,
+              "gitBlob": "5b1979e526772b1977da6dbdab84cd4e07fa088d",
+              "path": "Directory.Build.props",
+              "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+            },
+            {
+              "bytes": 3639,
+              "gitBlob": "cbbc638ed3a10817bfb58d7e680df6eee0d955f3",
+              "path": "Hexalith.Build.props",
+              "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+            },
+            {
+              "bytes": 2583,
+              "gitBlob": "7310c6fe7085336873d4ad71e1fb27014a7f3568",
+              "path": "Hexalith.Package.props",
+              "sha256": "f36f81f165ef4515bea4dd61924bf6b19f49f8d07809d0e94f38f673a3b06a63"
+            },
+            {
+              "bytes": 701,
+              "gitBlob": "cbc38e61f098faadafc0552c24d4aa0e56fcc765",
+              "path": "Props/Environment.Build.props",
+              "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+            },
+            {
+              "bytes": 495,
+              "gitBlob": "c7d93ebb5df401924e186b16924735e6feeb35ef",
+              "path": "src/libraries/Directory.Build.props",
+              "sha256": "9e244e03ac880f30b806669bfb7caffaf794a17e0f942a49feac3b50516e80bc"
+            },
+            {
+              "bytes": 1510,
+              "gitBlob": "21b75814f1eaca768cf47c0ff71776971b5eb950",
+              "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+              "sha256": "a03945c7044bee30586a80d9a8326dd4a60f58363ee2af1e9ea1abef21810827"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.Builds.Module.EventStoreHost"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false",
+              "true"
+            ],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [],
+            "PackageId": [],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        },
+        "inventoryPin": {
+          "committedMetadata": [
+            {
+              "bytes": 724,
+              "gitBlob": "5b1979e526772b1977da6dbdab84cd4e07fa088d",
+              "path": "Directory.Build.props",
+              "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+            },
+            {
+              "bytes": 3639,
+              "gitBlob": "cbbc638ed3a10817bfb58d7e680df6eee0d955f3",
+              "path": "Hexalith.Build.props",
+              "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+            },
+            {
+              "bytes": 2583,
+              "gitBlob": "7310c6fe7085336873d4ad71e1fb27014a7f3568",
+              "path": "Hexalith.Package.props",
+              "sha256": "f36f81f165ef4515bea4dd61924bf6b19f49f8d07809d0e94f38f673a3b06a63"
+            },
+            {
+              "bytes": 701,
+              "gitBlob": "cbc38e61f098faadafc0552c24d4aa0e56fcc765",
+              "path": "Props/Environment.Build.props",
+              "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+            },
+            {
+              "bytes": 495,
+              "gitBlob": "c7d93ebb5df401924e186b16924735e6feeb35ef",
+              "path": "src/libraries/Directory.Build.props",
+              "sha256": "9e244e03ac880f30b806669bfb7caffaf794a17e0f942a49feac3b50516e80bc"
+            },
+            {
+              "bytes": 1510,
+              "gitBlob": "21b75814f1eaca768cf47c0ff71776971b5eb950",
+              "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+              "sha256": "a03945c7044bee30586a80d9a8326dd4a60f58363ee2af1e9ea1abef21810827"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.Builds.Module.EventStoreHost"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false",
+              "true"
+            ],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [],
+            "PackageId": [],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        }
+      },
+      "missingDecision": "Complete generic SDK/import classification and the blocked root inspection before deciding whether the earlier package observation still exists. If it remains a candidate, confirm its exact named-template scope before authorizing any versioned data correction; if full inspection proves it absent, retain the prior observation as historical without adding an allowance.",
+      "observationState": "prior-rejection-retained-root-inspection-incomplete",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/patch-pass-2-20261110/acceptance-blockers.json",
+        "sha256": "74743a83e897c1298400f6435d2c4ab5e868cfe4cbc1b59d1bf75a4845657b60"
+      },
+      "owner": "Hexalith.Builds owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "package-metadata"
+      ],
+      "standalonePackageIdentityPresent": false,
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.EventStoreHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "exempt-build-tooling",
+          "owner": "Hexalith.Builds owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE01; exact identity and signal set only.",
+          "row": "PE01",
+          "signals": [
+            "executable-project"
+          ],
+          "surface": {
+            "identity": "Host",
+            "kind": "project",
+            "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 1486,
+          "gitBlob": "cfd3b268b4025564e9017cd16ddad1b261e453b4",
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+          "sha256": "16813c251a95d259e4efdc622466412cea00ced7766b18af13f920619a7f5943"
+        }
+      ],
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "historicalApproval": {
+        "applicabilityLimit": "PE01 explicitly names both packaging templates. These identities were rejected by an earlier scanner; the current root fails before returning complete results, and its standalone metadata probe emits no PackageId after the SDK-import handling correction.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "567604b616613ba429be0609636d805db776a709",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE01",
+            "line": 295
+          }
+        ]
+      },
+      "id": "O02",
+      "inventoryPinSources": [
+        {
+          "bytes": 1486,
+          "gitBlob": "cfd3b268b4025564e9017cd16ddad1b261e453b4",
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+          "sha256": "16813c251a95d259e4efdc622466412cea00ced7766b18af13f920619a7f5943"
+        }
+      ],
+      "metadata": {
+        "current": {
+          "committedMetadata": [
+            {
+              "bytes": 724,
+              "gitBlob": "5b1979e526772b1977da6dbdab84cd4e07fa088d",
+              "path": "Directory.Build.props",
+              "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+            },
+            {
+              "bytes": 3639,
+              "gitBlob": "cbbc638ed3a10817bfb58d7e680df6eee0d955f3",
+              "path": "Hexalith.Build.props",
+              "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+            },
+            {
+              "bytes": 2583,
+              "gitBlob": "7310c6fe7085336873d4ad71e1fb27014a7f3568",
+              "path": "Hexalith.Package.props",
+              "sha256": "f36f81f165ef4515bea4dd61924bf6b19f49f8d07809d0e94f38f673a3b06a63"
+            },
+            {
+              "bytes": 701,
+              "gitBlob": "cbc38e61f098faadafc0552c24d4aa0e56fcc765",
+              "path": "Props/Environment.Build.props",
+              "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+            },
+            {
+              "bytes": 495,
+              "gitBlob": "c7d93ebb5df401924e186b16924735e6feeb35ef",
+              "path": "src/libraries/Directory.Build.props",
+              "sha256": "9e244e03ac880f30b806669bfb7caffaf794a17e0f942a49feac3b50516e80bc"
+            },
+            {
+              "bytes": 1486,
+              "gitBlob": "cfd3b268b4025564e9017cd16ddad1b261e453b4",
+              "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+              "sha256": "16813c251a95d259e4efdc622466412cea00ced7766b18af13f920619a7f5943"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.Builds.Module.UiHost"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false",
+              "true"
+            ],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [],
+            "PackageId": [],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        },
+        "inventoryPin": {
+          "committedMetadata": [
+            {
+              "bytes": 724,
+              "gitBlob": "5b1979e526772b1977da6dbdab84cd4e07fa088d",
+              "path": "Directory.Build.props",
+              "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+            },
+            {
+              "bytes": 3639,
+              "gitBlob": "cbbc638ed3a10817bfb58d7e680df6eee0d955f3",
+              "path": "Hexalith.Build.props",
+              "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+            },
+            {
+              "bytes": 2583,
+              "gitBlob": "7310c6fe7085336873d4ad71e1fb27014a7f3568",
+              "path": "Hexalith.Package.props",
+              "sha256": "f36f81f165ef4515bea4dd61924bf6b19f49f8d07809d0e94f38f673a3b06a63"
+            },
+            {
+              "bytes": 701,
+              "gitBlob": "cbc38e61f098faadafc0552c24d4aa0e56fcc765",
+              "path": "Props/Environment.Build.props",
+              "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+            },
+            {
+              "bytes": 495,
+              "gitBlob": "c7d93ebb5df401924e186b16924735e6feeb35ef",
+              "path": "src/libraries/Directory.Build.props",
+              "sha256": "9e244e03ac880f30b806669bfb7caffaf794a17e0f942a49feac3b50516e80bc"
+            },
+            {
+              "bytes": 1486,
+              "gitBlob": "cfd3b268b4025564e9017cd16ddad1b261e453b4",
+              "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+              "sha256": "16813c251a95d259e4efdc622466412cea00ced7766b18af13f920619a7f5943"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.Builds.Module.UiHost"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false",
+              "true"
+            ],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [],
+            "PackageId": [],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        }
+      },
+      "missingDecision": "Complete generic SDK/import classification and the blocked root inspection before deciding whether the earlier package observation still exists. If it remains a candidate, confirm its exact named-template scope before authorizing any versioned data correction; if full inspection proves it absent, retain the prior observation as historical without adding an allowance.",
+      "observationState": "prior-rejection-retained-root-inspection-incomplete",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/patch-pass-2-20261110/acceptance-blockers.json",
+        "sha256": "74743a83e897c1298400f6435d2c4ab5e868cfe4cbc1b59d1bf75a4845657b60"
+      },
+      "owner": "Hexalith.Builds owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "package-metadata"
+      ],
+      "standalonePackageIdentityPresent": false,
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.UiHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "external-developer-configuration",
+          "owner": "Hexalith.ChatBot owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE06; exact identity and signal set only.",
+          "row": "PE06",
+          "signals": [
+            "developer-server-configuration"
+          ],
+          "surface": {
+            "identity": "fluent-ui-blazor:53e6d857c25a38abbc64be90486ad2d33e1835802b225df467d2e79a59a981e0",
+            "kind": "configuration",
+            "path": ".mcp.json",
+            "repository": "references/Hexalith.ChatBot"
+          }
+        },
+        {
+          "classification": "external-developer-configuration",
+          "owner": "Hexalith.ChatBot owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE06; exact identity and signal set only.",
+          "row": "PE06",
+          "signals": [
+            "developer-server-configuration"
+          ],
+          "surface": {
+            "identity": "microsoft-learn:d2772832e36d4a259be991a0c9319f07f31f342e0bb8cbaf956538aff31ab6c4",
+            "kind": "configuration",
+            "path": ".mcp.json",
+            "repository": "references/Hexalith.ChatBot"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 456,
+          "gitBlob": "0eb3531bf9d43b37555c16e3c3d0a340743b6916",
+          "path": ".mcp.json",
+          "sha256": "a47afe6164f19117f96378184c0c5656f016e1f878ab487198cdc811565c38d4"
+        }
+      ],
+      "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "historicalApproval": {
+        "applicabilityLimit": "PE06 classifies external Learn/Fluent UI clients at the approved pins; the current exact hashed configuration identity has no active allowance.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "b13c58006d292836a9c8b242de476765676e5fb2",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE06",
+            "line": 300
+          }
+        ]
+      },
+      "id": "O03",
+      "inventoryPinSources": [
+        {
+          "bytes": 456,
+          "gitBlob": "0eb3531bf9d43b37555c16e3c3d0a340743b6916",
+          "path": ".mcp.json",
+          "sha256": "a47afe6164f19117f96378184c0c5656f016e1f878ab487198cdc811565c38d4"
+        }
+      ],
+      "metadata": {},
+      "missingDecision": "The owning maintainer must confirm the exact observed client definition remains external developer tooling, then authorize its exact identity in a versioned amendment, or retain refusal. No blanket server-name exemption applies.",
+      "observationState": "current-rejection",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+        "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+      },
+      "owner": "Hexalith.ChatBot owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "standalonePackageIdentityPresent": null,
+      "surface": {
+        "identity": "fluent-ui-blazor:3c0ffdb9f97e6cedfbc5bc45acefe323575ae2f944c1c5ea2162214b0b3cd9bc",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.ChatBot"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "test-fixture",
+          "owner": "Hexalith.ChatBot owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE05; exact identity and signal set only.",
+          "row": "PE05",
+          "signals": [
+            "mcp-or-cli-dependency",
+            "project-identity"
+          ],
+          "surface": {
+            "identity": "Hexalith.ChatBot.Mcp.Tests",
+            "kind": "project",
+            "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+            "repository": "references/Hexalith.ChatBot"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 56807,
+          "gitBlob": "09dbec322f0bb508a3496ad0afa4dd075a4c6e34",
+          "path": "tests/Hexalith.ChatBot.Mcp.Tests/ChatBotMcpServiceTests.cs",
+          "sha256": "ad36d90197d8424be57c0f30f84c40e406193a6c6c52e33d0e834e9c2ee09f08"
+        },
+        {
+          "bytes": 836,
+          "gitBlob": "0bf57782b6f79e5a8424722cd7bbfced5d1e40c9",
+          "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+          "sha256": "1de1fd25fbdc5bfad182d4bd06f67c8bc931e7a01ec3d9be6f5b8b359f9befdc"
+        }
+      ],
+      "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "historicalApproval": {
+        "applicabilityLimit": "PE05 covers the named test project. Its active allowance lacks the now-observed mcp-registration signal.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "b13c58006d292836a9c8b242de476765676e5fb2",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE05",
+            "line": 299
+          }
+        ]
+      },
+      "id": "O04",
+      "inventoryPinSources": [
+        {
+          "bytes": 56807,
+          "gitBlob": "09dbec322f0bb508a3496ad0afa4dd075a4c6e34",
+          "path": "tests/Hexalith.ChatBot.Mcp.Tests/ChatBotMcpServiceTests.cs",
+          "sha256": "ad36d90197d8424be57c0f30f84c40e406193a6c6c52e33d0e834e9c2ee09f08"
+        },
+        {
+          "bytes": 836,
+          "gitBlob": "0bf57782b6f79e5a8424722cd7bbfced5d1e40c9",
+          "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+          "sha256": "1de1fd25fbdc5bfad182d4bd06f67c8bc931e7a01ec3d9be6f5b8b359f9befdc"
+        }
+      ],
+      "metadata": {
+        "current": {
+          "committedMetadata": [
+            {
+              "bytes": 4569,
+              "gitBlob": "1203b2e2aad43310bc0da09464fa1644443171a2",
+              "path": "Directory.Build.props",
+              "sha256": "271e92cca258c7ba9bb56bbc83819ae1fcc50cc9ccc9538b18f80205f0320458"
+            },
+            {
+              "bytes": 2033,
+              "gitBlob": "0ab1483db3daa6042d85b1154b0c23038886ec2e",
+              "path": "Directory.Build.targets",
+              "sha256": "dffc87bff0ce0e6acb7ee3f3dabecd38d73b778728f625f5c23215e1a60a812e"
+            },
+            {
+              "bytes": 128,
+              "gitBlob": "45d85700faf68a6e39b84ebf75899954ec30e113",
+              "path": "tests/Directory.Build.props",
+              "sha256": "fb17cf670eddfd8c32e12a2e9c44ff594b2b51e18c4a1950c2fcc51616ee4b75"
+            },
+            {
+              "bytes": 836,
+              "gitBlob": "0bf57782b6f79e5a8424722cd7bbfced5d1e40c9",
+              "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+              "sha256": "1de1fd25fbdc5bfad182d4bd06f67c8bc931e7a01ec3d9be6f5b8b359f9befdc"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.ChatBot.Mcp.Tests"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false"
+            ],
+            "OutputType": [],
+            "PackAsTool": [],
+            "PackageId": [],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        },
+        "inventoryPin": {
+          "committedMetadata": [
+            {
+              "bytes": 4569,
+              "gitBlob": "1203b2e2aad43310bc0da09464fa1644443171a2",
+              "path": "Directory.Build.props",
+              "sha256": "271e92cca258c7ba9bb56bbc83819ae1fcc50cc9ccc9538b18f80205f0320458"
+            },
+            {
+              "bytes": 2033,
+              "gitBlob": "0ab1483db3daa6042d85b1154b0c23038886ec2e",
+              "path": "Directory.Build.targets",
+              "sha256": "dffc87bff0ce0e6acb7ee3f3dabecd38d73b778728f625f5c23215e1a60a812e"
+            },
+            {
+              "bytes": 128,
+              "gitBlob": "45d85700faf68a6e39b84ebf75899954ec30e113",
+              "path": "tests/Directory.Build.props",
+              "sha256": "fb17cf670eddfd8c32e12a2e9c44ff594b2b51e18c4a1950c2fcc51616ee4b75"
+            },
+            {
+              "bytes": 836,
+              "gitBlob": "0bf57782b6f79e5a8424722cd7bbfced5d1e40c9",
+              "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+              "sha256": "1de1fd25fbdc5bfad182d4bd06f67c8bc931e7a01ec3d9be6f5b8b359f9befdc"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.ChatBot.Mcp.Tests"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false"
+            ],
+            "OutputType": [],
+            "PackAsTool": [],
+            "PackageId": [],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        }
+      },
+      "missingDecision": "Review the hash-bound test source and confirm that this registration is confined to the approved fixture. Authorize only the exact signal correction through a versioned amendment, or retain refusal if it constitutes new hosting behavior.",
+      "observationState": "current-rejection",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+        "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+      },
+      "owner": "Hexalith.ChatBot owning maintainer",
+      "proposedAuthority": null,
+      "reason": "allowance-signal-or-source-drift",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "mcp-or-cli-dependency",
+        "mcp-registration",
+        "project-identity"
+      ],
+      "standalonePackageIdentityPresent": null,
+      "surface": {
+        "identity": "Hexalith.ChatBot.Mcp.Tests",
+        "kind": "project",
+        "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+        "repository": "references/Hexalith.ChatBot"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "compatibility-surface",
+          "owner": "Hexalith.EventStore owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PS01; exact identity and signal set only.",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        },
+        {
+          "classification": "compatibility-publication-or-route",
+          "owner": "Hexalith.EventStore owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 G4; exact identity and signal set only.",
+          "row": "G4",
+          "signals": [
+            "tool-metadata"
+          ],
+          "surface": {
+            "identity": "tool:eventstore-admin",
+            "kind": "publication",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 1224,
+          "gitBlob": "3417f7ad9e23a55c3a95360e755210d3ca58ea2b",
+          "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+          "sha256": "b1d07f5bd8fd11d99583e0e8e0b0d25c09c4df11be68c2191e13f4da365974bb"
+        }
+      ],
+      "gitlink": "3de922e1140e26fe2e0151682ee656fcf675b26b",
+      "historicalApproval": {
+        "applicabilityLimit": "PS01 covers the existing packed Admin CLI; it does not itself populate an exact package-metadata allowance.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PS01",
+            "line": 272
+          },
+          {
+            "id": "G4",
+            "line": 357
+          }
+        ]
+      },
+      "id": "O05",
+      "inventoryPinSources": [
+        {
+          "bytes": 1106,
+          "gitBlob": "5e896aee073ddc285bfc773f635f02380556bfc7",
+          "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+          "sha256": "c6e668e65e53905a23e8b2c84d88775415ff556a6498e415361dc9143e2458d0"
+        }
+      ],
+      "metadata": {
+        "current": {
+          "committedMetadata": [
+            {
+              "bytes": 9578,
+              "gitBlob": "69d21a513d96319c15b6f1b8cbc2c58e1280d499",
+              "path": "Directory.Build.props",
+              "sha256": "66b2d5f9b4b60ef17fff045881badc565fcca6e4dfb51919aee760feebb6f477"
+            },
+            {
+              "bytes": 11791,
+              "gitBlob": "930f8b70506e5dfeebd8beaa0e85a392441a0743",
+              "path": "Directory.Build.targets",
+              "sha256": "e5ab862b2107b09d8c2ea9c39cb74d73a11fbfa734f05ba3941eb1715e2feab8"
+            },
+            {
+              "bytes": 1224,
+              "gitBlob": "3417f7ad9e23a55c3a95360e755210d3ca58ea2b",
+              "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+              "sha256": "b1d07f5bd8fd11d99583e0e8e0b0d25c09c4df11be68c2191e13f4da365974bb"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.EventStore.Admin.Cli"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false",
+              "true"
+            ],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [
+              "true"
+            ],
+            "PackageId": [
+              "Hexalith.EventStore.Admin.Cli"
+            ],
+            "TargetName": [],
+            "ToolCommandName": [
+              "eventstore-admin"
+            ]
+          }
+        },
+        "inventoryPin": {
+          "committedMetadata": [
+            {
+              "bytes": 9578,
+              "gitBlob": "69d21a513d96319c15b6f1b8cbc2c58e1280d499",
+              "path": "Directory.Build.props",
+              "sha256": "66b2d5f9b4b60ef17fff045881badc565fcca6e4dfb51919aee760feebb6f477"
+            },
+            {
+              "bytes": 11791,
+              "gitBlob": "930f8b70506e5dfeebd8beaa0e85a392441a0743",
+              "path": "Directory.Build.targets",
+              "sha256": "e5ab862b2107b09d8c2ea9c39cb74d73a11fbfa734f05ba3941eb1715e2feab8"
+            },
+            {
+              "bytes": 1106,
+              "gitBlob": "5e896aee073ddc285bfc773f635f02380556bfc7",
+              "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+              "sha256": "c6e668e65e53905a23e8b2c84d88775415ff556a6498e415361dc9143e2458d0"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.EventStore.Admin.Cli"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false",
+              "true"
+            ],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [
+              "true"
+            ],
+            "PackageId": [
+              "Hexalith.EventStore.Admin.Cli"
+            ],
+            "TargetName": [],
+            "ToolCommandName": [
+              "eventstore-admin"
+            ]
+          }
+        }
+      },
+      "missingDecision": "Confirm the default package identity is the existing PS01 compatibility binary and authorize that exact census identity through a versioned amendment. Keep all administration and retirement gates; this would grant no publication or execution authority.",
+      "observationState": "prior-rejection-retained-root-inspection-incomplete",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/patch-pass-2-20261110/acceptance-blockers.json",
+        "sha256": "74743a83e897c1298400f6435d2c4ab5e868cfe4cbc1b59d1bf75a4845657b60"
+      },
+      "owner": "Hexalith.EventStore owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": false,
+      "signals": [
+        "package-metadata"
+      ],
+      "standalonePackageIdentityPresent": true,
+      "surface": {
+        "identity": "package:Hexalith.EventStore.Admin.Cli",
+        "kind": "publication",
+        "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+        "repository": "references/Hexalith.EventStore"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "external-developer-configuration",
+          "owner": "Hexalith.Folders owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE06; exact identity and signal set only.",
+          "row": "PE06",
+          "signals": [
+            "developer-server-configuration"
+          ],
+          "surface": {
+            "identity": "fluent-ui-blazor:53e6d857c25a38abbc64be90486ad2d33e1835802b225df467d2e79a59a981e0",
+            "kind": "configuration",
+            "path": ".mcp.json",
+            "repository": "references/Hexalith.Folders"
+          }
+        },
+        {
+          "classification": "external-developer-configuration",
+          "owner": "Hexalith.Folders owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE06; exact identity and signal set only.",
+          "row": "PE06",
+          "signals": [
+            "developer-server-configuration"
+          ],
+          "surface": {
+            "identity": "microsoft-learn:d2772832e36d4a259be991a0c9319f07f31f342e0bb8cbaf956538aff31ab6c4",
+            "kind": "configuration",
+            "path": ".mcp.json",
+            "repository": "references/Hexalith.Folders"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 526,
+          "gitBlob": "4c02770f719aa012eeb0bb9cba2e0dcd1e010215",
+          "path": ".mcp.json",
+          "sha256": "727dc26dc0469df71ef60b16319c2e2a81f09680a88a8315b6d11da7f522f565"
+        }
+      ],
+      "gitlink": "d873861677982a737d131180bcf79f06caee034d",
+      "historicalApproval": {
+        "applicabilityLimit": "PE06 classifies external Learn/Fluent UI clients at the approved pins; the current exact hashed configuration identity has no active allowance.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE06",
+            "line": 300
+          }
+        ]
+      },
+      "id": "O06",
+      "inventoryPinSources": [
+        {
+          "bytes": 526,
+          "gitBlob": "4c02770f719aa012eeb0bb9cba2e0dcd1e010215",
+          "path": ".mcp.json",
+          "sha256": "727dc26dc0469df71ef60b16319c2e2a81f09680a88a8315b6d11da7f522f565"
+        }
+      ],
+      "metadata": {},
+      "missingDecision": "The owning maintainer must confirm the exact observed client definition remains external developer tooling, then authorize its exact identity in a versioned amendment, or retain refusal. No blanket server-name exemption applies.",
+      "observationState": "current-rejection",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+        "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+      },
+      "owner": "Hexalith.Folders owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "standalonePackageIdentityPresent": null,
+      "surface": {
+        "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Folders"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "compatibility-surface",
+          "owner": "Hexalith.Folders owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PS10; exact identity and signal set only.",
+          "row": "PS10",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "surface": {
+            "identity": "Hexalith.Folders.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+            "repository": "references/Hexalith.Folders"
+          }
+        },
+        {
+          "classification": "compatibility-publication-or-route",
+          "owner": "Hexalith.Folders owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 G4; exact identity and signal set only.",
+          "row": "G4",
+          "signals": [
+            "tool-metadata"
+          ],
+          "surface": {
+            "identity": "tool:folders",
+            "kind": "publication",
+            "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+            "repository": "references/Hexalith.Folders"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 1324,
+          "gitBlob": "5b336987f5f4c62bdc15193c720761f33b07f0eb",
+          "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+          "sha256": "3294791adab69a0f522abf575c048448a8516133547ce5cfff1dab7c7f1a7910"
+        }
+      ],
+      "gitlink": "d873861677982a737d131180bcf79f06caee034d",
+      "historicalApproval": {
+        "applicabilityLimit": "PS10 records a packed tool with IsPackable true. The project and tool command are allowed, but its separate package identity is absent.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PS10",
+            "line": 281
+          },
+          {
+            "id": "G4",
+            "line": 357
+          }
+        ]
+      },
+      "id": "O07",
+      "inventoryPinSources": [
+        {
+          "bytes": 1206,
+          "gitBlob": "2bff2dfca05deec9346b06b40660c84baedc6813",
+          "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+          "sha256": "4505901dae7ba191076215a4d61960ffd5b2d8fbac1cbd51712623956a51cf69"
+        }
+      ],
+      "metadata": {
+        "current": {
+          "committedMetadata": [
+            {
+              "bytes": 8131,
+              "gitBlob": "f1338d286169099312dfc89750d755c9f6a602ab",
+              "path": "Directory.Build.props",
+              "sha256": "cc30ee0ae15320e771aa1834d9cfa2053cb257bdf33966c87ca39dc8a4da0bfd"
+            },
+            {
+              "bytes": 3002,
+              "gitBlob": "e031bff1621202569187e13b44b1930737797a5b",
+              "path": "Directory.Build.targets",
+              "sha256": "142ee531ce5bf030f68c057ac43153ca912da76bb9bca4666f7ca92574ae578a"
+            },
+            {
+              "bytes": 1324,
+              "gitBlob": "5b336987f5f4c62bdc15193c720761f33b07f0eb",
+              "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+              "sha256": "3294791adab69a0f522abf575c048448a8516133547ce5cfff1dab7c7f1a7910"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.Folders.Cli"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false",
+              "true"
+            ],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [
+              "true"
+            ],
+            "PackageId": [
+              "Hexalith.Folders.Cli"
+            ],
+            "TargetName": [],
+            "ToolCommandName": [
+              "folders"
+            ]
+          }
+        },
+        "inventoryPin": {
+          "committedMetadata": [
+            {
+              "bytes": 8131,
+              "gitBlob": "f1338d286169099312dfc89750d755c9f6a602ab",
+              "path": "Directory.Build.props",
+              "sha256": "cc30ee0ae15320e771aa1834d9cfa2053cb257bdf33966c87ca39dc8a4da0bfd"
+            },
+            {
+              "bytes": 3002,
+              "gitBlob": "e031bff1621202569187e13b44b1930737797a5b",
+              "path": "Directory.Build.targets",
+              "sha256": "142ee531ce5bf030f68c057ac43153ca912da76bb9bca4666f7ca92574ae578a"
+            },
+            {
+              "bytes": 1206,
+              "gitBlob": "2bff2dfca05deec9346b06b40660c84baedc6813",
+              "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+              "sha256": "4505901dae7ba191076215a4d61960ffd5b2d8fbac1cbd51712623956a51cf69"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "Hexalith.Folders.Cli"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [
+              "false",
+              "true"
+            ],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [
+              "true"
+            ],
+            "PackageId": [
+              "Hexalith.Folders.Cli"
+            ],
+            "TargetName": [],
+            "ToolCommandName": [
+              "folders"
+            ]
+          }
+        }
+      },
+      "missingDecision": "Confirm this is the existing PS10 packed CLI identity and authorize an exact versioned census correction, or retain refusal. Preserve the Folders inventory and retirement prerequisites.",
+      "observationState": "current-rejection",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+        "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+      },
+      "owner": "Hexalith.Folders owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": false,
+      "signals": [
+        "package-metadata"
+      ],
+      "standalonePackageIdentityPresent": true,
+      "surface": {
+        "identity": "package:Hexalith.Folders.Cli",
+        "kind": "publication",
+        "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+        "repository": "references/Hexalith.Folders"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "compatibility-publication-or-route",
+          "owner": "Hexalith.Memories owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 G4; exact identity and signal set only.",
+          "row": "G4",
+          "signals": [
+            "package-or-container-reference"
+          ],
+          "surface": {
+            "identity": "memories-mcp",
+            "kind": "publication",
+            "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+            "repository": "references/Hexalith.Memories"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 1962,
+          "gitBlob": "a25f838b483e9985ec8ac3ee3e051539861c3413",
+          "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+          "sha256": "bfa695a6b5158787c1d17eb6c9e7fa5e32c16859fa8ae8a15e8ab52423e2bd5d"
+        }
+      ],
+      "gitlink": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "historicalApproval": {
+        "applicabilityLimit": "G4 requires explicit deployment routing accounting, but the ordinary memories image is not itself an inventoried proprietary surface. No exact census allowance or non-surface classification is recorded for this identity.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "G4",
+            "line": 357
+          }
+        ]
+      },
+      "id": "O08",
+      "inventoryPinSources": [
+        {
+          "bytes": 1962,
+          "gitBlob": "a25f838b483e9985ec8ac3ee3e051539861c3413",
+          "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+          "sha256": "bfa695a6b5158787c1d17eb6c9e7fa5e32c16859fa8ae8a15e8ab52423e2bd5d"
+        }
+      ],
+      "metadata": {},
+      "missingDecision": "Review whether the image resolves to the ordinary service rather than a proprietary MCP/CLI host. Choose a generic, test-protected project/image association fix or a specifically approved exact non-surface qualification; otherwise retain refusal. Do not classify it as PS07 based on its repository alone.",
+      "observationState": "current-rejection",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+        "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+      },
+      "owner": "Hexalith.Memories owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "container-image"
+      ],
+      "standalonePackageIdentityPresent": null,
+      "surface": {
+        "identity": "registry.hexalith.com/memories",
+        "kind": "publication",
+        "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "compatibility-publication-or-route",
+          "owner": "Hexalith.Memories owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 G4; exact identity and signal set only.",
+          "row": "G4",
+          "signals": [
+            "package-or-container-reference"
+          ],
+          "surface": {
+            "identity": "memories-mcp",
+            "kind": "publication",
+            "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+            "repository": "references/Hexalith.Memories"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 1962,
+          "gitBlob": "a25f838b483e9985ec8ac3ee3e051539861c3413",
+          "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+          "sha256": "bfa695a6b5158787c1d17eb6c9e7fa5e32c16859fa8ae8a15e8ab52423e2bd5d"
+        }
+      ],
+      "gitlink": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "historicalApproval": {
+        "applicabilityLimit": "PS07 and the deployment-routing narrative at inventory lines 330-342 cover the retained MCP route; the full registry-qualified image is not an allowed exact identity.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PS07",
+            "line": 278
+          },
+          {
+            "id": "G4",
+            "line": 357
+          }
+        ]
+      },
+      "id": "O09",
+      "inventoryPinSources": [
+        {
+          "bytes": 1962,
+          "gitBlob": "a25f838b483e9985ec8ac3ee3e051539861c3413",
+          "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+          "sha256": "bfa695a6b5158787c1d17eb6c9e7fa5e32c16859fa8ae8a15e8ab52423e2bd5d"
+        }
+      ],
+      "metadata": {},
+      "missingDecision": "Confirm the exact full MCP image identity is the already inventoried compatibility route, then authorize a versioned identity correction while preserving retirement gates.",
+      "observationState": "current-rejection",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+        "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+      },
+      "owner": "Hexalith.Memories owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "container-image"
+      ],
+      "standalonePackageIdentityPresent": null,
+      "surface": {
+        "identity": "registry.hexalith.com/memories-mcp",
+        "kind": "publication",
+        "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "qualification-evidence-tooling",
+          "owner": "Hexalith.Memories owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE09; exact identity and signal set only.",
+          "row": "PE09",
+          "signals": [
+            "executable-project"
+          ],
+          "surface": {
+            "identity": "GenerateBenchmarkVectors",
+            "kind": "project",
+            "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+            "repository": "references/Hexalith.Memories"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 238,
+          "gitBlob": "bad583f080c8ccd538e02b21d4a289150801717f",
+          "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+          "sha256": "c299ec65c19b75d1f4fd4ce516c09ee667a141b87a68a37ec76169cc3f86df2c"
+        }
+      ],
+      "gitlink": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "historicalApproval": {
+        "applicabilityLimit": "PE09 names this benchmark-vector generator as test-data tooling. Its independent effective package identity has no allowance.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE09",
+            "line": 303
+          }
+        ]
+      },
+      "id": "O10",
+      "inventoryPinSources": [
+        {
+          "bytes": 238,
+          "gitBlob": "bad583f080c8ccd538e02b21d4a289150801717f",
+          "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+          "sha256": "c299ec65c19b75d1f4fd4ce516c09ee667a141b87a68a37ec76169cc3f86df2c"
+        }
+      ],
+      "metadata": {
+        "current": {
+          "committedMetadata": [
+            {
+              "bytes": 11403,
+              "gitBlob": "ea4cf6e5090f876033f836c200b9a65d7b68ce80",
+              "path": "Directory.Build.props",
+              "sha256": "a9a304597aa3e047aa11f05caba59f627bdc3c1113e9a0b69a784edf751bc129"
+            },
+            {
+              "bytes": 1903,
+              "gitBlob": "5dae9f6a6868efef0349e70f4ee965e48143acf7",
+              "path": "Directory.Build.targets",
+              "sha256": "2bb12774bd85e76614439337b9d7cf8faea6030c5fb292937411f5a3d1f86bda"
+            },
+            {
+              "bytes": 238,
+              "gitBlob": "bad583f080c8ccd538e02b21d4a289150801717f",
+              "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+              "sha256": "c299ec65c19b75d1f4fd4ce516c09ee667a141b87a68a37ec76169cc3f86df2c"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "GenerateBenchmarkVectors"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [],
+            "PackageId": [
+              "GenerateBenchmarkVectors"
+            ],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        },
+        "inventoryPin": {
+          "committedMetadata": [
+            {
+              "bytes": 11403,
+              "gitBlob": "ea4cf6e5090f876033f836c200b9a65d7b68ce80",
+              "path": "Directory.Build.props",
+              "sha256": "a9a304597aa3e047aa11f05caba59f627bdc3c1113e9a0b69a784edf751bc129"
+            },
+            {
+              "bytes": 1903,
+              "gitBlob": "5dae9f6a6868efef0349e70f4ee965e48143acf7",
+              "path": "Directory.Build.targets",
+              "sha256": "2bb12774bd85e76614439337b9d7cf8faea6030c5fb292937411f5a3d1f86bda"
+            },
+            {
+              "bytes": 238,
+              "gitBlob": "bad583f080c8ccd538e02b21d4a289150801717f",
+              "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+              "sha256": "c299ec65c19b75d1f4fd4ce516c09ee667a141b87a68a37ec76169cc3f86df2c"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "GenerateBenchmarkVectors"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [],
+            "PackageId": [
+              "GenerateBenchmarkVectors"
+            ],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        }
+      },
+      "missingDecision": "Confirm the package default has no shipped operator surface and authorize its exact test-data tooling identity through a versioned amendment, or retain refusal. A tooling directory alone confers no exemption.",
+      "observationState": "current-rejection",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+        "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+      },
+      "owner": "Hexalith.Memories owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "package-metadata"
+      ],
+      "standalonePackageIdentityPresent": true,
+      "surface": {
+        "identity": "package:GenerateBenchmarkVectors",
+        "kind": "publication",
+        "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "sample-example-infrastructure",
+          "owner": "Hexalith.PolymorphicSerializations owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE08; exact identity and signal set only.",
+          "row": "PE08",
+          "signals": [
+            "executable-project"
+          ],
+          "surface": {
+            "identity": "DeserializeFileMessages",
+            "kind": "project",
+            "path": "examples/DeserializeFileMessages/DeserializeFileMessages.csproj",
+            "repository": "references/Hexalith.PolymorphicSerializations"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 586,
+          "gitBlob": "6c210e2a63c03e76e7fbf1bdf77c9496b32a4c02",
+          "path": "examples/DeserializeFileMessages/DeserializeFileMessages.csproj",
+          "sha256": "5e03109daee7267d86abd5940874fd26189a7fbcc809adaef335b07dd03c9f9a"
+        }
+      ],
+      "gitlink": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+      "historicalApproval": {
+        "applicabilityLimit": "PE08 explicitly names this example and PN03 records no proprietary runtime surface. The separate effective package identity is absent from active policy.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE08",
+            "line": 302
+          },
+          {
+            "id": "PN03",
+            "line": 311
+          }
+        ]
+      },
+      "id": "O11",
+      "inventoryPinSources": [
+        {
+          "bytes": 586,
+          "gitBlob": "6c210e2a63c03e76e7fbf1bdf77c9496b32a4c02",
+          "path": "examples/DeserializeFileMessages/DeserializeFileMessages.csproj",
+          "sha256": "5e03109daee7267d86abd5940874fd26189a7fbcc809adaef335b07dd03c9f9a"
+        }
+      ],
+      "metadata": {
+        "current": {
+          "committedMetadata": [
+            {
+              "bytes": 2348,
+              "gitBlob": "be6ed7d593e0a7529c743e45643c02b87bd434ae",
+              "path": "Directory.Build.props",
+              "sha256": "f60bcdefad1b54da5d0733bcad38c25c275d5b3a654bcde991e4a25325241991"
+            },
+            {
+              "bytes": 586,
+              "gitBlob": "6c210e2a63c03e76e7fbf1bdf77c9496b32a4c02",
+              "path": "examples/DeserializeFileMessages/DeserializeFileMessages.csproj",
+              "sha256": "5e03109daee7267d86abd5940874fd26189a7fbcc809adaef335b07dd03c9f9a"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "DeserializeFileMessages"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [],
+            "PackageId": [
+              "DeserializeFileMessages"
+            ],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        },
+        "inventoryPin": {
+          "committedMetadata": [
+            {
+              "bytes": 2348,
+              "gitBlob": "be6ed7d593e0a7529c743e45643c02b87bd434ae",
+              "path": "Directory.Build.props",
+              "sha256": "f60bcdefad1b54da5d0733bcad38c25c275d5b3a654bcde991e4a25325241991"
+            },
+            {
+              "bytes": 586,
+              "gitBlob": "6c210e2a63c03e76e7fbf1bdf77c9496b32a4c02",
+              "path": "examples/DeserializeFileMessages/DeserializeFileMessages.csproj",
+              "sha256": "5e03109daee7267d86abd5940874fd26189a7fbcc809adaef335b07dd03c9f9a"
+            }
+          ],
+          "properties": {
+            "AssemblyName": [
+              "DeserializeFileMessages"
+            ],
+            "ContainerRepository": [],
+            "IsPackable": [],
+            "OutputType": [
+              "Exe"
+            ],
+            "PackAsTool": [],
+            "PackageId": [
+              "DeserializeFileMessages"
+            ],
+            "TargetName": [],
+            "ToolCommandName": []
+          }
+        }
+      },
+      "missingDecision": "Confirm the default package identity remains the approved example and authorize an exact versioned census correction, or retain refusal. PN03 alone is not a permanent root exemption.",
+      "observationState": "current-rejection",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+        "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+      },
+      "owner": "Hexalith.PolymorphicSerializations owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "package-metadata"
+      ],
+      "standalonePackageIdentityPresent": true,
+      "surface": {
+        "identity": "package:DeserializeFileMessages",
+        "kind": "publication",
+        "path": "examples/DeserializeFileMessages/DeserializeFileMessages.csproj",
+        "repository": "references/Hexalith.PolymorphicSerializations"
+      }
+    },
+    {
+      "activeAllowancesAtSamePath": [
+        {
+          "classification": "external-developer-configuration",
+          "owner": "Hexalith.Timesheets owning maintainer",
+          "reason": "Approved technical-tools inventory 1.0.2 PE06; exact identity and signal set only.",
+          "row": "PE06",
+          "signals": [
+            "developer-server-configuration"
+          ],
+          "surface": {
+            "identity": "fluent-ui-blazor:53e6d857c25a38abbc64be90486ad2d33e1835802b225df467d2e79a59a981e0",
+            "kind": "configuration",
+            "path": ".mcp.json",
+            "repository": "references/Hexalith.Timesheets"
+          }
+        }
+      ],
+      "category": "rejected-observation",
+      "committedSources": [
+        {
+          "bytes": 228,
+          "gitBlob": "7bf42a13dbd16073a9a71e11e6aa1fb8a7f474ae",
+          "path": ".mcp.json",
+          "sha256": "1ab714ddcca398504b977ed331b2b3705adccc7c900c578b7cc7432cf13e70c1"
+        }
+      ],
+      "gitlink": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+      "historicalApproval": {
+        "applicabilityLimit": "PE06 classifies external Learn/Fluent UI clients at the approved pins; the current exact hashed configuration identity has no active allowance.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE06",
+            "line": 300
+          }
+        ]
+      },
+      "id": "O12",
+      "inventoryPinSources": [
+        {
+          "bytes": 228,
+          "gitBlob": "7bf42a13dbd16073a9a71e11e6aa1fb8a7f474ae",
+          "path": ".mcp.json",
+          "sha256": "1ab714ddcca398504b977ed331b2b3705adccc7c900c578b7cc7432cf13e70c1"
+        }
+      ],
+      "metadata": {},
+      "missingDecision": "The owning maintainer must confirm the exact observed client definition remains external developer tooling, then authorize its exact identity in a versioned amendment, or retain refusal. No blanket server-name exemption applies.",
+      "observationState": "current-rejection",
+      "observedReport": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+        "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+      },
+      "owner": "Hexalith.Timesheets owning maintainer",
+      "proposedAuthority": null,
+      "reason": "new-proprietary-surface",
+      "sameSourceBytesAtInventoryPin": true,
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "standalonePackageIdentityPresent": null,
+      "surface": {
+        "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Timesheets"
+      }
+    },
+    {
+      "category": "inspection-error",
+      "committedSources": [
+        {
+          "bytes": 3549,
+          "gitBlob": "9f8727b9c1f7cb2cacd6304f69e05f504ed37a47",
+          "path": "Github/publish-container-to-registry/action.yml",
+          "sha256": "31a18f4fa2b8b065f366f2b8855d9c92e4ad5f911d3aa51cc70b914127a60242"
+        }
+      ],
+      "explanation": "The action computes a project path inside a shell function from runtime application inputs; the committed census cannot determine the actual caller project or image.",
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "historicalApproval": {
+        "applicabilityLimit": "PE01 names the build/workspace tools and two packaging templates, not arbitrary runtime-derived application container projects in this composite action.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "567604b616613ba429be0609636d805db776a709",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE01",
+            "line": 295
+          }
+        ]
+      },
+      "id": "E01",
+      "inventoryPinSources": [
+        {
+          "bytes": 3549,
+          "gitBlob": "9f8727b9c1f7cb2cacd6304f69e05f504ed37a47",
+          "path": "Github/publish-container-to-registry/action.yml",
+          "sha256": "31a18f4fa2b8b065f366f2b8855d9c92e4ad5f911d3aa51cc70b914127a60242"
+        }
+      ],
+      "missingDecision": "Choose an approved generic static representation/resolution of caller project targets or explicitly scoped qualification of this exact build action. Keep unresolved arbitrary targets refused; do not exempt every build action.",
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "Github/publish-container-to-registry/action.yml",
+      "proposedAuthority": null,
+      "repository": "references/Hexalith.Builds",
+      "rule": "unresolved-publication-target:Github/publish-container-to-registry/action.yml"
+    },
+    {
+      "category": "inspection-error",
+      "committedSources": [
+        {
+          "bytes": 4456,
+          "gitBlob": "7552813a23e8f56264bc6cfd241a5038dcf327cd",
+          "path": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+          "sha256": "5631daf0eab17a8d41bf53409f52fa8d2d2e786f803e98b8cce03bd8c7d2dfc4"
+        }
+      ],
+      "explanation": "The fixture compiles @(_SampleApiRestGeneratedCopy), populated by a Copy task from uncommitted generated obj output. No committed item value is available to the static scanner.",
+      "gitlink": "3de922e1140e26fe2e0151682ee656fcf675b26b",
+      "historicalApproval": {
+        "applicabilityLimit": "PE08 names Sample.Api and other specific hosts, not the separate generated-code quality fixture; no exact allowance covers this dynamic Compile expression.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PE08",
+            "line": 302
+          }
+        ]
+      },
+      "id": "E02",
+      "inventoryPinSources": [
+        {
+          "path": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+          "present": false
+        }
+      ],
+      "missingDecision": "Approve a specific source-bound qualification for this generated-code fixture or define generic static generated-source handling with negative controls. Do not execute its generator or silently ignore Compile item expressions.",
+      "owner": "Hexalith.EventStore owning maintainer",
+      "path": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+      "proposedAuthority": null,
+      "repository": "references/Hexalith.EventStore",
+      "rule": "unresolved-classification-metadata:samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj"
+    },
+    {
+      "category": "inspection-error",
+      "committedSources": [
+        {
+          "bytes": 14632,
+          "gitBlob": "f2c66dd39af36aafab8a9e62af756831c83a8188",
+          "path": ".github/workflows/ci.yml",
+          "sha256": "a88877838dcf00d7633bfc6cc069367da353d76c4fdc12e869eccdcc8b79d61d"
+        }
+      ],
+      "explanation": "The workflow changes into references/Hexalith.Conversations and invokes dotnet run --project ../Hexalith.Builds/...; the scanner refuses the literal parent-relative publication path.",
+      "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "historicalApproval": {
+        "applicabilityLimit": "G5 requires unsafe/unknown coverage to fail. No inventory row or census exception authorizes a parent-relative project publication path.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "G5",
+            "line": 358
+          }
+        ]
+      },
+      "id": "E03",
+      "inventoryPinSources": [
+        {
+          "bytes": 14632,
+          "gitBlob": "f2c66dd39af36aafab8a9e62af756831c83a8188",
+          "path": ".github/workflows/ci.yml",
+          "sha256": "a88877838dcf00d7633bfc6cc069367da353d76c4fdc12e869eccdcc8b79d61d"
+        }
+      ],
+      "missingDecision": "Have the owning repository supply a safe, statically resolvable target, or approve a generic working-directory-aware source interpretation with containment tests. Keep the current unsafe-path guard until that change is proved.",
+      "owner": "Hexalith.Projects owning maintainer",
+      "path": ".github/workflows/ci.yml",
+      "proposedAuthority": null,
+      "repository": "references/Hexalith.Projects",
+      "rule": "unsafe-publication-path:.github/workflows/ci.yml"
+    },
+    {
+      "category": "inspection-error",
+      "committedSources": [
+        {
+          "bytes": 28743,
+          "gitBlob": "48b4cc0ac4a04ff90626dfe19e2fc00d253f9162",
+          "path": ".github/workflows/ci.yml",
+          "sha256": "85579066057b1d6f9fbcba4329d8905c3a5c73f240e37525acb175873e6fe3a2"
+        }
+      ],
+      "explanation": "The workflow shell loop packs src/Hexalith.Tenants.${catalog_package}/Hexalith.Tenants.${catalog_package}.csproj for Contracts and Server; literal project discovery refuses its unresolved variable.",
+      "gitlink": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+      "historicalApproval": {
+        "applicabilityLimit": "PN05 is a pinned no-proprietary-surface observation, not an exemption for future dynamic publication commands. No exact active allowance covers the shell-computed target.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PN05",
+            "line": 313
+          }
+        ]
+      },
+      "id": "E04",
+      "inventoryPinSources": [
+        {
+          "bytes": 28743,
+          "gitBlob": "48b4cc0ac4a04ff90626dfe19e2fc00d253f9162",
+          "path": ".github/workflows/ci.yml",
+          "sha256": "85579066057b1d6f9fbcba4329d8905c3a5c73f240e37525acb175873e6fe3a2"
+        }
+      ],
+      "missingDecision": "Define and verify generic finite shell-loop target expansion or obtain an exact source-bound qualification for this workflow. Confirm the Contracts/Server library targets have no MCP/CLI surface; do not add a Tenants-specific checker branch.",
+      "owner": "Hexalith.Tenants owning maintainer",
+      "path": ".github/workflows/ci.yml",
+      "proposedAuthority": null,
+      "repository": "references/Hexalith.Tenants",
+      "rule": "unresolved-publication-target:.github/workflows/ci.yml"
+    },
+    {
+      "category": "inspection-error",
+      "committedSources": [
+        {
+          "bytes": 3200,
+          "gitBlob": "1cab3e94a06d09245332cd1e78cd83dbe06272c2",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "sha256": "75eefb3b4365934314e4f1e4353a905a2379fcbeffe00b85ef730342bc9694df"
+        }
+      ],
+      "explanation": "The script changes into nested EventStore and Platform references and packs shell-computed project names; the current committed root census does not open those nested repositories.",
+      "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+      "historicalApproval": {
+        "applicabilityLimit": "PN07 records a historical no-surface root. It authorizes neither nested reference inspection nor this dynamic package-production script.",
+        "approval": {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+          "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+        },
+        "approvalLimits": [
+          "Inventory completeness and retaining defer / exclude dispositions only.",
+          "No resolution of downstream replacement, authorization, conformance or retirement prerequisites.",
+          "No runtime exposure, execution, enrollment, publication or retirement authority."
+        ],
+        "approvedGitlink": "2e9fafba151a184eb4552796db7eecc25ffaf8c7",
+        "approvedInventoryVersion": "1.0.2",
+        "inventory": {
+          "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+          "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+        },
+        "rows": [
+          {
+            "id": "PN07",
+            "line": 315
+          }
+        ]
+      },
+      "id": "E05",
+      "inventoryPinSources": [
+        {
+          "bytes": 3200,
+          "gitBlob": "1cab3e94a06d09245332cd1e78cd83dbe06272c2",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "sha256": "75eefb3b4365934314e4f1e4353a905a2379fcbeffe00b85ef730342bc9694df"
+        }
+      ],
+      "missingDecision": "Choose an approved generic contract for statically enumerating local/nested package targets or obtain an exact source-bound qualification of this script. Preserve the no-nested-initialization boundary and refuse unresolved targets.",
+      "owner": "Hexalith.Works owning maintainer",
+      "path": "scripts/build-story414-sdk-candidate.sh",
+      "proposedAuthority": null,
+      "repository": "references/Hexalith.Works",
+      "rule": "unresolved-publication-target:scripts/build-story414-sdk-candidate.sh"
+    }
+  ],
+  "inspectionErrorCount": 5,
+  "limits": [
+    "Evidence and missing decisions only; this document is not an approval receipt.",
+    "Historical classifications and matching source bytes do not automatically create an exact allowance.",
+    "Prior rejections from an error root remain unresolved; absent partial results do not prove removal.",
+    "No policy, source pin, reference content, publication or retirement change is authorized here."
+  ],
+  "parentRevision": "09ba8ce1ada39de9cd3f5073137cc399979e62d1",
+  "policy": {
+    "amendments": [
+      {
+        "path": "amendments/1.0.1.json",
+        "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+        "version": "1.0.1"
+      },
+      {
+        "path": "amendments/1.0.2.json",
+        "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+        "version": "1.0.2"
+      }
+    ],
+    "baselineSha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+    "version": "1.0.2"
+  },
+  "report": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/census.json",
+    "sha256": "640e03bf0bbf9db9991a6ca3d62f1d56d60325b81328b05f85e76530408afe87"
+  },
+  "retainedRejectedObservationCount": 12,
+  "rootPins": {
+    "references/Hexalith.AI.Tools": "8a3885dd22aea88edd57771cfe592c382df2c583",
+    "references/Hexalith.Agents": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+    "references/Hexalith.Builds": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+    "references/Hexalith.ChatBot": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+    "references/Hexalith.Commons": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+    "references/Hexalith.Conversations": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+    "references/Hexalith.EventStore": "3de922e1140e26fe2e0151682ee656fcf675b26b",
+    "references/Hexalith.Folders": "d873861677982a737d131180bcf79f06caee034d",
+    "references/Hexalith.FrontComposer": "01fc48e3955a8cec47ab1602f5cd5c8e286801da",
+    "references/Hexalith.Memories": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+    "references/Hexalith.Parties": "3eccce242d27c2f8248824354a1f403c7b4ea57b",
+    "references/Hexalith.Platform": "d7c74e8a5d5627a8773fb36652813fe743de3d6f",
+    "references/Hexalith.PolymorphicSerializations": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+    "references/Hexalith.Projects": "77067782154d35a794ea50d86af1c5e73c8351b6",
+    "references/Hexalith.Tenants": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+    "references/Hexalith.Timesheets": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+    "references/Hexalith.Works": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23"
+  },
+  "schema": "mcpcli-census-unresolved-dispositions/v1",
+  "status": "owner-or-approved-source-resolution-required",
+  "utcDate": "2026-11-10"
+}
