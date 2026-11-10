@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-10-2026 11:08'
+last_updated: '11-10-2026 11:44'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -98,11 +98,18 @@ development_status:
   5-5-retire-legacy-packages-and-platform-routes: review # Build review pass 1 2026-11-10: 8 patch groups applied, 1 deferred, 7 rejected. Delivery 2026-11-10: Parties label pushed (4c9fb0a0; main CI red on a pre-existing lifecycle test); Folders merged out of band (contract-spine-gates already red from Folders' own PD10 drift; the label adds the Folders.Cli.csproj drift, kept by user decision for the PD10 requalification); EventStore, FrontComposer, Memories, Projects and ChatBot pushes refused (HTTP 403, session token). Platform census clean; Parties.Mcp retirement retained blocked by G01–G06 (deferred-work.md:944); SM-3 deadline 2027-02-05.
   5-6-reject-new-proprietary-surfaces-in-ci: backlog
   5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: backlog
-  5-8-refresh-and-re-disposition-the-folders-inventory: backlog
+  5-8-refresh-and-re-disposition-the-folders-inventory: backlog # 2026-11-10: waits on Hexalith.Folders Story 5.12 (sprint-change-proposal-2026-11-10).
   5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent: backlog
   5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: backlog
   5-11-reconcile-product-claims-and-the-migration-plan: backlog
   epic-5-retrospective: optional
+
+  epic-6: backlog
+  6-1-enroll-the-folders-contracts-release: backlog # Waits on McpCli 5.2 and 5.8, Hexalith.Folders 5.12–5.14, and a published Folders composition helper; evidence for EXT-MCPCLI-FOLDERS-ENROLLMENT.
+  6-2-prove-folders-shared-head-parity-and-safety: backlog # Waits on 6.1 and Hexalith.Folders 5.8–5.11; evidence for EXT-MCPCLI-FOLDERS-RETIREMENT-GATE.
+  6-3-verify-the-folders-legacy-retirement-and-update-its-labels: backlog # Waits on 6.2 and Hexalith.Folders 5.15.
+  6-4-record-the-folders-retirement-in-the-migration-plan: backlog
+  epic-6-retrospective: optional
 
 # Readiness action items (09-23-2026); criteria are assigned, implementation remains open.
 action_items:

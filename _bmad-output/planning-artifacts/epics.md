@@ -58,6 +58,7 @@ approvedStories:
 changeProposals:
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-08.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10.md
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md
@@ -247,8 +248,8 @@ FR16: Epic 2 — Resolve Tenant, Actor, aggregate identity, identifiers, extensi
 FR17: Epic 2 — Submit once through the EventStore gateway client and map its result.
 FR18: Epic 2 — Manage separate, secret-safe Profiles.
 FR19: Epic 2 — Refuse writes inside the executor and CLI; Epic 3 omits the MCP write tool.
-FR20: Epic 1 — Approve the shared conformance-vector contract and validator before upstream authoring; Epic 4 — Prove approved Tenants and Parties coverage and v1 release readiness; Epic 5 — Extend Parties vectors for replacement parity and safety.
-FR21: Epic 4 — Produce approved first-increment migration inventories and enforce inventory-to-Catalog parity; Epic 5 — cover administration and non-gateway gaps, then retire obsolete surfaces.
+FR20: Epic 1 — Approve the shared conformance-vector contract and validator before upstream authoring; Epic 4 — Prove approved Tenants and Parties coverage and v1 release readiness; Epic 5 — Extend Parties vectors for replacement parity and safety; Epic 6 — Enroll Folders vectors and prove Folders replacement parity and safety.
+FR21: Epic 4 — Produce approved first-increment migration inventories and enforce inventory-to-Catalog parity; Epic 5 — cover administration and non-gateway gaps, then retire obsolete surfaces; Epic 6 — Replace the Folders legacy surfaces, verify their retirement and record it in the migration plan.
 FR22: Epic 4 — Merge the authoritative no-new-proprietary-MCP/CLI rule; Epic 5 — verify adoption across module plans and release packaging.
 
 ## Epic List
@@ -292,6 +293,14 @@ Operators and agents lose no supported capability while proprietary Hexalith MCP
 **FRs covered:** FR20 (Parties replacement parity vectors), FR21, FR22. **Entry:** Epic 4's v1 release (2.0.1) and Story 5.1's approved inventories; while the Epic 4 retrospective verdict remains `rejected`, Story 5.2 and later stories become `ready-for-dev` only after a recorded product-owner decision on Epic 4 retro item 8 (MR10). **Gate decision (2026-11-08):** recorded in the [sprint change proposal](sprint-change-proposal-2026-11-08.md) and the Epic 4 retrospective's F10 follow-up; Stories 5.2–5.11 may become `ready-for-dev`, the Epic 3 §G output-schema gap is accepted for 2.0.1 only, and no McpCli version after 2.0.1 is published until `epic-3-retro-item-1-complete-output-contract` is done. **Exit:** every inventoried operation has a current owner-approved disposition; `Parties.Mcp` is retired with verified replacement evidence, or the product owner records why SM-3 slips; CI rejects new proprietary surfaces against the Story 5.1 census beyond `src/`; the Hexalith.AI.Tools migration plan index is re-versioned (MR7); and no active Hexalith module PRD or architecture plans a proprietary module MCP/CLI implementation. **Out of scope:** HTTP transport and forwarded per-user identity (MR9), so Memories retirement and identity-dependent variants remain blocked; MCP resources and prompts, event-stream reading, and retries unless an approved PRD change in this epic admits them; any module-specific code in McpCli.
 
 **Implementation notes:** After Story 5.1, two independent tracks run. The gateway-ready track needs no new decision: Parties is already enrolled, so it closes compatibility gates C06–C08, proves parity and safety, and retires `Parties.Mcp` and its routes. In the non-gateway track, one generic-capability decision covering every gap class, admitted by a Platform AD under AD-14 and paired with the PRD change it needs, precedes any re-disposition of administration, resource, lifecycle, or tooling rows to `replace`. Re-pinning stale inventories, inventorying PS14, and every disposition change are versioned owner amendments. UI-only and confirmation-required Admin rows are expected to move to a confidential UI or be withdrawn rather than migrate. Open Epic 4 retro items 5, 6, and 9 apply wherever this epic adds evidence, releases, or tenant-isolation claims.
+
+### Epic 6: Replace and Retire the Folders CLI and MCP Server
+
+Operators and agents reach every supported Folders operation through McpCli's two heads, and the frozen `Hexalith.Folders.Cli` and `Hexalith.Folders.Mcp` retire with verified replacement evidence. McpCli enrolls the exact decorated Folders Contracts release, proves shared-head parity and safety on a selected environment, verifies the deletion that Folders performs, and records it in the migration plan.
+
+**FRs covered:** FR20, FR21. **Entry:** McpCli Stories 5.2 and 5.8 done; Hexalith.Folders Stories 5.12, 5.13 and 5.14 released (cross-repository prerequisites). MR1–MR9 and MR11 apply as written. MR10 applies to Epic 6 stories: the 2026-11-08 decision covers the Epic 1–4 verdicts, and a rejected Epic 5 verdict recorded before an Epic 6 story starts needs its own recorded decision. The Epic 5 gate decision and its release precondition are unchanged. **Exit:** McpCli evidence satisfies the Folders nodes EXT-MCPCLI-FOLDERS-ENROLLMENT and EXT-MCPCLI-FOLDERS-RETIREMENT-GATE; Hexalith.Folders Story 5.15 has removed the legacy surfaces and McpCli has verified it; a new AI.Tools migration-plan version records the retirement. **Out of scope:** Folders code, adapters or error mapping in McpCli; Folders source edits from this repository; any class Story 5.2 leaves deferred.
+
+**Implementation notes:** Mirrors the Parties chain 5.3 → 5.4 → 5.5 as enroll (6.1), prove (6.2), verify the retirement (6.3), then record it (6.4). Folders stories are always written "Hexalith.Folders Story 5.x".
 
 ## Epic 1: Module Authors Can Publish Discoverable Operations
 
@@ -1741,7 +1750,7 @@ As a McpCli solution architect,
 I want one approved decision for every capability class that the inventories cannot migrate as v1 gateway Commands and Queries,
 So that each class gains a generic McpCli path, an explicit withdrawal, or a named retention, with no module-specific branch.
 
-**Requirements:** FR21, FR22; MR1, MR2, MR3, MR9. **Dependencies:** Story 5.1 (Admin inventory G2/G3, technical inventory G2); the Epic 5 entry gate (MR10).
+**Requirements:** FR21, FR22; MR1, MR2, MR3, MR9. **Dependencies:** Story 5.1 (Admin inventory G2/G3, technical inventory G2); the Folders inventory 1.0.0 classes V01, V02, V04, V05, R01, R02 and G6, raised by Hexalith.Folders on 2026-11-10 (`sprint-change-proposal-2026-11-10.md` at Folders `4af40367`, Section 5, R1); the Epic 5 entry gate (MR10).
 
 **Acceptance Criteria:**
 
@@ -1749,6 +1758,16 @@ So that each class gains a generic McpCli path, an explicit withdrawal, or a nam
 **When** the decision is adopted as a McpCli architecture decision,
 **Then** each class has exactly one outcome — decorated Gateway contract, named generic authenticated transport, exempt local tooling, confidential UI only, withdrawal, or continued deferral with a named gap — and every inventory row maps to exactly one class,
 **And** each admitted class defines versioned declaration, discovery, execution, error documents, authorization class, audit, and conformance evidence without a module-specific runtime branch.
+
+**Given** the four Folders classes raised on 2026-11-10 against inventory 1.0.0: content above the inclusive 262144-byte inline boundary, up to the inclusive 1048576-byte per-file maximum, that requires out-of-band staging and `PutFileStream` (V04, V05); the R01 `audit-trail` and R02 `folder-tree` MCP resources; provider egress before external effects (G6); and per-operation freshness (V01) with paging and filter inputs (V02) mapped onto the Query envelope,
+**When** the decision is adopted,
+**Then** each of the four classes has exactly one outcome from the list above, within the binding limits: McpCli never calls a Module's REST or Dapr API (PRD §8.3), paging stays envelope-only (AD-20), and a resource, stream, freshness argument or filter argument is admitted only with the PRD change the next criterion requires,
+**And** the decision records that inline content up to 262144 bytes is an ordinary decorated Command Payload that needs no new class, and for each class it names the Folders inventory rows the class governs and the positive and negative evidence that the Folders parity proof collects.
+
+**Given** a Folders class whose outcome is continued deferral,
+**When** the decision records it,
+**Then** it names the gap and its owning role, and every row the class governs stays `defer`,
+**And** those rows keep the Folders retirement gate (Folders node EXT-MCPCLI-FOLDERS-RETIREMENT-GATE) closed until the class is decided or the Folders owner withdraws them; McpCli gains no legacy fallback and no module-specific path.
 
 **Given** an outcome that admits any capability to the McpCli `agent` surface beyond v1 decorated Commands and Queries,
 **When** the decision is proposed for adoption,
@@ -1936,27 +1955,42 @@ So that every administration, diagnostic, documentation, lifecycle, and tooling 
 ### Story 5.8: Refresh and Re-disposition the Folders Inventory
 
 As the Folders owner,
-I want the Folders inventory re-pinned to current source and amended with the Story 5.2 outcomes and an explicit owner approval,
+I want the Folders inventory re-pinned to current source and amended with the Story 5.2 outcomes, the Folders owner's eligibility decisions and named decorated types, and an explicit owner approval,
 So that every Folders tool, resource, CLI leaf, and variant has a current disposition before any replacement or retirement is planned.
 
-**Requirements:** FR21; MR3, MR4, MR5, MR6, MR7. **Dependencies:** Story 5.2.
+**Requirements:** FR21; MR3, MR4, MR5, MR6, MR7. **Dependencies:** Story 5.2; Hexalith.Folders Story 5.12 (cross-repository prerequisite): the owner-recorded eligibility decision for each candidate, the decorated types merged on Folders `main`, and the accepted behavior losses.
 
 **Acceptance Criteria:**
 
 **Given** the Folders 1.0.0 inventory and the drift recorded by technical inventory G3 (PS10),
-**When** it is re-pinned to its current root-declared reference,
+**When** it is re-pinned to its current root-declared reference at a Folders revision that contains the Hexalith.Folders Story 5.12 types,
 **Then** a new version records every added, removed, or changed tool, resource, CLI leaf, and variant with anchors at the new pin,
 **And** unchanged rows say so explicitly.
 
-**Given** the Story 5.2 outcomes and the 48 roadmap candidates C01–C13 and Q01–Q35,
+**Given** the Story 5.2 outcomes, the 48 roadmap candidates C01–C13 and Q01–Q35, and Hexalith.Folders Story 5.12's eligibility record,
 **When** rows are re-dispositioned,
-**Then** each becomes `replace` with decorated contract type, exact Gateway route, and eligibility, `withdraw` with owner rationale, or `defer` with a named gap,
-**And** `include` appears only with `replace`, and a roadmap candidate counts as a replacement only once its decorated contract is named.
+**Then** each eligible candidate becomes `replace` with its decorated CLR type as merged at the re-pin, the explicit `Hexalith.Folders.Commands.*` wire name for a Command, its exact Gateway route, and its eligibility, and each other candidate becomes `withdraw` with owner rationale or `defer` with a named gap,
+**And** `include` appears only with `replace`, and a candidate counts as `replace` only once its decorated type exists in Folders source at the re-pin; a type named only in a plan or a draft does not count.
 
 **Given** Folders legacy lowercase identifiers, `sha256` idempotency keys, and the `taskId` extension,
 **When** their treatment is recorded,
 **Then** envelope correlation and idempotency keys follow McpCli's canonical uppercase ULID rule, payload identifiers follow the Module's declared Identifier Kind, and task context travels only as Payload properties, through `actorProperty`, or in allowed Envelope extensions,
 **And** any legacy format the target cannot accept stays a named gap or an owner-approved change with migration evidence, never a silent conversion.
+
+**Given** the behavior losses the Folders owner accepted through Hexalith.Folders Story 5.12, which are V04 local-file input (`--file` path and stdin), V07 `--allow-auto-key`, V09 credential precedence, and the R01 and R02 resources under the Story 5.2 resource outcome,
+**When** the amendment records them,
+**Then** each loss is an owner-approved variant change that names its rationale, the replacement experience, and the rows it affects, and the rest of V09 (legacy exit codes 64–77 and human output) is either accepted the same way or kept as a named gap,
+**And** a loss the owner has not accepted keeps its variant and rows `defer`.
+
+**Given** gaps G1–G6,
+**When** the amendment is produced,
+**Then** each names its owning Hexalith.Folders story (G1: 5.12; G2 and G3: 5.13; G4 and G5: 5.14; G6: 5.10) and its status at the re-pin,
+**And** an open gap does not prevent `replace`, which records intended scope (migration plan "Approval limits"); G1–G5 remain enrollment prerequisites for the rows they govern, and G6 remains a retirement prerequisite, because Hexalith.Folders Story 5.10 proves it through the enrolled McpCli.
+
+**Given** Story 5.11 has already published a plan version that indexes Folders 1.0.0,
+**When** this amendment is approved,
+**Then** a new AI.Tools `plan_version` indexes it with a moved `inventory_revision` (MR7),
+**And** otherwise Story 5.11 indexes it.
 
 **Given** a removal gate that the amendment changes,
 **When** the amendment is approved,
@@ -2056,13 +2090,13 @@ As a product owner,
 I want the authoritative migration plan, module plans, and release notes to describe the actual shared surface and remaining compatibility binaries,
 So that users and release gates do not assume migrations or adapters that do not exist.
 
-**Requirements:** FR21, FR22; MR7, MR8. **Dependencies:** Stories 5.2–5.10.
+**Requirements:** FR21, FR22; MR7, MR8. **Dependencies:** Stories 5.2–5.7, 5.9 and 5.10; Story 5.8 when it is done (it waits on Hexalith.Folders Story 5.12).
 
 **Acceptance Criteria:**
 
 **Given** the current inventory versions and the Parties retirement outcome,
 **When** the Hexalith.AI.Tools migration plan is updated,
-**Then** it is published under a new `plan_version` with a moved `inventory_revision`, indexes the Story 5.1 inventories and every amended inventory, and records `Parties.Mcp` as retired or states why SM-3 slipped,
+**Then** it is published under a new `plan_version` with a moved `inventory_revision`, indexes the Story 5.1 inventories and every amended inventory, keeps Folders 1.0.0 indexed with its pending amendment named when Story 5.8 is not yet done, and records `Parties.Mcp` as retired or states why SM-3 slipped,
 **And** this repository's root-declared Hexalith.AI.Tools reference contains the merged revision and `scripts/check-agent-instructions-sync.sh` passes.
 
 **Given** every active Hexalith module PRD and architecture topic about proprietary MCP or CLI surfaces,
@@ -2078,3 +2112,171 @@ So that users and release gates do not assume migrations or adapters that do not
 **When** its release notes are published,
 **Then** they distinguish the gateway-only increment from completed retirements and list remaining compatibility binaries with their removal gates,
 **And** they do not claim that ecosystem migration is finished.
+
+## Epic 6: Replace and Retire the Folders CLI and MCP Server
+
+Operators and agents reach every supported Folders operation through McpCli's two heads, and the frozen `Hexalith.Folders.Cli` and `Hexalith.Folders.Mcp` retire with verified replacement evidence. McpCli enrolls the exact decorated Folders Contracts release, proves shared-head parity and safety on a selected environment, verifies the deletion that Folders performs, and records it in the migration plan.
+
+### Story 6.1: Enroll the Folders Contracts Release
+
+As the Folders owner,
+I want McpCli to enroll the exact decorated Folders Contracts release named by the approved inventory, with one approved vector for each included operation,
+So that every included Folders operation works through both McpCli heads with no Folders code in McpCli.
+
+**Requirements:** FR5, FR16, FR18, FR20, FR21; MR3, MR4, MR5, MR11. **Dependencies:** Stories 5.2 and 5.8; Hexalith.Folders Stories 5.12, 5.13 and 5.14 done, with the 5.12 types in a published `Hexalith.Folders.Contracts` version; a published, server-code-free Folders composition helper (cross-repository prerequisites). Hexalith.Folders Stories 5.8–5.10 follow this story.
+
+**Acceptance Criteria:**
+
+**Given** the approved Story 5.8 Folders inventory and a published `Hexalith.Folders.Contracts` version that contains every named type,
+**When** McpCli enrolls it,
+**Then** the versionless `PackageReference` marked `HexalithContracts="true"`, its exact version under `modules` in `tools/dependency-policy.json`, `tools/inventory-coverage/v1/folders-approved.json`, the vectors with an `approval.json` binding the artifact, inventory and vector hashes, and the companion live plans change together under the README enrollment rules,
+**And** the AD-15 package and closure gate passes with `Hexalith.McpCli.Abstractions` as the only identity Folders adds, and the AD-21 gate finds every `replace`/`include` row exactly once in `list_operations folders` with a matching contract type and an approved `withdraw` or `defer` for every excluded row.
+
+**Given** every included operation,
+**When** its vector is approved,
+**Then** it has exactly one execution vector, and `check_enrolled.py` shows equal canonical documents and captured Gateway requests from both heads against the reset loopback Gateway,
+**And** the captured requests carry canonical uppercase ULID message, correlation and idempotency identifiers, the explicit `Hexalith.Folders.Commands.*` wire type for each Command, domain `folders`, and task and workspace context only in Payload properties, `actorProperty` or allowed Envelope extensions (MR4).
+
+**Given** Folders' identifier kind, key admission and metadata-only results,
+**When** the enrollment change is reviewed,
+**Then** `src/` gains no Folders name, module-specific error mapping, content filter, validator change or new production dependency, and the `tools/live-topology/` runners stay generic,
+**And** any legacy format the contract cannot accept stays as the approved inventory records it (SM-1).
+
+**Given** the blocking live lane and AD-15's test-composition rule,
+**When** the new vectors run,
+**Then** the test AppHost composes the Folders domain service, and any provider double that G6-governed operations need, only through a published, server-code-free composition helper pinned exactly under `testPackages`, never a Folders source project, and each live Command is submitted once with its persisted semantic check,
+**And** if no such helper is published, enrollment stops and names the missing helper as an upstream prerequisite.
+
+**Given** an operator moving from `Hexalith.Folders.Cli` or `Hexalith.Folders.Mcp`,
+**When** the README documents the Folders setup,
+**Then** McpCli never reads `~/.hexalith/credentials.json`, `HEXALITH_TOKEN`, `HEXALITH_TENANT` or `HEXALITH_FOLDERS_AUTH_TOKENFILE`, and each Profile binds one Gateway URL, token and tenant,
+**And** the README documents the manual move and the V04, V07 and V09 changes recorded in the approved inventory.
+
+**Given** the enrollment passes every gate,
+**When** the owner dispatches the release,
+**Then** the paired packages are published at one version from a green source SHA through the AD-17 paired path, and the release notes list the enrolled Folders operations without claiming any Folders retirement,
+**And** while `epic-4-retro-item-6-bind-release-acceptance` is open, the release waits for it to close or for a recorded owner decision; the Epic 5 release precondition is unchanged.
+
+**Given** the published release,
+**When** its evidence is committed,
+**Then** the evidence passes the shared redactor and secret scan and binds the McpCli version, the Folders Contracts version, the Catalog digest, the inventory, the vectors and the live plans by hash,
+**And** it is the McpCli evidence for the Folders node EXT-MCPCLI-FOLDERS-ENROLLMENT, which the Folders owner accepts in the Folders manifest.
+
+### Story 6.2: Prove Folders Shared-Head Parity and Safety
+
+As the Folders release owner,
+I want positive, negative and rollback evidence that McpCli covers every Folders legacy tool, resource, CLI leaf and variant on the selected environment,
+So that Folders can retire its CLI and MCP server without breaking supported access or weakening authorization.
+
+**Requirements:** FR20, FR21; NFR4, NFR5, NFR7; MR2, MR3, MR5, MR6, MR10, MR11. **Dependencies:** Story 6.1; Hexalith.Folders Stories 5.8–5.11 done. Their McpCli-path evidence, including the G6 proof in 5.10, is the Folders-side behavior oracle.
+
+**Acceptance Criteria:**
+
+**Given** the owner-named selected environment and the approved Folders vectors,
+**When** the evidence runs,
+**Then** every Folders `replace` row succeeds through the CLI head against that environment with its persisted semantic check, and both heads produce equal canonical documents and captured requests against the reset loopback Gateway,
+**And** live MCP-head execution is included, or the owner re-accepts and records the CLI-only live-lane deviation for this retirement.
+
+**Given** V01–V10 and the losses accepted in the approved inventory,
+**When** the evidence is reviewed,
+**Then** each variant is preserved or matches an owner-approved change recorded in the inventory. This includes freshness and paging under the Story 5.2 outcome, the inclusive 262144-byte inline boundary and the staged-content outcome above it, caller-key replay and changed-input conflict, and task and workspace context,
+**And** each variant row cites a McpCli test, a loopback or live receipt, or a Folders upstream test at the enrolled revision; a matching operation name proves nothing, and an unrecorded behavior difference blocks retirement.
+
+**Given** authorized and unauthorized reads, including file-range reads, and failing writes,
+**When** their results and errors leave either head,
+**Then** no content bytes, inline content, stream descriptor, secret or unauthorized path appears in stdout, stderr, MCP `Content` or `StructuredContent` (V06, G5),
+**And** McpCli adds no content filter; a leak is a Folders defect that blocks retirement.
+
+**Given** G2 and the REST-equivalent safe denials of Hexalith.Folders Story 5.13,
+**When** negative cases run,
+**Then** each of these fails closed with the documented error document and no mutation, proven by an authorized persisted end-state read: missing or invalid credentials, an unauthorized principal, a revoked ACL entry, cross-tenant reads and writes, a forged Payload tenant or actor, a task or workspace mismatch, a disallowed tenant override, reserved public `system`, and non-ASCII look-alike tenant input,
+**And** while `epic-4-retro-item-9-ascii-tenant-input` is open, the owner records acceptance of the F7 limitation for Folders, or the story stays blocked.
+
+**Given** every row the approved inventory keeps `withdraw` or `defer`, including the adjacent exclusions N01–N04, and the Admin, UI-only and confirmation-required rows,
+**When** McpCli discovery and execution are probed,
+**Then** none of them appears in `list_operations` or can be submitted, including with a caller-supplied `confirm: true`,
+**And** no parity is claimed from operation-name matching alone.
+
+**Given** the last published `Hexalith.Folders.Cli` and `Hexalith.Folders.Mcp` versions,
+**When** rollback is exercised on the selected environment,
+**Then** both install and complete an owner-chosen smoke set against that environment, and the evidence records their versions and reinstall commands,
+**And** a failed rollback blocks retirement.
+
+**Given** the evidence,
+**When** the Folders owner reviews it,
+**Then** a versioned, owner-approved Folders inventory amendment records every legacy tool, resource, CLI leaf and variant as `replace` with its passing evidence or as `withdraw` with owner rationale, and prior versions stay byte-identical with hash-chained approvals,
+**And** every row still `defer` is named and keeps retirement blocked.
+
+**Given** the evidence set,
+**When** it is committed,
+**Then** it passes the shared redactor and secret scan and binds by hash the McpCli candidate, the Folders Contracts version, the Catalog digest, the environment, the vectors, the live plans and the amended inventory,
+**And** the Folders owner approves it under the single-maintainer model; it is the McpCli evidence for the Folders node EXT-MCPCLI-FOLDERS-RETIREMENT-GATE and claims no retirement.
+
+### Story 6.3: Verify the Folders Legacy Retirement and Update Its Labels
+
+As a platform maintainer,
+I want McpCli to verify that Hexalith.Folders removed `Hexalith.Folders.Cli` and `Hexalith.Folders.Mcp` from every publication and routing point, and that their compatibility labels now record the retirement,
+So that McpCli is the only supported Folders CLI and MCP path, and no retired binary is mistaken for a supported surface.
+
+**Requirements:** FR21, FR22; MR6, MR8, MR11. **Dependencies:** Story 6.2; Hexalith.Folders Story 5.15 merged and released (cross-repository prerequisite; the deletion happens there, never from this repository).
+
+**Acceptance Criteria:**
+
+**Given** the Folders release from Hexalith.Folders Story 5.15, with the root-declared Folders and Platform references moved to revisions that contain it,
+**When** retirement is verified,
+**Then** a source search at those gitlinks finds nothing that builds, packs, routes or advertises `Hexalith.Folders.Cli` or `Hexalith.Folders.Mcp`: no project, test project, shared adapter core, `.slnx` entry, NuGet release or trusted-publishing entry, CI reference, container, sample, Platform composition or operator document, and no routing point listed in technical inventory G4,
+**And** a surviving surface fails verification and is named by repository, path and detection signal.
+
+**Given** the Folders retirement record,
+**When** it is verified,
+**Then** the Folders README "Legacy compatibility surfaces" section records the retirement, the last published legacy package versions and the rollback path to them, and both package IDs are deprecated on NuGet with McpCli named as the alternative,
+**And** the recorded rollback versions match the ones Story 6.2's rollback evidence exercised.
+
+**Given** the Story 5.5 compatibility labels on the Folders surfaces,
+**When** retirement is verified,
+**Then** the Story 5.5 label evidence is regenerated so the Folders surfaces read as retired, not as missing labels,
+**And** no other module's label or count changes.
+
+**Given** the Story 5.6 census baseline,
+**When** the census check runs at the moved gitlinks,
+**Then** it reports the removed Folders surfaces as stale baseline entries, and a versioned census amendment retires them,
+**And** if Story 5.6 is not yet done, the amendment is still produced, and Story 5.6 adopts it as its baseline.
+
+**Given** SM-3 and MR8,
+**When** the retirement is recorded,
+**Then** the evidence states the retirement date and whether it satisfies SM-3 (deadline 2027-02-05), given the Parties retirement status on that date,
+**And** it claims nothing about any other surface.
+
+**Given** the verification evidence,
+**When** it is committed,
+**Then** it passes the shared redactor and secret scan and binds the Folders release revision, the moved gitlinks and the search results by hash,
+**And** this repository changes no Folders file: only gitlinks, evidence and census data change here.
+
+### Story 6.4: Record the Folders Retirement in the Migration Plan
+
+As a product owner,
+I want the Hexalith.AI.Tools migration plan to record the Folders retirement and index the final Folders inventory,
+So that the authoritative plan no longer lists `Hexalith.Folders.Cli` and `Hexalith.Folders.Mcp` as retained compatibility implementations.
+
+**Requirements:** FR21, FR22; MR7, MR8. **Dependencies:** Story 6.3. The plan change merges upstream in Hexalith.AI.Tools; this repository only moves its gitlink.
+
+**Acceptance Criteria:**
+
+**Given** Story 6.3's verified retirement and Story 6.2's approved final Folders inventory,
+**When** the Hexalith.AI.Tools migration plan is updated,
+**Then** it is published under a new `plan_version` that follows the latest published one, with a moved `inventory_revision`; it indexes the final Folders inventory and records `Hexalith.Folders.Mcp` and `Hexalith.Folders.Cli` as retired, naming McpCli as the replacement, the Folders release and the rollback versions,
+**And** every other plan entry is unchanged, whichever story published the previous version.
+
+**Given** the merged plan revision,
+**When** this repository takes it,
+**Then** the root-declared `references/Hexalith.AI.Tools` reference contains that revision and `scripts/check-agent-instructions-sync.sh` passes,
+**And** the evidence records the integrated revision, its containment and the exact check result.
+
+**Given** any McpCli release published after the retirement,
+**When** its release notes are written,
+**Then** they list Folders as retired with its rollback path and still list each remaining compatibility binary with its removal gate,
+**And** they do not claim that ecosystem migration is finished.
+
+**Given** every Epic 6 deferral recorded in `deferred-work.md`,
+**When** the epic closes,
+**Then** each has a recorded disposition: resolved, already tracked, or accepted.
