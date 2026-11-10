@@ -2,7 +2,7 @@
 title: '5.6 Reject new proprietary surfaces in CI'
 type: 'feature'
 created: '2026-11-10'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'c9a46a11a8317dd1903e3a3ef2f27791942b316a'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -69,10 +69,47 @@ context:
 - Preserved the original census baseline and inventory approval bytes. The option-A 1.0.1 amendment binds complete fixture-directory source closures, including additional-file detection; removals and exception replacement remain versioned operations.
 - CI initializes only committed root declarations with recursion disabled. Paired staging/publication require the census job and all three executed steps; bootstrap and publication-stage job maps remain separate.
 - Local checks and hashes are recorded in `evidence/story-5-6/verification.md`; sprint status is `review` for the build workflow's review phase.
+- Build review pass 1 applied all 13 patch groups, closed the parent P1 follow-up, and recorded six current-pin non-surface test/qualification observations without a directory exemption. Final verification: 53 census tests, 195 release tests, all 17 root references and all three mutation probes pass. No findings were deferred. See [reviewed evidence](evidence/story-5-6/review-pass-1/verification.md); the initial evidence remains preserved.
 
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Build review pass 1 — 2026-11-10
+
+All three review layers completed. Each finding was assessed before grouping. Patches extend existing generic discovery, policy validation and verification paths; they add no runtime public surface. Concurrent Story 5.12 work is outside this review's fixes.
+
+| ID | Verdict | Evidence | Route |
+|---|---|---|---|
+| BH1 | medium | A wildcard import is reduced to literal filenames, while unconsumed metadata ignores OutputType; a neutral executable is omitted. | P1 |
+| BH2 | medium | PackageReference/ProjectReference Include values are appended without property expansion, so a local MCP dependency alias disappears. | P2 |
+| BH3 | medium | Metadata matching and the property dictionary are case-sensitive although MSBuild property names are not; lowercase OutputType is missed. | P2 |
+| BH4 | medium | The JSON prefilter recognizes image/project structure but not packages alone; release.json package entries are skipped. | P3 |
+| BH5 | medium | The same JSON prefilter skips mcpServers/servers under nonstandard JSON filenames. | P3 |
+| BH6 | medium | Absent publication projects are emitted only when IDENTITY matches; dotnet publish missing/Neutral.csproj is ignored. | P4 |
+| BH7 | medium | Script/workflow discovery has no literal docker build/push target extraction, so neutral orphan image publications disappear. | P5 |
+| BH8 | high | Amendment approval only requires nonblank text and an evidence hash; explicit rejection and unrelated/non-JSON receipts can authorize allowances. | P6 |
+| BH9 | false | Root removal is reported as stale without rewriting policy, consistent with the approved stale-report behavior. The guide requires a new lineage when changing policy root/scope data; it does not require failing an observed removal. | reject |
+| BH10 | medium | Fixture sourcePrefix hashes only directory members; inherited metadata and linked sources outside it can change compiled behavior without source drift. | P7 |
+| BH11 | medium | The test/perf path check skips all non-project publication/configuration files rather than applying exact approved allowances. | P8 |
+| BH12 | medium | The scan step has the default success condition, so failed initialization/fixtures leave no report for the always-run artifact step. | P9 |
+| EC1 | medium | The traced local glob case reaches the same incomplete import/fallback branch as BH1. | P1 |
+| EC2 | medium | The traced PackageReference alias reaches the same unexpanded reference handling as BH2. | P2 |
+| EC3 | medium | Executable-project detection suppresses a neutral executable solely because its path contains tests/perf or Tests. | P8 |
+| EC4 | medium | Publication metadata with unresolved MSBuildProjectName is explicitly omitted, allowing a renamed approved package to become stale and pass. | P2 |
+| EC5 | medium | The image regex allows newline whitespace and captures repository: as the identity of a YAML mapping; changing the real repository preserves that identity. | P10 |
+| EC6 | medium | Neutral dotnet tool install and docker publication targets have neither explicit command extraction nor a matching suffix token. | P5 |
+| EC7 | medium | The orphan-publication claim is disproved by the same reachable neutral-name skip described in BH6. | P4 |
+| VG1 | medium | Pre-verified regression gap: scanning only the first root leaves all 34 fixtures passing; no multi-root fixture protects complete accounting. | P11 |
+| VG2 | medium | Pre-verified regression gap: disabling TOML discovery leaves all fixtures passing; JSON-only configuration tests do not protect TOML consumers. | P12 |
+| VG3 | medium | Pre-verified regression gap: removing report redaction leaves all fixtures passing; no census-boundary credential canary protects retained output. | P13 |
+| VG-O1 | medium | The verified wildcard-import reproduction confirms BH1/EC1; unconsumed OutputType metadata cannot substitute for resolved imports. | P1 |
+
+P1 imports; P2 property resolution; P3 JSON prefilter; P4 orphan projects; P5 publication commands; P6 approval decisions/scope; P7 fixture compilation closure; P8 path-based exemptions; P9 failure diagnostics; P10 YAML image mappings; P11 multiple roots; P12 TOML coverage; P13 census redaction coverage.
+
+Parent follow-up for P1: a disposable fixture with `$(ExternalDir)/*.props` and an unconsumed `OutputType=Exe` file still returned `passed` after the first patch batch. The medium verdict and P1 route are retained; executable/dependency fallback signals and regressions are required before final verification. The tool guide must also describe the corrected closure and v2 receipt format.
+
+Applied P1–P13: final checks and independent policy/source audit pass; BH9 is rejected on the recorded evidence. No open patch or deferral remains.
 
 ## Verification
 

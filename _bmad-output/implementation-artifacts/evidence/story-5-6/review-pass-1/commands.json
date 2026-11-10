@@ -1,0 +1,28 @@
+[
+  {
+    "name": "census-fixtures",
+    "command": "python3 -m unittest discover -v -s tools/proprietary-surfaces/v1 -p 'test_*.py'",
+    "exitCode": 0,
+    "seconds": 5.438,
+    "tests": 53
+  },
+  {
+    "name": "census",
+    "command": "python3 tools/proprietary-surfaces/v1/check.py --output /tmp/mcpcli-5-6-final-ry6kz8rk/census.json",
+    "exitCode": 0,
+    "seconds": 8.155
+  },
+  {
+    "name": "release-regressions",
+    "command": "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+    "exitCode": 0,
+    "seconds": 97.245,
+    "tests": 195
+  },
+  {
+    "name": "diff-check",
+    "command": "git diff --check",
+    "exitCode": 0,
+    "seconds": 0.104
+  }
+]

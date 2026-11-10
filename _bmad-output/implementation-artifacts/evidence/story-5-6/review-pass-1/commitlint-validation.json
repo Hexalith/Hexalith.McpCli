@@ -1,0 +1,8 @@
+{
+  "command": "npx --no -- commitlint --verbose",
+  "message": "ci: reject new proprietary surfaces\n",
+  "exitCode": 0,
+  "cliVersion": "21.2.4",
+  "packageLockSha256": "e424035ff5f7ddb924429d8b45321083ccd6512d23d0417821d93bd2c2160dc8",
+  "validationOutputSha256": "4564f575498adc8296975a924006caeb217e90f38b29972442cf27d26b4aaaff"
+}

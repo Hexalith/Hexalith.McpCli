@@ -35,8 +35,10 @@ executables and web hosts are included. Ordinary present web/service/library
 projects without a tool or MCP signal are not proprietary surfaces.
 
 Local imports are read conservatively, including literal filenames embedded in
-property functions and globs. Unconsumed local props/targets with tool metadata
-become independent candidates. SDK and unavailable nested-reference imports
+property functions and globs. Unconsumed local props/targets declaring an
+executable, packed tool, command name, MCP/CLI dependency or MCP container
+identity become independent candidates, including when an import directory
+cannot be resolved. SDK and unavailable nested-reference imports
 are never evaluated. This is a static source census: it cannot establish the
 behavior of dynamically generated code or remote deployment composition.
 
@@ -47,12 +49,25 @@ also limits its detection signals; a dependency consumer gaining an MCP
 registration fails. External developer tools and the two approved Builds tools
 retain their categorical exemption through named baseline data.
 
-Captured evidence and nested-reference prefixes are explicit scoped baseline
-data, with their PE07 classification and rationale. Test and qualification
-project allowances use exact paths. The user-approved 1.0.1 amendment covers
-only PublishSpike and Epic16.NativeHelper and binds every committed file in each
-fixture directory. Changed secondary sources, added files and removed files fail
-the complete source closure check. It grants no exemption to future fixtures or publication routes.
+Captured evidence prefixes are explicit scoped data with their PE07
+classification and rationale. A regular directory named `references`, `tests`
+or `perf` grants no exemption. Test and qualification allowances use exact
+approved identities; nested gitlinks are handled by Git object type.
+
+The original 1.0.1 option-A amendment and receipt remain byte-identical. The
+1.0.2 correction strengthens its two fixture exemptions to the complete committed
+local compilation/source closure: every fixture-directory file, inherited
+`Directory.Build.props`/targets, resolved local imports and linked Compile
+sources, including committed glob matches outside the fixture directory.
+Allowance data sets `compilationClosure: true`, keeps `sourcePrefix` equal to
+the project's directory, and lists every closure file under `sources` as a
+repository-relative `path` and SHA-256. Changed inherited, imported, linked or
+secondary sources and added/removed closure files fail. SDK and external/nested
+reference contents remain outside the local closure and are never initialized.
+
+Correction 1.0.2 also records exact historical test observations at their already
+approved census pins and exact captured/test metadata files. It grants no new
+owner authority, directory exemption, future fixture or publication route.
 
 ## Results and exceptions
 
@@ -81,23 +96,60 @@ Keep `baseline.json`, the approved inventory, approval receipt and all prior
 amendments byte-identical. The baseline is the original 1.0.0 census; changes
 are an append-only chain referenced by `amendments.json`.
 
-1. Obtain the owning maintainer's specific approval and retain its receipt with
-   source pins, exact inspected identities, scope and rationale. A planning
-   finding alone provides no approval.
-2. Add the next `amendments/1.0.N.json`. Set `fromVersion`, consecutive
-   `toVersion`, and `previousSha256` to the preceding amendment's exact hash
-   (the baseline hash for 1.0.1). Bind the approval evidence path and hash.
-3. Use `addAllowances` for exact approved entries and `addExceptions` for exact
-   expiring exceptions. Use `removeAllowances` or `removeExceptions` with exact
-   four-field descriptors to retire entries or replace them with approved new
-   data. Removal of an absent or ambiguous entry fails. All four arrays are
-   required, including when empty. No scan infers an amendment from source.
-4. Append the new relative path and SHA-256 to `amendments.json`; leave all
-   previous bytes unchanged. Do not edit existing allowances or extend a
-   captured prefix to admit a future fixture. Root/scope changes require a new
-   approved census baseline lineage with preserved prior data and provenance.
-5. Run fixtures and the real scan, retain the report and approval hashes, and
-   run `scripts/scan-evidence-secrets.py` over retained evidence.
+1. Obtain the owning maintainer's specific approval. Retain its source pins,
+   exact identities, source/exception scope and rationale. A planning finding,
+   an unrelated receipt or a mechanical correction provides no new authority.
+2. Add the next `amendments/1.0.N.json` with the census `schema`, `fromVersion`,
+   consecutive `toVersion` and `previousSha256` of the preceding amendment
+   (the baseline hash for 1.0.1). Its `approval` requires nonblank `owner` and
+   `reason`, an ISO `date`, affirmative `decision: "approved"`, and an `evidence`
+   object containing the receipt's repository-relative `path` and SHA-256.
+3. Include `addAllowances`, `removeAllowances`, `addExceptions` and
+   `removeExceptions`, even when empty. Removals contain exact four-field
+   surface descriptors and must target existing entries. Replacement uses an
+   exact removal plus a complete approved addition. For fixture exemptions,
+   compute the full local closure at the authorized Git pin with
+   `compilation_closure(Tree(repository, gitlink), project)`; preserve every
+   returned source hash rather than copying only the project's own directory.
+4. A new approval receipt uses
+   `schema: "mcpcli-census-amendment-approval/v2"`, `decision: "approved"`, and the same
+   `owner` as the amendment header. Its `authority` is a nonempty array of
+   `{ "path": "...", "sha256": "..." }` bindings to existing approved inventory
+   or census approval JSON. Hashes and approved decisions are checked; merely
+   naming a receipt confers no authority. Its `authorization` must match the
+   amendment's complete mutation arrays exactly, including all allowance
+   fields, source hashes and exception owner/reason/expiry scope:
+
+   ```json
+   {
+     "addAllowances": [],
+     "removeAllowances": [],
+     "addExceptions": [],
+     "removeExceptions": [],
+     "addExclusions": []
+   }
+   ```
+
+   Include `addExclusions: []` in the receipt even when that optional array is
+   absent from the amendment. Rejected, malformed, non-JSON, unrelated and
+   differently scoped receipts fail. The retained v1 receipt format is limited
+   to the original exact fixture scope; use v2 for future amendments.
+5. If existing approval covers a captured or deliberately malformed metadata
+   file, use an exact hash-bound entry in the amendment's `addExclusions`.
+   Include `repository`, `prefix` (the complete file path), approved `row`,
+   `classification`, `owner`, `reason`, `scope: "file"` and its `sha256`.
+   Optional `additionalSha256` lists only separately inspected, explicitly
+   authorized byte versions of that same file. Bind the inspected pins in the
+   approval evidence. These entries match no sibling or future file; changed
+   bytes fail. A directory name or a discovery finding does not authorize one.
+6. Hash the finished receipt into the amendment's evidence binding, then append
+   the finished amendment path and SHA-256 to `amendments.json`. Preserve all
+   prior baseline, amendment and receipt bytes. Never extend a captured prefix
+   to admit a future fixture. Root/scope changes require an approved new
+   baseline lineage with preserved prior data and provenance.
+7. Run fixtures and the real scan, retain report/approval hashes, and run
+   `scripts/scan-evidence-secrets.py` over retained evidence. Scanning never
+   edits policy or infers approval from discovered source.
 
 Hash-bound JSON and evidence use `.gitattributes` byte preservation so Windows
 checkout conversion cannot invalidate the chain. The required CI job and each

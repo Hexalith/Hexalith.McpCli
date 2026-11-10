@@ -1,0 +1,151 @@
+{
+  "schema": "mcpcli-story-5-6-reviewed-verification/v1",
+  "status": "passed-local-reviewed-implementation",
+  "implementationSource": "working-tree",
+  "baselineRevision": "c9a46a11a8317dd1903e3a3ef2f27791942b316a",
+  "parentRevision": "38fbc435c9b78e863127abe9d6c8fe6456528669",
+  "commands": [
+    {
+      "name": "census-fixtures",
+      "command": "python3 -m unittest discover -v -s tools/proprietary-surfaces/v1 -p 'test_*.py'",
+      "exitCode": 0,
+      "seconds": 5.438,
+      "tests": 53
+    },
+    {
+      "name": "census",
+      "command": "python3 tools/proprietary-surfaces/v1/check.py --output /tmp/mcpcli-5-6-final-ry6kz8rk/census.json",
+      "exitCode": 0,
+      "seconds": 8.155
+    },
+    {
+      "name": "release-regressions",
+      "command": "python3 -m unittest discover -s scripts/tests -p 'test_*.py'",
+      "exitCode": 0,
+      "seconds": 97.245,
+      "tests": 195
+    },
+    {
+      "name": "diff-check",
+      "command": "git diff --check",
+      "exitCode": 0,
+      "seconds": 0.104
+    }
+  ],
+  "review": {
+    "layers": 3,
+    "findings": 23,
+    "patchGroupsApplied": 13,
+    "rejectedFindings": [
+      "BH9"
+    ],
+    "unresolved": [],
+    "followup": "P1 unresolved-directory-glob executable/dependency metadata fixed; six existing current-pin xUnit test/qualification observations explicitly recorded in the correction."
+  },
+  "census": {
+    "repositories": 17,
+    "observations": 460,
+    "stale": 39,
+    "productionSurfaceProjects": 14,
+    "reportSha256": "ad34536e047d726db8b8bff1e288e7750a565f0c0b6d069a1a0631c90ec34aad"
+  },
+  "immutablePriorVersions": true,
+  "verifiedSourceBindings": 165,
+  "mutationProbes": [
+    {
+      "mutation": "scan-only-first-root",
+      "coveringTest": "test_every_committed_root_is_accounted_for_and_later_root_rejects",
+      "testsRun": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true
+    },
+    {
+      "mutation": "skip-toml-discovery",
+      "coveringTest": "test_toml_servers_require_exact_approval_and_malformed_toml_fails",
+      "testsRun": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true
+    },
+    {
+      "mutation": "drop-census-redaction",
+      "coveringTest": "test_boundary_redacts_canary_from_stdout_stderr_and_saved_json",
+      "testsRun": 1,
+      "failures": 1,
+      "errors": 0,
+      "detected": true
+    }
+  ],
+  "implementationFiles": [
+    {
+      "path": ".gitattributes",
+      "sha256": "076a656d839a1dafca8a4db08f5f707b21179d02a2a32d4e3acce5a258944fcb"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "fb410312e0abdfed262ebb9626ae1930cac461f9346bb2cd2d6f67c6716d4aa0"
+    },
+    {
+      "path": "README.md",
+      "sha256": "2fd31a4189f8ac814c872baa948194afb812ea1cf3d770158285cd6993020f2c"
+    },
+    {
+      "path": "scripts/tests/test_paired_publication.py",
+      "sha256": "f03d367cbf23d7e027437ca9458ce25fbfaf2e186635a53402e4a3a867bc8983"
+    },
+    {
+      "path": "scripts/verify-release-source.py",
+      "sha256": "9458e9c4251a34706186b8f9f743aa3dc0684da7188c7e0ac0bf48899df76479"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/README.md",
+      "sha256": "37963e588346fdcb9c8dfb9262f022e69638368e582838fb67f7e98792617892"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments.json",
+      "sha256": "98c37c5dd11041da07575b14870fb20ae93084962489e00dbf33f472fec6de0d"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1-approval.json",
+      "sha256": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1.json",
+      "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+      "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+      "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/baseline.json",
+      "sha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/check.py",
+      "sha256": "ba336fdb998c8d8bb5084c4186fdf6e89db1adaf35b5400bfcd1d0b707eac953"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/test_census.py",
+      "sha256": "be6ad101b16e4da6f6b91598a2a5fc55732e4ab6250a81a02575b2555f91c884"
+    }
+  ],
+  "limitations": [
+    "Static committed-source inspection; no inspected program or MSBuild is executed.",
+    "Actual GitHub CI execution is not claimed.",
+    "Concurrent Story 5.12 work is outside this implementation and validation."
+  ],
+  "commitValidation": {
+    "command": "npx --no -- commitlint --verbose",
+    "message": "ci: reject new proprietary surfaces\n",
+    "exitCode": 0,
+    "cliVersion": "21.2.4",
+    "packageLockSha256": "e424035ff5f7ddb924429d8b45321083ccd6512d23d0417821d93bd2c2160dc8",
+    "validationOutputSha256": "4564f575498adc8296975a924006caeb217e90f38b29972442cf27d26b4aaaff"
+  }
+}

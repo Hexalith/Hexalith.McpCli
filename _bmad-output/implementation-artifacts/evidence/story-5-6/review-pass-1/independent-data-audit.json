@@ -1,0 +1,30 @@
+{
+  "immutablePriorVersions": true,
+  "amendments": [
+    {
+      "version": "1.0.1",
+      "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+      "additions": 4,
+      "removals": 0,
+      "hashBoundMetadataFiles": 0
+    },
+    {
+      "version": "1.0.2",
+      "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+      "additions": 145,
+      "removals": 11,
+      "hashBoundMetadataFiles": 4
+    }
+  ],
+  "verifiedSourceBindings": 165,
+  "parentRevision": "38fbc435c9b78e863127abe9d6c8fe6456528669",
+  "repositories": 17,
+  "observations": 460,
+  "stale": 39,
+  "productionSurfaceProjects": 14,
+  "staleRows": {
+    "G4": 38,
+    "PE01": 1
+  },
+  "reportSha256": "ad34536e047d726db8b8bff1e288e7750a565f0c0b6d069a1a0631c90ec34aad"
+}

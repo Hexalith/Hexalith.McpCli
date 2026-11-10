@@ -1,0 +1,155 @@
+[
+  {
+    "repository": "references/Hexalith.AI.Tools",
+    "gitlink": "8a3885dd22aea88edd57771cfe592c382df2c583",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Commons",
+    "gitlink": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.PolymorphicSerializations",
+    "gitlink": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Conversations",
+    "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.EventStore",
+    "gitlink": "3de922e1140e26fe2e0151682ee656fcf675b26b",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Memories",
+    "gitlink": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Tenants",
+    "gitlink": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Builds",
+    "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.FrontComposer",
+    "gitlink": "01fc48e3955a8cec47ab1602f5cd5c8e286801da",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Parties",
+    "gitlink": "3eccce242d27c2f8248824354a1f403c7b4ea57b",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Agents",
+    "gitlink": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Projects",
+    "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Folders",
+    "gitlink": "d873861677982a737d131180bcf79f06caee034d",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.ChatBot",
+    "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Works",
+    "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Timesheets",
+    "gitlink": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  },
+  {
+    "repository": "references/Hexalith.Platform",
+    "gitlink": "d7c74e8a5d5627a8773fb36652813fe743de3d6f",
+    "clean": true,
+    "containingFetchedRemoteRefs": [
+      "refs/remotes/origin/HEAD",
+      "refs/remotes/origin/main"
+    ]
+  }
+]

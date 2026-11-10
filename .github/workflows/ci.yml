@@ -75,6 +75,7 @@ jobs:
       - name: Verify proprietary surface census refusal fixtures
         run: python3 -m unittest discover -v -s tools/proprietary-surfaces/v1 -p 'test_*.py'
       - name: Scan committed root reference pins for proprietary surfaces
+        if: ${{ always() }}
         run: python3 tools/proprietary-surfaces/v1/check.py --output "$RUNNER_TEMP/proprietary-surface-census/census.json"
       - name: Retain sanitized proprietary surface census report
         if: ${{ always() }}

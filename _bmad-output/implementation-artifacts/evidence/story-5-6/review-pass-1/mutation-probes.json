@@ -1,0 +1,26 @@
+[
+  {
+    "mutation": "scan-only-first-root",
+    "coveringTest": "test_every_committed_root_is_accounted_for_and_later_root_rejects",
+    "testsRun": 1,
+    "failures": 1,
+    "errors": 0,
+    "detected": true
+  },
+  {
+    "mutation": "skip-toml-discovery",
+    "coveringTest": "test_toml_servers_require_exact_approval_and_malformed_toml_fails",
+    "testsRun": 1,
+    "failures": 1,
+    "errors": 0,
+    "detected": true
+  },
+  {
+    "mutation": "drop-census-redaction",
+    "coveringTest": "test_boundary_redacts_canary_from_stdout_stderr_and_saved_json",
+    "testsRun": 1,
+    "failures": 1,
+    "errors": 0,
+    "detected": true
+  }
+]

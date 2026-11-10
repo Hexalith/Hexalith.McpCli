@@ -1,0 +1,4857 @@
+{
+  "schema": "mcpcli-census-amendment-approval/v2",
+  "decision": "approved",
+  "approvedOn": "2026-11-10",
+  "owner": "Requesting user, owning maintainer",
+  "reason": "Mechanical preservation of previously approved census classes and strengthening of the already approved fixture closures. No new owner authority or proprietary surface is admitted.",
+  "authority": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+      "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1-approval.json",
+      "sha256": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203"
+    }
+  ],
+  "authorization": {
+    "addAllowances": [
+      {
+        "surface": {
+          "repository": "references/Hexalith.Agents",
+          "path": "eng/verify-story-5.4.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Module.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Agents owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Agents",
+          "path": "eng/verify-story.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Module.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Agents owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": ".github/workflows/domain-ci-v2.yml",
+          "kind": "publication",
+          "identity": "Aspire.Cli"
+        },
+        "row": "PE01",
+        "classification": "exempt-build-publication",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Approved technical-tools inventory 1.0.2 PE01; exact identity and signal set only.",
+        "signals": [
+          "package-or-container-reference",
+          "tool-install"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": ".github/workflows/domain-release.yml",
+          "kind": "publication",
+          "identity": "path/to/project.csproj"
+        },
+        "row": "PE01",
+        "classification": "exempt-build-template-reference",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "orphan-project-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Samples/PublishSpike/PublishSpike.csproj",
+          "kind": "project",
+          "identity": "PublishSpike"
+        },
+        "row": "PA01",
+        "classification": "non-surface-qualification-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Versioned correction: complete committed local compilation/source closure at the already authorized option-A pin; no new exemption or owner authority.",
+        "signals": [
+          "executable-project"
+        ],
+        "sources": [
+          {
+            "path": "Directory.Build.props",
+            "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+          },
+          {
+            "path": "Hexalith.Build.props",
+            "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+          },
+          {
+            "path": "Props/Environment.Build.props",
+            "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+          },
+          {
+            "path": "Samples/PublishSpike/Program.cs",
+            "sha256": "7b4b4efb34dca99090ef1fec43b2332e66e9105dbee230f0996f06b0a3ceb61c"
+          },
+          {
+            "path": "Samples/PublishSpike/PublishSpike.csproj",
+            "sha256": "0791395ac5fe9088b63a055b7eed7691af4ecee5225f00aec0795c8a5d575a13"
+          }
+        ],
+        "sourcePrefix": "Samples/PublishSpike",
+        "compilationClosure": true
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Samples/PublishSpike/PublishSpike.csproj",
+          "kind": "publication",
+          "identity": "container:cicd-publish-spike-3-1"
+        },
+        "row": "PA01",
+        "classification": "non-surface-qualification-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Versioned correction: complete committed local compilation/source closure at the already authorized option-A pin; no new exemption or owner authority.",
+        "signals": [
+          "container-metadata"
+        ],
+        "sources": [
+          {
+            "path": "Directory.Build.props",
+            "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+          },
+          {
+            "path": "Hexalith.Build.props",
+            "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+          },
+          {
+            "path": "Props/Environment.Build.props",
+            "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+          },
+          {
+            "path": "Samples/PublishSpike/Program.cs",
+            "sha256": "7b4b4efb34dca99090ef1fec43b2332e66e9105dbee230f0996f06b0a3ceb61c"
+          },
+          {
+            "path": "Samples/PublishSpike/PublishSpike.csproj",
+            "sha256": "0791395ac5fe9088b63a055b7eed7691af4ecee5225f00aec0795c8a5d575a13"
+          }
+        ],
+        "sourcePrefix": "Samples/PublishSpike",
+        "compilationClosure": true
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Samples/PublishSpike/PublishSpike.csproj",
+          "kind": "publication",
+          "identity": "package:Hexalith.PublishSpike.LocalOnly"
+        },
+        "row": "PA01",
+        "classification": "non-surface-qualification-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Versioned correction: complete committed local compilation/source closure at the already authorized option-A pin; no new exemption or owner authority.",
+        "signals": [
+          "package-metadata"
+        ],
+        "sources": [
+          {
+            "path": "Directory.Build.props",
+            "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+          },
+          {
+            "path": "Hexalith.Build.props",
+            "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+          },
+          {
+            "path": "Props/Environment.Build.props",
+            "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+          },
+          {
+            "path": "Samples/PublishSpike/Program.cs",
+            "sha256": "7b4b4efb34dca99090ef1fec43b2332e66e9105dbee230f0996f06b0a3ceb61c"
+          },
+          {
+            "path": "Samples/PublishSpike/PublishSpike.csproj",
+            "sha256": "0791395ac5fe9088b63a055b7eed7691af4ecee5225f00aec0795c8a5d575a13"
+          }
+        ],
+        "sourcePrefix": "Samples/PublishSpike",
+        "compilationClosure": true
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-consumer-package-authority-validator.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Module.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-g4-tool-package-artifact-validator.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Module.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-g4-tool-package-contract-gate.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Evidence.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-g4-tool-package-contract-gate.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Module.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-g4-tool-package-contracts.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Evidence.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-g4-tool-package-contracts.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Module.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-g4-tool-package-contracts.ps1",
+          "kind": "publication",
+          "identity": "hexalith.builds.evidence.cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-g4-tool-package-contracts.ps1",
+          "kind": "publication",
+          "identity": "hexalith.builds.module.cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-publish-g4-tool-packages.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Evidence.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-publish-g4-tool-packages.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Module.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/validate-consumer-package-authority.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Builds.Module.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/module/executable/P0Fixture.Inventory/P0Fixture.Inventory.csproj",
+          "kind": "project",
+          "identity": "P0Fixture.Inventory"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/module/executable/P0Fixture.NativeMetadataProbe/P0Fixture.NativeMetadataProbe.csproj",
+          "kind": "project",
+          "identity": "P0Fixture.NativeMetadataProbe"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/module/executable/P0Fixture.NativeTests.VsTest/P0Fixture.NativeTests.VsTest.csproj",
+          "kind": "project",
+          "identity": "P0Fixture.NativeTests.VsTest"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/module/executable/P0Fixture.NativeTests/P0Fixture.NativeTests.csproj",
+          "kind": "project",
+          "identity": "P0Fixture.NativeTests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/module/executable/P0Fixture.Orders/P0Fixture.Orders.csproj",
+          "kind": "project",
+          "identity": "P0Fixture.Orders"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/package-consumer/.config/dotnet-tools.json",
+          "kind": "publication",
+          "identity": "hexalith.builds.evidence.cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "tool-manifest"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/package-consumer/.config/dotnet-tools.json",
+          "kind": "publication",
+          "identity": "hexalith.builds.module.cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "tool-manifest"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Admin.Abstractions"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Admin.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Admin.Server"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Aspire"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Client"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Contracts"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.DomainService"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Gateway"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.RestApi.Generators"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Server"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.ServiceDefaults"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.SignalR"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Testing"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Builds",
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Testing.Integration"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.ChatBot",
+          "path": "tests/Hexalith.ChatBot.RecoverySandbox/Hexalith.ChatBot.RecoverySandbox.csproj",
+          "kind": "project",
+          "identity": "Hexalith.ChatBot.RecoverySandbox"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.ChatBot owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Conversations",
+          "path": "_bmad/scripts/epic16_native_helper/Epic16.NativeHelper.csproj",
+          "kind": "project",
+          "identity": "Epic16.NativeHelper"
+        },
+        "row": "PA02",
+        "classification": "non-surface-qualification-fixture",
+        "owner": "Hexalith.Conversations owning maintainer",
+        "reason": "Versioned correction: complete committed local compilation/source closure at the already authorized option-A pin; no new exemption or owner authority.",
+        "signals": [
+          "executable-project"
+        ],
+        "sources": [
+          {
+            "path": "Directory.Build.props",
+            "sha256": "6075e5149286cced92b0e1a3c594eab8cf8688c54432f76b4d935d5571e06a8f"
+          },
+          {
+            "path": "_bmad/scripts/epic16_native_helper/Epic16.NativeHelper.csproj",
+            "sha256": "f3057cab73b03ec077940f41c8b23a30032c563c1989dc680ac7b60764d4fcb5"
+          },
+          {
+            "path": "_bmad/scripts/epic16_native_helper/EventStore-LICENSE",
+            "sha256": "6af66baf053023d456706de321e3cea6a6edbb288ffec10f673186b1befe7ac2"
+          },
+          {
+            "path": "_bmad/scripts/epic16_native_helper/ProductMetadata.cs",
+            "sha256": "ef75fbd3b889b78c2e2678db4d99cdb7448f231f29b3d22cb300dff0bb5e3902"
+          },
+          {
+            "path": "_bmad/scripts/epic16_native_helper/Program.cs",
+            "sha256": "ca06233bdb4466306b9f0f329f1c087fec71a3f46005562454410503491a5e9a"
+          },
+          {
+            "path": "_bmad/scripts/epic16_native_helper/README.md",
+            "sha256": "e65d5be2a5597753bc167e6ebcebd4ce48a71e100d87e3e329601246d55138ac"
+          },
+          {
+            "path": "_bmad/scripts/epic16_native_helper/ReadModelBatchCanonicalJson.cs",
+            "sha256": "1f9430e33cefaa51757c36f27d57ed509a31d08aa5f35b05a4159b7d806362f9"
+          },
+          {
+            "path": "_bmad/scripts/epic16_native_helper/SignatureNames.cs",
+            "sha256": "a65eb6120957a90478e644ba06f02f38085bfbd8b767d1a97e2ad36838e03450"
+          },
+          {
+            "path": "_bmad/scripts/epic16_native_helper/TestConstruction.cs",
+            "sha256": "48b39a9048eadd8f6c094db9a267069bfdaf24af65e5a069e46337af7dbbe218"
+          }
+        ],
+        "sourcePrefix": "_bmad/scripts/epic16_native_helper",
+        "compilationClosure": true
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Conversations",
+          "path": "tests/Hexalith.Conversations.TestSupport.Runner/Hexalith.Conversations.TestSupport.Runner.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Conversations.TestSupport.Runner"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Conversations owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "perf/Hexalith.EventStore.LoadTests/Hexalith.EventStore.LoadTests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.EventStore.LoadTests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.EventStore owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "tests/Hexalith.EventStore.ProviderVerification/Hexalith.EventStore.ProviderVerification.csproj",
+          "kind": "project",
+          "identity": "Hexalith.EventStore.ProviderVerification"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.EventStore owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Consumers/Domain/Domain.csproj",
+          "kind": "project",
+          "identity": "Domain"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.EventStore owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Consumers/Host/Host.csproj",
+          "kind": "project",
+          "identity": "Host"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.EventStore owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Consumers/Probe/Probe.csproj",
+          "kind": "project",
+          "identity": "Probe"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.EventStore owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Hexalith.EventStore.PublishedCompatibility.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.EventStore.PublishedCompatibility.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.EventStore owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "tests/Hexalith.EventStore.Sharding.TestHost/Hexalith.EventStore.Sharding.TestHost.csproj",
+          "kind": "project",
+          "identity": "Hexalith.EventStore.Sharding.TestHost"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.EventStore owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "tests/Hexalith.EventStore.Sharding.Tests/Hexalith.EventStore.Sharding.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.EventStore.Sharding.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.EventStore owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "tests/Hexalith.EventStore.TestSubscriber/Hexalith.EventStore.TestSubscriber.csproj",
+          "kind": "project",
+          "identity": "Hexalith.EventStore.TestSubscriber"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.EventStore owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Folders",
+          "path": "tests/load/Hexalith.Folders.LoadTests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Folders.LoadTests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Folders owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Folders",
+          "path": "tests/tools/parity-oracle-generator/Hexalith.Folders.ParityOracleGenerator.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Folders.ParityOracleGenerator"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Folders owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Folders",
+          "path": "tests/tools/run-consumer-docs-gates.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Folders.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Folders owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Folders",
+          "path": "tests/tools/run-contract-parity-ci-gates.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Folders.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Folders owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Folders",
+          "path": "tests/tools/run-contract-parity-ci-gates.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Folders.Mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Folders owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Folders",
+          "path": "tests/tools/run-nfr-traceability-gates.ps1",
+          "kind": "publication",
+          "identity": "owner-only-cli-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Folders owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Folders",
+          "path": "tests/tools/run-provider-error-docs-gates.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Folders.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Folders owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Folders",
+          "path": "tests/tools/run-provider-error-docs-gates.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Folders.Mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Folders owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Folders",
+          "path": "tests/tools/run-provider-error-docs-gates.ps1",
+          "kind": "publication",
+          "identity": "client-actions-cli-exit-codes-and-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Folders owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.FrontComposer",
+          "path": ".github/workflows/quality.yml",
+          "kind": "publication",
+          "identity": "Aspire.Cli"
+        },
+        "row": "PE06",
+        "classification": "external-developer-tool",
+        "owner": "Hexalith.FrontComposer owning maintainer",
+        "reason": "Approved technical-tools inventory 1.0.2 PE06; exact identity and signal set only.",
+        "signals": [
+          "package-or-container-reference",
+          "tool-install"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.FrontComposer",
+          "path": ".github/workflows/quality.yml",
+          "kind": "publication",
+          "identity": "Hexalith.FrontComposer.Cli"
+        },
+        "row": "G4",
+        "classification": "compatibility-publication-or-route",
+        "owner": "Hexalith.FrontComposer owning maintainer",
+        "reason": "Approved technical-tools inventory 1.0.2 G4; exact identity and signal set only.",
+        "signals": [
+          "package-or-container-reference",
+          "tool-install"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.FrontComposer",
+          "path": "eng/release-package-inventory.json",
+          "kind": "publication",
+          "identity": "Hexalith.FrontComposer.Cli"
+        },
+        "row": "PS03",
+        "classification": "compatibility-publication-or-route",
+        "owner": "Hexalith.FrontComposer owning maintainer",
+        "reason": "Mechanical preservation of the already approved production surface publication identity at the original inventory 1.0.2 pin.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.FrontComposer",
+          "path": "eng/release-package-inventory.json",
+          "kind": "publication",
+          "identity": "Hexalith.FrontComposer.Mcp"
+        },
+        "row": "PS04",
+        "classification": "compatibility-publication-or-route",
+        "owner": "Hexalith.FrontComposer owning maintainer",
+        "reason": "Mechanical preservation of the already approved production surface publication identity at the original inventory 1.0.2 pin.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.FrontComposer",
+          "path": "eng/validate-docs.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.FrontComposer.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.FrontComposer owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.FrontComposer",
+          "path": "tests/Hexalith.FrontComposer.CounterFixture/Hexalith.FrontComposer.CounterFixture.csproj",
+          "kind": "project",
+          "identity": "Hexalith.FrontComposer.CounterFixture"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.FrontComposer owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.FrontComposer",
+          "path": "tests/Hexalith.FrontComposer.Shell.Tests.Bench/Hexalith.FrontComposer.Shell.Tests.Bench.csproj",
+          "kind": "project",
+          "identity": "Hexalith.FrontComposer.Shell.Tests.Bench"
+        },
+        "row": "FK04",
+        "classification": "test-fixture",
+        "owner": "Hexalith.FrontComposer owning maintainer",
+        "reason": "Approved technical-tools inventory 1.0.2 FK04; exact identity and signal set only.",
+        "signals": [
+          "executable-project",
+          "mcp-or-cli-dependency"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "deploy/openbao/values.yaml",
+          "kind": "publication",
+          "identity": "openbao/openbao"
+        },
+        "row": "PE08",
+        "classification": "external-infrastructure-image",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "container-image"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tests/Hexalith.Memories.Web.SpecimenHost/Hexalith.Memories.Web.SpecimenHost.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Memories.Web.SpecimenHost"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/validate-production-deployment-evidence.ps1",
+          "kind": "publication",
+          "identity": "required-server-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/validate-release-packages.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Memories.Mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/verify-cli-pack.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.Memories.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference",
+          "tool-install"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/verify-cli-pack.sh",
+          "kind": "publication",
+          "identity": "Hexalith.Memories.Cli"
+        },
+        "row": "G4",
+        "classification": "compatibility-publication-or-route",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Approved technical-tools inventory 1.0.2 G4; exact identity and signal set only.",
+        "signals": [
+          "package-or-container-reference",
+          "tool-install"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/verify-container-registry.ps1",
+          "kind": "publication",
+          "identity": "memories-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/verify-production-deployment.ps1",
+          "kind": "publication",
+          "identity": "cleanup-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/verify-production-deployment.ps1",
+          "kind": "publication",
+          "identity": "initial-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/verify-production-deployment.ps1",
+          "kind": "publication",
+          "identity": "memories-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/verify-production-deployment.ps1",
+          "kind": "publication",
+          "identity": "required-dapr-token-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Memories",
+          "path": "tools/verify-production-deployment.ps1",
+          "kind": "publication",
+          "identity": "required-server-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Parties",
+          "path": ".github/workflows/ci-lifecycle-qualification.yml",
+          "kind": "publication",
+          "identity": "Aspire.Cli"
+        },
+        "row": "PE06",
+        "classification": "external-developer-tool",
+        "owner": "Hexalith.Parties owning maintainer",
+        "reason": "Approved technical-tools inventory 1.0.2 PE06; exact identity and signal set only.",
+        "signals": [
+          "package-or-container-reference",
+          "tool-install"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Parties",
+          "path": "scripts/validate-publication-preflight.sh",
+          "kind": "publication",
+          "identity": "parties-mcp"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Parties owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Parties",
+          "path": "tests/Hexalith.Parties.EventStoreAdminUI.TestHost/Hexalith.Parties.EventStoreAdminUI.TestHost.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Parties.EventStoreAdminUI.TestHost"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Parties owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Parties",
+          "path": "tests/Hexalith.Parties.EventStoreGateway.TestHost/Hexalith.Parties.EventStoreGateway.TestHost.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Parties.EventStoreGateway.TestHost"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Parties owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Parties",
+          "path": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Parties.EventStoreSample.TestHost"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Parties owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "eng/timesheets-deployment/chart/values.yaml",
+          "kind": "publication",
+          "identity": "registry.hexalith.com/timesheets"
+        },
+        "row": "PN09",
+        "classification": "domain-service-publication",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "container-image"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "infrastructure/Hexalith.Platform.Custody.Dapr.Tests/Hexalith.Platform.Custody.Dapr.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Custody.Dapr.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Composition.Tests/Hexalith.Platform.Composition.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Composition.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Custody.Component.Tests/Hexalith.Platform.Custody.Component.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Custody.Component.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Custody.Tests/Hexalith.Platform.Custody.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Custody.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Identity.Tests/Hexalith.Platform.Identity.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Identity.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.OwnerServices.Tests/Hexalith.Platform.OwnerServices.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.OwnerServices.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Protection.Tests/Hexalith.Platform.Protection.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Protection.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Secrets.ArchiveProcessFixture/Hexalith.Platform.Secrets.ArchiveProcessFixture.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Secrets.ArchiveProcessFixture"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Secrets.Authority.Tests/Hexalith.Platform.Secrets.Authority.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Secrets.Authority.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Secrets.Custody.Tests/Hexalith.Platform.Secrets.Custody.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Secrets.Custody.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Secrets.Inventory.Tests/Hexalith.Platform.Secrets.Inventory.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Secrets.Inventory.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Secrets.Runtime.Tests/Hexalith.Platform.Secrets.Runtime.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Secrets.Runtime.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Platform",
+          "path": "tests/Hexalith.Platform.Works.Tests/Hexalith.Platform.Works.Tests.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Platform.Works.Tests"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": ".github/workflows/ci.yml",
+          "kind": "publication",
+          "identity": "Aspire.Cli"
+        },
+        "row": "PE06",
+        "classification": "external-developer-tool",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Approved technical-tools inventory 1.0.2 PE06; exact identity and signal set only.",
+        "signals": [
+          "package-or-container-reference",
+          "tool-install"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/Hexalith.Projects.E2E.Fixtures/Hexalith.Projects.E2E.Fixtures.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Projects.E2E.Fixtures"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/Hexalith.Projects.ReadAuthority/Hexalith.Projects.ReadAuthority.csproj",
+          "kind": "project",
+          "identity": "Hexalith.Projects.ReadAuthority"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/e2e/run-live-apphost.sh",
+          "kind": "publication",
+          "identity": "eventstore-dapr-cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/e2e/run-live-apphost.sh",
+          "kind": "publication",
+          "identity": "projects-dapr-cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/e2e/run-live-apphost.sh",
+          "kind": "publication",
+          "identity": "projects-workers-dapr-cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/e2e/run-live-apphost.sh",
+          "kind": "publication",
+          "identity": "tenants-dapr-cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Admin.Abstractions"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Admin.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Admin.Server"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Aspire"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Client"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Contracts"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.DomainService"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Gateway"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.RestApi.Generators"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Server"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.ServiceDefaults"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.SignalR"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Testing"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Testing.Integration"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Admin.Abstractions"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Admin.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Admin.Server"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Aspire"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Client"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Contracts"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.DomainService"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Gateway"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.RestApi.Generators"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Server"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.ServiceDefaults"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.SignalR"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Testing"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "kind": "publication",
+          "identity": "Hexalith.EventStore.Testing.Integration"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "publication-entry"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Projects",
+          "path": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+          "kind": "publication",
+          "identity": "Hexalith.FrontComposer.Cli"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Projects owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "package-or-container-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Tenants",
+          "path": "scripts/run-tenant-audit-performance.sh",
+          "kind": "publication",
+          "identity": "seed.csproj"
+        },
+        "row": "PE05",
+        "classification": "performance-fixture-driver",
+        "owner": "Hexalith.Tenants owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "orphan-project-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Tenants",
+          "path": "tests/performance/tenant-audit/seed.csproj",
+          "kind": "project",
+          "identity": "seed"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Tenants owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "executable-project"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Works",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "kind": "publication",
+          "identity": "src/Hexalith.Platform.Identity/Hexalith.Platform.Identity.csproj"
+        },
+        "row": "PE06",
+        "classification": "external-developer-project-build",
+        "owner": "Hexalith.Works owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "orphan-project-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Works",
+          "path": "scripts/verify-story414-sdk-candidate.sh",
+          "kind": "publication",
+          "identity": "Consumer.csproj"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Works owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "orphan-project-reference"
+        ]
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.Works",
+          "path": "scripts/verify-story415-sdk-candidate.sh",
+          "kind": "publication",
+          "identity": "Consumer.csproj"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-observation",
+        "owner": "Hexalith.Works owning maintainer",
+        "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only.",
+        "signals": [
+          "orphan-project-reference"
+        ]
+      },
+      {
+        "surface": {
+          "identity": "Hexalith.Sample.HookTests",
+          "kind": "project",
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+          "repository": "references/Hexalith.Builds"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority.",
+        "signals": [
+          "executable-project"
+        ],
+        "sources": [
+          {
+            "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+            "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+          }
+        ]
+      },
+      {
+        "surface": {
+          "identity": "Hexalith.Sample.IntegrationTests",
+          "kind": "project",
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+          "repository": "references/Hexalith.Builds"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority.",
+        "signals": [
+          "executable-project"
+        ],
+        "sources": [
+          {
+            "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+            "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+          }
+        ]
+      },
+      {
+        "surface": {
+          "identity": "Hexalith.Sample.UnitTests",
+          "kind": "project",
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+          "repository": "references/Hexalith.Builds"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority.",
+        "signals": [
+          "executable-project"
+        ],
+        "sources": [
+          {
+            "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+            "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+          }
+        ]
+      },
+      {
+        "surface": {
+          "identity": "Hexalith.Sample.WindowsTests",
+          "kind": "project",
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+          "repository": "references/Hexalith.Builds"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority.",
+        "signals": [
+          "executable-project"
+        ],
+        "sources": [
+          {
+            "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+            "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+          }
+        ]
+      },
+      {
+        "surface": {
+          "identity": "tests/Hexalith.Platform.TestExtension.Qualification.Tests/Hexalith.Platform.TestExtension.Qualification.Tests.csproj",
+          "kind": "publication",
+          "path": ".github/workflows/test-extension-release.yml",
+          "repository": "references/Hexalith.Platform"
+        },
+        "row": "PE05",
+        "classification": "test-fixture-publication",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority.",
+        "signals": [
+          "project-publication-reference"
+        ],
+        "sources": [
+          {
+            "path": ".github/workflows/test-extension-release.yml",
+            "sha256": "eac3a90082d353bf3192403f9da7254add9c4d9ddadc5c5f9ee9162011691131"
+          }
+        ]
+      },
+      {
+        "surface": {
+          "identity": "Hexalith.Platform.TestExtension.Qualification.Tests",
+          "kind": "project",
+          "path": "tests/Hexalith.Platform.TestExtension.Qualification.Tests/Hexalith.Platform.TestExtension.Qualification.Tests.csproj",
+          "repository": "references/Hexalith.Platform"
+        },
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Platform owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority.",
+        "signals": [
+          "executable-project"
+        ],
+        "sources": [
+          {
+            "path": "tests/Hexalith.Platform.TestExtension.Qualification.Tests/Hexalith.Platform.TestExtension.Qualification.Tests.csproj",
+            "sha256": "35ebee634b9edb008115684ac5bd4ea90bff32fa6aa4e87a8d392767200f6f76"
+          }
+        ]
+      }
+    ],
+    "removeAllowances": [
+      {
+        "repository": "references/Hexalith.Builds",
+        "path": ".github/workflows/domain-ci-v2.yml",
+        "kind": "publication",
+        "identity": "Aspire.Cli"
+      },
+      {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/PublishSpike/PublishSpike.csproj",
+        "kind": "project",
+        "identity": "PublishSpike"
+      },
+      {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/PublishSpike/PublishSpike.csproj",
+        "kind": "publication",
+        "identity": "container:cicd-publish-spike-3-1"
+      },
+      {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/PublishSpike/PublishSpike.csproj",
+        "kind": "publication",
+        "identity": "package:Hexalith.PublishSpike.LocalOnly"
+      },
+      {
+        "repository": "references/Hexalith.Conversations",
+        "path": "_bmad/scripts/epic16_native_helper/Epic16.NativeHelper.csproj",
+        "kind": "project",
+        "identity": "Epic16.NativeHelper"
+      },
+      {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": ".github/workflows/quality.yml",
+        "kind": "publication",
+        "identity": "Aspire.Cli"
+      },
+      {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": ".github/workflows/quality.yml",
+        "kind": "publication",
+        "identity": "Hexalith.FrontComposer.Cli"
+      },
+      {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": "tests/Hexalith.FrontComposer.Shell.Tests.Bench/Hexalith.FrontComposer.Shell.Tests.Bench.csproj",
+        "kind": "project",
+        "identity": "Hexalith.FrontComposer.Shell.Tests.Bench"
+      },
+      {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/verify-cli-pack.sh",
+        "kind": "publication",
+        "identity": "Hexalith.Memories.Cli"
+      },
+      {
+        "repository": "references/Hexalith.Parties",
+        "path": ".github/workflows/ci-lifecycle-qualification.yml",
+        "kind": "publication",
+        "identity": "Aspire.Cli"
+      },
+      {
+        "repository": "references/Hexalith.Projects",
+        "path": ".github/workflows/ci.yml",
+        "kind": "publication",
+        "identity": "Aspire.Cli"
+      }
+    ],
+    "addExceptions": [],
+    "removeExceptions": [],
+    "addExclusions": [
+      {
+        "repository": "references/Hexalith.Builds",
+        "prefix": "Tools/package-version-audit.json",
+        "row": "PE07",
+        "classification": "captured-evidence",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Exact retained package audit snapshot; approved captured-evidence scope, not a publication manifest.",
+        "scope": "file",
+        "sha256": "2d3ab7421bf8b7091cfb7caf8e4381be60b80385a6d350e2cbd703e95d21968e",
+        "additionalSha256": [
+          "d48664651a1ab94143d6b83e7b4b01d1ab341cc6d64cfee83dae47afe07119de"
+        ]
+      },
+      {
+        "repository": "references/Hexalith.FrontComposer",
+        "prefix": "tests/ci-governance/fixtures/release-manifest-invalid.json",
+        "row": "PE05",
+        "classification": "approved-test-metadata-fixture",
+        "owner": "Hexalith.FrontComposer owning maintainer",
+        "reason": "Existing exact test metadata fixture at the original approved census pin; no directory or future-fixture exemption.",
+        "scope": "file",
+        "sha256": "4fbbe2c24ba0fed2aee4fb75139e6b5519c17577526b6ba4044baa456d02f435"
+      },
+      {
+        "repository": "references/Hexalith.FrontComposer",
+        "prefix": "tests/ci-governance/fixtures/release-manifest-valid.json",
+        "row": "PE05",
+        "classification": "approved-test-metadata-fixture",
+        "owner": "Hexalith.FrontComposer owning maintainer",
+        "reason": "Existing exact test metadata fixture at the original approved census pin; no directory or future-fixture exemption.",
+        "scope": "file",
+        "sha256": "a5fffd81f7fee0f18a83d22b6e272d3e034c175814c9000c05501929f6c637e2"
+      },
+      {
+        "repository": "references/Hexalith.Memories",
+        "prefix": "tools/nuget-local-feeds/hexalith-eventstore-999.1.20-proof.fa2d1c9910f8.manifest.json",
+        "row": "PE07",
+        "classification": "captured-evidence",
+        "owner": "Hexalith.Memories owning maintainer",
+        "reason": "Exact retained local-feed qualification proof manifest; approved captured-evidence scope, no publication authority.",
+        "scope": "file",
+        "sha256": "20fb8d3bf9ef0f5e3fea90d53472fc7b0e507c58640259ec73f59b3a8f061a08"
+      }
+    ]
+  },
+  "observations": [
+    {
+      "surface": {
+        "repository": "references/Hexalith.Agents",
+        "path": "eng/verify-story-5.4.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Module.Cli"
+      },
+      "gitlink": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+      "sources": [
+        {
+          "path": "eng/verify-story-5.4.ps1",
+          "sha256": "561c032e9bb1cc049e45dc5b0f2609cf0feaae8239c24c98e5c3b1c1f810d596"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Agents",
+        "path": "eng/verify-story.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Module.Cli"
+      },
+      "gitlink": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+      "sources": [
+        {
+          "path": "eng/verify-story.ps1",
+          "sha256": "1695caba477a55ca6a6f91cdf81465a1d8ea0d4bb730c82a384460ab7de4e8b7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/module/executable/P0Fixture.Inventory/P0Fixture.Inventory.csproj",
+        "kind": "project",
+        "identity": "P0Fixture.Inventory"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/module/executable/P0Fixture.Inventory/P0Fixture.Inventory.csproj",
+          "sha256": "570515ae1750eaf0a25118016aadb3df1a49aae50ec5868cfd20823ced6afdc1"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/module/executable/P0Fixture.NativeMetadataProbe/P0Fixture.NativeMetadataProbe.csproj",
+        "kind": "project",
+        "identity": "P0Fixture.NativeMetadataProbe"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/module/executable/P0Fixture.NativeMetadataProbe/P0Fixture.NativeMetadataProbe.csproj",
+          "sha256": "64d81bd89d332e3bce51ec068c0d5672f4c969629ccc6376e60a7f49c6ada817"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/module/executable/P0Fixture.NativeTests.VsTest/P0Fixture.NativeTests.VsTest.csproj",
+        "kind": "project",
+        "identity": "P0Fixture.NativeTests.VsTest"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/module/executable/P0Fixture.NativeTests.VsTest/P0Fixture.NativeTests.VsTest.csproj",
+          "sha256": "eeaab398ba0d1e954fa102f540bcd1e1de9948c96bad95d0a74fe97c5a02fab1"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/module/executable/P0Fixture.NativeTests/P0Fixture.NativeTests.csproj",
+        "kind": "project",
+        "identity": "P0Fixture.NativeTests"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/module/executable/P0Fixture.NativeTests/P0Fixture.NativeTests.csproj",
+          "sha256": "eb539e5496bd4f5758b33eb71a33e1247fd02a06ce69f68e16bcec5144578cfe"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/module/executable/P0Fixture.Orders/P0Fixture.Orders.csproj",
+        "kind": "project",
+        "identity": "P0Fixture.Orders"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/module/executable/P0Fixture.Orders/P0Fixture.Orders.csproj",
+          "sha256": "11b69c39e82224d4195a645ed98dc4d41d68800bc9e28051cf5d6dfd3374fccd"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": ".github/workflows/domain-ci-v2.yml",
+        "kind": "publication",
+        "identity": "Aspire.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": ".github/workflows/domain-ci-v2.yml",
+          "sha256": "3374b28aac7ae9468e24a7f437170972c204bf31fd6e5da5f817492b84f9b8f5"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": ".github/workflows/domain-release.yml",
+        "kind": "publication",
+        "identity": "path/to/project.csproj"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": ".github/workflows/domain-release.yml",
+          "sha256": "22a07d3961983a49e2045a07ebf1d3460fbb34f74b85ba1a0612bbbd83377ac7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-consumer-package-authority-validator.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Module.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-consumer-package-authority-validator.ps1",
+          "sha256": "3e8c42af84f5e87e01ca03184a1f257255f4e488ab95e0b623e35f14bec944e8"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-g4-tool-package-artifact-validator.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Module.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-g4-tool-package-artifact-validator.ps1",
+          "sha256": "811ca080ad3cc1908bdef8c1773fdc699ac0e4b2095df695ee4329f5a6ec0223"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-g4-tool-package-contract-gate.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Evidence.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-g4-tool-package-contract-gate.ps1",
+          "sha256": "ce0fe3975594565627a175eb0249d27862c7a510b5ad9ec3a999d5fa76856af6"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-g4-tool-package-contract-gate.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Module.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-g4-tool-package-contract-gate.ps1",
+          "sha256": "ce0fe3975594565627a175eb0249d27862c7a510b5ad9ec3a999d5fa76856af6"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-g4-tool-package-contracts.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Evidence.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-g4-tool-package-contracts.ps1",
+          "sha256": "6ddaaf0ca9d650222d19fe018daf9e11f8eb40c27025777fcc484b5e412d303d"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-g4-tool-package-contracts.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Module.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-g4-tool-package-contracts.ps1",
+          "sha256": "6ddaaf0ca9d650222d19fe018daf9e11f8eb40c27025777fcc484b5e412d303d"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-g4-tool-package-contracts.ps1",
+        "kind": "publication",
+        "identity": "hexalith.builds.module.cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-g4-tool-package-contracts.ps1",
+          "sha256": "6ddaaf0ca9d650222d19fe018daf9e11f8eb40c27025777fcc484b5e412d303d"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-g4-tool-package-contracts.ps1",
+        "kind": "publication",
+        "identity": "hexalith.builds.evidence.cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-g4-tool-package-contracts.ps1",
+          "sha256": "6ddaaf0ca9d650222d19fe018daf9e11f8eb40c27025777fcc484b5e412d303d"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-publish-g4-tool-packages.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Evidence.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-publish-g4-tool-packages.ps1",
+          "sha256": "0db69e7e5f503910d2f41cb7b90a1f99b516957565c1ff6169729438edc98a7f"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/test-publish-g4-tool-packages.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Module.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/test-publish-g4-tool-packages.ps1",
+          "sha256": "0db69e7e5f503910d2f41cb7b90a1f99b516957565c1ff6169729438edc98a7f"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Tools/validate-consumer-package-authority.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Builds.Module.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "Tools/validate-consumer-package-authority.ps1",
+          "sha256": "b20e45e3800e7d5e08770993192b646887097b8187e70f3f629adc741a0441fe"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/package-consumer/.config/dotnet-tools.json",
+        "kind": "publication",
+        "identity": "hexalith.builds.module.cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/package-consumer/.config/dotnet-tools.json",
+          "sha256": "ce9f4d539428d221a70a893a250aec45d244694050dc9216b490f6517eb626f4"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/package-consumer/.config/dotnet-tools.json",
+        "kind": "publication",
+        "identity": "hexalith.builds.evidence.cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/package-consumer/.config/dotnet-tools.json",
+          "sha256": "ce9f4d539428d221a70a893a250aec45d244694050dc9216b490f6517eb626f4"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Contracts"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Client"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Server"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.SignalR"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Testing"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Testing.Integration"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Aspire"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.ServiceDefaults"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.DomainService"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.RestApi.Generators"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Gateway"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Admin.Abstractions"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Admin.Cli"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Admin.Server"
+      },
+      "gitlink": "567604b616613ba429be0609636d805db776a709",
+      "sources": [
+        {
+          "path": "test/fixtures/publish-containers/v3.75.0-evidence.json",
+          "sha256": "9328412055cc7d77ce9798f1cfc37f3c4a005042e750988d72b248575aa39cc7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.ChatBot",
+        "path": "tests/Hexalith.ChatBot.RecoverySandbox/Hexalith.ChatBot.RecoverySandbox.csproj",
+        "kind": "project",
+        "identity": "Hexalith.ChatBot.RecoverySandbox"
+      },
+      "gitlink": "b13c58006d292836a9c8b242de476765676e5fb2",
+      "sources": [
+        {
+          "path": "tests/Hexalith.ChatBot.RecoverySandbox/Hexalith.ChatBot.RecoverySandbox.csproj",
+          "sha256": "0ba5834dfa3a66e00ddb6a5db28e881f05a60d2d9b0e43bc2376d217910d0816"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Conversations",
+        "path": "tests/Hexalith.Conversations.TestSupport.Runner/Hexalith.Conversations.TestSupport.Runner.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Conversations.TestSupport.Runner"
+      },
+      "gitlink": "9a5c684de5ee4876448faa26737f6afd36cf33e7",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Conversations.TestSupport.Runner/Hexalith.Conversations.TestSupport.Runner.csproj",
+          "sha256": "b064722df96cfd7208621b44db2972f51e4f32691d383884833dbdb283f212e4"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "perf/Hexalith.EventStore.LoadTests/Hexalith.EventStore.LoadTests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.EventStore.LoadTests"
+      },
+      "gitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+      "sources": [
+        {
+          "path": "perf/Hexalith.EventStore.LoadTests/Hexalith.EventStore.LoadTests.csproj",
+          "sha256": "65b723ffeab8be76b1d82539d61b53e87fba413319fbf33fcce1a6157bc223c5"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tests/Hexalith.EventStore.ProviderVerification/Hexalith.EventStore.ProviderVerification.csproj",
+        "kind": "project",
+        "identity": "Hexalith.EventStore.ProviderVerification"
+      },
+      "gitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+      "sources": [
+        {
+          "path": "tests/Hexalith.EventStore.ProviderVerification/Hexalith.EventStore.ProviderVerification.csproj",
+          "sha256": "0ac5d114b9b4b55dc9d29c1de251b541b26fe7b864633ec8cef4104594533e20"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Consumers/Domain/Domain.csproj",
+        "kind": "project",
+        "identity": "Domain"
+      },
+      "gitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+      "sources": [
+        {
+          "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Consumers/Domain/Domain.csproj",
+          "sha256": "e49c6e5822ec3f096962fa9760af26e16088b911dde35676b315b50aa9d8814e"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Consumers/Host/Host.csproj",
+        "kind": "project",
+        "identity": "Host"
+      },
+      "gitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+      "sources": [
+        {
+          "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Consumers/Host/Host.csproj",
+          "sha256": "2a95b73016d88c8e629ad0409ddc81367e6d69fbf0a4743ba0ff518e31a1ba50"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Consumers/Probe/Probe.csproj",
+        "kind": "project",
+        "identity": "Probe"
+      },
+      "gitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+      "sources": [
+        {
+          "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Consumers/Probe/Probe.csproj",
+          "sha256": "eca7ded20cf50d89cf3d3ee0641feeb01c20a8c28250a5c28c4e7389be26ba40"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Hexalith.EventStore.PublishedCompatibility.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.EventStore.PublishedCompatibility.Tests"
+      },
+      "gitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+      "sources": [
+        {
+          "path": "tests/Hexalith.EventStore.PublishedCompatibility.Tests/Hexalith.EventStore.PublishedCompatibility.Tests.csproj",
+          "sha256": "ca55471ad5d4ede748a1068614593e364c248b96a8cdfadb767b3411f0abf66e"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tests/Hexalith.EventStore.Sharding.TestHost/Hexalith.EventStore.Sharding.TestHost.csproj",
+        "kind": "project",
+        "identity": "Hexalith.EventStore.Sharding.TestHost"
+      },
+      "gitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+      "sources": [
+        {
+          "path": "tests/Hexalith.EventStore.Sharding.TestHost/Hexalith.EventStore.Sharding.TestHost.csproj",
+          "sha256": "5e1b10728b6238e0c556b21679341ffede388defb3443f2000c75dae54131cc5"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tests/Hexalith.EventStore.Sharding.Tests/Hexalith.EventStore.Sharding.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.EventStore.Sharding.Tests"
+      },
+      "gitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+      "sources": [
+        {
+          "path": "tests/Hexalith.EventStore.Sharding.Tests/Hexalith.EventStore.Sharding.Tests.csproj",
+          "sha256": "6f46a506388ec98a007a8cdb5055ef0abfae9af14613b64472b7720745f6b391"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.EventStore",
+        "path": "tests/Hexalith.EventStore.TestSubscriber/Hexalith.EventStore.TestSubscriber.csproj",
+        "kind": "project",
+        "identity": "Hexalith.EventStore.TestSubscriber"
+      },
+      "gitlink": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+      "sources": [
+        {
+          "path": "tests/Hexalith.EventStore.TestSubscriber/Hexalith.EventStore.TestSubscriber.csproj",
+          "sha256": "cef3891f52886c50dd36c725f35f5efd1e8aa51cae1e436ffec8cb054b8db709"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Folders",
+        "path": "tests/load/Hexalith.Folders.LoadTests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Folders.LoadTests"
+      },
+      "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+      "sources": [
+        {
+          "path": "tests/load/Hexalith.Folders.LoadTests.csproj",
+          "sha256": "de30427a957100e613a9d830fba0df0edcd46c285771c04704ce8f488070d7a7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Folders",
+        "path": "tests/tools/parity-oracle-generator/Hexalith.Folders.ParityOracleGenerator.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Folders.ParityOracleGenerator"
+      },
+      "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+      "sources": [
+        {
+          "path": "tests/tools/parity-oracle-generator/Hexalith.Folders.ParityOracleGenerator.csproj",
+          "sha256": "24edbb22270667929df7ecdd4e8bc90a061903dfaff564d077ac3f4e44146b5d"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Folders",
+        "path": "tests/tools/run-consumer-docs-gates.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Folders.Cli"
+      },
+      "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+      "sources": [
+        {
+          "path": "tests/tools/run-consumer-docs-gates.ps1",
+          "sha256": "710410b162556edbe97c13a0d757e233ca592487ac31681f9659d1bab90826e2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Folders",
+        "path": "tests/tools/run-contract-parity-ci-gates.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Folders.Cli"
+      },
+      "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+      "sources": [
+        {
+          "path": "tests/tools/run-contract-parity-ci-gates.ps1",
+          "sha256": "8c913159f905909ec2a187d7c8eed68f2173058fc94a8d4bc723ee03eae84149"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Folders",
+        "path": "tests/tools/run-contract-parity-ci-gates.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Folders.Mcp"
+      },
+      "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+      "sources": [
+        {
+          "path": "tests/tools/run-contract-parity-ci-gates.ps1",
+          "sha256": "8c913159f905909ec2a187d7c8eed68f2173058fc94a8d4bc723ee03eae84149"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Folders",
+        "path": "tests/tools/run-nfr-traceability-gates.ps1",
+        "kind": "publication",
+        "identity": "owner-only-cli-mcp"
+      },
+      "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+      "sources": [
+        {
+          "path": "tests/tools/run-nfr-traceability-gates.ps1",
+          "sha256": "ef9c1f89bb5e414b420512569e3ee9d668143ed39a1ad58303daf745f89385f5"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Folders",
+        "path": "tests/tools/run-provider-error-docs-gates.ps1",
+        "kind": "publication",
+        "identity": "client-actions-cli-exit-codes-and-mcp"
+      },
+      "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+      "sources": [
+        {
+          "path": "tests/tools/run-provider-error-docs-gates.ps1",
+          "sha256": "d503a884a2fe8e370da2158d20c5992df3220a65d4314ab9f207298f31c66bba"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Folders",
+        "path": "tests/tools/run-provider-error-docs-gates.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Folders.Cli"
+      },
+      "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+      "sources": [
+        {
+          "path": "tests/tools/run-provider-error-docs-gates.ps1",
+          "sha256": "d503a884a2fe8e370da2158d20c5992df3220a65d4314ab9f207298f31c66bba"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Folders",
+        "path": "tests/tools/run-provider-error-docs-gates.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Folders.Mcp"
+      },
+      "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+      "sources": [
+        {
+          "path": "tests/tools/run-provider-error-docs-gates.ps1",
+          "sha256": "d503a884a2fe8e370da2158d20c5992df3220a65d4314ab9f207298f31c66bba"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": "tests/Hexalith.FrontComposer.CounterFixture/Hexalith.FrontComposer.CounterFixture.csproj",
+        "kind": "project",
+        "identity": "Hexalith.FrontComposer.CounterFixture"
+      },
+      "gitlink": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+      "sources": [
+        {
+          "path": "tests/Hexalith.FrontComposer.CounterFixture/Hexalith.FrontComposer.CounterFixture.csproj",
+          "sha256": "c71fb716d94541ebd006572a8b85317cc832d01273aa52384d8040073114f689"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": "tests/Hexalith.FrontComposer.Shell.Tests.Bench/Hexalith.FrontComposer.Shell.Tests.Bench.csproj",
+        "kind": "project",
+        "identity": "Hexalith.FrontComposer.Shell.Tests.Bench"
+      },
+      "gitlink": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+      "sources": [
+        {
+          "path": "tests/Hexalith.FrontComposer.Shell.Tests.Bench/Hexalith.FrontComposer.Shell.Tests.Bench.csproj",
+          "sha256": "4d74f99092dd3ca0637db574d9883e286f673a4d594cc013a5838ae5627f9c72"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": ".github/workflows/quality.yml",
+        "kind": "publication",
+        "identity": "Aspire.Cli"
+      },
+      "gitlink": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+      "sources": [
+        {
+          "path": ".github/workflows/quality.yml",
+          "sha256": "b877f4648f5981ba7719074261688cb8ee98d761137a63f183e8adc0d973c8db"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": ".github/workflows/quality.yml",
+        "kind": "publication",
+        "identity": "Hexalith.FrontComposer.Cli"
+      },
+      "gitlink": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+      "sources": [
+        {
+          "path": ".github/workflows/quality.yml",
+          "sha256": "b877f4648f5981ba7719074261688cb8ee98d761137a63f183e8adc0d973c8db"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": "eng/validate-docs.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.FrontComposer.Cli"
+      },
+      "gitlink": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+      "sources": [
+        {
+          "path": "eng/validate-docs.ps1",
+          "sha256": "c4599bfb4814f60a364304957cf110e4bca83605caa74942169d6119e3768b14"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tests/Hexalith.Memories.Web.SpecimenHost/Hexalith.Memories.Web.SpecimenHost.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Memories.Web.SpecimenHost"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Memories.Web.SpecimenHost/Hexalith.Memories.Web.SpecimenHost.csproj",
+          "sha256": "538e52269a66aaf328111c99ae9992eec9e558ed6cf8dda6bb45b9a737fc1268"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "deploy/openbao/values.yaml",
+        "kind": "publication",
+        "identity": "openbao/openbao"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "deploy/openbao/values.yaml",
+          "sha256": "4d6e8909695100901be5008b5a4cd11d108ee03b495d26243d23a22ab25a0caa"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/validate-production-deployment-evidence.ps1",
+        "kind": "publication",
+        "identity": "required-server-mcp"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/validate-production-deployment-evidence.ps1",
+          "sha256": "d5ecb61e0744fa4fc2bf1efcd0c51c7aaa477c293a8291ce462802edcd763a92"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/validate-release-packages.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Memories.Mcp"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/validate-release-packages.ps1",
+          "sha256": "1cbc077bb152bf0af1ce39067a69a8e81c40618bd4df0389e341f32e8ff9cd86"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/verify-cli-pack.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.Memories.Cli"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/verify-cli-pack.ps1",
+          "sha256": "db764e2b5b136786c20767421c45e9246fbb93f0f236a0ca803664358baac0cb"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/verify-cli-pack.sh",
+        "kind": "publication",
+        "identity": "Hexalith.Memories.Cli"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/verify-cli-pack.sh",
+          "sha256": "6abbff109f889571f24f671f58109384b130a0eb459c171ed8a40424f1a1e142"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/verify-container-registry.ps1",
+        "kind": "publication",
+        "identity": "memories-mcp"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/verify-container-registry.ps1",
+          "sha256": "fec0dba657ab61066cce133dd54379edc4b12a7e9520f6c2259c3ec01e7760f8"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/verify-production-deployment.ps1",
+        "kind": "publication",
+        "identity": "required-dapr-token-mcp"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/verify-production-deployment.ps1",
+          "sha256": "de1f1429b936b844c36e26dbc05eaed1a76b727200fe4ea5daa9a2d854a5e552"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/verify-production-deployment.ps1",
+        "kind": "publication",
+        "identity": "initial-mcp"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/verify-production-deployment.ps1",
+          "sha256": "de1f1429b936b844c36e26dbc05eaed1a76b727200fe4ea5daa9a2d854a5e552"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/verify-production-deployment.ps1",
+        "kind": "publication",
+        "identity": "required-server-mcp"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/verify-production-deployment.ps1",
+          "sha256": "de1f1429b936b844c36e26dbc05eaed1a76b727200fe4ea5daa9a2d854a5e552"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/verify-production-deployment.ps1",
+        "kind": "publication",
+        "identity": "memories-mcp"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/verify-production-deployment.ps1",
+          "sha256": "de1f1429b936b844c36e26dbc05eaed1a76b727200fe4ea5daa9a2d854a5e552"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Memories",
+        "path": "tools/verify-production-deployment.ps1",
+        "kind": "publication",
+        "identity": "cleanup-mcp"
+      },
+      "gitlink": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+      "sources": [
+        {
+          "path": "tools/verify-production-deployment.ps1",
+          "sha256": "de1f1429b936b844c36e26dbc05eaed1a76b727200fe4ea5daa9a2d854a5e552"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Parties",
+        "path": "tests/Hexalith.Parties.EventStoreAdminUI.TestHost/Hexalith.Parties.EventStoreAdminUI.TestHost.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Parties.EventStoreAdminUI.TestHost"
+      },
+      "gitlink": "1308ad000c79ebc394fc395588f9af91092e8c4c",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Parties.EventStoreAdminUI.TestHost/Hexalith.Parties.EventStoreAdminUI.TestHost.csproj",
+          "sha256": "0ff06c921f429a5776b2e597177f3a589b7e4a12f500326eba8ed6908bd23736"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Parties",
+        "path": "tests/Hexalith.Parties.EventStoreGateway.TestHost/Hexalith.Parties.EventStoreGateway.TestHost.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Parties.EventStoreGateway.TestHost"
+      },
+      "gitlink": "1308ad000c79ebc394fc395588f9af91092e8c4c",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Parties.EventStoreGateway.TestHost/Hexalith.Parties.EventStoreGateway.TestHost.csproj",
+          "sha256": "a3cade2a7b310045c4f80117a068fe1bc5cdc96aa49c27a5a16c199b176c1345"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Parties",
+        "path": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Parties.EventStoreSample.TestHost"
+      },
+      "gitlink": "1308ad000c79ebc394fc395588f9af91092e8c4c",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
+          "sha256": "f7121b066ae86077cd37c23014e0458a5ae823e4281ef65d929a77f8220dcdd5"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Parties",
+        "path": ".github/workflows/ci-lifecycle-qualification.yml",
+        "kind": "publication",
+        "identity": "Aspire.Cli"
+      },
+      "gitlink": "1308ad000c79ebc394fc395588f9af91092e8c4c",
+      "sources": [
+        {
+          "path": ".github/workflows/ci-lifecycle-qualification.yml",
+          "sha256": "dcc85fc3cb3f6430557c95f826cdbd2b0f2ec2c8b3c98f74bd8dd22b711089da"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Parties",
+        "path": "scripts/validate-publication-preflight.sh",
+        "kind": "publication",
+        "identity": "parties-mcp"
+      },
+      "gitlink": "1308ad000c79ebc394fc395588f9af91092e8c4c",
+      "sources": [
+        {
+          "path": "scripts/validate-publication-preflight.sh",
+          "sha256": "ee4e95dff66367097fa47eeb3b6fd1fe410f2b2914a81f04b106f37a12522411"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "infrastructure/Hexalith.Platform.Custody.Dapr.Tests/Hexalith.Platform.Custody.Dapr.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Custody.Dapr.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "infrastructure/Hexalith.Platform.Custody.Dapr.Tests/Hexalith.Platform.Custody.Dapr.Tests.csproj",
+          "sha256": "7a098ff2a23ce76f9547650269cdb7b034256a518269a3c9f5ba0116a652c477"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Composition.Tests/Hexalith.Platform.Composition.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Composition.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Composition.Tests/Hexalith.Platform.Composition.Tests.csproj",
+          "sha256": "5543e66036cbe07e24a66495401e2d010142e3a46be9f89952ffa12c485b6963"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Custody.Component.Tests/Hexalith.Platform.Custody.Component.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Custody.Component.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Custody.Component.Tests/Hexalith.Platform.Custody.Component.Tests.csproj",
+          "sha256": "74a9c67402d23e12dc0ee06acc168d74f297bd1c41ebd3fe157506e8b7d4b9a7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Custody.Tests/Hexalith.Platform.Custody.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Custody.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Custody.Tests/Hexalith.Platform.Custody.Tests.csproj",
+          "sha256": "69a132fd2959113ff51b0219755b3a8a924cddc74b22ad30bde259b73512c7f6"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Identity.Tests/Hexalith.Platform.Identity.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Identity.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Identity.Tests/Hexalith.Platform.Identity.Tests.csproj",
+          "sha256": "b1aff44307b2758464679f5722d8cebedb5837981504e061b8419330d437fd7c"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.OwnerServices.Tests/Hexalith.Platform.OwnerServices.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.OwnerServices.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.OwnerServices.Tests/Hexalith.Platform.OwnerServices.Tests.csproj",
+          "sha256": "d85bc38774c0d8a8f597b2f050fa7b2b1b9d21ceac6b9627ddec574ff9e06e5a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Protection.Tests/Hexalith.Platform.Protection.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Protection.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Protection.Tests/Hexalith.Platform.Protection.Tests.csproj",
+          "sha256": "5021bd0966acb582b7ec3e9ee31f22f5f33a120f7c651034440cbca8c46af733"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Secrets.ArchiveProcessFixture/Hexalith.Platform.Secrets.ArchiveProcessFixture.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Secrets.ArchiveProcessFixture"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Secrets.ArchiveProcessFixture/Hexalith.Platform.Secrets.ArchiveProcessFixture.csproj",
+          "sha256": "295b530b03e72a5c6dec906376116da7c9af3d1d9aecda2dc8b857c18da237ed"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Secrets.Authority.Tests/Hexalith.Platform.Secrets.Authority.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Secrets.Authority.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Secrets.Authority.Tests/Hexalith.Platform.Secrets.Authority.Tests.csproj",
+          "sha256": "0ace7def569beb7bc4059e88591e7717377a6b1138f15a633d6eac9ed0d8ab99"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Secrets.Custody.Tests/Hexalith.Platform.Secrets.Custody.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Secrets.Custody.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Secrets.Custody.Tests/Hexalith.Platform.Secrets.Custody.Tests.csproj",
+          "sha256": "d4def11e4dfec937104f236de05eee9d2d3a466ae9eefb40efa270f7352ea63b"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Secrets.Inventory.Tests/Hexalith.Platform.Secrets.Inventory.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Secrets.Inventory.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Secrets.Inventory.Tests/Hexalith.Platform.Secrets.Inventory.Tests.csproj",
+          "sha256": "c76ed56939d5022a0acefde8e6ce53bb61cf71052132c0e4d9c976f6e84c8e8b"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Secrets.Runtime.Tests/Hexalith.Platform.Secrets.Runtime.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Secrets.Runtime.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Secrets.Runtime.Tests/Hexalith.Platform.Secrets.Runtime.Tests.csproj",
+          "sha256": "09fc4c4d04c50e372a3cdd0e307d55596845aeed5385c4e7fc15e3c187851bf7"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "tests/Hexalith.Platform.Works.Tests/Hexalith.Platform.Works.Tests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Works.Tests"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.Works.Tests/Hexalith.Platform.Works.Tests.csproj",
+          "sha256": "1633cf65913241115e0c9f28dd8f88141e448a9d029efa797361b70e81e7ab24"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "eng/timesheets-deployment/chart/values.yaml",
+        "kind": "publication",
+        "identity": "registry.hexalith.com/timesheets"
+      },
+      "gitlink": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+      "sources": [
+        {
+          "path": "eng/timesheets-deployment/chart/values.yaml",
+          "sha256": "ddcbdd46d46517217cab8a45b229bf7934465eb3225d42bd95e5005bbb453c71"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/Hexalith.Projects.E2E.Fixtures/Hexalith.Projects.E2E.Fixtures.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Projects.E2E.Fixtures"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Projects.E2E.Fixtures/Hexalith.Projects.E2E.Fixtures.csproj",
+          "sha256": "ae3cd030d8e07d80e315a1309e0b0009085a26c68fc6e4273db1f01a881629eb"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/Hexalith.Projects.ReadAuthority/Hexalith.Projects.ReadAuthority.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Projects.ReadAuthority"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Projects.ReadAuthority/Hexalith.Projects.ReadAuthority.csproj",
+          "sha256": "1964e77019547a84dd7a8f6febae30de70d041d62c70e0651c26d63805a8d413"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": ".github/workflows/ci.yml",
+        "kind": "publication",
+        "identity": "Aspire.Cli"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "sha256": "a88877838dcf00d7633bfc6cc069367da353d76c4fdc12e869eccdcc8b79d61d"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/e2e/run-live-apphost.sh",
+        "kind": "publication",
+        "identity": "projects-workers-dapr-cli"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/e2e/run-live-apphost.sh",
+          "sha256": "47f92176d5acf19fb87cfa277152c45808933d0e9705e6500be50ace4472cc2f"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/e2e/run-live-apphost.sh",
+        "kind": "publication",
+        "identity": "tenants-dapr-cli"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/e2e/run-live-apphost.sh",
+          "sha256": "47f92176d5acf19fb87cfa277152c45808933d0e9705e6500be50ace4472cc2f"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/e2e/run-live-apphost.sh",
+        "kind": "publication",
+        "identity": "projects-dapr-cli"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/e2e/run-live-apphost.sh",
+          "sha256": "47f92176d5acf19fb87cfa277152c45808933d0e9705e6500be50ace4472cc2f"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/e2e/run-live-apphost.sh",
+        "kind": "publication",
+        "identity": "eventstore-dapr-cli"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/e2e/run-live-apphost.sh",
+          "sha256": "47f92176d5acf19fb87cfa277152c45808933d0e9705e6500be50ace4472cc2f"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Contracts"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Client"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Server"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.SignalR"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Testing"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Testing.Integration"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Aspire"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.ServiceDefaults"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.DomainService"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.RestApi.Generators"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Gateway"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Admin.Abstractions"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Admin.Cli"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Admin.Server"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3109/public-packages.json",
+          "sha256": "19254f5b5ba28de1c138edd4f4f27b8d45060cf5a07e84594a342a5ffab6002a"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Contracts"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Client"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Server"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.SignalR"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Testing"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Testing.Integration"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Aspire"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.ServiceDefaults"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.DomainService"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.RestApi.Generators"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Gateway"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Admin.Abstractions"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Admin.Cli"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+        "kind": "publication",
+        "identity": "Hexalith.EventStore.Admin.Server"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/fixtures/6-1-p1r-3110/public-packages.json",
+          "sha256": "fe82ad393a9335088715648e551f5be487fb90b0259776271555cf675dac0bf2"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Projects",
+        "path": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+        "kind": "publication",
+        "identity": "Hexalith.FrontComposer.Cli"
+      },
+      "gitlink": "31cb92c4362becd83938bd550ca62d07b6af448a",
+      "sources": [
+        {
+          "path": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+          "sha256": "b7cdd5c53028c3df0e3ba172e5c374ec1e59eae5e4b6b28d6e8ee31dff48093d"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Tenants",
+        "path": "tests/performance/tenant-audit/seed.csproj",
+        "kind": "project",
+        "identity": "seed"
+      },
+      "gitlink": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35",
+      "sources": [
+        {
+          "path": "tests/performance/tenant-audit/seed.csproj",
+          "sha256": "f5b3bf938a9a6bfdfd151ad204029957e02f009cb7d00112e31f8f4cb3216a71"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Tenants",
+        "path": "scripts/run-tenant-audit-performance.sh",
+        "kind": "publication",
+        "identity": "seed.csproj"
+      },
+      "gitlink": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35",
+      "sources": [
+        {
+          "path": "scripts/run-tenant-audit-performance.sh",
+          "sha256": "15937f379ef2f77bbbf2657b02b31051df337edf80cf2e0c5f8fbe8ac9a24db3"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Works",
+        "path": "scripts/build-story414-sdk-candidate.sh",
+        "kind": "publication",
+        "identity": "src/Hexalith.Platform.Identity/Hexalith.Platform.Identity.csproj"
+      },
+      "gitlink": "2e9fafba151a184eb4552796db7eecc25ffaf8c7",
+      "sources": [
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "sha256": "75eefb3b4365934314e4f1e4353a905a2379fcbeffe00b85ef730342bc9694df"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Works",
+        "path": "scripts/verify-story414-sdk-candidate.sh",
+        "kind": "publication",
+        "identity": "Consumer.csproj"
+      },
+      "gitlink": "2e9fafba151a184eb4552796db7eecc25ffaf8c7",
+      "sources": [
+        {
+          "path": "scripts/verify-story414-sdk-candidate.sh",
+          "sha256": "1ab83f938c13d5e42a46816b5a55c5c0de1928fc60432dcd51f603ca5418577b"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Works",
+        "path": "scripts/verify-story415-sdk-candidate.sh",
+        "kind": "publication",
+        "identity": "Consumer.csproj"
+      },
+      "gitlink": "2e9fafba151a184eb4552796db7eecc25ffaf8c7",
+      "sources": [
+        {
+          "path": "scripts/verify-story415-sdk-candidate.sh",
+          "sha256": "d2986d77369ba0a4b4b1efb3de735f2518e23b3d4a5707ad62885401e9e5a833"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/PublishSpike/PublishSpike.csproj",
+        "kind": "project",
+        "identity": "PublishSpike"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Directory.Build.props",
+          "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+        },
+        {
+          "path": "Hexalith.Build.props",
+          "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+        },
+        {
+          "path": "Props/Environment.Build.props",
+          "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+        },
+        {
+          "path": "Samples/PublishSpike/Program.cs",
+          "sha256": "7b4b4efb34dca99090ef1fec43b2332e66e9105dbee230f0996f06b0a3ceb61c"
+        },
+        {
+          "path": "Samples/PublishSpike/PublishSpike.csproj",
+          "sha256": "0791395ac5fe9088b63a055b7eed7691af4ecee5225f00aec0795c8a5d575a13"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Conversations",
+        "path": "_bmad/scripts/epic16_native_helper/Epic16.NativeHelper.csproj",
+        "kind": "project",
+        "identity": "Epic16.NativeHelper"
+      },
+      "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+      "sources": [
+        {
+          "path": "Directory.Build.props",
+          "sha256": "6075e5149286cced92b0e1a3c594eab8cf8688c54432f76b4d935d5571e06a8f"
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/Epic16.NativeHelper.csproj",
+          "sha256": "f3057cab73b03ec077940f41c8b23a30032c563c1989dc680ac7b60764d4fcb5"
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/EventStore-LICENSE",
+          "sha256": "6af66baf053023d456706de321e3cea6a6edbb288ffec10f673186b1befe7ac2"
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/ProductMetadata.cs",
+          "sha256": "ef75fbd3b889b78c2e2678db4d99cdb7448f231f29b3d22cb300dff0bb5e3902"
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/Program.cs",
+          "sha256": "ca06233bdb4466306b9f0f329f1c087fec71a3f46005562454410503491a5e9a"
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/README.md",
+          "sha256": "e65d5be2a5597753bc167e6ebcebd4ce48a71e100d87e3e329601246d55138ac"
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/ReadModelBatchCanonicalJson.cs",
+          "sha256": "1f9430e33cefaa51757c36f27d57ed509a31d08aa5f35b05a4159b7d806362f9"
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/SignatureNames.cs",
+          "sha256": "a65eb6120957a90478e644ba06f02f38085bfbd8b767d1a97e2ad36838e03450"
+        },
+        {
+          "path": "_bmad/scripts/epic16_native_helper/TestConstruction.cs",
+          "sha256": "48b39a9048eadd8f6c094db9a267069bfdaf24af65e5a069e46337af7dbbe218"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/PublishSpike/PublishSpike.csproj",
+        "kind": "publication",
+        "identity": "container:cicd-publish-spike-3-1"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Directory.Build.props",
+          "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+        },
+        {
+          "path": "Hexalith.Build.props",
+          "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+        },
+        {
+          "path": "Props/Environment.Build.props",
+          "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+        },
+        {
+          "path": "Samples/PublishSpike/Program.cs",
+          "sha256": "7b4b4efb34dca99090ef1fec43b2332e66e9105dbee230f0996f06b0a3ceb61c"
+        },
+        {
+          "path": "Samples/PublishSpike/PublishSpike.csproj",
+          "sha256": "0791395ac5fe9088b63a055b7eed7691af4ecee5225f00aec0795c8a5d575a13"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/PublishSpike/PublishSpike.csproj",
+        "kind": "publication",
+        "identity": "package:Hexalith.PublishSpike.LocalOnly"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Directory.Build.props",
+          "sha256": "87831265b6dc7e43269e0638f6fc875230861e6283d383ec803472f4e749f59d"
+        },
+        {
+          "path": "Hexalith.Build.props",
+          "sha256": "d5b108d1f8aad1279503025691019cb07959b8ea201c4d426dcaecbae08ecabe"
+        },
+        {
+          "path": "Props/Environment.Build.props",
+          "sha256": "e5d210cc151a8835d52e56addbd4e17debfa528c110b453aad6604b0a979989d"
+        },
+        {
+          "path": "Samples/PublishSpike/Program.cs",
+          "sha256": "7b4b4efb34dca99090ef1fec43b2332e66e9105dbee230f0996f06b0a3ceb61c"
+        },
+        {
+          "path": "Samples/PublishSpike/PublishSpike.csproj",
+          "sha256": "0791395ac5fe9088b63a055b7eed7691af4ecee5225f00aec0795c8a5d575a13"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": "eng/release-package-inventory.json",
+        "kind": "publication",
+        "identity": "Hexalith.FrontComposer.Cli"
+      },
+      "gitlink": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+      "sources": [
+        {
+          "path": "eng/release-package-inventory.json",
+          "sha256": "843d71782afe3b66429f0157e3962e63e9a76a8f5322950c6f124f7a692bd014"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.FrontComposer",
+        "path": "eng/release-package-inventory.json",
+        "kind": "publication",
+        "identity": "Hexalith.FrontComposer.Mcp"
+      },
+      "gitlink": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+      "sources": [
+        {
+          "path": "eng/release-package-inventory.json",
+          "sha256": "843d71782afe3b66429f0157e3962e63e9a76a8f5322950c6f124f7a692bd014"
+        }
+      ]
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.HookTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+          "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.IntegrationTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+          "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.UnitTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+          "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.WindowsTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+          "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    },
+    {
+      "surface": {
+        "identity": "tests/Hexalith.Platform.TestExtension.Qualification.Tests/Hexalith.Platform.TestExtension.Qualification.Tests.csproj",
+        "kind": "publication",
+        "path": ".github/workflows/test-extension-release.yml",
+        "repository": "references/Hexalith.Platform"
+      },
+      "gitlink": "d7c74e8a5d5627a8773fb36652813fe743de3d6f",
+      "sources": [
+        {
+          "path": ".github/workflows/test-extension-release.yml",
+          "sha256": "eac3a90082d353bf3192403f9da7254add9c4d9ddadc5c5f9ee9162011691131"
+        }
+      ],
+      "classificationEvidence": "Build/qualification reference to the inspected non-packable xUnit project"
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Platform.TestExtension.Qualification.Tests",
+        "kind": "project",
+        "path": "tests/Hexalith.Platform.TestExtension.Qualification.Tests/Hexalith.Platform.TestExtension.Qualification.Tests.csproj",
+        "repository": "references/Hexalith.Platform"
+      },
+      "gitlink": "d7c74e8a5d5627a8773fb36652813fe743de3d6f",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.TestExtension.Qualification.Tests/Hexalith.Platform.TestExtension.Qualification.Tests.csproj",
+          "sha256": "35ebee634b9edb008115684ac5bd4ea90bff32fa6aa4e87a8d392767200f6f76"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    }
+  ],
+  "sourcePins": {
+    "references/Hexalith.AI.Tools": "1745b6663ad32bb1288167135ed0f979366c53a0",
+    "references/Hexalith.Agents": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+    "references/Hexalith.Builds": "567604b616613ba429be0609636d805db776a709",
+    "references/Hexalith.ChatBot": "b13c58006d292836a9c8b242de476765676e5fb2",
+    "references/Hexalith.Commons": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+    "references/Hexalith.Conversations": "9a5c684de5ee4876448faa26737f6afd36cf33e7",
+    "references/Hexalith.EventStore": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+    "references/Hexalith.Folders": "e88c940000446e13d17d86a7288649d8653a7138",
+    "references/Hexalith.FrontComposer": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+    "references/Hexalith.Memories": "246157a7ff8e2dcd8d356c833a77a02514490d2f",
+    "references/Hexalith.Parties": "1308ad000c79ebc394fc395588f9af91092e8c4c",
+    "references/Hexalith.Platform": "01e5b6530af96ad6eaa69cc1867d43def56c43ca",
+    "references/Hexalith.PolymorphicSerializations": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+    "references/Hexalith.Projects": "31cb92c4362becd83938bd550ca62d07b6af448a",
+    "references/Hexalith.Tenants": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35",
+    "references/Hexalith.Timesheets": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+    "references/Hexalith.Works": "2e9fafba151a184eb4552796db7eecc25ffaf8c7"
+  },
+  "snapshotCorrections": [
+    {
+      "repository": "references/Hexalith.Builds",
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "path": "Tools/package-version-audit.json",
+      "sha256": "d48664651a1ab94143d6b83e7b4b01d1ab341cc6d64cfee83dae47afe07119de",
+      "classification": "captured-evidence",
+      "authority": "Same exact retained package-audit metadata file and approved PE07 captured-evidence class; this is no executable or future-file exemption."
+    }
+  ],
+  "currentTestFixtureObservations": [
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.HookTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+          "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.IntegrationTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+          "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.UnitTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+          "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.WindowsTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+          "sha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    },
+    {
+      "surface": {
+        "identity": "tests/Hexalith.Platform.TestExtension.Qualification.Tests/Hexalith.Platform.TestExtension.Qualification.Tests.csproj",
+        "kind": "publication",
+        "path": ".github/workflows/test-extension-release.yml",
+        "repository": "references/Hexalith.Platform"
+      },
+      "gitlink": "d7c74e8a5d5627a8773fb36652813fe743de3d6f",
+      "sources": [
+        {
+          "path": ".github/workflows/test-extension-release.yml",
+          "sha256": "eac3a90082d353bf3192403f9da7254add9c4d9ddadc5c5f9ee9162011691131"
+        }
+      ],
+      "classificationEvidence": "Build/qualification reference to the inspected non-packable xUnit project"
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Platform.TestExtension.Qualification.Tests",
+        "kind": "project",
+        "path": "tests/Hexalith.Platform.TestExtension.Qualification.Tests/Hexalith.Platform.TestExtension.Qualification.Tests.csproj",
+        "repository": "references/Hexalith.Platform"
+      },
+      "gitlink": "d7c74e8a5d5627a8773fb36652813fe743de3d6f",
+      "sources": [
+        {
+          "path": "tests/Hexalith.Platform.TestExtension.Qualification.Tests/Hexalith.Platform.TestExtension.Qualification.Tests.csproj",
+          "sha256": "35ebee634b9edb008115684ac5bd4ea90bff32fa6aa4e87a8d392767200f6f76"
+        }
+      ],
+      "classificationEvidence": "xunit.v3, non-packable Exe test project"
+    }
+  ]
+}

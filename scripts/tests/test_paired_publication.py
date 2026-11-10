@@ -981,6 +981,9 @@ class PublicationBoundaryTests(unittest.TestCase):
         self.assertNotIn('--recursive', block)
         self.assertIn('if: ${{ always() }}', block)
         self.assertIn('submodules: false', block)
+        scan_step = block.split('      - name: Scan committed root reference pins for proprietary surfaces\n', 1)[1].split('      - name:', 1)[0]
+        self.assertIn('        if: ${{ always() }}\n', scan_step)
+        self.assertNotIn('continue-on-error', block)
         for scope in ('job', *required):
             for state in ('missing', 'skipped', 'failure'):
                 with self.subTest(scope=scope, state=state):

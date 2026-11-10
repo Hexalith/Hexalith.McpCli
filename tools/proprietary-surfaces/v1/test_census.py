@@ -5,6 +5,7 @@ from datetime import date
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -32,7 +33,7 @@ class CensusTests(unittest.TestCase):
         self.commit(self.repo)
         self.write(self.root, '.gitmodules', '[submodule "opaque"]\n path = references/opaque\n url = https://example.invalid/opaque.git\n')
         self.write(self.root, 'inventory.txt', 'immutable inventory\n')
-        self.write(self.root, 'approval.json', '{"decision":"approved"}\n')
+        self.write(self.root, 'approval.json', json.dumps({'decision':'approved','source_revisions':{'references/opaque':self.git(self.repo,'rev-parse','HEAD')}}))
         self.pin()
         self.baseline = self.root / 'policy/baseline.json'
         self.index = self.baseline.with_name('amendments.json')
@@ -117,15 +118,18 @@ class CensusTests(unittest.TestCase):
         return report
 
     def amendment(self, additions=None, removals=None):
-        self.write(self.root, 'decision.json', '{"decision":"approved","owner":"fixture owner"}\n')
         amendment = dict(schema=census.SCHEMA, fromVersion='1.0.0', toVersion='1.0.1', previousSha256=census.digest(self.baseline.read_bytes()),
-            approval=dict(owner='fixture owner', reason='Scoped qualification fixture', decision='approved', date='2026-11-10',
-                          evidence=dict(path='decision.json', sha256=census.digest((self.root / 'decision.json').read_bytes()))),
+            approval=dict(owner='fixture owner', reason='Scoped qualification fixture', decision='approved', date='2026-11-10', evidence={}),
             addAllowances=additions or [], removeAllowances=removals or [], addExceptions=[], removeExceptions=[])
-        target = self.baseline.parent / 'amendment.json'
+        authorization={key:amendment.get(key,[]) for key in ('addAllowances','removeAllowances','addExceptions','removeExceptions','addExclusions')}
+        receipt=dict(schema='mcpcli-census-amendment-approval/v2',decision='approved',owner='fixture owner',
+            authority=[dict(path='approval.json',sha256=census.digest((self.root/'approval.json').read_bytes()))],authorization=authorization)
+        self.write(self.root,'decision.json',json.dumps(receipt))
+        amendment['approval']['evidence']=dict(path='decision.json',sha256=census.digest((self.root/'decision.json').read_bytes()))
+        target=self.baseline.parent/'amendment.json'
         target.write_text(json.dumps(amendment))
-        self.index.write_text(json.dumps([dict(path=target.name, sha256=census.digest(target.read_bytes()))]))
-        return target, amendment
+        self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
+        return target,amendment
 
     def test_complete_clean_reference_is_accounted_for(self):
         report = self.run_cli(0)
@@ -472,6 +476,225 @@ class CensusTests(unittest.TestCase):
         with patch.object(census,'REGISTRATION',new=__import__('re').compile(r'(?!)')):
             self.assertEqual(self.scan()['status'],'passed')
         self.assertEqual(self.run_cli(1)['surfaces'][0]['unexpectedSignals'],['mcp-registration'])
+
+
+    def test_literal_glob_import_finds_neutral_executable_and_dependency(self):
+        self.write(self.repo,'eng/neutral.props','<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup><ItemGroup><PackageReference Include="System.CommandLine" /></ItemGroup></Project>')
+        self.write(self.repo,'Directory.Build.props','<Project><Import Project="eng/*.props" /></Project>')
+        self.project(metadata='')
+        project=next(s for s in self.run_cli(1)['surfaces'] if s['surface']['kind']=='project')
+        self.assertEqual(project['signals'],['command-line-dependency','executable-project'])
+
+    def test_unresolved_directory_glob_cannot_hide_executable_metadata(self):
+        self.write(self.repo,'Directory.Build.props','<Project><Import Project="$(ExternalDir)/*.props"/></Project>')
+        self.write(self.repo,'eng/Hidden.props','<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.project(metadata='')
+        self.assertEqual(self.run_cli(1)['surfaces'],[dict(surface=self.binding('eng/Hidden.props','source','eng/Hidden.props'),
+            signals=['unresolved-tool-metadata'],sources=['eng/Hidden.props'],gitlink=self.git(self.repo,'rev-parse','HEAD'),
+            status='rejected',classification='unapproved',reason='new-proprietary-surface')])
+
+    def test_unresolved_directory_glob_cannot_hide_mcp_or_cli_references(self):
+        self.write(self.repo,'Directory.Build.props','<Project><Import Project="$(ExternalDir)/*.props"/></Project>')
+        self.project(metadata='')
+        for reference in ['<PackageReference Include="ModelContextProtocol"/>','<PackageReference Include="system.commandline"/>',
+                '<ProjectReference Include="../Neutral.Mcp/Neutral.Mcp.csproj"/>']:
+            with self.subTest(reference=reference):
+                self.write(self.repo,'eng/Hidden.props','<Project><ItemGroup>'+reference+'</ItemGroup></Project>')
+                self.commit(self.repo);self.pin()
+                entry=self.run_cli(1)['surfaces'][0]
+                self.assertEqual(entry['surface'],self.binding('eng/Hidden.props','source','eng/Hidden.props'))
+                self.assertEqual(entry['signals'],['unresolved-tool-metadata'])
+
+    def test_case_insensitive_properties_and_aliased_reference_identities(self):
+        self.write(self.repo,PROJECT,'<Project><PropertyGroup><KiNd>Exe</KiNd><outputTYPE>$(kInD)</outputTYPE><protocol>ModelContextProtocol</protocol><target>../Opaque.Mcp/Opaque.Mcp.csproj</target></PropertyGroup><ItemGroup><packageREFERENCE include="$(PROTOCOL)"/><PROJECTreference Include="$(TARGET)"/></ItemGroup></Project>')
+        self.commit(self.repo);self.pin()
+        project=next(s for s in self.run_cli(1)['surfaces'] if s['surface']['kind']=='project')
+        self.assertEqual(project['signals'],['executable-project','mcp-or-cli-dependency'])
+
+    def test_symbolic_publication_identities_expand_and_renames_are_rejected(self):
+        for property_name,prefix in [('packageID','package:'),('toolCOMMANDname','tool:'),('containerREPOSITORY','container:')]:
+            with self.subTest(property=property_name):
+                self.policy['allowances']=[];self.save()
+                self.project(metadata='<outputtype>Exe</outputtype><'+property_name+'>old-$(msbuildPROJECTname)</'+property_name+'>')
+                for candidate in self.run_cli(1)['surfaces']:
+                    self.allowance(surface=candidate['surface'],signals=candidate['signals'])
+                self.run_cli(0)
+                self.project(metadata='<outputtype>Exe</outputtype><'+property_name+'>new-$(MSBuildProjectName)</'+property_name+'>')
+                rejected=[s for s in self.run_cli(1)['surfaces'] if s['status']=='rejected']
+                self.assertEqual([s['surface']['identity'] for s in rejected],[prefix+'new-Runner'])
+
+    def test_unresolved_classification_property_or_reference_fails_safely(self):
+        for metadata in ['<OutputType>$(Unknown)</OutputType>','<PackageId>$(Unknown)</PackageId>']:
+            self.project(metadata=metadata)
+            self.assertIn('unresolved-classification-metadata',self.run_cli(1)['errors'][0]['rule'])
+        self.write(self.repo,PROJECT,'<Project><ItemGroup><PackageReference Include="$(Unknown)"/></ItemGroup></Project>')
+        self.commit(self.repo);self.pin()
+        self.assertIn('unresolved-classification-metadata',self.run_cli(1)['errors'][0]['rule'])
+
+    def test_structure_discovers_neutral_json_packages_and_server_configuration(self):
+        self.write(self.repo,'release.json','{"packages":[{"id":"neutral"}]}')
+        self.write(self.repo,'settings.json','{"mcpServers":{"neutral":{"command":"neutral","args":[]}}}')
+        self.commit(self.repo);self.pin()
+        entries=self.run_cli(1)['surfaces']
+        self.assertEqual({s['surface']['path'] for s in entries},{'release.json','settings.json'})
+        self.assertEqual(next(s for s in entries if s['surface']['path']=='release.json')['surface']['identity'],'neutral')
+
+    def test_orphan_neutral_dotnet_publish_pack_and_run_are_candidates(self):
+        for verb in ('publish','pack','run'):
+            self.write(self.repo,'scripts/ship.sh',f'dotnet {verb} missing/Neutral.csproj\n'.replace('\\n','\n'))
+            self.commit(self.repo);self.pin()
+            entries=self.run_cli(1)['surfaces']
+            self.assertEqual(entries[0]['surface']['identity'],'missing/Neutral.csproj')
+            self.assertEqual(entries[0]['signals'],['orphan-project-reference'])
+
+    def test_literal_neutral_tool_install_and_container_commands_bind_exact_identity(self):
+        for command in ['dotnet tool install --global {name}','docker build -t registry.invalid/{name}:1 .','docker push registry.invalid/{name}:1']:
+            with self.subTest(command=command):
+                self.policy['allowances']=[];self.save()
+                self.write(self.repo,'scripts/ship.sh',command.format(name='neutral'))
+                self.commit(self.repo);self.pin()
+                for candidate in self.run_cli(1)['surfaces']:
+                    self.allowance(surface=candidate['surface'],signals=candidate['signals'])
+                self.run_cli(0)
+                self.write(self.repo,'scripts/ship.sh',command.format(name='renamed'))
+                self.commit(self.repo);self.pin()
+                rejected=[s for s in self.run_cli(1)['surfaces'] if s['status']=='rejected']
+                self.assertEqual(len(rejected),1)
+                self.assertIn('renamed',rejected[0]['surface']['identity'])
+
+    def test_rejected_unrelated_nonjson_and_wrong_scope_approval_cannot_authorize(self):
+        self.project()
+        entry=dict(surface=self.binding(),signals=['executable-project'],classification='test-fixture',row='PE05',owner='fixture owner',reason='Exact approved fixture')
+        for mutation in ('decision','receipt-rejected','unrelated','not-json','wrong-identity','wrong-sources','wrong-exception'):
+            with self.subTest(mutation=mutation):
+                target,amendment=self.amendment([entry])
+                receipt=json.loads((self.root/'decision.json').read_text())
+                if mutation=='decision':amendment['approval']['decision']='rejected'
+                elif mutation=='receipt-rejected':receipt['decision']='rejected'
+                elif mutation=='unrelated':receipt={'decision':'approved','owner':'unrelated'}
+                elif mutation=='wrong-identity':receipt['authorization']['addAllowances'][0]['surface']['identity']='another'
+                elif mutation=='wrong-sources':receipt['authorization']['addAllowances'][0]['sources']=[{'path':'other.cs','sha256':'0'*64}]
+                elif mutation=='wrong-exception':receipt['authorization']['addExceptions']=[dict(surface=self.binding(),owner='owner',reason='reason',expires='2026-12-01')]
+                (self.root/'decision.json').write_text('unrelated non-json' if mutation=='not-json' else json.dumps(receipt))
+                amendment['approval']['evidence']['sha256']=census.digest((self.root/'decision.json').read_bytes())
+                target.write_text(json.dumps(amendment));self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
+                self.run_cli(1)
+
+    def test_compilation_closure_binds_inherited_imported_linked_and_added_source(self):
+        self.write(self.repo,'Directory.Build.props','<Project><Import Project="shared/*.props"/></Project>')
+        self.write(self.repo,'shared/local.props','<Project><ItemGroup><Compile Include="*.cs"/></ItemGroup></Project>')
+        self.write(self.repo,'shared/Secondary.cs','class Secondary {}')
+        self.project()
+        tree=census.Tree(self.repo,self.git(self.repo,'rev-parse','HEAD'))
+        entry=self.allowance(sources=census.compilation_closure(tree,PROJECT),classification='non-surface-qualification-fixture',row='PA02')
+        entry.update(sourcePrefix=str(Path(PROJECT).parent),compilationClosure=True);self.save()
+        self.run_cli(0)
+        for path,original,changed in [('Directory.Build.props','<Project><Import Project="shared/*.props"/></Project>','<Project><Import Project="shared/*.props"/><PropertyGroup><Marker>changed</Marker></PropertyGroup></Project>'),('shared/local.props','<Project><ItemGroup><Compile Include="*.cs"/></ItemGroup></Project>','<Project><ItemGroup><Compile Include="*.cs"/></ItemGroup><PropertyGroup><Marker>changed</Marker></PropertyGroup></Project>'),('shared/Secondary.cs','class Secondary {}','class Secondary { int Changed; }')]:
+            self.write(self.repo,path,changed);self.commit(self.repo);self.pin()
+            self.assertIn(path,self.run_cli(1)['surfaces'][0]['changedSources'])
+            self.write(self.repo,path,original)
+        self.write(self.repo,'shared/Added.cs','class Added {}');self.commit(self.repo);self.pin()
+        self.assertIn('shared/Added.cs',self.run_cli(1)['surfaces'][0]['changedSources'])
+
+    def test_test_like_paths_do_not_grant_executable_or_metadata_authority(self):
+        self.project('tests/Neutral/Neutral.csproj')
+        self.project('perf/NeutralTests/NeutralTests.csproj')
+        self.write(self.repo,'tests/fixtures/settings.json','{"mcpServers":{"neutral":{"command":"neutral"}}}')
+        self.write(self.repo,'tests/fixtures/release.json','{"packages":[{"id":"neutral"}]}')
+        self.write(self.repo,'tests/fixtures/test-tool.sh','dotnet tool install neutral')
+        self.write(self.repo,'tests/fixtures/.config/dotnet-tools.json','{"tools":{"neutral":{"version":"1"}}}')
+        self.commit(self.repo);self.pin()
+        entries=self.run_cli(1)['surfaces']
+        paths={s['surface']['path'] for s in entries}
+        self.assertEqual(paths,{'tests/Neutral/Neutral.csproj','perf/NeutralTests/NeutralTests.csproj','tests/fixtures/settings.json','tests/fixtures/release.json','tests/fixtures/test-tool.sh','tests/fixtures/.config/dotnet-tools.json'})
+        self.assertTrue(all(s['status']=='rejected' for s in entries))
+
+    def test_image_mapping_binds_repository_and_never_a_following_key(self):
+        path='deploy/image.yaml'
+        self.write(self.repo,path,'image:\n  repository: registry.invalid/neutral\n  tag: one\n'.replace('\\n','\n'))
+        self.commit(self.repo);self.pin()
+        candidate=self.run_cli(1)['surfaces'][0]
+        self.assertEqual(candidate['surface']['identity'],'registry.invalid/neutral')
+        self.allowance(surface=candidate['surface'],signals=candidate['signals']);self.run_cli(0)
+        self.write(self.repo,path,'image:\n  repository: registry.invalid/renamed\n  tag: one\n'.replace('\\n','\n'))
+        self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['surface']['identity'],'registry.invalid/renamed')
+        self.write(self.repo,path,'image:\nother: value\n'.replace('\\n','\n'));self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(0)['surfaces'],[])
+
+    def test_every_committed_root_is_accounted_for_and_later_root_rejects(self):
+        later=self.root/'references/zeta';later.mkdir()
+        self.git(later,'init','-q')
+        self.write(later,'src/Neutral/Neutral.csproj','<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        pin=self.commit(later)
+        with (self.root/'.gitmodules').open('a') as output:output.write('[submodule "zeta"]\n path = references/zeta\n url = https://example.invalid/zeta.git\n'.replace('\\n','\n'))
+        self.git(self.root,'add','.gitmodules');self.git(self.root,'update-index','--add','--cacheinfo',f'160000,{pin},references/zeta');self.git(self.root,'commit','-q','-m','test: add second committed census root')
+        self.policy['roots'].append(dict(repository='references/zeta',gitlink=pin,classification='PN02',owner='fixture owner'));self.save()
+        report=self.run_cli(1)
+        self.assertEqual([r['repository'] for r in report['repositories']],['references/opaque','references/zeta'])
+        self.assertEqual([s['surface']['repository'] for s in report['surfaces']],['references/zeta'])
+
+    def test_toml_servers_require_exact_approval_and_malformed_toml_fails(self):
+        path='.codex/config.toml';original='[mcp_servers.neutral]\ncommand="neutral"\nargs=["old"]\n'.replace('\\n','\n')
+        self.write(self.repo,path,original);self.commit(self.repo);self.pin()
+        candidate=self.run_cli(1)['surfaces'][0]
+        self.allowance(surface=candidate['surface'],signals=candidate['signals'],row='PE06',classification='external-developer-configuration');self.run_cli(0)
+        for content in [original.replace('command="neutral"','command="renamed"'),original.replace('"old"','"new"')]:
+            self.write(self.repo,path,content);self.commit(self.repo);self.pin();self.run_cli(1)
+        self.write(self.repo,path,'[mcp_servers.neutral');self.commit(self.repo);self.pin()
+        self.assertIn('malformed-server-configuration',self.run_cli(1)['errors'][0]['rule'])
+
+    def test_boundary_redacts_canary_from_stdout_stderr_and_saved_json(self):
+        canary='census-boundary-credential-canary-74923'
+        self.write(self.repo,'tools/release.json',json.dumps({'packages':[{'id':canary}]}));self.commit(self.repo);self.pin()
+        output=self.root/'canary.json';stdout,stderr=io.StringIO(),io.StringIO()
+        with patch.dict(os.environ,{'MCPCLI_TEST_SECRET':canary}),contextlib.redirect_stdout(stdout),contextlib.redirect_stderr(stderr):
+            self.assertEqual(census.main(['--workspace',str(self.root),'--baseline',str(self.baseline),'--amendments',str(self.index),'--output',str(output)]),1)
+        self.assertNotIn(canary,stdout.getvalue());self.assertNotIn(canary,stderr.getvalue());self.assertNotIn(canary,output.read_text())
+        self.assertIn('[REDACTED]',stdout.getvalue());self.assertIn('[REDACTED]',stderr.getvalue());self.assertIn('[REDACTED]',output.read_text())
+
+
+    def test_exact_metadata_fixture_exclusion_is_hash_bound_and_has_no_directory_authority(self):
+        path='tests/fixtures/release.json'
+        self.write(self.repo,path,'{"packages":"intentionally invalid fixture"}')
+        self.commit(self.repo);self.pin();self.run_cli(1)
+        target,amendment=self.amendment()
+        exclusion=dict(repository='references/opaque',prefix=path,row='PE05',classification='approved-test-metadata-fixture',owner='fixture owner',reason='Exact approved existing fixture',scope='file',sha256=census.digest((self.repo/path).read_bytes()))
+        amendment['addExclusions']=[exclusion]
+        receipt=json.loads((self.root/'decision.json').read_text());receipt['authorization']['addExclusions']=[exclusion]
+        (self.root/'decision.json').write_text(json.dumps(receipt));amendment['approval']['evidence']['sha256']=census.digest((self.root/'decision.json').read_bytes())
+        target.write_text(json.dumps(amendment));self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
+        self.run_cli(0)
+        self.write(self.repo,'tests/fixtures/new.json','{"packages":[{"id":"new-neutral"}]}');self.commit(self.repo);self.pin()
+        self.assertEqual(self.run_cli(1)['surfaces'][0]['surface']['identity'],'new-neutral')
+        self.write(self.repo,path,'{"packages":[{"id":"changed-neutral"}]}');self.commit(self.repo);self.pin()
+        self.assertIn('excluded-fixture-source-drift',self.run_cli(1)['errors'][0]['rule'])
+
+    def test_preserved_legacy_receipt_authorizes_only_its_exact_fixture_scope(self):
+        self.project()
+        sources=[dict(path=PROJECT,sha256=census.digest((self.repo/PROJECT).read_bytes()))]
+        entry=dict(surface=self.binding(),signals=['executable-project'],classification='non-surface-qualification-fixture',row='PA01',owner='fixture owner',reason='Existing exact fixture',sourcePrefix=str(Path(PROJECT).parent),sources=sources)
+        target,amendment=self.amendment([entry])
+        receipt=dict(schema='mcpcli-census-amendment-approval/v1',decision='approved',owner='fixture owner',fixtures=[dict(repository='references/opaque',gitlink=self.git(self.repo,'rev-parse','HEAD'),project=PROJECT,sourceClosure=dict(prefix=str(Path(PROJECT).parent),sources=sources))])
+        (self.root/'decision.json').write_text(json.dumps(receipt));amendment['approval']['evidence']['sha256']=census.digest((self.root/'decision.json').read_bytes())
+        target.write_text(json.dumps(amendment));self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
+        self.run_cli(0)
+        amendment['addAllowances'][0]['surface']['identity']='unrelated'
+        target.write_text(json.dumps(amendment));self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
+        self.assertEqual(self.run_cli(1)['errors'],[{'rule':'amendment-authorization-scope-mismatch'}])
+
+    def test_committed_correction_data_preserves_previous_chain_and_exact_receipt_scope(self):
+        directory=Path(__file__).parent
+        previous=census.digest((directory/'baseline.json').read_bytes())
+        for item in json.loads((directory/'amendments.json').read_text()):
+            raw=(directory/item['path']).read_bytes();self.assertEqual(census.digest(raw),item['sha256'])
+            amendment=json.loads(raw);self.assertEqual(amendment['previousSha256'],previous)
+            binding=amendment['approval']['evidence'];receipt_path=census.ROOT/binding['path']
+            self.assertEqual(census.digest(receipt_path.read_bytes()),binding['sha256'])
+            receipt=json.loads(receipt_path.read_text());self.assertEqual(receipt['decision'],'approved')
+            if receipt['schema'].endswith('/v2'):
+                self.assertEqual(receipt['authorization'],{key:amendment.get(key,[]) for key in ('addAllowances','removeAllowances','addExceptions','removeExceptions','addExclusions')})
+            previous=item['sha256']
 
 
 if __name__=='__main__':

@@ -11,6 +11,7 @@ import json
 from pathlib import Path, PurePosixPath
 import posixpath
 import re
+import shlex
 import subprocess
 import sys
 import tomllib
@@ -168,11 +169,62 @@ def validate_allowance(entry, roots):
                 and isinstance(entry.get('sources'), list) and bool(entry['sources']), 'invalid-source-closure')
         paths = [source.get('path') for source in entry['sources'] if isinstance(source, dict)]
         require(len(paths) == len(entry['sources']) and len(set(paths)) == len(paths)
-                and all(isinstance(path, str) and path.startswith(prefix + '/') for path in paths), 'invalid-source-closure')
+                and all(isinstance(path, str) and (entry.get('compilationClosure') is True or path.startswith(prefix + '/')) for path in paths), 'invalid-source-closure')
     for source in entry.get('sources', []):
         require(isinstance(source, dict) and set(source) == {'path', 'sha256'}, 'invalid-source-binding')
         safe_path(source['path'])
         require(HASH.fullmatch(source['sha256']) is not None, 'invalid-source-binding')
+
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':'))
+
+
+def validate_approval_evidence(workspace, amendment, receipt):
+    """Require an affirmative receipt bound to the exact mutation scope."""
+    require(isinstance(receipt, dict) and receipt.get('decision') == 'approved'
+            and receipt.get('owner') == amendment['approval']['owner'], 'amendment-evidence-not-approved')
+    operations = ('addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions', 'addExclusions')
+    if receipt.get('schema') == 'mcpcli-census-amendment-approval/v2':
+        authorization = receipt.get('authorization')
+        require(isinstance(authorization, dict) and set(authorization) == set(operations)
+                and canonical(authorization) == canonical({key: amendment.get(key, []) for key in operations}), 'amendment-authorization-scope-mismatch')
+        authorities = receipt.get('authority')
+        require(isinstance(authorities, list) and bool(authorities), 'amendment-authority-missing')
+        for binding in authorities:
+            require(isinstance(binding, dict) and set(binding) == {'path', 'sha256'}, 'invalid-amendment-authority')
+            safe_path(binding['path'])
+            raw = (workspace / binding['path']).read_bytes()
+            require(HASH.fullmatch(binding['sha256']) is not None and digest(raw) == binding['sha256'], 'amendment-authority-mismatch')
+            authority = json_bytes(raw, binding['path'])
+            require(isinstance(authority, dict) and authority.get('decision') == 'approved'
+                    and (isinstance(authority.get('source_revisions'), dict)
+                         or authority.get('schema') in ('mcpcli-census-amendment-approval/v1', 'mcpcli-census-amendment-approval/v2')),
+                    'invalid-amendment-authority')
+        return
+    # The original receipt is retained byte-for-byte. Its historical format
+    # authorizes only the named fixture and its exact inspected directory bytes.
+    require(receipt.get('schema') == 'mcpcli-census-amendment-approval/v1'
+            and isinstance(receipt.get('fixtures'), list) and bool(receipt['fixtures'])
+            and all(not amendment.get(key, []) for key in operations[1:]), 'amendment-authorization-scope-mismatch')
+    for entry in amendment['addAllowances']:
+        surface = entry.get('surface', {})
+        fixtures = [fixture for fixture in receipt['fixtures'] if fixture.get('repository') == surface.get('repository')
+                    and fixture.get('project') == surface.get('path')]
+        require(len(fixtures) == 1, 'amendment-authorization-scope-mismatch')
+        fixture = fixtures[0]
+        require(SHA.fullmatch(fixture.get('gitlink', '')) is not None, 'amendment-authorization-scope-mismatch')
+        project = safe_path(fixture['project'])
+        closure = fixture.get('sourceClosure', {})
+        require(entry.get('sourcePrefix') == closure.get('prefix')
+                and canonical(entry.get('sources')) == canonical(closure.get('sources'))
+                and 'compilationClosure' not in entry, 'amendment-authorization-scope-mismatch')
+        tree = Tree(workspace / safe_path(fixture['repository']), fixture['gitlink'])
+        values, _, _, _ = project_metadata(tree, project, {p for p in tree.entries if p.endswith(('.props', '.targets'))})
+        authorized = {('project', PurePosixPath(project).stem)}
+        for name, prefix in [('PackageId', 'package:'), ('ToolCommandName', 'tool:'), ('ContainerRepository', 'container:')]:
+            authorized.update(('publication', prefix + value) for value in values.get(name, set()))
+        require((surface.get('kind'), surface.get('identity')) in authorized, 'amendment-authorization-scope-mismatch')
 
 
 def load_policy(workspace, parent, baseline_path, index_path, today):
@@ -206,15 +258,17 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
         raw = file.read_bytes()
         require(digest(raw) == item['sha256'], 'amendment-hash-mismatch')
         amendment = json_bytes(raw, item['path'])
-        require(isinstance(amendment, dict) and set(amendment) == {
-            'schema', 'fromVersion', 'toVersion', 'previousSha256', 'approval', 'addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions'}, 'invalid-amendment')
+        require(isinstance(amendment, dict) and set(amendment) in ({
+            'schema', 'fromVersion', 'toVersion', 'previousSha256', 'approval', 'addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions'}, {
+            'schema', 'fromVersion', 'toVersion', 'previousSha256', 'approval', 'addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions', 'addExclusions'}), 'invalid-amendment')
         target = amendment['toVersion']
         require(amendment['schema'] == SCHEMA and amendment['fromVersion'] == version
                 and re.fullmatch(r'1\.0\.[1-9][0-9]*', str(target)) is not None
                 and int(target.split('.')[-1]) == int(version.split('.')[-1]) + 1
                 and amendment['previousSha256'] == previous, 'amendment-chain-mismatch')
         approval = amendment['approval']
-        require(isinstance(approval, dict) and all(nonblank(approval.get(k)) for k in ('owner', 'reason', 'decision', 'date')), 'invalid-amendment-approval')
+        require(isinstance(approval, dict) and all(nonblank(approval.get(k)) for k in ('owner', 'reason', 'decision', 'date'))
+                and approval['decision'] in ('approved', 'approved option A'), 'invalid-amendment-approval')
         try:
             require(date.fromisoformat(approval['date']).isoformat() == approval['date'], 'invalid-amendment-approval')
         except ValueError:
@@ -227,6 +281,7 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
                 and HASH.fullmatch(binding['sha256']) is not None
                 and digest(evidence.read_bytes()) == binding['sha256'], 'amendment-approval-mismatch')
         require(all(isinstance(amendment[k], list) for k in ('addAllowances', 'removeAllowances', 'addExceptions', 'removeExceptions')), 'invalid-amendment')
+        validate_approval_evidence(workspace, amendment, json_bytes(evidence.read_bytes(), binding['path']))
         for removed in amendment['removeAllowances']:
             key = descriptor(removed)
             matches = [a for a in policy['allowances'] if descriptor(a.get('surface')) == key]
@@ -239,6 +294,8 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
             policy['exceptions'].remove(matches[0])
         policy['allowances'].extend(amendment['addAllowances'])
         policy['exceptions'].extend(amendment['addExceptions'])
+        require(isinstance(amendment.get('addExclusions', []), list), 'invalid-amendment')
+        policy['exclusions'].extend(amendment.get('addExclusions', []))
         applied.append({'path': item['path'], 'sha256': item['sha256'], 'version': target})
         previous, version = item['sha256'], target
     tool_names = set()
@@ -255,7 +312,14 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
         allowed[key] = entry
     exclusions = []
     for item in policy['exclusions']:
-        require(isinstance(item, dict) and set(item) == {'repository', 'prefix', 'row', 'classification', 'owner', 'reason'}, 'invalid-exclusion')
+        require(isinstance(item, dict) and set(item) in ({'repository', 'prefix', 'row', 'classification', 'owner', 'reason'},
+                {'repository', 'prefix', 'row', 'classification', 'owner', 'reason', 'scope', 'sha256'},
+                {'repository', 'prefix', 'row', 'classification', 'owner', 'reason', 'scope', 'sha256', 'additionalSha256'}), 'invalid-exclusion')
+        if 'scope' in item:
+            require(item['scope'] == 'file' and HASH.fullmatch(item['sha256']) is not None, 'invalid-exclusion')
+            extra_hashes = item.get('additionalSha256', [])
+            require(isinstance(extra_hashes, list) and all(isinstance(value, str) and HASH.fullmatch(value) for value in extra_hashes)
+                    and len(set([item['sha256'], *extra_hashes])) == len(extra_hashes) + 1, 'invalid-exclusion')
         require(item['repository'] in roots and all(nonblank(item[k]) for k in ('row', 'classification', 'owner', 'reason')), 'invalid-exclusion')
         safe_path(item['prefix'])
         require(item not in exclusions, 'duplicate-exclusion')
@@ -296,15 +360,67 @@ def resolve_path(base, value):
     return result
 
 
+PROPERTY_NAMES = {name.lower(): name for name in (
+    'OutputType', 'PackAsTool', 'ToolCommandName', 'PackageId', 'AssemblyName',
+    'ContainerRepository')}
+
+
+def attribute(element, name):
+    return next((value for key, value in element.attrib.items() if key.lower() == name.lower()), None)
+
+
+def expand_msbuild(value, properties, current, project, *, required=True):
+    """Expand local/context properties without invoking an MSBuild evaluator."""
+    context = dict(properties)
+    context.update({
+        'msbuildprojectname': PurePosixPath(project).stem,
+        'msbuildprojectdirectory': '@repo/' + str(PurePosixPath(project).parent) + '/',
+        'msbuildprojectfullpath': '@repo/' + project,
+        'msbuildprojectextension': PurePosixPath(project).suffix,
+        'msbuildthisfiledirectory': '@repo/' + (str(PurePosixPath(current).parent) + '/').removeprefix('./'),
+        'msbuildthisfilefullpath': '@repo/' + current,
+        'msbuildthisfilename': PurePosixPath(current).stem,
+    })
+    def substitute(text, seen):
+        def replace(match):
+            key = match[1].lower()
+            if key not in context or key in seen:
+                return match[0]
+            return substitute(context[key], seen | {key})
+        return re.sub(r'\$\(([A-Za-z_][\w.]*)\)', replace, text)
+    value = substitute(value, set())
+    # NormalizePath with literal arguments is path spelling, never invocation
+    # of arbitrary property-function code from the inspected repository.
+    def normalize(match):
+        arguments = re.findall(r"'([^']*)'", match[1])
+        remainder = re.sub(r"'[^']*'", '', match[1]).replace(',', '').strip()
+        return posixpath.normpath(posixpath.join(*arguments)) if arguments and not remainder else match[0]
+    value = re.sub(r"\$\(\[MSBuild\]::NormalizePath\((.*?)\)\)", normalize, value, flags=re.I)
+    value = re.sub(r"\$\(\[System\.IO\.Path\]::GetFullPath\('([^']*)'\)\)",
+                   lambda match: posixpath.normpath(match[1]), value, flags=re.I)
+    if required:
+        require('$(' not in value, f'unresolved-classification-metadata:{current}')
+    return value
+
+
+def metadata_path(current, raw, expanded):
+    if expanded.startswith('@repo/'):
+        target = posixpath.normpath(expanded.removeprefix('@repo/').replace('\\', '/'))
+        safe_path(target)
+        return target
+    return resolve_path(current, expanded)
+
+
 def project_metadata(tree, path, metadata_paths):
-    """Conservatively retain all conditional values in local inherited metadata."""
-    documents, visited, properties, values, references = [], set(), {}, {}, []
-    ancestors = list(PurePosixPath(path).parents)
+    """Conservatively retain conditional values and committed local imports."""
+    documents, visited, values, references, compile_items = [], set(), {}, [], []
+    properties = {'assemblyname': PurePosixPath(path).stem, 'packageid': PurePosixPath(path).stem}
+    pending_values = []
     initial = []
-    for ancestor in reversed(ancestors):
+    for ancestor in reversed(list(PurePosixPath(path).parents)):
         for filename in ('Directory.Build.props', 'Directory.Build.targets'):
             candidate = (ancestor / filename).as_posix()
-            if candidate in tree.entries:
+            if candidate in metadata_paths:
                 initial.append(candidate)
     initial.append(path)
 
@@ -314,53 +430,90 @@ def project_metadata(tree, path, metadata_paths):
         visited.add(current)
         document = xml(tree.text(current), current)
         documents.append(current)
-        this_dir = str(PurePosixPath(current).parent)
-        this_dir = '' if this_dir == '.' else this_dir + '/'
         for element in document.iter():
-            name = local_name(element)
+            name = local_name(element).lower()
             text = (element.text or '').strip()
-            if text and name in ('OutputType', 'PackAsTool', 'ToolCommandName', 'PackageId', 'AssemblyName', 'ContainerRepository', 'IsTestProject'):
-                expanded = text
-                for key, value in properties.items():
-                    expanded = expanded.replace('$(' + key + ')', value)
-                values.setdefault(name, set()).add(expanded)
             if text and not list(element):
-                properties[name] = text
-            if name in ('PackageReference', 'ProjectReference'):
-                value = element.get('Include') or element.get('Update') or ''
-                references.append((name, value, current))
-            if name == 'Import':
-                value = element.get('Project', '')
-                require(bool(value), f'malformed-project-metadata:{current}')
-                value = value.replace('$(MSBuildThisFileDirectory)', this_dir)
-                for key, prop in properties.items():
-                    value = value.replace('$(' + key + ')', prop)
-                # SDK/NuGet and nested reference imports are not executed. Their
-                # declarations are still searched independently for source signals.
-                if '$(' in value or '*' in value or '?' in value:
-                    # Resolve committed local candidates conservatively without
-                    # evaluating a property function, SDK or imported program.
+                expanded = expand_msbuild(text, properties, current, path, required=False)
+                if name in PROPERTY_NAMES:
+                    pending_values.append((PROPERTY_NAMES[name], expanded, current))
+                properties[name] = expanded
+            if name in ('packagereference', 'projectreference'):
+                value = attribute(element, 'Include') or attribute(element, 'Update') or ''
+                references.append(('PackageReference' if name == 'packagereference' else 'ProjectReference', value, current))
+            if name == 'compile' and attribute(element, 'Include'):
+                compile_items.append((attribute(element, 'Include'), current))
+            if name == 'import':
+                raw = attribute(element, 'Project') or ''
+                require(bool(raw), f'malformed-project-metadata:{current}')
+                value = expand_msbuild(raw, properties, current, path, required=False)
+                if '$(' not in value:
+                    # Imports outside this repository belong to the permitted
+                    # SDK/sibling boundary; no outside object is opened.
+                    relative = (posixpath.normpath(value.removeprefix('@repo/').replace('\\', '/')) if value.startswith('@repo/')
+                                else posixpath.normpath(posixpath.join(str(PurePosixPath(current).parent), value.replace('\\', '/'))))
+                    if relative == '..' or relative.startswith('../'):
+                        continue
+                    target = metadata_path(current, raw, value)
+                    matches = [candidate for candidate in metadata_paths if fnmatch.fnmatchcase(candidate, target)]
+                    for candidate in sorted(matches):
+                        visit(candidate)
+                else:
+                    # Property functions are never evaluated. Literal filenames
+                    # inside them still identify committed local metadata.
                     names = set(re.findall(r'[A-Za-z0-9_.-]+\.(?:props|targets)', value, re.I))
                     for candidate in sorted(metadata_paths):
-                        if PurePosixPath(candidate).name in names and PurePosixPath(candidate).name not in ('Directory.Build.props', 'Directory.Build.targets') and not any(candidate == p or candidate.startswith(p + '/') for p, e in tree.entries.items() if e[0] == '160000'):
+                        if PurePosixPath(candidate).name in names and PurePosixPath(candidate).name not in ('Directory.Build.props', 'Directory.Build.targets'):
                             visit(candidate)
-                    continue
-                if element.get('Project', '').startswith('$(MSBuildThisFileDirectory)'):
-                    target = posixpath.normpath(value.replace('\\', '/'))
-                    safe_path(target)
-                else:
-                    target = resolve_path(current, value)
-                if target in tree.entries:
-                    visit(target)
     for current in initial:
         visit(current)
-    return values, references, documents
+    for name, value, current in pending_values:
+        values.setdefault(name, set()).add(expand_msbuild(value, properties, current, path))
+    expanded_references = []
+    for name, value, current in references:
+        expanded = expand_msbuild(value, properties, current, path, required=False)
+        # An unresolved directory does not obscure a literal project identity.
+        identity = expanded.replace('\\', '/').rsplit('/', 1)[-1]
+        literal = re.search(r"'([A-Za-z0-9_.-]+\.(?:cs|fs|vb)proj)'\)\)\Z", expanded, re.I)
+        if '$(' in expanded and name == 'ProjectReference' and literal and re.match(r'\$\(\[MSBuild\]::NormalizePath\(', expanded, re.I):
+            expanded = identity = literal[1]
+        require('$(' not in expanded or name == 'ProjectReference' and '$(' not in identity
+                and PROJECT.search(identity) is not None, f'unresolved-classification-metadata:{current}')
+        expanded_references.append((name, expanded, current))
+    references = expanded_references
+    linked = set()
+    for raw, current in compile_items:
+        expanded = expand_msbuild(raw, properties, current, path)
+        for value in expanded.split(';'):
+            relative = (posixpath.normpath(value.removeprefix('@repo/').replace('\\', '/')) if value.startswith('@repo/')
+                        else posixpath.normpath(posixpath.join(str(PurePosixPath(current).parent), value.replace('\\', '/'))))
+            if relative == '..' or relative.startswith('../'):
+                continue
+            target = metadata_path(current, raw, value)
+            linked.update(candidate for candidate in tree.entries
+                          if fnmatch.fnmatchcase(candidate, target) and tree.entries[candidate][0] != '160000')
+    return values, references, documents, linked
+
+
+def compilation_closure(tree, project):
+    """Bind fixture files, inherited/imported metadata and linked local sources."""
+    metadata_paths = {path for path, entry in tree.entries.items()
+                      if entry[0] != '160000' and path.endswith(('.props', '.targets'))}
+    _, _, documents, linked = project_metadata(tree, project, metadata_paths)
+    prefix = str(PurePosixPath(project).parent) + '/'
+    paths = {path for path in tree.entries if path.startswith(prefix)} | set(documents) | linked
+    return [{'path': path, 'sha256': digest(tree.blob(path))} for path in sorted(paths)]
 
 
 def scan_tree(tree, repository, exclusions):
     excluded = [e for e in exclusions if e['repository'] == repository]
     def omitted(path):
-        return any(path == e['prefix'] or path.startswith(e['prefix'] + '/') for e in excluded)
+        for entry in excluded:
+            if path == entry['prefix'] or entry.get('scope') != 'file' and path.startswith(entry['prefix'] + '/'):
+                if entry.get('scope') == 'file':
+                    require(digest(tree.blob(path)) in [entry['sha256'], *entry.get('additionalSha256', [])], f'excluded-fixture-source-drift:{path}')
+                return True
+        return False
     paths = [p for p, entry in tree.entries.items() if entry[0] != '160000' and not omitted(p)]
     interesting = [p for p in paths if PROJECT.search(p) or p.endswith(('.props', '.targets', '.cs', '.fs', '.vb', '.json', '.toml', '.yml', '.yaml', '.ps1', '.sh', '.cmd', '.bat')) or PurePosixPath(p).name.startswith('Dockerfile')]
     tree.preload(interesting)
@@ -375,7 +528,7 @@ def scan_tree(tree, repository, exclusions):
         candidate['sources'].add(source or path)
 
     for path in sorted(p for p in paths if PROJECT.search(p)):
-        values, references, documents = project_metadata(tree, path, {p for p in paths if p.endswith(('.props', '.targets'))})
+        values, references, documents, linked = project_metadata(tree, path, {p for p in paths if p.endswith(('.props', '.targets'))})
         text = tree.text(path)
         project_id = PurePosixPath(path).stem
         signals = set()
@@ -394,9 +547,7 @@ def scan_tree(tree, repository, exclusions):
         web = 'Microsoft.NET.Sdk.Web' in text
         apphost = 'Aspire.AppHost.Sdk' in text
         if executable and not web and not apphost or (web and not path.startswith('src/')):
-            # xUnit runners and test harnesses are test projects, not module CLIs.
-            if not re.search(r'(?:^|/)(?:tests?|perf)/|Tests(?:[./]|$)', path):
-                signals.add('executable-project')
+            signals.add('executable-project')
         for kind, value, source in references:
             if kind == 'PackageReference' and value.lower() == 'system.commandline':
                 signals.add('command-line-dependency')
@@ -404,7 +555,7 @@ def scan_tree(tree, repository, exclusions):
                 signals.add('mcp-or-cli-dependency')
             elif kind == 'ProjectReference' and IDENTITY.search(PurePosixPath(value.replace('\\', '/')).stem):
                 signals.add('mcp-or-cli-dependency')
-        projects[path] = {'signals': signals, 'values': values, 'documents': documents}
+        projects[path] = {'signals': signals, 'values': values, 'documents': documents, 'linked': linked}
         for identity in {project_id, *values.get('PackageId', set()), *values.get('ToolCommandName', set()), *values.get('ContainerRepository', set())}:
             if '$(' not in identity:
                 identities.setdefault(identity.lower(), set()).add(path)
@@ -416,10 +567,15 @@ def scan_tree(tree, repository, exclusions):
         if path.endswith(('.props', '.targets')) and path not in consumed:
             document = xml(tree.text(path), path)
             for element in document.iter():
-                name, value = local_name(element), (element.text or '').strip()
-                if (name == 'PackAsTool' and value.lower() == 'true'
-                        or name == 'ToolCommandName' and value
-                        or name == 'ContainerRepository' and IDENTITY.search(value)):
+                name, value = local_name(element).lower(), (element.text or '').strip()
+                reference = attribute(element, 'Include') or attribute(element, 'Update') or ''
+                if (name == 'outputtype' and value.lower() in ('exe', 'winexe')
+                        or name == 'packastool' and value.lower() == 'true'
+                        or name == 'toolcommandname' and value
+                        or name == 'containerrepository' and IDENTITY.search(value)
+                        or name == 'packagereference' and (reference.lower() == 'system.commandline'
+                            or re.search(r'ModelContextProtocol', reference, re.I) or IDENTITY.search(reference))
+                        or name == 'projectreference' and IDENTITY.search(PurePosixPath(reference.replace('\\', '/')).stem)):
                     add(path, 'source', path, 'unresolved-tool-metadata')
 
     # Source registrations belong to the nearest enclosing project(s). Linked
@@ -449,26 +605,15 @@ def scan_tree(tree, repository, exclusions):
             else:
                 add(path, 'source', path, signal)
 
-    # Explicit linked source files may live outside a project's directory.
+    # Linked Compile items, including committed glob matches, belong to
+    # their declaring project even when the source is outside its directory.
     for project, metadata in projects.items():
-        for document in metadata['documents']:
-            for element in xml(tree.text(document), document).iter():
-                if local_name(element) == 'Compile' and element.get('Include'):
-                    value = element.get('Include')
-                    if any(token in value for token in ('*', '?')):
-                        continue
-                    if '$(' in value and not value.startswith('$(MSBuildThisFileDirectory)'):
-                        continue
-                    value = value.replace('$(MSBuildThisFileDirectory)', str(PurePosixPath(document).parent) + '/')
-                    target = resolve_path(document, value) if not element.get('Include').startswith('$(MSBuildThisFileDirectory)') else posixpath.normpath(value)
-                    safe_path(target)
-                    if target not in tree.entries:
-                        continue  # Generated Compile items have no committed blob.
-                    text = tree.text(target)
-                    for signal, pattern in [('mcp-registration', REGISTRATION), ('command-line-source', COMMAND)]:
-                        if pattern.search(text):
-                            add(project, 'project', PurePosixPath(project).stem, signal, target)
-                            metadata['signals'].add(signal)
+        for target in metadata['linked']:
+            text = tree.text(target)
+            for signal, pattern in [('mcp-registration', REGISTRATION), ('command-line-source', COMMAND)]:
+                if pattern.search(text):
+                    add(project, 'project', PurePosixPath(project).stem, signal, target)
+                    metadata['signals'].add(signal)
 
     # Publishing names are separate exact identities: an approved project is
     # never authority to rename its package, executable command or container.
@@ -500,13 +645,11 @@ def scan_tree(tree, repository, exclusions):
         if PROJECT.search(path) or path.endswith(('.cs', '.fs', '.vb', '.props', '.targets')):
             continue
         text = tree.text(path)
-        if re.search(r'(?:^|/)(?:tests?|perf)/', path) and not PROJECT.search(path):
-            continue
         if path.endswith('.json'):
             # Only publication/tool/server metadata is parsed as JSON. Arbitrary
             # schemas, localization and documentation data are not publications.
-            relevant = bool(re.fullmatch(r'(?:.*(?:release|publish)[-_].*|\.?mcp|dotnet-tools|package)\.json', PurePosixPath(path).name, re.I)
-                            or re.search(r'"project"\s*:\s*"[^"]+\.(?:cs|fs|vb)proj"|"(?:containers|images)"\s*:\s*\[', text, re.I))
+            relevant = bool(re.fullmatch(r'(?:.*(?:release|publish)(?:[-_].*)?|\.?mcp|dotnet-tools|package)\.json', PurePosixPath(path).name, re.I)
+                            or re.search(r'"mcpServers"\s*:|"servers"\s*:\s*\{|"(?:packages|containers|images)"\s*:\s*\[', text))
             if not relevant:
                 continue
             document = json_bytes(text, path)
@@ -541,7 +684,7 @@ def scan_tree(tree, repository, exclusions):
                 for entry in document[collection]:
                     require(isinstance(entry, dict), f'malformed-publication:{path}')
                     project = entry.get('project')
-                    identity = entry.get('packageId') or entry.get('id') or entry.get('image') or entry.get('repository') or entry.get('name') or project
+                    identity = entry.get('packageId') or entry.get('package_id') or entry.get('id') or entry.get('image') or entry.get('repository') or entry.get('name') or project
                     publication(path, identity, project)
         elif path.endswith('.toml') and 'config' in PurePosixPath(path).name:
             try:
@@ -554,9 +697,7 @@ def scan_tree(tree, repository, exclusions):
                 require(nonblank(identity) and isinstance(config, dict) and bool(config), f'malformed-server-configuration:{path}')
                 add(path, 'configuration', identity + ':' + digest(json.dumps(config, sort_keys=True, separators=(',', ':')).encode()), 'developer-server-configuration')
         elif path.endswith(('.yml', '.yaml', '.sh', '.ps1', '.cmd', '.bat')) or PurePosixPath(path).name.startswith('Dockerfile'):
-            if path.endswith(('.yml', '.yaml')) and not (path.startswith('.github/workflows/') or re.search(r'(?m)^\s*(?:image|kind|container)\s*:', text)):
-                continue
-            if re.match(r'(?:test|verify|validate)[-_]', PurePosixPath(path).name, re.I) and not re.search(r'(?im)^\s*(?:dotnet\s+(?:pack|publish)|docker\s+(?:push|build))\s', text):
+            if path.endswith(('.yml', '.yaml')) and not (path.startswith('.github/workflows/') or re.search(r'(?m)^\s*(?:image|kind|container)\s*:|\b(?:dotnet|docker|podman)\s', text)):
                 continue
             # Every literal project invocation and proprietary package/container
             # identity is checked, including orphan entries after source removal.
@@ -571,10 +712,63 @@ def scan_tree(tree, repository, exclusions):
                 target = posixpath.normpath(value)
                 if target in projects:
                     publication(path, target, target, 'project-publication-reference')
-                elif IDENTITY.search(value):
+                else:
                     publication(path, value, target, 'orphan-project-reference')
-            for match in re.finditer(r'(?im)^\s*(?:-\s*)?image:\s*[\"\']?([A-Za-z0-9][A-Za-z0-9_./:@-]*)', text):
-                publication(path, match[1], signal='container-image')
+            # Keep image scalars on their own line. A mapping's repository
+            # belongs to that image block, never to a following YAML key.
+            lines = text.splitlines()
+            for index, line in enumerate(lines):
+                match = re.match(r'^(\s*)(?:-\s*)?image:[ \t]*(.*)$', line)
+                if not match:
+                    continue
+                try:
+                    scalar_tokens = shlex.split(match[2], comments=True)
+                except ValueError:
+                    scalar_tokens = []
+                scalar = scalar_tokens[0] if scalar_tokens else ''
+                if scalar and not scalar.startswith('#'):
+                    if re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_./:@-]*', scalar) and not scalar.endswith(':'):
+                        publication(path, scalar, signal='container-image')
+                else:
+                    indent = len(match[1])
+                    for child in lines[index + 1:]:
+                        if not child.strip() or child.lstrip().startswith('#'):
+                            continue
+                        if len(child) - len(child.lstrip()) <= indent:
+                            break
+                        repository_match = re.match(r'^[ \t]+repository:[ \t]*["\']?([A-Za-z0-9][A-Za-z0-9_./:@-]*)', child)
+                        if repository_match:
+                            publication(path, repository_match[1], signal='container-image')
+                            break
+            for line in lines:
+                try:
+                    command = shlex.split(line, comments=True)
+                except ValueError:
+                    continue  # Multiline shell fragments are inspected on their literal lines.
+                for index, token in enumerate(command):
+                    following = command[index + 1:]
+                    if token == 'dotnet' and following[:2] == ['tool', 'install']:
+                        arguments = iter(following[2:])
+                        for value in arguments:
+                            if value in ('--version', '--tool-path', '--configfile', '--add-source', '--framework'):
+                                next(arguments, None)
+                            elif value.startswith('-'):
+                                continue
+                            else:
+                                if re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]*', value):
+                                    publication(path, value, signal='tool-install')
+                                break
+                    if token in ('docker', 'podman') and following:
+                        if following[0] == 'push' and len(following) > 1:
+                            value = following[1]
+                            if re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_./:@-]*', value):
+                                publication(path, value, signal='container-image')
+                        elif following[0] == 'build' or following[:2] == ['buildx', 'build']:
+                            for offset, value in enumerate(following[:-1]):
+                                if value in ('-t', '--tag'):
+                                    identity = following[offset + 1]
+                                    if re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_./:@-]*', identity):
+                                        publication(path, identity, signal='container-image')
             tokens = set(re.findall(r'(?<![\w.])([A-Za-z][A-Za-z0-9_.-]*(?:[.-](?:mcp|cli)))(?![\w.])', text, re.I))
             for token in tokens:
                 publication(path, token, signal='package-or-container-reference')
@@ -625,7 +819,8 @@ def scan(workspace, revision, baseline_path, index_path, today):
                     if 'sourcePrefix' in allowance:
                         prefix = allowance['sourcePrefix'] + '/'
                         expected_paths = {source['path'] for source in allowance['sources']}
-                        actual_paths = {path for path in tree.entries if path.startswith(prefix)}
+                        actual_paths = ({source['path'] for source in compilation_closure(tree, allowance['surface']['path'])}
+                                        if allowance.get('compilationClosure') else {path for path in tree.entries if path.startswith(prefix)})
                         source_changes = sorted(set(source_changes) | (expected_paths ^ actual_paths))
                     if extra or source_changes:
                         entry.update(status='rejected', classification=allowance['classification'], row=allowance['row'],
