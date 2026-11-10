@@ -1,0 +1,120 @@
+{
+  "schema": "mcpcli-story-5-5-sm3-status/v1",
+  "recordedOn": "2026-11-10",
+  "sourceSpec": "_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md",
+  "successMeasure": {
+    "id": "SM-3",
+    "text": "At least one Legacy Server deleted. Validates FR-21.",
+    "source": "_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:532",
+    "checkTiming": {
+      "text": "Checked three months after v1 ships.",
+      "source": "_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:527",
+      "section": "_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:525"
+    }
+  },
+  "v1": {
+    "package": "Hexalith.McpCli",
+    "version": "2.0.1",
+    "publishedOn": "2026-11-05",
+    "source": "_bmad-output/implementation-artifacts/evidence/story-4-18/publication-2.0.1-20261105/README.md",
+    "sourceSha256": "10be4f0a03ba137540899479f05e6b5d7b847b5513b7dfdcd30b00ada86c6ed5",
+    "basis": {
+      "statement": "Epic 5's entry names Epic 4's v1 release (2.0.1). The earlier tags v1.0.0, v1.1.0 and v2.0.0 are the fixed historical Abstractions-only bootstrap versions; 2.0.1 is the first paired release of Hexalith.McpCli.Abstractions and the Hexalith.McpCli tool.",
+      "sources": [
+        "_bmad-output/planning-artifacts/epics.md:292",
+        "README.md:87",
+        "README.md:121"
+      ]
+    }
+  },
+  "deadline": "2027-02-05",
+  "deadlineBasis": "2.0.1 published 2026-11-05 plus three months",
+  "deadlinePassed": false,
+  "status": "pending-not-met",
+  "committedRetirement": {
+    "surface": "Hexalith.Parties.Mcp",
+    "inventoryRow": "PS05",
+    "container": "parties-mcp",
+    "state": "retirement-blocked",
+    "verdict": "retirement-blocked",
+    "verdictSource": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json",
+      "sha256": "8bf60a2796f07a7bcb2e95adbe4d3467b8e1cd63164f67d4d8b3c476038d2c40",
+      "recordedAtUtc": "2026-11-09T21:33:10+00:00"
+    },
+    "blockingGaps": [
+      {
+        "id": "G01",
+        "gap": "Repeated missing-target rejection-only streams",
+        "owner": "Parties maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:556",
+        "disposition": "retained-blocking",
+        "workStatus": "open"
+      },
+      {
+        "id": "G02",
+        "gap": "Forced stale projections and erased/restricted delete/pre-read execution",
+        "owner": "Parties maintainer and EventStore Gateway maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:853",
+        "disposition": "retained-blocking",
+        "workStatus": "open"
+      },
+      {
+        "id": "G03",
+        "gap": "Downstream public Query-error detail/title privacy",
+        "owner": "EventStore Gateway maintainer and Parties maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:824",
+        "disposition": "retained-blocking",
+        "workStatus": "open"
+      },
+      {
+        "id": "G04",
+        "gap": "Persisted event/audit actor attribution",
+        "owner": "Parties maintainer and EventStore Gateway maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:859",
+        "disposition": "retained-blocking",
+        "workStatus": "open"
+      },
+      {
+        "id": "G05",
+        "gap": "Raw versus trimmed input-bound policy approval",
+        "owner": "Parties maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:865",
+        "disposition": "retained-blocking",
+        "workStatus": "open"
+      },
+      {
+        "id": "G06",
+        "gap": "Mixed-profile operator identity",
+        "owner": "McpCli maintainer",
+        "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:833",
+        "disposition": "retained-blocking",
+        "workStatus": "open"
+      }
+    ],
+    "reopenCondition": "G01-G06 close or receive owner-approved dispositions and a new exact-byte Story 5.4 verdict is retirement-ready (spec Decision 1)."
+  },
+  "deferredEntry": {
+    "anchor": "_bmad-output/implementation-artifacts/deferred-work.md:944",
+    "lineRange": "_bmad-output/implementation-artifacts/deferred-work.md:944-948",
+    "heading": "## Deferred from: planning of spec-5-5-retire-legacy-packages-and-platform-routes.md (2026-11-10)",
+    "entrySha256": "d42669cc980e9352c247caaea8ed69bcdb9764c9aca3e540a8f8bb7c8000b2d8",
+    "entryHashDefinition": "sha256 of lines 944-948 joined with LF, without a final line terminator",
+    "statusLine": "status: open; blocked until G01–G06 close or receive owner-approved dispositions and a new exact-byte Story 5.4 verdict is `retirement-ready`.",
+    "scope": "Parties retirement release (no AppHost, container, startup, sample or operator-documentation routing; rollback to the last legacy version) and the retirement verifier (Story 5.5 AC1-AC2)."
+  },
+  "compatibilityLabels": {
+    "register": "_bmad-output/implementation-artifacts/evidence/story-5-5/labels.json",
+    "rows": "PS01-PS14",
+    "deliveryStatus": "pendingPush"
+  },
+  "finalOutcome": {
+    "owner": "Story 5.11",
+    "note": "Story 5.11 records the final SM-3 outcome, and the product owner records why if no Legacy Server is deleted by the deadline."
+  },
+  "limits": [
+    "Records status only: no surface is removed, rerouted or unpublished, and no retirement is claimed.",
+    "No gap G01-G06 is closed or waived, and the Story 5.4 verdict is unchanged.",
+    "Whether SM-3 is met is decided at the deadline, not by this record."
+  ]
+}

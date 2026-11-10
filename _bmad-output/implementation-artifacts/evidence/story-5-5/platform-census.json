@@ -1,0 +1,1619 @@
+{
+  "schema": "mcpcli-story-5-5-platform-census/v1",
+  "generator": "_bmad-output/implementation-artifacts/evidence/story-5-5/platform-census.py",
+  "platformRepository": "https://github.com/Hexalith/Hexalith.Platform",
+  "platformRevision": "a9c3555cd178c0a46cdfb5e1ea7a2b3eafec02cd",
+  "revisionSource": "already-fetched origin/main in the local Platform checkout; no fetch, worktree or checkout change",
+  "governingDecision": {
+    "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md",
+    "line": 184,
+    "lineSha256": "986001fbcd69b3760121344757d043e701ed32eb126e4f056019bc1e861d7ab4",
+    "startsWith": "  - *Legacy surfaces:* Proprietary module ",
+    "startsWithNote": "exact leading characters, including the two-space indent"
+  },
+  "method": {
+    "command": "git grep -n -z -I <terms> <platformRevision> -- . <exclusions>",
+    "projectIdentities": {
+      "PS01": "Hexalith.EventStore.Admin.Cli",
+      "PS02": "Hexalith.EventStore.Admin.Mcp",
+      "PS03": "Hexalith.FrontComposer.Cli",
+      "PS04": "Hexalith.FrontComposer.Mcp",
+      "PS05": "Hexalith.Parties.Mcp",
+      "PS06": "Hexalith.Memories.Cli",
+      "PS07": "Hexalith.Memories.Mcp",
+      "PS08": "Hexalith.Projects.Cli",
+      "PS09": "Hexalith.Projects.Mcp",
+      "PS10": "Hexalith.Folders.Cli",
+      "PS11": "Hexalith.Folders.Mcp",
+      "PS12": "Hexalith.ChatBot.Cli",
+      "PS13": "Hexalith.ChatBot.Mcp",
+      "PS14": "MigrateEmbeddingVectors"
+    },
+    "projectMatch": "fixed string, case-insensitive (package IDs appear lowercase in tool manifests)",
+    "containerNames": {
+      "PS05": "parties-mcp",
+      "PS07": "memories-mcp"
+    },
+    "toolCommands": {
+      "PS01": "eventstore-admin",
+      "PS03": "frontcomposer",
+      "PS06": "memories",
+      "PS10": "folders"
+    },
+    "toolCommandMatch": "eventstore-admin as a fixed string; frontcomposer, memories and folders in invocation, installation and tool-manifest form (extended regex below), plus per-file bare-word counts in composition areas",
+    "toolCommandFormRegex": "(dotnet[ -]tool[ ]+(install|update|run|exec|restore)|dnx)[^|]*\\b(eventstore-admin|frontcomposer|memories|folders)\\b|(^|[[:space:]`\"\\'(])(frontcomposer[[:space:]]+(inspect|migrate)|memories[[:space:]]+(case|config|consistency|export|handlers|inspect|list|lookup|query|quickstart|repair|search|show|status|telemetry|tenant|verify|--version|--format|--help)|folders[[:space:]]+(audit|commit|context|file|folder|provider|workspace|--version|--help|--format))\\b",
+    "compositionAreas": [
+      "apphost.cs",
+      "apphost.run.json",
+      "hexalith-platform.json",
+      "src/",
+      "deploy/",
+      "infrastructure/",
+      "templates/",
+      "DaprComponents/",
+      "config/"
+    ],
+    "hitDefinition": "one deduplicated (path, line) pair per matching line, whatever the number of terms it matches"
+  },
+  "exclusions": {
+    "references/**": {
+      "reason": "Root-declared submodules, recorded as gitlinks that git grep at a revision does not enter; excluded by spec. Only the module manifests at the gitlinks of the seven PS-owning repositories are checked below (references/Hexalith.ChatBot, references/Hexalith.EventStore, references/Hexalith.Folders, references/Hexalith.FrontComposer, references/Hexalith.Memories, references/Hexalith.Parties, references/Hexalith.Projects); the other 10 references are not read (references/Hexalith.AI.Tools, references/Hexalith.Agents, references/Hexalith.Builds, references/Hexalith.Commons, references/Hexalith.Conversations, references/Hexalith.McpCli, references/Hexalith.PolymorphicSerializations, references/Hexalith.Tenants, references/Hexalith.Timesheets, references/Hexalith.Works).",
+      "files": 0,
+      "lineHits": 0
+    },
+    "**/evidence/**": {
+      "reason": "Captured evidence (out of scope by spec).",
+      "files": 543,
+      "lineHits": 11182
+    },
+    "docs/implementation/**": {
+      "reason": "Dated implementation evidence snapshots (source manifests, verification captures, installation observations); captured artifacts that ship nothing, as technical-tools inventory PE07 records.",
+      "files": 40,
+      "lineHits": 3489
+    }
+  },
+  "exclusionCountDefinition": "files: distinct paths; lineHits: deduplicated (path, line) pairs matching any census term (all fixed terms and the tool-command form) inside that exclusion alone",
+  "hitCount": 118,
+  "hits": [
+    {
+      "path": "DaprComponents/accesscontrol.eventstore-admin.yaml",
+      "line": 4,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "7cbfcfef22046b5ead9c7a1dc06c8fb2d765285ecf9aef70f576b900435d909e",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "# Loaded only by the eventstore-admin sidecar; governs which CALLERS may invoke Admin.Server through Dapr",
+      "resolvingIdentity": {
+        "identity": "ACL configuration loaded only by the Admin.Server sidecar; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "DaprComponents/accesscontrol.eventstore-admin.yaml:1",
+            "contains": "for the Admin.Server sidecar"
+          }
+        ]
+      }
+    },
+    {
+      "path": "DaprComponents/accesscontrol.eventstore-admin.yaml",
+      "line": 10,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "414c51a8e6ca91ce0118677b34ad663721c16bcc0f75a06858d293069c90bfcf",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "  name: accesscontrol-eventstore-admin",
+      "resolvingIdentity": {
+        "identity": "Dapr Configuration name of the Admin.Server sidecar ACL; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "DaprComponents/accesscontrol.eventstore-admin.yaml:1",
+            "contains": "for the Admin.Server sidecar"
+          }
+        ]
+      }
+    },
+    {
+      "path": "DaprComponents/accesscontrol.eventstore-operations.yaml",
+      "line": 17,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "c5407b0c301a3275b4c3222171ef7be8dbd81a86776df80e58bd79d943d643e7",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "      - appId: eventstore-admin",
+      "resolvingIdentity": {
+        "identity": "Caller policy for Admin.Server, the only caller allowed to query or mutate retained items; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "DaprComponents/accesscontrol.eventstore-operations.yaml:2",
+            "contains": "Only Admin.Server may query or mutate"
+          }
+        ]
+      }
+    },
+    {
+      "path": "DaprComponents/accesscontrol.works.yaml",
+      "line": 57,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "c5407b0c301a3275b4c3222171ef7be8dbd81a86776df80e58bd79d943d643e7",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "      - appId: eventstore-admin",
+      "resolvingIdentity": {
+        "identity": "Caller policy for the Admin.Server app ID; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:48",
+            "contains": "Hexalith.EventStore.Admin.Server.Host.csproj"
+          },
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:166",
+            "contains": "AddProject(\"eventstore-admin\", adminProject)"
+          }
+        ]
+      }
+    },
+    {
+      "path": "DaprComponents/accesscontrol.yaml",
+      "line": 53,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "c5407b0c301a3275b4c3222171ef7be8dbd81a86776df80e58bd79d943d643e7",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "      - appId: eventstore-admin",
+      "resolvingIdentity": {
+        "identity": "Caller policy for Admin.Server on the EventStore receiver; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "DaprComponents/accesscontrol.yaml:51",
+            "contains": "binds Admin.Server to its selected Admin API"
+          }
+        ]
+      }
+    },
+    {
+      "path": "DaprComponents/reference/statestore.yaml",
+      "line": 30,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "3aeb14cae8b9e1636f9c916ebb6058069c276720ddb90dd38370abda4c788cfd",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "  - eventstore-admin",
+      "resolvingIdentity": {
+        "identity": "State-store scope for the Admin.Server app ID in the reference composition; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "DaprComponents/accesscontrol.eventstore-admin.yaml:4",
+            "contains": "Loaded only by the eventstore-admin sidecar; governs which CALLERS may invoke Admin.Server"
+          }
+        ]
+      }
+    },
+    {
+      "path": "DaprComponents/statestore.yaml",
+      "line": 30,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "3aeb14cae8b9e1636f9c916ebb6058069c276720ddb90dd38370abda4c788cfd",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "  - eventstore-admin",
+      "resolvingIdentity": {
+        "identity": "State-store scope for the Admin.Server app ID; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:48",
+            "contains": "Hexalith.EventStore.Admin.Server.Host.csproj"
+          },
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:166",
+            "contains": "AddProject(\"eventstore-admin\", adminProject)"
+          }
+        ]
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/4-27-retire-kubesphere-without-changing-workload-data.md",
+      "line": 1542,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "9a65583d47ac94e7b4885ef6f7c8f9e5e307bca65a313d1e11a0837d33147541",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/4-27-retire-kubesphere-without-changing-workload-data.md",
+      "line": 1556,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "9993414d44acae93c5d2ee9e4b5a06f9c235fdcc38bf36dc787651d553ded753",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/deferred-work.md",
+      "line": 508,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "4b4c2991b57920a698e904305e865e6c29ae0b7d641a5debd9a98af6ed2b4e0d",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-1-10-run-and-debug-eventstore-and-memories-from-the-platform-workspace.md",
+      "line": 28,
+      "terms": [
+        "<tool-command-form>"
+      ],
+      "lineSha256": "fcf8d43ffc2544509253d2b2180aab60184c26a4fb6db5f06c5b89d46e1bf920",
+      "classification": "planning-or-review-record",
+      "reason": "Story text quoting a `dotnet tool run hexalith-module` invocation; the match is the word memories in its manifest path, not the memories tool."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-1-13-publish-the-domain-module-enrollment-kit.md",
+      "line": 124,
+      "terms": [
+        "Hexalith.Projects.Cli"
+      ],
+      "lineSha256": "7377862de2bb659f3b99557674fd7a7ea34d50693460a7a084b690b9011e86b4",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-1-5-declare-eventstore-memories-and-tenants-for-the-reference-composition.md",
+      "line": 101,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "d73148b67ad39940dff2854b1002085ce8210bf5dbbf942e1cea65937e28e276",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-1-5-declare-eventstore-memories-and-tenants-for-the-reference-composition.md",
+      "line": 286,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "6c10752ecdd267ee4995f67d6c9533a8ebe913d21b0a39518555c90e110e3dde",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-1-5-declare-eventstore-memories-and-tenants-for-the-reference-composition.md",
+      "line": 389,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "91a59b99a4c80ece6887d71e37dce1458053e6e12c0655ed412762304db83947",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-1-5-declare-eventstore-memories-and-tenants-for-the-reference-composition.md",
+      "line": 406,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "a127aa9f6737aca89f181c0e226f105c82efd485928cb72d0fd81fdd71579025",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-1-7-ratify-local-dapr-conventions-and-bind-component-names.md",
+      "line": 192,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "fced381bb1ff600b7aacc0c987ee5bee11f95915a009fedfedd725f2e9361782",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-4-27-retire-kubesphere-without-changing-workload-data.md",
+      "line": 1373,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "9a65583d47ac94e7b4885ef6f7c8f9e5e307bca65a313d1e11a0837d33147541",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-4-27-retire-kubesphere-without-changing-workload-data.md",
+      "line": 1387,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "9993414d44acae93c5d2ee9e4b5a06f9c235fdcc38bf36dc787651d553ded753",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-reconcile-retained-routing-catalog-work.md",
+      "line": 75,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "40c0b2fda3bb5bb7e469756ccc34e0e303a38e5ebf41004f5b3da11dca3a1817",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/.memlog.md",
+      "line": 214,
+      "terms": [
+        "Hexalith.EventStore.Admin.Cli"
+      ],
+      "lineSha256": "10774fecc1469f4a7a391f1ff9f0850c96909fa44d7992e7a77925ebe9144c41",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md",
+      "line": 184,
+      "terms": [
+        "Hexalith.EventStore.Admin.Cli"
+      ],
+      "lineSha256": "986001fbcd69b3760121344757d043e701ed32eb126e4f056019bc1e861d7ab4",
+      "classification": "governing-decision",
+      "reason": "AD-11 legacy-surfaces rule: names the surfaces only to keep them out of every Platform composition."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/update-2026-09-28-r3/review-reality.md",
+      "line": 15,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "c55a7c67439b4396e8c04764f353c5ff53ebbf3aa65439bbb0c33d16deea215a",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/update-2026-09-28/review-adversarial.md",
+      "line": 293,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "d46164cadeb9ce8f1b900a537a329524c3f4290f7f81ee96806950fd3bfe619f",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/update-2026-09-28/review-reconcile-r2.md",
+      "line": 61,
+      "terms": [
+        "Hexalith.EventStore.Admin.Cli"
+      ],
+      "lineSha256": "db7ea1f04b88fb77d35c78c71f76b9c7285b535373b1a8ccde5581ff74461fc3",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/findings.json",
+      "line": 400,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "17201f82cb614e997d5d7e1dbff386a2c58393732a7397e1cb7b2b39fcdfcd4b",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/findings.json",
+      "line": 1492,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "3fcb1453b8b1f3df6e96a4e1305d31f7bf473a11a44e51813e15295783bdfc5a",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/findings.json",
+      "line": 1493,
+      "terms": [
+        "Hexalith.EventStore.Admin.Cli"
+      ],
+      "lineSha256": "08ebf0a837d42ed897e0ec1f76638a725e440ee9b167b6736be52a3a271e3409",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-adversarial.md",
+      "line": 7,
+      "terms": [
+        "Hexalith.FrontComposer.Mcp"
+      ],
+      "lineSha256": "40a3cb147ecd6dd5452cb705eba7e51326ee2f20b75fb09d63740a63b5723902",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 37,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "673e1330abe021ed5758cbf395559169a27ce550fac2f12eb52e525ef540dcec",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 71,
+      "terms": [
+        "Hexalith.EventStore.Admin.Mcp"
+      ],
+      "lineSha256": "32fe2e1766fae910fa05fcbdb7506932bcf2a12b9d1ad43d3a5bed52e40ac431",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 72,
+      "terms": [
+        "Hexalith.EventStore.Admin.Cli",
+        "eventstore-admin"
+      ],
+      "lineSha256": "248356b9087e98b661a10de5dcb628713c3b4c93e70d7ee1923a3bd10cb4ad4e",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 73,
+      "terms": [
+        "Hexalith.Memories.Mcp",
+        "memories-mcp"
+      ],
+      "lineSha256": "ce06292b0dc14b653b766e6dee2aa1803530d42cb450c46a3e871894bbb7ed90",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 74,
+      "terms": [
+        "Hexalith.Memories.Cli"
+      ],
+      "lineSha256": "af0deb69787b0641e158d63cbe74ac0c8e222ef578262891a2e8bc5e714204ea",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 75,
+      "terms": [
+        "Hexalith.FrontComposer.Mcp"
+      ],
+      "lineSha256": "f5d8d4d0645a7c720dc9573de6534300680e97f3ce5161651ac3b1d928fdff42",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 76,
+      "terms": [
+        "Hexalith.FrontComposer.Cli"
+      ],
+      "lineSha256": "a2fad9fcaf38be469032a406c5ecf55ebebf234ee26f78a9d495c79b86f9adf8",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 77,
+      "terms": [
+        "Hexalith.Parties.Mcp",
+        "parties-mcp"
+      ],
+      "lineSha256": "feb1e7fa38a14960a5bfa487d1daebe5c43e5cdcc426e480fd59abf13bed32dc",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 79,
+      "terms": [
+        "Hexalith.Folders.Mcp"
+      ],
+      "lineSha256": "87064382a48b9482d901a5bb0a948fc11af9fc01388f158fc4a32f307d9c5fb6",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 80,
+      "terms": [
+        "Hexalith.Folders.Cli"
+      ],
+      "lineSha256": "5b3288237429d0332fd9b99dd194c2354d2df452af5721ac1322210f359d0e5e",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 81,
+      "terms": [
+        "Hexalith.Projects.Mcp"
+      ],
+      "lineSha256": "0c33ab0be13e101958542c9f1834df0ce75ea79ada71ec0728ded35bd0fe95c8",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 82,
+      "terms": [
+        "Hexalith.Projects.Cli"
+      ],
+      "lineSha256": "cacd5b794b1df8adfe2492de452db0b83da380ae9dee5b430a2c981d1780e59c",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 83,
+      "terms": [
+        "Hexalith.ChatBot.Mcp"
+      ],
+      "lineSha256": "a29c5357d93876da9f25f5cf6a2d66962f2bed44e7f5556f20abe1c702b3fee1",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-brownfield.md",
+      "line": 84,
+      "terms": [
+        "Hexalith.ChatBot.Cli"
+      ],
+      "lineSha256": "33b7e8b691cfec4c72535007915540fac53dae563ac23576e1a7c767ffceb994",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-reconcile.md",
+      "line": 332,
+      "terms": [
+        "Hexalith.EventStore.Admin.Cli"
+      ],
+      "lineSha256": "03f076ce1b033f7e60669e96aca1614a69599b765cdea59c04e3556afeda76a3",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-rubric.md",
+      "line": 32,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "2209c113385fbb174e425bc6d48cdb01f7edf090ce9ae203392366004eec45df",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-rubric.md",
+      "line": 52,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "1bc91949dbb86539d08f9721a3d7c1356efdc68f46afde578aab3aa1519f5a64",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-rubric.md",
+      "line": 57,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "c389973af30f9d04ad6902351e8b220cb75d3e9d4ee2b938fde3f4f73625ccab",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-security.md",
+      "line": 75,
+      "terms": [
+        "Hexalith.Memories.Mcp",
+        "Hexalith.Parties.Mcp"
+      ],
+      "lineSha256": "2016cb127bea2304a7c4e0328878b8d8ff65591c4a84bd1c5b5273cb566cafda",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/review-security.md",
+      "line": 79,
+      "terms": [
+        "Hexalith.EventStore.Admin.Mcp"
+      ],
+      "lineSha256": "4c8c42fc5ff3584ba6db1a5b9a6422df4bfa8b0aab61da8cc6c4bac5efb561a3",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/validation-report.html",
+      "line": 254,
+      "terms": [
+        "Hexalith.EventStore.Admin.Cli",
+        "eventstore-admin",
+        "memories-mcp"
+      ],
+      "lineSha256": "5ee19508efab72c5775d4250d9b3a86f76dff5c4d1775f0ba64bb84f31ac3051",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27-r2/validation-report.md",
+      "line": 261,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "699e533bb743fad303e8cb2d5b9271f88557fa945a0f4156858d499a68b78f12",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27/review-brownfield.md",
+      "line": 25,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "b64a94ef88b0ec73d2df21b6181889fb09157782286d645ff8099321ecb59080",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27/review-brownfield.md",
+      "line": 151,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "10dbe82e8ecd4dafbd39d2010365cfc1923361178f0d7eefe13f5dad5012acbb",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27/review-rubric.md",
+      "line": 242,
+      "terms": [
+        "Hexalith.FrontComposer.Mcp"
+      ],
+      "lineSha256": "150ed566104cccb6e5690f6280aef2f549285a80dd8782e770ce06db3b6829da",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/reviews/validate-2026-09-27/review-security.md",
+      "line": 47,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "73ef0dfdfd7475f041dfe8973a4b48d185cb6eeb3b3a72dc082aac72eff3be2a",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-27.md",
+      "line": 12,
+      "terms": [
+        "Hexalith.EventStore.Admin.Cli"
+      ],
+      "lineSha256": "9d4c7324ea93624275f1a256f962563a43c454d8048f680e3f74595e15bb5d4a",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-27.md",
+      "line": 32,
+      "terms": [
+        "Hexalith.ChatBot.Cli"
+      ],
+      "lineSha256": "adba1d8e7f5a35d04e8b479e14294c6251a1c16582337d2fcc144f634cf2a93b",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-27.md",
+      "line": 35,
+      "terms": [
+        "Hexalith.Memories.Cli"
+      ],
+      "lineSha256": "b4009caea3ab3a3c3bedf3e3a96dc539a68e39b2d0fe43af0bf093b2805f9ce5",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-27.md",
+      "line": 62,
+      "terms": [
+        "Hexalith.EventStore.Admin.Cli",
+        "Hexalith.EventStore.Admin.Mcp"
+      ],
+      "lineSha256": "95a35d9466b5c1a46d0fc218ecc3d4f6fddd681ddaabd09a6be3ce25e4f85f0e",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-27.md",
+      "line": 70,
+      "terms": [
+        "Hexalith.FrontComposer.Mcp"
+      ],
+      "lineSha256": "4dfc5a5316fb0ec9e550874bd565dd9a7621269ec0aae5bee5893ef12b5fbf2d",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-27.md",
+      "line": 72,
+      "terms": [
+        "Hexalith.Memories.Cli"
+      ],
+      "lineSha256": "4b72979981a1b7da48fe22ba345bdad0cfe7e824cc9f7255157890ba34b7ef45",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/sprint-change-proposal-2026-09-27.md",
+      "line": 84,
+      "terms": [
+        "Hexalith.ChatBot.Cli",
+        "Hexalith.Folders.Cli",
+        "Hexalith.Memories.Cli"
+      ],
+      "lineSha256": "23a8b010ed308c2a1f909fb3402eb0968ed3c9730d879f098c9ad22c7621b1bb",
+      "classification": "planning-or-review-record",
+      "reason": "Planning, architecture-review, story or ledger text that names a surface; not a composition input."
+    },
+    {
+      "path": "config/works-production-profile.schema.json",
+      "line": 15,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "63a7edeca3c931a3b7fc6eeefb1a3893bb15e0c2c7a2d6046ba972a47d5325a3",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "    \"operatorCaller\": {\"const\": \"eventstore-admin\"},",
+      "resolvingIdentity": {
+        "identity": "Production operator caller: the Admin.Server app ID; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:238",
+            "contains": "\"EventStoreOperations__AdminCallerAppId\", \"eventstore-admin\""
+          },
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:48",
+            "contains": "Hexalith.EventStore.Admin.Server.Host.csproj"
+          },
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:166",
+            "contains": "AddProject(\"eventstore-admin\", adminProject)"
+          }
+        ]
+      }
+    },
+    {
+      "path": "docs/works-host-parity.md",
+      "line": 264,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "38987152ea59057123b83f72fb5c962ebd98c30ebc25d0b3532d441955e84cbd",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "docs/works-host-parity.md",
+      "line": 323,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "d0f68c8225bc8fe1f83500d6b80dade6b8aa7bc428e4d545e0452ea3542cb988",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "eng/cluster-management/NEXT-OPERATOR-ACTION.md",
+      "line": 1901,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "9a65583d47ac94e7b4885ef6f7c8f9e5e307bca65a313d1e11a0837d33147541",
+      "classification": "existing-cluster-runbook",
+      "reason": "Operator runbook record naming the existing cluster Deployment memories-mcp, which Memories deploys with its own manifests; Platform does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/cluster-management/NEXT-OPERATOR-ACTION.md",
+      "line": 1915,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "9993414d44acae93c5d2ee9e4b5a06f9c235fdcc38bf36dc787651d553ded753",
+      "classification": "existing-cluster-runbook",
+      "reason": "Operator runbook record naming the existing cluster Deployment memories-mcp, which Memories deploys with its own manifests; Platform does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/cluster-management/STAGING-PREREQUISITES.md",
+      "line": 1074,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "9993414d44acae93c5d2ee9e4b5a06f9c235fdcc38bf36dc787651d553ded753",
+      "classification": "existing-cluster-runbook",
+      "reason": "Operator runbook record naming the existing cluster Deployment memories-mcp, which Memories deploys with its own manifests; Platform does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/kubernetes-upgrade/MAINTENANCE.md",
+      "line": 32,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "8c7fa36f528b49ca477ef0c6f6d65575c2f31110908353586df7d31207e0045a",
+      "classification": "existing-cluster-runbook",
+      "reason": "Operator runbook record naming the existing cluster Deployment memories-mcp, which Memories deploys with its own manifests; Platform does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/recovery-preparation/native_measurement_adapter.py",
+      "line": 94,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "527c9ea7443a0041406691333c003c8a5a07105a52082063d68c90ccbc8ed763",
+      "classification": "existing-cluster-observation",
+      "reason": "Synthetic-only, read-only measurement plan (no live entry point) that observes the existing cluster Deployment memories-mcp; it does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/recovery-preparation/test_native_enrollment_execution.py",
+      "line": 75,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "604f0bc361f1dcb746b3e6a622d6f9e7ce44a06d02f64ce426891cd9d0f29438",
+      "classification": "existing-cluster-observation",
+      "reason": "Synthetic-only, read-only measurement plan (no live entry point) that observes the existing cluster Deployment memories-mcp; it does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/recovery-preparation/test_native_enrollment_execution.py",
+      "line": 102,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "85383e86b2147ed7112839d3d785c4cd1c208979d3fb13270b3e49ce76ff5bff",
+      "classification": "existing-cluster-observation",
+      "reason": "Synthetic-only, read-only measurement plan (no live entry point) that observes the existing cluster Deployment memories-mcp; it does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/recovery-preparation/test_native_measurement_adapter.py",
+      "line": 90,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "f4096704f9fa726a1ffa6de7b3354c14064d6fbe72b1f6b12e262e0aa8231dbe",
+      "classification": "existing-cluster-observation",
+      "reason": "Synthetic-only, read-only measurement plan (no live entry point) that observes the existing cluster Deployment memories-mcp; it does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/recovery-preparation/test_native_measurement_adapter.py",
+      "line": 125,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "623680b7c4fdfc2af8c5e6861d2cd0ac36a9411e11a471bf51994ca62b1cf2d5",
+      "classification": "existing-cluster-observation",
+      "reason": "Synthetic-only, read-only measurement plan (no live entry point) that observes the existing cluster Deployment memories-mcp; it does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/retained-works-host/manifest.json",
+      "line": 15,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "f66fdf87a2ceb81f0efa1d0fb29765902cf795056ff0247ac7c9e5e212ba4f21",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "eng/test_verify_works_host.py",
+      "line": 33,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "dcd66a8222774d1609197ccc10e81550fbcd67da641f0abd4144a23b849972aa",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "eng/test_verify_works_host.py",
+      "line": 49,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "4c52bfd46301e361df1da8327de109df1fdf2ef38608b74159c84c12b2fc81d6",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "eng/test_verify_works_host.py",
+      "line": 610,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "a74b63e1758fd12acc31bc961b6fb768ef6373321e6c11970425cf5df4ba0f21",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "eng/test_verify_works_host.py",
+      "line": 1043,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "5384b44e8ca5ea684b389ca5ee93df51b527126004e55d21ced6011ec873fe7b",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "eng/test_verify_works_host.py",
+      "line": 1069,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "84f3a7ff930c5e02216242bff6d546bebae7207d610e344db128a2dbdc07d128",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "eng/timesheets-deployment/staging-dependency-handoff.md",
+      "line": 1058,
+      "terms": [
+        "memories-mcp"
+      ],
+      "lineSha256": "9993414d44acae93c5d2ee9e4b5a06f9c235fdcc38bf36dc787651d553ded753",
+      "classification": "existing-cluster-runbook",
+      "reason": "Operator runbook record naming the existing cluster Deployment memories-mcp, which Memories deploys with its own manifests; Platform does not enroll, deploy, route or map it."
+    },
+    {
+      "path": "eng/verify_works_host.py",
+      "line": 340,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "37007c9cb9de0a170f10a1bc63e6e954d44122464552242711dadb77089ae630",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "eng/verify_works_host.py",
+      "line": 451,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "20fa5d99374c126eb729394477f4bdd0f7db55bb7cca7c3c5fbd7be5c8d7e57b",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "scripts/test-reference-module-declarations.py",
+      "line": 330,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "5ba9c436892981cef2ef6928310325e4a86b7b759377ea78dba1bdaecede96ad",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "scripts/test-reference-module-declarations.py",
+      "line": 332,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "77335d1fd626010ef6d40142ca61ace0cf0e84a562c54994017ab99c390897ce",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
+      "line": 79,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "d3464bef68cfd16fa353589403110d7bdad3750148b38ab9b4eeaf2fde38906a",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "        string adminAcl = Component(\"accesscontrol.eventstore-admin.yaml\");",
+      "resolvingIdentity": {
+        "identity": "ACL file of the Admin.Server sidecar; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "DaprComponents/accesscontrol.eventstore-admin.yaml:1",
+            "contains": "for the Admin.Server sidecar"
+          }
+        ]
+      }
+    },
+    {
+      "path": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
+      "line": 166,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "b8d3a80c7bd2423e0fc992f33131a0ec942d52ae24b87af5fa54618f999a82ba",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "        var admin = builder.AddProject(\"eventstore-admin\", adminProject)",
+      "resolvingIdentity": {
+        "identity": "Aspire project resource for Admin.Server.Host; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:48",
+            "contains": "Hexalith.EventStore.Admin.Server.Host.csproj"
+          }
+        ]
+      }
+    },
+    {
+      "path": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
+      "line": 190,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "383b7260d5d0909b9542d69b62fac4467d6de067c999aeefc1f486dc9a15f39c",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "            .WithEnvironment(\"Authentication__Workload__AllowedCallers__1\", \"eventstore-admin\")",
+      "resolvingIdentity": {
+        "identity": "Allowed workload caller: the Admin.Server app ID; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:48",
+            "contains": "Hexalith.EventStore.Admin.Server.Host.csproj"
+          },
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:166",
+            "contains": "AddProject(\"eventstore-admin\", adminProject)"
+          }
+        ]
+      }
+    },
+    {
+      "path": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
+      "line": 238,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "04dac8f0f7019eab67868c6ed73b8d4384bc1d94ed33ed7694545684b641558b",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "            .WithEnvironment(\"EventStoreOperations__AdminCallerAppId\", \"eventstore-admin\")",
+      "resolvingIdentity": {
+        "identity": "Admin caller app ID for the operations workload: the Admin.Server app ID; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:48",
+            "contains": "Hexalith.EventStore.Admin.Server.Host.csproj"
+          },
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:166",
+            "contains": "AddProject(\"eventstore-admin\", adminProject)"
+          }
+        ]
+      }
+    },
+    {
+      "path": "src/Hexalith.Platform.Composition/WorksProductionProfile.cs",
+      "line": 56,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "7c17619b822b65d6a44414772ec080f892563700c50e7281a3cb1c5bd1dfe016",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.",
+      "excerpt": "            (\"gatewayCaller\", \"eventstore\"), (\"moduleCaller\", \"works\"), (\"operatorCaller\", \"eventstore-admin\"),",
+      "resolvingIdentity": {
+        "identity": "Production operator caller: the Admin.Server app ID; Dapr app ID and Aspire resource name eventstore-admin of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool",
+        "evidence": [
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:238",
+            "contains": "\"EventStoreOperations__AdminCallerAppId\", \"eventstore-admin\""
+          },
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:48",
+            "contains": "Hexalith.EventStore.Admin.Server.Host.csproj"
+          },
+          {
+            "anchor": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs:166",
+            "contains": "AddProject(\"eventstore-admin\", adminProject)"
+          }
+        ]
+      }
+    },
+    {
+      "path": "tests/Hexalith.Platform.Composition.Tests/PartiesAdoptionTests.cs",
+      "line": 74,
+      "terms": [
+        "parties-mcp"
+      ],
+      "lineSha256": "dc74cb4807296e004ddbd14ef2b90dc8fa2dfc661ea30d8e38a62c8817debb4e",
+      "classification": "negative-assertion",
+      "reason": "Asserts the composed server set does not contain parties-mcp."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Composition.Tests/PlatformAppModelTests.cs",
+      "line": 368,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "0893c212226e933bb686a36c0e518e7e0d6e8a8d33cf4722bf8fc453bd4fd045",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Composition.Tests/PlatformAppModelTests.cs",
+      "line": 380,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "ed89dc7874a0965b4126999d2b079ddde76e55432513d6058ff991fb2820cea3",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Composition.Tests/PlatformRunIsolationReviewTests.cs",
+      "line": 198,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "0893c212226e933bb686a36c0e518e7e0d6e8a8d33cf4722bf8fc453bd4fd045",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 37,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "a4110d68c032f83eb0fe3aae2dc4614476f8ec36148e6f9d60490c8741782698",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 52,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "54d1f4bb1abdfec55ad6ce5ad0294a5d6a21b819d1f0cc371534d64e77e0aa09",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 69,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "006b704502f2222d11920e111de83b855331cd23bc09917d27b09dff8d77da5d",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 70,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "2bcbb505aed9379c7d0ecabbbacf48adaaabb6882185824cb3eafecc5cf608a5",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 71,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "1430f694b54fc2ee2145c55cbf02cba08c473fbdb8b546140d8cd97ad4fb8661",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 72,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "719d8c194fda363a260f3948e2ccf6772b691215fea3377e31a6d1538f53218e",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 82,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "a4110d68c032f83eb0fe3aae2dc4614476f8ec36148e6f9d60490c8741782698",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 98,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "0f2bae4accc53b408c9376f1e822e66008f0fffdb169a5334733720d23e272e5",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 113,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "33703b7ec9e8c1f730e321a795e886c0a56fadadcfa0ac02275e6acfb718bde9",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 133,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "a4110d68c032f83eb0fe3aae2dc4614476f8ec36148e6f9d60490c8741782698",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 137,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "92b8531e5b9767df49100ca49b6133241bd01f12714a788dfa66de26c658eb50",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 159,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "33703b7ec9e8c1f730e321a795e886c0a56fadadcfa0ac02275e6acfb718bde9",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 230,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "691a3e50f120425e15d0d25415beb720988d0d9dc490e4e6d2a9e65c46557ff7",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 238,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "dea9eb3a7fb1c13a28f7c2b7c0f8241f448ef0c95f9a8a9f9c7ec4e3139641d7",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 298,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "f28f5da0aafddf8563038049f125a75ef52432df3639a386992ca9c26083b644",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/RecoveryRuntimeTests.cs",
+      "line": 299,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "55b827804caaef0670047d7b14435c7076a3eac683a2eb8bc3d9b363d585e535",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/WorksDaprPolicyTests.cs",
+      "line": 14,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "bb03c644221945994996bd94953c901808940f6fb59d9b0ea5a8207481eb257f",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/WorksDaprPolicyTests.cs",
+      "line": 123,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "9fb661866f0624c002bd7a9e9b8cb8adce4a2d07b692ef5e76e4faf6624edc5c",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/WorksDaprPolicyTests.cs",
+      "line": 125,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "f69fa171918aacfe8c9b85f0196c58104b39757c3804f31f804b72eeeb28eff5",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/WorksDaprPolicyTests.cs",
+      "line": 132,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "4b4a99d5c0cc70dbb5b0e3b23de62ff61519629943b1ce6373ffdf7fd32637a3",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/WorksPreviewModelTests.cs",
+      "line": 80,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "4277f1ae30ba90a248dba7c4010f4bee4466f2a51d48574ad6c253d4c30b53f6",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/WorksPreviewModelTests.cs",
+      "line": 107,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "555afe26b6d8a317b9d2f023469101ad21ae5a9a2fd8d1be0a724e120d507d81",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/WorksPreviewModelTests.cs",
+      "line": 152,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "3e1d456c7e9705e7f4d4ca9e3f8f6ba0ad07292630d8180ce75c5c0798485dab",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    },
+    {
+      "path": "tests/Hexalith.Platform.Works.Tests/WorksProductionProfileTests.cs",
+      "line": 181,
+      "terms": [
+        "eventstore-admin"
+      ],
+      "lineSha256": "c5d3ae80a1e4827cff90646a2c0d653a4327f602fb5043996ec74ced78f9327d",
+      "classification": "admin-server-dapr-identity",
+      "reason": "eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool."
+    }
+  ],
+  "unclassified": [],
+  "compositionHits": [],
+  "unresolvedEvidence": [],
+  "bareToolCommandWords": {
+    "frontcomposer": {
+      "surface": "PS03",
+      "compositionAreaFiles": [],
+      "classification": "none"
+    },
+    "memories": {
+      "surface": "PS06",
+      "compositionAreaFiles": [
+        {
+          "path": "DaprComponents/reference/pubsub.yaml",
+          "lineHits": 2
+        },
+        {
+          "path": "DaprComponents/reference/secretstore.yaml",
+          "lineHits": 3
+        },
+        {
+          "path": "DaprComponents/reference/statestore.yaml",
+          "lineHits": 1
+        },
+        {
+          "path": "DaprComponents/reference/telemetry-config.yaml",
+          "lineHits": 2
+        },
+        {
+          "path": "DaprComponents/reference/telemetry-state.yaml",
+          "lineHits": 1
+        },
+        {
+          "path": "src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs",
+          "lineHits": 11
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/Declarations/eventstore.json",
+          "lineHits": 2
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/Declarations/local-profile.json",
+          "lineHits": 195
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/Declarations/memories.json",
+          "lineHits": 37
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/Declarations/provenance.json",
+          "lineHits": 1
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformAppModel.cs",
+          "lineHits": 13
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformCatalogContractBinding.cs",
+          "lineHits": 1
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformDaprEndpointSubscriber.cs",
+          "lineHits": 1
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformLocalProfile.cs",
+          "lineHits": 3
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformNativeTestPreparation.cs",
+          "lineHits": 15
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformPackageCatalogQualification.cs",
+          "lineHits": 2
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformPartiesPackageCatalogQualification.cs",
+          "lineHits": 17
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformRetentionProfile.cs",
+          "lineHits": 5
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformRoutingCatalogBootstrap.cs",
+          "lineHits": 4
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformServerBindings.cs",
+          "lineHits": 9
+        },
+        {
+          "path": "templates/domain-module-enrollment/hexalith.module-manifest.v2.json",
+          "lineHits": 1
+        }
+      ],
+      "classification": "memories-module-identity",
+      "reason": "Every composition-area occurrence names the Memories module, its declared servers (memories, memories-access-telemetry, memories-access-telemetry-clock, memories-domain-service), their Dapr components, configuration keys, container images, embedding client or package-cohort names; none installs, invokes or routes the memories CLI, whose package identity Hexalith.Memories.Cli and invocation forms have no hit."
+    },
+    "folders": {
+      "surface": "PS10",
+      "compositionAreaFiles": [],
+      "classification": "none"
+    }
+  },
+  "toolManifest": {
+    "path": ".config/dotnet-tools.json",
+    "tools": [
+      "hexalith.builds.module.cli"
+    ],
+    "psTools": []
+  },
+  "declaredServers": {
+    "source": "src/Hexalith.Platform.Composition/Declarations/*.json",
+    "byDeclaration": {
+      "eventstore.json": [
+        "eventstore"
+      ],
+      "memories.json": [
+        "memories",
+        "memories-access-telemetry",
+        "memories-access-telemetry-clock",
+        "memories-domain-service"
+      ],
+      "tenants.json": [
+        "tenants",
+        "tenants-api"
+      ]
+    },
+    "psSurfaces": []
+  },
+  "moduleManifestsAtPlatformGitlinks": {
+    "source": "read with git show from each PS-owning repository object store at the Platform gitlink (read-only)",
+    "scope": "the seven PS-owning references only; not read: references/Hexalith.AI.Tools, references/Hexalith.Agents, references/Hexalith.Builds, references/Hexalith.Commons, references/Hexalith.Conversations, references/Hexalith.McpCli, references/Hexalith.PolymorphicSerializations, references/Hexalith.Tenants, references/Hexalith.Timesheets, references/Hexalith.Works",
+    "manifests": [
+      {
+        "reference": "references/Hexalith.EventStore",
+        "gitlink": "aa16227bd07f0564a3026d619a5abd973e02656f",
+        "path": "module/hexalith.module-manifest.v2.json",
+        "sha256": "21eda6da824d5ae6135ff342dd8a5aae950b02420319b953a836dddeb00ce495",
+        "psSurfaceMentions": 0
+      },
+      {
+        "reference": "references/Hexalith.Parties",
+        "gitlink": "c9eb1fe37373b2b25d3759a4ac8f33ac46754e17",
+        "path": "module/hexalith.module-manifest.v2.json",
+        "sha256": "d9c193b0e7b61601b8fcceb906b5dafe4769a1b9d7538a6ce164b4aa0840b348",
+        "psSurfaceMentions": 0
+      },
+      {
+        "reference": "references/Hexalith.Memories",
+        "gitlink": "4ff3e6866ecb6d1a497e7063e972c24259252c40",
+        "path": "module/hexalith.module-manifest.v2.json",
+        "sha256": "56f6dc8134d3f7cea06910e923a4736a450e00241e8e4a565ac9226897881840",
+        "psSurfaceMentions": 0
+      },
+      {
+        "reference": "references/Hexalith.Projects",
+        "gitlink": "9ae0571529cb4a9f3ad9750c8b834e6284d4f76b",
+        "path": "module/hexalith.module-manifest.v2.json",
+        "sha256": "7028d15cca15ac35fb8172a43537e45000307127f42499196817ca5a3772a754",
+        "psSurfaceMentions": 0
+      },
+      {
+        "reference": "references/Hexalith.FrontComposer",
+        "gitlink": "e972d0f06a8eec3446db0b2270fdb14eef4c1186",
+        "path": null,
+        "psSurfaceMentions": 0,
+        "note": "No module manifest at this gitlink."
+      },
+      {
+        "reference": "references/Hexalith.Folders",
+        "gitlink": "e88c940000446e13d17d86a7288649d8653a7138",
+        "path": null,
+        "psSurfaceMentions": 0,
+        "note": "No module manifest at this gitlink."
+      },
+      {
+        "reference": "references/Hexalith.ChatBot",
+        "gitlink": "b13c58006d292836a9c8b242de476765676e5fb2",
+        "path": "module/build.module-manifest.v2.json",
+        "sha256": "bd9cee9fe692e5b15075354f8e82e9188afa9cb71e76df9233feae719b5141b1",
+        "psSurfaceMentions": 0
+      }
+    ]
+  },
+  "verdict": "no-platform-composition-of-a-ps-surface",
+  "failures": []
+}

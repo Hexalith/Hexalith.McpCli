@@ -1,0 +1,8 @@
+{
+  "folders": {
+    "status": "merged-unreviewed",
+    "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
+    "mainCiRuns": null,
+    "note": "A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. README.md and the Cli .csproj at origin/main a87d0a0d equal the label commit. main CI was not checked, because this phase allows no remote operation."
+  }
+}

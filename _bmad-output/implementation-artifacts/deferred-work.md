@@ -938,3 +938,17 @@ status: open
   owner: McpCli maintainer / CI redaction maintainer.
   status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/verify-paired-publication.py:118; `redact_operator` (`:122`) and `private_operator_key` (`:134`) have no callers, and `credentials()` (`:118`) is used only by `scripts/tests/test_paired_publication.py:621-622`. Found during Story 5.4 review pass 2; delete them, or have the tests import `known_credentials` directly.
+
+## Deferred from: planning of spec-5-5-retire-legacy-packages-and-platform-routes.md (2026-11-10)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md`
+  summary: Retire `Parties.Mcp` through a merged upstream Parties release that no longer routes or advertises it (AppHost reference, `parties-mcp` container, startup, samples, operator documentation), with a rollback path to the last legacy version and its SM-3 date (2027-02-05), plus the retirement verifier that fails and names every remaining routing point (Story 5.5 AC1–AC2).
+  owner: Parties maintainer, for the release; McpCli maintainer, for the verifier.
+  status: open; blocked until G01–G06 close or receive owner-approved dispositions and a new exact-byte Story 5.4 verdict is `retirement-ready`.
+  evidence: Split from Story 5.5 at planning by the user's decision "Labels + slip" (2026-11-10). `_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json` records the verdict `retirement-blocked` and retains G01–G06 with their ledger anchors. Upstream Parties `v3.1.1` still ships `src/Hexalith.Parties.Mcp/` (`src/Hexalith.Parties.Mcp/Hexalith.Parties.Mcp.csproj:1` at tag `v3.1.1`).
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md`
+  summary: Older upstream README text still presents legacy surfaces as current features, with no pointer to the new "Legacy compatibility surfaces" section.
+  owner: each owning module maintainer (Parties, Memories, ChatBot), reconciled with Story 5.11's product claims.
+  status: open; pre-existing text, deferred by the Story 5.5 review pass 1 (BH7).
+  evidence: The sentences predate Story 5.5, and its labels add one root README section per repository (frozen Decision 4). At each repository's `origin/main` used for the label commits: Parties `README.md:28` ("Separate MCP host -- `parties-mcp` exposes …") and `:138`; Memories `README.md:47-48` and `:118-119` (`dotnet pack` / `dotnet tool install` steps for `Hexalith.Memories.Cli`); ChatBot `README.md:3` ("the production CLI adapter, the governed MCP tool surface") and `:78`. Parties pins part of that README text in `SampleOnboardingGuardrailTests`, so a rewording needs those tests updated upstream.

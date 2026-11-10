@@ -1,0 +1,945 @@
+{
+  "schema": "mcpcli-story-5-5-labels/v1",
+  "sourceSpec": "_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md",
+  "generator": "_bmad-output/implementation-artifacts/evidence/story-5-5/build-labels.py",
+  "register": "Authoritative register of the PS01-PS14 compatibility labels. Each of the following updates the owning upstream label and this register, with new sources and hashes, before it counts as complete: a versioned amendment that changes a removal gate (Stories 5.7-5.10); a change of the Story 5.4 verdict or of the status of any of G01-G06; and a newly approved version of a cited technical-tools or module inventory.",
+  "deliveryState": "pendingPush (eventstore, frontcomposer, parties, memories, projects, chatbot): the label commit exists only on the local branch docs/mcpcli-5-5-compatibility-labels of an isolated worktree; folders: merged-unreviewed as f1f639090a4e6b8cbeacb246e7052968dbc75836 (A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. README.md and the Cli .csproj at origin/main a87d0a0d equal the label commit. main CI was not checked, because this phase allows no remote operation.)",
+  "deliveryProcedure": [
+    "Run only after the Build review passes, one repository at a time.",
+    "Fetch origin. If origin/main moved past the recorded base, rebase the label commit onto it, revalidate the exact message with that repository's commitlint, and rerun its pinned README tests if the rebase changed README.md, a modified .csproj or a test that reads them. Parties already needs this: its origin/main is 64085d9f, not the recorded base 87a7b600.",
+    "A repository whose label commit already reached main out of band (status merged-unreviewed; currently Folders, through the concurrent /pushall merge f1f63909) skips the rebase and the push: list and record the main runs for its mergedCommit and for the later main head as in the next step, then regenerate and re-verify as below.",
+    "Push the label commit to main. If the push is rejected, record status push-rejected with the reason in the outcomes file, regenerate this register, and halt for the user.",
+    "List every main run for the pushed commit with gh run list -R Hexalith/Hexalith.<Repo> --commit <sha> and wait for each to finish. Record each run id, workflow and conclusion. If any run does not conclude success, record status ci-red, regenerate this register, and halt for the user without patching around the failure.",
+    "Regenerate this register with build-labels.py --rev <repo>=<pushed sha> --outcomes <file>. This re-records the base, the pushed commit, mergedCommit, every row's commit, the README blob and hashes, the label and Description anchors and hashes from the pushed blobs, and mainCiRuns.",
+    "Rerun verify-labels.py with --rev <repo>=<pushed sha> for every repository, against the pushed commits.",
+    "Rescan this directory into a new receipt."
+  ],
+  "mcpcliInventoryPin": {
+    "commit": "c70ca9784da393cb1929741c6a6c9564717eace5",
+    "onOriginMain": true
+  },
+  "labelHashDefinition": "Label sha256 covers the exact UTF-8 label line as committed, without a line terminator. Description sha256 covers the committed line that holds the prefix, without a line terminator. README sha256 covers the whole committed blob after Git normalization. messageSha256 covers the commit message as git log -1 --format=%B prints it, with its trailing newlines collapsed to exactly one.",
+  "labelTemplate": {
+    "heading": "## Legacy compatibility surfaces",
+    "intro": "These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition.",
+    "descriptionPrefix": "Compatibility binary, not retired; see \"Legacy compatibility surfaces\" in the repository README for its removal gate. "
+  },
+  "inventories": {
+    "technical-tools": {
+      "title": "technical-tools inventory",
+      "version": "1.0.2",
+      "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+      "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+      "pinnedUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md"
+    },
+    "eventstore-admin": {
+      "title": "EventStore Admin inventory",
+      "version": "1.0.1",
+      "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+      "sha256": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
+      "pinnedUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md"
+    },
+    "frontcomposer": {
+      "title": "FrontComposer inventory",
+      "version": "1.0.0",
+      "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+      "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+      "pinnedUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md"
+    },
+    "parties": {
+      "title": "Parties inventory",
+      "version": "1.2.0",
+      "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28",
+      "pinnedUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md"
+    },
+    "memories": {
+      "title": "Memories inventory",
+      "version": "1.0.0",
+      "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+      "sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597",
+      "pinnedUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md"
+    },
+    "projects": {
+      "title": "Projects inventory",
+      "version": "1.0.0",
+      "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+      "sha256": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+      "pinnedUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md"
+    },
+    "folders": {
+      "title": "Folders inventory",
+      "version": "1.0.0",
+      "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+      "sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+      "pinnedUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md"
+    },
+    "chatbot": {
+      "title": "ChatBot inventory",
+      "version": "1.0.0",
+      "path": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+      "sha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+      "pinnedUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md"
+    }
+  },
+  "commits": {
+    "eventstore": {
+      "repository": "https://github.com/Hexalith/Hexalith.EventStore",
+      "branch": "docs/mcpcli-5-5-compatibility-labels",
+      "localCommit": "84f928c47ebf1e1ed3a6e5105867e60bdcbf4d55",
+      "base": "aa16227bd07f0564a3026d619a5abd973e02656f",
+      "originMainWhenRecorded": "a940fb6167cc70526ba413782ec9fbe91ad64a8d",
+      "baseIsOriginMain": false,
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "mainCiRuns": null,
+      "deliveryNote": null,
+      "changedFiles": [
+        "README.md",
+        "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj"
+      ],
+      "subject": "docs: label legacy compatibility surfaces",
+      "messageSha256": "f129ec52dccbd230e3860b5309902176cbbce585b69b6d336a526b8919814fde",
+      "commitlint": {
+        "result": "found 0 problems, 0 warnings",
+        "validator": "owner checkout node_modules/.bin/commitlint (@commitlint/cli 21.2.4), run read-only; its lockfile and config are unchanged from origin/main"
+      },
+      "releaseRuleCheck": {
+        "docsCommitCutsRelease": false,
+        "basis": ".releaserc.json: default @semantic-release/commit-analyzer rules; release.yml is workflow_dispatch only"
+      },
+      "readme": {
+        "path": "README.md",
+        "blob": "d55c563ba7b86e831bdd0e96f8cfccfbbea6edc4",
+        "sha256": "bf51d26711c35ef0bfc82c626432f85c6800e9e85d379b391e5f9a88960d6190",
+        "sectionHeading": {
+          "line": 160,
+          "text": "## Legacy compatibility surfaces"
+        },
+        "sectionIntro": {
+          "line": 162,
+          "sha256": "7da57e905fb195f0d1256c9a0d586dd30a44338cf9d9d350f3a61b624d538fc3",
+          "text": "These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition."
+        }
+      }
+    },
+    "frontcomposer": {
+      "repository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+      "branch": "docs/mcpcli-5-5-compatibility-labels",
+      "localCommit": "c9af83ed5b5466a362e60be406510084929f96d0",
+      "base": "e972d0f06a8eec3446db0b2270fdb14eef4c1186",
+      "originMainWhenRecorded": "e972d0f06a8eec3446db0b2270fdb14eef4c1186",
+      "baseIsOriginMain": true,
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "mainCiRuns": null,
+      "deliveryNote": null,
+      "changedFiles": [
+        "README.md",
+        "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj",
+        "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj"
+      ],
+      "subject": "docs: label legacy compatibility surfaces",
+      "messageSha256": "0a4b01e0b0132ce179a019a9dba8ee52b8af594becccb666bc645994223e4efa",
+      "commitlint": {
+        "result": "found 0 problems, 0 warnings",
+        "validator": "owner checkout node_modules/.bin/commitlint (@commitlint/cli 21.2.4), run read-only; its lockfile and config are unchanged from origin/main"
+      },
+      "releaseRuleCheck": {
+        "docsCommitCutsRelease": false,
+        "basis": ".releaserc.json: conventionalcommits preset, no releaseRules; release.yml is workflow_dispatch only"
+      },
+      "readme": {
+        "path": "README.md",
+        "blob": "4ca63bfe799230c69264b050c1f5d045e04f6fc6",
+        "sha256": "198a7d105083dd376725ebf9b53bb4e7075e443b3c9b6cfd2a92c219b01f10cc",
+        "sectionHeading": {
+          "line": 28,
+          "text": "## Legacy compatibility surfaces"
+        },
+        "sectionIntro": {
+          "line": 30,
+          "sha256": "7da57e905fb195f0d1256c9a0d586dd30a44338cf9d9d350f3a61b624d538fc3",
+          "text": "These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition."
+        }
+      }
+    },
+    "parties": {
+      "repository": "https://github.com/Hexalith/Hexalith.Parties",
+      "branch": "docs/mcpcli-5-5-compatibility-labels",
+      "localCommit": "e23951d52aadb468038a208e95ff19eee8a97e6c",
+      "base": "87a7b600353b8967ab7b537c1e8dbd4a4b1b5cdc",
+      "originMainWhenRecorded": "64085d9f3b24f56bcffe63a9c2d7eb84f38e1fca",
+      "baseIsOriginMain": false,
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "mainCiRuns": null,
+      "deliveryNote": null,
+      "changedFiles": [
+        "README.md"
+      ],
+      "subject": "docs: label legacy compatibility surfaces",
+      "messageSha256": "680b33bed002ccd765244dae9ed188ac7bbc9c42d5e233813f364c3db1f930aa",
+      "commitlint": {
+        "result": "found 0 problems, 0 warnings",
+        "validator": "worktree node_modules/.bin/commitlint (@commitlint/cli 21.2.4) from npm ci --offline --ignore-scripts of the origin/main lockfile"
+      },
+      "releaseRuleCheck": {
+        "docsCommitCutsRelease": false,
+        "basis": "release.config.cjs: default commit-analyzer rules; release.yml is workflow_dispatch only"
+      },
+      "readme": {
+        "path": "README.md",
+        "blob": "2e244f1d9c0ea1da6673e5d7d046406e9ed5b23d",
+        "sha256": "d0aac9168a3a55f1cacf70aee5d2a0e42bce0236f22644aadaff191a90dfa97f",
+        "sectionHeading": {
+          "line": 160,
+          "text": "## Legacy compatibility surfaces"
+        },
+        "sectionIntro": {
+          "line": 162,
+          "sha256": "7da57e905fb195f0d1256c9a0d586dd30a44338cf9d9d350f3a61b624d538fc3",
+          "text": "These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition."
+        }
+      }
+    },
+    "memories": {
+      "repository": "https://github.com/Hexalith/Hexalith.Memories",
+      "branch": "docs/mcpcli-5-5-compatibility-labels",
+      "localCommit": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "base": "4ff3e6866ecb6d1a497e7063e972c24259252c40",
+      "originMainWhenRecorded": "4ff3e6866ecb6d1a497e7063e972c24259252c40",
+      "baseIsOriginMain": true,
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "mainCiRuns": null,
+      "deliveryNote": null,
+      "changedFiles": [
+        "README.md",
+        "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
+        "src/Hexalith.Memories.Mcp/Hexalith.Memories.Mcp.csproj"
+      ],
+      "subject": "docs: label legacy compatibility surfaces",
+      "messageSha256": "8b132d6c19b57e8e1360b764d8e0bd6f37d824594645c2708c1988cefdf5c9e8",
+      "commitlint": {
+        "result": "found 0 problems, 0 warnings",
+        "validator": "worktree node_modules/.bin/commitlint (@commitlint/cli 21.2.4) from npm ci --offline --ignore-scripts of the origin/main lockfile; the commit-msg hook re-ran it"
+      },
+      "releaseRuleCheck": {
+        "docsCommitCutsRelease": false,
+        "basis": ".releaserc.json: default commit-analyzer rules; release.yml is workflow_dispatch only"
+      },
+      "readme": {
+        "path": "README.md",
+        "blob": "3bdfebf27decfb37f8eb4bff8e519b44dd5c4623",
+        "sha256": "3fe33bf8ac3633b0546e627fe00f0677e5ee72fb4461fd8682a0e4f2ece676a4",
+        "sectionHeading": {
+          "line": 130,
+          "text": "## Legacy compatibility surfaces"
+        },
+        "sectionIntro": {
+          "line": 132,
+          "sha256": "7da57e905fb195f0d1256c9a0d586dd30a44338cf9d9d350f3a61b624d538fc3",
+          "text": "These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition."
+        }
+      }
+    },
+    "projects": {
+      "repository": "https://github.com/Hexalith/Hexalith.Projects",
+      "branch": "docs/mcpcli-5-5-compatibility-labels",
+      "localCommit": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "base": "9ae0571529cb4a9f3ad9750c8b834e6284d4f76b",
+      "originMainWhenRecorded": "9ae0571529cb4a9f3ad9750c8b834e6284d4f76b",
+      "baseIsOriginMain": true,
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "mainCiRuns": null,
+      "deliveryNote": null,
+      "changedFiles": [
+        "README.md"
+      ],
+      "subject": "docs: label legacy compatibility surfaces",
+      "messageSha256": "4c18ea8d82ffe644b205fd1a1d21e7630fbca8d4145bcc5815f89ae9f3fd335f",
+      "commitlint": {
+        "result": "found 0 problems, 0 warnings",
+        "validator": "owner checkout node_modules/.bin/commitlint (@commitlint/cli 21.2.4), run read-only; its lockfile and config are unchanged from origin/main"
+      },
+      "releaseRuleCheck": {
+        "docsCommitCutsRelease": false,
+        "basis": "release.config.cjs: default commit-analyzer rules; release.yml is workflow_dispatch only"
+      },
+      "readme": {
+        "path": "README.md",
+        "blob": "2ae104da62a13ede8dfbbe6b8d299d846329eb11",
+        "sha256": "1d3ea35dbc751bcc5f6eca7e0500a500b92ddcdadb36081848efdf0ae4c3aa90",
+        "sectionHeading": {
+          "line": 3,
+          "text": "## Legacy compatibility surfaces"
+        },
+        "sectionIntro": {
+          "line": 5,
+          "sha256": "7da57e905fb195f0d1256c9a0d586dd30a44338cf9d9d350f3a61b624d538fc3",
+          "text": "These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition."
+        }
+      }
+    },
+    "folders": {
+      "repository": "https://github.com/Hexalith/Hexalith.Folders",
+      "branch": "docs/mcpcli-5-5-compatibility-labels",
+      "localCommit": "f4f5ce0ce9676cd5674e75093476df2ba4fde585",
+      "base": "e88c940000446e13d17d86a7288649d8653a7138",
+      "originMainWhenRecorded": "a87d0a0d31d4c5a7e7a286ac9d8d0bdc3f7da3d5",
+      "baseIsOriginMain": false,
+      "deliveryStatus": "merged-unreviewed",
+      "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
+      "mainCiRuns": null,
+      "deliveryNote": "A concurrent Cursor /pushall session in the Folders owner checkout merged the local label branch into main as f1f63909 at 2026-11-10 10:12 +0100, before the Build review, pushed it and then a87d0a0d, and removed the label worktree and branch. README.md and the Cli .csproj at origin/main a87d0a0d equal the label commit. main CI was not checked, because this phase allows no remote operation.",
+      "changedFiles": [
+        "README.md",
+        "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj"
+      ],
+      "subject": "docs: label legacy compatibility surfaces",
+      "messageSha256": "3effad9c6c52428c63c0b7e3f5770888bed779510d2623e8f15e1df4710f4809",
+      "commitlint": {
+        "result": "found 0 problems, 0 warnings",
+        "validator": "worktree node_modules/.bin/commitlint (@commitlint/cli 21.2.4) from npm ci --offline --ignore-scripts of the origin/main lockfile"
+      },
+      "releaseRuleCheck": {
+        "docsCommitCutsRelease": false,
+        "basis": ".releaserc.json: default commit-analyzer rules; release.yml is workflow_dispatch only"
+      },
+      "readme": {
+        "path": "README.md",
+        "blob": "2efc90a62410e83a17defa8784ff9bc9b443f6b5",
+        "sha256": "9cf95d525ee0e75caeebf9a72e95d30b7bb57760096663b4dd7e1c4a1c18f740",
+        "sectionHeading": {
+          "line": 56,
+          "text": "## Legacy compatibility surfaces"
+        },
+        "sectionIntro": {
+          "line": 58,
+          "sha256": "7da57e905fb195f0d1256c9a0d586dd30a44338cf9d9d350f3a61b624d538fc3",
+          "text": "These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition."
+        }
+      }
+    },
+    "chatbot": {
+      "repository": "https://github.com/Hexalith/Hexalith.ChatBot",
+      "branch": "docs/mcpcli-5-5-compatibility-labels",
+      "localCommit": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "base": "b13c58006d292836a9c8b242de476765676e5fb2",
+      "originMainWhenRecorded": "b13c58006d292836a9c8b242de476765676e5fb2",
+      "baseIsOriginMain": true,
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "mainCiRuns": null,
+      "deliveryNote": null,
+      "changedFiles": [
+        "README.md"
+      ],
+      "subject": "docs: label legacy compatibility surfaces",
+      "messageSha256": "a2852b61d8e17b1b4dbc4fe51f507959264c319e9fa12a0375c44a2fb48ab07a",
+      "commitlint": {
+        "result": "found 0 problems, 0 warnings",
+        "validator": "the Parties worktree node_modules/.bin/commitlint (@commitlint/cli 21.2.4) with --config commitlint.config.cjs (no extends); ChatBot pins no CLI"
+      },
+      "releaseRuleCheck": {
+        "docsCommitCutsRelease": false,
+        "basis": ".releaserc.json: default commit-analyzer rules; release.yml runs on push to main, so its gates run, but semantic-release cuts no release for a docs commit"
+      },
+      "readme": {
+        "path": "README.md",
+        "blob": "110129bd259a3c367e70341e1538662b2be44492",
+        "sha256": "619cb807c81d9188156d1181b1c04db90cee5afda5e06b3a9ef047345c55923d",
+        "sectionHeading": {
+          "line": 177,
+          "text": "## Legacy compatibility surfaces"
+        },
+        "sectionIntro": {
+          "line": 179,
+          "sha256": "7da57e905fb195f0d1256c9a0d586dd30a44338cf9d9d350f3a61b624d538fc3",
+          "text": "These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition."
+        }
+      }
+    }
+  },
+  "rows": [
+    {
+      "id": "PS01",
+      "repository": "https://github.com/Hexalith/Hexalith.EventStore",
+      "surface": "Hexalith.EventStore.Admin.Cli",
+      "project": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+      "commit": "84f928c47ebf1e1ed3a6e5105867e60bdcbf4d55",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 164,
+        "anchor": "README.md:164",
+        "sha256": "fb021c6dfd926a8171f640f7bf7734ab1921d571b7334d2d14c9c15d657b3871",
+        "text": "- `Hexalith.EventStore.Admin.Cli` (.NET tool `eventstore-admin`): removal gate \"Companion G1–G6: approved generic administration contract and destructive-operation safety evidence first\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS01; [EventStore Admin inventory 1.0.1](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md)).",
+        "sectionIntroLine": 162
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true
+      },
+      "gate": {
+        "text": "Companion G1–G6: approved generic administration contract and destructive-operation safety evidence first",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:272",
+        "row": "PS01",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "EventStore Admin inventory",
+        "version": "1.0.1",
+        "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+        "sha256": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18"
+      },
+      "description": {
+        "file": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+        "line": 11,
+        "anchor": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj:11",
+        "sha256": "397058e35deffe2bd2d13baffcdb8fb4da7d021acd575ba2ca762d9b61f1ca71",
+        "prefix": "Compatibility binary, not retired; see \"Legacy compatibility surfaces\" in the repository README for its removal gate. ",
+        "added": false,
+        "nugetVisibility": "after the next release of this package"
+      }
+    },
+    {
+      "id": "PS02",
+      "repository": "https://github.com/Hexalith/Hexalith.EventStore",
+      "surface": "Hexalith.EventStore.Admin.Mcp",
+      "project": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+      "commit": "84f928c47ebf1e1ed3a6e5105867e60bdcbf4d55",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 165,
+        "anchor": "README.md:165",
+        "sha256": "35aeb63cd24b6023321da478f819c5ffc4e3354edcaf71100867804a20b96ac3",
+        "text": "- `Hexalith.EventStore.Admin.Mcp` (stdio MCP server): removal gate \"Companion G1–G6\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS02; [EventStore Admin inventory 1.0.1](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md)).",
+        "sectionIntroLine": 162
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true
+      },
+      "gate": {
+        "text": "Companion G1–G6",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:273",
+        "row": "PS02",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "EventStore Admin inventory",
+        "version": "1.0.1",
+        "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+        "sha256": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18"
+      },
+      "description": null
+    },
+    {
+      "id": "PS03",
+      "repository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+      "surface": "Hexalith.FrontComposer.Cli",
+      "project": "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj",
+      "commit": "c9af83ed5b5466a362e60be406510084929f96d0",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 32,
+        "anchor": "README.md:32",
+        "sha256": "3c659be20c8c576955e762940c3e78f0537603ae87204bea6f6c84f34c1886c8",
+        "text": "- `Hexalith.FrontComposer.Cli` (.NET tool `frontcomposer`): removal gate \"G2 compiler-tool decision; not removable with the MCP host by default\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS03; [FrontComposer inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md)).",
+        "sectionIntroLine": 30
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true
+      },
+      "gate": {
+        "text": "G2 compiler-tool decision; not removable with the MCP host by default",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:274",
+        "row": "PS03",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "FrontComposer inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+        "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9"
+      },
+      "description": {
+        "file": "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj",
+        "line": 10,
+        "anchor": "src/Hexalith.FrontComposer.Cli/Hexalith.FrontComposer.Cli.csproj:10",
+        "sha256": "6606c229114b6972da8633fb89c69ba45cb85a275a0350ed8b0b1c83fb9cb129",
+        "prefix": "Compatibility binary, not retired; see \"Legacy compatibility surfaces\" in the repository README for its removal gate. ",
+        "added": false,
+        "nugetVisibility": "after the next release of this package"
+      }
+    },
+    {
+      "id": "PS04",
+      "repository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+      "surface": "Hexalith.FrontComposer.Mcp",
+      "project": "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj",
+      "commit": "c9af83ed5b5466a362e60be406510084929f96d0",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 33,
+        "anchor": "README.md:33",
+        "sha256": "f7bc5f3336fad16ea45e999784fae6ee08cad66ffea5f43f6e5a08dd6ee81923",
+        "text": "- `Hexalith.FrontComposer.Mcp` (HTTP MCP host library): removal gate \"G4: retire together with the Projects plug-in after every host consumer is accounted for\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS04; [FrontComposer inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md)). The FrontComposer host and the Projects plug-in (`Hexalith.Projects.Mcp`) retire together.",
+        "sectionIntroLine": 30
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true,
+        "hostAndPluginRetireTogether": true
+      },
+      "gate": {
+        "text": "G4: retire together with the Projects plug-in after every host consumer is accounted for",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:275",
+        "row": "PS04",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "FrontComposer inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+        "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9"
+      },
+      "description": {
+        "file": "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj",
+        "line": 6,
+        "anchor": "src/Hexalith.FrontComposer.Mcp/Hexalith.FrontComposer.Mcp.csproj:6",
+        "sha256": "4ed9bec619efcdd20bef51e6af2e21d7e9c795e4e6585acf6ed094d142ad1ac7",
+        "prefix": "Compatibility binary, not retired; see \"Legacy compatibility surfaces\" in the repository README for its removal gate. ",
+        "added": true,
+        "nugetVisibility": "after the next release of this package"
+      }
+    },
+    {
+      "id": "PS05",
+      "repository": "https://github.com/Hexalith/Hexalith.Parties",
+      "surface": "Hexalith.Parties.Mcp",
+      "project": "src/Hexalith.Parties.Mcp/Hexalith.Parties.Mcp.csproj",
+      "commit": "e23951d52aadb468038a208e95ff19eee8a97e6c",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 164,
+        "anchor": "README.md:164",
+        "sha256": "acf9cfa8e7d2fe4ce127b7b9f28316079149ce3c90f347566437d19f29552058",
+        "text": "- `Hexalith.Parties.Mcp` (container `parties-mcp`): removal gate \"Parties inventory gates; replacement evidence and approved withdrawal for every row\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS05; [Parties inventory 1.2.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md)). Retirement is blocked: the McpCli Story 5.4 verdict is `retirement-blocked`, with G01–G06 open ([owner approval](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json)).",
+        "sectionIntroLine": 162
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true,
+        "story54VerdictAndOpenGaps": true
+      },
+      "gate": {
+        "text": "Parties inventory gates; replacement evidence and approved withdrawal for every row",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:276",
+        "row": "PS05",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "Parties inventory",
+        "version": "1.2.0",
+        "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+        "sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28"
+      },
+      "description": null,
+      "verdictSource": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json",
+        "pinnedUrl": "https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json",
+        "sha256": "8bf60a2796f07a7bcb2e95adbe4d3467b8e1cd63164f67d4d8b3c476038d2c40"
+      }
+    },
+    {
+      "id": "PS06",
+      "repository": "https://github.com/Hexalith/Hexalith.Memories",
+      "surface": "Hexalith.Memories.Cli",
+      "project": "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
+      "commit": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 134,
+        "anchor": "README.md:134",
+        "sha256": "4084ce373e1217de6c11c95175d1fefcce2ff4540013f160a6e8dd82f9684f34",
+        "text": "- `Hexalith.Memories.Cli` (.NET tool `memories`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS06; [Memories inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md)). Forwarded per-user identity is necessary but not sufficient for retirement.",
+        "sectionIntroLine": 132
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true,
+        "forwardedIdentityNecessaryNotSufficient": true
+      },
+      "gate": {
+        "text": "Memories gates, including forwarded per-user identity in the HTTP release",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:277",
+        "row": "PS06",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "Memories inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+        "sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+      },
+      "description": {
+        "file": "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
+        "line": 17,
+        "anchor": "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj:17",
+        "sha256": "23851b8c79bb21197e1f634eab839585794ad92cf10114232b79dcf5c404f7be",
+        "prefix": "Compatibility binary, not retired; see \"Legacy compatibility surfaces\" in the repository README for its removal gate. ",
+        "added": false,
+        "nugetVisibility": "after the next release of this package"
+      }
+    },
+    {
+      "id": "PS07",
+      "repository": "https://github.com/Hexalith/Hexalith.Memories",
+      "surface": "Hexalith.Memories.Mcp",
+      "project": "src/Hexalith.Memories.Mcp/Hexalith.Memories.Mcp.csproj",
+      "commit": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 135,
+        "anchor": "README.md:135",
+        "sha256": "ef3a0519732c617d8593ca5a0b846a0efb20e1ec93c32509a898ccaf82ace51c",
+        "text": "- `Hexalith.Memories.Mcp` (container `memories-mcp`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS07; [Memories inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md)). Forwarded per-user identity is necessary but not sufficient for retirement.",
+        "sectionIntroLine": 132
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true,
+        "forwardedIdentityNecessaryNotSufficient": true
+      },
+      "gate": {
+        "text": "Memories gates, including forwarded per-user identity in the HTTP release",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:278",
+        "row": "PS07",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "Memories inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+        "sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+      },
+      "description": {
+        "file": "src/Hexalith.Memories.Mcp/Hexalith.Memories.Mcp.csproj",
+        "line": 8,
+        "anchor": "src/Hexalith.Memories.Mcp/Hexalith.Memories.Mcp.csproj:8",
+        "sha256": "a659979e0d2c486af26b9c94102cfddfdc2f849c9c3ff1db795292456b4c3519",
+        "prefix": "Compatibility binary, not retired; see \"Legacy compatibility surfaces\" in the repository README for its removal gate. ",
+        "added": false,
+        "nugetVisibility": "after the next release of this package"
+      }
+    },
+    {
+      "id": "PS08",
+      "repository": "https://github.com/Hexalith/Hexalith.Projects",
+      "surface": "Hexalith.Projects.Cli",
+      "project": "src/Hexalith.Projects.Cli/Hexalith.Projects.Cli.csproj",
+      "commit": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 7,
+        "anchor": "README.md:7",
+        "sha256": "4ec1e4492c34c231de5736365293bd8afeb4c07d706050b643fdb1dde3ae3839",
+        "text": "- `Hexalith.Projects.Cli` (CLI): removal gate \"Projects inventory gates\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS08; [Projects inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md)).",
+        "sectionIntroLine": 5
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true
+      },
+      "gate": {
+        "text": "Projects inventory gates",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:279",
+        "row": "PS08",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "Projects inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+        "sha256": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f"
+      },
+      "description": null
+    },
+    {
+      "id": "PS09",
+      "repository": "https://github.com/Hexalith/Hexalith.Projects",
+      "surface": "Hexalith.Projects.Mcp",
+      "project": "src/Hexalith.Projects.Mcp/Hexalith.Projects.Mcp.csproj",
+      "commit": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 8,
+        "anchor": "README.md:8",
+        "sha256": "838d9ab58ad6aebc18668448de8446a3d002fe9f448a31f4592061df7c80425a",
+        "text": "- `Hexalith.Projects.Mcp` (FrontComposer MCP plug-in library): removal gate \"G4: retire together with the FrontComposer host\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS09; [Projects inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md)). The Projects plug-in and the FrontComposer host (`Hexalith.FrontComposer.Mcp`) retire together.",
+        "sectionIntroLine": 5
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true,
+        "hostAndPluginRetireTogether": true
+      },
+      "gate": {
+        "text": "G4: retire together with the FrontComposer host",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:280",
+        "row": "PS09",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "Projects inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+        "sha256": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f"
+      },
+      "description": null
+    },
+    {
+      "id": "PS10",
+      "repository": "https://github.com/Hexalith/Hexalith.Folders",
+      "surface": "Hexalith.Folders.Cli",
+      "project": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+      "commit": "f4f5ce0ce9676cd5674e75093476df2ba4fde585",
+      "deliveryStatus": "merged-unreviewed",
+      "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
+      "label": {
+        "file": "README.md",
+        "line": 60,
+        "anchor": "README.md:60",
+        "sha256": "2bb670f4cb96e5996ad6bbd9658f611105af37081ed7d7d346624e5c2cd9dde9",
+        "text": "- `Hexalith.Folders.Cli` (.NET tool `folders`): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS10; [Folders inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md)).",
+        "sectionIntroLine": 58
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true
+      },
+      "gate": {
+        "text": "Folders inventory gates",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:281",
+        "row": "PS10",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "Folders inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+        "sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b"
+      },
+      "description": {
+        "file": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+        "line": 10,
+        "anchor": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj:10",
+        "sha256": "03594cb5b8d7e4681f48cc19949cbff22c9342a121936d7c64ef44e4293a5980",
+        "prefix": "Compatibility binary, not retired; see \"Legacy compatibility surfaces\" in the repository README for its removal gate. ",
+        "added": false,
+        "nugetVisibility": "on its first release (never published)"
+      }
+    },
+    {
+      "id": "PS11",
+      "repository": "https://github.com/Hexalith/Hexalith.Folders",
+      "surface": "Hexalith.Folders.Mcp",
+      "project": "src/Hexalith.Folders.Mcp/Hexalith.Folders.Mcp.csproj",
+      "commit": "f4f5ce0ce9676cd5674e75093476df2ba4fde585",
+      "deliveryStatus": "merged-unreviewed",
+      "mergedCommit": "f1f639090a4e6b8cbeacb246e7052968dbc75836",
+      "label": {
+        "file": "README.md",
+        "line": 61,
+        "anchor": "README.md:61",
+        "sha256": "996096fa7fe20daad399d4a6383aeeb17060be1f6698d89805a89446c9b1cc00",
+        "text": "- `Hexalith.Folders.Mcp` (stdio MCP server): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS11; [Folders inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md)).",
+        "sectionIntroLine": 58
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true
+      },
+      "gate": {
+        "text": "Folders inventory gates",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:282",
+        "row": "PS11",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "Folders inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+        "sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b"
+      },
+      "description": null
+    },
+    {
+      "id": "PS12",
+      "repository": "https://github.com/Hexalith/Hexalith.ChatBot",
+      "surface": "Hexalith.ChatBot.Cli",
+      "project": "src/Hexalith.ChatBot.Cli/Hexalith.ChatBot.Cli.csproj",
+      "commit": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 181,
+        "anchor": "README.md:181",
+        "sha256": "dea6056e1e535f7f1d36de50c3c19e1c43bbdb4a38448803c483855a1ce1cd14",
+        "text": "- `Hexalith.ChatBot.Cli` (CLI): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS12; [ChatBot inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md)).",
+        "sectionIntroLine": 179
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true
+      },
+      "gate": {
+        "text": "ChatBot inventory gates",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:283",
+        "row": "PS12",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "ChatBot inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+        "sha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94"
+      },
+      "description": null
+    },
+    {
+      "id": "PS13",
+      "repository": "https://github.com/Hexalith/Hexalith.ChatBot",
+      "surface": "Hexalith.ChatBot.Mcp",
+      "project": "src/Hexalith.ChatBot.Mcp/Hexalith.ChatBot.Mcp.csproj",
+      "commit": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 182,
+        "anchor": "README.md:182",
+        "sha256": "1d0f04483be119ee7f4dc9518d3b9bc3072b193c0a651d56b6f6c83632a1be31",
+        "text": "- `Hexalith.ChatBot.Mcp` (stdio MCP server): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS13; [ChatBot inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md)).",
+        "sectionIntroLine": 179
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true
+      },
+      "gate": {
+        "text": "ChatBot inventory gates",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:284",
+        "row": "PS13",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "ChatBot inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+        "sha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94"
+      },
+      "description": null
+    },
+    {
+      "id": "PS14",
+      "repository": "https://github.com/Hexalith/Hexalith.Memories",
+      "surface": "tools/MigrateEmbeddingVectors",
+      "project": "tools/MigrateEmbeddingVectors/MigrateEmbeddingVectors.csproj",
+      "commit": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+      "deliveryStatus": "pendingPush",
+      "mergedCommit": null,
+      "label": {
+        "file": "README.md",
+        "line": 136,
+        "anchor": "README.md:136",
+        "sha256": "fc9dc0093c06d14a8070ad6d405d57c1d0e4fb2864951e77e9062ecac02e4f70",
+        "text": "- `tools/MigrateEmbeddingVectors` (operator CLI): removal gate \"G3 Memories inventory update; G4 compatibility surface; Memories inventory gates\" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS14; [Memories inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md)). Forwarded per-user identity is necessary but not sufficient for retirement.",
+        "sectionIntroLine": 132
+      },
+      "requiredStatements": {
+        "versionedCompatibilityBinary": true,
+        "notRetired": true,
+        "outsideEveryPlatformComposition": true,
+        "removalGateVerbatim": true,
+        "forwardedIdentityNecessaryNotSufficient": true
+      },
+      "gate": {
+        "text": "G3 Memories inventory update; G4 compatibility surface; Memories inventory gates",
+        "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:285",
+        "row": "PS14",
+        "inventoryVersion": "1.0.2",
+        "inventorySha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+      },
+      "moduleInventory": {
+        "title": "Memories inventory",
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+        "sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+      },
+      "description": null
+    }
+  ]
+}
