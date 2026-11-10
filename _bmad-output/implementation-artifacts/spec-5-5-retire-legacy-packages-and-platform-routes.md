@@ -131,6 +131,8 @@ context:
   - Nothing was patched around. `labels.json` was regenerated from these commits, and the read-back passes 14 of 14. The evidence was rescanned clean.
   - The outcomes and remaining steps are in `evidence/story-5-5/verification.md`.
 
+- **Correction (2026-11-10): the Folders attribution.** The delivery note above says Folders is "red from this story", which is wrong. `contract-spine-gates` was already red at `e88c9400` (run 42109497136), from Folders' own PD10 drift. The Description prefix adds one more drift, which masks the earlier one. A revert of only the prefix still fails 5 of the 24 PD10 tests. The user kept the label and made no Folders commit. The approval-bound PD10 v2 requalification, owned by the Folders maintainer, must rebind `Hexalith.Folders.Cli.csproj` at 1324 bytes, and Decision 4 is unchanged.
+
 ## Spec Change Log
 
 ## Review Triage Log
