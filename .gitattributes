@@ -34,6 +34,6 @@ _bmad-output/implementation-artifacts/evidence/story-4-18/** -text whitespace=-b
 # review receipts, and retained workflow text; their scans bind file SHA-256s.
 _bmad-output/implementation-artifacts/evidence/story-5-4*/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 
-# Preserve the exact scanned Story 5.5 label register, Platform census, SM-3 status
-# and verification; the scan receipt binds their file SHA-256s.
+# Preserve every scanned Story 5.5 evidence file byte for byte; the scan receipt
+# binds their file SHA-256s.
 _bmad-output/implementation-artifacts/evidence/story-5-5/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

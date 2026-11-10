@@ -18,21 +18,25 @@ INVENTORY = MCPCLI / '_bmad-output/implementation-artifacts/technical-tools-migr
 PIN = 'c70ca9784da393cb1929741c6a6c9564717eace5'
 OWNER_APPROVAL = (f'https://github.com/Hexalith/Hexalith.McpCli/blob/{PIN}/_bmad-output/implementation-artifacts/'
                   'evidence/story-5-4-owner-approval/owner-approval.json')
+LINK = f'(https://github.com/Hexalith/Hexalith.McpCli/blob/{PIN}/_bmad-output/implementation-artifacts/'
+TECHNICAL_TOOLS = '[technical-tools inventory 1.0.2]' + LINK + 'technical-tools-migration-inventory-v1.md)'
+ADMIN = ('EventStore Admin inventory 1.0.1', 'eventstore-admin-migration-inventory-v1.md')
+FRONTCOMPOSER = ('FrontComposer inventory 1.0.0', 'frontcomposer-migration-inventory-v1.md')
+MEMORIES = ('Memories inventory 1.0.0', 'memories-migration-inventory-v1.md')
+PROJECTS = ('Projects inventory 1.0.0', 'projects-migration-inventory-v1.md')
+FOLDERS = ('Folders inventory 1.0.0', 'folders-migration-inventory-v1.md')
+CHATBOT = ('ChatBot inventory 1.0.0', 'chatbot-migration-inventory-v1.md')
+# repository -> row -> (surface, (module inventory title, its file at the pin))
 EXPECTED = {
-    'eventstore': {'PS01': ('Hexalith.EventStore.Admin.Cli', 'EventStore Admin inventory 1.0.1'),
-                   'PS02': ('Hexalith.EventStore.Admin.Mcp', 'EventStore Admin inventory 1.0.1')},
-    'frontcomposer': {'PS03': ('Hexalith.FrontComposer.Cli', 'FrontComposer inventory 1.0.0'),
-                      'PS04': ('Hexalith.FrontComposer.Mcp', 'FrontComposer inventory 1.0.0')},
-    'parties': {'PS05': ('Hexalith.Parties.Mcp', 'Parties inventory 1.2.0')},
-    'memories': {'PS06': ('Hexalith.Memories.Cli', 'Memories inventory 1.0.0'),
-                 'PS07': ('Hexalith.Memories.Mcp', 'Memories inventory 1.0.0'),
-                 'PS14': ('tools/MigrateEmbeddingVectors', 'Memories inventory 1.0.0')},
-    'projects': {'PS08': ('Hexalith.Projects.Cli', 'Projects inventory 1.0.0'),
-                 'PS09': ('Hexalith.Projects.Mcp', 'Projects inventory 1.0.0')},
-    'folders': {'PS10': ('Hexalith.Folders.Cli', 'Folders inventory 1.0.0'),
-                'PS11': ('Hexalith.Folders.Mcp', 'Folders inventory 1.0.0')},
-    'chatbot': {'PS12': ('Hexalith.ChatBot.Cli', 'ChatBot inventory 1.0.0'),
-                'PS13': ('Hexalith.ChatBot.Mcp', 'ChatBot inventory 1.0.0')},
+    'eventstore': {'PS01': ('Hexalith.EventStore.Admin.Cli', ADMIN), 'PS02': ('Hexalith.EventStore.Admin.Mcp', ADMIN)},
+    'frontcomposer': {'PS03': ('Hexalith.FrontComposer.Cli', FRONTCOMPOSER),
+                      'PS04': ('Hexalith.FrontComposer.Mcp', FRONTCOMPOSER)},
+    'parties': {'PS05': ('Hexalith.Parties.Mcp', ('Parties inventory 1.2.0', 'parties-migration-inventory-v1.md'))},
+    'memories': {'PS06': ('Hexalith.Memories.Cli', MEMORIES), 'PS07': ('Hexalith.Memories.Mcp', MEMORIES),
+                 'PS14': ('tools/MigrateEmbeddingVectors', MEMORIES)},
+    'projects': {'PS08': ('Hexalith.Projects.Cli', PROJECTS), 'PS09': ('Hexalith.Projects.Mcp', PROJECTS)},
+    'folders': {'PS10': ('Hexalith.Folders.Cli', FOLDERS), 'PS11': ('Hexalith.Folders.Mcp', FOLDERS)},
+    'chatbot': {'PS12': ('Hexalith.ChatBot.Cli', CHATBOT), 'PS13': ('Hexalith.ChatBot.Mcp', CHATBOT)},
 }
 DESCRIPTIONS = {
     'eventstore': ['src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj'],
@@ -83,7 +87,7 @@ def main():
         bullets = [l for l in section if l.startswith('- ')]
         if len(bullets) != len(rows):
             failures.append(f'{repo}: {len(bullets)} bullets for {len(rows)} rows')
-        for ps, (surface, inventory) in rows.items():
+        for ps, (surface, (inventory, inventory_file)) in rows.items():
             mine = [b for b in bullets if b.startswith(f'- `{surface}`')]
             elsewhere = [l for l in readme if ps in l and l not in mine]
             if len(mine) != 1 or elsewhere:
@@ -93,8 +97,9 @@ def main():
             gate = re.search(r'removal gate "([^"]*)"', label)
             checks = {
                 'gateByteEqual': bool(gate) and gate.group(1).encode('utf-8') == cells[ps].encode('utf-8'),
-                'technicalToolsCited': f'[technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/{PIN}/' in label and f') {ps};' in label,
-                'moduleInventoryCited': f'[{inventory}](https://github.com/Hexalith/Hexalith.McpCli/blob/{PIN}/' in label,
+                # Each citation is compared as a whole link, title and target file, so a wrong path fails.
+                'technicalToolsCited': f'{TECHNICAL_TOOLS} {ps};' in label,
+                'moduleInventoryCited': f'[{inventory}]{LINK}{inventory_file})' in label,
                 'noReplacementClaim': not any(claim in label.lower() for claim in REPLACEMENT_CLAIMS),
             }
             if repo == 'memories':

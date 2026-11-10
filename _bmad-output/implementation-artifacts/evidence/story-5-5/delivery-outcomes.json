@@ -147,7 +147,7 @@
         "conclusion": "failure"
       }
     ],
-    "note": "The first push was refused with HTTP 403 on the session gh-cicd-agent token. Pushed on 2026-11-10 with the user's credential (GH_CONFIG_DIR=/home/administrator/.config/gh), after the user's instruction \"push all changes\". Fast-forward b13c580..82f20d5. ci (run 42805809990) and release (run 42805809900) fail on Hexalith.Platform.Composition compile errors (CS1061/CS0117/CS0103, missing QualificationOwners members). The parent b13c580 (ci run 42463556156, release run 41868435964) has identical error signatures, so they are pre-existing and not caused by the README-only label. semantic-release cut no release. Not patched (Decision 3)."
+    "note": "The first push was refused with HTTP 403 on the session gh-cicd-agent token. Pushed on 2026-11-10 with the user's credential (GH_CONFIG_DIR=/home/administrator/.config/gh), after the user's instruction \"push all changes\". Fast-forward b13c580..82f20d5. ci (run 42805809990) and release (run 42805809900) fail on Hexalith.Platform.Composition compile errors (CS1061/CS0117/CS0103, missing QualificationOwners members). The parent b13c580 (ci run 42463556156, release run 41868435964) has identical error signatures, so they are pre-existing and not caused by the README-only label. No release was cut: the release run failed before semantic-release ran. Not patched (Decision 3)."
   },
   "parties": {
     "status": "ci-red",

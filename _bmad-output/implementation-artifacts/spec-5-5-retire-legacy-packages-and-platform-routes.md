@@ -111,6 +111,144 @@ context:
 - Given the evidence set, when it is scanned, then the scan passes and the set binds each label commit, the Platform revision and the inventory hashes.
 - Given the whole change, when it is inspected, then McpCli `src/`, `tests/`, `references/`, the inventories and every upstream non-label line are unchanged.
 
+### Review Findings
+
+Code review pass 2 (bmad-code-review, 2026-11-10). The scope was the deliverables, 2,899 diff lines in 21 files:
+- the seven upstream label commits on `main`: EventStore `3de922e1`, FrontComposer `01fc48e3`, Parties `4c9fb0a0`, Memories `1143ba17`, Projects `77067782`, Folders `f4f5ce0c` (merged as `f1f63909`) and ChatBot `82f20d5e`;
+- `.gitattributes`, the three evidence scripts, `verification.md`, `sm3-status.json`, `delivery-outcomes.json`, `secret-scan.json` and `labels.json`;
+- the story's `deferred-work.md` hunks.
+
+The generated `platform-census.json` was left out; `platform-census.py` reproduces it.
+
+Four layers ran and none failed: Blind Hunter (B1–B20), Edge Case Hunter (E1–E30), Verification Gap (V1–V2 gaps, V3–V6 other) and Acceptance Auditor (A1–A11).
+
+Of 67 findings, 32 group into 13 patches. There is no decision and no deferral, and 35 are rejected.
+
+Independent re-checks during triage:
+- `verify-labels.py` passes 14 of 14 against the pushed commits, including Folders `f1f63909`.
+- Every register anchor, label, Description, README and message SHA-256 matches the committed blobs.
+- Each current `origin/main` keeps the label files unchanged.
+- The amended FrontComposer message passes its owner commitlint (0 problems).
+
+**Applied (2026-11-10, user "Apply every patch"):** all 13 patches.
+- Regenerated `labels.json`. Only the procedure text, the ChatBot note and Parties' moved `originMainWhenRecorded` changed.
+- Re-ran the read-back: 14 of 14 at the label commits, and again with Folders at `f1f63909`.
+- Re-ran the census at `a9c3555c`: byte-identical.
+- Rescanned the evidence: clean, 8 files bound.
+- The four new guards were probed. Each refuses a bad input that the committed version accepted ("Guard probes" in `evidence/story-5-5/verification.md`).
+- No upstream repository changed.
+
+- [x] [Review][Patch] `check_outcome` never proves that a label commit reached `main`
+  - `pushed`, and `ci-red` with `mergedCommit == commit`, accept a hand-entered outcome without `ancestor(commit, 'origin/main')`.
+  - `merged-unreviewed` passes with empty runs, because `all([])` is true.
+  - An unfinished run (conclusion `None`) counts as red.
+  - So a never-pushed SHA could be registered as delivered, and Stories 5.7–5.10 inherit that.
+  - Fix: for every status except `push-rejected`, require the ancestry, non-empty runs and final conclusions. Then regenerate, re-verify and rescan. All seven current commits are on `origin/main`.
+  - Not changed: the `baseIsOriginMain` rename.
+  - (V1, B3, E1, E2, E3) [_bmad-output/implementation-artifacts/evidence/story-5-5/build-labels.py:171]
+- [x] [Review][Patch] The AC1 read-back for Folders reads the pre-merge commit `f4f5ce0c`, not the merged `main` commit `f1f63909`
+  - Ancestry alone does not prove the label survived the `/pushall` merge.
+  - Run and record `verify-labels.py --rev folders=f1f639090a4e6b8cbeacb246e7052968dbc75836`. It passes, and its first-parent diff is the label alone.
+  - Keep `build-labels.py` on `f4f5ce0c`.
+  - (V2, E18) [_bmad-output/implementation-artifacts/evidence/story-5-5/verification.md:178]
+- [x] [Review][Patch] Instructions written for delivery were not refreshed after delivery
+  - `DELIVERY_PROCEDURE`, copied into `labels.json` `deliveryProcedure`, and steps 0 and 1 of `verification.md` still say:
+    - "Parties already needs this: its origin/main is 64085d9f, not the recorded base 87a7b600";
+    - "status merged-unreviewed; currently Folders".
+  - The register now records Parties base `64085d9f` and Folders `ci-red`.
+  - Step 4 says the tool "refuses an outcome whose `mergedCommit` differs from the pushed commit", but `ci-red` and `merged-unreviewed` accept an out-of-band ancestor merge.
+  - The resolved push entry in the ledger still tells the reader to "follow the delivery procedure" after pushing.
+  - Fix: make the procedure generic, correct step 4, put that evidence line in the past tense, then regenerate and rescan.
+  - Not changed: the ledger heading (B18 part, false), because CLAUDE.md files entries under their source spec's heading.
+  - (B1, B18, E11, E29, V4, A4) [_bmad-output/implementation-artifacts/evidence/story-5-5/build-labels.py:110]
+- [x] [Review][Patch] The summary claims in `verification.md` are false for Folders
+  - The Checks row "Pinned README and Description tests … all pass" omits the Folders PD10 tests: `Pd10V2ContractTests.cs:309` and `Pd10ConformanceSetTests.cs:72` bind `Hexalith.Folders.Cli.csproj` at 1206 bytes and fail at 1324. They were reported and not edited, as the matrix requires.
+  - ":34 each failure was compared with its parent commit" does not hold for the `a87d0a0d` `dotnet format` failure, and CI/CodeQL on `f1f63909` were cancelled.
+  - Fix: record the PD10 row, and state the format failure's basis: only `.cs` files fail, which the label does not touch, and `a87d0a0d` is the first completed CI run that contains the label.
+  - Not changed: the out-of-band merge (A3 part), which was a concurrent session's action, already recorded.
+  - (A2, A3, B14) [_bmad-output/implementation-artifacts/evidence/story-5-5/verification.md:161]
+- [x] [Review][Patch] The commitlint evidence leaves out the amended FrontComposer message
+  - `c9af83ed` was amended to `01fc48e3` with a new body, but the Checks row names only "the amended Parties commit".
+  - `commitlint.result` is a constant string.
+  - Record the `01fc48e3` validation: the owner CLI, read-only, reports 0 problems and 0 warnings, and the `main` Commitlint run succeeded.
+  - Refuted: the A5 `requiredStatements` part. `locate()` at `:247-248` and `:257` raises unless the exact line is committed, and `verify-labels.py` checks section placement.
+  - (B4, E6, A5) [_bmad-output/implementation-artifacts/evidence/story-5-5/verification.md:159]
+- [x] [Review][Patch] The read-back does not check the target file of a citation link
+  - `technicalToolsCited` and `moduleInventoryCited` check only the title and the `blob/<PIN>/` prefix.
+  - So a wrong `MODULE_INVENTORIES` path, for example after a Story 5.7–5.10 version bump, would pass. That contradicts the docstring "a generator mistake cannot verify itself".
+  - Fix: compare the full link, with each expected file, for both citations. The current targets are correct.
+  - (B7, V6, E14) [_bmad-output/implementation-artifacts/evidence/story-5-5/verify-labels.py:96]
+- [x] [Review][Patch] The census can classify a PS01 tool invocation as Admin.Server's Dapr identity
+  - `named` drops `<tool-command-form>` before `named == {'eventstore-admin'}`. So a `dotnet tool run eventstore-admin …` line outside the composition areas (`eng/`, `scripts/`, `tests/`, `docs/`) passes with the reason "not the PS01 … tool".
+  - Fix: add `and '<tool-command-form>' not in terms`, regenerate (expected byte-identical, since no current hit has both terms) and rescan.
+  - All 39 current non-area `eventstore-admin` lines were read and are Admin.Server identities.
+  - (V5, E19, B12, A9) [_bmad-output/implementation-artifacts/evidence/story-5-5/platform-census.py:139]
+- [x] [Review][Patch] The ledger entry for the PS03/PS04 Descriptions leaves out what the follow-up needs
+  - PS04 needs a new `<Description>` element, not a prefix.
+  - Both scripts support only the prefix case: `build-labels.py` searches for the prefix and hard-codes `added: False`. In `verify-labels.py`, the `replace(PREFIX)` equality makes the `('1','0')` numstat allowance unreachable.
+  - FrontComposer packs per-package READMEs, so a PS03/PS04 release made before the reseal ships with no NuGet label.
+  - Add these to the entry.
+  - (B8) [_bmad-output/implementation-artifacts/deferred-work.md:969]
+- [x] [Review][Patch] The `memories-mcp` container label is not recorded as a side effect
+  - `Hexalith.Memories.Mcp` sets `EnableContainer` with no `ContainerDescription` or label override.
+  - The .NET SDK falls back to `Description` for `org.opencontainers.image.description`, so the next `memories-mcp` image carries the prefix.
+  - The evidence mentions only NuGet.
+  - (B9) [_bmad-output/implementation-artifacts/evidence/story-5-5/verification.md:130]
+- [x] [Review][Patch] The SM-3 v1 anchor is stale
+  - `epics.md:292` holds "Epic 4's v1 release (2.0.1)" only before `76f2e74`. At HEAD it is `:293`.
+  - An uncommitted edit by a concurrent session moves it to `:294`, so use the line at HEAD when applying.
+  - (V3) [_bmad-output/implementation-artifacts/evidence/story-5-5/sm3-status.json:24]
+- [x] [Review][Patch] The AC4 check cannot show that the story commits left `src/`, `tests/` and `references/` untouched
+  - `git diff --stat HEAD` inspects only uncommitted changes.
+  - Record `git show --stat --format= 17c3681 f20a377 f2fc7c5 d6f7ffb 7f61892 -- src tests references` (empty).
+  - Note that the 13 gitlink moves in `adde25d..HEAD` come from the concurrent `efcda9e` `/pushall`.
+  - (A8) [_bmad-output/implementation-artifacts/evidence/story-5-5/verification.md:163]
+- [x] [Review][Patch] The ChatBot release text reports an outcome from a semantic-release step that never ran
+  - Release run 42805809900 failed at compile, before semantic-release ran, so "semantic-release finds no release-worthy commit" was never observed.
+  - Say that, and that the default rules cut no release for `docs`.
+  - (B16) [_bmad-output/implementation-artifacts/evidence/story-5-5/verification.md:211]
+- [x] [Review][Patch] The `.gitattributes` comment lists only four evidence files
+  - The glob protects, and the receipt binds, every Story 5.5 file, including the three scripts and `delivery-outcomes.json`.
+  - Say "every scanned Story 5.5 evidence file".
+  - (B19) [.gitattributes:37]
+
+**Rejected (35):**
+- B2 low: a Folders `deliveryPath` field. `mergedCommit` differs from `localCommit` and the note records the merge, so adding a schema field brings no reachable benefit.
+- B5 false: `requiredStatements`. `locate()` raises unless the built line, which holds the gate cell and statements, is committed exactly once.
+- B6 low: the register is never read back. Every row anchor and hash was cross-checked against the blobs and matches; adding a cross-checker would be extra code.
+- B10 low: the intro on non-legacy package pages. Pass 1 recorded the effect (P5), the heading scopes "These", and a change would need a re-push to seven repositories.
+- B11 false: census scope. ChatBot's AppHost is its own local-development umbrella ("ADR exception boundary"). It never adds `Hexalith.ChatBot.Mcp`, and its realm is the local sandbox. AD-11 governs Platform compositions, which the spec scopes to the Platform repository.
+- B13 low: revision freshness. The auditor's rerun at the newer Platform `origin/main` `d7c74e8a` is still clean.
+- B15 false: tests not tied to pushed commits. The Parties `87a7b600..64085d9f` and EventStore `aa16227b..39ebd8b4` rebases touch neither the root README, the Admin.Cli files nor any pinned test, so the procedure's rerun condition never fired.
+- B17 false: local paths and credential details. `GH_CONFIG_DIR` is a path, not a credential, and 2,520 committed `_bmad-output` files already carry `/home/administrator`.
+- B20 false: `platform-census.json` was omitted by the user's scope choice and is reproducible.
+- E4 low: misspelled repository keys. A typo is unlikely, and guarding against it would add code.
+- E5 low: a merge commit as the `build-labels.py` rev. The procedure passes the label commit; `verify-labels.py` handles the merge (first parent).
+- E7 low: `docsCommitCutsRelease` is a literal. All seven subjects are `docs:`.
+- E8 low: `onOriginMain` is a literal. Pin `c70ca978` is on `origin/main`.
+- E9 false: the working-tree owner approval is byte-identical to the pin.
+- E10 low: `baseIsOriginMain` after delivery is accurate (`base` ≠ `origin/main`). A rename would change the schema.
+- E12 low: duplicate PS rows. Unlikely; it would need a guard.
+- E13 low: `verify-labels.py` reads the working-tree inventory. `build-labels.py` enforces equality with the pin in the same procedure, and any drift fails loudly.
+- E15 low: section prose outside the bullets. None exists, and a check would need a guard.
+- E16 low: an exact duplicate label line elsewhere. Unlikely; it would need a guard.
+- E17 low: a parent that already holds the section. Unlikely; it would need a guard.
+- E20 low: `RESOLUTIONS` without line hashes. This affects reruns only; anchors are content-checked.
+- E21 low: the bare `memories` classification. This affects reruns only, and invocation forms are caught by `COMMAND_FORM`.
+- E22 low: the canned `_bmad-output` reason. Exactly one hit at the recorded revision, and the reason is accurate there.
+- E23 low: `PartiesAdoptionTests` classified by path. One hit, reruns only.
+- E24 low: the fixed AD-11 index. Correct at the recorded revision, reruns only.
+- E25 low: `revisionSource`. A dynamic value would break the documented byte-identical rerun.
+- E26 false: non-UTF-8 input fails loudly.
+- E27 false: a missing evidence file fails loudly, so the census stays closed.
+- E28 low: the `d6f7ffb` claim. `verify-labels.py` enforces README-only for FrontComposer and the procedure runs both scripts; commit history is immutable.
+- E30 low: "no build change" in the upstream messages. The messages are pushed history, and the spec allows the Description label text.
+- A1 low: the Decision 4 narrowing. It is a user decision tracked in the ledger, and the only fix would edit the spec.
+- A6 low: the ChatBot commitlint substitute. It is disclosed, was settled in pass 1 (BH14), and the commit is pushed.
+- A7 false: commitlint in owner checkouts. A read-only CLI run modifies no owner file.
+- A10 low: spec `done` against sprint `review`. That is the normal state during review, and this review sets the status.
+- A11 false: red `main` runs. Decision 3's report-and-halt path was followed, and the user decided.
+
 ## Implementation Notes
 
 - **Labels (local, `pendingPush`).** All seven label commits are on `docs/mcpcli-5-5-compatibility-labels` in isolated worktrees under the session scratchpad (`wt-5-5/<repo>`), each a direct child of the already-fetched `origin/main`. Nothing was fetched or pushed. Parties' `origin/main` moved to `87a7b600` through an owner push during the story. That commit touches neither `README.md` nor any test that reads it, so the label commit was rebased locally and its README tests were rerun. Commits, anchors and hashes are in `evidence/story-5-5/labels.json`.

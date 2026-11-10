@@ -11,7 +11,8 @@ register can be regenerated from the pushed commits after delivery. Usage:
 JSON object keyed by repository: {"status": "pushed" | "ci-red" | "push-rejected" | "merged-unreviewed",
 "mergedCommit": <sha or null>, "mainCiRuns": [{"id": <run id>, "workflow": <name>, "conclusion": <conclusion>}] or
 null, "note": <text>}. `merged-unreviewed` records a label commit that someone else's push merged into main before
-the Build review; its mergedCommit is the origin/main commit that brought it in.
+the Build review; its mergedCommit is the origin/main commit that brought it in. Every status except `push-rejected`
+needs the label commit on origin/main and at least one finished main run.
 """
 import argparse
 import hashlib
@@ -82,6 +83,9 @@ REPOS = ['eventstore', 'frontcomposer', 'parties', 'memories', 'projects', 'fold
 GITHUB = {repo: f'https://github.com/Hexalith/Hexalith.{name}' for repo, name in zip(
     REPOS, ['EventStore', 'FrontComposer', 'Parties', 'Memories', 'Projects', 'Folders', 'ChatBot'])}
 VISIBILITY = {'next': 'after the next release of this package', 'first': 'on its first release (never published)'}
+# GitHub Actions run conclusions; an unfinished run has none.
+FINAL_CONCLUSIONS = {'success', 'failure', 'cancelled', 'timed_out', 'skipped', 'neutral', 'action_required', 'stale',
+                     'startup_failure'}
 OWNER_CLI = ('owner checkout node_modules/.bin/commitlint (@commitlint/cli 21.2.4), run read-only; its lockfile '
              'and config are unchanged from origin/main')
 WORKTREE_CLI = ('worktree node_modules/.bin/commitlint (@commitlint/cli 21.2.4) from npm ci --offline --ignore-scripts '
@@ -107,11 +111,11 @@ DELIVERY_PROCEDURE = [
     'Run only after the Build review passes, one repository at a time.',
     'Fetch origin. If origin/main moved past the recorded base, rebase the label commit onto it, revalidate the exact '
     'message with that repository\'s commitlint, and rerun its pinned README tests if the rebase changed README.md, '
-    'a modified .csproj or a test that reads them. Parties already needs this: its origin/main is 64085d9f, not the '
-    'recorded base 87a7b600.',
-    'A repository whose label commit already reached main out of band (status merged-unreviewed; currently Folders, '
-    'through the concurrent /pushall merge f1f63909) skips the rebase and the push: list and record the main runs for '
-    'its mergedCommit and for the later main head as in the next step, then regenerate and re-verify as below.',
+    'a modified .csproj or a test that reads them.',
+    'A repository whose label commit already reached main out of band, through another merge, skips the rebase and '
+    'the push. Record that merge as mergedCommit, with a note, as status merged-unreviewed if every main run '
+    'succeeds and ci-red otherwise. List and record the main runs for it and for the later main head as in the next '
+    'step, then regenerate and re-verify as below.',
     'Push the label commit to main. If the push is rejected, record status push-rejected with the reason in the '
     'outcomes file, regenerate this register, and halt for the user.',
     'List every main run for the pushed commit with gh run list -R Hexalith/Hexalith.<Repo> --commit <sha> and wait '
@@ -119,8 +123,13 @@ DELIVERY_PROCEDURE = [
     'status ci-red, regenerate this register, and halt for the user without patching around the failure.',
     'Regenerate this register with build-labels.py --rev <repo>=<pushed sha> --outcomes <file>. This re-records the '
     'base, the pushed commit, mergedCommit, every row\'s commit, the README blob and hashes, the label and Description '
-    'anchors and hashes from the pushed blobs, and mainCiRuns.',
-    'Rerun verify-labels.py with --rev <repo>=<pushed sha> for every repository, against the pushed commits.',
+    'anchors and hashes from the pushed blobs, and mainCiRuns. It refuses an outcome whose label commit is not on '
+    'origin/main, whose runs are missing or unfinished, or whose run conclusions contradict its status. An own push '
+    'needs mergedCommit equal to the pushed commit; an out-of-band merge needs a note and a mergedCommit on '
+    'origin/main that contains the label commit.',
+    'Rerun verify-labels.py with --rev <repo>=<pushed sha> for every repository, against the pushed commits. Where '
+    'mergedCommit differs from the label commit, also run it with --rev <repo>=<mergedCommit>, so the read-back '
+    'covers the merged main.',
     'Rescan this directory into a new receipt.',
 ]
 
@@ -168,18 +177,20 @@ def check_outcome(repo, commit, outcome, git):
     def ancestor(older, newer):
         return subprocess.run(['git', 'merge-base', '--is-ancestor', older, newer], cwd=git,
                               capture_output=True).returncode == 0
-    if status == 'pushed':
-        ok = merged == commit and runs and all(c == 'success' for c in conclusions)
-    elif status == 'ci-red':
-        # A red main run after our own push, or after an out-of-band merge that contains the label commit.
-        reached = merged == commit or (bool(outcome.get('note')) and bool(merged) and ancestor(commit, merged)
-                                       and ancestor(merged, 'origin/main'))
-        ok = reached and any(c != 'success' for c in conclusions)
-    elif status == 'push-rejected':
+    if status == 'push-rejected':
         ok = outcome.get('mergedCommit') is None and bool(outcome.get('note'))
-    elif status == 'merged-unreviewed':
-        ok = bool(outcome.get('note')) and bool(merged) and ancestor(commit, merged) and ancestor(merged, 'origin/main') \
-            and all(c == 'success' for c in conclusions)
+    elif status in ('pushed', 'ci-red', 'merged-unreviewed'):
+        # Every delivered status needs the label commit on origin/main and at least one finished main run.
+        delivered = ancestor(commit, 'origin/main') and bool(runs) and all(c in FINAL_CONCLUSIONS for c in conclusions)
+        out_of_band = (bool(outcome.get('note')) and bool(merged) and ancestor(commit, merged)
+                       and ancestor(merged, 'origin/main'))
+        if status == 'pushed':
+            ok = delivered and merged == commit and all(c == 'success' for c in conclusions)
+        elif status == 'ci-red':
+            # A red main run after our own push, or after an out-of-band merge that contains the label commit.
+            ok = delivered and (merged == commit or out_of_band) and any(c != 'success' for c in conclusions)
+        else:
+            ok = delivered and out_of_band and all(c == 'success' for c in conclusions)
     else:
         ok = False
     if not ok:

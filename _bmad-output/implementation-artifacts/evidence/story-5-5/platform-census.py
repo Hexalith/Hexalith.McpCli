@@ -136,7 +136,8 @@ def main():
             verdict = ('existing-cluster-runbook', 'Operator runbook record naming the existing cluster Deployment memories-mcp, which Memories deploys with its own manifests; Platform does not enroll, deploy, route or map it.')
         elif named == {'memories-mcp'} and path.startswith('eng/recovery-preparation/'):
             verdict = ('existing-cluster-observation', 'Synthetic-only, read-only measurement plan (no live entry point) that observes the existing cluster Deployment memories-mcp; it does not enroll, deploy, route or map it.')
-        elif named == {'eventstore-admin'}:
+        elif named == {'eventstore-admin'} and '<tool-command-form>' not in terms:
+            # A line that also matches the tool-command form invokes or installs the PS01 tool, so it stays unclassified.
             verdict = ('admin-server-dapr-identity', 'eventstore-admin is the Dapr app ID, resource name or workload identity of EventStore Admin.Server (Hexalith.EventStore.Admin.Server.Host), not the PS01 eventstore-admin .NET tool.')
         else:
             unclassified.append(record)

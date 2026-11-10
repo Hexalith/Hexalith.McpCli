@@ -33,6 +33,8 @@ After the Build review, the Decision 3 procedure below delivered every label to 
 
 Each failure was compared with its parent commit by failing test and assertion text, not by job name alone, because a pre-existing failure can mask a new one (as in Folders).
 
+There is one exception: Folders' `dotnet format` failure in CI run 42789279473 at `a87d0a0d`. CI and CodeQL on `f1f63909` were cancelled, so `a87d0a0d` is the first completed CI run that contains the label, and no parent run was compared. Its log reports WHITESPACE errors in 11 files, all `.cs` sources, for example `src/Hexalith.Folders.AppHost/Program.cs` and `tests/tools/Task36FoldObserver/LifecycleRequestCorrelation.cs`. The label changes only `README.md` and the `Hexalith.Folders.Cli.csproj` `<Description>`, and `dotnet format` does not format either.
+
 **Credentials.** The session's `gh-cicd-agent` token was refused with HTTP 403 by EventStore, FrontComposer, Memories, Projects, ChatBot and McpCli. Those six were then pushed with the user's credential (`GH_CONFIG_DIR=/home/administrator/.config/gh`) after the user's instruction "push all changes". Parties pushes through that credential by its repository-local helper.
 
 **Still open.**
@@ -56,14 +58,16 @@ The Folders PD10 binding was missed before delivery. So before the five refused 
 Run it only after the Build review passes, one repository at a time. It is also
 recorded as `deliveryProcedure` in `labels.json`.
 
-0. Folders (`merged-unreviewed`) skips steps 1 and 2. List and record the
-   `main` runs for `f1f63909` and the later `main` head as in step 3, then
-   continue with steps 4–6.
+0. A repository whose label commit already reached `main` through another merge
+   skips steps 1 and 2. Record that merge as `mergedCommit`, with a note: as
+   `merged-unreviewed` if every `main` run succeeds, and as `ci-red` otherwise.
+   List and record the `main` runs for it and for the later `main` head as in
+   step 3, then continue with steps 4–6. Folders' `f1f63909` is recorded this
+   way, as `ci-red`.
 1. Fetch origin. If `origin/main` moved past the recorded base, rebase the label
    commit onto it and revalidate the exact message with that repository's
    commitlint (commands below). Rerun its pinned README tests if the rebase
-   changed `README.md`, a modified `.csproj` or a test that reads them. Parties
-   already needs this rebase.
+   changed `README.md`, a modified `.csproj` or a test that reads them.
 2. Push the label commit to `main`. If the push is rejected, record status
    `push-rejected` with the reason in the outcomes file, regenerate the
    register (step 4), and halt for the user.
@@ -76,11 +80,20 @@ recorded as `deliveryProcedure` in `labels.json`.
    `python3 build-labels.py --worktrees <root> --rev <repo>=<pushed sha> ... --outcomes <file> --output labels.json`.
    It re-records the base, the pushed commit, `mergedCommit`, every row's
    commit, the README blob and hashes, the label and Description anchors and
-   hashes from the pushed blobs, and `mainCiRuns`. It refuses an outcome whose
-   `mergedCommit` differs from the pushed commit, or whose run conclusions
-   contradict its status.
+   hashes from the pushed blobs, and `mainCiRuns`. It refuses an outcome in
+   any of these cases:
+   - its label commit is not on `origin/main`;
+   - its runs are missing or unfinished;
+   - its run conclusions contradict its status.
+
+   An own push needs `mergedCommit` equal to the pushed commit. An out-of-band
+   merge needs a note and a `mergedCommit` on `origin/main` that contains the
+   label commit.
 5. Rerun the read-back against the pushed commits:
    `python3 verify-labels.py --worktrees <root> --rev <repo>=<pushed sha> ...`.
+   Where `mergedCommit` differs from the label commit, also run it with
+   `--rev <repo>=<mergedCommit>`, so that the read-back covers the merged
+   `main`.
 6. Rescan this directory into a new receipt.
 
 ## Labels
@@ -129,7 +142,10 @@ PS06, PS07 and PS10. PS03 and PS04 carry the README label only, and their
 Description labels wait for FrontComposer's reseal procedure. Each new
 Description reaches NuGet only with that package's release: the next release
 for PS01, PS06 and PS07, and the first release for PS10, which has never been
-published. Five repositories also pack the root README
+published. `Hexalith.Memories.Mcp` also sets `EnableContainer` and has no
+`ContainerDescription` or label override. The .NET SDK therefore fills the
+`org.opencontainers.image.description` label from its `Description`, so the
+next `memories-mcp` image carries the prefix. Five repositories also pack the root README
 into every packable package, so the new section will appear on the NuGet pages
 of their non-legacy packages at their next release:
 
@@ -153,29 +169,52 @@ line and the section heading.
 
 | Check | Result |
 | --- | --- |
-| Read-back of each committed label blob (`verify-labels.py`, below): one section, the intro sentence, one bullet per row, a byte-equal gate cell, both citations, the row-specific statements, no replacement claim, no removed lines (Projects compared byte-wise), and Description prefixes as the only `.csproj` change | pass, 14 of 14 rows |
+| Read-back of each committed label blob (`verify-labels.py`, below): one section, the intro sentence, one bullet per row, a byte-equal gate cell, both citations as whole links (title and target file), the row-specific statements, no replacement claim, no removed lines (Projects compared byte-wise), and Description prefixes as the only `.csproj` change | pass, 14 of 14 rows, at the pushed label commits and again with Folders at its merge `f1f63909` (the merged `main`) |
 | `git -C <worktree> diff origin/main --stat` before the latest Parties move, and `git diff --numstat <commit>^ <commit>` in the read-back | only `README.md` plus the Decision 4 `.csproj` Description lines |
 | `git diff --check` in every worktree | clean |
-| commitlint on each exact committed message (commands below; message SHA-256 values in `labels.json`) | 0 problems, 0 warnings in all seven, including the amended Parties commit |
+| commitlint on each exact committed message (commands below; message SHA-256 values in `labels.json`) | 0 problems, 0 warnings in all seven, including the amended Parties commit and the amended FrontComposer commit `01fc48e3`, whose body changed from `c9af83ed`. The owner CLI was rerun read-only on `01fc48e3` in review pass 2, and its `main` Commitlint run succeeds. |
 | Release rules for `docs` commits | none cuts a release (below) |
-| Pinned README and Description tests (below) | all pass |
+| Pinned README and Description tests (below) | The README tests pass. The Folders PD10 conformance tests, which bind `Hexalith.Folders.Cli.csproj` by size, fail. They were found after delivery and reported, not edited (below and "Delivery outcome"). |
 | Platform census (`platform-census.py`, below), rerun at the same revision | no composition hit; 118 hits classified; all 13 composition-area hits resolved; byte-identical output |
-| `git diff --stat HEAD -- src tests references` in McpCli | empty |
+| `git show --stat --format= 17c3681 f20a377 f2fc7c5 d6f7ffb 7f61892 -- src tests references` in McpCli (the Story 5.5 commits) | Empty. The 13 gitlink moves in `adde25d..HEAD` come from the concurrent `/pushall` commit `efcda9e`, not from this story. The uncommitted check `git diff --stat HEAD -- src tests references` covers only the working tree. It was empty at delivery. At review pass 2 it showed only a concurrent session's Story 5.12 edits under `tests/Hexalith.McpCli.Core.Tests/`. |
 | `python3 scripts/scan-evidence-secrets.py _bmad-output/implementation-artifacts/evidence/story-5-5 --receipt <scratch>/scan.json` | exit 0, `clean` |
+
+### Guard probes (review pass 2, 2026-11-10)
+
+Review pass 2 added four guards. Each probe loads the script and feeds it a bad
+input, once as committed at `a851118` and once as changed:
+
+| Guard | Probe | Before | After |
+| --- | --- | --- | --- |
+| `build-labels.py` `check_outcome`: label commit on `origin/main` | `ci-red` own push of the pre-amend FrontComposer commit `c9af83ed`, which is not on `main` | accepted | refused |
+| Same: at least one `main` run | `merged-unreviewed` with no runs | accepted | refused |
+| Same: finished runs only | `ci-red` with a run whose conclusion is `null` | accepted | refused |
+| `verify-labels.py`: whole citation link | Memories rows expect the right title with the Projects inventory file | (link file not compared) | exit 1; PS06, PS07 and PS14 fail |
+| `platform-census.py`: tool-command form is never Admin.Server's identity | Shared clone of Platform with one synthetic commit on `a9c3555c` adding `eng/probe-ps01-invocation.sh` (`dotnet tool run eventstore-admin stream list`) | exit 0, classified `admin-server-dapr-identity` | exit 1, `halt`, unclassified `eng/probe-ps01-invocation.sh:2` |
+
+All seven recorded outcomes pass the new `check_outcome`. The census at
+`a9c3555c` is byte-identical before and after the change. The clone and its
+probe commit were deleted; the Platform checkout was not touched.
 
 ### Commands
 
-`<root>` is the worktree root: `wt-5-5` in this session's scratchpad, holding
-one checkout per repository. Folders has no worktree since the out-of-band
-merge, so `$F` points both scripts at the Folders owner checkout and its label
-commit. The scripts only read Git objects there. `<owner>` is
-`/home/administrator/projects/hexalith/<repo>`. All commands run from the
-McpCli root unless they `cd` first.
+The label worktrees were removed after delivery. So `<root>` is now
+`/home/administrator/projects/hexalith`, which holds one owner checkout per
+repository. `$REVS` names every pushed label commit explicitly, because an owner
+checkout's `HEAD` is not the label commit. The scripts only read Git objects
+there. `<owner>` is `/home/administrator/projects/hexalith/<repo>`. All commands
+run from the McpCli root unless they `cd` first.
+
+The second read-back reads Folders at its merge `f1f63909`, which is the merged
+`main` that AC1 names. That commit's first-parent diff is the label alone. The
+register stays bound to the label commit `f4f5ce0c` and records `f1f63909` as
+`mergedCommit`.
 
 ```bash
-F="--path folders=/home/administrator/projects/hexalith/folders --rev folders=f4f5ce0ce9676cd5674e75093476df2ba4fde585"
-python3 _bmad-output/implementation-artifacts/evidence/story-5-5/build-labels.py --worktrees <root> $F --outcomes _bmad-output/implementation-artifacts/evidence/story-5-5/delivery-outcomes.json --output _bmad-output/implementation-artifacts/evidence/story-5-5/labels.json
-python3 _bmad-output/implementation-artifacts/evidence/story-5-5/verify-labels.py --worktrees <root> $F
+REVS="--rev eventstore=3de922e1140e26fe2e0151682ee656fcf675b26b --rev frontcomposer=01fc48e3955a8cec47ab1602f5cd5c8e286801da --rev parties=4c9fb0a03a81694afe24beaed1ea0552348405fc --rev memories=1143ba17a2336f0d718fcff71e049c06350a45a2 --rev projects=77067782154d35a794ea50d86af1c5e73c8351b6 --rev chatbot=82f20d5ecca74993f93e73151a6ae3766d3d6a1d"
+python3 _bmad-output/implementation-artifacts/evidence/story-5-5/build-labels.py --worktrees <root> $REVS --rev folders=f4f5ce0ce9676cd5674e75093476df2ba4fde585 --outcomes _bmad-output/implementation-artifacts/evidence/story-5-5/delivery-outcomes.json --output _bmad-output/implementation-artifacts/evidence/story-5-5/labels.json
+python3 _bmad-output/implementation-artifacts/evidence/story-5-5/verify-labels.py --worktrees <root> $REVS --rev folders=f4f5ce0ce9676cd5674e75093476df2ba4fde585
+python3 _bmad-output/implementation-artifacts/evidence/story-5-5/verify-labels.py --worktrees <root> $REVS --rev folders=f1f639090a4e6b8cbeacb246e7052968dbc75836
 python3 _bmad-output/implementation-artifacts/evidence/story-5-5/platform-census.py --platform /home/administrator/projects/hexalith/platform --owners /home/administrator/projects/hexalith --output _bmad-output/implementation-artifacts/evidence/story-5-5/platform-census.json
 python3 _bmad-output/implementation-artifacts/evidence/story-5-5/platform-census.py --platform /home/administrator/projects/hexalith/platform --owners /home/administrator/projects/hexalith --revision a9c3555cd178c0a46cdfb5e1ea7a2b3eafec02cd --output <scratch>/census-rerun.json
 ```
@@ -209,8 +248,10 @@ commit-analyzer rules. FrontComposer uses the `conventionalcommits` preset.
 None defines `releaseRules`, so a `docs` commit cuts no release.
 
 Every `release.yml` except ChatBot's is `workflow_dispatch` only. The ChatBot
-release workflow runs on a push to `main`: its topology and live-recovery
-gates run, but semantic-release finds no release-worthy commit.
+release workflow runs on a push to `main`. For the label commit, release run
+42805809900 failed on the pre-existing compile errors before semantic-release
+ran, so no release was cut. Under the default rules a `docs` commit would not
+cut one anyway.
 
 The Memories `qualify-builds-publication.yml` also runs on this push, because
 `src/**/*.csproj` changed. It is an offline qualification that publishes
@@ -232,6 +273,7 @@ the owner submodule object stores and removed afterwards.
 | Folders | `Hexalith.Folders.Testing.Tests.ScaffoldContractTests`, including `SubmodulePolicyIsDiscoverableAndForbidsRecursiveDefaultSetup` (README submodule policy) | 16 passed |
 | EventStore | `AspireSecurityResourceNamingTests.RootOwnedSources_WhenScanned_ContainNoStaleSecurityRoleIdentities` and its fixture test (root Markdown audit) | 2 passed |
 | EventStore | `Hexalith.EventStore.Admin.Cli.Tests.VersionFlagTests` (the help text shares the Description's opening words) | 3 passed |
+| Folders | PD10 conformance tests `tests/Hexalith.Folders.Contracts.Tests/OpenApi/Pd10V2ContractTests.cs:309` and `Pd10ConformanceSetTests.cs:72`, which bind `Hexalith.Folders.Cli.csproj` at 1206 bytes | Fail at 1324 bytes. Found after delivery, in `main` CI. The gate was already red at `e88c9400` from Folders' own PD10 drift. Reported, not edited; the PD10 v2 requalification must rebind the file ("Delivery outcome"). |
 
 FrontComposer, Memories, Projects and ChatBot have no test or script that pins
 root README or Description text. Their README matches either read other README
@@ -296,7 +338,7 @@ module, its servers, components, images and package cohorts.
 
 - SM-3 ("At least one Legacy Server deleted", PRD `prd.md:532`) is checked three
   months after v1 (`prd.md:527`).
-- Hexalith.McpCli 2.0.1 is v1: `epics.md:292` names "Epic 4's v1 release
+- Hexalith.McpCli 2.0.1 is v1: `epics.md:293` names "Epic 4's v1 release
   (2.0.1)". The earlier tags `v1.0.0`, `v1.1.0` and `v2.0.0` are the historical
   Abstractions-only bootstrap versions (`README.md:87`, `:121`).
 - 2.0.1 was published on 2026-11-05, so the deadline is 2027-02-05. It has not
