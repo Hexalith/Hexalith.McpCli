@@ -1,11 +1,11 @@
 ---
 title: Cover enrolled modules by operation shape, not by operation
 created: '2026-11-10'
-status: proposed
+status: applied
 review_mode: batch
 source_action: 'Product-owner question on 2026-11-10 ("is this over-engineered? It creates a dependency between mcpcli and all other modules. Does this requirement give a real ROI?"), refined in party mode and advanced elicitation (P1–P6 applied by the product owner); correct-course invoked with "apply recommended"'
 baseline: d6f7ffb
-approval: pending
+approval: 'Product owner, 2026-11-10, verbatim: I approve _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10-shape-coverage.md for implementation ("yes", 2026-11-10). This approval is also the MR10 product-owner decision for Story 5.12. Keep both P6 refinements: (1) query projection selector in the shape tuple, (2) the keyed second-Command live vector authoring rule for new enrollments.'
 ---
 
 # Sprint Change Proposal: Cover Enrolled Modules by Operation Shape
@@ -465,6 +465,36 @@ Rationale: P4. Retirement keeps per-row evidence, and the module may supply it.
 | 4.1–4.4 Path | [x] | Option 1 selected (§3). |
 | 5.1–5.5 Proposal | [x] | This document. |
 | 6.1–6.2 Review | [x] | Batch mode; recommended options pre-approved ("apply recommended"). |
-| 6.3 Approval | [!] | Pending explicit product-owner "yes". |
-| 6.4 Sprint status | [!] | C14, applied on approval. |
+| 6.3 Approval | [x] | Product owner, 2026-11-10: "yes"; also the MR10 decision for Story 5.12, keeping both P6 refinements. |
+| 6.4 Sprint status | [x] | C14 applied by hand and validated (Section 6). |
 | 6.5 Handoff | [x] | §5. |
+
+## 6. Application record (2026-11-10)
+
+All edits are in the working tree and uncommitted. The tree was clean at HEAD `a851118` before application.
+
+| Artifact | SHA-256 before | SHA-256 after |
+| --- | --- | --- |
+| `_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md` | `774d0b1bd22e107a25fedfe1250999ea38ccbaca7083ecec40aa5fef6ba0e197` | `4c8f2e7fbd158e019c3da5d6b4fb13a5a3b7767578a8fbce40cfdbbfc900de5c` |
+| `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md` | `3d9552b72d9cd5b3fb2bc1fec570ba18684d26433a652cee7b7e33958d75ce84` | `89ba724847a4bc18868d6da858cea244dbad12e781d9674111992e266fdbd32d` |
+| `_bmad-output/planning-artifacts/epics.md` | `4eb120342ead6c283a0a5bf70158ec422867c8e3fd36bac30ca9f8c7febe2210` | `3bba3742a9e74144ad7a28559351f3dd7fa334be6a93ae112cd7ec55615aecac` |
+| `_bmad-output/implementation-artifacts/sprint-status.yaml` | `d17858ac9fde278d3201d867049e6daac9228303f2bda60b90a83a7066c3a7d1` | `43b5254d341a954168851e0099894aece5ed5fff6128f8283034e194e3b8a81b` |
+
+**How it was applied.** A one-off script took the C1–C13 blocks verbatim from this document. Before each replacement it asserted that the OLD text matched its target file exactly once. All 31 OLD blocks matched once, each inside its intended section, and no NEW text was already present. C9 was inserted after the single line beginning `- **FR-20 and §8.1 (AD-16/20):**`. C11 was inserted after Story 5.11 and before `## Epic 6:`. C14 was edited by hand; the sprint-plan generator was not run against the tracker.
+
+**Both P6 refinements are kept.** The query projection selector is in the shape tuple in FR-20 (C2), AD-16 (C7) and Story 5.12 (C11). The keyed second-Command live vector rule for new enrollments is in FR-20 (C2), AD-16 (C7), Story 5.12 (C11) and Story 6.1 (C12).
+
+**Validation:**
+
+- **`prd.md` scope.** Only §5.1 (FR-1), §5.7 (FR-20), §6 (NFR-7), §8.1 (checklist item 9) and §9 (SM-4) changed, and all 22 `FR`/`NFR` headings are present.
+  - The FR-20 Tenants bullet and the "Before the v1 release gate" line (`:561`) are byte-identical with HEAD.
+- **`ARCHITECTURE-SPINE.md` scope.** Only AD-16, AD-21 and the "PRD Amendments" list changed.
+- **`epics.md` scope.** Only the frontmatter `changeProposals` list, the FR20 coverage-map line, Stories 6.1 and 6.2, and the new Story 5.12 changed.
+  - Every other story and epic section is byte-identical with HEAD `a851118`, including all completed stories and Stories 5.1–5.11.
+  - `approvedStories` and the 2026-11-08 `refinement` block are unchanged.
+- **Sprint-status validation.** `sprint_plan.py validate` reports `valid: true` with no problems, and the YAML parses.
+- **Tracker sync.** `sprint_plan.py generate --dry-run`, run on a copy, reports `in_sync: true`: 6 epics, 56 stories, no new entries, no orphans, and the copy stays unchanged. Its four warnings are pre-existing non-story headings.
+- **Tracker diff.** `sprint-status.yaml` differs from HEAD in three places: `last_updated`, the new `5-12` row and the `6-1` comment. Every comment survives.
+- **Untouched files.** The applied `sprint-change-proposal-2026-11-10.md` is byte-identical with HEAD. No code, README, `AGENTS.md` or `references/` file changed; those belong to Story 5.12.
+- **Whitespace.** `git diff --check` is clean.
+- **Concurrent tracker edit.** After application, concurrent commit `d04e84c` (Story 5.5 review pass 2) changed `sprint-status.yaml`'s `last_updated` and its 5-5 row. The committed file therefore differs from the after-hash above, while its C14 edits are identical: the `5-12` row (`backlog`) and the `6-1` comment.

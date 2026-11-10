@@ -59,6 +59,7 @@ changeProposals:
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-08.md
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10-shape-coverage.md
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md
@@ -248,7 +249,7 @@ FR16: Epic 2 — Resolve Tenant, Actor, aggregate identity, identifiers, extensi
 FR17: Epic 2 — Submit once through the EventStore gateway client and map its result.
 FR18: Epic 2 — Manage separate, secret-safe Profiles.
 FR19: Epic 2 — Refuse writes inside the executor and CLI; Epic 3 omits the MCP write tool.
-FR20: Epic 1 — Approve the shared conformance-vector contract and validator before upstream authoring; Epic 4 — Prove approved Tenants and Parties coverage and v1 release readiness; Epic 5 — Extend Parties vectors for replacement parity and safety; Epic 6 — Enroll Folders vectors and prove Folders replacement parity and safety.
+FR20: Epic 1 — Approve the shared conformance-vector contract and validator before upstream authoring; Epic 4 — Prove approved Tenants and Parties coverage and v1 release readiness; Epic 5 — Extend Parties vectors for replacement parity and safety; Epic 6 — Enroll Folders vectors and prove Folders replacement parity and safety; Epic 5 (Story 5.12) — Replace per-Operation vectors with Operation Shape coverage for later enrollments.
 FR21: Epic 4 — Produce approved first-increment migration inventories and enforce inventory-to-Catalog parity; Epic 5 — cover administration and non-gateway gaps, then retire obsolete surfaces; Epic 6 — Replace the Folders legacy surfaces, verify their retirement and record it in the migration plan.
 FR22: Epic 4 — Merge the authoritative no-new-proprietary-MCP/CLI rule; Epic 5 — verify adoption across module plans and release packaging.
 
@@ -2113,6 +2114,45 @@ So that users and release gates do not assume migrations or adapters that do not
 **Then** they distinguish the gateway-only increment from completed retirements and list remaining compatibility binaries with their removal gates,
 **And** they do not claim that ecosystem migration is finished.
 
+### Story 5.12: Gate Enrolled Modules by Operation Shape
+
+As a McpCli maintainer,
+I want enrollment gates that cover each operation shape once, report operations that no inventory row mentions, and treat a Contracts version change that alters no vector as informational,
+So that a module can add or release decorated operations without a lockstep McpCli change while McpCli's generic translation stays proven.
+
+**Requirements:** FR1, FR20, FR21; NFR7; SM-4; AD-16 and AD-21 as amended on 2026-11-10. **Dependencies:** none. Story 6.1 waits on this story. Approval of `sprint-change-proposal-2026-11-10-shape-coverage.md` is the MR10 product-owner decision that lets this story become `ready-for-dev`.
+
+**Acceptance Criteria:**
+
+**Given** the enrolled production Catalog,
+**When** the shape-coverage gate runs,
+**Then** it derives each Operation Shape from Catalog descriptors (kind, Identifier Kind, Wire Type convention, tenant source as exact `platformScope`, Module `fixedTenant` or public, aggregate-identifier source as property, constant or none, query projection selector as `projectionType`, `projectionActorType` or none, and required idempotency key) and fails, naming every shape that has no approved vector,
+**And** with the existing Parties and Tenants vectors it reports the computed shapes (six expected from the 2026-11-10 survey) as covered and passes, and removing the only vector of one shape fails with that shape named.
+
+**Given** an enrolled module and its release inventory,
+**When** the inventory gate runs,
+**Then** every `include` row still appears exactly once publicly and internally with its recorded contract type, every `withdraw` or `defer` row's name and type stays absent, and a cataloged operation that no row mentions produces a reported finding that does not fail,
+**And** tests fail when either remaining guard is removed, asserting the complete finding text.
+
+**Given** a vector whose recorded package version differs from the restored package,
+**When** `check_enrolled.py`, `verify_artifact.py` and the live preflight run,
+**Then** the difference is reported and the vector still runs, `approval.json` binds the inventory and vector hashes but no artifact hash, and re-approval is needed only when vector bytes or the inventory change,
+**And** restored-package integrity checks (NuGet content hash against `project.assets.json`) and the AD-17 release package validation are unchanged.
+
+**Given** the live lane,
+**When** a module is enrolled after this story,
+**Then** the gate requires at least one approved live vector, with a companion plan, for each Operation kind it declares, and the vector README's approval rules require its live Command vector to create an aggregate in a prerequisite, then submit a second Command to it with a caller-supplied idempotency key and read the effect back with a postcondition Query,
+**And** the existing Parties and Tenants vectors, plans and inventories keep running unchanged; none is deleted. Adopting the keyed scenario for them is recorded as one deferred entry, to be picked up at their next vector amendment.
+
+**Given** the `HexalithCommandAttribute` and `HexalithQueryAttribute` XML documentation and the README "Gateway boundary" section,
+**When** a module author reads them,
+**Then** both state that decorating a type is the owning maintainer's consent to expose it to agents and operators through the Gateway without human confirmation, and that UI-only and confirmation-required operations are never decorated.
+
+**Given** the README, `tools/conformance-vectors/v1/README.md`, `tools/inventory-coverage/v1/README.md` and `AGENTS.md`,
+**When** the change lands,
+**Then** they describe shape coverage, reported uninventoried operations and informational vector versions, and `CLAUDE.md` and `.github/copilot-instructions.md` stay byte-identical to `AGENTS.md` with `scripts/check-agent-instructions-sync.sh` passing,
+**And** the Release build, the Core and Manifest tests, the conformance-vector and live-topology Python suites, `check_enrolled.py`, the live preflight and CI's `topology-vector-discovery` job pass.
+
 ## Epic 6: Replace and Retire the Folders CLI and MCP Server
 
 Operators and agents reach every supported Folders operation through McpCli's two heads, and the frozen `Hexalith.Folders.Cli` and `Hexalith.Folders.Mcp` retire with verified replacement evidence. McpCli enrolls the exact decorated Folders Contracts release, proves shared-head parity and safety on a selected environment, verifies the deletion that Folders performs, and records it in the migration plan.
@@ -2120,22 +2160,22 @@ Operators and agents reach every supported Folders operation through McpCli's tw
 ### Story 6.1: Enroll the Folders Contracts Release
 
 As the Folders owner,
-I want McpCli to enroll the exact decorated Folders Contracts release named by the approved inventory, with one approved vector for each included operation,
+I want McpCli to enroll the exact decorated Folders Contracts release named by the approved inventory, with approved vectors covering every operation shape Folders uses,
 So that every included Folders operation works through both McpCli heads with no Folders code in McpCli.
 
-**Requirements:** FR5, FR16, FR18, FR20, FR21; MR3, MR4, MR5, MR11. **Dependencies:** Stories 5.2 and 5.8; Hexalith.Folders Stories 5.12, 5.13 and 5.14 done, with the 5.12 types in a published `Hexalith.Folders.Contracts` version; a published, server-code-free Folders composition helper (cross-repository prerequisites). Hexalith.Folders Stories 5.8–5.10 follow this story.
+**Requirements:** FR5, FR16, FR18, FR20, FR21; MR3, MR4, MR5, MR11. **Dependencies:** Stories 5.2, 5.8 and 5.12; Hexalith.Folders Stories 5.12, 5.13 and 5.14 done, with the 5.12 types in a published `Hexalith.Folders.Contracts` version; a published, server-code-free Folders composition helper (cross-repository prerequisites). Hexalith.Folders Stories 5.8–5.10 follow this story.
 
 **Acceptance Criteria:**
 
 **Given** the approved Story 5.8 Folders inventory and a published `Hexalith.Folders.Contracts` version that contains every named type,
 **When** McpCli enrolls it,
-**Then** the versionless `PackageReference` marked `HexalithContracts="true"`, its exact version under `modules` in `tools/dependency-policy.json`, `tools/inventory-coverage/v1/folders-approved.json`, the vectors with an `approval.json` binding the artifact, inventory and vector hashes, and the companion live plans change together under the README enrollment rules,
-**And** the AD-15 package and closure gate passes with `Hexalith.McpCli.Abstractions` as the only identity Folders adds, and the AD-21 gate finds every `replace`/`include` row exactly once in `list_operations folders` with a matching contract type and an approved `withdraw` or `defer` for every excluded row.
+**Then** the versionless `PackageReference` marked `HexalithContracts="true"`, its exact version under `modules` in `tools/dependency-policy.json`, `tools/inventory-coverage/v1/folders-approved.json`, the shape vectors with an `approval.json` binding the inventory and vector hashes, and their companion live plans change together under the README enrollment rules,
+**And** the AD-15 package and closure gate passes with `Hexalith.McpCli.Abstractions` as the only identity Folders adds, and the AD-21 gate finds every `replace`/`include` row exactly once in `list_operations folders` with a matching contract type and an approved `withdraw` or `defer` for every excluded row whose contract is absent from the Catalog; a cataloged Folders operation that no row mentions is reported, not failed (AD-21).
 
-**Given** every included operation,
-**When** its vector is approved,
-**Then** it has exactly one execution vector, and `check_enrolled.py` shows equal canonical documents and captured Gateway requests from both heads against the reset loopback Gateway,
-**And** the captured requests carry canonical uppercase ULID message, correlation and idempotency identifiers, the explicit `Hexalith.Folders.Commands.*` wire type for each Command, domain `folders`, and task and workspace context only in Payload properties, `actorProperty` or allowed Envelope extensions (MR4).
+**Given** every operation shape in the enrolled Folders Catalog,
+**When** the shape vectors are approved,
+**Then** each shape has at least one execution vector, and `check_enrolled.py` shows equal canonical documents and captured Gateway requests from both heads against the reset loopback Gateway for every vector,
+**And** the captured requests carry canonical uppercase ULID message, correlation and idempotency identifiers, the explicit `Hexalith.Folders.Commands.*` wire type for each vectored Command (Folders' own tests at the enrolled revision cover every other Command's wire type), domain `folders`, and task and workspace context only in Payload properties, `actorProperty` or allowed Envelope extensions (MR4).
 
 **Given** Folders' identifier kind, key admission and metadata-only results,
 **When** the enrollment change is reviewed,
@@ -2143,8 +2183,8 @@ So that every included Folders operation works through both McpCli heads with no
 **And** any legacy format the contract cannot accept stays as the approved inventory records it (SM-1).
 
 **Given** the blocking live lane and AD-15's test-composition rule,
-**When** the new vectors run,
-**Then** the test AppHost composes the Folders domain service, and any provider double that G6-governed operations need, only through a published, server-code-free composition helper pinned exactly under `testPackages`, never a Folders source project, and each live Command is submitted once with its persisted semantic check,
+**When** the Folders live vectors run (at least one Command and one Query chosen by the owner, the Command vector following the AD-16 keyed second-Command scenario),
+**Then** the test AppHost composes the Folders domain service, and a provider double only if a chosen live vector needs one, only through a published, server-code-free composition helper pinned exactly under `testPackages`, never a Folders source project, and each live Command is submitted once with its persisted semantic check,
 **And** if no such helper is published, enrollment stops and names the missing helper as an upstream prerequisite.
 
 **Given** an operator moving from `Hexalith.Folders.Cli` or `Hexalith.Folders.Mcp`,
@@ -2172,9 +2212,9 @@ So that Folders can retire its CLI and MCP server without breaking supported acc
 
 **Acceptance Criteria:**
 
-**Given** the owner-named selected environment and the approved Folders vectors,
+**Given** the owner-named selected environment, the approved Folders shape vectors and Folders' per-row checks,
 **When** the evidence runs,
-**Then** every Folders `replace` row succeeds through the CLI head against that environment with its persisted semantic check, and both heads produce equal canonical documents and captured requests against the reset loopback Gateway,
+**Then** every Folders `replace` row succeeds through the CLI head against that environment with its persisted semantic check, run by McpCli or by a Folders upstream test that drives a McpCli head at the enrolled revision, and the shape vectors show both heads producing equal canonical documents and captured requests against the reset loopback Gateway,
 **And** live MCP-head execution is included, or the owner re-accepts and records the CLI-only live-lane deviation for this retirement.
 
 **Given** V01–V10 and the losses accepted in the approved inventory,

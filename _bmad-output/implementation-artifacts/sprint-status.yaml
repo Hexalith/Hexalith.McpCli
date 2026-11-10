@@ -102,10 +102,11 @@ development_status:
   5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent: backlog
   5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: backlog
   5-11-reconcile-product-claims-and-the-migration-plan: backlog
+  5-12-gate-enrolled-modules-by-operation-shape: backlog # 2026-11-10 shape-coverage proposal; precedes Story 6.1.
   epic-5-retrospective: optional
 
   epic-6: backlog
-  6-1-enroll-the-folders-contracts-release: backlog # Waits on McpCli 5.2 and 5.8, Hexalith.Folders 5.12–5.14, and a published Folders composition helper; evidence for EXT-MCPCLI-FOLDERS-ENROLLMENT.
+  6-1-enroll-the-folders-contracts-release: backlog # Waits on McpCli 5.2, 5.8 and 5.12, Hexalith.Folders 5.12–5.14, and a published Folders composition helper; evidence for EXT-MCPCLI-FOLDERS-ENROLLMENT.
   6-2-prove-folders-shared-head-parity-and-safety: backlog # Waits on 6.1 and Hexalith.Folders 5.8–5.11; evidence for EXT-MCPCLI-FOLDERS-RETIREMENT-GATE.
   6-3-verify-the-folders-legacy-retirement-and-update-its-labels: backlog # Waits on 6.2 and Hexalith.Folders 5.15.
   6-4-record-the-folders-retirement-in-the-migration-plan: backlog
