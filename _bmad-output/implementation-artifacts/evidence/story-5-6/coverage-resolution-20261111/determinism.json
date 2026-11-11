@@ -1,0 +1,10 @@
+{
+  "result": "passed",
+  "seeds": [
+    1,
+    2
+  ],
+  "sameReportAsPrimary": true,
+  "identicalCompleteBytes": true,
+  "sha256": "90ed78936139353aac85b0e85963288aad6a5600f2b039699b4aa744ba57887b"
+}

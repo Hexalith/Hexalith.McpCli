@@ -1,0 +1,247 @@
+{
+  "files": [
+    {
+      "afterSha256": "af3fa26fa7e0e954ce4e3ae25647e8bc266d93c25b4619b5be917bceeef9bbd9",
+      "beforeSha256": "af3fa26fa7e0e954ce4e3ae25647e8bc266d93c25b4619b5be917bceeef9bbd9",
+      "path": "acceptance-blockers.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "binding-audit.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "216891664d8b51830ba64a14e5176c788ed12b5a5cce11b55de16596a14ab723",
+      "beforeSha256": "216891664d8b51830ba64a14e5176c788ed12b5a5cce11b55de16596a14ab723",
+      "path": "binding-audit.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "blocker-bindings.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "d192e434c140db5e1f094824e3052166ed51103301f347cb4f7524f87192024d",
+      "beforeSha256": "d192e434c140db5e1f094824e3052166ed51103301f347cb4f7524f87192024d",
+      "path": "blocker-bindings.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "3334aba0bc789bc2d55924e88ae2c88b76313998dc916d9ed60ae8e4767bfc99",
+      "beforeSha256": "3334aba0bc789bc2d55924e88ae2c88b76313998dc916d9ed60ae8e4767bfc99",
+      "path": "build-acceptance-blockers.py",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "f3c91e8fed4877ec4a4b656989da906c99da518edfde6a4cf3bf03c042d0f711",
+      "beforeSha256": "f3c91e8fed4877ec4a4b656989da906c99da518edfde6a4cf3bf03c042d0f711",
+      "path": "build-verification.py",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "f892fc30ec22809909c9576e127fe33b527b626a7a5c31b2748fc79baeb45633",
+      "beforeSha256": "f892fc30ec22809909c9576e127fe33b527b626a7a5c31b2748fc79baeb45633",
+      "path": "census-tests.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "census-tests.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "beforeSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "path": "census.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "85100ee1435359db4ddeec24bebffca95f18e5d8108b6526671b7bf5492f2fb8",
+      "beforeSha256": "85100ee1435359db4ddeec24bebffca95f18e5d8108b6526671b7bf5492f2fb8",
+      "path": "commands-executed.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "51a5507b5861ff068c3f5edb6214b78f151b1f81ad50b01b6b983c089b3bc33a",
+      "beforeSha256": "51a5507b5861ff068c3f5edb6214b78f151b1f81ad50b01b6b983c089b3bc33a",
+      "path": "commands.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "817943bcae88771d160ee0a9047cbe4bf8a67c1a210b99af9b97266d7ba3a557",
+      "beforeSha256": "817943bcae88771d160ee0a9047cbe4bf8a67c1a210b99af9b97266d7ba3a557",
+      "path": "current-pin-census.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "beforeSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "path": "current-pin-census.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "beforeSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "path": "determinism-1.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "817943bcae88771d160ee0a9047cbe4bf8a67c1a210b99af9b97266d7ba3a557",
+      "beforeSha256": "817943bcae88771d160ee0a9047cbe4bf8a67c1a210b99af9b97266d7ba3a557",
+      "path": "determinism-1.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "beforeSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "path": "determinism-1.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "beforeSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "path": "determinism-2.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "817943bcae88771d160ee0a9047cbe4bf8a67c1a210b99af9b97266d7ba3a557",
+      "beforeSha256": "817943bcae88771d160ee0a9047cbe4bf8a67c1a210b99af9b97266d7ba3a557",
+      "path": "determinism-2.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "beforeSha256": "d1dc80bbdccd2f85531239d69fca3ef262fb4b8893b5f5c837b148319cf8525c",
+      "path": "determinism-2.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "411721aaae66da7de421361a45a4879c730686efcd917e7df7cb099afea67e6d",
+      "beforeSha256": "411721aaae66da7de421361a45a4879c730686efcd917e7df7cb099afea67e6d",
+      "path": "determinism.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+      "beforeSha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+      "path": "diff-check.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "diff-check.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "5b8136376563c2b43b3237f50b329c44e896ef141c9fe7b114ed8607851cceae",
+      "beforeSha256": "5b8136376563c2b43b3237f50b329c44e896ef141c9fe7b114ed8607851cceae",
+      "path": "implementation-integrity.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "2b8f6fcd677d230bf4c9cbf57dfb5e636f822dd60e656b9e1610dd2af0b6f336",
+      "beforeSha256": "2b8f6fcd677d230bf4c9cbf57dfb5e636f822dd60e656b9e1610dd2af0b6f336",
+      "path": "inspection-cases.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "7f0b9c831cd708931e5b500e74c123ff1738d1eb58c281e413034ca11905d4fa",
+      "beforeSha256": "7f0b9c831cd708931e5b500e74c123ff1738d1eb58c281e413034ca11905d4fa",
+      "path": "matrix-coverage.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "b15b724d3e2d97c3e1a3d29ae6200b717b463a94eea3060a8105f714dcafc524",
+      "beforeSha256": "b15b724d3e2d97c3e1a3d29ae6200b717b463a94eea3060a8105f714dcafc524",
+      "path": "mutation-guards.py",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "mutations.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "a05739200fcc008e9ea942019222afb06d8ef665716b6ae47b001f9069d40081",
+      "beforeSha256": "a05739200fcc008e9ea942019222afb06d8ef665716b6ae47b001f9069d40081",
+      "path": "mutations.stdout.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "d5704a056785b2ea2a2bdbb3f908f993b8384c6699990b10fc43b0d3a67e61fc",
+      "beforeSha256": "d5704a056785b2ea2a2bdbb3f908f993b8384c6699990b10fc43b0d3a67e61fc",
+      "path": "policy-before.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "a5c19952255f4dcf6efabb06847468a864ba9af7b9c6db9918fade82b29fe765",
+      "beforeSha256": "a5c19952255f4dcf6efabb06847468a864ba9af7b9c6db9918fade82b29fe765",
+      "path": "policy-integrity.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "7ad67d6f250004d5a67d599466cfaec6d6860f9aac6af650df15dda0c1c2d213",
+      "beforeSha256": "7ad67d6f250004d5a67d599466cfaec6d6860f9aac6af650df15dda0c1c2d213",
+      "path": "prior-evidence-integrity.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "cb687ddf5d019da02b2dd17bb9b964cca61510812cb6aef06f401d2a3fe48249",
+      "beforeSha256": "cb687ddf5d019da02b2dd17bb9b964cca61510812cb6aef06f401d2a3fe48249",
+      "path": "release-tests.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "beforeSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "path": "release-tests.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "c711a579ec6353885136cf8ac5dcc33ab4260a4945b8f3f1ccde78a8a717bbdb",
+      "beforeSha256": "c711a579ec6353885136cf8ac5dcc33ab4260a4945b8f3f1ccde78a8a717bbdb",
+      "path": "report-delta.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "f304e3092c6bfbcf0bdd936a77c20204b7cd45b9e68ce2cfd29a700e824cfc1b",
+      "beforeSha256": "f304e3092c6bfbcf0bdd936a77c20204b7cd45b9e68ce2cfd29a700e824cfc1b",
+      "path": "root-pin-delta.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "b56b8265bf978856a97053b9cd5b5eb44be1404ecd659d59a510b9e0b51f062e",
+      "beforeSha256": "b56b8265bf978856a97053b9cd5b5eb44be1404ecd659d59a510b9e0b51f062e",
+      "path": "run-final-verification.py",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "2c9cefebc1721a6e0710491edde607daf963b91f5765fc7cf9a951f59c97e1b4",
+      "beforeSha256": "2c9cefebc1721a6e0710491edde607daf963b91f5765fc7cf9a951f59c97e1b4",
+      "path": "secret-scan-command.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "f146815f53adac3cb8298d16a9847d20eed7953191fbb4ee4e667f9909332489",
+      "beforeSha256": "f146815f53adac3cb8298d16a9847d20eed7953191fbb4ee4e667f9909332489",
+      "path": "verification.json",
+      "unchanged": true
+    },
+    {
+      "afterSha256": "1813b975fb4804409418a35e2c58a17dffbc2bd6f8260c430ac9a7ab45e75bed",
+      "beforeSha256": "1813b975fb4804409418a35e2c58a17dffbc2bd6f8260c430ac9a7ab45e75bed",
+      "path": "verification.md",
+      "unchanged": true
+    }
+  ],
+  "receiptPath": "_bmad-output/implementation-artifacts/evidence/story-5-6/implementation-resume-20261111/secret-scan.json",
+  "receiptSha256": "c1ca3eb7494621550f5b25da3afd62fba74010cb00ed8e083dc624f6dd4c4d03",
+  "result": "passed"
+}

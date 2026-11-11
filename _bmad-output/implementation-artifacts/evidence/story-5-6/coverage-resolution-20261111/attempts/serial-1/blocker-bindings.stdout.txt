@@ -1,0 +1,1 @@
+{"rejected": 120, "inspectionErrors": 106}

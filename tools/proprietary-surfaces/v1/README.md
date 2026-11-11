@@ -154,6 +154,42 @@ committed target. Composite actions with literal caller-owned project paths
 produce exact orphan publication observations when those sources are absent.
 No new fixture or publication allowance follows from resolving a target.
 
+Additional committed path spellings include quoted or unquoted source-relative
+`cd`/`dirname`/`pwd` locators, an optional `CDPATH=` prefix, `--` path delimiters,
+`pwd -P`, and a second locator based on a previously proven script directory.
+These locators apply to committed script files. A workflow run step's
+`BASH_SOURCE[0]` names a runner-generated temporary script and supplies no
+committed directory authority. Locator proof is refused when source mutates
+its context or overrides its path builtins. Literal source tokens cannot borrow
+the resolver's internal repository marker; a NUL in publication-script source
+fails as unsafe text. Redirected `done` terminators preserve the
+boundary between a loop and subsequent publication commands. Executable
+process/command/backtick substitutions in their redirection suffix remain
+coverage errors. `elif` remains
+in its existing conditional branch and does not make later unconditional
+assignments conditional.
+
+PowerShell variable, cmdlet and alias evaluation remains unsupported.
+Unsupported executable wrappers such as `sudo`, `nohup`, `time`, and
+`env -i` retain the discovered target and an explicit coverage error.
+
+Project-command recognition distinguishes executable tokens from shell comments
+and literal diagnostic strings. Quoted executables and command substitutions,
+including backticks inside double quotes, remain executable signals. Literal
+heredoc contents do not affect later shell quote state or workflow matrix target
+resolution. Sources with no recognized project-publication signal produce no
+project-target control-flow diagnostic; this describes the census's static
+scope and does not establish arbitrary runtime behavior.
+
+Relevant JSON metadata may contain object arrays or wrapper objects. Traversal
+preserves nested package, image, project and server definitions, with a maximum
+depth of 32 and 4,096 object/array nodes. Scalar roots and structural arrays of
+scalars fail coverage; ordinary nested configuration argument arrays remain
+data. JSON Schema definitions under standard schema keywords describe metadata
+and are not runtime manifests. Actual manifest fields beside those definitions
+are still inspected. Malformed embedded publication entries remain actionable
+errors; a fixture or evidence path grants no exemption.
+
 ## Results and exceptions
 
 Exit 0 means all references were inspected successfully and all candidates were

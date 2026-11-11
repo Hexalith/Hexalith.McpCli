@@ -1,0 +1,47 @@
+[
+  {
+    "path": "tools/proprietary-surfaces/v1/amendments/1.0.1-approval.json",
+    "sha256": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203",
+    "headSha256": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203"
+  },
+  {
+    "path": "tools/proprietary-surfaces/v1/amendments/1.0.1.json",
+    "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+    "headSha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19"
+  },
+  {
+    "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+    "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b",
+    "headSha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+  },
+  {
+    "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+    "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+    "headSha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+  },
+  {
+    "path": "tools/proprietary-surfaces/v1/amendments.json",
+    "sha256": "98c37c5dd11041da07575b14870fb20ae93084962489e00dbf33f472fec6de0d",
+    "headSha256": "98c37c5dd11041da07575b14870fb20ae93084962489e00dbf33f472fec6de0d"
+  },
+  {
+    "path": "tools/proprietary-surfaces/v1/baseline.json",
+    "sha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+    "headSha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499"
+  },
+  {
+    "path": "tools/proprietary-surfaces/v1/legacy-receipts.json",
+    "sha256": "22055d14e2e5590d27be70291bf03045f3df8d9bf48a3b8f90cf84135f2f12ce",
+    "headSha256": "22055d14e2e5590d27be70291bf03045f3df8d9bf48a3b8f90cf84135f2f12ce"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+    "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+    "headSha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+    "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e",
+    "headSha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+  }
+]

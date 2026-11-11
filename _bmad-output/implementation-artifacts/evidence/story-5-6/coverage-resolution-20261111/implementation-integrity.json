@@ -1,0 +1,15 @@
+{
+  "after": {
+    "README.md": "a9d1bf9cf363ac0360a5e2d8b75358a7c889034247b736a4b583a09825bfb8ec",
+    "tools/proprietary-surfaces/v1/README.md": "7bb5cf647d4941647503e80a33241251cb1781c8e595f188d66923e76eeee278",
+    "tools/proprietary-surfaces/v1/check.py": "b5fe122e2964a75e0605ce6f53b1c4449fd253f1d31b2d6c2bbfb0b5b0854c92",
+    "tools/proprietary-surfaces/v1/test_census.py": "44c6e67502b600e1bf650ee42f302376b46e1a312112034753fd1ec988aab578"
+  },
+  "before": {
+    "README.md": "a9d1bf9cf363ac0360a5e2d8b75358a7c889034247b736a4b583a09825bfb8ec",
+    "tools/proprietary-surfaces/v1/README.md": "7bb5cf647d4941647503e80a33241251cb1781c8e595f188d66923e76eeee278",
+    "tools/proprietary-surfaces/v1/check.py": "b5fe122e2964a75e0605ce6f53b1c4449fd253f1d31b2d6c2bbfb0b5b0854c92",
+    "tools/proprietary-surfaces/v1/test_census.py": "44c6e67502b600e1bf650ee42f302376b46e1a312112034753fd1ec988aab578"
+  },
+  "result": "passed"
+}

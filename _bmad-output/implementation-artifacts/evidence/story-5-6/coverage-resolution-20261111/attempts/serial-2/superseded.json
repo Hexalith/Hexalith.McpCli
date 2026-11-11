@@ -1,0 +1,9 @@
+{
+  "reason": "Parent audit found executable substitutions on a redirected done suffix were omitted. This serial run is retained; final verification follows the refusal guard and its committed regression/control.",
+  "fixtures": 157,
+  "guardRemovalControls": 131,
+  "releaseRegressions": 195,
+  "inspectionErrors": 107,
+  "rejections": 120,
+  "acceptanceExitCode": 1
+}

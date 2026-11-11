@@ -1,0 +1,24 @@
+{
+  "committedTargets": [
+    "src/Hexalith.ChatBot.Contracts/Hexalith.ChatBot.Contracts.csproj",
+    "src/Hexalith.ChatBot.Client/Hexalith.ChatBot.Client.csproj",
+    "src/Hexalith.ChatBot.Testing/Hexalith.ChatBot.Testing.csproj"
+  ],
+  "execution": "Only Git blobs and JSON data were read; jq and the inspected script were not executed.",
+  "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+  "manifest": {
+    "gitBlob": "3264ddbdb4d5ae35714cfa3d88fa56ae53b20bf1",
+    "path": "release-metadata.json",
+    "sha256": "af2473f1b311309dbfb8f4b8fe8fbd7eb9ce1eceed2b92ab8038c1a575d7a270"
+  },
+  "newAuthority": null,
+  "priorSecretScan": "secret-scan.json records the packet before this supporting context was added; secret-scan-final.json binds the final complete packet.",
+  "recommendation": "First implement a generic bounded committed-JSON selector and ordered field binding for this exact shell packaging pattern, with runtime substitution/override refusal and guard-removal controls. Re-scan resulting project metadata; target enumeration alone does not qualify it.",
+  "repository": "references/Hexalith.ChatBot",
+  "script": {
+    "gitBlob": "5b2fdd4281d409f3bc9650dd5042bba66163a62e",
+    "path": ".github/scripts/pack-release-packages.sh",
+    "sha256": "df64004b0cdba29be9e5c1ac3351f16933908c7f9addf3da51ad0fbd09b17a97"
+  },
+  "selector": ".inventory.packages[].project"
+}

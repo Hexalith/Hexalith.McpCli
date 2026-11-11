@@ -1,0 +1,154 @@
+[
+  {
+    "name": "census-tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/proprietary-surfaces/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "census-tests.stdout.txt",
+    "stderr": "census-tests.stderr.txt"
+  },
+  {
+    "name": "mutations",
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/coverage-resolution-20261111/mutation-guards.py"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "mutations.stdout.json",
+    "stderr": "mutations.stderr.txt"
+  },
+  {
+    "name": "release-tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts/tests",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "release-tests.stdout.txt",
+    "stderr": "release-tests.stderr.txt"
+  },
+  {
+    "name": "current-pin-census",
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/coverage-resolution-20261111/census.json"
+    ],
+    "exitCode": 1,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "current-pin-census.stdout.txt",
+    "stderr": "current-pin-census.stderr.txt"
+  },
+  {
+    "name": "determinism-1",
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/coverage-resolution-20261111/determinism-1.json"
+    ],
+    "exitCode": 1,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "1"
+    },
+    "stdout": "determinism-1.stdout.txt",
+    "stderr": "determinism-1.stderr.txt"
+  },
+  {
+    "name": "determinism-2",
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/coverage-resolution-20261111/determinism-2.json"
+    ],
+    "exitCode": 1,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "2"
+    },
+    "stdout": "determinism-2.stdout.txt",
+    "stderr": "determinism-2.stderr.txt"
+  },
+  {
+    "name": "binding-audit",
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/coverage-resolution-20261111/build-verification.py"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "binding-audit.stdout.txt",
+    "stderr": "binding-audit.stderr.txt"
+  },
+  {
+    "name": "blocker-bindings",
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/coverage-resolution-20261111/build-acceptance-blockers.py"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "blocker-bindings.stdout.txt",
+    "stderr": "blocker-bindings.stderr.txt"
+  },
+  {
+    "name": "coverage-assessment",
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/coverage-resolution-20261111/build-coverage-assessment.py"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "coverage-assessment.stdout.txt",
+    "stderr": "coverage-assessment.stderr.txt"
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "diff-check.stdout.txt",
+    "stderr": "diff-check.stderr.txt"
+  }
+]

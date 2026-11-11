@@ -1,0 +1,22 @@
+{
+  "note": "Exploratory command outcomes observed before the retained final implementation. Full streams are retained where available; no missing stream has been reconstructed.",
+  "attempts": [
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tools/proprietary-surfaces/v1 -p test_*.py",
+      "exitCode": 1,
+      "tests": 142,
+      "failures": 13,
+      "reason": "Initial lexical filtering missed workflow and environment-prefix forms; fixed before final checks."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 mutation-guards.py",
+      "exitCode": 1,
+      "reason": "Retained S30/S33 mutation anchors required adaptation to the new equivalent implementation."
+    },
+    {
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 mutation-guards.py",
+      "exitCode": 1,
+      "reason": "A redundant diagnostic-string mutation did not affect the test because quote filtering already enforced it; redundant implementation guard and control were removed."
+    }
+  ]
+}

@@ -49,6 +49,9 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
+- [x] Continue the 111 coverage errors in `evidence/story-5-6/implementation-resume-20261111/acceptance-blockers.json`: group every error by root cause, identify what exact committed source proves, and implement bounded generic fixes in `tools/proprietary-surfaces/v1/check.py` where that proof suffices. This user authorization (2026-11-11) extends generic source-resolution work; preserve runtime/generated-input and nested-repository refusals. Execute no inspected code, initialize no nested submodules, change no references/gitlinks or policy allowances, exceptions, exemptions, approvals, or dependencies. Do not commit, stage, or push.
+- [x] Add regressions in `tools/proprietary-surfaces/v1/test_census.py` and executed guard-removal controls for new guards. Run relevant fixtures, release regressions, all five matrix rows, and a fresh committed-pin scan. Preserve earlier evidence; write a distinct `evidence/story-5-6/coverage-resolution-20261111/` packet with commands, exact pins/source bindings, before/after grouping, policy/prior-evidence integrity, and verification results. Update both READMEs for any supported-subset changes.
+- [x] Prepare a concise remaining-blocker decision packet in that new evidence directory separating scanner limitations, upstream source defects, and observations requiring exact owner disposition; recommend the next concrete action for each group, grant no authority, and keep story/sprint `in-progress` until acceptance succeeds.
 - [x] `tools/proprietary-surfaces/v1/check.py` — address inspection cases E01–E05 in the retained handoff disposition packet through generic, bounded static resolution of project targets and Compile item provenance. Resolve finite literal shell variables, loops, function arguments and working directories when provable from committed source. Inspect no nested repository and execute no inspected code; unresolved runtime/generated source must retain actionable coverage errors. Keep other inspectable projects/files visible when an individual source fails rather than discarding that root's observations. Do not add allowances, exclusions, exceptions or owner authority.
 - [x] `tools/proprietary-surfaces/v1/test_census.py` — cover supported target/item resolution, unresolved and unbounded variants, directory containment, nested gitlinks, dynamic generated sources and retained partial-root observations. Every new refusal needs an executed guard-removal negative control; assert full output streams and exact discovered identities.
 - [x] `tools/proprietary-surfaces/v1/README.md`, `README.md` and `evidence/story-5-6/` — document the supported static subset and remaining limitations; retain fresh fixture, release, matrix, mutation and real-scan evidence with exact pins and policy integrity. Keep story/sprint in-progress while current-reference acceptance is unsuccessful.
@@ -403,3 +406,36 @@ retain the exact commands, root revisions, findings and integrity evidence.
 No implementation, allowance, approval, amendment, dependency, reference or
 gitlink changed. No new authority is inferred; story and sprint remain
 `in-progress` while current-reference acceptance is unsuccessful.
+
+
+### Continued coverage resolution — 2026-11-11
+
+Implemented bounded generic command-token recognition, literal heredoc
+boundaries, redirected loop terminators, balanced `elif` state, committed-script
+path locators and bounded JSON object-array/wrapper traversal. Runtime/generated
+inputs, unsupported PowerShell evaluation, external imports/Compile inputs and
+nested repositories retain their refusals. No policy, reference, gitlink,
+dependency or owner authority changed.
+
+The [new verification](evidence/story-5-6/coverage-resolution-20261111/verification.md)
+passes 158 census fixtures, 132 executed guard-removal controls, 195 release
+regressions and all five matrix rows. Complete report bytes match across hash
+seeds 1 and 2. Policy and prior evidence remain unchanged; parent audit verified
+all 125 receipt-bound packet files and all four final implementation/README
+hashes. Earlier attempts are retained.
+
+The [coverage assessment](evidence/story-5-6/coverage-resolution-20261111/coverage-assessment.json)
+accounts for all 111 original errors once across 12 root causes: 101 diagnostics
+remain, 8 sources have no remaining error, and 2 original diagnostics resolve
+while their sources remain partial. Eight newly reported errors remain refused.
+The fresh committed-pin scan exits **1**, with 17 roots accounted for, 2 complete,
+548 observations, 120 rejected observations, 109 coverage errors and 2 stale
+allowances. These observations do not establish a count of new tools.
+
+The [decision packet](evidence/story-5-6/coverage-resolution-20261111/decision-packet.md)
+separates scanner limitations, protected source boundaries, embedded-data
+ambiguity, exact owner dispositions and the absence of a proven active upstream
+defect. Its next concrete scanner step is a bounded committed-manifest selector
+for the source-bound ChatBot release packaging case. This grants no approval
+or additional scope. Story and sprint remain `in-progress` at unsuccessful
+current-reference acceptance. No staging, commit or push was performed.

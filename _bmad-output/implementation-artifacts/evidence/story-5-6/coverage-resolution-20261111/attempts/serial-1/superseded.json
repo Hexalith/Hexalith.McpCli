@@ -1,0 +1,7 @@
+{
+  "reason": "Superseded before acceptance by additional locator-marker authority and lexical coverage hardening. Exploratory source edits overlapped this run; its combined result is retained but does not attest final implementation bytes. Final serial verification will run against fixed source bytes.",
+  "fixtureResult": "157 passed",
+  "releaseResult": "195 passed",
+  "mutationResult": "all executed controls detected",
+  "acceptanceExitCode": 1
+}

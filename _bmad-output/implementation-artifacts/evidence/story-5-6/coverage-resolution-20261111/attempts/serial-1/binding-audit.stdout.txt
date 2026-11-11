@@ -1,0 +1,1 @@
+{"completeRoots": 2, "fixtures": 157, "guardRemovalControls": 130, "inspectionErrors": 106, "observations": 548, "rejectedObservations": 120, "releaseRegressions": 195, "roots": 17, "stale": 2}

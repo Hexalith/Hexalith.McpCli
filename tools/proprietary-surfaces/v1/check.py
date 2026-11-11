@@ -705,6 +705,31 @@ def declared_container_repositories(metadata):
             for repository in values.get('ContainerRepository', set())}
 
 
+def json_documents(document, path):
+    """Inspect nested manifest objects in finite JSON arrays and wrappers."""
+    require(isinstance(document, (dict, list)), f'malformed-publication:{path}')
+    if isinstance(document, list):
+        require(all(isinstance(value, (dict, list)) for value in document), f'malformed-publication:{path}')
+    pending, count = [(document, 0, True)], 0
+    while pending:
+        value, depth, structural = pending.pop()
+        count += 1
+        require(depth <= 32 and count <= 4096, f'unbounded-publication-json:{path}')
+        if isinstance(value, dict):
+            yield value
+            schema = isinstance(value.get('$schema'), str) and value['$schema'] in {'https://json-schema.org/draft/2020-12/schema',
+                'https://json-schema.org/draft/2019-09/schema', 'http://json-schema.org/draft-07/schema#',
+                'http://json-schema.org/draft-06/schema#', 'http://json-schema.org/draft-04/schema#'}
+            schema_keywords = {'$defs', 'definitions', 'properties', 'patternProperties', 'dependentSchemas',
+                               'items', 'prefixItems', 'additionalProperties', 'allOf', 'anyOf', 'oneOf', 'not', 'if', 'then', 'else'}
+            pending.extend((child, depth + 1, False) for key, child in reversed(list(value.items()))
+                           if isinstance(child, (dict, list)) and not (schema and key in schema_keywords))
+        elif isinstance(value, list):
+            if structural:
+                require(all(isinstance(child, (dict, list)) for child in value), f'malformed-publication:{path}')
+            pending.extend((child, depth + 1, structural) for child in reversed(value) if isinstance(child, (dict, list)))
+
+
 def compilation_closure(tree, project):
     """Bind fixture files, inherited/imported metadata and linked local sources."""
     metadata_paths = metadata_files(tree)
@@ -768,30 +793,32 @@ def expand_workflow_projects(text, path):
             return f'{prefix}-{len(expressions) - 1}@'
         masked = re.sub(r'\$\{\{(.*?)\}\}', placeholder, block, flags=re.S)
         targets = set()
-        for invocation in re.finditer(DOTNET_INVOCATION.pattern + r'([^\n]*)', masked):
-            try:
-                arguments = shlex.split(invocation[1], comments=True)
-            except ValueError:
-                arguments = invocation[1].split()
-            skip_value = False
-            for index, value in enumerate(arguments):
-                if skip_value:
-                    skip_value = False
-                    continue
-                if value in ('--project',):
-                    if index + 1 < len(arguments):
-                        targets.add(arguments[index + 1])
+        for script, _ in script_blocks(masked, path):
+            for invocation in dotnet_invocations(script):
+                suffix = script[invocation.end():].split('\n', 1)[0]
+                try:
+                    arguments = shlex.split(suffix, comments=True)
+                except ValueError:
+                    arguments = suffix.split()
+                skip_value = False
+                for index, value in enumerate(arguments):
+                    if skip_value:
+                        skip_value = False
+                        continue
+                    if value in ('--project',):
+                        if index + 1 < len(arguments):
+                            targets.add(arguments[index + 1])
+                        break
+                    if value.startswith('--project='):
+                        targets.add(value.partition('=')[2])
+                        break
+                    if value in ('--configuration', '-c', '--framework', '-f', '--runtime', '-r', '--output', '-o', '--verbosity', '-v', '--property', '-p'):
+                        skip_value = True
+                        continue
+                    if value.startswith('-'):
+                        continue
+                    targets.add(value)
                     break
-                if value.startswith('--project='):
-                    targets.add(value.partition('=')[2])
-                    break
-                if value in ('--configuration', '-c', '--framework', '-f', '--runtime', '-r', '--output', '-o', '--verbosity', '-v', '--property', '-p'):
-                    skip_value = True
-                    continue
-                if value.startswith('-'):
-                    continue
-                targets.add(value)
-                break
         required = set()
         for target in sorted(targets):
             for match in re.finditer(re.escape(prefix) + r'-(\d+)@', target):
@@ -856,6 +883,93 @@ def build_action_images(lines):
 def logical_commands(text):
     """Join supported shell, PowerShell and batch continuation lines."""
     return re.sub(r'(?:\\|`|\^)[ \t]*\r?\n[ \t]*', ' ', text)
+
+
+def heredoc_operator(line):
+    """Recognize a literal heredoc operator outside comments and quoted data."""
+    quote, escaped, stack, index = None, False, [], 0
+    while index < len(line):
+        char = line[index]
+        if escaped:
+            escaped = False
+        elif char == '\\' and quote != "'":
+            escaped = True
+        elif line[index:index + 2] == '$(' and quote != "'":
+            stack.append(quote)
+            quote = None
+            index += 1
+        elif char == ')' and stack and quote is None:
+            quote = stack.pop()
+        elif quote:
+            if char == quote:
+                quote = None
+        elif char in ('"', "'"):
+            quote = char
+        elif char == '#' and (index == 0 or line[index - 1].isspace() or line[index - 1] in ';|&('):
+            break
+        elif line[index:index + 2] == '<<' and line[index:index + 3] != '<<<':
+            return re.match(r'''<<-?\s*(["']?)([A-Za-z_][\w]*)\1''', line[index:])
+        index += 1
+    return None
+
+
+def dotnet_invocations(text):
+    """Find executable commands, preserving quoted arguments and substitutions.
+
+    Comments and diagnostic strings are source text, not command invocations.
+    A quoted executable is still executable when it occupies command position.
+    """
+    # Literal heredoc contents do not participate in the surrounding shell's
+    # quote state. Unquoted substitutions are refused by the target resolver.
+    lexical_lines, delimiter = [], None
+    for line in text.splitlines(keepends=True):
+        if delimiter:
+            lexical_lines.append(''.join('\n' if char == '\n' else ' ' for char in line))
+            if line.strip() == delimiter:
+                delimiter = None
+            continue
+        lexical_lines.append(line)
+        heredoc = heredoc_operator(line)
+        if heredoc:
+            delimiter = heredoc[2]
+    lexical = ''.join(lexical_lines)
+    positions, quote, escaped, comment, stack = set(), None, False, False, []
+    index = 0
+    while index < len(lexical):
+        char = lexical[index]
+        if comment:
+            if char == '\n':
+                comment = False
+        elif escaped:
+            escaped = False
+        elif char == '\\' and quote != "'":
+            escaped = True
+        elif char == '`' and quote != "'":
+            if stack and stack[-1][1] == '`' and quote is None:
+                quote, _ = stack.pop()
+            else:
+                stack.append((quote, '`'))
+                quote = None
+        elif lexical[index:index + 2] == '$(' and quote != "'":
+            stack.append((quote, ')'))
+            quote = None
+            index += 1
+        elif char == ')' and stack and stack[-1][1] == ')' and quote is None:
+            quote, _ = stack.pop()
+        elif quote:
+            if char == quote:
+                quote = None
+        elif char == '#' and (index == 0 or text[index - 1].isspace() or text[index - 1] in ';|&('):
+            comment = True
+        else:
+            positions.add(index)
+            if char in ('"', "'"):
+                quote = char
+        index += 1
+    for match in DOTNET_INVOCATION.finditer(lexical):
+        if match.start() not in positions:
+            continue
+        yield match
 
 
 def script_blocks(text, path):
@@ -946,6 +1060,16 @@ def static_project_targets(tree, text, path, errors):
     no command, condition, substitution, external file or nested tree is run.
     """
     targets, functions, called, budget = set(), {}, set(), [0]
+    if not DOTNET_INVOCATION.search(text):
+        return []
+    require('\x00' not in text, f'unsafe-script-text:{path}')
+    # Supported literal substitutions cannot synthesize a NUL absent from source.
+    # This marker therefore carries path provenance rather than source authority.
+    repository_marker = '\x00repo'
+    locators_proven = not re.search(r'^\s*(?:alias|shopt|enable|eval|source|\.)(?:\s|$)|'
+        r'^\s*(?:function\s+)?(?:cd|dirname|pwd)\s*(?:\(\)|\{)|'
+        r'\b(?:unset|read|declare|typeset)\b[^\n]*\bBASH_SOURCE\b|\bBASH_SOURCE\s*\[',
+        text.replace('${BASH_SOURCE[0]}', ''), re.M)
 
     def problem(rule, target=None):
         error = {'path': path, 'rule': rule + ':' + path}
@@ -974,7 +1098,7 @@ def static_project_targets(tree, text, path, errors):
                     return None
             result = next_result
             if not changed:
-                return None if any(re.search(r'[$`*?\[\]{}\x00-\x1f]', item) for item in result) else result
+                return None if any(re.search(r'[$`*?\[\]{}\x00-\x1f]', item.removeprefix(repository_marker)) for item in result) else result
         return None
 
     def words(raw):
@@ -987,8 +1111,8 @@ def static_project_targets(tree, text, path, errors):
         if directory is None or value.startswith('/') or re.match(r'^[A-Za-z]:', value):
             problem('unsafe-publication-path' if directory is not None else 'unresolved-publication-directory')
             return None
-        base = '.' if value == '@repo' or value.startswith('@repo/') else directory
-        value = value.removeprefix('@repo').lstrip('/') if base == '.' and value.startswith('@repo') else value
+        base = '.' if value == repository_marker or value.startswith(repository_marker + '/') else directory
+        value = value.removeprefix(repository_marker).lstrip('/') if base == '.' and value.startswith(repository_marker) else value
         target = posixpath.normpath(posixpath.join(base, value.replace('\\', '/')))
         try:
             if target != '.':
@@ -1028,13 +1152,18 @@ def static_project_targets(tree, text, path, errors):
             problem('unresolved-publication-target', target)
 
     def invoke(raw, environment, directory, unbounded=False):
-        invocation = re.search(DOTNET_INVOCATION.pattern + r'(.*)', raw)
-        if not invocation:
+        invocation = next(dotnet_invocations(raw), None)
+        if invocation is None:
             return
+        prefix = re.split(r'[;|&()`]', raw[:invocation.start()])[-1].strip()
+        prefix = re.sub(r'^\$[A-Za-z_][\w]*\s*=\s*', '', prefix)
+        prefix = re.sub(r'^(?:[A-Za-z_][\w]*=(?:[^\s\'"]+|\'[^\']*\'|"[^"]*")(?:\s+|$))+', '', prefix)
+        if prefix and not re.fullmatch(r'(?:(?:if|then|else|elif|do|!|command|exec|env)\s*)+', prefix):
+            problem('unsupported-publication-wrapper')
         if unbounded:
             problem('unbounded-publication-control-flow')
         try:
-            arguments = shlex.split(invocation[1], comments=True)
+            arguments = shlex.split(raw[invocation.end():], comments=True)
         except ValueError:
             problem('unresolved-publication-target')
             return
@@ -1065,7 +1194,7 @@ def static_project_targets(tree, text, path, errors):
                 register_target(directory)
             return
         for value in selected:
-            quoted_literal = any('$' in part and value in part for part in re.findall(r"'([^']*)'", invocation[1]))
+            quoted_literal = any('$' in part and value in part for part in re.findall(r"'([^']*)'", raw[invocation.end():]))
             possibilities = None if quoted_literal else expand(value, environment)
             if possibilities is None:
                 problem('unresolved-publication-target')
@@ -1087,7 +1216,7 @@ def static_project_targets(tree, text, path, errors):
             if budget[0] > 8192:
                 problem('unbounded-publication-control-flow')
                 return None
-            heredoc = re.search(r'''<<-?\s*(["']?)([A-Za-z_][\w]*)\1''', raw)
+            heredoc = heredoc_operator(raw)
             if heredoc:
                 body = []
                 while index < len(lines) and lines[index].strip() != heredoc[2]:
@@ -1108,7 +1237,9 @@ def static_project_targets(tree, text, path, errors):
                     index += 1
                     if loop and re.match(r'^(?:for|while|until)\b', row):
                         nesting += 1
-                    if row == ('}' if function else 'done'):
+                    if (row == '}' if function else re.match(r'^done(?:\s*(?:[<>].*)?)?$', row)):
+                        if not function and re.search(r'\$\(|`|[<>]\(', row[4:]):
+                            problem('unresolved-loop-redirection')
                         nesting -= 1
                         if not nesting:
                             break
@@ -1154,7 +1285,7 @@ def static_project_targets(tree, text, path, errors):
             segments = shell_segments(raw)
             short_circuit = len(segments) > 1 and ('&&' in raw or '||' in raw)
             for command in segments:
-                if re.match(r'^(?:if|elif|case)\b', command):
+                if re.match(r'^(?:if|case)\b', command):
                     conditional += 1
                 if re.match(r'^(?:fi|esac)\b', command):
                     conditional = max(0, conditional - 1)
@@ -1172,11 +1303,18 @@ def static_project_targets(tree, text, path, errors):
                     choices = expand(value[0], environment) if len(value) == 1 else None
                     # Recognize this exact source-relative locator as spelling,
                     # without running dirname, cd or pwd from inspected code.
-                    if re.fullmatch(r'"\$\(cd "\$\(dirname "\$\{BASH_SOURCE\[0\]\}"\)/([.\/]+)" && pwd\)"', assignment[2]):
-                        suffix = re.search(r'\)/([.\/]+)" && pwd', assignment[2])[1]
-                        root = posixpath.normpath(posixpath.join(str(PurePosixPath(path).parent), suffix))
-                        if root == '.' or not root.startswith('../') and root != '..':
-                            choices = {'@repo' + ('/' + root if root != '.' else '')}
+                    locator = re.fullmatch(r'"?\$\((?:CDPATH= )?cd (?:-- )?"(.*?)" && pwd(?: -P)?\)"?', assignment[2])
+                    if locator and locators_proven and not path.endswith(('.yml', '.yaml')):
+                        source_relative = re.fullmatch(r'\$\(dirname (?:-- )?"\$\{BASH_SOURCE\[0\]\}"\)(/[.\/]+)?', locator[1])
+                        if source_relative:
+                            base = repository_marker + '/' + str(PurePosixPath(path).parent)
+                            paths = {base + (source_relative[1] or '')}
+                        else:
+                            paths = expand(locator[1], environment)
+                        if paths and all(value == repository_marker or value.startswith(repository_marker + '/') for value in paths):
+                            roots = {posixpath.normpath(value.removeprefix(repository_marker + '/')) if value != repository_marker else '.' for value in paths}
+                            if all(root != '..' and not root.startswith('../') for root in roots):
+                                choices = {repository_marker + ('/' + root if root != '.' else '') for root in roots}
                     if re.search(r"'[^']*\$[^']*'", assignment[2]):
                         choices = None
                     if conditional or short_circuit:
@@ -1185,6 +1323,8 @@ def static_project_targets(tree, text, path, errors):
                     environment[assignment[1]] = choices
                 elif command.startswith('cd '):
                     value = words(command[3:])
+                    if value[:1] == ['--']:
+                        value = value[1:]
                     choices = expand(value[0], environment) if len(value) == 1 else None
                     directory = normalized(directory, next(iter(choices))) if choices and len(choices) == 1 and not conditional and not short_circuit else None
                     if directory and directory != '.' and not any(p.startswith(directory + '/') or p == directory for p in tree.entries):
@@ -1427,41 +1567,44 @@ def scan_tree(tree, repository, exclusions):
                 if not relevant:
                     continue
                 document = json_bytes(text, path)
-                if not isinstance(document, dict) and not re.search(r'release|publish|mcp|dotnet-tools|^package\.json$', PurePosixPath(path).name, re.I):
-                    continue  # A retained runtime observation array is not a manifest.
-                require(isinstance(document, dict), f'malformed-publication:{path}')
-                for section in ('mcpServers', 'servers'):
-                    if section not in document:
-                        continue
-                    servers = document[section]
-                    require(isinstance(servers, dict), f'malformed-server-configuration:{path}')
-                    for identity, config in servers.items():
-                        require(nonblank(identity) and isinstance(config, dict) and bool(config), f'malformed-server-configuration:{path}')
-                        # Exact binding includes command/URL/arguments via the hash.
-                        add(path, 'configuration', identity + ':' + digest(json.dumps(config, sort_keys=True, separators=(',', ':')).encode()), 'developer-server-configuration')
-                if 'bin' in document and PurePosixPath(path).name == 'package.json':
-                    binaries = document['bin']
-                    require(isinstance(binaries, (dict, str)) and bool(binaries), f'malformed-publication:{path}')
-                    if isinstance(binaries, str):
-                        require(nonblank(document.get('name')), f'malformed-publication:{path}')
-                        publication(path, document['name'], signal='tool-manifest')
-                    else:
-                        for identity, target in binaries.items():
-                            require(nonblank(target), f'malformed-publication:{path}')
-                            publication(path, identity + ':' + target, signal='tool-manifest')
-                if 'tools' in document and 'dotnet-tools' in path:
-                    require(isinstance(document['tools'], dict), f'malformed-publication:{path}')
-                    for identity in document['tools']:
-                        publication(path, identity, signal='tool-manifest')
-                for collection in ('packages', 'containers', 'images'):
-                    if collection not in document:
-                        continue
-                    require(isinstance(document[collection], list), f'malformed-publication:{path}')
-                    for entry in document[collection]:
-                        require(isinstance(entry, dict), f'malformed-publication:{path}')
-                        project = entry.get('project')
-                        identity = entry.get('packageId') or entry.get('package_id') or entry.get('id') or entry.get('image') or entry.get('repository') or entry.get('name') or project
-                        publication(path, identity, project)
+                for document in json_documents(document, path):
+                    if 'project' in document:
+                        identity = document.get('packageId') or document.get('package_id') or document.get('id') or document.get('name') or document['project']
+                        publication(path, identity, document['project'])
+                    elif 'image' in document and isinstance(document['image'], str):
+                        publication(path, document['image'], signal='container-image')
+                    for section in ('mcpServers', 'servers'):
+                        if section not in document:
+                            continue
+                        servers = document[section]
+                        require(isinstance(servers, dict), f'malformed-server-configuration:{path}')
+                        for identity, config in servers.items():
+                            require(nonblank(identity) and isinstance(config, dict) and bool(config), f'malformed-server-configuration:{path}')
+                            # Exact binding includes command/URL/arguments via the hash.
+                            add(path, 'configuration', identity + ':' + digest(json.dumps(config, sort_keys=True, separators=(',', ':')).encode()), 'developer-server-configuration')
+                    if 'bin' in document and PurePosixPath(path).name == 'package.json':
+                        binaries = document['bin']
+                        require(isinstance(binaries, (dict, str)) and bool(binaries), f'malformed-publication:{path}')
+                        if isinstance(binaries, str):
+                            require(nonblank(document.get('name')), f'malformed-publication:{path}')
+                            publication(path, document['name'], signal='tool-manifest')
+                        else:
+                            for identity, target in binaries.items():
+                                require(nonblank(target), f'malformed-publication:{path}')
+                                publication(path, identity + ':' + target, signal='tool-manifest')
+                    if 'tools' in document and 'dotnet-tools' in path:
+                        require(isinstance(document['tools'], dict), f'malformed-publication:{path}')
+                        for identity in document['tools']:
+                            publication(path, identity, signal='tool-manifest')
+                    for collection in ('packages', 'containers', 'images'):
+                        if collection not in document:
+                            continue
+                        require(isinstance(document[collection], list), f'malformed-publication:{path}')
+                        for entry in document[collection]:
+                            require(isinstance(entry, dict), f'malformed-publication:{path}')
+                            project = entry.get('project')
+                            identity = entry.get('packageId') or entry.get('package_id') or entry.get('id') or entry.get('image') or entry.get('repository') or entry.get('name') or project
+                            publication(path, identity, project)
             elif path.endswith('.toml') and 'config' in PurePosixPath(path).name:
                 try:
                     document = tomllib.loads(text)

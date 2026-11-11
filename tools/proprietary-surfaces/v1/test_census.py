@@ -1892,6 +1892,226 @@ dotnet publish "$target"
                           self.binding(project, 'publication', 'container:team/neutral')])
         self.assertEqual([e['signals'] for e in report['surfaces']], [['container-image'], ['mcp-registration'], ['container-metadata']])
 
+    def test_coverage_comments_and_diagnostic_strings_are_not_commands(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, '# concurrent dotnet run launches are incremental\n'
+                   'echo "dotnet pack $runtime_project failed"\n'
+                   "printf '%s' 'dotnet publish absent/Diagnostic.csproj'\n")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(0)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(report['surfaces'], [])
+        self.write(self.repo, path, '# dotnet pack ignored\n'
+                   'dotnet publish "missing/Hash#Runner.csproj" # dotnet pack missing/Comment.csproj\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding(path, 'publication', 'missing/Hash#Runner.csproj')])
+
+    def test_coverage_unknown_wrappers_cannot_borrow_approved_identity(self):
+        path = 'scripts/ship.sh'
+        for wrapper in ('sudo', 'sudo -D elsewhere', 'nohup', 'env -i', 'time'):
+            with self.subTest(wrapper=wrapper):
+                self.write(self.repo, path, wrapper + ' dotnet publish missing/Old.csproj')
+                self.commit(self.repo); self.pin()
+                self.policy['allowances'] = []
+                self.allowance(self.binding(path, 'publication', 'missing/Old.csproj'), ['orphan-project-reference'])
+                report = self.run_cli(1)
+                self.assert_source_errors(report, path, ['unsupported-publication-wrapper'])
+                self.assertEqual([e['surface'] for e in report['surfaces']],
+                                 [self.binding(path, 'publication', 'missing/Old.csproj')])
+
+    def test_coverage_heredoc_quotes_do_not_hide_later_publication(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, "cat <<'EOF'\nI'm literal data\nEOF\ndotnet publish missing/New.csproj\n")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding(path, 'publication', 'missing/New.csproj')])
+        self.assertEqual(len(list(census.dotnet_invocations((self.repo / path).read_text()))), 1)
+        for prefix in ("# example <<'EOF'", "echo 'literal <<EOF'", 'echo "literal <<EOF"'):
+            self.write(self.repo, path, prefix + '\ndotnet publish missing/New.csproj\n')
+            self.commit(self.repo); self.pin()
+            report = self.run_cli(1)
+            self.assertEqual(report['errors'], [])
+            self.assertEqual([e['surface'] for e in report['surfaces']],
+                             [self.binding(path, 'publication', 'missing/New.csproj')])
+
+    def test_coverage_backtick_substitution_inside_diagnostic_remains_executable(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, 'printf \'%s\' "ignored `dotnet publish missing/New.csproj`"\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unresolved-publication-target'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_coverage_source_relative_shell_locator_forms_resolve_without_execution(self):
+        path = 'scripts/ship.sh'
+        locators = ('root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)',
+                    'script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"\nroot="$(cd "$script_dir/.." && pwd)"',
+                    'root="$(CDPATH= cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"')
+        for locator in locators:
+            with self.subTest(locator=locator):
+                self.write(self.repo, path, locator + '\ndotnet pack "$root/missing/Runner.csproj"\n')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['errors'], [])
+                self.assertEqual([e['surface'] for e in report['surfaces']],
+                                 [self.binding(path, 'publication', 'missing/Runner.csproj')])
+        self.write(self.repo, path, 'root=$(cd "$runtime_root" && pwd)\ndotnet pack "$root/missing/Runner.csproj"\n')
+        self.commit(self.repo); self.pin()
+        self.assert_source_errors(self.run_cli(1), path, ['unresolved-publication-target'])
+
+    def test_coverage_redirected_loop_end_does_not_consume_later_publication(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, 'while read -r line; do\n  echo "$line"\ndone < runtime-input\n'
+                   'dotnet publish missing/After.csproj\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding(path, 'publication', 'missing/After.csproj')])
+
+    def test_coverage_loop_redirection_substitutions_remain_executable(self):
+        path = 'scripts/ship.sh'
+        for suffix in ('< <(dotnet publish missing/Actual.csproj)',
+                       '< "$(dotnet publish missing/Actual.csproj)"',
+                       '< `dotnet publish missing/Actual.csproj`'):
+            self.write(self.repo, path, 'while read -r value; do\n  echo "$value"\ndone ' + suffix + '\n')
+            self.commit(self.repo); self.pin()
+            report = self.run_cli(1)
+            self.assert_source_errors(report, path, ['unresolved-loop-redirection'])
+            self.assertEqual(report['surfaces'], [])
+
+    def test_coverage_workflow_temporary_script_has_no_committed_locator_authority(self):
+        path = '.github/workflows/ship.yml'
+        self.write(self.repo, path, 'jobs:\n  ship:\n    steps:\n      - run: |\n'
+                   '          root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"\n'
+                   '          dotnet publish "$root/missing/New.csproj"\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unresolved-publication-target'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_coverage_literal_repository_marker_cannot_borrow_locator_authority(self):
+        path = 'scripts/ship.sh'
+        self.allowance(self.binding(path, 'publication', 'missing/Old.csproj'), ['orphan-project-reference'])
+        self.write(self.repo, path, "root='@repo'\ndotnet publish \"$root/missing/Old.csproj\"\n")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding(path, 'publication', '@repo/missing/Old.csproj')])
+        self.write(self.repo, path, "left='@re'\nright='po'\nroot=\"$left$right\"\ndotnet publish \"$root/missing/Old.csproj\"\n")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding(path, 'publication', '@repo/missing/Old.csproj')])
+        self.write(self.repo, path, "root='\x00repo'\ndotnet publish \"$root/missing/Old.csproj\"\n")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unsafe-script-text'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_coverage_locator_builtin_overrides_and_source_mutations_refuse(self):
+        path = 'scripts/ship.sh'
+        for prefix in ('pwd() {\n  echo elsewhere\n}\n', 'alias cd=runtime\n', 'eval "$runtime"\n',
+                       'source runtime.sh\n', 'unset BASH_SOURCE\n'):
+            self.write(self.repo, path, prefix + 'root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"\n'
+                       'dotnet publish "$root/missing/Old.csproj"\n')
+            self.commit(self.repo); self.pin()
+            report = self.run_cli(1)
+            self.assert_source_errors(report, path, ['unresolved-publication-target'])
+            self.assertEqual(report['surfaces'], [])
+
+    def test_coverage_elif_does_not_leave_following_literal_assignment_conditional(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, 'if test "$runtime"; then\n  echo yes\nelif test "$other"; then\n  echo other\nfi\n'
+                   'target=missing/After.csproj\ndotnet pack "$target"\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding(path, 'publication', 'missing/After.csproj')])
+
+    def test_coverage_unrelated_loops_and_heredocs_create_no_publication_error(self):
+        path = 'scripts/ordinary.sh'
+        self.write(self.repo, path, 'for file in runtime/*; do cp "$file" output; done\n'
+                   'cat <<EOF\n$(runtime_data)\nEOF\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(0)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_coverage_json_object_arrays_preserve_nested_manifest_signals(self):
+        path = 'tools/release.json'
+        self.write(self.repo, path, json.dumps([{'case': 'observation', 'document': {'schema': 'release-result', 'outcome': 'published'}},
+            {'document': {'packages': [{'id': 'neutral', 'project': 'missing/Runner.csproj'}]}},
+            {'document': {'servers': {'local': {'command': 'neutral', 'args': ['one', 'two']}}}},
+            {'image': 'registry.invalid/neutral:1'}]))
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(e['surface']['kind'], e['surface']['identity']) for e in report['surfaces']],
+                         [('configuration', 'local:' + census.digest(json.dumps({'command': 'neutral', 'args': ['one', 'two']}, sort_keys=True, separators=(',', ':')).encode())),
+                          ('publication', 'neutral'), ('publication', 'registry.invalid/neutral:1')])
+
+    def test_coverage_json_array_scalar_roots_and_depth_are_refused(self):
+        path = 'tools/release.json'
+        for document in ('unclassified-package', ['unclassified-package'], [[['unclassified-package']]]):
+            self.write(self.repo, path, json.dumps(document))
+            self.commit(self.repo); self.pin()
+            self.assert_source_errors(self.run_cli(1), path, ['malformed-publication'])
+        document = {'packages': [{'id': 'neutral', 'project': 'missing/Runner.csproj'}]}
+        for _ in range(34):
+            document = {'document': document}
+        self.write(self.repo, path, json.dumps(document))
+        self.commit(self.repo); self.pin()
+        self.assert_source_errors(self.run_cli(1), path, ['unbounded-publication-json'])
+        self.write(self.repo, path, json.dumps([{} for _ in range(4097)]))
+        self.commit(self.repo); self.pin()
+        self.assert_source_errors(self.run_cli(1), path, ['unbounded-publication-json'])
+
+    def test_coverage_json_schema_definitions_are_not_runtime_manifests(self):
+        path = 'tools/release-schema.json'
+        schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema',
+                  'properties': {'servers': {'type': 'array'}, 'packages': {'type': 'array'}}}
+        self.write(self.repo, path, json.dumps(schema))
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(0)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(report['surfaces'], [])
+        schema['packages'] = [{'id': 'actual', 'project': 'missing/Actual.csproj'}]
+        self.write(self.repo, path, json.dumps(schema))
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', 'actual')])
+        del schema['packages']
+        schema['$schema'] = 'https://attacker.invalid/json-schema.org/draft/2020-12/schema'
+        self.write(self.repo, path, json.dumps(schema))
+        self.commit(self.repo); self.pin()
+        self.assert_source_errors(self.run_cli(1), path, ['malformed-server-configuration'])
+
+    def test_coverage_literal_heredoc_matrix_text_has_no_target_authority(self):
+        path = '.github/workflows/ship.yml'
+        self.write(self.repo, path, 'jobs:\n  ship:\n    steps:\n      - run: |\n'
+                   "          cat <<'EOF'\n          dotnet publish ${{ matrix.unknown }}\n          EOF\n"
+                   '          dotnet publish missing/Actual.csproj\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', 'missing/Actual.csproj')])
+        self.write(self.repo, path, 'jobs:\n  ship:\n    strategy:\n      matrix:\n        project: [missing/Quoted.csproj]\n'
+                   '    steps:\n      - run: \'dotnet publish ${{ matrix.project }}\'\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', 'missing/Quoted.csproj')])
+
 
 if __name__=='__main__':
     unittest.main()

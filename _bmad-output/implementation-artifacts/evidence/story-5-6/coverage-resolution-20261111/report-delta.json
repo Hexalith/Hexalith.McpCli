@@ -1,0 +1,282 @@
+{
+  "afterCounts": {
+    "completeRoots": 2,
+    "fixtures": 158,
+    "guardRemovalControls": 132,
+    "inspectionErrors": 109,
+    "observations": 548,
+    "rejectedObservations": 120,
+    "releaseRegressions": 195,
+    "roots": 17,
+    "stale": 2
+  },
+  "beforeCounts": {
+    "errors": 111,
+    "rejections": 114
+  },
+  "inspectionErrors": {
+    "added": [
+      {
+        "gitlink": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+        "path": "scripts/publish-partial-release.sh",
+        "repository": "references/Hexalith.Tenants",
+        "rule": "unresolved-publication-directory:scripts/publish-partial-release.sh"
+      },
+      {
+        "gitlink": "43d2d72f7170a29a58b6046f69e05c9ad9734701",
+        "path": "tools/ci/provision-eventstore-local-feed.sh",
+        "repository": "references/Hexalith.Memories",
+        "rule": "unresolved-loop-redirection:tools/ci/provision-eventstore-local-feed.sh"
+      },
+      {
+        "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+        "path": ".github/workflows/ci.yml",
+        "repository": "references/Hexalith.Projects",
+        "rule": "unresolved-loop-redirection:.github/workflows/ci.yml"
+      },
+      {
+        "gitlink": "7ace06c5c50406b9021fc95d8d87cf962b5180dd",
+        "path": "tests/ci-governance/fixtures/release-readiness-cases.json",
+        "repository": "references/Hexalith.FrontComposer",
+        "rule": "malformed-publication:tests/ci-governance/fixtures/release-readiness-cases.json"
+      },
+      {
+        "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+        "path": ".github/scripts/pack-release-packages.sh",
+        "repository": "references/Hexalith.ChatBot",
+        "rule": "unresolved-publication-target:.github/scripts/pack-release-packages.sh"
+      },
+      {
+        "gitlink": "891886ddc60a9924d053bb74bf6bcc73e101b2ce",
+        "path": "Github/publish-containers/publish-containers.sh",
+        "repository": "references/Hexalith.Builds",
+        "rule": "unresolved-publication-target:Github/publish-containers/publish-containers.sh"
+      },
+      {
+        "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+        "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v5-proposal.json",
+        "repository": "references/Hexalith.Conversations",
+        "rule": "malformed-publication:docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v5-proposal.json"
+      },
+      {
+        "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+        "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v6-proposal.json",
+        "repository": "references/Hexalith.Conversations",
+        "rule": "malformed-publication:docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v6-proposal.json"
+      }
+    ],
+    "removed": [
+      {
+        "gitlink": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+        "path": "scripts/publish-partial-release.sh",
+        "repository": "references/Hexalith.Tenants",
+        "rule": "unbounded-publication-control-flow:scripts/publish-partial-release.sh"
+      },
+      {
+        "gitlink": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+        "path": "scripts/run-tenant-audit-performance.sh",
+        "repository": "references/Hexalith.Tenants",
+        "rule": "unresolved-publication-target:scripts/run-tenant-audit-performance.sh"
+      },
+      {
+        "gitlink": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+        "path": "scripts/verify-release-artifacts.sh",
+        "repository": "references/Hexalith.Tenants",
+        "rule": "unsupported-inline-publication-control-flow:scripts/verify-release-artifacts.sh"
+      },
+      {
+        "gitlink": "07ddff72c99161be212466ff8795bba4c107adc1",
+        "path": "scripts/prepare-aspire-runtime-hosts.sh",
+        "repository": "references/Hexalith.Parties",
+        "rule": "unresolved-publication-target:scripts/prepare-aspire-runtime-hosts.sh",
+        "target": "launches"
+      },
+      {
+        "gitlink": "43d2d72f7170a29a58b6046f69e05c9ad9734701",
+        "path": "tools/ci/provision-eventstore-local-feed.sh",
+        "repository": "references/Hexalith.Memories",
+        "rule": "unresolved-publication-target:tools/ci/provision-eventstore-local-feed.sh"
+      },
+      {
+        "gitlink": "43d2d72f7170a29a58b6046f69e05c9ad9734701",
+        "path": "tools/publish-containers.ps1",
+        "repository": "references/Hexalith.Memories",
+        "rule": "unresolved-publication-target:tools/publish-containers.ps1"
+      },
+      {
+        "gitlink": "43d2d72f7170a29a58b6046f69e05c9ad9734701",
+        "path": "tools/verify-cli-pack.sh",
+        "repository": "references/Hexalith.Memories",
+        "rule": "unresolved-publication-target:tools/verify-cli-pack.sh"
+      },
+      {
+        "gitlink": "7ace06c5c50406b9021fc95d8d87cf962b5180dd",
+        "path": ".github/workflows/quarantine-governance-nightly.yml",
+        "repository": "references/Hexalith.FrontComposer",
+        "rule": "unresolved-heredoc-substitution:.github/workflows/quarantine-governance-nightly.yml"
+      },
+      {
+        "gitlink": "7ace06c5c50406b9021fc95d8d87cf962b5180dd",
+        "path": ".github/workflows/release-evidence.yml",
+        "repository": "references/Hexalith.FrontComposer",
+        "rule": "unsupported-inline-publication-control-flow:.github/workflows/release-evidence.yml"
+      },
+      {
+        "gitlink": "891886ddc60a9924d053bb74bf6bcc73e101b2ce",
+        "path": "Github/lib/tests/fixtures/release-outcome.json",
+        "repository": "references/Hexalith.Builds",
+        "rule": "malformed-publication:Github/lib/tests/fixtures/release-outcome.json"
+      }
+    ]
+  },
+  "rejectedObservations": {
+    "added": [
+      {
+        "classification": "unapproved",
+        "gitlink": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+        "reason": "new-proprietary-surface",
+        "signals": [
+          "orphan-project-reference"
+        ],
+        "sources": [
+          "scripts/run-tenant-audit-performance.sh"
+        ],
+        "status": "rejected",
+        "surface": {
+          "identity": "tests/performance/tenant-audit/seed.csproj",
+          "kind": "publication",
+          "path": "scripts/run-tenant-audit-performance.sh",
+          "repository": "references/Hexalith.Tenants"
+        }
+      },
+      {
+        "classification": "unapproved",
+        "gitlink": "43d2d72f7170a29a58b6046f69e05c9ad9734701",
+        "reason": "new-proprietary-surface",
+        "signals": [
+          "project-publication-reference"
+        ],
+        "sources": [
+          "tools/verify-cli-pack.sh"
+        ],
+        "status": "rejected",
+        "surface": {
+          "identity": "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
+          "kind": "publication",
+          "path": "tools/verify-cli-pack.sh",
+          "repository": "references/Hexalith.Memories"
+        }
+      },
+      {
+        "classification": "unapproved",
+        "gitlink": "43d2d72f7170a29a58b6046f69e05c9ad9734701",
+        "reason": "new-proprietary-surface",
+        "signals": [
+          "publication-entry"
+        ],
+        "sources": [
+          "tools/release-containers.json"
+        ],
+        "status": "rejected",
+        "surface": {
+          "identity": "mcp",
+          "kind": "publication",
+          "path": "tools/release-containers.json",
+          "repository": "references/Hexalith.Memories"
+        }
+      },
+      {
+        "classification": "unapproved",
+        "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+        "reason": "new-proprietary-surface",
+        "signals": [
+          "publication-entry"
+        ],
+        "sources": [
+          "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json"
+        ],
+        "status": "rejected",
+        "surface": {
+          "identity": "Hexalith.EventStore.Client",
+          "kind": "publication",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+          "repository": "references/Hexalith.Conversations"
+        }
+      },
+      {
+        "classification": "unapproved",
+        "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+        "reason": "new-proprietary-surface",
+        "signals": [
+          "publication-entry"
+        ],
+        "sources": [
+          "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json"
+        ],
+        "status": "rejected",
+        "surface": {
+          "identity": "Hexalith.EventStore.Contracts",
+          "kind": "publication",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+          "repository": "references/Hexalith.Conversations"
+        }
+      },
+      {
+        "classification": "unapproved",
+        "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+        "reason": "new-proprietary-surface",
+        "signals": [
+          "publication-entry"
+        ],
+        "sources": [
+          "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json"
+        ],
+        "status": "rejected",
+        "surface": {
+          "identity": "Hexalith.EventStore.DomainService",
+          "kind": "publication",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+          "repository": "references/Hexalith.Conversations"
+        }
+      },
+      {
+        "classification": "unapproved",
+        "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+        "reason": "new-proprietary-surface",
+        "signals": [
+          "publication-entry"
+        ],
+        "sources": [
+          "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json"
+        ],
+        "status": "rejected",
+        "surface": {
+          "identity": "Hexalith.EventStore.ServiceDefaults",
+          "kind": "publication",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+          "repository": "references/Hexalith.Conversations"
+        }
+      }
+    ],
+    "removed": [
+      {
+        "classification": "unapproved",
+        "gitlink": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+        "reason": "new-proprietary-surface",
+        "signals": [
+          "orphan-project-reference"
+        ],
+        "sources": [
+          "scripts/demo.sh"
+        ],
+        "status": "rejected",
+        "surface": {
+          "identity": "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+          "kind": "publication",
+          "path": "scripts/demo.sh",
+          "repository": "references/Hexalith.Tenants"
+        }
+      }
+    ]
+  }
+}

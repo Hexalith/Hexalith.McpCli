@@ -52,7 +52,10 @@ MCP registrations and direct construction, and literal workflow/script/container
 publication identities. Unsafe publication paths and unresolved workflow project
 targets fail with source context. Finite literal shell variables, loops, function
 arguments, working directories, Compile item aliases and committed Copy inputs
-resolve without executing inspected code. Runtime/generated or nested sources
+resolve without executing inspected code. Committed-script path locators and bounded JSON object arrays/wrappers are
+also inspected. Comments and quoted diagnostics do not
+establish commands; executable substitutions remain visible and unsupported
+command wrappers fail coverage. Runtime/generated or nested sources
 remain coverage errors; partial roots retain other observations and do not
 establish stale allowances. The report names new surfaces and stale allowances; baseline changes require a
 versioned, hash-chained amendment. Successful census execution is required for
