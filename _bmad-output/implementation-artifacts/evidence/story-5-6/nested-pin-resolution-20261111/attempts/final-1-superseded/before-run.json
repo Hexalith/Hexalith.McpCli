@@ -1,0 +1,12 @@
+{
+  "checkerSha256": "39337483e9579a5dfc26182fbebeafcd8bd47aa8951d32b9688afca3a9540f18",
+  "executedCopySha256": "22573fa488a3eb86b200e1279447347090bf9caf5ea120f0e3df6a86ddf10766",
+  "identicalToPriorExceptParentRevision": true,
+  "onlyAdaptation": "ROOT names the workspace because the committed checker runs from a temporary copy.",
+  "parentRevision": "ef80e45056620aa851a68276428aa63ed6dcc90b",
+  "priorParentRevision": "1a44525c450081dc07df4021ab23e3090aacfda4",
+  "priorReport": "_bmad-output/implementation-artifacts/evidence/story-5-6/manifest-selector-resolution-20261111/runs/final-1/census.json",
+  "priorReportSha256": "21af3ad20a31b045419a77d000320128c9fbc421514e2fbb47227ed7858b53a9",
+  "reportSha256": "506e3d682852c5c1d0d9201e90eb7f5c780ed32af56e05411ade7e34c1ad8ee5",
+  "stderrSha256": "b951aed85a6b0787a39f0d72416b8e0138493533c9e28eed8d63645bfd63bb41"
+}

@@ -1,0 +1,6 @@
+{
+  "reportSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57",
+  "identicalToFinalReport": true,
+  "finalReport": "runs/final-2/census.json",
+  "reason": "Superseded after a README-only correction; implementation-integrity hashes differ only for tools/proprietary-surfaces/v1/README.md. The final report is retained once."
+}

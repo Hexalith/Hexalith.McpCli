@@ -10,6 +10,8 @@ import hashlib
 from functools import lru_cache
 import fnmatch
 import json
+from collections import namedtuple
+import os
 from pathlib import Path, PurePosixPath
 import posixpath
 import re
@@ -35,6 +37,10 @@ HASH = re.compile(r'[0-9a-f]{64}\Z')
 
 class CensusError(ValueError):
     """A coverage or metadata failure, safe to retain without source snippets."""
+
+    def __init__(self, message, target=None):
+        super().__init__(message)
+        self.target = target
 
 
 class ManifestRows(tuple):
@@ -77,8 +83,10 @@ def json_bytes(raw, label):
 
 
 def git(repo, *args, raw=False, input=None):
+    # Object reads never fetch: a partial clone's missing object stays missing.
     result = subprocess.run(['git', '-c', 'core.quotePath=false', '-C', str(repo), *args],
-                            input=input, capture_output=True, check=False)
+                            input=input, capture_output=True, check=False,
+                            env={**os.environ, 'GIT_NO_LAZY_FETCH': '1'})
     require(result.returncode == 0, 'git-object-unavailable')
     return result.stdout if raw else result.stdout.decode('utf-8', errors='strict').strip()
 
@@ -157,6 +165,242 @@ def declarations(parent):
     return dict(sorted(roots.items()))
 
 
+REGULAR = ('100644', '100755')
+Substitution = namedtuple('Substitution', 'base tree resolution repository commit gitlink')
+
+
+def submodule_urls(tree):
+    """Map each declared submodule path to its URL list; malformed declarations map nothing."""
+    try:
+        parser = configparser.ConfigParser(interpolation=None, strict=True)
+        parser.read_string(tree.text('.gitmodules'))
+        modules = {}
+        for section in parser.sections():
+            modules.setdefault(parser.get(section, 'path', fallback=None), []).append(parser.get(section, 'url', fallback=None))
+        return modules
+    except (CensusError, configparser.Error):
+        return {}
+
+
+def remote_identity(url):
+    """Compare remotes as declared text: trim one '/' and one '.git'; only the host ignores case."""
+    if not nonblank(url) or url in ('.', '..') or url.startswith(('./', '../')):
+        return None  # Relative URLs depend on a superproject remote and never match.
+    url = url[:-1] if url.endswith('/') else url
+    url = url[:-4] if url.endswith('.git') else url
+    match = re.fullmatch(r'([A-Za-z][A-Za-z0-9+.-]*://)([^/?#]*)(.*)', url, re.S)
+    if match:
+        userinfo, at, host = match[2].rpartition('@')
+        return match[1] + userinfo + at + host.lower() + match[3]
+    match = re.fullmatch(r'([^@/:]+@)?([^/:]+):(.*)', url, re.S)
+    if match and len(match[2]) > 1:
+        return (match[1] or '') + match[2].lower() + ':' + match[3]
+    return url
+
+
+class Workspace:
+    """Committed root declarations whose checkouts supply Git objects; nothing is fetched or checked out."""
+
+    def __init__(self, path, parent, roots):
+        self.path, self.parent, self.roots, self.trees = Path(path), parent, roots, {}
+        urls = submodule_urls(parent)
+        self.identities = {root: remote_identity((urls.get(root) or [None])[0]) for root in roots}
+
+    def checkout(self, repository):
+        location = self.path / repository
+        require(location.is_dir() and not any(p.is_symlink() for p in [location, *list(location.parents)[:len(PurePosixPath(repository).parts) - 1]]), 'reference-root-unavailable-or-linked')
+        # Refuse Git's upward repository discovery for an uninitialized root.
+        require(not git(location, 'rev-parse', '--show-prefix'), 'reference-root-uninitialized')
+        return location
+
+    def tree(self, repository, commit):
+        """Read one commit from a root checkout's own object store, caching success or failure."""
+        key = (repository, commit)
+        if key not in self.trees:
+            try:
+                location = self.checkout(repository)
+                require(git(location, 'cat-file', '-t', commit) == 'commit', 'reference-pin-not-commit')
+                self.trees[key] = Tree(location, commit)
+            except CensusError as error:
+                self.trees[key] = CensusError(str(error))
+        if isinstance(self.trees[key], CensusError):
+            raise CensusError(str(self.trees[key]))
+        return self.trees[key]
+
+
+class Refusal:
+    """Build a coverage error naming the declaring metadata file and the refused label."""
+
+    def __init__(self, rule, current, target):
+        self.rule, self.current, self.target = rule, current, target
+
+    def __call__(self, rule=None):
+        return CensusError(f'{rule or self.rule}:{self.current}', target=self.target)
+
+    def require(self, condition, rule=None):
+        if not condition:
+            raise self(rule)
+
+
+class Resolver:
+    """Map inspected-root labels to committed blobs, crossing at most one tree boundary.
+
+    Labels are paths relative to the inspected root. A leading '..' marks a
+    workspace path; a path under a nested gitlink names that nested commit.
+    """
+
+    def __init__(self, workspace, repository, tree):
+        self.workspace, self.repository, self.tree = workspace, repository, tree
+        self.gitlinks = sorted(p for p, entry in tree.entries.items() if entry[0] == '160000')
+        self.locations, self.reads, self.modules = {}, {}, None
+
+    @staticmethod
+    def escaping(label):
+        return label == '..' or label.startswith('../')
+
+    def nested(self, label):
+        return next((g for g in self.gitlinks if label == g or label.startswith(g + '/')), None)
+
+    def canonical_label(self, label):
+        """Spell each workspace path once, relative to the inspected root."""
+        if self.repository is None or not self.escaping(label):
+            return label
+        target = posixpath.normpath(self.repository + '/' + label)
+        if target.startswith(self.repository + '/'):
+            return target[len(self.repository) + 1:]
+        # The inspected root directory itself and paths above the parent keep their escape.
+        return label if target == self.repository or self.escaping(target) else posixpath.relpath(target, self.repository)
+
+    def local(self, label):
+        return not self.escaping(label) and self.nested(label) is None
+
+    def substitution(self, label):
+        return self.locations[label][2] if label in self.locations else None
+
+    def text(self, label):
+        """Read a local blob, or a substituted blob with its exact provenance."""
+        if label not in self.locations:
+            return self.tree.text(label)
+        tree, inner, substitution = self.locations[label]
+        record = {'requested': label, 'resolution': substitution.resolution, 'repository': substitution.repository,
+                  'commit': substitution.commit, 'path': inner, 'sha256': digest(tree.blob(inner))}
+        if substitution.gitlink:
+            record['nestedGitlink'] = substitution.gitlink
+        self.reads[canonical(record)] = record
+        try:
+            return tree.text(inner)
+        except CensusError:
+            raise CensusError(f'malformed-text:{label}') from None
+
+    def provenance(self):
+        return sorted(self.reads.values(), key=lambda record: (record['requested'], canonical(record)))
+
+    def present(self, label):
+        """Prove a path exists in a non-recursive workspace: committed in this root or in a root at its pin."""
+        if self.local(label):
+            tree, inner = self.tree, label
+        elif self.escaping(label) and self.workspace is not None:
+            target = posixpath.normpath(self.repository + '/' + label)
+            root = next((r for r in self.workspace.roots if target.startswith(r + '/')), None)
+            if self.escaping(target) or root is None:
+                return False  # Above the parent root or outside every root: never proven present.
+            try:
+                tree = self.workspace.tree(root, self.workspace.roots[root])
+            except CensusError:
+                return False
+            inner = target[len(root) + 1:]
+        else:
+            return False  # Non-recursive checkouts lack every path under a nested gitlink.
+        # A gitlink is no regular blob and has no committed entries below it.
+        entry = tree.entries.get(inner)
+        return entry is not None and entry[0] in REGULAR or any(p.startswith(inner + '/') for p in tree.entries)
+
+    def absent(self, label, substitution):
+        """Prove no file or directory exists under the local, workspace and nested rules."""
+        if re.search(r'[*?]', label):
+            return False
+        if substitution is None and self.local(label):
+            return label not in self.tree.entries and not any(p.startswith(label + '/') for p in self.tree.entries)
+        try:
+            found, missing = self.matches(label, substitution, 'unsafe-import-path', '')
+        except CensusError:
+            return False  # A refused or unresolvable path proves nothing.
+        return missing and not found
+
+    def locate(self, label, substitution, refusal):
+        """Return the tree, in-tree path and substitution holding one cross-tree label."""
+        if substitution is not None:
+            if not (label == substitution.base or label.startswith(substitution.base + '/')):
+                raise refusal()  # The single permitted hop is already used.
+            tree, inner = substitution.tree, label[len(substitution.base) + 1:]
+        elif self.escaping(label):
+            refusal.require(self.workspace is not None)
+            target = posixpath.normpath(self.repository + '/' + label)
+            refusal.require(not self.escaping(target))  # Above the parent root.
+            root = next((r for r in self.workspace.roots if target == r or target.startswith(r + '/')), None)
+            if root is None:
+                return None, target, None  # A parent-tree path outside every root is never read.
+            try:
+                tree = self.workspace.tree(root, self.workspace.roots[root])
+            except CensusError:
+                raise refusal('workspace-object-unavailable') from None
+            inner = target[len(root) + 1:]
+            substitution = Substitution(posixpath.relpath(root, self.repository), tree, 'workspace', root, self.workspace.roots[root], None)
+        else:
+            gitlink = self.nested(label)
+            if self.modules is None:
+                self.modules = submodule_urls(self.tree)
+            urls = self.modules.get(gitlink, [])
+            identity = remote_identity(urls[0]) if len(urls) == 1 else None
+            roots = [] if identity is None or self.workspace is None else [
+                root for root, value in self.workspace.identities.items() if value == identity]
+            refusal.require(len(roots) == 1, 'nested-pin-unresolvable')
+            commit = self.tree.entries[gitlink][2]
+            try:
+                tree = self.workspace.tree(roots[0], commit)
+            except CensusError:
+                raise refusal('nested-object-unavailable') from None
+            inner = label[len(gitlink) + 1:]
+            substitution = Substitution(gitlink, tree, 'nested', roots[0], commit, gitlink)
+        # A gitlink inside the substituted tree would be a second hop.
+        refusal.require(not any(entry[0] == '160000' and (inner == p or inner.startswith(p + '/'))
+                                for p, entry in tree.entries.items()))
+        return tree, inner, substitution
+
+    def matches(self, label, substitution, rule, current):
+        """Resolve a cross-tree literal or glob; return (labels, absent literal)."""
+        refusal = Refusal(rule, current, label)
+        parts = label.split('/')
+        wildcard = next((index for index, part in enumerate(parts) if re.search(r'[*?]', part)), None)
+        directory = '/'.join(parts[:wildcard]) if wildcard is not None else label
+        tree, inner, substitution = self.locate(directory, substitution, refusal)
+        if tree is None:
+            refusal.require(wildcard is None)  # Parent-tree directories are never listed.
+            refusal.require(inner not in self.workspace.parent.entries)  # Parent-tree blobs are never read.
+            # Exists() is also true for a directory, so only a missing path is absent.
+            refusal.require(not any(p.startswith(inner + '/') for p in self.workspace.parent.entries))
+            return [], True
+        if wildcard is None:
+            entry = tree.entries.get(inner)
+            if entry is None:
+                refusal.require(bool(inner) and not any(p.startswith(inner + '/') for p in tree.entries))  # Directory.
+                return [], True
+            refusal.require(entry[0] in REGULAR)
+            found = [inner]
+        else:
+            # A glob cannot prove what an unopened gitlink below its directory contains.
+            refusal.require(not any(entry[0] == '160000' and (not inner or p.startswith(inner + '/'))
+                                    for p, entry in tree.entries.items()))
+            pattern = (inner + '/' if inner else '') + '/'.join(parts[wildcard:])
+            found = sorted(p for p, entry in tree.entries.items() if entry[0] in REGULAR and msbuild_glob(p, pattern))
+        labels = []
+        for path in found:
+            resolved = substitution.base + '/' + path
+            self.locations[resolved] = (tree, path, substitution)
+            labels.append(resolved)
+        return labels, False
+
+
 def descriptor(value):
     require(isinstance(value, dict) and set(value) == {'repository', 'path', 'kind', 'identity'}, 'invalid-surface-binding')
     safe_path(value['repository'])
@@ -190,7 +434,7 @@ def canonical(value):
     return json.dumps(value, sort_keys=True, separators=(',', ':'))
 
 
-def validate_approval_evidence(workspace, amendment, receipt, authorities):
+def validate_approval_evidence(workspace, amendment, receipt, authorities, context=None):
     """Require an affirmative receipt bound to the exact mutation scope."""
     require(isinstance(receipt, dict) and receipt.get('decision') == 'approved'
             and receipt.get('owner') == amendment['approval']['owner'], 'amendment-evidence-not-approved')
@@ -230,14 +474,15 @@ def validate_approval_evidence(workspace, amendment, receipt, authorities):
                 and canonical(entry.get('sources')) == canonical(closure.get('sources'))
                 and 'compilationClosure' not in entry, 'amendment-authorization-scope-mismatch')
         tree = Tree(workspace / safe_path(fixture['repository']), fixture['gitlink'])
-        values, _, _, _ = project_metadata(tree, project, metadata_files(tree))
+        values, _, _, _ = project_metadata(tree, project, metadata_files(tree),
+                                           resolver=Resolver(context, fixture['repository'], tree) if context else None)
         authorized = {('project', PurePosixPath(project).stem)}
         for name, prefix in [('PackageId', 'package:'), ('ToolCommandName', 'tool:'), ('ContainerRepository', 'container:')]:
             authorized.update(('publication', prefix + value) for value in values.get(name, set()))
         require((surface.get('kind'), surface.get('identity')) in authorized, 'amendment-authorization-scope-mismatch')
 
 
-def load_policy(workspace, parent, baseline_path, index_path, today):
+def load_policy(workspace, parent, baseline_path, index_path, today, context=None):
     baseline_raw = baseline_path.read_bytes()
     policy = json_bytes(baseline_raw, 'baseline')
     require(isinstance(policy, dict) and set(policy) == {'schema', 'version', 'roots', 'allowances', 'exclusions', 'exceptions', 'provenance', 'toolIdentities'} and policy.get('schema') == SCHEMA and policy.get('version') == '1.0.0', 'invalid-baseline-version')
@@ -322,7 +567,7 @@ def load_policy(workspace, parent, baseline_path, index_path, today):
             require(len({canonical(retained) for retained in registry['receipts']}) == len(registry['receipts']),
                     'invalid-legacy-receipt-registry')
             require(binding in registry['receipts'], 'untrusted-legacy-amendment-evidence')
-        validate_approval_evidence(workspace, amendment, receipt, authorities)
+        validate_approval_evidence(workspace, amendment, receipt, authorities, context)
         authorities[(binding['path'], binding['sha256'])] = receipt
         for removed in amendment['removeAllowances']:
             key = descriptor(removed)
@@ -453,6 +698,62 @@ def metadata_path(current, raw, expanded):
     return resolve_path(current, expanded)
 
 
+def label_path(base, expanded):
+    """Normalize an MSBuild path to an inspected-root label; leading '..' segments mark an escape."""
+    if expanded.startswith('@repo/'):
+        label = posixpath.normpath(expanded.removeprefix('@repo/').replace('\\', '/'))
+    else:
+        require(nonblank(expanded) and not re.search(r'[\x00-\x1f\x7f]', expanded), 'unsafe-metadata-path')
+        expanded = expanded.replace('\\', '/')
+        require(not expanded.startswith('/') and re.match(r'^[A-Za-z]:', expanded) is None, 'unsafe-metadata-path')
+        label = posixpath.normpath(posixpath.join(str(PurePosixPath(base).parent), expanded))
+    parts = label.split('/')
+    depth = next((index for index, part in enumerate(parts) if part != '..'), len(parts))
+    if depth < len(parts):
+        safe_path('/'.join(parts[depth:]))
+    return label
+
+
+def condition_conjuncts(condition):
+    """Split a balanced condition at top-level `and`; [] when a top-level `or` or unbalanced text may bypass it."""
+    masked, depth, quote = [], 0, None
+    for char in condition:
+        if quote:
+            quote = None if char == quote else quote
+            masked.append(' ')
+        elif char in '\'"':
+            quote = char
+            masked.append(' ')
+        elif char == '(':
+            depth += 1
+            masked.append(' ' if depth > 1 else char)
+        elif char == ')':
+            depth -= 1
+            masked.append(' ' if depth > 0 else char)
+            if depth < 0:
+                return []
+        else:
+            masked.append(' ' if depth else char)
+    masked = ''.join(masked)
+    if quote or depth:
+        return []
+    operators = list(re.finditer(r'(?<![\w$.])(and|or)(?![\w.])', masked, re.I))
+    if any(match[1].lower() == 'or' for match in operators):
+        return []
+    bounds = [0, *[edge for match in operators for edge in match.span()], len(condition)]
+    return [condition[begin:end] for begin, end in zip(bounds[::2], bounds[1::2])]
+
+
+def exists_arguments(condition):
+    """Return Exists() arguments that a condition requires, or [] when a disjunction may bypass them."""
+    arguments = []
+    for conjunct in condition_conjuncts(condition):
+        exists = re.fullmatch(r'''\s*Exists\(\s*(["'])(.*?)\1\s*\)\s*''', conjunct, re.I | re.S)
+        if exists:
+            arguments.append(exists[2])
+    return arguments
+
+
 @lru_cache(maxsize=2048)
 def msbuild_glob_pattern(pattern):
     """MSBuild ** spans zero or more directories; * stays in one segment."""
@@ -506,8 +807,9 @@ def expanded_values(value, properties, current, project, *, required=True):
     return sorted(expand(value, set()))
 
 
-def project_metadata(tree, path, metadata_paths, errors=None):
+def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
     """Read props, project and targets in order, retaining conditional branches."""
+    resolver = resolver or Resolver(None, None, tree)
     documents, visited, values, references, item_records = [], set(), {}, [], []
     properties = {'assemblyname': {PurePosixPath(path).stem}}
     declared_properties, copy_sources = set(), {}
@@ -522,14 +824,52 @@ def project_metadata(tree, path, metadata_paths, errors=None):
         if (current, inherited_condition) in visited:
             return
         visited.add((current, inherited_condition))
-        document = xml(tree.text(current), current)
+        document = xml(resolver.text(current), current)
         documents.append(current)
 
-        def inspect(element, conditional=False):
+        def unreachable(conditions):
+            # Only Exists() facts in a balanced top-level conjunction can prove an element unreachable.
+            for condition in conditions:
+                for conjunct in condition_conjuncts(condition):
+                    guard = re.fullmatch(r'''\s*(!\s*)?Exists\(\s*(["'])(.*?)\2\s*\)\s*''', conjunct, re.I | re.S)
+                    if not guard:
+                        continue
+                    alternatives = expanded_values(guard[3], properties, current, path, required=False)
+                    if not alternatives or any('$(' in item for item in alternatives):
+                        continue  # An unresolved property proves nothing.
+                    try:
+                        labels = [resolver.canonical_label(label_path(current, item)) for item in alternatives]
+                    except CensusError:
+                        continue
+                    if guard[1] and all(resolver.present(label) for label in labels):
+                        return True
+                    if not guard[1] and all(resolver.absent(label, resolver.substitution(current)) for label in labels):
+                        return True
+            return False
+
+        def import_optional(element, label):
+            # An absent path is optional only when a required Exists() names it exactly.
+            for argument in exists_arguments(attribute(element, 'Condition') or ''):
+                alternatives = expanded_values(argument, properties, current, path, required=False)
+                try:
+                    if alternatives and all('$(' not in item and resolver.canonical_label(label_path(current, item)) == label
+                                            for item in alternatives):
+                        return True
+                except CensusError:
+                    continue
+            return False
+
+        def inspect(element, conditional=False, guards=(), parent=None, static=True):
             name = local_name(element).lower()
+            own = attribute(element, 'Condition')
             conditional = conditional or attribute(element, 'Condition') is not None or name in ('when', 'otherwise')
+            # Evaluation-time guards: the element's own Condition plus its enclosing
+            # PropertyGroup/ImportGroup. Choose/When and Target conditions prove nothing.
+            evaluated = guards + ((own,) if own is not None else ())
             text = (element.text or '').strip()
             if not list(element) and (text or name in properties or name in PROPERTY_NAMES):
+                if conditional and static and parent == 'propertygroup' and unreachable(evaluated):
+                    return  # An unreachable conditional definition contributes no alternative.
                 declared_properties.add(name)
                 possibilities = set(expanded_values(text, properties, current, path, required=False))
                 # Any conditional definition can be selected by a build; preserve
@@ -557,26 +897,23 @@ def project_metadata(tree, path, metadata_paths, errors=None):
                 require(bool(raw), f'malformed-project-metadata:{current}')
                 if attribute(element, 'Sdk'):
                     return  # SDK imports are resolved outside this committed tree.
+                if unreachable(evaluated):
+                    return  # An unreachable import is not visited.
+                substitution = resolver.substitution(current)
                 for value in expanded_values(raw, properties, current, path, required=False):
                     if '$(' not in value:
-                        relative = (posixpath.normpath(value.removeprefix('@repo/').replace('\\', '/')) if value.startswith('@repo/')
-                                    else posixpath.normpath(posixpath.join(str(PurePosixPath(current).parent), value.replace('\\', '/'))))
-                        require(relative != '..' and not relative.startswith('../'), f'unsafe-import-path:{current}')
-                        target = metadata_path(current, raw, value)
-                        if any(entry[0] == '160000' and (target == nested or target.startswith(nested + '/'))
-                               for nested, entry in tree.entries.items()):
-                            continue  # Nested gitlinks are reported, never opened.
-                        matches = ([target] if target in metadata_paths else []) if not re.search(r'[*?]', target) else sorted(
-                            candidate for candidate in metadata_paths if msbuild_glob(candidate, target))
-                        if not matches and not re.search(r'[*?]', target):
-                            condition = attribute(element, 'Condition') or ''
-                            exists = re.fullmatch(r'''\s*Exists\(\s*(["'])(.*?)\1\s*\)\s*''', condition, re.I)
-                            optional = False
-                            if exists:
-                                alternatives = expanded_values(exists[2], properties, current, path, required=False)
-                                optional = bool(alternatives) and all('$(' not in item and metadata_path(current, exists[2], item) == target
-                                                                      for item in alternatives)
-                            require(optional, f'unavailable-local-import:{current}')
+                        label = resolver.canonical_label(label_path(current, value))
+                        if substitution is None and resolver.local(label):
+                            target = label
+                            matches = ([target] if target in metadata_paths else []) if not re.search(r'[*?]', target) else sorted(
+                                candidate for candidate in metadata_paths if msbuild_glob(candidate, target))
+                            if not matches and not re.search(r'[*?]', target):
+                                require(import_optional(element, label), f'unavailable-local-import:{current}')
+                        else:
+                            # Workspace and nested paths resolve at committed pins, one hop at most.
+                            matches, absent = resolver.matches(label, substitution, 'unsafe-import-path', current)
+                            if absent:
+                                Refusal('unsafe-import-path', current, label).require(import_optional(element, label))
                         for candidate in matches:
                             visit(candidate, conditional)
                     else:
@@ -591,7 +928,8 @@ def project_metadata(tree, path, metadata_paths, errors=None):
                                 if (msbuild_glob(candidate, suffix[1]) or msbuild_glob(candidate, '**/' + suffix[1])):
                                     visit(candidate, True)
             for child in element:
-                inspect(child, conditional)
+                inspect(child, conditional, guards + ((own,) if own is not None and name in ('propertygroup', 'importgroup') else ()),
+                        name, static and name != 'target')
         inspect(document, inherited_condition)
 
     for current in initial:
@@ -621,13 +959,14 @@ def project_metadata(tree, path, metadata_paths, errors=None):
             require('$(' not in expanded or name == 'ProjectReference' and '$(' not in identity
                     and PROJECT.search(identity) is not None, f'unresolved-classification-metadata:{current}')
             expanded_references.extend((name, item.strip(), current) for item in expanded.split(';') if item.strip())
-    linked = compile_provenance(tree, path, properties, item_records, copy_sources, errors)
+    linked = compile_provenance(tree, path, properties, item_records, copy_sources, errors, resolver)
     return values, expanded_references, documents, linked
 
 
 
-def compile_provenance(tree, project, properties, records, copy_sources, errors=None):
+def compile_provenance(tree, project, properties, records, copy_sources, errors=None, resolver=None):
     """Resolve finite committed item aliases; runtime task output never supplies bytes."""
+    resolver = resolver or Resolver(None, None, tree)
     items, linked = {}, set()
     for name, element, current, conditional in records:
         if local_name(element).lower() == 'output':
@@ -661,14 +1000,18 @@ def compile_provenance(tree, project, properties, records, copy_sources, errors=
                     require('@(' not in value and '%(' not in value and '$' not in value,
                             f'unresolved-compile-source:{current}')
                     try:
-                        target = metadata_path(project, value, value)
-                        require(not any(target == p or target.startswith(p + '/') for p, e in tree.entries.items()
-                                        if e[0] == '160000'), 'nested')
+                        label = resolver.canonical_label(label_path(project, value))
                     except CensusError:
                         raise CensusError(f'unsafe-or-nested-compile-source:{current}') from None
-                    matches = {candidate for candidate, entry in tree.entries.items()
-                               if entry[0] in ('100644', '100755') and msbuild_glob(candidate, target)}
-                    require(bool(matches), f'unavailable-committed-compile-source:{current}')
+                    if resolver.local(label):
+                        # Project-relative sources stay in the inspected tree; no hop is read.
+                        matches = {candidate for candidate, entry in tree.entries.items()
+                                   if entry[0] in ('100644', '100755') and msbuild_glob(candidate, label)}
+                        require(bool(matches), f'unavailable-committed-compile-source:{current}')
+                    else:
+                        found, _ = resolver.matches(label, resolver.substitution(current), 'unsafe-or-nested-compile-source', current)
+                        Refusal('unsafe-or-nested-compile-source', current, label).require(bool(found))
+                        matches = set(found)
                     result.update(matches)
                 require(len(result) <= 4096, f'unbounded-compile-items:{current}')
         return result
@@ -683,7 +1026,7 @@ def compile_provenance(tree, project, properties, records, copy_sources, errors=
         except CensusError as error:
             if errors is None:
                 raise
-            entry = {'path': current, 'rule': str(error)}
+            entry = {'path': current, 'rule': str(error), **({'target': error.target} if error.target else {})}
             if entry not in errors:
                 errors.append(entry)
     return linked
@@ -735,12 +1078,17 @@ def json_documents(document, path):
             pending.extend((child, depth + 1, structural) for child in reversed(value) if isinstance(child, (dict, list)))
 
 
-def compilation_closure(tree, project):
-    """Bind fixture files, inherited/imported metadata and linked local sources."""
+def compilation_closure(tree, project, resolver=None):
+    """Bind fixture files, inherited/imported metadata and linked local sources.
+
+    Substituted workspace/nested blobs are bound by their pins in report
+    provenance; the local closure names only this repository's own blobs.
+    """
     metadata_paths = metadata_files(tree)
-    _, _, documents, linked = project_metadata(tree, project, metadata_paths)
+    _, _, documents, linked = project_metadata(tree, project, metadata_paths, resolver=resolver)
     prefix = str(PurePosixPath(project).parent) + '/'
-    paths = {path for path in tree.entries if path.startswith(prefix)} | set(documents) | linked
+    paths = {path for path in tree.entries if path.startswith(prefix)} | {
+        path for path in set(documents) | linked if path in tree.entries}
     return [{'path': path, 'sha256': digest(tree.blob(path))} for path in sorted(paths)]
 
 
@@ -1554,14 +1902,18 @@ def static_project_targets(tree, text, path, errors):
                 execute(body, dict(environment), directory)
     return sorted(targets)
 
-def scan_tree(tree, repository, exclusions):
+def scan_tree(tree, repository, exclusions, resolver=None):
     candidates, projects, identities, errors = {}, {}, {}, []
+    resolver = resolver or Resolver(None, None, tree)
     @contextmanager
     def inspection(path):
         try:
             yield
         except (CensusError, OSError, UnicodeError) as error:
-            errors.append({'path': path, 'rule': str(error) if isinstance(error, CensusError) else 'source-read-failed'})
+            entry = {'path': path, 'rule': str(error) if isinstance(error, CensusError) else 'source-read-failed'}
+            if isinstance(error, CensusError) and error.target:
+                entry['target'] = error.target
+            errors.append(entry)
 
     excluded = [e for e in exclusions if e['repository'] == repository]
     def omitted(path):
@@ -1597,7 +1949,7 @@ def scan_tree(tree, repository, exclusions):
 
     for path in sorted(p for p in paths if PROJECT.search(p)):
         with inspection(path):
-            values, references, documents, linked = project_metadata(tree, path, set(paths), errors)
+            values, references, documents, linked = project_metadata(tree, path, set(paths), errors, resolver)
             sdks = sdk_identities(tree, path)
             project_id = PurePosixPath(path).stem
             signals = set()
@@ -1688,7 +2040,7 @@ def scan_tree(tree, repository, exclusions):
     for project, metadata in projects.items():
         for target in sorted(metadata['linked']):
             with inspection(target):
-                text = tree.text(target)
+                text = resolver.text(target)
                 for signal, pattern in [('mcp-registration', REGISTRATION), ('command-line-source', COMMAND)]:
                     if re.search(pattern.pattern, text, re.I if target.lower().endswith('.vb') else 0):
                         add(project, 'project', PurePosixPath(project).stem, signal, target)
@@ -1880,23 +2232,21 @@ def scan(workspace, revision, baseline_path, index_path, today):
     require(SHA.fullmatch(revision) is not None, 'invalid-parent-revision')
     parent = Tree(workspace, revision)
     roots = declarations(parent)
-    policy, baseline_roots, allowed, exclusions, exceptions, provenance = load_policy(workspace, parent, baseline_path, index_path, today)
+    context = Workspace(workspace, parent, roots)
+    policy, baseline_roots, allowed, exclusions, exceptions, provenance = load_policy(workspace, parent, baseline_path, index_path, today, context)
     report = {'schema': SCHEMA, 'status': 'passed', 'parentRevision': revision, 'utcDate': today.isoformat(),
               'policy': provenance, 'repositories': [], 'surfaces': [], 'stale': [], 'errors': []}
     observed, inspected = set(), set()
     for repository, gitlink in roots.items():
-        summary = {'repository': repository, 'gitlink': gitlink, 'nestedGitlinks': [], 'exclusions': [], 'status': 'passed'}
+        summary = {'repository': repository, 'gitlink': gitlink, 'nestedGitlinks': [], 'exclusions': [], 'status': 'passed',
+                   'crossTreeReads': []}
         report['repositories'].append(summary)
+        resolver = None
         try:
             require(repository in baseline_roots, 'unapproved-root')
-            location = workspace / repository
-            require(location.is_dir() and not any(p.is_symlink() for p in [location, *list(location.parents)[:len(PurePosixPath(repository).parts) - 1]]), 'reference-root-unavailable-or-linked')
-            # Refuse Git's upward repository discovery for an uninitialized root.
-            gitdir = git(location, 'rev-parse', '--show-prefix')
-            require(not gitdir, 'reference-root-uninitialized')
-            require(git(location, 'cat-file', '-t', gitlink) == 'commit', 'reference-pin-not-commit')
-            tree = Tree(location, gitlink)
-            candidates, nested, scoped, source_errors = scan_tree(tree, repository, exclusions)
+            tree = context.tree(repository, gitlink)
+            resolver = Resolver(context, repository, tree)
+            candidates, nested, scoped, source_errors = scan_tree(tree, repository, exclusions, resolver)
             if source_errors:
                 summary['status'] = 'failed'
                 summary['inspectionComplete'] = False
@@ -1925,7 +2275,7 @@ def scan(workspace, revision, baseline_path, index_path, today):
                         if 'sourcePrefix' in allowance:
                             prefix = allowance['sourcePrefix'] + '/'
                             expected_paths = {source['path'] for source in allowance['sources']}
-                            actual_paths = ({source['path'] for source in compilation_closure(tree, allowance['surface']['path'])}
+                            actual_paths = ({source['path'] for source in compilation_closure(tree, allowance['surface']['path'], resolver)}
                                             if allowance.get('compilationClosure') else {path for path in tree.entries if path.startswith(prefix)})
                             source_changes = sorted(set(source_changes) | (expected_paths ^ actual_paths))
                     except (CensusError, OSError, UnicodeError) as error:
@@ -1933,7 +2283,8 @@ def scan(workspace, revision, baseline_path, index_path, today):
                         summary['status'] = 'failed'
                         summary['inspectionComplete'] = False
                         report['errors'].append({'repository': repository, 'gitlink': gitlink, 'path': key[1],
-                            'rule': str(error) if isinstance(error, CensusError) else 'source-read-failed'})
+                            'rule': str(error) if isinstance(error, CensusError) else 'source-read-failed',
+                            **({'target': error.target} if isinstance(error, CensusError) and error.target else {})})
                     if source_changes is None:
                         entry.update(status='rejected', classification=allowance['classification'], row=allowance['row'],
                                      reason='allowance-source-inspection-failed')
@@ -1953,6 +2304,9 @@ def scan(workspace, revision, baseline_path, index_path, today):
             summary['status'] = 'failed'
             summary['inspectionComplete'] = False
             report['errors'].append({'repository': repository, 'gitlink': gitlink, 'rule': str(error) if isinstance(error, CensusError) else 'reference-read-failed'})
+        if resolver is not None:
+            # Every substituted blob read for this root, with its exact pin and hash.
+            summary['crossTreeReads'] = resolver.provenance()
     for key, entry in sorted(allowed.items()):
         if key not in observed and (key[0] in inspected or key[0] not in roots):
             report['stale'].append({'surface': entry['surface'], 'row': entry['row'], 'classification': entry['classification']})

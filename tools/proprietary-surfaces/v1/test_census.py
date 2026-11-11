@@ -1047,10 +1047,11 @@ class CensusTests(unittest.TestCase):
                 entries=[entry for entry in self.run_cli(1)['surfaces'] if entry['surface']['path']==filename and entry['status']=='rejected']
                 self.assertEqual([entry['surface']['identity'] for entry in entries],['missing/New Runner.csproj'])
 
-    def assert_source_errors(self, report, path, rules):
+    def assert_source_errors(self, report, path, rules, targets=None):
         pin = self.git(self.repo, 'rev-parse', 'HEAD')
         self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin,
-            path=path, rule=rule + ':' + path) for rule in rules])
+            path=path, rule=rule + ':' + path, **({'target': target} if target else {}))
+            for rule, target in zip(rules, targets or [None] * len(rules))])
 
     def test_literal_shell_variables_loops_functions_and_aliases_resolve_exact_targets(self):
         path = 'scripts/ship.sh'
@@ -1255,16 +1256,17 @@ done
         pin = self.git(self.repo, 'rev-parse', 'HEAD')
         self.git(self.repo, 'update-index', '--add', '--cacheinfo', f'160000,{pin},dependencies/nested')
         self.git(self.repo, 'commit', '-q', '-m', 'test: retain nested compile pin'); self.pin()
-        for target, rule in (('../../../../Escape.cs', 'unsafe-or-nested-compile-source'),
-                             ('../../../dependencies/nested/Code.cs', 'unsafe-or-nested-compile-source'),
-                             ('../../../missing/Code.cs', 'unavailable-committed-compile-source')):
+        # An escape outside every root and a nested pin without a declared URL stay refused.
+        for target, rule, label in (('../../../../Escape.cs', 'unsafe-or-nested-compile-source', '../Escape.cs'),
+                                    ('../../../dependencies/nested/Code.cs', 'nested-pin-unresolvable', 'dependencies/nested/Code.cs'),
+                                    ('../../../missing/Code.cs', 'unavailable-committed-compile-source', None)):
             with self.subTest(target=target):
                 self.write(self.repo, PROJECT, '<Project><ItemGroup><Compile Include="' + target + '"/></ItemGroup></Project>')
                 self.git(self.repo, 'add', PROJECT)
                 self.git(self.repo, 'update-index', '--add', '--cacheinfo', f'160000,{pin},dependencies/nested')
                 self.git(self.repo, 'commit', '-q', '-m', 'test: pin compile source refusal'); self.pin()
                 report = self.run_cli(1)
-                self.assert_source_errors(report, PROJECT, [rule])
+                self.assert_source_errors(report, PROJECT, [rule], [label])
                 self.assertEqual(report['surfaces'], [])
 
     def test_partial_root_keeps_other_projects_sources_and_publication_observations(self):
@@ -1613,27 +1615,29 @@ dotnet publish "$target"
         self.assertEqual(self.run_cli(0)['surfaces'], [])
 
     def test_review_s07_required_optional_sdk_and_nested_imports_are_distinct(self):
-        for imports, expected in [('<Import Project="../../../missing.props"/>', 'unavailable-local-import'),
-                                  ('<Import Project="../../../../outside.props"/>', 'unsafe-import-path'),
-                                  ('<Import Project="../../../missing.props" Condition="Exists(\'../../../missing.props\')"/>', None),
-                                  ('<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk"/>', None)]:
+        for imports, expected, label in [('<Import Project="../../../missing.props"/>', 'unavailable-local-import', None),
+                                         ('<Import Project="../../../../outside.props"/>', 'unsafe-import-path', '../outside.props'),
+                                         ('<Import Project="../../../missing.props" Condition="Exists(\'../../../missing.props\')"/>', None, None),
+                                         ('<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk"/>', None, None)]:
             with self.subTest(imports=imports):
                 self.write(self.repo, PROJECT, '<Project>' + imports + '</Project>')
                 self.commit(self.repo); self.pin()
                 report = self.run_cli(1 if expected else 0)
                 if expected:
-                    self.assert_source_errors(report, PROJECT, [expected])
+                    self.assert_source_errors(report, PROJECT, [expected], [label])
                 else:
                     self.assertEqual(report['errors'], [])
                 self.assertEqual(report['surfaces'], [])
+        # A nested import now needs a same-URL root; without a declaration it is refused, never opened.
         pin = self.git(self.repo, 'rev-parse', 'HEAD')
         self.write(self.repo, PROJECT, '<Project><Import Project="../../../nested/build.props"/></Project>')
         self.git(self.repo, 'add', PROJECT)
         self.git(self.repo, 'update-index', '--add', '--cacheinfo', f'160000,{pin},nested')
         self.git(self.repo, 'commit', '-q', '-m', 'test: retain unopened nested import'); self.pin()
-        report = self.run_cli(0)
-        self.assertEqual(report['errors'], [])
+        report = self.run_cli(1)
+        self.assert_source_errors(report, PROJECT, ['nested-pin-unresolvable'], ['nested/build.props'])
         self.assertEqual(report['repositories'][0]['nestedGitlinks'], ['nested'])
+        self.assertEqual(report['repositories'][0]['crossTreeReads'], [])
         self.assertFalse((self.repo / 'nested').exists())
 
     def test_review_s08_property_expansion_depth_is_a_safe_coverage_error(self):
@@ -2378,6 +2382,549 @@ dotnet publish "$target"
         self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin, path=path,
             rule='nested-publication-target:' + path, target='nested/First.csproj'),
             dict(repository='references/opaque', gitlink=pin, path=path, rule='unsafe-publication-path:' + path)])
+
+    # Nested-pin resolution. Sibling roots are committed repositories declared
+    # by the parent; nested gitlinks are recorded without any nested worktree.
+    def add_root(self, name, url=None):
+        location = self.root / 'references' / name
+        location.mkdir(parents=True, exist_ok=True)
+        if not (location / '.git').exists():
+            self.git(location, 'init', '-q')
+        self.write(location, 'README.md', 'committed sibling\n')
+        pin = self.commit(location)
+        with (self.root / '.gitmodules').open('a') as output:
+            output.write(f'[submodule "{name}"]\n path = references/{name}\n url = {url or f"https://example.invalid/{name}.git"}\n')
+        self.policy['roots'].append(dict(repository=f'references/{name}', gitlink=pin, classification='PN02', owner='fixture owner'))
+        approval = json.loads((self.root / 'approval.json').read_text())
+        approval['source_revisions'][f'references/{name}'] = pin
+        self.write(self.root, 'approval.json', json.dumps(approval))
+        self.policy['provenance'][1]['sha256'] = census.digest((self.root / 'approval.json').read_bytes())
+        self.save()
+        self.pin_root(name, pin)
+        return location
+
+    def pin_root(self, name, sha=None):
+        sha = sha or self.git(self.root / 'references' / name, 'rev-parse', 'HEAD')
+        self.git(self.root, 'add', '.gitmodules', 'approval.json')
+        self.git(self.root, 'update-index', '--add', '--cacheinfo', f'160000,{sha},references/{name}')
+        self.git(self.root, 'commit', '-q', '--allow-empty', '-m', 'test: pin sibling census root')
+        return sha
+
+    def commit_with_gitlinks(self, gitlinks, repo=None):
+        repo = repo or self.repo
+        self.git(repo, 'add', '--all')
+        for path, sha in gitlinks.items():
+            self.git(repo, 'update-index', '--add', '--cacheinfo', f'160000,{sha},{path}')
+        self.git(repo, 'commit', '-q', '--allow-empty', '-m', 'test: record unopened nested gitlinks')
+        return self.git(repo, 'rev-parse', 'HEAD')
+
+    def cross_read(self, requested, resolution, commit, path, text, repository='references/shared', gitlink=None):
+        record = dict(requested=requested, resolution=resolution, repository=repository, commit=commit,
+                      path=path, sha256=census.digest(text.encode()))
+        if gitlink:
+            record['nestedGitlink'] = gitlink
+        return record
+
+    def summaries(self, report):
+        return {summary['repository']: summary for summary in report['repositories']}
+
+    EXE = '<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>'
+    LIB = '<Project><PropertyGroup><OutputType>Library</OutputType></PropertyGroup></Project>'
+    NESTED = '[submodule "shared"]\n path = dependencies/shared\n url = {}\n'
+
+    def test_nested_pin_workspace_import_reads_sibling_root_at_its_pin(self):
+        shared = self.add_root('shared')
+        self.write(shared, 'eng/Runner.props', self.EXE)
+        pinned = self.pin_root('shared', self.commit(shared))
+        # The sibling HEAD and worktree move; only the parent's gitlink is authority.
+        self.write(shared, 'eng/Runner.props', self.LIB); self.commit(shared)
+        self.write(shared, 'eng/Runner.props', 'invalid worktree metadata')
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../../shared/eng/Runner.props"/></Project>')
+        self.commit(self.repo); self.pin()
+        original = census.git
+        with patch.object(census, 'git', side_effect=lambda repo, *args, **kwargs: original(repo, *args, **kwargs)) as reads:
+            report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(s['surface'], s['signals'], s['sources'], s['status']) for s in report['surfaces']], [
+            (self.binding(), ['executable-project'], [PROJECT], 'rejected'),
+            (dict(repository='references/shared', path='eng/Runner.props', kind='source', identity='eng/Runner.props'),
+             ['unresolved-tool-metadata'], ['eng/Runner.props'], 'rejected')])
+        summaries = self.summaries(report)
+        self.assertEqual(summaries['references/opaque']['crossTreeReads'], [self.cross_read(
+            '../shared/eng/Runner.props', 'workspace', pinned, 'eng/Runner.props', self.EXE)])
+        self.assertEqual(summaries['references/shared']['crossTreeReads'], [])
+        self.assertNotIn('inspectionComplete', summaries['references/opaque'])
+        # Only committed objects are read: no fetch, checkout, submodule or worktree command runs.
+        self.assertEqual({call.args[1] for call in reads.call_args_list}, {'rev-parse', 'ls-tree', 'cat-file'})
+
+    def test_nested_pin_exists_guarded_absent_escapes_are_optional_only_when_required(self):
+        shared = self.add_root('shared')
+        self.write(shared, 'eng/Present.props', '<Project/>')
+        self.pin_root('shared', self.commit(shared))
+        self.write(self.root, 'references/present.props', '<Project/>')
+        self.write(self.root, 'references/present-dir/file.txt', 'parent tree only\n')
+        self.git(self.root, 'add', 'references/present.props', 'references/present-dir/file.txt'); self.pin()
+        absent = '../../../../absent/x.props'
+        for project, condition in [
+                (absent, f"Exists('{absent}')"),
+                (absent, f"Exists('{absent}') And '$(Loaded)' != 'true'"),
+                (absent, f"'$(Loaded)' != 'true' and Exists('{absent}') and ('$(A)' == 'a' or '$(B)' == 'b')"),
+                (absent, f"Exists('{absent}') and '$(Mode)' == 'or'"),
+                # A proven-absent Exists() on another path also makes the import unreachable.
+                (absent, "Exists('../../../../absent/other.props')"),
+                ('../../../../shared/eng/Missing.props', "Exists('../../../../shared/eng/Missing.props')")]:
+            with self.subTest(condition=condition):
+                self.write(self.repo, PROJECT, f'<Project><Import Project="{project}" Condition="{condition}"/></Project>')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(0)
+                self.assertEqual((report['errors'], report['surfaces']), ([], []))
+                self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [])
+        for project, condition, label in [
+                (absent, '', '../absent/x.props'),
+                (absent, f"Exists('{absent}') Or '$(Loaded)' == 'true'", '../absent/x.props'),
+                (absent, f"!Exists('{absent}')", '../absent/x.props'),
+                (absent, "Exists('../../../../shared/eng/Present.props')", '../absent/x.props'),
+                (absent, f"Exists('{absent}') and '$(Loaded)", '../absent/x.props'),
+                (absent, f"Exists('{absent}') and 'a' == 'a' ) or ( 'b' == 'b'", '../absent/x.props'),
+                ('../../../../present-dir', "Exists('../../../../present-dir')", '../present-dir'),
+                ('../../../../shared/eng/Missing.props', '', '../shared/eng/Missing.props'),
+                ('../../../../present.props', "Exists('../../../../present.props')", '../present.props'),
+                ('../../../../shared/eng', "Exists('../../../../shared/eng')", '../shared/eng'),
+                ('../../../../shared', "Exists('../../../../shared')", '../shared'),
+                ('../../../../opaque', "Exists('../../../../opaque')", '../opaque'),
+                ('../../../../*.props', "Exists('../../../../*.props')", '../*.props'),
+                ('../../../../absent/*.props', "Exists('../../../../absent/*.props')", '../absent/*.props'),
+                ('../../../../../../outside.props', "Exists('../../../../../../outside.props')", '../../../outside.props')]:
+            with self.subTest(project=project, condition=condition):
+                self.write(self.repo, PROJECT, f'<Project><Import Project="{project}" Condition="{condition}"/></Project>')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, PROJECT, ['unsafe-import-path'], [label])
+                self.assertEqual(report['surfaces'], [])
+                self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [])
+
+    def test_nested_pin_local_exists_conjunction_is_optional_and_disjunction_is_required(self):
+        missing = '../../../missing.props'
+        for condition, expected in [(f"Exists('{missing}') And '$(Loaded)' != 'true'", None),
+                                    (f"Exists('{missing}') Or '$(Loaded)' == 'true'", 'unavailable-local-import'),
+                                    (f"!Exists('{missing}')", 'unavailable-local-import')]:
+            with self.subTest(condition=condition):
+                self.write(self.repo, PROJECT, f'<Project><Import Project="{missing}" Condition="{condition}"/></Project>')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1 if expected else 0)
+                if expected:
+                    self.assert_source_errors(report, PROJECT, [expected])
+                else:
+                    self.assertEqual(report['errors'], [])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_nested_pin_import_reads_same_url_root_at_the_nested_commit(self):
+        shared = self.add_root('shared', 'https://example.invalid/team/shared.git')
+        self.write(shared, 'eng/Runner.props', self.EXE)
+        nested = self.commit(shared)
+        self.write(shared, 'eng/Runner.props', self.LIB)
+        pinned = self.pin_root('shared', self.commit(shared))
+        self.assertNotEqual(nested, pinned)
+        self.write(self.repo, '.gitmodules', self.NESTED.format('https://EXAMPLE.invalid/team/shared/'))
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../dependencies/shared/eng/Runner.props"/></Project>')
+        self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+        original = census.git
+        with patch.object(census, 'git', side_effect=lambda repo, *args, **kwargs: original(repo, *args, **kwargs)) as reads:
+            report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(s['surface'], s['signals'], s['sources']) for s in report['surfaces']],
+                         [(self.binding(), ['executable-project'], [PROJECT])])
+        summary = self.summaries(report)['references/opaque']
+        self.assertEqual(summary['nestedGitlinks'], ['dependencies/shared'])
+        self.assertEqual(summary['crossTreeReads'], [self.cross_read(
+            'dependencies/shared/eng/Runner.props', 'nested', nested, 'eng/Runner.props', self.EXE, gitlink='dependencies/shared')])
+        self.assertFalse((self.repo / 'dependencies/shared').exists())
+        # The nested commit is read from the declared root's object store only.
+        self.assertTrue(all(Path(call.args[0]) in (self.root, self.repo, shared) for call in reads.call_args_list))
+        self.assertEqual({call.args[1] for call in reads.call_args_list}, {'rev-parse', 'ls-tree', 'cat-file'})
+
+    def test_nested_pin_url_identity_requires_one_exact_absolute_declaration(self):
+        shared = self.add_root('shared', 'https://example.invalid/team/shared.git')
+        neutral = '<Project><PropertyGroup><Neutral>1</Neutral></PropertyGroup></Project>'
+        self.write(shared, 'eng/Neutral.props', neutral)
+        nested = self.pin_root('shared', self.commit(shared))
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../dependencies/shared/eng/Neutral.props"/></Project>')
+        for url in ('https://example.invalid/team/shared', 'https://example.invalid/team/shared.git/',
+                    'https://Example.INVALID/team/shared.git', 'https://example.invalid/team/shared/'):
+            with self.subTest(url=url):
+                self.write(self.repo, '.gitmodules', self.NESTED.format(url))
+                self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+                report = self.run_cli(0)
+                self.assertEqual((report['errors'], report['surfaces']), ([], []))
+                self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [self.cross_read(
+                    'dependencies/shared/eng/Neutral.props', 'nested', nested, 'eng/Neutral.props', neutral, gitlink='dependencies/shared')])
+        refusals = {
+            'path-case': self.NESTED.format('https://example.invalid/Team/shared.git'),
+            'double-suffix': self.NESTED.format('https://example.invalid/team/shared.git.git'),
+            'double-slash': self.NESTED.format('https://example.invalid/team/shared.git//'),
+            'other-host': self.NESTED.format('https://mirror.invalid/team/shared.git'),
+            'relative': self.NESTED.format('../shared.git'),
+            'dot-relative': self.NESTED.format('./shared'),
+            'empty-declarations': '',
+            'other-path': '[submodule "shared"]\n path = dependencies/other\n url = https://example.invalid/team/shared.git\n',
+            'duplicate-path': self.NESTED.format('https://example.invalid/team/shared.git')
+                + '[submodule "copy"]\n path = dependencies/shared\n url = https://example.invalid/team/shared.git\n',
+            'malformed': 'not a declaration\n'}
+        for case, declaration in refusals.items():
+            with self.subTest(case=case):
+                self.write(self.repo, '.gitmodules', declaration)
+                self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, PROJECT, ['nested-pin-unresolvable'], ['dependencies/shared/eng/Neutral.props'])
+                self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [])
+        (self.repo / '.gitmodules').unlink()
+        self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+        self.assert_source_errors(self.run_cli(1), PROJECT, ['nested-pin-unresolvable'], ['dependencies/shared/eng/Neutral.props'])
+
+    def test_nested_pin_ambiguous_and_relative_root_identities_refuse(self):
+        shared = self.add_root('shared', 'https://example.invalid/team/shared.git')
+        self.write(shared, 'eng/Runner.props', self.EXE)
+        nested = self.pin_root('shared', self.commit(shared))
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../dependencies/shared/eng/Runner.props"/></Project>')
+        self.write(self.repo, '.gitmodules', self.NESTED.format('https://example.invalid/team/shared.git'))
+        self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+        shared_source = dict(repository='references/shared', path='eng/Runner.props', kind='source', identity='eng/Runner.props')
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([s['surface'] for s in report['surfaces']], [self.binding(), shared_source])
+        # A second root with the same normalized remote makes the nested source ambiguous.
+        self.add_root('mirror', 'https://example.invalid/team/shared/')
+        self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, PROJECT, ['nested-pin-unresolvable'], ['dependencies/shared/eng/Runner.props'])
+        self.assertEqual([s['surface'] for s in report['surfaces']], [shared_source])
+        # Identical relative URLs depend on different superproject remotes and never match.
+        relative = self.add_root('relative', '../relative.git')
+        self.write(relative, 'eng/Runner.props', self.EXE)
+        relative_pin = self.pin_root('relative', self.commit(relative))
+        self.write(self.repo, '.gitmodules', '[submodule "relative"]\n path = dependencies/relative\n url = ../relative.git\n')
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../dependencies/relative/eng/Runner.props"/></Project>')
+        self.commit_with_gitlinks({'dependencies/relative': relative_pin}); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, PROJECT, ['nested-pin-unresolvable'], ['dependencies/relative/eng/Runner.props'])
+        self.assertEqual([s['surface'] for s in report['surfaces']], [
+            dict(shared_source, repository='references/relative'), shared_source])
+
+    def test_nested_pin_missing_nested_commit_is_unavailable(self):
+        shared = self.add_root('shared', 'https://example.invalid/team/shared.git')
+        with tempfile.TemporaryDirectory() as directory:
+            stranger = Path(directory)
+            self.git(stranger, 'init', '-q')
+            self.write(stranger, 'eng/Runner.props', self.EXE)
+            unavailable = self.commit(stranger)
+        self.write(self.repo, '.gitmodules', self.NESTED.format('https://example.invalid/team/shared.git'))
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../dependencies/shared/eng/Runner.props"/></Project>')
+        self.commit_with_gitlinks({'dependencies/shared': unavailable}); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, PROJECT, ['nested-object-unavailable'], ['dependencies/shared/eng/Runner.props'])
+        self.assertEqual(report['surfaces'], [])
+        self.assertFalse((shared / 'dependencies').exists())
+
+    def test_nested_pin_partial_clone_objects_are_never_fetched(self):
+        with tempfile.TemporaryDirectory() as directory:
+            server = Path(directory) / 'server'
+            server.mkdir()
+            self.git(server, 'init', '-q')
+            self.git(server, 'config', 'uploadpack.allowFilter', 'true')
+            self.git(server, 'config', 'uploadpack.allowAnySHA1InWant', 'true')
+            self.write(server, 'README.md', 'published\n')
+            self.commit(server)
+            published = self.git(server, 'rev-parse', '--abbrev-ref', 'HEAD')
+            # The nested commit exists only behind a ref a clone never fetches.
+            self.git(server, 'checkout', '-q', '--orphan', 'hidden')
+            self.write(server, 'eng/Runner.props', self.EXE)
+            hidden = self.commit(server)
+            self.git(server, 'update-ref', 'refs/hidden/nested', hidden)
+            self.git(server, 'checkout', '-q', '-f', published)
+            self.git(server, 'branch', '-q', '-D', 'hidden')
+            location = self.root / 'references/shared'
+            self.git(self.root / 'references', 'clone', '-q', '--filter=blob:none', '--no-checkout', server.as_uri(), 'shared')
+            self.add_root('shared', 'https://example.invalid/team/shared.git')
+            self.write(self.repo, '.gitmodules', self.NESTED.format('https://example.invalid/team/shared.git'))
+            self.write(self.repo, PROJECT, '<Project><Import Project="../../../dependencies/shared/eng/Runner.props"/></Project>')
+            self.commit_with_gitlinks({'dependencies/shared': hidden}); self.pin()
+            report = self.run_cli(1)
+            self.assert_source_errors(report, PROJECT, ['nested-object-unavailable'], ['dependencies/shared/eng/Runner.props'])
+            self.assertEqual(report['surfaces'], [])
+            missing = subprocess.run(['git', '-C', str(location), 'cat-file', '-e', hidden], capture_output=True,
+                                     env={**os.environ, 'GIT_NO_LAZY_FETCH': '1'})
+            self.assertNotEqual(missing.returncode, 0, 'the promisor object must not be fetched')
+
+    def test_nested_pin_second_hop_escapes_and_substituted_gitlinks_refuse(self):
+        other = self.add_root('other')
+        self.write(other, 'eng/Exe.props', self.EXE)
+        self.write(other, 'src/Tool.cs', 'builder.Services.AddMcpServer();')
+        self.pin_root('other', self.commit(other))
+        shared = self.add_root('shared', 'https://example.invalid/team/shared.git')
+        self.write(shared, 'eng/Hop.props', '<Project><Import Project="$(MSBuildThisFileDirectory)../../other/eng/Exe.props"/></Project>')
+        self.write(shared, 'eng/Back.props', '<Project><Import Project="../../opaque/eng/Local.props"/></Project>')
+        self.write(shared, 'eng/Vendor.props', '<Project><Import Project="../vendor/v.props" Condition="Exists(\'../vendor/v.props\')"/></Project>')
+        self.write(shared, 'eng/Compile.props', '<Project><ItemGroup><Compile Include="$(MSBuildThisFileDirectory)../../other/src/Tool.cs"/></ItemGroup></Project>')
+        shared_pin = self.commit_with_gitlinks({'vendor': self.git(other, 'rev-parse', 'HEAD')}, shared)
+        self.pin_root('shared', shared_pin)
+        self.write(self.repo, 'eng/Local.props', self.EXE)
+        self.write(self.repo, '.gitmodules', self.NESTED.format('https://example.invalid/team/shared.git'))
+        for imported, current, rule, target in [
+                ('../../../../shared/eng/Hop.props', '../shared/eng/Hop.props', 'unsafe-import-path', '../other/eng/Exe.props'),
+                ('../../../../shared/eng/Back.props', '../shared/eng/Back.props', 'unsafe-import-path', 'eng/Local.props'),
+                ('../../../../shared/eng/Vendor.props', '../shared/eng/Vendor.props', 'unsafe-import-path', '../shared/vendor/v.props'),
+                ('../../../../shared/eng/Compile.props', '../shared/eng/Compile.props', 'unsafe-or-nested-compile-source', '../other/src/Tool.cs'),
+                ('../../../dependencies/shared/eng/Hop.props', 'dependencies/shared/eng/Hop.props', 'unsafe-import-path', 'dependencies/other/eng/Exe.props')]:
+            with self.subTest(imported=imported):
+                self.write(self.repo, PROJECT, f'<Project><Import Project="{imported}"/></Project>')
+                self.commit_with_gitlinks({'dependencies/shared': shared_pin}); self.pin()
+                report = self.run_cli(1)
+                pin = self.git(self.repo, 'rev-parse', 'HEAD')
+                # Compile refusals name their declaring metadata file, as for local items.
+                path = current if rule == 'unsafe-or-nested-compile-source' else PROJECT
+                self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin, path=path,
+                                                         rule=rule + ':' + current, target=target)])
+                self.assertEqual([s['surface'] for s in report['surfaces']], [
+                    dict(repository='references/opaque', path='eng/Local.props', kind='source', identity='eng/Local.props'),
+                    dict(repository='references/other', path='eng/Exe.props', kind='source', identity='eng/Exe.props'),
+                    dict(repository='references/other', path='src/Tool.cs', kind='source', identity='src/Tool.cs')])
+                self.assertFalse(self.summaries(report)['references/opaque']['inspectionComplete'])
+
+    def test_nested_pin_substituted_links_are_not_regular_blobs(self):
+        shared = self.add_root('shared')
+        self.write(shared, 'eng/Runner.xml', self.EXE)
+        (shared / 'eng/Link.xml').symlink_to('Runner.xml')
+        self.pin_root('shared', self.commit(shared))
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../../shared/eng/Link.xml"/></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, PROJECT, ['unsafe-import-path'], ['../shared/eng/Link.xml'])
+        self.assertEqual((report['surfaces'], self.summaries(report)['references/opaque']['crossTreeReads']), ([], []))
+
+    def test_nested_pin_substituted_compile_items_may_name_only_local_or_same_tree_sources(self):
+        shared = self.add_root('shared')
+        self.write(shared, 'eng/Compile.props', '<Project><ItemGroup><Compile Include="../../../shared-src/Local.cs"/>'
+                   '<Compile Include="$(MSBuildThisFileDirectory)../src/Same.cs"/></ItemGroup></Project>')
+        self.write(shared, 'src/Same.cs', 'builder.Services.AddMcpServer();')
+        pinned = self.pin_root('shared', self.commit(shared))
+        self.write(self.repo, 'shared-src/Local.cs', 'using System.CommandLine;')
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../../shared/eng/Compile.props"/></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(s['surface'], s['signals'], s['sources']) for s in report['surfaces']], [
+            (self.binding(), ['command-line-source', 'mcp-registration'], ['../shared/src/Same.cs', 'shared-src/Local.cs']),
+            (self.binding('shared-src/Local.cs', 'source', 'shared-src/Local.cs'), ['command-line-source'], ['shared-src/Local.cs']),
+            (dict(repository='references/shared', path='src/Same.cs', kind='source', identity='src/Same.cs'), ['mcp-registration'], ['src/Same.cs'])])
+        self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [
+            self.cross_read('../shared/eng/Compile.props', 'workspace', pinned, 'eng/Compile.props',
+                            (shared / 'eng/Compile.props').read_text()),
+            self.cross_read('../shared/src/Same.cs', 'workspace', pinned, 'src/Same.cs', 'builder.Services.AddMcpServer();')])
+
+    def test_nested_pin_compile_sources_and_globs_resolve_with_provenance(self):
+        shared = self.add_root('shared', 'https://example.invalid/team/shared.git')
+        self.write(shared, 'src/Tool.cs', 'builder.Services.AddMcpServer();')
+        nested = self.commit(shared)
+        self.git(shared, 'rm', '-q', 'src/Tool.cs')
+        self.write(shared, 'lib/Cli.cs', 'using System.CommandLine;')
+        self.write(shared, 'lib/Plain.cs', 'class Plain {}')
+        pinned = self.pin_root('shared', self.commit(shared))
+        self.write(self.repo, '.gitmodules', self.NESTED.format('https://example.invalid/team/shared.git'))
+        self.write(self.repo, PROJECT, '<Project><ItemGroup><Compile Include="../../../dependencies/shared/src/Tool.cs"/>'
+                   '<Compile Include="../../../../shared/lib/*.cs"/></ItemGroup></Project>')
+        self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(s['surface'], s['signals'], s['sources']) for s in report['surfaces']], [
+            (self.binding(), ['command-line-source', 'mcp-registration'], ['../shared/lib/Cli.cs', 'dependencies/shared/src/Tool.cs']),
+            (dict(repository='references/shared', path='lib/Cli.cs', kind='source', identity='lib/Cli.cs'), ['command-line-source'], ['lib/Cli.cs'])])
+        self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [
+            self.cross_read('../shared/lib/Cli.cs', 'workspace', pinned, 'lib/Cli.cs', 'using System.CommandLine;'),
+            self.cross_read('../shared/lib/Plain.cs', 'workspace', pinned, 'lib/Plain.cs', 'class Plain {}'),
+            self.cross_read('dependencies/shared/src/Tool.cs', 'nested', nested, 'src/Tool.cs', 'builder.Services.AddMcpServer();',
+                            gitlink='dependencies/shared')])
+        # A glob cannot prove what an unopened gitlink below its directory contains.
+        self.commit_with_gitlinks({'lib/vendor': nested}, shared)
+        self.pin_root('shared')
+        self.write(self.repo, PROJECT, '<Project><ItemGroup><Compile Include="../../../../shared/lib/*.cs"/></ItemGroup></Project>')
+        self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, PROJECT, ['unsafe-or-nested-compile-source'], ['../shared/lib/*.cs'])
+        self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [])
+
+    def test_nested_pin_unavailable_workspace_root_object_refuses(self):
+        shared = self.add_root('shared')
+        self.write(shared, 'eng/Runner.props', self.EXE)
+        self.commit(shared)
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../../shared/eng/Runner.props"/></Project>')
+        self.commit(self.repo); self.pin()
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        refused = dict(repository='references/opaque', gitlink=pin, path=PROJECT, rule='workspace-object-unavailable:' + PROJECT,
+                       target='../shared/eng/Runner.props')
+        self.pin_root('shared', 'e' * 40)
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [refused, dict(repository='references/shared', gitlink='e' * 40, rule='git-object-unavailable')])
+        self.assertEqual(report['surfaces'], [])
+        # An uninitialized sibling cannot borrow the parent repository's objects.
+        head = self.pin_root('shared', self.git(shared, 'rev-parse', 'HEAD'))
+        shutil.move(shared / '.git', self.root / 'held-git')
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [refused, dict(repository='references/shared', gitlink=head, rule='reference-root-uninitialized')])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_nested_pin_local_closure_and_context_free_api(self):
+        shared = self.add_root('shared')
+        self.write(shared, 'eng/Runner.props', self.EXE)
+        self.pin_root('shared', self.commit(shared))
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../../shared/eng/Runner.props"/></Project>')
+        self.commit(self.repo); self.pin()
+        tree = census.Tree(self.repo, self.git(self.repo, 'rev-parse', 'HEAD'))
+        parent = census.Tree(self.root, self.git(self.root, 'rev-parse', 'HEAD'))
+        workspace = census.Workspace(self.root, parent, census.declarations(parent))
+        sources = census.compilation_closure(tree, PROJECT, census.Resolver(workspace, 'references/opaque', tree))
+        self.assertEqual(sources, [dict(path=PROJECT, sha256=census.digest((self.repo / PROJECT).read_bytes()))])
+        entry = self.allowance(sources=sources, classification='non-surface-qualification-fixture', row='PA02')
+        entry.update(sourcePrefix=str(Path(PROJECT).parent), compilationClosure=True); self.save()
+        report = self.run_cli(1)
+        self.assertEqual([(s['surface']['repository'], s['status']) for s in report['surfaces']],
+                         [('references/opaque', 'approved'), ('references/shared', 'rejected')])
+        self.assertEqual(len(self.summaries(report)['references/opaque']['crossTreeReads']), 1)
+        # Substituted bytes are pinned by the parent; a signal they add is still drift.
+        self.write(shared, 'eng/Runner.props', '<Project><PropertyGroup><OutputType>Exe</OutputType><PackAsTool>true</PackAsTool></PropertyGroup></Project>')
+        self.pin_root('shared', self.commit(shared))
+        drift = self.run_cli(1)['surfaces'][0]
+        self.assertEqual((drift['reason'], drift['unexpectedSignals']), ('allowance-signal-or-source-drift', ['packed-tool']))
+        # Without root declarations, cross-tree reads are refused rather than skipped.
+        for imported, rule, target in [('../../../../shared/eng/Runner.props', 'unsafe-import-path', '../shared/eng/Runner.props'),
+                                       ('../../../nested/eng/Runner.props', 'nested-pin-unresolvable', 'nested/eng/Runner.props')]:
+            with self.subTest(imported=imported):
+                self.write(self.repo, PROJECT, f'<Project><Import Project="{imported}"/></Project>')
+                head = self.commit_with_gitlinks({'nested': self.git(shared, 'rev-parse', 'HEAD')})
+                with self.assertRaises(census.CensusError) as refused:
+                    census.compilation_closure(census.Tree(self.repo, head), PROJECT)
+                self.assertEqual((str(refused.exception), refused.exception.target), (rule + ':' + PROJECT, target))
+
+    # Exists() guard extension. FIRST is a nested path, SECOND a workspace path
+    # present at its root pin and THIRD a parent-tree path outside every root,
+    # which is refused whenever it is reached.
+    FIRST = '$(MSBuildThisFileDirectory)../../../dependencies/shared/eng/{}'
+    SECOND = '$(MSBuildThisFileDirectory)../../../../shared/eng/{}'
+    THIRD = '$(MSBuildThisFileDirectory)../../../../../outside/{}'
+
+    def guard_fixture(self):
+        shared = self.add_root('shared', 'https://example.invalid/team/shared.git')
+        self.write(shared, 'eng/Package.props', '<Project/>')
+        self.write(shared, 'eng/Provenance.targets', '<Project/>')
+        nested = self.commit(shared)
+        self.write(shared, 'eng/Package.props', self.EXE)
+        pinned = self.pin_root('shared', self.commit(shared))
+        self.write(self.root, 'references/present.props', '<Project/>')
+        self.git(self.root, 'add', 'references/present.props')
+        self.write(self.repo, '.gitmodules', self.NESTED.format('https://example.invalid/team/shared.git'))
+        return shared, nested, pinned
+
+    def guarded(self, body, nested, expected, target=None):
+        self.write(self.repo, PROJECT, '<Project>' + body + '</Project>')
+        self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+        report = self.run_cli(expected)
+        if target:
+            self.assert_source_errors(report, PROJECT, ['unsafe-import-path'], [target])
+        else:
+            self.assertEqual(report['errors'], [])
+        return report
+
+    def test_exists_guard_negated_present_fallback_import_is_not_visited(self):
+        shared, nested, pinned = self.guard_fixture()
+        layout = ('<PropertyGroup><First>' + self.FIRST.format('Package.props') + '</First><Second>' + self.SECOND.format('Package.props')
+                  + '</Second><Third>' + self.THIRD.format('Package.props') + '</Third>'
+                  "<Multi>$(Second)</Multi><Multi Condition=\"'$(Mode)' == 'b'\">$(Third)</Multi></PropertyGroup>"
+                  '<Import Project="$(First)" Condition="Exists(\'$(First)\')"/>'
+                  '<Import Project="$(Second)" Condition="!Exists(\'$(First)\') And Exists(\'$(Second)\')"/>')
+        shared_source = dict(repository='references/shared', path='eng/Package.props', kind='source', identity='eng/Package.props')
+        # The nested FIRST is never proven present; the workspace SECOND is, so the fallback is unreachable.
+        for condition in ["!Exists('$(First)') And !Exists('$(Second)')",
+                          "!Exists('$(MSBuildThisFileDirectory)Runner.csproj')",
+                          "!Exists('$(MSBuildThisFileDirectory)')",
+                          "Exists('" + self.FIRST.format('Missing.props') + "')",
+                          "Exists('" + self.SECOND.format('Missing.props') + "')",
+                          "Exists('" + self.THIRD.format('Missing.props') + "') and '$(Mode)' == 'a'"]:
+            with self.subTest(condition=condition):
+                report = self.guarded(layout + f'<Import Project="$(Third)" Condition="{condition}"/>', nested, 1)
+                self.assertEqual([(s['surface'], s['signals']) for s in report['surfaces']],
+                                 [(self.binding(), ['executable-project']), (shared_source, ['unresolved-tool-metadata'])])
+                self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [
+                    self.cross_read('../shared/eng/Package.props', 'workspace', pinned, 'eng/Package.props', self.EXE),
+                    self.cross_read('dependencies/shared/eng/Package.props', 'nested', nested, 'eng/Package.props', '<Project/>',
+                                    gitlink='dependencies/shared')])
+        with self.subTest(guard='ImportGroup'):
+            self.guarded(layout + '<ImportGroup Condition="!Exists(\'$(Second)\')"><Import Project="$(Third)"/></ImportGroup>', nested, 1)
+        # Every other guard proves nothing, so the fallback is reached and refused.
+        for condition in ["!Exists('$(First)')",
+                          "!Exists('$(Second)') Or '$(Mode)' == 'x'",
+                          "!Exists('$(Unknown)')",
+                          "Exists('$(Unknown)/Package.props')",
+                          "!Exists('$(Multi)')",
+                          "Exists('$(Multi)')",
+                          "(!Exists('$(Second)'))",
+                          "!(Exists('$(Second)'))",
+                          "!Exists('$(MSBuildThisFileDirectory)../../../../present.props')",
+                          "Exists('$(MSBuildThisFileDirectory)../../../../../../../above.props')",
+                          "Exists('$(MSBuildThisFileDirectory)')",
+                          "Exists('$(MSBuildThisFileDirectory)*.csproj')",
+                          "!Exists('$(Second)') and '$(Mode)"]:
+            with self.subTest(condition=condition):
+                report = self.guarded(layout + f'<Import Project="$(Third)" Condition="{condition}"/>', nested, 1,
+                                      '../../outside/Package.props')
+                self.assertEqual([s['surface'] for s in report['surfaces']], [shared_source])
+        with self.subTest(guard='Choose'):
+            # Import cannot occur in When; a When-selected property keeps its conservative union.
+            self.guarded(layout + "<Choose><When Condition=\"!Exists('$(Second)')\"><PropertyGroup><Late>$(Third)</Late>"
+                         '</PropertyGroup></When></Choose><Import Project="$(Late)" Condition="\'$(Late)\' != \'\'"/>',
+                         nested, 1, '../../outside/Package.props')
+
+    def test_exists_guard_self_referential_property_fallback_chain_drops_unreachable_alternatives(self):
+        shared, nested, pinned = self.guard_fixture()
+        first, second, third = (pattern.format('Provenance.targets') for pattern in (self.FIRST, self.SECOND, self.THIRD))
+        chain = ('<PropertyGroup><Targets>' + first + '</Targets>'
+                 f"<Targets Condition=\"!Exists('$(Targets)') and Exists('{second}')\">{second}</Targets>"
+                 f"<Targets Condition=\"!Exists('$(Targets)') and Exists('{third}')\">{third}</Targets></PropertyGroup>")
+        reads = [self.cross_read('../shared/eng/Provenance.targets', 'workspace', pinned, 'eng/Provenance.targets', '<Project/>'),
+                 self.cross_read('dependencies/shared/eng/Provenance.targets', 'nested', nested, 'eng/Provenance.targets',
+                                 '<Project/>', gitlink='dependencies/shared')]
+        # The nested first value is never present, so the workspace alternative stays; the
+        # outside-root alternative is proven absent and contributes nothing.
+        report = self.guarded(chain + '<Import Project="$(Targets)"/>', nested, 1)
+        self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], reads)
+        # A workspace-present value makes a later !Exists('$(P)') definition unreachable.
+        present = ('<PropertyGroup><Targets>' + second + '</Targets>'
+                   f"<Targets Condition=\"!Exists('$(Targets)')\">{third}</Targets></PropertyGroup>")
+        report = self.guarded(present + '<Import Project="$(Targets)"/>', nested, 1)
+        self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], reads[:1])
+        dropped = ('<PropertyGroup><Targets>' + second + '</Targets></PropertyGroup>'
+                   f"<PropertyGroup Condition=\"Exists('{third}')\"><Targets>{third}</Targets></PropertyGroup>")
+        self.assertEqual(self.summaries(self.guarded(dropped + '<Import Project="$(Targets)"/>', nested, 1))
+                         ['references/opaque']['crossTreeReads'], reads[:1])
+        for body in [('<PropertyGroup><Targets>' + second + '</Targets>'
+                      f"<Targets Condition=\"!Exists('$(Targets)') or '$(Mode)' == ''\">{third}</Targets></PropertyGroup>"),
+                     ('<PropertyGroup><Targets>' + second + '</Targets></PropertyGroup>'
+                      f"<Choose><When Condition=\"!Exists('$(Targets)')\"><PropertyGroup><Targets>{third}</Targets>"
+                      '</PropertyGroup></When></Choose>'),
+                     ('<PropertyGroup><Targets>' + second + '</Targets></PropertyGroup>'
+                      f"<Target Name=\"Late\"><PropertyGroup><Targets Condition=\"!Exists('$(Targets)')\">{third}</Targets>"
+                      '</PropertyGroup></Target>')]:
+            with self.subTest(body=body):
+                self.guarded(body + '<Import Project="$(Targets)"/>', nested, 1, '../../outside/Provenance.targets')
+        # A dropped classification alternative leaves no executable signal; a bypassable one keeps it.
+        for condition, signals in [(f"Exists('{third}')", []), (f"Exists('{third}') or '$(Mode)' == ''", ['executable-project'])]:
+            with self.subTest(condition=condition):
+                report = self.guarded(f'<PropertyGroup><OutputType>Library</OutputType><OutputType Condition="{condition}">Exe'
+                                      '</OutputType></PropertyGroup>', nested, 1)
+                self.assertEqual([s['signals'] for s in report['surfaces'] if s['surface'] == self.binding()],
+                                 [signals] if signals else [])
+        # Only PropertyGroup definitions are evaluated; other conditional values keep their union.
+        report = self.guarded(f'<ItemGroup><Thing Include="a"><OutputType Condition="Exists(\'{third}\')">Exe</OutputType>'
+                              '</Thing></ItemGroup>', nested, 1)
+        self.assertEqual([s['signals'] for s in report['surfaces'] if s['surface'] == self.binding()], [['executable-project']])
 
 
 if __name__=='__main__':

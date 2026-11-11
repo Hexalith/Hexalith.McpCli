@@ -49,6 +49,11 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
+- [ ] `tools/proprietary-surfaces/v1/check.py` — implement the user-approved (2026-11-11) guard extension for MSBuild imports and property definitions. A condition is evaluated only when it is a top-level `and` conjunction with no top-level `or` and balanced syntax, and only for the element's own `Condition` plus any enclosing `PropertyGroup`/`ImportGroup` `Condition`. Expansion uses the property alternatives in effect at that document position; any unresolved `$(` proves nothing. An `Exists(p)` conjunct makes the element unreachable when every expansion of `p` is proven absent under the existing local/workspace/nested rules. A `!Exists(p)` conjunct makes it unreachable when every expansion of `p` is proven present in the parent workspace model, i.e. a committed regular blob or directory in the inspected root, or in a root-declared reference at its root pin. A path under a nested gitlink is never proven present, because non-recursive checkouts lack it; neither is a refused or unresolvable path. An unreachable conditional property definition contributes no alternative; an unreachable import is not visited. `Choose`/`When` keeps its conservative union. All other guards prove nothing, and existing refusals stand. Record nothing new in policy.
+- [ ] `tools/proprietary-surfaces/v1/test_census.py`, both READMEs and `evidence/story-5-6/exists-guard-resolution-20261111/` — generic fixtures for a negated-guard fallback import, and for a self-referential property fallback chain whose `!Exists('$(P)')` and `Exists(alternative)` guards drop the unreachable alternatives. Refusal cases: `!Exists` on a nested path, top-level `or`, an unresolved property, a partly-present multi-expansion, parenthesized conditions and `Choose`/`When`. Add guard-removal controls for each new rule, assert full output streams, and repeat this packet's verification set and before/after accounting against `nested-pin-resolution-20261111`. Same preservation and no-authority limits as above; do not stage, commit or push.
+- [x] `tools/proprietary-surfaces/v1/check.py` — implement the user-approved (2026-11-11) cross-tree resolution for MSBuild imports and Compile item sources only. **Workspace rule:** a path escaping the inspected root reference is normalized against the parent revision tree; inside a root-declared gitlink it is read at that root's pin; if absent and the import is `Exists()`-conditioned on that exact path, it is absent; anything else, including a path above the parent root, keeps `unsafe-import-path` / `unsafe-or-nested-compile-source`. **Nested rule:** a path inside a nested gitlink resolves at that exact nested commit, read from the single root-declared reference whose `.gitmodules` URL equals the nested entry's URL at the same pin (trim one trailing `/` and one trailing `.git`; host case-insensitive; relative URLs never match). No unique match → `nested-pin-unresolvable:<path>`; commit missing from that checkout's object store → `nested-object-unavailable:<path>`. Never initialize, fetch, check out or execute anything. Allow one cross-tree hop per resolution chain; a further escape or gitlink inside the substituted tree keeps the existing refusal. Record each cross-tree read's repository, commit, path and blob hash in report provenance. Publication targets inside nested gitlinks keep `nested-publication-target`. No module names, paths or counts in logic.
+- [x] `tools/proprietary-surfaces/v1/test_census.py` — disposable Git fixtures: escaping import resolved into a sibling root at its pin; absent `Exists()`-conditioned escape; escape above the parent root; nested import resolved through a same-URL root at a nested pin that differs from the root pin; URL normalization match plus relative, ambiguous and missing-entry refusals; missing nested commit; second-hop refusal; nested Compile source; report provenance; `OutputType=Exe` arriving through each rule. Executed guard-removal controls for every new refusal; assert full stdout/stderr and error documents.
+- [x] `tools/proprietary-surfaces/v1/README.md`, `README.md` and `evidence/story-5-6/nested-pin-resolution-20261111/` — document both rules and the CI precondition (root references are full clones, so nested pins must be reachable in them). Run fixtures, release regressions, all five matrix rows, determinism across two hash seeds and a fresh committed-pin scan. Record before/after blocker accounting against `manifest-selector-resolution-20261111`, including how many prior source-file rejections now associate with an approved project. Retain the final report once and record repeat runs as hashes. Preserve all prior evidence, policy and inventory bytes; add no allowance, exception, exemption or approval. Keep story/sprint `in-progress` unless the scan passes; do not stage, commit or push.
 - [x] Continue from `evidence/story-5-6/coverage-resolution-20261111/decision-packet.md` with bounded generic committed-JSON publication-target resolution in `tools/proprietary-surfaces/v1/check.py`. Start by inspecting the exact committed ChatBot `.github/scripts/pack-release-packages.sh`, `release-metadata.json` and `.inventory.packages[].project` at its root gitlink; record what those bytes prove. Support only the finite selector and ordered shell iteration semantics needed to enumerate those targets without executing jq or inspected code, and inspect each resolved project's metadata before qualification. Keep logic and fixtures generic: no module-specific names, paths, counts or branches. Preserve refusals for runtime/generated inputs, unsupported selectors, unknown mutations, unsafe paths and nested repositories. No nested initialization, reference/gitlink/dependency change or added allowance, exception, exemption or owner approval is authorized (user, 2026-11-11).
 - [x] Add exact observation, error-document, stdout and stderr regression assertions in `tools/proprietary-surfaces/v1/test_census.py`; execute guard-removal controls for every new guard. Update both READMEs for the supported subset. Run relevant fixtures, release regressions, all five matrix rows and a fresh committed-pin scan; retain failed attempts and rerun final verification after any implementation change.
 - [x] Preserve all prior evidence and create a separate `evidence/story-5-6/manifest-selector-resolution-20261111/` packet with exact commands/results, full canonical revisions, source blob/SHA-256 bindings, policy/prior-evidence/reference integrity checks and complete before/after blocker accounting. Include a concise decision packet distinguishing remaining scanner limitations, proven upstream defects (assert none without committed evidence of an active defect) and exact observations needing owner disposition, with the next concrete action for each. Run the evidence secret scanner. Keep story/sprint `in-progress` until acceptance succeeds; do not stage, commit or push.
@@ -163,6 +168,8 @@ None.
 ## Spec Change Log
 
 - 2026-11-11 — User answered "yes" to the offered next steps; proceed with the first scope: generic resolution of the five inspection cases before owner disposition of rejected identities. This authorizes implementation and verification within the existing committed-source boundary, not a new allowance or qualification. E01–E05 and their exact source pins/paths remain defined by [the retained packet](evidence/story-5-6/handoff-verification-20261110/disposition-packet.json). Resolve what committed source proves; retain coverage errors for unresolvable runtime or generated targets, with complete observations from independently inspectable files. Prior baseline, inventory, approval and amendment bytes remain preserved.
+- 2026-11-11 — User chose "nested-pin resolution" after the [manifest-selector packet](evidence/story-5-6/manifest-selector-resolution-20261111/decision-packet.md) showed the remaining blockers cascade from refused layout-fallback imports. For example, `references/Hexalith.EventStore` `src/Hexalith.EventStore.Admin.Cli` fails `unsafe-import-path:Directory.Build.props`, and 62 of its source files then become separate rejections. Parent investigation: the error comes from parent-relative fallbacks (`../references/…`, `../../references/…`), which in this workspace land in root-declared references. The nested alternative is skipped. The workspace rule reads those paths at root pins, which the frozen boundary already allows. The nested rule reads a nested pin from the same-URL root checkout. Example: EventStore `b882c1005050aaebfa70618b5a72c1c8be452281` nests Builds `11f8534fc89a2c4a18a984307e927abb6d6c7ff3`, reachable from root Builds `891886ddc60a9924d053bb74bf6bcc73e101b2ce` history (`origin/main`). CI clones root references fully. Scope: MSBuild imports and Compile sources only. No nested initialization, execution, allowance, exception, exemption or owner approval is granted.
+- 2026-11-11 — User approved the `Exists()` guard extension and an independent review afterwards, following the [nested-pin decision packet](evidence/story-5-6/nested-pin-resolution-20261111/decision-packet.md). Targets: Tenants `Directory.Build.targets` at `019aa0a82d021e08475a68fc50eff3b6a0e6c111`, whose fallback guards sit on property definitions (20 errors), and Commons `src/libraries/Directory.Build.props` at `11555ace9efcae2928a00122dcba91243e5a8a1a`, whose import uses negated guards (4 errors). Parent soundness limit: CI initializes root references without recursion, so nested-gitlink paths are absent there. A `!Exists()` on a nested path therefore never proves a guarded element unreachable. Both cases still resolve through their workspace-present or outside-root-absent guards. No allowance, exception, exemption or approval is granted.
 
 ## Review Triage Log
 
@@ -468,3 +475,41 @@ staging, commit, push or publication changed. The
 binds remaining scanner limits, source boundaries, embedded-data context and
 exact owner dispositions. No active upstream defect is inferred. Story and
 sprint remain `in-progress` while current-reference acceptance fails.
+
+
+### Nested-pin resolution — 2026-11-11
+
+Implemented the approved cross-tree resolution for MSBuild imports and Compile
+item sources only. Workspace paths are read from the root-declared reference
+they land in, at its committed pin. Nested-gitlink paths are read at the exact
+nested commit from the single root whose declared URL matches after the one
+`/` and one `.git` trim, with a case-insensitive host; relative URLs never match.
+One hop is allowed per chain. Other paths keep `unsafe-import-path` /
+`unsafe-or-nested-compile-source`, now with the refused label as `target`.
+`nested-pin-unresolvable`, `nested-object-unavailable` and
+`workspace-object-unavailable` name the specific failures. An absent path is
+optional only under an `Exists()` on that exact path, alone or as a top-level
+`and` conjunct. Every substituted read is listed in the repository summary's
+`crossTreeReads`. Git reads set `GIT_NO_LAZY_FETCH=1`; nothing is initialized,
+fetched, checked out or executed. Nested publication targets still fail.
+
+The [verification packet](evidence/story-5-6/nested-pin-resolution-20261111/verification.md)
+records 192 passing census fixtures (14 new), 212 detected guard-removal controls
+(43 new, 8 prior anchors adapted), 195 release regressions, all five matrix rows,
+and byte-identical reports across hash seeds 1 and 2. The unchanged HEAD
+checker reproduces the manifest-selector report at the same root pins. The
+fresh committed-pin scan exits 1: 17 roots accounted for, 5 complete, 479
+observations, 39 rejected observations, 68 coverage errors (from 107), 10 stale
+allowances and 58 verified cross-tree reads. All 62 prior standalone source-file
+rejections now associate with approved EventStore Admin.Cli/Admin.Mcp projects.
+All 14 new blocker keys were masked by a resolved refusal on the same source.
+Prior evidence, policy, inventory and reference bytes are unchanged, and the
+evidence secret scan is clean.
+
+The [decision packet](evidence/story-5-6/nested-pin-resolution-20261111/decision-packet.md)
+leaves 24 cross-tree fallbacks refused: Tenants targets guarded by
+property-definition `Exists()`, and a Commons import guarded by negated
+`Exists()`. Approving either generic extension is a separate decision. No
+allowance, exception, exemption, approval, dependency, reference or gitlink
+changed. Story and sprint remain `in-progress`; nothing was staged, committed
+or pushed.

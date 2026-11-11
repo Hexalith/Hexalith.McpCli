@@ -1,0 +1,112 @@
+"""Run serial nested-pin verification; retain each attempt, the final report once and repeats as hashes."""
+import hashlib
+import json
+import os
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+
+PACKET = Path(__file__).resolve().parent
+ROOT = Path.cwd()
+PRIOR_REPORT = PACKET.parent / 'manifest-selector-resolution-20261111/runs/final-1/census.json'
+runs = PACKET / 'runs'
+runs.mkdir(exist_ok=True)
+RUN = runs / ('final-' + str(len(list(runs.iterdir())) + 1))
+RUN.mkdir()
+environment = {**os.environ, 'PYTHONDONTWRITEBYTECODE': '1'}
+implementation = ['tools/proprietary-surfaces/v1/check.py', 'tools/proprietary-surfaces/v1/test_census.py',
+                  'tools/proprietary-surfaces/v1/README.md', 'README.md', str((PACKET / 'mutation-guards.py').relative_to(ROOT))]
+sha = lambda raw: hashlib.sha256(raw).hexdigest()
+git = lambda *args: subprocess.run(['git', *args], check=True, capture_output=True).stdout
+commands = []
+
+
+def preserved_paths():
+    """Every prior evidence, policy and inventory file this change must leave byte-identical."""
+    paths = []
+    for base in ('_bmad-output/implementation-artifacts/evidence/story-5-6', '_bmad-output/implementation-artifacts/evidence/story-5-1'):
+        paths += [p for p in (ROOT / base).rglob('*') if p.is_file() and PACKET not in p.parents]
+    policy = ROOT / 'tools/proprietary-surfaces/v1'
+    paths += [policy / 'baseline.json', policy / 'amendments.json', policy / 'legacy-receipts.json', *sorted((policy / 'amendments').iterdir()),
+              ROOT / '_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md']
+    return {str(p.relative_to(ROOT)): sha(p.read_bytes()) for p in sorted(set(paths))}
+
+
+def workspace_state():
+    return {'head': git('rev-parse', 'HEAD').decode().strip(), 'gitmodulesSha256': sha(git('show', 'HEAD:.gitmodules')),
+            'gitlinks': git('ls-tree', 'HEAD', 'references/').decode(),
+            'referenceStatus': git('status', '--porcelain', '--', 'references').decode()}
+
+
+def save(name, value):
+    (RUN / name).write_text(json.dumps(value, indent=2, sort_keys=True) + '\n')
+
+
+def run(name, arguments, expected, extra=None, retain=True):
+    print('Running ' + name, flush=True)
+    result = subprocess.run(arguments, capture_output=True, env={**environment, **(extra or {})}, timeout=1800)
+    row = {'name': name, 'command': [str(value) for value in arguments], 'exitCode': result.returncode,
+           'expectedExitCode': expected, 'environment': {'PYTHONDONTWRITEBYTECODE': '1', **(extra or {})},
+           'stdoutSha256': sha(result.stdout), 'stderrSha256': sha(result.stderr)}
+    if retain:
+        (RUN / (name + '.stdout.txt')).write_bytes(result.stdout)
+        (RUN / (name + '.stderr.txt')).write_bytes(result.stderr)
+        row.update(stdout=name + '.stdout.txt', stderr=name + '.stderr.txt')
+    commands.append(row)
+    save('commands.json', commands)
+    print(name + ': exit ' + str(result.returncode), flush=True)
+    if result.returncode != expected:
+        raise SystemExit('Unexpected result retained in ' + str(RUN.relative_to(ROOT)))
+    return result
+
+
+save('workspace-before.json', workspace_state())
+save('prior-integrity-before.json', preserved_paths())
+before = {path: sha((ROOT / path).read_bytes()) for path in implementation}
+run('census-tests', [sys.executable, '-m', 'unittest', 'discover', '-v', '-s', 'tools/proprietary-surfaces/v1', '-p', 'test_*.py'], 0)
+run('mutations', [sys.executable, PACKET / 'mutation-guards.py'], 0)
+run('release-tests', [sys.executable, '-m', 'unittest', 'discover', '-s', 'scripts/tests', '-p', 'test_*.py'], 0)
+revision = git('rev-parse', 'HEAD').decode().strip()
+arguments = [sys.executable, 'tools/proprietary-surfaces/v1/check.py', '--revision', revision, '--output']
+census = run('current-pin-census', arguments + [RUN / 'census.json'], 1, retain=False)
+(RUN / 'current-pin-census.stderr.txt').write_bytes(census.stderr)
+report = (RUN / 'census.json').read_bytes()
+assert census.stdout == report, 'Census stdout must equal its retained report.'
+repeats = {}
+with tempfile.TemporaryDirectory() as temporary:
+    for seed in ('1', '2'):
+        output = Path(temporary) / f'determinism-{seed}.json'
+        result = run('determinism-' + seed, arguments + [output], 1, {'PYTHONHASHSEED': seed}, retain=False)
+        repeats[seed] = {'reportSha256': sha(output.read_bytes()), 'stdoutSha256': sha(result.stdout),
+                         'stderrSha256': sha(result.stderr), 'identicalToFinal': output.read_bytes() == report
+                         and result.stdout == report and result.stderr == census.stderr}
+    # The committed HEAD checker is the manifest-selector final implementation.
+    original = git('show', 'HEAD:tools/proprietary-surfaces/v1/check.py')
+    adapted = original.replace(b"ROOT = Path(__file__).resolve().parents[3]", ('ROOT = Path(' + repr(str(ROOT)) + ')').encode(), 1)
+    copy = Path(temporary) / 'before-check.py'
+    copy.write_bytes(adapted)
+    output = Path(temporary) / 'before-census.json'
+    result = run('before-census', [sys.executable, copy, '--revision', revision,
+                                   '--baseline', ROOT / 'tools/proprietary-surfaces/v1/baseline.json',
+                                   '--amendments', ROOT / 'tools/proprietary-surfaces/v1/amendments.json', '--output', output], 1, retain=False)
+    prior = json.loads(PRIOR_REPORT.read_text())
+    previous = json.loads(output.read_text())
+    normalized = {**previous, 'parentRevision': prior['parentRevision']}
+    save('before-run.json', {'checkerSha256': sha(original), 'executedCopySha256': sha(adapted),
+                             'onlyAdaptation': 'ROOT names the workspace because the committed checker runs from a temporary copy.',
+                             'reportSha256': sha(output.read_bytes()), 'stderrSha256': sha(result.stderr),
+                             'parentRevision': previous['parentRevision'], 'priorReport': str(PRIOR_REPORT.relative_to(ROOT)),
+                             'priorReportSha256': sha(PRIOR_REPORT.read_bytes()), 'priorParentRevision': prior['parentRevision'],
+                             'identicalToPriorExceptParentRevision': normalized == prior})
+    assert normalized == prior, 'The unchanged checker must reproduce the prior final report at these root pins.'
+assert all(row['identicalToFinal'] for row in repeats.values()), 'Complete census bytes differ by hash seed.'
+save('determinism.json', {'result': 'passed', 'seeds': [1, 2], 'finalReportSha256': sha(report), 'repeats': repeats})
+run('diff-check', ['git', 'diff', '--check'], 0)
+after = {path: sha((ROOT / path).read_bytes()) for path in implementation}
+assert before == after, 'Implementation changed during verification; rerun after stabilizing it.'
+save('implementation-integrity.json', {'result': 'passed', 'before': before, 'after': after})
+assert workspace_state() == json.loads((RUN / 'workspace-before.json').read_text())
+assert preserved_paths() == json.loads((RUN / 'prior-integrity-before.json').read_text())
+(PACKET / 'latest-run.json').write_text(json.dumps({'path': str(RUN.relative_to(PACKET)), 'result': 'passed'}, indent=2) + '\n')
+print('Final checks retained at ' + str(RUN.relative_to(ROOT)), flush=True)

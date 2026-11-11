@@ -1,0 +1,158 @@
+[
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/proprietary-surfaces/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "census-tests",
+    "stderr": "census-tests.stderr.txt",
+    "stderrSha256": "afd29012d8b8cc29eae34f9ceed5095b2fe63db1bdfcca42fe3edecd48975573",
+    "stdout": "census-tests.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/nested-pin-resolution-20261111/mutation-guards.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "mutations",
+    "stderr": "mutations.stderr.txt",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "mutations.stdout.txt",
+    "stdoutSha256": "44dc2e6247b1c31512f219c217c157cd529b5a62967753f1776e71cfb1e00da3"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts/tests",
+      "-p",
+      "test_*.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "release-tests",
+    "stderr": "release-tests.stderr.txt",
+    "stderrSha256": "cdfa9f3c80632f6f4d25f71b16900755237a3d39606dab1fd918afc4b47ec3ca",
+    "stdout": "release-tests.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--revision",
+      "ef80e45056620aa851a68276428aa63ed6dcc90b",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/nested-pin-resolution-20261111/runs/final-1/census.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "name": "current-pin-census",
+    "stderrSha256": "ba92f2b24a362e97a7ab3ff912bae95ef4aa7f75cd20939da673c8e0b8e78da2",
+    "stdoutSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--revision",
+      "ef80e45056620aa851a68276428aa63ed6dcc90b",
+      "--output",
+      "/tmp/tmpp72946v2/determinism-1.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "1"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "name": "determinism-1",
+    "stderrSha256": "ba92f2b24a362e97a7ab3ff912bae95ef4aa7f75cd20939da673c8e0b8e78da2",
+    "stdoutSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--revision",
+      "ef80e45056620aa851a68276428aa63ed6dcc90b",
+      "--output",
+      "/tmp/tmpp72946v2/determinism-2.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "2"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "name": "determinism-2",
+    "stderrSha256": "ba92f2b24a362e97a7ab3ff912bae95ef4aa7f75cd20939da673c8e0b8e78da2",
+    "stdoutSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "/tmp/tmpp72946v2/before-check.py",
+      "--revision",
+      "ef80e45056620aa851a68276428aa63ed6dcc90b",
+      "--baseline",
+      "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/baseline.json",
+      "--amendments",
+      "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/amendments.json",
+      "--output",
+      "/tmp/tmpp72946v2/before-census.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "name": "before-census",
+    "stderrSha256": "b951aed85a6b0787a39f0d72416b8e0138493533c9e28eed8d63645bfd63bb41",
+    "stdoutSha256": "506e3d682852c5c1d0d9201e90eb7f5c780ed32af56e05411ade7e34c1ad8ee5"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "diff-check",
+    "stderr": "diff-check.stderr.txt",
+    "stderrSha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+    "stdout": "diff-check.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

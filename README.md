@@ -58,8 +58,18 @@ fields to a literal shell read loop; every selected project still undergoes
 metadata inspection. Unsupported selector, mutation and shell-input forms fail
 coverage. Comments and quoted diagnostics do not
 establish commands; executable substitutions remain visible and unsupported
-command wrappers fail coverage. Runtime/generated or nested sources
-remain coverage errors; partial roots retain other observations and do not
+command wrappers fail coverage. Runtime/generated sources remain coverage
+errors. MSBuild imports and Compile sources may cross one tree boundary: a path
+escaping a root is read from the root-declared reference it lands in, at that
+root's committed pin, and a path inside a nested gitlink is read at the exact
+nested commit from the single root reference whose declared URL matches. Other
+cross-tree paths, unresolvable nested pins and missing objects fail coverage;
+nothing is fetched, initialized or checked out. Each such read's repository,
+commit, path and SHA-256 appear in the report. Root references must therefore
+be full clones that contain their nested pins, as CI's non-recursive root
+initialization provides. Imports and static property definitions guarded by a
+balanced top-level `and` of `Exists()`/`!Exists()` checks are skipped only when
+committed facts prove the guard false; a nested path is never proven present. Partial roots retain other observations and do not
 establish stale allowances. The report names new surfaces and stale allowances; baseline changes require a
 versioned, hash-chained amendment. Successful census execution is required for
 paired-release staging and publication.

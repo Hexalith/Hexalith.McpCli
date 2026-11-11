@@ -1,0 +1,1787 @@
+{
+  "sources": [
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupArguments.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupExportStreamCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupImportStreamCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupListCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupRestoreCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupTriggerCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Backup/BackupValidateCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ConfigCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ConfigCompletionCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ConfigCurrentCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ConfigUseCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileAddCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileListCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileRemoveCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Config/ProfileShowCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/HealthCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/HealthDaprCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionArguments.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionListCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionPauseCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionResetCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionResumeCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Projection/ProjectionStatusCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotArguments.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotCreateCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotDeletePolicyCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotPoliciesCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Snapshot/SnapshotSetPolicyCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamArguments.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamCausationCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamDiffCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamEventCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamEventsCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamListCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Stream/StreamStateCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/StubCommands.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantArguments.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantDetailCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantListCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantUsersCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Commands/Tenant/TenantVerifyCommand.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/GlobalOptionsBinding.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS01",
+          "signals": [
+            "command-line-dependency",
+            "command-line-source",
+            "executable-project",
+            "package-identity",
+            "packed-tool",
+            "project-identity",
+            "tool-command"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Cli",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Cli/Program.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "command-line-source"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Program.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/BackupWriteTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/ConsistencyTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/ConsistencyWriteTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/DiagnosticTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/ProjectionTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/ProjectionWriteTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/ServerTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/SessionTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/StorageTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/StreamTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/TenantTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    },
+    {
+      "associatedProjects": [
+        {
+          "classification": "compatibility-surface",
+          "row": "PS02",
+          "signals": [
+            "executable-project",
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "package-identity",
+            "project-identity"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.EventStore.Admin.Mcp",
+            "kind": "project",
+            "path": "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "path": "src/Hexalith.EventStore.Admin.Mcp/Tools/TypeCatalogTools.cs",
+      "repository": "references/Hexalith.EventStore",
+      "signals": [
+        "mcp-registration"
+      ]
+    }
+  ],
+  "summary": {
+    "approvedProjects": {
+      "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj": 49,
+      "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj": 13
+    },
+    "associatedWithApprovedProjectOnly": 62,
+    "associatedWithRejectedProject": 0,
+    "noLongerStandalone": 62,
+    "priorRejectedSourceObservations": 62,
+    "withoutAssociatedProjectCandidate": 0
+  }
+}

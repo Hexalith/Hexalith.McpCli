@@ -1,0 +1,60 @@
+{
+  "counts": {
+    "roots": 17,
+    "completeRoots": 5,
+    "observations": 479,
+    "rejectedObservations": 39,
+    "inspectionErrors": 68,
+    "stale": 10,
+    "crossTreeReads": 58
+  },
+  "before": {
+    "roots": 17,
+    "completeRoots": 2,
+    "observations": 548,
+    "rejectedObservations": 120,
+    "inspectionErrors": 107,
+    "stale": 2,
+    "crossTreeReads": 0
+  },
+  "outcomes": {
+    "retained": 76,
+    "resolved-for-source": 120,
+    "diagnostic-resolved-source-partial": 14
+  },
+  "newBlockers": 14,
+  "newUnmasked": 0,
+  "sourceAssociation": {
+    "priorRejectedSourceObservations": 62,
+    "noLongerStandalone": 62,
+    "associatedWithApprovedProjectOnly": 62,
+    "associatedWithRejectedProject": 0,
+    "withoutAssociatedProjectCandidate": 0,
+    "approvedProjects": {
+      "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj": 49,
+      "src/Hexalith.EventStore.Admin.Mcp/Hexalith.EventStore.Admin.Mcp.csproj": 13
+    }
+  },
+  "groups": {
+    "cross-tree-boundary": {
+      "keys": 24,
+      "observations": 24
+    },
+    "embedded-metadata-context": {
+      "keys": 3,
+      "observations": 3
+    },
+    "exact-owner-disposition": {
+      "keys": 39,
+      "observations": 39
+    },
+    "protected-source-boundary": {
+      "keys": 6,
+      "observations": 23
+    },
+    "scanner-limit-or-unproven-input": {
+      "keys": 18,
+      "observations": 18
+    }
+  }
+}

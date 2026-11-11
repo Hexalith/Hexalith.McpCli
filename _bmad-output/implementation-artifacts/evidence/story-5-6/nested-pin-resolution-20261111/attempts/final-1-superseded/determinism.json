@@ -1,0 +1,22 @@
+{
+  "finalReportSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57",
+  "repeats": {
+    "1": {
+      "identicalToFinal": true,
+      "reportSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57",
+      "stderrSha256": "ba92f2b24a362e97a7ab3ff912bae95ef4aa7f75cd20939da673c8e0b8e78da2",
+      "stdoutSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57"
+    },
+    "2": {
+      "identicalToFinal": true,
+      "reportSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57",
+      "stderrSha256": "ba92f2b24a362e97a7ab3ff912bae95ef4aa7f75cd20939da673c8e0b8e78da2",
+      "stdoutSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57"
+    }
+  },
+  "result": "passed",
+  "seeds": [
+    1,
+    2
+  ]
+}
