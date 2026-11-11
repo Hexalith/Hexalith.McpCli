@@ -1,0 +1,562 @@
+{
+  "result": "passed",
+  "receipt": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/secret-scan.json",
+  "receiptSha256": "3970bead736638c0b019dc72690709709f20724ebdc0d4f0245030641a8ebe9b",
+  "bindings": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/acceptance-blockers.json",
+      "sha256": "9f98110c3a81d283f4a425c452ca1498b2f7103522aa932b2d699af7913d1222",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/binding-audit.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/binding-audit.stdout.txt",
+      "sha256": "c7ef0832eae67ede8fff0f839710ec8b176c506a7801f606f4efe994171d3667",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/build-verification.py",
+      "sha256": "f3c91e8fed4877ec4a4b656989da906c99da518edfde6a4cf3bf03c042d0f711",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/census-tests.stderr.txt",
+      "sha256": "b8109df61ba65292fecdcc6bf2780f5927c0e1ec8329d8f2d8e21f289a55dfeb",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/census-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/census.json",
+      "sha256": "f20dc08a920a8ac84010a9e389fe981599023e4543891ddf31c6376a7592b927",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/commands-executed.json",
+      "sha256": "30366efc2baec49ab0cf86f88c9e25e8ceb06af16b1ccebe9b2db92a08c18fbf",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/commands.json",
+      "sha256": "f341c8d9e66b1752740cd8801c58cd4a3a4b4e59e6996ad9eabf6c4fd9074dbe",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/current-pin-census.stderr.txt",
+      "sha256": "0a899c95ac752cacfd4f7029109e70de8bb1e5b62348cb6b6c7f60cda8264532",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/current-pin-census.stdout.txt",
+      "sha256": "f20dc08a920a8ac84010a9e389fe981599023e4543891ddf31c6376a7592b927",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/determinism-1.json",
+      "sha256": "f20dc08a920a8ac84010a9e389fe981599023e4543891ddf31c6376a7592b927",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/determinism-1.stderr.txt",
+      "sha256": "0a899c95ac752cacfd4f7029109e70de8bb1e5b62348cb6b6c7f60cda8264532",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/determinism-1.stdout.txt",
+      "sha256": "f20dc08a920a8ac84010a9e389fe981599023e4543891ddf31c6376a7592b927",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/determinism-2.json",
+      "sha256": "f20dc08a920a8ac84010a9e389fe981599023e4543891ddf31c6376a7592b927",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/determinism-2.stderr.txt",
+      "sha256": "0a899c95ac752cacfd4f7029109e70de8bb1e5b62348cb6b6c7f60cda8264532",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/determinism-2.stdout.txt",
+      "sha256": "f20dc08a920a8ac84010a9e389fe981599023e4543891ddf31c6376a7592b927",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/determinism.json",
+      "sha256": "411721aaae66da7de421361a45a4879c730686efcd917e7df7cb099afea67e6d",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/diff-check.stderr.txt",
+      "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/diff-check.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/inspection-cases.json",
+      "sha256": "9b5dab3370ca897b9a198201c857b26dbc97d226618ebc2d24fb217d84aaba24",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/matrix-coverage.json",
+      "sha256": "7f0b9c831cd708931e5b500e74c123ff1738d1eb58c281e413034ca11905d4fa",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/mutations.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/mutations.stdout.json",
+      "sha256": "6d1f480c1d334aebac014ce56e581bc5882dbf08501fe684a5c94cda12fa76f1",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/policy-integrity.json",
+      "sha256": "a5c19952255f4dcf6efabb06847468a864ba9af7b9c6db9918fade82b29fe765",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/release-tests.stderr.txt",
+      "sha256": "21bb04f5c682374cbabca2a7cf93a404d61fbad0b811a7c48fd5ba2052265775",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/release-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/run-final-verification.py",
+      "sha256": "b56b8265bf978856a97053b9cd5b5eb44be1404ecd659d59a510b9e0b51f062e",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/attempts/parent-final-1/verification.json",
+      "sha256": "9f0afcd2f13343bf4b883b56e7ac531ba62c6907aa2028b4e499ad3b97eb7765",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/binding-audit.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/binding-audit.stdout.txt",
+      "sha256": "1eebb0901b7b4ecb8f2e2dd349842f3027c95c15766acc47a51f8452cf973b7f",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/build-acceptance-blockers.py",
+      "sha256": "3334aba0bc789bc2d55924e88ae2c88b76313998dc916d9ed60ae8e4767bfc99",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/build-verification.py",
+      "sha256": "f3c91e8fed4877ec4a4b656989da906c99da518edfde6a4cf3bf03c042d0f711",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/census-tests.stderr.txt",
+      "sha256": "fd7e6c68a6f2fd9c5561cc1263619ee0c08b0aefee3b1cf77a3fa8223c573579",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/census-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/census.json",
+      "sha256": "de17c797f345c0b0364442473cc27a101626bcb72eb68c3238410ed611603935",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/commands-executed.json",
+      "sha256": "30366efc2baec49ab0cf86f88c9e25e8ceb06af16b1ccebe9b2db92a08c18fbf",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/commands.json",
+      "sha256": "f341c8d9e66b1752740cd8801c58cd4a3a4b4e59e6996ad9eabf6c4fd9074dbe",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/current-pin-census.stderr.txt",
+      "sha256": "1ed6689da435e155bacd02915ad72d571a795875c63fe45cd1ff25171df658e0",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/current-pin-census.stdout.txt",
+      "sha256": "de17c797f345c0b0364442473cc27a101626bcb72eb68c3238410ed611603935",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/determinism-1.json",
+      "sha256": "de17c797f345c0b0364442473cc27a101626bcb72eb68c3238410ed611603935",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/determinism-1.stderr.txt",
+      "sha256": "1ed6689da435e155bacd02915ad72d571a795875c63fe45cd1ff25171df658e0",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/determinism-1.stdout.txt",
+      "sha256": "de17c797f345c0b0364442473cc27a101626bcb72eb68c3238410ed611603935",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/determinism-2.json",
+      "sha256": "de17c797f345c0b0364442473cc27a101626bcb72eb68c3238410ed611603935",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/determinism-2.stderr.txt",
+      "sha256": "1ed6689da435e155bacd02915ad72d571a795875c63fe45cd1ff25171df658e0",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/determinism-2.stdout.txt",
+      "sha256": "de17c797f345c0b0364442473cc27a101626bcb72eb68c3238410ed611603935",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/determinism.json",
+      "sha256": "411721aaae66da7de421361a45a4879c730686efcd917e7df7cb099afea67e6d",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/diff-check.stderr.txt",
+      "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/diff-check.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/compatibility-tests.stderr.txt",
+      "sha256": "b3d1c41b4dd418b402f36e9c377af21b1b0862489511534c8f293007eb07133e",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/compatibility-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/diff-check.stderr.txt",
+      "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/diff-check.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/mutation-guards-prior.py",
+      "sha256": "34f2847aeeb618d906a722416def9c36144fd9adfd9c713aa5eb247bf99f92f0",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/mutations.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/mutations.stdout.json",
+      "sha256": "845357139e4df87e6a18348089d55568a77924761a295ae907ca1af87ea80d18",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/prior-review-evidence.json",
+      "sha256": "4d53a0757d868cdc9b0cf402195fbc6ff9d8f37b358ffff51f4f3e497982d637",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/s19-tests.stderr.txt",
+      "sha256": "9a744b98644318bcb574e05031b2673f060f5a46a1c01def9cae994296ebfc2e",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/s19-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/s20-tests.stderr.txt",
+      "sha256": "cfdaaaf41fb5f5745d11f34242a0acb89b5ce00b0b02c61b25669a54ce56018d",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/s20-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/verification.json",
+      "sha256": "43a2ee661397a576a7a1f3fe9e6dfda7d8db8bbe3cf49c1b61e3c284f9891959",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s19-s20/verification.md",
+      "sha256": "57f341273e7f20e6ae122a7db3e1f7a70d49a2e49fa301da2f9cd4a96547dd48",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/compatibility-tests.stderr.txt",
+      "sha256": "2b24439eae691b8576c6812deb8760e906b0f3141c1830c8e97f42ab12e4c2d7",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/compatibility-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/diff-check.stderr.txt",
+      "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/diff-check.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/mutation-guards-prior.py",
+      "sha256": "7648696ce11d88bf05d63123a1e0ec183538f94b5524dea1a2d504f1ee38c5bf",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/mutations.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/mutations.stdout.json",
+      "sha256": "7455a82dff5e82d21f5f30d4b53a0d7dbdfa56e1f69b52fd8471ef463e5c1de6",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/printf-initial.stderr.txt",
+      "sha256": "5c8f1ed6f831b1a2b119eec76976b6d46a6322037287397647b9a26813921122",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/prior-review-evidence.json",
+      "sha256": "8f62416d2e74c615f19600f1a2d50e002f340199de5cccc2324de94fe9d1732b",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/s21-tests.stderr.txt",
+      "sha256": "a9d6455bfc48e2179a1bd5e6114521c9694be9aa84d8cce08ee901abe4356b59",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/s21-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/s22-tests.stderr.txt",
+      "sha256": "a33150010f4a60e0fa54c2de015e71ed77dfa34f52fe0eb24e531df7dae26822",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/s22-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/s23-tests.stderr.txt",
+      "sha256": "4210afefa1e653a5a8b5d245be90d1c87bfcdfb50c1cd1a2424c04c3303a85cb",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/s23-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/verification.json",
+      "sha256": "e686ab95eba0fa8f4ab999c08f181eecb51e7c404d2ed71b96f233482d24f9cc",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes-s21-s23/verification.md",
+      "sha256": "c634c0eacb3c50e2adb2206f3db44ccdd726756c415d62da9467bc161e9c78e0",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/compatibility-tests.stderr.txt",
+      "sha256": "4526ea7ebff96d16d7d82800acb57892aa02ec02c8a5cb13943347636b9282ba",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/compatibility-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/diff-check.stderr.txt",
+      "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/diff-check.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/focused-tests.stderr.txt",
+      "sha256": "d5f7042027839d6d3b6c79592a18cc769575b4e6e9f0580350ad4cc007cd6319",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/focused-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/mutations.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/mutations.stdout.json",
+      "sha256": "b49f3e8f851116f3921b7f5c86fd0cdebb057a6fb9efac70b4f69289112cb6c3",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/prior-evidence-integrity.json",
+      "sha256": "1f5ae72101d9e0d6b99d83aa53e9d454a8e1b48cb5ca11c9183a5df1a8b1b65c",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/run-compatibility.py",
+      "sha256": "f07f7185cbb77af63a7726b74c42fbe7f9fdd86620bd326cc625af4326b7054c",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/verification.json",
+      "sha256": "054b9ecc06a779f2ad05800c114189d9ba3193e91129281fc64da07336c76e86",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/verification.md",
+      "sha256": "b966324467fc7fd61deff721618b2fe8052010ec74905bbd431d1315ae05c709",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/hash-seed-1.json",
+      "sha256": "aeeccf4f7f91950f11afe03ee7f5c0323145758cc0d5cf8c65ec361d08808523",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/hash-seed-2.json",
+      "sha256": "e52c59edf0cb0025373a58ec4bfcaa1e841d0bd6c1853c934bbbcdafe91a61d6",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/inspection-cases.json",
+      "sha256": "9b5dab3370ca897b9a198201c857b26dbc97d226618ebc2d24fb217d84aaba24",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/matrix-coverage.json",
+      "sha256": "7f0b9c831cd708931e5b500e74c123ff1738d1eb58c281e413034ca11905d4fa",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/mutation-guards.py",
+      "sha256": "b15b724d3e2d97c3e1a3d29ae6200b717b463a94eea3060a8105f714dcafc524",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/mutations.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/mutations.stdout.json",
+      "sha256": "a05739200fcc008e9ea942019222afb06d8ef665716b6ae47b001f9069d40081",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/parent-reproductions.json",
+      "sha256": "131d872695d4dae1d8eed947c53d50423df66db7706bf0b23c73c2f59122bcde",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/policy-before.json",
+      "sha256": "d5704a056785b2ea2a2bdbb3f908f993b8384c6699990b10fc43b0d3a67e61fc",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/policy-integrity.json",
+      "sha256": "a5c19952255f4dcf6efabb06847468a864ba9af7b9c6db9918fade82b29fe765",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/prior-evidence-integrity.json",
+      "sha256": "b3549f2b560d762d3f6475b3d5b4efaaefd998aa78c2c72139dd980c52e1e5b0",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/release-tests.stderr.txt",
+      "sha256": "3ac74ace0ba1968c5f98635b36887cd55278ccb13277f2c8e63bc6fd74be7d94",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/release-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/run-final-verification.py",
+      "sha256": "b56b8265bf978856a97053b9cd5b5eb44be1404ecd659d59a510b9e0b51f062e",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/secret-scan-command.json",
+      "sha256": "57132c0d7fb7aedc8190f0ed56c25b55a376e071aedcf2f1363844a87edf5425",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/triage-state.json",
+      "sha256": "b44c312882fd027eb42e61ce5a2bcaa238c1cc18687e7704faa65141dafcef37",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/triage.json",
+      "sha256": "1d42981f192d0c79b93d05a52527bc6b6e3aca32547a59e1454090af8952e04f",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/verification.json",
+      "sha256": "f49802cb5bd4d50bf6dcea7ce1aecbe6d76863f26d773f180add2227a45e13d8",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/verification.md",
+      "sha256": "11dbe296ffa2c8b460df3c41235994e7316ac4b2799d1a00f4adbf3ada2bae73",
+      "unchanged": true
+    }
+  ]
+}

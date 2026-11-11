@@ -1,0 +1,30 @@
+{
+  "bindings": [
+    {
+      "currentSha256": "a2276dedfa3d6d8e48b74f6a4b202e587f7cdb33de36cccf524a622e03727c01",
+      "path": "tools/proprietary-surfaces/v1/check.py",
+      "sha256": "a2276dedfa3d6d8e48b74f6a4b202e587f7cdb33de36cccf524a622e03727c01",
+      "unchanged": true
+    },
+    {
+      "currentSha256": "b41fd5ea592eb2ffb06613647c445a13b1d6b4734fa604e4ae2ea2adada545ac",
+      "path": "tools/proprietary-surfaces/v1/test_census.py",
+      "sha256": "b41fd5ea592eb2ffb06613647c445a13b1d6b4734fa604e4ae2ea2adada545ac",
+      "unchanged": true
+    },
+    {
+      "currentSha256": "a326fea3cdbd4b7592fa7c7491a6940c6298acef7d9bb981c538fec6aac36e63",
+      "path": "tools/proprietary-surfaces/v1/README.md",
+      "sha256": "a326fea3cdbd4b7592fa7c7491a6940c6298acef7d9bb981c538fec6aac36e63",
+      "unchanged": true
+    },
+    {
+      "currentSha256": "e5082b6757d45d28ff4cb3d6f0fbe3acb26d444b2de4f6464c966d0fe2aab572",
+      "path": "README.md",
+      "sha256": "e5082b6757d45d28ff4cb3d6f0fbe3acb26d444b2de4f6464c966d0fe2aab572",
+      "unchanged": true
+    }
+  ],
+  "priorVerification": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/verification.json",
+  "result": "passed"
+}

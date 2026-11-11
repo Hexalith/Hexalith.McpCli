@@ -1,0 +1,667 @@
+{
+  "schema": "mcpcli-census-mutation-controls/v1",
+  "result": "passed",
+  "mutationCount": 110,
+  "controls": [
+    {
+      "patch": "P1",
+      "test": "test_amendment_authority_must_belong_to_validated_lineage",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P2",
+      "test": "test_sdk_comments_do_not_suppress_neutral_executables",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P3",
+      "test": "test_import_xml_and_uppercase_extensions_are_metadata_and_closure",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P4",
+      "test": "test_targets_import_uses_project_defined_properties",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P5",
+      "test": "test_effective_sdk_package_identity_cannot_be_renamed_through_assembly",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P6",
+      "test": "test_fsharp_vb_attributes_and_direct_construction_add_registration_signal",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P7",
+      "test": "test_fsharp_vb_attributes_and_direct_construction_add_registration_signal",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P8",
+      "test": "test_recursive_globs_include_zero_directory_sources_and_imports",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P9",
+      "test": "test_container_action_and_supported_yaml_structures_bind_each_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P10",
+      "test": "test_container_action_and_supported_yaml_structures_bind_each_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P11",
+      "test": "test_conditional_alias_alternatives_cannot_hide_release_executable",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P12",
+      "test": "test_imported_compile_paths_are_relative_to_consuming_project",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P13",
+      "test": "test_unconsumed_metadata_expands_local_classification_aliases",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P14",
+      "test": "test_both_json_server_sections_are_validated_and_inspected",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P15",
+      "test": "test_docker_equals_tags_and_extensionless_executable_scripts",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P16",
+      "test": "test_docker_equals_tags_and_extensionless_executable_scripts",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P17",
+      "test": "test_container_identity_alone_has_project_and_publication_candidates",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P18",
+      "test": "test_each_project_language_executable_and_orphan_reference_is_inspected",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P19",
+      "test": "test_unsafe_and_unresolved_publication_paths_fail_with_context",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "P20",
+      "test": "test_workflow_matrix_project_publications_cannot_hide_orphan_projects",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R1",
+      "test": "test_new_legacy_receipt_cannot_create_untracked_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R2",
+      "test": "test_conditional_sdk_import_cannot_suppress_executable",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R3",
+      "test": "test_empty_package_assignment_reapplies_sdk_default",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R4",
+      "test": "test_default_tool_command_tracks_assembly_and_target_name",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R5",
+      "test": "test_reference_item_lists_split_before_classification",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R6",
+      "test": "test_unknown_task_output_cannot_supply_committed_compile_bytes",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R7",
+      "test": "test_unresolved_xml_directory_glob_includes_local_executable_metadata",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R8",
+      "test": "test_continued_container_commands_and_push_options_bind_images",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R9",
+      "test": "test_continued_container_commands_and_push_options_bind_images",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R10",
+      "test": "test_fsharp_vb_attributes_and_direct_construction_add_registration_signal",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R11",
+      "test": "test_import_conditions_preserve_release_and_debug_alternatives",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R12",
+      "test": "test_quoted_project_targets_preserve_full_path_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R13",
+      "test": "test_fsharp_vb_attributes_and_direct_construction_add_registration_signal",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "R14",
+      "test": "test_recursive_globs_include_zero_directory_sources_and_imports",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S01",
+      "test": "test_shell_target_unknown_substitution_and_unsupported_parameters_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S02",
+      "test": "test_unbounded_shell_loop_refuses_and_retains_literal_observations",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S03",
+      "test": "test_shell_iteration_and_expansion_limits_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S04",
+      "test": "test_shell_iteration_and_expansion_limits_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S05",
+      "test": "test_finite_shell_call_depth_limit_refuses_before_unbounded_traversal",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S06",
+      "test": "test_shell_recursion_and_command_budgets_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S07",
+      "test": "test_source_relative_root_locator_and_nested_targets_never_open_nested_repo",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S08",
+      "test": "test_unknown_missing_and_conditional_working_directories_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S09",
+      "test": "test_unknown_missing_and_conditional_working_directories_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S10",
+      "test": "test_literal_shell_loop_order_preserves_directory_state",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S11",
+      "test": "test_short_circuit_directory_state_cannot_select_an_approved_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S12",
+      "test": "test_workflow_and_job_default_directories_override_root_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S13",
+      "test": "test_yaml_working_directory_and_step_state_isolation",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S15",
+      "test": "test_compile_item_cycles_unknown_aliases_and_transforms_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S16",
+      "test": "test_unknown_compile_directory_refuses_incomplete_local_suffix_coverage",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S17",
+      "test": "test_compile_source_escape_missing_and_nested_inputs_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S18",
+      "test": "test_compile_source_escape_missing_and_nested_inputs_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S19",
+      "test": "test_compile_item_depth_and_cardinality_are_bounded",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S20",
+      "test": "test_compile_item_cycles_unknown_aliases_and_transforms_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S21",
+      "test": "test_compile_item_depth_and_cardinality_are_bounded",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S22",
+      "test": "test_partial_root_keeps_other_projects_sources_and_publication_observations",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S23",
+      "test": "test_allowance_closure_failure_keeps_later_candidates_and_suppresses_staleness",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S24",
+      "test": "test_generated_compile_task_output_refuses_with_producer_and_keeps_project",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S25",
+      "test": "test_missing_ambiguous_directory_and_unsupported_solution_targets_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S26",
+      "test": "test_unresolved_and_unbounded_solution_metadata_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S27",
+      "test": "test_unresolved_and_unbounded_solution_metadata_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S28",
+      "test": "test_allowance_closure_failure_keeps_later_candidates_and_suppresses_staleness",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S29",
+      "test": "test_function_global_assignments_and_local_shadowing_select_actual_target",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S30",
+      "test": "test_unterminated_loop_and_malformed_shell_target_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S31",
+      "test": "test_unterminated_loop_and_malformed_shell_target_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S32",
+      "test": "test_single_quoted_target_and_external_state_cannot_select_approved_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S33",
+      "test": "test_single_quoted_target_and_external_state_cannot_select_approved_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S34",
+      "test": "test_excluded_source_drift_keeps_unrelated_project_observations",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S35",
+      "test": "test_missing_source_blob_keeps_other_committed_project_observations",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S36",
+      "test": "test_unresolved_and_unbounded_solution_metadata_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "S37",
+      "test": "test_ambiguous_loop_word_cannot_become_a_sequential_approved_directory_list",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S01",
+      "test": "test_review_s01_inline_loop_is_explicitly_refused",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S02",
+      "test": "test_review_s02_quoted_dotnet_retains_exact_project_target",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S03-options",
+      "test": "test_review_s03_container_global_options_and_image_subcommand",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S03-image",
+      "test": "test_review_s03_container_global_options_and_image_subcommand",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S04",
+      "test": "test_review_s04_quoted_matrix_targets_keep_alternatives_paths_and_scope",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S05",
+      "test": "test_review_s05_unquoted_heredoc_substitutions_refuse_without_executing",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S06",
+      "test": "test_review_s06_container_requires_complete_declared_provenance",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S07-required",
+      "test": "test_review_s07_required_optional_sdk_and_nested_imports_are_distinct",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S07-optional",
+      "test": "test_review_s07_required_optional_sdk_and_nested_imports_are_distinct",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S07-sdk",
+      "test": "test_review_s07_required_optional_sdk_and_nested_imports_are_distinct",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S07-nested",
+      "test": "test_review_s07_required_optional_sdk_and_nested_imports_are_distinct",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S08",
+      "test": "test_review_s08_property_expansion_depth_is_a_safe_coverage_error",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S09",
+      "test": "test_review_s09_local_tool_definition_cannot_borrow_consumption_exemption",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S10-props",
+      "test": "test_review_s10_nearest_default_metadata_and_explicit_imports",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S10-targets",
+      "test": "test_review_s10_nearest_default_metadata_and_explicit_imports",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S11",
+      "test": "test_review_s11_conditional_loop_keeps_prebranch_target",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S12",
+      "test": "test_review_s12_unknown_loop_invalidates_changed_caller_directory",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S13",
+      "test": "test_review_s13_shell_state_commands_invalidate_trusted_targets",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S14",
+      "test": "test_review_s14_single_quoted_function_argument_has_no_variable_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S15",
+      "test": "test_review_s15_missing_executable_blob_retains_other_root_observations",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S16",
+      "test": "test_review_s16_report_directory_and_file_write_failures_return_one",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S17",
+      "test": "test_review_s17_environment_prefix_keeps_publication_command_visible",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S18",
+      "test": "test_review_s18_metadata_errors_and_full_output_ignore_hash_seed",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S04-bound",
+      "test": "test_review_s04_quoted_matrix_targets_keep_alternatives_paths_and_scope",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S07-escape",
+      "test": "test_review_s07_required_optional_sdk_and_nested_imports_are_distinct",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S18-order",
+      "test": "test_review_s18_metadata_errors_and_full_output_ignore_hash_seed",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S19-token",
+      "test": "test_review_s19_forged_matrix_tokens_have_no_approved_target_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S19-origin",
+      "test": "test_review_s19_forged_matrix_tokens_have_no_approved_target_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S19-whole",
+      "test": "test_review_s19_matrix_requires_a_whole_target_argument",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S20-malformed",
+      "test": "test_review_s20_malformed_unconsumed_default_metadata_is_refused",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S20-source",
+      "test": "test_review_s20_unconsumed_executable_default_metadata_is_a_source_observation",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S21-write",
+      "test": "test_review_s21_printf_variable_writes_cannot_reuse_old_approval",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S21-attached",
+      "test": "test_review_s21_printf_variable_writes_cannot_reuse_old_approval",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S21-unknown",
+      "test": "test_review_s21_printf_variable_writes_cannot_reuse_old_approval",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S22",
+      "test": "test_review_s22_multi_assignment_invalidates_every_written_variable",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-registry",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-tag",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-digest",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-complete",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-signals",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    }
+  ]
+}

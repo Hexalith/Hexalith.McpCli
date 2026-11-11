@@ -384,3 +384,22 @@ unsafe import before generated provenance. Unresolved metadata and nested or
 runtime source remain refused, without a new allowance or owner authority.
 Story and sprint remain `in-progress`; the workflow halts at unsuccessful
 current-reference acceptance. No local commit or publication was performed.
+
+### Implementation resume verification — 2026-11-11
+
+The requested implementation and all recorded patches are already present at
+`ec458664b0218d07357091b5a5ea12897154db2a`. Fresh serial verification passes
+142 census fixtures, 195 release regressions, all 110 guard-removal controls
+and all five matrix rows. Complete report bytes match across Python hash seeds
+1 and 2. Checker, census tests and both READMEs match the preceding reviewed
+packet; all nine policy bindings and its 111 receipt-covered files are unchanged.
+
+Seven root pins have changed since that packet. The current committed-pin
+scan exits 1: all 17 roots are accounted for, 3 are fully inspected, with
+542 observations, 114 rejections, 111 coverage errors and 4 stale allowances.
+The [fresh verification](evidence/story-5-6/implementation-resume-20261111/verification.md)
+and [source-bound blockers](evidence/story-5-6/implementation-resume-20261111/acceptance-blockers.json)
+retain the exact commands, root revisions, findings and integrity evidence.
+No implementation, allowance, approval, amendment, dependency, reference or
+gitlink changed. No new authority is inferred; story and sprint remain
+`in-progress` while current-reference acceptance is unsuccessful.

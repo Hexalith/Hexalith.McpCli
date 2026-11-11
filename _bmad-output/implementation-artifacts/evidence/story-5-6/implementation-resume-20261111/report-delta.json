@@ -1,0 +1,52 @@
+{
+  "addedErrors": [
+    {
+      "gitlink": "891886ddc60a9924d053bb74bf6bcc73e101b2ce",
+      "path": "Github/lib/tests/fixtures/release-outcome.json",
+      "repository": "references/Hexalith.Builds",
+      "rule": "malformed-publication:Github/lib/tests/fixtures/release-outcome.json"
+    }
+  ],
+  "addedRejections": [
+    {
+      "classification": "unapproved",
+      "gitlink": "891886ddc60a9924d053bb74bf6bcc73e101b2ce",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "executable-project"
+      ],
+      "sources": [
+        "test/fixtures/release/Container/Release.Container.csproj"
+      ],
+      "status": "rejected",
+      "surface": {
+        "identity": "Release.Container",
+        "kind": "project",
+        "path": "test/fixtures/release/Container/Release.Container.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "classification": "unapproved",
+      "gitlink": "891886ddc60a9924d053bb74bf6bcc73e101b2ce",
+      "reason": "new-proprietary-surface",
+      "signals": [
+        "container-metadata"
+      ],
+      "sources": [
+        "test/fixtures/release/Container/Release.Container.csproj"
+      ],
+      "status": "rejected",
+      "surface": {
+        "identity": "container:hexalith-release-create-disposable",
+        "kind": "publication",
+        "path": "test/fixtures/release/Container/Release.Container.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    }
+  ],
+  "parentRevision": "ec458664b0218d07357091b5a5ea12897154db2a",
+  "previousParentRevision": "051fadedf68335ba5c525cf26c42f86aa69697f9",
+  "removedErrors": [],
+  "removedRejections": []
+}
