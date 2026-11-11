@@ -2372,20 +2372,69 @@ class CiWorkflowTests(unittest.TestCase):
                               + repr([*independent, live, loopback]) + '\n'),
                              (refused.returncode, refused.stdout, refused.stderr))
 
-    def test_workflow_pin_matches_builds_gitlink(self):
+    def test_catalog_and_workflow_pins_keep_their_approved_identities(self):
         root = HERE.parents[1]
         recorded = subprocess.run(
             ['git', 'ls-tree', 'HEAD', 'references/Hexalith.Builds'],
             cwd=root, check=True, capture_output=True, text=True).stdout.split()
-        references = []
+        self.assert_approved_builds_references(root, recorded)
+
+    def assert_approved_builds_references(self, root, recorded):
+        # The source catalog and the reusable workflow executor are separate inputs.
+        # Bind both to their exact reviewed identities without requiring the same commit.
+        self.assertEqual([
+            '160000', 'commit', '891886ddc60a9924d053bb74bf6bcc73e101b2ce',
+            'references/Hexalith.Builds',
+        ], recorded, 'The recorded Builds catalog gitlink must retain its approved source identity.')
+        approved = {
+            '.github/workflows/ci.yml': [
+                'Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@52ea174c70f1afe77b52a2ccf06bb53afa5e962d',
+            ],
+            '.github/workflows/commitlint.yml': [
+                'Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@52ea174c70f1afe77b52a2ccf06bb53afa5e962d',
+            ],
+        }
+        references = {}
         for workflow in sorted((root / '.github/workflows').rglob('*')):
             if workflow.suffix in ('.yml', '.yaml'):
-                references.extend((workflow, pin) for pin in re.findall(
-                    r'Hexalith/Hexalith\.Builds/[^\s@]+@([^\s#]+)', workflow.read_text()))
-        self.assertTrue(references, 'Expected pinned Hexalith.Builds workflow references.')
-        for workflow, pin in references:
-            with self.subTest(workflow=str(workflow.relative_to(root)), pin=pin):
-                self.assertEqual(recorded[2], pin)
+                selected = re.findall(r'Hexalith/Hexalith\.Builds/[^\s@]+@[^\s#]+', workflow.read_text())
+                if selected:
+                    references[workflow.relative_to(root).as_posix()] = selected
+        self.assertEqual(approved, references, 'Builds workflow execution must retain its exact approved references.')
+
+    def test_builds_reference_guard_rejects_catalog_and_executor_drift(self):
+        root = HERE.parents[1]
+        documents = {workflow.relative_to(root): workflow.read_text()
+                     for workflow in (root / '.github/workflows').rglob('*')
+                     if workflow.suffix in ('.yml', '.yaml')}
+        catalog = ['160000', 'commit', '891886ddc60a9924d053bb74bf6bcc73e101b2ce',
+                   'references/Hexalith.Builds']
+        executor = '52ea174c70f1afe77b52a2ccf06bb53afa5e962d'
+        ci_path = Path('.github/workflows/ci.yml')
+        cases = [
+            ('catalog mode', ['100644', *catalog[1:]], {}),
+            ('catalog object type', [catalog[0], 'blob', *catalog[2:]], {}),
+            ('catalog commit', [*catalog[:2], '0' * 40, catalog[3]], {}),
+            ('catalog path', [*catalog[:3], 'references/Other.Builds'], {}),
+            ('missing catalog', [], {}),
+            ('missing workflow', catalog, {ci_path: None}),
+            ('mutable executor', catalog, {ci_path: documents[ci_path].replace(executor, 'main')}),
+            ('unapproved executor', catalog, {ci_path: documents[ci_path].replace(executor, '0' * 40)}),
+            ('catalog used as executor', catalog, {ci_path: documents[ci_path].replace(executor, catalog[2])}),
+            ('different workflow', catalog, {ci_path: documents[ci_path].replace('domain-ci.yml@', 'other-ci.yml@')}),
+            ('extra executor', catalog, {Path('.github/workflows/unapproved.yml'):
+                f'uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@{executor}\n'}),
+        ]
+        for name, recorded, replacements in cases:
+            with self.subTest(case=name), tempfile.TemporaryDirectory() as directory:
+                fixture = Path(directory)
+                for relative, content in {**documents, **replacements}.items():
+                    if content is not None:
+                        destination = fixture / relative
+                        destination.parent.mkdir(parents=True, exist_ok=True)
+                        destination.write_text(content)
+                with self.assertRaises(AssertionError):
+                    self.assert_approved_builds_references(fixture, recorded)
 
 
 if __name__ == '__main__':
