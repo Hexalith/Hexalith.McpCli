@@ -1,0 +1,67 @@
+{
+  "schema": "mcpcli-census-mutation-controls/v1",
+  "result": "passed",
+  "mutationCount": 10,
+  "controls": [
+    {
+      "patch": "Review-S06",
+      "test": "test_review_s06_container_requires_complete_declared_provenance",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S21-write",
+      "test": "test_review_s21_printf_variable_writes_cannot_reuse_old_approval",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S21-attached",
+      "test": "test_review_s21_printf_variable_writes_cannot_reuse_old_approval",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S21-unknown",
+      "test": "test_review_s21_printf_variable_writes_cannot_reuse_old_approval",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S22",
+      "test": "test_review_s22_multi_assignment_invalidates_every_written_variable",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-registry",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-tag",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-digest",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-complete",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S23-signals",
+      "test": "test_review_s23_complete_container_registry_repository_and_image_suffixes",
+      "result": "detected",
+      "exitCode": 1
+    }
+  ]
+}

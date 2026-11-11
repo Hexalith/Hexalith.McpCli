@@ -1,0 +1,67 @@
+{
+  "schema": "mcpcli-census-mutation-controls/v1",
+  "result": "passed",
+  "mutationCount": 10,
+  "controls": [
+    {
+      "patch": "S32",
+      "test": "test_single_quoted_target_and_external_state_cannot_select_approved_identity",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S04",
+      "test": "test_review_s04_quoted_matrix_targets_keep_alternatives_paths_and_scope",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S10-props",
+      "test": "test_review_s10_nearest_default_metadata_and_explicit_imports",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S10-targets",
+      "test": "test_review_s10_nearest_default_metadata_and_explicit_imports",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S04-bound",
+      "test": "test_review_s04_quoted_matrix_targets_keep_alternatives_paths_and_scope",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S19-token",
+      "test": "test_review_s19_forged_matrix_tokens_have_no_approved_target_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S19-origin",
+      "test": "test_review_s19_forged_matrix_tokens_have_no_approved_target_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S19-whole",
+      "test": "test_review_s19_matrix_requires_a_whole_target_argument",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S20-malformed",
+      "test": "test_review_s20_malformed_unconsumed_default_metadata_is_refused",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "Review-S20-source",
+      "test": "test_review_s20_unconsumed_executable_default_metadata_is_a_source_observation",
+      "result": "detected",
+      "exitCode": 1
+    }
+  ]
+}

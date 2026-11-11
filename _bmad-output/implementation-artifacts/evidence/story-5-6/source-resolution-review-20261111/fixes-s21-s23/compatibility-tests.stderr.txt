@@ -1,0 +1,6 @@
+test_review_s06_container_requires_complete_declared_provenance (test_census.CensusTests.test_review_s06_container_requires_complete_declared_provenance) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.087s
+
+OK

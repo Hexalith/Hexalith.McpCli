@@ -1,0 +1,23 @@
+test_review_s01_inline_loop_is_explicitly_refused (test_census.CensusTests.test_review_s01_inline_loop_is_explicitly_refused) ... ok
+test_review_s02_quoted_dotnet_retains_exact_project_target (test_census.CensusTests.test_review_s02_quoted_dotnet_retains_exact_project_target) ... ok
+test_review_s03_container_global_options_and_image_subcommand (test_census.CensusTests.test_review_s03_container_global_options_and_image_subcommand) ... ok
+test_review_s04_quoted_matrix_targets_keep_alternatives_paths_and_scope (test_census.CensusTests.test_review_s04_quoted_matrix_targets_keep_alternatives_paths_and_scope) ... ok
+test_review_s05_unquoted_heredoc_substitutions_refuse_without_executing (test_census.CensusTests.test_review_s05_unquoted_heredoc_substitutions_refuse_without_executing) ... ok
+test_review_s06_container_requires_complete_declared_provenance (test_census.CensusTests.test_review_s06_container_requires_complete_declared_provenance) ... ok
+test_review_s07_required_optional_sdk_and_nested_imports_are_distinct (test_census.CensusTests.test_review_s07_required_optional_sdk_and_nested_imports_are_distinct) ... ok
+test_review_s08_property_expansion_depth_is_a_safe_coverage_error (test_census.CensusTests.test_review_s08_property_expansion_depth_is_a_safe_coverage_error) ... ok
+test_review_s09_local_tool_definition_cannot_borrow_consumption_exemption (test_census.CensusTests.test_review_s09_local_tool_definition_cannot_borrow_consumption_exemption) ... ok
+test_review_s10_nearest_default_metadata_and_explicit_imports (test_census.CensusTests.test_review_s10_nearest_default_metadata_and_explicit_imports) ... ok
+test_review_s11_conditional_loop_keeps_prebranch_target (test_census.CensusTests.test_review_s11_conditional_loop_keeps_prebranch_target) ... ok
+test_review_s12_unknown_loop_invalidates_changed_caller_directory (test_census.CensusTests.test_review_s12_unknown_loop_invalidates_changed_caller_directory) ... ok
+test_review_s13_shell_state_commands_invalidate_trusted_targets (test_census.CensusTests.test_review_s13_shell_state_commands_invalidate_trusted_targets) ... ok
+test_review_s14_single_quoted_function_argument_has_no_variable_authority (test_census.CensusTests.test_review_s14_single_quoted_function_argument_has_no_variable_authority) ... ok
+test_review_s15_missing_executable_blob_retains_other_root_observations (test_census.CensusTests.test_review_s15_missing_executable_blob_retains_other_root_observations) ... ok
+test_review_s16_report_directory_and_file_write_failures_return_one (test_census.CensusTests.test_review_s16_report_directory_and_file_write_failures_return_one) ... ok
+test_review_s17_environment_prefix_keeps_publication_command_visible (test_census.CensusTests.test_review_s17_environment_prefix_keeps_publication_command_visible) ... ok
+test_review_s18_metadata_errors_and_full_output_ignore_hash_seed (test_census.CensusTests.test_review_s18_metadata_errors_and_full_output_ignore_hash_seed) ... ok
+
+----------------------------------------------------------------------
+Ran 18 tests in 1.873s
+
+OK

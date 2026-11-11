@@ -50,7 +50,11 @@ locally with `python3 tools/proprietary-surfaces/v1/check.py --output /tmp/mcpcl
 The scan covers inherited/imported project metadata, effective package names,
 MCP registrations and direct construction, and literal workflow/script/container
 publication identities. Unsafe publication paths and unresolved workflow project
-targets fail with source context. The report names new surfaces and stale allowances; baseline changes require a
+targets fail with source context. Finite literal shell variables, loops, function
+arguments, working directories, Compile item aliases and committed Copy inputs
+resolve without executing inspected code. Runtime/generated or nested sources
+remain coverage errors; partial roots retain other observations and do not
+establish stale allowances. The report names new surfaces and stale allowances; baseline changes require a
 versioned, hash-chained amendment. Successful census execution is required for
 paired-release staging and publication.
 

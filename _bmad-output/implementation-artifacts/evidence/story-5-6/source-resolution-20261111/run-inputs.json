@@ -1,0 +1,22 @@
+{
+  "parentRevision": "051fadedf68335ba5c525cf26c42f86aa69697f9",
+  "checkerSha256": "8f7bd2239c9823eb870a614e5b9abade21b1d7082c8cd36fb7bb7f5c889a504d",
+  "testsSha256": "a2381ea04cd7edd75478fcd68fa005c19cbcb1d5173c2e6929ad906a33bc37bc",
+  "releaseTests": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts/tests",
+      "-p",
+      "test_*.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "reusedFromThisImplementationRun": true
+  }
+}

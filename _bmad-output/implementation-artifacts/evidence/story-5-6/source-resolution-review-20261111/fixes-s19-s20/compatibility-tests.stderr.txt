@@ -1,0 +1,7 @@
+test_review_s04_quoted_matrix_targets_keep_alternatives_paths_and_scope (census_tests.CensusTests.test_review_s04_quoted_matrix_targets_keep_alternatives_paths_and_scope) ... ok
+test_review_s10_nearest_default_metadata_and_explicit_imports (census_tests.CensusTests.test_review_s10_nearest_default_metadata_and_explicit_imports) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.227s
+
+OK

@@ -9,6 +9,7 @@ import os
 from pathlib import Path
 import shutil
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -941,15 +942,13 @@ class CensusTests(unittest.TestCase):
         self.write(self.baseline.parent,'legacy-receipts.json',json.dumps(dict(schema='mcpcli-census-legacy-receipts/v1',baselineSha256=census.digest(self.baseline.read_bytes()),receipts=[])))
         self.assertEqual(self.run_cli(1)['errors'],[{'rule':'untrusted-legacy-amendment-evidence'}])
 
-    def test_unknown_compile_directory_binds_all_local_suffix_matches(self):
+    def test_unknown_compile_directory_refuses_incomplete_local_suffix_coverage(self):
         self.write(self.repo,'shared/Secondary.cs','class Secondary {}')
-        self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><IsPackable>false</IsPackable></PropertyGroup><ItemGroup><Compile Include="$(ExternalDir)/shared/**/*.cs"/></ItemGroup></Project>')
+        self.write(self.repo,PROJECT,'<Project><ItemGroup><Compile Include="$(ExternalDir)/shared/**/*.cs"/></ItemGroup></Project>')
         self.commit(self.repo);self.pin()
-        tree=census.Tree(self.repo,self.git(self.repo,'rev-parse','HEAD'))
-        entry=self.allowance(sources=census.compilation_closure(tree,PROJECT))
-        entry.update(sourcePrefix=str(Path(PROJECT).parent),compilationClosure=True);self.save();self.run_cli(0)
-        self.write(self.repo,'shared/Secondary.cs','class Secondary { int Changed; }');self.commit(self.repo);self.pin()
-        self.assertEqual(self.run_cli(1)['surfaces'][0]['changedSources'],['shared/Secondary.cs'])
+        report=self.run_cli(1)
+        self.assertEqual([e['rule'] for e in report['errors']],['unresolved-compile-source:'+PROJECT])
+        self.assertEqual(report['surfaces'],[])
 
     def test_sdk_default_assembly_name_is_available_to_package_aliases(self):
         self.write(self.repo,PROJECT,'<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><OutputType>Exe</OutputType><PackageId>$(AssemblyName)</PackageId></PropertyGroup></Project>')
@@ -1000,11 +999,14 @@ class CensusTests(unittest.TestCase):
             expected='command-line-dependency' if 'PackageReference' in items else 'mcp-or-cli-dependency'
             self.assertEqual(self.run_cli(1)['surfaces'][0]['signals'],[expected])
 
-    def test_unresolved_compile_item_alias_fails_with_context(self):
+    def test_literal_compile_item_alias_resolves_committed_source(self):
         self.write(self.repo,'shared/Extra.cs','class Extra {}')
         self.write(self.repo,PROJECT,'<Project><ItemGroup><SharedSource Include="../../../shared/Extra.cs"/><Compile Include="@(SharedSource)"/></ItemGroup></Project>')
         self.commit(self.repo);self.pin()
-        self.assertEqual(self.run_cli(1)['errors'][0]['rule'],'unresolved-classification-metadata:'+PROJECT)
+        report=self.run_cli(0)
+        self.assertEqual(report['errors'],[])
+        tree=census.Tree(self.repo,self.git(self.repo,'rev-parse','HEAD'))
+        self.assertEqual([s['path'] for s in census.compilation_closure(tree,PROJECT)],[PROJECT,'shared/Extra.cs'])
 
     def test_unresolved_xml_directory_glob_includes_local_executable_metadata(self):
         self.write(self.repo,'eng/Hidden.xml','<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
@@ -1044,6 +1046,851 @@ class CensusTests(unittest.TestCase):
                 self.commit(self.repo);self.pin()
                 entries=[entry for entry in self.run_cli(1)['surfaces'] if entry['surface']['path']==filename and entry['status']=='rejected']
                 self.assertEqual([entry['surface']['identity'] for entry in entries],['missing/New Runner.csproj'])
+
+    def assert_source_errors(self, report, path, rules):
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin,
+            path=path, rule=rule + ':' + path) for rule in rules])
+
+    def test_literal_shell_variables_loops_functions_and_aliases_resolve_exact_targets(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, '''root=missing
+ship() {
+  local flavor="$1"
+  local project="${root}/${flavor}/${flavor}.csproj"
+  dotnet publish "$project"
+}
+for flavor in First Second; do
+  ship "$flavor"
+done
+''')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(e['surface'], e['signals'], e['sources']) for e in report['surfaces']],
+            [(self.binding(path, 'publication', f'missing/{name}/{name}.csproj'),
+              ['orphan-project-reference'], [path]) for name in ('First', 'Second')])
+
+    def test_finite_loop_present_libraries_have_no_proprietary_surface(self):
+        for name in ('First', 'Second'):
+            self.write(self.repo, f'src/{name}/{name}.csproj', '<Project Sdk="Microsoft.NET.Sdk"/>')
+        self.write(self.repo, '.github/workflows/ci.yml', '''jobs:
+  pack:
+    steps:
+      - run: |
+          for package in First Second; do
+            dotnet pack "src/${package}/${package}.csproj" -p:Version=${{ inputs.version }}
+          done
+''')
+        self.commit(self.repo); self.pin()
+        self.assertEqual(self.run_cli(0)['surfaces'], [])
+
+    def test_shell_target_unknown_substitution_and_unsupported_parameters_refuse(self):
+        path = 'scripts/ship.sh'
+        for script in ('dotnet publish "$runtime"', 'target="$(printf missing/X.csproj)"\ndotnet publish "$target"',
+                       'target=missing/X.csproj\ndotnet publish "${target:-missing/Y.csproj}"',
+                       "target='$RUNTIME'\ndotnet publish \"$target\""):
+            with self.subTest(script=script):
+                self.write(self.repo, path, script); self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['surfaces'], [])
+                self.assert_source_errors(report, path, ['unresolved-publication-target'])
+
+    def test_unbounded_shell_loop_refuses_and_retains_literal_observations(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, 'while read package; do\n dotnet pack missing/Neutral.csproj\ndone')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unbounded-publication-control-flow'])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', 'missing/Neutral.csproj')])
+
+    def test_shell_iteration_and_expansion_limits_refuse(self):
+        path = 'scripts/ship.sh'
+        scripts = [
+            'for item in ' + ' '.join('P' + str(i) for i in range(257)) + '; do\n dotnet pack "missing/${item}.csproj"\ndone',
+            'target=missing/P0.csproj\nif true; then\n' + '\n'.join('target=missing/P' + str(i) + '.csproj' for i in range(1, 257)) + '\nfi\ndotnet pack "$target"',
+        ]
+        for script in scripts:
+            with self.subTest(script=script[:30]):
+                self.write(self.repo, path, script); self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['surfaces'], [])
+                self.assertIn('unresolved-publication-target:' + path, [e['rule'] for e in report['errors']])
+
+    def test_shell_recursion_and_command_budgets_refuse(self):
+        path = 'scripts/ship.sh'
+        for script in ('ship() {\n dotnet publish missing/Neutral.csproj\n ship\n}\nship',
+                       ':\n' * 8193 + 'dotnet publish missing/Neutral.csproj'):
+            with self.subTest(script=script[:30]):
+                self.write(self.repo, path, script); self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, path, ['unbounded-publication-control-flow'])
+                self.assertEqual([e['surface']['identity'] for e in report['surfaces']],
+                                 ['missing/Neutral.csproj'] if script.startswith('ship') else [])
+
+    def test_working_directory_parent_paths_and_subshell_restore_are_contained(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, 'work/placeholder.txt', 'committed')
+        self.write(self.repo, path, '(\n cd work\n dotnet pack ../missing/Inside.csproj\n)\ndotnet publish missing/Outside.csproj')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface']['identity'] for e in report['surfaces']], ['missing/Inside.csproj', 'missing/Outside.csproj'])
+        self.write(self.repo, path, 'cd work\ndotnet publish ../../Escape.csproj'); self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unsafe-publication-path'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_yaml_working_directory_and_step_state_isolation(self):
+        path = '.github/workflows/ci.yml'
+        self.write(self.repo, 'work/placeholder.txt', 'committed')
+        self.write(self.repo, path, '''jobs:
+  pack:
+    steps:
+      - run: dotnet publish ../missing/Inside.csproj
+        working-directory: work
+      - run: |
+          target=missing/StepOne.csproj
+          dotnet publish "$target"
+      - run: dotnet publish "$target"
+''')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unresolved-publication-target'])
+        self.assertEqual([e['surface']['identity'] for e in report['surfaces']], ['missing/Inside.csproj', 'missing/StepOne.csproj'])
+
+    def test_unknown_missing_and_conditional_working_directories_refuse(self):
+        path = 'scripts/ship.sh'
+        for script in ('cd "$runtime"\ndotnet publish missing/X.csproj',
+                       'cd absent\ndotnet publish missing/X.csproj',
+                       'if condition; then\n cd work\nfi\ndotnet publish missing/X.csproj'):
+            with self.subTest(script=script):
+                self.write(self.repo, 'work/placeholder.txt', 'committed')
+                self.write(self.repo, path, script); self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, path, ['unresolved-publication-directory'])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_source_relative_root_locator_and_nested_targets_never_open_nested_repo(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, '''repository_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+producer_root="$repository_root/dependencies/producer"
+cd "$producer_root"
+for package in First Second; do
+ dotnet pack "src/${package}/${package}.csproj"
+done
+''')
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        self.git(self.repo, 'add', path)
+        self.git(self.repo, 'update-index', '--add', '--cacheinfo', f'160000,{pin},dependencies/producer')
+        self.git(self.repo, 'commit', '-q', '-m', 'test: retain nested target pin'); self.pin()
+        # No nested worktree exists. Every Git read must stay at the root repo.
+        original = census.git
+        with patch.object(census, 'git', side_effect=lambda repo, *args, **kwargs: original(repo, *args, **kwargs)) as reads:
+            report = self.run_cli(1)
+        self.assertEqual([e['target'] for e in report['errors']],
+                         ['dependencies/producer/src/First/First.csproj', 'dependencies/producer/src/Second/Second.csproj'])
+        self.assertEqual({e['rule'] for e in report['errors']}, {'nested-publication-target:' + path})
+        self.assertEqual(report['surfaces'], [])
+        self.assertFalse((self.repo / 'dependencies/producer').exists())
+        self.assertTrue(all(Path(call.args[0]) in (self.repo, self.root) for call in reads.call_args_list))
+
+    def test_compile_item_aliases_bind_imported_properties_globs_and_registration(self):
+        self.write(self.repo, 'shared/Root.cs', 'class Root {}')
+        self.write(self.repo, 'shared/deep/Extra.cs', 'builder.Services.AddMcpServer();')
+        self.write(self.repo, 'eng/items.xml', '<Project><PropertyGroup><SourceRoot>../../../shared</SourceRoot></PropertyGroup>'
+                   '<ItemGroup><First Include="$(SourceRoot)/**/*.cs"/><Second Include="@(First)"/></ItemGroup></Project>')
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../eng/items.xml"/>'
+                   '<ItemGroup><Compile Include="@(Second)"/></ItemGroup></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding(), self.binding('shared/deep/Extra.cs', 'source', 'shared/deep/Extra.cs')])
+        self.assertEqual(report['surfaces'][0]['signals'], ['mcp-registration'])
+        tree = census.Tree(self.repo, self.git(self.repo, 'rev-parse', 'HEAD'))
+        self.assertEqual([s['path'] for s in census.compilation_closure(tree, PROJECT)],
+                         ['eng/items.xml', PROJECT, 'shared/Root.cs', 'shared/deep/Extra.cs'])
+
+    def test_generated_compile_task_output_refuses_with_producer_and_keeps_project(self):
+        self.write(self.repo, PROJECT, '<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup>'
+                   '<Target Name="Generate"><Copy SourceFiles="obj/*.g.cs" DestinationFolder="obj/copied">'
+                   '<Output TaskParameter="DestinationFiles" ItemName="Generated"/></Copy>'
+                   '<ItemGroup><Compile Include="@(Generated)"/></ItemGroup></Target></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual([e['rule'] for e in report['errors']], ['dynamic-generated-compile-source:' + PROJECT + ':generated'])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding()])
+        self.assertEqual(report['surfaces'][0]['signals'], ['executable-project'])
+
+    def test_compile_item_cycles_unknown_aliases_and_transforms_refuse(self):
+        variants = [('<First Include="@(Second)"/><Second Include="@(First)"/>', '@(First)', 'cyclic-compile-item:' + PROJECT + ':first'),
+                    ('', '@(Unknown)', 'unresolved-compile-item:' + PROJECT + ':unknown'),
+                    ('<First Include="../../../shared/Root.cs"/>', "@(First->'%(FullPath)')", 'unresolved-compile-source:' + PROJECT)]
+        self.write(self.repo, 'shared/Root.cs', 'class Root {}')
+        for definitions, value, rule in variants:
+            with self.subTest(value=value):
+                self.write(self.repo, PROJECT, '<Project><ItemGroup>' + definitions + '<Compile Include="' + value + '"/></ItemGroup></Project>')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual([e['rule'] for e in report['errors']], [rule])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_compile_item_depth_and_cardinality_are_bounded(self):
+        self.write(self.repo, 'shared/Root.cs', 'class Root {}')
+        definitions = ''.join(f'<Item{i} Include="@(Item{i+1})"/>' for i in range(33)) + '<Item33 Include="../../../shared/Root.cs"/>'
+        self.write(self.repo, PROJECT, '<Project><ItemGroup>' + definitions + '<Compile Include="@(Item0)"/></ItemGroup></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual([e['rule'] for e in report['errors']], ['cyclic-compile-item:' + PROJECT + ':item31'])
+        for index in range(4097):
+            self.write(self.repo, f'shared/Item{index}.cs', 'class Item {}')
+        self.write(self.repo, PROJECT, '<Project><ItemGroup><Compile Include="../../../shared/*.cs"/></ItemGroup></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, PROJECT, ['unbounded-compile-items'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_compile_source_escape_missing_and_nested_inputs_refuse(self):
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        self.git(self.repo, 'update-index', '--add', '--cacheinfo', f'160000,{pin},dependencies/nested')
+        self.git(self.repo, 'commit', '-q', '-m', 'test: retain nested compile pin'); self.pin()
+        for target, rule in (('../../../../Escape.cs', 'unsafe-or-nested-compile-source'),
+                             ('../../../dependencies/nested/Code.cs', 'unsafe-or-nested-compile-source'),
+                             ('../../../missing/Code.cs', 'unavailable-committed-compile-source')):
+            with self.subTest(target=target):
+                self.write(self.repo, PROJECT, '<Project><ItemGroup><Compile Include="' + target + '"/></ItemGroup></Project>')
+                self.git(self.repo, 'add', PROJECT)
+                self.git(self.repo, 'update-index', '--add', '--cacheinfo', f'160000,{pin},dependencies/nested')
+                self.git(self.repo, 'commit', '-q', '-m', 'test: pin compile source refusal'); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, PROJECT, [rule])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_partial_root_keeps_other_projects_sources_and_publication_observations(self):
+        self.write(self.repo, 'broken/Broken.csproj', '<Project>')
+        self.write(self.repo, 'broken/Program.cs', 'builder.Services.AddMcpServer();')
+        self.write(self.repo, 'shared/Standalone.cs', 'using System.CommandLine;')
+        self.write(self.repo, 'release.json', '{"packages":"malformed"}')
+        self.write(self.repo, 'scripts/ship.sh', 'dotnet publish missing/Orphan.csproj')
+        self.project()
+        report = self.run_cli(1)
+        self.assertEqual([e['surface'] for e in report['surfaces']], [
+            self.binding('broken/Program.cs', 'source', 'broken/Program.cs'), self.binding(),
+            self.binding('scripts/ship.sh', 'publication', 'missing/Orphan.csproj'),
+            self.binding('shared/Standalone.cs', 'source', 'shared/Standalone.cs')])
+        self.assertEqual([(e['path'], e['rule']) for e in report['errors']],
+                         [('broken/Broken.csproj', 'malformed-project-metadata:broken/Broken.csproj'),
+                          ('release.json', 'malformed-publication:release.json')])
+        self.assertFalse(report['repositories'][0]['inspectionComplete'])
+        self.assertEqual(report['stale'], [])
+
+    def test_literal_shell_loop_order_preserves_directory_state(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, 'b/a/placeholder.txt', 'committed')
+        self.write(self.repo, path, 'for segment in b a; do\n cd "$segment"\n dotnet publish Runner.csproj\ndone')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface']['identity'] for e in report['surfaces']], ['b/Runner.csproj', 'b/a/Runner.csproj'])
+
+    def test_short_circuit_directory_state_cannot_select_an_approved_identity(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, 'child/placeholder.txt', 'committed')
+        self.allowance(self.binding(path, 'publication', 'child/Runner.csproj'), ['orphan-project-reference'])
+        for script in ('false && cd child\ndotnet publish Runner.csproj',
+                       'true || cd child\ndotnet publish Runner.csproj',
+                       'false && target=child/Runner.csproj\ndotnet publish "$target"'):
+            with self.subTest(script=script):
+                self.write(self.repo, path, script); self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['surfaces'], [])
+                self.assertTrue(report['errors'])
+                self.assertEqual(report['stale'], [])
+
+    def test_workflow_and_job_default_directories_override_root_identity(self):
+        path = '.github/workflows/ci.yml'
+        self.write(self.repo, 'global/placeholder.txt', 'committed')
+        self.write(self.repo, 'local/placeholder.txt', 'committed')
+        self.allowance(self.binding(path, 'publication', 'Runner.csproj'), ['orphan-project-reference'])
+        self.write(self.repo, path, """defaults:
+  run:
+    working-directory: global
+jobs:
+  first:
+    steps:
+      - run: dotnet publish Runner.csproj
+  second:
+    defaults:
+      run:
+        working-directory: local
+    steps:
+      - run: dotnet publish Runner.csproj
+""")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface']['identity'] for e in report['surfaces']], ['global/Runner.csproj', 'local/Runner.csproj'])
+        self.write(self.repo, path, """defaults:
+  run:
+    working-directory: ${{ inputs.directory }}
+jobs:
+  first:
+    steps:
+      - run: dotnet publish Runner.csproj
+""")
+        self.commit(self.repo); self.pin()
+        self.assert_source_errors(self.run_cli(1), path, ['unresolved-publication-directory'])
+
+    def test_allowance_closure_failure_keeps_later_candidates_and_suppresses_staleness(self):
+        self.project()
+        tree = census.Tree(self.repo, self.git(self.repo, 'rev-parse', 'HEAD'))
+        entry = self.allowance(sources=census.compilation_closure(tree, PROJECT))
+        entry.update(sourcePrefix=str(Path(PROJECT).parent), compilationClosure=True)
+        self.allowance(self.binding('removed/Removed.csproj', 'project', 'Removed'))
+        self.save()
+        self.write(self.repo, 'scripts/ship.sh', 'dotnet publish missing/Later.csproj')
+        self.commit(self.repo); self.pin()
+        with patch.object(census, 'compilation_closure', side_effect=census.CensusError('unresolved-compile-source:' + PROJECT)):
+            report = self.run_cli(1)
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(), self.binding('scripts/ship.sh', 'publication', 'missing/Later.csproj')])
+        self.assertEqual(report['surfaces'][0]['reason'], 'allowance-source-inspection-failed')
+        self.assert_source_errors(report, PROJECT, ['unresolved-compile-source'])
+        self.assertFalse(report['repositories'][0]['inspectionComplete'])
+        self.assertEqual(report['stale'], [])
+
+    def test_finite_shell_call_depth_limit_refuses_before_unbounded_traversal(self):
+        path = 'scripts/ship.sh'
+        body = '\n'.join(f'f{i}() {{\n f{i+1}\n}}' for i in range(18))
+        self.write(self.repo, path, body + '\nf18() {\n dotnet publish missing/TooDeep.csproj\n}\nf0')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unbounded-publication-control-flow'])
+        self.assertEqual([e['surface']['identity'] for e in report['surfaces']], ['missing/TooDeep.csproj'])
+
+    def test_copy_output_provenance_binds_committed_bytes_without_running_copy(self):
+        self.write(self.repo, 'shared/Original.cs', 'builder.Services.AddMcpServer();')
+        self.write(self.repo, PROJECT, '<Project><Target Name="CopySource">'
+                   '<Copy SourceFiles="../../../shared/Original.cs" DestinationFolder="obj/copied">'
+                   '<Output TaskParameter="DestinationFiles" ItemName="Copied"/></Copy>'
+                   '<ItemGroup><Compile Include="@(Copied)"/></ItemGroup></Target></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(report['surfaces'][0]['surface'], self.binding())
+        self.assertEqual(report['surfaces'][0]['signals'], ['mcp-registration'])
+        self.assertEqual(report['surfaces'][0]['sources'], ['shared/Original.cs'])
+        self.assertFalse((self.repo / 'odd/location/Runner/obj').exists())
+        tree = census.Tree(self.repo, self.git(self.repo, 'rev-parse', 'HEAD'))
+        self.assertEqual([e['path'] for e in census.compilation_closure(tree, PROJECT)], [PROJECT, 'shared/Original.cs'])
+
+    def test_function_global_assignments_and_local_shadowing_select_actual_target(self):
+        path = 'scripts/ship.sh'
+        self.allowance(self.binding(path, 'publication', 'missing/Original.csproj'), ['orphan-project-reference'])
+        self.write(self.repo, path, """target=missing/Original.csproj
+set_target() {
+ target=missing/Global.csproj
+}
+local_target() {
+ local target=missing/Local.csproj
+ dotnet pack "$target"
+}
+set_target
+local_target
+dotnet publish "$target"
+""")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface']['identity'] for e in report['surfaces']], ['missing/Global.csproj', 'missing/Local.csproj'])
+
+    def test_directory_solution_and_implicit_targets_resolve_committed_projects(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, 'apps/First/First.csproj', '<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.write(self.repo, 'apps/Second/Second.csproj', '<Project/>')
+        self.write(self.repo, 'Repo.slnx', '<Solution><Project Path="apps/First/First.csproj"/><Project Path="apps/Second/Second.csproj"/></Solution>')
+        self.write(self.repo, path, 'dotnet publish apps/First\ndotnet run --project apps/Second\ndotnet pack Repo.slnx\ndotnet publish')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding('apps/First/First.csproj', 'project', 'First'),
+                          self.binding(path, 'publication', 'apps/First/First.csproj')])
+        self.assertEqual(report['surfaces'][1]['signals'], ['project-publication-reference'])
+
+    def test_missing_ambiguous_directory_and_unsupported_solution_targets_refuse(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, 'apps/First.csproj', '<Project/>')
+        self.write(self.repo, 'apps/Second.csproj', '<Project/>')
+        for target in ('missing-directory', 'apps', 'missing.slnx', 'old.sln'):
+            with self.subTest(target=target):
+                self.write(self.repo, path, 'dotnet publish --project ' + target)
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual([e['rule'] for e in report['errors']], ['unresolved-publication-target:' + path])
+                self.assertEqual([e['target'] for e in report['errors']], [target])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_unresolved_and_unbounded_solution_metadata_refuse(self):
+        path = 'scripts/ship.sh'
+        for content in ('<Solution/>', '<Solution><Project Path="$(Runtime)"/></Solution>',
+                        '<Solution>' + '<Project Path="missing/Runner.csproj"/>' * 4097 + '</Solution>'):
+            with self.subTest(content=content[:50]):
+                self.write(self.repo, 'Repo.slnx', content)
+                self.write(self.repo, path, 'dotnet pack Repo.slnx')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual([e['rule'] for e in report['errors']], ['unresolved-publication-solution:' + path])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_unknown_task_output_cannot_supply_committed_compile_bytes(self):
+        self.write(self.repo, PROJECT, '<Project><Target Name="Generate"><Exec Command="runtime-generator">'
+                   '<Output TaskParameter="Output" ItemName="Runtime"/></Exec>'
+                   '<ItemGroup><Compile Include="@(Runtime)"/></ItemGroup></Target></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual([e['rule'] for e in report['errors']], ['dynamic-generated-compile-source:' + PROJECT + ':runtime'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_unterminated_loop_and_malformed_shell_target_refuse(self):
+        path = 'scripts/ship.sh'
+        for script, rule in (('for package in One Two; do\n dotnet publish missing/X.csproj', 'unbounded-publication-control-flow'),
+                             ('dotnet publish "unterminated', 'unresolved-publication-target')):
+            with self.subTest(script=script):
+                self.write(self.repo, path, script); self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, path, [rule])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_single_quoted_target_and_external_state_cannot_select_approved_identity(self):
+        path = 'scripts/ship.sh'
+        self.allowance(self.binding(path, 'publication', 'missing/Allowed.csproj'), ['orphan-project-reference'])
+        for script in ("target=missing/Allowed.csproj\ndotnet publish '$target'",
+                       'target=missing/Allowed.csproj\nsource runtime.sh\ndotnet publish "$target"'):
+            with self.subTest(script=script):
+                self.write(self.repo, path, script); self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, path, ['unresolved-publication-target'])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_excluded_source_drift_keeps_unrelated_project_observations(self):
+        path = 'captured/metadata.xml'
+        self.write(self.repo, path, '<Project/>')
+        self.policy['exclusions'] = [dict(repository='references/opaque', prefix=path, row='PE05',
+            classification='test-fixture', owner='fixture owner', reason='Exact source', scope='file',
+            sha256=census.digest(b'<Project/>'))]
+        self.save()
+        self.project()
+        self.write(self.repo, path, '<Project Changed="true"/>'); self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['excluded-fixture-source-drift'])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding()])
+        self.assertFalse(report['repositories'][0]['inspectionComplete'])
+
+    def test_missing_source_blob_keeps_other_committed_project_observations(self):
+        path = 'bad/Bad.csproj'
+        self.write(self.repo, path, '<Project/>')
+        self.project()
+        oid = self.git(self.repo, 'rev-parse', 'HEAD:' + path)
+        (self.repo / '.git/objects' / oid[:2] / oid[2:]).unlink()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=self.git(self.repo, 'rev-parse', 'HEAD'), path=path, rule='git-object-unavailable')])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding()])
+        self.assertFalse(report['repositories'][0]['inspectionComplete'])
+
+    def test_ambiguous_loop_word_cannot_become_a_sequential_approved_directory_list(self):
+        path = 'scripts/ship.sh'
+        for directory in ('a/b', 'b'):
+            self.write(self.repo, directory + '/placeholder.txt', 'committed')
+        for target in ('a/Runner.csproj', 'a/b/Runner.csproj'):
+            self.allowance(self.binding(path, 'publication', target), ['orphan-project-reference'])
+        self.write(self.repo, path, 'directory=a\nif runtime; then\n directory=b\nfi\n'
+                   'for segment in "$directory"; do\n cd "$segment"\n dotnet publish Runner.csproj\ndone')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unbounded-publication-control-flow', 'unresolved-publication-directory'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_review_s01_inline_loop_is_explicitly_refused(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, 'for p in missing/One.csproj; do dotnet publish "$p"; done')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unsupported-inline-publication-control-flow'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_review_s02_quoted_dotnet_retains_exact_project_target(self):
+        path = 'scripts/ship.sh'
+        for command in ('"dotnet" publish "missing/One Runner.csproj"', "'dotnet' publish 'missing/One Runner.csproj'"):
+            with self.subTest(command=command):
+                self.write(self.repo, path, command); self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['errors'], [])
+                self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', 'missing/One Runner.csproj')])
+                self.assertEqual(report['surfaces'][0]['signals'], ['orphan-project-reference'])
+
+    def test_review_s03_container_global_options_and_image_subcommand(self):
+        path = 'scripts/ship.sh'
+        commands = ['docker --context production push attacker/neutral:latest',
+                    'docker --context=production image push attacker/neutral:latest',
+                    'docker image push attacker/neutral:latest',
+                    'docker --host tcp://example.invalid --debug image push --all-tags attacker/neutral:latest']
+        for command in commands:
+            with self.subTest(command=command):
+                self.write(self.repo, path, command); self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['errors'], [])
+                self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', 'attacker/neutral:latest')])
+                self.assertEqual(report['surfaces'][0]['signals'], ['container-image'])
+
+    def test_review_s04_quoted_matrix_targets_keep_alternatives_paths_and_scope(self):
+        path = '.github/workflows/ci.yml'
+        for name in ('One', 'Two'):
+            self.write(self.repo, f'src/{name}/{name}.csproj', '<Project/>')
+        self.write(self.repo, path, '''jobs:
+  ordinary:
+    strategy:
+      matrix:
+        project: [src/One/One.csproj, src/Two/Two.csproj]
+    steps:
+      - run: dotnet publish "${{ matrix.project }}"
+''')
+        self.commit(self.repo); self.pin()
+        self.assertEqual(self.run_cli(0)['surfaces'], [])
+        self.write(self.repo, 'work/placeholder.txt', 'committed')
+        self.write(self.repo, path, '''jobs:
+  first:
+    strategy:
+      matrix:
+        project: ["missing/One Runner.csproj", "missing/Two Runner.csproj"]
+    steps:
+      - run: dotnet publish "${{ matrix.project }}"
+        working-directory: work
+  second:
+    strategy:
+      matrix:
+        project: [missing/Third.csproj]
+    steps:
+      - run: dotnet publish "${{ matrix.project }}"
+''')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface']['identity'] for e in report['surfaces']],
+                         ['missing/Third.csproj', 'work/missing/One Runner.csproj', 'work/missing/Two Runner.csproj'])
+        self.assertEqual([e['signals'] for e in report['surfaces']], [['orphan-project-reference']] * 3)
+
+        values = ', '.join(f'missing/Project{i}.csproj' for i in range(257))
+        self.write(self.repo, path, 'jobs:\n  bounded:\n    strategy:\n      matrix:\n        project: [' + values + ']\n    steps:\n      - run: dotnet publish "${{ matrix.project }}"\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unresolved-publication-target'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_review_s05_unquoted_heredoc_substitutions_refuse_without_executing(self):
+        path = 'scripts/ship.sh'
+        for substitution in ('$(dotnet publish missing/One.csproj)', '`dotnet publish missing/One.csproj`'):
+            self.write(self.repo, path, 'cat <<EOF\n' + substitution + '\nEOF')
+            self.commit(self.repo); self.pin()
+            report = self.run_cli(1)
+            self.assert_source_errors(report, path, ['unresolved-heredoc-substitution'])
+            self.assertEqual(report['surfaces'], [])
+        self.write(self.repo, path, 'cat <<\'EOF\'\n$(dotnet publish missing/One.csproj)\nEOF')
+        self.commit(self.repo); self.pin()
+        self.assertEqual(self.run_cli(0)['surfaces'], [])
+
+    def test_review_s06_container_requires_complete_declared_provenance(self):
+        path = 'scripts/ship.sh'
+        project = 'src/Neutral/Neutral.csproj'
+        self.write(self.repo, project, '<Project/>')
+        self.write(self.repo, path, 'docker push attacker/neutral:latest')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', 'attacker/neutral:latest')])
+        self.write(self.repo, project, '<Project><PropertyGroup><ContainerRepository>attacker/neutral:latest</ContainerRepository></PropertyGroup></Project>')
+        self.commit(self.repo); self.pin()
+        self.assertEqual(self.run_cli(0)['surfaces'], [])
+
+    def test_review_s07_required_optional_sdk_and_nested_imports_are_distinct(self):
+        for imports, expected in [('<Import Project="../../../missing.props"/>', 'unavailable-local-import'),
+                                  ('<Import Project="../../../../outside.props"/>', 'unsafe-import-path'),
+                                  ('<Import Project="../../../missing.props" Condition="Exists(\'../../../missing.props\')"/>', None),
+                                  ('<Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk"/>', None)]:
+            with self.subTest(imports=imports):
+                self.write(self.repo, PROJECT, '<Project>' + imports + '</Project>')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1 if expected else 0)
+                if expected:
+                    self.assert_source_errors(report, PROJECT, [expected])
+                else:
+                    self.assertEqual(report['errors'], [])
+                self.assertEqual(report['surfaces'], [])
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../nested/build.props"/></Project>')
+        self.git(self.repo, 'add', PROJECT)
+        self.git(self.repo, 'update-index', '--add', '--cacheinfo', f'160000,{pin},nested')
+        self.git(self.repo, 'commit', '-q', '-m', 'test: retain unopened nested import'); self.pin()
+        report = self.run_cli(0)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(report['repositories'][0]['nestedGitlinks'], ['nested'])
+        self.assertFalse((self.repo / 'nested').exists())
+
+    def test_review_s08_property_expansion_depth_is_a_safe_coverage_error(self):
+        chain = ''.join(f'<P{i}>$(P{i+1})</P{i}>' for i in range(1100)) + '<P1100>Exe</P1100><OutputType>$(P0)</OutputType>'
+        self.write(self.repo, PROJECT, '<Project><PropertyGroup>' + chain + '</PropertyGroup></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, PROJECT, ['property-expansion-depth'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_review_s09_local_tool_definition_cannot_borrow_consumption_exemption(self):
+        identity = 'Approved.Tool'
+        self.policy['toolIdentities'] = [dict(identity=identity, classification='exempt-build-tooling', row='PE01', owner='owner', reason='Approved consumption')]
+        self.save()
+        self.write(self.repo, 'package.json', json.dumps(dict(name=identity, bin='run.js')))
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding('package.json', 'publication', identity)])
+        self.assertEqual(report['surfaces'][0]['signals'], ['tool-manifest'])
+        self.allowance(report['surfaces'][0]['surface'], ['tool-manifest'])
+        self.run_cli(0)
+        (self.repo / 'package.json').unlink()
+        self.write(self.repo, 'scripts/use.sh', 'dotnet tool install ' + identity)
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(0)
+        self.assertEqual([e['classification'] for e in report['surfaces']], ['exempt-build-tooling'])
+
+    def test_review_s10_nearest_default_metadata_and_explicit_imports(self):
+        project = 'src/Neutral/Neutral.csproj'
+        self.write(self.repo, 'Directory.Build.props', '<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.write(self.repo, 'Directory.Build.targets', '<Project><PropertyGroup><PackAsTool>true</PackAsTool></PropertyGroup></Project>')
+        self.write(self.repo, 'src/Directory.Build.props', '<Project/>')
+        self.write(self.repo, 'src/Directory.Build.targets', '<Project/>')
+        self.write(self.repo, project, '<Project/>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding(name, 'source', name) for name in ('Directory.Build.props', 'Directory.Build.targets')])
+        self.assertEqual([e['signals'] for e in report['surfaces']], [['unresolved-tool-metadata']] * 2)
+        self.write(self.repo, 'src/Directory.Build.props', '<Project><Import Project="../Directory.Build.props"/></Project>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding('Directory.Build.targets', 'source', 'Directory.Build.targets'), self.binding(project, 'project', 'Neutral')])
+        self.assertEqual([e['signals'] for e in report['surfaces']], [['unresolved-tool-metadata'], ['executable-project']])
+
+    def test_review_s11_conditional_loop_keeps_prebranch_target(self):
+        path = 'scripts/ship.sh'
+        self.allowance(self.binding(path, 'publication', 'missing/Approved.csproj'), ['orphan-project-reference'])
+        self.write(self.repo, path, 'target=missing/New.csproj\nif runtime; then\n for x in One; do\n target=missing/Approved.csproj\n done\nfi\ndotnet pack "$target"')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(e['surface']['identity'], e['status']) for e in report['surfaces']],
+                         [('missing/Approved.csproj', 'approved'), ('missing/New.csproj', 'rejected')])
+
+    def test_review_s12_unknown_loop_invalidates_changed_caller_directory(self):
+        path = 'scripts/ship.sh'
+        self.allowance(self.binding(path, 'publication', 'missing/Approved.csproj'), ['orphan-project-reference'])
+        self.write(self.repo, 'child/placeholder.txt', 'committed')
+        for loop in ('while runtime', 'until runtime'):
+            self.write(self.repo, path, loop + '; do\n cd child\ndone\ndotnet publish missing/Approved.csproj')
+            self.commit(self.repo); self.pin()
+            report = self.run_cli(1)
+            self.assert_source_errors(report, path, ['unresolved-publication-directory'])
+            self.assertEqual(report['surfaces'], [])
+
+    def test_review_s13_shell_state_commands_invalidate_trusted_targets(self):
+        path = 'scripts/ship.sh'
+        self.allowance(self.binding(path, 'publication', 'missing/Approved.csproj'), ['orphan-project-reference'])
+        for statement in ('read -r target', 'unset target', 'declare target=missing/New.csproj'):
+            with self.subTest(statement=statement):
+                self.write(self.repo, path, 'target=missing/Approved.csproj\n' + statement + '\ndotnet publish "$target"')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, path, ['unresolved-publication-target'])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_review_s14_single_quoted_function_argument_has_no_variable_authority(self):
+        path = 'scripts/ship.sh'
+        self.allowance(self.binding(path, 'publication', 'missing/Approved.csproj'), ['orphan-project-reference'])
+        prefix = 'target=missing/Approved.csproj\nship() {\n dotnet pack "$1"\n}\n'
+        self.write(self.repo, path, prefix + "ship '$target'")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unresolved-publication-target'])
+        self.assertEqual(report['surfaces'], [])
+        self.write(self.repo, path, prefix + 'ship "$target"')
+        self.commit(self.repo); self.pin()
+        self.assertEqual(self.run_cli(0)['surfaces'][0]['surface']['identity'], 'missing/Approved.csproj')
+
+    def test_review_s15_missing_executable_blob_retains_other_root_observations(self):
+        path = 'scripts/ship'
+        self.write(self.repo, path, '#!/bin/sh\ndotnet publish missing/One.csproj')
+        (self.repo / path).chmod(0o755)
+        self.project()
+        oid = self.git(self.repo, 'rev-parse', 'HEAD:' + path)
+        (self.repo / '.git/objects' / oid[:2] / oid[2:]).unlink()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=self.git(self.repo, 'rev-parse', 'HEAD'), path=path, rule='git-object-unavailable')])
+        self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding()])
+        self.assertFalse(report['repositories'][0]['inspectionComplete'])
+
+    def test_review_s16_report_directory_and_file_write_failures_return_one(self):
+        for method in ('mkdir', 'write_text'):
+            with self.subTest(method=method):
+                stdout, stderr = io.StringIO(), io.StringIO()
+                with contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr), patch.object(census.Path, method, side_effect=OSError('unsafe supplied value')):
+                    status = census.main(['--workspace', str(self.root), '--baseline', str(self.baseline), '--amendments', str(self.index), '--output', str(self.root / 'failure/report.json')])
+                self.assertEqual(status, 1)
+                self.assertEqual(stdout.getvalue(), '')
+                self.assertEqual(stderr.getvalue(), 'Proprietary surface census failed: report-write-failed\n')
+
+    def test_review_s17_environment_prefix_keeps_publication_command_visible(self):
+        path = 'scripts/ship.sh'
+        for prefix in ('FLAG=value', 'FLAG=value SECOND="two words"'):
+            self.write(self.repo, path, prefix + ' dotnet publish missing/New.csproj')
+            self.commit(self.repo); self.pin()
+            report = self.run_cli(1)
+            self.assertEqual(report['errors'], [])
+            self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', 'missing/New.csproj')])
+            self.assertEqual(report['surfaces'][0]['signals'], ['orphan-project-reference'])
+
+    def test_review_s18_metadata_errors_and_full_output_ignore_hash_seed(self):
+        self.write(self.repo, PROJECT, '<Project><PropertyGroup><Source Condition="A">$(Missing)/Unknown.cs</Source>'
+                   '<Source Condition="B">../../../shared/Absent.cs</Source></PropertyGroup><ItemGroup><Compile Include="$(Source)"/><Compile Include="../../../shared/AlsoMissing.cs"/></ItemGroup></Project>')
+        self.commit(self.repo); self.pin()
+        captures = []
+        for seed in ('1', '2', '3', '4'):
+            output = self.root / 'seed-report.json'
+            command = [sys.executable, census.__file__, '--workspace', str(self.root), '--baseline', str(self.baseline), '--amendments', str(self.index), '--output', str(output)]
+            result = subprocess.run(command, capture_output=True, text=True, env={**os.environ, 'PYTHONHASHSEED': seed, 'PYTHONDONTWRITEBYTECODE': '1'})
+            self.assertEqual(result.returncode, 1)
+            self.assertEqual(result.stdout, output.read_text())
+            report = json.loads(result.stdout)
+            self.assertEqual([e['rule'] for e in report['errors']], ['unavailable-committed-compile-source:' + PROJECT, 'unresolved-compile-source:' + PROJECT])
+            self.assertEqual(report['surfaces'], [])
+            self.assertEqual(result.stderr, ''.join('error: ' + json.dumps(e, sort_keys=True) + '\n' for e in report['errors']))
+            captures.append((result.stdout, result.stderr))
+        self.assertTrue(all(capture == captures[0] for capture in captures))
+
+    def test_review_s19_forged_matrix_tokens_have_no_approved_target_authority(self):
+        path = 'scripts/ship.sh'
+        approved = 'missing/Approved.csproj'
+        forged = '@matrix-projects:' + json.dumps([approved], separators=(',', ':')).encode().hex() + '@'
+        self.allowance(self.binding(path, 'publication', approved), ['orphan-project-reference'])
+        self.write(self.repo, path, 'dotnet publish "' + forged + '"')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['surfaces'], [])
+        self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=self.git(self.repo, 'rev-parse', 'HEAD'),
+            path=path, rule='unresolved-publication-target:' + path, target=forged)])
+        workflow = '.github/workflows/ci.yml'
+        self.allowance(self.binding(workflow, 'publication', approved), ['orphan-project-reference'])
+        self.write(self.repo, workflow, 'jobs:\n  ship:\n    strategy:\n      matrix:\n        project: [' + approved + ']\n'
+                   '    steps:\n      - run: dotnet publish "${{ matrix.project }}"\n'
+                   '      - run: dotnet publish "@census-expression-0@"\n')
+        (self.repo / path).unlink()
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual([(e['surface'], e['status']) for e in report['surfaces']], [(self.binding(workflow, 'publication', approved), 'approved')])
+        self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=self.git(self.repo, 'rev-parse', 'HEAD'),
+            path=workflow, rule='unresolved-publication-target:' + workflow, target='@census-expression-0@')])
+
+    def test_review_s19_matrix_requires_a_whole_target_argument(self):
+        path = '.github/workflows/ci.yml'
+        self.write(self.repo, path, 'jobs:\n  ship:\n    strategy:\n      matrix:\n        project: [missing/One.csproj]\n'
+                   '    steps:\n      - run: dotnet publish "prefix/${{ matrix.project }}"\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, path, ['unresolved-publication-target'])
+        self.assertEqual(report['surfaces'], [])
+
+    def test_review_s20_malformed_unconsumed_default_metadata_is_refused(self):
+        for name in ('Directory.Build.props', 'Directory.Build.targets'):
+            with self.subTest(name=name):
+                self.write(self.repo, 'Directory.Build.props', '<Project/>')
+                self.write(self.repo, 'Directory.Build.targets', '<Project/>')
+                self.write(self.repo, name, '<Project><broken>')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, name, ['malformed-project-metadata'])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_review_s20_unconsumed_executable_default_metadata_is_a_source_observation(self):
+        for name in ('Directory.Build.props', 'Directory.Build.targets'):
+            with self.subTest(name=name):
+                self.write(self.repo, 'Directory.Build.props', '<Project/>')
+                self.write(self.repo, 'Directory.Build.targets', '<Project/>')
+                self.write(self.repo, name, '<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['errors'], [])
+                self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(name, 'source', name)])
+                self.assertEqual(report['surfaces'][0]['signals'], ['unresolved-tool-metadata'])
+
+    def test_review_s21_printf_variable_writes_cannot_reuse_old_approval(self):
+        path = 'scripts/ship.sh'
+        self.allowance(self.binding(path, 'publication', 'missing/Approved.csproj'), ['orphan-project-reference'])
+        for statement in ("printf -v target '%s' missing/New.csproj", "printf -vtarget '%s' missing/New.csproj",
+                          "builtin printf -vtarget '%s' missing/New.csproj", "printf -v \"$destination\" '%s' missing/New.csproj"):
+            with self.subTest(statement=statement):
+                self.write(self.repo, path, 'target=missing/Approved.csproj\n' + statement + '\ndotnet publish "$target"')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, path, ['unresolved-publication-target'])
+                self.assertEqual(report['surfaces'], [])
+        self.write(self.repo, path, 'target=missing/Approved.csproj\nprintf -- \"%s\" \"-vtarget\"\ndotnet publish "$target"')
+        self.commit(self.repo); self.pin()
+        self.assertEqual(self.run_cli(0)['surfaces'][0]['surface']['identity'], 'missing/Approved.csproj')
+
+    def test_review_s22_multi_assignment_invalidates_every_written_variable(self):
+        path = 'scripts/ship.sh'
+        self.allowance(self.binding(path, 'publication', 'missing/Approved.csproj'), ['orphan-project-reference'])
+        for statement in ('other=x target=missing/New.csproj', 'first="two words" second=y target=missing/New.csproj',
+                          'other=x target+=missing/New.csproj'):
+            with self.subTest(statement=statement):
+                self.write(self.repo, path, 'target=missing/Approved.csproj\n' + statement + '\ndotnet publish "$target"')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, path, ['unresolved-publication-target'])
+                self.assertEqual(report['surfaces'], [])
+
+    def test_review_s23_complete_container_registry_repository_and_image_suffixes(self):
+        path = 'scripts/ship.sh'
+        project = 'src/Host/Host.csproj'
+        digest = 'sha256:' + 'a' * 64
+        for registry, repository in [('trusted.invalid', 'neutral'), ('trusted.invalid:5000', 'team/neutral')]:
+            self.write(self.repo, project, '<Project Sdk="Microsoft.NET.Sdk.Web"><PropertyGroup><IsPackable>false</IsPackable>'
+                       '<ContainerRegistry>' + registry + '</ContainerRegistry><ContainerRepository>' + repository + '</ContainerRepository></PropertyGroup></Project>')
+            for suffix in (':latest', ':v2', '@' + digest, ':v2@' + digest):
+                self.write(self.repo, path, 'docker push ' + registry + '/' + repository + suffix)
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(0)
+                self.assertEqual(report['errors'], [])
+                self.assertEqual(report['surfaces'], [])
+            for image in ('attacker/' + repository + ':latest', 'other.invalid/' + repository + ':latest',
+                          registry + '/other/' + repository + ':latest', registry + '/' + repository + '-other:latest'):
+                self.write(self.repo, path, 'docker push ' + image)
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['errors'], [])
+                self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', image)])
+                self.assertEqual(report['surfaces'][0]['signals'], ['container-image'])
+        image = 'trusted.invalid:5000/team/neutral:latest'
+        self.write(self.repo, 'src/Host/Program.cs', 'builder.Services.AddMcpServer();')
+        self.write(self.repo, path, 'docker push ' + image)
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([e['surface'] for e in report['surfaces']],
+                         [self.binding(path, 'publication', image), self.binding(project, 'project', 'Host'),
+                          self.binding(project, 'publication', 'container:team/neutral')])
+        self.assertEqual([e['signals'] for e in report['surfaces']], [['container-image'], ['mcp-registration'], ['container-metadata']])
 
 
 if __name__=='__main__':

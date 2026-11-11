@@ -1,0 +1,202 @@
+{
+  "result": "passed",
+  "originalPacket": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111",
+  "receiptSha256": "89fa1672d3b1a1b123cdcd4c3be6a4313ecfc6e05377dca7c81e7194ca73bad2",
+  "files": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/01/census-tests.stderr.txt",
+      "sha256": "a49fe50cf89c28f8567a75ba869ed5750e77d4a851b6bb9534e6909255788bcc",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/01/census-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/01/run-inputs.json",
+      "sha256": "b5eb471a6080b9049b226e0222261c555bea7bd98f0daf12ff8880493c2f88ef",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/02/census-tests.stderr.txt",
+      "sha256": "456bd3ca75ec4e6bd7e354e6db48278183cad94e71e9e3d44a131340cfbe2d11",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/02/census-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/02/mutations.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/02/mutations.stdout.json",
+      "sha256": "f6664f93b8b4a1273f3a6b45c2418da84a6d6a7478e6dee94d4c3d4610f25d94",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/census-tests.stderr.txt",
+      "sha256": "9a84f9375862e3fdae2665604fec505086f15853196f72c530435ba4131e667e",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/census-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/census.json",
+      "sha256": "6c2a2dfc4682c456900792b1e528a47bd8d141d4cd6d623ddcc11c20c8da28ae",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/current-pin-census.stderr.txt",
+      "sha256": "a8e2088e8e6c0c6cb918a9d19d0551782fc43ece291edb508f1b26f06691b961",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/current-pin-census.stdout.txt",
+      "sha256": "6c2a2dfc4682c456900792b1e528a47bd8d141d4cd6d623ddcc11c20c8da28ae",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/inspection-cases.json",
+      "sha256": "611743723bb3031295898df92bf53719b8bbb7a45f79bd442f217547dfe261d9",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/mutations.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/mutations.stdout.json",
+      "sha256": "f6664f93b8b4a1273f3a6b45c2418da84a6d6a7478e6dee94d4c3d4610f25d94",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/run-inputs.json",
+      "sha256": "209a318127947f5f034fe5ad44e1cb4700356b981b30c627f6206c7a8df1b65e",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/attempts/03/verification.json",
+      "sha256": "b093020ad785a07215eea7ace32c537ca478190653fd7b4e1f6c606e9e4429fe",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/build-verification.py",
+      "sha256": "3d7f5ffcf5fdf2a1043614d14146ad712fdb62b5c8c8a0c640e2caf07cac16f4",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/census-tests.stderr.txt",
+      "sha256": "0cacbad5da00a7799106af5aef53dff01bd839a18df9e2359e819cafd4bb7310",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/census-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/census.json",
+      "sha256": "f3d5333c8a31743b0b275223a678226ffd7b98adccb7f9ea858ed126879cdf41",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/commands.json",
+      "sha256": "3ae66291276f1c04f4796dac326660e0b6a91ff02670ef05606ae92471e90874",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/current-pin-census.stderr.txt",
+      "sha256": "51ff81ecce689616a24b4274abf5c70bc03a674a3c4d11bd91e03de08af78db4",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/current-pin-census.stdout.txt",
+      "sha256": "f3d5333c8a31743b0b275223a678226ffd7b98adccb7f9ea858ed126879cdf41",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/diff-check.json",
+      "sha256": "42fa84d9a873cd66604d8e75644492e70b3a68978bbf070d0ed7be2fff56ca26",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/diff-check.stderr.txt",
+      "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/diff-check.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/inspection-cases.json",
+      "sha256": "611743723bb3031295898df92bf53719b8bbb7a45f79bd442f217547dfe261d9",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/matrix-coverage.json",
+      "sha256": "7f0b9c831cd708931e5b500e74c123ff1738d1eb58c281e413034ca11905d4fa",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/mutation-guards.py",
+      "sha256": "613d747edd533cb5cb53f9a25917f757b4bd9a5af1d0610078224a72eb50aa19",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/mutations.stderr.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/mutations.stdout.json",
+      "sha256": "770b24889670334a811dfdc76d46fb812f89aed1ec9da408172650b13a9f06f7",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/policy-before.json",
+      "sha256": "d5704a056785b2ea2a2bdbb3f908f993b8384c6699990b10fc43b0d3a67e61fc",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/policy-integrity.json",
+      "sha256": "a5c19952255f4dcf6efabb06847468a864ba9af7b9c6db9918fade82b29fe765",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/release-tests.stderr.txt",
+      "sha256": "5a6f59ca07491744ffd66a0bf8c4213bc9bc9b8ceaaa9037c9372afe92570939",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/release-tests.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/run-inputs.json",
+      "sha256": "f3153d579218d5d6c337bf9d5762e295ce96ad93406d3506977f719fd1c4938f",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/verification.json",
+      "sha256": "5cc5657571ae9f6739f1ab694bd0a7243dac17e05071c8c40683658fbff388dc",
+      "unchanged": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-20261111/verification.md",
+      "sha256": "dfd6898032a5c3e5d93ee17c391b46c39441a6b5982f7e21b9a0b324ee0583b9",
+      "unchanged": true
+    }
+  ]
+}

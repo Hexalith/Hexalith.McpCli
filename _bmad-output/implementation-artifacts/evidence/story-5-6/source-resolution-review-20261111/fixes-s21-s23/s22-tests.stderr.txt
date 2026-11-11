@@ -1,0 +1,6 @@
+test_review_s22_multi_assignment_invalidates_every_written_variable (test_census.CensusTests.test_review_s22_multi_assignment_invalidates_every_written_variable) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.128s
+
+OK

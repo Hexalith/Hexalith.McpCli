@@ -1,0 +1,7 @@
+test_review_s20_malformed_unconsumed_default_metadata_is_refused (test_census.CensusTests.test_review_s20_malformed_unconsumed_default_metadata_is_refused) ... ok
+test_review_s20_unconsumed_executable_default_metadata_is_a_source_observation (test_census.CensusTests.test_review_s20_unconsumed_executable_default_metadata_is_a_source_observation) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.180s
+
+OK

@@ -1,0 +1,161 @@
+{
+  "result": "passed",
+  "files": [
+    {
+      "path": "attempts/01/census-tests.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/01/census-tests.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/01/run-inputs.json",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/02/census-tests.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/02/census-tests.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/02/mutations.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/02/mutations.stdout.json",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/census-tests.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/census-tests.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/census.json",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/current-pin-census.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/current-pin-census.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/inspection-cases.json",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/mutations.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/mutations.stdout.json",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/run-inputs.json",
+      "unchanged": true
+    },
+    {
+      "path": "attempts/03/verification.json",
+      "unchanged": true
+    },
+    {
+      "path": "build-verification.py",
+      "unchanged": true
+    },
+    {
+      "path": "census-tests.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "census-tests.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "path": "census.json",
+      "unchanged": true
+    },
+    {
+      "path": "commands.json",
+      "unchanged": true
+    },
+    {
+      "path": "current-pin-census.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "current-pin-census.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "path": "diff-check.json",
+      "unchanged": true
+    },
+    {
+      "path": "diff-check.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "diff-check.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "path": "inspection-cases.json",
+      "unchanged": true
+    },
+    {
+      "path": "matrix-coverage.json",
+      "unchanged": true
+    },
+    {
+      "path": "mutation-guards.py",
+      "unchanged": true
+    },
+    {
+      "path": "mutations.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "mutations.stdout.json",
+      "unchanged": true
+    },
+    {
+      "path": "policy-before.json",
+      "unchanged": true
+    },
+    {
+      "path": "policy-integrity.json",
+      "unchanged": true
+    },
+    {
+      "path": "release-tests.stderr.txt",
+      "unchanged": true
+    },
+    {
+      "path": "release-tests.stdout.txt",
+      "unchanged": true
+    },
+    {
+      "path": "run-inputs.json",
+      "unchanged": true
+    },
+    {
+      "path": "verification.json",
+      "unchanged": true
+    },
+    {
+      "path": "verification.md",
+      "unchanged": true
+    }
+  ]
+}

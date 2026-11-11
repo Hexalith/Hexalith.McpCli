@@ -1,0 +1,73 @@
+{
+  "acceptance": "failed",
+  "counts": {
+    "completeRoots": 5,
+    "fixtures": 117,
+    "guardRemovalControls": 70,
+    "inspectionErrors": 50,
+    "observations": 458,
+    "rejectedObservations": 14,
+    "releaseRegressions": 195,
+    "roots": 17,
+    "stale": 4
+  },
+  "parentRevision": "051fadedf68335ba5c525cf26c42f86aa69697f9",
+  "policy": {
+    "amendments": [
+      {
+        "path": "amendments/1.0.1.json",
+        "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+        "version": "1.0.1"
+      },
+      {
+        "path": "amendments/1.0.2.json",
+        "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+        "version": "1.0.2"
+      }
+    ],
+    "baselineSha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+    "version": "1.0.2"
+  },
+  "report": {
+    "path": "census.json",
+    "sha256": "f3d5333c8a31743b0b275223a678226ffd7b98adccb7f9ea858ed126879cdf41"
+  },
+  "rootPins": {
+    "references/Hexalith.AI.Tools": "8a3885dd22aea88edd57771cfe592c382df2c583",
+    "references/Hexalith.Agents": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+    "references/Hexalith.Builds": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+    "references/Hexalith.ChatBot": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+    "references/Hexalith.Commons": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+    "references/Hexalith.Conversations": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+    "references/Hexalith.EventStore": "3de922e1140e26fe2e0151682ee656fcf675b26b",
+    "references/Hexalith.Folders": "d873861677982a737d131180bcf79f06caee034d",
+    "references/Hexalith.FrontComposer": "01fc48e3955a8cec47ab1602f5cd5c8e286801da",
+    "references/Hexalith.Memories": "1143ba17a2336f0d718fcff71e049c06350a45a2",
+    "references/Hexalith.Parties": "3eccce242d27c2f8248824354a1f403c7b4ea57b",
+    "references/Hexalith.Platform": "d7c74e8a5d5627a8773fb36652813fe743de3d6f",
+    "references/Hexalith.PolymorphicSerializations": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+    "references/Hexalith.Projects": "77067782154d35a794ea50d86af1c5e73c8351b6",
+    "references/Hexalith.Tenants": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+    "references/Hexalith.Timesheets": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+    "references/Hexalith.Works": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23"
+  },
+  "sources": [
+    {
+      "path": "tools/proprietary-surfaces/v1/check.py",
+      "sha256": "8f7bd2239c9823eb870a614e5b9abade21b1d7082c8cd36fb7bb7f5c889a504d"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/test_census.py",
+      "sha256": "a2381ea04cd7edd75478fcd68fa005c19cbcb1d5173c2e6929ad906a33bc37bc"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/README.md",
+      "sha256": "7353fc12299b98b890f661298f0fe73153e4752f176b295f60b8bdd34efb3acf"
+    },
+    {
+      "path": "README.md",
+      "sha256": "e5082b6757d45d28ff4cb3d6f0fbe3acb26d444b2de4f6464c966d0fe2aab572"
+    }
+  ],
+  "utcDate": "2026-11-11"
+}

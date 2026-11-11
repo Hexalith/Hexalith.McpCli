@@ -1,0 +1,163 @@
+[
+  {
+    "id": "BH1",
+    "source": "for p in missing/One.csproj; do dotnet publish \"$p\"; done",
+    "status": "passed",
+    "errors": [],
+    "surfaces": []
+  },
+  {
+    "id": "BH2",
+    "source": "\"dotnet\" publish missing/One.csproj",
+    "status": "passed",
+    "errors": [],
+    "surfaces": []
+  },
+  {
+    "id": "BH3a",
+    "source": "docker --context production push attacker/neutral:latest",
+    "status": "passed",
+    "errors": [],
+    "surfaces": []
+  },
+  {
+    "id": "BH3b",
+    "source": "docker image push attacker/neutral:latest",
+    "status": "passed",
+    "errors": [],
+    "surfaces": []
+  },
+  {
+    "id": "BH5",
+    "source": "cat <<EOF\n$(dotnet publish missing/One.csproj)\nEOF",
+    "status": "passed",
+    "errors": [],
+    "surfaces": []
+  },
+  {
+    "id": "EC1",
+    "source": "target=missing/New.csproj\nif runtime; then\n for x in One; do\n target=missing/Approved.csproj\n done\nfi\ndotnet pack \"$target\"",
+    "status": "failed",
+    "errors": [],
+    "surfaces": [
+      [
+        "missing/Approved.csproj",
+        "rejected"
+      ]
+    ]
+  },
+  {
+    "id": "EC2",
+    "source": "while runtime; do\n cd child\ndone\ndotnet publish missing/Approved.csproj",
+    "status": "failed",
+    "errors": [],
+    "surfaces": [
+      [
+        "missing/Approved.csproj",
+        "rejected"
+      ]
+    ]
+  },
+  {
+    "id": "EC4",
+    "source": "target=missing/Approved.csproj\nship() {\n dotnet pack \"$1\"\n}\nship '$target'",
+    "status": "failed",
+    "errors": [],
+    "surfaces": [
+      [
+        "missing/Approved.csproj",
+        "rejected"
+      ]
+    ]
+  },
+  {
+    "id": "BH4",
+    "status": "failed",
+    "errors": [],
+    "surfaces": [
+      [
+        {
+          "repository": "references/opaque",
+          "path": ".github/workflows/ci.yml",
+          "kind": "publication",
+          "identity": "src/One/One.csproj src/Two/Two.csproj"
+        },
+        [
+          "orphan-project-reference"
+        ],
+        "rejected"
+      ]
+    ]
+  },
+  {
+    "id": "BH6",
+    "status": "passed",
+    "errors": [],
+    "surfaces": []
+  },
+  {
+    "id": "BH7",
+    "status": "passed",
+    "errors": [],
+    "surfaces": []
+  },
+  {
+    "id": "BH8",
+    "unhandled": "RecursionError"
+  },
+  {
+    "id": "BH9",
+    "status": "passed",
+    "errors": [],
+    "surfaces": [
+      [
+        {
+          "repository": "references/opaque",
+          "path": "package.json",
+          "kind": "publication",
+          "identity": "hexalith.builds.module.cli"
+        },
+        [
+          "tool-manifest"
+        ],
+        "approved"
+      ]
+    ]
+  },
+  {
+    "id": "BH10",
+    "status": "failed",
+    "errors": [],
+    "surfaces": [
+      [
+        {
+          "repository": "references/opaque",
+          "path": "odd/location/Runner/Runner.csproj",
+          "kind": "project",
+          "identity": "Runner"
+        },
+        [
+          "executable-project"
+        ],
+        "rejected"
+      ]
+    ]
+  },
+  {
+    "id": "Parent4",
+    "status": "passed",
+    "errors": [],
+    "surfaces": [
+      [
+        "missing/Approved.csproj",
+        "approved"
+      ]
+    ]
+  },
+  {
+    "id": "Parent5",
+    "status": "passed",
+    "errors": [],
+    "surfaces": []
+  }
+]

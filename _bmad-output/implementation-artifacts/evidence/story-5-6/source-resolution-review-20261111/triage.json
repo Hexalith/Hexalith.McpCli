@@ -1,0 +1,128 @@
+[
+  {
+    "id": "BH1",
+    "verdict": "medium",
+    "route": "S01",
+    "evidence": "Inline loop bodies are consumed without inspecting their original line; the committed fixture passes with no observation or error."
+  },
+  {
+    "id": "BH2",
+    "verdict": "medium",
+    "route": "S02",
+    "evidence": "A quoted dotnet executable has no regex invocation match; its committed orphan publication passes silently."
+  },
+  {
+    "id": "BH3",
+    "verdict": "medium",
+    "route": "S03",
+    "evidence": "Docker global options and image push place the verb outside following[0]; both committed neutral-image fixtures pass silently."
+  },
+  {
+    "id": "BH4",
+    "verdict": "medium",
+    "route": "S04",
+    "evidence": "Two quoted matrix alternatives become one space-concatenated orphan identity instead of the two present ordinary projects."
+  },
+  {
+    "id": "BH5",
+    "verdict": "medium",
+    "route": "S05",
+    "evidence": "Unquoted heredoc command substitutions are skipped; a committed literal dotnet publication inside one passes silently."
+  },
+  {
+    "id": "BH6",
+    "verdict": "medium",
+    "route": "S06",
+    "evidence": "An unrelated neutral library suppresses attacker/neutral:latest by basename; its exact container publication vanishes."
+  },
+  {
+    "id": "BH7",
+    "verdict": "medium",
+    "route": "S07",
+    "evidence": "A missing literal local import has zero matches and no prerequisite diagnostic; the committed fixture passes."
+  },
+  {
+    "id": "BH8",
+    "verdict": "medium",
+    "route": "S08",
+    "evidence": "A 1,100-property chain raises uncaught RecursionError instead of retaining the sanitized coverage report."
+  },
+  {
+    "id": "BH9",
+    "verdict": "high",
+    "route": "S09",
+    "evidence": "An npm bin definition in another repository borrows the named Builds tool identity and is approved without an exact allowance."
+  },
+  {
+    "id": "BH10",
+    "verdict": "medium",
+    "route": "S10",
+    "evidence": "Every ancestor props file is inspected even when a nearer file stops MSBuild discovery; the shadowed root Exe marks the library executable."
+  },
+  {
+    "id": "EC1",
+    "verdict": "medium",
+    "route": "S11",
+    "evidence": "Recursive finite-loop execution resets conditional state and overwrites the possible pre-branch publication target."
+  },
+  {
+    "id": "EC2",
+    "verdict": "medium",
+    "route": "S12",
+    "evidence": "Unknown loop execution discards its resulting directory, so a later publication trusts the pre-loop directory only."
+  },
+  {
+    "id": "EC3",
+    "verdict": "medium",
+    "route": "S13",
+    "evidence": "read/unset/declare state changes leave a previous literal target trusted; the runtime-read parent fixture approves that old identity."
+  },
+  {
+    "id": "EC4",
+    "verdict": "medium",
+    "route": "S14",
+    "evidence": "Single-quoted function arguments lose quote provenance and expand a variable that the shell passes literally."
+  },
+  {
+    "id": "EC5",
+    "verdict": "medium",
+    "route": "S15",
+    "evidence": "The shebang comprehension reads executable blobs outside per-source recovery; a missing executable blob discards the rest of its root."
+  },
+  {
+    "id": "VG1",
+    "verdict": "medium",
+    "route": "S16",
+    "evidence": "Pre-verified mutation changes report-write failure to exit zero while all 117 tests pass; CI relies on that exit status."
+  },
+  {
+    "id": "Parent1",
+    "verdict": "medium",
+    "route": "S17",
+    "evidence": "FLAG=value dotnet publish missing/New.csproj is swallowed as one assignment; the full committed fixture returns passed with no observations."
+  },
+  {
+    "id": "Parent2",
+    "verdict": "medium",
+    "route": "S13",
+    "evidence": "A previously allowed missing/Old.csproj remains approved after read -r target; no unknown-target error is emitted."
+  },
+  {
+    "id": "Parent3",
+    "verdict": "medium",
+    "route": "S18",
+    "evidence": "Actual scans with PYTHONHASHSEED=1 and 2 produce different error rules for the same committed Parties metadata; source-alternative iteration is unordered."
+  },
+  {
+    "id": "Parent4",
+    "verdict": "medium",
+    "route": "S19",
+    "evidence": "A literal encoded matrix marker borrows unrelated approval outside a workflow."
+  },
+  {
+    "id": "Parent5",
+    "verdict": "medium",
+    "route": "S20",
+    "evidence": "A filename exemption skips malformed unconsumed default build metadata."
+  }
+]

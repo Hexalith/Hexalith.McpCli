@@ -1,0 +1,329 @@
+{
+  "cases": [
+    {
+      "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+      "id": "E01",
+      "newAuthority": null,
+      "priorDisposition": {
+        "id": "E01",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/disposition-packet.json"
+      },
+      "reportedErrors": [],
+      "reportedSurfaces": [
+        {
+          "classification": "unapproved",
+          "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "orphan-project-reference"
+          ],
+          "sources": [
+            "Github/publish-container-to-registry/action.yml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "HexalithApp/src/HexalithApp.ApiServer/HexalithApp.ApiServer.csproj",
+            "kind": "publication",
+            "path": "Github/publish-container-to-registry/action.yml",
+            "repository": "references/Hexalith.Builds"
+          }
+        },
+        {
+          "classification": "unapproved",
+          "gitlink": "52ea174c70f1afe77b52a2ccf06bb53afa5e962d",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "orphan-project-reference"
+          ],
+          "sources": [
+            "Github/publish-container-to-registry/action.yml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "HexalithApp/src/HexalithApp.WebServer/HexalithApp.WebServer.csproj",
+            "kind": "publication",
+            "path": "Github/publish-container-to-registry/action.yml",
+            "repository": "references/Hexalith.Builds"
+          }
+        }
+      ],
+      "repository": "references/Hexalith.Builds",
+      "resolvedLocalTargets": [
+        "HexalithApp/src/HexalithApp.ApiServer/HexalithApp.ApiServer.csproj",
+        "HexalithApp/src/HexalithApp.WebServer/HexalithApp.WebServer.csproj"
+      ],
+      "resolverErrors": [],
+      "source": {
+        "gitBlob": "9f8727b9c1f7cb2cacd6304f69e05f504ed37a47",
+        "path": "Github/publish-container-to-registry/action.yml",
+        "sha256": "31a18f4fa2b8b065f366f2b8855d9c92e4ad5f911d3aa51cc70b914127a60242"
+      }
+    },
+    {
+      "gitlink": "3de922e1140e26fe2e0151682ee656fcf675b26b",
+      "id": "E02",
+      "newAuthority": null,
+      "priorDisposition": {
+        "id": "E02",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/disposition-packet.json"
+      },
+      "reportedErrors": [
+        {
+          "gitlink": "3de922e1140e26fe2e0151682ee656fcf675b26b",
+          "path": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+          "repository": "references/Hexalith.EventStore",
+          "rule": "dynamic-generated-compile-source:samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj:_sampleapirestgeneratedcopy"
+        }
+      ],
+      "reportedSurfaces": [],
+      "repository": "references/Hexalith.EventStore",
+      "resolvedLocalTargets": [],
+      "resolverErrors": [],
+      "source": {
+        "gitBlob": "7552813a23e8f56264bc6cfd241a5038dcf327cd",
+        "path": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+        "sha256": "5631daf0eab17a8d41bf53409f52fa8d2d2e786f803e98b8cce03bd8c7d2dfc4"
+      }
+    },
+    {
+      "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "id": "E03",
+      "newAuthority": null,
+      "priorDisposition": {
+        "id": "E03",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/disposition-packet.json"
+      },
+      "reportedErrors": [
+        {
+          "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+          "path": ".github/workflows/ci.yml",
+          "repository": "references/Hexalith.Projects",
+          "rule": "nested-publication-target:.github/workflows/ci.yml",
+          "target": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/Hexalith.Builds.Module.Cli.csproj"
+        }
+      ],
+      "reportedSurfaces": [
+        {
+          "classification": "external-developer-tool",
+          "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+          "row": "PE06",
+          "signals": [
+            "package-or-container-reference",
+            "tool-install"
+          ],
+          "sources": [
+            ".github/workflows/ci.yml"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Aspire.Cli",
+            "kind": "publication",
+            "path": ".github/workflows/ci.yml",
+            "repository": "references/Hexalith.Projects"
+          }
+        },
+        {
+          "classification": "exempt-build-tooling",
+          "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+          "row": "PE01",
+          "signals": [
+            "package-or-container-reference"
+          ],
+          "sources": [
+            ".github/workflows/ci.yml"
+          ],
+          "status": "approved",
+          "surface": {
+            "identity": "Hexalith.Builds.Module.Cli",
+            "kind": "publication",
+            "path": ".github/workflows/ci.yml",
+            "repository": "references/Hexalith.Projects"
+          }
+        }
+      ],
+      "repository": "references/Hexalith.Projects",
+      "resolvedLocalTargets": [],
+      "resolverErrors": [
+        {
+          "path": ".github/workflows/ci.yml",
+          "rule": "nested-publication-target:.github/workflows/ci.yml",
+          "target": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/Hexalith.Builds.Module.Cli.csproj"
+        }
+      ],
+      "source": {
+        "gitBlob": "f2c66dd39af36aafab8a9e62af756831c83a8188",
+        "path": ".github/workflows/ci.yml",
+        "sha256": "a88877838dcf00d7633bfc6cc069367da353d76c4fdc12e869eccdcc8b79d61d"
+      }
+    },
+    {
+      "gitlink": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+      "id": "E04",
+      "newAuthority": null,
+      "priorDisposition": {
+        "id": "E04",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/disposition-packet.json"
+      },
+      "reportedErrors": [],
+      "reportedSurfaces": [],
+      "repository": "references/Hexalith.Tenants",
+      "resolvedLocalTargets": [
+        "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+        "src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj"
+      ],
+      "resolverErrors": [],
+      "source": {
+        "gitBlob": "48b4cc0ac4a04ff90626dfe19e2fc00d253f9162",
+        "path": ".github/workflows/ci.yml",
+        "sha256": "85579066057b1d6f9fbcba4329d8905c3a5c73f240e37525acb175873e6fe3a2"
+      }
+    },
+    {
+      "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+      "id": "E05",
+      "newAuthority": null,
+      "priorDisposition": {
+        "id": "E05",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/handoff-verification-20261110/disposition-packet.json"
+      },
+      "reportedErrors": [
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Abstractions/Hexalith.EventStore.Admin.Abstractions.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Aspire/Hexalith.EventStore.Aspire.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.Platform/src/Hexalith.Platform.Identity/Hexalith.Platform.Identity.csproj"
+        }
+      ],
+      "reportedSurfaces": [],
+      "repository": "references/Hexalith.Works",
+      "resolvedLocalTargets": [],
+      "resolverErrors": [
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj"
+        },
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj"
+        },
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj"
+        },
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj"
+        },
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj"
+        },
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Abstractions/Hexalith.EventStore.Admin.Abstractions.csproj"
+        },
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj"
+        },
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj"
+        },
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Aspire/Hexalith.EventStore.Aspire.csproj"
+        },
+        {
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.Platform/src/Hexalith.Platform.Identity/Hexalith.Platform.Identity.csproj"
+        }
+      ],
+      "source": {
+        "gitBlob": "1cab3e94a06d09245332cd1e78cd83dbe06272c2",
+        "path": "scripts/build-story414-sdk-candidate.sh",
+        "sha256": "75eefb3b4365934314e4f1e4353a905a2379fcbeffe00b85ef730342bc9694df"
+      }
+    }
+  ],
+  "limits": [
+    "No policy change or new owner authority.",
+    "No nested tree was opened or initialized.",
+    "No inspected command, condition, generator, project or Copy task was executed."
+  ],
+  "parentRevision": "051fadedf68335ba5c525cf26c42f86aa69697f9"
+}

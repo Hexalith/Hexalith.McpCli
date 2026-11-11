@@ -1,0 +1,86 @@
+[
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/build-verification.py",
+    "sha256": "f3c91e8fed4877ec4a4b656989da906c99da518edfde6a4cf3bf03c042d0f711"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/compatibility-tests.stderr.txt",
+    "sha256": "4526ea7ebff96d16d7d82800acb57892aa02ec02c8a5cb13943347636b9282ba"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/compatibility-tests.stdout.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/diff-check.stderr.txt",
+    "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/diff-check.stdout.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/focused-tests.stderr.txt",
+    "sha256": "d5f7042027839d6d3b6c79592a18cc769575b4e6e9f0580350ad4cc007cd6319"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/focused-tests.stdout.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/mutations.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/mutations.stdout.json",
+    "sha256": "b49f3e8f851116f3921b7f5c86fd0cdebb057a6fb9efac70b4f69289112cb6c3"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/prior-evidence-integrity.json",
+    "sha256": "1f5ae72101d9e0d6b99d83aa53e9d454a8e1b48cb5ca11c9183a5df1a8b1b65c"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/run-compatibility.py",
+    "sha256": "f07f7185cbb77af63a7726b74c42fbe7f9fdd86620bd326cc625af4326b7054c"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/verification.json",
+    "sha256": "054b9ecc06a779f2ad05800c114189d9ba3193e91129281fc64da07336c76e86"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/fixes/verification.md",
+    "sha256": "b966324467fc7fd61deff721618b2fe8052010ec74905bbd431d1315ae05c709"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/hash-seed-1.json",
+    "sha256": "aeeccf4f7f91950f11afe03ee7f5c0323145758cc0d5cf8c65ec361d08808523"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/hash-seed-2.json",
+    "sha256": "e52c59edf0cb0025373a58ec4bfcaa1e841d0bd6c1853c934bbbcdafe91a61d6"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/mutation-guards.py",
+    "sha256": "34f2847aeeb618d906a722416def9c36144fd9adfd9c713aa5eb247bf99f92f0"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/parent-reproductions.json",
+    "sha256": "131d872695d4dae1d8eed947c53d50423df66db7706bf0b23c73c2f59122bcde"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/policy-before.json",
+    "sha256": "d5704a056785b2ea2a2bdbb3f908f993b8384c6699990b10fc43b0d3a67e61fc"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/prior-evidence-integrity.json",
+    "sha256": "b3549f2b560d762d3f6475b3d5b4efaaefd998aa78c2c72139dd980c52e1e5b0"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/run-final-verification.py",
+    "sha256": "b56b8265bf978856a97053b9cd5b5eb44be1404ecd659d59a510b9e0b51f062e"
+  },
+  {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/source-resolution-review-20261111/triage.json",
+    "sha256": "1d42981f192d0c79b93d05a52527bc6b6e3aca32547a59e1454090af8952e04f"
+  }
+]

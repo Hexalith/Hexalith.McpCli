@@ -1,0 +1,6 @@
+test_review_s23_complete_container_registry_repository_and_image_suffixes (test_census.CensusTests.test_review_s23_complete_container_registry_repository_and_image_suffixes) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.560s
+
+OK

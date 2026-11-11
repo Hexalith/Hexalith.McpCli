@@ -1,0 +1,31 @@
+"""Only existing census regressions directly affected by S01–S18."""
+import importlib.util
+from pathlib import Path
+import sys
+import unittest
+root=Path.cwd()
+spec=importlib.util.spec_from_file_location('census_tests', root/'tools/proprietary-surfaces/v1/test_census.py')
+tests=importlib.util.module_from_spec(spec);spec.loader.exec_module(tests)
+names=[
+ 'test_inherited_props_targets_and_imports_cannot_hide_tool',
+ 'test_property_function_glob_and_unconsumed_local_tool_metadata_cannot_hide',
+ 'test_named_external_tool_exemption_is_data_and_does_not_allow_other_tools',
+ 'test_literal_glob_import_finds_neutral_executable_and_dependency',
+ 'test_import_xml_and_uppercase_extensions_are_metadata_and_closure',
+ 'test_targets_import_uses_project_defined_properties',
+ 'test_import_conditions_preserve_release_and_debug_alternatives',
+ 'test_workflow_matrix_project_publications_cannot_hide_orphan_projects',
+ 'test_workflow_non_target_expressions_do_not_obscure_literal_projects',
+ 'test_container_action_and_supported_yaml_structures_bind_each_identity',
+ 'test_container_identity_alone_has_project_and_publication_candidates',
+ 'test_literal_neutral_tool_install_and_container_commands_bind_exact_identity',
+ 'test_function_global_assignments_and_local_shadowing_select_actual_target',
+ 'test_literal_shell_variables_loops_functions_and_aliases_resolve_exact_targets',
+ 'test_yaml_working_directory_and_step_state_isolation',
+ 'test_unknown_missing_and_conditional_working_directories_refuse',
+ 'test_finite_loop_present_libraries_have_no_proprietary_surface',
+ 'test_compilation_closure_binds_inherited_imported_linked_and_added_source',
+ 'test_source_relative_root_locator_and_nested_targets_never_open_nested_repo',
+ 'test_partial_root_keeps_other_projects_sources_and_publication_observations']
+result=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(tests.CensusTests(name) for name in names))
+sys.exit(0 if result.wasSuccessful() else 1)

@@ -1,0 +1,7 @@
+test_review_s19_forged_matrix_tokens_have_no_approved_target_authority (test_census.CensusTests.test_review_s19_forged_matrix_tokens_have_no_approved_target_authority) ... ok
+test_review_s19_matrix_requires_a_whole_target_argument (test_census.CensusTests.test_review_s19_matrix_requires_a_whole_target_argument) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.142s
+
+OK

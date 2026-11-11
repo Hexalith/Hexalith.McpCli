@@ -49,6 +49,9 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
+- [x] `tools/proprietary-surfaces/v1/check.py` — address inspection cases E01–E05 in the retained handoff disposition packet through generic, bounded static resolution of project targets and Compile item provenance. Resolve finite literal shell variables, loops, function arguments and working directories when provable from committed source. Inspect no nested repository and execute no inspected code; unresolved runtime/generated source must retain actionable coverage errors. Keep other inspectable projects/files visible when an individual source fails rather than discarding that root's observations. Do not add allowances, exclusions, exceptions or owner authority.
+- [x] `tools/proprietary-surfaces/v1/test_census.py` — cover supported target/item resolution, unresolved and unbounded variants, directory containment, nested gitlinks, dynamic generated sources and retained partial-root observations. Every new refusal needs an executed guard-removal negative control; assert full output streams and exact discovered identities.
+- [x] `tools/proprietary-surfaces/v1/README.md`, `README.md` and `evidence/story-5-6/` — document the supported static subset and remaining limitations; retain fresh fixture, release, matrix, mutation and real-scan evidence with exact pins and policy integrity. Keep story/sprint in-progress while current-reference acceptance is unsuccessful.
 - [x] `tools/proprietary-surfaces/v1/baseline.json` — encode approved surfaces, narrowly scoped exemptions, consumer distinctions, publication identities, root provenance and empty initial exceptions; bind source inventory and approval hashes. Preserve the original baseline and record the two authorized fixture exemptions in a versioned amendment.
 - [x] `tools/proprietary-surfaces/v1/check.py` — inspect Git trees/blobs; discover candidates from project identity, executable/tool metadata, MCP references/registrations and publication metadata. Associate source signals with projects; inspect manifests/workflows/scripts even when a referenced project is absent. Emit stable JSON and diagnostics; never execute MSBuild or a discovered program.
 - [x] `tools/proprietary-surfaces/v1/test_census.py` — disposable Git fixtures for the matrix, renamed/nonstandard/outside-src surfaces, inherited settings, every exemption class, orphan publication, invalid baseline/amendments, exact exception binding, date boundaries, stale entries, missing objects, nested gitlinks and worktree/HEAD independence. Assert exit status and complete output streams; prove each refusal guard is detected when removed.
@@ -152,6 +155,8 @@ None.
 - Build review pass 1 applied all 13 patch groups, closed the parent P1 follow-up, and recorded six current-pin non-surface test/qualification observations without a directory exemption. Final verification: 53 census tests, 195 release tests, all 17 root references and all three mutation probes pass. No findings were deferred. See [reviewed evidence](evidence/story-5-6/review-pass-1/verification.md); the initial evidence remains preserved.
 
 ## Spec Change Log
+
+- 2026-11-11 — User answered "yes" to the offered next steps; proceed with the first scope: generic resolution of the five inspection cases before owner disposition of rejected identities. This authorizes implementation and verification within the existing committed-source boundary, not a new allowance or qualification. E01–E05 and their exact source pins/paths remain defined by [the retained packet](evidence/story-5-6/handoff-verification-20261110/disposition-packet.json). Resolve what committed source proves; retain coverage errors for unresolvable runtime or generated targets, with complete observations from independently inspectable files. Prior baseline, inventory, approval and amendment bytes remain preserved.
 
 ## Review Triage Log
 
@@ -281,3 +286,101 @@ authority; the story and sprint remain `in-progress` pending owner disposition
 or approved generic source-resolution work.
 The [fresh evidence secret scan](evidence/story-5-6/handoff-verification-20261110/secret-scan.json)
 is clean: 20 files checked, zero findings and zero inspection errors.
+
+
+### Bounded source-resolution implementation — 2026-11-11
+
+Implemented the approved generic E01–E05 source-resolution work. Committed
+Compile aliases and byte-preserving Copy inputs retain source provenance;
+finite literal shell variables, ordered loops, function arguments and scoped
+working directories resolve without executing inspected code. Generated or
+runtime source and exact nested targets remain actionable coverage errors.
+Individual source and allowance-closure failures preserve other observations
+and mark the root partial, with no stale claims from incomplete coverage.
+
+The [new verification packet](evidence/story-5-6/source-resolution-20261111/verification.md)
+records 117 passing census tests, 195 passing release regressions,
+70 executed guard-removal controls and all five matrix rows. The real
+committed-pin scan exits 1: 17 roots are accounted for, 5 are complete,
+with 14 rejected observations and 50 coverage errors. E04 resolves;
+E01 yields two exact orphan observations; E02 retains generated-source refusal;
+E03/E05 identify exact nested targets and refuse nested inspection. Policy,
+approval, original inventory, amendment and gitlink bytes remain unchanged.
+The story and sprint remain `in-progress` while current-reference acceptance
+is unsuccessful; no owner disposition or additional authority is inferred.
+
+### Bounded source-resolution review — 2026-11-11
+
+All three independent layers completed before triage. Every submitted finding
+received an individual verdict before grouping; parent reproductions confirm
+the concrete outcomes. All 19 findings route to 18 patches in existing census
+behavior, with no new runtime surface or allowance. No finding is deferred.
+
+| ID | Verdict | Evidence | Route |
+|---|---|---|---|
+| BH1 | medium | Inline loop bodies are consumed without inspecting their original line; the committed fixture passes with no observation or error. | S01 |
+| BH2 | medium | A quoted dotnet executable has no regex invocation match; its committed orphan publication passes silently. | S02 |
+| BH3 | medium | Docker global options and image push place the verb outside following[0]; both committed neutral-image fixtures pass silently. | S03 |
+| BH4 | medium | Two quoted matrix alternatives become one space-concatenated orphan identity instead of the two present ordinary projects. | S04 |
+| BH5 | medium | Unquoted heredoc command substitutions are skipped; a committed literal dotnet publication inside one passes silently. | S05 |
+| BH6 | medium | An unrelated neutral library suppresses attacker/neutral:latest by basename; its exact container publication vanishes. | S06 |
+| BH7 | medium | A missing literal local import has zero matches and no prerequisite diagnostic; the committed fixture passes. | S07 |
+| BH8 | medium | A 1,100-property chain raises uncaught RecursionError instead of retaining the sanitized coverage report. | S08 |
+| BH9 | high | An npm bin definition in another repository borrows the named Builds tool identity and is approved without an exact allowance. | S09 |
+| BH10 | medium | Every ancestor props file is inspected even when a nearer file stops MSBuild discovery; the shadowed root Exe marks the library executable. | S10 |
+| EC1 | medium | Recursive finite-loop execution resets conditional state and overwrites the possible pre-branch publication target. | S11 |
+| EC2 | medium | Unknown loop execution discards its resulting directory, so a later publication trusts the pre-loop directory only. | S12 |
+| EC3 | medium | read/unset/declare state changes leave a previous literal target trusted; the runtime-read parent fixture approves that old identity. | S13 |
+| EC4 | medium | Single-quoted function arguments lose quote provenance and expand a variable that the shell passes literally. | S14 |
+| EC5 | medium | The shebang comprehension reads executable blobs outside per-source recovery; a missing executable blob discards the rest of its root. | S15 |
+| VG1 | medium | Pre-verified mutation changes report-write failure to exit zero while all 117 tests pass; CI relies on that exit status. | S16 |
+| Parent1 | medium | FLAG=value dotnet publish missing/New.csproj is swallowed as one assignment; the full committed fixture returns passed with no observations. | S17 |
+| Parent2 | medium | A previously allowed missing/Old.csproj remains approved after read -r target; no unknown-target error is emitted. | S13 |
+| Parent3 | medium | Actual scans with PYTHONHASHSEED=1 and 2 produce different error rules for the same committed Parties metadata; source-alternative iteration is unordered. | S18 |
+
+S01 inline loops; S02 executable quoting; S03 Docker verbs/options; S04 matrix alternatives; S05 executable heredocs; S06 exact container provenance; S07 missing local imports; S08 property depth; S09 tool consumption versus definition; S10 nearest build metadata; S11 conditional loop state; S12 unknown-loop directories; S13 shell state writers; S14 quoted function arguments; S15 executable-blob recovery; S16 report-I/O boundary verification; S17 prefixed environment assignments; S18 deterministic diagnostics.
+
+All patches are pending. Existing owner decisions and current-reference acceptance remain unresolved.
+
+Patch validation found two further concrete regressions; each is verified before grouping.
+
+| ID | Verdict | Evidence | Route |
+|---|---|---|---|
+| Parent4 | medium | A literal forged @matrix-projects encoded token is decoded as an approved target even outside a workflow; the committed fixture passes under the unrelated approval. | S19 |
+| Parent5 | medium | Excluding all unconsumed Directory.Build.props/targets by filename skips even malformed XML; the committed malformed default-metadata fixture passes. | S20 |
+
+S19 removes forgeable matrix authority; S20 preserves unconsumed metadata validation and classification while retaining nearest-file project discovery. Both are pending patches.
+
+Final state-writer validation confirmed two remaining concrete cases after the first complete parent verification; its passing evidence is retained under `source-resolution-review-20261111/attempts/parent-final-1/`.
+
+| ID | Verdict | Evidence | Route |
+|---|---|---|---|
+| Parent6 | medium | printf -v target changes the shell variable, but a later publication still approves its previous literal value; full committed fixture passes with no errors. | S21 |
+| Parent7 | medium | Multiple assignments on one line update only the first variable in the resolver, allowing a later target assignment to retain an unrelated old approval. | S22 |
+
+S21 refuses unsupported printf shell-state writes; S22 resolves or invalidates every assignment on a multi-assignment line. Both are pending patches in the existing state model.
+
+| ID | Verdict | Evidence | Route |
+|---|---|---|---|
+| Parent8 | medium | An ordinary present web project declaring ContainerRegistry=trusted.invalid and ContainerRepository=neutral still has trusted.invalid/neutral:latest rejected; the complete declared source association is lost. | S23 |
+
+S23 recognizes exact declared registry/repository image provenance for ordinary projects, preserving refusal of other registries and every project carrying MCP/CLI signals. This changes no allowance.
+
+### Reviewed source-resolution outcome — 2026-11-11
+
+Applied S01–S23, closing all 24 individually triaged findings without deferral.
+Fresh parent verification passes 142 census tests, 195 release regressions, all
+110 guard-removal controls and all five matrix rows. Complete report bytes
+match across Python hash seeds 1 and 2. Original evidence and policy bindings
+remain unchanged.
+
+The real scan exits 1: 17 roots are accounted for, 3 are fully inspected,
+with 540 observations, 112 rejections and 110 coverage errors. The
+[final verification](evidence/story-5-6/source-resolution-review-20261111/verification.md)
+and [current blocker packet](evidence/story-5-6/source-resolution-review-20261111/acceptance-blockers.json)
+bind the exact findings and commands. E04 target enumeration resolves, while
+its imported metadata still prevents qualification; E02 currently stops on an
+unsafe import before generated provenance. Unresolved metadata and nested or
+runtime source remain refused, without a new allowance or owner authority.
+Story and sprint remain `in-progress`; the workflow halts at unsuccessful
+current-reference acceptance. No local commit or publication was performed.

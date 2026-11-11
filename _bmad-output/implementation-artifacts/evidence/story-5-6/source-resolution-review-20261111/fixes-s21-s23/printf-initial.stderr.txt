@@ -1,0 +1,135 @@
+test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) ... 
+  test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) (statement="printf -v target '%s' missing/New.csproj") ... FAIL
+  test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) (statement="printf -vtarget '%s' missing/New.csproj") ... FAIL
+  test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) (statement="builtin printf -vtarget '%s' missing/New.csproj") ... FAIL
+  test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) (statement='printf -v "$destination" \'%s\' missing/New.csproj') ... FAIL
+test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) ... FAIL
+
+======================================================================
+FAIL: test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) (statement="printf -v target '%s' missing/New.csproj")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 1845, in test_review_s21_printf_variable_writes_cannot_reuse_old_approval
+    self.assert_source_errors(report, path, ['unresolved-publication-target'])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 1052, in assert_source_errors
+    self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        path=path, rule=rule + ':' + path) for rule in rules])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'gitlink': 'bea0e02732b448f03e9830c3f2a15a[132 chars]sh'}] != [{'repository': 'references/opaque', 'gitlin[127 chars]sh'}]
+
+First differing element 0:
+{'gitlink': 'bea0e02732b448f03e9830c3f2a15a[131 chars].sh'}
+{'repository': 'references/opaque', 'gitlin[126 chars].sh'}
+
+  [{'gitlink': 'bea0e02732b448f03e9830c3f2a15a9f61781c44',
+    'path': 'scripts/ship.sh',
+    'repository': 'references/opaque',
+-   'rule': 'unbounded-publication-control-flow:scripts/ship.sh'}]
+?              ^ ^^^               ---  ^^^^^^^
+
++   'rule': 'unresolved-publication-target:scripts/ship.sh'}]
+?              ^^^ ^^                + ^^^
+
+
+======================================================================
+FAIL: test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) (statement="printf -vtarget '%s' missing/New.csproj")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 1845, in test_review_s21_printf_variable_writes_cannot_reuse_old_approval
+    self.assert_source_errors(report, path, ['unresolved-publication-target'])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 1052, in assert_source_errors
+    self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        path=path, rule=rule + ':' + path) for rule in rules])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'gitlink': '0df32902862f58d2c7ff08a8275057[132 chars]sh'}] != [{'repository': 'references/opaque', 'gitlin[127 chars]sh'}]
+
+First differing element 0:
+{'gitlink': '0df32902862f58d2c7ff08a8275057[131 chars].sh'}
+{'repository': 'references/opaque', 'gitlin[126 chars].sh'}
+
+  [{'gitlink': '0df32902862f58d2c7ff08a82750579e32365816',
+    'path': 'scripts/ship.sh',
+    'repository': 'references/opaque',
+-   'rule': 'unbounded-publication-control-flow:scripts/ship.sh'}]
+?              ^ ^^^               ---  ^^^^^^^
+
++   'rule': 'unresolved-publication-target:scripts/ship.sh'}]
+?              ^^^ ^^                + ^^^
+
+
+======================================================================
+FAIL: test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) (statement="builtin printf -vtarget '%s' missing/New.csproj")
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 1845, in test_review_s21_printf_variable_writes_cannot_reuse_old_approval
+    self.assert_source_errors(report, path, ['unresolved-publication-target'])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 1052, in assert_source_errors
+    self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        path=path, rule=rule + ':' + path) for rule in rules])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'gitlink': '790802dcb45c5ef44d90696b8b4b52[132 chars]sh'}] != [{'repository': 'references/opaque', 'gitlin[127 chars]sh'}]
+
+First differing element 0:
+{'gitlink': '790802dcb45c5ef44d90696b8b4b52[131 chars].sh'}
+{'repository': 'references/opaque', 'gitlin[126 chars].sh'}
+
+  [{'gitlink': '790802dcb45c5ef44d90696b8b4b52b0d1779484',
+    'path': 'scripts/ship.sh',
+    'repository': 'references/opaque',
+-   'rule': 'unbounded-publication-control-flow:scripts/ship.sh'}]
+?              ^ ^^^               ---  ^^^^^^^
+
++   'rule': 'unresolved-publication-target:scripts/ship.sh'}]
+?              ^^^ ^^                + ^^^
+
+
+======================================================================
+FAIL: test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) (statement='printf -v "$destination" \'%s\' missing/New.csproj')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 1845, in test_review_s21_printf_variable_writes_cannot_reuse_old_approval
+    self.assert_source_errors(report, path, ['unresolved-publication-target'])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 1052, in assert_source_errors
+    self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin,
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        path=path, rule=rule + ':' + path) for rule in rules])
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'gitlink': '66fc9cd8be678883889e7cf7b8af22[132 chars]sh'}] != [{'repository': 'references/opaque', 'gitlin[127 chars]sh'}]
+
+First differing element 0:
+{'gitlink': '66fc9cd8be678883889e7cf7b8af22[131 chars].sh'}
+{'repository': 'references/opaque', 'gitlin[126 chars].sh'}
+
+  [{'gitlink': '66fc9cd8be678883889e7cf7b8af226913a4a649',
+    'path': 'scripts/ship.sh',
+    'repository': 'references/opaque',
+-   'rule': 'unbounded-publication-control-flow:scripts/ship.sh'}]
+?              ^ ^^^               ---  ^^^^^^^
+
++   'rule': 'unresolved-publication-target:scripts/ship.sh'}]
+?              ^^^ ^^                + ^^^
+
+
+======================================================================
+FAIL: test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 1849, in test_review_s21_printf_variable_writes_cannot_reuse_old_approval
+    self.assertEqual(self.run_cli(0)['surfaces'][0]['surface']['identity'], 'missing/Approved.csproj')
+                     ~~~~~~~~~~~~^^^
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 107, in run_cli
+    self.assertEqual(status, expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.710s
+
+FAILED (failures=5)

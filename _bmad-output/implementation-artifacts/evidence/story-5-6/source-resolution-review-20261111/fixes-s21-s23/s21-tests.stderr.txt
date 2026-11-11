@@ -1,0 +1,6 @@
+test_review_s21_printf_variable_writes_cannot_reuse_old_approval (test_census.CensusTests.test_review_s21_printf_variable_writes_cannot_reuse_old_approval) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.180s
+
+OK

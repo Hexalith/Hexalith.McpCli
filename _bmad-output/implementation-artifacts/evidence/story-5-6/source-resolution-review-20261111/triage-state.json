@@ -1,0 +1,43 @@
+[
+  {
+    "id": "Parent6",
+    "verdict": "medium",
+    "route": "S21",
+    "statement": "printf -v target '%s' missing/New.csproj",
+    "outcome": "passed with missing/Approved.csproj approved and no errors"
+  },
+  {
+    "id": "Parent7",
+    "verdict": "medium",
+    "route": "S22",
+    "statement": "other=x target=missing/New.csproj",
+    "outcome": "passed with missing/Approved.csproj approved and no errors"
+  },
+  {
+    "id": "Parent8",
+    "verdict": "medium",
+    "route": "S23",
+    "outcome": "A present ordinary web project declares the exact registry/repository pair, yet its matching image is rejected because ContainerRegistry is discarded.",
+    "surfaces": [
+      {
+        "classification": "unapproved",
+        "gitlink": "f94aa3aaad23c5be139fa5536c02a90880184de4",
+        "reason": "new-proprietary-surface",
+        "signals": [
+          "container-image"
+        ],
+        "sources": [
+          "scripts/ship.sh"
+        ],
+        "status": "rejected",
+        "surface": {
+          "identity": "trusted.invalid/neutral:latest",
+          "kind": "publication",
+          "path": "scripts/ship.sh",
+          "repository": "references/opaque"
+        }
+      }
+    ],
+    "errors": []
+  }
+]
