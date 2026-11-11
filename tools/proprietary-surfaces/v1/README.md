@@ -54,8 +54,9 @@ blobs. Property expansion has a 128-level budget and fails with the metadata
 path when exhausted. Classification aliases and conditional imports retain alternatives; unconditional property
 replacements and empty assignments control effective package defaults.
 Reference item lists are split before classification. Recursive `**/` globs include zero
-intermediate directories. SDK identities come from XML declarations; comments
-provide no SDK authority. Unconsumed local props/targets declaring an
+intermediate directories. SDK identities come from XML declarations, including unconditional explicit
+`Sdk.props`/`Sdk.targets` imports with an `Sdk` attribute; comments provide no SDK
+authority. Unconsumed local props/targets declaring an
 executable, packed tool, command name, MCP/CLI dependency or MCP container
 identity become independent candidates, including when an import directory
 cannot be resolved. SDK and unavailable nested-reference imports
@@ -140,8 +141,12 @@ Unknown substitutions, runtime parameters, recursive/unbounded control flow,
 ambiguous conditional or short-circuit directory changes, missing directories
 and targets crossing a nested gitlink retain actionable coverage errors. Shell
 conditions are never executed. Inline loop bodies and command substitutions in
-unquoted heredocs are explicitly refused. Quoted literal heredocs supply no
-executable state. Conditional loops retain their uncertainty; unknown loops
+unquoted heredocs are explicitly refused when resolving project invocations.
+Scripts without a literal `dotnet publish`, `pack` or `run` command require no
+project-target dataflow; their other publication signals are still inspected.
+Shell and PowerShell comment lines supply no executable state and cannot consume
+the next command through a trailing continuation character. Quoted literal
+heredocs supply no executable state. Conditional loops retain their uncertainty; unknown loops
 invalidate a changed caller directory. Runtime reads, `unset` and unsupported
 `declare`/`typeset` changes invalidate affected variables. Unsupported `printf -v`
 writes, including attached `-vname` forms, invalidate the destination; an unknown

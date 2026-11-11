@@ -755,6 +755,21 @@ class CensusTests(unittest.TestCase):
         self.write(self.repo,path,'<Project><Sdk Name="Microsoft.NET.Sdk.Web"/><PropertyGroup><OutputType>Exe</OutputType><IsPackable>false</IsPackable></PropertyGroup></Project>')
         self.commit(self.repo);self.pin();self.assertEqual(self.run_cli(0)['surfaces'],[])
 
+    def test_explicit_sdk_imports_preserve_apphost_classification_without_granting_other_imports_authority(self):
+        path = 'src/Neutral/Neutral.csproj'
+        for project, sdk, accepted in [('Sdk.props', 'Aspire.AppHost.Sdk', True),
+                                       ('Sdk.targets', 'Aspire.AppHost.Sdk', True),
+                                       ('Sdk.props', 'Microsoft.NET.Sdk', False),
+                                       ('Other.props', 'Aspire.AppHost.Sdk', False)]:
+            with self.subTest(project=project, sdk=sdk):
+                self.write(self.repo, path, f'<Project><Import Project="{project}" Sdk="{sdk}" Version="13.6.4"/>'
+                    '<PropertyGroup><OutputType>Exe</OutputType><IsPackable>false</IsPackable></PropertyGroup></Project>')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(0 if accepted else 1)
+                self.assertEqual(report['errors'], [])
+                self.assertEqual([entry['signals'] for entry in report['surfaces']],
+                                 [] if accepted else [['executable-project']])
+
     def test_import_xml_and_uppercase_extensions_are_metadata_and_closure(self):
         for imported in ('eng/runtime.xml','eng/Hidden.PROPS'):
             with self.subTest(imported=imported):
@@ -1095,6 +1110,38 @@ done
                 report = self.run_cli(1)
                 self.assertEqual(report['surfaces'], [])
                 self.assert_source_errors(report, path, ['unresolved-publication-target'])
+
+    def test_shell_comments_do_not_publish_or_consume_the_next_command(self):
+        path = 'scripts/ship.sh'
+        comment = '# Concurrent dotnet run launches are incremental; <<EOF $(not-executed)\n'
+        self.write(self.repo, path, comment)
+        self.commit(self.repo); self.pin()
+        self.assertEqual(self.run_cli(0)['surfaces'], [])
+        for continuation in ('\\', '`', '^'):
+            with self.subTest(continuation=continuation):
+                self.write(self.repo, path, comment + '# documented command ' + continuation
+                           + '\n  dotnet publish missing/Real.csproj\n')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['errors'], [])
+                self.assertEqual([entry['surface'] for entry in report['surfaces']],
+                                 [self.binding(path, 'publication', 'missing/Real.csproj')])
+                self.assertEqual(report['surfaces'][0]['signals'], ['orphan-project-reference'])
+
+    def test_unrelated_shell_control_flow_does_not_mask_other_publication_signals(self):
+        path = 'scripts/ship.sh'
+        self.write(self.repo, path, 'cat <<EOF\n$(printf unrelated)\nEOF\n'
+                   'for item in a b; do printf "%s" "$item"; done\n')
+        self.commit(self.repo); self.pin()
+        self.assertEqual(self.run_cli(0)['surfaces'], [])
+        with (self.repo / path).open('a') as script:
+            script.write('docker push attacker/neutral:latest\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([entry['surface'] for entry in report['surfaces']],
+                         [self.binding(path, 'publication', 'attacker/neutral:latest')])
+        self.assertEqual(report['surfaces'][0]['signals'], ['container-image'])
 
     def test_unbounded_shell_loop_refuses_and_retains_literal_observations(self):
         path = 'scripts/ship.sh'

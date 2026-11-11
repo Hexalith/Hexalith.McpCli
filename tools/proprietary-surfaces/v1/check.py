@@ -689,6 +689,9 @@ def sdk_identities(tree, path):
     for element in document:
         if local_name(element).lower() == 'sdk':
             identities.append(attribute(element, 'Name') or '')
+        elif (local_name(element).lower() == 'import' and attribute(element, 'Condition') is None
+              and attribute(element, 'Project') in ('Sdk.props', 'Sdk.targets')):
+            identities.append(attribute(element, 'Sdk') or '')
     return {identity.split('/', 1)[0].lower() for identity in identities if identity}
 
 
@@ -855,7 +858,10 @@ def build_action_images(lines):
 
 def logical_commands(text):
     """Join supported shell, PowerShell and batch continuation lines."""
-    return re.sub(r'(?:\\|`|\^)[ \t]*\r?\n[ \t]*', ' ', text)
+    # A shell/PowerShell comment's trailing continuation character does not
+    # consume the next physical command. Preserve it before joining commands.
+    return re.sub(r'(?m)(^[ \t]*#[^\r\n]*(?:\r?\n|$))|(?:\\|`|\^)[ \t]*\r?\n[ \t]*',
+                  lambda match: match[1] if match[1] is not None else ' ', text)
 
 
 def script_blocks(text, path):
@@ -945,6 +951,8 @@ def static_project_targets(tree, text, path, errors):
     This is an overapproximation of source paths, never a shell interpreter:
     no command, condition, substitution, external file or nested tree is run.
     """
+    if not DOTNET_INVOCATION.search(text):
+        return []  # Other publication signals are inspected separately.
     targets, functions, called, budget = set(), {}, set(), [0]
 
     def problem(rule, target=None):
@@ -1087,6 +1095,8 @@ def static_project_targets(tree, text, path, errors):
             if budget[0] > 8192:
                 problem('unbounded-publication-control-flow')
                 return None
+            if raw.startswith('#') and not path.lower().endswith(('.cmd', '.bat')):
+                continue
             heredoc = re.search(r'''<<-?\s*(["']?)([A-Za-z_][\w]*)\1''', raw)
             if heredoc:
                 body = []
