@@ -1,0 +1,6 @@
+{
+  "checkerSha256": "3c7612b06c5e3553aaf7c41565577f25a46707f44dd97c9975c90655fbbde36f",
+  "probesSha256": "7ec9e08cb7a824ff9a9e7fdbbe1543ed023d6d58d9732f0124ba402ed206d504",
+  "source": "Parent independent disposable committed fixture probes after the two reported fixes.",
+  "note": "Checker stayed unchanged through these final checks; the official current implementation hash is also bound by final run integrity."
+}

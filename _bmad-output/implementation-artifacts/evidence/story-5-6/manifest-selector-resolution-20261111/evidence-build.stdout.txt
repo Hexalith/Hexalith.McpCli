@@ -1,0 +1,1 @@
+{"after": {"completeRoots": 2, "inspectionErrors": 107, "observations": 548, "rejectedObservations": 120, "roots": 17, "stale": 2}, "before": {"completeRoots": 2, "inspectionErrors": 109, "observations": 548, "rejectedObservations": 120, "roots": 17, "stale": 2}, "newBlockers": 0, "priorFilesPreserved": 421, "removedBlockers": 2}

@@ -154,6 +154,39 @@ committed target. Composite actions with literal caller-owned project paths
 produce exact orphan publication observations when those sources are absent.
 No new fixture or publication allowance follows from resolving a target.
 
+Committed JSON inputs also support this finite literal selector spelling:
+`jq -er '.payload.units | select(length == 2) | .[] | [.label, .target] | @tsv' targets.json`.
+The property names and positive length are data; `-r` and `-re` are also supported.
+Dotted object fields select one array and one or more ordered string fields per
+row. A `while IFS=$'\t' read -r label target; do` loop with
+`done <<< "$rows"` consumes an exactly bound assignment such as
+`rows="$(jq ...)"` in array order. It preserves field pairing and directory
+changes between iterations. The final EOF read invalidates its destinations.
+No jq program, shell condition, inspected command or project is executed.
+
+This subset requires 1–256 rows, at most 32 columns and 32 dotted field levels,
+plus the existing JSON, statement and call budgets. Fields must be nonempty
+strings without control characters, backslashes or shell expansion syntax;
+missing fields, a failed length assertion, a scalar collection, zero rows and
+reader field-count mismatches fail coverage. Inputs require an exact committed
+regular blob and a proven directory. Quoted filenames retain spaces; unquoted
+inputs need a safe exact shell argument. Runtime/generated inputs, unsupported
+filters/options, nested roots, command/reader overrides and unknown mutations
+retain explicit coverage errors. Table copies and other readers remain unsupported.
+
+Before a selector, the resolver tracks effects in source order. It accepts the
+retained shell guards, diagnostics, variable operations, proven directory
+locators and directory creation; it refuses file redirections and unsupported
+commands or substitutions that could change the input. Numeric descriptor
+duplication such as `>&2` is harmless. A `find` deletion is accepted only for a
+complete finite disjunction of literal `-name` filters that cannot match the
+input basename, using ASCII filename literals and `*`/`?` wildcards, with optional
+`-maxdepth` and `-type f`; other find actions or
+expressions fail. Unknown helpers, wrappers and file writers cannot establish
+immutable-input authority. Unknown writes to table or row variables invalidate
+their targets, including conditional and short-circuit mutations. This is a
+bounded source proof, with no new allowance or qualification from enumeration.
+
 Additional committed path spellings include quoted or unquoted source-relative
 `cd`/`dirname`/`pwd` locators, an optional `CDPATH=` prefix, `--` path delimiters,
 `pwd -P`, and a second locator based on a previously proven script directory.

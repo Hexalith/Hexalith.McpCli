@@ -1,0 +1,146 @@
+[
+  {
+    "name": "census-tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/proprietary-surfaces/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "census-tests.stdout.txt",
+    "stderr": "census-tests.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  },
+  {
+    "name": "mutations",
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/manifest-selector-resolution-20261111/mutation-guards.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "mutations.stdout.txt",
+    "stderr": "mutations.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  },
+  {
+    "name": "release-tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts/tests",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "release-tests.stdout.txt",
+    "stderr": "release-tests.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  },
+  {
+    "name": "before-census",
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/manifest-selector-resolution-20261111/before-check.py",
+      "--revision",
+      "1a44525c450081dc07df4021ab23e3090aacfda4",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/manifest-selector-resolution-20261111/runs/final-1/before-census.json"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "stdout": "before-census.stdout.txt",
+    "stderr": "before-census.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  },
+  {
+    "name": "current-pin-census",
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--revision",
+      "1a44525c450081dc07df4021ab23e3090aacfda4",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/manifest-selector-resolution-20261111/runs/final-1/census.json"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "stdout": "current-pin-census.stdout.txt",
+    "stderr": "current-pin-census.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  },
+  {
+    "name": "determinism-1",
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--revision",
+      "1a44525c450081dc07df4021ab23e3090aacfda4",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/manifest-selector-resolution-20261111/runs/final-1/determinism-1.json"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "stdout": "determinism-1.stdout.txt",
+    "stderr": "determinism-1.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "1"
+    }
+  },
+  {
+    "name": "determinism-2",
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--revision",
+      "1a44525c450081dc07df4021ab23e3090aacfda4",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/manifest-selector-resolution-20261111/runs/final-1/determinism-2.json"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "stdout": "determinism-2.stdout.txt",
+    "stderr": "determinism-2.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "2"
+    }
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "diff-check.stdout.txt",
+    "stderr": "diff-check.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  }
+]

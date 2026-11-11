@@ -1,0 +1,158 @@
+{
+  "priorRunner": "../coverage-resolution-20261111/mutation-guards.py",
+  "retainedControlCount": 132,
+  "newControls": [
+    {
+      "id": "M01-enumeration",
+      "test": "test_manifest_selector_retains_exact_orphan_observations_and_committed_input"
+    },
+    {
+      "id": "M02-selector-options",
+      "test": "test_manifest_selector_unsupported_selectors_and_options_refuse"
+    },
+    {
+      "id": "M03-overrides",
+      "test": "test_manifest_selector_command_overrides_refuse"
+    },
+    {
+      "id": "M04-runtime-input",
+      "test": "test_manifest_selector_runtime_missing_malformed_and_duplicate_inputs_refuse"
+    },
+    {
+      "id": "M05-input-argv",
+      "test": "test_manifest_selector_input_argv_and_safe_readonly_effects_are_proven"
+    },
+    {
+      "id": "M06-nested-input",
+      "test": "test_manifest_selector_unsafe_and_nested_sources_and_targets_refuse"
+    },
+    {
+      "id": "M07-redirection",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse"
+    },
+    {
+      "id": "M08-unknown-effects",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse"
+    },
+    {
+      "id": "M09-find-expression",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse"
+    },
+    {
+      "id": "M10-find-patterns",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse"
+    },
+    {
+      "id": "M11-row-budget",
+      "test": "test_manifest_selector_eof_cannot_reuse_final_fields_and_zero_rows_refuse"
+    },
+    {
+      "id": "M12-column-budget",
+      "test": "test_manifest_selector_budgets_refuse"
+    },
+    {
+      "id": "M13-field-depth",
+      "test": "test_manifest_selector_budgets_refuse"
+    },
+    {
+      "id": "M14-shape",
+      "test": "test_manifest_selector_collection_shape_and_length_refuse"
+    },
+    {
+      "id": "M15-field-controls",
+      "test": "test_manifest_selector_fields_cannot_forge_tsv_or_shell_provenance"
+    },
+    {
+      "id": "M16-reader-shape",
+      "test": "test_manifest_selector_reader_shape_refuses_instead_of_using_wrong_fields"
+    },
+    {
+      "id": "M17-eof",
+      "test": "test_manifest_selector_eof_cannot_reuse_final_fields_and_zero_rows_refuse"
+    },
+    {
+      "id": "M18-order",
+      "test": "test_manifest_selector_pairs_fields_and_preserves_iteration_directory_order"
+    },
+    {
+      "id": "M19-pairing",
+      "test": "test_manifest_selector_pairs_fields_and_preserves_iteration_directory_order"
+    },
+    {
+      "id": "M20-append-effects",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse"
+    },
+    {
+      "id": "M21-locator-effects",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse"
+    },
+    {
+      "id": "M22-append-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority"
+    },
+    {
+      "id": "M23-indexed-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority"
+    },
+    {
+      "id": "M24-arithmetic-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority"
+    },
+    {
+      "id": "M25-nameref-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority"
+    },
+    {
+      "id": "M26-writer-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority"
+    },
+    {
+      "id": "M27-upper-row-budget",
+      "test": "test_manifest_selector_budgets_refuse"
+    },
+    {
+      "id": "M28-field-type-empty",
+      "test": "test_manifest_selector_fields_cannot_forge_tsv_or_shell_provenance"
+    },
+    {
+      "id": "M29-collection-path",
+      "test": "test_manifest_selector_missing_collection_path_refuses"
+    },
+    {
+      "id": "M30-field-path",
+      "test": "test_manifest_selector_collection_shape_and_length_refuse"
+    },
+    {
+      "id": "M31-json-traversal",
+      "test": "test_manifest_selector_json_traversal_budgets_refuse"
+    },
+    {
+      "id": "M32-conditional-reader",
+      "test": "test_manifest_selector_conditional_and_unbounded_readers_refuse"
+    },
+    {
+      "id": "M33-unbounded-reader",
+      "test": "test_manifest_selector_conditional_and_unbounded_readers_refuse"
+    },
+    {
+      "id": "M34-table-scalar",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority"
+    },
+    {
+      "id": "M35-query-scope",
+      "test": "test_manifest_selector_unrelated_scalar_queries_have_no_table_authority"
+    },
+    {
+      "id": "M36-test-token-position",
+      "test": "test_manifest_selector_literal_test_tokens_cannot_hide_later_writers"
+    },
+    {
+      "id": "M37-decimal-conversion",
+      "test": "test_manifest_selector_budgets_refuse"
+    }
+  ],
+  "adaptedAnchors": [
+    "Review-S13-shell-state now names normalized writes and includes added unsupported writers; its test and expected failure remain unchanged.",
+    "Review-S11 anchor includes the literal-for variable binding to distinguish its original conditional-state guard from the new ordered table reader call."
+  ]
+}

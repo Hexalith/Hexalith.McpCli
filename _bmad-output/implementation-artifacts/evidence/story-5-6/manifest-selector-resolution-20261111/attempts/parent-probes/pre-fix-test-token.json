@@ -1,0 +1,6 @@
+{
+  "checkerSha256": "3c7612b06c5e3553aaf7c41565577f25a46707f44dd97c9975c90655fbbde36f",
+  "before": "echo [[; cp runtime targets.json",
+  "errors": [],
+  "observations": 2
+}

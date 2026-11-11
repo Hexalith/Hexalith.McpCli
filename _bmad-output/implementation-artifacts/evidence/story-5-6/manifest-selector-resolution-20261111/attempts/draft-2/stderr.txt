@@ -1,0 +1,43 @@
+test_manifest_selector_budgets_refuse (test_census.CensusTests.test_manifest_selector_budgets_refuse) ... ok
+test_manifest_selector_collection_shape_and_length_refuse (test_census.CensusTests.test_manifest_selector_collection_shape_and_length_refuse) ... ok
+test_manifest_selector_command_overrides_refuse (test_census.CensusTests.test_manifest_selector_command_overrides_refuse) ... ok
+test_manifest_selector_fields_cannot_forge_tsv_or_shell_provenance (test_census.CensusTests.test_manifest_selector_fields_cannot_forge_tsv_or_shell_provenance) ... ok
+test_manifest_selector_known_and_unknown_file_writes_refuse (test_census.CensusTests.test_manifest_selector_known_and_unknown_file_writes_refuse) ... ok
+test_manifest_selector_pairs_fields_and_preserves_iteration_directory_order (test_census.CensusTests.test_manifest_selector_pairs_fields_and_preserves_iteration_directory_order) ... ok
+test_manifest_selector_present_projects_require_metadata_and_registration_inspection (test_census.CensusTests.test_manifest_selector_present_projects_require_metadata_and_registration_inspection) ... FAIL
+test_manifest_selector_reader_shape_refuses_instead_of_using_wrong_fields (test_census.CensusTests.test_manifest_selector_reader_shape_refuses_instead_of_using_wrong_fields) ... ok
+test_manifest_selector_retains_exact_orphan_observations_and_committed_input (test_census.CensusTests.test_manifest_selector_retains_exact_orphan_observations_and_committed_input) ... ok
+test_manifest_selector_runtime_missing_malformed_and_duplicate_inputs_refuse (test_census.CensusTests.test_manifest_selector_runtime_missing_malformed_and_duplicate_inputs_refuse) ... ok
+test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority (test_census.CensusTests.test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority) ... ok
+test_manifest_selector_unsafe_and_nested_sources_and_targets_refuse (test_census.CensusTests.test_manifest_selector_unsafe_and_nested_sources_and_targets_refuse) ... ok
+test_manifest_selector_unsupported_selectors_and_options_refuse (test_census.CensusTests.test_manifest_selector_unsupported_selectors_and_options_refuse) ... ok
+
+======================================================================
+FAIL: test_manifest_selector_present_projects_require_metadata_and_registration_inspection (test_census.CensusTests.test_manifest_selector_present_projects_require_metadata_and_registration_inspection)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/test_census.py", line 2173, in test_manifest_selector_present_projects_require_metadata_and_registration_inspection
+    self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=self.git(self.repo, 'rev-parse', 'HEAD'),
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+                                            path='one/First.csproj', rule='malformed-project-xml:one/First.csproj')])
+                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: Lists differ: [{'gitlink': 'b596c45e59379778b231438ee9688c[126 chars]oj'}] != [{'repository': 'references/opaque', 'gitlin[121 chars]oj'}]
+
+First differing element 0:
+{'gitlink': 'b596c45e59379778b231438ee9688c[125 chars]roj'}
+{'repository': 'references/opaque', 'gitlin[120 chars]roj'}
+
+  [{'gitlink': 'b596c45e59379778b231438ee9688ce4c722965a',
+    'path': 'one/First.csproj',
+    'repository': 'references/opaque',
+-   'rule': 'malformed-project-metadata:one/First.csproj'}]
+?                               ^^^^^^^
+
++   'rule': 'malformed-project-xml:one/First.csproj'}]
+?                              + ^
+
+
+----------------------------------------------------------------------
+Ran 13 tests in 2.399s
+
+FAILED (failures=1)

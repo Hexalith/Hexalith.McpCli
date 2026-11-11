@@ -1,0 +1,50 @@
+{
+  "result": "passed",
+  "rows": [
+    {
+      "executed": true,
+      "passed": true,
+      "row": "New unapproved project/tool/container/release",
+      "tests": [
+        "test_manifest_selector_retains_exact_orphan_observations_and_committed_input",
+        "test_orphan_package_tool_container_and_workflow_publications_fail"
+      ]
+    },
+    {
+      "executed": true,
+      "passed": true,
+      "row": "Approved exemption or exact unexpired exception",
+      "tests": [
+        "test_each_approved_classification_is_retained_without_broadening",
+        "test_exception_is_exact_including_kind_identity_path_and_root"
+      ]
+    },
+    {
+      "executed": true,
+      "passed": true,
+      "row": "Invalid/malformed/expired exception, including allowed target",
+      "tests": [
+        "test_invalid_exception_fails_even_when_target_is_already_allowed",
+        "test_expiry_is_inclusive_and_production_uses_utc"
+      ]
+    },
+    {
+      "executed": true,
+      "passed": true,
+      "row": "Removed surface reports stale without changing policy",
+      "tests": [
+        "test_stale_allowances_are_reported_and_never_rewritten"
+      ]
+    },
+    {
+      "executed": true,
+      "passed": true,
+      "row": "Missing source/root, malformed metadata or unsafe path",
+      "tests": [
+        "test_missing_root_uninitialized_root_and_missing_committed_object_fail",
+        "test_manifest_selector_runtime_missing_malformed_and_duplicate_inputs_refuse",
+        "test_manifest_selector_unsafe_and_nested_sources_and_targets_refuse"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,415 @@
+{
+  "checkerSha256": "39337483e9579a5dfc26182fbebeafcd8bd47aa8951d32b9688afca3a9540f18",
+  "runnerSha256": "443ce011c63dcf48d07c9f29b07fd01479e597a5540446baddffc31a1e8a7ea3",
+  "retainedControls": 132,
+  "newGuards": [
+    {
+      "control": "M01-enumeration",
+      "test": "test_manifest_selector_retains_exact_orphan_observations_and_committed_input",
+      "guardChanges": [
+        {
+          "before": "if selected_rows is not None:",
+          "after": "if False:",
+          "line": 1451
+        }
+      ]
+    },
+    {
+      "control": "M02-selector-options",
+      "test": "test_manifest_selector_unsupported_selectors_and_options_refuse",
+      "guardChanges": [
+        {
+          "before": "problem('unsupported-manifest-selector')",
+          "after": "pass",
+          "line": 1146
+        }
+      ]
+    },
+    {
+      "control": "M03-overrides",
+      "test": "test_manifest_selector_command_overrides_refuse",
+      "guardChanges": [
+        {
+          "before": "problem('unsupported-manifest-command-context')",
+          "after": "pass",
+          "line": 1156
+        }
+      ]
+    },
+    {
+      "control": "M04-runtime-input",
+      "test": "test_manifest_selector_runtime_missing_malformed_and_duplicate_inputs_refuse",
+      "guardChanges": [
+        {
+          "before": "problem('unresolved-manifest-input')",
+          "after": "pass",
+          "line": 1160
+        }
+      ]
+    },
+    {
+      "control": "M05-input-argv",
+      "test": "test_manifest_selector_input_argv_and_safe_readonly_effects_are_proven",
+      "guardChanges": [
+        {
+          "before": "if not input_word or input_word[1][:1] not in ('\"', \"'\") and not re.fullmatch(r'[A-Za-z0-9_./-]+', next(iter(possibilities))):",
+          "after": "if False:",
+          "line": 1163
+        }
+      ]
+    },
+    {
+      "control": "M06-nested-input",
+      "test": "test_manifest_selector_unsafe_and_nested_sources_and_targets_refuse",
+      "guardChanges": [
+        {
+          "before": "problem('nested-manifest-input', manifest)",
+          "after": "pass",
+          "line": 1170
+        }
+      ]
+    },
+    {
+      "control": "M07-redirection",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "guardChanges": [
+        {
+          "before": "if writes_file or not safe_effect or re.search",
+          "after": "if not safe_effect or re.search",
+          "line": 1214
+        }
+      ]
+    },
+    {
+      "control": "M08-unknown-effects",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "guardChanges": [
+        {
+          "before": "if writes_file or not safe_effect or re.search",
+          "after": "if writes_file or re.search",
+          "line": 1214
+        }
+      ]
+    },
+    {
+      "control": "M09-find-expression",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "guardChanges": [
+        {
+          "before": "safe_effect = deletes and bool(patterns) and not expression and all(",
+          "after": "safe_effect = True or all(",
+          "line": 1211
+        }
+      ]
+    },
+    {
+      "control": "M10-find-patterns",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "guardChanges": [
+        {
+          "before": "re.fullmatch(r'[A-Za-z0-9_.?*-]+', pattern) and",
+          "after": "True and",
+          "line": 1212
+        }
+      ]
+    },
+    {
+      "control": "M11-row-budget",
+      "test": "test_manifest_selector_eof_cannot_reuse_final_fields_and_zero_rows_refuse",
+      "guardChanges": [
+        {
+          "before": "not 1 <= row_count <= 256",
+          "after": "row_count > 256",
+          "line": 1222
+        }
+      ]
+    },
+    {
+      "control": "M12-column-budget",
+      "test": "test_manifest_selector_budgets_refuse",
+      "guardChanges": [
+        {
+          "before": "or len(fields) > 32",
+          "after": "",
+          "line": 1222
+        }
+      ]
+    },
+    {
+      "control": "M13-field-depth",
+      "test": "test_manifest_selector_budgets_refuse",
+      "guardChanges": [
+        {
+          "before": "or any(len(keys) > 32 for keys in [collection, *fields])",
+          "after": "",
+          "line": 1222
+        }
+      ]
+    },
+    {
+      "control": "M14-shape",
+      "test": "test_manifest_selector_collection_shape_and_length_refuse",
+      "guardChanges": [
+        {
+          "before": "require(isinstance(document, list) and len(document) == row_count, 'manifest-selector-shape')",
+          "after": "pass",
+          "line": 1232
+        }
+      ]
+    },
+    {
+      "control": "M15-field-controls",
+      "test": "test_manifest_selector_fields_cannot_forge_tsv_or_shell_provenance",
+      "guardChanges": [
+        {
+          "before": "not re.search(r'[\\x00-\\x1f\\x7f\\\\$`*?\\[\\]{}]', value)",
+          "after": "True",
+          "line": 1241
+        }
+      ]
+    },
+    {
+      "control": "M16-reader-shape",
+      "test": "test_manifest_selector_reader_shape_refuses_instead_of_using_wrong_fields",
+      "guardChanges": [
+        {
+          "before": "if len(set(names)) != len(names) or any(len(row) != len(names) for row in rows):",
+          "after": "if False:",
+          "line": 1384
+        }
+      ]
+    },
+    {
+      "control": "M17-eof",
+      "test": "test_manifest_selector_eof_cannot_reuse_final_fields_and_zero_rows_refuse",
+      "guardChanges": [
+        {
+          "before": "environment.update({name: None for name in names})",
+          "after": "pass",
+          "line": 1392
+        }
+      ]
+    },
+    {
+      "control": "M18-order",
+      "test": "test_manifest_selector_pairs_fields_and_preserves_iteration_directory_order",
+      "guardChanges": [
+        {
+          "before": "for row in rows:",
+          "after": "for row in reversed(rows):",
+          "line": 1387
+        }
+      ]
+    },
+    {
+      "control": "M19-pairing",
+      "test": "test_manifest_selector_pairs_fields_and_preserves_iteration_directory_order",
+      "guardChanges": [
+        {
+          "before": "zip(names, row)",
+          "after": "zip(names, reversed(row))",
+          "line": 1388
+        }
+      ]
+    },
+    {
+      "control": "M20-append-effects",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "guardChanges": [
+        {
+          "before": "if re.search(r'\\$\\(|`', command):\n                        effects.append(command)",
+          "after": "if False:\n                        effects.append(command)",
+          "line": 1436
+        }
+      ]
+    },
+    {
+      "control": "M21-locator-effects",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "guardChanges": [
+        {
+          "before": "selected_rows is None and not read_only_locator",
+          "after": "selected_rows is None and not (locator and locators_proven)",
+          "line": 1459
+        }
+      ]
+    },
+    {
+      "control": "M22-append-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "guardChanges": [
+        {
+          "before": "environment[appended[1]] = None",
+          "after": "pass",
+          "line": 1435
+        }
+      ]
+    },
+    {
+      "control": "M23-indexed-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "guardChanges": [
+        {
+          "before": "environment[indexed[1]] = None",
+          "after": "pass",
+          "line": 1514
+        }
+      ]
+    },
+    {
+      "control": "M24-arithmetic-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "guardChanges": [
+        {
+          "before": "if command.startswith('(('):",
+          "after": "if False:",
+          "line": 1509
+        }
+      ]
+    },
+    {
+      "control": "M25-nameref-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "guardChanges": [
+        {
+          "before": "if writes[0] in ('declare', 'typeset', 'local') and any(token.startswith('-') and 'n' in token for token in writes[1:]):",
+          "after": "if False:",
+          "line": 1507
+        }
+      ]
+    },
+    {
+      "control": "M26-writer-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "guardChanges": [
+        {
+          "before": "if writes and writes[0] in ('read', 'unset', 'declare', 'typeset', 'local', 'mapfile', 'readarray', 'getopts', 'let'):",
+          "after": "if False:",
+          "line": 1502
+        }
+      ]
+    },
+    {
+      "control": "M27-upper-row-budget",
+      "test": "test_manifest_selector_budgets_refuse",
+      "guardChanges": [
+        {
+          "before": "not 1 <= row_count <= 256",
+          "after": "row_count < 1",
+          "line": 1222
+        }
+      ]
+    },
+    {
+      "control": "M28-field-type-empty",
+      "test": "test_manifest_selector_fields_cannot_forge_tsv_or_shell_provenance",
+      "guardChanges": [
+        {
+          "before": "require(isinstance(value, str) and bool(value) and not re.search(r'[\\x00-\\x1f\\x7f\\\\$`*?\\[\\]{}]', value), 'manifest-selector-field')",
+          "after": "pass",
+          "line": 1241
+        }
+      ]
+    },
+    {
+      "control": "M29-collection-path",
+      "test": "test_manifest_selector_missing_collection_path_refuses",
+      "guardChanges": [
+        {
+          "before": "require(isinstance(document, dict) and key in document, 'manifest-selector-shape')",
+          "after": "pass",
+          "line": 1230
+        }
+      ]
+    },
+    {
+      "control": "M30-field-path",
+      "test": "test_manifest_selector_collection_shape_and_length_refuse",
+      "guardChanges": [
+        {
+          "before": "require(isinstance(value, dict) and key in value, 'manifest-selector-shape')",
+          "after": "pass",
+          "line": 1239
+        }
+      ]
+    },
+    {
+      "control": "M31-json-traversal",
+      "test": "test_manifest_selector_json_traversal_budgets_refuse",
+      "guardChanges": [
+        {
+          "before": "list(json_documents(document, manifest))",
+          "after": "pass",
+          "line": 1228
+        }
+      ]
+    },
+    {
+      "control": "M32-conditional-reader",
+      "test": "test_manifest_selector_conditional_and_unbounded_readers_refuse",
+      "guardChanges": [
+        {
+          "before": "isinstance(rows, ManifestRows) and not conditional and not unbounded",
+          "after": "isinstance(rows, ManifestRows) and not unbounded",
+          "line": 1382
+        }
+      ]
+    },
+    {
+      "control": "M33-unbounded-reader",
+      "test": "test_manifest_selector_conditional_and_unbounded_readers_refuse",
+      "guardChanges": [
+        {
+          "before": "isinstance(rows, ManifestRows) and not conditional and not unbounded",
+          "after": "isinstance(rows, ManifestRows) and not conditional",
+          "line": 1382
+        }
+      ]
+    },
+    {
+      "control": "M34-table-scalar",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "guardChanges": [
+        {
+          "before": "if choices is None or isinstance(choices, ManifestRows):",
+          "after": "if choices is None:",
+          "line": 1107
+        }
+      ]
+    },
+    {
+      "control": "M35-query-scope",
+      "test": "test_manifest_selector_unrelated_scalar_queries_have_no_table_authority",
+      "guardChanges": [
+        {
+          "before": "if assignment[1] in row_inputs else None",
+          "after": "if True else None",
+          "line": 1450
+        }
+      ]
+    },
+    {
+      "control": "M36-test-token-position",
+      "test": "test_manifest_selector_literal_test_tokens_cannot_hide_later_writers",
+      "guardChanges": [
+        {
+          "before": "elif text[index:index + 2] == '[[' and text[start:index].strip() in ('', 'if', 'elif', 'then', 'else', 'do', '!'):",
+          "after": "elif text[index:index + 2] == '[[':",
+          "line": 1048
+        }
+      ]
+    },
+    {
+      "control": "M37-decimal-conversion",
+      "test": "test_manifest_selector_budgets_refuse",
+      "guardChanges": [
+        {
+          "before": "selector[2].lstrip('0')[:4]",
+          "after": "selector[2].lstrip('0')",
+          "line": 1221
+        }
+      ]
+    }
+  ],
+  "evidence": "runs/final-1/mutations.stdout.txt records execution of all controls. Each named test asserts full stdout/stderr and exact source errors or observations."
+}

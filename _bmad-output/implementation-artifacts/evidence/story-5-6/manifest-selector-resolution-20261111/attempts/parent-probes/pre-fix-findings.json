@@ -1,0 +1,18 @@
+{
+  "source": "Parent independently constructed disposable committed fixtures; no reference commands executed.",
+  "findings": [
+    {
+      "before": "scratch+=$(cp runtime targets.json)",
+      "errors": [],
+      "publicationObservations": 2,
+      "issue": "Append assignment skipped command effect recording."
+    },
+    {
+      "before": "scratch=\"$(cd \"$(touch targets.json)\" && pwd)\"",
+      "errors": [],
+      "publicationObservations": 2,
+      "issue": "Locator syntax alone hid an executable nested substitution."
+    }
+  ],
+  "resolution": "Added effect recording for executable append substitutions and a complete read-only locator argument proof; exact-error fixtures and mutation controls required."
+}

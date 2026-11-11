@@ -49,6 +49,9 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
+- [x] Continue from `evidence/story-5-6/coverage-resolution-20261111/decision-packet.md` with bounded generic committed-JSON publication-target resolution in `tools/proprietary-surfaces/v1/check.py`. Start by inspecting the exact committed ChatBot `.github/scripts/pack-release-packages.sh`, `release-metadata.json` and `.inventory.packages[].project` at its root gitlink; record what those bytes prove. Support only the finite selector and ordered shell iteration semantics needed to enumerate those targets without executing jq or inspected code, and inspect each resolved project's metadata before qualification. Keep logic and fixtures generic: no module-specific names, paths, counts or branches. Preserve refusals for runtime/generated inputs, unsupported selectors, unknown mutations, unsafe paths and nested repositories. No nested initialization, reference/gitlink/dependency change or added allowance, exception, exemption or owner approval is authorized (user, 2026-11-11).
+- [x] Add exact observation, error-document, stdout and stderr regression assertions in `tools/proprietary-surfaces/v1/test_census.py`; execute guard-removal controls for every new guard. Update both READMEs for the supported subset. Run relevant fixtures, release regressions, all five matrix rows and a fresh committed-pin scan; retain failed attempts and rerun final verification after any implementation change.
+- [x] Preserve all prior evidence and create a separate `evidence/story-5-6/manifest-selector-resolution-20261111/` packet with exact commands/results, full canonical revisions, source blob/SHA-256 bindings, policy/prior-evidence/reference integrity checks and complete before/after blocker accounting. Include a concise decision packet distinguishing remaining scanner limitations, proven upstream defects (assert none without committed evidence of an active defect) and exact observations needing owner disposition, with the next concrete action for each. Run the evidence secret scanner. Keep story/sprint `in-progress` until acceptance succeeds; do not stage, commit or push.
 - [x] Continue the 111 coverage errors in `evidence/story-5-6/implementation-resume-20261111/acceptance-blockers.json`: group every error by root cause, identify what exact committed source proves, and implement bounded generic fixes in `tools/proprietary-surfaces/v1/check.py` where that proof suffices. This user authorization (2026-11-11) extends generic source-resolution work; preserve runtime/generated-input and nested-repository refusals. Execute no inspected code, initialize no nested submodules, change no references/gitlinks or policy allowances, exceptions, exemptions, approvals, or dependencies. Do not commit, stage, or push.
 - [x] Add regressions in `tools/proprietary-surfaces/v1/test_census.py` and executed guard-removal controls for new guards. Run relevant fixtures, release regressions, all five matrix rows, and a fresh committed-pin scan. Preserve earlier evidence; write a distinct `evidence/story-5-6/coverage-resolution-20261111/` packet with commands, exact pins/source bindings, before/after grouping, policy/prior-evidence integrity, and verification results. Update both READMEs for any supported-subset changes.
 - [x] Prepare a concise remaining-blocker decision packet in that new evidence directory separating scanner limitations, upstream source defects, and observations requiring exact owner disposition; recommend the next concrete action for each group, grant no authority, and keep story/sprint `in-progress` until acceptance succeeds.
@@ -439,3 +442,29 @@ defect. Its next concrete scanner step is a bounded committed-manifest selector
 for the source-bound ChatBot release packaging case. This grants no approval
 or additional scope. Story and sprint remain `in-progress` at unsuccessful
 current-reference acceptance. No staging, commit or push was performed.
+
+
+### Committed-manifest selector resolution — 2026-11-11
+
+Implemented the bounded generic committed-JSON row selector and ordered shell
+read semantics required by the exact pinned packaging source. The selector
+resolves all three declared projects; each selected project's metadata is
+inspected without errors and emits no proprietary-surface observation. Other
+repository sources retain their existing coverage and policy failures.
+
+Fresh serial verification passes 178 census fixtures, 169 executed guard-removal
+controls, 195 release regressions and all five I/O matrix rows. Full report bytes
+match across hash seeds 1 and 2. Failed/superseded attempts are preserved in the
+[new verification packet](evidence/story-5-6/manifest-selector-resolution-20261111/verification.md).
+
+The original and updated checkers scan the same full parent revision and root
+pins. Coverage errors fall from 109 to 107, resolving both packaging-script
+diagnostics, with no new blocker. All 17 roots are accounted for, 2 complete,
+with 548 observations, 120 rejected observations and 2 stale allowances.
+All 421 retained evidence/policy files and the reference/gitlink state remain
+unchanged. No allowance, exemption, exception, owner authority, dependency,
+staging, commit, push or publication changed. The
+[decision packet](evidence/story-5-6/manifest-selector-resolution-20261111/decision-packet.md)
+binds remaining scanner limits, source boundaries, embedded-data context and
+exact owner dispositions. No active upstream defect is inferred. Story and
+sprint remain `in-progress` while current-reference acceptance fails.

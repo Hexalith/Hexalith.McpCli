@@ -1,0 +1,249 @@
+[
+  {
+    "case": "descriptor-redirection",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "811179731d8565e15ffa14e4379d7b821c77f297",
+        "path": "eng/ship.sh",
+        "rule": "mutable-manifest-input:eng/ship.sh",
+        "target": "targets.json"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "811179731d8565e15ffa14e4379d7b821c77f297",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "811179731d8565e15ffa14e4379d7b821c77f297",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "redirect-clobber",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "d5c971570b9262542c879b0fbd103fed4c7c6123",
+        "path": "eng/ship.sh",
+        "rule": "mutable-manifest-input:eng/ship.sh",
+        "target": "targets.json"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "d5c971570b9262542c879b0fbd103fed4c7c6123",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "d5c971570b9262542c879b0fbd103fed4c7c6123",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "find-output",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "2360c73a76d7345db489089855f23c837a38245e",
+        "path": "eng/ship.sh",
+        "rule": "mutable-manifest-input:eng/ship.sh",
+        "target": "targets.json"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "2360c73a76d7345db489089855f23c837a38245e",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "2360c73a76d7345db489089855f23c837a38245e",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "find-disjunction",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "00a112a29274555adf586c05182c2c70f65c7be3",
+        "path": "eng/ship.sh",
+        "rule": "mutable-manifest-input:eng/ship.sh",
+        "target": "targets.json"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "00a112a29274555adf586c05182c2c70f65c7be3",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "00a112a29274555adf586c05182c2c70f65c7be3",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "find-exec",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "7958ed958ab6bc4913af0e4260711dae231c8ae8",
+        "path": "eng/ship.sh",
+        "rule": "mutable-manifest-input:eng/ship.sh",
+        "target": "targets.json"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "7958ed958ab6bc4913af0e4260711dae231c8ae8",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "7958ed958ab6bc4913af0e4260711dae231c8ae8",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "read-function",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "716a51433c0fdf6a85c34e7003eae94b8bdba768",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "716a51433c0fdf6a85c34e7003eae94b8bdba768",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "716a51433c0fdf6a85c34e7003eae94b8bdba768",
+        "path": "eng/ship.sh",
+        "rule": "unsupported-manifest-command-context:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "wrapped-copy",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "74f6b36ab9f705a5c325f2ab5d5c75e6f457c559",
+        "path": "eng/ship.sh",
+        "rule": "mutable-manifest-input:eng/ship.sh",
+        "target": "targets.json"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "74f6b36ab9f705a5c325f2ab5d5c75e6f457c559",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "74f6b36ab9f705a5c325f2ab5d5c75e6f457c559",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "env-copy",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "5a517073d6238d3e63d305163cd843f9ec538654",
+        "path": "eng/ship.sh",
+        "rule": "mutable-manifest-input:eng/ship.sh",
+        "target": "targets.json"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "5a517073d6238d3e63d305163cd843f9ec538654",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "5a517073d6238d3e63d305163cd843f9ec538654",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "writer-function",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "2fba9c3d0dadb06af00bb9f09406d2e07fb243b4",
+        "path": "eng/ship.sh",
+        "rule": "mutable-manifest-input:eng/ship.sh",
+        "target": "targets.json"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "2fba9c3d0dadb06af00bb9f09406d2e07fb243b4",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "2fba9c3d0dadb06af00bb9f09406d2e07fb243b4",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "conditional-table-function",
+    "errors": [
+      {
+        "repository": "references/opaque",
+        "gitlink": "e219ad46a4516c6c8e7542ebe556bfdfbfa10215",
+        "path": "eng/ship.sh",
+        "rule": "unbounded-publication-control-flow:eng/ship.sh"
+      },
+      {
+        "repository": "references/opaque",
+        "gitlink": "e219ad46a4516c6c8e7542ebe556bfdfbfa10215",
+        "path": "eng/ship.sh",
+        "rule": "unresolved-publication-target:eng/ship.sh"
+      }
+    ],
+    "observations": 0
+  },
+  {
+    "case": "late-unknown-writer",
+    "errors": [],
+    "observations": 2
+  }
+]

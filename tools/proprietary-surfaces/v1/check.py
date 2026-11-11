@@ -8,6 +8,7 @@ from contextlib import contextmanager
 from datetime import date, datetime, timezone
 import hashlib
 from functools import lru_cache
+import fnmatch
 import json
 from pathlib import Path, PurePosixPath
 import posixpath
@@ -34,6 +35,10 @@ HASH = re.compile(r'[0-9a-f]{64}\Z')
 
 class CensusError(ValueError):
     """A coverage or metadata failure, safe to retain without source snippets."""
+
+
+class ManifestRows(tuple):
+    """Ordered string fields selected from one immutable committed JSON input."""
 
 
 def require(condition, message):
@@ -1028,7 +1033,7 @@ def script_blocks(text, path):
 
 def shell_segments(text):
     """Split literal command separators, preserving quotes and substitutions."""
-    result, start, quote, depth, escaped = [], 0, None, 0, False
+    result, start, quote, depth, escaped, test = [], 0, None, 0, False, False
     for index, char in enumerate(text):
         if escaped:
             escaped = False
@@ -1040,11 +1045,17 @@ def shell_segments(text):
                 quote = None
         elif char in ('"', "'"):
             quote = char
+        elif text[index:index + 2] == '[[' and text[start:index].strip() in ('', 'if', 'elif', 'then', 'else', 'do', '!'):
+            test = True
+        elif text[index:index + 2] == ']]':
+            test = False
         elif char == '(':
             depth += 1
         elif char == ')' and depth:
             depth -= 1
-        elif char in (';', '&', '|') and not depth:
+        elif char in (';', '&', '|') and not depth and not test:
+            if (char in ('&', '|') and index and text[index - 1] in '<>') or (char == '&' and text[index + 1:index + 2] in ('>', '<')):
+                continue
             if text[start:index].strip():
                 result.append(text[start:index].strip())
             start = index + 1
@@ -1060,6 +1071,9 @@ def static_project_targets(tree, text, path, errors):
     no command, condition, substitution, external file or nested tree is run.
     """
     targets, functions, called, budget = set(), {}, set(), [0]
+    effects = []
+    row_inputs = {match[1] or match[2] for match in re.finditer(
+        r'done\s+<<<\s+"\$(?:\{([A-Za-z_][\w]*)\}|([A-Za-z_][\w]*))"', text)}
     if not DOTNET_INVOCATION.search(text):
         return []
     require('\x00' not in text, f'unsafe-script-text:{path}')
@@ -1090,7 +1104,7 @@ def static_project_targets(tree, text, path, errors):
                     continue
                 key = match[1] or match[2]
                 choices = environment.get(key)
-                if choices is None:
+                if choices is None or isinstance(choices, ManifestRows):
                     return None
                 changed = True
                 next_result.update(item[:match.start()] + choice + item[match.end():] for choice in choices)
@@ -1121,6 +1135,116 @@ def static_project_targets(tree, text, path, errors):
             problem('unsafe-publication-path')
             return None
         return target
+
+    def manifest_rows(raw, environment, directory):
+        """Recognize a finite jq spelling as data, without invoking jq or shell."""
+        substitution = re.fullmatch(r'"?\$\((jq\s+.*?)\)"?', raw)
+        if not substitution:
+            return None
+        arguments = words(substitution[1])
+        if len(arguments) != 4 or arguments[1] not in ('-r', '-er', '-re'):
+            problem('unsupported-manifest-selector')
+            return None
+        field = r'\.[A-Za-z_][\w]*(?:\.[A-Za-z_][\w]*)*'
+        selector = re.fullmatch(r'(' + field + r')\s*\|\s*select\(length\s*==\s*([0-9]+)\)'
+            r'\s*\|\s*\.\[\]\s*\|\s*\[(' + field + r'(?:\s*,\s*' + field + r')*)\]\s*\|\s*@tsv', arguments[2])
+        if not selector:
+            problem('unsupported-manifest-selector')
+            return None
+        if re.search(r'(?:^|[;\n])\s*(?:(?:then|else|do)\s+)?(?:alias|eval|source|\.|enable|builtin)(?:\s|$)|'
+                     r'(?:^|[;\n])\s*(?:function\s+)?(?:jq|read)\s*(?:\(\)|\{)', text):
+            problem('unsupported-manifest-command-context')
+            return None
+        possibilities = expand(arguments[3], environment)
+        if not possibilities or len(possibilities) != 1 or re.search(r"'[^']*\$[^']*'", raw):
+            problem('unresolved-manifest-input')
+            return None
+        input_word = re.search(r'''(?:^|\s)("[^"]*"|'[^']*'|[^\s]+)\Z''', substitution[1])
+        if not input_word or input_word[1][:1] not in ('"', "'") and not re.fullmatch(r'[A-Za-z0-9_./-]+', next(iter(possibilities))):
+            problem('unresolved-manifest-input')
+            return None
+        manifest = normalized(directory, next(iter(possibilities)))
+        if manifest is None:
+            return None
+        if any(entry[0] == '160000' and (manifest == p or manifest.startswith(p + '/')) for p, entry in tree.entries.items()):
+            problem('nested-manifest-input', manifest)
+            return None
+        # Known file writers cannot confer committed-input authority. Refuse
+        # unknown destinations rather than assuming an earlier blob survives.
+        for line in effects:
+            lexer = shlex.shlex(line, posix=False, punctuation_chars='<>;&|')
+            lexer.whitespace_split = True
+            try:
+                lexical_tokens = list(lexer)
+            except ValueError:
+                lexical_tokens = []
+            writes_file = any('>' in token and set(token) <= set('<>;&|') and not (
+                token == '>&' and index + 1 < len(lexical_tokens) and re.fullmatch(r'[0-9]+', lexical_tokens[index + 1]))
+                for index, token in enumerate(lexical_tokens))
+            tokens = words(line)
+            while tokens and tokens[0] in ('if', 'then', 'else', 'elif', '!'):
+                tokens.pop(0)
+            harmless = {'set', 'printf', 'echo', 'exit', 'true', 'false', 'test', '[', '[[', '((', ':',
+                        'mkdir', 'read', 'unset', 'declare', 'typeset', 'local', 'export', 'readonly',
+                        'fi', 'esac', 'do', 'done'}
+            safe_effect = not tokens or tokens[0] in harmless or tokens[0] in functions
+            if tokens[:1] == ['find']:
+                expression = tokens[2:] if len(tokens) > 2 and not tokens[1].startswith('-') else []
+                if len(expression) >= 2 and expression[0] == '-maxdepth' and re.fullmatch(r'[0-9]+', expression[1]):
+                    expression = expression[2:]
+                if expression[:2] == ['-type', 'f']:
+                    expression = expression[2:]
+                deletes = expression[-1:] == ['-delete']
+                expression = expression[:-1] if deletes else []
+                if expression[:1] == ['('] and expression[-1:] == [')']:
+                    expression = expression[1:-1]
+                # Only a complete disjunction of name filters followed by
+                # deletion proves that another basename cannot be modified.
+                patterns = []
+                while len(expression) >= 2 and expression[0] == '-name':
+                    patterns.append(expression[1])
+                    expression = expression[2:]
+                    if expression[:1] == ['-o'] and len(expression) > 1:
+                        expression = expression[1:]
+                    else:
+                        break
+                safe_effect = deletes and bool(patterns) and not expression and all(
+                    re.fullmatch(r'[A-Za-z0-9_.?*-]+', pattern) and
+                    not fnmatch.fnmatchcase(PurePosixPath(manifest).name, pattern) for pattern in patterns)
+            if writes_file or not safe_effect or re.search(r'\$\(|`', line):
+                problem('mutable-manifest-input', manifest)
+                return None
+        fields = [value.strip().lstrip('.').split('.') for value in selector[3].split(',')]
+        collection = selector[1].lstrip('.').split('.')
+        # Four significant decimal digits already exceed the row budget;
+        # never pass an unbounded source integer to Python's conversion.
+        row_count = int(selector[2].lstrip('0')[:4] or '0')
+        if not 1 <= row_count <= 256 or len(fields) > 32 or any(len(keys) > 32 for keys in [collection, *fields]):
+            problem('manifest-selector-limit', manifest)
+            return None
+        try:
+            document = json_bytes(tree.blob(manifest), manifest)
+            # Apply the existing finite JSON traversal budget before selection.
+            list(json_documents(document, manifest))
+            for key in collection:
+                require(isinstance(document, dict) and key in document, 'manifest-selector-shape')
+                document = document[key]
+            require(isinstance(document, list) and len(document) == row_count, 'manifest-selector-shape')
+            rows = []
+            for entry in document:
+                row = []
+                for keys in fields:
+                    value = entry
+                    for key in keys:
+                        require(isinstance(value, dict) and key in value, 'manifest-selector-shape')
+                        value = value[key]
+                    require(isinstance(value, str) and bool(value) and not re.search(r'[\x00-\x1f\x7f\\$`*?\[\]{}]', value), 'manifest-selector-field')
+                    row.append(value)
+                rows.append(tuple(row))
+            return ManifestRows(rows)
+        except CensusError as error:
+            problem(str(error).partition(':')[0], manifest)
+            return None
 
     def register_target(target):
         nested = next((p for p, entry in tree.entries.items() if entry[0] == '160000'
@@ -1231,7 +1355,7 @@ def static_project_targets(tree, text, path, errors):
             function = re.match(r'^(?:function\s+)?([A-Za-z_][\w]*)\s*\(\)\s*\{\s*$', raw)
             loop = re.match(r'^(for\s+([A-Za-z_][\w]*)\s+in\s+(.+?)(?:;\s*do)?|(?:while|until)\b.*)\s*$', raw)
             if function or loop:
-                body, nesting = [], 1
+                body, nesting, terminator = [], 1, ''
                 while index < len(lines):
                     row = lines[index].strip()
                     index += 1
@@ -1242,6 +1366,7 @@ def static_project_targets(tree, text, path, errors):
                             problem('unresolved-loop-redirection')
                         nesting -= 1
                         if not nesting:
+                            terminator = row
                             break
                     body.append(row)
                 if nesting:
@@ -1251,6 +1376,21 @@ def static_project_targets(tree, text, path, errors):
                 if function:
                     functions[function[1]] = body
                     continue
+                reader = re.fullmatch(r"while\s+IFS=\$'\\t'\s+read\s+-r\s+([A-Za-z_][\w]*(?:\s+[A-Za-z_][\w]*)*)\s*;\s*do", raw)
+                source = re.fullmatch(r'done\s+<<<\s+"\$(?:\{([A-Za-z_][\w]*)\}|([A-Za-z_][\w]*))"', terminator)
+                rows = environment.get((source[1] or source[2])) if source else None
+                if reader and isinstance(rows, ManifestRows) and not conditional and not unbounded:
+                    names = reader[1].split()
+                    if len(set(names)) != len(names) or any(len(row) != len(names) for row in rows):
+                        problem('unsupported-manifest-reader')
+                    else:
+                        for row in rows:
+                            environment.update({name: {value} for name, value in zip(names, row)})
+                            directory = execute(body, environment, directory, depth + 1, unbounded, conditional)
+                        # The terminating read reaches EOF and clears fields;
+                        # it cannot lend the last successful row to later code.
+                        environment.update({name: None for name in names})
+                        continue
                 choices = []
                 if loop[2]:
                     for value in words(loop[3]):
@@ -1290,6 +1430,12 @@ def static_project_targets(tree, text, path, errors):
                 if re.match(r'^(?:fi|esac)\b', command):
                     conditional = max(0, conditional - 1)
                 command = re.sub(r'^(?:then|else|do)\s+', '', command)
+                appended = re.match(r'^(?:(?:local|export|readonly)\s+)?([A-Za-z_][\w]*)\+=', command)
+                if appended:
+                    environment[appended[1]] = None
+                    if re.search(r'\$\(|`', command):
+                        effects.append(command)
+                    continue
                 assignment = re.match(r'^(?:(?:local|export|readonly)\s+)?([A-Za-z_][\w]*)=(.*)$', command)
                 if assignment:
                     if DOTNET_INVOCATION.search(command) and len(words(assignment[2])) > 1:
@@ -1301,9 +1447,17 @@ def static_project_targets(tree, text, path, errors):
                         if assigned:
                             environment[assigned[1]] = None
                     choices = expand(value[0], environment) if len(value) == 1 else None
+                    selected_rows = manifest_rows(assignment[2], environment, directory) if assignment[1] in row_inputs else None
+                    if selected_rows is not None:
+                        choices = selected_rows
                     # Recognize this exact source-relative locator as spelling,
                     # without running dirname, cd or pwd from inspected code.
                     locator = re.fullmatch(r'"?\$\((?:CDPATH= )?cd (?:-- )?"(.*?)" && pwd(?: -P)?\)"?', assignment[2])
+                    read_only_locator = locator and locators_proven and (
+                        re.fullmatch(r'\$\(dirname (?:-- )?"\$\{BASH_SOURCE\[0\]\}"\)(/[.\/]+)?', locator[1])
+                        or re.fullmatch(r'(?:[A-Za-z0-9_./ -]|\$[A-Za-z_][\w]*|\$\{[A-Za-z_][\w]*\})+', locator[1]))
+                    if selected_rows is None and not read_only_locator and (re.search(r'\$\(|`', assignment[2]) or any('=' not in item for item in value[1:])):
+                        effects.append(command)
                     if locator and locators_proven and not path.endswith(('.yml', '.yaml')):
                         source_relative = re.fullmatch(r'\$\(dirname (?:-- )?"\$\{BASH_SOURCE\[0\]\}"\)(/[.\/]+)?', locator[1])
                         if source_relative:
@@ -1319,7 +1473,7 @@ def static_project_targets(tree, text, path, errors):
                         choices = None
                     if conditional or short_circuit:
                         old = environment.get(assignment[1])
-                        choices = None if choices is None or old is None else old | choices
+                        choices = None if choices is None or old is None or isinstance(choices, ManifestRows) or isinstance(old, ManifestRows) else old | choices
                     environment[assignment[1]] = choices
                 elif command.startswith('cd '):
                     value = words(command[3:])
@@ -1331,6 +1485,7 @@ def static_project_targets(tree, text, path, errors):
                         directory = None
                 else:
                     tokens = words(command)
+                    effects.append(command)
                     writes = tokens[1:] if tokens and tokens[0] in ('builtin', 'command') else tokens
                     if writes[:1] == ['printf']:
                         for write_index, option in enumerate(writes[1:], 1):
@@ -1344,11 +1499,19 @@ def static_project_targets(tree, text, path, errors):
                                 else:
                                     environment.update({key: None for key in environment})
                                 break
-                    if tokens and tokens[0] in ('read', 'unset', 'declare', 'typeset', 'local'):
-                        for token in tokens[1:]:
+                    if writes and writes[0] in ('read', 'unset', 'declare', 'typeset', 'local', 'mapfile', 'readarray', 'getopts', 'let'):
+                        for token in writes[1:]:
                             name = token.partition('=')[0]
                             if re.fullmatch(r'[A-Za-z_][\w]*', name):
                                 environment[name] = None
+                        if writes[0] in ('declare', 'typeset', 'local') and any(token.startswith('-') and 'n' in token for token in writes[1:]):
+                            environment.update({key: None for key in environment})
+                    if command.startswith('(('):
+                        for name in re.findall(r'\b([A-Za-z_][\w]*)\s*(?:\+?=|\+\+|--)', command):
+                            environment[name] = None
+                    indexed = re.match(r'([A-Za-z_][\w]*)\[', command)
+                    if indexed:
+                        environment[indexed[1]] = None
                     if tokens and tokens[0].lower() in ('pushd', 'popd', 'eval', 'source', '.', 'set-location', 'push-location', 'pop-location', 'chdir'):
                         directory = None
                         environment.update({key: None for key in environment})
@@ -1370,7 +1533,7 @@ def static_project_targets(tree, text, path, errors):
                             if not key.isdigit() and key not in local_names:
                                 if conditional or short_circuit:
                                     old = environment.get(key)
-                                    values = None if old is None or values is None else old | values
+                                    values = None if old is None or values is None or isinstance(old, ManifestRows) or isinstance(values, ManifestRows) else old | values
                                 environment[key] = values
                     else:
                         invoke(command, environment, directory, unbounded)
@@ -1378,6 +1541,7 @@ def static_project_targets(tree, text, path, errors):
 
     for script, directory in script_blocks(text, path):
         environment = {}
+        effects.clear()
         functions.clear()
         called.clear()
         directories = expand(directory, {})

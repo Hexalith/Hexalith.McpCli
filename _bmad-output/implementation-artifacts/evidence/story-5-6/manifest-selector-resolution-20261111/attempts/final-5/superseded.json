@@ -1,0 +1,9 @@
+{
+  "reason": "Finite-selector audit reproduced uncaught ValueError on oversized decimal. Bounded conversion and covering control require full rerun.",
+  "retainedPassingChecks": {
+    "censusTests": 178,
+    "guardControls": 168,
+    "releaseRegressions": 195
+  },
+  "authority": null
+}

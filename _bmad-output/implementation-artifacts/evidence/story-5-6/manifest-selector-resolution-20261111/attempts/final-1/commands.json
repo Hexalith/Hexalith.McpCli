@@ -1,0 +1,23 @@
+[
+  {
+    "name": "census-tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/proprietary-surfaces/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 0,
+    "stdout": "census-tests.stdout.txt",
+    "stderr": "census-tests.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  }
+]

@@ -1,0 +1,109 @@
+[
+  {
+    "name": "head",
+    "command": [
+      "git",
+      "rev-parse",
+      "HEAD"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "head.stdout.txt",
+    "stderr": "head.stderr.txt"
+  },
+  {
+    "name": "reference-entries",
+    "command": [
+      "git",
+      "ls-files",
+      "--stage",
+      "--",
+      ".gitmodules",
+      "references"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "reference-entries.stdout.txt",
+    "stderr": "reference-entries.stderr.txt"
+  },
+  {
+    "name": "reference-status",
+    "command": [
+      "git",
+      "status",
+      "--porcelain",
+      "--ignore-submodules=none",
+      "--",
+      ".gitmodules",
+      "references"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "reference-status.stdout.txt",
+    "stderr": "reference-status.stderr.txt"
+  },
+  {
+    "name": "unstaged-index",
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--quiet"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "unstaged-index.stdout.txt",
+    "stderr": "unstaged-index.stderr.txt"
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "diff-check.stdout.txt",
+    "stderr": "diff-check.stderr.txt"
+  },
+  {
+    "name": "selector-tests",
+    "command": [
+      "/usr/bin/python3",
+      "-c",
+      "import importlib.util,pathlib,unittest,sys\np=pathlib.Path('tools/proprietary-surfaces/v1/test_census.py')\ns=importlib.util.spec_from_file_location('parent_cases',p)\nm=importlib.util.module_from_spec(s);s.loader.exec_module(m)\nnames=[n for n in unittest.defaultTestLoader.getTestCaseNames(m.CensusTests) if n.startswith('test_manifest_selector_')]\nr=unittest.TextTestRunner(verbosity=2).run(unittest.TestSuite(m.CensusTests(n) for n in names))\nsys.exit(0 if r.wasSuccessful() else 1)\n"
+    ],
+    "exitCode": 0,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "selector-tests.stdout.txt",
+    "stderr": "selector-tests.stderr.txt"
+  },
+  {
+    "name": "census",
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/manifest-selector-resolution-20261111/parent-verification/census.json"
+    ],
+    "exitCode": 1,
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "stdout": "census.stdout.txt",
+    "stderr": "census.stderr.txt"
+  }
+]

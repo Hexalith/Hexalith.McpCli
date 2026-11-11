@@ -53,7 +53,10 @@ publication identities. Unsafe publication paths and unresolved workflow project
 targets fail with source context. Finite literal shell variables, loops, function
 arguments, working directories, Compile item aliases and committed Copy inputs
 resolve without executing inspected code. Committed-script path locators and bounded JSON object arrays/wrappers are
-also inspected. Comments and quoted diagnostics do not
+also inspected. A finite committed-JSON selector can bind ordered tab-separated
+fields to a literal shell read loop; every selected project still undergoes
+metadata inspection. Unsupported selector, mutation and shell-input forms fail
+coverage. Comments and quoted diagnostics do not
 establish commands; executable substitutions remain visible and unsupported
 command wrappers fail coverage. Runtime/generated or nested sources
 remain coverage errors; partial roots retain other observations and do not

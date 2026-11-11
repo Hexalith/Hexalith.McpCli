@@ -1,0 +1,12 @@
+{
+  "reasons": [
+    "Literal [[ token position fix requires full rerun.",
+    "Relocated original checker default policy paths were missing; baseline/amendments must be passed explicitly. Original report was sanitized invalid-policy-or-source, not root coverage."
+  ],
+  "retainedPassingChecks": {
+    "censusTests": 177,
+    "guardControls": 167,
+    "releaseRegressions": 195
+  },
+  "authority": null
+}

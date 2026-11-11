@@ -1,0 +1,40 @@
+{
+  "authority": null,
+  "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+  "orderedProjects": [
+    "src/Hexalith.ChatBot.Contracts/Hexalith.ChatBot.Contracts.csproj",
+    "src/Hexalith.ChatBot.Client/Hexalith.ChatBot.Client.csproj",
+    "src/Hexalith.ChatBot.Testing/Hexalith.ChatBot.Testing.csproj"
+  ],
+  "parentRevision": "1a44525c450081dc07df4021ab23e3090aacfda4",
+  "proof": "Committed manifest supplies ordered id/project string rows; shell performs an ordered tab-delimited read. Target metadata still needs inspection. No command or condition was executed.",
+  "repository": "references/Hexalith.ChatBot",
+  "selector": ".inventory.packages | select(length == 3) | .[] | [.id, .project] | @tsv",
+  "sources": [
+    {
+      "gitBlob": "5b2fdd4281d409f3bc9650dd5042bba66163a62e",
+      "path": ".github/scripts/pack-release-packages.sh",
+      "sha256": "df64004b0cdba29be9e5c1ac3351f16933908c7f9addf3da51ad0fbd09b17a97"
+    },
+    {
+      "gitBlob": "3264ddbdb4d5ae35714cfa3d88fa56ae53b20bf1",
+      "path": "release-metadata.json",
+      "sha256": "af2473f1b311309dbfb8f4b8fe8fbd7eb9ce1eceed2b92ab8038c1a575d7a270"
+    },
+    {
+      "gitBlob": "35895dec39e73a5012279d6ac51cb1bc80188a1b",
+      "path": "src/Hexalith.ChatBot.Contracts/Hexalith.ChatBot.Contracts.csproj",
+      "sha256": "8b79b4fc137b8bfd647cc16572510d5a5a354d3ca7d130d0f5dacec7dfe7bdbb"
+    },
+    {
+      "gitBlob": "2b23abec1f9045a62578c952283e10833a3a26ac",
+      "path": "src/Hexalith.ChatBot.Client/Hexalith.ChatBot.Client.csproj",
+      "sha256": "50375fd35ff35fc442f26e192089ba712a6c7471efbd85fefc6b46b4abda8ed7"
+    },
+    {
+      "gitBlob": "1441f730a7aa6b7b2a0d2f889adc6c903b6894d4",
+      "path": "src/Hexalith.ChatBot.Testing/Hexalith.ChatBot.Testing.csproj",
+      "sha256": "86b6847d05ab70b260ef32e5b8671818f12590234128294a35559bd3a70ce6be"
+    }
+  ]
+}

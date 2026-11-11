@@ -1,0 +1,7 @@
+{
+  "parentRevision": "1a44525c450081dc07df4021ab23e3090aacfda4",
+  "originalCommittedPath": "tools/proprietary-surfaces/v1/check.py",
+  "originalSha256": "b5fe122e2964a75e0605ce6f53b1c4449fd253f1d31b2d6c2bbfb0b5b0854c92",
+  "executedCopySha256": "59518789f42d5bb0adbfb263404fd3b766ea380b883e932cd8cac95ca0e9d8ed",
+  "onlyAdaptation": "ROOT points to the actual workspace because the preserved original checker is executed from this evidence directory."
+}

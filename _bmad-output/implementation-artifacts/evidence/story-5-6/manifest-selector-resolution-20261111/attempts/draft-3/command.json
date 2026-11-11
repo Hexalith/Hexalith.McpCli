@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "tools/proprietary-surfaces/v1",
+    "-p",
+    "test_*.py"
+  ],
+  "exitCode": 1
+}

@@ -2113,5 +2113,272 @@ dotnet publish "$target"
         self.assertEqual([e['surface'] for e in report['surfaces']], [self.binding(path, 'publication', 'missing/Quoted.csproj')])
 
 
+    def manifest_fixture(self, entries=None, *, before='', body='dotnet pack "$target"', after='', selector=None, source='targets.json'):
+        path = 'eng/ship.sh'
+        if entries is None:
+            entries = [{'label': 'second', 'target': 'missing/Second.csproj'},
+                       {'label': 'first', 'target': 'missing/First.fsproj'}]
+        selector = selector or '.payload.units | select(length == 2) | .[] | [.label, .target] | @tsv'
+        self.write(self.repo, 'targets.json', json.dumps({'payload': {'units': entries}}))
+        self.write(self.repo, path, before + '\nrows="$(jq -er \'' + selector + "' " + source + ')"\n' + after +
+                   "\nwhile IFS=$'\\t' read -r label target; do\n" + body + '\ndone <<< "$rows"\n')
+        self.commit(self.repo); self.pin()
+        return path
+
+    def assert_manifest_errors(self, report, path, rule, target='targets.json'):
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        expected = [dict(repository='references/opaque', gitlink=pin, path=path, rule=rule + ':' + path,
+                         **({'target': target} if target is not None else {})),
+                    dict(repository='references/opaque', gitlink=pin, path=path, rule='unbounded-publication-control-flow:' + path),
+                    dict(repository='references/opaque', gitlink=pin, path=path, rule='unresolved-publication-target:' + path)]
+        self.assertEqual(report['errors'], sorted(expected, key=lambda error: json.dumps(error, sort_keys=True)))
+        self.assertEqual(report['surfaces'], [])
+
+    def test_manifest_selector_retains_exact_orphan_observations_and_committed_input(self):
+        path = self.manifest_fixture()
+        self.write(self.repo, 'targets.json', '{"payload":{"units":[]}}')
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        self.assertEqual(report['surfaces'], [dict(surface=self.binding(path, 'publication', target),
+            signals=['orphan-project-reference'], sources=[path], gitlink=pin, status='rejected',
+            classification='unapproved', reason='new-proprietary-surface')
+            for target in ('missing/First.fsproj', 'missing/Second.csproj')])
+
+    def test_manifest_selector_pairs_fields_and_preserves_iteration_directory_order(self):
+        self.write(self.repo, 'start/ordinary.txt', 'directory\n')
+        path = self.manifest_fixture([{'label': 'start', 'target': 'First.csproj'}, {'label': '..', 'target': 'Second.csproj'}],
+                                     body='cd "$label"\ndotnet pack "$target"')
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([entry['surface'] for entry in report['surfaces']],
+                         [self.binding(path, 'publication', target) for target in ('Second.csproj', 'start/First.csproj')])
+
+    def test_manifest_selector_present_projects_require_metadata_and_registration_inspection(self):
+        self.write(self.repo, 'one/First.csproj', '<Project Sdk="Microsoft.NET.Sdk"/>')
+        self.write(self.repo, 'two/Second.vbproj', '<Project Sdk="Microsoft.NET.Sdk"/>')
+        entries = [{'label': 'one', 'target': 'one/First.csproj'}, {'label': 'two', 'target': 'two/Second.vbproj'}]
+        self.manifest_fixture(entries)
+        self.assertEqual(self.run_cli(0)['surfaces'], [])
+        self.write(self.repo, 'two/Program.vb', '<McpServerTool>\nPublic Function Execute()\nEnd Function')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(entry['surface']['path'], entry['signals']) for entry in report['surfaces']],
+                         [('eng/ship.sh', ['project-publication-reference']), ('two/Second.vbproj', ['mcp-registration']),
+                          ('two/Second.vbproj', ['package-metadata'])])
+        self.write(self.repo, 'one/First.csproj', '<Project')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=self.git(self.repo, 'rev-parse', 'HEAD'),
+                                                path='one/First.csproj', rule='malformed-project-metadata:one/First.csproj')])
+
+    def test_manifest_selector_unsupported_selectors_and_options_refuse(self):
+        for selector in ('.payload.units[].target', '.payload.units | select(length > 0) | .[] | [.label, .target] | @tsv',
+                         '.payload.units | select(length == 2) | .[] | [.label, (.target | ascii_downcase)] | @tsv'):
+            with self.subTest(selector=selector):
+                path = self.manifest_fixture(selector=selector)
+                self.assert_manifest_errors(self.run_cli(1), path, 'unsupported-manifest-selector', None)
+        path = self.manifest_fixture(source='--arg target runtime targets.json')
+        self.assert_manifest_errors(self.run_cli(1), path, 'unsupported-manifest-selector', None)
+
+    def test_manifest_selector_runtime_missing_malformed_and_duplicate_inputs_refuse(self):
+        path = self.manifest_fixture(source='"$runtime"')
+        self.assert_manifest_errors(self.run_cli(1), path, 'unresolved-manifest-input', None)
+        path = self.manifest_fixture(source='generated.json')
+        self.assert_manifest_errors(self.run_cli(1), path, 'regular-committed-blob-required', 'generated.json')
+        for raw, rule in (('{', 'malformed-json'), ('{"payload":{},"payload":{}}', 'duplicate-json-key')):
+            with self.subTest(rule=rule):
+                self.manifest_fixture()
+                self.write(self.repo, 'targets.json', raw); self.commit(self.repo); self.pin()
+                self.assert_manifest_errors(self.run_cli(1), path, rule)
+
+    def test_manifest_selector_collection_shape_and_length_refuse(self):
+        for entries in ([], {}, [{'label': 'one', 'target': 'First.csproj'}], [None, None], [{}, {}]):
+            with self.subTest(entries=entries):
+                path = self.manifest_fixture(entries)
+                self.assert_manifest_errors(self.run_cli(1), path, 'manifest-selector-shape')
+
+    def test_manifest_selector_missing_collection_path_refuses(self):
+        for document in ({}, {'payload': {}}, {'payload': None}, {'payload': []}):
+            with self.subTest(document=document):
+                path = self.manifest_fixture()
+                self.write(self.repo, 'targets.json', json.dumps(document)); self.commit(self.repo); self.pin()
+                self.assert_manifest_errors(self.run_cli(1), path, 'manifest-selector-shape')
+
+    def test_manifest_selector_fields_cannot_forge_tsv_or_shell_provenance(self):
+        for value in ('', None, 7, [], {}, 'a\tb', 'a\nb', 'a\rb', 'a\\b', '\x00', '\x7f',
+                      '$old', '${old}', '$(helper)', '`helper`', '*.csproj', 'a?b', 'a[bc]'):
+            with self.subTest(value=value):
+                path = self.manifest_fixture([{'label': 'first', 'target': value}, {'label': 'next', 'target': 'Next.csproj'}])
+                self.assert_manifest_errors(self.run_cli(1), path, 'manifest-selector-field')
+
+    def test_manifest_selector_budgets_refuse(self):
+        for selector in ('.payload.units | select(length == 257) | .[] | [.label, .target] | @tsv',
+                         '.payload.units | select(length == 0) | .[] | [.label, .target] | @tsv',
+                         '.payload.units | select(length == 2) | .[] | [' + ', '.join(['.target'] * 33) + '] | @tsv',
+                         '.' + '.'.join(['a'] * 33) + ' | select(length == 2) | .[] | [.target] | @tsv'):
+            with self.subTest(selector=selector):
+                path = self.manifest_fixture(selector=selector)
+                self.assert_manifest_errors(self.run_cli(1), path, 'manifest-selector-limit')
+        path = self.manifest_fixture([{'label': 'unit', 'target': 'missing/Unit.csproj'}] * 257,
+            selector='.payload.units | select(length == 257) | .[] | [.label, .target] | @tsv')
+        self.assert_manifest_errors(self.run_cli(1), path, 'manifest-selector-limit')
+        path = self.manifest_fixture(selector='.payload.units | select(length == ' + '9' * 5000 + ') | .[] | [.label, .target] | @tsv')
+        self.assert_manifest_errors(self.run_cli(1), path, 'manifest-selector-limit')
+
+    def test_manifest_selector_json_traversal_budgets_refuse(self):
+        for kind in ('depth', 'nodes'):
+            with self.subTest(kind=kind):
+                path = self.manifest_fixture()
+                document = json.loads((self.repo / 'targets.json').read_text())
+                if kind == 'depth':
+                    extra = {}
+                    for _ in range(34):
+                        extra = {'nested': extra}
+                else:
+                    extra = [{} for _ in range(4097)]
+                document['other'] = extra
+                self.write(self.repo, 'targets.json', json.dumps(document)); self.commit(self.repo); self.pin()
+                self.assert_manifest_errors(self.run_cli(1), path, 'unbounded-publication-json')
+
+    def test_manifest_selector_command_overrides_refuse(self):
+        for before in ('alias jq=other', 'jq() {\n printf fake\n}', 'function jq {\n printf fake\n}',
+                       'read() {\n target=fake\n}', 'enable -n read', 'builtin enable -n read',
+                       'true; alias read=other', 'true; read() {\n :\n}',
+                       'eval "$runtime"', 'source runtime.sh', '. runtime.sh'):
+            with self.subTest(before=before):
+                path = self.manifest_fixture(before=before)
+                self.assert_manifest_errors(self.run_cli(1), path, 'unsupported-manifest-command-context', None)
+
+    def test_manifest_selector_known_and_unknown_file_writes_refuse(self):
+        for before in ('printf changed > targets.json', 'printf changed > "$runtime"', 'cp runtime targets.json',
+                       'mv runtime targets.json', 'tee targets.json', 'sed -i s/a/b/ targets.json',
+                       'command cp runtime targets.json', 'FLAG=value cp runtime targets.json',
+                       'condition && cp runtime targets.json', 'perl -i -pe s/a/b/ targets.json',
+                       'helper targets.json', 'generated="$(helper targets.json)"',
+                       'printf "%s" "$(helper targets.json)"', 'find . -delete',
+                       "find . -name '*.json' -delete", "find . -name '*.nupkg' -o -delete",
+                       "find . -name '*.nupkg' -o -true -delete", 'find . -fprint targets.json',
+                       'find . -fprintf targets.json changed', 'printf changed >| targets.json',
+                       'printf changed &> targets.json', 'printf changed >& targets.json', ': <> targets.json',
+                       'find . -name "$runtime" -delete', "find . -name '*[[:alpha:]]*' -delete",
+                       'scratch+=$(cp runtime targets.json)', 'scratch="$(cd "$(touch targets.json)" && pwd)"'):
+            with self.subTest(before=before):
+                path = self.manifest_fixture(before=before)
+                self.assert_manifest_errors(self.run_cli(1), path, 'mutable-manifest-input')
+
+    def test_manifest_selector_literal_test_tokens_cannot_hide_later_writers(self):
+        path = self.manifest_fixture(before='echo [[; cp runtime targets.json')
+        self.assert_manifest_errors(self.run_cli(1), path, 'mutable-manifest-input')
+
+    def test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority(self):
+        for after in ('read -r rows', 'printf -v rows changed', 'rows+=changed', 'rows="$runtime"',
+                      'mapfile -t rows', 'readarray rows', 'getopts flags rows', 'let rows=1',
+                      '((rows=1))', 'rows[0]=changed', 'declare -n alias=rows\nalias=changed',
+                      'if condition; then\n rows="$runtime"\nfi', 'condition && rows="$runtime"'):
+            with self.subTest(after=after):
+                path = self.manifest_fixture(after=after)
+                report = self.run_cli(1)
+                self.assertEqual(report['surfaces'], [])
+                self.assert_source_errors(report, path, ['unbounded-publication-control-flow', 'unresolved-publication-target'])
+        for body in ('read -r target\ndotnet pack "$target"', 'target+=$runtime\ndotnet pack "$target"',
+                     'command read -r target\ndotnet pack "$target"',
+                     'if condition; then\n target="$runtime"\nfi\ndotnet pack "$target"',
+                     'condition && target="$runtime"\ndotnet pack "$target"'):
+            with self.subTest(body=body):
+                path = self.manifest_fixture(body=body)
+                report = self.run_cli(1)
+                self.assertEqual(report['surfaces'], [])
+                self.assert_source_errors(report, path, ['unresolved-publication-target'])
+        path = self.manifest_fixture(body='dotnet pack "$rows"')
+        report = self.run_cli(1)
+        self.assertEqual(report['surfaces'], [])
+        self.assert_source_errors(report, path, ['unresolved-publication-target'])
+
+    def test_manifest_selector_reader_shape_refuses_instead_of_using_wrong_fields(self):
+        for names in ('label', 'label target other', 'target target'):
+            with self.subTest(names=names):
+                path = self.manifest_fixture()
+                file = self.repo / path
+                file.write_text(file.read_text().replace('read -r label target', 'read -r ' + names))
+                self.commit(self.repo); self.pin()
+                self.assert_source_errors(self.run_cli(1), path, ['unbounded-publication-control-flow',
+                    'unresolved-publication-target', 'unsupported-manifest-reader'])
+
+    def test_manifest_selector_conditional_and_unbounded_readers_refuse(self):
+        for control, ending in (('if condition; then', 'fi'), ('while condition; do', 'done')):
+            with self.subTest(control=control):
+                path = self.manifest_fixture()
+                file = self.repo / path
+                file.write_text(file.read_text().replace("while IFS=", control + "\nwhile IFS=") + ending + '\n')
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual(report['surfaces'], [])
+                self.assert_source_errors(report, path, ['unbounded-publication-control-flow', 'unresolved-publication-target'])
+
+    def test_manifest_selector_eof_cannot_reuse_final_fields_and_zero_rows_refuse(self):
+        path = self.manifest_fixture(body='printf "%s" "$target"')
+        file = self.repo / path
+        file.write_text(file.read_text() + 'dotnet pack "$target"\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['surfaces'], [])
+        self.assert_source_errors(report, path, ['unresolved-publication-target'])
+        path = self.manifest_fixture([], selector='.payload.units | select(length == 0) | .[] | [.label, .target] | @tsv',
+                                     body='dotnet pack missing/Actual.csproj')
+        report = self.run_cli(1)
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin, path=path,
+            rule='manifest-selector-limit:' + path, target='targets.json'),
+            dict(repository='references/opaque', gitlink=pin, path=path, rule='unbounded-publication-control-flow:' + path)])
+        self.assertEqual([entry['surface'] for entry in report['surfaces']], [self.binding(path, 'publication', 'missing/Actual.csproj')])
+
+    def test_manifest_selector_input_argv_and_safe_readonly_effects_are_proven(self):
+        path = self.manifest_fixture(before='input="space targets.json"', source='"$input"')
+        self.write(self.repo, 'space targets.json', (self.repo / 'targets.json').read_text())
+        self.commit(self.repo); self.pin()
+        self.assertEqual(self.run_cli(1)['errors'], [])
+        path = self.manifest_fixture(before='input="space targets.json"', source='$input')
+        self.assert_manifest_errors(self.run_cli(1), path, 'unresolved-manifest-input', None)
+        path = self.manifest_fixture(before='input=targets.json', source="'$input'")
+        self.assert_manifest_errors(self.run_cli(1), path, 'unresolved-manifest-input', None)
+        path = self.manifest_fixture(before="printf 'Usage <input> <version>\\n' >&2\nfind \"$runtime\" -name '*.nupkg' -delete")
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(len(report['surfaces']), 2)
+
+    def test_manifest_selector_unrelated_scalar_queries_have_no_table_authority(self):
+        path = 'eng/ship.sh'
+        self.write(self.repo, path, 'version="$(jq -r .version targets.json)"\n'
+                   'dotnet pack missing/Actual.csproj -p:Version="$version"\n')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([entry['surface'] for entry in report['surfaces']], [self.binding(path, 'publication', 'missing/Actual.csproj')])
+
+    def test_manifest_selector_unsafe_and_nested_sources_and_targets_refuse(self):
+        for source in ('../targets.json', '/tmp/targets.json'):
+            with self.subTest(source=source):
+                path = self.manifest_fixture(source=source)
+                self.assert_source_errors(self.run_cli(1), path, ['unbounded-publication-control-flow',
+                                                               'unresolved-publication-target', 'unsafe-publication-path'])
+        path = self.manifest_fixture(source='nested/targets.json')
+        def nested_pin():
+            self.git(self.repo, 'update-index', '--add', '--cacheinfo',
+                     '160000,' + self.git(self.repo, 'rev-parse', 'HEAD') + ',nested')
+            self.git(self.repo, 'commit', '-q', '-m', 'test: retain unopened nested boundary'); self.pin()
+        nested_pin()
+        self.assert_manifest_errors(self.run_cli(1), path, 'nested-manifest-input', 'nested/targets.json')
+        path = self.manifest_fixture([{'label': 'one', 'target': 'nested/First.csproj'}, {'label': 'two', 'target': '../Other.csproj'}])
+        nested_pin()
+        report = self.run_cli(1)
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        self.assertEqual(report['surfaces'], [])
+        self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin, path=path,
+            rule='nested-publication-target:' + path, target='nested/First.csproj'),
+            dict(repository='references/opaque', gitlink=pin, path=path, rule='unsafe-publication-path:' + path)])
+
+
 if __name__=='__main__':
     unittest.main()

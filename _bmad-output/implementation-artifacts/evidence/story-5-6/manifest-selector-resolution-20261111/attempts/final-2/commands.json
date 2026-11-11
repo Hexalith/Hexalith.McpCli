@@ -1,0 +1,37 @@
+[
+  {
+    "name": "census-tests",
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/proprietary-surfaces/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "census-tests.stdout.txt",
+    "stderr": "census-tests.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  },
+  {
+    "name": "mutations",
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/manifest-selector-resolution-20261111/mutation-guards.py"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 0,
+    "stdout": "mutations.stdout.txt",
+    "stderr": "mutations.stderr.txt",
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    }
+  }
+]

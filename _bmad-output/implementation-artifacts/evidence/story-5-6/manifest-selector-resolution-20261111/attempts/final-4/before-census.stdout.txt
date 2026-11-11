@@ -1,0 +1,9 @@
+{
+  "errors": [
+    {
+      "rule": "invalid-policy-or-source"
+    }
+  ],
+  "schema": "mcpcli-proprietary-surface-census/v1",
+  "status": "failed"
+}

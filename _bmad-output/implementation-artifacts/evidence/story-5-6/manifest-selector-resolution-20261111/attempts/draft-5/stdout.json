@@ -1,0 +1,163 @@
+{
+  "schema": "mcpcli-census-mutation-controls/v1",
+  "result": "passed",
+  "mutationCount": 26,
+  "controls": [
+    {
+      "patch": "M01-enumeration",
+      "test": "test_manifest_selector_retains_exact_orphan_observations_and_committed_input",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M02-selector-options",
+      "test": "test_manifest_selector_unsupported_selectors_and_options_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M03-overrides",
+      "test": "test_manifest_selector_command_overrides_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M04-runtime-input",
+      "test": "test_manifest_selector_runtime_missing_malformed_and_duplicate_inputs_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M05-input-argv",
+      "test": "test_manifest_selector_input_argv_and_safe_readonly_effects_are_proven",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M06-nested-input",
+      "test": "test_manifest_selector_unsafe_and_nested_sources_and_targets_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M07-redirection",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M08-unknown-effects",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M09-find-expression",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M10-find-patterns",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M11-row-budget",
+      "test": "test_manifest_selector_eof_cannot_reuse_final_fields_and_zero_rows_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M12-column-budget",
+      "test": "test_manifest_selector_budgets_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M13-field-depth",
+      "test": "test_manifest_selector_budgets_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M14-shape",
+      "test": "test_manifest_selector_collection_shape_and_length_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M15-field-controls",
+      "test": "test_manifest_selector_fields_cannot_forge_tsv_or_shell_provenance",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M16-reader-shape",
+      "test": "test_manifest_selector_reader_shape_refuses_instead_of_using_wrong_fields",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M17-eof",
+      "test": "test_manifest_selector_eof_cannot_reuse_final_fields_and_zero_rows_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M18-order",
+      "test": "test_manifest_selector_pairs_fields_and_preserves_iteration_directory_order",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M19-pairing",
+      "test": "test_manifest_selector_pairs_fields_and_preserves_iteration_directory_order",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M20-append-effects",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M21-locator-effects",
+      "test": "test_manifest_selector_known_and_unknown_file_writes_refuse",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M22-append-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M23-indexed-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M24-arithmetic-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M25-nameref-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "result": "detected",
+      "exitCode": 1
+    },
+    {
+      "patch": "M26-writer-state",
+      "test": "test_manifest_selector_unknown_row_or_table_writes_cannot_keep_old_authority",
+      "result": "detected",
+      "exitCode": 1
+    }
+  ]
+}

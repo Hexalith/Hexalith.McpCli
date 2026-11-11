@@ -1,0 +1,34 @@
+{
+  "origin": "Implementation finite-input audit",
+  "checkerSha256": "44c495d214a0f096268708a775835a105a2d02f57444b630cee5e2fa86fdcf4e",
+  "results": [
+    {
+      "case": "selector-integer",
+      "uncaughtException": "ValueError"
+    },
+    {
+      "case": "json-recursion",
+      "errors": [
+        {
+          "repository": "references/opaque",
+          "gitlink": "b029930ecef0225dbd3b3c3d714a3f3a71b099b3",
+          "path": "eng/ship.sh",
+          "rule": "unbounded-publication-control-flow:eng/ship.sh"
+        },
+        {
+          "repository": "references/opaque",
+          "gitlink": "b029930ecef0225dbd3b3c3d714a3f3a71b099b3",
+          "path": "eng/ship.sh",
+          "rule": "unbounded-publication-json:eng/ship.sh",
+          "target": "targets.json"
+        },
+        {
+          "repository": "references/opaque",
+          "gitlink": "b029930ecef0225dbd3b3c3d714a3f3a71b099b3",
+          "path": "eng/ship.sh",
+          "rule": "unresolved-publication-target:eng/ship.sh"
+        }
+      ]
+    }
+  ]
+}

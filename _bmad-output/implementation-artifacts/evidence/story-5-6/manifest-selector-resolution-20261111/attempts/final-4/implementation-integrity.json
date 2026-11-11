@@ -1,0 +1,15 @@
+{
+  "result": "passed",
+  "before": {
+    "tools/proprietary-surfaces/v1/check.py": "3c7612b06c5e3553aaf7c41565577f25a46707f44dd97c9975c90655fbbde36f",
+    "tools/proprietary-surfaces/v1/test_census.py": "2308e42cfaa71a5d7246842aa43a3f904e0f0357e35faedc9b718ebbcf0e4d4b",
+    "tools/proprietary-surfaces/v1/README.md": "9497b142cea5501109b35bacaa3955d75dfe3530b6d4c26b00724caac879c483",
+    "README.md": "c29376278814aba1b25cbdd85aeb6bfc6259df88a953a5e2e0a55ecfc246481a"
+  },
+  "after": {
+    "tools/proprietary-surfaces/v1/check.py": "3c7612b06c5e3553aaf7c41565577f25a46707f44dd97c9975c90655fbbde36f",
+    "tools/proprietary-surfaces/v1/test_census.py": "2308e42cfaa71a5d7246842aa43a3f904e0f0357e35faedc9b718ebbcf0e4d4b",
+    "tools/proprietary-surfaces/v1/README.md": "9497b142cea5501109b35bacaa3955d75dfe3530b6d4c26b00724caac879c483",
+    "README.md": "c29376278814aba1b25cbdd85aeb6bfc6259df88a953a5e2e0a55ecfc246481a"
+  }
+}

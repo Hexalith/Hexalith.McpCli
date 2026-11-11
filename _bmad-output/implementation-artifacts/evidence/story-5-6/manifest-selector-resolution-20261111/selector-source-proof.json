@@ -1,0 +1,122 @@
+{
+  "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+  "limit": "Enumeration alone grants no qualification or authority. Independent selected-project metadata and existing policy determine observations; other source failures remain root-wide blockers.",
+  "newAuthority": null,
+  "orderedManifestProjects": [
+    "src/Hexalith.ChatBot.Contracts/Hexalith.ChatBot.Contracts.csproj",
+    "src/Hexalith.ChatBot.Client/Hexalith.ChatBot.Client.csproj",
+    "src/Hexalith.ChatBot.Testing/Hexalith.ChatBot.Testing.csproj"
+  ],
+  "parentRevision": "1a44525c450081dc07df4021ab23e3090aacfda4",
+  "repository": "references/Hexalith.ChatBot",
+  "resolvedTargets": [
+    "src/Hexalith.ChatBot.Client/Hexalith.ChatBot.Client.csproj",
+    "src/Hexalith.ChatBot.Contracts/Hexalith.ChatBot.Contracts.csproj",
+    "src/Hexalith.ChatBot.Testing/Hexalith.ChatBot.Testing.csproj"
+  ],
+  "resolverErrors": [],
+  "scriptAndManifest": [
+    {
+      "gitBlob": "5b2fdd4281d409f3bc9650dd5042bba66163a62e",
+      "path": ".github/scripts/pack-release-packages.sh",
+      "sha256": "df64004b0cdba29be9e5c1ac3351f16933908c7f9addf3da51ad0fbd09b17a97"
+    },
+    {
+      "gitBlob": "3264ddbdb4d5ae35714cfa3d88fa56ae53b20bf1",
+      "path": "release-metadata.json",
+      "sha256": "af2473f1b311309dbfb8f4b8fe8fbd7eb9ce1eceed2b92ab8038c1a575d7a270"
+    }
+  ],
+  "selectedProjectInspection": [
+    {
+      "classificationMetadata": {
+        "AssemblyName": [
+          "Hexalith.ChatBot.Client"
+        ],
+        "PackageId": [
+          "Hexalith.ChatBot.Client"
+        ]
+      },
+      "metadataErrors": [],
+      "metadataSources": [
+        {
+          "gitBlob": "1203b2e2aad43310bc0da09464fa1644443171a2",
+          "path": "Directory.Build.props",
+          "sha256": "271e92cca258c7ba9bb56bbc83819ae1fcc50cc9ccc9538b18f80205f0320458"
+        },
+        {
+          "gitBlob": "0ab1483db3daa6042d85b1154b0c23038886ec2e",
+          "path": "Directory.Build.targets",
+          "sha256": "dffc87bff0ce0e6acb7ee3f3dabecd38d73b778728f625f5c23215e1a60a812e"
+        },
+        {
+          "gitBlob": "2b23abec1f9045a62578c952283e10833a3a26ac",
+          "path": "src/Hexalith.ChatBot.Client/Hexalith.ChatBot.Client.csproj",
+          "sha256": "50375fd35ff35fc442f26e192089ba712a6c7471efbd85fefc6b46b4abda8ed7"
+        }
+      ],
+      "observations": [],
+      "path": "src/Hexalith.ChatBot.Client/Hexalith.ChatBot.Client.csproj"
+    },
+    {
+      "classificationMetadata": {
+        "AssemblyName": [
+          "Hexalith.ChatBot.Contracts"
+        ],
+        "PackageId": [
+          "Hexalith.ChatBot.Contracts"
+        ]
+      },
+      "metadataErrors": [],
+      "metadataSources": [
+        {
+          "gitBlob": "1203b2e2aad43310bc0da09464fa1644443171a2",
+          "path": "Directory.Build.props",
+          "sha256": "271e92cca258c7ba9bb56bbc83819ae1fcc50cc9ccc9538b18f80205f0320458"
+        },
+        {
+          "gitBlob": "0ab1483db3daa6042d85b1154b0c23038886ec2e",
+          "path": "Directory.Build.targets",
+          "sha256": "dffc87bff0ce0e6acb7ee3f3dabecd38d73b778728f625f5c23215e1a60a812e"
+        },
+        {
+          "gitBlob": "35895dec39e73a5012279d6ac51cb1bc80188a1b",
+          "path": "src/Hexalith.ChatBot.Contracts/Hexalith.ChatBot.Contracts.csproj",
+          "sha256": "8b79b4fc137b8bfd647cc16572510d5a5a354d3ca7d130d0f5dacec7dfe7bdbb"
+        }
+      ],
+      "observations": [],
+      "path": "src/Hexalith.ChatBot.Contracts/Hexalith.ChatBot.Contracts.csproj"
+    },
+    {
+      "classificationMetadata": {
+        "AssemblyName": [
+          "Hexalith.ChatBot.Testing"
+        ],
+        "PackageId": [
+          "Hexalith.ChatBot.Testing"
+        ]
+      },
+      "metadataErrors": [],
+      "metadataSources": [
+        {
+          "gitBlob": "1203b2e2aad43310bc0da09464fa1644443171a2",
+          "path": "Directory.Build.props",
+          "sha256": "271e92cca258c7ba9bb56bbc83819ae1fcc50cc9ccc9538b18f80205f0320458"
+        },
+        {
+          "gitBlob": "0ab1483db3daa6042d85b1154b0c23038886ec2e",
+          "path": "Directory.Build.targets",
+          "sha256": "dffc87bff0ce0e6acb7ee3f3dabecd38d73b778728f625f5c23215e1a60a812e"
+        },
+        {
+          "gitBlob": "1441f730a7aa6b7b2a0d2f889adc6c903b6894d4",
+          "path": "src/Hexalith.ChatBot.Testing/Hexalith.ChatBot.Testing.csproj",
+          "sha256": "86b6847d05ab70b260ef32e5b8671818f12590234128294a35559bd3a70ce6be"
+        }
+      ],
+      "observations": [],
+      "path": "src/Hexalith.ChatBot.Testing/Hexalith.ChatBot.Testing.csproj"
+    }
+  ]
+}
