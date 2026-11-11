@@ -15,9 +15,10 @@ permissions:
 
 jobs:
   ci:
-    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@52ea174c70f1afe77b52a2ccf06bb53afa5e962d
+    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@6e77e79e8914a375b0c43b0af3bd142405675ecd
     with:
       solution: Hexalith.McpCli.slnx
+      additional-sdk-version: '10.0.x'
       test-platform: microsoft-testing-platform
       unit-test-projects: |
         tests/Hexalith.McpCli.Abstractions.Tests
@@ -97,6 +98,7 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           global-json-file: global.json
+          dotnet-version: '10.0.x'
       - name: Pack and validate the shared vector contract without a Head or Gateway
         run: |
           python3 -m venv "$RUNNER_TEMP/mcpcli-vector-venv"
@@ -116,6 +118,7 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           global-json-file: global.json
+          dotnet-version: '10.0.x'
       - name: Install vector runner test tooling
         run: |
           python3 -m venv "$RUNNER_TEMP/mcpcli-vector-venv"
@@ -137,6 +140,7 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           global-json-file: global.json
+          dotnet-version: '10.0.x'
       - name: Restore and build exact production catalog
         run: |
           dotnet restore Hexalith.McpCli.slnx
@@ -175,6 +179,7 @@ jobs:
         uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
         with:
           global-json-file: global.json
+          dotnet-version: '10.0.x'
       - name: Install pinned non-live plan validator
         run: |
           python3 -m venv "$RUNNER_TEMP/mcpcli-live-venv"
