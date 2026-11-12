@@ -1,0 +1,13 @@
+{
+  "scope": "Actual committed source refusal before the exact1.0.4 continuation; no native/image/publication authority is granted by the census.",
+  "sourceBeforeRenewal": "25b8e596d77a4f3ca124cfec9310ed27e7f9ecd0",
+  "committedDeclaredRoots": 17,
+  "existingExactFileDrifts": 4,
+  "existingObservationDrifts": 4,
+  "newSurfacesOrSignals": 0,
+  "opaqueHelperBodiesUnchanged": true,
+  "producer": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b",
+  "qualifiedPlatform": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+  "qualifiedPlatformTag": "v1.11.0",
+  "authorization": "Requesting user explicitly bypassed human validation; all automatic hash/source/inventory/behavior gates remain strict."
+}
