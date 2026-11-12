@@ -2388,7 +2388,7 @@ class CiWorkflowTests(unittest.TestCase):
         ], recorded, 'The recorded Builds catalog gitlink must retain its approved source identity.')
         approved = {
             '.github/workflows/ci.yml': [
-                'Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@52ea174c70f1afe77b52a2ccf06bb53afa5e962d',
+                'Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@6e77e79e8914a375b0c43b0af3bd142405675ecd',
             ],
             '.github/workflows/commitlint.yml': [
                 'Hexalith/Hexalith.Builds/.github/workflows/commitlint.yml@52ea174c70f1afe77b52a2ccf06bb53afa5e962d',
@@ -2409,7 +2409,7 @@ class CiWorkflowTests(unittest.TestCase):
                      if workflow.suffix in ('.yml', '.yaml')}
         catalog = ['160000', 'commit', 'ff6b295abcca5159896602bd8a5e87e913950b83',
                    'references/Hexalith.Builds']
-        executor = '52ea174c70f1afe77b52a2ccf06bb53afa5e962d'
+        executor = '6e77e79e8914a375b0c43b0af3bd142405675ecd'
         ci_path = Path('.github/workflows/ci.yml')
         cases = [
             ('catalog mode', ['100644', *catalog[1:]], {}),
