@@ -1,0 +1,36 @@
+{
+  "scope": "Diagnostic compiler configuration on exact published707Tenant source only; no native acceptance",
+  "result": "passed",
+  "rows": [
+    {
+      "process": 0,
+      "DOTNET_PROCESSOR_COUNT": "1",
+      "dll": "728cef0bd5bbc7af674be2dd4175eaa74ab62a538148e24dd4fb19b6d91a3a10",
+      "pdb": "9a4d1d67514bf13acee4f280c9df93085b1842b04f4b38d466b209b293116f50"
+    },
+    {
+      "process": 1,
+      "DOTNET_PROCESSOR_COUNT": "2",
+      "dll": "728cef0bd5bbc7af674be2dd4175eaa74ab62a538148e24dd4fb19b6d91a3a10",
+      "pdb": "9a4d1d67514bf13acee4f280c9df93085b1842b04f4b38d466b209b293116f50"
+    },
+    {
+      "process": 2,
+      "DOTNET_PROCESSOR_COUNT": "8",
+      "dll": "728cef0bd5bbc7af674be2dd4175eaa74ab62a538148e24dd4fb19b6d91a3a10",
+      "pdb": "9a4d1d67514bf13acee4f280c9df93085b1842b04f4b38d466b209b293116f50"
+    },
+    {
+      "process": 3,
+      "DOTNET_PROCESSOR_COUNT": "2",
+      "dll": "728cef0bd5bbc7af674be2dd4175eaa74ab62a538148e24dd4fb19b6d91a3a10",
+      "pdb": "9a4d1d67514bf13acee4f280c9df93085b1842b04f4b38d466b209b293116f50"
+    },
+    {
+      "process": 4,
+      "DOTNET_PROCESSOR_COUNT": "1",
+      "dll": "728cef0bd5bbc7af674be2dd4175eaa74ab62a538148e24dd4fb19b6d91a3a10",
+      "pdb": "9a4d1d67514bf13acee4f280c9df93085b1842b04f4b38d466b209b293116f50"
+    }
+  ]
+}

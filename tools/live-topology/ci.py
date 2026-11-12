@@ -602,6 +602,30 @@ def prepare(evidence: Path) -> None:
         pruning_condition = ' Or '.join("'$(MSBuildProjectName)' == '" + name + "'" for name in pruning_owners)
         ET.SubElement(ET.SubElement(overrides_xml, 'PropertyGroup', {'Condition': pruning_condition}),
                       'RestoreEnablePackagePruning').text = 'false'
+        # Telemetry 11's replacement logging generator orders two nested Log types
+        # nondeterministically. Keep the actual current Tenant source/runtime packages,
+        # but select the standard LoggerMessage generator consistently before sealing.
+        tenant_condition = "'$(MSBuildProjectName)' == 'Hexalith.Tenants'"
+        ET.SubElement(ET.SubElement(overrides_xml, 'PropertyGroup', {'Condition': tenant_condition}),
+                      'DisableMicrosoftExtensionsLoggingSourceGenerator').text = 'false'
+        logging = ET.SubElement(overrides_xml, 'Target', {
+            'Name': 'McpCliRequireDeterministicLoggingGenerator', 'BeforeTargets': 'CoreCompile',
+            'Condition': tenant_condition})
+        for item, filename, package in (
+                ('_McpCliTelemetryLoggingGenerator', 'Microsoft.Gen.Logging', 'Microsoft.Extensions.Telemetry.Abstractions'),
+                ('_McpCliStandardLoggingGenerator', 'Microsoft.Extensions.Logging.Generators', 'Microsoft.Extensions.Logging.Abstractions')):
+            ET.SubElement(ET.SubElement(logging, 'ItemGroup'), item, {
+                'Include': '@(Analyzer)', 'Condition': "'%(Analyzer.Filename)' == '" + filename + "'"})
+            ET.SubElement(logging, 'Error', {'Condition': "'@(" + item + "->Count())' != '1'",
+                'Text': 'The current Tenant fixture requires exactly one ' + filename + ' generator.'})
+            ET.SubElement(ET.SubElement(logging, 'ItemGroup'), item + 'Expected', {
+                'Include': '@(' + item + ')',
+                'Condition': "'%(" + item + ".NuGetPackageId)' == '" + package
+                    + "' And '%(" + item + ".NuGetPackageVersion)' == '11.0.0'"})
+            ET.SubElement(logging, 'Error', {'Condition': "'@(" + item + "Expected->Count())' != '1'",
+                'Text': 'The current Tenant fixture requires the exact ' + package + ' 11.0.0 generator identity.'})
+        ET.SubElement(ET.SubElement(logging, 'ItemGroup'), 'Analyzer', {
+            'Remove': '@(_McpCliTelemetryLoggingGenerator)'})
         ET.ElementTree(overrides_xml).write(overrides, encoding='utf-8', xml_declaration=True)
         os.environ['CustomAfterMicrosoftCommonTargets'] = str(overrides)
         receipt['sourcePackageCatalog'] = {'buildsCommit': actual_builds,

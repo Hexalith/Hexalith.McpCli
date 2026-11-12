@@ -213,7 +213,15 @@ All builds and nested preparation processes inherit a fresh task-owned
 `NUGET_PACKAGES`. The actual gateway, domain hosts, separate Parties adapter and
 Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the current root catalog’s published dependency selections. Source hosts and
 the separate adapter use the root McpCli 2.0.1 pin so their Abstractions identity
-matches the AppHost, including later SDK/Aspire rebuilds. The Parties
+matches the AppHost, including later SDK/Aspire rebuilds. The current Tenant
+source build uses the standard `Microsoft.Extensions.Logging.Abstractions` 11.0.0
+`LoggerMessage` generator. The telemetry replacement generator emits its two nested
+`Log` types in an unstable order, changing DLL/PDB hashes on an unchanged rebuild.
+The private post-import target requires exactly one generator from each expected
+11.0.0 package, removes only the telemetry logging replacement, and retains the
+metrics generator and all runtime/reference packages. This same configuration is
+sealed before execution and inherited by the ordinary SDK preparation and Aspire
+rebuilds. Historical profiles remain unchanged. The Parties
 adapter remains a separate compiled library. Its ordinary build uses
 `CopyLocalLockFileAssemblies=true` to materialize the genuine package runtime
 closure; every deployed SDK DLL must match its public archive before preparation

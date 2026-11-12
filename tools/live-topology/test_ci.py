@@ -306,6 +306,8 @@ else:
     if mode == 'duplicate-smoke-receipt' and independent == 'smoke': print('Isolated run: ' + str(path))
     if mode == 'tamper-after-boundary' and independent == 'boundary':
         (root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.EventStore.Gateway.dll').write_bytes(b'changed-after-boundary')
+    if mode == 'tamper-tenant-after-boundary' and independent == 'boundary':
+        (root / 'references/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll').write_bytes(b'changed-after-boundary')
     sys.exit(17 if mode in ('smoke-exit', 'both-fail') and independent == 'smoke' else 0)
 '''
 
@@ -807,6 +809,63 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         (self.root / relative).write_text('// unexpected new source')
         with self.assertRaisesRegex(ValueError, 'online audit proof changed'):
             self.ci_module().require_reader_audit(prepared)
+
+    def test_current_tenant_generator_selection_uses_real_msbuild_and_refuses_identity_drift(self):
+        prepared = self.prepare()
+        override = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
+        telemetry = ('telemetry/Microsoft.Gen.Logging.dll', 'Microsoft.Extensions.Telemetry.Abstractions', '11.0.0')
+        standard = ('logging/Microsoft.Extensions.Logging.Generators.dll', 'Microsoft.Extensions.Logging.Abstractions', '11.0.0')
+        metrics = ('telemetry/Microsoft.Gen.Metrics.dll', 'Microsoft.Extensions.Telemetry.Abstractions', '11.0.0')
+        other = ('unrelated/Other.Analyzer.dll', 'Other.Analyzer', '1.0.0')
+
+        def execute(name, analyzers, project_name='Hexalith.Tenants'):
+            directory = self.root / ('generator-' + name)
+            directory.mkdir()
+            project = directory / (project_name + '.proj')
+            xml = ET.Element('Project')
+            ET.SubElement(ET.SubElement(xml, 'PropertyGroup'), 'DisableMicrosoftExtensionsLoggingSourceGenerator').text = 'true'
+            items = ET.SubElement(xml, 'ItemGroup')
+            for path, package, version in analyzers:
+                item = ET.SubElement(items, 'Analyzer', {'Include': path})
+                ET.SubElement(item, 'NuGetPackageId').text = package
+                ET.SubElement(item, 'NuGetPackageVersion').text = version
+            ET.SubElement(xml, 'Import', {'Project': str(override)})
+            target = ET.SubElement(xml, 'Target', {'Name': 'CoreCompile'})
+            ET.SubElement(target, 'WriteLinesToFile', {
+                'File': '$(MSBuildProjectDirectory)/remaining.txt', 'Overwrite': 'true',
+                'Lines': "@(Analyzer->'%(Filename)|%(NuGetPackageId)|%(NuGetPackageVersion)')"})
+            ET.ElementTree(xml).write(project, encoding='utf-8', xml_declaration=True)
+            result = subprocess.run([shutil.which('dotnet'), 'msbuild', str(project), '-nologo', '-t:CoreCompile',
+                                     '-getProperty:DisableMicrosoftExtensionsLoggingSourceGenerator'],
+                                    cwd=self.root, capture_output=True, text=True, timeout=30)
+            return result, directory / 'remaining.txt'
+
+        selected, remaining = execute('selected', [telemetry, standard, metrics, other])
+        self.assertEqual(0, selected.returncode, selected.stdout + selected.stderr)
+        self.assertEqual('false', selected.stdout.strip())
+        self.assertEqual({'Microsoft.Extensions.Logging.Generators|Microsoft.Extensions.Logging.Abstractions|11.0.0',
+                          'Microsoft.Gen.Metrics|Microsoft.Extensions.Telemetry.Abstractions|11.0.0',
+                          'Other.Analyzer|Other.Analyzer|1.0.0'}, set(remaining.read_text().splitlines()))
+        unchanged, remaining = execute('unrelated', [telemetry, standard, metrics, other], 'Other.Host')
+        self.assertEqual(0, unchanged.returncode, unchanged.stdout + unchanged.stderr)
+        self.assertEqual('true', unchanged.stdout.strip())
+        self.assertEqual(4, len(remaining.read_text().splitlines()))
+        cases = {
+            'missing-telemetry': [standard, metrics, other],
+            'missing-standard': [telemetry, metrics, other],
+            'duplicate-telemetry': [telemetry, ('duplicate/' + telemetry[0], *telemetry[1:]), standard],
+            'duplicate-standard': [telemetry, standard, ('duplicate/' + standard[0], *standard[1:])],
+            'wrong-telemetry-package': [(telemetry[0], 'Untrusted.Package', telemetry[2]), standard],
+            'wrong-standard-package': [telemetry, (standard[0], 'Untrusted.Package', standard[2])],
+            'wrong-telemetry-version': [(telemetry[0], telemetry[1], '11.0.1'), standard],
+            'wrong-standard-version': [telemetry, (standard[0], standard[1], '11.0.1')],
+        }
+        for name, analyzers in cases.items():
+            with self.subTest(case=name):
+                result, remaining = execute(name, analyzers)
+                self.assertNotEqual(0, result.returncode)
+                self.assertIn('The current Tenant fixture requires', result.stdout + result.stderr)
+                self.assertFalse(remaining.exists())
 
     def test_inherited_source_override_pins_abstractions_during_real_msbuild_evaluation(self):
         prepared = self.prepare()
@@ -1511,6 +1570,19 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual('not-run', receipt['vectors']['result'])
         self.assertFalse(receipt['fullLiveAccepted'])
         self.assertIn('Deployed EventStore binary differs from its archive', result.stderr)
+        self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call) for call in self.calls()))
+
+    def test_tenant_output_rebuild_drift_is_refused_before_any_vector(self):
+        tenant = self.root / 'references/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants.dll'
+        tenant.write_bytes(b'prepared-tenant-host')
+        self.prepare()
+        result = self.invoke('run-ci.sh', 'tamper-tenant-after-boundary')
+        self.assertNotEqual(0, result.returncode)
+        receipt = json.loads((self.evidence / 'ci-live.json').read_text())
+        self.assertEqual('passed', receipt['boundary']['result'])
+        self.assertEqual('not-run', receipt['vectors']['result'])
+        self.assertFalse(receipt['fullLiveAccepted'])
+        self.assertIn('gateway.domainHosts.Hexalith.Tenants.output.Hexalith.Tenants.dll', result.stderr)
         self.assertFalse(any(any(value.endswith('run-vectors.py') for value in call) for call in self.calls()))
 
     def test_vector_nonacceptance_and_nonzero_exits_still_run_smoke(self):

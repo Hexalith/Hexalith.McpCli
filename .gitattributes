@@ -61,4 +61,7 @@ tools/live-topology/binaries*.json -text
 evidence/release-maintenance-20261112/foreign-1.0.5-assertions/** -text
 
 # Bind the bounded current census continuation to captured evidence bytes.
-evidence/release-maintenance-20261112/census-1.0.6/** -text
+evidence/release-maintenance-20261112/census-1.0.6/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+
+# Preserve current compiler diagnostics as captured fixture-only evidence.
+evidence/release-maintenance-20261112/current-tenant-logging-generation/** -text

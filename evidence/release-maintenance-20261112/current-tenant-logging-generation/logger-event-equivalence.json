@@ -1,0 +1,522 @@
+{
+  "scope": "Offline comparison of actual compiled Tenant host variants only; no native or publication authority",
+  "result": "passed",
+  "methods": 14,
+  "reports": {
+    "/tmp/current-mcpcli-tenant-logging-equivalence/original": {
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapCredentialProvider\u002BLog.CredentialUnavailable": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 2006,
+          "EventName": "CredentialUnavailable",
+          "Message": "Bootstrap administrator credential unavailable: Reason=probe-reason. The bootstrap command is not sent; configure the administrator\u0027s delegated credential",
+          "Fields": {
+            "Reason": "probe-reason",
+            "{OriginalFormat}": "Bootstrap administrator credential unavailable: Reason={Reason}. The bootstrap command is not sent; configure the administrator\u0027s delegated credential"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapCredentialProvider\u002BLog.TokenRequestFailed": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 2005,
+          "EventName": "TokenRequestFailed",
+          "Message": "Bootstrap administrator token request failed: StatusCode=7. The bootstrap command is not sent",
+          "Fields": {
+            "StatusCode": 7,
+            "{OriginalFormat}": "Bootstrap administrator token request failed: StatusCode={StatusCode}. The bootstrap command is not sent"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapAlreadyDone": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2004,
+          "EventName": "BootstrapAlreadyDone",
+          "Message": "Bootstrap skipped: initial global administrator is already registered; verify configured administrator projected membership before handoff",
+          "Fields": {
+            "{OriginalFormat}": "Bootstrap skipped: initial global administrator is already registered; verify configured administrator projected membership before handoff"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapAttempt": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2008,
+          "EventName": "BootstrapAttempt",
+          "Message": "Bootstrap command dispatch attempt: MessageId=probe-messageId, CorrelationId=probe-correlationId. Retain these identifiers for status and projected membership recovery",
+          "Fields": {
+            "CorrelationId": "probe-correlationId",
+            "MessageId": "probe-messageId",
+            "{OriginalFormat}": "Bootstrap command dispatch attempt: MessageId={MessageId}, CorrelationId={CorrelationId}. Retain these identifiers for status and projected membership recovery"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapCommandSent": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2001,
+          "EventName": "BootstrapCommandSent",
+          "Message": "Bootstrap command accepted for configured global administrator; verify command status and projected membership before handoff",
+          "Fields": {
+            "{OriginalFormat}": "Bootstrap command accepted for configured global administrator; verify command status and projected membership before handoff"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapDisabled": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2007,
+          "EventName": "BootstrapDisabled",
+          "Message": "Bootstrap skipped: Tenants:BootstrapGlobalAdminEnabled is false",
+          "Fields": {
+            "{OriginalFormat}": "Bootstrap skipped: Tenants:BootstrapGlobalAdminEnabled is false"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapFailed": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 2002,
+          "EventName": "BootstrapFailed",
+          "Message": "Bootstrap failed: Reason=probe-reason, Phase=probe-phase, ExceptionType=probe-exceptionType. The global administrator may not have been created. Verify command status and projected membership before explicit operator recovery; a restart makes one new attempt",
+          "Fields": {
+            "ExceptionType": "probe-exceptionType",
+            "Phase": "probe-phase",
+            "Reason": "probe-reason",
+            "{OriginalFormat}": "Bootstrap failed: Reason={Reason}, Phase={Phase}, ExceptionType={ExceptionType}. The global administrator may not have been created. Verify command status and projected membership before explicit operator recovery; a restart makes one new attempt"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapSkipped": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2000,
+          "EventName": "BootstrapSkipped",
+          "Message": "Bootstrap skipped: Tenants:BootstrapGlobalAdminUserId is not configured",
+          "Fields": {
+            "{OriginalFormat}": "Bootstrap skipped: Tenants:BootstrapGlobalAdminUserId is not configured"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapUnexpectedResponse": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 2003,
+          "EventName": "BootstrapUnexpectedResponse",
+          "Message": "Bootstrap unexpected response: StatusCode=7, ResponseKind=probe-responseKind, ResponseCode=probe-responseCode, ValidationField=probe-validationField. Verify command status and projected membership before explicit operator recovery",
+          "Fields": {
+            "ResponseCode": "probe-responseCode",
+            "ResponseKind": "probe-responseKind",
+            "StatusCode": 7,
+            "ValidationField": "probe-validationField",
+            "{OriginalFormat}": "Bootstrap unexpected response: StatusCode={StatusCode}, ResponseKind={ResponseKind}, ResponseCode={ResponseCode}, ValidationField={ValidationField}. Verify command status and projected membership before explicit operator recovery"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Projections.ProjectionDispatcher.ProjectionDispatchCompleted": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 100301,
+          "EventName": "ProjectionDispatchCompleted",
+          "Message": "Tenant projection dispatch completed: CorrelationId=probe-correlationId, TenantId=probe-tenantId, Domain=probe-domain, AggregateId=probe-aggregateId, ProjectionType=probe-projectionType, Stage=probe-stage, Outcome=probe-outcome, EventCount=7, DurationMs=1.25",
+          "Fields": {
+            "AggregateId": "probe-aggregateId",
+            "CorrelationId": "probe-correlationId",
+            "Domain": "probe-domain",
+            "DurationMs": 1.25,
+            "EventCount": 7,
+            "Outcome": "probe-outcome",
+            "ProjectionType": "probe-projectionType",
+            "Stage": "probe-stage",
+            "TenantId": "probe-tenantId",
+            "{OriginalFormat}": "Tenant projection dispatch completed: CorrelationId={CorrelationId}, TenantId={TenantId}, Domain={Domain}, AggregateId={AggregateId}, ProjectionType={ProjectionType}, Stage={Stage}, Outcome={Outcome}, EventCount={EventCount}, DurationMs={DurationMs}"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Projections.ProjectionDispatcher.ProjectionDispatchFailed": {
+        "enabled": {
+          "Level": "Error",
+          "EventId": 100302,
+          "EventName": "ProjectionDispatchFailed",
+          "Message": "Tenant projection dispatch failed: CorrelationId=probe-correlationId, TenantId=probe-tenantId, Domain=probe-domain, AggregateId=probe-aggregateId, ProjectionType=probe-projectionType, Stage=probe-stage, Outcome=probe-outcome, ExceptionType=probe-exceptionType",
+          "Fields": {
+            "AggregateId": "probe-aggregateId",
+            "CorrelationId": "probe-correlationId",
+            "Domain": "probe-domain",
+            "ExceptionType": "probe-exceptionType",
+            "Outcome": "probe-outcome",
+            "ProjectionType": "probe-projectionType",
+            "Stage": "probe-stage",
+            "TenantId": "probe-tenantId",
+            "{OriginalFormat}": "Tenant projection dispatch failed: CorrelationId={CorrelationId}, TenantId={TenantId}, Domain={Domain}, AggregateId={AggregateId}, ProjectionType={ProjectionType}, Stage={Stage}, Outcome={Outcome}, ExceptionType={ExceptionType}"
+          },
+          "ExceptionType": "System.InvalidOperationException",
+          "ExceptionMessage": "probe-exception"
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.InvalidCursorRejected": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 1902,
+          "EventName": "InvalidCursorRejected",
+          "Message": "Invalid tenant query cursor rejected at handler: QueryType=probe-queryType, Endpoint=probe-endpoint, TenantId=probe-tenantId, UserId=probe-userId, FailureReason=probe-failureReason, Stage=TenantQueryHandler",
+          "Fields": {
+            "Endpoint": "probe-endpoint",
+            "FailureReason": "probe-failureReason",
+            "QueryType": "probe-queryType",
+            "TenantId": "probe-tenantId",
+            "UserId": "probe-userId",
+            "{OriginalFormat}": "Invalid tenant query cursor rejected at handler: QueryType={QueryType}, Endpoint={Endpoint}, TenantId={TenantId}, UserId={UserId}, FailureReason={FailureReason}, Stage=TenantQueryHandler"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.MissingAuthenticatedUserRejected": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 1904,
+          "EventName": "MissingAuthenticatedUserRejected",
+          "Message": "Tenant query envelope rejected before authorization because authenticated user id was missing: CorrelationId=probe-correlationId, QueryType=probe-queryType, FailureReason=probe-failureReason, Stage=probe-stage",
+          "Fields": {
+            "CorrelationId": "probe-correlationId",
+            "FailureReason": "probe-failureReason",
+            "QueryType": "probe-queryType",
+            "Stage": "probe-stage",
+            "{OriginalFormat}": "Tenant query envelope rejected before authorization because authenticated user id was missing: CorrelationId={CorrelationId}, QueryType={QueryType}, FailureReason={FailureReason}, Stage={Stage}"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.OrphanUserTenantMembershipFiltered": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 1903,
+          "EventName": "OrphanUserTenantMembershipFiltered",
+          "Message": "Filtered orphan tenant membership from query result: CorrelationId=probe-correlationId, QueryType=probe-queryType, RequesterUserId=probe-requesterUserId, TargetUserId=probe-targetUserId, OrphanTenantId=probe-orphanTenantId, Stage=TenantQueryHandler",
+          "Fields": {
+            "CorrelationId": "probe-correlationId",
+            "OrphanTenantId": "probe-orphanTenantId",
+            "QueryType": "probe-queryType",
+            "RequesterUserId": "probe-requesterUserId",
+            "TargetUserId": "probe-targetUserId",
+            "{OriginalFormat}": "Filtered orphan tenant membership from query result: CorrelationId={CorrelationId}, QueryType={QueryType}, RequesterUserId={RequesterUserId}, TargetUserId={TargetUserId}, OrphanTenantId={OrphanTenantId}, Stage=TenantQueryHandler"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      }
+    },
+    "/tmp/current-mcpcli-tenant-logging-equivalence/standard": {
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapCredentialProvider\u002BLog.CredentialUnavailable": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 2006,
+          "EventName": "CredentialUnavailable",
+          "Message": "Bootstrap administrator credential unavailable: Reason=probe-reason. The bootstrap command is not sent; configure the administrator\u0027s delegated credential",
+          "Fields": {
+            "Reason": "probe-reason",
+            "{OriginalFormat}": "Bootstrap administrator credential unavailable: Reason={Reason}. The bootstrap command is not sent; configure the administrator\u0027s delegated credential"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapCredentialProvider\u002BLog.TokenRequestFailed": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 2005,
+          "EventName": "TokenRequestFailed",
+          "Message": "Bootstrap administrator token request failed: StatusCode=7. The bootstrap command is not sent",
+          "Fields": {
+            "StatusCode": 7,
+            "{OriginalFormat}": "Bootstrap administrator token request failed: StatusCode={StatusCode}. The bootstrap command is not sent"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapAlreadyDone": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2004,
+          "EventName": "BootstrapAlreadyDone",
+          "Message": "Bootstrap skipped: initial global administrator is already registered; verify configured administrator projected membership before handoff",
+          "Fields": {
+            "{OriginalFormat}": "Bootstrap skipped: initial global administrator is already registered; verify configured administrator projected membership before handoff"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapAttempt": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2008,
+          "EventName": "BootstrapAttempt",
+          "Message": "Bootstrap command dispatch attempt: MessageId=probe-messageId, CorrelationId=probe-correlationId. Retain these identifiers for status and projected membership recovery",
+          "Fields": {
+            "CorrelationId": "probe-correlationId",
+            "MessageId": "probe-messageId",
+            "{OriginalFormat}": "Bootstrap command dispatch attempt: MessageId={MessageId}, CorrelationId={CorrelationId}. Retain these identifiers for status and projected membership recovery"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapCommandSent": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2001,
+          "EventName": "BootstrapCommandSent",
+          "Message": "Bootstrap command accepted for configured global administrator; verify command status and projected membership before handoff",
+          "Fields": {
+            "{OriginalFormat}": "Bootstrap command accepted for configured global administrator; verify command status and projected membership before handoff"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapDisabled": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2007,
+          "EventName": "BootstrapDisabled",
+          "Message": "Bootstrap skipped: Tenants:BootstrapGlobalAdminEnabled is false",
+          "Fields": {
+            "{OriginalFormat}": "Bootstrap skipped: Tenants:BootstrapGlobalAdminEnabled is false"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapFailed": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 2002,
+          "EventName": "BootstrapFailed",
+          "Message": "Bootstrap failed: Reason=probe-reason, Phase=probe-phase, ExceptionType=probe-exceptionType. The global administrator may not have been created. Verify command status and projected membership before explicit operator recovery; a restart makes one new attempt",
+          "Fields": {
+            "ExceptionType": "probe-exceptionType",
+            "Phase": "probe-phase",
+            "Reason": "probe-reason",
+            "{OriginalFormat}": "Bootstrap failed: Reason={Reason}, Phase={Phase}, ExceptionType={ExceptionType}. The global administrator may not have been created. Verify command status and projected membership before explicit operator recovery; a restart makes one new attempt"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapSkipped": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 2000,
+          "EventName": "BootstrapSkipped",
+          "Message": "Bootstrap skipped: Tenants:BootstrapGlobalAdminUserId is not configured",
+          "Fields": {
+            "{OriginalFormat}": "Bootstrap skipped: Tenants:BootstrapGlobalAdminUserId is not configured"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapUnexpectedResponse": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 2003,
+          "EventName": "BootstrapUnexpectedResponse",
+          "Message": "Bootstrap unexpected response: StatusCode=7, ResponseKind=probe-responseKind, ResponseCode=probe-responseCode, ValidationField=probe-validationField. Verify command status and projected membership before explicit operator recovery",
+          "Fields": {
+            "ResponseCode": "probe-responseCode",
+            "ResponseKind": "probe-responseKind",
+            "StatusCode": 7,
+            "ValidationField": "probe-validationField",
+            "{OriginalFormat}": "Bootstrap unexpected response: StatusCode={StatusCode}, ResponseKind={ResponseKind}, ResponseCode={ResponseCode}, ValidationField={ValidationField}. Verify command status and projected membership before explicit operator recovery"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Projections.ProjectionDispatcher.ProjectionDispatchCompleted": {
+        "enabled": {
+          "Level": "Information",
+          "EventId": 100301,
+          "EventName": "ProjectionDispatchCompleted",
+          "Message": "Tenant projection dispatch completed: CorrelationId=probe-correlationId, TenantId=probe-tenantId, Domain=probe-domain, AggregateId=probe-aggregateId, ProjectionType=probe-projectionType, Stage=probe-stage, Outcome=probe-outcome, EventCount=7, DurationMs=1.25",
+          "Fields": {
+            "AggregateId": "probe-aggregateId",
+            "CorrelationId": "probe-correlationId",
+            "Domain": "probe-domain",
+            "DurationMs": 1.25,
+            "EventCount": 7,
+            "Outcome": "probe-outcome",
+            "ProjectionType": "probe-projectionType",
+            "Stage": "probe-stage",
+            "TenantId": "probe-tenantId",
+            "{OriginalFormat}": "Tenant projection dispatch completed: CorrelationId={CorrelationId}, TenantId={TenantId}, Domain={Domain}, AggregateId={AggregateId}, ProjectionType={ProjectionType}, Stage={Stage}, Outcome={Outcome}, EventCount={EventCount}, DurationMs={DurationMs}"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Projections.ProjectionDispatcher.ProjectionDispatchFailed": {
+        "enabled": {
+          "Level": "Error",
+          "EventId": 100302,
+          "EventName": "ProjectionDispatchFailed",
+          "Message": "Tenant projection dispatch failed: CorrelationId=probe-correlationId, TenantId=probe-tenantId, Domain=probe-domain, AggregateId=probe-aggregateId, ProjectionType=probe-projectionType, Stage=probe-stage, Outcome=probe-outcome, ExceptionType=probe-exceptionType",
+          "Fields": {
+            "AggregateId": "probe-aggregateId",
+            "CorrelationId": "probe-correlationId",
+            "Domain": "probe-domain",
+            "ExceptionType": "probe-exceptionType",
+            "Outcome": "probe-outcome",
+            "ProjectionType": "probe-projectionType",
+            "Stage": "probe-stage",
+            "TenantId": "probe-tenantId",
+            "{OriginalFormat}": "Tenant projection dispatch failed: CorrelationId={CorrelationId}, TenantId={TenantId}, Domain={Domain}, AggregateId={AggregateId}, ProjectionType={ProjectionType}, Stage={Stage}, Outcome={Outcome}, ExceptionType={ExceptionType}"
+          },
+          "ExceptionType": "System.InvalidOperationException",
+          "ExceptionMessage": "probe-exception"
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.InvalidCursorRejected": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 1902,
+          "EventName": "InvalidCursorRejected",
+          "Message": "Invalid tenant query cursor rejected at handler: QueryType=probe-queryType, Endpoint=probe-endpoint, TenantId=probe-tenantId, UserId=probe-userId, FailureReason=probe-failureReason, Stage=TenantQueryHandler",
+          "Fields": {
+            "Endpoint": "probe-endpoint",
+            "FailureReason": "probe-failureReason",
+            "QueryType": "probe-queryType",
+            "TenantId": "probe-tenantId",
+            "UserId": "probe-userId",
+            "{OriginalFormat}": "Invalid tenant query cursor rejected at handler: QueryType={QueryType}, Endpoint={Endpoint}, TenantId={TenantId}, UserId={UserId}, FailureReason={FailureReason}, Stage=TenantQueryHandler"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.MissingAuthenticatedUserRejected": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 1904,
+          "EventName": "MissingAuthenticatedUserRejected",
+          "Message": "Tenant query envelope rejected before authorization because authenticated user id was missing: CorrelationId=probe-correlationId, QueryType=probe-queryType, FailureReason=probe-failureReason, Stage=probe-stage",
+          "Fields": {
+            "CorrelationId": "probe-correlationId",
+            "FailureReason": "probe-failureReason",
+            "QueryType": "probe-queryType",
+            "Stage": "probe-stage",
+            "{OriginalFormat}": "Tenant query envelope rejected before authorization because authenticated user id was missing: CorrelationId={CorrelationId}, QueryType={QueryType}, FailureReason={FailureReason}, Stage={Stage}"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      },
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.OrphanUserTenantMembershipFiltered": {
+        "enabled": {
+          "Level": "Warning",
+          "EventId": 1903,
+          "EventName": "OrphanUserTenantMembershipFiltered",
+          "Message": "Filtered orphan tenant membership from query result: CorrelationId=probe-correlationId, QueryType=probe-queryType, RequesterUserId=probe-requesterUserId, TargetUserId=probe-targetUserId, OrphanTenantId=probe-orphanTenantId, Stage=TenantQueryHandler",
+          "Fields": {
+            "CorrelationId": "probe-correlationId",
+            "OrphanTenantId": "probe-orphanTenantId",
+            "QueryType": "probe-queryType",
+            "RequesterUserId": "probe-requesterUserId",
+            "TargetUserId": "probe-targetUserId",
+            "{OriginalFormat}": "Filtered orphan tenant membership from query result: CorrelationId={CorrelationId}, QueryType={QueryType}, RequesterUserId={RequesterUserId}, TargetUserId={TargetUserId}, OrphanTenantId={OrphanTenantId}, Stage=TenantQueryHandler"
+          },
+          "ExceptionType": null,
+          "ExceptionMessage": null
+        },
+        "disabledEmitted": 0
+      }
+    }
+  },
+  "disabledAttempts": {
+    "/tmp/current-mcpcli-tenant-logging-equivalence/original": {
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapCredentialProvider\u002BLog.CredentialUnavailable": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapCredentialProvider\u002BLog.TokenRequestFailed": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapAlreadyDone": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapAttempt": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapCommandSent": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapDisabled": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapFailed": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapSkipped": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapUnexpectedResponse": 0,
+      "Hexalith.Tenants.Projections.ProjectionDispatcher.ProjectionDispatchCompleted": 0,
+      "Hexalith.Tenants.Projections.ProjectionDispatcher.ProjectionDispatchFailed": 1,
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.InvalidCursorRejected": 0,
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.MissingAuthenticatedUserRejected": 0,
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.OrphanUserTenantMembershipFiltered": 0
+    },
+    "/tmp/current-mcpcli-tenant-logging-equivalence/standard": {
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapCredentialProvider\u002BLog.CredentialUnavailable": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapCredentialProvider\u002BLog.TokenRequestFailed": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapAlreadyDone": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapAttempt": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapCommandSent": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapDisabled": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapFailed": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapSkipped": 0,
+      "Hexalith.Tenants.Bootstrap.TenantBootstrapHostedService\u002BLog.BootstrapUnexpectedResponse": 0,
+      "Hexalith.Tenants.Projections.ProjectionDispatcher.ProjectionDispatchCompleted": 0,
+      "Hexalith.Tenants.Projections.ProjectionDispatcher.ProjectionDispatchFailed": 0,
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.InvalidCursorRejected": 0,
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.MissingAuthenticatedUserRejected": 0,
+      "Hexalith.Tenants.Queries.Handlers.TenantQueryHandlerBase\u002BLog.OrphanUserTenantMembershipFiltered": 0
+    }
+  },
+  "note": "Both actual variants preserve emitted event identity, level, message, structured fields and exception. Disabled sinks emit zero; telemetry replacement may still call Log for severe disabled levels while standard generator avoids that unnecessary attempt."
+}
