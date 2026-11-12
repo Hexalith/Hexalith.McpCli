@@ -1,0 +1,28 @@
+[
+  {
+    "amendment": {
+      "path": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/1.0.5.json",
+      "sha256": "d26229036f26d1354f0f174a978319b75fef0cac03d72ae5a4418b7f716a6d0e"
+    },
+    "approvalLabel": "Approve hash-only 1.0.5 as owner (Recommended)",
+    "authorizationSha256": "46167f41a77406075acc9e396308c75b138ac32c5382a756b27bfc7a65452345",
+    "receipt": {
+      "path": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/1.0.5-approval.json",
+      "sha256": "3ac6f88e20c90eab1ee22b3dea150061adedb4e2a128ac9ed0151f6d49e1ef85"
+    },
+    "version": "1.0.5"
+  },
+  {
+    "amendment": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-1.0.7-20261112/prior-owner-1.0.6/1.0.6.json",
+      "sha256": "f74ddbb7ccce917f32905fca3f48767d63678003e34ca0959b6630804ac29d6b"
+    },
+    "approvalLabel": "Approve hash-only 1.0.6 as owner",
+    "authorizationSha256": "77457c135044faba86145c04944eec47394fe3143a693d609a00485975caac4f",
+    "receipt": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-1.0.7-20261112/prior-owner-1.0.6/1.0.6-approval.json",
+      "sha256": "00061c69f0cf08974e10f93a5a1eb1233087b3049bbd777d98bdc6f7fb56ea73"
+    },
+    "version": "1.0.6"
+  }
+]

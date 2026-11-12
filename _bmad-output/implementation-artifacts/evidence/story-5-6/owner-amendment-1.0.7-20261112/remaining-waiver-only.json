@@ -1,0 +1,380 @@
+{
+  "allowances": [
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "test-fixture",
+      "row": "PE05",
+      "surface": {
+        "identity": "Hexalith.ChatBot.Mcp.Tests",
+        "kind": "project",
+        "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+        "repository": "references/Hexalith.ChatBot"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.4.json",
+      "classification": "existing-platform-composition-tooling",
+      "row": "PE03",
+      "surface": {
+        "identity": "Hexalith.Platform.Composition",
+        "kind": "project",
+        "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+        "repository": "references/Hexalith.Platform"
+      },
+      "why": "owner approved other source bytes"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "existing-build-tooling-template",
+      "row": "PE01",
+      "surface": {
+        "identity": "HexalithApp/src/HexalithApp.ApiServer/HexalithApp.ApiServer.csproj",
+        "kind": "publication",
+        "path": "Github/publish-container-to-registry/action.yml",
+        "repository": "references/Hexalith.Builds"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "existing-build-tooling-template",
+      "row": "PE01",
+      "surface": {
+        "identity": "HexalithApp/src/HexalithApp.WebServer/HexalithApp.WebServer.csproj",
+        "kind": "publication",
+        "path": "Github/publish-container-to-registry/action.yml",
+        "repository": "references/Hexalith.Builds"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.4.json",
+      "classification": "non-surface-qualification-fixture",
+      "row": "PA01",
+      "surface": {
+        "identity": "PublishSpike",
+        "kind": "project",
+        "path": "Samples/PublishSpike/PublishSpike.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "existing-release-test-fixture",
+      "row": "PE05",
+      "surface": {
+        "identity": "Release.Container",
+        "kind": "project",
+        "path": "test/fixtures/release/Container/Release.Container.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.4.json",
+      "classification": "non-surface-qualification-fixture",
+      "row": "PA01",
+      "surface": {
+        "identity": "container:cicd-publish-spike-3-1",
+        "kind": "publication",
+        "path": "Samples/PublishSpike/PublishSpike.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "existing-release-test-fixture",
+      "row": "PE05",
+      "surface": {
+        "identity": "container:hexalith-release-create-disposable",
+        "kind": "publication",
+        "path": "test/fixtures/release/Container/Release.Container.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "external-developer-configuration",
+      "row": "PE06",
+      "surface": {
+        "identity": "fluent-ui-blazor:3c0ffdb9f97e6cedfbc5bc45acefe323575ae2f944c1c5ea2162214b0b3cd9bc",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.ChatBot"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "external-developer-configuration",
+      "row": "PE06",
+      "surface": {
+        "identity": "fluent-ui-blazor:4950609ec82e4efc8932b7079093494e61c0355bb1446529ee1f64d0f978e978",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Projects"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "external-developer-configuration",
+      "row": "PE06",
+      "surface": {
+        "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Folders"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "external-developer-configuration",
+      "row": "PE06",
+      "surface": {
+        "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Timesheets"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "existing-test-data-generator",
+      "row": "PE09",
+      "surface": {
+        "identity": "package:GenerateBenchmarkVectors",
+        "kind": "publication",
+        "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+        "repository": "references/Hexalith.Memories"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "existing-build-tooling-template",
+      "row": "PE01",
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.EventStoreHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "existing-build-tooling-template",
+      "row": "PE01",
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.UiHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "retained-eventstore-admin-publication",
+      "row": "PS01",
+      "surface": {
+        "identity": "package:Hexalith.EventStore.Admin.Cli",
+        "kind": "publication",
+        "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+        "repository": "references/Hexalith.EventStore"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "retained-folders-publication",
+      "row": "PS10",
+      "surface": {
+        "identity": "package:Hexalith.Folders.Cli",
+        "kind": "publication",
+        "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+        "repository": "references/Hexalith.Folders"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.4.json",
+      "classification": "non-surface-qualification-fixture",
+      "row": "PA01",
+      "surface": {
+        "identity": "package:Hexalith.PublishSpike.LocalOnly",
+        "kind": "publication",
+        "path": "Samples/PublishSpike/PublishSpike.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "retained-memories-publication",
+      "row": "PS07",
+      "surface": {
+        "identity": "registry.hexalith.com/memories-mcp",
+        "kind": "publication",
+        "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+        "repository": "references/Hexalith.Memories"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "retained-memories-publication",
+      "row": "PS06",
+      "surface": {
+        "identity": "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
+        "kind": "publication",
+        "path": "tools/verify-cli-pack.sh",
+        "repository": "references/Hexalith.Memories"
+      },
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": "amendments/1.0.3.json",
+      "classification": "existing-performance-test-data-tooling",
+      "row": "PE09",
+      "surface": {
+        "identity": "tests/performance/tenant-audit/seed.csproj",
+        "kind": "publication",
+        "path": "scripts/run-tenant-audit-performance.sh",
+        "repository": "references/Hexalith.Tenants"
+      },
+      "why": "never owner-approved"
+    }
+  ],
+  "exclusions": [
+    {
+      "approvedBy": [
+        "amendments/1.0.2.json",
+        "amendments/1.0.3.json",
+        "amendments/1.0.4.json"
+      ],
+      "classification": "captured-evidence",
+      "prefix": "Tools/package-version-audit.json",
+      "repository": "references/Hexalith.Builds",
+      "row": "PE07",
+      "why": "owner approved a different classification or other bytes"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-evidence",
+      "prefix": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v5-proposal.json",
+      "repository": "references/Hexalith.Conversations",
+      "row": "PE07",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-evidence",
+      "prefix": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v6-proposal.json",
+      "repository": "references/Hexalith.Conversations",
+      "row": "PE07",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-evidence",
+      "prefix": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+      "repository": "references/Hexalith.Conversations",
+      "row": "PE07",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "deliberately-malformed-metadata-test-fixture",
+      "prefix": "tests/ci-governance/fixtures/release-readiness-cases.json",
+      "repository": "references/Hexalith.FrontComposer",
+      "row": "PE05",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-operator-packet",
+      "prefix": "eng/mcpcli-operator-setup/v1/packet-20261031-dns-review/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "row": "PE07",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-operator-packet",
+      "prefix": "eng/mcpcli-operator-setup/v1/packet-20261031-final/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "row": "PE07",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-operator-packet",
+      "prefix": "eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "row": "PE07",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-operator-packet",
+      "prefix": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-final/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "row": "PE07",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-operator-packet",
+      "prefix": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-review/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "row": "PE07",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-operator-packet",
+      "prefix": "eng/mcpcli-operator-setup/v1/packet-20261031-review/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "row": "PE07",
+      "why": "never owner-approved"
+    },
+    {
+      "approvedBy": [
+        "amendments/1.0.3.json"
+      ],
+      "classification": "captured-operator-packet",
+      "prefix": "eng/mcpcli-operator-setup/v1/packet-20261031/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "row": "PE07",
+      "why": "never owner-approved"
+    }
+  ]
+}

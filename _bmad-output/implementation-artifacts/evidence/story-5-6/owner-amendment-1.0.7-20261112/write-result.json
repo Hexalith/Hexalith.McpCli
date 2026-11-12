@@ -1,0 +1,45 @@
+{
+  "result": "loaded",
+  "version": "1.0.7",
+  "amendments": [
+    {
+      "path": "amendments/1.0.1.json",
+      "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+      "version": "1.0.1"
+    },
+    {
+      "path": "amendments/1.0.2.json",
+      "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+      "version": "1.0.2"
+    },
+    {
+      "path": "amendments/1.0.3.json",
+      "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c",
+      "version": "1.0.3"
+    },
+    {
+      "path": "amendments/1.0.4.json",
+      "sha256": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61",
+      "version": "1.0.4"
+    },
+    {
+      "path": "amendments/1.0.5.json",
+      "sha256": "1784345c0ff853ed35952c9de2b1e7f2c20a88a455309375e56aecb95da5e887",
+      "version": "1.0.5"
+    },
+    {
+      "path": "amendments/1.0.6.json",
+      "sha256": "dcc6e833c45a78bd47e493e89cd7730843918488732ed8c518433f807b3c0297",
+      "version": "1.0.6"
+    },
+    {
+      "path": "amendments/1.0.7.json",
+      "sha256": "48b8463b6fcbd69d436461e380f86b57d0a912221b38bf75f85f1e567df0cfba",
+      "version": "1.0.7"
+    }
+  ],
+  "allowances": 515,
+  "exclusions": 149,
+  "amendmentSha256": "48b8463b6fcbd69d436461e380f86b57d0a912221b38bf75f85f1e567df0cfba",
+  "receiptSha256": "14771b70c5e50de35d476df12713a50f57fe0d4ce951ea13983a3df2e9b25e3b"
+}

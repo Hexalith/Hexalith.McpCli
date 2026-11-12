@@ -1,0 +1,43 @@
+{
+  "approvalLabel": "Approve hash-only 1.0.7 as owner (Recommended)",
+  "approvedCanonicalSha256": "e0f1ef0d8885ba528c0cd64aca3ae5a5f515a073676b3d68ff9f7abee0ca6b04",
+  "approvedOn": "2026-11-12",
+  "checker": {
+    "path": "tools/proprietary-surfaces/v1/check.py",
+    "sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388"
+  },
+  "checks": {
+    "censusFixtures": {
+      "exitCode": 0,
+      "tests": 222
+    },
+    "diffCheck": {
+      "exitCode": 0
+    },
+    "realScan": {
+      "errors": 0,
+      "exitCode": 0,
+      "hashSeeds": [
+        1,
+        2
+      ],
+      "identicalAcrossSeeds": true,
+      "parentRevision": "4b19b5362b3cebf5ac97ff3d9e879a0b33543d6e",
+      "passedRoots": 17,
+      "policyVersion": "1.0.7",
+      "rejected": 0,
+      "report": "post-approval-census.json",
+      "reportSha256": "88b859447e2fd73f95a5a19f0d5cadb116a89c9707e8719da7953f0beed99bd7",
+      "roots": 17
+    },
+    "releaseRegressions": {
+      "exitCode": 0,
+      "tests": 195
+    }
+  },
+  "written": {
+    "tools/proprietary-surfaces/v1/amendments.json": "c2fd3add88c37c082177de1315cd93a8f947458ef5b472f54a614fd2948040e8",
+    "tools/proprietary-surfaces/v1/amendments/1.0.7-approval.json": "14771b70c5e50de35d476df12713a50f57fe0d4ce951ea13983a3df2e9b25e3b",
+    "tools/proprietary-surfaces/v1/amendments/1.0.7.json": "48b8463b6fcbd69d436461e380f86b57d0a912221b38bf75f85f1e567df0cfba"
+  }
+}

@@ -1,0 +1,316 @@
+{
+  "approvalLabel": "Approve hash-only 1.0.7 as owner (Recommended)",
+  "approvedOn": "2026-11-12",
+  "authority": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+      "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1-approval.json",
+      "sha256": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+      "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+    }
+  ],
+  "authorization": {
+    "addAllowances": [
+      {
+        "classification": "retained-memories-publication",
+        "owner": "Requesting user, owning maintainer",
+        "reason": "Renewal of the PS07 retained-memories-publication allowance. Source hash renewed at the current Memories pin; the reviewed change only updates the recorded buildsSha, with the same publication entries and signal set.",
+        "row": "PS07",
+        "signals": [
+          "publication-entry"
+        ],
+        "sources": [
+          {
+            "path": "tools/release-containers.json",
+            "sha256": "561f9c14b3ccabd6d1b4b113bb33ee2fdc59756e0f3341d7c2f263b7e02102ab"
+          }
+        ],
+        "surface": {
+          "identity": "mcp",
+          "kind": "publication",
+          "path": "tools/release-containers.json",
+          "repository": "references/Hexalith.Memories"
+        }
+      }
+    ],
+    "addExceptions": [],
+    "addExclusions": [
+      {
+        "classification": "existing-build-preparation-proof",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "eng/verify-story-5.4.ps1",
+        "reason": "Hash-only renewal at the current root pin of the PE01 existing-build-preparation-proof exclusion last bound to 7957108c30d38b8e82eb072cf3437b6a67627cd7. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Agents",
+        "row": "PE01",
+        "scope": "file",
+        "sha256": "561c032e9bb1cc049e45dc5b0f2609cf0feaae8239c24c98e5c3b1c1f810d596"
+      },
+      {
+        "classification": "existing-build-preparation-proof",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "eng/verify-story.ps1",
+        "reason": "Hash-only renewal at the current root pin of the PE01 existing-build-preparation-proof exclusion last bound to 7957108c30d38b8e82eb072cf3437b6a67627cd7. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Agents",
+        "row": "PE01",
+        "scope": "file",
+        "sha256": "1695caba477a55ca6a6f91cdf81465a1d8ea0d4bb730c82a384460ab7de4e8b7"
+      },
+      {
+        "classification": "existing-generic-publication-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": ".github/workflows/domain-release.yml",
+        "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-helper exclusion last bound to 6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Builds",
+        "row": "PE01",
+        "scope": "file",
+        "sha256": "4826f5ef4e457930d8aa89c6c8c4c92d9db483787850b4d1f426b5e4f8269ab7"
+      },
+      {
+        "classification": "existing-generic-publication-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "Github/publish-containers/publish-containers.sh",
+        "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-helper exclusion last bound to 6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Builds",
+        "row": "PE01",
+        "scope": "file",
+        "sha256": "7b0b29d552fb38ab20db6c5faf650ac314a8fac17a6b9f43417035d29ef649ed"
+      },
+      {
+        "classification": "existing-generic-publication-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "Github/scripts/build-packages.ps1",
+        "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-helper exclusion last bound to 6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Builds",
+        "row": "PE01",
+        "scope": "file",
+        "sha256": "abdef8a25d50810450fc0e2a38a3d7f4cbce2b4220fdf1257552d5ded436cac2"
+      },
+      {
+        "classification": "nonpublishable-generated-code-test-fixture",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+        "reason": "Hash-only renewal at the current root pin of the PE05 nonpublishable-generated-code-test-fixture exclusion last bound to 0c7b14856f2b730749caa8a552742a77d4882dc7. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.EventStore",
+        "row": "PE05",
+        "scope": "file",
+        "sha256": "5631daf0eab17a8d41bf53409f52fa8d2d2e786f803e98b8cce03bd8c7d2dfc4"
+      },
+      {
+        "classification": "existing-capacity-qualification-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "tests/tools/run-capacity-calibration-gates.ps1",
+        "reason": "Hash-only renewal at the current root pin of the PE05 existing-capacity-qualification-helper exclusion last bound to 7f029a6e117e4ada82b1e2ccfb050fa45abf49c4. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Folders",
+        "row": "PE05",
+        "scope": "file",
+        "sha256": "c50762d23e2e832724582fc4ca7cf2d3fa5c431f973f36a7773dc8d6f2c19d17"
+      },
+      {
+        "classification": "existing-ci-qualification-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": ".github/workflows/quality.yml",
+        "reason": "Hash-only renewal at the current root pin of the PE05 existing-ci-qualification-helper exclusion last bound to 57aa756c02edbae4294412885823533308b7db0d. Reviewed change: SDK 11.0.100 with the supported range gate moved to [11.0.100, 11.0.200); Builds initialize-dotnet pinned from @main to a commit; an extra setup-dotnet 10.0.404 install and .NET 10 runtime step; Aspire CLI 13.6.5; and a test artifact flag. No publication, packing or container step added. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.FrontComposer",
+        "row": "PE05",
+        "scope": "file",
+        "sha256": "a65e038d38c121baee360ecf82df0bdfbafc236fb782a2b22ee7cab8280eb0c7"
+      },
+      {
+        "classification": "existing-local-package-proof-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "tools/ci/provision-eventstore-local-feed.sh",
+        "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-package-proof-helper exclusion last bound to 13fdb88a3267626b14f75e16cc2de58dcfbbb2bb. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Memories",
+        "row": "PE09",
+        "scope": "file",
+        "sha256": "9e26bad059fd46c2e3a6b68d19cb0197a64f0199b29c383caabbf8919464a154"
+      },
+      {
+        "classification": "existing-generic-publication-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "tools/pack-release.ps1",
+        "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-helper exclusion last bound to 13fdb88a3267626b14f75e16cc2de58dcfbbb2bb. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Memories",
+        "row": "PE01",
+        "scope": "file",
+        "sha256": "dfa8e1628868dbb717f83b06b65dbca73ed76eed8175b7a4aeddf7148aef4a04"
+      },
+      {
+        "classification": "existing-cli-package-test-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "tools/verify-cli-pack.ps1",
+        "reason": "Hash-only renewal at the current root pin of the PE05 existing-cli-package-test-helper exclusion last bound to 13fdb88a3267626b14f75e16cc2de58dcfbbb2bb. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Memories",
+        "row": "PE05",
+        "scope": "file",
+        "sha256": "db764e2b5b136786c20767421c45e9246fbb93f0f236a0ca803664358baac0cb"
+      },
+      {
+        "classification": "nonpublishable-native-sample-test-fixture",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "tests/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact.csproj",
+        "reason": "Hash-only renewal at the current root pin of the PE05 nonpublishable-native-sample-test-fixture exclusion last bound to 95347ab98f83defaa0983cd70177889469d8e4ec. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Parties",
+        "row": "PE05",
+        "scope": "file",
+        "sha256": "e206e9b03e0aae58a97d9727ff5c45d8ec53f19c3cfd2c68656ed0b6cc1badf8"
+      },
+      {
+        "classification": "nonpublishable-native-sample-test-fixture",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
+        "reason": "Hash-only renewal at the current root pin of the PE05 nonpublishable-native-sample-test-fixture exclusion last bound to 95347ab98f83defaa0983cd70177889469d8e4ec. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Parties",
+        "row": "PE05",
+        "scope": "file",
+        "sha256": "f7121b066ae86077cd37c23014e0458a5ae823e4281ef65d929a77f8220dcdd5"
+      },
+      {
+        "classification": "existing-build-preparation-proof",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": ".github/workflows/ci.yml",
+        "reason": "Hash-only renewal at the current root pin of the PE01 existing-build-preparation-proof exclusion; it stays valid across later pin moves until the file bytes change. Reviewed change: Projects c9fa1d6 adds one step that initializes its own references/Hexalith.Builds submodule, without recursion, for the current G-6 policy fixtures. No publication, packing or container step added.",
+        "repository": "references/Hexalith.Projects",
+        "row": "PE01",
+        "scope": "file",
+        "sha256": "ef1d0d802600f1a4fd99ac71b0f1cbce37ab8295ab939a3c4c451ff0b4513687"
+      },
+      {
+        "classification": "existing-compiler-qualification-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+        "reason": "Hash-only renewal at the current root pin of the PE05 existing-compiler-qualification-helper exclusion last bound to 77067782154d35a794ea50d86af1c5e73c8351b6. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Projects",
+        "row": "PE05",
+        "scope": "file",
+        "sha256": "b7cdd5c53028c3df0e3ba172e5c374ec1e59eae5e4b6b28d6e8ee31dff48093d"
+      },
+      {
+        "classification": "existing-generic-publication-recovery-helper",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "scripts/publish-partial-release.sh",
+        "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-recovery-helper exclusion last bound to fb105d7c6035671bdc66dfb27990a463ea6165b2. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Tenants",
+        "row": "PE01",
+        "scope": "file",
+        "sha256": "4dab193efd8115adeb10ab63d6c503b737fa02c2b27788bc01b06f1b884196d4"
+      },
+      {
+        "classification": "existing-local-sdk-candidate-proof",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "scripts/build-story414-sdk-candidate.sh",
+        "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-sdk-candidate-proof exclusion last bound to 4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Works",
+        "row": "PE09",
+        "scope": "file",
+        "sha256": "75eefb3b4365934314e4f1e4353a905a2379fcbeffe00b85ef730342bc9694df"
+      },
+      {
+        "classification": "existing-local-sdk-candidate-proof",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "scripts/build-story415-sdk-candidate.sh",
+        "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-sdk-candidate-proof exclusion last bound to 4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Works",
+        "row": "PE09",
+        "scope": "file",
+        "sha256": "e122bb2d1273f6dd0ba27c2e66723470f24b6971898d7857f5a48ebe59cd5153"
+      },
+      {
+        "classification": "existing-local-sdk-candidate-proof",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "scripts/verify-story414-sdk-candidate.sh",
+        "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-sdk-candidate-proof exclusion last bound to 4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Works",
+        "row": "PE09",
+        "scope": "file",
+        "sha256": "1ab83f938c13d5e42a46816b5a55c5c0de1928fc60432dcd51f603ca5418577b"
+      },
+      {
+        "classification": "existing-local-sdk-candidate-proof",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "scripts/verify-story415-sdk-candidate.sh",
+        "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-sdk-candidate-proof exclusion last bound to 4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
+        "repository": "references/Hexalith.Works",
+        "row": "PE09",
+        "scope": "file",
+        "sha256": "d2986d77369ba0a4b4b1efb3de735f2518e23b3d4a5707ad62885401e9e5a833"
+      }
+    ],
+    "removeAllowances": [
+      {
+        "identity": "mcp",
+        "kind": "publication",
+        "path": "tools/release-containers.json",
+        "repository": "references/Hexalith.Memories"
+      }
+    ],
+    "removeExceptions": []
+  },
+  "decision": "approved",
+  "migrationAcceptance": false,
+  "owner": "Requesting user, owning maintainer",
+  "priorOwnerApprovals": [
+    {
+      "amendment": {
+        "path": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/1.0.5.json",
+        "sha256": "d26229036f26d1354f0f174a978319b75fef0cac03d72ae5a4418b7f716a6d0e"
+      },
+      "approvalLabel": "Approve hash-only 1.0.5 as owner (Recommended)",
+      "authorizationSha256": "46167f41a77406075acc9e396308c75b138ac32c5382a756b27bfc7a65452345",
+      "receipt": {
+        "path": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/1.0.5-approval.json",
+        "sha256": "3ac6f88e20c90eab1ee22b3dea150061adedb4e2a128ac9ed0151f6d49e1ef85"
+      },
+      "version": "1.0.5"
+    },
+    {
+      "amendment": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-1.0.7-20261112/prior-owner-1.0.6/1.0.6.json",
+        "sha256": "f74ddbb7ccce917f32905fca3f48767d63678003e34ca0959b6630804ac29d6b"
+      },
+      "approvalLabel": "Approve hash-only 1.0.6 as owner",
+      "authorizationSha256": "77457c135044faba86145c04944eec47394fe3143a693d609a00485975caac4f",
+      "receipt": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-1.0.7-20261112/prior-owner-1.0.6/1.0.6-approval.json",
+        "sha256": "00061c69f0cf08974e10f93a5a1eb1233087b3049bbd777d98bdc6f7fb56ea73"
+      },
+      "version": "1.0.6"
+    }
+  ],
+  "reason": "Owner re-approval, byte for byte, of 20 exact-file exclusions and 1 allowance whose classifications and current bytes the owner already approved in the hash-only owner amendments 1.0.5 and 1.0.6 (see priorOwnerApprovals), and which the active chain otherwise rests only on the waiver amendments 1.0.3-1.0.6. The exclusions are hash-only: they stay valid across pin moves until the file bytes change.",
+  "runtimeAcceptance": false,
+  "schema": "mcpcli-census-amendment-approval/v2",
+  "sourceChecker": {
+    "path": "tools/proprietary-surfaces/v1/check.py",
+    "sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388"
+  },
+  "sourcePins": {
+    "references/Hexalith.AI.Tools": "8a3885dd22aea88edd57771cfe592c382df2c583",
+    "references/Hexalith.Agents": "4a65f67d040bec4d646a830ed72b65c0e8951048",
+    "references/Hexalith.Builds": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b",
+    "references/Hexalith.ChatBot": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+    "references/Hexalith.Commons": "5f9d783babadc30748a91f00e5ad6b863e16dd79",
+    "references/Hexalith.Conversations": "36cd13159f6c66d249942c6cfeca179adf3c4ec8",
+    "references/Hexalith.EventStore": "147e861834361c88cfb90c76a44d113e236152cb",
+    "references/Hexalith.Folders": "6a8cf4f9e28786176d26522b41bb921e18b922da",
+    "references/Hexalith.FrontComposer": "56c9206167b7f18c3a95f610f814dfa39d9dcd01",
+    "references/Hexalith.Memories": "a846178e8f552e66cf29982550e3ebdab93956ba",
+    "references/Hexalith.Parties": "3c9ab67483bb2c7081f7b2fbb96235815bb9158a",
+    "references/Hexalith.Platform": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+    "references/Hexalith.PolymorphicSerializations": "3400fbf6a318b04fd5b9a7d91c2903727e535126",
+    "references/Hexalith.Projects": "1ea04f7959e9ca393bc19d3b96b03cb350088e72",
+    "references/Hexalith.Tenants": "d43342f1a21fbe57ff0d42108ed3d211ecdbeb55",
+    "references/Hexalith.Timesheets": "aafdae771e81f152671d18c506a0470ce0deee7f",
+    "references/Hexalith.Works": "2f94a3b4c874577e4286afe7deb3e1c53c78bdb4"
+  },
+  "sourceReport": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-1.0.7-20261112/source-census.json",
+    "sha256": "33aa7a3bdeaafd2b79631d1d1c558d4c9172cff28674cb2bf81a4e78ffec21bf"
+  }
+}

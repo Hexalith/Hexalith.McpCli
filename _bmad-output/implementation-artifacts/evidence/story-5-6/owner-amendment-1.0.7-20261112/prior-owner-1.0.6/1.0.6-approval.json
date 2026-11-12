@@ -1,0 +1,91 @@
+{
+  "approvalLabel": "Approve hash-only 1.0.6 as owner",
+  "approvedOn": "2026-11-12",
+  "authority": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+      "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1-approval.json",
+      "sha256": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+      "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+      "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.4-approval.json",
+      "sha256": "cb3c2f09ce4ed8684766e29d9ce0b215e624905f48916cc259627bf564023df1"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.5-approval.json",
+      "sha256": "3ac6f88e20c90eab1ee22b3dea150061adedb4e2a128ac9ed0151f6d49e1ef85"
+    }
+  ],
+  "authorization": {
+    "addAllowances": [],
+    "addExceptions": [],
+    "addExclusions": [
+      {
+        "classification": "captured-evidence",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": "Tools/package-version-audit.json",
+        "reason": "Hash-only renewal at the current root pin of the PE07 captured-evidence exclusion; it stays valid across later pin moves until the file bytes change. Reviewed change: Builds cac8bf5c regenerated the retained package audit snapshot for the refreshed catalog; audit data only, not a publication manifest.",
+        "repository": "references/Hexalith.Builds",
+        "row": "PE07",
+        "scope": "file",
+        "sha256": "2d8d23c2b2d1135771f4409e8929222d7d7eea64281153e96f1acc239a314b3b"
+      },
+      {
+        "classification": "existing-build-preparation-proof",
+        "owner": "Requesting user, owning maintainer",
+        "prefix": ".github/workflows/ci.yml",
+        "reason": "Hash-only renewal at the current root pin of the PE01 existing-build-preparation-proof exclusion; it stays valid across later pin moves until the file bytes change. Reviewed change: Projects c9fa1d6 adds one step that initializes its own references/Hexalith.Builds submodule, without recursion, for the current G-6 policy fixtures. No publication, packing or container step added.",
+        "repository": "references/Hexalith.Projects",
+        "row": "PE01",
+        "scope": "file",
+        "sha256": "ef1d0d802600f1a4fd99ac71b0f1cbce37ab8295ab939a3c4c451ff0b4513687"
+      }
+    ],
+    "removeAllowances": [],
+    "removeExceptions": []
+  },
+  "decision": "approved",
+  "migrationAcceptance": false,
+  "owner": "Requesting user, owning maintainer",
+  "reason": "Owner hash-only renewal, at the current root pins, of two exact-file exclusions whose bytes changed after amendment 1.0.5: same rows and classifications, exact file hashes only.",
+  "runtimeAcceptance": false,
+  "schema": "mcpcli-census-amendment-approval/v2",
+  "sourceChecker": {
+    "path": "tools/proprietary-surfaces/v1/check.py",
+    "sha256": "967dd359072bb7abd42656afb50fbb09eb90b8b44e59937a8e1c8a06fbd546bf"
+  },
+  "sourcePins": {
+    "references/Hexalith.AI.Tools": "8a3885dd22aea88edd57771cfe592c382df2c583",
+    "references/Hexalith.Agents": "4a65f67d040bec4d646a830ed72b65c0e8951048",
+    "references/Hexalith.Builds": "14bb22d9fb2124405ce23c22bd0d38ad55be7836",
+    "references/Hexalith.ChatBot": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+    "references/Hexalith.Commons": "5f9d783babadc30748a91f00e5ad6b863e16dd79",
+    "references/Hexalith.Conversations": "36cd13159f6c66d249942c6cfeca179adf3c4ec8",
+    "references/Hexalith.EventStore": "dca486392d5938c2efbd6049b516137499551aa7",
+    "references/Hexalith.Folders": "6a8cf4f9e28786176d26522b41bb921e18b922da",
+    "references/Hexalith.FrontComposer": "56c9206167b7f18c3a95f610f814dfa39d9dcd01",
+    "references/Hexalith.Memories": "a846178e8f552e66cf29982550e3ebdab93956ba",
+    "references/Hexalith.Parties": "3c9ab67483bb2c7081f7b2fbb96235815bb9158a",
+    "references/Hexalith.Platform": "38402bc77ac0be3e6902002d08923c51d0e73a77",
+    "references/Hexalith.PolymorphicSerializations": "3400fbf6a318b04fd5b9a7d91c2903727e535126",
+    "references/Hexalith.Projects": "1ea04f7959e9ca393bc19d3b96b03cb350088e72",
+    "references/Hexalith.Tenants": "d43342f1a21fbe57ff0d42108ed3d211ecdbeb55",
+    "references/Hexalith.Timesheets": "aafdae771e81f152671d18c506a0470ce0deee7f",
+    "references/Hexalith.Works": "2f94a3b4c874577e4286afe7deb3e1c53c78bdb4"
+  },
+  "sourceReport": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-1.0.6-20261112/source-census.json",
+    "sha256": "1498bc58f303eb2f476dee5ce60d1a6122487dbf9eb2f6db1ca3bcf3bb32bb18"
+  }
+}

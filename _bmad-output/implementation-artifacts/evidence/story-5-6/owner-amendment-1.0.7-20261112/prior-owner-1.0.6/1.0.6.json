@@ -1,0 +1,42 @@
+{
+  "addAllowances": [],
+  "addExceptions": [],
+  "addExclusions": [
+    {
+      "classification": "captured-evidence",
+      "owner": "Requesting user, owning maintainer",
+      "prefix": "Tools/package-version-audit.json",
+      "reason": "Hash-only renewal at the current root pin of the PE07 captured-evidence exclusion; it stays valid across later pin moves until the file bytes change. Reviewed change: Builds cac8bf5c regenerated the retained package audit snapshot for the refreshed catalog; audit data only, not a publication manifest.",
+      "repository": "references/Hexalith.Builds",
+      "row": "PE07",
+      "scope": "file",
+      "sha256": "2d8d23c2b2d1135771f4409e8929222d7d7eea64281153e96f1acc239a314b3b"
+    },
+    {
+      "classification": "existing-build-preparation-proof",
+      "owner": "Requesting user, owning maintainer",
+      "prefix": ".github/workflows/ci.yml",
+      "reason": "Hash-only renewal at the current root pin of the PE01 existing-build-preparation-proof exclusion; it stays valid across later pin moves until the file bytes change. Reviewed change: Projects c9fa1d6 adds one step that initializes its own references/Hexalith.Builds submodule, without recursion, for the current G-6 policy fixtures. No publication, packing or container step added.",
+      "repository": "references/Hexalith.Projects",
+      "row": "PE01",
+      "scope": "file",
+      "sha256": "ef1d0d802600f1a4fd99ac71b0f1cbce37ab8295ab939a3c4c451ff0b4513687"
+    }
+  ],
+  "approval": {
+    "date": "2026-11-12",
+    "decision": "approved",
+    "evidence": {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.6-approval.json",
+      "sha256": "00061c69f0cf08974e10f93a5a1eb1233087b3049bbd777d98bdc6f7fb56ea73"
+    },
+    "owner": "Requesting user, owning maintainer",
+    "reason": "Owner hash-only renewal, at the current root pins, of two exact-file exclusions whose bytes changed after amendment 1.0.5: same rows and classifications, exact file hashes only."
+  },
+  "fromVersion": "1.0.5",
+  "previousSha256": "d26229036f26d1354f0f174a978319b75fef0cac03d72ae5a4418b7f716a6d0e",
+  "removeAllowances": [],
+  "removeExceptions": [],
+  "schema": "mcpcli-proprietary-surface-census/v1",
+  "toVersion": "1.0.6"
+}

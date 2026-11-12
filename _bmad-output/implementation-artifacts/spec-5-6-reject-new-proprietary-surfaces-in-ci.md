@@ -230,6 +230,15 @@ None.
   - **Owner 1.0.6 not landed:** the owner-approved hash-only 1.0.6 ("Approve hash-only 1.0.6 as owner", unpushed local commit `56e0865`) chained to the overwritten 1.0.5 and was dropped. `999b109` appended a waiver 1.0.6 instead, renewing 14 revision-bound exclusions, 13 of them byte-identical.
   - **Verification at `b381563`:** 222 census fixtures and 195 release regressions pass. The committed-pin scan exits 0, identically for hash seeds 1 and 2: policy 1.0.6, 0 errors, 0 rejected observations, 17 of 17 roots passing.
   - **Outcome:** story done. Every active census classification rests on waiver receipts that record bypassed human validation, and 20 file exclusions stay bound to source revisions, so a pin move without a byte change still needs a renewal. Offered follow-up: an append-only, owner-approved, hash-only 1.0.7, built only while the release session is paused.
+- 2026-11-12 — With the release session paused, the owner asked to "build 1.0.7" and selected "Approve hash-only 1.0.7 as owner (Recommended)" for canonical SHA-256 `e0f1ef0d8885ba528c0cd64aca3ae5a5f515a073676b3d68ff9f7abee0ca6b04` ([1.0.7 folder](evidence/story-5-6/owner-amendment-1.0.7-20261112/README.md)).
+  - **Content:**
+    - 20 hash-only exact-file exclusions and the Memories `mcp` allowance;
+    - each one byte-identical to an entry of the owner 1.0.5 (archived) or the owner 1.0.6 (unpushed);
+    - included only where the active classification rested solely on waiver amendments and the current bytes were owner-approved;
+    - authority bound only to the Story 5.1 approval and the 1.0.1/1.0.2 receipts.
+  - **Pin-move control:** the 54 revision-bound entries of those files were rebound to a revision that no pin has. The census passes with 1.0.7 and fails without it, with exactly 20 `excluded-source-revision-drift` errors.
+  - **Verification at `4b19b53`:** 222 census fixtures and 195 release regressions pass. The scan exits 0, identically for hash seeds 1 and 2: policy 1.0.7, 0 errors, 0 rejected observations, 17 of 17 roots passing.
+  - **Still waiver-only:** 21 allowances and 12 exclusions, listed in `remaining-waiver-only.json`. Owner approval of these needs a separate review.
 
 ## Review Triage Log
 

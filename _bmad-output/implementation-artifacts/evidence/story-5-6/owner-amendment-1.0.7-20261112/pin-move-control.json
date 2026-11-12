@@ -1,0 +1,25 @@
+{
+  "setup": {
+    "exclusions": {
+      "with-draft": 149,
+      "without-draft": 129
+    },
+    "files": 20,
+    "reboundEntries": 54
+  },
+  "with-draft": {
+    "errors": 0,
+    "exitCode": 0,
+    "rejected": 0,
+    "rules": {}
+  },
+  "without-draft": {
+    "errorFilesEqualDraftFiles": true,
+    "errors": 20,
+    "exitCode": 1,
+    "rejected": 0,
+    "rules": {
+      "excluded-source-revision-drift": 20
+    }
+  }
+}
