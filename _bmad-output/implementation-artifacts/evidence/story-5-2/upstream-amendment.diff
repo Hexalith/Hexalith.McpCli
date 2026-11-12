@@ -1,0 +1,57 @@
+diff --git a/README.md b/README.md
+index 6b5258b..349bdf4 100644
+--- a/README.md
++++ b/README.md
+@@ -48 +48 @@ repository's own instructions take precedence on conflict.
+-and [migration plan 1.1.0](./hexalith-mcpcli-migration-instructions.md) for
++and [migration plan 1.2.0](./hexalith-mcpcli-migration-instructions.md) for
+diff --git a/hexalith-llm-instructions.md b/hexalith-llm-instructions.md
+index efd63cc..e9496ed 100644
+--- a/hexalith-llm-instructions.md
++++ b/hexalith-llm-instructions.md
+@@ -80,0 +81,6 @@ module operations, currently `hexalith-module` and `hexalith-evidence`.
++Also exempt are `Hexalith.FrontComposer.Cli` (`inspect` and `migrate`) as
++local compiler/developer tooling, and Memories `tools/MigrateEmbeddingVectors`
++(`--dry-run`, `--live`, `--rollback`, `--abort`) as owner-held local operator
++tooling only. These named exemptions never admit an agent-facing server,
++plug-in, Gateway operation or remotely callable tool, never count as a retired
++surface, and do not authorize new proprietary per-module CLIs.
+diff --git a/hexalith-mcpcli-migration-instructions.md b/hexalith-mcpcli-migration-instructions.md
+index 310981d..8a6ceb4 100644
+--- a/hexalith-mcpcli-migration-instructions.md
++++ b/hexalith-mcpcli-migration-instructions.md
+@@ -2 +2 @@
+-plan_version: '1.1.0'
++plan_version: '1.2.0'
+@@ -9 +9 @@ inventory_revision: 'c694bff5a29073bee6848b88c142f7da23efcf85'
+-Version **1.1.0** indexes the retained proprietary migration sources under the
++Version **1.2.0** indexes the retained proprietary migration sources under the
+@@ -19,0 +20,25 @@ module operations, currently `hexalith-module` and `hexalith-evidence`.
++## Named local-tooling exemptions (1.2.0 amendment)
++
++The ownership rule exempts these two existing, narrowly named surfaces from
++McpCli migration. This amendment preserves `inventory_revision` and the six
++historical inventory links below; it neither adds nor re-pins an indexed
++inventory, changes any inventory bytes or dispositions, nor claims parity.
++McpCli Story 5.2 records exact-byte owner approval and the upstream delivery
++state. Until this amendment is approved and merged to authoritative AI.Tools
++`main`, both surfaces stay frozen in the proprietary-surface census. Updating
++that census requires its own versioned owner-approved amendment.
++
++| Exempt surface | Retained local scope | Limits and remaining owner evidence |
++| --- | --- | --- |
++| `Hexalith.FrontComposer.Cli` | `inspect` and `migrate`; local compiler/developer tooling (technical inventory FC01/FC02 and PS03) | Keep explicit build choice and no-build freshness limits, safe canonical target/hash checks, partial-write reporting, import-coverage warnings, parser and output privacy limits. No module operation or agent-facing server, plug-in, Gateway tool or generated McpCli subcommand is admitted. |
++| Memories `tools/MigrateEmbeddingVectors` | Owner-held local operator tooling only: `--dry-run`, `--live`, `--rollback`, `--abort` (technical inventory PS14) | Live/rollback/abort remain tenant-scoped, consent-requiring privileged migration modes; `--yes` grants no public-agent authority. Story 5.10 still inventories every mode and its authorization, state transition, audit and rollback behavior. No mode is exposed through either McpCli head. |
++
++A later inventory amendment records `withdraw` from migration scope for these
++exempt identities; the tools remain supported locally and are never counted as
++retired. No execution, enrollment, deletion or retirement authority follows.
++Their exemptions are not templates or permission for new module CLIs. Existing
++safety, continuity, custody, authorization and source/output privacy obligations
++remain with the FrontComposer and Memories owning maintainers respectively.
++This classification introduces no new McpCli transport or capability beyond
++v1 decorated Commands and Queries.
++
+@@ -33 +58 @@ this index does not duplicate their tables or change their dispositions.
+-| `Hexalith.FrontComposer.Mcp` host, `Hexalith.FrontComposer.Cli` | [FrontComposer](https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md): one configurable-name lifecycle tool, 13 framework documentation resources, two local compiler CLI leaves, plus manifest-defined families. | All rows remain `defer / exclude`. Projects operations are counted in their companion inventory. Inventory other manifest consumers and approve generic lifecycle/resource/compiler treatment before the shared host and Projects plug-in retire together. |
++| `Hexalith.FrontComposer.Mcp` host (compiler CLI separately exempt above) | [FrontComposer](https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md): one configurable-name lifecycle tool, 13 framework documentation resources, two local compiler CLI leaves, plus manifest-defined families. | All rows remain `defer / exclude`. Projects operations are counted in their companion inventory. Inventory other manifest consumers and approve generic lifecycle/resource treatment before the shared host and Projects plug-in retire together. The compiler CLI remains retained local tooling under the named exemption above. |

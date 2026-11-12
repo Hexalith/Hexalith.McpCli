@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-12-2026 14:36'
+last_updated: '11-12-2026 17:30'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -90,7 +90,7 @@ development_status:
 
   epic-5: in-progress
   5-1-inventory-eventstore-admin-and-technical-tool-operations: done # Code review pass 2 2026-11-08: all 13 patches applied; owner-approved Admin 1.0.1 and technical 1.0.2 amendments (CLI URL disclosure in G4, census beyond src/ with PS14, release/startup routing, A1 approver pointer); static gate passes with 159 A1 rows and 49 damaged inputs rejected.
-  5-2-decide-generic-non-gateway-capability-contracts: ready-for-dev
+  5-2-decide-generic-non-gateway-capability-contracts: review # Owner adopted exact AD-23 candidate and all 12 roles; 45 tests and two review passes passed. AI.Tools push remains separately pending; Parties reconciliation at deferred-work.md:1024.
   5-3-enroll-replacement-contracts-and-profiles: done # Review pass 1 2026-11-09: 18 fixes applied, 3 rejected, 2 deferred (Platform reference-runner handoff, profile identity beside flag/environment connection); owner-approved Parties inventory 1.1.0 (C05 delete oracles, C06/C07 resolutions); single-source URL/token rule and C06 logger fix.
   # Review pass 2 complete: all 3 patches fixed; owner approved exact Parties 1.2.0 C05 correction; prior inventory/receipt preserved and approved-mode checks pass.
   5-4-prove-shared-head-parity-and-safety: done # Build complete; exact-byte owner verdict retirement-blocked, G01–G06 retained. Post-review CI 42711210249 green; six prerequisite follow-ups deferred.

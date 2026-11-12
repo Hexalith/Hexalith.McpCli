@@ -1017,3 +1017,12 @@ status: open
   owner: Platform and Builds owning maintainers; McpCli maintainer for the inventory record.
   status: open; deferred by the Story 5.6 owner-amendment review (2026-11-12). The census amendment, once approved, is the binding census record. Whether the inventory itself needs a versioned amendment is a separate owner decision.
   evidence: `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:297` (PE03 lists CatalogBuilder and three qualification executables) and `:299` (PE05 lists `.Cli.Tests`/`.Mcp.Tests` projects). The draft is `_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-draft-20261112/authorization.draft.json`. Corrections to approved inventory bytes follow the versioned-amendment procedure under `evidence/story-5-1/approval/`.
+
+
+## Deferred from: review of spec-5-2-decide-generic-non-gateway-capability-contracts.md (2026-11-12)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-2-decide-generic-non-gateway-capability-contracts.md`
+  summary: Reconcile Parties' existing destructive classifications and enrolled Commands with AD-23's restricted capability outcome before claiming restricted discovery/submission compliance or retirement readiness.
+  owner: Parties owning maintainer and McpCli product/architecture/security owners; reconcile the accepted resolution in Story 5.11.
+  status: open; separate owner-approved inventory/exposure resolution required; AD-23 adoption does not authorize runtime removal or override existing approvals.
+  evidence: `_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:134` and `:153` label L03–L05 and T04/T05/T07 destructive; C03–C05 carry the corresponding creation/removal/deactivation variants at `:180`. `src/Hexalith.McpCli/Hexalith.McpCli.csproj:24` still enrolls Parties Contracts. Acceptance requires an exact-byte owner-approved inventory/architecture resolution, corresponding exposure evidence through both heads and direct/chained authorization denials with zero unauthorized persisted effects; retain the retirement gate until that evidence passes. Parent searched the ledger before appending and found no equivalent entry.

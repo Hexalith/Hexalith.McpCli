@@ -1,0 +1,38 @@
+{
+  "frozenSpecBlockUnchanged": true,
+  "frozenSpecBlockSha256": "8adb4def1bffac05e6a601412216854fb11a0ea19eb865e3d1a1f5c2b52a521b",
+  "parties12ApprovalUnchanged": true,
+  "parties12ApprovalSha256": "f7c123e174549272a6de162ffb7ea5100e093ddd030df1e30989c2bf8affec7a",
+  "parties12InventoryHashMatchesExistingApproval": true,
+  "decisionAndMapHashes": {
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3"
+  },
+  "comparisonSource": {
+    "path": "/tmp/mcpcli-story-5-2-iteration-1/_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md",
+    "status": "unapproved archived iteration-1 candidate; no approval authority",
+    "sha256": "c529585708dc5f2b09f8ba525fa3f349bae87d925eb6ae20e73f53738ceb89ee"
+  },
+  "retainedDecisionSections": [
+    {
+      "heading": "## Existing v1 admission contract (all seven facets)",
+      "beforeSha256": "3eb1ac01e6640255869ad2110211e9a17dbbaf8387ea9baed5dcd7176cb70048",
+      "afterSha256": "d6cf85198fddc55151e4bc66ae822e3effa8eebb4f6eacfac3338c08ca6c09d5",
+      "byteIdentical": false,
+      "difference": "The shared Audit row now permits authorized Query content in public results while excluding secrets/unauthorized content; diagnostics and retained evidence remain free of content. Other admission facets are byte-identical."
+    },
+    {
+      "heading": "## Folders handoff and parity evidence",
+      "beforeSha256": "448237e89f56e8c4adffc75a234394e96121532384c101ee626fd17aecc208a7",
+      "afterSha256": "448237e89f56e8c4adffc75a234394e96121532384c101ee626fd17aecc208a7",
+      "byteIdentical": true,
+      "difference": null
+    }
+  ],
+  "admissionSectionExcludingAuditRow": {
+    "beforeSha256": "e408d90773e37a4d665edee0ec9aadcd854283f1b5631640307149abce06030d",
+    "afterSha256": "e408d90773e37a4d665edee0ec9aadcd854283f1b5631640307149abce06030d",
+    "byteIdentical": true
+  },
+  "exactExtractionComparisonCommand": "python3 -B - <<'PYCOMPARE'\nimport hashlib\nfrom pathlib import Path\nbefore = Path('/tmp/mcpcli-story-5-2-iteration-1/_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md').read_text()\nafter = Path('_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md').read_text()\ndef section(text, heading):\n    return text.split(heading, 1)[1].split('\\n## ', 1)[0]\ndef digest(text):\n    return hashlib.sha256(text.encode('utf-8')).hexdigest()\nfor heading in ('## Existing v1 admission contract (all seven facets)', '## Folders handoff and parity evidence'):\n    left, right = section(before, heading), section(after, heading)\n    print(heading, digest(left), digest(right), 'byteIdentical=' + str(left == right))\nheading = '## Existing v1 admission contract (all seven facets)'\nwithout_audit = lambda text: '\\n'.join(line for line in text.splitlines() if not line.startswith('| Audit |'))\nleft, right = without_audit(section(before, heading)), without_audit(section(after, heading))\nprint('admission section excluding Audit row', digest(left), digest(right), 'byteIdentical=' + str(left == right))\nassert left == right\nPYCOMPARE"
+}

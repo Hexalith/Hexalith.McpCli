@@ -7,9 +7,11 @@ paradigm: hexagonal (ports and adapters), two adapters on one core
 scope: Hexalith.McpCli v1 — Decoration Package, Catalog, executor, MCP Server head, CLI head, profiles, build-time manifest, test harness, release; the HTTP transport only as a seam
 status: final
 created: '2026-09-22'
-updated: '2026-11-06'
+updated: '2026-11-12'
 binds: [FR-1, FR-2, FR-3, FR-4, FR-5, FR-6, FR-7, FR-8, FR-9, FR-10, FR-11, FR-12, FR-13, FR-14, FR-15, FR-16, FR-17, FR-18, FR-19, FR-20, FR-21, FR-22, NFR-1, NFR-2, NFR-3, NFR-4, NFR-5, NFR-6, NFR-7, NFR-8]
 sources:
+  - _bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md (adopted 2026-11-12; receipt-controlled exact-byte approval)
+  - _bmad-output/implementation-artifacts/spec-5-2-decide-generic-non-gateway-capability-contracts.md
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md
   - _bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/VALIDATION-REPORT-2026-09-23-1241.md
   - _bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/VALIDATION-REPORT-2026-09-23.md
@@ -197,6 +199,14 @@ graph LR
 - **Profile location:** AD-14 defines explicit constructor path, then absolute `MCPCLI_HOME`, then user-profile home. This changes file selection, not settings precedence or identity. Invalid overrides fail safely while the existing store protections remain.
 - **Provenance:** the product/architecture owner approved P1–P8 in [the change proposal](../../sprint-change-proposal-2026-11-06.md) on 2026-11-06 after implementation had shipped. This local decision is the McpCli authority; EventStore AD-27 is background, not a substitute. It does not imply prior authorization by frozen story specs, accept the bootstrap/publication-history deviations, close retrospective F7's non-ASCII-before-lowercasing gap, or close unrelated §G schema findings.
 - **Evidence:** `HexalithCommandAttribute.PlatformScope`, `HexalithQueryAttribute.PlatformScope`, `CatalogBuilder`, `RoutingResolver`, `OperationExecutor`, `ProfileStore`; Core `PlatformScopeTests` and `ProfileStoreTests`, CLI `PlatformScopeCommandTests`, MCP `PlatformScopeProtocolTests`. Current Tenants Commands and cross-tenant reads declare `platform:tenants`; its single-tenant reads use the selected matching public tenant and no module fixed tenant. These are enrolled Contracts facts, not module-specific executor logic.
+
+### AD-23 — Non-gateway capability classes [ADOPTED 2026-11-12]
+
+- **Binds:** FR-21, FR-22, MR1–MR3 and MR9; Stories 5.7–5.10, Epic 6 and the legacy-surface retirement gates.
+- **Prevents:** unclassified legacy capabilities, restricted operations reaching the public agent surface, draft decisions changing inventory dispositions, and map-owned policy or status fields substituting for owner approval.
+- **Rule:** the [decision](AD-23-non-gateway-capability-classes.md) and [class map](AD-23-capability-class-map.json) partition every row of the eight hash-bound inputs into one class or an explicitly eligible non-operation record. Each class has one outcome. Only existing v1 decorated Gateway Commands/Queries are admitted; restricted operations go to confidential UI, owner-held local tooling or withdrawal. Staging/streams and HTTP caller authority retain named gaps and owners. The decision defines Folders and restricted evidence, exact-type-at-pin replacement and Admin G4 preconditions. No Platform AD or PRD change is required for these outcomes; no new transport, execution, enrollment or retirement authority is granted.
+- **Provenance:** on 2026-11-12 the owner replied "approve" to the explicit request to approve the final exact-byte candidate and confirm all listed owner roles. The separate [receipt](../../../implementation-artifacts/evidence/story-5-2/approval.json) records that verbatim response, all twelve decision-bound roles and unchanged decision/map/input hashes. It establishes effective ADOPTED status while the approved decision/map remain byte-identical; their proposed-candidate frontmatter is immutable historical metadata. The retained AI.Tools local amendment still needs separate push approval and merge; exempt surfaces remain frozen meanwhile.
+- **Evidence:** [verification packet](../../../implementation-artifacts/evidence/story-5-2/verification.md), stdlib class-map verifier and damaged-input process regressions; these prove documentary consistency, not human signature authenticity, parity or current compliance with the disclosed Parties destructive-label/enrollment conflict.
 
 ## Consistency Conventions
 

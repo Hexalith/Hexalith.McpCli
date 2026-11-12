@@ -1,0 +1,3 @@
+⧗   --- input ---
+docs: adopt generic non-gateway capability contracts
+✔   found 0 problems, 0 warnings

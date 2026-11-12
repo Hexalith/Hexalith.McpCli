@@ -1,0 +1,24 @@
+{
+  "repository": "https://github.com/Hexalith/Hexalith.AI.Tools.git",
+  "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-2/aitools",
+  "branch": "docs/mcpcli-local-tooling-exemptions",
+  "baseRevision": "8a3885dd22aea88edd57771cfe592c382df2c583",
+  "candidateRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+  "planVersion": "1.2.0",
+  "inventoryRevision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+  "pushApproval": "pending; separate explicit owner approval required",
+  "pushed": false,
+  "merged": false,
+  "censusState": "frozen; baseline unchanged",
+  "files": {
+    "README.md": "8c02ffb2c4ef6d83b7b425d4bf4a3f07bbabffd3cf3d1f136149851392da1a88",
+    "hexalith-llm-instructions.md": "3e3b756a29e213171df183a12cb6a298aea87f6f307729971455a2bd890eb6ef",
+    "hexalith-mcpcli-migration-instructions.md": "8ffbe4485aa92d13fa6cc759f28744a0243b9bec02317769164deb22386392a4"
+  },
+  "checks": {
+    "npm ci --ignore-scripts": "exit 0; 72 packages audited; zero vulnerabilities",
+    "npx --no -- commitlint --verbose < /tmp/story-5-2-aitools-commit-message.txt": "exit 0; 0 problems, 0 warnings",
+    "git -c core.whitespace=cr-at-eol diff --check": "exit 0; preserves the existing CRLF instruction file",
+    "git status --short": "exit 0; empty after the local candidate commit"
+  }
+}

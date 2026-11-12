@@ -1,0 +1,81 @@
+{
+  "schemaVersion": "1.0.0",
+  "decision": "approved",
+  "candidateVersion": "AD-23 1.0.0",
+  "approvedOn": "2026-11-12",
+  "approver": "Jérôme Piquot (GitHub jpiquot)",
+  "exactApprovalInstruction": "approve",
+  "rolesCovered": [
+    "McpCli product/architecture owner",
+    "McpCli maintainer",
+    "McpCli security and contract/transport maintainer",
+    "Platform architecture/security and platform/operator maintainer",
+    "EventStore owning maintainer",
+    "FrontComposer owning maintainer",
+    "Projects owning maintainer",
+    "Folders owning maintainer",
+    "ChatBot owning maintainer",
+    "Memories owning maintainer",
+    "Parties owning maintainer",
+    "AI.Tools owning maintainer"
+  ],
+  "priorInstruction": {
+    "exactWords": "approve and stop",
+    "source": "_bmad-output/implementation-artifacts/spec-5-2-decide-generic-non-gateway-capability-contracts.md#implementation-notes",
+    "scope": "Specification intent and Owner Decisions D1–D8 only; no exact-byte AD adoption or upstream push approval."
+  },
+  "artifacts": {
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3",
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597",
+    "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28"
+  },
+  "upstreamCandidate": {
+    "repository": "https://github.com/Hexalith/Hexalith.AI.Tools.git",
+    "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-2/aitools",
+    "branch": "docs/mcpcli-local-tooling-exemptions",
+    "baseRevision": "8a3885dd22aea88edd57771cfe592c382df2c583",
+    "candidateRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+    "planVersion": "1.2.0",
+    "inventoryRevision": "c694bff5a29073bee6848b88c142f7da23efcf85",
+    "pushApproval": "pending; separate explicit owner approval required",
+    "pushed": false,
+    "merged": false,
+    "censusState": "frozen; baseline unchanged",
+    "files": {
+      "README.md": "8c02ffb2c4ef6d83b7b425d4bf4a3f07bbabffd3cf3d1f136149851392da1a88",
+      "hexalith-llm-instructions.md": "3e3b756a29e213171df183a12cb6a298aea87f6f307729971455a2bd890eb6ef",
+      "hexalith-mcpcli-migration-instructions.md": "8ffbe4485aa92d13fa6cc759f28744a0243b9bec02317769164deb22386392a4"
+    },
+    "checks": {
+      "npm ci --ignore-scripts": "exit 0; 72 packages audited; zero vulnerabilities",
+      "npx --no -- commitlint --verbose < /tmp/story-5-2-aitools-commit-message.txt": "exit 0; 0 problems, 0 warnings",
+      "git -c core.whitespace=cr-at-eol diff --check": "exit 0; preserves the existing CRLF instruction file",
+      "git status --short": "exit 0; empty after the local candidate commit"
+    }
+  },
+  "limits": [
+    "No inventory re-disposition before exact-byte AD-23 adoption.",
+    "No execution, enrollment, publication or retirement authority.",
+    "No upstream push or merge without separate explicit owner approval.",
+    "Exempt surfaces remain frozen until the amendment merges; no census edit or gitlink move.",
+    "Existing inventory approval limits and the owner-approved Parties 1.2.0 amendment remain unchanged.",
+    "Parties destructive-classification/enrollment reconciliation remains unresolved; no claim of current restricted discovery/submission compliance."
+  ],
+  "requiredRolesSource": "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md#normative-verifier-policy",
+  "approvalRequest": {
+    "presentedRequest": "Approve the exact candidate in the approval packet, confirming all listed owner roles?",
+    "responseVerbatim": "approve",
+    "basis": "The user replied approve directly to the final candidate approval request and confirmation of all listed owner roles. The exact presented decision/map/input hashes are unchanged. Push approval was explicitly separate and is not granted by this response.",
+    "presentedPacket": "_bmad-output/implementation-artifacts/evidence/story-5-2/verification.md",
+    "identitySource": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/amendment-1.2.0.json",
+    "identitySourceSha256": "f7c123e174549272a6de162ffb7ea5100e093ddd030df1e30989c2bf8affec7a",
+    "identityNote": "Approver identity retained from the existing owner-approved receipt; current response confirms this candidate and all decision-bound roles under the single-maintainer model."
+  }
+}

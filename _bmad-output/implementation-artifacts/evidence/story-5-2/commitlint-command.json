@@ -1,0 +1,13 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "input": "docs: adopt generic non-gateway capability contracts\n",
+  "exitCode": 0,
+  "messageFile": "/tmp/mcpcli-story-5-2-commit-q2ai8v_1.txt",
+  "packageInstall": "npm ci; exit 0; locked versions unchanged"
+}

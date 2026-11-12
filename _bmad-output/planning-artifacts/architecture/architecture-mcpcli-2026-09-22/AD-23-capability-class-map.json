@@ -1,0 +1,3152 @@
+{
+  "schemaVersion": "1.0.0",
+  "decision": {
+    "path": "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md",
+    "sha256": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560"
+  },
+  "approvalPath": "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json",
+  "classes": [
+    {
+      "id": "A1",
+      "name": "infrastructure administration",
+      "outcome": "confidential-ui-only"
+    },
+    {
+      "id": "A2",
+      "name": "operator diagnostics",
+      "outcome": "confidential-ui-only"
+    },
+    {
+      "id": "A3",
+      "name": "stream and state reads",
+      "outcome": "confidential-ui-only"
+    },
+    {
+      "id": "A4",
+      "name": "tenant administration reads",
+      "outcome": "confidential-ui-only"
+    },
+    {
+      "id": "A5",
+      "name": "process-local context",
+      "outcome": "withdrawal"
+    },
+    {
+      "id": "A6",
+      "name": "retained unavailable stubs",
+      "outcome": "withdrawal"
+    },
+    {
+      "id": "A7",
+      "name": "local credential and profile configuration",
+      "outcome": "withdrawal"
+    },
+    {
+      "id": "A8",
+      "name": "shell completion, out of McpCli v1 under PRD §8.2",
+      "outcome": "withdrawal"
+    },
+    {
+      "id": "K01",
+      "name": "ordinary module operations",
+      "outcome": "decorated-gateway-contract"
+    },
+    {
+      "id": "K02",
+      "name": "module-state resource reads",
+      "outcome": "decorated-gateway-contract"
+    },
+    {
+      "id": "K03",
+      "name": "freshness, paging and filters",
+      "outcome": "decorated-gateway-contract"
+    },
+    {
+      "id": "K04",
+      "name": "context, caller keys and identifier formats",
+      "outcome": "decorated-gateway-contract"
+    },
+    {
+      "id": "K05",
+      "name": "module-authorized provider egress and pre-submit effects",
+      "outcome": "decorated-gateway-contract"
+    },
+    {
+      "id": "K06",
+      "name": "owner-decorated module diagnostics",
+      "outcome": "decorated-gateway-contract"
+    },
+    {
+      "id": "K07",
+      "name": "documentation delivery",
+      "outcome": "withdrawal"
+    },
+    {
+      "id": "K08",
+      "name": "legacy lifecycle/status observation",
+      "outcome": "withdrawal"
+    },
+    {
+      "id": "K09",
+      "name": "streams, staging, files, imports/exports and event streams",
+      "outcome": "continued-deferral",
+      "gap": "Generic authenticated out-of-band staging/stream/file transport; Platform AD and PRD change required.",
+      "ownerRole": "McpCli product/architecture owner"
+    },
+    {
+      "id": "K10",
+      "name": "forwarded per-user identity and HTTP caller authority",
+      "outcome": "continued-deferral",
+      "gap": "Approved shared HTTP transport and forwarded per-user authority under Platform AD-14, with authenticated actor/effective-origin and denial evidence.",
+      "ownerRole": "McpCli product owner"
+    },
+    {
+      "id": "K12",
+      "name": "module confirmation-required, UI-only and destructive operations",
+      "outcome": "confidential-ui-only"
+    },
+    {
+      "id": "K13",
+      "name": "FrontComposer compiler CLI",
+      "outcome": "exempt-local-tooling"
+    },
+    {
+      "id": "K14",
+      "name": "owner-held MigrateEmbeddingVectors operator modes",
+      "outcome": "exempt-local-tooling"
+    },
+    {
+      "id": "K15",
+      "name": "legacy local context, configuration, stubs, previews, wizards and CLI conventions",
+      "outcome": "withdrawal"
+    }
+  ],
+  "inventories": [
+    {
+      "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+      "version": "1.0.1",
+      "sha256": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
+      "approvalLimit": "Approved owning-maintainer inventory.",
+      "rows": [
+        {
+          "id": "AC01",
+          "classId": "A2"
+        },
+        {
+          "id": "AC02",
+          "classId": "A2"
+        },
+        {
+          "id": "AC03",
+          "classId": "A3"
+        },
+        {
+          "id": "AC04",
+          "classId": "A3"
+        },
+        {
+          "id": "AC05",
+          "classId": "A3"
+        },
+        {
+          "id": "AC06",
+          "classId": "A3"
+        },
+        {
+          "id": "AC07",
+          "classId": "A3"
+        },
+        {
+          "id": "AC08",
+          "classId": "A3"
+        },
+        {
+          "id": "AC09",
+          "classId": "A1"
+        },
+        {
+          "id": "AC10",
+          "classId": "A1"
+        },
+        {
+          "id": "AC11",
+          "classId": "A1"
+        },
+        {
+          "id": "AC12",
+          "classId": "A1"
+        },
+        {
+          "id": "AC13",
+          "classId": "A1"
+        },
+        {
+          "id": "AC14",
+          "classId": "A4"
+        },
+        {
+          "id": "AC15",
+          "classId": "A4"
+        },
+        {
+          "id": "AC16",
+          "classId": "A4"
+        },
+        {
+          "id": "AC17",
+          "classId": "A4"
+        },
+        {
+          "id": "AC18",
+          "classId": "A1"
+        },
+        {
+          "id": "AC19",
+          "classId": "A1"
+        },
+        {
+          "id": "AC20",
+          "classId": "A1"
+        },
+        {
+          "id": "AC21",
+          "classId": "A1"
+        },
+        {
+          "id": "AC22",
+          "classId": "A6"
+        },
+        {
+          "id": "AC23",
+          "classId": "A6"
+        },
+        {
+          "id": "AC24",
+          "classId": "A6"
+        },
+        {
+          "id": "AC25",
+          "classId": "A7"
+        },
+        {
+          "id": "AC26",
+          "classId": "A7"
+        },
+        {
+          "id": "AC27",
+          "classId": "A7"
+        },
+        {
+          "id": "AC28",
+          "classId": "A7"
+        },
+        {
+          "id": "AC29",
+          "classId": "A7"
+        },
+        {
+          "id": "AC30",
+          "classId": "A7"
+        },
+        {
+          "id": "AC31",
+          "classId": "A8"
+        },
+        {
+          "id": "AM01",
+          "classId": "A1"
+        },
+        {
+          "id": "AM02",
+          "classId": "A3"
+        },
+        {
+          "id": "AM03",
+          "classId": "A1"
+        },
+        {
+          "id": "AM04",
+          "classId": "A1"
+        },
+        {
+          "id": "AM05",
+          "classId": "A1"
+        },
+        {
+          "id": "AM06",
+          "classId": "A1"
+        },
+        {
+          "id": "AM07",
+          "classId": "A2"
+        },
+        {
+          "id": "AM08",
+          "classId": "A2"
+        },
+        {
+          "id": "AM09",
+          "classId": "A2"
+        },
+        {
+          "id": "AM10",
+          "classId": "A1"
+        },
+        {
+          "id": "AM11",
+          "classId": "A1"
+        },
+        {
+          "id": "AM12",
+          "classId": "A1"
+        },
+        {
+          "id": "AM13",
+          "classId": "A1"
+        },
+        {
+          "id": "AM14",
+          "classId": "A1"
+        },
+        {
+          "id": "AM15",
+          "classId": "A1"
+        },
+        {
+          "id": "AM16",
+          "classId": "A5"
+        },
+        {
+          "id": "AM17",
+          "classId": "A5"
+        },
+        {
+          "id": "AM18",
+          "classId": "A5"
+        },
+        {
+          "id": "AM19",
+          "classId": "A1"
+        },
+        {
+          "id": "AM20",
+          "classId": "A3"
+        },
+        {
+          "id": "AM21",
+          "classId": "A3"
+        },
+        {
+          "id": "AM22",
+          "classId": "A3"
+        },
+        {
+          "id": "AM23",
+          "classId": "A3"
+        },
+        {
+          "id": "AM24",
+          "classId": "A3"
+        },
+        {
+          "id": "AM25",
+          "classId": "A4"
+        },
+        {
+          "id": "AM26",
+          "classId": "A4"
+        },
+        {
+          "id": "AM27",
+          "classId": "A4"
+        },
+        {
+          "id": "AM28",
+          "classId": "A2"
+        },
+        {
+          "id": "AV01",
+          "classId": "K15"
+        },
+        {
+          "id": "AV02",
+          "classId": "A7"
+        },
+        {
+          "id": "AV03",
+          "classId": "A7"
+        },
+        {
+          "id": "AV04",
+          "classId": "A2"
+        },
+        {
+          "id": "AV05",
+          "classId": "A2"
+        },
+        {
+          "id": "AV06",
+          "classId": "A2"
+        },
+        {
+          "id": "AV07",
+          "classId": "A1"
+        },
+        {
+          "id": "AV08",
+          "classId": "A5"
+        },
+        {
+          "id": "AV09",
+          "classId": "A1"
+        },
+        {
+          "id": "AV10",
+          "classId": "A1"
+        },
+        {
+          "id": "AV11",
+          "classId": "A3"
+        },
+        {
+          "id": "AV12",
+          "classId": "A1"
+        }
+      ],
+      "records": [
+        {
+          "id": "AU01",
+          "kind": "unregistered-helper",
+          "reason": "Not reachable from the registered CLI command graph; no invented operation or replacement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AU02",
+          "kind": "unregistered-helper",
+          "reason": "Not reachable from the registered CLI command graph; no invented operation or replacement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AU03",
+          "kind": "unregistered-helper",
+          "reason": "Not reachable from the registered CLI command graph; no invented operation or replacement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AU04",
+          "kind": "unregistered-helper",
+          "reason": "Not reachable from the registered CLI command graph; no invented operation or replacement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AU05",
+          "kind": "unregistered-helper",
+          "reason": "Not reachable from the registered CLI command graph; no invented operation or replacement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AU06",
+          "kind": "unregistered-helper",
+          "reason": "Not reachable from the registered CLI command graph; no invented operation or replacement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AX01",
+          "kind": "scope-accounting",
+          "reason": "Absence or cross-head accounting, not an additional operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AX02",
+          "kind": "scope-accounting",
+          "reason": "Absence or cross-head accounting, not an additional operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AX03",
+          "kind": "scope-accounting",
+          "reason": "Absence or cross-head accounting, not an additional operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AX04",
+          "kind": "scope-accounting",
+          "reason": "Absence or cross-head accounting, not an additional operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AX05",
+          "kind": "scope-accounting",
+          "reason": "Absence or cross-head accounting, not an additional operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AX06",
+          "kind": "scope-accounting",
+          "reason": "Absence or cross-head accounting, not an additional operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AX07",
+          "kind": "scope-accounting",
+          "reason": "Absence or cross-head accounting, not an additional operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G1",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; AD-23 closes no behavior or retirement gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G2",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; AD-23 closes no behavior or retirement gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G3",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; AD-23 closes no behavior or retirement gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G4",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; AD-23 closes no behavior or retirement gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G5",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; AD-23 closes no behavior or retirement gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G6",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; AD-23 closes no behavior or retirement gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "AV13",
+          "kind": "verification-note",
+          "reason": "Source-test observation, not an executable capability.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+              "id": "AM01"
+            }
+          ]
+        }
+      ],
+      "restrictionEvidence": [
+        {
+          "id": "AC01",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC02",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC03",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC04",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC05",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC06",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC07",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC08",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC09",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC10",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC11",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC12",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC13",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC14",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC15",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC16",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC17",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC18",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC19",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC20",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC21",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC25",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AC28",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM01",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM02",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM03",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM04",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM05",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM06",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM07",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM08",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM09",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM10",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM11",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM12",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM13",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM14",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM15",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM19",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM20",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM21",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM22",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM23",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM24",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM25",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM26",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM27",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AM28",
+          "sourceText": "UI-only",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AV03",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "AV07",
+          "sourceText": "confirmation-required",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        }
+      ]
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+      "version": "1.0.2",
+      "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+      "approvalLimit": "Approved owning-maintainer inventory.",
+      "rows": [
+        {
+          "id": "FH01",
+          "classId": "K08"
+        },
+        {
+          "id": "FH02",
+          "classId": "K01"
+        },
+        {
+          "id": "FH03",
+          "classId": "K02"
+        },
+        {
+          "id": "FD01",
+          "classId": "K07"
+        },
+        {
+          "id": "FD02",
+          "classId": "K07"
+        },
+        {
+          "id": "FD03",
+          "classId": "K07"
+        },
+        {
+          "id": "FD04",
+          "classId": "K07"
+        },
+        {
+          "id": "FD05",
+          "classId": "K07"
+        },
+        {
+          "id": "FD06",
+          "classId": "K07"
+        },
+        {
+          "id": "FD07",
+          "classId": "K07"
+        },
+        {
+          "id": "FD08",
+          "classId": "K07"
+        },
+        {
+          "id": "FD09",
+          "classId": "K07"
+        },
+        {
+          "id": "FD10",
+          "classId": "K07"
+        },
+        {
+          "id": "FD11",
+          "classId": "K07"
+        },
+        {
+          "id": "FD12",
+          "classId": "K07"
+        },
+        {
+          "id": "FD13",
+          "classId": "K07"
+        },
+        {
+          "id": "FC01",
+          "classId": "K13"
+        },
+        {
+          "id": "FC02",
+          "classId": "K13"
+        },
+        {
+          "id": "FV01",
+          "classId": "K08"
+        },
+        {
+          "id": "FV02",
+          "classId": "K10"
+        },
+        {
+          "id": "FV03",
+          "classId": "K10"
+        },
+        {
+          "id": "FV04",
+          "classId": "K01"
+        },
+        {
+          "id": "FV05",
+          "classId": "K02"
+        },
+        {
+          "id": "FV06",
+          "classId": "K13"
+        },
+        {
+          "id": "FV07",
+          "classId": "K13"
+        },
+        {
+          "id": "FV08",
+          "classId": "K13"
+        },
+        {
+          "id": "FV09",
+          "classId": "K13"
+        },
+        {
+          "id": "PS14",
+          "classId": "K14"
+        }
+      ],
+      "records": [
+        {
+          "id": "PS01",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+              "id": "AC01"
+            }
+          ]
+        },
+        {
+          "id": "PS02",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+              "id": "AM01"
+            }
+          ]
+        },
+        {
+          "id": "PS03",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "classId": "K13"
+        },
+        {
+          "id": "PS04",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+              "id": "H01"
+            },
+            {
+              "inventory": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+              "id": "H02"
+            },
+            {
+              "inventory": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+              "id": "H03"
+            }
+          ]
+        },
+        {
+          "id": "PS05",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+              "id": "L01"
+            }
+          ]
+        },
+        {
+          "id": "PS06",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+              "id": "L01"
+            }
+          ]
+        },
+        {
+          "id": "PS07",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+              "id": "M01"
+            }
+          ]
+        },
+        {
+          "id": "PS08",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+              "id": "L01"
+            }
+          ]
+        },
+        {
+          "id": "PS09",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+              "id": "M01"
+            }
+          ]
+        },
+        {
+          "id": "PS10",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+              "id": "L01"
+            }
+          ]
+        },
+        {
+          "id": "PS11",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+              "id": "M01"
+            }
+          ]
+        },
+        {
+          "id": "PS12",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+              "id": "L01"
+            }
+          ]
+        },
+        {
+          "id": "PS13",
+          "kind": "companion-owned-surface",
+          "reason": "Surface census entry; concrete capabilities are classified in its companion inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+              "id": "M01"
+            }
+          ]
+        },
+        {
+          "id": "FK01",
+          "kind": "manifest-consumer",
+          "reason": "Consumer accounting; Projects owns its concrete operations; other consumers require their own inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+              "id": "FH02"
+            },
+            {
+              "inventory": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+              "id": "FH03"
+            }
+          ]
+        },
+        {
+          "id": "FK02",
+          "kind": "manifest-consumer",
+          "reason": "Consumer accounting; Projects owns its concrete operations; other consumers require their own inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+              "id": "FH02"
+            },
+            {
+              "inventory": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+              "id": "FH03"
+            }
+          ]
+        },
+        {
+          "id": "FK03",
+          "kind": "manifest-consumer",
+          "reason": "Consumer accounting; Projects owns its concrete operations; other consumers require their own inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+              "id": "FH02"
+            },
+            {
+              "inventory": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+              "id": "FH03"
+            }
+          ]
+        },
+        {
+          "id": "FK04",
+          "kind": "manifest-consumer",
+          "reason": "Consumer accounting; Projects owns its concrete operations; other consumers require their own inventory.",
+          "governedBy": [
+            {
+              "inventory": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+              "id": "FH02"
+            },
+            {
+              "inventory": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+              "id": "FH03"
+            }
+          ]
+        },
+        {
+          "id": "PE01",
+          "kind": "non-surface-or-existing-exemption",
+          "reason": "Existing build/test/external-tool/snapshot exclusion, not a newly exempted module capability.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PE02",
+          "kind": "non-surface-or-existing-exemption",
+          "reason": "Existing build/test/external-tool/snapshot exclusion, not a newly exempted module capability.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PE03",
+          "kind": "non-surface-or-existing-exemption",
+          "reason": "Existing build/test/external-tool/snapshot exclusion, not a newly exempted module capability.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PE04",
+          "kind": "non-surface-or-existing-exemption",
+          "reason": "Existing build/test/external-tool/snapshot exclusion, not a newly exempted module capability.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PE05",
+          "kind": "non-surface-or-existing-exemption",
+          "reason": "Existing build/test/external-tool/snapshot exclusion, not a newly exempted module capability.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PE06",
+          "kind": "non-surface-or-existing-exemption",
+          "reason": "Existing build/test/external-tool/snapshot exclusion, not a newly exempted module capability.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PE07",
+          "kind": "non-surface-or-existing-exemption",
+          "reason": "Existing build/test/external-tool/snapshot exclusion, not a newly exempted module capability.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PE08",
+          "kind": "non-surface-or-existing-exemption",
+          "reason": "Existing build/test/external-tool/snapshot exclusion, not a newly exempted module capability.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PE09",
+          "kind": "non-surface-or-existing-exemption",
+          "reason": "Existing build/test/external-tool/snapshot exclusion, not a newly exempted module capability.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PN01",
+          "kind": "no-production-surface",
+          "reason": "Root census absence finding; creates no operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PN02",
+          "kind": "no-production-surface",
+          "reason": "Root census absence finding; creates no operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PN03",
+          "kind": "no-production-surface",
+          "reason": "Root census absence finding; creates no operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PN04",
+          "kind": "no-production-surface",
+          "reason": "Root census absence finding; creates no operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PN05",
+          "kind": "no-production-surface",
+          "reason": "Root census absence finding; creates no operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PN06",
+          "kind": "no-production-surface",
+          "reason": "Root census absence finding; creates no operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PN07",
+          "kind": "no-production-surface",
+          "reason": "Root census absence finding; creates no operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PN08",
+          "kind": "no-production-surface",
+          "reason": "Root census absence finding; creates no operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "PN09",
+          "kind": "no-production-surface",
+          "reason": "Root census absence finding; creates no operation.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G1",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, approval and retirement/removal gates.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G2",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, approval and retirement/removal gates.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G3",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, approval and retirement/removal gates.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G4",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, approval and retirement/removal gates.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G5",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, approval and retirement/removal gates.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        }
+      ],
+      "restrictionEvidence": [
+        {
+          "id": "PS14",
+          "sourceText": "--live",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "FC02",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "FV07",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        }
+      ]
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+      "version": "1.0.0",
+      "sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+      "approvalLimit": "Session scope only; no new owning-maintainer or readiness approval.",
+      "rows": [
+        {
+          "id": "M01",
+          "classId": "K01"
+        },
+        {
+          "id": "M02",
+          "classId": "K12"
+        },
+        {
+          "id": "M03",
+          "classId": "K05"
+        },
+        {
+          "id": "M04",
+          "classId": "K01"
+        },
+        {
+          "id": "M05",
+          "classId": "K05"
+        },
+        {
+          "id": "M06",
+          "classId": "K05"
+        },
+        {
+          "id": "M07",
+          "classId": "K05"
+        },
+        {
+          "id": "M08",
+          "classId": "K01"
+        },
+        {
+          "id": "M09",
+          "classId": "K05"
+        },
+        {
+          "id": "M10",
+          "classId": "K01"
+        },
+        {
+          "id": "M11",
+          "classId": "K05"
+        },
+        {
+          "id": "M12",
+          "classId": "K01"
+        },
+        {
+          "id": "M13",
+          "classId": "K12"
+        },
+        {
+          "id": "M14",
+          "classId": "K01"
+        },
+        {
+          "id": "M15",
+          "classId": "K01"
+        },
+        {
+          "id": "M16",
+          "classId": "K01"
+        },
+        {
+          "id": "M17",
+          "classId": "K01"
+        },
+        {
+          "id": "M18",
+          "classId": "K06"
+        },
+        {
+          "id": "M19",
+          "classId": "K01"
+        },
+        {
+          "id": "M20",
+          "classId": "K06"
+        },
+        {
+          "id": "M21",
+          "classId": "K01"
+        },
+        {
+          "id": "M22",
+          "classId": "K01"
+        },
+        {
+          "id": "M23",
+          "classId": "K01"
+        },
+        {
+          "id": "M24",
+          "classId": "K06"
+        },
+        {
+          "id": "M25",
+          "classId": "K01"
+        },
+        {
+          "id": "M26",
+          "classId": "K06"
+        },
+        {
+          "id": "M27",
+          "classId": "K01"
+        },
+        {
+          "id": "M28",
+          "classId": "K01"
+        },
+        {
+          "id": "M29",
+          "classId": "K06"
+        },
+        {
+          "id": "M30",
+          "classId": "K01"
+        },
+        {
+          "id": "M31",
+          "classId": "K01"
+        },
+        {
+          "id": "M32",
+          "classId": "K01"
+        },
+        {
+          "id": "M33",
+          "classId": "K01"
+        },
+        {
+          "id": "M34",
+          "classId": "K06"
+        },
+        {
+          "id": "M35",
+          "classId": "K01"
+        },
+        {
+          "id": "M36",
+          "classId": "K01"
+        },
+        {
+          "id": "M37",
+          "classId": "K01"
+        },
+        {
+          "id": "M38",
+          "classId": "K01"
+        },
+        {
+          "id": "M39",
+          "classId": "K01"
+        },
+        {
+          "id": "M40",
+          "classId": "K01"
+        },
+        {
+          "id": "M41",
+          "classId": "K01"
+        },
+        {
+          "id": "M42",
+          "classId": "K01"
+        },
+        {
+          "id": "M43",
+          "classId": "K01"
+        },
+        {
+          "id": "M44",
+          "classId": "K01"
+        },
+        {
+          "id": "M45",
+          "classId": "K01"
+        },
+        {
+          "id": "M46",
+          "classId": "K01"
+        },
+        {
+          "id": "M47",
+          "classId": "K01"
+        },
+        {
+          "id": "M48",
+          "classId": "K01"
+        },
+        {
+          "id": "M49",
+          "classId": "K05"
+        },
+        {
+          "id": "R01",
+          "classId": "K02"
+        },
+        {
+          "id": "R02",
+          "classId": "K02"
+        },
+        {
+          "id": "L01",
+          "classId": "K05"
+        },
+        {
+          "id": "L02",
+          "classId": "K01"
+        },
+        {
+          "id": "L03",
+          "classId": "K05"
+        },
+        {
+          "id": "L04",
+          "classId": "K01"
+        },
+        {
+          "id": "L05",
+          "classId": "K01"
+        },
+        {
+          "id": "L06",
+          "classId": "K05"
+        },
+        {
+          "id": "L07",
+          "classId": "K05"
+        },
+        {
+          "id": "L08",
+          "classId": "K01"
+        },
+        {
+          "id": "L09",
+          "classId": "K01"
+        },
+        {
+          "id": "L10",
+          "classId": "K12"
+        },
+        {
+          "id": "L11",
+          "classId": "K01"
+        },
+        {
+          "id": "L12",
+          "classId": "K01"
+        },
+        {
+          "id": "L13",
+          "classId": "K01"
+        },
+        {
+          "id": "L14",
+          "classId": "K05"
+        },
+        {
+          "id": "L15",
+          "classId": "K01"
+        },
+        {
+          "id": "L16",
+          "classId": "K05"
+        },
+        {
+          "id": "L17",
+          "classId": "K01"
+        },
+        {
+          "id": "L18",
+          "classId": "K01"
+        },
+        {
+          "id": "L19",
+          "classId": "K01"
+        },
+        {
+          "id": "L20",
+          "classId": "K01"
+        },
+        {
+          "id": "L21",
+          "classId": "K01"
+        },
+        {
+          "id": "L22",
+          "classId": "K01"
+        },
+        {
+          "id": "L23",
+          "classId": "K01"
+        },
+        {
+          "id": "L24",
+          "classId": "K01"
+        },
+        {
+          "id": "L25",
+          "classId": "K01"
+        },
+        {
+          "id": "L26",
+          "classId": "K12"
+        },
+        {
+          "id": "L27",
+          "classId": "K05"
+        },
+        {
+          "id": "L28",
+          "classId": "K01"
+        },
+        {
+          "id": "L29",
+          "classId": "K01"
+        },
+        {
+          "id": "L30",
+          "classId": "K01"
+        },
+        {
+          "id": "L31",
+          "classId": "K01"
+        },
+        {
+          "id": "L32",
+          "classId": "K01"
+        },
+        {
+          "id": "L33",
+          "classId": "K01"
+        },
+        {
+          "id": "L34",
+          "classId": "K01"
+        },
+        {
+          "id": "L35",
+          "classId": "K01"
+        },
+        {
+          "id": "L36",
+          "classId": "K01"
+        },
+        {
+          "id": "L37",
+          "classId": "K01"
+        },
+        {
+          "id": "L38",
+          "classId": "K01"
+        },
+        {
+          "id": "L39",
+          "classId": "K01"
+        },
+        {
+          "id": "L40",
+          "classId": "K01"
+        },
+        {
+          "id": "L41",
+          "classId": "K01"
+        },
+        {
+          "id": "L42",
+          "classId": "K01"
+        },
+        {
+          "id": "V01",
+          "classId": "K03"
+        },
+        {
+          "id": "V02",
+          "classId": "K03"
+        },
+        {
+          "id": "V03",
+          "classId": "K04"
+        },
+        {
+          "id": "V04",
+          "classId": "K09"
+        },
+        {
+          "id": "V05",
+          "classId": "K09"
+        },
+        {
+          "id": "V06",
+          "classId": "K01"
+        },
+        {
+          "id": "V07",
+          "classId": "K04"
+        },
+        {
+          "id": "V08",
+          "classId": "K01"
+        },
+        {
+          "id": "V09",
+          "classId": "K15"
+        },
+        {
+          "id": "V10",
+          "classId": "K15"
+        }
+      ],
+      "records": [
+        {
+          "id": "C01",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K12"
+        },
+        {
+          "id": "C02",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K05"
+        },
+        {
+          "id": "C03",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K05"
+        },
+        {
+          "id": "C04",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K05"
+        },
+        {
+          "id": "C05",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K05"
+        },
+        {
+          "id": "C06",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "C07",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K05"
+        },
+        {
+          "id": "C08",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "C09",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "C10",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K12"
+        },
+        {
+          "id": "C11",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K05"
+        },
+        {
+          "id": "C12",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "C13",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q01",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q02",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q03",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q04",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K06"
+        },
+        {
+          "id": "Q05",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q06",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K06"
+        },
+        {
+          "id": "Q07",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q08",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q09",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q10",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K06"
+        },
+        {
+          "id": "Q11",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q12",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K06"
+        },
+        {
+          "id": "Q13",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q14",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q15",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K06"
+        },
+        {
+          "id": "Q16",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q17",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q18",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q19",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q20",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K06"
+        },
+        {
+          "id": "Q21",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q22",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q23",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q24",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q25",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q26",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q27",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q28",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q29",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q30",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q31",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q32",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q33",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q34",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "Q35",
+          "kind": "candidate",
+          "reason": "Roadmap target, not a legacy operation; exact decoration/handler/readiness remains upstream.",
+          "classId": "K01"
+        },
+        {
+          "id": "G1",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G2",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G3",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role.",
+          "classId": "K04"
+        },
+        {
+          "id": "G4",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G5",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G6",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role.",
+          "classId": "K05"
+        },
+        {
+          "id": "N01",
+          "kind": "capability-exclusion",
+          "reason": "Adjacent nonlegacy capability; no added agent exposure or retirement authority.",
+          "classId": "K12"
+        },
+        {
+          "id": "N02",
+          "kind": "capability-exclusion",
+          "reason": "Adjacent nonlegacy capability; no added agent exposure or retirement authority.",
+          "classId": "K12"
+        },
+        {
+          "id": "N03",
+          "kind": "capability-exclusion",
+          "reason": "Adjacent nonlegacy capability; no added agent exposure or retirement authority.",
+          "classId": "K01"
+        },
+        {
+          "id": "N04",
+          "kind": "capability-exclusion",
+          "reason": "Adjacent nonlegacy capability; no added agent exposure or retirement authority.",
+          "classId": "K01"
+        }
+      ],
+      "restrictionEvidence": [
+        {
+          "id": "C01",
+          "sourceText": "archive-folder",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "C10",
+          "sourceText": "linked tool/variant rules",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "M02",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "M13",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "L10",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "L26",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "N01",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        }
+      ]
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+      "version": "1.0.0",
+      "sha256": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+      "approvalLimit": "Session scope only; no new owning-maintainer or readiness approval.",
+      "rows": [
+        {
+          "id": "R01",
+          "classId": "K02"
+        },
+        {
+          "id": "R02",
+          "classId": "K02"
+        },
+        {
+          "id": "R03",
+          "classId": "K02"
+        },
+        {
+          "id": "R04",
+          "classId": "K02"
+        },
+        {
+          "id": "R05",
+          "classId": "K07"
+        },
+        {
+          "id": "R06",
+          "classId": "K02"
+        },
+        {
+          "id": "R07",
+          "classId": "K02"
+        },
+        {
+          "id": "R08",
+          "classId": "K02"
+        },
+        {
+          "id": "R09",
+          "classId": "K02"
+        },
+        {
+          "id": "R10",
+          "classId": "K02"
+        },
+        {
+          "id": "R11",
+          "classId": "K07"
+        },
+        {
+          "id": "M01",
+          "classId": "K12"
+        },
+        {
+          "id": "M02",
+          "classId": "K12"
+        },
+        {
+          "id": "M03",
+          "classId": "K12"
+        },
+        {
+          "id": "M04",
+          "classId": "K12"
+        },
+        {
+          "id": "M05",
+          "classId": "K01"
+        },
+        {
+          "id": "L01",
+          "classId": "K01"
+        },
+        {
+          "id": "L02",
+          "classId": "K01"
+        },
+        {
+          "id": "L03",
+          "classId": "K01"
+        },
+        {
+          "id": "L04",
+          "classId": "K01"
+        },
+        {
+          "id": "L05",
+          "classId": "K01"
+        },
+        {
+          "id": "L06",
+          "classId": "K01"
+        },
+        {
+          "id": "L07",
+          "classId": "K01"
+        },
+        {
+          "id": "L08",
+          "classId": "K01"
+        },
+        {
+          "id": "L09",
+          "classId": "K01"
+        },
+        {
+          "id": "L10",
+          "classId": "K01"
+        },
+        {
+          "id": "L11",
+          "classId": "K01"
+        },
+        {
+          "id": "L12",
+          "classId": "K15"
+        },
+        {
+          "id": "L13",
+          "classId": "K15"
+        },
+        {
+          "id": "L14",
+          "classId": "K12"
+        },
+        {
+          "id": "L15",
+          "classId": "K12"
+        },
+        {
+          "id": "L16",
+          "classId": "K12"
+        },
+        {
+          "id": "L17",
+          "classId": "K12"
+        },
+        {
+          "id": "L18",
+          "classId": "K01"
+        },
+        {
+          "id": "V01",
+          "classId": "K03"
+        },
+        {
+          "id": "V02",
+          "classId": "K01"
+        },
+        {
+          "id": "V03",
+          "classId": "K03"
+        },
+        {
+          "id": "V04",
+          "classId": "K15"
+        },
+        {
+          "id": "V05",
+          "classId": "K12"
+        },
+        {
+          "id": "V06",
+          "classId": "K12"
+        },
+        {
+          "id": "V07",
+          "classId": "K08"
+        },
+        {
+          "id": "V08",
+          "classId": "K04"
+        },
+        {
+          "id": "V09",
+          "classId": "K04"
+        },
+        {
+          "id": "V10",
+          "classId": "K12"
+        },
+        {
+          "id": "V11",
+          "classId": "K15"
+        },
+        {
+          "id": "V12",
+          "classId": "K15"
+        }
+      ],
+      "records": [
+        {
+          "id": "G1",
+          "kind": "prerequisite",
+          "reason": "Retained Contracts/authority/parity/shared-head retirement prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G2",
+          "kind": "prerequisite",
+          "reason": "Retained Contracts/authority/parity/shared-head retirement prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G3",
+          "kind": "prerequisite",
+          "reason": "Retained Contracts/authority/parity/shared-head retirement prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G4",
+          "kind": "prerequisite",
+          "reason": "Retained Contracts/authority/parity/shared-head retirement prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G5",
+          "kind": "prerequisite",
+          "reason": "Retained Contracts/authority/parity/shared-head retirement prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G6",
+          "kind": "prerequisite",
+          "reason": "Retained Contracts/authority/parity/shared-head retirement prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        }
+      ],
+      "restrictionEvidence": [
+        {
+          "id": "M01",
+          "sourceText": "confirmation",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "M02",
+          "sourceText": "confirmation",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "M03",
+          "sourceText": "confirmation",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "L14",
+          "sourceText": "M01",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "L15",
+          "sourceText": "M02",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "L16",
+          "sourceText": "M03",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "M04",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "L17",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        }
+      ]
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+      "version": "1.0.0",
+      "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+      "approvalLimit": "Session scope only; no new owning-maintainer or readiness approval.",
+      "rows": [
+        {
+          "id": "H01",
+          "classId": "K08"
+        },
+        {
+          "id": "H02",
+          "classId": "K01"
+        },
+        {
+          "id": "H03",
+          "classId": "K02"
+        },
+        {
+          "id": "D01",
+          "classId": "K07"
+        },
+        {
+          "id": "D02",
+          "classId": "K07"
+        },
+        {
+          "id": "D03",
+          "classId": "K07"
+        },
+        {
+          "id": "D04",
+          "classId": "K07"
+        },
+        {
+          "id": "D05",
+          "classId": "K07"
+        },
+        {
+          "id": "D06",
+          "classId": "K07"
+        },
+        {
+          "id": "D07",
+          "classId": "K07"
+        },
+        {
+          "id": "D08",
+          "classId": "K07"
+        },
+        {
+          "id": "D09",
+          "classId": "K07"
+        },
+        {
+          "id": "D10",
+          "classId": "K07"
+        },
+        {
+          "id": "D11",
+          "classId": "K07"
+        },
+        {
+          "id": "D12",
+          "classId": "K07"
+        },
+        {
+          "id": "D13",
+          "classId": "K07"
+        },
+        {
+          "id": "C01",
+          "classId": "K13"
+        },
+        {
+          "id": "C02",
+          "classId": "K13"
+        },
+        {
+          "id": "V01",
+          "classId": "K08"
+        },
+        {
+          "id": "V02",
+          "classId": "K10"
+        },
+        {
+          "id": "V03",
+          "classId": "K10"
+        },
+        {
+          "id": "V04",
+          "classId": "K01"
+        },
+        {
+          "id": "V05",
+          "classId": "K02"
+        },
+        {
+          "id": "V06",
+          "classId": "K13"
+        },
+        {
+          "id": "V07",
+          "classId": "K13"
+        },
+        {
+          "id": "V08",
+          "classId": "K13"
+        }
+      ],
+      "records": [
+        {
+          "id": "G1",
+          "kind": "prerequisite",
+          "reason": "Retained companion/shared-host and generic-contract prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G2",
+          "kind": "prerequisite",
+          "reason": "Retained companion/shared-host and generic-contract prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G3",
+          "kind": "prerequisite",
+          "reason": "Retained companion/shared-host and generic-contract prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G4",
+          "kind": "prerequisite",
+          "reason": "Retained companion/shared-host and generic-contract prerequisite and owning role.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        }
+      ],
+      "restrictionEvidence": [
+        {
+          "id": "C02",
+          "sourceText": "Local file mutation",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        }
+      ]
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+      "version": "1.0.0",
+      "sha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+      "approvalLimit": "Session scope only; no new owning-maintainer or readiness approval.",
+      "rows": [
+        {
+          "id": "M01",
+          "classId": "K01"
+        },
+        {
+          "id": "M02",
+          "classId": "K01"
+        },
+        {
+          "id": "M03",
+          "classId": "K01"
+        },
+        {
+          "id": "M04",
+          "classId": "K01"
+        },
+        {
+          "id": "M05",
+          "classId": "K01"
+        },
+        {
+          "id": "M06",
+          "classId": "K01"
+        },
+        {
+          "id": "M07",
+          "classId": "K01"
+        },
+        {
+          "id": "M08",
+          "classId": "K01"
+        },
+        {
+          "id": "M09",
+          "classId": "K01"
+        },
+        {
+          "id": "M10",
+          "classId": "K05"
+        },
+        {
+          "id": "M11",
+          "classId": "K01"
+        },
+        {
+          "id": "M12",
+          "classId": "K01"
+        },
+        {
+          "id": "L01",
+          "classId": "K01"
+        },
+        {
+          "id": "L02",
+          "classId": "K01"
+        },
+        {
+          "id": "L03",
+          "classId": "K01"
+        },
+        {
+          "id": "L04",
+          "classId": "K01"
+        },
+        {
+          "id": "L05",
+          "classId": "K01"
+        },
+        {
+          "id": "L06",
+          "classId": "K01"
+        },
+        {
+          "id": "L07",
+          "classId": "K01"
+        },
+        {
+          "id": "L08",
+          "classId": "K01"
+        },
+        {
+          "id": "L09",
+          "classId": "K01"
+        },
+        {
+          "id": "L10",
+          "classId": "K05"
+        },
+        {
+          "id": "L11",
+          "classId": "K01"
+        },
+        {
+          "id": "L12",
+          "classId": "K01"
+        },
+        {
+          "id": "V01",
+          "classId": "K10"
+        },
+        {
+          "id": "V02",
+          "classId": "K10"
+        },
+        {
+          "id": "V03",
+          "classId": "K10"
+        },
+        {
+          "id": "V04",
+          "classId": "K10"
+        },
+        {
+          "id": "V05",
+          "classId": "K04"
+        },
+        {
+          "id": "V06",
+          "classId": "K04"
+        },
+        {
+          "id": "V07",
+          "classId": "K05"
+        },
+        {
+          "id": "V08",
+          "classId": "K05"
+        },
+        {
+          "id": "V09",
+          "classId": "K03"
+        },
+        {
+          "id": "V10",
+          "classId": "K04"
+        },
+        {
+          "id": "V11",
+          "classId": "K01"
+        },
+        {
+          "id": "V12",
+          "classId": "K15"
+        },
+        {
+          "id": "V13",
+          "classId": "K01"
+        },
+        {
+          "id": "V14",
+          "classId": "K12"
+        },
+        {
+          "id": "V15",
+          "classId": "K09"
+        }
+      ],
+      "records": [
+        {
+          "id": "G1",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, authority and behavior/release owner gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G2",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, authority and behavior/release owner gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G3",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, authority and behavior/release owner gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G4",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, authority and behavior/release owner gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G5",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite, authority and behavior/release owner gate.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "X01",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent scope; no extra legacy operation or newly admitted surface.",
+          "classId": "K12"
+        },
+        {
+          "id": "X02",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent scope; no extra legacy operation or newly admitted surface.",
+          "classId": "K12"
+        },
+        {
+          "id": "X03",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent scope; no extra legacy operation or newly admitted surface.",
+          "classId": "K07"
+        },
+        {
+          "id": "X04",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent scope; no extra legacy operation or newly admitted surface.",
+          "classId": "K09"
+        }
+      ],
+      "restrictionEvidence": [
+        {
+          "id": "V14",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "X01",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        }
+      ]
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+      "version": "1.0.0",
+      "sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597",
+      "approvalLimit": "Session scope only; no new owning-maintainer or readiness approval.",
+      "rows": [
+        {
+          "id": "M01",
+          "classId": "K01"
+        },
+        {
+          "id": "M02",
+          "classId": "K01"
+        },
+        {
+          "id": "M03",
+          "classId": "K01"
+        },
+        {
+          "id": "M04",
+          "classId": "K01"
+        },
+        {
+          "id": "L01",
+          "classId": "K01"
+        },
+        {
+          "id": "L02",
+          "classId": "K15"
+        },
+        {
+          "id": "L03",
+          "classId": "K01"
+        },
+        {
+          "id": "L04",
+          "classId": "K01"
+        },
+        {
+          "id": "L05",
+          "classId": "K01"
+        },
+        {
+          "id": "L06",
+          "classId": "K15"
+        },
+        {
+          "id": "L07",
+          "classId": "K06"
+        },
+        {
+          "id": "L08",
+          "classId": "K06"
+        },
+        {
+          "id": "L09",
+          "classId": "K06"
+        },
+        {
+          "id": "L10",
+          "classId": "K12"
+        },
+        {
+          "id": "L11",
+          "classId": "K09"
+        },
+        {
+          "id": "L12",
+          "classId": "K09"
+        },
+        {
+          "id": "L13",
+          "classId": "K06"
+        },
+        {
+          "id": "L14",
+          "classId": "K06"
+        },
+        {
+          "id": "S01",
+          "classId": "K15"
+        },
+        {
+          "id": "S02",
+          "classId": "K15"
+        },
+        {
+          "id": "S03",
+          "classId": "K15"
+        },
+        {
+          "id": "S04",
+          "classId": "K15"
+        },
+        {
+          "id": "V01",
+          "classId": "K10"
+        },
+        {
+          "id": "V02",
+          "classId": "K10"
+        },
+        {
+          "id": "V03",
+          "classId": "K10"
+        },
+        {
+          "id": "V04",
+          "classId": "K03"
+        },
+        {
+          "id": "V05",
+          "classId": "K03"
+        },
+        {
+          "id": "V06",
+          "classId": "K01"
+        },
+        {
+          "id": "V07",
+          "classId": "K03"
+        },
+        {
+          "id": "V08",
+          "classId": "K04"
+        },
+        {
+          "id": "V09",
+          "classId": "K12"
+        },
+        {
+          "id": "V10",
+          "classId": "K15"
+        },
+        {
+          "id": "V11",
+          "classId": "K03"
+        },
+        {
+          "id": "V12",
+          "classId": "K09"
+        },
+        {
+          "id": "V13",
+          "classId": "K09"
+        },
+        {
+          "id": "V14",
+          "classId": "K12"
+        },
+        {
+          "id": "V15",
+          "classId": "K12"
+        },
+        {
+          "id": "V16",
+          "classId": "K15"
+        },
+        {
+          "id": "V17",
+          "classId": "K15"
+        }
+      ],
+      "records": [
+        {
+          "id": "G1",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; per-user HTTP identity alone never proves retirement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G2",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; per-user HTTP identity alone never proves retirement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G3",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; per-user HTTP identity alone never proves retirement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G4",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; per-user HTTP identity alone never proves retirement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G5",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; per-user HTTP identity alone never proves retirement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "G6",
+          "kind": "prerequisite",
+          "reason": "Retained source prerequisite and owning role; per-user HTTP identity alone never proves retirement.",
+          "governingRule": "Scope accounting only; retains the source inventory approval limits and unresolved owner gates."
+        },
+        {
+          "id": "X01",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent capability, not an extra implemented legacy operation.",
+          "classId": "K09"
+        },
+        {
+          "id": "X02",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent capability, not an extra implemented legacy operation.",
+          "classId": "K12"
+        },
+        {
+          "id": "X03",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent capability, not an extra implemented legacy operation.",
+          "classId": "K12"
+        },
+        {
+          "id": "X04",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent capability, not an extra implemented legacy operation.",
+          "classId": "K09"
+        },
+        {
+          "id": "X05",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent capability, not an extra implemented legacy operation.",
+          "classId": "K01"
+        },
+        {
+          "id": "X06",
+          "kind": "capability-exclusion",
+          "reason": "Absent or adjacent capability, not an extra implemented legacy operation.",
+          "classId": "K15"
+        }
+      ],
+      "restrictionEvidence": [
+        {
+          "id": "L10",
+          "sourceText": "Confirmation-required",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "X02",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        }
+      ]
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "version": "1.2.0",
+      "sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28",
+      "approvalLimit": "Owner-approved 1.2.0 on 2026-11-09 under evidence/story-5-3/approval/amendment-1.2.0.json; scope limited to the C05 oracle amendment, no execution, parity or retirement authority.",
+      "rows": [
+        {
+          "id": "L01",
+          "classId": "K01"
+        },
+        {
+          "id": "L02",
+          "classId": "K01"
+        },
+        {
+          "id": "L03",
+          "classId": "K12"
+        },
+        {
+          "id": "L04",
+          "classId": "K12"
+        },
+        {
+          "id": "L05",
+          "classId": "K12"
+        },
+        {
+          "id": "T01",
+          "classId": "K01"
+        },
+        {
+          "id": "T02",
+          "classId": "K01"
+        },
+        {
+          "id": "T03",
+          "classId": "K01"
+        },
+        {
+          "id": "T04",
+          "classId": "K12"
+        },
+        {
+          "id": "T05",
+          "classId": "K12"
+        },
+        {
+          "id": "T06",
+          "classId": "K01"
+        },
+        {
+          "id": "T07",
+          "classId": "K12"
+        },
+        {
+          "id": "C01",
+          "classId": "K01"
+        },
+        {
+          "id": "C02",
+          "classId": "K03"
+        },
+        {
+          "id": "C03",
+          "classId": "K12"
+        },
+        {
+          "id": "C04",
+          "classId": "K12"
+        },
+        {
+          "id": "C05",
+          "classId": "K12"
+        },
+        {
+          "id": "C06",
+          "classId": "K01"
+        },
+        {
+          "id": "C07",
+          "classId": "K04"
+        },
+        {
+          "id": "C08",
+          "classId": "K04"
+        }
+      ],
+      "records": [
+        {
+          "id": "N01",
+          "kind": "capability-exclusion",
+          "reason": "Adjacent nonlegacy scope; does not expand enrolled operations.",
+          "classId": "K12"
+        },
+        {
+          "id": "N02",
+          "kind": "capability-exclusion",
+          "reason": "Adjacent nonlegacy scope; does not expand enrolled operations.",
+          "classId": "K12"
+        },
+        {
+          "id": "N03",
+          "kind": "capability-exclusion",
+          "reason": "Adjacent nonlegacy scope; does not expand enrolled operations.",
+          "classId": "K01"
+        },
+        {
+          "id": "N04",
+          "kind": "capability-exclusion",
+          "reason": "Adjacent nonlegacy scope; does not expand enrolled operations.",
+          "classId": "K06"
+        }
+      ],
+      "restrictionEvidence": [
+        {
+          "id": "L03",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "L04",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "L05",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "T04",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "T05",
+          "sourceText": "destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "T07",
+          "sourceText": "Destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "N01",
+          "sourceText": "Privacy-destructive",
+          "reason": "Restricted source effect/eligibility or linked confirmation/destructive variant; restriction precedence applies."
+        },
+        {
+          "id": "C03",
+          "sourceText": "Accept T04's explicit IDs",
+          "reason": "Mixed create/update variant inherits the destructive L03/T04 classification."
+        },
+        {
+          "id": "C04",
+          "sourceText": "contact/identifier aliases and removals",
+          "reason": "Update/removal/deactivation variant inherits L04/T05/T07 restrictions."
+        },
+        {
+          "id": "C05",
+          "sourceText": "DeactivateParty",
+          "reason": "Soft-deactivation variant inherits destructive L05/T07 restrictions."
+        }
+      ]
+    }
+  ]
+}
