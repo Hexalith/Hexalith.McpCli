@@ -16,7 +16,7 @@ def main():
     runtime = args.runtime_directory.resolve()
     runtime.mkdir(mode=0o700)  # Fail rather than replace any existing directory.
     (runtime / "bin").mkdir(mode=0o700)
-    records = json.loads(Path(__file__).with_name("binaries.json").read_text())
+    records = json.loads(Path(__file__).with_name("binaries-current.json").read_text())
     images = sorted({row["image"].split(":")[0] + "@" + row["imageId"] for row in records})
     for image in images:
         subprocess.run(["docker", "pull", "--platform", "linux/amd64", image], check=True, timeout=300)

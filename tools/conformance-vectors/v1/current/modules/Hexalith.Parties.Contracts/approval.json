@@ -1,0 +1,17 @@
+{
+  "packageId": "Hexalith.Parties.Contracts",
+  "version": "3.1.1",
+  "module": "parties",
+  "inventorySha256": "79a787f55c1a101c1bfd5c85c3fcd487d1219a984450b5d3f0d1e7f898ea1d9b",
+  "approvalReference": "evidence/release-maintenance-20261112/current-cohort/authorization.json",
+  "publication": "https://github.com/Hexalith/Hexalith.Parties/releases/tag/v3.1.1",
+  "vectorFilesSha256": {
+    "create-party.vector.json": "4e0121c58fb35d56a07755e24a8e0c7f816c294677e007e039113a78f7012dcc",
+    "deactivate-party.vector.json": "b4278fecddde3b026abc7c4d4166e34fd4714bd44328d3fd21f69e6ae3f123d2",
+    "get-party.vector.json": "de2a2a43ef47ad80bec84dcff72ae90dfafbe0b3d0728e2606e4033ffefb62c9",
+    "list-parties.vector.json": "1e9e11d5c2e4e6ad35a33686d5722ab0b9e1384e20e318ced1a5a686a48cf696",
+    "reactivate-party.vector.json": "2cb8a221a6ee7ff70af79f1e3a3aa71aa2f1dfd4e841337feb1ff82adb5bea42",
+    "search-parties.vector.json": "c443b0afb35c58fd7a0a94b64fcf9416158ab9d84e0fa2d62841d98648d10609",
+    "update-party.vector.json": "88f498b1133a1769f24d6a27d4dfd570309b4448bcf111a01592ca10d73430a8"
+  }
+}

@@ -13,7 +13,7 @@ public sealed class NativeFixtureIdentityTests
     {
         string root = FindRepositoryRoot();
         var expected = new HashSet<string>(StringComparer.Ordinal);
-        foreach (string directory in new[] { "tools/conformance-vectors/v1/modules", "tools/live-topology/plans" })
+        foreach (string directory in new[] { "tools/conformance-vectors/v1/current/modules", "tools/live-topology/plans-current" })
         {
             foreach (string file in Directory.EnumerateFiles(Path.Combine(root, directory), "*.json", SearchOption.AllDirectories))
             {

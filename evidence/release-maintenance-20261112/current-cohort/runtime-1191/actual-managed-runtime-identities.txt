@@ -1,0 +1,2 @@
+Current native managed runtime: 11.0.0; Core: /home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Private.CoreLib.dll; JsonElement: /home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Text.Json.dll
+Current native managed runtime: 11.0.0; Core: /home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Private.CoreLib.dll; JsonElement: /home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Text.Json.dll

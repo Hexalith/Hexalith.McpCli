@@ -1,0 +1,36 @@
+[
+  {
+    "version": "1.5.1",
+    "available": true,
+    "sourceRevision": "8c88c27acd5ed3ee2d2f2b6f51f3432d536f2021",
+    "explicitActor": true
+  },
+  {
+    "version": "2.0.0",
+    "available": true,
+    "sourceRevision": "3e1dd7cac6ee4db1db48d1bfb478e1b5848f7b8e",
+    "explicitActor": true
+  },
+  {
+    "version": "2.0.1",
+    "available": false
+  },
+  {
+    "version": "3.0.0",
+    "available": true,
+    "sourceRevision": "639d6e98b496429eb0490d1f8feeec97bd1a3280",
+    "explicitActor": false
+  },
+  {
+    "version": "3.1.0",
+    "available": true,
+    "sourceRevision": "50904cc4ba53c9b0b2c082d5872a0d276be8f5c3",
+    "explicitActor": false
+  },
+  {
+    "version": "3.1.1",
+    "available": true,
+    "sourceRevision": "84e3df796ac977041a21ec7bd8e5789bdc44241a",
+    "explicitActor": false
+  }
+]

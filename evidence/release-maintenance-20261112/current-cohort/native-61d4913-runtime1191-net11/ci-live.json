@@ -1,0 +1,20 @@
+{
+  "result": "passed",
+  "fullLiveAccepted": true,
+  "runId": "27a0d0d372214905a45290fb9df9b6ad",
+  "preparationRunId": "7ce7f9e2ecca418f900bdeb7ad36ff4f",
+  "output": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad",
+  "vectors": {
+    "result": "passed",
+    "count": 21,
+    "receipt": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/live-lane.json"
+  },
+  "boundary": {
+    "result": "passed",
+    "receipt": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T035537Z-e6e8c862/result.json"
+  },
+  "smoke": {
+    "result": "passed",
+    "receipt": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T042038Z-c75b7088/result.json"
+  }
+}

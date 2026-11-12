@@ -1,0 +1,100 @@
+{
+  "retainedModules": {
+    "parties": "1.5.1",
+    "tenants": "7.0.5"
+  },
+  "candidateModules": {
+    "parties": "3.1.1",
+    "tenants": "7.0.7"
+  },
+  "sdk": "4.2.0",
+  "newOperations": [],
+  "operationCount": 21,
+  "allDescriptionsAndSchemasEqual": true,
+  "operations": [
+    {
+      "name": "parties.create-party",
+      "unchanged": true
+    },
+    {
+      "name": "parties.deactivate-party",
+      "unchanged": true
+    },
+    {
+      "name": "parties.get-party",
+      "unchanged": true
+    },
+    {
+      "name": "parties.list-parties",
+      "unchanged": true
+    },
+    {
+      "name": "parties.reactivate-party",
+      "unchanged": true
+    },
+    {
+      "name": "parties.search-parties",
+      "unchanged": true
+    },
+    {
+      "name": "parties.update-party",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.add-user-to-tenant",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.change-user-role",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.create-tenant",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.disable-tenant",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.enable-tenant",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.get-tenant",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.get-tenant-audit",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.get-tenant-users",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.get-user-tenants",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.list-tenants",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.remove-tenant-configuration",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.remove-user-from-tenant",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.set-tenant-configuration",
+      "unchanged": true
+    },
+    {
+      "name": "tenants.update-tenant",
+      "unchanged": true
+    }
+  ]
+}

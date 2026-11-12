@@ -1,0 +1,58 @@
+{
+  "version": "4.48.2",
+  "sourceRevision": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b",
+  "measuredAtUtc": "2026-11-12T03:55:38.899158+00:00",
+  "release": {
+    "id": 442477512,
+    "url": "https://github.com/Hexalith/Hexalith.Builds/releases/tag/v4.48.2",
+    "immutable": false,
+    "tagPeeledCommit": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b"
+  },
+  "inventorySha256": "a9a6b8dbdc35977cde018dd355638d7feb2542319b6538550c28379af7d2ac5f",
+  "packages": [
+    {
+      "id": "Hexalith.Builds.Module.Cli",
+      "version": "4.48.2",
+      "officialUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.builds.module.cli/4.48.2/hexalith.builds.module.cli.4.48.2.nupkg",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.Builds",
+        "branch": "refs/heads/main",
+        "commit": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b"
+      },
+      "sha256": "9b7c50125f0ddfc953c1c3d892cddec5ba2fa1d8741bd9e82d77669b4e86ee92",
+      "sha512": "I/aMNCIp6vnocFYUqAEqqwJNfrCB5pFAHLzp8qNxS7YxomkO/+CjJni9aOazdBWoL6cIK3uTFIOt0ZdeJhJ7LA==",
+      "signatureVerification": "passed",
+      "sizeBytes": 43425713,
+      "payloadSha256": {
+        "Hexalith.Builds.Tooling.dll": "142bd3fdd26ff4e5ba8eadd91d00de92b738b019270fa6742e3a35f41460b1cf",
+        "g4-host/Hexalith.Builds.Module.AppHost.dll": "f8f7b6e743a798e37784f5e3d44f62bc81c5cef112c8fa9ec643fcb35da825ba",
+        "g4-host/Hexalith.Builds.Tooling.dll": "142bd3fdd26ff4e5ba8eadd91d00de92b738b019270fa6742e3a35f41460b1cf"
+      },
+      "currentCatalogHostClosure": {
+        "Microsoft.Extensions.Configuration": "f1996c6c86bf81c03efc079b14b83997f47c9260a6d942a728952fed461c4e2d",
+        "Microsoft.Extensions.Configuration.Abstractions": "2527a31b60171870b285436fa93858411669033ed13ebe4622b2f284cf854ff3",
+        "Microsoft.Extensions.DependencyInjection": "30e82e2318be85abe25e0a07997c66bde14021800e8ad8c8bd08d2d57c2ee26a",
+        "Microsoft.Extensions.DependencyInjection.Abstractions": "a015b5671749c8c5ae710feca9b7d7db0ef6e24cbbfbee616842536a6e665709",
+        "Microsoft.Extensions.Options": "74d1b3872649eba8747192aa800d4a61add2166b669aa6d87ff6368d5baba9f7"
+      }
+    },
+    {
+      "id": "Hexalith.Builds.Evidence.Cli",
+      "version": "4.48.2",
+      "officialUrl": "https://api.nuget.org/v3-flatcontainer/hexalith.builds.evidence.cli/4.48.2/hexalith.builds.evidence.cli.4.48.2.nupkg",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/Hexalith/Hexalith.Builds",
+        "branch": "refs/heads/main",
+        "commit": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b"
+      },
+      "sha256": "f32c48edf81cef8bce2594542e92f45da613efbfe0dbf2aca9d3d0a46258d009",
+      "sha512": "Z87q9IJ1sAJ/SnA2M/ESRQR75BpZ6zJPFDPRLjIsYZlZF3skILqsgqR+1AadjR7xuAaGU9H3cA5KMVCE2/d7Bw==",
+      "signatureVerification": "passed",
+      "sizeBytes": 3063039
+    }
+  ],
+  "failures": [],
+  "candidateAcceptance": false
+}

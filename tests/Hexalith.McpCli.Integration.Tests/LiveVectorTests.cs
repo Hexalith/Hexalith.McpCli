@@ -12,7 +12,7 @@ public sealed class LiveVectorTests(AspireTopologyFixture fixture)
     /// <summary>Discovers all companion plans without requiring a running topology.</summary>
     public static IEnumerable<TheoryDataRow<string>> Operations()
     {
-        string plans = Path.Combine(RepositoryProjectPaths.GetRepositoryRoot(), "tools", "live-topology", "plans");
+        string plans = Path.Combine(RepositoryProjectPaths.GetRepositoryRoot(), "tools", "live-topology", "plans-current");
         foreach (string path in Directory.EnumerateFiles(plans, "*.json").Order(StringComparer.Ordinal))
         {
             using JsonDocument document = JsonDocument.Parse(File.ReadAllText(path));

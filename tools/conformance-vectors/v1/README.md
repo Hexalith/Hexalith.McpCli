@@ -122,7 +122,7 @@ An optional inventory runs the same strict C# coverage checker as Core.Tests; it
 The `enrolled-module-conformance` CI job evaluates every flagged production
 PackageReference, requires its exact restored `.nupkg`, and calls
 `check_enrolled.py`. Each package needs a directory
-`tools/conformance-vectors/v1/modules/<PackageId>/` containing complete
+`tools/conformance-vectors/v1/current/modules/<PackageId>/` containing complete
 `*.vector.json` files and `approval.json` with `packageId`, `version` (the
 version the vectors were approved against), `module` and an owning-maintainer
 `approvalReference`, plus `inventorySha256` (the lowercase SHA-256 of the exact

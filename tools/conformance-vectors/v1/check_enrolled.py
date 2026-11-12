@@ -187,7 +187,7 @@ def main():
         assets = json.loads((project.parent / 'obj/project.assets.json').read_text())
         results = []
         for package_id in packages:
-            directory = approval_directory(repo / 'tools/conformance-vectors/v1/modules', package_id)
+            directory = approval_directory(repo / 'tools/conformance-vectors/v1/current/modules', package_id)
             receipt = _load_json(directory / 'approval.json')
             receipt_reports = []
             artifact, _ = artifact_for(assets, package_id, receipt, receipt_reports)

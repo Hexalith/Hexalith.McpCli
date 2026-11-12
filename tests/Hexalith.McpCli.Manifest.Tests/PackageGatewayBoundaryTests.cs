@@ -123,12 +123,12 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
     public void PackageConfigurationRetainsReviewedSourceAndDeployedHashes()
     {
         string host = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "Hexalith.McpCli.EventStoreGateway.TestHost");
-        using JsonDocument document = JsonDocument.Parse(File.ReadAllText(Path.Combine(host, "Configuration", "provenance.json")));
+        using JsonDocument document = JsonDocument.Parse(File.ReadAllText(Path.Combine(host, "Configuration", "provenance-current.json")));
         JsonElement profile = document.RootElement;
         Assert.Equal("published", profile.GetProperty("profile").GetString());
-        Assert.Equal("4.1.0", profile.GetProperty("eventStoreVersion").GetString());
+        Assert.Equal("4.2.0", profile.GetProperty("eventStoreVersion").GetString());
         Assert.Equal("https://github.com/Hexalith/Hexalith.EventStore.git", profile.GetProperty("sourceRepository").GetString());
-        Assert.Equal("dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a", profile.GetProperty("sourceCommit").GetString());
+        Assert.Equal("aa16227bd07f0564a3026d619a5abd973e02656f", profile.GetProperty("sourceCommit").GetString());
         foreach (JsonProperty file in profile.GetProperty("files").EnumerateObject())
         {
             string path = Path.Combine(host, file.Name);

@@ -11,7 +11,7 @@ using Hexalith.McpCli.AppHost;
 namespace Hexalith.McpCli.Integration.Tests;
 
 /// <summary>Uses the platform lifecycle and prerequisite handling for the three-service test topology.</summary>
-public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.Hexalith_McpCli_AppHost>, IAsyncLifetime
+public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.Hexalith_McpCli_AppHost>, IAsyncLifetime
 {
     /// <summary>The test-owned identity bootstrapped by the server inside private state.</summary>
     internal const string AdministratorId = TopologyConfiguration.BootstrapAdministratorId;
@@ -39,26 +39,31 @@ public sealed class AspireTopologyFixture : AspireTopologyFixtureBase<Projects.H
     {
         if (Environment.GetEnvironmentVariable("MCPCLI_ISOLATED_TOPOLOGY") != "1")
             throw new InvalidOperationException("Live topology tests require tools/live-topology/run-isolated.py; refusing to use host Dapr or Redis.");
+        TopologyConfiguration.RequireCurrentManagedRuntime();
         TopologyConfiguration.ValidateWorkspace(RepositoryProjectPaths.GetRepositoryRoot());
         _additionalPrerequisiteFailure = await TopologyPrerequisites.GetFailureAsync().ConfigureAwait(false);
         if (_additionalPrerequisiteFailure is not null) return;
 
-        if (!DaprTestPrerequisites.IsAvailable)
+        if (!await TopologyPrerequisites.BasicAvailableAsync().ConfigureAwait(false))
         {
             _additionalPrerequisiteFailure = "Basic platform Redis, placement or scheduler prerequisites are unavailable.";
             return;
         }
         TopologyConfiguration.EnsureNoConflictingTopology(3501);
+        if (!await TopologyPrerequisites.IsDockerHealthyAsync().ConfigureAwait(false))
+        {
+            _additionalPrerequisiteFailure = "Docker is not running or is not healthy enough for Aspire container orchestration.";
+            return;
+        }
 
         await base.InitializeAsync().ConfigureAwait(false);
     }
 
     /// <summary>Reports missing topology-specific prerequisites using the standard skip diagnostic.</summary>
-    public new void SkipIfUnavailable()
+    public void SkipIfUnavailable()
     {
         if (_additionalPrerequisiteFailure is not null)
-            Assert.Skip(DaprTestPrerequisites.SkipReason + " " + _additionalPrerequisiteFailure);
-        base.SkipIfUnavailable();
+            Assert.Skip(TopologyPrerequisites.SkipReason + " " + _additionalPrerequisiteFailure);
     }
 
     /// <summary>Creates a caller-owned client at the platform-discovered endpoint with a short-lived test identity.</summary>

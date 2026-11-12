@@ -1,0 +1,15 @@
+{
+  "scope": "Real SDK4.2 current owner catalog generation only; no running service, image authority or native runtime acceptance.",
+  "runtimeAcceptance": false,
+  "imageAuthority": false,
+  "platformSource": "d4217aec78005c0a2f18ce0efb1ce4c4e8864b6d",
+  "buildsSource": "db2dac29ea20358978122595a7d31549ec9f05ef",
+  "onlineAuditedPackageCount": 224,
+  "readerReceiptSha256": "5500db13757def67b53a353ef1906b4da96cded618ecfa02e743c33a6927036a",
+  "onlineAuditSha256": "3d1ddc51a623d44c28f968fa9b68a573c81036629fb99a94cf87c564ff125d75",
+  "files": {
+    "direct-reader-receipt.json": "5500db13757def67b53a353ef1906b4da96cded618ecfa02e743c33a6927036a",
+    "direct-reader-audit.json": "3d1ddc51a623d44c28f968fa9b68a573c81036629fb99a94cf87c564ff125d75",
+    "direct-reader-preparation.json": "a9d6a8b199eb744aeea4a490779808c945eed3007abfd4baeb4f4807a7995da2"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "scope": "Independent diagnostic boundary only; fresh complete strict lane remains required.",
+  "fullLiveAccepted": false,
+  "imageAuthority": false,
+  "runtimeRollForwardPrimarySource": "https://github.com/dotnet/runtime/blob/main/docs/design/features/framework-version-resolution.md",
+  "nativeOperationDifference": {
+    "unchangedDeclarationCounts": {
+      "Tenants": 23,
+      "Parties": 41
+    },
+    "onlyRuntimeSchemaChanges": "Four projection operations add byte-array contentEncoding base64 under JSON11; every operation digest guard remains intact."
+  },
+  "diagnosticInputs": "Detached source b37df762 plus measured uncommitted runtime-only fixture changes; no committed CI or source release authority claimed."
+}

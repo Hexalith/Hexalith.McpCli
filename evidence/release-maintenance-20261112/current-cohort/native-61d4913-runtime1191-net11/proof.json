@@ -1,0 +1,599 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-11-12T04:24:01.892960+00:00",
+  "scope": "Genuine complete local isolated native runtime qualification for exact detached candidate61d4913. Not authoritative final-pin hostedCI, staged pair, release, migration or image admission.",
+  "sourceSnapshot": "61d49138f568c4dddd640dce20837094caa3730c",
+  "buildsSource": "840ac7bb69c326e0aab5c4034676c5b5fd0eaf32",
+  "platformSource": "d4217aec78005c0a2f18ce0efb1ce4c4e8864b6d",
+  "fullLiveAccepted": true,
+  "nativeVectorsPassed": 21,
+  "independentCasesPassed": [
+    "SharedHeadsPreserveAuthorizationAndDeactivationSafety",
+    "AuthenticatedQueryReturnsSuccessfulDocument"
+  ],
+  "distinctIsolatedRuntimes": 23,
+  "skips": 0,
+  "imageAuthority": false,
+  "hostedCiAcceptance": false,
+  "pairedReleaseAcceptance": false,
+  "files": [
+    {
+      "retained": "ci-live.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/ci-live.json",
+      "sha256": "9fd3dc7a755918ede197b4b75fe3ec4877ba7dc742ae63c954640d40f5fdf834",
+      "bytes": 817
+    },
+    {
+      "retained": "preparation.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/preparation.json",
+      "sha256": "1e9805c491e6360fff9017b755396dca0043703d1810c831d8f7096780ab666e",
+      "bytes": 90448
+    },
+    {
+      "retained": "live-lane.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/live-lane.json",
+      "sha256": "6ef5c58a1966f1323acc3d6c2529ed3e54cc44964eba8511472f4145e840a7b8",
+      "bytes": 23785
+    },
+    {
+      "retained": "boundary/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/boundary/tests.xml",
+      "sha256": "e22b3aa3a7d832d7a114bf8b303d91eb04dffc27e5b7453d159d7b8a6453c3b9",
+      "bytes": 1751
+    },
+    {
+      "retained": "smoke/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/smoke/tests.xml",
+      "sha256": "ef7596d007819f6da3fcb79df79c3e907e091acc034eb9753e068650560de755",
+      "bytes": 1714
+    },
+    {
+      "retained": "runtime-profile-current.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/tools/live-topology/runtime-profile-current.json",
+      "sha256": "d6853877ab323e701d83de962183602dbb592ac8d30fd75676567c77c3444f5d",
+      "bytes": 1606
+    },
+    {
+      "retained": "native-runtime-current.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/tools/live-topology/native-runtime-current.json",
+      "sha256": "57ccfce8293f920d288418cca84de490f677098808598d9e1191930305ffa995",
+      "bytes": 5165
+    },
+    {
+      "retained": "isolated-runs/20261112T035751Z-0aeb0954/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T035751Z-0aeb0954/result.json",
+      "sha256": "97bab2ed2a945491f64b382f665692fed2f3cf98bab5553c04f2b58db65f2b14",
+      "bytes": 4645
+    },
+    {
+      "retained": "isolated-runs/20261112T035835Z-ba45cf84/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T035835Z-ba45cf84/result.json",
+      "sha256": "d4da2b7c11ac26e67bbaf9482b8712d15e5fd1d9d9d6ecda0acfa03c40b174b4",
+      "bytes": 4653
+    },
+    {
+      "retained": "isolated-runs/20261112T035929Z-8e643759/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T035929Z-8e643759/result.json",
+      "sha256": "62b848314ea0548665fe4a813a2e1b23bee3a38518b142b48edcd21c40953676",
+      "bytes": 4639
+    },
+    {
+      "retained": "isolated-runs/20261112T040016Z-f973ad8b/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040016Z-f973ad8b/result.json",
+      "sha256": "afbd7cd26305689e978cdaed771853f38a31a9cf2111fe23da10410e07211163",
+      "bytes": 4645
+    },
+    {
+      "retained": "isolated-runs/20261112T040114Z-f6121cb4/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040114Z-f6121cb4/result.json",
+      "sha256": "aa061f783dd7225b510545ed9e212ee55b0c1178077bd01530184cd4bd8f7b42",
+      "bytes": 4653
+    },
+    {
+      "retained": "isolated-runs/20261112T040216Z-dd022a24/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040216Z-dd022a24/result.json",
+      "sha256": "e4b7be7365a4334e85d6c3ebbe8e662875f1d5f58f6dfb4583c9d5f132775435",
+      "bytes": 4649
+    },
+    {
+      "retained": "isolated-runs/20261112T040314Z-24f882b3/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040314Z-24f882b3/result.json",
+      "sha256": "a8bd57b15f054c26291d4b7f85a980470ad8b675790d8aa93910e3db8df56758",
+      "bytes": 4644
+    },
+    {
+      "retained": "isolated-runs/20261112T040409Z-2288e5cc/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040409Z-2288e5cc/result.json",
+      "sha256": "0bedafa62cd30c899e9fccc73ea6ae0c76b301f21badd43e60c298210fcf4db2",
+      "bytes": 4657
+    },
+    {
+      "retained": "isolated-runs/20261112T040510Z-81eeb8d5/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040510Z-81eeb8d5/result.json",
+      "sha256": "837edddb00c78836ab7e66d48aeb088cdeef14e40998c035e4fdec2a106eb868",
+      "bytes": 4653
+    },
+    {
+      "retained": "isolated-runs/20261112T040620Z-2ad20ad1/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040620Z-2ad20ad1/result.json",
+      "sha256": "55262e8bb30f25f8ea4e2a8275c196206da40706e9fe22cd4eca78d961666643",
+      "bytes": 4647
+    },
+    {
+      "retained": "isolated-runs/20261112T040711Z-f40af1b0/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040711Z-f40af1b0/result.json",
+      "sha256": "1c554062bbc6108a5f7f955551e73899b6e3fd0f454229fccdbbb16e1f837aeb",
+      "bytes": 4648
+    },
+    {
+      "retained": "isolated-runs/20261112T040809Z-aa7b266a/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040809Z-aa7b266a/result.json",
+      "sha256": "9c45921afa91e4bf7b83b8abe8d2e57a0cd91f50d04211272e4ebd855b70fd21",
+      "bytes": 4647
+    },
+    {
+      "retained": "isolated-runs/20261112T040918Z-9c7fad38/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T040918Z-9c7fad38/result.json",
+      "sha256": "727738b412b122f3ae4b33947bb9c6bc13f69c4844f5561fa32730313e7cf416",
+      "bytes": 4654
+    },
+    {
+      "retained": "isolated-runs/20261112T041059Z-f7ee81e3/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T041059Z-f7ee81e3/result.json",
+      "sha256": "73f198b8cdbdb2c3f8d3767d064c95b55f06a33964482699ae7694da90f43d50",
+      "bytes": 4652
+    },
+    {
+      "retained": "isolated-runs/20261112T041221Z-66c73389/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T041221Z-66c73389/result.json",
+      "sha256": "77e91d4300e7a5ba7512179b86cfd221fef60978106f276a482bfbc51947d775",
+      "bytes": 4641
+    },
+    {
+      "retained": "isolated-runs/20261112T041336Z-ae9616a6/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T041336Z-ae9616a6/result.json",
+      "sha256": "39321d88102befcf1c02e40be964710638b2c69125388fcfd459ab8228a0d3fb",
+      "bytes": 4654
+    },
+    {
+      "retained": "isolated-runs/20261112T041520Z-44dc05c2/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T041520Z-44dc05c2/result.json",
+      "sha256": "feec1f966a810ace763b9e04e13123a394ed3c509c574d6be106a31f4bd01b96",
+      "bytes": 4645
+    },
+    {
+      "retained": "isolated-runs/20261112T041633Z-dec2270f/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T041633Z-dec2270f/result.json",
+      "sha256": "74d6bdd6eb5dbac4cd45db6f6c4bfe27d4471dd73438f91f491306292a6cf6b3",
+      "bytes": 4675
+    },
+    {
+      "retained": "isolated-runs/20261112T041742Z-823f7b5e/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T041742Z-823f7b5e/result.json",
+      "sha256": "703ee0ab0d2b6060de8cbec2e94cf1a0e88e46a045a4ebaa909196f4e3b07712",
+      "bytes": 4667
+    },
+    {
+      "retained": "isolated-runs/20261112T041846Z-3c5fd3a0/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T041846Z-3c5fd3a0/result.json",
+      "sha256": "5a37f908b959da6326ef42ed71469efd083773847bc4653644b9519afe72f5f6",
+      "bytes": 4669
+    },
+    {
+      "retained": "isolated-runs/20261112T041941Z-9b5881fb/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T041941Z-9b5881fb/result.json",
+      "sha256": "c35d810c386b01eac1c6f1a8c5d8c6571916640732537b901345c48174dc232d",
+      "bytes": 4647
+    },
+    {
+      "retained": "isolated-runs/20261112T035537Z-e6e8c862/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T035537Z-e6e8c862/result.json",
+      "sha256": "3817f7ccf133ce9690619b896814a77d53bd914bda1787c70710b95d4f4fb5af",
+      "bytes": 4519
+    },
+    {
+      "retained": "isolated-runs/20261112T042038Z-c75b7088/result.json",
+      "originalTaskPath": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T042038Z-c75b7088/result.json",
+      "sha256": "82c5bd033557ea227ed15d591a3857a49b7bc0a2da10484ba5cb081317d141a6",
+      "bytes": 4510
+    },
+    {
+      "retained": "vectors/parties.create-party/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.create-party/live-result.json",
+      "sha256": "1b114c7b589adfaabd0de0fa64bd7caae6f9929a2c4f2509d87331c95a3cbdee",
+      "bytes": 11525
+    },
+    {
+      "retained": "vectors/parties.create-party/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.create-party/writer-bootstrap.json",
+      "sha256": "b9526253b56429f7ded0183d676a27b1616bc22c99b6e025daabf5cac5a265cd",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/parties.create-party/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.create-party/tests.xml",
+      "sha256": "bafeb775ffc5396df753319f67f2ab8fe7dfc487da533c0c9e930065484e8320",
+      "bytes": 1796
+    },
+    {
+      "retained": "vectors/parties.deactivate-party/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.deactivate-party/live-result.json",
+      "sha256": "e826c91d3952658939291a290cf70aa2fce7f400407dcaafd9cc8456c59df5bd",
+      "bytes": 22686
+    },
+    {
+      "retained": "vectors/parties.deactivate-party/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.deactivate-party/writer-bootstrap.json",
+      "sha256": "ba0115b04a7067b2c12f5079b677e3f7059397416e3ccf8a5b28e6ef70b5f283",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/parties.deactivate-party/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.deactivate-party/tests.xml",
+      "sha256": "372f9e55caf0aed965cc76d160959885a81d2fa5782705fd9475019046359cd9",
+      "bytes": 1804
+    },
+    {
+      "retained": "vectors/parties.get-party/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.get-party/live-result.json",
+      "sha256": "f232d298cc98dca087fb013afb1e10b6f5fbc8a8c390933b414359a27fa70eb7",
+      "bytes": 11604
+    },
+    {
+      "retained": "vectors/parties.get-party/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.get-party/writer-bootstrap.json",
+      "sha256": "8872e3512762bbd4a6a1175313134da339f2cded9c15b6a3c0b7a3d9742fa123",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/parties.get-party/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.get-party/tests.xml",
+      "sha256": "65e227e2c5c42fa02aa93bdad508fcaf399e9ee25bd688e53d2dca5fc6974f1b",
+      "bytes": 1790
+    },
+    {
+      "retained": "vectors/parties.list-parties/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.list-parties/live-result.json",
+      "sha256": "b2d59cb27fed3b6171bfacc224f7e40cf8d2a1f2088c4887042d93980d348634",
+      "bytes": 20535
+    },
+    {
+      "retained": "vectors/parties.list-parties/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.list-parties/writer-bootstrap.json",
+      "sha256": "bd26d7043b5febf7cac3b8438d5f2ae0422296cf8553faacc5036a29ba76e811",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/parties.list-parties/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.list-parties/tests.xml",
+      "sha256": "8d31c3a32a17d9224e0cd928e2c3c6a0436637b4f706363744b21240d193266b",
+      "bytes": 1796
+    },
+    {
+      "retained": "vectors/parties.reactivate-party/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.reactivate-party/live-result.json",
+      "sha256": "26da7aabe5a1933de3bf51a58d5185e204922f3ae2046d1d00f30aa163d2c4e2",
+      "bytes": 23759
+    },
+    {
+      "retained": "vectors/parties.reactivate-party/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.reactivate-party/writer-bootstrap.json",
+      "sha256": "93c8945a5e3f4b4a68ce3d8c959037b43a56a0ff954694a021fb9395cbf4098d",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/parties.reactivate-party/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.reactivate-party/tests.xml",
+      "sha256": "3aa3773b32090bab5bdd2805c433538e4dbd14d72d7c99eed17c8257a2bb8c9a",
+      "bytes": 1804
+    },
+    {
+      "retained": "vectors/parties.search-parties/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.search-parties/live-result.json",
+      "sha256": "ac4a9106a9bc4af61b9c1bc2b1950dc83ede8327e63ab49b8dc9d4f2568411f9",
+      "bytes": 21063
+    },
+    {
+      "retained": "vectors/parties.search-parties/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.search-parties/writer-bootstrap.json",
+      "sha256": "e35a1f7c99efdd85b224987585626b0f9f9b1a063fa5cc9990efb7f4faf791dd",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/parties.search-parties/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.search-parties/tests.xml",
+      "sha256": "e2b48153b59e365402f9707a33fcd0d0f6a340f7091e964590a93ea03a96ec16",
+      "bytes": 1800
+    },
+    {
+      "retained": "vectors/parties.update-party/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.update-party/live-result.json",
+      "sha256": "d9e25a92de456965e50be4873fefae061f1efc4e6de665e50321c4243da667d5",
+      "bytes": 18429
+    },
+    {
+      "retained": "vectors/parties.update-party/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.update-party/writer-bootstrap.json",
+      "sha256": "36f099dc19704b2a73caea84a3eef4c233fe77e059f681a43b9fbed7c5869af2",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/parties.update-party/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/parties.update-party/tests.xml",
+      "sha256": "fed87cadf5ed5449df5cbaf7e6a0018017ffc387b62ad7413b4f6318f3622cbc",
+      "bytes": 1796
+    },
+    {
+      "retained": "vectors/tenants.add-user-to-tenant/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.add-user-to-tenant/live-result.json",
+      "sha256": "8edac4b9966d3f5aca7ba30fdd746e78dad8cec43b7a06f40d58d645e3538f3a",
+      "bytes": 8129
+    },
+    {
+      "retained": "vectors/tenants.add-user-to-tenant/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.add-user-to-tenant/writer-bootstrap.json",
+      "sha256": "ded6036c6768dbe43ab0f57ad586e7b9de6617025bc133d5809a54eacd0d7c63",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.add-user-to-tenant/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.add-user-to-tenant/tests.xml",
+      "sha256": "b2d072465ffa17d99af139f604939f825ea87643000efe0b1a0f25e05c65eab3",
+      "bytes": 1808
+    },
+    {
+      "retained": "vectors/tenants.change-user-role/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.change-user-role/live-result.json",
+      "sha256": "ab9cea97137ae5e60381e833e86ed138b906b46650bc5b2bdde397bad06f6135",
+      "bytes": 10817
+    },
+    {
+      "retained": "vectors/tenants.change-user-role/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.change-user-role/writer-bootstrap.json",
+      "sha256": "48390578d38ce76b4c664ec8ff8d2be7ea0c62ee89ec1af78bd21d3d556779b0",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.change-user-role/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.change-user-role/tests.xml",
+      "sha256": "ddcba4e6b91c7de421f05326cab92cb6856b369610d9779563e3bcbb1140eb8d",
+      "bytes": 1804
+    },
+    {
+      "retained": "vectors/tenants.create-tenant/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.create-tenant/live-result.json",
+      "sha256": "594433c060c0765f3e2874317a12962a107311f76cfe876fb587ea7c367a94d5",
+      "bytes": 5595
+    },
+    {
+      "retained": "vectors/tenants.create-tenant/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.create-tenant/writer-bootstrap.json",
+      "sha256": "3bc463f653bf6426515e5431325e20317bd726aa9316df6c33fdbca6c6a2f789",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.create-tenant/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.create-tenant/tests.xml",
+      "sha256": "661ebe552b827ba63abe3b2e18b25a0f712ada338c43b82cf4a554573ac0dfa8",
+      "bytes": 1798
+    },
+    {
+      "retained": "vectors/tenants.disable-tenant/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.disable-tenant/live-result.json",
+      "sha256": "78ab748cbc1800281b42eb1b7335ab4735d61218e8a28ffbf269d43d6ecab4a9",
+      "bytes": 8113
+    },
+    {
+      "retained": "vectors/tenants.disable-tenant/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.disable-tenant/writer-bootstrap.json",
+      "sha256": "a39ee458a729de86995b7e4d8cdd09168cbfe1732633c6ac5aaec152e6c31afd",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.disable-tenant/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.disable-tenant/tests.xml",
+      "sha256": "96f4905716e8bedf648655a06145a78692226a88fae25becee125512ad8e51b0",
+      "bytes": 1800
+    },
+    {
+      "retained": "vectors/tenants.enable-tenant/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.enable-tenant/live-result.json",
+      "sha256": "02104bd284faf510860b09e47512f092185f0decbd6834bec4edcf84dca79146",
+      "bytes": 10806
+    },
+    {
+      "retained": "vectors/tenants.enable-tenant/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.enable-tenant/writer-bootstrap.json",
+      "sha256": "04407aba709d46c5846d44684e281df6b972515ca221939d2e3532da5982bec4",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.enable-tenant/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.enable-tenant/tests.xml",
+      "sha256": "4c69655928cb8e3ece060bdf1a43dcfc259576f2395b48cdc4c9e1b547f25244",
+      "bytes": 1798
+    },
+    {
+      "retained": "vectors/tenants.get-tenant-audit/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-tenant-audit/live-result.json",
+      "sha256": "08fa8826e80e455ea4a01913fcbfee1434db751666ffb106dd10eac7336d9f7e",
+      "bytes": 39703
+    },
+    {
+      "retained": "vectors/tenants.get-tenant-audit/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-tenant-audit/writer-bootstrap.json",
+      "sha256": "63c37b43309665821a32df9d7b9f88197cb341e8eade6178b840b3445deeaf4f",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.get-tenant-audit/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-tenant-audit/tests.xml",
+      "sha256": "93c2980b2aa0d105668e693be4c0d3949a291462293c1ecc73bff3f0e1d9d55b",
+      "bytes": 1805
+    },
+    {
+      "retained": "vectors/tenants.get-tenant-users/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-tenant-users/live-result.json",
+      "sha256": "a717cf802fbbd4d37f9291acc1ea7e98d7b3f321a12b7fd9b44d99978062b524",
+      "bytes": 19598
+    },
+    {
+      "retained": "vectors/tenants.get-tenant-users/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-tenant-users/writer-bootstrap.json",
+      "sha256": "2d9a2ba0e379a93c7863036564d3b5b8def1e798bec77a3ab86dc831a7065689",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.get-tenant-users/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-tenant-users/tests.xml",
+      "sha256": "64d75160f01c21dc3a6a312e93a1dfee98a59e1af16209ff63ca2230937f9ccd",
+      "bytes": 1804
+    },
+    {
+      "retained": "vectors/tenants.get-tenant/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-tenant/live-result.json",
+      "sha256": "55b375b208b5cc8cd9c535d692e4aeed15da61d130389c0a4c7fcec9e2b2afcd",
+      "bytes": 11827
+    },
+    {
+      "retained": "vectors/tenants.get-tenant/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-tenant/writer-bootstrap.json",
+      "sha256": "660f3cefbd009eacbb8e2b9b7dd59e4ed2d8107b8b8457b3de50fc1ab242470b",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.get-tenant/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-tenant/tests.xml",
+      "sha256": "195d13a178b71ac173434b728b2bf659c5ff2c4d697aaf2b555b9e3349dd76a9",
+      "bytes": 1792
+    },
+    {
+      "retained": "vectors/tenants.get-user-tenants/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-user-tenants/live-result.json",
+      "sha256": "ce885fd1487fd80fbf7e6cc107829341d769b78783886a198a1c43e338c1122d",
+      "bytes": 25650
+    },
+    {
+      "retained": "vectors/tenants.get-user-tenants/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-user-tenants/writer-bootstrap.json",
+      "sha256": "f8e6a2fc611d1aa2b343e36a3d728caee02d0c6ba38b40b8045cd0d19be07d12",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.get-user-tenants/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.get-user-tenants/tests.xml",
+      "sha256": "0e658d4eb306c5eb1b1d1c357b839caf8fc549b99cb97eed66e3c20ccdfdadfd",
+      "bytes": 1805
+    },
+    {
+      "retained": "vectors/tenants.list-tenants/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.list-tenants/live-result.json",
+      "sha256": "116090b9da61b8b32dc28b9750784eae18b852d32513c038dfbe7c5ff0586dd6",
+      "bytes": 15865
+    },
+    {
+      "retained": "vectors/tenants.list-tenants/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.list-tenants/writer-bootstrap.json",
+      "sha256": "e7677304100fb639255771f8b53f3f6b594678f85f174bf0e86d8ec08eac3e22",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.list-tenants/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.list-tenants/tests.xml",
+      "sha256": "b5afad4afa537708630bb0e06b8ebdc8be2d978f6b7c0c92f4e456d24ce65a95",
+      "bytes": 1796
+    },
+    {
+      "retained": "vectors/tenants.remove-tenant-configuration/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.remove-tenant-configuration/live-result.json",
+      "sha256": "91dd6bd6a5b91d5b625f8b9b036cc2fddb392196b8838854df2fad4412880386",
+      "bytes": 11538
+    },
+    {
+      "retained": "vectors/tenants.remove-tenant-configuration/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.remove-tenant-configuration/writer-bootstrap.json",
+      "sha256": "ed97c74278a70eacaf36f51a348fcb7c150f092d560cc37bd8c5df3bf4ff9ba0",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.remove-tenant-configuration/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.remove-tenant-configuration/tests.xml",
+      "sha256": "e00513e83823b5cfe7a261732ac8ee0ad5c10eb4c18f57b523d07b6f478e3584",
+      "bytes": 1826
+    },
+    {
+      "retained": "vectors/tenants.remove-user-from-tenant/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.remove-user-from-tenant/live-result.json",
+      "sha256": "771ae72ea1b582ad7d6c08bc69bb3428a7beda28a6bfde91441eab092b3073d9",
+      "bytes": 10287
+    },
+    {
+      "retained": "vectors/tenants.remove-user-from-tenant/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.remove-user-from-tenant/writer-bootstrap.json",
+      "sha256": "50a99a5446b59fa127353b48558ee6dc14cc2bf60045d6f66332631e01d47d58",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.remove-user-from-tenant/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.remove-user-from-tenant/tests.xml",
+      "sha256": "7eb7244567af6d56b65de6d722c780beb6ee9719d0492eaa4afd27aa8f83c63c",
+      "bytes": 1818
+    },
+    {
+      "retained": "vectors/tenants.set-tenant-configuration/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.set-tenant-configuration/live-result.json",
+      "sha256": "aaeade28a31463eb4444f83b03ccdeb379667a332d7cb96d88b982e01fdad26a",
+      "bytes": 8465
+    },
+    {
+      "retained": "vectors/tenants.set-tenant-configuration/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.set-tenant-configuration/writer-bootstrap.json",
+      "sha256": "8072d38a4ca7137bd08c160e1524e59def4b05bd1ea304f5af6f6f1e6da24c08",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.set-tenant-configuration/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.set-tenant-configuration/tests.xml",
+      "sha256": "e7297a9c41a20f139a18b57ade849555033c9f518be140e5e6b0a80b7d05ee4f",
+      "bytes": 1820
+    },
+    {
+      "retained": "vectors/tenants.update-tenant/live-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.update-tenant/live-result.json",
+      "sha256": "b2e513892c2bb057105dc3715d4461e093c23915ca53a64f6b4b9cca81a4713f",
+      "bytes": 8292
+    },
+    {
+      "retained": "vectors/tenants.update-tenant/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.update-tenant/writer-bootstrap.json",
+      "sha256": "917c97883131fe56d41f67cc19d51998c75a8ef678f4ca8ea26b78b545011944",
+      "bytes": 305
+    },
+    {
+      "retained": "vectors/tenants.update-tenant/tests.xml",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/vectors/aeed36b5ba8b45dfaf6fc15cfb9b7f57/tenants.update-tenant/tests.xml",
+      "sha256": "a7fff0f065861253fdb7567a513af6a147f2bdc03cfe5c03b5eaa2dca4d2aac7",
+      "bytes": 1798
+    },
+    {
+      "retained": "boundary/boundary-result.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/boundary/boundary-result.json",
+      "sha256": "3782520e26c51e0eb9ad785ab756529465ac30ea1670f07ed62775d3f385d6ae",
+      "bytes": 20371
+    },
+    {
+      "retained": "boundary/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/boundary/writer-bootstrap.json",
+      "sha256": "9a9e3e866b01d2caec0a6aa84040f72d134b70ecf8c5cd55a2bbb5e309ec7eff",
+      "bytes": 305
+    },
+    {
+      "retained": "smoke/writer-bootstrap.json",
+      "originalTaskPath": "/tmp/mcpcli-current-native-scope-qualification/TestResults/local-current-runtime1191-net11-scoped/27a0d0d372214905a45290fb9df9b6ad/smoke/writer-bootstrap.json",
+      "sha256": "f9f39cf3442980e742b0cbab415d5036c6fe98ae988476e9a47aa8ed7eb1c8f3",
+      "bytes": 305
+    }
+  ],
+  "semanticVectorReceipts": 21,
+  "qualifiedReleasedPlatformRequiredBeforeFinalPins": true
+}

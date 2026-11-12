@@ -1,0 +1,189 @@
+{
+  "scope": "Local candidate working-tree verification only. Exact committed current CI and paired staging remain required.",
+  "nativeRuntimeAcceptance": false,
+  "imageAuthority": false,
+  "checkedAtUtc": "2026-11-12T02:44:18.314353+00:00",
+  "buildsSource": "840ac7bb69c326e0aab5c4034676c5b5fd0eaf32",
+  "counts": {
+    "pythonTopology": 239,
+    "pythonVectors": 185,
+    "pythonReleaseAutomation": 195,
+    "abstractions": 20,
+    "analyzers": 19,
+    "core": 916,
+    "cli": 625,
+    "mcp": 94,
+    "manifestFullBeforeTwoAdditionalLivenessCases": 367,
+    "lifecycleControlsIncludingTwoAdditionalLivenessCases": 4,
+    "latestDependencyAndGatewaySubset": 115,
+    "expectedCoreSkips": 4,
+    "expectedCliWindowsSkips": 2,
+    "currentReplayOperations": 21,
+    "currentReplayShapes": 6,
+    "currentReplayReports": 0,
+    "currentManifestWithManagedRuntimeGuard": 370
+  },
+  "logs": {
+    "solution-build-on840": {
+      "retainedTaskPath": "/tmp/current-mcpcli-builds840-solution-build.log",
+      "sha256": "25ec163c38e46751e11e9ad657abeb7dbf9700a7f125124db42a2f9097c7063b"
+    },
+    "native-party-host-on840": {
+      "retainedTaskPath": "/tmp/current-mcpcli-builds840-native-parties-build.log",
+      "sha256": "bd18e45d79abe94c5ea2d0bc8979bf33114da7366181b27d1afda289ec55dfd4"
+    },
+    "native-tenant-host-on840": {
+      "retainedTaskPath": "/tmp/current-mcpcli-builds840-native-tenants-build.log",
+      "sha256": "5d3071ff7dc379e6473ea8acc2bfdb996dabcae64bd11361f601d909cc0386bd"
+    },
+    "native-party-adapter-on840": {
+      "retainedTaskPath": "/tmp/current-mcpcli-builds840-native-adapter-build.log",
+      "sha256": "89cb0bb766db9f3b821700fa62df1a953812e0f25966e0ad3b798aaa7c75428a"
+    },
+    "dependency-and-gateway-on840": {
+      "retainedTaskPath": "/tmp/current-mcpcli-builds840-focused-checks.log",
+      "sha256": "04287af47ea77e0c7649fc996d3eeac9a268676a3b9a081f3a4a0013495c55e1"
+    },
+    "topology-python": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-topology-tests-final-v2.log",
+      "sha256": "d0a96f3db2fe572791dede87289c40e7ac1530bc2761be39befceacd40436f1e"
+    },
+    "vector-python": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-vector-tests-final.log",
+      "sha256": "4828916665365c844b46c0b43c25fb2a33835de6cb251929b8a601a0dbd10dfa"
+    },
+    "release-automation-python": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-release-automation-tests.log",
+      "sha256": "8681c7c61a6bc6b7939eef42f20d5492e0141068b1fbff14636c2d0456cb4d16"
+    },
+    "full-manifest": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-manifest-tests-final.log",
+      "sha256": "0658dd3778a4cc427ad92c6638031d5a84c96c421a6ea14604ee99fb950cf663"
+    },
+    "fixture-lifecycle-controls": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-lifecycle-controls.log",
+      "sha256": "4f3eb65385673f4456667a5a86e0cbb416db3ec33a67ca6589925a41107f1db1"
+    },
+    "cli-after-hosting11-fix": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-Cli-tests-v2.log",
+      "sha256": "c6c2659e4fbaf1f80648a0d012301571826a2add71b3b555a4fda5b8b9bbda79"
+    },
+    "mcp": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-Mcp-tests.log",
+      "sha256": "000e2e5e540a0ed35248c1f2ced00ec4867348b12ea3ff2b5138232a1a4a3c6e"
+    },
+    "core": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-Core-tests.log",
+      "sha256": "955de41685c26e3eb8bfdaedd355c58e8d61bbbb32aadf038553af592deee24f"
+    },
+    "abstractions": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-Abstractions-tests.log",
+      "sha256": "9d592ec2ad3fdcd7f9233dbbe980288d976c39f86ed3586fd3f2129fa23e3956"
+    },
+    "analyzers": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-Analyzers-tests.log",
+      "sha256": "bba921982af8d9521421536d31d9f4b391a28cd0e98ac6645a3332fc481160ae"
+    },
+    "current-cli-mcp-replay": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-vectors.log",
+      "sha256": "213bae408797c9c1add079d14f742d34e0a841ea042459d285463f00ef449451"
+    },
+    "current-manifest-runtime-guard": {
+      "retainedTaskPath": "/tmp/current-mcpcli-managed-runtime-manifest-final.log",
+      "sha256": "10d91190bd5cda0dad5f0cea0e8a3fd7fd437da95e36994a6a1c969bffcfc586"
+    },
+    "managed-runtime-guard-mutant": {
+      "retainedTaskPath": "/tmp/current-mcpcli-managed-runtime-guard-mutant-result.json",
+      "sha256": "97c3c8a972a22bbdb2778b8ffd3683696d8079b636edaa32fa7e1dc511fce3a4"
+    },
+    "managed-runtime-inventory-mutant": {
+      "retainedTaskPath": "/tmp/current-mcpcli-managed-runtime-inventory-mutant-result.json",
+      "sha256": "0e8f6b2812aee3d972aef01e57ef24c3b50032e4c4f7d0a9d341772f100c773b"
+    },
+    "source-pruning-scope-msbuild": {
+      "retainedTaskPath": "/tmp/current-mcpcli-source-pruning-scope-msbuild.log",
+      "sha256": "c8d2a709a76d27bc3bd6e87ec8b2e3c4654a3362279955d9d80798d70363abea"
+    },
+    "complete-runtime-managed-python": {
+      "retainedTaskPath": "/tmp/current-mcpcli-current-runtime1191-net11-tests-restored.log",
+      "sha256": "471995b6648f46ca1ce80f5922293c2fb106eab7dda36f212a16d9510412bd54"
+    },
+    "source-pruning-only-source-controls": {
+      "retainedTaskPath": "/tmp/current-mcpcli-source-pruning-final-source-controls.log",
+      "sha256": "fd1b78604f9116c13536bd5ae3cb7f5e98e228ae1a444b40e97f52c951f40a86"
+    },
+    "source-pruning-scope-mutant": {
+      "retainedTaskPath": "/tmp/current-mcpcli-source-pruning-scope-mutant-result.json",
+      "sha256": "ca89a069fd9fd4cbb57fbdc34023d9128fca04633abaa824639356d2bc42c8c0"
+    },
+    "first-qualified-pin-restore": {
+      "retainedTaskPath": "/tmp/current-mcpcli-final-first-pin-restore.log",
+      "sha256": "40d104602671164ab3958225da3e1c8cabd55f0251d6df6bc911d9d5a24f44ce"
+    },
+    "first-qualified-pin-build": {
+      "retainedTaskPath": "/tmp/current-mcpcli-final-first-pin-build.log",
+      "sha256": "ae1136f0cd05cf3fc4feedf958fcb4d6d4e2a3bca7e87c4d6b28231865153bd2"
+    },
+    "first-qualified-pin-manifest": {
+      "retainedTaskPath": "/tmp/current-mcpcli-final-first-pin-manifest.log",
+      "sha256": "26dd52ee2f18638c9eed67564874e46238e63535f180555ff68ce7ac6ed8b935"
+    },
+    "first-qualified-producer-negatives": {
+      "retainedTaskPath": "/tmp/current-mcpcli-final-producer-identity-negative-controls.log",
+      "sha256": "1f7a280c6c8480158be32be6e946ace5e755e262da2231f7b4502f754a89a672"
+    }
+  },
+  "detectedMutants": [
+    {
+      "mutant": "historical-vector-drift",
+      "detected": true,
+      "exitCode": 1,
+      "log": "/tmp/current-mcpcli-mutant-historical-vector-drift.log"
+    },
+    {
+      "mutant": "current-query-retarget",
+      "detected": true,
+      "exitCode": 1,
+      "log": "/tmp/current-mcpcli-mutant-current-query-retarget.log"
+    },
+    {
+      "mutant": "unsupported-cohort-admission",
+      "detected": true,
+      "exitCode": 1,
+      "log": "/tmp/current-mcpcli-mutant-unsupported-cohort-admission.log"
+    }
+  ],
+  "checksAfterInitialCohort": {
+    "currentRuntimeNativePythonControlsBeforeManagedChange": 242,
+    "trustedManagedRuntimeGuardTests": 42,
+    "compiledGuardRemovalMutantDetected": true,
+    "managedInventoryGuardRemovalMutantDetected": true,
+    "sourcePruningScopeRealMSBuildProjects": 7,
+    "currentRuntimeManagedPythonSuite": 244,
+    "currentRuntimeManagedPythonSuiteNote": "Complete suite after runtime11 alignment, before the subsequent exact source-pruning-only scope change; targeted changed-source controls and actual fresh native lane qualify that later change.",
+    "sourcePruningOnlyFocusedTests": 22,
+    "sourcePruningScopeRemovalMutantDetected": true
+  },
+  "candidateNativeQualification": {
+    "sourceSnapshot": "61d49138f568c4dddd640dce20837094caa3730c",
+    "proof": "native-61d4913-runtime1191-net11/proof.json",
+    "proofSha256": "2cf49e623456f33922155c58302570ed75089e868fc874edf7b16a5020b5f5df",
+    "fullLiveAccepted": true,
+    "vectors": 21,
+    "independentCases": 2,
+    "distinctIsolatedRuntimes": 23,
+    "failures": 0,
+    "skips": 0,
+    "exactInputs": "Builds840/Platformd421; this does not grant final-pin hostedCI, release or image authority."
+  },
+  "firstQualifiedPinChecks": {
+    "builds": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b",
+    "platform": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+    "platformTag": "v1.11.0",
+    "solutionBuildWarnings": 0,
+    "solutionBuildErrors": 0,
+    "manifestPassed": 370,
+    "manifestSkips": 0,
+    "producerIdentityNegativeControlsPassed": true
+  }
+}

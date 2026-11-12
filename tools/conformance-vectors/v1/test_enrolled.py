@@ -422,7 +422,7 @@ class EnrolledPreflightTests(unittest.TestCase):
     def setUp(self):
         VerifierFailureTests.setUp(self)
         self.package_id = 'Module.Contracts'
-        self.directory = self.repo / 'tools/conformance-vectors/v1/modules' / self.package_id
+        self.directory = self.repo / 'tools/conformance-vectors/v1/current/modules' / self.package_id
         self.directory.mkdir(parents=True)
         self.vector = self.directory / 'read.vector.json'
         self.vector.write_text('{"operation":"module.read"}')

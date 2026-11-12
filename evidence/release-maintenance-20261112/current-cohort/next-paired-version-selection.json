@@ -1,0 +1,8 @@
+{
+  "schema": "mcpcli-version-selection/v1",
+  "source_sha": "ba1fa6fe7bcafaf4011b05e3443f0b943da21ab1",
+  "release": true,
+  "version": "3.0.0",
+  "scope": "Version selection only; no tag, package publication or new artifact authority.",
+  "selectedBy": "Pinned scripts/select-release-version.mjs / semantic-release25.0.9"
+}

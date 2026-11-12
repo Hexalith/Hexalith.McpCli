@@ -1,0 +1,330 @@
+--- /tmp/current-mcpcli-operation-runtime-10.0.15.json	2026-11-12 04:42:52.535141738 +0100
++++ /tmp/current-mcpcli-operation-runtime-11.0.0.json	2026-11-12 04:42:52.511140720 +0100
+@@ -1647,7 +1647,8 @@
+                   "type": "string"
+                 },
+                 "payload": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 },
+                 "serializationFormat": {
+                   "type": "string"
+@@ -1722,7 +1723,8 @@
+                   "type": [
+                     "string",
+                     "null"
+-                  ]
++                  ],
++                  "contentEncoding": "base64"
+                 },
+                 "storedEventTypeName": {
+                   "type": [
+@@ -1734,7 +1736,8 @@
+                   "type": [
+                     "string",
+                     "null"
+-                  ]
++                  ],
++                  "contentEncoding": "base64"
+                 },
+                 "registryFingerprint": {
+                   "type": [
+@@ -1831,7 +1834,8 @@
+                   "type": "integer"
+                 },
+                 "storedDigest": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 },
+                 "eventContractType": {
+                   "type": "string"
+@@ -1843,16 +1847,19 @@
+                   "type": "string"
+                 },
+                 "effectivePayload": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 },
+                 "routeClaim": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 },
+                 "routeKeyId": {
+                   "type": "string"
+                 },
+                 "routeSignature": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 }
+               },
+               "required": [
+@@ -1872,7 +1879,8 @@
+             "type": [
+               "string",
+               "null"
+-            ]
++            ],
++            "contentEncoding": "base64"
+           },
+           "rebuildSourceHeadSequence": {
+             "type": [
+@@ -1925,7 +1933,7 @@
+           "state"
+         ]
+       },
+-      "Digest": "be19dbffcebbe3f528bb668031ac50f6eb8e3ec4c84a909a37c31df3b05f0289",
++      "Digest": "bf592b2c47a65e992c14225e4366ed41d25e2bd5304d15a4f561b40357f01b44",
+       "Kind": "projection",
+       "Domain": "tenants",
+       "MessageType": "tenants"
+@@ -1962,7 +1970,8 @@
+                   "type": "string"
+                 },
+                 "payload": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 },
+                 "serializationFormat": {
+                   "type": "string"
+@@ -2037,7 +2046,8 @@
+                   "type": [
+                     "string",
+                     "null"
+-                  ]
++                  ],
++                  "contentEncoding": "base64"
+                 },
+                 "storedEventTypeName": {
+                   "type": [
+@@ -2049,7 +2059,8 @@
+                   "type": [
+                     "string",
+                     "null"
+-                  ]
++                  ],
++                  "contentEncoding": "base64"
+                 },
+                 "registryFingerprint": {
+                   "type": [
+@@ -2146,7 +2157,8 @@
+                   "type": "integer"
+                 },
+                 "storedDigest": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 },
+                 "eventContractType": {
+                   "type": "string"
+@@ -2158,16 +2170,19 @@
+                   "type": "string"
+                 },
+                 "effectivePayload": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 },
+                 "routeClaim": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 },
+                 "routeKeyId": {
+                   "type": "string"
+                 },
+                 "routeSignature": {
+-                  "type": "string"
++                  "type": "string",
++                  "contentEncoding": "base64"
+                 }
+               },
+               "required": [
+@@ -2187,7 +2202,8 @@
+             "type": [
+               "string",
+               "null"
+-            ]
++            ],
++            "contentEncoding": "base64"
+           },
+           "rebuildSourceHeadSequence": {
+             "type": [
+@@ -2240,7 +2256,7 @@
+           "state"
+         ]
+       },
+-      "Digest": "f0c26597fbdfe346240de179e1afc919608f6b38478af04942b454dcdd569cd2",
++      "Digest": "7097e670c7b00654355cd47ce4cc79c9028146749920080c56f1b568c1cfd8e7",
+       "Kind": "projection",
+       "Domain": "global-administrators",
+       "MessageType": "global-administrators"
+@@ -13219,7 +13235,8 @@
+                       "type": "string"
+                     },
+                     "payload": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     },
+                     "serializationFormat": {
+                       "type": "string"
+@@ -13294,7 +13311,8 @@
+                       "type": [
+                         "string",
+                         "null"
+-                      ]
++                      ],
++                      "contentEncoding": "base64"
+                     },
+                     "storedEventTypeName": {
+                       "type": [
+@@ -13306,7 +13324,8 @@
+                       "type": [
+                         "string",
+                         "null"
+-                      ]
++                      ],
++                      "contentEncoding": "base64"
+                     },
+                     "registryFingerprint": {
+                       "type": [
+@@ -13403,7 +13422,8 @@
+                       "type": "integer"
+                     },
+                     "storedDigest": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     },
+                     "eventContractType": {
+                       "type": "string"
+@@ -13415,16 +13435,19 @@
+                       "type": "string"
+                     },
+                     "effectivePayload": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     },
+                     "routeClaim": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     },
+                     "routeKeyId": {
+                       "type": "string"
+                     },
+                     "routeSignature": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     }
+                   },
+                   "required": [
+@@ -13444,7 +13467,8 @@
+                 "type": [
+                   "string",
+                   "null"
+-                ]
++                ],
++                "contentEncoding": "base64"
+               },
+               "rebuildSourceHeadSequence": {
+                 "type": [
+@@ -13555,7 +13579,7 @@
+           "outcomes"
+         ]
+       },
+-      "Digest": "1b4aff959e3fa0969f66c019bb3157090199514e1734d2e82d74d06e4afc5145",
++      "Digest": "c7ece0f7119e2d4f66dc86b1b64ee2f9e7fbb8a491a36913ad07e1c7e9827fb0",
+       "Kind": "projection",
+       "Domain": "party",
+       "MessageType": "party-detail"
+@@ -13595,7 +13619,8 @@
+                       "type": "string"
+                     },
+                     "payload": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     },
+                     "serializationFormat": {
+                       "type": "string"
+@@ -13670,7 +13695,8 @@
+                       "type": [
+                         "string",
+                         "null"
+-                      ]
++                      ],
++                      "contentEncoding": "base64"
+                     },
+                     "storedEventTypeName": {
+                       "type": [
+@@ -13682,7 +13708,8 @@
+                       "type": [
+                         "string",
+                         "null"
+-                      ]
++                      ],
++                      "contentEncoding": "base64"
+                     },
+                     "registryFingerprint": {
+                       "type": [
+@@ -13779,7 +13806,8 @@
+                       "type": "integer"
+                     },
+                     "storedDigest": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     },
+                     "eventContractType": {
+                       "type": "string"
+@@ -13791,16 +13819,19 @@
+                       "type": "string"
+                     },
+                     "effectivePayload": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     },
+                     "routeClaim": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     },
+                     "routeKeyId": {
+                       "type": "string"
+                     },
+                     "routeSignature": {
+-                      "type": "string"
++                      "type": "string",
++                      "contentEncoding": "base64"
+                     }
+                   },
+                   "required": [
+@@ -13820,7 +13851,8 @@
+                 "type": [
+                   "string",
+                   "null"
+-                ]
++                ],
++                "contentEncoding": "base64"
+               },
+               "rebuildSourceHeadSequence": {
+                 "type": [
+@@ -13931,7 +13963,7 @@
+           "outcomes"
+         ]
+       },
+-      "Digest": "ff50c8b64a0aaec7d96b77367d1d62b4f5bb1e933c043345e661a9a85430bd8c",
++      "Digest": "f2faadc207a170508f51cde3b52d625773ce4e832995f383d49c6e268b785a01",
+       "Kind": "projection",
+       "Domain": "party",
+       "MessageType": "party-index"

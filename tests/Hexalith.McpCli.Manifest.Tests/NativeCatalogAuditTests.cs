@@ -83,12 +83,12 @@ public sealed class NativeCatalogAuditTests : IDisposable
     {
         string root = DependencyPolicyTests.FindRepositoryRoot();
         using JsonDocument restored = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(root, "tests", "Hexalith.McpCli.AppHost", "obj", "project.assets.json")));
-        const string identity = "Hexalith.EventStore.Client/4.1.0";
+        const string identity = "Hexalith.EventStore.Client/4.2.0";
         JsonElement library = restored.RootElement.GetProperty("libraries").GetProperty(identity);
         string cache = restored.RootElement.GetProperty("packageFolders").EnumerateObject().Select(item => item.Name)
-            .Single(folder => File.Exists(Path.Combine(folder, "hexalith.eventstore.client", "4.1.0", "hexalith.eventstore.client.4.1.0.nupkg")));
-        string archive = Path.Combine(cache, "hexalith.eventstore.client", "4.1.0", "hexalith.eventstore.client.4.1.0.nupkg");
-        using JsonDocument selection = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(root, "tools", "live-topology", "native-runtime.json")));
+            .Single(folder => File.Exists(Path.Combine(folder, "hexalith.eventstore.client", "4.2.0", "hexalith.eventstore.client.4.2.0.nupkg")));
+        string archive = Path.Combine(cache, "hexalith.eventstore.client", "4.2.0", "hexalith.eventstore.client.4.2.0.nupkg");
+        using JsonDocument selection = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(root, "tools", "live-topology", "native-runtime-current.json")));
         Assert.Equal(selection.RootElement.GetProperty("packages").EnumerateArray().Single(item => item.GetProperty("id").GetString() == "Hexalith.EventStore.Client")
             .GetProperty("sha256").GetString(), Digest(archive));
         string archiveHash = Convert.ToBase64String(SHA512.HashData(File.ReadAllBytes(archive)));

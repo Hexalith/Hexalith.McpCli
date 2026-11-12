@@ -19,9 +19,9 @@ from validate import VectorError, _load_json
 
 def expected_operations() -> list[str]:
     """Independently require every approved vector that has a companion plan, never a returned subset."""
-    plans = ROOT / 'tools/live-topology/plans'
+    plans = ROOT / 'tools/live-topology/plans-current'
     operations = [operation for operation in (_load_json(path)['operation'] for path in
-                  (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json'))
+                  (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json'))
                   if (plans / (operation + '.json')).is_file()]
     if not operations or len(operations) != len(set(operations)):
         raise VectorError('Approved live vector coverage is empty or duplicated.')

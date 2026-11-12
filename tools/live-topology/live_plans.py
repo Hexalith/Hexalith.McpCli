@@ -363,7 +363,7 @@ def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | N
     check_dependencies(assets, _load_json(repo / 'tools/dependency-policy.json'))
     check_adapter_dependencies(host, assets)
     selections, catalog, modules, approved_operations = [], {}, set(), set()
-    plans_directory = repo / 'tools/live-topology/plans'
+    plans_directory = repo / 'tools/live-topology/plans-current'
     plans = plan_operations(plans_directory)
     with tempfile.TemporaryDirectory(prefix='mcpcli-live-preflight-') as home:
         head = HeadProcess(host, home, 30)
@@ -372,7 +372,7 @@ def preflight(host: Path, output: Path, repo: Path = ROOT, *, operation: str | N
         if {entry['packageId'] for entry in json.loads(manifest.stdout)} != set(packages):
             raise VectorError('Adapter manifest differs from production enrollment.')
         for package in packages:
-            directory = approval_directory(repo / 'tools/conformance-vectors/v1/modules', package)
+            directory = approval_directory(repo / 'tools/conformance-vectors/v1/current/modules', package)
             receipt_path = freeze_input(directory / 'approval.json', output / 'inputs' / package / 'approval.json')
             receipt = _load_json(receipt_path)
             receipt_reports: list[str] = []

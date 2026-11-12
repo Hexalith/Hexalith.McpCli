@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.remove-user-from-tenant",
+  "vectorSha256": "7bd3c0f1f161ed0703a3a737bea9bf8bdd49cd032bc52b75d65147f9231c343a",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-removal"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Removal"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/1"
+    },
+    {
+      "label": "persisted-prerequisites-1",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-user-3@example.com",
+              "role": "TenantReader"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-removal"
+        },
+        "envelope": {
+          "tenant": "vector-removal"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "arrayLength",
+            "value": 0
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

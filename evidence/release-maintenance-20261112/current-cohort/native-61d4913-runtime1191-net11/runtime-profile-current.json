@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "profile": "current-sdk42-aspire1365-dapr1191",
+  "tools": {
+    "aspire": {
+      "version": "13.6.5",
+      "url": "https://github.com/microsoft/aspire/releases/download/v13.6.5/aspire-cli-linux-x64-13.6.5.tar.gz",
+      "archiveSha256": "6e22bd4daaa62d09320638246e57bfaf56ed147a3a87cdd5eafec277726ca978",
+      "binarySha256": "7a9d1c1e264c645d7d78e2891ef53a865fa51d96adf2d827fed1e9cc3cb1e253"
+    },
+    "dapr": {
+      "version": "1.19.1",
+      "url": "https://github.com/dapr/cli/releases/download/v1.19.1/dapr_linux_amd64.tar.gz",
+      "archiveSha256": "6e9a339d261e430e5914909cc4443572573c197c174c3e14504c34116831de3b",
+      "binarySha256": "b651f5fcfe0b261ca6b26058dde31927efc8e17b12267d6743bdbeddca09bafd"
+    },
+    "daprd": {
+      "version": "1.19.1",
+      "url": "https://github.com/dapr/dapr/releases/download/v1.19.1/daprd_linux_amd64.tar.gz",
+      "archiveSha256": "93217800d5072cf1735ed89ec8a9cdeedfb9d235895fb9e0d864088bc5d9466c",
+      "binarySha256": "b1ece5da76674bf6e15126aeb019fa58e444b5b8edf4d0ac59e32df895ae8fd2"
+    }
+  },
+  "binaries": {
+    "file": "binaries-current.json",
+    "sha256": "c8c5f621ff4a5d2afc80daf1158c7455fdaccfad44d96d84ecb9212128d8f20a"
+  },
+  "managedTestHosts": {
+    "runtime": "11.0.0",
+    "targetFramework": "net10.0",
+    "projects": [
+      "Hexalith.McpCli.AppHost",
+      "Hexalith.McpCli.Integration.Tests"
+    ],
+    "resourceLaunch": {
+      "rollForward": "LatestMajor",
+      "highestInstalledRuntime": "11.0.0",
+      "resources": [
+        "eventstore",
+        "tenants",
+        "parties"
+      ]
+    }
+  }
+}

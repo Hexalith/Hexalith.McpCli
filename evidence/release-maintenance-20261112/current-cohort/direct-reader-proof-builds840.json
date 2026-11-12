@@ -1,0 +1,13 @@
+{
+  "scope": "Real catalog generation only with the newer four-family catalog; no running service, image authority or native runtime acceptance.",
+  "runtimeAcceptance": false,
+  "imageAuthority": false,
+  "platformSource": "d4217aec78005c0a2f18ce0efb1ce4c4e8864b6d",
+  "buildsSource": "840ac7bb69c326e0aab5c4034676c5b5fd0eaf32",
+  "onlineAuditedPackageCount": 224,
+  "files": {
+    "direct-reader840-receipt.json": "30bc9a4515002f5043d52a62f8bd82b9a752ef0dddd486b6f64ff3c1da0a80a6",
+    "direct-reader840-audit.json": "2e89e556b8fde33beca91c5cc2b74bc34e8b6e942674c0a698fd4ef498b9926d",
+    "direct-reader840-preparation.json": "2227883136e45019ecb61f088a3eb1fcf54b8c511235d2a9ab9c699f1d220130"
+  }
+}

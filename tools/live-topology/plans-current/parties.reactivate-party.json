@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "operation": "parties.reactivate-party",
+  "vectorSha256": "2cb8a221a6ee7ff70af79f1e3a3aa71aa2f1dfd4e841337feb1ff82adb5bea42",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        },
+        "assertions": [
+          {
+            "path": "/document/id",
+            "operator": "equals",
+            "value": "party-story49"
+          },
+          {
+            "path": "/document/isActive",
+            "operator": "equals",
+            "value": true
+          },
+          {
+            "path": "/document/personDetails/firstName",
+            "operator": "equals",
+            "value": "Ada"
+          }
+        ]
+      }
+    },
+    {
+      "step": "/prerequisites/1"
+    },
+    {
+      "label": "persisted-prerequisites-1",
+      "query": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        },
+        "assertions": [
+          {
+            "path": "/document/id",
+            "operator": "equals",
+            "value": "party-story49"
+          },
+          {
+            "path": "/document/isActive",
+            "operator": "equals",
+            "value": false
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "parties.get-party",
+        "kind": "query",
+        "payload": {
+          "PartyId": "party-story49"
+        },
+        "envelope": {
+          "tenant": "tenant-a"
+        },
+        "assertions": [
+          {
+            "path": "/document/id",
+            "operator": "equals",
+            "value": "party-story49"
+          },
+          {
+            "path": "/document/isActive",
+            "operator": "equals",
+            "value": true
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

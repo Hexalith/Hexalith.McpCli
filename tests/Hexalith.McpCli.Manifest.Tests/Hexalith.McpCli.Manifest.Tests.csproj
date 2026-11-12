@@ -1,5 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/IsolatedTopologyLifecycle.cs" Link="IsolatedTopologyLifecycle.cs" />
+    <Compile Include="../Hexalith.McpCli.Integration.Tests/AspireResource.cs" Link="AspireResource.cs" />
+    <PackageReference Include="Aspire.Hosting.Testing" />
+    <PackageReference Include="Hexalith.EventStore.Testing.Integration" />
     <Compile Include="../Hexalith.McpCli.AppHost/NativeCatalogAudit.cs" Link="NativeCatalogAudit.cs" />
     <Compile Include="../Hexalith.McpCli.AppHost/NativeCatalogTool.cs" Link="NativeCatalogTool.cs" />
     <Compile Include="../Hexalith.McpCli.AppHost/NativeCatalogCleanup.cs" Link="NativeCatalogCleanup.cs" />

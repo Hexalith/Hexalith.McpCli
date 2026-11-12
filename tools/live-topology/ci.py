@@ -31,15 +31,81 @@ from evidence_redaction import sanitized, sanitized_xml
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
 TESTS = ROOT / PROJECT / 'bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
 MODULES = native_cohort.MODULES
-# The legacy Testing.Integration harness remains independent of these launched SDK hosts.
+# Published Testing.Integration remains independent of these test-owned launched SDK hosts.
 EVENTSTORE_COHORT = native_cohort.COHORT
-NATIVE_SELECTION = ROOT / 'tools/live-topology/native-runtime.json'
+NATIVE_SELECTION = ROOT / 'tools/live-topology/native-runtime-current.json'
 PACKAGE_GATEWAY = 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj'
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
 NAMESPACES = {'user', 'pid', 'net', 'mnt'}
 OWNER_FILE = '.mcpcli-ci-owner'
-ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v13.6.1/aspire-cli-linux-x64-13.6.1.tar.gz'
-ASPIRE_CLI_SHA256 = 'f5498a1b30f894186a805c08798d9ca4f112dfc3b5f24ab0acef3f8aa5d009b8'
+ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v13.6.5/aspire-cli-linux-x64-13.6.5.tar.gz'
+ASPIRE_CLI_SHA256 = '6e22bd4daaa62d09320638246e57bfaf56ed147a3a87cdd5eafec277726ca978'
+
+
+def current_runtime_profile() -> dict:
+    """Load only the finite current toolchain and its exact pinned native binary map."""
+    path = ROOT / 'tools/live-topology/runtime-profile-current.json'
+    value = json.loads(path.read_text())
+    expected = {'aspire': '13.6.5', 'dapr': '1.19.1', 'daprd': '1.19.1'}
+    if value.get('schemaVersion') != 1 or value.get('profile') != 'current-sdk42-aspire1365-dapr1191' \
+            or set(value.get('tools', {})) != set(expected):
+        raise ValueError('The exact finite current runtime profile is required.')
+    if value.get('managedTestHosts') != {'runtime': '11.0.0', 'targetFramework': 'net10.0',
+            'projects': ['Hexalith.McpCli.AppHost', 'Hexalith.McpCli.Integration.Tests'],
+            'resourceLaunch': {'rollForward': 'LatestMajor', 'highestInstalledRuntime': '11.0.0',
+                               'resources': ['eventstore', 'tenants', 'parties']}}:
+        raise ValueError('The exact current owned managed test-host runtime is required.')
+    for name, version in expected.items():
+        item = value['tools'][name]
+        if item.get('version') != version or any(not re.fullmatch('[0-9a-f]{64}', item.get(key, ''))
+                for key in ('archiveSha256', 'binarySha256')):
+            raise ValueError('Current runtime tool identity or checksum is invalid: ' + name)
+    if value['tools']['aspire'].get('url') != ASPIRE_CLI_URL or value['tools']['aspire']['archiveSha256'] != ASPIRE_CLI_SHA256:
+        raise ValueError('Current Aspire archive differs from its pinned official release.')
+    binaries = value.get('binaries', {})
+    if binaries.get('file') != 'binaries-current.json' or binaries.get('sha256') != hashlib.sha256(
+            (path.parent / 'binaries-current.json').read_bytes()).hexdigest():
+        raise ValueError('The current runtime binary manifest changed or is unbound.')
+    return value
+
+
+def current_managed_runtime_selection(output: str) -> dict:
+    """LatestMajor is finite here: refuse any missing or newer selected shared framework."""
+    names = {'Microsoft.NETCore.App', 'Microsoft.AspNetCore.App'}
+    found = {name: [] for name in names}
+    for line in output.splitlines():
+        parts = line.split()
+        if parts and parts[0] in names:
+            if len(parts) < 3 or not re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+', parts[1]):
+                raise ValueError('Current native resources require a stable, measured managed runtime inventory.')
+            found[parts[0]].append(tuple(map(int, parts[1].split('.'))))
+    if any(not versions or max(versions) != (11, 0, 0) for versions in found.values()):
+        raise ValueError('Current native resource roll-forward requires highest installed Core and ASP.NET runtime 11.0.0.')
+    return {name: '11.0.0' for name in sorted(names)}
+
+
+def verify_current_tool_bytes(profile: dict, paths: dict) -> None:
+    """A version string alone cannot authenticate an installed executable."""
+    if set(paths) != {'aspire', 'dapr', 'daprd'}:
+        raise ValueError('The complete exact current executable set is required.')
+    for name, path in paths.items():
+        if hashlib.sha256(Path(path).read_bytes()).hexdigest() != profile['tools'][name]['binarySha256']:
+            raise ValueError('Current runtime executable hash mismatch: ' + name)
+
+
+def require_current_runtime_profile(prepared: dict) -> dict:
+    profile = current_runtime_profile()
+    path = ROOT / 'tools/live-topology/runtime-profile-current.json'
+    if prepared.get('runtimeProfile') != {'sha256': hashlib.sha256(path.read_bytes()).hexdigest(),
+                                         'binariesSha256': profile['binaries']['sha256']}:
+        raise ValueError('The prepared current runtime profile changed or is missing.')
+    managed = current_managed_runtime_selection(subprocess.check_output(
+        [prepared['tools']['executables']['dotnet']['path'], '--list-runtimes'], timeout=30, text=True))
+    if prepared['tools'].get('managedResourceRuntimes') != managed:
+        raise ValueError('The prepared managed resource runtime selection changed or is missing.')
+    verify_current_tool_bytes(profile, {name: prepared['tools']['executables'][name]['path'] for name in ('aspire', 'dapr')}
+                              | {'daprd': str(Path.home() / '.dapr/bin/daprd')})
+    return profile
 
 
 def save(path: Path, value, *, environment=None) -> None:
@@ -197,12 +263,12 @@ def gateway_package_provenance() -> dict:
     adapter = restored_cohort(ROOT / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                               'Hexalith.EventStore.DomainService', deployed_required=True)
     composition = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj',
-                                                      selection, 'Hexalith.Tenants.Aspire/7.0.5')
+                                                      selection, 'Hexalith.Tenants.Aspire/7.0.7')
     client = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
-                                                 selection, 'Hexalith.Tenants.Contracts/7.0.5')
+                                                 selection, 'Hexalith.Tenants.Contracts/7.0.7')
     source = ROOT / 'references/Hexalith.EventStore'
     host = (ROOT / PACKAGE_GATEWAY).parent
-    manifest = host / 'Configuration/provenance.json'
+    manifest = host / 'Configuration/provenance-current.json'
     configuration_source = json.loads(manifest.read_text())
     commit = configuration_source.get('sourceCommit', '')
     expected_files = {
@@ -244,6 +310,7 @@ def gateway_package_provenance() -> dict:
 
 def require_source_catalog(prepared: dict) -> Path:
     """Recheck the pinned source catalog and exact private override before any child rebuild."""
+    require_current_runtime_profile(prepared)
     native_cohort.reject_nested_catalogs(ROOT)
     private = Path(prepared['privateDirectory'])
     catalog = ROOT / 'references/Hexalith.Builds/Props/Directory.Packages.props'
@@ -400,9 +467,11 @@ def prepare(evidence: Path) -> None:
         # This command runs at ROOT, so the SDK resolver enforces global.json,
         # including its explicitly permitted patch roll-forward policy.
         tools['dotnet'] = bounded(['dotnet', '--version'], 30, evidence / 'dotnet-version')
+        tools['managedResourceRuntimes'] = current_managed_runtime_selection(
+            bounded(['dotnet', '--list-runtimes'], 30, evidence / 'dotnet-shared-runtimes'))
         tools['dapr'] = bounded(['dapr', '--version'], 30, evidence / 'dapr-version')
-        if not re.search(r'CLI version: 1\.18\.2\s', tools['dapr'] + '\n') or not re.search(r'Runtime version: 1\.18\.7\s', tools['dapr'] + '\n'):
-            raise RuntimeError('Dapr CLI 1.18.2 and initialized runtime 1.18.7 are required; initialize Dapr in the reusable workflow.')
+        if not re.search(r'CLI version: 1\.19\.1\s', tools['dapr'] + '\n') or not re.search(r'Runtime version: 1\.19\.1\s', tools['dapr'] + '\n'):
+            raise RuntimeError('Dapr CLI 1.19.1 and initialized runtime 1.19.1 are required; initialize Dapr in the reusable workflow.')
         daprd = Path.home() / '.dapr/bin/daprd'
         if not daprd.is_file():
             raise RuntimeError(f'Missing initialized Dapr runtime: {daprd}')
@@ -437,12 +506,16 @@ def prepare(evidence: Path) -> None:
                 release.extractall(installed_cli, filter='data')
             os.environ['PATH'] = str(installed_cli) + os.pathsep + os.environ['PATH']
         tools['aspire'] = bounded(['aspire', '--version'], 30, evidence / 'aspire-version')
-        if tools['aspire'].split('+')[0] != '13.6.1':
-            raise RuntimeError('Aspire CLI 13.6.1 is required.')
+        if tools['aspire'].split('+')[0] != '13.6.5':
+            raise RuntimeError('Aspire CLI 13.6.5 is required.')
         tools['hostPython'] = sys.version
         tools['executables'] = {name: {'path': shutil.which(name), 'sha256': hashlib.sha256(Path(shutil.which(name)).read_bytes()).hexdigest()}
                                 for name in ('aspire', 'dapr', 'dotnet')}
         tools['daprdSha256'] = hashlib.sha256(daprd.read_bytes()).hexdigest()
+        profile = current_runtime_profile()
+        verify_current_tool_bytes(profile, {name: tools['executables'][name]['path'] for name in ('aspire', 'dapr')} | {'daprd': str(daprd)})
+        receipt['runtimeProfile'] = {'sha256': hashlib.sha256((ROOT / 'tools/live-topology/runtime-profile-current.json').read_bytes()).hexdigest(),
+                                     'binariesSha256': profile['binaries']['sha256']}
         bundle = Path.home() / '.aspire'
         fresh_bundle = private / 'qualified-aspire'
         bounded(['aspire', 'setup', '--install-path', str(fresh_bundle), '--force', '--non-interactive'],
@@ -495,8 +568,8 @@ def prepare(evidence: Path) -> None:
         if not catalog.is_file() or redis != ['3.4.31']:
             raise ValueError('The qualified source catalog requires the exact root Redis 3.4.31 override.')
         mcpcli = [item.text for item in own_versions.iter('HexalithMcpCliVersion')]
-        if mcpcli != ['2.0.0']:
-            raise ValueError('The qualified source catalog requires the exact root McpCli 2.0.0 pin.')
+        if mcpcli != ['2.0.1']:
+            raise ValueError('The qualified source catalog requires the exact root McpCli 2.0.1 pin.')
         overlay = private / 'source-runtime-packages.props'
         project_xml = ET.Element('Project')
         ET.SubElement(project_xml, 'Import', {'Project': str(catalog)})
@@ -517,6 +590,18 @@ def prepare(evidence: Path) -> None:
         # compile against that same version, including later SDK/Aspire rebuilds.
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
                       {'Update': 'Hexalith.McpCli.Abstractions', 'Version': mcpcli[0]})
+        # The published Parties Web project excludes this package for its old generator
+        # workaround. The current catalog requires the actual 11.x reference consistently
+        # across its projects instead of silently resolving the shared-framework 10.x image.
+        ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageReference',
+                      {'Update': 'Microsoft.Extensions.Logging.Abstractions', 'ExcludeAssets': ''})
+        # Only these selected net10 source hosts need the legacy pruning workaround.
+        # Applying it to the ordinary CLI changes the authenticated production closure.
+        pruning_owners = ('Hexalith.McpCli.EventStoreGateway.TestHost', 'Hexalith.Tenants',
+                          'Hexalith.Parties', 'Hexalith.Parties.EventStoreExtensions')
+        pruning_condition = ' Or '.join("'$(MSBuildProjectName)' == '" + name + "'" for name in pruning_owners)
+        ET.SubElement(ET.SubElement(overrides_xml, 'PropertyGroup', {'Condition': pruning_condition}),
+                      'RestoreEnablePackagePruning').text = 'false'
         ET.ElementTree(overrides_xml).write(overrides, encoding='utf-8', xml_declaration=True)
         os.environ['CustomAfterMicrosoftCommonTargets'] = str(overrides)
         receipt['sourcePackageCatalog'] = {'buildsCommit': actual_builds,
@@ -532,15 +617,12 @@ def prepare(evidence: Path) -> None:
             working = ROOT if module == 'Hexalith.EventStore' else ROOT / 'references' / module
             # Source owners may downgrade audit warnings; this native qualification requires every warning to fail.
             properties = ['-p:NuGetAudit=true', '-p:NuGetAuditMode=all', '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true',
-                          '-p:WarningsNotAsErrors=',
+                          '-p:WarningsNotAsErrors=', '-p:RestoreEnablePackagePruning=false',
                           '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
                           '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
             properties.append('-p:HexalithMcpCliVersion=' + mcpcli[0])
             if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
                 properties.append('-p:HexalithBuildPackageVersions1=' + str(overlay))
-            if module == 'Hexalith.Parties':
-                # Preserve the separately qualified Parties source dependency selections.
-                properties += ['-p:HexalithMemoriesVersion=3.0.11', '-p:HexalithTenantsVersion=5.11.2']
             source['HexalithEventStoreVersion'] = bounded(
                 ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion', *properties],
                 30, evidence / (module + '-eventstore-version'), cwd=working)
@@ -555,7 +637,8 @@ def prepare(evidence: Path) -> None:
                         300, evidence / 'parties-adapter-build', cwd=working)
         # Rebuild the actual AppHost and tests in the same fresh public cache.
         bounded(['dotnet', 'build', PROJECT + '/Hexalith.McpCli.Integration.Tests.csproj',
-                 '--configuration', 'Release', '-warnaserror', '-m:1', '-p:NuGetAudit=true', '-p:NuGetAuditMode=all',
+                 '--configuration', 'Release', '--no-incremental', '-warnaserror', '-m:1', '-p:McpCliCurrentNativeProfile=true',
+                 '-p:NuGetAudit=true', '-p:NuGetAuditMode=all',
                  '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true', '-p:WarningsNotAsErrors='],
                 300, evidence / 'native-tests-build')
         receipt['gateway'] = gateway_package_provenance()
@@ -576,7 +659,7 @@ def prepare(evidence: Path) -> None:
         receipt['headCatalog'] = {'path': str(catalog_path.resolve()), 'sha256': hashlib.sha256(catalog_path.read_bytes()).hexdigest()}
         runtime = private / 'runtime'
         bounded([str(python), str(ROOT / 'tools/live-topology/bootstrap-runtime.py'), str(runtime)], 900, evidence / 'runtime-bootstrap')
-        binaries = json.loads((ROOT / 'tools/live-topology/binaries.json').read_text())
+        binaries = json.loads((ROOT / 'tools/live-topology/binaries-current.json').read_text())
         for row in binaries:
             path = runtime / 'bin' / Path(row['source']).name
             if hashlib.sha256(path.read_bytes()).hexdigest() != row['sha256']:
@@ -672,7 +755,7 @@ def run(evidence: Path) -> None:
         python = Path(prepared['python'])
         if not prepared_runtime.is_dir() or not python.is_file() or not TESTS.is_file():
             raise ValueError('Prepared private runtime, Python and built Release integration tests are required.')
-        for row in json.loads((ROOT / 'tools/live-topology/binaries.json').read_text()):
+        for row in json.loads((ROOT / 'tools/live-topology/binaries-current.json').read_text()):
             binary = prepared_runtime / 'bin' / Path(row['source']).name
             if hashlib.sha256(binary.read_bytes()).hexdigest() != row['sha256']:
                 raise ValueError(f'Prepared runtime binary hash mismatch: {binary.name}')
@@ -683,7 +766,7 @@ def run(evidence: Path) -> None:
         for key in list(environment):
             if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_')):
                 del environment[key]
-        environment.update(MCPCLI_ISOLATED_RUNTIME_DIR=str(runtime),
+        environment.update(McpCliCurrentNativeProfile='true', MCPCLI_ISOLATED_RUNTIME_DIR=str(runtime),
                            NUGET_PACKAGES=prepared['nugetPackages'],
                            CustomAfterMicrosoftCommonTargets=str(source_overrides),
                            UseHexalithProjectReferences='false', UseNuGetDeps='true',
@@ -740,8 +823,8 @@ def run(evidence: Path) -> None:
             lane = json.loads((vectors / 'live-lane.json').read_text())
             # The live set is every approved vector with a companion plan; a vector without one is loopback-only.
             expected = sorted(operation for operation in (json.loads(path.read_text())['operation'] for path in
-                              (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json'))
-                              if (ROOT / 'tools/live-topology/plans' / (operation + '.json')).is_file())
+                              (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json'))
+                              if (ROOT / 'tools/live-topology/plans-current' / (operation + '.json')).is_file())
             outcomes = lane.get('vectors', [])
             if not expected or len(set(expected)) != len(expected) or lane.get('coverage') != expected \
                     or lane.get('result') != 'passed' or lane.get('fullLiveAccepted') is not True \

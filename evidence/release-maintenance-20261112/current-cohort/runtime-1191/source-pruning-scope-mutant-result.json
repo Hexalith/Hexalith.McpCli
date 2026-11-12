@@ -1,0 +1,5 @@
+{
+  "testExit": 1,
+  "detected": true,
+  "scope": "Removing exact owner condition makes CLI/ConformanceHost/AppHost lose normal package pruning; actual MSBuild control detects it."
+}

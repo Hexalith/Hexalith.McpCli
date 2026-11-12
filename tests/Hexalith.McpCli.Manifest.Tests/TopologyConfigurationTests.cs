@@ -31,6 +31,25 @@ public sealed class TopologyConfigurationTests : IDisposable
         }
     }
 
+    /// <summary>A shared-runtime JSON image is admitted only for the finite current runtime.</summary>
+    [Fact]
+    public void CurrentManagedRuntimeRequiresTrustedJsonIdentity()
+    {
+        string runtime = Path.Combine(_root, "shared", "Microsoft.NETCore.App", "11.0.0");
+        string core = Path.Combine(runtime, "System.Private.CoreLib.dll");
+        string json = Path.Combine(runtime, "System.Text.Json.dll");
+        TopologyConfiguration.ValidateCurrentManagedRuntime(new Version(11, 0, 0), new Version(11, 0, 0, 0), core, json);
+        Assert.Equal("The current native fixture requires the exact .NET 11.0.0 runtime and System.Text.Json 11 identity.",
+            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateCurrentManagedRuntime(
+                new Version(10, 0, 15), new Version(11, 0, 0, 0), core, json)).Message);
+        Assert.Equal("The current native fixture requires the exact .NET 11.0.0 runtime and System.Text.Json 11 identity.",
+            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateCurrentManagedRuntime(
+                new Version(11, 0, 0), new Version(10, 0, 0, 0), core, json)).Message);
+        Assert.Equal("The current native fixture requires JsonElement from the actual trusted shared runtime directory.",
+            Assert.Throws<InvalidOperationException>(() => TopologyConfiguration.ValidateCurrentManagedRuntime(
+                new Version(11, 0, 0), new Version(11, 0, 0, 0), core, Path.Combine(_root, "nuget", "System.Text.Json.dll"))).Message);
+    }
+
     /// <summary>A declared direct Git checkout is accepted.</summary>
     [Fact]
     public void DeclaredDirectRootSourcesPass() => TopologyConfiguration.ValidateWorkspace(_root);

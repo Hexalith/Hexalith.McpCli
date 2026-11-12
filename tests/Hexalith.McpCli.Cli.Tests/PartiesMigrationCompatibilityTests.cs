@@ -252,7 +252,7 @@ public sealed class PartiesMigrationCompatibilityTests
     /// <summary>Gets an empty environment so no inherited variable reaches either head.</summary>
     private static IReadOnlyDictionary<string, string?> NoEnvironment { get; } = new Dictionary<string, string?>();
 
-    /// <summary>Checks that the enrolled Parties Contracts package restored for this run is exactly 1.5.1.</summary>
+    /// <summary>Checks that the enrolled Parties Contracts package restored for this run is exactly 3.1.1.</summary>
     [Fact]
     public void CatalogUsesTheEnrolledPartiesContractsPackage()
     {
@@ -260,7 +260,7 @@ public sealed class PartiesMigrationCompatibilityTests
         using JsonDocument document = JsonDocument.Parse(File.ReadAllText(deps));
         document.RootElement.GetProperty("libraries").EnumerateObject().Select(library => library.Name)
             .Where(name => name.StartsWith("Hexalith.Parties.", StringComparison.Ordinal))
-            .ShouldBe(["Hexalith.Parties.Contracts/1.5.1"]);
+            .ShouldBe(["Hexalith.Parties.Contracts/3.1.1"]);
         PartiesAssembly().GetTypes().Select(type => type.FullName).ShouldContain("Hexalith.Parties.Contracts.Commands.DeactivateParty");
     }
 

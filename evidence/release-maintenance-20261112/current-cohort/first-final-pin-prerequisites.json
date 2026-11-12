@@ -1,0 +1,14 @@
+{
+  "scope": "Actual released firstproducer and qualifiedRootA source prerequisites; no new native/image authority by this metadata.",
+  "builds": {
+    "version": "4.48.2",
+    "source": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b"
+  },
+  "platform": {
+    "version": "1.11.0",
+    "source": "f99f51c3053fe0b0292acad461d78c833ec156cc"
+  },
+  "historicalNativeCandidate": "native-61d4913-runtime1191-net11/proof.json",
+  "currentNativeGate": "Exact final committed hostedCI still required.",
+  "workflowInputs": "Builds catalog/CI/commitlint independently pinned to actual released6ad source."
+}

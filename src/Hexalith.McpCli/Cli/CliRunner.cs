@@ -785,9 +785,18 @@ internal sealed class CliRunner
     /// <returns>Zero for a normal shutdown, or two for a serving failure.</returns>
     internal static async Task<int> RunMcpHostAsync(IHost host, CancellationToken cancellationToken)
     {
-        await host.WaitForShutdownAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            await host.WaitForShutdownAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception) when (host.Services.GetServices<IHostedService>().OfType<BackgroundService>()
+            .Any(service => service.ExecuteTask?.IsFaulted == true))
+        {
+            // Hosting 11 propagates the service fault through StopAsync. Normalize it
+            // to the same bounded diagnostic and exit used by earlier hosting versions.
+        }
 
-        // BackgroundService.StopAsync suppresses a faulted ExecuteTask, so a serving fault would otherwise exit 0.
+        // Earlier hosts can complete shutdown despite a faulted ExecuteTask.
         if (host.Services.GetServices<IHostedService>().OfType<BackgroundService>()
             .Any(service => service.ExecuteTask?.IsFaulted == true))
         {

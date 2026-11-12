@@ -27,6 +27,7 @@ var routes = new Dictionary<string, string>();
 var topicOverrides = new Dictionary<string, string>();
 try
 {
+    TopologyConfiguration.RequireCurrentManagedRuntime();
     gatewayPort = builder.Configuration.GetValue("Dapr:GatewayHttpPort", 3501);
     preflightOnly = builder.Configuration.GetValue<bool>("Topology:PreflightOnly");
     inspectComposition = builder.Configuration.GetValue<bool>("Topology:InspectComposition");
@@ -103,6 +104,14 @@ IResourceBuilder<ProjectResource> parties = builder.AddHexalithPartiesServer(top
     daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
     .WithGeneratedEventStoreAppChannelToken();
 
+// Current qualification uses one managed runtime for metadata and its isolated resource processes.
+// This changes only test launch environment; selected owner sources and net10.0 exports stay intact.
+if (string.Equals(Environment.GetEnvironmentVariable("McpCliCurrentNativeProfile"), "true", StringComparison.OrdinalIgnoreCase))
+{
+    foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
+        resource.WithEnvironment("DOTNET_ROLL_FORWARD", "LatestMajor");
+}
+
 // Tenants proves its current administrator and owner state through the real,
 // authenticated stream boundary. Private proof material exists only for this run.
 if (usePackagedGateway)
@@ -122,7 +131,7 @@ foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants,
     resource.WithEnvironment("UseHexalithProjectReferences", "false")
         .WithEnvironment("UseNuGetDeps", "true")
         .WithEnvironment("HexalithEventStoreFromSource", "false")
-        .WithEnvironment("HexalithEventStoreVersion", "4.1.0")
+        .WithEnvironment("HexalithEventStoreVersion", "4.2.0")
         .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
         .WithEnvironment("DOTNET_ENVIRONMENT", "Development")
         .WithEnvironment("Authentication__JwtBearer__Authority", string.Empty)

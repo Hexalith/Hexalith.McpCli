@@ -37,8 +37,8 @@ class LaneTests(unittest.TestCase):
     def test_expected_live_set_is_every_approved_vector_with_a_companion_plan(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            modules = root / 'tools/conformance-vectors/v1/modules/Module.Contracts'
-            plans = root / 'tools/live-topology/plans'
+            modules = root / 'tools/conformance-vectors/v1/current/modules/Module.Contracts'
+            plans = root / 'tools/live-topology/plans-current'
             modules.mkdir(parents=True)
             plans.mkdir(parents=True)
             for name in ['module.write', 'module.read', 'module.loopback-only']:

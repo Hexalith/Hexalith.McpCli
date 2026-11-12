@@ -1,0 +1,12 @@
+{
+  "parties": {
+    "operationListingUnchanged": true,
+    "retainedSha256": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475",
+    "latestSha256": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475"
+  },
+  "tenants": {
+    "operationListingUnchanged": true,
+    "retainedSha256": "330f7c3f313acfaea63b37ccf3fec3a71d371df7d7581dd5a3c70cd81dabbaa8",
+    "latestSha256": "330f7c3f313acfaea63b37ccf3fec3a71d371df7d7581dd5a3c70cd81dabbaa8"
+  }
+}

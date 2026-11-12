@@ -1,0 +1,33 @@
+{
+  "packageId": "Hexalith.Tenants.Contracts",
+  "version": "7.0.7",
+  "module": "tenants",
+  "status": "approved-published-artifact",
+  "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27",
+  "supersedesPublishedVersion": "7.0.4",
+  "vectorFilesSha256": {
+    "add-user-to-tenant.vector.json": "a79c6b764b4583f609c9177e253bceb60226e095d23e3e9cb0d2397a1903b728",
+    "change-user-role.vector.json": "a38c855cdc612cee0965c00a2cf83b80090f61c028f312b91ab1366251992388",
+    "create-tenant.vector.json": "8814c45d3b372870d3db5c43904245d1ab32339be66cbfebadfcca61722be6ce",
+    "disable-tenant.vector.json": "380179541d77cd1b717a70b8de3256b088fe23417effab5f68a4b6615a19fc13",
+    "enable-tenant.vector.json": "88ecafbc122d8382731f10d858c88350065850f35e1ea125463662ee3e330280",
+    "get-tenant-audit.vector.json": "6f5a61f4ca16df0fdbfdc67a18a387e033c7a32d452fac3cbc0a38197f5d3806",
+    "get-tenant-users.vector.json": "464711a75677c555dbdc8af43931a3d71356dc07bef9a4b77d60c3dc31407dca",
+    "get-tenant.vector.json": "6c84c702b7cd5c907e08e711baa698741c11261c52292ecaf914087e617823e9",
+    "get-user-tenants.vector.json": "48a54f9441e5825ce5115c6699076841cfd0afc94a89037fa872ddd738a5dc87",
+    "list-tenants.vector.json": "698ac184af89ff3576de2d50ab2d30837a27d734cb07ad375cf22962f91b161b",
+    "remove-tenant-configuration.vector.json": "5651ef2b9726db850c741a95383732759d1d43934f820a4117d34434b32daf15",
+    "remove-user-from-tenant.vector.json": "7bd3c0f1f161ed0703a3a737bea9bf8bdd49cd032bc52b75d65147f9231c343a",
+    "set-tenant-configuration.vector.json": "8b8253721b2129a84e4a9b17c98862289488b857366077cd0897dff461e6b9a4",
+    "update-tenant.vector.json": "d8c8ab541d5447aac8f316b351e168e629a075987e75822c1d407c155e2288d9"
+  },
+  "approvalReference": "evidence/release-maintenance-20261112/current-cohort/authorization.json",
+  "publication": "https://github.com/Hexalith/Hexalith.Tenants/releases/tag/v7.0.7",
+  "sourceCommit": "d88aef6b52d7e8a2e2d81132b1d76b7e1d1f0f35",
+  "historicalCandidate": {
+    "status": "historical-local-candidate-not-public-evidence",
+    "artifactHash": "sha512-vovnGv3V6O1JEDXX1Z3oqS3g9iGo8A42hXSxdXNAIQrEvsfI7WkhNTEe7oiLQrM1CbfXhST04oIAp9+ARxjCQA==",
+    "sourceCommit": "ed35296686451f41ee919ca132052ced3315113c",
+    "provenance": "local-committed-source-not-published"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "schemaVersion": 1,
+  "operation": "tenants.add-user-to-tenant",
+  "vectorSha256": "a79c6b764b4583f609c9177e253bceb60226e095d23e3e9cb0d2397a1903b728",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/prerequisites/0"
+    },
+    {
+      "label": "persisted-prerequisites-0",
+      "query": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-members"
+        },
+        "envelope": {
+          "tenant": "vector-members"
+        },
+        "assertions": [
+          {
+            "path": "/document/tenantId",
+            "operator": "equals",
+            "value": "vector-members"
+          },
+          {
+            "path": "/document/name",
+            "operator": "equals",
+            "value": "Vector Members"
+          },
+          {
+            "path": "/document/status",
+            "operator": "equals",
+            "value": "Active"
+          },
+          {
+            "path": "/document/description",
+            "operator": "equals",
+            "value": null
+          }
+        ]
+      }
+    },
+    {
+      "step": "/invocation"
+    },
+    {
+      "label": "persisted-invocation",
+      "query": {
+        "operation": "tenants.get-tenant-users",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-members"
+        },
+        "envelope": {
+          "tenant": "vector-members"
+        },
+        "assertions": [
+          {
+            "path": "/document/items",
+            "operator": "contains",
+            "value": {
+              "userId": "vector-user-1@example.com",
+              "role": "TenantContributor"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "step": "/postconditions/0"
+    }
+  ]
+}

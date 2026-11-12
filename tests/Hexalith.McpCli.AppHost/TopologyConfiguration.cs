@@ -10,6 +10,26 @@ namespace Hexalith.McpCli.AppHost;
 /// <summary>Validates the source and local runtime boundary before starting the test topology.</summary>
 internal static class TopologyConfiguration
 {
+    /// <summary>Requires current fixture JSON to come from the trusted .NET 11 shared runtime.</summary>
+    internal static void RequireCurrentManagedRuntime()
+    {
+        if (!string.Equals(Environment.GetEnvironmentVariable("McpCliCurrentNativeProfile"), "true", StringComparison.OrdinalIgnoreCase)) return;
+        Version jsonVersion = typeof(JsonElement).Assembly.GetName().Version!;
+        string corePath = typeof(object).Assembly.Location;
+        string jsonPath = typeof(JsonElement).Assembly.Location;
+        ValidateCurrentManagedRuntime(Environment.Version, jsonVersion, corePath, jsonPath);
+        Console.WriteLine($"Current native managed runtime: {Environment.Version}; Core: {corePath}; JsonElement: {jsonPath}");
+    }
+
+    /// <summary>Rejects a NuGet or alternate runtime JSON image before the strict child loader runs.</summary>
+    internal static void ValidateCurrentManagedRuntime(Version runtime, Version json, string corePath, string jsonPath)
+    {
+        if (runtime != new Version(11, 0, 0) || json != new Version(11, 0, 0, 0))
+            throw new InvalidOperationException("The current native fixture requires the exact .NET 11.0.0 runtime and System.Text.Json 11 identity.");
+        if (!string.Equals(Path.GetDirectoryName(Path.GetFullPath(corePath)), Path.GetDirectoryName(Path.GetFullPath(jsonPath)), StringComparison.Ordinal))
+            throw new InvalidOperationException("The current native fixture requires JsonElement from the actual trusted shared runtime directory.");
+    }
+
     /// <summary>Requires the immutable wrapper-owned empty backup before catalog or writer mutation.</summary>
     internal static string VerifyFreshBackup(string receiptPath)
     {

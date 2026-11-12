@@ -33,8 +33,8 @@ class PlanTests(unittest.TestCase):
             execution_selection(selections + [selections[0]], 'fixture.first')
 
     def setUp(self):
-        self.vector = ROOT / 'tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json'
-        self.path = ROOT / 'tools/live-topology/plans/tenants.get-tenant-users.json'
+        self.vector = ROOT / 'tools/conformance-vectors/v1/current/modules/Hexalith.Tenants.Contracts/get-tenant-users.vector.json'
+        self.path = ROOT / 'tools/live-topology/plans-current/tenants.get-tenant-users.json'
         self.plan = json.loads(self.path.read_text())
 
     def reject(self, mutate, message):
@@ -49,8 +49,8 @@ class PlanTests(unittest.TestCase):
     def test_all_21_v1_companion_plans_and_every_plan_are_valid_for_approved_vectors(self):
         # Only companion plans are counted and loaded; an approved vector without a plan is loopback-only.
         vectors = {json.loads(path.read_text())['operation']: path
-                   for path in (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json')}
-        plans = sorted((ROOT / 'tools/live-topology/plans').glob('*.json'))
+                   for path in (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json')}
+        plans = sorted((ROOT / 'tools/live-topology/plans-current').glob('*.json'))
         # The pin counts only the v1 modules' plans, so a new enrollment's plans never move it.
         v1_modules = set(json.loads((ROOT / 'tools/conformance-vectors/v1/v1-scope.json').read_text())['requiredModules'])
         self.assertEqual(21, len([plan for plan in plans if plan.name.split('.', 1)[0] in v1_modules]))
@@ -153,8 +153,8 @@ class PlanTests(unittest.TestCase):
         self.reject(mutate, 'cursor must bind a captured returned cursor')
 
     def test_time_binding_requires_a_timestamp_capture(self):
-        self.vector = ROOT / 'tools/conformance-vectors/v1/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json'
-        self.plan = json.loads((ROOT / 'tools/live-topology/plans/tenants.get-tenant-audit.json').read_text())
+        self.vector = ROOT / 'tools/conformance-vectors/v1/current/modules/Hexalith.Tenants.Contracts/get-tenant-audit.vector.json'
+        self.plan = json.loads((ROOT / 'tools/live-topology/plans-current/tenants.get-tenant-audit.json').read_text())
         action = next(i for i, item in enumerate(self.plan['actions']) if item.get('label') == 'time-upper-inclusive')
         self.reject(lambda p: p['actions'][action]['bindings'][0].update(capture='continuation'),
                     'time binding requires a timestamp capture')
@@ -229,12 +229,12 @@ class PlanTests(unittest.TestCase):
     def test_negative_party_predicates_and_complete_update_observation_are_retained(self):
         for name, fields in [('list-parties', {'Type', 'Active', 'CreatedAfter'}),
                              ('search-parties', {'Query', 'Type', 'Active'})]:
-            plan = json.loads((ROOT / 'tools/live-topology/plans' / ('parties.' + name + '.json')).read_text())
+            plan = json.loads((ROOT / 'tools/live-topology/plans-current' / ('parties.' + name + '.json')).read_text())
             negatives = [action for action in plan['actions'] if action.get('label', '').startswith('nonmatching-')]
             self.assertEqual({field.lower() for field in fields}, {action['label'].removeprefix('nonmatching-') for action in negatives})
             for action in negatives:
                 self.assertIn({'path': '/document/items', 'operator': 'arrayLength', 'value': 0}, action['query']['assertions'])
-        plan = json.loads((ROOT / 'tools/live-topology/plans/parties.update-party.json').read_text())
+        plan = json.loads((ROOT / 'tools/live-topology/plans-current/parties.update-party.json').read_text())
         observation = next(action['query'] for action in plan['actions'] if action.get('label') == 'persisted-invocation')
         expected = {'/document/personDetails/lastName': 'Lovelace', '/document/type': 'Person',
                     '/document/contactChannels/0/id': 'email-story49', '/document/contactChannels/0/type': 'Email',
@@ -243,7 +243,7 @@ class PlanTests(unittest.TestCase):
         self.assertEqual(expected, {key: actual[key] for key in expected})
 
     def test_create_party_observation_retains_complete_submitted_content(self):
-        plan = json.loads((ROOT / 'tools/live-topology/plans/parties.create-party.json').read_text())
+        plan = json.loads((ROOT / 'tools/live-topology/plans-current/parties.create-party.json').read_text())
         observation = next(action['query'] for action in plan['actions'] if action.get('label') == 'persisted-invocation')
         expected = {('/document/id', 'equals'): 'party-story49', ('/document/type', 'equals'): 'Person',
                     ('/document/isActive', 'equals'): True, ('/document/isErased', 'equals'): False,
@@ -354,7 +354,7 @@ class PlanTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as home:
             head = HeadProcess(host, home, 30)
             for name in ['parties.create-party', 'parties.list-parties', 'parties.search-parties', 'parties.update-party']:
-                plan = json.loads((ROOT / 'tools/live-topology/plans' / (name + '.json')).read_text())
+                plan = json.loads((ROOT / 'tools/live-topology/plans-current' / (name + '.json')).read_text())
                 for action in plan['actions']:
                     if 'query' in action:
                         with self.subTest(operation=name, label=action['label']):
@@ -391,7 +391,7 @@ class LiveKindCoverageTests(unittest.TestCase):
     def preflight(self, plans=None, **patches):
         import live_plans
         from unittest.mock import patch
-        real = live_plans.plan_operations(ROOT / 'tools/live-topology/plans')
+        real = live_plans.plan_operations(ROOT / 'tools/live-topology/plans-current')
         with tempfile.TemporaryDirectory() as directory, patch.object(live_plans, 'check_dependencies'), \
                 patch.object(live_plans, 'plan_operations', return_value=real if plans is None else plans(real)):
             for name, value in patches.items():
@@ -406,14 +406,14 @@ class LiveKindCoverageTests(unittest.TestCase):
         operations = sorted(item['operation'] for item in bindings)
         self.assertNotIn('parties.get-party', operations)
         self.assertEqual(sorted(json.loads(path.read_text())['operation'] for path in
-                                (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json')
+                                (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json')
                                 if path.name != 'get-party.vector.json'), operations)
         self.assertEqual([], reports)
 
     def test_missing_live_kind_fails_naming_the_module_and_kind(self):
         # Derived from the approved vectors, so a Parties amendment that adds a planned query needs no edit here.
         documents = (json.loads(path.read_text()) for path in
-                     (ROOT / 'tools/conformance-vectors/v1/modules/Hexalith.Parties.Contracts').glob('*.vector.json'))
+                     (ROOT / 'tools/conformance-vectors/v1/current/modules/Hexalith.Parties.Contracts').glob('*.vector.json'))
         queries = {document['operation'] for document in documents if document['kind'] == 'query'}
         self.assertTrue(queries)
         with self.assertRaises(VectorError) as failure:
@@ -448,7 +448,7 @@ class LiveKindCoverageTests(unittest.TestCase):
         self.enterContext(patch.object(validate, '_load_json', older_vectors))
         selections, bindings, reports = self.preflight()
         restored = {binding['packageId'].casefold(): binding['version'] for binding in bindings}
-        self.assertEqual(len(list((ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json'))), len(older))
+        self.assertEqual(len(list((ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json'))), len(older))
         self.assertEqual([f'{path}:/package/version: vector {package}@0.0.1 differs from release artifact version '
                           f'{restored[package.casefold()]}; reported, not failed' for path, package in older], reports)
         self.assertEqual(['parties.list-parties'], [item['operation'] for item in selections])

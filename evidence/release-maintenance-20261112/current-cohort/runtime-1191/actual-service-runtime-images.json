@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "measuredAtUtc": "2026-11-12T04:17:54.749501+00:00",
+  "scope": "Read-only actual current isolated service process maps; no memory contents or environments read. This component measurement does not grant full native/image acceptance.",
+  "sourceSnapshot": "61d49138f568c4dddd640dce20837094caa3730c",
+  "fullLiveAccepted": false,
+  "imageAuthority": false,
+  "resources": {
+    "parties": {
+      "processId": 1689456,
+      "selectedExecutable": "/tmp/mcpcli-current-native-scope-qualification/references/Hexalith.Parties/src/Hexalith.Parties/bin/Release/net10.0/Hexalith.Parties",
+      "startTimeTicks": "6827273",
+      "namespaces": {
+        "user": "user:[4026532485]",
+        "pid": "pid:[4026532861]",
+        "net": "net:[4026532864]",
+        "mnt": "mnt:[4026532860]"
+      },
+      "mappedRuntimeImages": {
+        "System.Private.CoreLib.dll": [
+          "/home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Private.CoreLib.dll"
+        ],
+        "System.Text.Json.dll": [
+          "/home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Text.Json.dll"
+        ]
+      },
+      "exactTrustedRuntime11": true
+    },
+    "eventstore": {
+      "processId": 1689471,
+      "selectedExecutable": "/tmp/mcpcli-current-native-scope-qualification/tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.McpCli.EventStoreGateway.TestHost",
+      "startTimeTicks": "6827286",
+      "namespaces": {
+        "user": "user:[4026532485]",
+        "pid": "pid:[4026532861]",
+        "net": "net:[4026532864]",
+        "mnt": "mnt:[4026532860]"
+      },
+      "mappedRuntimeImages": {
+        "System.Private.CoreLib.dll": [
+          "/home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Private.CoreLib.dll"
+        ],
+        "System.Text.Json.dll": [
+          "/home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Text.Json.dll"
+        ]
+      },
+      "exactTrustedRuntime11": true
+    },
+    "tenants": {
+      "processId": 1689569,
+      "selectedExecutable": "/tmp/mcpcli-current-native-scope-qualification/references/Hexalith.Tenants/src/Hexalith.Tenants/bin/Release/net10.0/Hexalith.Tenants",
+      "startTimeTicks": "6827385",
+      "namespaces": {
+        "user": "user:[4026532485]",
+        "pid": "pid:[4026532861]",
+        "net": "net:[4026532864]",
+        "mnt": "mnt:[4026532860]"
+      },
+      "mappedRuntimeImages": {
+        "System.Private.CoreLib.dll": [
+          "/home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Private.CoreLib.dll"
+        ],
+        "System.Text.Json.dll": [
+          "/home/administrator/.dotnet/shared/Microsoft.NETCore.App/11.0.0/System.Text.Json.dll"
+        ]
+      },
+      "exactTrustedRuntime11": true
+    }
+  },
+  "isolatedRunDirectory": "/tmp/mcpcli-live-ci-1jtrd55i/runtime/runs/20261112T041742Z-823f7b5e",
+  "runtimeProfileSha256": "d6853877ab323e701d83de962183602dbb592ac8d30fd75676567c77c3444f5d",
+  "nativeSelectionSha256": "57ccfce8293f920d288418cca84de490f677098808598d9e1191930305ffa995",
+  "sharedRuntimeImageSha256": {
+    "System.Private.CoreLib.dll": "44c059630500c14dff53fea4d8f9fa7b52bc4a2311787ec04d9ec631cfdf1974",
+    "System.Text.Json.dll": "404cb833bd044d4a41f067692ade2807470a27eb461f6efbc7f7e53413c340e6"
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "runtimeAcceptance": false,
+  "scope": "Primary source routing comparison. Real current native CI independently proves behavior.",
+  "sources": [
+    {
+      "repository": "Hexalith.EventStore",
+      "commit": "dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a",
+      "path": "src/Hexalith.EventStore.Contracts/Routing/RouteCatalogQuerySelectorPolicy.cs",
+      "sha256": "2aeb052f2fe3c56d729c84dcb2e0acde9afcb792893ec9957aa700b282fb259a",
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/blob/dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a/src/Hexalith.EventStore.Contracts/Routing/RouteCatalogQuerySelectorPolicy.cs"
+    },
+    {
+      "repository": "Hexalith.EventStore",
+      "commit": "aa16227bd07f0564a3026d619a5abd973e02656f",
+      "path": "src/Hexalith.EventStore.Contracts/Routing/RouteCatalogQuerySelectorPolicy.cs",
+      "sha256": "2aeb052f2fe3c56d729c84dcb2e0acde9afcb792893ec9957aa700b282fb259a",
+      "url": "https://github.com/Hexalith/Hexalith.EventStore/blob/aa16227bd07f0564a3026d619a5abd973e02656f/src/Hexalith.EventStore.Contracts/Routing/RouteCatalogQuerySelectorPolicy.cs"
+    },
+    {
+      "repository": "Hexalith.Parties",
+      "commit": "d4415715b2517927655c538e6d41e05d71d4207e",
+      "path": "src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs",
+      "sha256": "26ede88be71a269f99b54ffd38930d97ee9f1b1c1eb279ff03252b52197f6de1",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/blob/d4415715b2517927655c538e6d41e05d71d4207e/src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs"
+    },
+    {
+      "repository": "Hexalith.Parties",
+      "commit": "84e3df796ac977041a21ec7bd8e5789bdc44241a",
+      "path": "src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs",
+      "sha256": "68d04ce14a41df637dad895ab9674311cb3f9c562f3f2371ec7a86bc14954ac8",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/blob/84e3df796ac977041a21ec7bd8e5789bdc44241a/src/Hexalith.Parties.Contracts/Routing/PartiesCatalogDeclarations.cs"
+    },
+    {
+      "repository": "Hexalith.Parties",
+      "commit": "d4415715b2517927655c538e6d41e05d71d4207e",
+      "path": "src/Hexalith.Parties.Contracts/Queries/GetParty.cs",
+      "sha256": "59173bd233f122202c462847e6f85cf79ca97528209980afcae685617ea90213",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/blob/d4415715b2517927655c538e6d41e05d71d4207e/src/Hexalith.Parties.Contracts/Queries/GetParty.cs"
+    },
+    {
+      "repository": "Hexalith.Parties",
+      "commit": "84e3df796ac977041a21ec7bd8e5789bdc44241a",
+      "path": "src/Hexalith.Parties.Contracts/Queries/GetParty.cs",
+      "sha256": "59173bd233f122202c462847e6f85cf79ca97528209980afcae685617ea90213",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/blob/84e3df796ac977041a21ec7bd8e5789bdc44241a/src/Hexalith.Parties.Contracts/Queries/GetParty.cs"
+    },
+    {
+      "repository": "Hexalith.Parties",
+      "commit": "d4415715b2517927655c538e6d41e05d71d4207e",
+      "path": "src/Hexalith.Parties.Contracts/Queries/ListParties.cs",
+      "sha256": "bf45826d514d6e3063ec09b2febd00543a0ec92ac5e89b338f9937848c87663b",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/blob/d4415715b2517927655c538e6d41e05d71d4207e/src/Hexalith.Parties.Contracts/Queries/ListParties.cs"
+    },
+    {
+      "repository": "Hexalith.Parties",
+      "commit": "84e3df796ac977041a21ec7bd8e5789bdc44241a",
+      "path": "src/Hexalith.Parties.Contracts/Queries/ListParties.cs",
+      "sha256": "bf45826d514d6e3063ec09b2febd00543a0ec92ac5e89b338f9937848c87663b",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/blob/84e3df796ac977041a21ec7bd8e5789bdc44241a/src/Hexalith.Parties.Contracts/Queries/ListParties.cs"
+    },
+    {
+      "repository": "Hexalith.Parties",
+      "commit": "d4415715b2517927655c538e6d41e05d71d4207e",
+      "path": "src/Hexalith.Parties.Contracts/Queries/SearchParties.cs",
+      "sha256": "f8fa7f3eb1928d26e73bc502e7729468f77f1b366e26cd3a865590ad62ba51e9",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/blob/d4415715b2517927655c538e6d41e05d71d4207e/src/Hexalith.Parties.Contracts/Queries/SearchParties.cs"
+    },
+    {
+      "repository": "Hexalith.Parties",
+      "commit": "84e3df796ac977041a21ec7bd8e5789bdc44241a",
+      "path": "src/Hexalith.Parties.Contracts/Queries/SearchParties.cs",
+      "sha256": "f8fa7f3eb1928d26e73bc502e7729468f77f1b366e26cd3a865590ad62ba51e9",
+      "url": "https://github.com/Hexalith/Hexalith.Parties/blob/84e3df796ac977041a21ec7bd8e5789bdc44241a/src/Hexalith.Parties.Contracts/Queries/SearchParties.cs"
+    }
+  ],
+  "currentEffectiveRoutes": {
+    "PartyDetail": {
+      "targetKind": "domain-service",
+      "queryKind": "projection",
+      "projectionType": "party-detail",
+      "handlerType": "Hexalith.Parties.Contracts.Queries.GetParty",
+      "compatibilityActorType": "PartyDetailProjectionQueryActor"
+    },
+    "PartyIndex": {
+      "targetKind": "domain-service",
+      "queryKind": "projection",
+      "projectionType": "party-index",
+      "handlerType": "Hexalith.Parties.Contracts.Queries.ListParties",
+      "compatibilityActorType": "PartyIndexProjectionQueryActor"
+    },
+    "PartySearch": {
+      "targetKind": "domain-service",
+      "queryKind": "projection",
+      "projectionType": "party-index",
+      "handlerType": "Hexalith.Parties.Contracts.Queries.SearchParties",
+      "compatibilityActorType": "PartyIndexProjectionQueryActor"
+    }
+  }
+}

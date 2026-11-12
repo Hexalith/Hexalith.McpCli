@@ -1,0 +1,19 @@
+{
+  "scope": "Preliminary current source public API comparison only; not staged or signed3artifact qualification.",
+  "publishedBefore": "Hexalith.McpCli.Abstractions2.0.1 (signedarchive separatelyverified)",
+  "currentAfter": "Owned Release assembly built from current source with defaultVersion2.0.1; paired3stillpendingactualstage/publication.",
+  "files": {
+    "before": {
+      "taskPath": "/home/administrator/.nuget/packages/hexalith.mcpcli.abstractions/2.0.1/lib/net10.0/Hexalith.McpCli.Abstractions.dll",
+      "sha256": "aeb390050b08451827b147a958ba355e1e5c96de526834221645028b85c26c2e"
+    },
+    "after": {
+      "taskPath": "src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll",
+      "sha256": "1d2e54c8d1bcfd415ff0a5cc612c64c4f40a2fb2b40aa387fb8c77a3037e802f"
+    },
+    "diff": {
+      "taskPath": "/tmp/current-mcpcli-abstractions-public-api-diff.json",
+      "sha256": "bad303259ae2abc246a60ba112c5995b28395c45d70c7f4ee48591a5a939c587"
+    }
+  }
+}

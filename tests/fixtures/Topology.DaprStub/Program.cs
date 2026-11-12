@@ -68,6 +68,12 @@ if (args.Contains("rev-parse") && int.TryParse(Environment.GetEnvironmentVariabl
 }
 
 if (int.TryParse(Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_DELAY_MS"), out int delay)) Thread.Sleep(delay);
+if (args.SequenceEqual(new[] { "info", "--format", "{{.ServerVersion}}" }))
+{
+    Console.WriteLine("controlled-fixture-server");
+    return int.TryParse(Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_VERSION_EXIT"), out int dockerExit) ? dockerExit : 0;
+}
+
 if (args.SequenceEqual(new[] { "--version" }))
 {
     if (int.TryParse(Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_VERSION_EXIT"), out int versionExit) && versionExit != 0)

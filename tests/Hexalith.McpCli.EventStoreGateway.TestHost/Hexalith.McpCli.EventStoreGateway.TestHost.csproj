@@ -10,5 +10,6 @@
     <Content Include="Configuration/appsettings.gateway.json" TargetPath="appsettings.gateway.json"
              CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="Never" />
     <Content Update="Configuration/provenance.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
+    <Content Update="Configuration/provenance-current.json" CopyToOutputDirectory="Never" CopyToPublishDirectory="Never" />
   </ItemGroup>
 </Project>

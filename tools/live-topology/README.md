@@ -10,9 +10,9 @@ non-launching AppHost preflight and composition inspection remain available.
 Requirements: Linux amd64, Python 3.11.4 or later,
 GNU or uutils coreutils `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
 zlib (`libz.so.1`) and zstd (`libzstd.so.1`) shared libraries,
-Docker with a successful `docker info`, Aspire CLI 13.6.1 with its DCP and dashboard
-bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.4),
-Dapr CLI 1.18.2 and runtime 1.18.7 at
+Docker with a successful `docker info`, Aspire CLI 13.6.5 with its DCP and dashboard
+bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.5),
+Dapr CLI 1.19.1 and runtime 1.19.1 at
 `~/.dapr/bin/daprd`. User namespaces and network namespace creation must be
 permitted. For direct wrapper runs, install Dapr independently without
 initializing or changing a user environment. The canonical lane uses the exact public packages and qualified source selection
@@ -20,11 +20,11 @@ through the CI hooks below; ordinary source builds do not establish that profile
 
 From the repository root, create a new task-owned directory and extract the four
 native binaries from digest-pinned official images. The bootstrap verifies each
-SHA-256 in `binaries.json`, refuses existing destination directories, and removes
+SHA-256 in `binaries-current.json`, refuses existing destination directories, and removes
 only its own never-started extraction containers by exact ID. Docker pulls have
 a 300-second bound; create, copy and removal commands have separate bounds.
 Both pulled images remain in the host Docker store; remove them when no longer
-needed with `docker image rm daprio/dapr@sha256:0ac4fadf0016be85065cdebab952a8350e468cf9283d26777b0307a14a10aecc redis@sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf`.
+needed with `docker image rm daprio/dapr@sha256:801b920e02867addcd64f9a5792b8aadf015d6fc365f8b26a72415e2e01bcf98 redis@sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf`.
 
 If bootstrap fails, choose a fresh task-owned directory before retrying, for
 example by rerunning `private_runtime="$(mktemp -d)/runtime"`. A failed destination
@@ -158,7 +158,7 @@ The caller pins the qualified Builds workflow and supplies the Integration.Tests
 project, `microsoft-testing-platform` and `aspire-continue-on-error: false`.
 Builds keeps the six non-live Release test projects ahead of its Aspire tier,
 builds the Release solution again in that fresh job and initializes Dapr CLI
-1.18.2/runtime 1.18.7 before invoking preparation. Linux amd64, Python 3.11.4+
+1.19.1/runtime 1.19.1 before invoking preparation. Linux amd64, Python 3.11.4+
 with `venv` and `ensurepip` support, OpenSSL 3, zlib/zstd, Docker,
 GNU or uutils coreutils `timeout`, Git, curl, `unshare`, `ip` and working
 user/PID/network/mount namespaces are required. The hooks name missing tools,
@@ -176,14 +176,29 @@ Every live child still proves all four private namespaces; setup or probe failur
 fails preparation.
 
 `prepare-ci.sh` authenticates the complete native runtime selection in
-`native-runtime.json`: exact public EventStore **4.1.0** archives, public Tenants
-**7.0.5** archives and their embedded repository commits, plus the separately
-qualified Parties and Platform source revisions. The independent
-Testing.Integration **3.128.4** package continues to own the test lifecycle.
+`native-runtime-current.json`: exact public EventStore **4.2.0** archives, public Tenants
+**7.0.7** archives and their embedded repository commits, plus the separately
+qualified Parties and Platform source revisions. The current
+Testing.Integration **4.2.0** package consumes Platform descriptors. This isolated
+suite retains ownership of its AppHost through Aspire’s public testing API,
+with bounded startup, named endpoint discovery, liveness and independent cleanup.
+The current fixture hosts select the shared .NET **11.0.0** runtime through
+`McpCliCurrentNativeProfile=true`; their compilation targets and the selected
+owner exports remain `net10.0`. Only the three isolated resource launch
+environments select `DOTNET_ROLL_FORWARD=LatestMajor`. Preparation and every
+execution recheck require the highest installed Core and ASP.NET runtime to be
+exactly 11.0.0, so this policy cannot admit another installed version. The actual
+fixture and AppHost require `JsonElement` to come from the trusted shared-runtime
+directory. A single runtime keeps the SDK's compiled owner schemas identical to
+the running owners; its loader, operation digests and inventory checks remain
+required. This configuration grants no acceptance before the full live lane.
+
+The historical `native-runtime.json` and its receipts remain unchanged.
 
 Generic CLI and MCP query requests preserve every descriptor-declared
-`projectionActorType`, including the frozen published Parties selectors. SDK
-4.1.0 supplies the exact owner-enrolled selector policy. The immutable Parties
+`projectionActorType`, when the current owner declares one. The current Parties annotations omit the
+deprecated compatibility hint and retain the same domain-service projection target. SDK
+4.2.0 supplies the exact owner-enrolled selector policy. The immutable Parties
 source selection includes its three digest-bound compatibility bindings; foreign
 selectors remain refused. The committed catalog chooses the actual receiver.
 Fresh complete native CI remains required for this selected cohort; offline
@@ -196,9 +211,8 @@ qualified commit; local revisions and nested dependencies are never updated.
 
 All builds and nested preparation processes inherit a fresh task-owned
 `NUGET_PACKAGES`. The actual gateway, domain hosts, separate Parties adapter and
-Integration.Tests/AppHost are built with the public SDK cohort. Parties retains
-its qualified Tenants 5.11.2/Memories 3.0.11 dependency selections. Source hosts and
-the separate adapter use the root McpCli 2.0.0 pin so their Abstractions identity
+Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the current root catalog’s published dependency selections. Source hosts and
+the separate adapter use the root McpCli 2.0.1 pin so their Abstractions identity
 matches the AppHost, including later SDK/Aspire rebuilds. The Parties
 adapter remains a separate compiled library. Its ordinary build uses
 `CopyLocalLockFileAssemblies=true` to materialize the genuine package runtime
@@ -218,7 +232,7 @@ catalog files and the pinned catalog; execution rejects source or file drift
 before vectors and again before smoke. Server build commands retain their
 separate 300-second bounds. The owned gateway's mandatory
 configuration snapshot is verified against native source commit
-`dbc6e7e08d605ba6c6c790e3e08a15dc8bbdec8a`, matching the public 4.1.0 archive
+`aa16227bd07f0564a3026d619a5abd973e02656f`, matching the public 4.2.0 archive
 metadata; normal overrides, real JWT validation and sidecar tokens remain active.
 
 Before creating any digest material or catalog authority, the AppHost verifies
@@ -263,7 +277,7 @@ keys, RDB bytes and raw operational state remain outside uploaded evidence.
 This is infrastructure for native acceptance; public artifact approval and a
 complete successful remote vector and independent-case lane remain separate requirements.
 
-Aspire CLI 13.6.1 is installed from its official Linux x64 release archive when
+Aspire CLI 13.6.5 is installed from its official Linux x64 release archive when
 absent, with a pinned SHA-256 verified before extraction; bounded
 `aspire setup` extracts its embedded DCP/dashboard bundle when missing. An
 existing incompatible CLI or Dapr version is refused. Python requirements are
@@ -280,14 +294,14 @@ implementation.
 For a local run, first place each clean direct root checkout for
 `Hexalith.EventStore`, `Hexalith.Tenants`, `Hexalith.Parties` and
 `Hexalith.Platform` at its exact selected commit in
-[`native-runtime.json`](native-runtime.json). A normal root submodule
+[`native-runtime-current.json`](native-runtime-current.json). A normal root submodule
 initialization follows the root gitlinks, which can differ from these qualified
 runtime selections. The local hook refuses to change source revisions; only
 disposable GitHub-hosted CI selects them automatically. Keep nested submodules
 uninitialized.
 
 From the repository root, after the focused Release checks and the workflow's
-full `dapr init --runtime-version 1.18.7`, run the same preparation and execution
+full `dapr init --runtime-version 1.19.1`, run the same preparation and execution
 path:
 
 ```sh

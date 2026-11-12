@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   ci:
-    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@6e77e79e8914a375b0c43b0af3bd142405675ecd
+    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b
     with:
       solution: Hexalith.McpCli.slnx
       additional-sdk-version: '10.0.x'
@@ -36,8 +36,8 @@ jobs:
       aspire-runner-timeout-minutes: 300
       aspire-timeout-minutes: 360
       aspire-evidence-path: TestResults/live-ci
-      dapr-version: '1.18.2'
-      dapr-runtime-version: '1.18.7'
+      dapr-version: '1.19.1'
+      dapr-runtime-version: '1.19.1'
 
   release-automation:
     runs-on: ubuntu-latest
@@ -198,8 +198,8 @@ jobs:
                         if line.startswith("Hexalith.McpCli.Integration.Tests.")]
           # The expected live set is every approved vector that has a companion plan.
           operations = sorted(operation for operation in (json.loads(path.read_text())["operation"] for path in
-                              pathlib.Path("tools/conformance-vectors/v1/modules").rglob("*.vector.json"))
-                              if pathlib.Path("tools/live-topology/plans", operation + ".json").is_file())
+                              pathlib.Path("tools/conformance-vectors/v1/current/modules").rglob("*.vector.json"))
+                              if pathlib.Path("tools/live-topology/plans-current", operation + ".json").is_file())
           expected = ["Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"]
           expected += ["Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety"]
           expected += ['Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: "' + operation + '")'

@@ -1,0 +1,249 @@
+{
+  "checkedAtUtc": "2026-11-12T02:18:56.182492+00:00",
+  "source": "Official NuGet flat-container version indices",
+  "packages": [
+    {
+      "id": "Aspire.Hosting.Testing",
+      "selectedVersions": [
+        "13.6.5"
+      ],
+      "latestStable": "13.6.5",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "ByteAether.Ulid",
+      "selectedVersions": [
+        "1.4.2"
+      ],
+      "latestStable": "1.4.2",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "CommunityToolkit.Aspire.Hosting.Dapr",
+      "selectedVersions": [
+        "13.6.2-beta.959"
+      ],
+      "latestStable": "13.0.0",
+      "selectedLatest": false,
+      "status": "Existing approved13.6 prerelease; latest stable13.0 is older and highest published17 prerelease belongs to a different Aspire major",
+      "latestPublished": "17.0.0-beta.1033",
+      "latest13_6": "13.6.2-beta.959"
+    },
+    {
+      "id": "Hexalith.EventStore.Aspire",
+      "selectedVersions": [
+        "4.2.0"
+      ],
+      "latestStable": "4.2.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.EventStore.Client",
+      "selectedVersions": [
+        "4.2.0"
+      ],
+      "latestStable": "4.2.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.EventStore.Contracts",
+      "selectedVersions": [
+        "4.2.0"
+      ],
+      "latestStable": "4.2.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.EventStore.Gateway",
+      "selectedVersions": [
+        "4.2.0"
+      ],
+      "latestStable": "4.2.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.EventStore.Testing",
+      "selectedVersions": [
+        "4.2.0"
+      ],
+      "latestStable": "4.2.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.EventStore.Testing.Integration",
+      "selectedVersions": [
+        "4.2.0"
+      ],
+      "latestStable": "4.2.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.McpCli.Abstractions",
+      "selectedVersions": [
+        "2.0.1"
+      ],
+      "latestStable": "2.0.1",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.Parties.Aspire",
+      "selectedVersions": [
+        "3.1.1"
+      ],
+      "latestStable": "3.1.1",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.Parties.Contracts",
+      "selectedVersions": [
+        "3.1.1"
+      ],
+      "latestStable": "3.1.1",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.Tenants.Aspire",
+      "selectedVersions": [
+        "7.0.7"
+      ],
+      "latestStable": "7.0.7",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Hexalith.Tenants.Contracts",
+      "selectedVersions": [
+        "7.0.7"
+      ],
+      "latestStable": "7.0.7",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "JsonSchema.Net",
+      "selectedVersions": [
+        "9.6.0"
+      ],
+      "latestStable": "9.6.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Microsoft.CodeAnalysis.CSharp",
+      "selectedVersions": [
+        "5.9.0"
+      ],
+      "latestStable": "5.9.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Microsoft.Extensions.DependencyInjection.Abstractions",
+      "selectedVersions": [
+        "11.0.0"
+      ],
+      "latestStable": "11.0.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Microsoft.Extensions.Hosting",
+      "selectedVersions": [
+        "11.0.0"
+      ],
+      "latestStable": "11.0.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Microsoft.Extensions.Http",
+      "selectedVersions": [
+        "11.0.0"
+      ],
+      "latestStable": "11.0.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Microsoft.Extensions.Logging.Abstractions",
+      "selectedVersions": [
+        "11.0.0"
+      ],
+      "latestStable": "11.0.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Microsoft.NET.Test.Sdk",
+      "selectedVersions": [
+        "18.12.0"
+      ],
+      "latestStable": "18.12.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "ModelContextProtocol",
+      "selectedVersions": [
+        "2.4.0"
+      ],
+      "latestStable": "2.4.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "NSubstitute",
+      "selectedVersions": [
+        "6.2.0"
+      ],
+      "latestStable": "6.2.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Shouldly",
+      "selectedVersions": [
+        "4.3.0"
+      ],
+      "latestStable": "4.3.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "System.CommandLine",
+      "selectedVersions": [
+        "3.0.0"
+      ],
+      "latestStable": "3.0.0",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    },
+    {
+      "id": "Verify.XunitV3",
+      "selectedVersions": [],
+      "latestStable": "33.3.4",
+      "selectedLatest": false,
+      "status": "allowlist-only; no restored dependency to update"
+    },
+    {
+      "id": "xunit.v3",
+      "selectedVersions": [
+        "4.0.3"
+      ],
+      "latestStable": "4.0.3",
+      "selectedLatest": true,
+      "status": "latest stable selected"
+    }
+  ]
+}

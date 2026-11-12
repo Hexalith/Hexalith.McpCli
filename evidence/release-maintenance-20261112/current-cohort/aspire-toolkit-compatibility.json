@@ -1,0 +1,89 @@
+{
+  "latest13_6": "13.6.2-beta.959",
+  "highestPublished": "17.0.0-beta.1033",
+  "packages": [
+    {
+      "version": "13.6.2-beta.959",
+      "assemblies": [
+        "lib/net10.0/CommunityToolkit.Aspire.Hosting.Dapr.dll",
+        "lib/net8.0/CommunityToolkit.Aspire.Hosting.Dapr.dll",
+        "lib/net9.0/CommunityToolkit.Aspire.Hosting.Dapr.dll"
+      ],
+      "dependencies": [
+        {
+          "targetFramework": "net10.0",
+          "dependencies": [
+            {
+              "id": "Aspire.Hosting",
+              "version": "13.6.4",
+              "exclude": "Build,Analyzers"
+            },
+            {
+              "id": "YamlDotNet",
+              "version": "18.1.0",
+              "exclude": "Build,Analyzers"
+            }
+          ]
+        },
+        {
+          "targetFramework": "net8.0",
+          "dependencies": [
+            {
+              "id": "Aspire.Hosting",
+              "version": "13.6.4",
+              "exclude": "Build,Analyzers"
+            },
+            {
+              "id": "YamlDotNet",
+              "version": "18.1.0",
+              "exclude": "Build,Analyzers"
+            }
+          ]
+        },
+        {
+          "targetFramework": "net9.0",
+          "dependencies": [
+            {
+              "id": "Aspire.Hosting",
+              "version": "13.6.4",
+              "exclude": "Build,Analyzers"
+            },
+            {
+              "id": "YamlDotNet",
+              "version": "18.1.0",
+              "exclude": "Build,Analyzers"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "version": "17.0.0-beta.1033",
+      "assemblies": [
+        "lib/net10.0/CommunityToolkit.Aspire.Hosting.Dapr.dll"
+      ],
+      "dependencies": [
+        {
+          "targetFramework": "net10.0",
+          "dependencies": [
+            {
+              "id": "Aspire.Hosting",
+              "version": "17.1.0-preview.1.26559.8",
+              "exclude": "Build,Analyzers"
+            },
+            {
+              "id": "Microsoft.Extensions.Hosting.Abstractions",
+              "version": "10.0.14",
+              "exclude": "Build,Analyzers"
+            },
+            {
+              "id": "YamlDotNet",
+              "version": "18.1.0",
+              "exclude": "Build,Analyzers"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

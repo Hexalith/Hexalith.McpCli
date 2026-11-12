@@ -196,7 +196,7 @@ def fixture(repo: Path, artifact: Path):
         env = {key: value for key, value in os.environ.items() if not key.startswith(('MCPCLI_', 'EVENTSTORE_'))}
         env['NUGET_PACKAGES'] = str(root / 'packages')
         run(['dotnet', 'restore', project, '-p:Configuration=Release', f'-p:RestoreAdditionalProjectSources={artifact.parent}'], root, env)
-        directory = root / 'tools/conformance-vectors/v1/modules' / package_id
+        directory = root / 'tools/conformance-vectors/v1/current/modules' / package_id
         directory.mkdir(parents=True)
         vectors = []
         for source in ['sample-command.json', 'sample-query.json', 'sample-rename.json']:

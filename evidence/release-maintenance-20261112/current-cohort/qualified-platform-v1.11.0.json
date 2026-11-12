@@ -1,0 +1,122 @@
+{
+  "schema": "hexalith.workspace.first-qualified-source-release.v1",
+  "source": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+  "tag": "v1.11.0",
+  "tagObject": {
+    "sha": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+    "type": "commit",
+    "url": "https://api.github.com/repos/Hexalith/Hexalith.Platform/git/commits/f99f51c3053fe0b0292acad461d78c833ec156cc"
+  },
+  "peeled": {
+    "sha": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+    "type": "commit",
+    "url": "https://api.github.com/repos/Hexalith/Hexalith.Platform/git/commits/f99f51c3053fe0b0292acad461d78c833ec156cc"
+  },
+  "release": {
+    "id": 442547130,
+    "html_url": "https://github.com/Hexalith/Hexalith.Platform/releases/tag/v1.11.0",
+    "tag_name": "v1.11.0",
+    "published_at": "2026-11-12T05:52:23Z",
+    "draft": false,
+    "prerelease": false,
+    "immutable": false
+  },
+  "runs": [
+    {
+      "id": 43159448171,
+      "name": "Platform tuple CI preflight",
+      "source": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+      "conclusion": "success",
+      "url": "https://github.com/Hexalith/Hexalith.Platform/actions/runs/43159448171",
+      "jobs": [
+        {
+          "id": 130986915885,
+          "name": "resolve-sources",
+          "conclusion": "success"
+        },
+        {
+          "id": 130987047897,
+          "name": "Same changed source against the legacy public tuple",
+          "conclusion": "success"
+        },
+        {
+          "id": 130987047950,
+          "name": "Same changed source against the pre-extension public tuple",
+          "conclusion": "success"
+        },
+        {
+          "id": 130987047975,
+          "name": "tuple",
+          "conclusion": "success"
+        },
+        {
+          "id": 131001783697,
+          "name": "tuple-verdict",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 43159448198,
+      "name": "Catalog builder consumer binding",
+      "source": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+      "conclusion": "success",
+      "url": "https://github.com/Hexalith/Hexalith.Platform/actions/runs/43159448198",
+      "jobs": [
+        {
+          "id": 130986916650,
+          "name": "consumer-binding (3.130.0)",
+          "conclusion": "success"
+        },
+        {
+          "id": 130986916928,
+          "name": "consumer-binding (3.130.2)",
+          "conclusion": "success"
+        },
+        {
+          "id": 130986916939,
+          "name": "consumer-binding (3.132.1)",
+          "conclusion": "success"
+        },
+        {
+          "id": 130986916976,
+          "name": "consumer-binding (4.2.0)",
+          "conclusion": "success"
+        },
+        {
+          "id": 130986916987,
+          "name": "consumer-binding (3.130.1)",
+          "conclusion": "success"
+        },
+        {
+          "id": 130986917048,
+          "name": "consumer-binding (4.1.0)",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "id": 43164109420,
+      "name": "Qualified Platform source release",
+      "source": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+      "conclusion": "success",
+      "url": "https://github.com/Hexalith/Hexalith.Platform/actions/runs/43164109420",
+      "jobs": [
+        {
+          "id": 131001841958,
+          "name": "verify",
+          "conclusion": "success"
+        },
+        {
+          "id": 131001988739,
+          "name": "publish",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "all17ActualOwnersStillFrozen": true,
+  "producer": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b",
+  "publishedBuildsVersion": "4.48.2",
+  "remainingWork": "Dependent pin/native/release batch, actual new signed package cohort/producerB, final root synchronization/source/fixture publication"
+}

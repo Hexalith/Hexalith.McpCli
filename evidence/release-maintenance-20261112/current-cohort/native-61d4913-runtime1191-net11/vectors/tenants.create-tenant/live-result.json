@@ -1,0 +1,194 @@
+{
+  "operation": "tenants.create-tenant",
+  "result": "passed",
+  "phases": [
+    {
+      "head": "cli",
+      "phase": "/invocation",
+      "operation": "tenants.create-tenant",
+      "kind": "command",
+      "resolvedCall": {
+        "operation": "tenants.create-tenant",
+        "kind": "command",
+        "payload": {
+          "TenantId": "vector-create",
+          "Name": "Vector Create Corporation",
+          "Description": "Created by the McpCli v1 vector"
+        },
+        "envelope": {
+          "tenant": "platform:tenants",
+          "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.create-tenant",
+            "messageId": "01M76YZQHGET46YQZNWDWV84MQ",
+            "correlationId": "01JAT0V8M4XQ4K3W5Z6Y7B8C9E",
+            "tenant": "platform:tenants",
+            "aggregateId": "vector-create",
+            "status": "accepted"
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-create"
+        },
+        "envelope": {
+          "tenant": "vector-create"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-create",
+            "document": {
+              "tenantId": "vector-create",
+              "name": "Vector Create Corporation",
+              "description": "Created by the McpCli v1 vector",
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-12T04:06:53.3180074+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "persisted-invocation",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-create"
+        },
+        "envelope": {
+          "tenant": "vector-create"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-create",
+            "document": {
+              "tenantId": "vector-create",
+              "name": "Vector Create Corporation",
+              "description": "Created by the McpCli v1 vector",
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-12T04:06:53.3180074+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "cli",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-create"
+        },
+        "envelope": {
+          "tenant": "vector-create"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-create",
+            "document": {
+              "tenantId": "vector-create",
+              "name": "Vector Create Corporation",
+              "description": "Created by the McpCli v1 vector",
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-12T04:06:53.3180074+00:00"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "head": "mcp",
+      "phase": "/postconditions/0",
+      "operation": "tenants.get-tenant",
+      "kind": "query",
+      "resolvedCall": {
+        "operation": "tenants.get-tenant",
+        "kind": "query",
+        "payload": {
+          "TenantId": "vector-create"
+        },
+        "envelope": {
+          "tenant": "vector-create"
+        }
+      },
+      "result": "passed",
+      "attempts": [
+        {
+          "result": "passed",
+          "exitCode": 0,
+          "document": {
+            "operation": "tenants.get-tenant",
+            "tenant": "vector-create",
+            "document": {
+              "tenantId": "vector-create",
+              "name": "Vector Create Corporation",
+              "description": "Created by the McpCli v1 vector",
+              "status": "Active",
+              "members": [],
+              "configuration": {},
+              "createdAt": "2026-11-12T04:06:53.3180074+00:00"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "binding": {
+    "packageId": "Hexalith.Tenants.Contracts",
+    "version": "7.0.7",
+    "artifactHash": "sha512-0cdcXSfo2qGaO0Nm3tsmFJkIgto8qRFyRjoWIjX5tQMuCYRcg+dMJBxr+qp29iPgYMPMOqRAuIaiH+G+mo6u/g==",
+    "vectorSha256": "8814c45d3b372870d3db5c43904245d1ab32339be66cbfebadfcca61722be6ce",
+    "planSha256": "01e60524a2a458f6bd7df252ef0e04a6622ab398de48fee33cad3ea4a08e7c84",
+    "approvalSha256": "1d608f742a5daf60a399f9b7db9e34fb0f74c8947cd35529703430591c2add77",
+    "inventorySha256": "25cbb586dee8a57ecd42b4c8e5359fb419debc40356d25bf0d2710c1e97a2b27"
+  },
+  "captures": {}
+}

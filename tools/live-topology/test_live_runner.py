@@ -317,9 +317,9 @@ class RunnerTests(unittest.TestCase):
 class ExecutionTests(unittest.TestCase):
     def selection(self, operation='parties.deactivate-party'):
         from live_plans import ROOT, load_plan
-        vector = next(path for path in (ROOT / 'tools/conformance-vectors/v1/modules').rglob('*.vector.json')
+        vector = next(path for path in (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json')
                       if json.loads(path.read_text())['operation'] == operation)
-        plan = load_plan(ROOT / 'tools/live-topology/plans' / (operation + '.json'), vector)
+        plan = load_plan(ROOT / 'tools/live-topology/plans-current' / (operation + '.json'), vector)
         return {'operation': operation, 'vector': vector, 'plan': plan}
 
     @staticmethod
@@ -457,7 +457,7 @@ class ExecutionTests(unittest.TestCase):
 
     def test_every_vector_submits_each_declared_command_once_at_executor_boundary(self):
         from live_plans import ROOT, require_phases
-        for path in sorted((ROOT / 'tools/live-topology/plans').glob('*.json')):
+        for path in sorted((ROOT / 'tools/live-topology/plans-current').glob('*.json')):
             operation = json.loads(path.read_text())['operation']
             with self.subTest(operation=operation):
                 selection = self.selection(operation)
@@ -585,7 +585,7 @@ sys.exit(run_live.main(['--operation','parties.deactivate-party','--output',sys.
             environment.update(MCPCLI_ISOLATED_TOPOLOGY='1', MCPCLI_LIVE_URL='http://127.0.0.1:1234/',
                                MCPCLI_LIVE_TOKEN='private-kill-token', MCPCLI_LIVE_BINDING=json.dumps(binding))
             process = subprocess.Popen([sys.executable, '-c', script, str(ROOT / 'tools/live-topology'),
-                                        str(selection['vector']), str(ROOT / 'tools/live-topology/plans/parties.deactivate-party.json'), directory],
+                                        str(selection['vector']), str(ROOT / 'tools/live-topology/plans-current/parties.deactivate-party.json'), directory],
                                        env=environment, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
             try:
                 deadline = time.monotonic() + 10

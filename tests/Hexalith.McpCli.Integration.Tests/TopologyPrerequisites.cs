@@ -6,6 +6,56 @@ namespace Hexalith.McpCli.Integration.Tests;
 /// <summary>Checks topology-specific tools and mTLS inputs without starting infrastructure.</summary>
 internal static class TopologyPrerequisites
 {
+    /// <summary>The retained explicit missing-prerequisite diagnostic.</summary>
+    internal const string SkipReason = "DAPR integration prerequisites are unavailable. Run 'dapr init' and ensure Redis, placement, and scheduler are reachable.";
+
+    /// <summary>Requires Redis PONG and the selected placement/scheduler transports.</summary>
+    internal static async Task<bool> BasicAvailableAsync()
+    {
+        try
+        {
+            using var redis = new TcpClient();
+            using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(3));
+            await redis.ConnectAsync("localhost", 6379, deadline.Token).ConfigureAwait(false);
+            using NetworkStream stream = redis.GetStream();
+            await stream.WriteAsync("*1\r\n$4\r\nPING\r\n"u8.ToArray(), deadline.Token).ConfigureAwait(false);
+            byte[] pong = new byte[5];
+            await stream.ReadExactlyAsync(pong, deadline.Token).ConfigureAwait(false);
+            return pong.AsSpan().SequenceEqual("+PONG"u8)
+                && await IsSentryReachableAsync(Hexalith.EventStore.Testing.Integration.DaprLocalEndpoints.PlacementPort).ConfigureAwait(false)
+                && await IsSentryReachableAsync(Hexalith.EventStore.Testing.Integration.DaprLocalEndpoints.SchedulerPort).ConfigureAwait(false);
+        }
+        catch (Exception failure) when (failure is IOException or SocketException or OperationCanceledException)
+        {
+            return false;
+        }
+    }
+
+    /// <summary>Retains the original topology owner's bounded Docker-health refusal.</summary>
+    internal static async Task<bool> IsDockerHealthyAsync(string executable = "docker")
+    {
+        try
+        {
+            var start = new ProcessStartInfo(executable) { RedirectStandardOutput = true, RedirectStandardError = true };
+            foreach (string argument in new[] { "info", "--format", "{{.ServerVersion}}" }) start.ArgumentList.Add(argument);
+            using Process process = Process.Start(start)!;
+            Task<string> output = process.StandardOutput.ReadToEndAsync();
+            Task<string> error = process.StandardError.ReadToEndAsync();
+            using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+            try { await process.WaitForExitAsync(deadline.Token).ConfigureAwait(false); }
+            catch (OperationCanceledException)
+            {
+                if (!process.HasExited) process.Kill(entireProcessTree: true);
+                await process.WaitForExitAsync().ConfigureAwait(false);
+                return false;
+            }
+            _ = await output.ConfigureAwait(false);
+            _ = await error.ConfigureAwait(false);
+            return process.ExitCode == 0;
+        }
+        catch (System.ComponentModel.Win32Exception) { return false; }
+    }
+
     /// <summary>Returns the first missing requirement with bounded CLI and Sentry probes.</summary>
     internal static async Task<string?> GetFailureAsync()
     {

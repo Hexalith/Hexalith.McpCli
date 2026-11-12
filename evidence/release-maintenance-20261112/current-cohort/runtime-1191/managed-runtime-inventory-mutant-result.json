@@ -1,0 +1,5 @@
+{
+  "buildNotRequired": "Python guard mutant",
+  "testExit": 1,
+  "detected": true
+}

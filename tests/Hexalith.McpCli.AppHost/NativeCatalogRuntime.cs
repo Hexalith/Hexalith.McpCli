@@ -59,7 +59,7 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
             await NativeCatalogTool.RunOwnedPreparationAsync(directory, owner, async () =>
             {
                 using JsonDocument receipt = await NativeCatalogTool.GenerateAsync(new DirectoryInfo(root), directory,
-                    owner, "eventstore", "4.1.0", [(contracts, adapter, "parties")], deadline.Token).ConfigureAwait(false);
+                    owner, "eventstore", "4.2.0", [(contracts, adapter, "parties")], deadline.Token).ConfigureAwait(false);
                 partyArtifacts = receipt.RootElement.GetProperty("loadedArtifacts").Clone();
                 foreach (JsonElement artifact in partyArtifacts.EnumerateArray())
                 {
@@ -106,7 +106,7 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
                     hosts = new[] { "eventstore", "parties", "tenants" },
                     inputs = new
                     {
-                        sourceSelectionSha256 = Digest(File.ReadAllBytes(Path.Combine(root, "tools", "live-topology", "native-runtime.json"))),
+                        sourceSelectionSha256 = Digest(File.ReadAllBytes(Path.Combine(root, "tools", "live-topology", "native-runtime-current.json"))),
                         preparations = NativeCatalogPreparationEvidence.Capture(Path.Combine(tenantOwner.Directory, "preparation.json"),
                             Path.Combine(directory, "reader", "preparation.json")),
                         partyArtifacts,
