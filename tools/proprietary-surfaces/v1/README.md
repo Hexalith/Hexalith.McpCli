@@ -12,12 +12,22 @@ python3 tools/proprietary-surfaces/v1/check.py --output /tmp/mcpcli-census.json
 The root references must already contain the pinned Git objects. CI reads
 `.gitmodules` and gitlinks from the same parent commit, initializes only those
 root declarations with recursion disabled, then runs the fixtures and scan.
-Those root references are full clones, so they also hold the nested pins that
-cross-tree resolution reads (below); a nested pin missing from its matching
-root's object store fails coverage. Locally, an unavailable root or object fails
-with a prerequisite diagnostic; the checker never initializes, fetches or checks
-out anything, and sets `GIT_NO_LAZY_FETCH=1` so a partial clone cannot fetch a
-missing object. `--workspace` and `--revision` allow
+Those root references are full clones, but a fresh clone holds only commits
+reachable from its remote refs. A nested pin that cross-tree resolution reads
+(below) must therefore be reachable from the matching root's remote refs;
+otherwise it fails as `nested-object-unavailable`. Locally, an unavailable root
+or object fails with a prerequisite diagnostic; the checker never initializes,
+fetches or checks out anything. Every Git call that reads a repository adds
+`-c protocol.allow=never`, sets `GIT_NO_LAZY_FETCH=1`,
+`GIT_NO_REPLACE_OBJECTS=1` and an empty `GIT_ALLOW_PROTOCOL`, and drops the
+repository-local variables that `git rev-parse --local-env-vars` lists. A
+partial clone therefore cannot fetch a missing object on any Git version, even
+under an inherited protocol allow list or `protocol.<name>.allow` setting,
+replace refs never substitute committed bytes, and an inherited `GIT_DIR` or
+object directory cannot redirect a read. That `--local-env-vars` query is the
+one call that reads no repository or object; it runs without those protections
+and with no inherited `GIT_` variable, and its failure is reported as
+`git-unavailable`. `--workspace` and `--revision` allow
 inspection of another parent checkout or commit. Reference HEADs, index files
 and dirty/untracked source do not influence the inspected trees.
 
@@ -53,19 +63,22 @@ Each project uses the nearest default `Directory.Build.props` before the project
 and the nearest default `Directory.Build.targets` afterward, plus their explicit
 imports. More distant defaults do not contribute properties unless imported.
 Unconsumed metadata, including shadowed or standalone defaults, is still parsed
-and classified independently. Missing required literal local imports fail; an
-`Exists` condition on that exact path, alone or as one conjunct of a top-level
-`and` condition, proves an absent import optional. Exists() guard evaluation
-(below) can also prove an import or conditional property definition unreachable. A top-level `or`, a negated
-`!Exists`, an `Exists` on another path or an unbalanced condition proves nothing.
-SDK-resolved imports remain distinct from missing local blobs; nested-gitlink and
-escaping imports follow cross-tree resolution. Property expansion has a 128-level budget and fails with the metadata
-path when exhausted. Classification aliases and conditional imports retain alternatives; unconditional property
-replacements and empty assignments control effective package defaults.
-Reference item lists are split before classification. Recursive `**/` globs include zero
-intermediate directories. SDK identities come from XML declarations, including unconditional explicit
-`Sdk.props`/`Sdk.targets` imports with an `Sdk` attribute; comments provide no SDK
-authority. Unconsumed local props/targets declaring an
+and classified independently. Missing required literal local imports fail. An
+absent import is optional when an `Exists` condition names that exact path,
+alone or as one conjunct of a top-level `and` condition, or when the
+[Exists() guard excuse](#exists-guard-excuse) proves the import never
+evaluates. Otherwise a top-level `or`, an unbalanced condition, an `Exists` on
+another path that is not proven absent, or a negated `!Exists` on a path that is
+not proven present proves nothing. SDK-resolved imports remain distinct from
+missing local blobs; nested-gitlink and escaping imports follow cross-tree
+resolution. Property expansion has a 128-level budget and fails with the
+metadata path when exhausted. Classification aliases and conditional imports
+retain alternatives; unconditional property replacements and empty assignments
+control effective package defaults. Reference item lists are split before
+classification. Recursive `**/` globs include zero intermediate directories. SDK
+identities come from XML declarations, including unconditional explicit
+`Sdk.props`/`Sdk.targets` imports with an `Sdk` attribute; comments provide no
+SDK authority. Unconsumed local props/targets declaring an
 executable, packed tool, command name, MCP/CLI dependency or MCP container
 identity become independent candidates, including when an import directory
 cannot be resolved. SDK imports and unresolvable nested references
@@ -87,14 +100,22 @@ relative to their declaring file.
   commit from the single root-declared reference whose URL equals the nested
   entry's URL in the inspected root's `.gitmodules` at the same pin. Comparison
   trims one trailing `/` and then one trailing `.git`, and ignores case only in
-  the host. Relative URLs never match. A missing, duplicate, malformed or
-  ambiguous declaration fails as `nested-pin-unresolvable`; a commit absent from
-  that root's object store fails as `nested-object-unavailable`.
+  the host. Relative URLs never match. As for root declarations, every section
+  must be `submodule "<name>"` with a safe path; otherwise the nested
+  declarations declare nothing. A missing, duplicate, malformed or ambiguous
+  declaration fails as `nested-pin-unresolvable`; a commit absent from that
+  root's object store, or a gitlink naming a non-commit object, fails as
+  `nested-object-unavailable`.
 - **Absent paths.** An import of a missing file in a substituted tree, or of a
-  missing parent-tree path outside every root, is absent only when an `Exists`
-  condition requires that exact path. A present parent-tree blob or directory
-  outside every root is never read; a parent-tree glob outside every root is
-  never listed; a directory or a tree root is never a file.
+  missing parent-tree path outside every root, is refused unless an `Exists`
+  condition requires that exact path or the
+  [Exists() guard excuse](#exists-guard-excuse) proves the import never
+  evaluates. Such a path is absent only as `Tree.absent()` decides: a present
+  parent-tree blob or directory outside every root is never read, a case
+  variant or a path through a committed link is refused, a parent-tree glob
+  outside every root is never listed, and a directory, a tree root or the parent
+  workspace root is never a file. A local import through a committed link is
+  refused as `unavailable-local-import` with its label as `target`.
 - **One hop.** A substituted file's imports must stay inside that same
   substituted tree. A further escape, including one back into the inspected
   root, or a gitlink inside the substituted tree fails. A Compile item declared
@@ -109,41 +130,79 @@ declaring metadata file in `rule` and the refused root-relative label in
 `target`; a leading `../` marks a workspace label. Every substituted blob read
 for a root is listed once in that repository summary's `crossTreeReads`, with
 `requested` label, `resolution` (`workspace` or `nested`), source `repository`,
-`commit`, in-tree `path`, `sha256` and, for nested reads, `nestedGitlink`.
-Substituted blobs contribute classification signals but never enter an
-allowance's local compilation closure; their pins bind them instead, and a
-signal they add is still allowance drift. Publication targets inside nested
-gitlinks keep `nested-publication-target`. No module name, path or count is
-part of this logic.
+`commit`, in-tree `path`, `sha256` and, for nested reads, `nestedGitlink`. A
+read stays listed when its file is then refused. A substituted file's import
+that keeps an unresolved `$(` fails as `unsafe-import-path` with its label as
+`target`; it is never name-matched against inspected-root metadata. A
+substituted blob missing from its object store fails as
+`workspace-object-unavailable` or `nested-object-unavailable` with the
+requested label in `rule` and `target`; invalid text fails as
+`malformed-text:<label>`. Substituted blobs contribute classification signals.
+A compilation-closure allowance binds each substituted member by its requested
+label and pinned blob hash, so a sibling or nested pin that changes, adds or
+removes a member is source drift, as is any signal it adds. Publication targets
+inside nested gitlinks keep `nested-publication-target`. No module name, path or
+count is part of this logic.
 
-## Exists() guard evaluation
+## Exists() guard excuse
 
-Imports and static property definitions can be proven unreachable from
-committed `Exists()` facts. Only the element's own `Condition` and the
-`Condition` of an enclosing `PropertyGroup` or `ImportGroup` are evaluated, and
-only when it is a balanced top-level `and` conjunction with no top-level `or`.
-A conjunct is evaluated only when it is exactly `Exists('…')` or `!Exists('…')`;
-parenthesized, negated-group and other conjuncts prove nothing. Arguments expand
-with the property alternatives in effect at that document position; any
-unresolved `$(` proves nothing.
+A guard only excuses an import target that is missing from every inspected tree
+and would otherwise be refused as `unavailable-local-import` or an absent
+`unsafe-import-path`. It never skips a present target, never removes a property
+alternative and never changes classification; nothing new is recorded in
+policy. An absent target is excused when either:
 
-- `Exists(p)` makes the element unreachable when every expansion of `p` is
-  proven absent under the local, workspace and nested rules above: no committed
-  file and no directory. A refused or unresolvable path, a glob, or a path
-  above the parent root proves nothing.
-- `!Exists(p)` makes it unreachable when every expansion of `p` is proven
-  present in a non-recursive workspace: a committed regular blob or directory in
-  the inspected root, or in a root-declared reference at its root pin. A path
-  under a nested gitlink is never proven present, because CI initializes root
-  references without recursion. Parent-tree paths outside every root, and
-  refused or unresolvable paths, are not proven present either.
+- **(a)** the import's evaluated condition, its own `Condition` plus an
+  enclosing `ImportGroup` `Condition`, has a conjunct that proves false; or
+- **(b)** the import's `Project` is exactly one `$(P)`, and every definition of
+  `P` that produced that exact value is conditional and proves false through its
+  own or enclosing `PropertyGroup` condition.
 
-An unreachable conditional property definition contributes no alternative, and
-an unreachable import is not visited. Every other element keeps the
-conservative union. `Choose`/`When`/`Otherwise` conditions are never evaluated,
-and neither is any condition inside a `Target`, because target properties are
-assigned at execution time. Existing refusals stand for every reachable path,
-and nothing new is recorded in policy.
+Only a balanced top-level `and` conjunction with no top-level `or` counts. A
+conjunct proves false when it is exactly `Exists('p')` with every expansion of
+`p` proven absent, or `!Exists('p')` with every expansion proven present;
+parenthesized or negated groups prove nothing, and a quoted argument cannot
+span quotes. Arguments are trimmed, as MSBuild trims items. An argument proves
+nothing when an expansion is a `;` list of more than one item, keeps `$(`, `@(`
+or `%(`, contains a `%XX` escape, or uses a property that is only conditionally
+defined (so it may be empty), was defined from such a property or before a
+property it names, is item metadata rather than a `PropertyGroup` definition,
+or is also defined inside a `Target`. `!Exists('p/')` with a trailing `/` or
+`\` is proven only for a committed directory. `Choose`/`When` conditions and
+anything inside a `Target` prove nothing. Relative paths in `Import`,
+`ImportGroup` and enclosing `PropertyGroup` conditions resolve from the
+declaring file; a property element's own condition resolves them from the
+entry project's directory, as an MSBuild evaluation of both forms shows.
+
+An import `Project` value is trimmed too. A value that is a `;` list of more
+than one item, or that contains a `%XX` escape MSBuild would decode, fails as
+`unavailable-local-import` or `unsafe-import-path` with its label as `target`,
+whatever its condition. The exact-path `Exists` rule uses the same conjunct
+parser, trims its argument and ignores a list or escaped argument.
+
+Proofs model the parent workspace CI builds from: the parent revision tree,
+each root-declared reference checked out at its pin, and no nested gitlink
+initialized. They read tree entries only, never blob content.
+
+- **Present** means a committed regular blob or directory at that exact spelling
+  in the inspected root, or in a root-declared reference at its pin. A path
+  under a nested gitlink, a link, a gitlink, a glob, or parent-tree content
+  outside every root is never present.
+- **Absent** means no case-insensitive match for an entry or directory in that
+  model: the inspected root, the root reference at its pin, or the parent tree
+  outside every root. A nested path is absent only when its exact nested commit,
+  read through the nested rule, has no such match. A tree root, the parent
+  workspace root, a path below an unopened gitlink or through a committed link,
+  a glob and a path above the parent root are never absent.
+- **One hop.** A guard in a substituted file proves something only for a path in
+  that same substituted tree, and a nested commit never proves presence.
+
+Because only an absent, otherwise refused target is excused, a build-time file
+such as `obj/project.assets.json`, an ignored file or a standalone layout cannot
+hide committed content: a present import is always visited and every
+conditional property alternative is kept. A Compile item is never excused, so a
+guarded property fallback that reaches a Compile source outside every root
+stays refused. Global `-p:` properties are outside the static model.
 
 Each candidate binds an exact repository, path, kind and identity. Package IDs,
 tool commands and container repositories have separate identities, including
@@ -173,17 +232,20 @@ local compilation/source closure: every fixture-directory file, inherited
 sources, including committed glob matches outside the fixture directory.
 Allowance data sets `compilationClosure: true`, keeps `sourcePrefix` equal to
 the project's directory, and lists every closure file under `sources` as a
-repository-relative `path` and SHA-256. Changed inherited, imported, linked or
-secondary sources and added/removed closure files fail. Imported Compile paths
-use the consuming project directory unless `MSBuildThisFileDirectory` supplies an
-explicit local base. Compile item aliases and alias chains resolve to finite committed literal/glob
-inputs. Byte-preserving `Copy` outputs bind their committed source bytes when
+repository-relative `path` and SHA-256; a cross-tree member is listed by its
+requested label, where a leading `../` marks a workspace label. Only such a
+closure may name a label outside the repository. Changed inherited, imported,
+linked or secondary sources and added/removed closure files fail. Imported
+Compile paths use the consuming project directory unless
+`MSBuildThisFileDirectory` supplies an explicit local base. Compile item aliases
+and alias chains resolve to finite committed literal/glob inputs.
+Byte-preserving `Copy` outputs bind their committed source bytes when
 all inputs resolve; other task output, generated `obj` files, unknown directory
 aliases, missing sources and unsupported item transforms remain coverage errors.
-Conditional and removed item alternatives are inspected conservatively. SDK,
-workspace and nested reference contents remain outside the local closure and
-are never initialized; only cross-tree resolution reads their committed
-objects, and the report binds those reads. An unknown directory cannot be qualified from
+Conditional and removed item alternatives are inspected conservatively. SDK
+contents remain outside the closure. Workspace and nested reference contents
+enter it only through cross-tree resolution, bound by label and pinned blob
+hash, and are never initialized. An unknown directory cannot be qualified from
 local suffix matches alone. Cyclic/undefined aliases, more than 32 alias levels
 or more than 4,096 source items fail with their metadata path.
 Unresolved import globs inspect committed local suffix matches regardless of
@@ -356,11 +418,15 @@ are an append-only chain referenced by `amendments.json`.
    `removeExceptions`, even when empty. Removals contain exact four-field
    surface descriptors and must target existing entries. Replacement uses an
    exact removal plus a complete approved addition. For fixture exemptions,
-   compute the full local closure at the authorized Git pin with
-   `compilation_closure(tree, project, Resolver(Workspace(workspace, parent, declarations(parent)), repository, tree))`,
-   where `tree = Tree(repository, gitlink)` and `parent = Tree(workspace, revision)`;
-   preserve every returned source hash rather than copying only the project's
-   own directory. Without a resolver, cross-tree imports and sources are refused.
+   compute the full closure at the authorized Git pin with
+   `compilation_closure(tree, project, resolver)`, where
+   `resolver = Resolver(Workspace(workspace, parent, declarations(parent)), repository, tree)`,
+   `tree = Tree(repository, gitlink)` and `parent = Tree(workspace, revision)`.
+   Preserve every returned source hash rather than copying only the project's
+   own directory. Without a resolver, cross-tree imports and sources are
+   refused. Policy loading validates a retained v1 fixture receipt without
+   workspace context, so a cross-tree path in that fixture's metadata is refused
+   and policy loading fails closed.
 4. A new approval receipt uses
    `schema: "mcpcli-census-amendment-approval/v2"`, `decision: "approved"`, and the same
    `owner` as the amendment header. Its `authority` is a nonempty array of
@@ -410,11 +476,17 @@ are an append-only chain referenced by `amendments.json`.
    expressions and the limits of the classification; enumeration or hashes do not
    prove runtime behavior. These entries add no proprietary implementation.
 
-   Append-only amendments can record separately authorized versions of the same
-   exact file. The checker accepts only their explicitly recorded hashes at their
-   applicable source revisions. An unknown body, wrong pin, neighboring file or
-   unrelated source still refuses; earlier baseline and receipt bytes never change.
-
+   To approve a refreshed version of an already excluded file, add another
+   exact-file entry for the same `repository` and `prefix` in a later amendment.
+   Keep the same `row` and `classification`. Append-only amendments record those
+   separately authorized versions; there is no removal operation for exclusions.
+   The checker accepts only their explicitly recorded hashes at their applicable
+   source revisions, so an entry without `sourceRevision` still matches the
+   current pin and earlier approved bodies of that file stay approved. An unknown
+   body, wrong pin, neighboring file or unrelated source still refuses, and
+   earlier baseline and receipt bytes never change. A file covered by an
+   exact-file entry never falls back to a directory-scope exclusion of its
+   parent, so a drifted file fails even inside an excluded directory.
 6. Hash the finished receipt into the amendment's evidence binding, then append
    the finished amendment path and SHA-256 to `amendments.json`. Preserve all
    prior baseline, amendment and receipt bytes. Never extend a captured prefix

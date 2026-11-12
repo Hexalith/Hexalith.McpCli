@@ -52,25 +52,31 @@ MCP registrations and direct construction, and literal workflow/script/container
 publication identities. Unsafe publication paths and unresolved workflow project
 targets fail with source context. Finite literal shell variables, loops, function
 arguments, working directories, Compile item aliases and committed Copy inputs
-resolve without executing inspected code. Committed-script path locators and bounded JSON object arrays/wrappers are
-also inspected. A finite committed-JSON selector can bind ordered tab-separated
-fields to a literal shell read loop; every selected project still undergoes
-metadata inspection. Unsupported selector, mutation and shell-input forms fail
-coverage. Comments and quoted diagnostics do not
-establish commands; executable substitutions remain visible and unsupported
-command wrappers fail coverage. Runtime/generated sources remain coverage
-errors. MSBuild imports and Compile sources may cross one tree boundary: a path
-escaping a root is read from the root-declared reference it lands in, at that
-root's committed pin, and a path inside a nested gitlink is read at the exact
-nested commit from the single root reference whose declared URL matches. Other
-cross-tree paths, unresolvable nested pins and missing objects fail coverage;
-nothing is fetched, initialized or checked out. Each such read's repository,
-commit, path and SHA-256 appear in the report. Root references must therefore
-be full clones that contain their nested pins, as CI's non-recursive root
-initialization provides. Imports and static property definitions guarded by a
-balanced top-level `and` of `Exists()`/`!Exists()` checks are skipped only when
-committed facts prove the guard false; a nested path is never proven present. Partial roots retain other observations and do not
-establish stale allowances. The report names new surfaces and stale allowances; baseline changes require a
+resolve without executing inspected code. Committed-script path locators and
+bounded JSON object arrays/wrappers are also inspected. A finite committed-JSON
+selector can bind ordered tab-separated fields to a literal shell read loop;
+every selected project still undergoes metadata inspection. Unsupported
+selector, mutation and shell-input forms fail coverage. Comments and quoted
+diagnostics do not establish commands; executable substitutions remain visible
+and unsupported command wrappers fail coverage. Runtime/generated sources remain
+coverage errors. MSBuild imports and Compile sources may cross one tree
+boundary: a path escaping a root is read from the root-declared reference it
+lands in, at that root's committed pin, and a path inside a nested gitlink is
+read at the exact nested commit from the single root reference whose declared
+URL matches. Other cross-tree paths, unresolvable nested pins and missing
+objects fail coverage; nothing is fetched, initialized or checked out, and Git
+reads ignore replace refs and inherited repository variables. Each such read's
+repository, commit, path and SHA-256 appear in the report, and a fixture
+allowance's compilation closure binds each cross-tree member by its requested
+label and hash. A nested pin must therefore be reachable from the matching
+root reference's remote refs, or it fails as `nested-object-unavailable`. An
+absent import target that would otherwise be refused is excused only when a
+balanced top-level `and` of `Exists()`/`!Exists()` checks in the import's own
+or `ImportGroup` condition, or in every definition of the single `$(P)` it
+imports, proves against committed workspace facts that the import never
+evaluates. Present imports and property alternatives are never skipped. Partial
+roots retain other observations and do not establish stale allowances. The
+report names new surfaces and stale allowances; baseline changes require a
 versioned, hash-chained amendment. Successful census execution is required for
 paired-release staging and publication.
 

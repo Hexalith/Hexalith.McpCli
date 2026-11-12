@@ -1,0 +1,41 @@
+[
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/proprietary-surfaces/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "census-tests",
+    "stderr": "census-tests.stderr.txt",
+    "stderrSha256": "29f009e623085ae022f1742599054d6eac3f4f976f39170885a0b272cd53bc81",
+    "stdout": "census-tests.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/mutation-guards.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 0,
+    "name": "mutations",
+    "stderr": "mutations.stderr.txt",
+    "stderrSha256": "6a115a90618de4b89a8021c2dc27106782499f709959989dbb54a212851f5ebf",
+    "stdout": "mutations.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

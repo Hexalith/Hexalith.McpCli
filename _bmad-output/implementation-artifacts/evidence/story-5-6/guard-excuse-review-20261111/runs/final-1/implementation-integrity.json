@@ -1,0 +1,21 @@
+{
+  "after": {
+    "README.md": "b0c74a9bf5f450166de7b39a3222af4192eb3c81da56fa0f5cf5721ad83b0ccd",
+    "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/before-pruning-check.py": "3e10669799b5f520960071aec645acf1995d874c4f81e288d51b471e666fc2a3",
+    "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/mutation-guards.py": "56273b0a672875cbc9c26606ced27bce76e06e88d9c64270e63ed7046d74fed3",
+    "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/run-final-verification.py": "70b20cb0f122f718fbf7b62f980bd4b5a46cb93d80624b357bfdc341a8bfcb21",
+    "tools/proprietary-surfaces/v1/README.md": "a4e362eb1c0ff6df39dc852620b78d0ae1661d46d1f04708d87ce7be26c2e51e",
+    "tools/proprietary-surfaces/v1/check.py": "e40c065a1211392a033915d39dfc39368fb1ac4ff2b5aa733198e1b0127bb87e",
+    "tools/proprietary-surfaces/v1/test_census.py": "7da3e15dde2a3f83c2ba3008178e3c867ad71efce7a25addf0b0c7ba3c1ce58c"
+  },
+  "before": {
+    "README.md": "b0c74a9bf5f450166de7b39a3222af4192eb3c81da56fa0f5cf5721ad83b0ccd",
+    "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/before-pruning-check.py": "3e10669799b5f520960071aec645acf1995d874c4f81e288d51b471e666fc2a3",
+    "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/mutation-guards.py": "56273b0a672875cbc9c26606ced27bce76e06e88d9c64270e63ed7046d74fed3",
+    "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/run-final-verification.py": "70b20cb0f122f718fbf7b62f980bd4b5a46cb93d80624b357bfdc341a8bfcb21",
+    "tools/proprietary-surfaces/v1/README.md": "a4e362eb1c0ff6df39dc852620b78d0ae1661d46d1f04708d87ce7be26c2e51e",
+    "tools/proprietary-surfaces/v1/check.py": "e40c065a1211392a033915d39dfc39368fb1ac4ff2b5aa733198e1b0127bb87e",
+    "tools/proprietary-surfaces/v1/test_census.py": "7da3e15dde2a3f83c2ba3008178e3c867ad71efce7a25addf0b0c7ba3c1ce58c"
+  },
+  "result": "passed"
+}

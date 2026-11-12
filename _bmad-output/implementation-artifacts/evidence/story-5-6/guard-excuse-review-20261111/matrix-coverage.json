@@ -1,0 +1,61 @@
+{
+  "result": "passed",
+  "rows": [
+    {
+      "executed": true,
+      "passed": true,
+      "row": "New unapproved project/tool/container/release",
+      "tests": [
+        "test_orphan_package_tool_container_and_workflow_publications_fail",
+        "test_nested_pin_workspace_import_reads_sibling_root_at_its_pin",
+        "test_nested_pin_import_reads_same_url_root_at_the_nested_commit",
+        "test_guard_excuse_never_skips_present_imports_or_classification_alternatives",
+        "test_nested_review_substituted_unresolved_import_is_refused_without_name_matching"
+      ]
+    },
+    {
+      "executed": true,
+      "passed": true,
+      "row": "Approved exemption or exact unexpired exception",
+      "tests": [
+        "test_each_approved_classification_is_retained_without_broadening",
+        "test_exception_is_exact_including_kind_identity_path_and_root",
+        "test_nested_pin_local_closure_and_context_free_api",
+        "test_nested_review_closure_allowance_binds_cross_tree_members_by_label"
+      ]
+    },
+    {
+      "executed": true,
+      "passed": true,
+      "row": "Invalid/malformed/expired exception, including allowed target",
+      "tests": [
+        "test_invalid_exception_fails_even_when_target_is_already_allowed",
+        "test_expiry_is_inclusive_and_production_uses_utc"
+      ]
+    },
+    {
+      "executed": true,
+      "passed": true,
+      "row": "Removed surface reports stale without changing policy",
+      "tests": [
+        "test_stale_allowances_are_reported_and_never_rewritten"
+      ]
+    },
+    {
+      "executed": true,
+      "passed": true,
+      "row": "Missing source/root, malformed metadata or unsafe path",
+      "tests": [
+        "test_missing_root_uninitialized_root_and_missing_committed_object_fail",
+        "test_nested_pin_exists_guarded_absent_escapes_are_optional_only_when_required",
+        "test_guard_excuse_unproven_guards_keep_the_refusal",
+        "test_guard_excuse_carried_property_guard_requires_every_producing_definition_refuted",
+        "test_nested_review_missing_substituted_blobs_name_their_requested_labels",
+        "test_nested_review_invalid_substituted_text_names_its_label_and_keeps_provenance",
+        "test_nested_review_linked_root_checkout_and_tree_pin_refuse_cross_tree_reads",
+        "test_nested_review_nested_declarations_need_valid_submodule_sections",
+        "test_nested_review_amendment_fixture_validation_refuses_cross_tree_metadata"
+      ]
+    }
+  ]
+}

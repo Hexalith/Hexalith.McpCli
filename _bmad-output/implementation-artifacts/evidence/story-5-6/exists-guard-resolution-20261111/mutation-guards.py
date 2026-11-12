@@ -40,12 +40,28 @@ def literals(name, wanted):
     return found
 
 
+# An absent Exists()-guarded import is now optional twice: the guard proof runs first
+# and import_optional remains for committed but excluded paths. Removing the guard
+# means removing both, so this prior control also disables the positive-absent proof.
+GUARD_ADAPTED = {
+    'Review-S07-optional': [
+        ("if alternatives and all('$(' not in item and resolver.canonical_label(label_path(current, item)) == label",
+         "if False and all('$(' not in item and resolver.canonical_label(label_path(current, item)) == label"),
+        ('if not guard[1] and all(resolver.absent(label, resolver.substitution(current)) for label in labels):', 'if False:')],
+}
+
+
 def prior_controls():
     manifest = literals('manifest', {'prior_mutations', 'review_mutations', 'coverage_mutations', 'manifest_mutations'})
     nested = literals('nested', {'ADAPTED', 'NESTED'})
-    controls = [(name, nested['ADAPTED'].get(name, replacements), test, 'adapted' if name in nested['ADAPTED'] else 'retained')
-                for group in ('prior_mutations', 'review_mutations', 'coverage_mutations', 'manifest_mutations')
-                for name, replacements, test in manifest[group]]
+    controls = []
+    for group in ('prior_mutations', 'review_mutations', 'coverage_mutations', 'manifest_mutations'):
+        for name, replacements, test in manifest[group]:
+            if name in GUARD_ADAPTED:
+                controls.append((name, GUARD_ADAPTED[name], test, 'guard-adapted'))
+            else:
+                controls.append((name, nested['ADAPTED'].get(name, replacements), test,
+                                 'adapted' if name in nested['ADAPTED'] else 'retained'))
     return controls + [(name, replacements, test, 'nested') for name, replacements, test in nested['NESTED']]
 
 
@@ -133,7 +149,7 @@ def main():
     print(json.dumps(dict(schema='mcpcli-census-mutation-controls/v1', result='passed',
                           runners={key: value[1] for key, value in RUNNERS.items()}, mutationCount=len(results),
                           newCount=sum(r['origin'] == 'new' for r in results), origins={origin: sum(r['origin'] == origin for r in results)
-                          for origin in ('retained', 'adapted', 'nested', 'new')}, controls=results), indent=2))
+                          for origin in ('retained', 'adapted', 'guard-adapted', 'nested', 'new')}, controls=results), indent=2))
 
 
 if __name__ == '__main__':

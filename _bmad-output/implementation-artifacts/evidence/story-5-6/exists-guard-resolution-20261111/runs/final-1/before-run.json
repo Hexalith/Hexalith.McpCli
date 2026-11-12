@@ -1,0 +1,86 @@
+{
+  "baseline": {
+    "checker": "before-upstream-check.py",
+    "checkerSha256": "60a07e707a4036966340f5336eb13b44b9928168674100573d09224cb3ccda02",
+    "counts": {
+      "completeRoots": 5,
+      "errors": 69,
+      "observations": 481,
+      "rejected": 41,
+      "stale": 10
+    },
+    "executedCopySha256": "431e295f176aaec6236a44f35be475dff8225ce17a4cd3bbc36673f687f392a7",
+    "reportSha256": "2b0bed1f3ce6b754cca4532b76657265d6906ec6fdcb81d8c2f0f4429a3541a6",
+    "stderrSha256": "1941795848cc2eca6b4f6b8363771ad985f30970b947de745d9363852de29bae"
+  },
+  "nestedPinCheckerAtCurrentPins": {
+    "checker": "before-check.py",
+    "checkerSha256": "3cfcc05db9c7f4e35f0a2eb8e3cb908466908d56e176d475178300cf297097a5",
+    "counts": {
+      "completeRoots": 5,
+      "errors": 69,
+      "observations": 480,
+      "rejected": 40,
+      "stale": 10
+    },
+    "executedCopySha256": "d58056262dab2a71ef4b050916f030cb915be91e0d391835626a831177968cf0",
+    "identicalToPriorExceptRevisionAndDate": false,
+    "reportSha256": "8fd16386785639185db912ffaee9369d9ecdc703d5ea2de92963ac3d9abb9104",
+    "stderrSha256": "12324ac7547b60ec89dcfbb6c679bc299290782b97ae13ad447640a8187c9956"
+  },
+  "onlyAdaptation": "ROOT names the workspace because each before-checker runs from a temporary copy.",
+  "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+  "priorCounts": {
+    "completeRoots": 5,
+    "errors": 68,
+    "observations": 479,
+    "rejected": 39,
+    "stale": 10
+  },
+  "priorParentRevision": "ef80e45056620aa851a68276428aa63ed6dcc90b",
+  "priorReport": "_bmad-output/implementation-artifacts/evidence/story-5-6/nested-pin-resolution-20261111/runs/final-2/census.json",
+  "priorReportSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57",
+  "report": "before-census.json",
+  "rootPinChanges": [
+    {
+      "current": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "prior": "891886ddc60a9924d053bb74bf6bcc73e101b2ce",
+      "repository": "references/Hexalith.Builds"
+    },
+    {
+      "current": "0c7b14856f2b730749caa8a552742a77d4882dc7",
+      "prior": "b882c1005050aaebfa70618b5a72c1c8be452281",
+      "repository": "references/Hexalith.EventStore"
+    },
+    {
+      "current": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+      "prior": "9b67b3d117e0a95aabd13535da8317846c66f9d9",
+      "repository": "references/Hexalith.Folders"
+    },
+    {
+      "current": "57aa756c02edbae4294412885823533308b7db0d",
+      "prior": "7ace06c5c50406b9021fc95d8d87cf962b5180dd",
+      "repository": "references/Hexalith.FrontComposer"
+    },
+    {
+      "current": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "prior": "43d2d72f7170a29a58b6046f69e05c9ad9734701",
+      "repository": "references/Hexalith.Memories"
+    },
+    {
+      "current": "95347ab98f83defaa0983cd70177889469d8e4ec",
+      "prior": "07ddff72c99161be212466ff8795bba4c107adc1",
+      "repository": "references/Hexalith.Parties"
+    },
+    {
+      "current": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "prior": "5adb00b2f30d2985ee0b1fb1abd713b10660dc48",
+      "repository": "references/Hexalith.Platform"
+    },
+    {
+      "current": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "prior": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+      "repository": "references/Hexalith.Tenants"
+    }
+  ]
+}

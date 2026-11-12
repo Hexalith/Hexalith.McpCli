@@ -1,0 +1,2006 @@
+{
+  "decisions": [
+    {
+      "category": "inspection-error",
+      "gitlink": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+          "path": "eng/verify-story-5.4.ps1",
+          "repository": "references/Hexalith.Agents",
+          "rule": "unresolved-publication-target:eng/verify-story-5.4.ps1"
+        }
+      ],
+      "owner": "Hexalith.Agents owning maintainer",
+      "path": "eng/verify-story-5.4.ps1",
+      "repository": "references/Hexalith.Agents",
+      "sourceBindings": [
+        {
+          "gitBlob": "eb5e15e534a269d0c74cfd544737a9f43fffa584",
+          "path": "eng/verify-story-5.4.ps1",
+          "sha256": "561c032e9bb1cc049e45dc5b0f2609cf0feaae8239c24c98e5c3b1c1f810d596"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+          "path": "eng/verify-story.ps1",
+          "repository": "references/Hexalith.Agents",
+          "rule": "unresolved-publication-target:eng/verify-story.ps1"
+        }
+      ],
+      "owner": "Hexalith.Agents owning maintainer",
+      "path": "eng/verify-story.ps1",
+      "repository": "references/Hexalith.Agents",
+      "sourceBindings": [
+        {
+          "gitBlob": "6cd736ca54435d24e6ba00f785bce01c0c662db0",
+          "path": "eng/verify-story.ps1",
+          "sha256": "1695caba477a55ca6a6f91cdf81465a1d8ea0d4bb730c82a384460ab7de4e8b7"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "path": ".github/workflows/domain-release.yml",
+          "repository": "references/Hexalith.Builds",
+          "rule": "unresolved-publication-target:.github/workflows/domain-release.yml"
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": ".github/workflows/domain-release.yml",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "93d1546f8c5a1e08e7bb174748c924aea38dd5c1",
+          "path": ".github/workflows/domain-release.yml",
+          "sha256": "4826f5ef4e457930d8aa89c6c8c4c92d9db483787850b4d1f426b5e4f8269ab7"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "path": "Github/publish-containers/publish-containers.sh",
+          "repository": "references/Hexalith.Builds",
+          "rule": "unbounded-publication-control-flow:Github/publish-containers/publish-containers.sh"
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "Github/publish-containers/publish-containers.sh",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "ea4aa000309a80436f489640752400b16b95cecd",
+          "path": "Github/publish-containers/publish-containers.sh",
+          "sha256": "7b0b29d552fb38ab20db6c5faf650ac314a8fac17a6b9f43417035d29ef649ed"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "path": "Github/publish-containers/publish-containers.sh",
+          "repository": "references/Hexalith.Builds",
+          "rule": "unresolved-publication-target:Github/publish-containers/publish-containers.sh"
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "Github/publish-containers/publish-containers.sh",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "ea4aa000309a80436f489640752400b16b95cecd",
+          "path": "Github/publish-containers/publish-containers.sh",
+          "sha256": "7b0b29d552fb38ab20db6c5faf650ac314a8fac17a6b9f43417035d29ef649ed"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "path": "Github/scripts/build-packages.ps1",
+          "repository": "references/Hexalith.Builds",
+          "rule": "unresolved-publication-target:Github/scripts/build-packages.ps1"
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "Github/scripts/build-packages.ps1",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "2bd123dbb97a4c077ff71420fa21bf25d86b1ec8",
+          "path": "Github/scripts/build-packages.ps1",
+          "sha256": "abdef8a25d50810450fc0e2a38a3d7f4cbce2b4220fdf1257552d5ded436cac2"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "The exact hash-bound exclusion no longer matches the committed bytes at this pin; the owner approves the new bytes through a versioned amendment, or the pin keeps the approved bytes.",
+      "observations": [
+        {
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "path": "Tools/package-version-audit.json",
+          "repository": "references/Hexalith.Builds",
+          "rule": "excluded-fixture-source-drift:Tools/package-version-audit.json"
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "Tools/package-version-audit.json",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "67a58f38b56e2b77081beb73fb6dc9dd67c08c0a",
+          "path": "Tools/package-version-audit.json",
+          "sha256": "173efbb30709e624ee0ec041ea5c0a62188499b5b5b1cf1a4d516dd045af71e2"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+      "group": "embedded-metadata-context",
+      "newAuthority": null,
+      "nextConcreteAction": "Owner identifies active composition versus test/evidence data for this exact blob; an exclusion needs exact hash-bound versioned authority.",
+      "observations": [
+        {
+          "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v5-proposal.json",
+          "repository": "references/Hexalith.Conversations",
+          "rule": "malformed-publication:docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v5-proposal.json"
+        }
+      ],
+      "owner": "Hexalith.Conversations owning maintainer",
+      "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v5-proposal.json",
+      "repository": "references/Hexalith.Conversations",
+      "sourceBindings": [
+        {
+          "gitBlob": "00e723d0addd860308b7207fff787be26ddad48f",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v5-proposal.json",
+          "sha256": "c1c919df4c8a1dcd021de24c99ebe88c50f4c2dd81f4da68f9c3fbd2ee2e7f84"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+      "group": "embedded-metadata-context",
+      "newAuthority": null,
+      "nextConcreteAction": "Owner identifies active composition versus test/evidence data for this exact blob; an exclusion needs exact hash-bound versioned authority.",
+      "observations": [
+        {
+          "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v6-proposal.json",
+          "repository": "references/Hexalith.Conversations",
+          "rule": "malformed-publication:docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v6-proposal.json"
+        }
+      ],
+      "owner": "Hexalith.Conversations owning maintainer",
+      "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v6-proposal.json",
+      "repository": "references/Hexalith.Conversations",
+      "sourceBindings": [
+        {
+          "gitBlob": "39113d55296323f4c409f0390b9c69e905c629bb",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v6-proposal.json",
+          "sha256": "0bbf7346addb7860ad77376f7595126f436fc14afae6d8a69782fd60836969fd"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "0c7b14856f2b730749caa8a552742a77d4882dc7",
+      "group": "protected-source-boundary",
+      "newAuthority": null,
+      "nextConcreteAction": "Nested publication targets, generated task output and unresolved Compile inputs stay refused; supply root-contained committed sources or seek an approved generic boundary design.",
+      "observations": [
+        {
+          "gitlink": "0c7b14856f2b730749caa8a552742a77d4882dc7",
+          "path": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+          "repository": "references/Hexalith.EventStore",
+          "rule": "dynamic-generated-compile-source:samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj:_sampleapirestgeneratedcopy"
+        }
+      ],
+      "owner": "Hexalith.EventStore owning maintainer",
+      "path": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+      "repository": "references/Hexalith.EventStore",
+      "sourceBindings": [
+        {
+          "gitBlob": "7552813a23e8f56264bc6cfd241a5038dcf327cd",
+          "path": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+          "sha256": "5631daf0eab17a8d41bf53409f52fa8d2d2e786f803e98b8cce03bd8c7d2dfc4"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+          "path": "tests/tools/run-capacity-calibration-gates.ps1",
+          "repository": "references/Hexalith.Folders",
+          "rule": "unresolved-publication-target:tests/tools/run-capacity-calibration-gates.ps1"
+        }
+      ],
+      "owner": "Hexalith.Folders owning maintainer",
+      "path": "tests/tools/run-capacity-calibration-gates.ps1",
+      "repository": "references/Hexalith.Folders",
+      "sourceBindings": [
+        {
+          "gitBlob": "335701530d83ab1f0e216998d55c101f39650e1a",
+          "path": "tests/tools/run-capacity-calibration-gates.ps1",
+          "sha256": "c50762d23e2e832724582fc4ca7cf2d3fa5c431f973f36a7773dc8d6f2c19d17"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "57aa756c02edbae4294412885823533308b7db0d",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "57aa756c02edbae4294412885823533308b7db0d",
+          "path": ".github/workflows/quality.yml",
+          "repository": "references/Hexalith.FrontComposer",
+          "rule": "unbounded-publication-control-flow:.github/workflows/quality.yml"
+        }
+      ],
+      "owner": "Hexalith.FrontComposer owning maintainer",
+      "path": ".github/workflows/quality.yml",
+      "repository": "references/Hexalith.FrontComposer",
+      "sourceBindings": [
+        {
+          "gitBlob": "1eabde29fb5c47a69fd525698b5216efe82fd7ef",
+          "path": ".github/workflows/quality.yml",
+          "sha256": "06683f65b86c0a35ec2ddc6f320c913241ce326f6439d5e4ee246384ef827cd0"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "57aa756c02edbae4294412885823533308b7db0d",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "57aa756c02edbae4294412885823533308b7db0d",
+          "path": ".github/workflows/quality.yml",
+          "repository": "references/Hexalith.FrontComposer",
+          "rule": "unresolved-heredoc-substitution:.github/workflows/quality.yml"
+        }
+      ],
+      "owner": "Hexalith.FrontComposer owning maintainer",
+      "path": ".github/workflows/quality.yml",
+      "repository": "references/Hexalith.FrontComposer",
+      "sourceBindings": [
+        {
+          "gitBlob": "1eabde29fb5c47a69fd525698b5216efe82fd7ef",
+          "path": ".github/workflows/quality.yml",
+          "sha256": "06683f65b86c0a35ec2ddc6f320c913241ce326f6439d5e4ee246384ef827cd0"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "57aa756c02edbae4294412885823533308b7db0d",
+      "group": "embedded-metadata-context",
+      "newAuthority": null,
+      "nextConcreteAction": "Owner identifies active composition versus test/evidence data for this exact blob; an exclusion needs exact hash-bound versioned authority.",
+      "observations": [
+        {
+          "gitlink": "57aa756c02edbae4294412885823533308b7db0d",
+          "path": "tests/ci-governance/fixtures/release-readiness-cases.json",
+          "repository": "references/Hexalith.FrontComposer",
+          "rule": "malformed-publication:tests/ci-governance/fixtures/release-readiness-cases.json"
+        }
+      ],
+      "owner": "Hexalith.FrontComposer owning maintainer",
+      "path": "tests/ci-governance/fixtures/release-readiness-cases.json",
+      "repository": "references/Hexalith.FrontComposer",
+      "sourceBindings": [
+        {
+          "gitBlob": "64eccc672e098cd5b8a107135e68520765071d93",
+          "path": "tests/ci-governance/fixtures/release-readiness-cases.json",
+          "sha256": "2d59bc89702a3eb6f6c0371cf3aba503bd58fee4ed2488a2dd13e1b8a8a54ed0"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+          "path": "tools/ci/provision-eventstore-local-feed.sh",
+          "repository": "references/Hexalith.Memories",
+          "rule": "unbounded-publication-control-flow:tools/ci/provision-eventstore-local-feed.sh"
+        }
+      ],
+      "owner": "Hexalith.Memories owning maintainer",
+      "path": "tools/ci/provision-eventstore-local-feed.sh",
+      "repository": "references/Hexalith.Memories",
+      "sourceBindings": [
+        {
+          "gitBlob": "f041f2821d061fae071bd7b8d2e578bcbaf90874",
+          "path": "tools/ci/provision-eventstore-local-feed.sh",
+          "sha256": "9e26bad059fd46c2e3a6b68d19cb0197a64f0199b29c383caabbf8919464a154"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+          "path": "tools/ci/provision-eventstore-local-feed.sh",
+          "repository": "references/Hexalith.Memories",
+          "rule": "unresolved-loop-redirection:tools/ci/provision-eventstore-local-feed.sh"
+        }
+      ],
+      "owner": "Hexalith.Memories owning maintainer",
+      "path": "tools/ci/provision-eventstore-local-feed.sh",
+      "repository": "references/Hexalith.Memories",
+      "sourceBindings": [
+        {
+          "gitBlob": "f041f2821d061fae071bd7b8d2e578bcbaf90874",
+          "path": "tools/ci/provision-eventstore-local-feed.sh",
+          "sha256": "9e26bad059fd46c2e3a6b68d19cb0197a64f0199b29c383caabbf8919464a154"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+          "path": "tools/pack-release.ps1",
+          "repository": "references/Hexalith.Memories",
+          "rule": "unresolved-publication-target:tools/pack-release.ps1"
+        }
+      ],
+      "owner": "Hexalith.Memories owning maintainer",
+      "path": "tools/pack-release.ps1",
+      "repository": "references/Hexalith.Memories",
+      "sourceBindings": [
+        {
+          "gitBlob": "8fa0fe5bc7204140dca5c3acfa0c96bfc4f6d7d7",
+          "path": "tools/pack-release.ps1",
+          "sha256": "dfa8e1628868dbb717f83b06b65dbca73ed76eed8175b7a4aeddf7148aef4a04"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+          "path": "tools/verify-cli-pack.ps1",
+          "repository": "references/Hexalith.Memories",
+          "rule": "unresolved-publication-target:tools/verify-cli-pack.ps1"
+        }
+      ],
+      "owner": "Hexalith.Memories owning maintainer",
+      "path": "tools/verify-cli-pack.ps1",
+      "repository": "references/Hexalith.Memories",
+      "sourceBindings": [
+        {
+          "gitBlob": "1a4a3f3b473c5b045dd61c0bf9a1980a5113ec0c",
+          "path": "tools/verify-cli-pack.ps1",
+          "sha256": "db764e2b5b136786c20767421c45e9246fbb93f0f236a0ca803664358baac0cb"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "95347ab98f83defaa0983cd70177889469d8e4ec",
+      "group": "protected-source-boundary",
+      "newAuthority": null,
+      "nextConcreteAction": "Nested publication targets, generated task output and unresolved Compile inputs stay refused; supply root-contained committed sources or seek an approved generic boundary design.",
+      "observations": [
+        {
+          "gitlink": "95347ab98f83defaa0983cd70177889469d8e4ec",
+          "path": "tests/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact.csproj",
+          "repository": "references/Hexalith.Parties",
+          "rule": "unresolved-compile-source:tests/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact.csproj"
+        }
+      ],
+      "owner": "Hexalith.Parties owning maintainer",
+      "path": "tests/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact.csproj",
+      "repository": "references/Hexalith.Parties",
+      "sourceBindings": [
+        {
+          "gitBlob": "6652461467f3a434ba7282b7e22c391a79347eb6",
+          "path": "tests/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact.csproj",
+          "sha256": "e206e9b03e0aae58a97d9727ff5c45d8ec53f19c3cfd2c68656ed0b6cc1badf8"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "95347ab98f83defaa0983cd70177889469d8e4ec",
+      "group": "protected-source-boundary",
+      "newAuthority": null,
+      "nextConcreteAction": "Nested publication targets, generated task output and unresolved Compile inputs stay refused; supply root-contained committed sources or seek an approved generic boundary design.",
+      "observations": [
+        {
+          "gitlink": "95347ab98f83defaa0983cd70177889469d8e4ec",
+          "path": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
+          "repository": "references/Hexalith.Parties",
+          "rule": "unresolved-compile-source:tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj"
+        }
+      ],
+      "owner": "Hexalith.Parties owning maintainer",
+      "path": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
+      "repository": "references/Hexalith.Parties",
+      "sourceBindings": [
+        {
+          "gitBlob": "93e5b6cb3cb48d84075c02635d5d1962645dcf7b",
+          "path": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
+          "sha256": "f7121b066ae86077cd37c23014e0458a5ae823e4281ef65d929a77f8220dcdd5"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "group": "protected-source-boundary",
+      "newAuthority": null,
+      "nextConcreteAction": "Nested publication targets, generated task output and unresolved Compile inputs stay refused; supply root-contained committed sources or seek an approved generic boundary design.",
+      "observations": [
+        {
+          "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+          "path": ".github/workflows/ci.yml",
+          "repository": "references/Hexalith.Projects",
+          "rule": "nested-publication-target:.github/workflows/ci.yml",
+          "target": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Module.Cli/Hexalith.Builds.Module.Cli.csproj"
+        }
+      ],
+      "owner": "Hexalith.Projects owning maintainer",
+      "path": ".github/workflows/ci.yml",
+      "repository": "references/Hexalith.Projects",
+      "sourceBindings": [
+        {
+          "gitBlob": "f2c66dd39af36aafab8a9e62af756831c83a8188",
+          "path": ".github/workflows/ci.yml",
+          "sha256": "a88877838dcf00d7633bfc6cc069367da353d76c4fdc12e869eccdcc8b79d61d"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+          "path": ".github/workflows/ci.yml",
+          "repository": "references/Hexalith.Projects",
+          "rule": "unresolved-loop-redirection:.github/workflows/ci.yml"
+        }
+      ],
+      "owner": "Hexalith.Projects owning maintainer",
+      "path": ".github/workflows/ci.yml",
+      "repository": "references/Hexalith.Projects",
+      "sourceBindings": [
+        {
+          "gitBlob": "f2c66dd39af36aafab8a9e62af756831c83a8188",
+          "path": ".github/workflows/ci.yml",
+          "sha256": "a88877838dcf00d7633bfc6cc069367da353d76c4fdc12e869eccdcc8b79d61d"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+          "path": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+          "repository": "references/Hexalith.Projects",
+          "rule": "unresolved-publication-target:tests/tools/run-frontcomposer-inspect-gate.ps1"
+        }
+      ],
+      "owner": "Hexalith.Projects owning maintainer",
+      "path": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+      "repository": "references/Hexalith.Projects",
+      "sourceBindings": [
+        {
+          "gitBlob": "d79d0d2b5b9c93ba94150b01299d59b68e592bff",
+          "path": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+          "sha256": "b7cdd5c53028c3df0e3ba172e5c374ec1e59eae5e4b6b28d6e8ee31dff48093d"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "scripts/publish-partial-release.sh",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unresolved-publication-directory:scripts/publish-partial-release.sh"
+        }
+      ],
+      "owner": "Hexalith.Tenants owning maintainer",
+      "path": "scripts/publish-partial-release.sh",
+      "repository": "references/Hexalith.Tenants",
+      "sourceBindings": [
+        {
+          "gitBlob": "c6290f9a9c0bfc8573eed8522d38982ada35c601",
+          "path": "scripts/publish-partial-release.sh",
+          "sha256": "4dab193efd8115adeb10ab63d6c503b737fa02c2b27788bc01b06f1b884196d4"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+      "group": "protected-source-boundary",
+      "newAuthority": null,
+      "nextConcreteAction": "Nested publication targets, generated task output and unresolved Compile inputs stay refused; supply root-contained committed sources or seek an approved generic boundary design.",
+      "observations": [
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Abstractions/Hexalith.EventStore.Admin.Abstractions.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Aspire/Hexalith.EventStore.Aspire.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story414-sdk-candidate.sh",
+          "target": "references/Hexalith.Platform/src/Hexalith.Platform.Identity/Hexalith.Platform.Identity.csproj"
+        }
+      ],
+      "owner": "Hexalith.Works owning maintainer",
+      "path": "scripts/build-story414-sdk-candidate.sh",
+      "repository": "references/Hexalith.Works",
+      "sourceBindings": [
+        {
+          "gitBlob": "1cab3e94a06d09245332cd1e78cd83dbe06272c2",
+          "path": "scripts/build-story414-sdk-candidate.sh",
+          "sha256": "75eefb3b4365934314e4f1e4353a905a2379fcbeffe00b85ef730342bc9694df"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+      "group": "protected-source-boundary",
+      "newAuthority": null,
+      "nextConcreteAction": "Nested publication targets, generated task output and unresolved Compile inputs stay refused; supply root-contained committed sources or seek an approved generic boundary design.",
+      "observations": [
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story415-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Admin.Abstractions/Hexalith.EventStore.Admin.Abstractions.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story415-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Aspire/Hexalith.EventStore.Aspire.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story415-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Client/Hexalith.EventStore.Client.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story415-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts/Hexalith.EventStore.Contracts.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story415-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.DomainService/Hexalith.EventStore.DomainService.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story415-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Gateway/Hexalith.EventStore.Gateway.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story415-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Server/Hexalith.EventStore.Server.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story415-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.ServiceDefaults/Hexalith.EventStore.ServiceDefaults.csproj"
+        },
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "nested-publication-target:scripts/build-story415-sdk-candidate.sh",
+          "target": "references/Hexalith.EventStore/src/Hexalith.EventStore.Testing/Hexalith.EventStore.Testing.csproj"
+        }
+      ],
+      "owner": "Hexalith.Works owning maintainer",
+      "path": "scripts/build-story415-sdk-candidate.sh",
+      "repository": "references/Hexalith.Works",
+      "sourceBindings": [
+        {
+          "gitBlob": "92798f8d1150db43a05ccb45f38248643aecadab",
+          "path": "scripts/build-story415-sdk-candidate.sh",
+          "sha256": "e122bb2d1273f6dd0ba27c2e66723470f24b6971898d7857f5a48ebe59cd5153"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/verify-story414-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "unresolved-publication-target:scripts/verify-story414-sdk-candidate.sh"
+        }
+      ],
+      "owner": "Hexalith.Works owning maintainer",
+      "path": "scripts/verify-story414-sdk-candidate.sh",
+      "repository": "references/Hexalith.Works",
+      "sourceBindings": [
+        {
+          "gitBlob": "5986f1632e165c2bf48b9135101e6c74aa95606b",
+          "path": "scripts/verify-story414-sdk-candidate.sh",
+          "sha256": "1ab83f938c13d5e42a46816b5a55c5c0de1928fc60432dcd51f603ca5418577b"
+        }
+      ]
+    },
+    {
+      "category": "inspection-error",
+      "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+      "group": "scanner-limit-or-unproven-input",
+      "newAuthority": null,
+      "nextConcreteAction": "Inspect this exact committed dependency and design only a finite generic proof with refusal fixtures; runtime and PowerShell evaluation stay unsupported.",
+      "observations": [
+        {
+          "gitlink": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23",
+          "path": "scripts/verify-story415-sdk-candidate.sh",
+          "repository": "references/Hexalith.Works",
+          "rule": "unresolved-publication-target:scripts/verify-story415-sdk-candidate.sh"
+        }
+      ],
+      "owner": "Hexalith.Works owning maintainer",
+      "path": "scripts/verify-story415-sdk-candidate.sh",
+      "repository": "references/Hexalith.Works",
+      "sourceBindings": [
+        {
+          "gitBlob": "d6cd0123a1871f089c1ae73f1e4a302bf062a69b",
+          "path": "scripts/verify-story415-sdk-candidate.sh",
+          "sha256": "d2986d77369ba0a4b4b1efb3de735f2518e23b3d4a5707ad62885401e9e5a833"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "orphan-project-reference"
+          ],
+          "sources": [
+            "Github/publish-container-to-registry/action.yml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "HexalithApp/src/HexalithApp.ApiServer/HexalithApp.ApiServer.csproj",
+            "kind": "publication",
+            "path": "Github/publish-container-to-registry/action.yml",
+            "repository": "references/Hexalith.Builds"
+          }
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "Github/publish-container-to-registry/action.yml",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "9f8727b9c1f7cb2cacd6304f69e05f504ed37a47",
+          "path": "Github/publish-container-to-registry/action.yml",
+          "sha256": "31a18f4fa2b8b065f366f2b8855d9c92e4ad5f911d3aa51cc70b914127a60242"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "orphan-project-reference"
+          ],
+          "sources": [
+            "Github/publish-container-to-registry/action.yml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "HexalithApp/src/HexalithApp.WebServer/HexalithApp.WebServer.csproj",
+            "kind": "publication",
+            "path": "Github/publish-container-to-registry/action.yml",
+            "repository": "references/Hexalith.Builds"
+          }
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "Github/publish-container-to-registry/action.yml",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "9f8727b9c1f7cb2cacd6304f69e05f504ed37a47",
+          "path": "Github/publish-container-to-registry/action.yml",
+          "sha256": "31a18f4fa2b8b065f366f2b8855d9c92e4ad5f911d3aa51cc70b914127a60242"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "package-metadata"
+          ],
+          "sources": [
+            "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "package:Hexalith.Builds.Module.EventStoreHost",
+            "kind": "publication",
+            "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "21b75814f1eaca768cf47c0ff71776971b5eb950",
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+          "sha256": "a03945c7044bee30586a80d9a8326dd4a60f58363ee2af1e9ea1abef21810827"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "package-metadata"
+          ],
+          "sources": [
+            "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "package:Hexalith.Builds.Module.UiHost",
+            "kind": "publication",
+            "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "cfd3b268b4025564e9017cd16ddad1b261e453b4",
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+          "sha256": "16813c251a95d259e4efdc622466412cea00ced7766b18af13f920619a7f5943"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "executable-project"
+          ],
+          "sources": [
+            "test/fixtures/release/Container/Release.Container.csproj"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "Release.Container",
+            "kind": "project",
+            "path": "test/fixtures/release/Container/Release.Container.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "test/fixtures/release/Container/Release.Container.csproj",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "a77e7f93f046bc92973e0e3abc574d6019b0a3d5",
+          "path": "test/fixtures/release/Container/Release.Container.csproj",
+          "sha256": "f0e365dd362ef3c1682dcfb16c998030a73ac3aa2cfea391bb15683de8052820"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "ff6b295abcca5159896602bd8a5e87e913950b83",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "container-metadata"
+          ],
+          "sources": [
+            "test/fixtures/release/Container/Release.Container.csproj"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "container:hexalith-release-create-disposable",
+            "kind": "publication",
+            "path": "test/fixtures/release/Container/Release.Container.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        }
+      ],
+      "owner": "Hexalith.Builds owning maintainer",
+      "path": "test/fixtures/release/Container/Release.Container.csproj",
+      "repository": "references/Hexalith.Builds",
+      "sourceBindings": [
+        {
+          "gitBlob": "a77e7f93f046bc92973e0e3abc574d6019b0a3d5",
+          "path": "test/fixtures/release/Container/Release.Container.csproj",
+          "sha256": "f0e365dd362ef3c1682dcfb16c998030a73ac3aa2cfea391bb15683de8052820"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "developer-server-configuration"
+          ],
+          "sources": [
+            ".mcp.json"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "fluent-ui-blazor:3c0ffdb9f97e6cedfbc5bc45acefe323575ae2f944c1c5ea2162214b0b3cd9bc",
+            "kind": "configuration",
+            "path": ".mcp.json",
+            "repository": "references/Hexalith.ChatBot"
+          }
+        }
+      ],
+      "owner": "Hexalith.ChatBot owning maintainer",
+      "path": ".mcp.json",
+      "repository": "references/Hexalith.ChatBot",
+      "sourceBindings": [
+        {
+          "gitBlob": "0eb3531bf9d43b37555c16e3c3d0a340743b6916",
+          "path": ".mcp.json",
+          "sha256": "a47afe6164f19117f96378184c0c5656f016e1f878ab487198cdc811565c38d4"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "changedSources": [],
+          "classification": "test-fixture",
+          "gitlink": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+          "reason": "allowance-signal-or-source-drift",
+          "row": "PE05",
+          "signals": [
+            "mcp-or-cli-dependency",
+            "mcp-registration",
+            "project-identity"
+          ],
+          "sources": [
+            "tests/Hexalith.ChatBot.Mcp.Tests/ChatBotMcpServiceTests.cs",
+            "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "Hexalith.ChatBot.Mcp.Tests",
+            "kind": "project",
+            "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+            "repository": "references/Hexalith.ChatBot"
+          },
+          "unexpectedSignals": [
+            "mcp-registration"
+          ]
+        }
+      ],
+      "owner": "Hexalith.ChatBot owning maintainer",
+      "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+      "repository": "references/Hexalith.ChatBot",
+      "sourceBindings": [
+        {
+          "gitBlob": "09dbec322f0bb508a3496ad0afa4dd075a4c6e34",
+          "path": "tests/Hexalith.ChatBot.Mcp.Tests/ChatBotMcpServiceTests.cs",
+          "sha256": "ad36d90197d8424be57c0f30f84c40e406193a6c6c52e33d0e834e9c2ee09f08"
+        },
+        {
+          "gitBlob": "0bf57782b6f79e5a8424722cd7bbfced5d1e40c9",
+          "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+          "sha256": "1de1fd25fbdc5bfad182d4bd06f67c8bc931e7a01ec3d9be6f5b8b359f9befdc"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "publication-entry"
+          ],
+          "sources": [
+            "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "Hexalith.EventStore.Client",
+            "kind": "publication",
+            "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+            "repository": "references/Hexalith.Conversations"
+          }
+        }
+      ],
+      "owner": "Hexalith.Conversations owning maintainer",
+      "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+      "repository": "references/Hexalith.Conversations",
+      "sourceBindings": [
+        {
+          "gitBlob": "d6c8bd81f67044288aa4faa76d14651c90c4349b",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+          "sha256": "644ef49ef1d603b324c5c5bbe5f1d0ff132dc0d47a03e0f3a01621659e848917"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "publication-entry"
+          ],
+          "sources": [
+            "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "Hexalith.EventStore.Contracts",
+            "kind": "publication",
+            "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+            "repository": "references/Hexalith.Conversations"
+          }
+        }
+      ],
+      "owner": "Hexalith.Conversations owning maintainer",
+      "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+      "repository": "references/Hexalith.Conversations",
+      "sourceBindings": [
+        {
+          "gitBlob": "d6c8bd81f67044288aa4faa76d14651c90c4349b",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+          "sha256": "644ef49ef1d603b324c5c5bbe5f1d0ff132dc0d47a03e0f3a01621659e848917"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "publication-entry"
+          ],
+          "sources": [
+            "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "Hexalith.EventStore.DomainService",
+            "kind": "publication",
+            "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+            "repository": "references/Hexalith.Conversations"
+          }
+        }
+      ],
+      "owner": "Hexalith.Conversations owning maintainer",
+      "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+      "repository": "references/Hexalith.Conversations",
+      "sourceBindings": [
+        {
+          "gitBlob": "d6c8bd81f67044288aa4faa76d14651c90c4349b",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+          "sha256": "644ef49ef1d603b324c5c5bbe5f1d0ff132dc0d47a03e0f3a01621659e848917"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "publication-entry"
+          ],
+          "sources": [
+            "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "Hexalith.EventStore.ServiceDefaults",
+            "kind": "publication",
+            "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+            "repository": "references/Hexalith.Conversations"
+          }
+        }
+      ],
+      "owner": "Hexalith.Conversations owning maintainer",
+      "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+      "repository": "references/Hexalith.Conversations",
+      "sourceBindings": [
+        {
+          "gitBlob": "d6c8bd81f67044288aa4faa76d14651c90c4349b",
+          "path": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+          "sha256": "644ef49ef1d603b324c5c5bbe5f1d0ff132dc0d47a03e0f3a01621659e848917"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "0c7b14856f2b730749caa8a552742a77d4882dc7",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "0c7b14856f2b730749caa8a552742a77d4882dc7",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "package-metadata"
+          ],
+          "sources": [
+            "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "package:Hexalith.EventStore.Admin.Cli",
+            "kind": "publication",
+            "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+            "repository": "references/Hexalith.EventStore"
+          }
+        }
+      ],
+      "owner": "Hexalith.EventStore owning maintainer",
+      "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+      "repository": "references/Hexalith.EventStore",
+      "sourceBindings": [
+        {
+          "gitBlob": "3417f7ad9e23a55c3a95360e755210d3ca58ea2b",
+          "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+          "sha256": "b1d07f5bd8fd11d99583e0e8e0b0d25c09c4df11be68c2191e13f4da365974bb"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "developer-server-configuration"
+          ],
+          "sources": [
+            ".mcp.json"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+            "kind": "configuration",
+            "path": ".mcp.json",
+            "repository": "references/Hexalith.Folders"
+          }
+        }
+      ],
+      "owner": "Hexalith.Folders owning maintainer",
+      "path": ".mcp.json",
+      "repository": "references/Hexalith.Folders",
+      "sourceBindings": [
+        {
+          "gitBlob": "4c02770f719aa012eeb0bb9cba2e0dcd1e010215",
+          "path": ".mcp.json",
+          "sha256": "727dc26dc0469df71ef60b16319c2e2a81f09680a88a8315b6d11da7f522f565"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "package-metadata"
+          ],
+          "sources": [
+            "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "package:Hexalith.Folders.Cli",
+            "kind": "publication",
+            "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+            "repository": "references/Hexalith.Folders"
+          }
+        }
+      ],
+      "owner": "Hexalith.Folders owning maintainer",
+      "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+      "repository": "references/Hexalith.Folders",
+      "sourceBindings": [
+        {
+          "gitBlob": "5b336987f5f4c62bdc15193c720761f33b07f0eb",
+          "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+          "sha256": "3294791adab69a0f522abf575c048448a8516133547ce5cfff1dab7c7f1a7910"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "container-image"
+          ],
+          "sources": [
+            "deploy/kubernetes/overlays/production/kustomization.yaml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "registry.hexalith.com/memories-mcp",
+            "kind": "publication",
+            "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+            "repository": "references/Hexalith.Memories"
+          }
+        }
+      ],
+      "owner": "Hexalith.Memories owning maintainer",
+      "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+      "repository": "references/Hexalith.Memories",
+      "sourceBindings": [
+        {
+          "gitBlob": "a25f838b483e9985ec8ac3ee3e051539861c3413",
+          "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+          "sha256": "bfa695a6b5158787c1d17eb6c9e7fa5e32c16859fa8ae8a15e8ab52423e2bd5d"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "package-metadata"
+          ],
+          "sources": [
+            "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "package:GenerateBenchmarkVectors",
+            "kind": "publication",
+            "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+            "repository": "references/Hexalith.Memories"
+          }
+        }
+      ],
+      "owner": "Hexalith.Memories owning maintainer",
+      "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+      "repository": "references/Hexalith.Memories",
+      "sourceBindings": [
+        {
+          "gitBlob": "bad583f080c8ccd538e02b21d4a289150801717f",
+          "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+          "sha256": "c299ec65c19b75d1f4fd4ce516c09ee667a141b87a68a37ec76169cc3f86df2c"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "publication-entry"
+          ],
+          "sources": [
+            "tools/release-containers.json"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "mcp",
+            "kind": "publication",
+            "path": "tools/release-containers.json",
+            "repository": "references/Hexalith.Memories"
+          }
+        }
+      ],
+      "owner": "Hexalith.Memories owning maintainer",
+      "path": "tools/release-containers.json",
+      "repository": "references/Hexalith.Memories",
+      "sourceBindings": [
+        {
+          "gitBlob": "14eee611aa551ea0edb40b965e6ce85b9aff82cc",
+          "path": "tools/release-containers.json",
+          "sha256": "4395f1357adad15ed09c5356df32d574ac6ac38dc21a5e41c5763a2226135285"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "project-publication-reference"
+          ],
+          "sources": [
+            "tools/verify-cli-pack.sh"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
+            "kind": "publication",
+            "path": "tools/verify-cli-pack.sh",
+            "repository": "references/Hexalith.Memories"
+          }
+        }
+      ],
+      "owner": "Hexalith.Memories owning maintainer",
+      "path": "tools/verify-cli-pack.sh",
+      "repository": "references/Hexalith.Memories",
+      "sourceBindings": [
+        {
+          "gitBlob": "aa7d1cab188d3649229b85dd4fd6592ebf34c6e1",
+          "path": "tools/verify-cli-pack.sh",
+          "sha256": "6abbff109f889571f24f671f58109384b130a0eb459c171ed8a40424f1a1e142"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "container-image"
+          ],
+          "sources": [
+            "eng/mcpcli-operator-setup/v1/packet-20261031-dns-review/eventstore.yaml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+            "kind": "publication",
+            "path": "eng/mcpcli-operator-setup/v1/packet-20261031-dns-review/eventstore.yaml",
+            "repository": "references/Hexalith.Platform"
+          }
+        }
+      ],
+      "owner": "Hexalith.Platform owning maintainer",
+      "path": "eng/mcpcli-operator-setup/v1/packet-20261031-dns-review/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "sourceBindings": [
+        {
+          "gitBlob": "8f381c123196a9c9abedd0b45a158f1b25d14f90",
+          "path": "eng/mcpcli-operator-setup/v1/packet-20261031-dns-review/eventstore.yaml",
+          "sha256": "69aded6a3866ed74c9d3b2cf52a2cdca9919619bde1da660b62c4a61f2b412dc"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "container-image"
+          ],
+          "sources": [
+            "eng/mcpcli-operator-setup/v1/packet-20261031-final/eventstore.yaml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+            "kind": "publication",
+            "path": "eng/mcpcli-operator-setup/v1/packet-20261031-final/eventstore.yaml",
+            "repository": "references/Hexalith.Platform"
+          }
+        }
+      ],
+      "owner": "Hexalith.Platform owning maintainer",
+      "path": "eng/mcpcli-operator-setup/v1/packet-20261031-final/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "sourceBindings": [
+        {
+          "gitBlob": "34a4b46fc858a71fd390b6269e7926553686b285",
+          "path": "eng/mcpcli-operator-setup/v1/packet-20261031-final/eventstore.yaml",
+          "sha256": "51f975e60c1f7a0cd8f117ab2eaea01a7f00bc7714c90a42626167a88daee908"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "container-image"
+          ],
+          "sources": [
+            "eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review/eventstore.yaml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+            "kind": "publication",
+            "path": "eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review/eventstore.yaml",
+            "repository": "references/Hexalith.Platform"
+          }
+        }
+      ],
+      "owner": "Hexalith.Platform owning maintainer",
+      "path": "eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "sourceBindings": [
+        {
+          "gitBlob": "edc787b229d31f0d66802282c2a179e923f7f785",
+          "path": "eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review/eventstore.yaml",
+          "sha256": "5ffd6fa55d8df6ce1933bba35aea14ea0a7237fa232833630e5b9305d32acbeb"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "container-image"
+          ],
+          "sources": [
+            "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-final/eventstore.yaml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+            "kind": "publication",
+            "path": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-final/eventstore.yaml",
+            "repository": "references/Hexalith.Platform"
+          }
+        }
+      ],
+      "owner": "Hexalith.Platform owning maintainer",
+      "path": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-final/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "sourceBindings": [
+        {
+          "gitBlob": "e6beb6630ca930b998713954f088f4cf61149462",
+          "path": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-final/eventstore.yaml",
+          "sha256": "0d803a6708c72ee207a089c75f8c003474eb8ed0269ffbdd0070280ae45f5d93"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "container-image"
+          ],
+          "sources": [
+            "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-review/eventstore.yaml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+            "kind": "publication",
+            "path": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-review/eventstore.yaml",
+            "repository": "references/Hexalith.Platform"
+          }
+        }
+      ],
+      "owner": "Hexalith.Platform owning maintainer",
+      "path": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-review/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "sourceBindings": [
+        {
+          "gitBlob": "320ea885d13637da9d0f87115849ac9518c2588d",
+          "path": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-review/eventstore.yaml",
+          "sha256": "09ff8a72601e435603971405631ab19b379a9f9ef5abb8c7405d429b56e60340"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "container-image"
+          ],
+          "sources": [
+            "eng/mcpcli-operator-setup/v1/packet-20261031-review/eventstore.yaml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+            "kind": "publication",
+            "path": "eng/mcpcli-operator-setup/v1/packet-20261031-review/eventstore.yaml",
+            "repository": "references/Hexalith.Platform"
+          }
+        }
+      ],
+      "owner": "Hexalith.Platform owning maintainer",
+      "path": "eng/mcpcli-operator-setup/v1/packet-20261031-review/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "sourceBindings": [
+        {
+          "gitBlob": "f17a1e2944de98d4bb9df29edd8865c904d18ae6",
+          "path": "eng/mcpcli-operator-setup/v1/packet-20261031-review/eventstore.yaml",
+          "sha256": "334bb4c3b90c79a6c91c60a2df9cce46ff886507b668c29432aacf05e52c7583"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "container-image"
+          ],
+          "sources": [
+            "eng/mcpcli-operator-setup/v1/packet-20261031/eventstore.yaml"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+            "kind": "publication",
+            "path": "eng/mcpcli-operator-setup/v1/packet-20261031/eventstore.yaml",
+            "repository": "references/Hexalith.Platform"
+          }
+        }
+      ],
+      "owner": "Hexalith.Platform owning maintainer",
+      "path": "eng/mcpcli-operator-setup/v1/packet-20261031/eventstore.yaml",
+      "repository": "references/Hexalith.Platform",
+      "sourceBindings": [
+        {
+          "gitBlob": "78dc946b6ad976ab9bb70ff023b2932fb7230b0a",
+          "path": "eng/mcpcli-operator-setup/v1/packet-20261031/eventstore.yaml",
+          "sha256": "3485d15a1ae93ad3bd1a0e3d72d4ddf8cdb263a769523cebc52439efa1432a99"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "executable-project"
+          ],
+          "sources": [
+            "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "Hexalith.Platform.Composition",
+            "kind": "project",
+            "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+            "repository": "references/Hexalith.Platform"
+          }
+        }
+      ],
+      "owner": "Hexalith.Platform owning maintainer",
+      "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+      "repository": "references/Hexalith.Platform",
+      "sourceBindings": [
+        {
+          "gitBlob": "87af8f823f60957f5b620fc896b4d8d7bb246541",
+          "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+          "sha256": "a80c1a4c699ec072c3a21b5078a077a2d2c0e82703dbe684309bb09e6ac95c20"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "77067782154d35a794ea50d86af1c5e73c8351b6",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "developer-server-configuration"
+          ],
+          "sources": [
+            ".mcp.json"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "fluent-ui-blazor:4950609ec82e4efc8932b7079093494e61c0355bb1446529ee1f64d0f978e978",
+            "kind": "configuration",
+            "path": ".mcp.json",
+            "repository": "references/Hexalith.Projects"
+          }
+        }
+      ],
+      "owner": "Hexalith.Projects owning maintainer",
+      "path": ".mcp.json",
+      "repository": "references/Hexalith.Projects",
+      "sourceBindings": [
+        {
+          "gitBlob": "ca98a1f93365ce8e3a71f874ecba91273fc78597",
+          "path": ".mcp.json",
+          "sha256": "9daac0187014f76c47ae639ac89e9aebe12904210440d41f6143b1fb757ef30d"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "project-publication-reference"
+          ],
+          "sources": [
+            "scripts/run-tenant-audit-performance.sh"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "tests/performance/tenant-audit/seed.csproj",
+            "kind": "publication",
+            "path": "scripts/run-tenant-audit-performance.sh",
+            "repository": "references/Hexalith.Tenants"
+          }
+        }
+      ],
+      "owner": "Hexalith.Tenants owning maintainer",
+      "path": "scripts/run-tenant-audit-performance.sh",
+      "repository": "references/Hexalith.Tenants",
+      "sourceBindings": [
+        {
+          "gitBlob": "3274781ac2b050d2fcbdd7d2894f7fc32208132a",
+          "path": "scripts/run-tenant-audit-performance.sh",
+          "sha256": "15937f379ef2f77bbbf2657b02b31051df337edf80cf2e0c5f8fbe8ac9a24db3"
+        }
+      ]
+    },
+    {
+      "category": "rejected-observation",
+      "gitlink": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+      "group": "exact-owner-disposition",
+      "newAuthority": null,
+      "nextConcreteAction": "Owning maintainer classifies this exact identity and signal set at its pin with committed proof or an exact versioned approval; the rejection stays until then.",
+      "observations": [
+        {
+          "classification": "unapproved",
+          "gitlink": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+          "reason": "new-proprietary-surface",
+          "signals": [
+            "developer-server-configuration"
+          ],
+          "sources": [
+            ".mcp.json"
+          ],
+          "status": "rejected",
+          "surface": {
+            "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+            "kind": "configuration",
+            "path": ".mcp.json",
+            "repository": "references/Hexalith.Timesheets"
+          }
+        }
+      ],
+      "owner": "Hexalith.Timesheets owning maintainer",
+      "path": ".mcp.json",
+      "repository": "references/Hexalith.Timesheets",
+      "sourceBindings": [
+        {
+          "gitBlob": "7bf42a13dbd16073a9a71e11e6aa1fb8a7f474ae",
+          "path": ".mcp.json",
+          "sha256": "1ab714ddcca398504b977ed331b2b3705adccc7c900c578b7cc7432cf13e70c1"
+        }
+      ]
+    }
+  ],
+  "groups": {
+    "embedded-metadata-context": {
+      "keys": 3,
+      "observations": 3
+    },
+    "exact-owner-disposition": {
+      "keys": 31,
+      "observations": 31
+    },
+    "protected-source-boundary": {
+      "keys": 6,
+      "observations": 23
+    },
+    "scanner-limit-or-unproven-input": {
+      "keys": 18,
+      "observations": 18
+    }
+  },
+  "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+  "policy": {
+    "amendments": [
+      {
+        "path": "amendments/1.0.1.json",
+        "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+        "version": "1.0.1"
+      },
+      {
+        "path": "amendments/1.0.2.json",
+        "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+        "version": "1.0.2"
+      }
+    ],
+    "baselineSha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+    "version": "1.0.2"
+  },
+  "provenActiveUpstreamDefects": [],
+  "reportSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428",
+  "rootPins": {
+    "references/Hexalith.AI.Tools": "8a3885dd22aea88edd57771cfe592c382df2c583",
+    "references/Hexalith.Agents": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+    "references/Hexalith.Builds": "ff6b295abcca5159896602bd8a5e87e913950b83",
+    "references/Hexalith.ChatBot": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+    "references/Hexalith.Commons": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+    "references/Hexalith.Conversations": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+    "references/Hexalith.EventStore": "0c7b14856f2b730749caa8a552742a77d4882dc7",
+    "references/Hexalith.Folders": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+    "references/Hexalith.FrontComposer": "57aa756c02edbae4294412885823533308b7db0d",
+    "references/Hexalith.Memories": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+    "references/Hexalith.Parties": "95347ab98f83defaa0983cd70177889469d8e4ec",
+    "references/Hexalith.Platform": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+    "references/Hexalith.PolymorphicSerializations": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+    "references/Hexalith.Projects": "77067782154d35a794ea50d86af1c5e73c8351b6",
+    "references/Hexalith.Tenants": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+    "references/Hexalith.Timesheets": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+    "references/Hexalith.Works": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23"
+  },
+  "utcDate": "2026-11-11"
+}

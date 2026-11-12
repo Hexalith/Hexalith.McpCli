@@ -1,0 +1,6 @@
+{
+  "result": "stopped",
+  "stage": "mutations",
+  "reason": "Stopped during the guard-removal controls so the closure drift fixture could also assert its full error document; the census fixtures had passed. No result from this attempt is used.",
+  "supersededBy": "runs/final-1"
+}

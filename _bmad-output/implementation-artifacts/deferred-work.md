@@ -991,3 +991,29 @@ status: open
   owner: McpCli maintainer (paired-release source gate).
   status: open; pre-existing gap, deferred by the Story 5.12 code review pass 2 (D2, V2). Story 5.12 renamed the step correctly in both files. Generalize the check after the concurrent Story 5.6 edits to `scripts/tests/test_paired_publication.py` land, so the two changes do not collide.
   evidence: `scripts/verify-release-source.py:38` (`STAGING_JOBS['enrolled-module-conformance']`) and the `ci.yml` step "Validate restored-package integrity, Operation Shape coverage and both heads". Only `test_topology_discovery_required_step_matches_the_current_workflow` (`scripts/tests/test_paired_publication.py:971` at `c9a46a1`) and the `release-automation` assertions compare `STAGING_JOBS` with `ci.yml`. Extending that parser to every `STAGING_JOBS` job defined in `ci.yml` closes the gap.
+
+## Deferred from: review of spec-5-6-reject-new-proprietary-surfaces-in-ci.md (2026-11-11)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`
+  summary: A local MSBuild import or Compile glob in the inspected root, such as `dependencies/*/eng/*.props`, that spans a nested gitlink expands silently without that gitlink's contents. Cross-tree globs through a substituted tree already refuse that case.
+  owner: McpCli maintainer (proprietary-surface census).
+  status: open; pre-existing gap, deferred by the Story 5.6 cross-tree resolution review (BH14, EC9). The reviewed change kept the existing local-glob behavior; the README describes the gitlink-glob refusal only for substituted trees.
+  evidence: `tools/proprietary-surfaces/v1/check.py:841` (local branch) matches `metadata_paths` with `msbuild_glob` at line 844 and no gitlink check, while the substituted branch in `Resolver.matches` refuses a glob when a gitlink lies below its directory. The fix mirrors that refusal in the local import and Compile branches (`check.py:940`). Run a fresh committed-pin scan first, because the refusal can surface new coverage errors in root references.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`
+  summary: Shell, PowerShell and Dockerfile continuation joining does not model comment semantics, so a following `dotnet publish` can be merged into a comment and missed. The cases are a trailing `\` inside an inline `#` comment, a `#` line after a continued line or a second joining pass, and a full-line comment inside a Dockerfile `RUN` continuation.
+  owner: McpCli maintainer (proprietary-surface census).
+  status: open; deferred by the Story 5.6 cross-tree resolution review loop 1 (BH3, EC7, EC8). The inline-comment and Dockerfile cases predate the review range. Whether `94f5ee6` introduced the EC7 case is unverified.
+  evidence: `tools/proprietary-surfaces/v1/check.py:1379` (`logical_commands`) joins `\`, backtick and `^` continuations and preserves only whole `#` lines. Reviewer probes: `dotnet build # note \` followed by `dotnet publish missing/Real.csproj` scans with exit 0 and no surface. A Dockerfile `RUN a \` / `# c` / `dotnet publish x` scans with no surface. The fix needs per-language comment stripping before joining, applied once per text.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`
+  summary: Unresolved `$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', …))` imports never visit or refuse the upward `Directory.Build.props` chain. Name matching explicitly skips `Directory.Build.*` candidates, so parent props and their own imports (for example Builds' `Hexalith.Build.props`) stay unread without a coverage error.
+  owner: McpCli maintainer (proprietary-surface census).
+  status: open; pre-existing gap, deferred by the Story 5.6 cross-tree resolution review loop 1 (BH4). Unconsumed defaults are still classified independently, but their imports are not followed.
+  evidence: `tools/proprietary-surfaces/v1/check.py:1059` excludes `Directory.Build.props`/`Directory.Build.targets` from unresolved-import name matching. Commons `src/libraries/Directory.Build.props` and PolymorphicSerializations use this upward pattern. Resolve `GetPathOfFileAbove` against committed trees under the existing one-hop rules, or refuse it, and rescan the committed pins.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`
+  summary: Census amendment 1.0.3 classifies `Hexalith.Platform.Composition` under PE03 and the Builds release-create fixture under PE05. Both go beyond the enumerated lists of those rows in the approved, hash-bound technical-tools migration inventory 1.0.2.
+  owner: Platform and Builds owning maintainers; McpCli maintainer for the inventory record.
+  status: open; deferred by the Story 5.6 owner-amendment review (2026-11-12). The census amendment, once approved, is the binding census record. Whether the inventory itself needs a versioned amendment is a separate owner decision.
+  evidence: `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md:297` (PE03 lists CatalogBuilder and three qualification executables) and `:299` (PE05 lists `.Cli.Tests`/`.Mcp.Tests` projects). The draft is `_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-draft-20261112/authorization.draft.json`. Corrections to approved inventory bytes follow the versioned-amendment procedure under `evidence/story-5-1/approval/`.

@@ -1,0 +1,169 @@
+{
+  "acceptance": "failed",
+  "counts": {
+    "censusTests": 219,
+    "completeRoots": 6,
+    "controlOrigins": {
+      "adapted": 5,
+      "excuse-adapted": 10,
+      "nested": 36,
+      "new": 85,
+      "retained": 161
+    },
+    "crossTreeReads": 62,
+    "guardRemovalControls": 297,
+    "inspectionErrors": 47,
+    "newGuardRemovalControls": 85,
+    "observations": 473,
+    "rejectedObservations": 30,
+    "releaseRegressions": 195,
+    "roots": 17,
+    "stale": 10
+  },
+  "crossTreeFallbacks": {
+    "byRepository": {
+      "references/Hexalith.Commons": 4,
+      "references/Hexalith.Tenants": 20
+    },
+    "importRefusalsRemaining": 0,
+    "resolved": 24
+  },
+  "determinism": {
+    "finalReportSha256": "6385946560009db6f4fbbf70157e2ab1ff49e8d8de57f647caf504a271899548",
+    "repeats": {
+      "1": {
+        "identicalToFinal": true,
+        "reportSha256": "6385946560009db6f4fbbf70157e2ab1ff49e8d8de57f647caf504a271899548",
+        "stderrSha256": "67fe2b879ea3306eac024575573e41495d56c380220e4a4dc6e5fa156c6f3948",
+        "stdoutSha256": "6385946560009db6f4fbbf70157e2ab1ff49e8d8de57f647caf504a271899548"
+      },
+      "2": {
+        "identicalToFinal": true,
+        "reportSha256": "6385946560009db6f4fbbf70157e2ab1ff49e8d8de57f647caf504a271899548",
+        "stderrSha256": "67fe2b879ea3306eac024575573e41495d56c380220e4a4dc6e5fa156c6f3948",
+        "stdoutSha256": "6385946560009db6f4fbbf70157e2ab1ff49e8d8de57f647caf504a271899548"
+      }
+    },
+    "result": "passed",
+    "seeds": [
+      1,
+      2
+    ]
+  },
+  "excuseProofs": {
+    "byRepository": {
+      "references/Hexalith.Commons": 4,
+      "references/Hexalith.Tenants": 20
+    },
+    "excusedProjects": 24,
+    "projectsWithRetainedCompileRefusals": [
+      [
+        "references/Hexalith.Tenants",
+        "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj"
+      ]
+    ]
+  },
+  "implementation": {
+    "after": {
+      "README.md": "f63a3591069eda7c4c3cd9b1441b62ff89e373b1461f10741e6ccdf7fcaa8e30",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/before-pruning-check.py": "3e10669799b5f520960071aec645acf1995d874c4f81e288d51b471e666fc2a3",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/mutation-guards.py": "68f44331fc859950c55056ad26eec3f359342aece46345d5c0b82daf79f52499",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/run-final-verification.py": "70b20cb0f122f718fbf7b62f980bd4b5a46cb93d80624b357bfdc341a8bfcb21",
+      "tools/proprietary-surfaces/v1/README.md": "105f5e4e4478c583271921263f85632710dcf21610913fc39bcd1270a0457d12",
+      "tools/proprietary-surfaces/v1/check.py": "1361d9fa88e0f0dce4974879124fbbbf8555042b6db965a567845c287a03167e",
+      "tools/proprietary-surfaces/v1/test_census.py": "4ff4ea4844182553c9705c0c07714992b86e3fd4be690aff05001337150d40db"
+    },
+    "before": {
+      "README.md": "f63a3591069eda7c4c3cd9b1441b62ff89e373b1461f10741e6ccdf7fcaa8e30",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/before-pruning-check.py": "3e10669799b5f520960071aec645acf1995d874c4f81e288d51b471e666fc2a3",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/mutation-guards.py": "68f44331fc859950c55056ad26eec3f359342aece46345d5c0b82daf79f52499",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/run-final-verification.py": "70b20cb0f122f718fbf7b62f980bd4b5a46cb93d80624b357bfdc341a8bfcb21",
+      "tools/proprietary-surfaces/v1/README.md": "105f5e4e4478c583271921263f85632710dcf21610913fc39bcd1270a0457d12",
+      "tools/proprietary-surfaces/v1/check.py": "1361d9fa88e0f0dce4974879124fbbbf8555042b6db965a567845c287a03167e",
+      "tools/proprietary-surfaces/v1/test_census.py": "4ff4ea4844182553c9705c0c07714992b86e3fd4be690aff05001337150d40db"
+    },
+    "result": "passed"
+  },
+  "newAuthority": null,
+  "noGuardBaselineCounts": {
+    "completeRoots": 5,
+    "crossTreeReads": 60,
+    "inspectionErrors": 69,
+    "observations": 481,
+    "rejectedObservations": 41,
+    "roots": 17,
+    "stale": 10
+  },
+  "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9",
+  "policy": {
+    "amendments": [
+      {
+        "path": "amendments/1.0.1.json",
+        "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+        "version": "1.0.1"
+      },
+      {
+        "path": "amendments/1.0.2.json",
+        "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+        "version": "1.0.2"
+      }
+    ],
+    "baselineSha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+    "version": "1.0.2"
+  },
+  "pruningCounts": {
+    "completeRoots": 6,
+    "crossTreeReads": 63,
+    "inspectionErrors": 45,
+    "observations": 473,
+    "rejectedObservations": 30,
+    "roots": 17,
+    "stale": 10
+  },
+  "remainingGroups": {
+    "embedded-metadata-context": {
+      "keys": 3,
+      "observations": 3
+    },
+    "exact-owner-disposition": {
+      "keys": 31,
+      "observations": 31
+    },
+    "guarded-compile-fallback": {
+      "keys": 1,
+      "observations": 2
+    },
+    "protected-source-boundary": {
+      "keys": 6,
+      "observations": 23
+    },
+    "scanner-limit-or-unproven-input": {
+      "keys": 18,
+      "observations": 18
+    }
+  },
+  "reportSha256": "6385946560009db6f4fbbf70157e2ab1ff49e8d8de57f647caf504a271899548",
+  "rootPinChanges": [],
+  "rootPins": {
+    "references/Hexalith.AI.Tools": "8a3885dd22aea88edd57771cfe592c382df2c583",
+    "references/Hexalith.Agents": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+    "references/Hexalith.Builds": "ff6b295abcca5159896602bd8a5e87e913950b83",
+    "references/Hexalith.ChatBot": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+    "references/Hexalith.Commons": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+    "references/Hexalith.Conversations": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+    "references/Hexalith.EventStore": "0c7b14856f2b730749caa8a552742a77d4882dc7",
+    "references/Hexalith.Folders": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+    "references/Hexalith.FrontComposer": "57aa756c02edbae4294412885823533308b7db0d",
+    "references/Hexalith.Memories": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+    "references/Hexalith.Parties": "95347ab98f83defaa0983cd70177889469d8e4ec",
+    "references/Hexalith.Platform": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+    "references/Hexalith.PolymorphicSerializations": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+    "references/Hexalith.Projects": "77067782154d35a794ea50d86af1c5e73c8351b6",
+    "references/Hexalith.Tenants": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+    "references/Hexalith.Timesheets": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+    "references/Hexalith.Works": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23"
+  },
+  "run": "runs/final-2",
+  "storyStatus": "in-progress",
+  "utcDate": "2026-11-11"
+}

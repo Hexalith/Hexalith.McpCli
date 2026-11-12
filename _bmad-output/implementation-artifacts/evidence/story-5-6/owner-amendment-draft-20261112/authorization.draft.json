@@ -1,0 +1,428 @@
+{
+  "addAllowances": [
+    {
+      "classification": "compatibility-publication-or-route",
+      "owner": "Hexalith.EventStore owning maintainer",
+      "reason": "Effective package identity of the approved PS01 compatibility project on this file, which already has approved PS01 and G4 allowances; it stays a labeled compatibility publication until its retirement gate. Exact identity only.",
+      "row": "G4",
+      "signals": [
+        "package-metadata"
+      ],
+      "surface": {
+        "identity": "package:Hexalith.EventStore.Admin.Cli",
+        "kind": "publication",
+        "path": "src/Hexalith.EventStore.Admin.Cli/Hexalith.EventStore.Admin.Cli.csproj",
+        "repository": "references/Hexalith.EventStore"
+      }
+    },
+    {
+      "classification": "compatibility-publication-or-route",
+      "owner": "Hexalith.Folders owning maintainer",
+      "reason": "Effective package identity of the approved PS10 compatibility project on this file, which already has approved PS10 and G4 allowances; it stays a labeled compatibility publication until its retirement gate. Exact identity only.",
+      "row": "G4",
+      "signals": [
+        "package-metadata"
+      ],
+      "surface": {
+        "identity": "package:Hexalith.Folders.Cli",
+        "kind": "publication",
+        "path": "src/Hexalith.Folders.Cli/Hexalith.Folders.Cli.csproj",
+        "repository": "references/Hexalith.Folders"
+      }
+    },
+    {
+      "classification": "compatibility-publication-or-route",
+      "owner": "Hexalith.Memories owning maintainer",
+      "reason": "Another identity spelling on a file whose approved G4 compatibility-publication allowance routes a Memories PS surface; it stays a labeled compatibility publication until its retirement gate. Exact identity only.",
+      "row": "G4",
+      "signals": [
+        "container-image"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/memories-mcp",
+        "kind": "publication",
+        "path": "deploy/kubernetes/overlays/production/kustomization.yaml",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "classification": "compatibility-publication-or-route",
+      "owner": "Hexalith.Memories owning maintainer",
+      "reason": "Another identity spelling on a file whose approved G4 compatibility-publication allowance routes a Memories PS surface; it stays a labeled compatibility publication until its retirement gate. Exact identity only.",
+      "row": "G4",
+      "signals": [
+        "publication-entry"
+      ],
+      "surface": {
+        "identity": "mcp",
+        "kind": "publication",
+        "path": "tools/release-containers.json",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "classification": "compatibility-publication-or-route",
+      "owner": "Hexalith.Memories owning maintainer",
+      "reason": "Another identity spelling on a file whose approved G4 compatibility-publication allowance routes a Memories PS surface; it stays a labeled compatibility publication until its retirement gate. Exact identity only.",
+      "row": "G4",
+      "signals": [
+        "project-publication-reference"
+      ],
+      "surface": {
+        "identity": "src/Hexalith.Memories.Cli/Hexalith.Memories.Cli.csproj",
+        "kind": "publication",
+        "path": "tools/verify-cli-pack.sh",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "classification": "exempt-build-publication",
+      "owner": "Hexalith.Builds owning maintainer",
+      "reason": "Builds publish-container-to-registry composite action: a CI template that publishes a consumer's HexalithApp API/Web server containers from that consumer's HexalithApp checkout; build tooling that invokes no module operation. Exact identity only.",
+      "row": "PE01",
+      "signals": [
+        "orphan-project-reference"
+      ],
+      "surface": {
+        "identity": "HexalithApp/src/HexalithApp.ApiServer/HexalithApp.ApiServer.csproj",
+        "kind": "publication",
+        "path": "Github/publish-container-to-registry/action.yml",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "classification": "exempt-build-publication",
+      "owner": "Hexalith.Builds owning maintainer",
+      "reason": "Builds publish-container-to-registry composite action: a CI template that publishes a consumer's HexalithApp API/Web server containers from that consumer's HexalithApp checkout; build tooling that invokes no module operation. Exact identity only.",
+      "row": "PE01",
+      "signals": [
+        "orphan-project-reference"
+      ],
+      "surface": {
+        "identity": "HexalithApp/src/HexalithApp.WebServer/HexalithApp.WebServer.csproj",
+        "kind": "publication",
+        "path": "Github/publish-container-to-registry/action.yml",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "classification": "exempt-build-publication",
+      "owner": "Hexalith.Builds owning maintainer",
+      "reason": "Package identity of a hexalith-module pack template that inventory row PE01 names and that already has an approved PE01 allowance on this file. Exact identity only.",
+      "row": "PE01",
+      "signals": [
+        "package-metadata"
+      ],
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.EventStoreHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "classification": "exempt-build-publication",
+      "owner": "Hexalith.Builds owning maintainer",
+      "reason": "Package identity of a hexalith-module pack template that inventory row PE01 names and that already has an approved PE01 allowance on this file. Exact identity only.",
+      "row": "PE01",
+      "signals": [
+        "package-metadata"
+      ],
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.UiHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "classification": "platform-qualification-tooling",
+      "owner": "Hexalith.Platform owning maintainer",
+      "reason": "Became an executable after inventory approval (Platform 3ad2f29a): a non-packable PlatformSourceStateWorker that reads a JSON path list on stdin and prints a source-state hash. No System.CommandLine, MCP package or tool packing; classified PE03 by the Platform owner on 2026-11-12. Exact identity and signal set only.",
+      "row": "PE03",
+      "signals": [
+        "executable-project"
+      ],
+      "surface": {
+        "identity": "Hexalith.Platform.Composition",
+        "kind": "project",
+        "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+        "repository": "references/Hexalith.Platform"
+      }
+    },
+    {
+      "classification": "test-fixture",
+      "owner": "Hexalith.Builds owning maintainer",
+      "reason": "Disposable Builds release-create test fixture: its hosted test runs build it into draft releases that are deleted afterwards; it is not a shipped surface. Exact identity only.",
+      "row": "PE05",
+      "signals": [
+        "executable-project"
+      ],
+      "surface": {
+        "identity": "Release.Container",
+        "kind": "project",
+        "path": "test/fixtures/release/Container/Release.Container.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "classification": "test-fixture-observation",
+      "owner": "Hexalith.Builds owning maintainer",
+      "reason": "Disposable Builds release-create test fixture: its hosted test runs build it into draft releases that are deleted afterwards; it is not a shipped surface. Exact identity only.",
+      "row": "PE05",
+      "signals": [
+        "container-metadata"
+      ],
+      "surface": {
+        "identity": "container:hexalith-release-create-disposable",
+        "kind": "publication",
+        "path": "test/fixtures/release/Container/Release.Container.csproj",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "classification": "performance-fixture-driver",
+      "owner": "Hexalith.Tenants owning maintainer",
+      "reason": "Full-path spelling of the tenant-audit performance seed driver that already has an approved PE05 allowance on this script. Exact identity only.",
+      "row": "PE05",
+      "signals": [
+        "project-publication-reference"
+      ],
+      "surface": {
+        "identity": "tests/performance/tenant-audit/seed.csproj",
+        "kind": "publication",
+        "path": "scripts/run-tenant-audit-performance.sh",
+        "repository": "references/Hexalith.Tenants"
+      }
+    },
+    {
+      "classification": "test-fixture",
+      "owner": "Hexalith.ChatBot owning maintainer",
+      "reason": "Replacement of the approved PE05 test-fixture allowance: tests/Hexalith.ChatBot.Mcp.Tests/ChatBotMcpServiceTests.cs adds an MCP registration signal inside the test project of the PS ChatBot MCP surface. Test fixture only; exact identity and signal set.",
+      "row": "PE05",
+      "signals": [
+        "mcp-or-cli-dependency",
+        "mcp-registration",
+        "project-identity"
+      ],
+      "surface": {
+        "identity": "Hexalith.ChatBot.Mcp.Tests",
+        "kind": "project",
+        "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+        "repository": "references/Hexalith.ChatBot"
+      }
+    },
+    {
+      "classification": "external-developer-configuration",
+      "owner": "Hexalith.ChatBot owning maintainer",
+      "reason": "servers-section stdio entry that launches the locally installed fluentui-mcp command (the .NET tool microsoft.fluentui.aspnetcore.mcpserver, Microsoft Fluent UI Blazor MCP server); an external developer MCP server, not a Hexalith surface. Exact configuration identity only.",
+      "row": "PE06",
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "surface": {
+        "identity": "fluent-ui-blazor:3c0ffdb9f97e6cedfbc5bc45acefe323575ae2f944c1c5ea2162214b0b3cd9bc",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.ChatBot"
+      }
+    },
+    {
+      "classification": "external-developer-configuration",
+      "owner": "Hexalith.Folders owning maintainer",
+      "reason": "servers-section stdio entry that launches the locally installed fluentui-mcp command (the .NET tool microsoft.fluentui.aspnetcore.mcpserver, Microsoft Fluent UI Blazor MCP server); an external developer MCP server, not a Hexalith surface. Exact configuration identity only.",
+      "row": "PE06",
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "surface": {
+        "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Folders"
+      }
+    },
+    {
+      "classification": "external-developer-configuration",
+      "owner": "Hexalith.Projects owning maintainer",
+      "reason": "servers-section stdio entry that launches the locally installed fluentui-mcp command (the .NET tool microsoft.fluentui.aspnetcore.mcpserver, Microsoft Fluent UI Blazor MCP server); an external developer MCP server, not a Hexalith surface. Exact configuration identity only.",
+      "row": "PE06",
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "surface": {
+        "identity": "fluent-ui-blazor:4950609ec82e4efc8932b7079093494e61c0355bb1446529ee1f64d0f978e978",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Projects"
+      }
+    },
+    {
+      "classification": "external-developer-configuration",
+      "owner": "Hexalith.Timesheets owning maintainer",
+      "reason": "servers-section stdio entry that launches the locally installed fluentui-mcp command (the .NET tool microsoft.fluentui.aspnetcore.mcpserver, Microsoft Fluent UI Blazor MCP server); an external developer MCP server, not a Hexalith surface. Exact configuration identity only.",
+      "row": "PE06",
+      "signals": [
+        "developer-server-configuration"
+      ],
+      "surface": {
+        "identity": "fluent-ui-blazor:889bfe4f3883a9628ad171a38d6baad10f088a1a0de76811a43e1f77c1c9e118",
+        "kind": "configuration",
+        "path": ".mcp.json",
+        "repository": "references/Hexalith.Timesheets"
+      }
+    },
+    {
+      "classification": "qualification-evidence-tooling",
+      "owner": "Hexalith.Memories owning maintainer",
+      "reason": "Package identity of the GenerateBenchmarkVectors evidence tool, which already has an approved PE09 allowance on this project. Exact identity only.",
+      "row": "PE09",
+      "signals": [
+        "package-metadata"
+      ],
+      "surface": {
+        "identity": "package:GenerateBenchmarkVectors",
+        "kind": "publication",
+        "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+        "repository": "references/Hexalith.Memories"
+      }
+    },
+    {
+      "classification": "domain-service-publication",
+      "owner": "Hexalith.Platform owning maintainer",
+      "reason": "EventStore domain-service image pinned by digest in a retained 2026-10-31 operator-setup packet; not an MCP or CLI surface. Same class as the approved Platform Timesheets image. Exact identity only.",
+      "row": "PN09",
+      "signals": [
+        "container-image"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+        "kind": "publication",
+        "path": "eng/mcpcli-operator-setup/v1/packet-20261031/eventstore.yaml",
+        "repository": "references/Hexalith.Platform"
+      }
+    },
+    {
+      "classification": "domain-service-publication",
+      "owner": "Hexalith.Platform owning maintainer",
+      "reason": "EventStore domain-service image pinned by digest in a retained 2026-10-31 operator-setup packet; not an MCP or CLI surface. Same class as the approved Platform Timesheets image. Exact identity only.",
+      "row": "PN09",
+      "signals": [
+        "container-image"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+        "kind": "publication",
+        "path": "eng/mcpcli-operator-setup/v1/packet-20261031-dns-review/eventstore.yaml",
+        "repository": "references/Hexalith.Platform"
+      }
+    },
+    {
+      "classification": "domain-service-publication",
+      "owner": "Hexalith.Platform owning maintainer",
+      "reason": "EventStore domain-service image pinned by digest in a retained 2026-10-31 operator-setup packet; not an MCP or CLI surface. Same class as the approved Platform Timesheets image. Exact identity only.",
+      "row": "PN09",
+      "signals": [
+        "container-image"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+        "kind": "publication",
+        "path": "eng/mcpcli-operator-setup/v1/packet-20261031-final/eventstore.yaml",
+        "repository": "references/Hexalith.Platform"
+      }
+    },
+    {
+      "classification": "domain-service-publication",
+      "owner": "Hexalith.Platform owning maintainer",
+      "reason": "EventStore domain-service image pinned by digest in a retained 2026-10-31 operator-setup packet; not an MCP or CLI surface. Same class as the approved Platform Timesheets image. Exact identity only.",
+      "row": "PN09",
+      "signals": [
+        "container-image"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+        "kind": "publication",
+        "path": "eng/mcpcli-operator-setup/v1/packet-20261031-gateway-api-review/eventstore.yaml",
+        "repository": "references/Hexalith.Platform"
+      }
+    },
+    {
+      "classification": "domain-service-publication",
+      "owner": "Hexalith.Platform owning maintainer",
+      "reason": "EventStore domain-service image pinned by digest in a retained 2026-10-31 operator-setup packet; not an MCP or CLI surface. Same class as the approved Platform Timesheets image. Exact identity only.",
+      "row": "PN09",
+      "signals": [
+        "container-image"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+        "kind": "publication",
+        "path": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-final/eventstore.yaml",
+        "repository": "references/Hexalith.Platform"
+      }
+    },
+    {
+      "classification": "domain-service-publication",
+      "owner": "Hexalith.Platform owning maintainer",
+      "reason": "EventStore domain-service image pinned by digest in a retained 2026-10-31 operator-setup packet; not an MCP or CLI surface. Same class as the approved Platform Timesheets image. Exact identity only.",
+      "row": "PN09",
+      "signals": [
+        "container-image"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+        "kind": "publication",
+        "path": "eng/mcpcli-operator-setup/v1/packet-20261031-recovery-review/eventstore.yaml",
+        "repository": "references/Hexalith.Platform"
+      }
+    },
+    {
+      "classification": "domain-service-publication",
+      "owner": "Hexalith.Platform owning maintainer",
+      "reason": "EventStore domain-service image pinned by digest in a retained 2026-10-31 operator-setup packet; not an MCP or CLI surface. Same class as the approved Platform Timesheets image. Exact identity only.",
+      "row": "PN09",
+      "signals": [
+        "container-image"
+      ],
+      "surface": {
+        "identity": "registry.hexalith.com/eventstore@sha256:c14074f08cf990072912dd6284fc253a900f6a020a0cd11008195aa357528eed",
+        "kind": "publication",
+        "path": "eng/mcpcli-operator-setup/v1/packet-20261031-review/eventstore.yaml",
+        "repository": "references/Hexalith.Platform"
+      }
+    }
+  ],
+  "addExceptions": [],
+  "addExclusions": [
+    {
+      "classification": "captured-evidence",
+      "owner": "Hexalith.Conversations owning maintainer",
+      "prefix": "docs/release-evidence/conformance-oracle-tiering-eventstore-repair-v7-proposal.json",
+      "reason": "Exact retained story 9.2 repair proposal marked preparation-only with no acceptance claimed: captured evidence whose package list (Hexalith.EventStore.Client, Hexalith.EventStore.Contracts, Hexalith.EventStore.DomainService, Hexalith.EventStore.ServiceDefaults) names EventStore packages, not a Conversations publication manifest.",
+      "repository": "references/Hexalith.Conversations",
+      "row": "PE07",
+      "scope": "file",
+      "sha256": "644ef49ef1d603b324c5c5bbe5f1d0ff132dc0d47a03e0f3a01621659e848917"
+    },
+    {
+      "classification": "captured-evidence",
+      "owner": "Hexalith.Builds owning maintainer",
+      "prefix": "Tools/package-version-audit.json",
+      "reason": "Refreshed byte version of the approved retained package audit snapshot at the current Builds pin; approved captured-evidence scope, not a publication manifest.",
+      "repository": "references/Hexalith.Builds",
+      "row": "PE07",
+      "scope": "file",
+      "sha256": "173efbb30709e624ee0ec041ea5c0a62188499b5b5b1cf1a4d516dd045af71e2"
+    }
+  ],
+  "removeAllowances": [
+    {
+      "identity": "Hexalith.ChatBot.Mcp.Tests",
+      "kind": "project",
+      "path": "tests/Hexalith.ChatBot.Mcp.Tests/Hexalith.ChatBot.Mcp.Tests.csproj",
+      "repository": "references/Hexalith.ChatBot"
+    }
+  ],
+  "removeExceptions": []
+}

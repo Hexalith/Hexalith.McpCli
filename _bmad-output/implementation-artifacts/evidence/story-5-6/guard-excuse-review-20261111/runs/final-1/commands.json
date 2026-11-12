@@ -1,0 +1,180 @@
+[
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/proprietary-surfaces/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "census-tests",
+    "stderr": "census-tests.stderr.txt",
+    "stderrSha256": "7f84de9fc03ef982230a3b378736c116677de498ea93bfa3b040281a9ba49717",
+    "stdout": "census-tests.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/mutation-guards.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "mutations",
+    "stderr": "mutations.stderr.txt",
+    "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stdout": "mutations.stdout.txt",
+    "stdoutSha256": "569e281b8ecd9c03f17f5bb7aabc982cb11c687737580d21429579ee1062eb41"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "scripts/tests",
+      "-p",
+      "test_*.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "release-tests",
+    "stderr": "release-tests.stderr.txt",
+    "stderrSha256": "583d748abbd5d06d033a9e2f67969f387cb41cc060afcc5d08f51fa86e670e19",
+    "stdout": "release-tests.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--revision",
+      "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/census.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "name": "current-pin-census",
+    "stderrSha256": "67fe2b879ea3306eac024575573e41495d56c380220e4a4dc6e5fa156c6f3948",
+    "stdoutSha256": "d405fa04c6da361a762631324711b55af72f083ad642bc8d87b4c4683629604f"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--revision",
+      "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+      "--output",
+      "/tmp/tmpwf0q7eyh/determinism-1.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "1"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "name": "determinism-1",
+    "stderrSha256": "67fe2b879ea3306eac024575573e41495d56c380220e4a4dc6e5fa156c6f3948",
+    "stdoutSha256": "d405fa04c6da361a762631324711b55af72f083ad642bc8d87b4c4683629604f"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "tools/proprietary-surfaces/v1/check.py",
+      "--revision",
+      "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+      "--output",
+      "/tmp/tmpwf0q7eyh/determinism-2.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONHASHSEED": "2"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "name": "determinism-2",
+    "stderrSha256": "67fe2b879ea3306eac024575573e41495d56c380220e4a4dc6e5fa156c6f3948",
+    "stdoutSha256": "d405fa04c6da361a762631324711b55af72f083ad642bc8d87b4c4683629604f"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "/tmp/tmpwf0q7eyh/before-census.py",
+      "--revision",
+      "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+      "--baseline",
+      "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/baseline.json",
+      "--amendments",
+      "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/amendments.json",
+      "--output",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/before-census.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "name": "before-census",
+    "stderrSha256": "efdebfc4efe9cedc59db5b681346dc07ee158d8cbbeb10fd01418372e5338891",
+    "stdoutSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428"
+  },
+  {
+    "command": [
+      "/usr/bin/python3",
+      "/tmp/tmpwf0q7eyh/no-guard-census.py",
+      "--revision",
+      "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+      "--baseline",
+      "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/baseline.json",
+      "--amendments",
+      "/home/administrator/projects/hexalith/mcpcli/tools/proprietary-surfaces/v1/amendments.json",
+      "--output",
+      "/tmp/tmpwf0q7eyh/no-guard.json"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "name": "no-guard-census",
+    "stderrSha256": "1941795848cc2eca6b4f6b8363771ad985f30970b947de745d9363852de29bae",
+    "stdoutSha256": "2b0bed1f3ce6b754cca4532b76657265d6906ec6fdcb81d8c2f0f4429a3541a6"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "diff-check",
+    "stderr": "diff-check.stderr.txt",
+    "stderrSha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb",
+    "stdout": "diff-check.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "noGuardBaseline": {
+    "checker": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/before-upstream-check.py",
+    "checkerSha256": "60a07e707a4036966340f5336eb13b44b9928168674100573d09224cb3ccda02",
+    "counts": {
+      "completeRoots": 5,
+      "errors": 69,
+      "observations": 481,
+      "rejected": 41,
+      "stale": 10
+    },
+    "executedCopySha256": "431e295f176aaec6236a44f35be475dff8225ce17a4cd3bbc36673f687f392a7",
+    "identicalToPriorExceptRevisionAndDate": true,
+    "priorReport": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/before-census.json",
+    "priorReportSha256": "2b0bed1f3ce6b754cca4532b76657265d6906ec6fdcb81d8c2f0f4429a3541a6",
+    "reportSha256": "2b0bed1f3ce6b754cca4532b76657265d6906ec6fdcb81d8c2f0f4429a3541a6",
+    "stderrSha256": "1941795848cc2eca6b4f6b8363771ad985f30970b947de745d9363852de29bae"
+  },
+  "onlyAdaptation": "ROOT names the workspace because each before-checker runs from a temporary copy.",
+  "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+  "priorParentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+  "pruningChecker": {
+    "checker": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/before-pruning-check.py",
+    "checkerSha256": "3e10669799b5f520960071aec645acf1995d874c4f81e288d51b471e666fc2a3",
+    "counts": {
+      "completeRoots": 6,
+      "errors": 45,
+      "observations": 473,
+      "rejected": 30,
+      "stale": 10
+    },
+    "executedCopySha256": "165f00b664fa64014c1fd4c1908a6e6fa069d083a3d0113d9529c9a2750a708b",
+    "identicalToPriorExceptRevisionAndDate": true,
+    "priorReport": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/census.json",
+    "priorReportSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428",
+    "reportSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428",
+    "stderrSha256": "efdebfc4efe9cedc59db5b681346dc07ee158d8cbbeb10fd01418372e5338891"
+  },
+  "report": "before-census.json",
+  "rootPinChanges": []
+}

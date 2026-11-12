@@ -1,0 +1,25 @@
+[
+  {
+    "command": [
+      "/usr/bin/python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "tools/proprietary-surfaces/v1",
+      "-p",
+      "test_*.py"
+    ],
+    "environment": {
+      "PYTHONDONTWRITEBYTECODE": "1"
+    },
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "name": "census-tests",
+    "stderr": "census-tests.stderr.txt",
+    "stderrSha256": "c2ec53ef2661ef45964151ba16a8ee3ffcc73b3632fa986b0983c88519f611e7",
+    "stdout": "census-tests.stdout.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+]

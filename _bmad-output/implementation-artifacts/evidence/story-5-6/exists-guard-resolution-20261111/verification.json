@@ -1,0 +1,279 @@
+{
+  "acceptance": "failed",
+  "beforeCounts": {
+    "completeRoots": 5,
+    "crossTreeReads": 60,
+    "inspectionErrors": 69,
+    "observations": 481,
+    "rejectedObservations": 41,
+    "roots": 17,
+    "stale": 10
+  },
+  "counts": {
+    "censusTests": 197,
+    "completeRoots": 6,
+    "controlOrigins": {
+      "adapted": 7,
+      "guard-adapted": 1,
+      "nested": 43,
+      "new": 24,
+      "retained": 161
+    },
+    "crossTreeReads": 63,
+    "guardRemovalControls": 236,
+    "inspectionErrors": 45,
+    "newGuardRemovalControls": 24,
+    "observations": 473,
+    "rejectedObservations": 30,
+    "releaseRegressions": 195,
+    "roots": 17,
+    "stale": 10
+  },
+  "determinism": {
+    "finalReportSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428",
+    "repeats": {
+      "1": {
+        "identicalToFinal": true,
+        "reportSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428",
+        "stderrSha256": "efdebfc4efe9cedc59db5b681346dc07ee158d8cbbeb10fd01418372e5338891",
+        "stdoutSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428"
+      },
+      "2": {
+        "identicalToFinal": true,
+        "reportSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428",
+        "stderrSha256": "efdebfc4efe9cedc59db5b681346dc07ee158d8cbbeb10fd01418372e5338891",
+        "stdoutSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428"
+      }
+    },
+    "result": "passed",
+    "seeds": [
+      1,
+      2
+    ]
+  },
+  "guardProofs": {
+    "byRepository": {
+      "references/Hexalith.Commons": 4,
+      "references/Hexalith.Tenants": 20
+    },
+    "distinctProvenFacts": [
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../../DaprSelfHostedMtls.cs"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../../Hexalith.Builds/Props/Directory.Packages.props"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../../src/Hexalith.EventStore.Contracts"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../../src/Hexalith.FrontComposer.Shell"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../.gitmodules"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../DaprSelfHostedMtls.cs"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../src/Hexalith.EventStore.Contracts"
+      ],
+      [
+        "present",
+        "references/Hexalith.Commons",
+        "../Hexalith.Builds/Hexalith.Package.props"
+      ],
+      [
+        "present",
+        "references/Hexalith.Tenants",
+        "../Hexalith.Builds/Props/ContainerProvenance.targets"
+      ]
+    ],
+    "resolvedCrossTreeProjects": 24
+  },
+  "implementation": {
+    "after": {
+      "README.md": "4c8d2c95ea21beacddc2463e95bca37339759a429230ff747ea7dd73deab4083",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/before-check.py": "3cfcc05db9c7f4e35f0a2eb8e3cb908466908d56e176d475178300cf297097a5",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/before-upstream-check.py": "60a07e707a4036966340f5336eb13b44b9928168674100573d09224cb3ccda02",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/mutation-guards.py": "f23b5b241d7e9b08f4ddfeb066859e0208e1f5c80819e16bdc51d7fa94991100",
+      "tools/proprietary-surfaces/v1/README.md": "1eef7216e036bc115318fdf55f660cc065f06209b33d7311a33b7d8bbf4b96d3",
+      "tools/proprietary-surfaces/v1/check.py": "3e10669799b5f520960071aec645acf1995d874c4f81e288d51b471e666fc2a3",
+      "tools/proprietary-surfaces/v1/test_census.py": "c677d2c580cb1577a6c4ba498d15ff5e55bf3d237c82fc52a2a79cd48439ea1a"
+    },
+    "before": {
+      "README.md": "4c8d2c95ea21beacddc2463e95bca37339759a429230ff747ea7dd73deab4083",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/before-check.py": "3cfcc05db9c7f4e35f0a2eb8e3cb908466908d56e176d475178300cf297097a5",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/before-upstream-check.py": "60a07e707a4036966340f5336eb13b44b9928168674100573d09224cb3ccda02",
+      "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/mutation-guards.py": "f23b5b241d7e9b08f4ddfeb066859e0208e1f5c80819e16bdc51d7fa94991100",
+      "tools/proprietary-surfaces/v1/README.md": "1eef7216e036bc115318fdf55f660cc065f06209b33d7311a33b7d8bbf4b96d3",
+      "tools/proprietary-surfaces/v1/check.py": "3e10669799b5f520960071aec645acf1995d874c4f81e288d51b471e666fc2a3",
+      "tools/proprietary-surfaces/v1/test_census.py": "c677d2c580cb1577a6c4ba498d15ff5e55bf3d237c82fc52a2a79cd48439ea1a"
+    },
+    "result": "passed"
+  },
+  "newAuthority": null,
+  "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+  "policy": {
+    "amendments": [
+      {
+        "path": "amendments/1.0.1.json",
+        "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+        "version": "1.0.1"
+      },
+      {
+        "path": "amendments/1.0.2.json",
+        "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+        "version": "1.0.2"
+      }
+    ],
+    "baselineSha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+    "version": "1.0.2"
+  },
+  "priorPacketCounts": {
+    "completeRoots": 5,
+    "crossTreeReads": 58,
+    "inspectionErrors": 68,
+    "observations": 479,
+    "rejectedObservations": 39,
+    "roots": 17,
+    "stale": 10
+  },
+  "remainingGroups": {
+    "embedded-metadata-context": {
+      "keys": 3,
+      "observations": 3
+    },
+    "exact-owner-disposition": {
+      "keys": 31,
+      "observations": 31
+    },
+    "protected-source-boundary": {
+      "keys": 6,
+      "observations": 23
+    },
+    "scanner-limit-or-unproven-input": {
+      "keys": 18,
+      "observations": 18
+    }
+  },
+  "reportSha256": "a555e28010f5798062aec3034652b294369609b006f5155995d632e2cde5a428",
+  "rootPinChanges": [
+    {
+      "current": "ff6b295abcca5159896602bd8a5e87e913950b83",
+      "prior": "891886ddc60a9924d053bb74bf6bcc73e101b2ce",
+      "repository": "references/Hexalith.Builds"
+    },
+    {
+      "current": "0c7b14856f2b730749caa8a552742a77d4882dc7",
+      "prior": "b882c1005050aaebfa70618b5a72c1c8be452281",
+      "repository": "references/Hexalith.EventStore"
+    },
+    {
+      "current": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+      "prior": "9b67b3d117e0a95aabd13535da8317846c66f9d9",
+      "repository": "references/Hexalith.Folders"
+    },
+    {
+      "current": "57aa756c02edbae4294412885823533308b7db0d",
+      "prior": "7ace06c5c50406b9021fc95d8d87cf962b5180dd",
+      "repository": "references/Hexalith.FrontComposer"
+    },
+    {
+      "current": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+      "prior": "43d2d72f7170a29a58b6046f69e05c9ad9734701",
+      "repository": "references/Hexalith.Memories"
+    },
+    {
+      "current": "95347ab98f83defaa0983cd70177889469d8e4ec",
+      "prior": "07ddff72c99161be212466ff8795bba4c107adc1",
+      "repository": "references/Hexalith.Parties"
+    },
+    {
+      "current": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+      "prior": "5adb00b2f30d2985ee0b1fb1abd713b10660dc48",
+      "repository": "references/Hexalith.Platform"
+    },
+    {
+      "current": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "prior": "019aa0a82d021e08475a68fc50eff3b6a0e6c111",
+      "repository": "references/Hexalith.Tenants"
+    }
+  ],
+  "rootPins": {
+    "references/Hexalith.AI.Tools": "8a3885dd22aea88edd57771cfe592c382df2c583",
+    "references/Hexalith.Agents": "7957108c30d38b8e82eb072cf3437b6a67627cd7",
+    "references/Hexalith.Builds": "ff6b295abcca5159896602bd8a5e87e913950b83",
+    "references/Hexalith.ChatBot": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+    "references/Hexalith.Commons": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+    "references/Hexalith.Conversations": "8d0e091d849669fc8447e5078d8e3b3380a00c64",
+    "references/Hexalith.EventStore": "0c7b14856f2b730749caa8a552742a77d4882dc7",
+    "references/Hexalith.Folders": "7f029a6e117e4ada82b1e2ccfb050fa45abf49c4",
+    "references/Hexalith.FrontComposer": "57aa756c02edbae4294412885823533308b7db0d",
+    "references/Hexalith.Memories": "13fdb88a3267626b14f75e16cc2de58dcfbbb2bb",
+    "references/Hexalith.Parties": "95347ab98f83defaa0983cd70177889469d8e4ec",
+    "references/Hexalith.Platform": "94001fad925fdf7fa03a90b507b8f8e19074f9e3",
+    "references/Hexalith.PolymorphicSerializations": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+    "references/Hexalith.Projects": "77067782154d35a794ea50d86af1c5e73c8351b6",
+    "references/Hexalith.Tenants": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+    "references/Hexalith.Timesheets": "f5bee2c91bec6e1e78d81b604cea6af0cee764fe",
+    "references/Hexalith.Works": "4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23"
+  },
+  "run": "runs/final-1",
+  "storyStatus": "in-progress",
+  "utcDate": "2026-11-11"
+}

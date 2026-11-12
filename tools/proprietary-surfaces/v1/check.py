@@ -59,6 +59,15 @@ def safe_path(value):
     return value
 
 
+def safe_label(value):
+    """A safe path, optionally behind leading '..' segments that mark a workspace label."""
+    require(isinstance(value, str), 'unsafe-path')
+    parts = value.split('/')
+    depth = next((index for index, part in enumerate(parts) if part != '..'), len(parts))
+    safe_path('/'.join(parts[depth:]))
+    return value
+
+
 def nonblank(value):
     return isinstance(value, str) and bool(value.strip()) and not re.search(r'[\x00-\x1f\x7f]', value)
 
@@ -82,11 +91,28 @@ def json_bytes(raw, label):
         raise CensusError(f'malformed-json:{label}') from None
 
 
+@lru_cache(maxsize=1)
+def repository_variables():
+    """Name the variables Git treats as repository-local; inherited values redirect reads.
+
+    This is the one census Git call that reads no repository or object, so it
+    runs without the object-read protections, with no inherited GIT_ variable.
+    """
+    result = subprocess.run(['git', 'rev-parse', '--local-env-vars'], capture_output=True, check=False,
+                            env={key: value for key, value in os.environ.items() if not key.startswith('GIT_')})
+    require(result.returncode == 0, 'git-unavailable')
+    return frozenset(result.stdout.decode('utf-8', errors='strict').split())
+
+
 def git(repo, *args, raw=False, input=None):
-    # Object reads never fetch: a partial clone's missing object stays missing.
-    result = subprocess.run(['git', '-c', 'core.quotePath=false', '-C', str(repo), *args],
-                            input=input, capture_output=True, check=False,
-                            env={**os.environ, 'GIT_NO_LAZY_FETCH': '1'})
+    # Object reads never fetch or substitute: a partial clone's missing object
+    # stays missing on every Git version, replace refs are ignored and inherited
+    # repository variables cannot redirect `-C` to another object store.
+    environment = {key: value for key, value in os.environ.items() if key not in repository_variables()}
+    environment.update({'GIT_NO_LAZY_FETCH': '1', 'GIT_NO_REPLACE_OBJECTS': '1'})
+    environment['GIT_ALLOW_PROTOCOL'] = ''  # An empty allow list overrides protocol.<name>.allow and inheritance.
+    result = subprocess.run(['git', '-c', 'core.quotePath=false', '-c', 'protocol.allow=never', '-C', str(repo), *args],
+                            input=input, capture_output=True, check=False, env=environment)
     require(result.returncode == 0, 'git-object-unavailable')
     return result.stdout if raw else result.stdout.decode('utf-8', errors='strict').strip()
 
@@ -96,7 +122,7 @@ class Tree:
 
     def __init__(self, repo, revision):
         self.repo, self.revision = Path(repo), revision
-        self.entries, self.cache = {}, {}
+        self.entries, self.cache, self.paths = {}, {}, None
         raw = git(repo, 'ls-tree', '-rz', '--full-tree', revision, raw=True)
         for row in raw.split(b'\0'):
             if not row:
@@ -122,6 +148,39 @@ class Tree:
             return raw.decode('utf-16' if raw.startswith((b'\xff\xfe', b'\xfe\xff')) else 'utf-8-sig')
         except UnicodeError:
             raise CensusError(f'malformed-text:{path}') from None
+
+    def index(self):
+        """Committed directories, plus case-folded entries, directories, gitlinks and links."""
+        if self.paths is None:
+            directories, folded, folded_directories, unopened = set(), set(), set(), set()
+            for path, entry in self.entries.items():
+                parts = path.split('/')
+                directories.update('/'.join(parts[:end]) for end in range(1, len(parts)))
+                folded.add(path.lower())
+                folded_directories.update('/'.join(parts[:end]).lower() for end in range(1, len(parts)))
+                if entry[0] in ('160000', '120000'):
+                    unopened.add(path.lower())  # Gitlinks and links: their targets are not in this tree.
+            self.paths = directories, folded, folded_directories, unopened
+        return self.paths
+
+    def present(self, inner, directory=False):
+        """A committed regular blob or directory at this exact spelling; never the tree root."""
+        if directory:
+            return inner in self.index()[0]  # A trailing separator names a directory only.
+        entry = self.entries.get(inner)
+        return entry[0] in REGULAR if entry is not None else inner in self.index()[0]
+
+    def opaque(self, inner):
+        """A proper prefix, ignoring case, is a gitlink or link whose contents this tree does not hold."""
+        parts = inner.lower().split('/')
+        return any('/'.join(parts[:end]) in self.index()[3] for end in range(1, len(parts)))
+
+    def absent(self, inner):
+        """No committed entry or directory matches, ignoring case; a path below a gitlink or link is unknown."""
+        _, folded, folded_directories, _ = self.index()
+        lowered = inner.lower()
+        return (bool(inner) and lowered != '.' and lowered not in folded and lowered not in folded_directories
+                and not self.opaque(inner))
 
     def preload(self, paths):
         paths = [p for p in paths if self.entries[p][0] in ('100644', '100755')]
@@ -170,13 +229,19 @@ Substitution = namedtuple('Substitution', 'base tree resolution repository commi
 
 
 def submodule_urls(tree):
-    """Map each declared submodule path to its URL list; malformed declarations map nothing."""
+    """Map each declared submodule path to its URL list; malformed declarations map nothing.
+
+    As in declarations(), every section must be `submodule "<name>"` with a safe
+    path; any other section or path makes the whole declaration unusable.
+    """
     try:
         parser = configparser.ConfigParser(interpolation=None, strict=True)
         parser.read_string(tree.text('.gitmodules'))
         modules = {}
         for section in parser.sections():
-            modules.setdefault(parser.get(section, 'path', fallback=None), []).append(parser.get(section, 'url', fallback=None))
+            require(re.fullmatch(r'submodule "[^"\r\n]+"', section) is not None, 'malformed-nested-declarations')
+            path = safe_path(parser.get(section, 'path', fallback=''))
+            modules.setdefault(path, []).append(parser.get(section, 'url', fallback=None))
         return modules
     except (CensusError, configparser.Error):
         return {}
@@ -277,55 +342,88 @@ class Resolver:
     def substitution(self, label):
         return self.locations[label][2] if label in self.locations else None
 
-    def text(self, label):
+    def blob(self, label):
         """Read a local blob, or a substituted blob with its exact provenance."""
         if label not in self.locations:
-            return self.tree.text(label)
+            return self.tree.blob(label)
         tree, inner, substitution = self.locations[label]
+        try:
+            raw = tree.blob(inner)
+        except CensusError:
+            # The pinned tree names this blob, but its object store lacks it.
+            raise CensusError(f'{substitution.resolution}-object-unavailable:{label}', target=label) from None
         record = {'requested': label, 'resolution': substitution.resolution, 'repository': substitution.repository,
-                  'commit': substitution.commit, 'path': inner, 'sha256': digest(tree.blob(inner))}
+                  'commit': substitution.commit, 'path': inner, 'sha256': digest(raw)}
         if substitution.gitlink:
             record['nestedGitlink'] = substitution.gitlink
         self.reads[canonical(record)] = record
+        return raw
+
+    def text(self, label):
+        if label not in self.locations:
+            return self.tree.text(label)
+        raw = self.blob(label)
         try:
-            return tree.text(inner)
-        except CensusError:
+            return raw.decode('utf-16' if raw.startswith((b'\xff\xfe', b'\xfe\xff')) else 'utf-8-sig')
+        except UnicodeError:
             raise CensusError(f'malformed-text:{label}') from None
 
     def provenance(self):
         return sorted(self.reads.values(), key=lambda record: (record['requested'], canonical(record)))
 
-    def present(self, label):
-        """Prove a path exists in a non-recursive workspace: committed in this root or in a root at its pin."""
-        if self.local(label):
-            tree, inner = self.tree, label
-        elif self.escaping(label) and self.workspace is not None:
-            target = posixpath.normpath(self.repository + '/' + label)
-            root = next((r for r in self.workspace.roots if target.startswith(r + '/')), None)
-            if self.escaping(target) or root is None:
-                return False  # Above the parent root or outside every root: never proven present.
-            try:
-                tree = self.workspace.tree(root, self.workspace.roots[root])
-            except CensusError:
-                return False
-            inner = target[len(root) + 1:]
-        else:
-            return False  # Non-recursive checkouts lack every path under a nested gitlink.
-        # A gitlink is no regular blob and has no committed entries below it.
-        entry = tree.entries.get(inner)
-        return entry is not None and entry[0] in REGULAR or any(p.startswith(inner + '/') for p in tree.entries)
-
-    def absent(self, label, substitution):
-        """Prove no file or directory exists under the local, workspace and nested rules."""
+    # Guard proofs model the parent workspace CI builds from: the parent tree,
+    # with each root reference checked out at its pin and no nested gitlink
+    # initialized. They read tree entries only, never blob content.
+    def present(self, label, substitution, directory=False):
+        """Prove Exists() true: a committed regular blob or directory at this exact spelling."""
         if re.search(r'[*?]', label):
             return False
-        if substitution is None and self.local(label):
-            return label not in self.tree.entries and not any(p.startswith(label + '/') for p in self.tree.entries)
+        if substitution is not None:
+            # One hop: only a workspace root checked out at its pin; CI never opens a nested commit.
+            return (substitution.resolution == 'workspace' and label.startswith(substitution.base + '/')
+                    and substitution.tree.present(label[len(substitution.base) + 1:], directory))
+        if self.local(label):
+            return self.tree.present(label, directory)
+        if not self.escaping(label) or self.workspace is None:
+            return False  # Paths under a nested gitlink are absent from non-recursive checkouts.
+        target = posixpath.normpath(self.repository + '/' + label)
+        root = next((r for r in self.workspace.roots if target.startswith(r + '/')), None)
+        if self.escaping(target) or root is None:
+            return False  # Above the parent root, a tree root itself, or outside every root.
         try:
-            found, missing = self.matches(label, substitution, 'unsafe-import-path', '')
+            return self.workspace.tree(root, self.workspace.roots[root]).present(target[len(root) + 1:], directory)
         except CensusError:
-            return False  # A refused or unresolvable path proves nothing.
-        return missing and not found
+            return False
+
+    def absent(self, label, substitution):
+        """Prove Exists() false: no case-insensitive match in any tree a build could read there."""
+        if re.search(r'[*?]', label):
+            return False
+        if substitution is not None:
+            # A path outside the substituted tree is a second hop and proves nothing.
+            return label.startswith(substitution.base + '/') and substitution.tree.absent(label[len(substitution.base) + 1:])
+        if self.local(label):
+            return self.tree.absent(label)
+        if not self.escaping(label):
+            # A nested path is absent everywhere only when its exact nested commit lacks it.
+            try:
+                tree, inner, _ = self.locate(label, None, Refusal('unsafe-import-path', '', label))
+            except CensusError:
+                return False
+            return tree.absent(inner)
+        if self.workspace is None:
+            return False
+        target = posixpath.normpath(self.repository + '/' + label)
+        if self.escaping(target):
+            return False  # Above the parent root.
+        root = next((r for r in self.workspace.roots if target == r or target.startswith(r + '/')), None)
+        if root is None:
+            # The parent tree records every root as a gitlink, so a case variant of a root is unknown.
+            return self.workspace.parent.absent(target)
+        try:
+            return self.workspace.tree(root, self.workspace.roots[root]).absent(target[len(root) + 1:])
+        except CensusError:
+            return False
 
     def locate(self, label, substitution, refusal):
         """Return the tree, in-tree path and substitution holding one cross-tree label."""
@@ -376,14 +474,15 @@ class Resolver:
         tree, inner, substitution = self.locate(directory, substitution, refusal)
         if tree is None:
             refusal.require(wildcard is None)  # Parent-tree directories are never listed.
-            refusal.require(inner not in self.workspace.parent.entries)  # Parent-tree blobs are never read.
-            # Exists() is also true for a directory, so only a missing path is absent.
-            refusal.require(not any(p.startswith(inner + '/') for p in self.workspace.parent.entries))
+            # Parent-tree blobs are never read. Exists() is also true for a directory, and a
+            # case variant, a link-traversing path or the parent root itself is no absent file.
+            refusal.require(self.workspace.parent.absent(inner))
             return [], True
         if wildcard is None:
             entry = tree.entries.get(inner)
             if entry is None:
-                refusal.require(bool(inner) and not any(p.startswith(inner + '/') for p in tree.entries))  # Directory.
+                # A directory, the tree root, a case variant or a link-traversing path is no absent file.
+                refusal.require(tree.absent(inner))
                 return [], True
             refusal.require(entry[0] in REGULAR)
             found = [inner]
@@ -426,7 +525,8 @@ def validate_allowance(entry, roots):
                 and all(isinstance(path, str) and (entry.get('compilationClosure') is True or path.startswith(prefix + '/')) for path in paths), 'invalid-source-closure')
     for source in entry.get('sources', []):
         require(isinstance(source, dict) and set(source) == {'path', 'sha256'}, 'invalid-source-binding')
-        safe_path(source['path'])
+        # Only a compilation closure names cross-tree members, by their requested labels.
+        (safe_label if 'sourcePrefix' in entry and entry.get('compilationClosure') is True else safe_path)(source['path'])
         require(HASH.fullmatch(source['sha256']) is not None, 'invalid-source-binding')
 
 
@@ -434,7 +534,7 @@ def canonical(value):
     return json.dumps(value, sort_keys=True, separators=(',', ':'))
 
 
-def validate_approval_evidence(workspace, amendment, receipt, authorities, context=None):
+def validate_approval_evidence(workspace, amendment, receipt, authorities):
     """Require an affirmative receipt bound to the exact mutation scope."""
     require(isinstance(receipt, dict) and receipt.get('decision') == 'approved'
             and receipt.get('owner') == amendment['approval']['owner'], 'amendment-evidence-not-approved')
@@ -474,15 +574,16 @@ def validate_approval_evidence(workspace, amendment, receipt, authorities, conte
                 and canonical(entry.get('sources')) == canonical(closure.get('sources'))
                 and 'compilationClosure' not in entry, 'amendment-authorization-scope-mismatch')
         tree = Tree(workspace / safe_path(fixture['repository']), fixture['gitlink'])
-        values, _, _, _ = project_metadata(tree, project, metadata_files(tree),
-                                           resolver=Resolver(context, fixture['repository'], tree) if context else None)
+        # No workspace context: a cross-tree path in fixture metadata is refused,
+        # so policy loading fails closed instead of reading current pins.
+        values, _, _, _ = project_metadata(tree, project, metadata_files(tree))
         authorized = {('project', PurePosixPath(project).stem)}
         for name, prefix in [('PackageId', 'package:'), ('ToolCommandName', 'tool:'), ('ContainerRepository', 'container:')]:
             authorized.update(('publication', prefix + value) for value in values.get(name, set()))
         require((surface.get('kind'), surface.get('identity')) in authorized, 'amendment-authorization-scope-mismatch')
 
 
-def load_policy(workspace, parent, baseline_path, index_path, today, context=None):
+def load_policy(workspace, parent, baseline_path, index_path, today):
     baseline_raw = baseline_path.read_bytes()
     policy = json_bytes(baseline_raw, 'baseline')
     require(isinstance(policy, dict) and set(policy) == {'schema', 'version', 'roots', 'allowances', 'exclusions', 'exceptions', 'provenance', 'toolIdentities'} and policy.get('schema') == SCHEMA and policy.get('version') == '1.0.0', 'invalid-baseline-version')
@@ -567,7 +668,7 @@ def load_policy(workspace, parent, baseline_path, index_path, today, context=Non
             require(len({canonical(retained) for retained in registry['receipts']}) == len(registry['receipts']),
                     'invalid-legacy-receipt-registry')
             require(binding in registry['receipts'], 'untrusted-legacy-amendment-evidence')
-        validate_approval_evidence(workspace, amendment, receipt, authorities, context)
+        validate_approval_evidence(workspace, amendment, receipt, authorities)
         authorities[(binding['path'], binding['sha256'])] = receipt
         for removed in amendment['removeAllowances']:
             key = descriptor(removed)
@@ -751,10 +852,24 @@ def exists_arguments(condition):
     """Return Exists() arguments that a condition requires, or [] when a disjunction may bypass them."""
     arguments = []
     for conjunct in condition_conjuncts(condition):
-        exists = re.fullmatch(r'''\s*Exists\(\s*(["'])(.*?)\1\s*\)\s*''', conjunct, re.I | re.S)
-        if exists:
-            arguments.append(exists[2])
+        exists = EXISTS_GUARD.fullmatch(conjunct)  # The guard parser: an argument cannot span quotes.
+        if exists and not exists[1]:
+            arguments.append(exists[3])
     return arguments
+
+
+# A guard conjunct is exactly Exists('…') or !Exists('…'); a quoted argument cannot span quotes.
+EXISTS_GUARD = re.compile(r'''\s*(!\s*)?Exists\(\s*(["'])([^"']*)\2\s*\)\s*''', re.I)
+# Properties expand_msbuild supplies for every document position.
+CONTEXT_PROPERTIES = frozenset({'msbuildprojectname', 'msbuildprojectdirectory', 'msbuildprojectfullpath', 'msbuildprojectextension',
+                                'msbuildthisfiledirectory', 'msbuildthisfilefullpath', 'msbuildthisfilename'})
+PROPERTY_REFERENCE = re.compile(r'\$\(([A-Za-z_][\w.]*)\)')
+
+
+def literal_item(value):
+    """MSBuild splits at ';', trims each item and unescapes %XX: None unless one plain item remains."""
+    items = [item.strip() for item in value.split(';') if item.strip()]
+    return items[0] if len(items) == 1 and not re.search(r'%[0-9A-Fa-f]{2}', items[0]) else None
 
 
 @lru_cache(maxsize=2048)
@@ -816,6 +931,15 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
     documents, visited, values, references, item_records = [], set(), {}, [], []
     properties = {'assemblyname': {PurePosixPath(path).stem}}
     declared_properties, copy_sources = set(), {}
+    # Guard bookkeeping: names whose alternatives are complete at evaluation time,
+    # names any Target assigns, and each value's definitions with their proofs.
+    certain, target_defined, origins = set(), set(), {}
+
+    def settled(text):
+        """Every property the text names has complete evaluation-time alternatives."""
+        return all((name in certain if name in properties else name in CONTEXT_PROPERTIES) and name not in target_defined
+                   for name in {name.lower() for name in PROPERTY_REFERENCE.findall(text)})
+
     parents = list(reversed(list(PurePosixPath(path).parents)))
     props = [(ancestor / 'Directory.Build.props').as_posix() for ancestor in parents]
     targets = [(ancestor / 'Directory.Build.targets').as_posix() for ancestor in parents]
@@ -829,31 +953,50 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
         visited.add((current, inherited_condition))
         document = xml(resolver.text(current), current)
         documents.append(current)
+        # Target properties are assigned at execution time; their names never support a proof.
+        target_defined.update(local_name(item).lower() for target in document.iter() if local_name(target).lower() == 'target'
+                              for item in target.iter() if item is not target and not list(item))
 
-        def unreachable(conditions):
-            # Only Exists() facts in a balanced top-level conjunction can prove an element unreachable.
+        def refuted(conditions, base):
+            """Prove an element never evaluates: a balanced top-level `and` conjunct is false."""
+            substitution = resolver.substitution(current)
             for condition in conditions:
                 for conjunct in condition_conjuncts(condition):
-                    guard = re.fullmatch(r'''\s*(!\s*)?Exists\(\s*(["'])(.*?)\2\s*\)\s*''', conjunct, re.I | re.S)
-                    if not guard:
-                        continue
-                    alternatives = expanded_values(guard[3], properties, current, path, required=False)
-                    if not alternatives or any('$(' in item for item in alternatives):
-                        continue  # An unresolved property proves nothing.
+                    guard = EXISTS_GUARD.fullmatch(conjunct)
+                    if not guard or not settled(guard[3]):
+                        continue  # A conditionally defined or Target-assigned property may differ.
+                    alternatives = [literal_item(item) for item in expanded_values(guard[3], properties, current, path, required=False)]
+                    if not alternatives or None in alternatives or any(re.search(r'[$@%]\(', item) for item in alternatives):
+                        continue  # A list, or unresolved, item or escaped text, proves nothing.
                     try:
-                        labels = [resolver.canonical_label(label_path(current, item)) for item in alternatives]
+                        labels = [resolver.canonical_label(label_path(base, item)) for item in alternatives]
                     except CensusError:
                         continue
-                    if guard[1] and all(resolver.present(label) for label in labels):
+                    # A trailing separator makes Exists() true only for a directory.
+                    if guard[1] and all(resolver.present(label, substitution, item.endswith(('/', '\\')))
+                                        for label, item in zip(labels, alternatives)):
                         return True
-                    if not guard[1] and all(resolver.absent(label, resolver.substitution(current)) for label in labels):
+                    if not guard[1] and all(resolver.absent(label, substitution) for label in labels):
                         return True
             return False
+
+        def excused(element, enclosing, raw, value):
+            """Excuse an absent, otherwise refused import target; never skip or reclassify content."""
+            # Import and ImportGroup conditions resolve relative paths from the declaring file.
+            conditions = [condition for condition in (attribute(element, 'Condition'),
+                          enclosing[1] if enclosing[0] == 'importgroup' else None) if condition is not None]
+            if refuted(conditions, current):
+                return True
+            # A carried guard: every definition producing this exact value is proven unreachable.
+            carried = re.fullmatch(r'\s*\$\(([A-Za-z_][\w.]*)\)\s*', raw)
+            proofs = origins.get(carried[1].lower(), {}).get(value) if carried else None
+            return bool(proofs) and all(proofs)
 
         def import_optional(element, label):
             # An absent path is optional only when a required Exists() names it exactly.
             for argument in exists_arguments(attribute(element, 'Condition') or ''):
-                alternatives = expanded_values(argument, properties, current, path, required=False)
+                alternatives = [literal_item(item) for item in expanded_values(argument, properties, current, path, required=False)]
+                alternatives = [] if None in alternatives else alternatives  # A list or escaped argument names nothing.
                 try:
                     if alternatives and all('$(' not in item and resolver.canonical_label(label_path(current, item)) == label
                                             for item in alternatives):
@@ -862,25 +1005,32 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                     continue
             return False
 
-        def inspect(element, conditional=False, guards=(), parent=None, static=True):
+        def inspect(element, conditional=False, enclosing=(None, None), in_target=False):
             name = local_name(element).lower()
-            own = attribute(element, 'Condition')
             conditional = conditional or attribute(element, 'Condition') is not None or name in ('when', 'otherwise')
-            # Evaluation-time guards: the element's own Condition plus its enclosing
-            # PropertyGroup/ImportGroup. Choose/When and Target conditions prove nothing.
-            evaluated = guards + ((own,) if own is not None else ())
             text = (element.text or '').strip()
             if not list(element) and (text or name in properties or name in PROPERTY_NAMES):
-                if conditional and static and parent == 'propertygroup' and unreachable(evaluated):
-                    return  # An unreachable conditional definition contributes no alternative.
                 declared_properties.add(name)
                 possibilities = set(expanded_values(text, properties, current, path, required=False))
+                # Only an evaluation-time PropertyGroup definition can be proven unreachable,
+                # from its own or enclosing PropertyGroup condition.
+                static = enclosing[0] == 'propertygroup' and not in_target
+                # Its own condition resolves relative paths from the entry project; the
+                # enclosing PropertyGroup condition from the declaring file.
+                proof = static and (refuted([attribute(element, 'Condition') or ''], path) or refuted([enclosing[1] or ''], current))
+                complete = static and settled(text)
                 # Any conditional definition can be selected by a build; preserve
                 # it even when another branch appears later in the document.
                 if conditional:
                     properties.setdefault(name, set()).update(possibilities)
+                    for possibility in possibilities:
+                        origins.setdefault(name, {}).setdefault(possibility, []).append(proof)
+                    if not complete:
+                        certain.discard(name)
                 else:
                     properties[name] = possibilities
+                    origins[name] = {possibility: [proof] for possibility in possibilities}
+                    (certain.add if complete else certain.discard)(name)
                 if name in PROPERTY_NAMES:
                     values.setdefault(PROPERTY_NAMES[name], set()).update(possibilities)
             if name in ('packagereference', 'projectreference'):
@@ -900,10 +1050,18 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                 require(bool(raw), f'malformed-project-metadata:{current}')
                 if attribute(element, 'Sdk'):
                     return  # SDK imports are resolved outside this committed tree.
-                if unreachable(evaluated):
-                    return  # An unreachable import is not visited.
                 substitution = resolver.substitution(current)
                 for value in expanded_values(raw, properties, current, path, required=False):
+                    item = literal_item(value)
+                    if item is None and value.strip():
+                        # MSBuild splits a ';' list and unescapes %XX: no single committed path is named.
+                        try:
+                            label = resolver.canonical_label(label_path(current, value.strip()))
+                        except CensusError:
+                            label = value.strip()
+                        local = substitution is None and resolver.local(label)
+                        raise CensusError(f"{'unavailable-local-import' if local else 'unsafe-import-path'}:{current}", target=label)
+                    value = value if item is None else item
                     if '$(' not in value:
                         label = resolver.canonical_label(label_path(current, value))
                         if substitution is None and resolver.local(label):
@@ -911,14 +1069,26 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                             matches = ([target] if target in metadata_paths else []) if not re.search(r'[*?]', target) else sorted(
                                 candidate for candidate in metadata_paths if msbuild_glob(candidate, target))
                             if not matches and not re.search(r'[*?]', target):
-                                require(import_optional(element, label), f'unavailable-local-import:{current}')
+                                # A build follows a committed link; its target is no absent file.
+                                Refusal('unavailable-local-import', current, label).require(not resolver.tree.opaque(label))
+                                require(import_optional(element, label) or excused(element, enclosing, raw, value),
+                                        f'unavailable-local-import:{current}')
                         else:
                             # Workspace and nested paths resolve at committed pins, one hop at most.
                             matches, absent = resolver.matches(label, substitution, 'unsafe-import-path', current)
                             if absent:
-                                Refusal('unsafe-import-path', current, label).require(import_optional(element, label))
+                                Refusal('unsafe-import-path', current, label).require(
+                                    import_optional(element, label) or excused(element, enclosing, raw, value))
+                        # A present target is always visited, whatever its guards prove.
                         for candidate in matches:
                             visit(candidate, conditional)
+                    elif substitution is not None:
+                        # A substituted file's unresolved import names no inspected-root metadata.
+                        try:
+                            label = resolver.canonical_label(label_path(current, value))
+                        except CensusError:
+                            label = value
+                        raise CensusError(f'unsafe-import-path:{current}', target=label)
                     else:
                         names = set(re.findall(r'[A-Za-z0-9_.-]+\.[A-Za-z0-9]+', value))
                         for candidate in sorted(metadata_paths):
@@ -931,8 +1101,7 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                                 if (msbuild_glob(candidate, suffix[1]) or msbuild_glob(candidate, '**/' + suffix[1])):
                                     visit(candidate, True)
             for child in element:
-                inspect(child, conditional, guards + ((own,) if own is not None and name in ('propertygroup', 'importgroup') else ()),
-                        name, static and name != 'target')
+                inspect(child, conditional, (name, attribute(element, 'Condition')), in_target or name == 'target')
         inspect(document, inherited_condition)
 
     for current in initial:
@@ -1037,12 +1206,15 @@ def compile_provenance(tree, project, properties, records, copy_sources, errors=
 def sdk_identities(tree, path):
     document = xml(tree.text(path), path)
     identities = (attribute(document, 'Sdk') or '').split(';')
+    explicit = {'Sdk.props': set(), 'Sdk.targets': set()}
     for element in document:
         if local_name(element).lower() == 'sdk':
             identities.append(attribute(element, 'Name') or '')
         elif (local_name(element).lower() == 'import' and attribute(element, 'Condition') is None
               and attribute(element, 'Project') in ('Sdk.props', 'Sdk.targets')):
-            identities.append(attribute(element, 'Sdk') or '')
+            explicit[attribute(element, 'Project')].add((attribute(element, 'Sdk') or '').split('/', 1)[0].lower())
+    # An explicit SDK applies only when unconditional Sdk.props and Sdk.targets imports both name it.
+    identities.extend(explicit['Sdk.props'] & explicit['Sdk.targets'])
     return {identity.split('/', 1)[0].lower() for identity in identities if identity}
 
 
@@ -1085,17 +1257,21 @@ def json_documents(document, path):
 
 
 def compilation_closure(tree, project, resolver=None):
-    """Bind fixture files, inherited/imported metadata and linked local sources.
+    """Bind fixture files, inherited/imported metadata and linked sources.
 
-    Substituted workspace/nested blobs are bound by their pins in report
-    provenance; the local closure names only this repository's own blobs.
+    A substituted workspace or nested member is bound by its requested label and
+    the SHA-256 of its pinned blob, so a changed, added or removed cross-tree
+    member is source drift.
     """
+    resolver = resolver or Resolver(None, None, tree)
     metadata_paths = metadata_files(tree)
     _, _, documents, linked = project_metadata(tree, project, metadata_paths, resolver=resolver)
     prefix = str(PurePosixPath(project).parent) + '/'
     paths = {path for path in tree.entries if path.startswith(prefix)} | {
         path for path in set(documents) | linked if path in tree.entries}
-    return [{'path': path, 'sha256': digest(tree.blob(path))} for path in sorted(paths)]
+    substituted = {label for label in set(documents) | linked if resolver.substitution(label) is not None}
+    return [{'path': path, 'sha256': digest(tree.blob(path) if path in paths else resolver.blob(path))}
+            for path in sorted(paths | substituted)]
 
 
 def workflow_matrix_values(text):
@@ -1931,7 +2107,8 @@ def scan_tree(tree, repository, exclusions, resolver=None):
         exact = [entry for entry in excluded if entry.get('scope') == 'file' and path == entry['prefix']]
         if exact:
             # An append-only amendment may authorize another exact body of the same file.
-            # A revision-scoped classification cannot be reused at a later source pin.
+            # A revision-scoped classification cannot be reused at a later source pin,
+            # and a file-bound path never falls back to a directory-scope exclusion.
             applicable = [entry for entry in exact if entry.get('sourceRevision', tree.revision) == tree.revision]
             require(bool(applicable), f'excluded-source-revision-drift:{path}')
             hashes = {value for entry in applicable for value in [entry['sha256'], *entry.get('additionalSha256', [])]}
@@ -2249,7 +2426,7 @@ def scan(workspace, revision, baseline_path, index_path, today):
     parent = Tree(workspace, revision)
     roots = declarations(parent)
     context = Workspace(workspace, parent, roots)
-    policy, baseline_roots, allowed, exclusions, exceptions, provenance = load_policy(workspace, parent, baseline_path, index_path, today, context)
+    policy, baseline_roots, allowed, exclusions, exceptions, provenance = load_policy(workspace, parent, baseline_path, index_path, today)
     report = {'schema': SCHEMA, 'status': 'passed', 'parentRevision': revision, 'utcDate': today.isoformat(),
               'policy': provenance, 'repositories': [], 'surfaces': [], 'stale': [], 'errors': []}
     observed, inspected = set(), set()
@@ -2286,13 +2463,16 @@ def scan(workspace, revision, baseline_path, index_path, today):
                 elif allowance:
                     extra = set(candidate['signals']) - set(allowance['signals'])
                     try:
+                        # A compilation closure binds requested labels, cross-tree members included.
+                        closure = ({source['path']: source['sha256'] for source in compilation_closure(tree, allowance['surface']['path'], resolver)}
+                                   if 'sourcePrefix' in allowance and allowance.get('compilationClosure') else None)
                         source_changes = [source['path'] for source in allowance.get('sources', [])
-                                          if source['path'] not in tree.entries or digest(tree.blob(source['path'])) != source['sha256']]
+                                          if (closure.get(source['path']) != source['sha256'] if closure is not None else
+                                              source['path'] not in tree.entries or digest(tree.blob(source['path'])) != source['sha256'])]
                         if 'sourcePrefix' in allowance:
                             prefix = allowance['sourcePrefix'] + '/'
                             expected_paths = {source['path'] for source in allowance['sources']}
-                            actual_paths = ({source['path'] for source in compilation_closure(tree, allowance['surface']['path'], resolver)}
-                                            if allowance.get('compilationClosure') else {path for path in tree.entries if path.startswith(prefix)})
+                            actual_paths = set(closure) if closure is not None else {path for path in tree.entries if path.startswith(prefix)}
                             source_changes = sorted(set(source_changes) | (expected_paths ^ actual_paths))
                     except (CensusError, OSError, UnicodeError) as error:
                         source_changes = None

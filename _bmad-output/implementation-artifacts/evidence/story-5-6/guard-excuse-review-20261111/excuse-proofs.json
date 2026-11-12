@@ -1,0 +1,2168 @@
+{
+  "limit": "Facts come only from committed tree entries: the inspected root, root-declared references at their pins, the parent tree outside every root and nested commits for absence. Nested paths are never proven present. No inspected code ran, and no property alternative was removed.",
+  "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9",
+  "projects": [
+    {
+      "gitlink": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+          "path": "src/libraries/Hexalith.Commons.Configurations/Hexalith.Commons.Configurations.csproj",
+          "repository": "references/Hexalith.Commons",
+          "rule": "unsafe-import-path:src/libraries/Directory.Build.props",
+          "target": "../../Hexalith.Builds/Hexalith.Package.props"
+        }
+      ],
+      "project": "src/libraries/Hexalith.Commons.Configurations/Hexalith.Commons.Configurations.csproj",
+      "provenFacts": [
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Hexalith.Package.props"
+        }
+      ],
+      "repository": "references/Hexalith.Commons",
+      "unprovenFacts": [
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Hexalith.Package.props"
+        }
+      ]
+    },
+    {
+      "gitlink": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+          "path": "src/libraries/Hexalith.Commons.Metadatas/Hexalith.Commons.Metadatas.csproj",
+          "repository": "references/Hexalith.Commons",
+          "rule": "unsafe-import-path:src/libraries/Directory.Build.props",
+          "target": "../../Hexalith.Builds/Hexalith.Package.props"
+        }
+      ],
+      "project": "src/libraries/Hexalith.Commons.Metadatas/Hexalith.Commons.Metadatas.csproj",
+      "provenFacts": [
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Hexalith.Package.props"
+        }
+      ],
+      "repository": "references/Hexalith.Commons",
+      "unprovenFacts": [
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Hexalith.Package.props"
+        }
+      ]
+    },
+    {
+      "gitlink": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+          "path": "src/libraries/Hexalith.Commons.StringEncoders/Hexalith.Commons.StringEncoders.csproj",
+          "repository": "references/Hexalith.Commons",
+          "rule": "unsafe-import-path:src/libraries/Directory.Build.props",
+          "target": "../../Hexalith.Builds/Hexalith.Package.props"
+        }
+      ],
+      "project": "src/libraries/Hexalith.Commons.StringEncoders/Hexalith.Commons.StringEncoders.csproj",
+      "provenFacts": [
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Hexalith.Package.props"
+        }
+      ],
+      "repository": "references/Hexalith.Commons",
+      "unprovenFacts": [
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Hexalith.Package.props"
+        }
+      ]
+    },
+    {
+      "gitlink": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+          "path": "src/libraries/Hexalith.Commons/Hexalith.Commons.csproj",
+          "repository": "references/Hexalith.Commons",
+          "rule": "unsafe-import-path:src/libraries/Directory.Build.props",
+          "target": "../../Hexalith.Builds/Hexalith.Package.props"
+        }
+      ],
+      "project": "src/libraries/Hexalith.Commons/Hexalith.Commons.csproj",
+      "provenFacts": [
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Hexalith.Package.props"
+        }
+      ],
+      "repository": "references/Hexalith.Commons",
+      "unprovenFacts": [
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Hexalith.Package.props"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "samples/Hexalith.Tenants.Sample.Tests/Hexalith.Tenants.Sample.Tests.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "samples/Hexalith.Tenants.Sample.Tests/Hexalith.Tenants.Sample.Tests.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "samples/Hexalith.Tenants.Sample/Hexalith.Tenants.Sample.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "samples/Hexalith.Tenants.Sample/Hexalith.Tenants.Sample.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "src/Hexalith.Tenants.Api/Hexalith.Tenants.Api.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "src/Hexalith.Tenants.Api/Hexalith.Tenants.Api.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [
+        {
+          "path": "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+          "rule": "unsafe-or-nested-compile-source:src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+          "target": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "path": "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+          "rule": "unsafe-or-nested-compile-source:src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+          "target": "../../DaprSelfHostedMtlsSubscriber.cs"
+        }
+      ],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "src/Hexalith.Tenants.Aspire/Hexalith.Tenants.Aspire.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "src/Hexalith.Tenants.Aspire/Hexalith.Tenants.Aspire.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "src/Hexalith.Tenants.Client/Hexalith.Tenants.Client.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "src/Hexalith.Tenants.Client/Hexalith.Tenants.Client.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "src/Hexalith.Tenants.Contracts/Hexalith.Tenants.Contracts.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "src/Hexalith.Tenants.Server/Hexalith.Tenants.Server.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "src/Hexalith.Tenants.Testing/Hexalith.Tenants.Testing.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "src/Hexalith.Tenants.Testing/Hexalith.Tenants.Testing.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "src/Hexalith.Tenants.UI/Hexalith.Tenants.UI.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "src/Hexalith.Tenants.UI/Hexalith.Tenants.UI.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "tests/Hexalith.Tenants.AppHost.Tests/Hexalith.Tenants.AppHost.Tests.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "tests/Hexalith.Tenants.AppHost.Tests/Hexalith.Tenants.AppHost.Tests.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "tests/Hexalith.Tenants.Client.Tests/Hexalith.Tenants.Client.Tests.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "tests/Hexalith.Tenants.Client.Tests/Hexalith.Tenants.Client.Tests.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "tests/Hexalith.Tenants.Contracts.Tests/Hexalith.Tenants.Contracts.Tests.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "tests/Hexalith.Tenants.IntegrationTests/Hexalith.Tenants.IntegrationTests.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "tests/Hexalith.Tenants.IntegrationTests/Hexalith.Tenants.IntegrationTests.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "tests/Hexalith.Tenants.Server.Tests/Hexalith.Tenants.Server.Tests.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "tests/Hexalith.Tenants.Testing.Tests/Hexalith.Tenants.Testing.Tests.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "tests/Hexalith.Tenants.Testing.Tests/Hexalith.Tenants.Testing.Tests.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "tests/Hexalith.Tenants.UI.Tests/Hexalith.Tenants.UI.Tests.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "tests/Hexalith.Tenants.UI.Tests/Hexalith.Tenants.UI.Tests.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "tests/performance/tenant-audit/seed.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "tests/performance/tenant-audit/seed.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    },
+    {
+      "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+      "metadataErrors": [],
+      "noGuardBaselineErrors": [
+        {
+          "gitlink": "fb105d7c6035671bdc66dfb27990a463ea6165b2",
+          "path": "tools/CatalogArtifactVerifier/CatalogArtifactVerifier.csproj",
+          "repository": "references/Hexalith.Tenants",
+          "rule": "unsafe-import-path:Directory.Build.targets",
+          "target": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "project": "tools/CatalogArtifactVerifier/CatalogArtifactVerifier.csproj",
+      "provenFacts": [
+        {
+          "fact": "absent",
+          "label": "../../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../../src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../.gitmodules"
+        },
+        {
+          "fact": "absent",
+          "label": "../DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "present",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ],
+      "repository": "references/Hexalith.Tenants",
+      "unprovenFacts": [
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/Props/ContainerProvenance.targets"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "../Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+        },
+        {
+          "fact": "absent",
+          "label": "references/Hexalith.Platform/DaprSelfHostedMtls.cs"
+        },
+        {
+          "fact": "present",
+          "label": "references/Hexalith.Builds/Props/ContainerProvenance.targets"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "byRepository": {
+      "references/Hexalith.Commons": 4,
+      "references/Hexalith.Tenants": 20
+    },
+    "distinctProvenFacts": [
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../../DaprSelfHostedMtls.cs"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../../Hexalith.Builds/Props/ContainerProvenance.targets"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../../src/Hexalith.EventStore.Contracts"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../../src/Hexalith.FrontComposer.Shell"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../.gitmodules"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../DaprSelfHostedMtls.cs"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.Builds/src/libraries/Hexalith.Builds.Tooling/Hexalith.Builds.Tooling.csproj"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.Commons/src/libraries/Hexalith.Commons.ServiceDefaults"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.EventStore/src/Hexalith.EventStore.Contracts"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.FrontComposer/src/Hexalith.FrontComposer.Shell"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.McpCli/src/Hexalith.McpCli.Abstractions"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../references/Hexalith.Memories/src/Hexalith.Memories.Contracts"
+      ],
+      [
+        "absent",
+        "references/Hexalith.Tenants",
+        "../src/Hexalith.EventStore.Contracts"
+      ],
+      [
+        "present",
+        "references/Hexalith.Commons",
+        "../Hexalith.Builds/Hexalith.Package.props"
+      ],
+      [
+        "present",
+        "references/Hexalith.Tenants",
+        "../Hexalith.Builds/Props/ContainerProvenance.targets"
+      ]
+    ],
+    "excusedProjects": 24,
+    "projectsWithRetainedCompileRefusals": [
+      [
+        "references/Hexalith.Tenants",
+        "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj"
+      ]
+    ]
+  }
+}

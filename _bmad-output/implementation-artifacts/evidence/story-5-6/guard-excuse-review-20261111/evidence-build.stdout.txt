@@ -1,0 +1,85 @@
+{
+  "counts": {
+    "roots": 17,
+    "completeRoots": 6,
+    "observations": 473,
+    "rejectedObservations": 30,
+    "inspectionErrors": 47,
+    "stale": 10,
+    "crossTreeReads": 62
+  },
+  "pruning": {
+    "roots": 17,
+    "completeRoots": 6,
+    "observations": 473,
+    "rejectedObservations": 30,
+    "inspectionErrors": 45,
+    "stale": 10,
+    "crossTreeReads": 63
+  },
+  "baseline": {
+    "roots": 17,
+    "completeRoots": 5,
+    "observations": 481,
+    "rejectedObservations": 41,
+    "inspectionErrors": 69,
+    "stale": 10,
+    "crossTreeReads": 60
+  },
+  "versusPruning": {
+    "retained": 58
+  },
+  "newVersusPruning": 1,
+  "versusBaseline": {
+    "retained": 58,
+    "resolved-for-source": 34,
+    "diagnostic-resolved-source-partial": 1
+  },
+  "newVersusBaseline": 1,
+  "fallbacks": {
+    "resolved": 24,
+    "byRepository": {
+      "references/Hexalith.Commons": 4,
+      "references/Hexalith.Tenants": 20
+    },
+    "importRefusalsRemaining": 0
+  },
+  "excuse": {
+    "excusedProjects": 24,
+    "byRepository": {
+      "references/Hexalith.Commons": 4,
+      "references/Hexalith.Tenants": 20
+    },
+    "projectsWithRetainedCompileRefusals": [
+      [
+        "references/Hexalith.Tenants",
+        "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj"
+      ]
+    ]
+  },
+  "groups": {
+    "embedded-metadata-context": {
+      "keys": 3,
+      "observations": 3
+    },
+    "exact-owner-disposition": {
+      "keys": 31,
+      "observations": 31
+    },
+    "guarded-compile-fallback": {
+      "keys": 1,
+      "observations": 2
+    },
+    "protected-source-boundary": {
+      "keys": 6,
+      "observations": 23
+    },
+    "scanner-limit-or-unproven-input": {
+      "keys": 18,
+      "observations": 18
+    }
+  },
+  "unbound": [
+    "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/secret-scan.json"
+  ]
+}

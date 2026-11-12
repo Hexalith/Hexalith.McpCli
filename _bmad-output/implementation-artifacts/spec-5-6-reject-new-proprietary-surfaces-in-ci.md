@@ -5,7 +5,7 @@ created: '2026-11-10'
 status: 'in-progress'
 baseline_commit: 'c9a46a11a8317dd1903e3a3ef2f27791942b316a'
 route: 'dispatch'
-review_loop_iteration: 0
+review_loop_iteration: 1
 context:
   - '{project-root}/_bmad-output/implementation-artifacts/epic-5-context.md'
 ---
@@ -49,8 +49,26 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `tools/proprietary-surfaces/v1/check.py` — implement the user-approved (2026-11-11) guard extension for MSBuild imports and property definitions. A condition is evaluated only when it is a top-level `and` conjunction with no top-level `or` and balanced syntax, and only for the element's own `Condition` plus any enclosing `PropertyGroup`/`ImportGroup` `Condition`. Expansion uses the property alternatives in effect at that document position; any unresolved `$(` proves nothing. An `Exists(p)` conjunct makes the element unreachable when every expansion of `p` is proven absent under the existing local/workspace/nested rules. A `!Exists(p)` conjunct makes it unreachable when every expansion of `p` is proven present in the parent workspace model, i.e. a committed regular blob or directory in the inspected root, or in a root-declared reference at its root pin. A path under a nested gitlink is never proven present, because non-recursive checkouts lack it; neither is a refused or unresolvable path. An unreachable conditional property definition contributes no alternative; an unreachable import is not visited. `Choose`/`When` keeps its conservative union. All other guards prove nothing, and existing refusals stand. Record nothing new in policy.
-- [ ] `tools/proprietary-surfaces/v1/test_census.py`, both READMEs and `evidence/story-5-6/exists-guard-resolution-20261111/` — generic fixtures for a negated-guard fallback import, and for a self-referential property fallback chain whose `!Exists('$(P)')` and `Exists(alternative)` guards drop the unreachable alternatives. Refusal cases: `!Exists` on a nested path, top-level `or`, an unresolved property, a partly-present multi-expansion, parenthesized conditions and `Choose`/`When`. Add guard-removal controls for each new rule, assert full output streams, and repeat this packet's verification set and before/after accounting against `nested-pin-resolution-20261111`. Same preservation and no-authority limits as above; do not stage, commit or push.
+- [x] `tools/proprietary-surfaces/v1/check.py` and `test_census.py` — owner decision 2026-11-12 ("Checker fix + new version"). A file passes when any exact-file exclusion for its path lists its hash, and a file-bound path never falls back to a directory-scope exclusion. Covered by `test_later_exact_file_exclusion_approves_another_byte_version`, with an executed guard-removal control that fails under the old first-match lookup.
+- [ ] `evidence/story-5-6/owner-amendment-draft-20261112/` — census amendment 1.0.3 draft covering all 30 rejected identities and the Builds audit drift. Owner decisions 2026-11-12: "Review first, then approve"; "Add as PE03 tooling" for `Hexalith.Platform.Composition`. Independent review first, then ask for exact-byte owner approval of `authorization.draft.json`.
+- [ ] After that approval only: write `tools/proprietary-surfaces/v1/amendments/1.0.3.json` and its v2 receipt from the approved bytes unchanged, append `amendments.json`, recording the selected label verbatim. Then rerun fixtures, release regressions and the real scan, and retain the evidence.
+- [x] `tools/proprietary-surfaces/v1/check.py` — re-implement the user-approved (2026-11-11) `Exists()` guard rule as an excuse only (review loop 1 supersedes the reverted pruning version). A guard may only excuse an import target that is missing from every inspected tree and would otherwise be refused (`unavailable-local-import`, `unsafe-import-path`). It never skips a present target, never removes a property alternative and never changes classification. An absent target is excused when either (a) the import's evaluated condition (its own `Condition` plus an enclosing `ImportGroup` `Condition`) has a conjunct that proves false, or (b) the import's `Project` is exactly one `$(P)` and every definition of `P` producing that value is conditional and proves false through its own or enclosing `PropertyGroup` condition. A conjunct proves false when it is `Exists(p)` with every expansion of `p` proven absent, or `!Exists(p)` with every expansion proven present. Only balanced top-level `and` conjunctions with no top-level `or` count, and a quoted argument cannot span quotes. An argument proves nothing when it contains an unresolved `$(` or a `%XX` escape, or uses a property that is only conditionally defined (it may be empty) or is also defined inside a `Target`. Relative paths in `Import`, `ImportGroup` and `PropertyGroup` conditions resolve from the declaring file; in a property element's own condition they resolve from the entry project's directory (corrected by the loop-1 `dotnet msbuild` probe, L12). Present means a committed regular blob or directory in the inspected root, or in a root-declared reference at its pin, never under a nested gitlink. Absent means no case-insensitive match in that model, and is never a tree root or the parent workspace root. `Choose`/`When` and `Target` conditions prove nothing. Record nothing new in policy.
+- [x] `tools/proprietary-surfaces/v1/check.py` — nested-pin review fixes:
+  1. A substituted file's import value that keeps an unresolved `$(` is refused as `unsafe-import-path` with its label as `target`; it is never name-matched against inspected-root metadata.
+  2. `submodule_urls` reads only `submodule "<name>"` sections with safe paths, as `declarations()` does.
+  3. A substituted blob missing from its object store fails as `nested-object-unavailable` or `workspace-object-unavailable`, with the requested label as `target`.
+  4. A fixture allowance's compilation closure includes substituted members as `{path: <requested label>, sha256}`, so a changed, added or removed cross-tree member is source drift.
+  5. Amendment fixture validation runs without workspace context, so any cross-tree path it meets is refused and policy loading fails closed.
+  6. Every census Git call adds `-c protocol.allow=never`, drops the repository-local variables listed by `git rev-parse --local-env-vars`, and sets `GIT_NO_REPLACE_OBJECTS=1` beside `GIT_NO_LAZY_FETCH=1`.
+- [x] `tools/proprietary-surfaces/v1/test_census.py`, both READMEs and a new `evidence/story-5-6/guard-excuse-review-20261111/` packet. Each regression asserts the full error document and both output streams.
+  - **Excuse forms:** own-condition `Exists`/`!Exists`; a carried `$(P)` guard; generic Tenants- and Commons-shaped fallback chains with zero errors.
+  - **Never skipped:** a present import and a classification property under a census-false guard (`Exists('obj/project.assets.json')`, `!Exists` on a present workspace path) are still visited and retained.
+  - **Prove nothing:** `!Exists` on a nested path; top-level `or`; quote-spanning `Exists('a') == Exists('b')`; `%XX`; conditionally defined and `Target`-defined properties; the parent workspace root; a case-only difference; a relative property condition in an imported file, resolved from the project directory.
+  - **Verification gaps:** a committed but file-excluded target that needs the excuse (VG1); a substituted file's guard naming a second-hop path (VG2); an allowance closure refusal carrying `target`, without patching (VG3); an invalid UTF-8 substituted blob (VG4); a symlinked sibling root and a nested tree-oid (VG5); an scp-style identity match plus a drive-letter refusal (VG6).
+  - **Also cover:** `crossTreeReads` on a refusal path; amendment validation refusing a cross-tree fixture; a strict-length `assert_source_errors`.
+  - Add guard-removal controls for every new rule.
+  - **READMEs:** replace the pruning text with the excuse rule; state that proofs model the parent workspace; fix the `!Exists` contradiction; rewrap long lines.
+  - **Verification:** repeat the nested-pin packet's verification set, with before/after accounting against `exists-guard-resolution-20261111`. Preserve prior evidence and grant no authority; do not stage, commit or push.
 - [x] `tools/proprietary-surfaces/v1/check.py` — implement the user-approved (2026-11-11) cross-tree resolution for MSBuild imports and Compile item sources only. **Workspace rule:** a path escaping the inspected root reference is normalized against the parent revision tree; inside a root-declared gitlink it is read at that root's pin; if absent and the import is `Exists()`-conditioned on that exact path, it is absent; anything else, including a path above the parent root, keeps `unsafe-import-path` / `unsafe-or-nested-compile-source`. **Nested rule:** a path inside a nested gitlink resolves at that exact nested commit, read from the single root-declared reference whose `.gitmodules` URL equals the nested entry's URL at the same pin (trim one trailing `/` and one trailing `.git`; host case-insensitive; relative URLs never match). No unique match → `nested-pin-unresolvable:<path>`; commit missing from that checkout's object store → `nested-object-unavailable:<path>`. Never initialize, fetch, check out or execute anything. Allow one cross-tree hop per resolution chain; a further escape or gitlink inside the substituted tree keeps the existing refusal. Record each cross-tree read's repository, commit, path and blob hash in report provenance. Publication targets inside nested gitlinks keep `nested-publication-target`. No module names, paths or counts in logic.
 - [x] `tools/proprietary-surfaces/v1/test_census.py` — disposable Git fixtures: escaping import resolved into a sibling root at its pin; absent `Exists()`-conditioned escape; escape above the parent root; nested import resolved through a same-URL root at a nested pin that differs from the root pin; URL normalization match plus relative, ambiguous and missing-entry refusals; missing nested commit; second-hop refusal; nested Compile source; report provenance; `OutputType=Exe` arriving through each rule. Executed guard-removal controls for every new refusal; assert full stdout/stderr and error documents.
 - [x] `tools/proprietary-surfaces/v1/README.md`, `README.md` and `evidence/story-5-6/nested-pin-resolution-20261111/` — document both rules and the CI precondition (root references are full clones, so nested pins must be reachable in them). Run fixtures, release regressions, all five matrix rows, determinism across two hash seeds and a fresh committed-pin scan. Record before/after blocker accounting against `manifest-selector-resolution-20261111`, including how many prior source-file rejections now associate with an approved project. Retain the final report once and record repeat runs as hashes. Preserve all prior evidence, policy and inventory bytes; add no allowance, exception, exemption or approval. Keep story/sprint `in-progress` unless the scan passes; do not stage, commit or push.
@@ -170,7 +188,23 @@ None.
 - 2026-11-11 — User answered "yes" to the offered next steps; proceed with the first scope: generic resolution of the five inspection cases before owner disposition of rejected identities. This authorizes implementation and verification within the existing committed-source boundary, not a new allowance or qualification. E01–E05 and their exact source pins/paths remain defined by [the retained packet](evidence/story-5-6/handoff-verification-20261110/disposition-packet.json). Resolve what committed source proves; retain coverage errors for unresolvable runtime or generated targets, with complete observations from independently inspectable files. Prior baseline, inventory, approval and amendment bytes remain preserved.
 - 2026-11-11 — User chose "nested-pin resolution" after the [manifest-selector packet](evidence/story-5-6/manifest-selector-resolution-20261111/decision-packet.md) showed the remaining blockers cascade from refused layout-fallback imports. For example, `references/Hexalith.EventStore` `src/Hexalith.EventStore.Admin.Cli` fails `unsafe-import-path:Directory.Build.props`, and 62 of its source files then become separate rejections. Parent investigation: the error comes from parent-relative fallbacks (`../references/…`, `../../references/…`), which in this workspace land in root-declared references. The nested alternative is skipped. The workspace rule reads those paths at root pins, which the frozen boundary already allows. The nested rule reads a nested pin from the same-URL root checkout. Example: EventStore `b882c1005050aaebfa70618b5a72c1c8be452281` nests Builds `11f8534fc89a2c4a18a984307e927abb6d6c7ff3`, reachable from root Builds `891886ddc60a9924d053bb74bf6bcc73e101b2ce` history (`origin/main`). CI clones root references fully. Scope: MSBuild imports and Compile sources only. No nested initialization, execution, allowance, exception, exemption or owner approval is granted.
 - 2026-11-11 — User approved the `Exists()` guard extension and an independent review afterwards, following the [nested-pin decision packet](evidence/story-5-6/nested-pin-resolution-20261111/decision-packet.md). Targets: Tenants `Directory.Build.targets` at `019aa0a82d021e08475a68fc50eff3b6a0e6c111`, whose fallback guards sit on property definitions (20 errors), and Commons `src/libraries/Directory.Build.props` at `11555ace9efcae2928a00122dcba91243e5a8a1a`, whose import uses negated guards (4 errors). Parent soundness limit: CI initializes root references without recursion, so nested-gitlink paths are absent there. A `!Exists()` on a nested path therefore never proves a guarded element unreachable. Both cases still resolve through their workspace-present or outside-root-absent guards. No allowance, exception, exemption or approval is granted.
+- 2026-11-11 — Review loop 1 (bad_spec R1, R2), triggered by BH3, EC3, BH5, BH8 and EC11 in the cross-tree resolution review below.
+  - **Root cause:** the parent-written guard task let `Exists()` proofs drop present imports and classification-relevant property alternatives. That went beyond the user's approved phrasing, "carry `Exists()` guards from property definitions to the import that uses them". Proofs rest on committed-source facts that differ at real build time: generated `obj/`/`bin/` and ignored files, and standalone layouts without workspace siblings.
+  - **Known-bad state avoided:** `<OutputType Condition="Exists('obj/project.assets.json')">Exe</OutputType>` disappeared from the census while every restored build is an executable.
+  - **Amended:** the guard task now only excuses an absent, otherwise-refused import target. It adds proof-correctness rules (R4–R10) and nested-pin fixes (R2, R3, R11–R14). The test task covers R15–R21.
+  - **Reverted:** the guard-pass code in `check.py`, `test_census.py` and both READMEs was reverted to the nested-pin state plus the upstream `94f5ee6`/`2723ce1` merge. 195 census fixtures pass after the revert. Nested-pin code is amended in place, not reverted, because its design had no bad_spec finding. The `exists-guard-resolution-20261111` packet stays as superseded evidence.
+  - **KEEP:**
+    - balanced top-level `and` splitting that returns nothing for `or` or unbalanced text
+    - presence only from committed root content at root pins, never nested
+    - guard scope limited to the element's own condition plus the enclosing `PropertyGroup`/`ImportGroup`
+    - `Choose`/`When` and `Target` conditions prove nothing
+    - generic Tenants- and Commons-shaped fixtures that end with zero errors
+    - the 24-error accounting target (Tenants 20, Commons 4) as the expected outcome
 
+- 2026-11-12 — The user answered "yes" to the offered next steps. As with the earlier "yes", that means the first offer: draft the owner amendment. The [owner draft](evidence/story-5-6/owner-amendment-draft-20261112/README.md) was built from the final-2 report, every hash read from committed blobs.
+  - **Decisions:** "Review first, then approve"; "Add as PE03 tooling" for `Hexalith.Platform.Composition`; "Checker fix + new version" for the Builds audit snapshot, which the first-match exclusion lookup could not accept as a second approved version.
+  - **Dry run:** the active policy plus the draft, run against the real pins, gives 0 rejected observations and 46 coverage errors (from 47). CI stays red on coverage errors, which no allowance can settle.
+  - **No authority yet:** no receipt exists and the active policy is unchanged.
 ## Review Triage Log
 
 ### Build review pass 1 — 2026-11-10
@@ -208,6 +242,173 @@ P1 imports; P2 property resolution; P3 JSON prefilter; P4 orphan projects; P5 pu
 Parent follow-up for P1: a disposable fixture with `$(ExternalDir)/*.props` and an unconsumed `OutputType=Exe` file still returned `passed` after the first patch batch. The medium verdict and P1 route are retained; executable/dependency fallback signals and regressions are required before final verification. The tool guide must also describe the corrected closure and v2 receipt format.
 
 Applied P1–P13: final checks and independent policy/source audit pass; BH9 is rejected on the recorded evidence. No open patch or deferral remains.
+
+### Cross-tree resolution review — 2026-11-11
+
+- **Scope:** code-only `ef80e45..884f65e` in `tools/proprietary-surfaces/v1/` and `README.md` (1,488 lines): nested-pin resolution plus the first guard pass. The upstream `fix(ci)` commits merged by another session are out of scope.
+- **Process:** all three layers completed before triage, and each finding got its verdict before grouping. Parent checks: MSBuild Import docs; both fixture exemptions have zero cross-tree reads; peak RSS is 619 MB; Git is 2.53.0; the scan has no nested-pin errors.
+- **Outcome:** 2 bad_spec entries trigger loop 1. The 19 patch entries are folded into the amended tasks, because the guard code is re-derived. 1 entry is deferred and 7 findings are rejected.
+
+| ID | Verdict | Evidence | Route |
+|---|---|---|---|
+| BH1 | medium | MSBuild docs: relative paths in imported files resolve from the importing project, except the Import path. `unreachable()` used the declaring file for every guard. | R4 |
+| BH2 | medium | `Exists('../..')` normalizes to `.`, which `matches()` reports absent; the guarded element is dropped. | R5 |
+| BH3 | high | Uncommitted `obj/`/ignored paths are proven absent, so a conditional `OutputType=Exe` is dropped and never rescanned. | R1 |
+| BH4 | low | Absence uses exact-case lookups; Windows/macOS `Exists()` matches case-insensitively. | R6 |
+| BH5 | medium | A `!Exists` workspace-presence proof drops a property that a standalone build of the root keeps. | R1 |
+| BH6 | low | No trace of skipped elements. The excuse-only rule hides no committed content, and a new report field adds surface. | reject |
+| BH7 | low | `crossTreeReads` lack a consuming project; tracing needs a new report surface and causes no named failure. | reject |
+| BH8 | medium | `compilation_closure` now filters to local entries. Cross-tree closure members, previously refused, pass unbound across pin bumps. | R2 |
+| BH9 | low | Fixture validation resolves cross-tree at current pins. Current fixtures have zero cross-tree reads; the fix deletes the context argument. | R3 |
+| BH10 | low | Peak RSS of the full scan is 619 MB, well within CI runners; the fix adds cache management. | reject |
+| BH11 | medium | `GIT_NO_LAZY_FETCH` needs Git 2.44+, and inherited repository variables can redirect reads; the README states an unconditional guarantee. | R14 |
+| BH12 | low | The v1 README says a negated `!Exists` proves nothing, contradicting the guard section; several lines are unwrapped. | R15 |
+| BH13 | low | Missing and refused cross-tree paths share rule names, but `target` disambiguates; renaming changes the report contract. | reject |
+| BH14 | medium | A local glob spanning a nested gitlink expands silently. That behavior predates this diff. | D1 |
+| BH15 | medium | `submodule_urls` accepts any section with path/url, unlike `declarations()`. The reason-suffix suggestion is not adopted. | R12 |
+| BH16 | medium | scp identity, nested non-commit pin, refusal-path provenance, context passing, an ImportGroup absent-`Exists` case and strict `zip` have no tests. | R21 |
+| EC1 | medium | Probe confirmed: the parent workspace root is proven absent. | R5 |
+| EC2 | medium | Probe confirmed: a conditionally defined property loses its empty alternative, so `!Exists('$(P)')` is proven present. | R7 |
+| EC3 | high | Probe confirmed: a build-time-only path is proven absent and the guarded property is hidden. | R1 |
+| EC4 | medium | `(.*?)\2` lets `Exists('a') == Exists('b')` match one bogus argument, which is then proven absent. | R8 |
+| EC5 | medium | Probe confirmed the same wrong base directory as BH1. | R4 |
+| EC6 | low | `%2E` escapes are compared literally; an existing file is proven absent. | R9 |
+| EC7 | low | Global `-p:` overrides are a general static-census limit. Under the excuse-only rule they can excuse only absent targets. | reject |
+| EC8 | low | `Resolver.text` digests before its try block, so a missing substituted blob raises an untargeted `git-object-unavailable`. | R13 |
+| EC9 | medium | Probe confirmed the same pre-existing local-glob gap as BH14. | D1 |
+| EC10 | medium | Probe confirmed: a `[remote "x"]` section with path/url resolves a nested pin that Git would ignore. | R12 |
+| EC11 | medium | Probe confirmed: a sibling pin moves substituted bytes while a closure allowance stays approved. | R2 |
+| EC12 | low | Same time-mixed receipt validation as BH9. | R3 |
+| EC13 | medium | Same lazy-fetch version gap as BH11; `protocol.allow=never` closes it on every version. | R14 |
+| EC14 | medium | Inherited `GIT_DIR`/object-directory variables redirect `git -C` reads; this change rebuilt that environment line. | R14 |
+| EC15 | low | Probe confirmed: `Target` definitions replace values that later evaluation-time guards expand. | R10 |
+| EC16 | medium | Probe confirmed: an unresolved `$(` import in a substituted file name-matches inspected-root metadata, an unreported second hop. | R11 |
+| EC17 | low | Validation reads cross-tree bytes that never reach `crossTreeReads`; removed by R3. | R3 |
+| EC18 | low | `workspace-object-unavailable` is an extra, documented, more specific rule name with no consumer impact. | reject |
+| VG1 | medium | Pre-verified: `import_optional` is shadowed by `unreachable()`, so mutants survive. | R16 |
+| VG2 | medium | Pre-verified: a substituted-file guard using `absent(label, None)` survives. | R17 |
+| VG3 | low | Pre-verified: the allowance-error `target` is unprotected. | R18 |
+| VG4 | low | Pre-verified: the `malformed-text` label rewrap is unprotected. | R19 |
+| VG5 | medium | Pre-verified: the moved symlink and commit-type guards now protect cross-tree reads untested. | R20 |
+| VG6 | low | Pre-verified: the scp identity branch is untested. The filed disposition was defer; a direct test is cheap. | R21 |
+| VG-O1 | low | Works' nested URL case (`Chatbot`) differs from root `ChatBot`, but no current scan error reaches it, and the failure is fail-closed. | reject |
+
+- **Routes, bad_spec:** R1 guards prune present content; R2 unbound cross-tree closure members.
+- **Routes, patch (folded into amended tasks):** R3 context-free fixture validation; R4 condition base directory; R5 tree/workspace roots; R6 case-insensitive absence; R7 undefined property branch; R8 quote-bounded arguments; R9 escapes; R10 `Target` properties; R11 substituted unresolved imports; R12 submodule sections; R13 targeted missing blobs; R14 Git isolation; R15 README; R16–R21 tests.
+- **Deferred:** D1, recorded in `deferred-work.md`.
+
+### Cross-tree resolution review, loop 1 — 2026-11-11
+
+- **Scope:** code-only `ef80e45` → working tree in `tools/proprietary-surfaces/v1/` and `README.md` (2,314 lines). It covers nested-pin resolution, the excuse-only guard, the R-fixes, and the upstream `2723ce1`/`94f5ee6` checker commits merged by another session.
+- **Process:** all three layers completed before triage, and each finding was checked against the rows above first.
+- **Parent checks:**
+  - A `dotnet msbuild` probe shows a property element's own `Exists()` resolving from the entry project's directory. A `PropertyGroup` or `Import` condition resolves from the declaring file.
+  - Fresh scans at `6ec91eb` and at `f223aaa` (three concurrent build-only commits, no pin moves) both report 47 errors and 30 rejections. The latter equals `guard-excuse-review-20261111/runs/final-1/census.json`.
+- **Outcome:** no bad_spec or intent_gap entries, so no further loop. 19 patch entries, 2 deferrals and 7 rejections.
+
+| ID | Verdict | Evidence | Route |
+|---|---|---|---|
+| BH1 | medium | Probe: `%73hared` in an import and its exact `Exists()` is excused as absent, and the importing project loses `executable-project`. MSBuild unescapes both. | L1 |
+| BH2 | low | `Resolver.matches` absence uses exact-case lookups, so a case-variant workspace target is excused. The guard model already folds case. | L2 |
+| BH3 | medium | A `dotnet build # note \` comment still joins the next physical command; bash does not continue inside comments. Pre-existing joining behavior. | D2 |
+| BH4 | medium | Unresolved `GetPathOfFileAbove('Directory.Build.props', …)` imports skip `Directory.Build.*` candidates, so upward chains are neither read nor refused. Pre-existing. | D3 |
+| BH5 | medium | An inherited `GIT_ALLOW_PROTOCOL` or `protocol.<name>.allow` overrides `-c protocol.allow=never`. Reproduced on Git 2.53. | L5 |
+| BH6 | medium | `exists_arguments()` still uses `(.*?)\1`; `Exists('a/') == Exists('/../b')` yields a spanning argument that can match a target. | L3 |
+| BH7 | medium | The two Tenants AppHost Compile refusals are real false positives, but excusing Compile items is outside the approved import-only intent. The "evidence out of date" claim is false: the `final-1` report equals the fresh 47-error scan. Surfaced as a user decision. | reject |
+| BH8 | low | carried: same claim as BH6 of the first review (no trace of excused elements); code unchanged in that respect. | reject |
+| BH9 | medium | `sdk_identities` grants an SDK identity from a lone `Sdk.targets` import. An `Aspire.AppHost.Sdk` targets import therefore suppresses `executable-project` on any Exe. | L4 |
+| BH10 | low | Local rules (`unavailable-local-import`, …) carry no `target`; adding one changes established report rows and causes no named failure. | reject |
+| BH11 | low | carried: same claim as BH10 of the first review (retained trees); peak RSS is now 770 MB, still well within CI runners. | reject |
+| BH12 | low | The README says CI initialization "provides" nested pins; only commits reachable from remote refs are cloned. | L6 |
+| BH13 | low | The README says every Git call adds the protections; `repository_variables()` does not, and its failure reads as `git-object-unavailable`. | L7 |
+| EC1 | low | Probe: an import target normalizing to the parent workspace root `.` with an exact `Exists()` is excused as absent. | L8 |
+| EC2 | medium | Probe: a label traversing a committed symlink directory is proven absent while MSBuild follows the link; a package identity was hidden. | L9 |
+| EC3 | medium | Probe: a `;`-list or whitespace-padded import or `Exists()` argument is treated as one absent path, while MSBuild splits and trims it. | L10 |
+| EC4 | low | `!Exists('file/')` with a trailing separator is false in MSBuild for a file; the census proves it present. | L11 |
+| EC5 | medium | Same protocol override as BH5. | L5 |
+| EC6 | low | `#` lines skipped in a `shell: cmd` workflow step still run under cmd. Rare, and the fix needs per-step shell context. | reject |
+| EC7 | medium | Probe: a `#` line after a continued line, or a second `logical_commands` pass, merges the next publish into the comment. Whether `94f5ee6` introduced it is unverified. | D2 |
+| EC8 | medium | Probe: a Dockerfile `RUN` continuation interrupted by a full-line comment hides its `dotnet publish`; Docker drops such comments before joining. | D2 |
+| EC9 | medium | MSBuild probe confirms an enclosing `PropertyGroup` condition resolves from the declaring file. `refuted(guards, path)` resolves it from the project directory and misproves carried excuses. | L12 |
+| EC10 | low | `target_defined` sees only Targets visited so far, but Targets run after evaluation; the reviewer's own probe shows no unsound excuse. | reject |
+| EC11 | low | Same `repository_variables()` claim as BH13; that call reads no objects. | L7 |
+| VG1 | medium | Pre-verified: deleting the committed-directory check in `Tree.absent` leaves 214 tests green. | L13 |
+| VG2 | medium | Pre-verified: an unresolvable nested pin in a guard returning absent leaves 214 tests green. | L14 |
+| VG3 | medium | Pre-verified: unreadable-root and no-workspace guard fallbacks flipped to true leave 214 tests green. | L15 |
+| VG4 | medium | Pre-verified: the HopPresent case passes by root-name length coincidence; the boundary check is unprotected. | L16 |
+| VG5 | low | Pre-verified: the shell comment-line skip in `execute()` is unprotected. | L17 |
+| VG6 | low | Pre-verified: the `safe_label` tail validation is unprotected. | L18 |
+| VG7 | low | Pre-verified: the `crossTreeReads: []` default on early-failing roots is unprotected. | L19 |
+| VG-O1 | false | Its 50-error count came from its probe copies; fresh real scans at `6ec91eb` and `f223aaa` both report 47 errors. | reject |
+
+- **Routes, patch:**
+  - L1 `%XX` import values and exact arguments refused
+  - L2 case-folded target absence
+  - L3 one shared `Exists()` parser
+  - L4 paired `Sdk.props`/`Sdk.targets`
+  - L5 `GIT_ALLOW_PROTOCOL=''`
+  - L6 nested-pin reachability wording
+  - L7 `repository_variables()` wording and rule
+  - L8 parent-root target
+  - L9 symlink prefixes unknown
+  - L10 `;`/whitespace values
+  - L11 trailing-separator presence
+  - L12 `PropertyGroup` condition base
+  - L13–L19 tests
+- **Deferred:** D2 comment-aware continuation joining; D3 upward `GetPathOfFileAbove` chains.
+- **Spec correction:** L12 corrects the guard task's "other conditions resolve from the entry project's directory" to the element's own `Condition` only, on the probe evidence.
+
+### Owner-amendment draft review — 2026-11-12
+
+- **Scope:** the exact-file exclusion union in `check.py`, its test, and the draft files `authorization.draft.json`, `README.md`, `build-draft.py` and `dry-run-gate.py` (695 lines).
+- **Process:** all three layers completed before triage.
+- **Outcome:** every patch is applied in place. One finding is deferred and four are rejected. The draft canonical SHA-256 moved from `f8c44dea…` to `df0eda1a…`.
+
+| ID | Verdict | Evidence | Route |
+|---|---|---|---|
+| BH1 | high | Verified at the pins: the four new PE06 identities hash the `servers`-section stdio `fluentui-mcp` entries, not the HTTP entry, which is already approved. The draft's reason strings said HTTP. | O1 |
+| BH2 | medium | The draft holds only the five lists, but `load_policy` requires the amendment header keys, so "unchanged bytes become 1.0.3.json" cannot hold. | O2 |
+| BH3 | medium | The scratch-baseline dry run never exercised chain loading (header, receipt binding, authorization equality, authority, exact removal). | O3 |
+| BH4 | low | The README lacked the scan command, the scratch baseline hash, `not-included.json`/`secret-scan.json`, and the passing-root baseline (3, not 6). | O2 |
+| BH5 | medium | `<Project/>` yields no observation either way, so `return False` after the hash check survived the new test. | O4 |
+| BH6 | medium | Tool README step 5 did not describe combined same-path versions or the removed directory fallback. | O5 |
+| BH7 | low | Superseded byte versions stay approved, and same-path entries are not checked for agreement. A removal operation or consistency guard adds surface; the README now documents accumulation and requires the same row and classification. | O5 |
+| BH8 | medium | The Conversations exclusion hid four identities from the owner; the reason and README now name them. | O1 |
+| BH9 | medium | PE03 and PE05 enumerations in hash-bound inventory 1.0.2 do not list `Composition` or the Builds release fixture. | D4 |
+| BH10 | medium | Prefix picks accepted any identity, and "already approved" claims were unchecked. Memories has G4, not PS, rows on those files. | O6 |
+| BH11 | low | Both scripts hard-coded the local account path. | O6 |
+| BH12 | low | Ten stale allowances were left without comment; the README now lists them exactly, after checking the report. | O2 |
+| BH13 | low | "Ships nothing" overstated the release fixture; it builds draft releases that are deleted afterwards. | O1 |
+| BH14 | low | One decision label was paraphrased; all three are now quoted verbatim. | O2 |
+| EC1 | low | Same accumulation as BH7. | O5 |
+| EC2 | medium | Same unchecked prefix picks as BH10. | O6 |
+| EC3 | low | The Builds fixture prefix mapped every non-project kind to an observation class. | O6 |
+| EC4 | medium | The builder did not check that the report parent and gitlinks still match `HEAD`. | O6 |
+| EC5 | low | The gate ignored `removeExceptions`. | O3 |
+| EC6 | low | The gate removal used `assert` and an any-match test, not exactly one. | O3 |
+| EC7 | low | The gate did not verify amendment index hashes. | O3 |
+| EC8 | low | The gate could overwrite a live policy directory, or fail without an argument. | O3 |
+| EC9 | medium | Same header mismatch as BH2. | O2 |
+| EC10 | low | Same Memories G4-versus-PS wording as BH10. | O1 |
+| VG1 | medium | Pre-verified: the non-scoped exact-file prefix match is unprotected, yet two active baseline exclusions use it. | O4 |
+| VG2 | medium | Pre-verified: `additionalSha256` in the union is unprotected. | O4 |
+| VG-O1 | medium | Same tool README gap as BH6. | O5 |
+| VG-O2 | low | Same gate merge divergence as EC5 and EC6. | O3 |
+
+**Routes:**
+- **O1:** corrected reason strings (PE06 stdio `fluentui-mcp`, the four named Conversations identities, Memories G4 wording, the release fixture).
+- **O2:** README mapping and reproducibility.
+- **O3:** `assemble-amendment.py --rehearse`, a `load_policy` rehearsal outside the repository, plus a hardened gate.
+- **O4:** the exclusion test made observable, with `additionalSha256` and non-scoped prefix cases; four executed guard-removal controls are all detected.
+- **O5:** tool README step 5.
+- **O6:** the builder checks exact expectations, active-policy claims and pins, and derives its root from its own location.
+- **Deferred:** D4, inventory reconciliation, in `deferred-work.md`. BH7's removal operation and consistency guard are not adopted.
+
+**Fresh results:**
+- 220 census fixtures pass.
+- The chain rehearsal loads version 1.0.3 with 522 allowances and 64 exclusions.
+- The coverage dry run leaves 0 rejected observations and 46 coverage errors, with passing roots 3 → 6.
+- The draft secret scan is clean.
 
 ## Verification
 
@@ -513,3 +714,116 @@ property-definition `Exists()`, and a Commons import guarded by negated
 allowance, exception, exemption, approval, dependency, reference or gitlink
 changed. Story and sprint remain `in-progress`; nothing was staged, committed
 or pushed.
+
+
+### Exists() guard resolution — 2026-11-11
+
+Implemented the approved guard extension for MSBuild imports and property
+definitions. Only an element's own `Condition` and an enclosing
+`PropertyGroup`/`ImportGroup` `Condition` are evaluated. Each must be a balanced
+top-level `and` conjunction with no top-level `or`, using the property
+alternatives in effect at that position; an unresolved `$(` proves nothing.
+`Exists(p)` proves an element unreachable when every expansion is proven absent
+under the local, workspace and nested rules. `!Exists(p)` does so when every
+expansion is a committed regular blob or directory in the inspected root, or in a
+root-declared reference at its pin. A nested path is never proven present.
+Unreachable conditional definitions contribute no alternative; unreachable
+imports are not visited. `Choose`/`When` and `Target` conditions are never
+evaluated. Nothing new is recorded in policy.
+
+During this work another session committed `884f65e` (*build: sync local
+changes via /pushall*). It included this story's uncommitted work and moved
+eight root gitlinks. It then merged upstream `94f5ee6` into `check.py`, the tests
+and the census guide as `6ec91eb`. Verification therefore runs at `6ec91eb`. The
+before baseline is the exact nested-pin checker plus the upstream `check.py`
+hunks. It differs from the current checker only by this extension, and both
+bindings are retained.
+
+The [verification packet](evidence/story-5-6/exists-guard-resolution-20261111/verification.md)
+records 197 passing census fixtures, 236 detected guard-removal controls (24
+new; `Review-S07-optional` adapted because the guard proof now runs first), 195
+release regressions, all five matrix rows and byte-identical reports across hash
+seeds 1 and 2. Against that same-pin baseline, all 24 cross-tree fallback
+errors (Tenants 20, Commons 4) and 11 dependent publication rejections resolve,
+with no new blocker. Commons is now fully inspected. The fresh scan exits 1: 17
+roots, 6 complete, 473 observations, 30 rejected observations, 45 coverage
+errors and 10 stale allowances. The
+[decision packet](evidence/story-5-6/exists-guard-resolution-20261111/decision-packet.md)
+leaves owner dispositions, including one exclusion whose bytes changed at the
+new Builds pin, plus protected boundaries, scanner limits and embedded data. No
+allowance, exception, exemption, approval, dependency, reference or gitlink
+changed through this work. Story and sprint remain `in-progress`; this work
+performed no staging, commit or push.
+
+Superseded by review loop 1 (2026-11-11): the cross-tree resolution review
+found that this pruning form lets census-false guards hide present
+classification, so its code was reverted. The excuse-only rewrite replaces it;
+this packet stays as superseded evidence.
+
+
+### Guard excuse review loop 1 — 2026-11-11
+
+Re-implemented the approved `Exists()` guard rule as an excuse only. A guard
+now excuses an absent import target that would otherwise be refused as
+`unavailable-local-import` or an absent `unsafe-import-path`, through (a) the
+import's own or enclosing `ImportGroup` condition, or (b) every definition of
+the single `$(P)` it imports. Present imports are always visited, every
+conditional property alternative is kept and classification is unchanged.
+Proofs model the parent workspace from committed tree entries; presence is
+exact-case and never nested, absence is case-insensitive and never a tree root,
+the parent workspace root, a glob, a path above the parent or a path below an
+unopened gitlink. The nested-pin review fixes R2, R3 and R11–R14 are applied:
+substituted `$(` imports are refused with their label, nested `.gitmodules`
+need valid `submodule` sections with safe paths, missing substituted blobs fail
+with the requested label, closures bind cross-tree members by label, amendment
+fixture validation has no workspace context, and every Git call disables
+protocols, lazy fetches and replace objects and drops repository-local
+variables. Nothing new is recorded in policy.
+
+The [verification packet](evidence/story-5-6/guard-excuse-review-20261111/verification.md)
+records 214 passing census fixtures (19 new), 283 detected guard-removal
+controls (71 new, 4 adapted here), 195 release regressions, all five matrix
+rows and byte-identical reports across hash seeds 1 and 2. The fresh scan exits
+1: 17 roots, 6 complete, 473 observations, 30 rejected observations, 47
+coverage errors and 10 stale allowances. Against the no-guard baseline at the
+same pins, all 24 cross-tree fallback errors (Tenants 20, Commons 4) resolve
+and no import refusal remains. Against the superseded pruning checker, all 58
+blocker keys remain and two Tenants AppHost Compile refusals become visible: a
+guarded `$(HexalithPlatformRoot)` fallback at `Directory.Build.props:65` keeps
+its `$(MSBuildThisFileDirectory)../..` alternative, which the pruning version
+dropped, and the excuse never covers a Compile item. The no-guard baseline
+masked them with that project's import refusal. The
+[decision packet](evidence/story-5-6/guard-excuse-review-20261111/decision-packet.md)
+groups the remaining blockers. No allowance, exception, exemption, approval,
+dependency, reference or gitlink changed. Story and sprint remain
+`in-progress`; nothing was staged, committed or pushed.
+
+### Loop-1 review patches — 2026-11-12
+
+Applied L1–L19 from the loop-1 review in place:
+- escaped and `;`-list import values are refused, and values are trimmed
+- absence of a cross-tree target is case-folded and refuses the parent root and symlink prefixes
+- one shared `Exists()` parser serves both rules
+- an explicit SDK identity needs both `Sdk.props` and `Sdk.targets`
+- `GIT_ALLOW_PROTOCOL` is empty, and the local-variable call reports `git-unavailable`
+- `!Exists('dir/')` is proven only for directories
+- `PropertyGroup` conditions resolve from the declaring file, following the probe
+- seven test gaps are closed
+
+D2 and D3 are in `deferred-work.md`.
+
+The rerun [final-2](evidence/story-5-6/guard-excuse-review-20261111/runs/final-2/commands.json),
+at parent `f223aaa5acd70c04a413f3251f83d96472a6b0d9` (build-only commits since
+`6ec91eb`, no pin moves), passes:
+- 219 census fixtures, with all 297 guard-removal controls detected
+- 195 release regressions
+- all five matrix rows, and `git diff --check`
+- byte-identical reports across hash seeds 1 and 2
+- a clean evidence secret scan
+
+The real scan is unchanged by the patches. It exits 1 with 47 errors, 30
+rejected observations, 473 observations, 6 complete roots and 10 stale
+allowances. Current-reference acceptance therefore still fails on owner
+dispositions, protected boundaries, scanner limits, embedded data and the
+guarded Tenants Compile fallback. Story and sprint remain `in-progress`; I
+staged, committed and pushed nothing.

@@ -1,0 +1,15 @@
+{
+  "byteIdenticalToPrior": false,
+  "checkerSha256": "3cfcc05db9c7f4e35f0a2eb8e3cb908466908d56e176d475178300cf297097a5",
+  "executedCopySha256": "d58056262dab2a71ef4b050916f030cb915be91e0d391835626a831177968cf0",
+  "identicalToPriorExceptRevisionAndDate": false,
+  "onlyAdaptation": "ROOT names the workspace because the nested-pin checker runs from a temporary copy.",
+  "parentRevision": "884f65ef203a2c79a531403d26b6a1734da90d42",
+  "priorParentRevision": "ef80e45056620aa851a68276428aa63ed6dcc90b",
+  "priorReport": "_bmad-output/implementation-artifacts/evidence/story-5-6/nested-pin-resolution-20261111/runs/final-2/census.json",
+  "priorReportSha256": "7981474964930d5cf2f382baf4fe0c4eae72f31b4d8a5480163ab11ea5153f57",
+  "priorUtcDate": "2026-11-11",
+  "reportSha256": "b4530358a69658482fc6c0a484620111cfa44fa3b9304c85dc58af767a56be04",
+  "stderrSha256": "12324ac7547b60ec89dcfbb6c679bc299290782b97ae13ad447640a8187c9956",
+  "utcDate": "2026-11-11"
+}

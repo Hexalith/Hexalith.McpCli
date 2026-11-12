@@ -1,0 +1,23 @@
+{
+  "result": "loaded",
+  "version": "1.0.3",
+  "amendments": [
+    {
+      "path": "amendments/1.0.1.json",
+      "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+      "version": "1.0.1"
+    },
+    {
+      "path": "amendments/1.0.2.json",
+      "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+      "version": "1.0.2"
+    },
+    {
+      "path": "amendments/1.0.3.json",
+      "sha256": "cf54172b8acaac5da781e8286d7938210172402d0cafb30b0e0e65720c256e13",
+      "version": "1.0.3"
+    }
+  ],
+  "allowances": 522,
+  "exclusions": 64
+}

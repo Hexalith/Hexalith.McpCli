@@ -1,0 +1,15 @@
+{
+  "builderSha256": "c79a99c9a3c26fd14b4c1d0568f5783a7ac119347a7d31afcde0fb0b5a8d4ff0",
+  "command": [
+    "python3",
+    "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/build-evidence.py"
+  ],
+  "environment": {
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "exitCode": 0,
+  "stderr": "evidence-build.stderr.txt",
+  "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stdout": "evidence-build.stdout.txt",
+  "stdoutSha256": "3f14a1b41896cddeeb1b989e119373245dab0a486c11a4dfdc84000f331856fd"
+}

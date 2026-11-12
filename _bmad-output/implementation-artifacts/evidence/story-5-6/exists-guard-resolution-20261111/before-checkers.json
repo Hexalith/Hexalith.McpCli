@@ -1,0 +1,14 @@
+{
+  "nestedPin": {
+    "path": "before-check.py",
+    "sha256": "3cfcc05db9c7f4e35f0a2eb8e3cb908466908d56e176d475178300cf297097a5",
+    "source": "Exact nested-pin implementation; equals nested-pin-resolution-20261111 runs/final-2 implementation-integrity check.py."
+  },
+  "nestedPinWithUpstream": {
+    "path": "before-upstream-check.py",
+    "sha256": "60a07e707a4036966340f5336eb13b44b9928168674100573d09224cb3ccda02",
+    "derivation": "before-check.py with the check.py hunks of merge 6ec91eb81aa98a850e98ad0b139972158eaf9fef over 884f65ef203a2c79a531403d26b6a1734da90d42 (upstream 94f5ee691c70dcb30e893c50629d95afb63d216f) applied by git apply.",
+    "upstreamPatchSha256": "a77deae6bd813e02aa434c9520126842efd8f94768f09bef586c52d0db460f01",
+    "purpose": "Same-revision baseline that differs from the current checker only by the Exists() guard extension."
+  }
+}

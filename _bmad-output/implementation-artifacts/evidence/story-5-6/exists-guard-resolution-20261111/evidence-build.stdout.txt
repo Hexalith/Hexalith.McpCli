@@ -1,0 +1,51 @@
+{
+  "counts": {
+    "roots": 17,
+    "completeRoots": 6,
+    "observations": 473,
+    "rejectedObservations": 30,
+    "inspectionErrors": 45,
+    "stale": 10,
+    "crossTreeReads": 63
+  },
+  "before": {
+    "roots": 17,
+    "completeRoots": 5,
+    "observations": 481,
+    "rejectedObservations": 41,
+    "inspectionErrors": 69,
+    "stale": 10,
+    "crossTreeReads": 60
+  },
+  "outcomes": {
+    "retained": 58,
+    "resolved-for-source": 35
+  },
+  "newBlockers": 0,
+  "newUnmasked": 0,
+  "guardProofs": {
+    "resolvedCrossTreeProjects": 24,
+    "byRepository": {
+      "references/Hexalith.Commons": 4,
+      "references/Hexalith.Tenants": 20
+    }
+  },
+  "groups": {
+    "embedded-metadata-context": {
+      "keys": 3,
+      "observations": 3
+    },
+    "exact-owner-disposition": {
+      "keys": 31,
+      "observations": 31
+    },
+    "protected-source-boundary": {
+      "keys": 6,
+      "observations": 23
+    },
+    "scanner-limit-or-unproven-input": {
+      "keys": 18,
+      "observations": 18
+    }
+  }
+}
