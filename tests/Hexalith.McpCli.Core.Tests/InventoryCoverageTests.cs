@@ -521,7 +521,8 @@ public sealed class InventoryCoverageTests
     public void RejectsInventoryDirectoryReadDenied()
     {
         CatalogProvider provider = Provider();
-        string path = AppContext.BaseDirectory;
+        string path = Path.TrimEndingDirectorySeparator(AppContext.BaseDirectory);
+        Directory.Exists(path).ShouldBeTrue();
 
         InventoryCoverageGate.CheckFile(path, Service(provider), provider)
             .ShouldBe(new[] { path + ":$: cannot read inventory (UnauthorizedAccessException)." });
