@@ -1,0 +1,49 @@
+{
+  "source_before_policy_commit": "3576ddf518c7b3f3188a5f7e08e04080647b4023",
+  "build": "0warnings0errors",
+  "suites": [
+    {
+      "suite": "Abstractions",
+      "total": 20,
+      "passed": 20,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Analyzers",
+      "total": 19,
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Core",
+      "total": 916,
+      "passed": 912,
+      "failed": 0,
+      "skipped": 4
+    },
+    {
+      "suite": "Manifest",
+      "total": 370,
+      "passed": 370,
+      "failed": 0,
+      "skipped": 0
+    },
+    {
+      "suite": "Cli",
+      "total": 625,
+      "passed": 623,
+      "failed": 0,
+      "skipped": 2
+    },
+    {
+      "suite": "Mcp",
+      "total": 94,
+      "passed": 94,
+      "failed": 0,
+      "skipped": 0
+    }
+  ],
+  "nativeAcceptance": false
+}

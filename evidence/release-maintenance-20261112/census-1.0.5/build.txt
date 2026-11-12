@@ -1,0 +1,33 @@
+  Topology.DaprStub -> /tmp/current-census-sync-20261112/tests/fixtures/Topology.DaprStub/bin/Release/net10.0/dapr.dll
+  Hexalith.McpCli.Analyzers -> /tmp/current-census-sync-20261112/src/Hexalith.McpCli.Analyzers/bin/Release/netstandard2.0/Hexalith.McpCli.Analyzers.dll
+  Manifest.Unmarked.Contracts -> /tmp/current-census-sync-20261112/tests/fixtures/Manifest.Unmarked.Contracts/bin/Release/net10.0/manifest.AUnmarked.Contracts.dll
+  Hexalith.McpCli.Abstractions -> /tmp/current-census-sync-20261112/src/Hexalith.McpCli.Abstractions/bin/Release/net10.0/Hexalith.McpCli.Abstractions.dll
+  Hexalith.McpCli.Sample.Contracts -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.Sample.Contracts/bin/Release/net10.0/Hexalith.McpCli.Sample.Contracts.dll
+  Hexalith.McpCli.Abstractions.Tests -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.Abstractions.Tests/bin/Release/net10.0/Hexalith.McpCli.Abstractions.Tests.dll
+  Catalog.InvalidProvider.Contracts -> /tmp/current-census-sync-20261112/tests/fixtures/Catalog.InvalidProvider.Contracts/bin/Release/net10.0/Catalog.InvalidProvider.Contracts.dll
+  Catalog.Explicit.Contracts -> /tmp/current-census-sync-20261112/tests/fixtures/Catalog.Explicit.Contracts/bin/Release/net10.0/Catalog.Explicit.Contracts.dll
+  Catalog.String.Contracts -> /tmp/current-census-sync-20261112/tests/fixtures/Catalog.String.Contracts/bin/Release/net10.0/Catalog.String.Contracts.dll
+  Catalog.Table.Contracts -> /tmp/current-census-sync-20261112/tests/fixtures/Catalog.Table.Contracts/bin/Release/net10.0/Catalog.Table.Contracts.dll
+  Catalog.Lint.Contracts -> /tmp/current-census-sync-20261112/tests/fixtures/Catalog.Lint.Contracts/bin/Release/net10.0/Catalog.Lint.Contracts.dll
+  Catalog.Invalid.Contracts -> /tmp/current-census-sync-20261112/tests/fixtures/Catalog.Invalid.Contracts/bin/Release/net10.0/Catalog.Invalid.Contracts.dll
+  Manifest.MarkedEmpty.Contracts -> /tmp/current-census-sync-20261112/tests/fixtures/Manifest.MarkedEmpty.Contracts/bin/Release/net10.0/Manifest.MarkedEmpty.Contracts.dll
+  Hexalith.McpCli.Analyzers.Tests -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.Analyzers.Tests/bin/Release/net10.0/Hexalith.McpCli.Analyzers.Tests.dll
+  Hexalith.McpCli.AppHost -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.AppHost/bin/Release/net10.0/Hexalith.McpCli.AppHost.dll
+  Hexalith.McpCli.EventStoreGateway.TestHost -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net10.0/Hexalith.McpCli.EventStoreGateway.TestHost.dll
+  Catalog.Routing.Contracts -> /tmp/current-census-sync-20261112/tests/fixtures/Catalog.Routing.Contracts/bin/Release/net10.0/Catalog.Routing.Contracts.dll
+  Hexalith.McpCli.Core -> /tmp/current-census-sync-20261112/src/Hexalith.McpCli.Core/bin/Release/net10.0/Hexalith.McpCli.Core.dll
+  Hexalith.McpCli.Mcp -> /tmp/current-census-sync-20261112/src/Hexalith.McpCli.Mcp/bin/Release/net10.0/Hexalith.McpCli.Mcp.dll
+  Hexalith.McpCli.Mcp.Tests -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll
+  Hexalith.McpCli -> /tmp/current-census-sync-20261112/src/Hexalith.McpCli/bin/Release/net10.0/Hexalith.McpCli.dll
+  Hexalith.McpCli.StdioHost -> /tmp/current-census-sync-20261112/tests/fixtures/StdioHost/bin/Release/net10.0/Hexalith.McpCli.StdioHost.dll
+  Hexalith.McpCli.Core.Tests -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll
+  Hexalith.McpCli.ConformanceHost -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll
+  Hexalith.McpCli.Integration.Tests -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll
+  Hexalith.McpCli.Cli.Tests -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll
+  Hexalith.McpCli.Manifest.Tests -> /tmp/current-census-sync-20261112/tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.83

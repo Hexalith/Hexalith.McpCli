@@ -1,0 +1,51 @@
+{
+  "schema": "mcpcli-tenant-owning-metadata-committed-source-preview/v1",
+  "realTenantCandidate": "d43342f1a21fbe57ff0d42108ed3d211ecdbeb55",
+  "realMcpBase": "f99d945235341f12c3aa308613a69d9b1d9840e7",
+  "scope": "Actual local committed Git source trees; unpublished Tenant/aggregate source preview only, not current-main, release, native or inventory admission. Exact unmodified scanner and existing1.0.4 policy remain strict.",
+  "cases": [
+    {
+      "case": "candidate",
+      "tenantSource": "d43342f1a21fbe57ff0d42108ed3d211ecdbeb55",
+      "aggregatePreviewCommit": "052e9c273327f03967aac59995d761a83a9a8131",
+      "errors": 17,
+      "tenantBoundaryErrors": [],
+      "fullReleaseAcceptance": false
+    },
+    {
+      "case": "unsafe",
+      "tenantSource": "1ebf355f0f48e535f5b53c3afe8375ccc94cf90c",
+      "aggregatePreviewCommit": "ede8fbb33c288a3fcc3e935b4b8aae04ad1a5349",
+      "errors": 18,
+      "tenantBoundaryErrors": [
+        {
+          "repository": "references/Hexalith.Tenants",
+          "gitlink": "1ebf355f0f48e535f5b53c3afe8375ccc94cf90c",
+          "path": "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+          "rule": "unsafe-or-nested-compile-source:src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+          "target": "../../../../census-outside.cs"
+        }
+      ],
+      "fullReleaseAcceptance": false
+    },
+    {
+      "case": "unknown",
+      "tenantSource": "9e8b103f318dc990bdee5f5ffdc18e2bfea21063",
+      "aggregatePreviewCommit": "3f45fbf89b53368d80ced56dce7c62857551a594",
+      "errors": 18,
+      "tenantBoundaryErrors": [
+        {
+          "repository": "references/Hexalith.Tenants",
+          "gitlink": "9e8b103f318dc990bdee5f5ffdc18e2bfea21063",
+          "path": "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj",
+          "rule": "unresolved-compile-source:src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj"
+        }
+      ],
+      "fullReleaseAcceptance": false
+    }
+  ],
+  "mcpHeadAndIndexUnchanged": true,
+  "checkerSha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388",
+  "fullNativeAcceptance": false,
+  "publicationAuthority": false
+}

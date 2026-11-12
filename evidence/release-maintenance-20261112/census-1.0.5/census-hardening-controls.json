@@ -1,0 +1,41 @@
+{
+  "schema": "mcpcli-incoming-census-hardening-mutation-controls/v1",
+  "source": "ab4d2dcfca150b0aa6b550a788c0f92d5ddb88ae",
+  "original_source_sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388",
+  "positive_controls": {
+    "tests": 3,
+    "failed": 0
+  },
+  "mutants": [
+    {
+      "mutant": "inherited_repository_redirect",
+      "test": "test_nested_review_git_reads_ignore_inherited_repository_state",
+      "exitCode": 1,
+      "detected": true,
+      "source_sha256": "4851dbc0ae5c6d4c800b77a8e3e99fd335c307b8c6d5739f9f24c6abbc8cd007"
+    },
+    {
+      "mutant": "cross_tree_closure_omitted",
+      "test": "test_nested_review_closure_allowance_binds_cross_tree_members_by_label",
+      "exitCode": 1,
+      "detected": true,
+      "source_sha256": "8ca36987c70fcb372a1c4f4f7d19e6fcc463e4e8d795538f1b587a6170138204"
+    },
+    {
+      "mutant": "legacy_receipt_current_context",
+      "test": "test_nested_review_amendment_fixture_validation_refuses_cross_tree_metadata",
+      "exitCode": 1,
+      "detected": true,
+      "source_sha256": "e7fe3f01021e437e7901e0db89c53ab7d7ad04220eae4cd181002d914f9d303b"
+    },
+    {
+      "mutant": "replace_objects_allowed",
+      "test": "real Git blob replacement cannot change exact committed bytes",
+      "exitCode": 1,
+      "detected": true,
+      "source_sha256": "da209e803675cbd30a6898724bdf8b4acac8ccc5c85873d62b0f6517bc4ba21b"
+    }
+  ],
+  "repository_source_unchanged": true,
+  "native_or_publication_acceptance": false
+}

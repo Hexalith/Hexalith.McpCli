@@ -1,0 +1,554 @@
+{
+  "repository": "/tmp/module-finalization-workspace-20261112/references/Hexalith.Tenants",
+  "base": "b239c8e43da8a80fd872c7f4391d219be44b2d1d",
+  "candidate": "d43342f1a21fbe57ff0d42108ed3d211ecdbeb55",
+  "pushed": false,
+  "pending": "Census committed source preview plus unsafe/unknown Compile mutants and parent coordinated pre-push inspection",
+  "changedFiles": {
+    ".github/workflows/source-reference.yml": "26e5f105250f23ee8d46460693518c5b4183028751558609edfd7d428c645939",
+    "Directory.Build.props": "c4714606bd1ed59308112d0a32ef12908852cf3503c8ad0513851c24678294d0",
+    "README.md": "27e2ba8a9f03ab9999162395a7f04c5bfac2a0262e70d2829c800b240945b11e",
+    "scripts/tests/test_platform_source_root.py": "989d3eb43d95883c7439cca491d15fc002094d1e434fc6780f8ee5ed25861b4e",
+    "src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj": "ef9e9e1a7bb50d9f75725a3cd6cfece18595a3dea57b2ed531e0acea2d12b15b"
+  },
+  "gitlinksUnchanged": true,
+  "ownerClean": true,
+  "compileItemsByteEquivalent": true,
+  "selectionSemantics": {
+    "defaultPriority": [
+      "declared nested references/Hexalith.Platform when its helper exists",
+      "declared sibling ../Hexalith.Platform when its helper exists",
+      "declared nested path as a missing-prerequisite diagnostic default"
+    ],
+    "explicitInput": "An existing nonempty HexalithPlatformRoot overrides discovery, including actual Platform parent/grandparent umbrella layouts. The caller supplies that authority intentionally.",
+    "removed": [
+      "ambient unnamed parent helper discovery",
+      "ambient unnamed grandparent helper discovery"
+    ],
+    "prerequisiteGuard": "Before PrepareForBuild, require Hexalith.Platform.slnx and both canonical helper source files. This is structural build validation; exact URL/commit/blob authority remains with the source mapping and strict census.",
+    "compileVisibility": "Both original unconditional Compile includes remain present and unchanged; no generated aliases, hidden targets, or checker exceptions."
+  },
+  "unitControls": {
+    "tests": 8,
+    "layoutCases": 26,
+    "allPassed": true,
+    "log": "/tmp/tenants-platform-source-controls-20261112.log",
+    "scope": "Actual production metadata evaluated by MSBuild in disposable component layouts; no resource starts"
+  },
+  "siblingBuilds": {
+    "release": {
+      "log": "/tmp/tenants-platform-source-root-release-build-20261112.log",
+      "warnings": 0,
+      "errors": 0,
+      "auditAssets": {
+        "obj/Hexalith.Builds.Tooling/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.Server/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.AppHost/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.Aspire/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.Contracts/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      }
+    },
+    "debug": {
+      "log": "/tmp/tenants-platform-source-root-debug-build-20261112.log",
+      "warnings": 0,
+      "errors": 0,
+      "auditAssets": {
+        "obj/Hexalith.FrontComposer.Contracts.UI/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.FrontComposer.SourceTools/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Builds.Tooling/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Memories.EventStore/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.Admin.UI/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.FrontComposer.Contracts/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.McpCli.Analyzers/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.Sample/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.FrontComposer.Shell/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Memories.Telemetry/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Memories.Server/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.Admin.Server.Host/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Commons.UniqueIds/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.Server/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Commons.Aspire/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Memories.Aspire/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.McpCli.Abstractions/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.DomainService/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Memories.Client.Rest/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.RestApi.Generators/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.Gateway/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.AppHost/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.Server/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.Client/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.Aspire/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Memories.ServiceDefaults/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.Contracts/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.Client/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.Admin.Server/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.ServiceDefaults/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.UI/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.Admin.Abstractions/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Memories.AccessTelemetry.Contracts/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Tenants.Api/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.Aspire/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.Memories.Contracts/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.Contracts/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        },
+        "obj/Hexalith.EventStore.SignalR/project.assets.json": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      }
+    }
+  },
+  "actualUmbrella": {
+    "receipt": "/tmp/tenants-platform-umbrella-receipt-20261112.json",
+    "source": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+    "canonicalFiles": {
+      "Hexalith.Platform.slnx": {
+        "sha256": "66256b63e0f2e88ee05a09ffbd5f750c0c9f645435dd0abadb346db6ae88d784",
+        "sourceCommit": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+        "blob": "071548221d155d8785b6cafde50d4de2548a59cf"
+      },
+      "DaprSelfHostedMtls.cs": {
+        "sha256": "3fa9ccf46cd70cdc2253dda51ad06b3bcf5f7f696b3b74a95ca1b86913489a7c",
+        "sourceCommit": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+        "blob": "129db8d5f558d20991ebbc8dc52fbcab5a835d98"
+      },
+      "DaprSelfHostedMtlsSubscriber.cs": {
+        "sha256": "35e5f5b4418814e8df7fc5f73b3d25ea2531215978723b8dcf49060cd2cd7e24",
+        "sourceCommit": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+        "blob": "3198ae8aabbafbe54eb995895cfb66d27b72e180"
+      }
+    },
+    "ownerCandidate": "d43342f1a21fbe57ff0d42108ed3d211ecdbeb55",
+    "ownerCloneClean": true,
+    "builds": {
+      "Release": {
+        "log": "/tmp/tenants-platform-umbrella-release-20261112.log",
+        "artifacts": "/tmp/tenants-platform-umbrella-release-artifacts-20261112",
+        "warnings": 0,
+        "errors": 0,
+        "auditAssets": {
+          "obj/Hexalith.Builds.Tooling/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.Server/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.AppHost/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.Aspire/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.Contracts/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          }
+        }
+      },
+      "Debug": {
+        "log": "/tmp/tenants-platform-umbrella-debug-20261112.log",
+        "artifacts": "/tmp/tenants-platform-umbrella-debug-artifacts-20261112",
+        "warnings": 0,
+        "errors": 0,
+        "auditAssets": {
+          "obj/Hexalith.FrontComposer.Contracts.UI/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.FrontComposer.SourceTools/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Builds.Tooling/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Memories.EventStore/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.Admin.UI/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.FrontComposer.Contracts/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.McpCli.Analyzers/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.Sample/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.FrontComposer.Shell/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Memories.Telemetry/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Memories.Server/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.Admin.Server.Host/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Commons.UniqueIds/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.Server/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Commons.Aspire/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Memories.Aspire/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.McpCli.Abstractions/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.DomainService/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Memories.Client.Rest/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.RestApi.Generators/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.Gateway/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.AppHost/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.Server/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.Client/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.Aspire/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Memories.ServiceDefaults/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.Contracts/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.Client/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.Admin.Server/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.ServiceDefaults/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.UI/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.Admin.Abstractions/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Memories.AccessTelemetry.Contracts/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Tenants.Api/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.Aspire/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.Memories.Contracts/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.Contracts/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          },
+          "obj/Hexalith.EventStore.SignalR/project.assets.json": {
+            "enableAudit": "true",
+            "auditLevel": "low",
+            "auditMode": "all"
+          }
+        }
+      }
+    }
+  },
+  "commitlint": {
+    "version": "21.2.4",
+    "fullMessageBeforeCommit": "/tmp/tenants-platform-source-root-precommitlint-20261112.log",
+    "rangeAfterCommit": "/tmp/tenants-platform-source-root-range-commitlint-20261112.log",
+    "bothPassed": true
+  },
+  "productTfmRuntimeContainersAndAdmissionRulesChanged": false,
+  "actualRootOrWorksChanged": false,
+  "nativeOrImageAcceptance": false
+}

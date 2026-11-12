@@ -1,0 +1,411 @@
+{
+  "schema": "mcpcli-incoming-historical-evidence-scope/v1",
+  "source": "ab4d2dcfca150b0aa6b550a788c0f92d5ddb88ae",
+  "files": 133,
+  "json_metadata": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/acceptance-blockers.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/attempts/failed-1-subsumed-review-s07-control/commands.json",
+      "fields": {
+        "topLevel": "list"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/attempts/failed-1-subsumed-review-s07-control/prior-integrity-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/attempts/failed-1-subsumed-review-s07-control/workspace-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/attempts/failed-2-parent-revision-moved/before-run.json",
+      "fields": {
+        "parentRevision": "884f65ef203a2c79a531403d26b6a1734da90d42"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/attempts/failed-2-parent-revision-moved/census.json",
+      "fields": {
+        "parentRevision": "884f65ef203a2c79a531403d26b6a1734da90d42",
+        "schema": "mcpcli-proprietary-surface-census/v1",
+        "status": "failed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/attempts/failed-2-parent-revision-moved/commands.json",
+      "fields": {
+        "topLevel": "list"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/attempts/failed-2-parent-revision-moved/prior-integrity-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/attempts/failed-2-parent-revision-moved/workspace-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/before-checkers.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/blocker-delta.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/cross-tree-provenance.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/evidence-build-command.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/guard-proofs.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/latest-run.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/matrix-coverage.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/prior-policy-integrity.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/reference-integrity.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/before-census.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+        "schema": "mcpcli-proprietary-surface-census/v1",
+        "status": "failed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/before-run.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/census.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+        "schema": "mcpcli-proprietary-surface-census/v1",
+        "status": "failed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/commands.json",
+      "fields": {
+        "topLevel": "list"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/determinism.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/implementation-integrity.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/prior-integrity-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/runs/final-1/workspace-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/secret-scan-command.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/secret-scan.json",
+      "fields": {
+        "result": "clean",
+        "schema": "mcpcli-evidence-secret-scan/v1"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/exists-guard-resolution-20261111/verification.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/acceptance-blockers.json",
+      "fields": {
+        "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/attempts/pre-patch-evidence/secret-scan-after-final-2-before-record.json",
+      "fields": {
+        "result": "clean",
+        "schema": "mcpcli-evidence-secret-scan/v1"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/attempts/pre-patch-evidence/secret-scan-superseded-sha-typo.json",
+      "fields": {
+        "result": "clean",
+        "schema": "mcpcli-evidence-secret-scan/v1"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/attempts/pre-patch-evidence/secret-scan.json",
+      "fields": {
+        "result": "clean",
+        "schema": "mcpcli-evidence-secret-scan/v1"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/attempts/stopped-1-closure-drift-errors-unasserted/commands.json",
+      "fields": {
+        "topLevel": "list"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/attempts/stopped-1-closure-drift-errors-unasserted/prior-integrity-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/attempts/stopped-1-closure-drift-errors-unasserted/reason.json",
+      "fields": {
+        "result": "stopped"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/attempts/stopped-1-closure-drift-errors-unasserted/workspace-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/blocker-delta.json",
+      "fields": {
+        "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/cross-tree-provenance.json",
+      "fields": {
+        "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/evidence-build-command.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/excuse-proofs.json",
+      "fields": {
+        "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/latest-run.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/matrix-coverage.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/prior-policy-integrity.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/reference-integrity.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/before-census.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+        "schema": "mcpcli-proprietary-surface-census/v1",
+        "status": "failed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/before-run.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/census.json",
+      "fields": {
+        "parentRevision": "6ec91eb81aa98a850e98ad0b139972158eaf9fef",
+        "schema": "mcpcli-proprietary-surface-census/v1",
+        "status": "failed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/commands.json",
+      "fields": {
+        "topLevel": "list"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/determinism.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/implementation-integrity.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/prior-integrity-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-1/workspace-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-2/before-census.json",
+      "fields": {
+        "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9",
+        "schema": "mcpcli-proprietary-surface-census/v1",
+        "status": "failed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-2/before-run.json",
+      "fields": {
+        "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-2/census.json",
+      "fields": {
+        "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9",
+        "schema": "mcpcli-proprietary-surface-census/v1",
+        "status": "failed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-2/commands.json",
+      "fields": {
+        "topLevel": "list"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-2/determinism.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-2/implementation-integrity.json",
+      "fields": {
+        "result": "passed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-2/prior-integrity-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/runs/final-2/workspace-before.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/secret-scan-command.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/secret-scan.json",
+      "fields": {
+        "result": "clean",
+        "schema": "mcpcli-evidence-secret-scan/v1"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/guard-excuse-review-20261111/verification.json",
+      "fields": {
+        "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-draft-20261112/authorization.draft.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-draft-20261112/dry-run-census.json",
+      "fields": {
+        "parentRevision": "f223aaa5acd70c04a413f3251f83d96472a6b0d9",
+        "schema": "mcpcli-proprietary-surface-census/v1",
+        "status": "failed"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-draft-20261112/dry-run-merge.json",
+      "fields": {}
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-draft-20261112/not-included.json",
+      "fields": {
+        "topLevel": "list"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-draft-20261112/rehearsal-load.json",
+      "fields": {
+        "result": "loaded"
+      }
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-6/owner-amendment-draft-20261112/secret-scan.json",
+      "fields": {
+        "result": "clean",
+        "schema": "mcpcli-evidence-secret-scan/v1"
+      }
+    }
+  ],
+  "current_release_or_native_authority": false,
+  "note": "Captured old guard/draft evidence is preserved; no historical draft assembly command is executed and no old source result credits current release."
+}

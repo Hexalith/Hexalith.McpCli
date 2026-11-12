@@ -1,0 +1,19 @@
+{
+  "schema": "mcpcli-current-census-revision-scope-control/v1",
+  "policy": "1.0.5",
+  "source_before": "3576ddf518c7b3f3188a5f7e08e04080647b4023",
+  "approvedTenantSource": "d43342f1a21fbe57ff0d42108ed3d211ecdbeb55",
+  "sameTreeDifferentRevision": "defde18781af541d9aab55c8dd9aa4fffd8f90e0",
+  "sameTree": "ece89e82a68f0aa7b0171fb93faccc333ba28d65",
+  "aggregatePreview": "beabdde37d27e1894e5811b9c79b0eeca6966410",
+  "result": "correctly-refused-same-body-new-source-revision",
+  "errors": [
+    {
+      "repository": "references/Hexalith.Tenants",
+      "gitlink": "defde18781af541d9aab55c8dd9aa4fffd8f90e0",
+      "path": "scripts/publish-partial-release.sh",
+      "rule": "excluded-source-revision-drift:scripts/publish-partial-release.sh"
+    }
+  ],
+  "nativeOrPublicationAuthority": false
+}

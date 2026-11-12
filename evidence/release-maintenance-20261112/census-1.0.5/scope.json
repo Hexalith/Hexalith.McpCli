@@ -1,0 +1,26 @@
+{
+  "schema": "mcpcli-current-source-census-continuation-scope/v1",
+  "source_before_amendment": "3576ddf518c7b3f3188a5f7e08e04080647b4023",
+  "incoming_user_commit": "ab4d2dcfca150b0aa6b550a788c0f92d5ddb88ae",
+  "preserved_incoming_paths": 155,
+  "source_prerequisites": {
+    "Builds": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b",
+    "Platform": "f99f51c3053fe0b0292acad461d78c833ec156cc",
+    "Tenant_owning_metadata_fix": "d43342f1a21fbe57ff0d42108ed3d211ecdbeb55"
+  },
+  "exact_existing_file_renewals": 17,
+  "byte_identical_helper_bodies": 15,
+  "changed_existing_ci_workflows": 2,
+  "existing_memory_manifest_change": "buildsSha only; unchanged five image/project/health entries",
+  "new_proprietary_surfaces": 0,
+  "new_mcp_capabilities": false,
+  "parser_boundary_relaxation": false,
+  "historical_policy_rewritten": false,
+  "human_validation": "Bypassed per explicit user release instruction; no invented approver/client sessions.",
+  "historical_incoming_drafts": "Retained unmodified as historical/draft source evidence; their old decision/status/source labels do not authorize this current release. No old amendment assembly script was executed.",
+  "nativeAcceptance": false,
+  "migrationAcceptance": false,
+  "imageAuthority": false,
+  "publicationAuthority": false,
+  "mcp3Publication": "Pending exact current CI/native, new original staging, actual staged3 public behavior/auth/cleanup and supported source-bound automated waiver."
+}

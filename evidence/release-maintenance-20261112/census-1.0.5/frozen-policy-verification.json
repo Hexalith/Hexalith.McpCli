@@ -1,0 +1,19 @@
+{
+  "schema": "mcpcli-current-census-frozen-preservation/v1",
+  "retained_policy_files": {
+    "tools/proprietary-surfaces/v1/baseline.json": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+    "tools/proprietary-surfaces/v1/legacy-receipts.json": "22055d14e2e5590d27be70291bf03045f3df8d9bf48a3b8f90cf84135f2f12ce",
+    "tools/proprietary-surfaces/v1/amendments/1.0.1-approval.json": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203",
+    "tools/proprietary-surfaces/v1/amendments/1.0.1.json": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19",
+    "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b",
+    "tools/proprietary-surfaces/v1/amendments/1.0.2.json": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78",
+    "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c",
+    "tools/proprietary-surfaces/v1/amendments/1.0.3.json": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c",
+    "tools/proprietary-surfaces/v1/amendments/1.0.4-approval.json": "cb3c2f09ce4ed8684766e29d9ce0b215e624905f48916cc259627bf564023df1",
+    "tools/proprietary-surfaces/v1/amendments/1.0.4.json": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61"
+  },
+  "retained_policy_files_unchanged": true,
+  "prior_four_index_entries_unchanged": true,
+  "legacy_and_native_168_files_unchanged": true,
+  "incoming_155_paths_preserved": true
+}
