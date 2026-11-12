@@ -1,0 +1,1 @@
+docs: record story 5.2 main integration

@@ -46,8 +46,8 @@
     "inventoryRevision": "c694bff5a29073bee6848b88c142f7da23efcf85",
     "pushApproval": "approved; user replied approve to the separately pending AI.Tools push",
     "pushed": true,
-    "merged": false,
-    "censusState": "frozen; baseline unchanged",
+    "merged": true,
+    "censusState": "baseline unchanged; upstream exemption amendment merged; any census reclassification requires a separate owner-approved amendment",
     "files": {
       "README.md": "8c02ffb2c4ef6d83b7b425d4bf4a3f07bbabffd3cf3d1f136149851392da1a88",
       "hexalith-llm-instructions.md": "3e3b756a29e213171df183a12cb6a298aea87f6f307729971455a2bd890eb6ef",
@@ -60,7 +60,10 @@
       "git status --short": "exit 0; empty after the local candidate commit",
       "git fetch --no-recurse-submodules origin main": "exit 0; origin/main 8a3885dd22aea88edd57771cfe592c382df2c583; candidate ahead 1 / behind 0",
       "git push --set-upstream origin HEAD:refs/heads/docs/mcpcli-local-tooling-exemptions": "exit 0; new remote branch; exact candidate commit preserved",
-      "git ls-remote --heads origin refs/heads/docs/mcpcli-local-tooling-exemptions": "exit 0; 10b709b86f9c9148e5a18177e8d11fad79ae2c0b\trefs/heads/docs/mcpcli-local-tooling-exemptions"
+      "git ls-remote --heads origin refs/heads/docs/mcpcli-local-tooling-exemptions": "exit 0; 10b709b86f9c9148e5a18177e8d11fad79ae2c0b\trefs/heads/docs/mcpcli-local-tooling-exemptions",
+      "git merge --ff-only 10b709b86f9c9148e5a18177e8d11fad79ae2c0b": "exit 0 in AI.Tools main worktree",
+      "git push origin main": "exit 0; remote main fast-forwarded to 10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+      "git ls-remote --heads origin refs/heads/main": "exit 0; 10b709b86f9c9148e5a18177e8d11fad79ae2c0b refs/heads/main"
     },
     "pushApprovalOn": "2026-11-12",
     "pushApprovalRequest": {
@@ -73,7 +76,15 @@
     "remoteBranch": "refs/heads/docs/mcpcli-local-tooling-exemptions",
     "remoteRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
     "branchUrl": "https://github.com/Hexalith/Hexalith.AI.Tools/tree/docs/mcpcli-local-tooling-exemptions",
-    "mergeApproval": "pending; no merge performed"
+    "mergeApproval": "approved; user requested merge all changes to main",
+    "mergeRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+    "mainRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+    "mergeApprovalOn": "2026-11-12",
+    "mergeMethod": "fast-forward",
+    "mergeApprovalRequest": {
+      "requestVerbatim": "merge all changes to main",
+      "scope": "Integrate the approved AI.Tools amendment and all McpCli story commits into their remote main branches; no inventory, census baseline or reference gitlink changes."
+    }
   },
   "limits": [
     "No inventory re-disposition before exact-byte AD-23 adoption.",

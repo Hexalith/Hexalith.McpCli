@@ -168,11 +168,11 @@ revision, approval/disposition limits and all census bytes. Story 5.10 still
 owes the PS14 mode inventory. The original `npm ci --ignore-scripts` and pinned
 commitlint checks succeeded; their evidence is retained rather than repeated.
 
-**The branch push is approved and complete; merge remains pending.** The
+**The approved amendment is merged to AI.Tools main.** The
 user replied **"approve"** after the separate AI.Tools push was identified as
 pending. [Delivery evidence](upstream-delivery.json) and the [push output](upstream-push.txt)
 record publication of the exact candidate on `docs/mcpcli-local-tooling-exemptions`.
-Exempt surfaces remain frozen until the amendment merges. Retained local tools are
+The amendment merged by fast-forward under the subsequent explicit main-integration request; the census baseline itself is unchanged. Retained local tools are
 never counted as retired. No root gitlink, reference checkout, census baseline
 or inventory was changed.
 
@@ -211,9 +211,9 @@ requiring fresh approval; no automatic status/hash refresh is permitted.
 
 The user separately approved publishing the exact upstream commit, and the
 branch push succeeded with matching remote read-back. This satisfies the
-specification's explicit push approval gate. No merge, reference update or
-census amendment was performed; the still-frozen amendment remains within the
-specification's allowed pending-amendment outcome.
+specification's explicit push approval gate. At that branch-delivery checkpoint no merge, reference update or census amendment
+was performed. The later explicit main-integration request and successful merge
+are recorded below; reference and census bytes remain unchanged.
 
 Parties L03–L05, T04/T05/T07 and C03/C04/C05 are restricted here, although the
 Commands are already decorated/enrolled. This is a disclosed conflict requiring
@@ -305,3 +305,38 @@ preserves the exact original output as a JSON string and records its SHA-256.
 The delivery record binds both representations. The
 [scan before output formatting](secret-scan-before-output-formatting.json)
 is historical; the current scan includes the corrected evidence layout.
+
+
+## Main integration (2026-11-12)
+
+The user explicitly requested **"merge all changes to main"**, authorizing
+integration of the prepared AI.Tools amendment and McpCli story commits.
+Both remote main branches were fetched without recursive submodule updates.
+Both were unprotected with no required status contexts. AI.Tools' candidate
+had no check runs; its existing pinned commitlint validation and approved file
+hashes remained valid. All 17 root-declared reference checkouts were clean and
+had no unpublished branch commits. McpCli main was two commits ahead of its
+remote with no divergence.
+
+AI.Tools' clean main worktree fast-forwarded from
+`8a3885dd22aea88edd57771cfe592c382df2c583` to the exact approved commit
+`10b709b86f9c9148e5a18177e8d11fad79ae2c0b`, then `git push origin main`
+succeeded. A fresh remote read-back confirms that exact main revision. The
+[main integration record](main-integration.json) retains the verbatim request,
+method and command outputs. No merge commit, rebase, force push or protection
+bypass was needed. The upstream amendment's merge gate is satisfied.
+
+McpCli's reviewed story, approval, delivery and integration records are
+published together from its local main. This metadata update retains every
+approved decision/map/input hash and does not alter the census baseline,
+reference gitlinks, inventories or runtime. Any later census reclassification
+still needs its separate versioned owner approval. Parties reconciliation,
+Folders staging and later enrollment/retirement evidence remain open.
+
+
+Final main-integration verification reran all **45 process tests** against the
+merged upstream metadata; all passed. The local integration-record message
+passed pinned commitlint with zero problems/warnings; its [exact message](main-commit-message.txt),
+[validation](main-commitlint-validation.txt) and [command](main-commitlint-command.json)
+are retained. The [scan before main integration](secret-scan-before-main-integration.json)
+is historical; the current scan binds the main-integration packet.

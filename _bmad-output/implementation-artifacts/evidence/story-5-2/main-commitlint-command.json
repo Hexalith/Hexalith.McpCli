@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "input": "docs: record story 5.2 main integration\n",
+  "exitCode": 0,
+  "messageFile": "/tmp/mcpcli-story-5-2-main-8l135zmo.txt"
+}

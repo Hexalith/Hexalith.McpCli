@@ -236,3 +236,8 @@ AI.Tools push and merge remain pending separate approval; the locally committed 
 ### Upstream push delivery (2026-11-12)
 
 After the adoption summary identified the AI.Tools push as the remaining separate approval, the user replied **"approve"**. The exact approved amendment commit `10b709b86f9c9148e5a18177e8d11fad79ae2c0b` was pushed to `docs/mcpcli-local-tooling-exemptions`; a fresh remote branch read-back matches it. The [delivery record](evidence/story-5-2/upstream-delivery.json) retains the raw response, exact push command/result and remote revision. Earlier pending-push notes are historical. Merge remains pending and exempt surfaces stay frozen. No reference gitlink or approved decision/map/inventory bytes changed, and this approval does not push McpCli's local completion commits.
+
+
+### Main integration (2026-11-12)
+
+The user requested **"merge all changes to main"**. AI.Tools main was clean and fast-forwarded to the exact approved amendment `10b709b86f9c9148e5a18177e8d11fad79ae2c0b`; its remote main read-back confirms that revision. The [integration record](evidence/story-5-2/main-integration.json) retains the request and successful commands. The amendment merge gate is satisfied; earlier pending-merge notes above are historical. All McpCli story and delivery commits are published together to main under the same request. No approved decision/map/input, census baseline, inventory or reference gitlink bytes changed; remaining Parties, Folders and later release/retirement gates stay open.

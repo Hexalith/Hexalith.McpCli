@@ -1,0 +1,89 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordedOn": "2026-11-12T17:01:39+00:00",
+  "requestVerbatim": "merge all changes to main",
+  "repository": "https://github.com/Hexalith/Hexalith.AI.Tools.git",
+  "baseRevision": "8a3885dd22aea88edd57771cfe592c382df2c583",
+  "candidateRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+  "mainRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+  "merged": true,
+  "method": "fast-forward",
+  "commands": [
+    {
+      "command": [
+        "git",
+        "branch",
+        "--show-current"
+      ],
+      "exitCode": 0,
+      "stdout": "main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "8a3885dd22aea88edd57771cfe592c382df2c583\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "10b709b86f9c9148e5a18177e8d11fad79ae2c0b"
+      ],
+      "exitCode": 0,
+      "stdout": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "merge",
+        "--ff-only",
+        "10b709b86f9c9148e5a18177e8d11fad79ae2c0b"
+      ],
+      "exitCode": 0,
+      "stdout": "Updating 8a3885d..10b709b\nFast-forward\n README.md                                 |  2 +-\n hexalith-llm-instructions.md              |  6 ++++++\n hexalith-mcpcli-migration-instructions.md | 31 ++++++++++++++++++++++++++++---\n 3 files changed, 35 insertions(+), 4 deletions(-)\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "To https://github.com/Hexalith/Hexalith.AI.Tools.git\n   8a3885d..10b709b  main -> main\n"
+    },
+    {
+      "command": [
+        "git",
+        "ls-remote",
+        "--heads",
+        "origin",
+        "refs/heads/main"
+      ],
+      "exitCode": 0,
+      "stdout": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b\trefs/heads/main\n",
+      "stderr": ""
+    }
+  ],
+  "censusBaselineChanged": false,
+  "referencesGitlinkChanged": false
+}

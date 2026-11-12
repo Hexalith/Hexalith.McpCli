@@ -45,6 +45,6 @@ test_whole_inventory_omission_and_extra_inventory_are_rejected (test_verify_clas
 test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) ... ok
 
 ----------------------------------------------------------------------
-Ran 45 tests in 3.214s
+Ran 45 tests in 3.279s
 
 OK
