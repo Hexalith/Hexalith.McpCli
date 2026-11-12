@@ -59,3 +59,6 @@ tools/live-topology/binaries*.json -text
 
 # Preserve original external assertions as documentary bytes without acceptance authority.
 evidence/release-maintenance-20261112/foreign-1.0.5-assertions/** -text
+
+# Bind the bounded current census continuation to captured evidence bytes.
+evidence/release-maintenance-20261112/census-1.0.6/** -text

@@ -1,0 +1,176 @@
+{
+  "schema": "mcpcli-proprietary-surface-census/v1",
+  "fromVersion": "1.0.5",
+  "toVersion": "1.0.6",
+  "previousSha256": "1784345c0ff853ed35952c9de2b1e7f2c20a88a455309375e56aecb95da5e887",
+  "approval": {
+    "owner": "Requesting user via the current release instruction",
+    "reason": "Bounded existing-source continuation under the explicit user human-validation waiver; exact revision/digest classification, no source-boundary or capability relaxation.",
+    "decision": "approved",
+    "date": "2026-11-12",
+    "evidence": {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.6-approval.json",
+      "sha256": "2be9c64c62edc802424274ceab75cf0ace44e5ecc1a1d8fa9a0c5396b02f0b54"
+    }
+  },
+  "addAllowances": [],
+  "removeAllowances": [],
+  "addExceptions": [],
+  "removeExceptions": [],
+  "addExclusions": [
+    {
+      "repository": "references/Hexalith.Agents",
+      "prefix": "eng/verify-story-5.4.ps1",
+      "row": "PE01",
+      "classification": "existing-build-preparation-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "561c032e9bb1cc049e45dc5b0f2609cf0feaae8239c24c98e5c3b1c1f810d596",
+      "sourceRevision": "4a65f67d040bec4d646a830ed72b65c0e8951048"
+    },
+    {
+      "repository": "references/Hexalith.Agents",
+      "prefix": "eng/verify-story.ps1",
+      "row": "PE01",
+      "classification": "existing-build-preparation-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "1695caba477a55ca6a6f91cdf81465a1d8ea0d4bb730c82a384460ab7de4e8b7",
+      "sourceRevision": "4a65f67d040bec4d646a830ed72b65c0e8951048"
+    },
+    {
+      "repository": "references/Hexalith.Folders",
+      "prefix": "tests/tools/run-capacity-calibration-gates.ps1",
+      "row": "PE05",
+      "classification": "existing-capacity-qualification-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "c50762d23e2e832724582fc4ca7cf2d3fa5c431f973f36a7773dc8d6f2c19d17",
+      "sourceRevision": "6a8cf4f9e28786176d26522b41bb921e18b922da"
+    },
+    {
+      "repository": "references/Hexalith.Memories",
+      "prefix": "tools/ci/provision-eventstore-local-feed.sh",
+      "row": "PE09",
+      "classification": "existing-local-package-proof-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "9e26bad059fd46c2e3a6b68d19cb0197a64f0199b29c383caabbf8919464a154",
+      "sourceRevision": "a846178e8f552e66cf29982550e3ebdab93956ba"
+    },
+    {
+      "repository": "references/Hexalith.Memories",
+      "prefix": "tools/pack-release.ps1",
+      "row": "PE01",
+      "classification": "existing-generic-publication-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "dfa8e1628868dbb717f83b06b65dbca73ed76eed8175b7a4aeddf7148aef4a04",
+      "sourceRevision": "a846178e8f552e66cf29982550e3ebdab93956ba"
+    },
+    {
+      "repository": "references/Hexalith.Memories",
+      "prefix": "tools/verify-cli-pack.ps1",
+      "row": "PE05",
+      "classification": "existing-cli-package-test-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "db764e2b5b136786c20767421c45e9246fbb93f0f236a0ca803664358baac0cb",
+      "sourceRevision": "a846178e8f552e66cf29982550e3ebdab93956ba"
+    },
+    {
+      "repository": "references/Hexalith.Parties",
+      "prefix": "tests/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact.csproj",
+      "row": "PE05",
+      "classification": "nonpublishable-native-sample-test-fixture",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "e206e9b03e0aae58a97d9727ff5c45d8ec53f19c3cfd2c68656ed0b6cc1badf8",
+      "sourceRevision": "3c9ab67483bb2c7081f7b2fbb96235815bb9158a"
+    },
+    {
+      "repository": "references/Hexalith.Parties",
+      "prefix": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
+      "row": "PE05",
+      "classification": "nonpublishable-native-sample-test-fixture",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "f7121b066ae86077cd37c23014e0458a5ae823e4281ef65d929a77f8220dcdd5",
+      "sourceRevision": "3c9ab67483bb2c7081f7b2fbb96235815bb9158a"
+    },
+    {
+      "repository": "references/Hexalith.Projects",
+      "prefix": ".github/workflows/ci.yml",
+      "row": "PE01",
+      "classification": "existing-build-preparation-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "ef1d0d802600f1a4fd99ac71b0f1cbce37ab8295ab939a3c4c451ff0b4513687",
+      "sourceRevision": "1ea04f7959e9ca393bc19d3b96b03cb350088e72"
+    },
+    {
+      "repository": "references/Hexalith.Projects",
+      "prefix": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+      "row": "PE05",
+      "classification": "existing-compiler-qualification-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "b7cdd5c53028c3df0e3ba172e5c374ec1e59eae5e4b6b28d6e8ee31dff48093d",
+      "sourceRevision": "1ea04f7959e9ca393bc19d3b96b03cb350088e72"
+    },
+    {
+      "repository": "references/Hexalith.Works",
+      "prefix": "scripts/build-story414-sdk-candidate.sh",
+      "row": "PE09",
+      "classification": "existing-local-sdk-candidate-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "75eefb3b4365934314e4f1e4353a905a2379fcbeffe00b85ef730342bc9694df",
+      "sourceRevision": "2f94a3b4c874577e4286afe7deb3e1c53c78bdb4"
+    },
+    {
+      "repository": "references/Hexalith.Works",
+      "prefix": "scripts/build-story415-sdk-candidate.sh",
+      "row": "PE09",
+      "classification": "existing-local-sdk-candidate-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "e122bb2d1273f6dd0ba27c2e66723470f24b6971898d7857f5a48ebe59cd5153",
+      "sourceRevision": "2f94a3b4c874577e4286afe7deb3e1c53c78bdb4"
+    },
+    {
+      "repository": "references/Hexalith.Works",
+      "prefix": "scripts/verify-story414-sdk-candidate.sh",
+      "row": "PE09",
+      "classification": "existing-local-sdk-candidate-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "1ab83f938c13d5e42a46816b5a55c5c0de1928fc60432dcd51f603ca5418577b",
+      "sourceRevision": "2f94a3b4c874577e4286afe7deb3e1c53c78bdb4"
+    },
+    {
+      "repository": "references/Hexalith.Works",
+      "prefix": "scripts/verify-story415-sdk-candidate.sh",
+      "row": "PE09",
+      "classification": "existing-local-sdk-candidate-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing file renewed at the independently inspected source revision and body digest. Thirteen bodies are unchanged. The only changed Projects CI workflow initializes its already-declared Builds checkout for existing current G-6 fixtures. No new project, MCP operation, publication target, Compile exception, native or image authority.",
+      "scope": "file",
+      "sha256": "d2986d77369ba0a4b4b1efb3de735f2518e23b3d4a5707ad62885401e9e5a833",
+      "sourceRevision": "2f94a3b4c874577e4286afe7deb3e1c53c78bdb4"
+    }
+  ]
+}

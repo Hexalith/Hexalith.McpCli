@@ -1,0 +1,13 @@
+--- 6490db052c9bb0d446b807264539beeccb77fbec:.github/workflows/ci.yml
++++ 1ea04f7959e9ca393bc19d3b96b03cb350088e72:.github/workflows/ci.yml
+@@ -92,6 +92,10 @@
+         env:
+           PYTHONDONTWRITEBYTECODE: '1'
+         run: python3 -m unittest tests/tools/test_run_g6_candidate_gate.py -v
++
++      - name: Initialize Builds for current G-6 policy fixtures
++        shell: bash
++        run: git -c submodule.recurse=false submodule update --init -- references/Hexalith.Builds
+ 
+       - name: Validate current G-6 change selection
+         env:

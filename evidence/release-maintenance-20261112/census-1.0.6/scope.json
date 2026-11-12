@@ -1,0 +1,22 @@
+{
+  "schema": "mcpcli-census-continuation-scope/v1",
+  "beforeSource": "0f00d1255aaa5869eee4ac280f4d700b05592e65",
+  "foreignHistoryRetained": [
+    "05f9e51c5667d6183e18d6e1f3986d2caab3b866",
+    "50dbe43a119c1240bb3c45178e750630b7d32815"
+  ],
+  "canonicalPolicyPreserved": "1.0.1\u20131.0.5",
+  "newPolicy": "1.0.6",
+  "exactRenewals": 14,
+  "identicalBodies": 13,
+  "changedBody": "Projects CI only initializes its already-declared Builds checkout before existing G6 fixtures",
+  "newAllowances": 0,
+  "newExceptions": 0,
+  "newOperations": 0,
+  "newPublicationTargets": 0,
+  "strictCompileGuardUnchanged": true,
+  "humanValidation": "bypassed per explicit user release instruction",
+  "runtimeAcceptance": false,
+  "imageAuthority": false,
+  "publicationAuthority": false
+}

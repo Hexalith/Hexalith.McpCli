@@ -501,3 +501,5 @@ checkout conversion cannot invalidate the chain. The required CI job and each
 executed initialization, fixture and scan step are also paired-release staging
 and publication prerequisites. Historical bootstrap recovery keeps its existing
 gates and the publication-stage job map remains separate.
+
+Current continuation 1.0.6 preserves all canonical 1.0.1–1.0.5 records and renews fourteen exact existing files at their selected source revisions and digests. Thirteen bodies are identical; Projects CI only initializes its already-declared Builds checkout for existing G-6 fixtures. It adds no allowances, exceptions, MCP operations or publication targets. The strict Compile guard remains unchanged. External overwrite/approval assertions are preserved separately under `evidence/release-maintenance-20261112/foreign-1.0.5-assertions` as unverified documentary history. The requesting user bypassed human validation; all automated source, hash, inventory and behavior gates remain mandatory.
