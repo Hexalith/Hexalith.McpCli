@@ -1,5 +1,10 @@
 # Census amendment 1.0.5 — renewal draft (not approved)
 
+> **Status, 2026-11-12:** the owner approved this draft, and it was written as 1.0.5 in
+> `05f9e51`. Those bytes replaced a waiver 1.0.5 already pushed in `f995412`, so `0f00d12`
+> restored the original and archived these bytes as unverified history. This renewal is not
+> in the active chain; see the story spec's Spec Change Log.
+
 This folder is a **draft**. It grants no allowance, exclusion or authority. The
 active chain ends at 1.0.4, and no 1.0.5 receipt exists in the repository.
 
