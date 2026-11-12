@@ -1,0 +1,18 @@
+test_append_only_exact_file_versions_preserve_both_authorized_bodies (test_census.CensusTests.test_append_only_exact_file_versions_preserve_both_authorized_bodies) ... FAIL
+
+======================================================================
+FAIL: test_append_only_exact_file_versions_preserve_both_authorized_bodies (test_census.CensusTests.test_append_only_exact_file_versions_preserve_both_authorized_bodies)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/census-guard-mutant-bdh069ex/tools/proprietary-surfaces/v1/test_census.py", line 690, in test_append_only_exact_file_versions_preserve_both_authorized_bodies
+    self.run_cli(0)
+    ~~~~~~~~~~~~^^^
+  File "/tmp/census-guard-mutant-bdh069ex/tools/proprietary-surfaces/v1/test_census.py", line 107, in run_cli
+    self.assertEqual(status, expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 1 != 0
+
+----------------------------------------------------------------------
+Ran 1 test in 0.082s
+
+FAILED (failures=1)

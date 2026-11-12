@@ -1,0 +1,17 @@
+{
+  "schema": "mcpcli-census-release-verification/v1",
+  "sourceBeforeChange": "dec250f869ace8e63b6b229137211529cd77cd08",
+  "policyVersion": "1.0.3",
+  "referenceCount": 17,
+  "classifiedSurfaces": 452,
+  "coverageErrors": 0,
+  "rejectedSurfaces": 0,
+  "controls": {
+    "passed": 199,
+    "failed": 0,
+    "guardMutantsDetected": 2
+  },
+  "runtimeAcceptance": false,
+  "migrationAcceptance": false,
+  "humanValidation": "Bypassed explicitly by the requesting user; no external human review is asserted."
+}

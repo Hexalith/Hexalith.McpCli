@@ -43,3 +43,6 @@ tools/proprietary-surfaces/v1/*.json -text
 tools/proprietary-surfaces/v1/amendments/** -text
 tools/proprietary-surfaces/v1/*.py text eol=lf
 _bmad-output/implementation-artifacts/evidence/story-5-6/** -text
+
+# Preserve the current release census reports and exact file-hash verification packet.
+evidence/release-maintenance-20261112/census-1.0.3/** -text

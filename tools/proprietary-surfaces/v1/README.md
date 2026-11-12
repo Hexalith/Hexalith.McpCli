@@ -401,6 +401,20 @@ are an append-only chain referenced by `amendments.json`.
    authorized byte versions of that same file. Bind the inspected pins in the
    approval evidence. These entries match no sibling or future file; changed
    bytes fail. A directory name or a discovery finding does not authorize one.
+   A current classification of an existing opaque build/test helper may additionally
+   bind `sourceRevision` to the exact inspected 40-character lowercase Git commit.
+   This field is valid only for an exact `scope: "file"` exclusion. Both that pin
+   and the file hash must match. A later repository pin refuses even when the
+   helper body stays unchanged, so release-specific source review grants no future
+   helper or target authority. The approval receipt records the unmodeled runtime
+   expressions and the limits of the classification; enumeration or hashes do not
+   prove runtime behavior. These entries add no proprietary implementation.
+
+   Append-only amendments can record separately authorized versions of the same
+   exact file. The checker accepts only their explicitly recorded hashes at their
+   applicable source revisions. An unknown body, wrong pin, neighboring file or
+   unrelated source still refuses; earlier baseline and receipt bytes never change.
+
 6. Hash the finished receipt into the amendment's evidence binding, then append
    the finished amendment path and SHA-256 to `amendments.json`. Preserve all
    prior baseline, amendment and receipt bytes. Never extend a captured prefix

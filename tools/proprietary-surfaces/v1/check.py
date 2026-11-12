@@ -599,9 +599,12 @@ def load_policy(workspace, parent, baseline_path, index_path, today, context=Non
         allowed[key] = entry
     exclusions = []
     for item in policy['exclusions']:
-        require(isinstance(item, dict) and set(item) in ({'repository', 'prefix', 'row', 'classification', 'owner', 'reason'},
+        require(isinstance(item, dict) and set(item) - {'sourceRevision'} in ({'repository', 'prefix', 'row', 'classification', 'owner', 'reason'},
                 {'repository', 'prefix', 'row', 'classification', 'owner', 'reason', 'scope', 'sha256'},
                 {'repository', 'prefix', 'row', 'classification', 'owner', 'reason', 'scope', 'sha256', 'additionalSha256'}), 'invalid-exclusion')
+        if 'sourceRevision' in item:
+            require(item.get('scope') == 'file' and isinstance(item['sourceRevision'], str)
+                    and SHA.fullmatch(item['sourceRevision']) is not None, 'invalid-exclusion-source-revision')
         if 'scope' in item:
             require(item['scope'] == 'file' and HASH.fullmatch(item['sha256']) is not None, 'invalid-exclusion')
             extra_hashes = item.get('additionalSha256', [])
@@ -1925,12 +1928,17 @@ def scan_tree(tree, repository, exclusions, resolver=None):
 
     excluded = [e for e in exclusions if e['repository'] == repository]
     def omitted(path):
-        for entry in excluded:
-            if path == entry['prefix'] or entry.get('scope') != 'file' and path.startswith(entry['prefix'] + '/'):
-                if entry.get('scope') == 'file':
-                    require(digest(tree.blob(path)) in [entry['sha256'], *entry.get('additionalSha256', [])], f'excluded-fixture-source-drift:{path}')
-                return True
-        return False
+        exact = [entry for entry in excluded if entry.get('scope') == 'file' and path == entry['prefix']]
+        if exact:
+            # An append-only amendment may authorize another exact body of the same file.
+            # A revision-scoped classification cannot be reused at a later source pin.
+            applicable = [entry for entry in exact if entry.get('sourceRevision', tree.revision) == tree.revision]
+            require(bool(applicable), f'excluded-source-revision-drift:{path}')
+            hashes = {value for entry in applicable for value in [entry['sha256'], *entry.get('additionalSha256', [])]}
+            require(digest(tree.blob(path)) in hashes, f'excluded-fixture-source-drift:{path}')
+            return True
+        return any(entry.get('scope') != 'file' and (path == entry['prefix'] or path.startswith(entry['prefix'] + '/'))
+                   for entry in excluded)
     paths = []
     for path, entry in tree.entries.items():
         if entry[0] == '160000':

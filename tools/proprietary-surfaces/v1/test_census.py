@@ -674,6 +674,35 @@ class CensusTests(unittest.TestCase):
         self.write(self.repo,path,'{"packages":[{"id":"changed-neutral"}]}');self.commit(self.repo);self.pin()
         self.assertIn('excluded-fixture-source-drift',self.run_cli(1)['errors'][0]['rule'])
 
+    def test_append_only_exact_file_versions_preserve_both_authorized_bodies(self):
+        path='tests/fixtures/release.json'
+        original='{"packages":"original malformed test metadata"}'
+        replacement='{"packages":"updated malformed test metadata"}'
+        self.write(self.repo,path,original);self.commit(self.repo);self.pin()
+        first=dict(repository='references/opaque',prefix=path,row='PE05',classification='test-metadata-fixture',owner='fixture owner',reason='Original exact fixture',scope='file',sha256=census.digest(original.encode()))
+        self.policy['exclusions']=[first];self.save();self.run_cli(0)
+        self.write(self.repo,path,replacement);self.commit(self.repo);self.pin()
+        second=dict(first,sha256=census.digest(replacement.encode()),reason='Independently authorized exact replacement fixture')
+        target,amendment=self.amendment();amendment['addExclusions']=[second]
+        receipt=json.loads((self.root/'decision.json').read_text());receipt['authorization']['addExclusions']=[second]
+        (self.root/'decision.json').write_text(json.dumps(receipt));amendment['approval']['evidence']['sha256']=census.digest((self.root/'decision.json').read_bytes())
+        target.write_text(json.dumps(amendment));self.index.write_text(json.dumps([dict(path=target.name,sha256=census.digest(target.read_bytes()))]))
+        self.run_cli(0)
+        self.write(self.repo,path,original);self.commit(self.repo);self.pin();self.run_cli(0)
+        self.write(self.repo,path,'{"packages":"unauthorized third body"}');self.commit(self.repo);self.pin()
+        self.assertIn('excluded-fixture-source-drift',self.run_cli(1)['errors'][0]['rule'])
+
+    def test_exact_reviewed_source_exclusion_refuses_a_later_pin_even_with_unchanged_bytes(self):
+        path='tools/publisher.ps1';source='dotnet pack $UnresolvedProject\n'
+        self.write(self.repo,path,source);revision=self.commit(self.repo);self.pin()
+        self.policy['exclusions']=[dict(repository='references/opaque',prefix=path,row='PE01',classification='existing-build-helper',owner='fixture owner',reason='Exact current source classification only',scope='file',sha256=census.digest(source.encode()),sourceRevision=revision)]
+        self.save();self.run_cli(0)
+        self.write(self.repo,'unrelated.txt','later source revision');self.commit(self.repo);self.pin()
+        self.assertIn('excluded-source-revision-drift',self.run_cli(1)['errors'][0]['rule'])
+        for invalid in ['pending','a'*39,'A'*40,None]:
+            self.policy['exclusions'][0]['sourceRevision']=invalid;self.save()
+            self.assertEqual(self.run_cli(1)['errors'],[{'rule':'invalid-exclusion-source-revision'}])
+
     def test_preserved_legacy_receipt_authorizes_only_its_exact_fixture_scope(self):
         self.project()
         sources=[dict(path=PROJECT,sha256=census.digest((self.repo/PROJECT).read_bytes()))]

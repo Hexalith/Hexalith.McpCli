@@ -6,5 +6,9 @@
   {
     "path": "amendments/1.0.2.json",
     "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+  },
+  {
+    "path": "amendments/1.0.3.json",
+    "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
   }
 ]

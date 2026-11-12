@@ -1,0 +1,16 @@
+[
+  {
+    "guard": "exact-approved-body-union",
+    "test": "test_append_only_exact_file_versions_preserve_both_authorized_bodies",
+    "mutantDetected": true,
+    "exitCode": 1,
+    "log": "/tmp/current-census-mutant-exact-approved-body-union.log"
+  },
+  {
+    "guard": "exact-source-pin",
+    "test": "test_exact_reviewed_source_exclusion_refuses_a_later_pin_even_with_unchanged_bytes",
+    "mutantDetected": true,
+    "exitCode": 1,
+    "log": "/tmp/current-census-mutant-exact-source-pin.log"
+  }
+]

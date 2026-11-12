@@ -1,0 +1,18 @@
+test_exact_reviewed_source_exclusion_refuses_a_later_pin_even_with_unchanged_bytes (test_census.CensusTests.test_exact_reviewed_source_exclusion_refuses_a_later_pin_even_with_unchanged_bytes) ... FAIL
+
+======================================================================
+FAIL: test_exact_reviewed_source_exclusion_refuses_a_later_pin_even_with_unchanged_bytes (test_census.CensusTests.test_exact_reviewed_source_exclusion_refuses_a_later_pin_even_with_unchanged_bytes)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/tmp/census-guard-mutant-tzmd_krl/tools/proprietary-surfaces/v1/test_census.py", line 701, in test_exact_reviewed_source_exclusion_refuses_a_later_pin_even_with_unchanged_bytes
+    self.assertIn('excluded-source-revision-drift',self.run_cli(1)['errors'][0]['rule'])
+                                                   ~~~~~~~~~~~~^^^
+  File "/tmp/census-guard-mutant-tzmd_krl/tools/proprietary-surfaces/v1/test_census.py", line 107, in run_cli
+    self.assertEqual(status, expected)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+AssertionError: 0 != 1
+
+----------------------------------------------------------------------
+Ran 1 test in 0.083s
+
+FAILED (failures=1)
