@@ -1,5 +1,13 @@
 # Census amendment 1.0.3 — owner draft (not approved)
 
+> **Superseded, never approved (2026-11-12).** Before approval, another session
+> committed its own amendments 1.0.3 and 1.0.4 (`ba1fa6f`, `32bbd5b`), with owner
+> "Requesting user via the current release instruction". Its checker change
+> already includes this draft's exclusion fix. Then `ab4d2dc` moved all 16 root
+> pins. This draft is bound to the earlier pins and to version 1.0.3, so it can
+> no longer be applied. `build-draft.py` and `assemble-amendment.py --write`
+> both refuse to run. It is kept as review evidence only.
+
 This folder is a **draft**. It grants no allowance, exclusion or authority. The
 active policy (`baseline.json` plus amendments 1.0.1 and 1.0.2) is unchanged,
 and no approval receipt exists in the repository.

@@ -2,7 +2,7 @@
 title: '5.6 Reject new proprietary surfaces in CI'
 type: 'feature'
 created: '2026-11-10'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'c9a46a11a8317dd1903e3a3ef2f27791942b316a'
 route: 'dispatch'
 review_loop_iteration: 1
@@ -49,9 +49,11 @@ context:
 ## Tasks & Acceptance
 
 **Execution:**
+- [x] `tools/proprietary-surfaces/v1/check.py`, `test_census.py`, README — owner decision 2026-11-12, "Extend the excuse to Compile items". A Compile `Include` of exactly one leading `$(P)` plus a literal suffix excuses an absent source only when every producing definition of `P` is conditional and proven unreachable. A present source is always read, and a case variant is never absent. Covered by `test_guard_excuse_carried_guard_excuses_absent_compile_sources_only`. After independent review it applies only to a direct Include with an absent cross-tree literal. Its proofs must come from facts outside the repository, and `P` must keep a reachable definition. Nine executed guard-removal controls are all caught.
+- [x] `evidence/story-5-6/owner-amendment-renewal-20261112/` — owner decision 2026-11-12, "Build a 1.0.5 renewal". It renews the 20 revision-bound exclusions and 2 source-bound allowances of 1.0.3/1.0.4 at `ab4d2dc`. Review first, then exact-byte owner approval, then `assemble-renewal.py --write "<label>"`, then rerun the fixtures, release regressions and real scan. Reviewed, approved and written; see Spec Change Log.
 - [x] `tools/proprietary-surfaces/v1/check.py` and `test_census.py` — owner decision 2026-11-12 ("Checker fix + new version"). A file passes when any exact-file exclusion for its path lists its hash, and a file-bound path never falls back to a directory-scope exclusion. Covered by `test_later_exact_file_exclusion_approves_another_byte_version`, with an executed guard-removal control that fails under the old first-match lookup.
-- [ ] `evidence/story-5-6/owner-amendment-draft-20261112/` — census amendment 1.0.3 draft covering all 30 rejected identities and the Builds audit drift. Owner decisions 2026-11-12: "Review first, then approve"; "Add as PE03 tooling" for `Hexalith.Platform.Composition`. Independent review first, then ask for exact-byte owner approval of `authorization.draft.json`.
-- [ ] After that approval only: write `tools/proprietary-surfaces/v1/amendments/1.0.3.json` and its v2 receipt from the approved bytes unchanged, append `amendments.json`, recording the selected label verbatim. Then rerun fixtures, release regressions and the real scan, and retain the evidence.
+- [x] ~~`evidence/story-5-6/owner-amendment-draft-20261112/` — census amendment 1.0.3 draft~~ superseded before approval by the committed 1.0.3/1.0.4 (`ba1fa6f`, `32bbd5b`) and the pin move in `ab4d2dc`; kept as review evidence. Original task: covering all 30 rejected identities and the Builds audit drift. Owner decisions 2026-11-12: "Review first, then approve"; "Add as PE03 tooling" for `Hexalith.Platform.Composition`. Independent review first, then ask for exact-byte owner approval of `authorization.draft.json`.
+- [x] ~~After that approval only: write `tools/proprietary-surfaces/v1/amendments/1.0.3.json`~~ not applicable: 1.0.3 already exists in the chain. Original task: and its v2 receipt from the approved bytes unchanged, append `amendments.json`, recording the selected label verbatim. Then rerun fixtures, release regressions and the real scan, and retain the evidence.
 - [x] `tools/proprietary-surfaces/v1/check.py` — re-implement the user-approved (2026-11-11) `Exists()` guard rule as an excuse only (review loop 1 supersedes the reverted pruning version). A guard may only excuse an import target that is missing from every inspected tree and would otherwise be refused (`unavailable-local-import`, `unsafe-import-path`). It never skips a present target, never removes a property alternative and never changes classification. An absent target is excused when either (a) the import's evaluated condition (its own `Condition` plus an enclosing `ImportGroup` `Condition`) has a conjunct that proves false, or (b) the import's `Project` is exactly one `$(P)` and every definition of `P` producing that value is conditional and proves false through its own or enclosing `PropertyGroup` condition. A conjunct proves false when it is `Exists(p)` with every expansion of `p` proven absent, or `!Exists(p)` with every expansion proven present. Only balanced top-level `and` conjunctions with no top-level `or` count, and a quoted argument cannot span quotes. An argument proves nothing when it contains an unresolved `$(` or a `%XX` escape, or uses a property that is only conditionally defined (it may be empty) or is also defined inside a `Target`. Relative paths in `Import`, `ImportGroup` and `PropertyGroup` conditions resolve from the declaring file; in a property element's own condition they resolve from the entry project's directory (corrected by the loop-1 `dotnet msbuild` probe, L12). Present means a committed regular blob or directory in the inspected root, or in a root-declared reference at its pin, never under a nested gitlink. Absent means no case-insensitive match in that model, and is never a tree root or the parent workspace root. `Choose`/`When` and `Target` conditions prove nothing. Record nothing new in policy.
 - [x] `tools/proprietary-surfaces/v1/check.py` — nested-pin review fixes:
   1. A substituted file's import value that keeps an unresolved `$(` is refused as `unsafe-import-path` with its label as `target`; it is never name-matched against inspected-root metadata.
@@ -205,6 +207,23 @@ None.
   - **Decisions:** "Review first, then approve"; "Add as PE03 tooling" for `Hexalith.Platform.Composition`; "Checker fix + new version" for the Builds audit snapshot, which the first-match exclusion lookup could not accept as a second approved version.
   - **Dry run:** the active policy plus the draft, run against the real pins, gives 0 rejected observations and 46 coverage errors (from 47). CI stays red on coverage errors, which no allowance can settle.
   - **No authority yet:** no receipt exists and the active policy is unchanged.
+- 2026-11-12 — While the reviewed draft waited for the pins to settle (user: "Wait, rebuild at new pins"), another session made a series of changes:
+  - it committed amendments 1.0.3 and 1.0.4 (`ba1fa6f`, `32bbd5b`), owner "Requesting user via the current release instruction", whose receipts record that human validation was explicitly bypassed;
+  - it resolved the stash conflict in `check.py` and its README, keeping this story's safe guard code and its own `sourceRevision`-aware `omitted()`;
+  - it committed everything with new pins for all 16 roots in `ab4d2dc`, and pushed.
+
+  The draft is superseded. At `ab4d2dc` the scan reports 2 rejected observations and 22 errors: 20 `excluded-source-revision-drift` (1.0.3/1.0.4 exclusions bound to the earlier pins), 2 source-drifted allowances (Memories `tools/release-containers.json`, Platform `Composition`), and the 2 Tenants AppHost Compile fallbacks. 222 census fixtures pass.
+- 2026-11-12 — User decisions at `ab4d2dc`: "Build a 1.0.5 renewal" and "Extend the excuse to Compile items".
+  - **Compile rule:** the Tenants AppHost `$(HexalithPlatformRoot)\DaprSelfHostedMtls*.cs` fallbacks are excused, because their outside-root alternatives (Tenants `Directory.Build.props` lines 64–65) carry `Exists()` guards that prove false. No other observation changed.
+  - **[Renewal draft](evidence/story-5-6/owner-amendment-renewal-20261112/README.md):**
+    - 20 exclusions renewed at the new pins; 18 are byte-identical, and the FrontComposer and Projects workflows changed and were reviewed;
+    - 2 allowance source renewals: the Memories `buildsSha`, and the Composition closure, which gains `WorksPreviewManagedRuntime.cs` from `eff9e909`.
+  - **Dry run:** the active chain plus the draft, with the Compile rule, exits 0 at `ab4d2dc`: 0 errors, 0 rejected, all 17 roots passing.
+  - **No authority yet:** no 1.0.5 receipt exists.
+- 2026-11-12 — The owner selected "Approve hash-only 1.0.5 as owner (Recommended)", the hash-only renewal lists with canonical SHA-256 `46167f41a77406075acc9e396308c75b138ac32c5382a756b27bfc7a65452345`.
+  - **Written:** `assemble-renewal.py --write` recorded the label verbatim, wrote `amendments/1.0.5.json`, its v2 receipt and the index entry, and loaded the chain at 1.0.5.
+  - **Verification:** 223 census fixtures and 195 release regressions pass. The real committed-pin scan exits 0, identically for hash seeds 1 and 2, at `ab4d2dc`: 0 errors, 0 rejected observations, 17 of 17 roots passing ([post-approval verification](evidence/story-5-6/owner-amendment-renewal-20261112/post-approval-verification.json)).
+  - **Outcome:** current-reference acceptance succeeds, and the story moves to done/review.
 ## Review Triage Log
 
 ### Build review pass 1 — 2026-11-10
@@ -409,6 +428,42 @@ Applied P1–P13: final checks and independent policy/source audit pass; BH9 is 
 - The chain rehearsal loads version 1.0.3 with 522 allowances and 64 exclusions.
 - The coverage dry run leaves 0 rejected observations and 46 coverage errors, with passing roots 3 → 6.
 - The draft secret scan is clean.
+
+### Compile excuse and 1.0.5 renewal review — 2026-11-12
+
+- **Scope:** the Compile rule in `check.py`, its test and README, and the renewal draft folder (1,172 lines).
+- **Process:** all three layers completed before triage.
+- **Outcome:** every finding is valid and was patched in place. No bad_spec: the rule's approved intent stands, and the patches make the implementation match it.
+- **Fresh results:**
+  - 223 census fixtures and 195 release regressions pass.
+  - Nine guard-removal controls on the corrected rule are all caught. Two redundant conditions were removed, because their removal was undetectable.
+  - Both renewal variants dry-run with exit 0: 0 errors, 0 rejected, 17/17 roots passing.
+
+| IDs | Verdict | Evidence | Route |
+|---|---|---|---|
+| VG1, BH1 | medium | `any(proofs)` and a dropped `bool(proofs)` survived the suite; a mixed-producer or late-bound value would be excused. | Q1 |
+| VG-O1, BH3 | medium | The excuse reached item aliases and `Copy` outputs, which were previously refused as `dynamic-generated-compile-source`. | Q2 |
+| VG-O2, EC1, EC2, BH2 | medium | A wildcard in the property value was excused: locally via `Tree.absent`, and cross-tree because the `absent` flag was discarded. | Q3 |
+| EC3 | medium | With every definition of `P` refuted, the build sees an empty or environment value that the census did not model. | Q4 |
+| EC4 | medium | A guard proven false only from the repository's own tree, for example `obj/`, can be true after a build. | Q5 |
+| BH5, BH6 | low | The real Tenants shape (backslash suffix, `'$(P)' == ''` conjunction, chained fallbacks) and a cross-tree case variant were untested, and one branch asserted only rule names. | Q1 |
+| EC5, EC6, EC7, EC8, EC14, EC15, VG-O4, BH7, BH16 | low–medium | The builder used plain Git, raised on missing roots, compared against older hashes, accepted stale reviewed entries, under-checked the closure, chain and root coverage, and bound no checker hash. | Q6 |
+| EC9, EC10, EC13, BH8 | medium | `--write` did not enforce the approved bytes, recheck pins, write atomically or load the written chain. | Q7 |
+| EC11, EC12, VG-O3, BH14 | low | The gate and assembler failed on a file `DIR`, and a docstring named the wrong script. | Q8 |
+| BH4, BH9, BH10, BH12, BH13, BH15 | low–medium | README and receipt problems: intro and placement, a missing first-human-validation note and scope disclaimers, per-entry owners, incomplete change summaries, the 16-of-17 pin wording, and reproduction steps. | Q9 |
+| BH11 | medium | Revision-bound renewal recurs at every pin move; the hash-only alternative was not offered. | Q10 |
+
+**Routes:**
+- **Q1:** pinned the proofs, the real-shape case and the full error documents.
+- **Q2:** the excuse applies to a direct `Compile` `Include` only.
+- **Q3:** an absent literal is required.
+- **Q4:** at least one reachable definition is required.
+- **Q5:** proofs must come from facts outside the inspected repository, and local sources are never excused.
+- **Q6:** builder hardening.
+- **Q7:** `--write` requires `--approved-sha256` and verifies the pins, `check.py` and the report, writes atomically and loads the chain.
+- **Q8:** gate and assembler fixes.
+- **Q9:** README and receipt accuracy.
+- **Q10:** a hash-only variant, dry-run clean, offered to the owner.
 
 ## Verification
 

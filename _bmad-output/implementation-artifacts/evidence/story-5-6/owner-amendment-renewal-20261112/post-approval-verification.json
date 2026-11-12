@@ -1,0 +1,48 @@
+{
+  "approvalLabel": "Approve hash-only 1.0.5 as owner (Recommended)",
+  "approvedCanonicalSha256": "46167f41a77406075acc9e396308c75b138ac32c5382a756b27bfc7a65452345",
+  "approvedOn": "2026-11-12",
+  "checker": {
+    "path": "tools/proprietary-surfaces/v1/check.py",
+    "sha256": "967dd359072bb7abd42656afb50fbb09eb90b8b44e59937a8e1c8a06fbd546bf"
+  },
+  "checks": {
+    "censusFixtures": {
+      "command": "python3 -m unittest discover -s tools/proprietary-surfaces/v1 -p test_*.py",
+      "exitCode": 0,
+      "tests": 223
+    },
+    "diffCheck": {
+      "command": "git diff --check",
+      "exitCode": 0
+    },
+    "realScan": {
+      "command": "python3 tools/proprietary-surfaces/v1/check.py --output <file>",
+      "errors": 0,
+      "exitCode": 0,
+      "hashSeeds": [
+        1,
+        2
+      ],
+      "identicalAcrossSeeds": true,
+      "parentRevision": "ab4d2dcfca150b0aa6b550a788c0f92d5ddb88ae",
+      "passedRoots": 17,
+      "policyVersion": "1.0.5",
+      "rejected": 0,
+      "report": "post-approval-census.json",
+      "reportSha256": "41a41725b7c67779cd4b84174cea5374db092247aba941cea66db8c9cce15166",
+      "roots": 17,
+      "stale": 70
+    },
+    "releaseRegressions": {
+      "command": "python3 -m unittest discover -s scripts/tests -p test_*.py",
+      "exitCode": 0,
+      "tests": 195
+    }
+  },
+  "written": {
+    "tools/proprietary-surfaces/v1/amendments.json": "10dc658a1e8610fcce44773ec13d90b05573167767b479ff77203e9587593f55",
+    "tools/proprietary-surfaces/v1/amendments/1.0.5-approval.json": "3ac6f88e20c90eab1ee22b3dea150061adedb4e2a128ac9ed0151f6d49e1ef85",
+    "tools/proprietary-surfaces/v1/amendments/1.0.5.json": "d26229036f26d1354f0f174a978319b75fef0cac03d72ae5a4418b7f716a6d0e"
+  }
+}

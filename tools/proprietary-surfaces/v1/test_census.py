@@ -3117,6 +3117,90 @@ dotnet publish "$target"
                     f"<Targets Condition=\"'$(Mode)' == 'x'\">{third[:-len('.targets')]}</Targets></PropertyGroup>")
         self.guarded(suffixed + '<Import Project="$(Targets)$(Suffix)"/>', nested, 1, target)
 
+    def test_guard_excuse_carried_guard_excuses_absent_compile_sources_only(self):
+        shared, nested, pinned = self.guard_fixture()
+        self.write(shared, 'eng/Tool.cs', 'builder.Services.AddMcpServer();')
+        pinned = self.pin_root('shared', self.commit(shared))
+        self.write(self.repo, str(Path(PROJECT).parent / 'lib/Tool.cs'), 'using System.CommandLine;')
+        outside, workspace = '$(MSBuildThisFileDirectory)../../../../../outside', '$(MSBuildThisFileDirectory)../../../../shared/eng'
+        local, target = '$(MSBuildThisFileDirectory)lib', '../../outside/Tool.cs'
+        proven = f"<Root Condition=\"Exists('{outside}/Tool.cs')\">{outside}</Root>"
+
+        def compiled(definitions, items='<ItemGroup><Compile Include="$(Root)/Tool.cs"/></ItemGroup>', expected=1):
+            self.write(self.repo, PROJECT, '<Project><PropertyGroup>' + definitions + '</PropertyGroup>' + items + '</Project>')
+            self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+            return self.run_cli(expected), self.git(self.repo, 'rev-parse', 'HEAD')
+
+        def refused(report, pin, rule='unsafe-or-nested-compile-source', label=target):
+            self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin, path=PROJECT,
+                                                     rule=rule if ':' in rule else rule + ':' + PROJECT,
+                                                     **({'target': label} if label else {}))])
+
+        def project(report):
+            return [(entry['signals'], entry['sources']) for entry in report['surfaces'] if entry['surface']['kind'] == 'project']
+
+        # An absent outside-root alternative whose guard is proven false from outside the repository is
+        # excused; the reachable local alternative is still compiled and classified.
+        report, _ = compiled(f'<Root>{local}</Root>' + proven)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(project(report), [(['command-line-source'], [str(Path(PROJECT).parent / 'lib/Tool.cs')])])
+        # The motivating fallback chain: a backslash suffix, `'$(P)' == '' and Exists()` guards, a present
+        # workspace alternative, an excused outside one and an unprovable final fallback.
+        chain = (f"<Root Condition=\"'$(Root)' == '' and Exists('{workspace}/Tool.cs')\">{workspace}</Root>"
+                 f"<Root Condition=\"'$(Root)' == '' and Exists('{outside}/Tool.cs')\">{outside}</Root>"
+                 f"<Root Condition=\"'$(Root)' == ''\">{local}</Root>")
+        report, _ = compiled(chain, '<ItemGroup><Compile Include="$(Root)\\Tool.cs"/></ItemGroup>')
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(project(report), [(['command-line-source', 'mcp-registration'],
+                                            ['../shared/eng/Tool.cs', str(Path(PROJECT).parent / 'lib/Tool.cs')])])
+        self.assertIn(self.cross_read('../shared/eng/Tool.cs', 'workspace', pinned, 'eng/Tool.cs', 'builder.Services.AddMcpServer();'),
+                      self.summaries(report)['references/opaque']['crossTreeReads'])
+        # A present source is always read, even when its alternative's guard is proven false.
+        report, _ = compiled(f"<Root>{local}</Root><Root Condition=\"Exists('{self.THIRD.format('Missing.props')}')\">{workspace}</Root>")
+        self.assertEqual(report['errors'], [])
+        self.assertEqual(project(report)[0][0], ['command-line-source', 'mcp-registration'])
+        cases = {
+            'unguarded': (f'<Root>{local}</Root><Root>{outside}</Root>', None),
+            'unproven': (f"<Root>{local}</Root><Root Condition=\"'$(Mode)' == 'x'\">{outside}</Root>", None),
+            'disjunction': (f"<Root>{local}</Root><Root Condition=\"Exists('{outside}/Tool.cs') or '$(Mode)' == 'x'\">{outside}</Root>", None),
+            # One value from a proven and an unproven definition: the unproven one may be taken.
+            'mixed-producers': (f"<Root>{local}</Root>{proven}<Root Condition=\"'$(Mode)' == 'x'\">{outside}</Root>", None),
+            # Every definition proven unreachable: the build may see an empty or environment value.
+            'no-reachable-definition': (proven, None),
+            # A guard proven false only from the repository's own tree may be true after a build.
+            'local-proof': (f"<Root>{local}</Root><Root Condition=\"Exists('$(MSBuildThisFileDirectory)obj/Flag.txt')\">{outside}</Root>", None),
+            'second-property': (f'<Root>{local}</Root>{proven}<Name>Tool</Name>', '<ItemGroup><Compile Include="$(Root)/$(Name).cs"/></ItemGroup>'),
+            'concatenated-suffix': (f'<Root>{local}</Root>{proven}<Suffix>/Tool.cs</Suffix>', '<ItemGroup><Compile Include="$(Root)$(Suffix)"/></ItemGroup>'),
+            'item-alias': (f'<Root>{local}</Root>{proven}', '<ItemGroup><Shared Include="$(Root)/Tool.cs"/><Compile Include="@(Shared)"/></ItemGroup>'),
+            # A value no recorded definition produced, here through a late-bound property, has no proof.
+            'late-bound': (f'<Root>{local}</Root><Root>$(Base)</Root><Base>{outside}</Base>', None),
+        }
+        for case, (definitions, items) in cases.items():
+            with self.subTest(case=case):
+                report, pin = compiled(definitions, *([items] if items else []))
+                refused(report, pin)
+        # A Copy output is task output: the excuse never reaches it.
+        copy = ('<Target Name="Gen"><Copy SourceFiles="$(Root)/Tool.cs" DestinationFiles="obj/Tool.cs">'
+                '<Output TaskParameter="DestinationFiles" ItemName="Gen"/></Copy></Target>'
+                '<ItemGroup><Compile Include="@(Gen)"/></ItemGroup>')
+        report, pin = compiled(f'<Root>{local}</Root>{proven}', copy)
+        refused(report, pin, f'dynamic-generated-compile-source:{PROJECT}:gen', None)
+        # Wildcards never count as absent: in the suffix, in a workspace value, or in an outside value.
+        report, pin = compiled(f'<Root>{local}</Root>{proven}', '<ItemGroup><Compile Include="$(Root)/*.cs"/></ItemGroup>')
+        refused(report, pin, label='../../outside/*.cs')
+        report, pin = compiled(f"<Root>{local}</Root><Root Condition=\"Exists('{outside}/Tool.cs')\">"
+                               '$(MSBuildThisFileDirectory)../../../../shared/EN*</Root>')
+        refused(report, pin, label='../shared/EN*/Tool.cs')
+        # A cross-tree case variant of a committed file is not absent.
+        report, pin = compiled(f"<Root>{local}</Root><Root Condition=\"Exists('{outside}/Tool.cs')\">"
+                               '$(MSBuildThisFileDirectory)../../../../shared/ENG</Root>')
+        refused(report, pin, label='../shared/ENG/Tool.cs')
+        # A missing local source may be produced by the build, so it is never excused.
+        for alternative in ('$(MSBuildThisFileDirectory)gone', '$(MSBuildThisFileDirectory)LIB', '$(MSBuildThisFileDirectory)LI*'):
+            with self.subTest(alternative=alternative):
+                report, pin = compiled(f"<Root>{local}</Root><Root Condition=\"Exists('{outside}/Tool.cs')\">{alternative}</Root>")
+                refused(report, pin, 'unavailable-committed-compile-source', None)
+
     def test_guard_excuse_generic_fallback_chains_end_with_zero_errors(self):
         shared, nested, pinned = self.guard_fixture()
         # Property-definition guards: a root-level targets file chooses a nested, then a
