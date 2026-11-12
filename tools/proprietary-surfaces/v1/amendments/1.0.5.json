@@ -1,369 +1,30 @@
 {
+  "schema": "mcpcli-proprietary-surface-census/v1",
+  "fromVersion": "1.0.4",
+  "toVersion": "1.0.5",
+  "previousSha256": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61",
+  "approval": {
+    "owner": "Requesting user via the current release instruction",
+    "reason": "Reviewed existing-source continuation under the explicit user human-validation waiver; no source-boundary relaxation or new target authority.",
+    "decision": "approved",
+    "date": "2026-11-12",
+    "evidence": {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.5-approval.json",
+      "sha256": "bf16c2e75990de71b451d75460f8eff0a33cd11a63c6bc468894262e21239d52"
+    }
+  },
   "addAllowances": [
     {
-      "classification": "existing-platform-composition-tooling",
-      "compilationClosure": true,
-      "owner": "Requesting user, owning maintainer",
-      "reason": "Renewal of the PE03 existing-platform-composition-tooling allowance. Compilation closure renewed at the current Platform pin after the reviewed eff9e909 change: it adds the internal WorksPreviewManagedRuntime.cs helper, which runs dotnet --list-runtimes to align Works development hosts with the qualified runtime, and updates WorksPreviewModel.cs. Same signal set; no MCP, CLI or publication capability.",
-      "row": "PE03",
-      "signals": [
-        "executable-project"
-      ],
-      "sourcePrefix": "src/Hexalith.Platform.Composition",
-      "sources": [
-        {
-          "path": "DaprSelfHostedMtls.cs",
-          "sha256": "3fa9ccf46cd70cdc2253dda51ad06b3bcf5f7f696b3b74a95ca1b86913489a7c"
-        },
-        {
-          "path": "DaprSelfHostedMtlsSubscriber.cs",
-          "sha256": "35e5f5b4418814e8df7fc5f73b3d25ea2531215978723b8dcf49060cd2cd7e24"
-        },
-        {
-          "path": "Directory.Build.props",
-          "sha256": "16c8cf6435a4d295789d6a1e0b039c504968898b2d990436330aa98b16dec063"
-        },
-        {
-          "path": "Directory.Build.targets",
-          "sha256": "3b5f138ed080e38afc0b901193accb52387aac90f06733644af029932c9efcd0"
-        },
-        {
-          "path": "eng/SourceRestore.props",
-          "sha256": "2e433f7e5d30eb94beb7030f22fe0ddee7798ece8177eaec045084040851d100"
-        },
-        {
-          "path": "src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs",
-          "sha256": "f82f7fd364780b47b5797d1c7347b3994facf532d225d0b8636fcd5c2be90681"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AcceptedDependencyRecords.cs",
-          "sha256": "5ff92bd47d6e18a04bcbd13f6407756a329b2efd6742f558d000e211d352e32d"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AcceptedLaunchArtifactLease.cs",
-          "sha256": "bf81c81653536a4cf896543ca1ed09107106fee7d5d3693b13ab17fd5a04c412"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AcceptedLaunchLeaseOwner.cs",
-          "sha256": "3666fff71ae86022ca791218880f6abb295640ac7ed9a8db45de27c017d01e39"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AcceptedLaunchLifetime.cs",
-          "sha256": "08bbbfd556e4874ab6fa90a1fbf57238385e1fb62f8f4792cab35a5d2d76ee95"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AcceptedListenerBindings.cs",
-          "sha256": "3774d514f2c27e5d26106c4c393d28c68873fd837e4d1c1af6ebe67f3e50ffbf"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AcceptedResourceListener.cs",
-          "sha256": "625d33e42afe07f62b9b479b086b61a8ac8fa450a9c5895f6280361d2b6947bc"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AgentsDeploymentProfile.cs",
-          "sha256": "1b7e83575454d661a6d1cee1f7d21dce2ad5061301a68b932819498b67941f25"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AgentsDeploymentProfileModel.cs",
-          "sha256": "358c955a44a872aa3ab3aef0efe9db7bb4bb3ffe4245efc0066a3182094c6573"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AgentsHostComposition.cs",
-          "sha256": "ddfbb66c7378bc2029f71bcbadcea23803f89e3625ecf052e202af6f8f8ce975"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/AgentsIngressDenialContext.cs",
-          "sha256": "ace389a666b5eb920c78387ac3aa6785f7124f7c32d21e37eba57f00ae96a546"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/BoundedDevelopmentFile.cs",
-          "sha256": "52af9c0c0b8a3a4cb70c24d4c225ae46a1ff9f79768a4f81fb2a9e2dfd2d4ebe"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/CoordinatedProtectionAcceptance.cs",
-          "sha256": "048184a0d3e2cd970f4314fb893e1a1e047feb9509434fcca2ba8ae279642e00"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/Declarations/eventstore.json",
-          "sha256": "21eda6da824d5ae6135ff342dd8a5aae950b02420319b953a836dddeb00ce495"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/Declarations/local-profile.json",
-          "sha256": "6cf2cc9bcda7c7e158a595b4a6839b864381d88cfb541a382ec8c45597b6bd50"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/Declarations/memories.json",
-          "sha256": "56f6dc8134d3f7cea06910e923a4736a450e00241e8e4a565ac9226897881840"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/Declarations/provenance.json",
-          "sha256": "bbfcd7d73f6a92467360fd56dfead6c574cb48ca08bb961c7a949356a4d72b39"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/Declarations/tenants.json",
-          "sha256": "1588f3428ec29296c452fdd35bf95146142315aad3ad8ceb934e7a791f1fb522"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
-          "sha256": "eaca9740bec4daa5d275ecbce94024adb328cb01f352f590c46bdd2333181341"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformAppModel.cs",
-          "sha256": "446ca0b88df40f03dbd4785ec806d6979978606a58ee5af4cd52a147718c87d9"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformApplicationGraph.cs",
-          "sha256": "42378f4ac70f4145bf414c4007ba7a0f3a69b4dfa7edb02de8206e7134427374"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformCatalogContractBinding.cs",
-          "sha256": "0d9754ffc3654672618a8a4cb47eb0ee0028a6b08c23adfc5fd962797c19e6df"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformCommittedCatalogProof.cs",
-          "sha256": "0323ad3f8ccfc8896b7d9c9e1767a61b4be69b83255e41a21c5430e032efd5cb"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformCompositionOptions.cs",
-          "sha256": "98d06cb516b51cb645284479644ebd5398a506e569945369b8a3355285807749"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformCompositionWorkspace.cs",
-          "sha256": "2b8c2d912c50952e5a9c5afddadc4e1473a1b8471f436d17f559ff450187fc44"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformCurrentOwnerObservation.cs",
-          "sha256": "0083fca821b43b8639244fde0fb19857077168291d94106d9ad001a2ceeaa96d"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformCurrentOwnerProof.cs",
-          "sha256": "aeb36d9aa364367e34483d3cb099df53c68e8dd3da5398fc2661a9185880fa72"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformCurrentOwnerSourceInventory.cs",
-          "sha256": "1f6bd27d0e1cf5f3db7778b53c8645ef480de742ff3de97318b398b52e419466"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformCurrentOwnerSourceState.cs",
-          "sha256": "e2757d9a530ef286c29d6c3a1b7556f81b06950b44056df073db054372f4fa6f"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformDaprBindings.cs",
-          "sha256": "adaabe21b30e90d8ef14c05ac73ccc506deb6cb224370db30580f7e858a69e27"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformDaprDiagnosticFile.cs",
-          "sha256": "a7332df57b1ab08d9044f45a9413f5db07faee3e129e71e1dc5c921749d4e8e5"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformDaprDiagnosticRedactor.cs",
-          "sha256": "78c1325a0ed40e7ad9bdefccb9cee4da9d6b9d19abf785d7eb0b947109b66a58"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformDaprDiagnosticResource.cs",
-          "sha256": "d32ef6e6ad150b5c79dc92083d5fd4ee059d7d9f37757fa93428cbf69b87f417"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformDaprDiagnostics.cs",
-          "sha256": "4bc6dffa4f46734fd501343565123a4e72593cad26b3b660736b836a52490b34"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformDaprEndpointSubscriber.cs",
-          "sha256": "cb11f7daa1f90370493ea47a61293248f84f5db1d3e9dd8c05be95b613c2a8ef"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformDeclarationSet.cs",
-          "sha256": "3d0662d7bcbba28ea25e47399c71b63ba35b3af6d0b699670b1e951140524af3"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformEventStoreExtensionBinding.cs",
-          "sha256": "ef5f90b120b9a5af90c93bf23bc8f4cdbd7a81c034ddca0863654ce5d94e5666"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformEventStoreExtensionBindings.cs",
-          "sha256": "d9ae60ac0c332f69d63eb77e45f9be40c7358224df90cdfd55716b8221375645"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformEventStoreHostBinding.cs",
-          "sha256": "51c06a65f4ad137210470447281659593d3cfade0e9cafda7badbe24d0ecc1cd"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformGatewayConfiguration.cs",
-          "sha256": "8f158eaa188610032df2179b49203fd149702a05a1095705097aeca4fb055b76"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformGatewayStartup.cs",
-          "sha256": "24e2596a126878a2afee70dcdff83b3c4ea4f52d027294377cff918b34eb380d"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformHostedPublishing.cs",
-          "sha256": "31a4954b66fd64462edf43c4ae4d75fd7b30612ce9ba217383f82bf520123411"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformHostedReferenceMapping.cs",
-          "sha256": "63dcaad2446cbbddc21ff4115e4075e609632d4cd366efd8fe57758c52956557"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformLocalProfile.cs",
-          "sha256": "960107ec705ffa65f15f4c076e063d9e1b2bd5c1e3f519ca869bd63e30e27c37"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformLoopbackRegistryProbe.cs",
-          "sha256": "6ce566a244e1e573870465a4a54c65cf6fd812adbfe90cb0f9cf8e85ba695c58"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformMappedArtifact.cs",
-          "sha256": "b14c693049de9fd0505cf2ed815bd9879f2e30a83245a117665fc5579fd07d5f"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformNativeGatewayContract.cs",
-          "sha256": "200f226d1bfc7cbe4ee1f5b8555182ed4bc44b5aa016748884a314247e359ca6"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformNativeHostDiagnostics.cs",
-          "sha256": "68a17206f960421ef87926f83a0ebd9a29127eec592c159a9c5a120170bfd3ae"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformNativeInvocationAccess.cs",
-          "sha256": "230ca876f8e7174f28a88a7cf8caa190ba799453a1cf47415c68cb2d098c4d46"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformNativeTestPreparation.cs",
-          "sha256": "efa6380b1173d0e06f08c24a7e784486341a1a15d9c001852ed01745eae3c8b0"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformOwnerClientBinding.cs",
-          "sha256": "84f01c62520146d945652c74f29128e2604eb2c11aba1cdf4a3d7533418c70c0"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformOwnerServices.cs",
-          "sha256": "1136ef3a0abd7737df9c42e375291be2ad20616e97437116c5d4e472a7a609e3"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformPackageCatalogQualification.cs",
-          "sha256": "7a52c741990d83a6ce61315b43fded691d7aaf4171b3537a365795aedae45f94"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformPackageCatalogReader.cs",
-          "sha256": "e58972d81aaa7eaf6066b4d5d2d9ad84ef454c5bc6148c373fe26f22b151e318"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformPartiesPackageCatalogQualification.cs",
-          "sha256": "12d19c8e49487b7d8ff83122fc9fd4b8666eab6753bb5fbe86d1368642a5be2c"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformPartiesRunProof.cs",
-          "sha256": "8cda86f6aa01acb9ab62e5b68eb946efd190596070d8cfdb9132f589558ff5e0"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformPartiesValidationContext.cs",
-          "sha256": "3ad772f72407fc0b2df455ec5cf5f63c1f083a8aa82920ca064adcfbeaf3ae04"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformPostgresqlHealthCheck.cs",
-          "sha256": "694dad5a9ba81a1aa5c7d2938a64057933ff87d43252f9657e8a33518a9d9751"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformQualificationOwnerProof.cs",
-          "sha256": "c42df24e965b24362b177d1322ad20c04fbb894b1535532258970ab616ea0486"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformRedisHealthCheck.cs",
-          "sha256": "2548f5dd02b64c639f0f08bd6ca43ef29ffe80688c26f10097820978ddc086a9"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformResourceOwnerAnnotation.cs",
-          "sha256": "0e6371a16cc7e72cce3f400284fe12c85c27aa861bbdbeb462614f4b2c4891f9"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformRetentionProfile.cs",
-          "sha256": "5bb847f9db271b8c2065300070392725cad5e878844740b9ccb4fd554650dbfb"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformRoutingCatalog.cs",
-          "sha256": "5f423009a0fe25ba30588e17ea6c90ab17615889409e3baa1eadb7ad3be40662"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformRoutingCatalogBootstrap.cs",
-          "sha256": "8f720334b3b91f5d9a8130106f1a1de01747f9c5ba812fc1d82a608307a74208"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformRoutingCatalogComponentRenderer.cs",
-          "sha256": "d3f49c5a895429b2d1b9421cb5db076d36ecb2a6143efc8a40b1041e83b93f29"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformRoutingCatalogMetadata.cs",
-          "sha256": "d045a49c7009b6fb2a01ccfd055737567068b447f0c64808a94b37674c972e3f"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformServerAnnotation.cs",
-          "sha256": "e6e694457827249572c3b44006235ccbcf761c047ebb3d558b2e54c9bcbc33c2"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformServerBinding.cs",
-          "sha256": "909f6bbf4c05ec3bef05063d4bba0bfcebc30b80f472e0bb6b461597539aa35c"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformServerBindings.cs",
-          "sha256": "a92b30da3591c0384253822060d87b31e41af16cbb7e7cebcbbe75bd5c263013"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformSourceStateWorker.cs",
-          "sha256": "fb3a5014fd3a2fb285c62091e9b997836ff99609f2d2bebdc45a938918edc112"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformTenantBootstrapAccess.cs",
-          "sha256": "2981949e158bd3782a78b89db8ae4a630a53e48a31878e98f181243f1e9d426a"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformTimesheetsBinding.cs",
-          "sha256": "9aeb4ba3adade96b728c4ec74c5708ea86d2b5f525b8e0436b9351519ef889a2"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PlatformWorkloadEnrollment.cs",
-          "sha256": "68f4bfca1a2c5f812badc3df9aa0799acce9b583a78ee9180b2952cf3acf6d53"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/PythonCanonicalJson.cs",
-          "sha256": "ee2cde753d50bae2942ac64f2bfc42e089e51f08d9c8429eb60f95d2d38612e9"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/SdkReadinessHealthCheck.cs",
-          "sha256": "ec57f02a8453306aff5f31978f9374694daa39fba2c82f86141e1ba557fd140f"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/WorksDevelopmentCatalogProfile.cs",
-          "sha256": "aa685b047f0b349a08157e6256faea2f1ba42fb2f3edc90433c4aca75b495b99"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/WorksPreviewManagedRuntime.cs",
-          "sha256": "3c15f3a8678493145a5154094ee1a80630a3c9d8c5fe8591d8c10b89a6c2c355"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
-          "sha256": "6d990e6b926b1154962f5c24c33c26cbb67d2c47f647a88b99aeabc133b51f7d"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/WorksProductionProfile.cs",
-          "sha256": "1dca97f316ec39e56f755403907bbc85acae50b044b43ed7809a2cf5c114c9e7"
-        },
-        {
-          "path": "src/Hexalith.Platform.Composition/WorksRoutingCatalogLifetime.cs",
-          "sha256": "418d3056665f5ac04caa9e8f56129df95ae73f749b3dcad445473e31d750aa5f"
-        }
-      ],
       "surface": {
-        "identity": "Hexalith.Platform.Composition",
-        "kind": "project",
-        "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
-        "repository": "references/Hexalith.Platform"
-      }
-    },
-    {
-      "classification": "retained-memories-publication",
-      "owner": "Requesting user, owning maintainer",
-      "reason": "Renewal of the PS07 retained-memories-publication allowance. Source hash renewed at the current Memories pin; the reviewed change only updates the recorded buildsSha, with the same publication entries and signal set.",
+        "identity": "mcp",
+        "kind": "publication",
+        "path": "tools/release-containers.json",
+        "repository": "references/Hexalith.Memories"
+      },
       "row": "PS07",
+      "classification": "retained-memories-publication",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Existing retained Memories MCP container declaration; only buildsSha changes to the actual published 6ad producer. All five image identities, project paths, platforms and health modes are unchanged. This is source classification, not container, native or MCP capability acceptance.",
       "signals": [
         "publication-entry"
       ],
@@ -372,237 +33,10 @@
           "path": "tools/release-containers.json",
           "sha256": "561f9c14b3ccabd6d1b4b113bb33ee2fdc59756e0f3341d7c2f263b7e02102ab"
         }
-      ],
-      "surface": {
-        "identity": "mcp",
-        "kind": "publication",
-        "path": "tools/release-containers.json",
-        "repository": "references/Hexalith.Memories"
-      }
+      ]
     }
   ],
-  "addExceptions": [],
-  "addExclusions": [
-    {
-      "classification": "existing-build-preparation-proof",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "eng/verify-story-5.4.ps1",
-      "reason": "Hash-only renewal at the current root pin of the PE01 existing-build-preparation-proof exclusion last bound to 7957108c30d38b8e82eb072cf3437b6a67627cd7. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Agents",
-      "row": "PE01",
-      "scope": "file",
-      "sha256": "561c032e9bb1cc049e45dc5b0f2609cf0feaae8239c24c98e5c3b1c1f810d596"
-    },
-    {
-      "classification": "existing-build-preparation-proof",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "eng/verify-story.ps1",
-      "reason": "Hash-only renewal at the current root pin of the PE01 existing-build-preparation-proof exclusion last bound to 7957108c30d38b8e82eb072cf3437b6a67627cd7. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Agents",
-      "row": "PE01",
-      "scope": "file",
-      "sha256": "1695caba477a55ca6a6f91cdf81465a1d8ea0d4bb730c82a384460ab7de4e8b7"
-    },
-    {
-      "classification": "existing-generic-publication-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": ".github/workflows/domain-release.yml",
-      "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-helper exclusion last bound to 6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Builds",
-      "row": "PE01",
-      "scope": "file",
-      "sha256": "4826f5ef4e457930d8aa89c6c8c4c92d9db483787850b4d1f426b5e4f8269ab7"
-    },
-    {
-      "classification": "existing-generic-publication-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "Github/publish-containers/publish-containers.sh",
-      "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-helper exclusion last bound to 6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Builds",
-      "row": "PE01",
-      "scope": "file",
-      "sha256": "7b0b29d552fb38ab20db6c5faf650ac314a8fac17a6b9f43417035d29ef649ed"
-    },
-    {
-      "classification": "existing-generic-publication-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "Github/scripts/build-packages.ps1",
-      "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-helper exclusion last bound to 6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Builds",
-      "row": "PE01",
-      "scope": "file",
-      "sha256": "abdef8a25d50810450fc0e2a38a3d7f4cbce2b4220fdf1257552d5ded436cac2"
-    },
-    {
-      "classification": "nonpublishable-generated-code-test-fixture",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
-      "reason": "Hash-only renewal at the current root pin of the PE05 nonpublishable-generated-code-test-fixture exclusion last bound to 0c7b14856f2b730749caa8a552742a77d4882dc7. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.EventStore",
-      "row": "PE05",
-      "scope": "file",
-      "sha256": "5631daf0eab17a8d41bf53409f52fa8d2d2e786f803e98b8cce03bd8c7d2dfc4"
-    },
-    {
-      "classification": "existing-capacity-qualification-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "tests/tools/run-capacity-calibration-gates.ps1",
-      "reason": "Hash-only renewal at the current root pin of the PE05 existing-capacity-qualification-helper exclusion last bound to 7f029a6e117e4ada82b1e2ccfb050fa45abf49c4. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Folders",
-      "row": "PE05",
-      "scope": "file",
-      "sha256": "c50762d23e2e832724582fc4ca7cf2d3fa5c431f973f36a7773dc8d6f2c19d17"
-    },
-    {
-      "classification": "existing-ci-qualification-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": ".github/workflows/quality.yml",
-      "reason": "Hash-only renewal at the current root pin of the PE05 existing-ci-qualification-helper exclusion last bound to 57aa756c02edbae4294412885823533308b7db0d. Reviewed change: SDK 11.0.100 with the supported range gate moved to [11.0.100, 11.0.200); Builds initialize-dotnet pinned from @main to a commit; an extra setup-dotnet 10.0.404 install and .NET 10 runtime step; Aspire CLI 13.6.5; and a test artifact flag. No publication, packing or container step added. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.FrontComposer",
-      "row": "PE05",
-      "scope": "file",
-      "sha256": "a65e038d38c121baee360ecf82df0bdfbafc236fb782a2b22ee7cab8280eb0c7"
-    },
-    {
-      "classification": "existing-local-package-proof-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "tools/ci/provision-eventstore-local-feed.sh",
-      "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-package-proof-helper exclusion last bound to 13fdb88a3267626b14f75e16cc2de58dcfbbb2bb. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Memories",
-      "row": "PE09",
-      "scope": "file",
-      "sha256": "9e26bad059fd46c2e3a6b68d19cb0197a64f0199b29c383caabbf8919464a154"
-    },
-    {
-      "classification": "existing-generic-publication-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "tools/pack-release.ps1",
-      "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-helper exclusion last bound to 13fdb88a3267626b14f75e16cc2de58dcfbbb2bb. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Memories",
-      "row": "PE01",
-      "scope": "file",
-      "sha256": "dfa8e1628868dbb717f83b06b65dbca73ed76eed8175b7a4aeddf7148aef4a04"
-    },
-    {
-      "classification": "existing-cli-package-test-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "tools/verify-cli-pack.ps1",
-      "reason": "Hash-only renewal at the current root pin of the PE05 existing-cli-package-test-helper exclusion last bound to 13fdb88a3267626b14f75e16cc2de58dcfbbb2bb. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Memories",
-      "row": "PE05",
-      "scope": "file",
-      "sha256": "db764e2b5b136786c20767421c45e9246fbb93f0f236a0ca803664358baac0cb"
-    },
-    {
-      "classification": "nonpublishable-native-sample-test-fixture",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "tests/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact.csproj",
-      "reason": "Hash-only renewal at the current root pin of the PE05 nonpublishable-native-sample-test-fixture exclusion last bound to 95347ab98f83defaa0983cd70177889469d8e4ec. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Parties",
-      "row": "PE05",
-      "scope": "file",
-      "sha256": "e206e9b03e0aae58a97d9727ff5c45d8ec53f19c3cfd2c68656ed0b6cc1badf8"
-    },
-    {
-      "classification": "nonpublishable-native-sample-test-fixture",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
-      "reason": "Hash-only renewal at the current root pin of the PE05 nonpublishable-native-sample-test-fixture exclusion last bound to 95347ab98f83defaa0983cd70177889469d8e4ec. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Parties",
-      "row": "PE05",
-      "scope": "file",
-      "sha256": "f7121b066ae86077cd37c23014e0458a5ae823e4281ef65d929a77f8220dcdd5"
-    },
-    {
-      "classification": "existing-build-preparation-proof",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": ".github/workflows/ci.yml",
-      "reason": "Hash-only renewal at the current root pin of the PE01 existing-build-preparation-proof exclusion last bound to 77067782154d35a794ea50d86af1c5e73c8351b6. Reviewed change: Builds pins and Dapr 1.19.1 bumps, additional SDK 10.0.404, Aspire CLI 13.6.5, extra unit tests, an EventStore --unshallow history fetch, the G6 policy moved to the repository-local tools/qualification/g6-current-policy-2026-11-12-dapr-net1191.json, and the source-mapping step now builds the Builds hexalith-module CLI and runs the built DLL. No publication target added. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Projects",
-      "row": "PE01",
-      "scope": "file",
-      "sha256": "bc121f2dad3abb2ae37838eafc0b72644fb636c19d807cdb8d3ffdf44a4f090d"
-    },
-    {
-      "classification": "existing-compiler-qualification-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "tests/tools/run-frontcomposer-inspect-gate.ps1",
-      "reason": "Hash-only renewal at the current root pin of the PE05 existing-compiler-qualification-helper exclusion last bound to 77067782154d35a794ea50d86af1c5e73c8351b6. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Projects",
-      "row": "PE05",
-      "scope": "file",
-      "sha256": "b7cdd5c53028c3df0e3ba172e5c374ec1e59eae5e4b6b28d6e8ee31dff48093d"
-    },
-    {
-      "classification": "existing-generic-publication-recovery-helper",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "scripts/publish-partial-release.sh",
-      "reason": "Hash-only renewal at the current root pin of the PE01 existing-generic-publication-recovery-helper exclusion last bound to fb105d7c6035671bdc66dfb27990a463ea6165b2. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Tenants",
-      "row": "PE01",
-      "scope": "file",
-      "sha256": "4dab193efd8115adeb10ab63d6c503b737fa02c2b27788bc01b06f1b884196d4"
-    },
-    {
-      "classification": "existing-local-sdk-candidate-proof",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "scripts/build-story414-sdk-candidate.sh",
-      "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-sdk-candidate-proof exclusion last bound to 4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Works",
-      "row": "PE09",
-      "scope": "file",
-      "sha256": "75eefb3b4365934314e4f1e4353a905a2379fcbeffe00b85ef730342bc9694df"
-    },
-    {
-      "classification": "existing-local-sdk-candidate-proof",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "scripts/build-story415-sdk-candidate.sh",
-      "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-sdk-candidate-proof exclusion last bound to 4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Works",
-      "row": "PE09",
-      "scope": "file",
-      "sha256": "e122bb2d1273f6dd0ba27c2e66723470f24b6971898d7857f5a48ebe59cd5153"
-    },
-    {
-      "classification": "existing-local-sdk-candidate-proof",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "scripts/verify-story414-sdk-candidate.sh",
-      "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-sdk-candidate-proof exclusion last bound to 4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Works",
-      "row": "PE09",
-      "scope": "file",
-      "sha256": "1ab83f938c13d5e42a46816b5a55c5c0de1928fc60432dcd51f603ca5418577b"
-    },
-    {
-      "classification": "existing-local-sdk-candidate-proof",
-      "owner": "Requesting user, owning maintainer",
-      "prefix": "scripts/verify-story415-sdk-candidate.sh",
-      "reason": "Hash-only renewal at the current root pin of the PE09 existing-local-sdk-candidate-proof exclusion last bound to 4bd0df1461c89fdf00f1ccf3c47a3bf9bc939a23. Bytes unchanged since that entry. Hash-only: it stays valid across later pin moves until the file bytes change.",
-      "repository": "references/Hexalith.Works",
-      "row": "PE09",
-      "scope": "file",
-      "sha256": "d2986d77369ba0a4b4b1efb3de735f2518e23b3d4a5707ad62885401e9e5a833"
-    }
-  ],
-  "approval": {
-    "date": "2026-11-12",
-    "decision": "approved",
-    "evidence": {
-      "path": "tools/proprietary-surfaces/v1/amendments/1.0.5-approval.json",
-      "sha256": "3ac6f88e20c90eab1ee22b3dea150061adedb4e2a128ac9ed0151f6d49e1ef85"
-    },
-    "owner": "Requesting user, owning maintainer",
-    "reason": "Owner renewal, at the current root pins, of the revision-bound exclusions and source-bound allowances recorded by amendments 1.0.3 and 1.0.4, whose receipts state that human validation was bypassed. This approval is the first human validation of those renewed classifications: same rows, classifications and signal sets, exact file hashes only."
-  },
-  "fromVersion": "1.0.4",
-  "previousSha256": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61",
   "removeAllowances": [
-    {
-      "identity": "Hexalith.Platform.Composition",
-      "kind": "project",
-      "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
-      "repository": "references/Hexalith.Platform"
-    },
     {
       "identity": "mcp",
       "kind": "publication",
@@ -610,7 +44,195 @@
       "repository": "references/Hexalith.Memories"
     }
   ],
+  "addExceptions": [],
   "removeExceptions": [],
-  "schema": "mcpcli-proprietary-surface-census/v1",
-  "toVersion": "1.0.5"
+  "addExclusions": [
+    {
+      "repository": "references/Hexalith.Agents",
+      "prefix": "eng/verify-story-5.4.ps1",
+      "row": "PE01",
+      "classification": "existing-build-preparation-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "561c032e9bb1cc049e45dc5b0f2609cf0feaae8239c24c98e5c3b1c1f810d596",
+      "sourceRevision": "4f1545bce412eec1627661582e561fba269b1593"
+    },
+    {
+      "repository": "references/Hexalith.Agents",
+      "prefix": "eng/verify-story.ps1",
+      "row": "PE01",
+      "classification": "existing-build-preparation-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "1695caba477a55ca6a6f91cdf81465a1d8ea0d4bb730c82a384460ab7de4e8b7",
+      "sourceRevision": "4f1545bce412eec1627661582e561fba269b1593"
+    },
+    {
+      "repository": "references/Hexalith.EventStore",
+      "prefix": "samples/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality/Hexalith.EventStore.Sample.Api.GeneratedCodeQuality.csproj",
+      "row": "PE05",
+      "classification": "nonpublishable-generated-code-test-fixture",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "5631daf0eab17a8d41bf53409f52fa8d2d2e786f803e98b8cce03bd8c7d2dfc4",
+      "sourceRevision": "147e861834361c88cfb90c76a44d113e236152cb"
+    },
+    {
+      "repository": "references/Hexalith.Folders",
+      "prefix": "tests/tools/run-capacity-calibration-gates.ps1",
+      "row": "PE05",
+      "classification": "existing-capacity-qualification-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "c50762d23e2e832724582fc4ca7cf2d3fa5c431f973f36a7773dc8d6f2c19d17",
+      "sourceRevision": "5c318e6f4abea88076d1e7f1eb0abfaf9b9c0e25"
+    },
+    {
+      "repository": "references/Hexalith.FrontComposer",
+      "prefix": ".github/workflows/quality.yml",
+      "row": "PE05",
+      "classification": "existing-ci-qualification-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "a65e038d38c121baee360ecf82df0bdfbafc236fb782a2b22ee7cab8280eb0c7",
+      "sourceRevision": "56c9206167b7f18c3a95f610f814dfa39d9dcd01"
+    },
+    {
+      "repository": "references/Hexalith.Memories",
+      "prefix": "tools/ci/provision-eventstore-local-feed.sh",
+      "row": "PE09",
+      "classification": "existing-local-package-proof-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "9e26bad059fd46c2e3a6b68d19cb0197a64f0199b29c383caabbf8919464a154",
+      "sourceRevision": "d20924044ac501bfab9c375b1732fcf0847145b6"
+    },
+    {
+      "repository": "references/Hexalith.Memories",
+      "prefix": "tools/pack-release.ps1",
+      "row": "PE01",
+      "classification": "existing-generic-publication-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "dfa8e1628868dbb717f83b06b65dbca73ed76eed8175b7a4aeddf7148aef4a04",
+      "sourceRevision": "d20924044ac501bfab9c375b1732fcf0847145b6"
+    },
+    {
+      "repository": "references/Hexalith.Memories",
+      "prefix": "tools/verify-cli-pack.ps1",
+      "row": "PE05",
+      "classification": "existing-cli-package-test-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "db764e2b5b136786c20767421c45e9246fbb93f0f236a0ca803664358baac0cb",
+      "sourceRevision": "d20924044ac501bfab9c375b1732fcf0847145b6"
+    },
+    {
+      "repository": "references/Hexalith.Parties",
+      "prefix": "tests/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact/Hexalith.Parties.EventStoreSample.Contracts.TestArtifact.csproj",
+      "row": "PE05",
+      "classification": "nonpublishable-native-sample-test-fixture",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "e206e9b03e0aae58a97d9727ff5c45d8ec53f19c3cfd2c68656ed0b6cc1badf8",
+      "sourceRevision": "09ff18380d571c3a4953edfa5c72104ac232a868"
+    },
+    {
+      "repository": "references/Hexalith.Parties",
+      "prefix": "tests/Hexalith.Parties.EventStoreSample.TestHost/Hexalith.Parties.EventStoreSample.TestHost.csproj",
+      "row": "PE05",
+      "classification": "nonpublishable-native-sample-test-fixture",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "f7121b066ae86077cd37c23014e0458a5ae823e4281ef65d929a77f8220dcdd5",
+      "sourceRevision": "09ff18380d571c3a4953edfa5c72104ac232a868"
+    },
+    {
+      "repository": "references/Hexalith.Projects",
+      "prefix": ".github/workflows/ci.yml",
+      "row": "PE01",
+      "classification": "existing-build-preparation-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "bc121f2dad3abb2ae37838eafc0b72644fb636c19d807cdb8d3ffdf44a4f090d",
+      "sourceRevision": "6490db052c9bb0d446b807264539beeccb77fbec"
+    },
+    {
+      "repository": "references/Hexalith.Projects",
+      "prefix": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+      "row": "PE05",
+      "classification": "existing-compiler-qualification-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "b7cdd5c53028c3df0e3ba172e5c374ec1e59eae5e4b6b28d6e8ee31dff48093d",
+      "sourceRevision": "6490db052c9bb0d446b807264539beeccb77fbec"
+    },
+    {
+      "repository": "references/Hexalith.Tenants",
+      "prefix": "scripts/publish-partial-release.sh",
+      "row": "PE01",
+      "classification": "existing-generic-publication-recovery-helper",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "4dab193efd8115adeb10ab63d6c503b737fa02c2b27788bc01b06f1b884196d4",
+      "sourceRevision": "d43342f1a21fbe57ff0d42108ed3d211ecdbeb55"
+    },
+    {
+      "repository": "references/Hexalith.Works",
+      "prefix": "scripts/build-story414-sdk-candidate.sh",
+      "row": "PE09",
+      "classification": "existing-local-sdk-candidate-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "75eefb3b4365934314e4f1e4353a905a2379fcbeffe00b85ef730342bc9694df",
+      "sourceRevision": "34c578dd12d50246d8a9513523ae909023a6fcd2"
+    },
+    {
+      "repository": "references/Hexalith.Works",
+      "prefix": "scripts/build-story415-sdk-candidate.sh",
+      "row": "PE09",
+      "classification": "existing-local-sdk-candidate-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "e122bb2d1273f6dd0ba27c2e66723470f24b6971898d7857f5a48ebe59cd5153",
+      "sourceRevision": "34c578dd12d50246d8a9513523ae909023a6fcd2"
+    },
+    {
+      "repository": "references/Hexalith.Works",
+      "prefix": "scripts/verify-story414-sdk-candidate.sh",
+      "row": "PE09",
+      "classification": "existing-local-sdk-candidate-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "1ab83f938c13d5e42a46816b5a55c5c0de1928fc60432dcd51f603ca5418577b",
+      "sourceRevision": "34c578dd12d50246d8a9513523ae909023a6fcd2"
+    },
+    {
+      "repository": "references/Hexalith.Works",
+      "prefix": "scripts/verify-story415-sdk-candidate.sh",
+      "row": "PE09",
+      "classification": "existing-local-sdk-candidate-proof",
+      "owner": "Requesting user via the current release instruction",
+      "reason": "Exact existing helper or nonpublishable fixture renewed at the inspected current source. Fifteen bodies are unchanged; the two separately reviewed CI workflows only update supported tools and the same existing qualification route. No new project, MCP operation, publication target, native or image authority.",
+      "scope": "file",
+      "sha256": "d2986d77369ba0a4b4b1efb3de735f2518e23b3d4a5707ad62885401e9e5a833",
+      "sourceRevision": "34c578dd12d50246d8a9513523ae909023a6fcd2"
+    }
+  ]
 }

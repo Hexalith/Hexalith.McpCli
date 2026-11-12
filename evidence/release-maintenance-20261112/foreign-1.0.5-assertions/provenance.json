@@ -1,0 +1,46 @@
+{
+  "schema": "mcpcli-external-census-assertion-archive/v1",
+  "sourceCommit": "50dbe43a119c1240bb3c45178e750630b7d32815",
+  "policyCommit": "05f9e51c5667d6183e18d6e1f3986d2caab3b866",
+  "status": "externally asserted, UNVERIFIED approval provenance",
+  "authority": {
+    "classification": false,
+    "runtime": false,
+    "migration": false,
+    "image": false,
+    "publication": false
+  },
+  "reason": "The existing canonical amendment1.0.5 already existed atf995. These original foreign overwrite bytes and claimed separate human approval are retained as documentary history only. Current release uses the requesting user instruction to bypass human validation, with no human review claim. Canonicalf9951.0.5 and strict Compile provenance are restored; new exact source changes require an append-only amendment.",
+  "files": [
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments.json",
+      "archive": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/amendments.json",
+      "sha256": "10dc658a1e8610fcce44773ec13d90b05573167767b479ff77203e9587593f55"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.5.json",
+      "archive": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/1.0.5.json",
+      "sha256": "d26229036f26d1354f0f174a978319b75fef0cac03d72ae5a4418b7f716a6d0e"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.5-approval.json",
+      "archive": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/1.0.5-approval.json",
+      "sha256": "3ac6f88e20c90eab1ee22b3dea150061adedb4e2a128ac9ed0151f6d49e1ef85"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/check.py",
+      "archive": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/check.py",
+      "sha256": "967dd359072bb7abd42656afb50fbb09eb90b8b44e59937a8e1c8a06fbd546bf"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/test_census.py",
+      "archive": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/test_census.py",
+      "sha256": "536781dcf49c2b400cba8de6136560f6b2ed9870a95b69dce46bf588ad521e46"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/README.md",
+      "archive": "evidence/release-maintenance-20261112/foreign-1.0.5-assertions/README.md",
+      "sha256": "de5c3dd72275a5963872aa20f444e83e6e43c787f075f3d9e9b71d9b9c277100"
+    }
+  ]
+}

@@ -56,3 +56,6 @@ tools/live-topology/native-runtime*.json -text
 evidence/release-maintenance-20261112/current-cohort/** -text
 tools/live-topology/runtime-profile-current.json -text
 tools/live-topology/binaries*.json -text
+
+# Preserve original external assertions as documentary bytes without acceptance authority.
+evidence/release-maintenance-20261112/foreign-1.0.5-assertions/** -text

@@ -1,0 +1,22 @@
+[
+  {
+    "path": "amendments/1.0.1.json",
+    "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19"
+  },
+  {
+    "path": "amendments/1.0.2.json",
+    "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+  },
+  {
+    "path": "amendments/1.0.3.json",
+    "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+  },
+  {
+    "path": "amendments/1.0.4.json",
+    "sha256": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61"
+  },
+  {
+    "path": "amendments/1.0.5.json",
+    "sha256": "d26229036f26d1354f0f174a978319b75fef0cac03d72ae5a4418b7f716a6d0e"
+  }
+]

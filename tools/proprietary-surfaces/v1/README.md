@@ -146,27 +146,17 @@ count is part of this logic.
 
 ## Exists() guard excuse
 
-A guard only excuses a target that is missing from every inspected tree and
-would otherwise be refused: an import (`unavailable-local-import` or an absent
-`unsafe-import-path`), or, under (c), a cross-tree Compile source
-(`unsafe-or-nested-compile-source`). It never skips a present target, never
-removes a property alternative and never changes classification; nothing new is
-recorded in policy. An absent target is excused when one of these holds:
+A guard only excuses an import target that is missing from every inspected tree
+and would otherwise be refused as `unavailable-local-import` or an absent
+`unsafe-import-path`. It never skips a present target, never removes a property
+alternative and never changes classification; nothing new is recorded in
+policy. An absent target is excused when either:
 
 - **(a)** the import's evaluated condition, its own `Condition` plus an
   enclosing `ImportGroup` `Condition`, has a conjunct that proves false; or
 - **(b)** the import's `Project` is exactly one `$(P)`, and every definition of
   `P` that produced that exact value is conditional and proves false through its
   own or enclosing `PropertyGroup` condition.
-- **(c)** a direct `Compile` `Include` starts with one `$(P)`, and the absent
-  cross-tree value equals a recorded alternative of `P` followed by the
-  Include's remaining literal text. Every definition of `P` that produced that
-  alternative must be conditional and prove false from facts outside the
-  inspected repository, never from a path in its own tree, where builds write
-  outputs. `P` must also keep at least one unproven definition, so the build
-  cannot fall back to an empty or environment value. Item aliases, `Copy` task
-  outputs, local sources (which a build may generate), globs and every other
-  shape keep their refusal.
 
 Only a balanced top-level `and` conjunction with no top-level `or` counts. A
 conjunct proves false when it is exactly `Exists('p')` with every expansion of
@@ -210,8 +200,9 @@ initialized. They read tree entries only, never blob content.
 Because only an absent, otherwise refused target is excused, a build-time file
 such as `obj/project.assets.json`, an ignored file or a standalone layout cannot
 hide committed content: a present import is always visited and every
-conditional property alternative is kept. Global `-p:` properties are outside
-the static model.
+conditional property alternative is kept. A Compile item is never excused, so a
+guarded property fallback that reaches a Compile source outside every root
+stays refused. Global `-p:` properties are outside the static model.
 
 Each candidate binds an exact repository, path, kind and identity. Package IDs,
 tool commands and container repositories have separate identities, including

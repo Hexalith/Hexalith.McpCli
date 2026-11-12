@@ -958,11 +958,7 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                               for item in target.iter() if item is not target and not list(item))
 
         def refuted(conditions, base):
-            """Prove an element never evaluates: a balanced top-level `and` conjunct is false.
-
-            The truthy result says where the proof came from: 'local' when it used a path in the
-            inspected repository's own tree, where builds write outputs, otherwise 'cross'.
-            """
+            """Prove an element never evaluates: a balanced top-level `and` conjunct is false."""
             substitution = resolver.substitution(current)
             for condition in conditions:
                 for conjunct in condition_conjuncts(condition):
@@ -977,12 +973,11 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                     except CensusError:
                         continue
                     # A trailing separator makes Exists() true only for a directory.
-                    origin = 'local' if substitution is None and any(resolver.local(label) for label in labels) else 'cross'
                     if guard[1] and all(resolver.present(label, substitution, item.endswith(('/', '\\')))
                                         for label, item in zip(labels, alternatives)):
-                        return origin
+                        return True
                     if not guard[1] and all(resolver.absent(label, substitution) for label in labels):
-                        return origin
+                        return True
             return False
 
         def excused(element, enclosing, raw, value):
@@ -1136,34 +1131,15 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
             require('$(' not in expanded or name == 'ProjectReference' and '$(' not in identity
                     and PROJECT.search(identity) is not None, f'unresolved-classification-metadata:{current}')
             expanded_references.extend((name, item.strip(), current) for item in expanded.split(';') if item.strip())
-    linked = compile_provenance(tree, path, properties, item_records, copy_sources, errors, resolver, origins)
+    linked = compile_provenance(tree, path, properties, item_records, copy_sources, errors, resolver)
     return values, expanded_references, documents, linked
 
 
 
-def compile_provenance(tree, project, properties, records, copy_sources, errors=None, resolver=None, origins=None):
+def compile_provenance(tree, project, properties, records, copy_sources, errors=None, resolver=None):
     """Resolve finite committed item aliases; runtime task output never supplies bytes."""
     resolver = resolver or Resolver(None, None, tree)
     items, linked = {}, set()
-
-    def excused(raw, value):
-        """Excuse an absent cross-tree source only through a carried guard; a present source is always read.
-
-        The direct Compile Include starts with one $(P), and the value must equal a recorded
-        alternative of P followed by the Include's remaining literal text; any other shape, or a
-        value P never produced, has no proof. Every definition of P producing this value must be
-        conditional and proven unreachable from facts outside the inspected repository, and P must
-        keep at least one unproven definition, so the build never falls back to an empty or
-        environment-supplied value.
-        """
-        carried = re.fullmatch(r'\s*\$\(([A-Za-z_][\w.]*)\)(.*?)\s*', raw or '')
-        if carried is None or origins is None:
-            return False
-        definitions = origins.get(carried[1].lower(), {})
-        proofs = [proof for alternative, producing in definitions.items()
-                  if alternative + carried[2] == value for proof in producing]
-        reachable = any(not proof for producing in definitions.values() for proof in producing)
-        return bool(proofs) and all(proof == 'cross' for proof in proofs) and reachable
     for name, element, current, conditional in records:
         if local_name(element).lower() == 'output':
             items.setdefault(name, []).append((copy_sources.get(id(element)), current, True))
@@ -1172,7 +1148,7 @@ def compile_provenance(tree, project, properties, records, copy_sources, errors=
         if raw is not None:
             items.setdefault(name, []).append((raw, current, False))
 
-    def resolve(raw, current, seen, direct=False):
+    def resolve(raw, current, seen):
         result = set()
         for expanded in expanded_values(raw, properties, current, project, required=False):
             for value in expanded.split(';'):
@@ -1203,13 +1179,10 @@ def compile_provenance(tree, project, properties, records, copy_sources, errors=
                         # Project-relative sources stay in the inspected tree; no hop is read.
                         matches = {candidate for candidate, entry in tree.entries.items()
                                    if entry[0] in ('100644', '100755') and msbuild_glob(candidate, label)}
-                        # A missing local source may be generated by the build, so it is never excused.
                         require(bool(matches), f'unavailable-committed-compile-source:{current}')
                     else:
-                        # Only a direct Include's absent literal can be excused; a glob that matches nothing is not absent.
-                        found, absent = resolver.matches(label, resolver.substitution(current), 'unsafe-or-nested-compile-source', current)
-                        Refusal('unsafe-or-nested-compile-source', current, label).require(
-                            bool(found) or direct and absent and excused(raw, value))
+                        found, _ = resolver.matches(label, resolver.substitution(current), 'unsafe-or-nested-compile-source', current)
+                        Refusal('unsafe-or-nested-compile-source', current, label).require(bool(found))
                         matches = set(found)
                     result.update(matches)
                 require(len(result) <= 4096, f'unbounded-compile-items:{current}')
@@ -1221,7 +1194,7 @@ def compile_provenance(tree, project, properties, records, copy_sources, errors=
         try:
             # Include all conditional/removed alternatives conservatively: no
             # item operation can hide a potentially compiled committed source.
-            linked.update(resolve(attribute(element, 'Include'), current, {'compile'}, direct=True))
+            linked.update(resolve(attribute(element, 'Include'), current, {'compile'}))
         except CensusError as error:
             if errors is None:
                 raise
