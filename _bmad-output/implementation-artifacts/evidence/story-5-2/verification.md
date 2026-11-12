@@ -168,8 +168,11 @@ revision, approval/disposition limits and all census bytes. Story 5.10 still
 owes the PS14 mode inventory. The original `npm ci --ignore-scripts` and pinned
 commitlint checks succeeded; their evidence is retained rather than repeated.
 
-**Push approval and merge remain pending.** Exempt surfaces remain frozen
-until the separately approved amendment merges. Retained local tools are
+**The branch push is approved and complete; merge remains pending.** The
+user replied **"approve"** after the separate AI.Tools push was identified as
+pending. [Delivery evidence](upstream-delivery.json) and the [push output](upstream-push.txt)
+record publication of the exact candidate on `docs/mcpcli-local-tooling-exemptions`.
+Exempt surfaces remain frozen until the amendment merges. Retained local tools are
 never counted as retired. No root gitlink, reference checkout, census baseline
 or inventory was changed.
 
@@ -206,10 +209,11 @@ unbound spine/workflow state changed for adoption. The decision/map retain the
 exact approved bytes. Any later change to those artifacts is a new candidate
 requiring fresh approval; no automatic status/hash refresh is permitted.
 
-Separate explicit approval is still required to push the exact upstream
-commit. This gate comes from the frozen spec; no automatic approval-review
-rejection occurred. A local committed, still-frozen amendment satisfies the
-spec's allowed pending-amendment outcome.
+The user separately approved publishing the exact upstream commit, and the
+branch push succeeded with matching remote read-back. This satisfies the
+specification's explicit push approval gate. No merge, reference update or
+census amendment was performed; the still-frozen amendment remains within the
+specification's allowed pending-amendment outcome.
 
 Parties L03–L05, T04/T05/T07 and C03/C04/C05 are restricted here, although the
 Commands are already decorated/enrolled. This is a disclosed conflict requiring
@@ -257,11 +261,47 @@ previously reviewed deferred-work entry. Root-declared reference checkouts were
 clean, had no commits ahead of their tracked upstream, and their revisions were
 contained in cached remote branches; no reference or gitlink change is recorded.
 
-The AI.Tools amendment remains local and unpushed. This approval adopts AD-23;
-it does not authorize the explicitly separate upstream push or merge, unfreeze
-the exempted census surfaces, resolve Parties' exposure conflict, or close the
-Folders staging and later retirement evidence gates.
+At the adoption checkpoint the AI.Tools amendment was local and unpushed;
+that first approval adopted AD-23 only. The later separately approved branch
+push is recorded below. Neither approval grants a merge, unfreezes the census
+surfaces, resolves Parties' exposure conflict, or closes the Folders staging
+and later retirement evidence gates.
 
 The [pre-adoption scan](secret-scan-before-adoption.json) is retained as
 historical evidence. The current `secret-scan.json` is a fresh receipt for the
 approved packet; the scanner correctly refuses to overwrite existing receipts.
+
+
+## Separately approved upstream delivery (2026-11-12)
+
+The user replied **"approve"** directly after the completed AD-23 adoption
+summary identified the AI.Tools push as the remaining separate approval.
+The exact candidate was rechecked against its full commit and three file
+hashes, then `git fetch --no-recurse-submodules origin main` confirmed that
+`origin/main` remained `8a3885dd22aea88edd57771cfe592c382df2c583` and the candidate
+was ahead one commit with no divergence. The branch did not previously exist
+on the remote.
+
+`git push --set-upstream origin HEAD:refs/heads/docs/mcpcli-local-tooling-exemptions`
+succeeded. `git ls-remote --heads origin refs/heads/docs/mcpcli-local-tooling-exemptions`
+returned the exact candidate **`10b709b86f9c9148e5a18177e8d11fad79ae2c0b`**.
+The [published branch](https://github.com/Hexalith/Hexalith.AI.Tools/tree/docs/mcpcli-local-tooling-exemptions),
+[delivery record](upstream-delivery.json) and [readable output](upstream-push.txt)
+identify that result. The source worktree remains clean. No force push,
+`main` update, merge, PR, reference gitlink change, census amendment or domain
+operation ran. AD-23's approved decision/map and all input inventory bytes
+remain unchanged; the standalone verifier still reports effective `adopted`.
+
+The shared secret scan is refreshed for these delivery records. The prior
+[post-adoption scan](secret-scan-before-upstream-push.json) is historical;
+`secret-scan.json` binds the current packet. Merge remains pending and exempt
+surfaces remain frozen. This delivery-record update is committed locally in
+McpCli; its branch is not pushed by the AI.Tools push approval.
+
+
+GitHub's captured push output contains trailing spaces. The readable
+`upstream-push.txt` strips those spaces; [upstream-push.raw.json](upstream-push.raw.json)
+preserves the exact original output as a JSON string and records its SHA-256.
+The delivery record binds both representations. The
+[scan before output formatting](secret-scan-before-output-formatting.json)
+is historical; the current scan includes the corrected evidence layout.

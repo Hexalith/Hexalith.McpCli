@@ -1,0 +1,6 @@
+{
+  "encoding": "utf-8",
+  "description": "Exact captured Git push output, including trailing spaces and newlines.",
+  "sha256": "68696c8bf070538606ce5f93a959f1d06672fe5b53b458df1e5f7bbe828a74db",
+  "output": "remote: \nremote: Create a pull request for 'docs/mcpcli-local-tooling-exemptions' on GitHub by visiting:        \nremote:      https://github.com/Hexalith/Hexalith.AI.Tools/pull/new/docs/mcpcli-local-tooling-exemptions        \nremote: \nTo https://github.com/Hexalith/Hexalith.AI.Tools.git\n * [new branch]      HEAD -> docs/mcpcli-local-tooling-exemptions\nbranch 'docs/mcpcli-local-tooling-exemptions' set up to track 'origin/docs/mcpcli-local-tooling-exemptions'.\n"
+}

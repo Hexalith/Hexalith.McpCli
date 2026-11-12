@@ -1,0 +1,33 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordedOn": "2026-11-12T16:50:10+00:00",
+  "repository": "https://github.com/Hexalith/Hexalith.AI.Tools.git",
+  "branch": "docs/mcpcli-local-tooling-exemptions",
+  "candidateRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+  "approval": {
+    "presentedRequest": "AI.Tools push remains pending separate approval.",
+    "responseVerbatim": "approve",
+    "scope": "Publish the prepared exact candidate on docs/mcpcli-local-tooling-exemptions; no merge, reference gitlink change or census amendment is authorized.",
+    "ownerRolesSource": "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json",
+    "basis": "The user replied approve immediately after adoption was completed and the separate AI.Tools push remained the stated pending action."
+  },
+  "pushCommand": [
+    "git",
+    "push",
+    "--set-upstream",
+    "origin",
+    "HEAD:refs/heads/docs/mcpcli-local-tooling-exemptions"
+  ],
+  "exitCode": 0,
+  "remoteReadback": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b\trefs/heads/docs/mcpcli-local-tooling-exemptions",
+  "pushed": true,
+  "merged": false,
+  "censusState": "frozen; baseline unchanged",
+  "mcpcliApprovalBindingsUnchanged": true,
+  "mcpcliAdoptionRevision": "80a7857c36168034d599d9a1cf61d81b07477cf8",
+  "evidence": {
+    "upstream-push.txt": "66b9e8cc360dfc9fa50ee5de958325ea2262d5c2350b63a66dcac98fb9dcb869",
+    "upstream-push.raw.json": "aec18d10c1a1fee8a6ea58d55862738fdd653dde119e541e349e099c8c928a8d"
+  },
+  "pushOutputFormat": "upstream-push.txt is normalized for display; upstream-push.raw.json preserves the exact captured output and its SHA-256."
+}

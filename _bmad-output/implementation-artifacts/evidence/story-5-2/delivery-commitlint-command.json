@@ -1,0 +1,12 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "input": "docs: record approved AI.Tools amendment delivery\n",
+  "exitCode": 0,
+  "messageFile": "/tmp/mcpcli-story-5-2-delivery-p987_ox3.txt"
+}

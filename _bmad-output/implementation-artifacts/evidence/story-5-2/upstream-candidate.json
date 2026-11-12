@@ -6,8 +6,8 @@
   "candidateRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
   "planVersion": "1.2.0",
   "inventoryRevision": "c694bff5a29073bee6848b88c142f7da23efcf85",
-  "pushApproval": "pending; separate explicit owner approval required",
-  "pushed": false,
+  "pushApproval": "approved; user replied approve to the separately pending AI.Tools push",
+  "pushed": true,
   "merged": false,
   "censusState": "frozen; baseline unchanged",
   "files": {
@@ -19,6 +19,21 @@
     "npm ci --ignore-scripts": "exit 0; 72 packages audited; zero vulnerabilities",
     "npx --no -- commitlint --verbose < /tmp/story-5-2-aitools-commit-message.txt": "exit 0; 0 problems, 0 warnings",
     "git -c core.whitespace=cr-at-eol diff --check": "exit 0; preserves the existing CRLF instruction file",
-    "git status --short": "exit 0; empty after the local candidate commit"
-  }
+    "git status --short": "exit 0; empty after the local candidate commit",
+    "git fetch --no-recurse-submodules origin main": "exit 0; origin/main 8a3885dd22aea88edd57771cfe592c382df2c583; candidate ahead 1 / behind 0",
+    "git push --set-upstream origin HEAD:refs/heads/docs/mcpcli-local-tooling-exemptions": "exit 0; new remote branch; exact candidate commit preserved",
+    "git ls-remote --heads origin refs/heads/docs/mcpcli-local-tooling-exemptions": "exit 0; 10b709b86f9c9148e5a18177e8d11fad79ae2c0b\trefs/heads/docs/mcpcli-local-tooling-exemptions"
+  },
+  "pushApprovalOn": "2026-11-12",
+  "pushApprovalRequest": {
+    "presentedRequest": "AI.Tools push remains pending separate approval.",
+    "responseVerbatim": "approve",
+    "scope": "Publish the prepared exact candidate on docs/mcpcli-local-tooling-exemptions; no merge, reference gitlink change or census amendment is authorized.",
+    "ownerRolesSource": "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json",
+    "basis": "The user replied approve immediately after adoption was completed and the separate AI.Tools push remained the stated pending action."
+  },
+  "remoteBranch": "refs/heads/docs/mcpcli-local-tooling-exemptions",
+  "remoteRevision": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+  "branchUrl": "https://github.com/Hexalith/Hexalith.AI.Tools/tree/docs/mcpcli-local-tooling-exemptions",
+  "mergeApproval": "pending; no merge performed"
 }

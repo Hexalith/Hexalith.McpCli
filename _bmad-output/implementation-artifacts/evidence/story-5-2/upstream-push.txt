@@ -1,0 +1,7 @@
+remote:
+remote: Create a pull request for 'docs/mcpcli-local-tooling-exemptions' on GitHub by visiting:
+remote:      https://github.com/Hexalith/Hexalith.AI.Tools/pull/new/docs/mcpcli-local-tooling-exemptions
+remote:
+To https://github.com/Hexalith/Hexalith.AI.Tools.git
+ * [new branch]      HEAD -> docs/mcpcli-local-tooling-exemptions
+branch 'docs/mcpcli-local-tooling-exemptions' set up to track 'origin/docs/mcpcli-local-tooling-exemptions'.
