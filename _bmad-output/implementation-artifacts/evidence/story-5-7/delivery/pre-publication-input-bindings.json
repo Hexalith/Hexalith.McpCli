@@ -1,0 +1,30 @@
+{
+  "files": [
+    {
+      "source": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "copy": "/tmp/story57-approved-inputs-xrbohv_c/eventstore-admin-migration-inventory-v1.0.2.md",
+      "bytes": 120822,
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "copy": "/tmp/story57-approved-inputs-xrbohv_c/technical-tools-migration-inventory-v1.0.3.md",
+      "bytes": 77399,
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "copy": "/tmp/story57-approved-inputs-xrbohv_c/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "bytes": 13291,
+      "sha256": "304ec936a8f9d355f922c36ed9ba5d720979ef89a672bef6b7d27cf4a46b7faf"
+    }
+  ],
+  "command": [
+    "python3",
+    "scripts/scan-evidence-secrets.py",
+    "/tmp/story57-approved-inputs-xrbohv_c",
+    "--receipt",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/pre-publication-input-scan.json"
+  ],
+  "exitCode": 0
+}
