@@ -1,0 +1,401 @@
+{
+  "schemaVersion": "1.0.0",
+  "state": "candidate-pending-owner-approval-and-delivery",
+  "predecessor": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-5/labels.json",
+    "sha256": "196a2f700f02f23aa69d4e32d1f4dc1dbcd3d32fd8aa169cea7e46ebb248d43b"
+  },
+  "inventoryRevision": null,
+  "inventoryArtifacts": {
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+  },
+  "citationPolicy": "Versioned additive files on main; exact content SHA-256 below each label. Completion additionally binds an integrated inventoryRevision and its exact blobs. No unpublished link is claimed available.",
+  "deliveryAuthorization": {
+    "exactWords": "approve",
+    "source": "Current conversation: user replied approve directly to the final request approving the exact inventory candidates under previously confirmed owner roles and authorizing commit/push delivery of inventories and seven README label updates.",
+    "approvedOn": "2026-11-13"
+  },
+  "repositories": [
+    {
+      "name": "eventstore",
+      "repository": "https://github.com/Hexalith/Hexalith.EventStore",
+      "ownerCheckout": "/home/administrator/projects/hexalith/eventstore",
+      "baseRevision": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/eventstore/README.before.section.md",
+        "sha256": "f387517bdb37dfe0f34b2d264a5dbcba5ff7aee82930598f26773d108f5e2f22"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/eventstore/README.after.section.md",
+        "sha256": "74b6273a59a6127a21328666ce58cc7fb3144a5db5565c5e6cca3114e61deae7"
+      },
+      "readme": {
+        "beforeSha256": "7af1f83ec57c3ec55e5062ce7a32241982a9235890113b95263dedcd9e1384ae",
+        "afterSha256": "31d1cbf7e617cdeb38dcca67eada11d5c1d592f7ede9b9813000c26a4bd5e497"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/eventstore/README.patch",
+        "sha256": "985074500588ef0c4054d7a2414719850c12c12b4c0fd9003a49dff12445cefa"
+      },
+      "ownerState": {
+        "branch": "main",
+        "statusSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "statusEntries": 0,
+        "readmeSha256": "7af1f83ec57c3ec55e5062ce7a32241982a9235890113b95263dedcd9e1384ae"
+      },
+      "integration": null,
+      "preparedBaseRevision": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2"
+    },
+    {
+      "name": "frontcomposer",
+      "repository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+      "ownerCheckout": "/home/administrator/projects/hexalith/frontcomposer",
+      "baseRevision": "56c9206167b7f18c3a95f610f814dfa39d9dcd01",
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/frontcomposer/README.before.section.md",
+        "sha256": "5b2099d499e91b0b6fda089c1ef25a5794e1040e0fcfa4924cfeb64e28dcf99c"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/frontcomposer/README.after.section.md",
+        "sha256": "a7e3d0429a2d856ef36af963e0087032d6df97f09115aeff6c11035bcb4f192f"
+      },
+      "readme": {
+        "beforeSha256": "198a7d105083dd376725ebf9b53bb4e7075e443b3c9b6cfd2a92c219b01f10cc",
+        "afterSha256": "65b2be3c12f3eaeb7e039535c040d4bab4d9e06acc3301a725addb1f96c636a8"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/frontcomposer/README.patch",
+        "sha256": "6550182d02d09f04843dcffb10d159e2f2accdd92f1ab1c5b61bd7f424d70f07"
+      },
+      "ownerState": {
+        "branch": "main",
+        "statusSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "statusEntries": 0,
+        "readmeSha256": "146f09112ca8d2512f760edd77832dbb67b01382244fad4f75cb2fd61a8563d3"
+      },
+      "integration": null,
+      "preparedBaseRevision": "56c9206167b7f18c3a95f610f814dfa39d9dcd01"
+    },
+    {
+      "name": "parties",
+      "repository": "https://github.com/Hexalith/Hexalith.Parties",
+      "ownerCheckout": "/home/administrator/projects/hexalith/parties",
+      "baseRevision": "f532145038992217f6433cd3dc1e36e61a1acc38",
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/parties/README.before.section.md",
+        "sha256": "43962aa9cf0b7732b5601955a4e8a0f5dafcbc1f2eb2e8d5377986924b517403"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/parties/README.after.section.md",
+        "sha256": "f96eee8d75ed4c9f9172f5344f6c274ab6684948a2148f959a2cf4d514888f26"
+      },
+      "readme": {
+        "beforeSha256": "edbc1eb0076f709df2170904aec2505a856d1ae8ffde6d4de6ebecfa31fa288b",
+        "afterSha256": "525ac80f800621875625de31e370391de347384c99a297816369512be9ec8b71"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/parties/README.patch",
+        "sha256": "25f565a8b5b66af03294a95f0438956478d293c8b389dda2b12d79c1e506731f"
+      },
+      "ownerState": {
+        "branch": "main",
+        "statusSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5",
+        "statusEntries": 2,
+        "readmeSha256": "edbc1eb0076f709df2170904aec2505a856d1ae8ffde6d4de6ebecfa31fa288b"
+      },
+      "integration": null,
+      "preparedBaseRevision": "f532145038992217f6433cd3dc1e36e61a1acc38"
+    },
+    {
+      "name": "memories",
+      "repository": "https://github.com/Hexalith/Hexalith.Memories",
+      "ownerCheckout": "/home/administrator/projects/hexalith/memories",
+      "baseRevision": "3e98dc990675fdaed83aff2bf4856440a191986f",
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/memories/README.before.section.md",
+        "sha256": "fdea5e1c165cfe5ab6ad83d137104898501442a688620e0c74cfd689cac5b837"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/memories/README.after.section.md",
+        "sha256": "5f8138b02abf322d66fa30d6cce91b1a38e76e7c6b140ec6d33e2ba4c0d18a61"
+      },
+      "readme": {
+        "beforeSha256": "d7d99e8e0f68963a69a7211f3e7db9635894bf73a77021ff5b9d6939ea4507e0",
+        "afterSha256": "38dc0310dbbe3076442e49b15c80b7e1532be09e8bc9837f394198211085389a"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/memories/README.patch",
+        "sha256": "29d162ea3b04fb5416037c79b832c1fb2d60b3c50a021cb6ce957180ce3cbaac"
+      },
+      "ownerState": {
+        "branch": "main",
+        "statusSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5",
+        "statusEntries": 2,
+        "readmeSha256": "e7af927daa6ccb3f84dbdb5a1cea0b144e0993ed2c5bf93c59d671a79629d601"
+      },
+      "integration": null,
+      "preparedBaseRevision": "3e98dc990675fdaed83aff2bf4856440a191986f"
+    },
+    {
+      "name": "projects",
+      "repository": "https://github.com/Hexalith/Hexalith.Projects",
+      "ownerCheckout": "/home/administrator/projects/hexalith/projects",
+      "baseRevision": "1ea04f7959e9ca393bc19d3b96b03cb350088e72",
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/projects/README.before.section.md",
+        "sha256": "6be695c717c31a8bc192e30c0aa2c30fe91c62272b6e66399d7174aa9da41280"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/projects/README.after.section.md",
+        "sha256": "0ff70906dc129cc727c19831ad37bb353eba75fc9b7d45a449a18ac19ed66f30"
+      },
+      "readme": {
+        "beforeSha256": "1d3ea35dbc751bcc5f6eca7e0500a500b92ddcdadb36081848efdf0ae4c3aa90",
+        "afterSha256": "d093eb74092a75dfa6ab1d374c8a61da54533e5cce0a9855930aa6c238cb8e45"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/projects/README.patch",
+        "sha256": "e2f100502d6f5ba5c6042c7032ac2c2497e0a18608ade3a3bd809b7abc23ca63"
+      },
+      "ownerState": {
+        "branch": "main",
+        "statusSha256": "923f6ef58034c1a8a7f2f3ca599b039a63ef6b2466688d9792765f11f5344db5",
+        "statusEntries": 7893,
+        "readmeSha256": "1d3ea35dbc751bcc5f6eca7e0500a500b92ddcdadb36081848efdf0ae4c3aa90"
+      },
+      "integration": null,
+      "preparedBaseRevision": "77067782154d35a794ea50d86af1c5e73c8351b6"
+    },
+    {
+      "name": "folders",
+      "repository": "https://github.com/Hexalith/Hexalith.Folders",
+      "ownerCheckout": "/home/administrator/projects/hexalith/folders",
+      "baseRevision": "7eab70e9332c0573b50dce5b219e425b6a2d363c",
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/folders/README.before.section.md",
+        "sha256": "8a62675f3b83b4f1f66a1b7adcb013d9b13b1966937b465fe1f6bf34e0c4cfc5"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/folders/README.after.section.md",
+        "sha256": "efd17b99b386b40e988e785d986e76bf4753665998d535f9efadaa0655f38eb3"
+      },
+      "readme": {
+        "beforeSha256": "9cf95d525ee0e75caeebf9a72e95d30b7bb57760096663b4dd7e1c4a1c18f740",
+        "afterSha256": "bfec790c274b8952313dd17d25b69f025bca9d172fddb22d461fe148fa87c75e"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/folders/README.patch",
+        "sha256": "57a5d7bd8d033b99a3297de3a2093f606cc4e18332d774f74d6e4d10f8efcd94"
+      },
+      "ownerState": {
+        "branch": "main",
+        "statusSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5",
+        "statusEntries": 2,
+        "readmeSha256": "9cf95d525ee0e75caeebf9a72e95d30b7bb57760096663b4dd7e1c4a1c18f740"
+      },
+      "integration": null,
+      "preparedBaseRevision": "7eab70e9332c0573b50dce5b219e425b6a2d363c"
+    },
+    {
+      "name": "chatbot",
+      "repository": "https://github.com/Hexalith/Hexalith.ChatBot",
+      "ownerCheckout": "/home/administrator/projects/hexalith/chatbot",
+      "baseRevision": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/chatbot/README.before.section.md",
+        "sha256": "35cac328925f4193a9bbcbc58d57cc9016f3d3ecfbecfdae1ebbad688e356be5"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/chatbot/README.after.section.md",
+        "sha256": "09b051b0d61c95335554686c59b24512f1ca55b19d02b0b89cd6b16bef9649b2"
+      },
+      "readme": {
+        "beforeSha256": "619cb807c81d9188156d1181b1c04db90cee5afda5e06b3a9ef047345c55923d",
+        "afterSha256": "6b3874701fbb50035d7187d92e740a1cb07080eddaa2910404fe1dd7ec114c03"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/chatbot/README.patch",
+        "sha256": "fc8aea66576c9a39d3949ba529a98ff180a5c9640b18e94ad23477ccff3031ac"
+      },
+      "ownerState": {
+        "branch": "main",
+        "statusSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "statusEntries": 0,
+        "readmeSha256": "619cb807c81d9188156d1181b1c04db90cee5afda5e06b3a9ef047345c55923d"
+      },
+      "integration": null,
+      "preparedBaseRevision": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d"
+    }
+  ],
+  "rows": [
+    {
+      "id": "PS01",
+      "repository": "eventstore",
+      "surface": "Hexalith.EventStore.Admin.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 164,
+        "text": "- `Hexalith.EventStore.Admin.Cli` (.NET tool `eventstore-admin`): removal gate \"Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS01; [EventStore Admin inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md)). Remote Admin capabilities are withdrawn from the public agent target; confidential UI coverage and retained G4 safety fixes precede retirement. No Admin Gateway replacement is admitted. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Admin inventory SHA-256: `ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2`.",
+        "sha256": "393a62da711ac34616e653561049ac7e29f541d91233eb76a5a70708b23622b9"
+      },
+      "gate": "Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement"
+    },
+    {
+      "id": "PS02",
+      "repository": "eventstore",
+      "surface": "Hexalith.EventStore.Admin.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 165,
+        "text": "- `Hexalith.EventStore.Admin.Mcp` (stdio MCP server): removal gate \"Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS02; [EventStore Admin inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md)). Remote Admin capabilities are withdrawn from the public agent target; confidential UI coverage and retained G4 safety fixes precede retirement. No Admin Gateway replacement is admitted. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Admin inventory SHA-256: `ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2`.",
+        "sha256": "d7af122932266ea9bdf85b1d9130c968f3aa6fd5152471b670bfc9b7eede75af"
+      },
+      "gate": "Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement"
+    },
+    {
+      "id": "PS03",
+      "repository": "frontcomposer",
+      "surface": "Hexalith.FrontComposer.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 32,
+        "text": "- `Hexalith.FrontComposer.Cli` (.NET tool `frontcomposer`): removal gate \"Retained local compiler exemption under merged AI.Tools plan 1.2.0; no retirement or Gateway replacement\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS03; [FrontComposer inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md)). Retained local compiler tooling under merged AI.Tools plan 1.2.0; no agent exposure and never counted as retired. Its build/freshness, apply/drift/path, partial-write and output privacy gates remain independent. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "9b48fd94d9ab9a4323eb187ca2bae64320b90f63cf6dde22f0d224ddb5cfee06"
+      },
+      "gate": "Retained local compiler exemption under merged AI.Tools plan 1.2.0; no retirement or Gateway replacement"
+    },
+    {
+      "id": "PS04",
+      "repository": "frontcomposer",
+      "surface": "Hexalith.FrontComposer.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 33,
+        "text": "- `Hexalith.FrontComposer.Mcp` (HTTP MCP host library): removal gate \"G4: retire together with the Projects plug-in after every host consumer is accounted for\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS04; [FrontComposer inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md)). The FrontComposer host and the Projects plug-in (`Hexalith.Projects.Mcp`) retire together. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "5c8bf7fe36d5e8663cf17db76e3e9255fc506c7fccdf7f713a1889a553376539"
+      },
+      "gate": "G4: retire together with the Projects plug-in after every host consumer is accounted for"
+    },
+    {
+      "id": "PS05",
+      "repository": "parties",
+      "surface": "Hexalith.Parties.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 164,
+        "text": "- `Hexalith.Parties.Mcp` (container `parties-mcp`): removal gate \"Parties inventory gates; replacement evidence and approved withdrawal for every row\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS05; [Parties inventory 1.2.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md)). Retirement is blocked: the McpCli Story 5.4 verdict is `retirement-blocked`, with G01–G06 open ([owner approval](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "86d4b63fe824a215b423da4bb00616c257a1a30ac063943448ad177e351ac0c9"
+      },
+      "gate": "Parties inventory gates; replacement evidence and approved withdrawal for every row"
+    },
+    {
+      "id": "PS06",
+      "repository": "memories",
+      "surface": "Hexalith.Memories.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 134,
+        "text": "- `Hexalith.Memories.Cli` (.NET tool `memories`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS06; [Memories inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md)). Forwarded per-user identity is necessary but not sufficient for retirement. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "8531af84e0354a508b333e41fef4bed2974252efc1beaa6aa2e74c8b67746e8b"
+      },
+      "gate": "Memories gates, including forwarded per-user identity in the HTTP release"
+    },
+    {
+      "id": "PS07",
+      "repository": "memories",
+      "surface": "Hexalith.Memories.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 135,
+        "text": "- `Hexalith.Memories.Mcp` (container `memories-mcp`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS07; [Memories inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md)). Forwarded per-user identity is necessary but not sufficient for retirement. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "bfe3d53ad5aa07bfce9aa0a2a5f77b8d8215581f17c7c5eefed5397439aa0a21"
+      },
+      "gate": "Memories gates, including forwarded per-user identity in the HTTP release"
+    },
+    {
+      "id": "PS08",
+      "repository": "projects",
+      "surface": "Hexalith.Projects.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 7,
+        "text": "- `Hexalith.Projects.Cli` (CLI): removal gate \"Projects inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS08; [Projects inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "0dd5c25bd3bcb9f25bfc96205e7fa5472ba1d79cbdf3c82014f24eae25bc22bf"
+      },
+      "gate": "Projects inventory gates"
+    },
+    {
+      "id": "PS09",
+      "repository": "projects",
+      "surface": "Hexalith.Projects.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 8,
+        "text": "- `Hexalith.Projects.Mcp` (FrontComposer MCP plug-in library): removal gate \"G4: retire together with the FrontComposer host\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS09; [Projects inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md)). The Projects plug-in and the FrontComposer host (`Hexalith.FrontComposer.Mcp`) retire together. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "1dbdad9b1363d0dcf7c4415ba71fe5d523ab4c0d2248fc16a6dff227a1087118"
+      },
+      "gate": "G4: retire together with the FrontComposer host"
+    },
+    {
+      "id": "PS10",
+      "repository": "folders",
+      "surface": "Hexalith.Folders.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 60,
+        "text": "- `Hexalith.Folders.Cli` (.NET tool `folders`): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS10; [Folders inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "440148e3bda821c215a754a728e40be7348d9d155566b4fe9132a32a359223b6"
+      },
+      "gate": "Folders inventory gates"
+    },
+    {
+      "id": "PS11",
+      "repository": "folders",
+      "surface": "Hexalith.Folders.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 61,
+        "text": "- `Hexalith.Folders.Mcp` (stdio MCP server): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS11; [Folders inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "faa56262e3e851f23988eebacb92a05e374b0de85531a0c57543a92775f3cbf2"
+      },
+      "gate": "Folders inventory gates"
+    },
+    {
+      "id": "PS12",
+      "repository": "chatbot",
+      "surface": "Hexalith.ChatBot.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 181,
+        "text": "- `Hexalith.ChatBot.Cli` (CLI): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS12; [ChatBot inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "3cb013b7c77cafafa7a47eb7e34d6386c85b671a34847988c4fded7dafda5b60"
+      },
+      "gate": "ChatBot inventory gates"
+    },
+    {
+      "id": "PS13",
+      "repository": "chatbot",
+      "surface": "Hexalith.ChatBot.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 182,
+        "text": "- `Hexalith.ChatBot.Mcp` (stdio MCP server): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS13; [ChatBot inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "17d98dc478dd6733ffd2ce5cdbae36a718bdd5a3bd92a9e0c1b2b98746a9b8a3"
+      },
+      "gate": "ChatBot inventory gates"
+    },
+    {
+      "id": "PS14",
+      "repository": "memories",
+      "surface": "tools/MigrateEmbeddingVectors",
+      "label": {
+        "file": "README.md",
+        "line": 136,
+        "text": "- `tools/MigrateEmbeddingVectors` (operator CLI): removal gate \"Retained owner-held vector-migration exemption under merged AI.Tools plan 1.2.0; four-mode inventory and independent safety gates remain\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS14; [Memories inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md)). Forwarded per-user identity does not make this owner-held tool agent-safe. Retained owner-held local exemption under merged AI.Tools plan 1.2.0; --dry-run, --live, --rollback and --abort still require Story 5.10 operation accounting and independent tenant/credential/custody, consent, no-write dry-run, denial, rollback/abort and audit evidence. Never counted as retired. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`.",
+        "sha256": "4b7ab14b1e04511ab319efe740cfba3b2e7f58e40a0776c95f5b0e0dbcc5b78b"
+      },
+      "gate": "Retained owner-held vector-migration exemption under merged AI.Tools plan 1.2.0; four-mode inventory and independent safety gates remain"
+    }
+  ]
+}

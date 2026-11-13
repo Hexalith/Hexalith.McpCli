@@ -1,0 +1,122 @@
+[
+  {
+    "repository": "mcpcli",
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.McpCli\n * branch            main       -> FETCH_HEAD\n",
+    "originMain": "48076b1bd041b45250597937da82594e202985f3"
+  },
+  {
+    "repository": "eventstore",
+    "cwd": "/home/administrator/projects/hexalith/eventstore",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.EventStore\n * branch                main       -> FETCH_HEAD\n",
+    "originMain": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141"
+  },
+  {
+    "repository": "frontcomposer",
+    "cwd": "/home/administrator/projects/hexalith/frontcomposer",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.FrontComposer\n * branch              main       -> FETCH_HEAD\n",
+    "originMain": "56c9206167b7f18c3a95f610f814dfa39d9dcd01"
+  },
+  {
+    "repository": "parties",
+    "cwd": "/home/administrator/projects/hexalith/parties",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Parties\n * branch              main       -> FETCH_HEAD\n",
+    "originMain": "f532145038992217f6433cd3dc1e36e61a1acc38"
+  },
+  {
+    "repository": "memories",
+    "cwd": "/home/administrator/projects/hexalith/memories",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Memories\n * branch              main       -> FETCH_HEAD\n",
+    "originMain": "3e98dc990675fdaed83aff2bf4856440a191986f"
+  },
+  {
+    "repository": "projects",
+    "cwd": "/home/administrator/projects/hexalith/projects",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Projects\n * branch            main       -> FETCH_HEAD\n   7706778..1ea04f7  main       -> origin/main\n",
+    "originMain": "1ea04f7959e9ca393bc19d3b96b03cb350088e72"
+  },
+  {
+    "repository": "folders",
+    "cwd": "/home/administrator/projects/hexalith/folders",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Folders\n * branch              main       -> FETCH_HEAD\n",
+    "originMain": "7eab70e9332c0573b50dce5b219e425b6a2d363c"
+  },
+  {
+    "repository": "chatbot",
+    "cwd": "/home/administrator/projects/hexalith/chatbot",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.ChatBot\n * branch            main       -> FETCH_HEAD\n   82f20d5..62e8220  main       -> origin/main\n",
+    "originMain": "62e82201d10c8b01445433ba82d3b8619f332ea8"
+  }
+]

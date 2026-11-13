@@ -1,0 +1,220 @@
+{
+  "baselineCommit": "48076b1bd041b45250597937da82594e202985f3",
+  "protectedScopeCommand": [
+    "git",
+    "diff",
+    "--exit-code",
+    "48076b1bd041b45250597937da82594e202985f3",
+    "--",
+    "src",
+    "tests",
+    "tools",
+    "references",
+    ".gitmodules",
+    "Directory.Build.props",
+    "Directory.Build.targets",
+    "Directory.Packages.props",
+    "global.json",
+    "package.json",
+    "package-lock.json",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json",
+    "_bmad-output/implementation-artifacts/evidence/story-5-1",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2",
+    "_bmad-output/implementation-artifacts/evidence/story-5-5",
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+    "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n",
+  "ownerWorktrees": [
+    {
+      "name": "eventstore",
+      "head": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+      "stateUnchanged": true,
+      "state": {
+        "branch": "main",
+        "statusSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "statusEntries": 0,
+        "readmeSha256": "7af1f83ec57c3ec55e5062ce7a32241982a9235890113b95263dedcd9e1384ae"
+      }
+    },
+    {
+      "name": "frontcomposer",
+      "head": "56c9206167b7f18c3a95f610f814dfa39d9dcd01",
+      "stateUnchanged": true,
+      "state": {
+        "branch": "main",
+        "statusSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "statusEntries": 0,
+        "readmeSha256": "146f09112ca8d2512f760edd77832dbb67b01382244fad4f75cb2fd61a8563d3"
+      }
+    },
+    {
+      "name": "parties",
+      "head": "f532145038992217f6433cd3dc1e36e61a1acc38",
+      "stateUnchanged": true,
+      "state": {
+        "branch": "main",
+        "statusSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5",
+        "statusEntries": 2,
+        "readmeSha256": "edbc1eb0076f709df2170904aec2505a856d1ae8ffde6d4de6ebecfa31fa288b"
+      }
+    },
+    {
+      "name": "memories",
+      "head": "3e98dc990675fdaed83aff2bf4856440a191986f",
+      "stateUnchanged": true,
+      "state": {
+        "branch": "main",
+        "statusSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5",
+        "statusEntries": 2,
+        "readmeSha256": "e7af927daa6ccb3f84dbdb5a1cea0b144e0993ed2c5bf93c59d671a79629d601"
+      }
+    },
+    {
+      "name": "projects",
+      "head": "77067782154d35a794ea50d86af1c5e73c8351b6",
+      "stateUnchanged": true,
+      "state": {
+        "branch": "main",
+        "statusSha256": "923f6ef58034c1a8a7f2f3ca599b039a63ef6b2466688d9792765f11f5344db5",
+        "statusEntries": 7893,
+        "readmeSha256": "1d3ea35dbc751bcc5f6eca7e0500a500b92ddcdadb36081848efdf0ae4c3aa90"
+      }
+    },
+    {
+      "name": "folders",
+      "head": "7eab70e9332c0573b50dce5b219e425b6a2d363c",
+      "stateUnchanged": true,
+      "state": {
+        "branch": "main",
+        "statusSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5",
+        "statusEntries": 2,
+        "readmeSha256": "9cf95d525ee0e75caeebf9a72e95d30b7bb57760096663b4dd7e1c4a1c18f740"
+      }
+    },
+    {
+      "name": "chatbot",
+      "head": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "stateUnchanged": true,
+      "state": {
+        "branch": "main",
+        "statusSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "statusEntries": 0,
+        "readmeSha256": "619cb807c81d9188156d1181b1c04db90cee5afda5e06b3a9ef047345c55923d"
+      }
+    }
+  ],
+  "patchApplyChecks": [
+    {
+      "repository": "eventstore",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--unidiff-zero",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/eventstore/README.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "patchSha256": "985074500588ef0c4054d7a2414719850c12c12b4c0fd9003a49dff12445cefa"
+    },
+    {
+      "repository": "frontcomposer",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--unidiff-zero",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/frontcomposer/README.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "patchSha256": "6550182d02d09f04843dcffb10d159e2f2accdd92f1ab1c5b61bd7f424d70f07"
+    },
+    {
+      "repository": "parties",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--unidiff-zero",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/parties/README.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "patchSha256": "25f565a8b5b66af03294a95f0438956478d293c8b389dda2b12d79c1e506731f"
+    },
+    {
+      "repository": "memories",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--unidiff-zero",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/memories/README.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "patchSha256": "29d162ea3b04fb5416037c79b832c1fb2d60b3c50a021cb6ce957180ce3cbaac"
+    },
+    {
+      "repository": "projects",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--unidiff-zero",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/projects/README.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "patchSha256": "e2f100502d6f5ba5c6042c7032ac2c2497e0a18608ade3a3bd809b7abc23ca63"
+    },
+    {
+      "repository": "folders",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--unidiff-zero",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/folders/README.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "patchSha256": "57a5d7bd8d033b99a3297de3a2093f606cc4e18332d774f74d6e4d10f8efcd94"
+    },
+    {
+      "repository": "chatbot",
+      "command": [
+        "git",
+        "apply",
+        "--check",
+        "--unidiff-zero",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/chatbot/README.patch"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "",
+      "patchSha256": "fc8aea66576c9a39d3949ba529a98ff180a5c9640b18e94ad23477ccff3031ac"
+    }
+  ],
+  "inventoryHashes": {
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+  }
+}

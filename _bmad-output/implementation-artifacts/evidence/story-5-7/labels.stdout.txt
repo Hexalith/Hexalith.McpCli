@@ -1,0 +1,1 @@
+PASS: successor register, 14 labels in 7 README-only patches; candidate only; integrated delivery remains a completion gate

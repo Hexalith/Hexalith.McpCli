@@ -38,6 +38,11 @@ _bmad-output/implementation-artifacts/evidence/story-5-4*/** -text whitespace=-b
 # binds their file SHA-256s.
 _bmad-output/implementation-artifacts/evidence/story-5-5/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 
+# Story 5.7 approvals and upstream patches bind exact evidence and successor bytes.
+_bmad-output/implementation-artifacts/evidence/story-5-7/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md -text
+_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md -text
+
 # Preserve the census allowance chain, approvals and retained evidence hashes.
 tools/proprietary-surfaces/v1/*.json -text
 tools/proprietary-surfaces/v1/amendments/** -text

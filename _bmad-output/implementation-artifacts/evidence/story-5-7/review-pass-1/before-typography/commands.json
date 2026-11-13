@@ -1,0 +1,88 @@
+[
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/amendments.stdout.txt",
+    "stderr": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/amendments.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/labels.stdout.txt",
+    "stderr": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/labels.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/tests.stdout.txt",
+    "stderr": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/tests.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/adoption.stdout.txt",
+    "stderr": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/adoption.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py",
+      "--approved-completion"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/completion.stdout.txt",
+    "stderr": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/completion.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py",
+      "--approved-completion"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1,
+    "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/label-completion.stdout.txt",
+    "stderr": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/label-completion.stderr.txt"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0,
+    "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/diff-check.stdout.txt",
+    "stderr": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/diff-check.stderr.txt"
+  }
+]

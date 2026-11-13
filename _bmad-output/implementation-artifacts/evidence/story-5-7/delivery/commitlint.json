@@ -1,0 +1,226 @@
+[
+  {
+    "repository": "eventstore",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/eventstore",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "message": "docs: align story 5.7 compatibility labels\n",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/eventstore.txt",
+    "cliVersion": "21.2.4",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: align story 5.7 compatibility labels\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "frontcomposer",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/frontcomposer",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "message": "docs: align story 5.7 compatibility labels\n",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/frontcomposer.txt",
+    "cliVersion": "21.2.4",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: align story 5.7 compatibility labels\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "parties",
+    "command": [
+      "npm",
+      "ci",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/parties",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "exitCode": 0,
+    "stdout": "\nadded 317 packages in 4s\n",
+    "stderr": ""
+  },
+  {
+    "repository": "parties",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/parties",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "message": "docs: align story 5.7 compatibility labels\n",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/parties.txt",
+    "cliVersion": "21.2.4",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: align story 5.7 compatibility labels\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "memories",
+    "command": [
+      "npm",
+      "ci",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/memories",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "exitCode": 0,
+    "stdout": "\nadded 320 packages in 4s\n",
+    "stderr": ""
+  },
+  {
+    "repository": "memories",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/memories",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "message": "docs: align story 5.7 compatibility labels\n",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/memories.txt",
+    "cliVersion": "21.2.4",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: align story 5.7 compatibility labels\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "projects",
+    "command": [
+      "npm",
+      "ci",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/projects",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "exitCode": 0,
+    "stdout": "\nadded 355 packages in 6s\n",
+    "stderr": ""
+  },
+  {
+    "repository": "projects",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/projects",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "message": "docs: align story 5.7 compatibility labels\n",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/projects.txt",
+    "cliVersion": "21.2.4",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: align story 5.7 compatibility labels\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "folders",
+    "command": [
+      "npm",
+      "ci",
+      "--ignore-scripts",
+      "--no-audit",
+      "--no-fund"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/folders",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "exitCode": 0,
+    "stdout": "\nadded 317 packages in 4s\n",
+    "stderr": ""
+  },
+  {
+    "repository": "folders",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/folders",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "message": "docs: align story 5.7 compatibility labels\n",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/folders.txt",
+    "cliVersion": "21.2.4",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: align story 5.7 compatibility labels\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "chatbot",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/chatbot",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "message": "docs: align story 5.7 compatibility labels\n",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/chatbot.txt",
+    "cliVersion": "21.2.4",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: align story 5.7 compatibility labels\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "mcpcli",
+    "purpose": "inventory",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "message": "docs: adopt story 5.7 inventory amendments\n",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/inventory.txt",
+    "cliVersion": "21.2.4",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: adopt story 5.7 inventory amendments\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "mcpcli",
+    "purpose": "completion",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "cwd": "/home/administrator/projects/hexalith/mcpcli",
+    "runtimeBin": "/home/administrator/.nvm/versions/node/v24.22.1/bin",
+    "message": "docs: record story 5.7 delivery completion\n",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/completion.txt",
+    "cliVersion": "21.2.4",
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: record story 5.7 delivery completion\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,6 @@
+## Legacy compatibility surfaces
+
+These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition.
+
+- `Hexalith.Projects.Cli` (CLI): removal gate "Projects inventory gates" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS08; [Projects inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md)).
+- `Hexalith.Projects.Mcp` (FrontComposer MCP plug-in library): removal gate "G4: retire together with the FrontComposer host" ([technical-tools inventory 1.0.2](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md) PS09; [Projects inventory 1.0.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md)). The Projects plug-in and the FrontComposer host (`Hexalith.FrontComposer.Mcp`) retire together.

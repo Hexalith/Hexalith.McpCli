@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "stagingDirectory": "/tmp/mcpcli-story-5-7-approval-inputs-final-3tcjvkj3",
+  "files": [
+    {
+      "source": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "copy": "/tmp/mcpcli-story-5-7-approval-inputs-final-3tcjvkj3/eventstore-admin-migration-inventory-v1.0.2.md",
+      "scanPath": "eventstore-admin-migration-inventory-v1.0.2.md",
+      "bytes": 120822,
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "copy": "/tmp/mcpcli-story-5-7-approval-inputs-final-3tcjvkj3/technical-tools-migration-inventory-v1.0.3.md",
+      "scanPath": "technical-tools-migration-inventory-v1.0.3.md",
+      "bytes": 77399,
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "copy": "/tmp/mcpcli-story-5-7-approval-inputs-final-3tcjvkj3/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "scanPath": "spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "bytes": 12697,
+      "sha256": "9c5970e36cb35e3649af3a75df02defd967d3a9505b0ccb79d7bd9abe03959b1"
+    }
+  ],
+  "command": [
+    "python3",
+    "scripts/scan-evidence-secrets.py",
+    "/tmp/mcpcli-story-5-7-approval-inputs-final-3tcjvkj3",
+    "--receipt",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-1/approval-input-secret-scan.json"
+  ],
+  "exitCode": 0,
+  "stdout": "{\n  \"errors\": [],\n  \"exitCode\": 0,\n  \"fileCount\": 3,\n  \"files\": [\n    {\n      \"bytes\": 120822,\n      \"path\": \"eventstore-admin-migration-inventory-v1.0.2.md\",\n      \"sha256\": \"ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2\"\n    },\n    {\n      \"bytes\": 12697,\n      \"path\": \"spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md\",\n      \"sha256\": \"9c5970e36cb35e3649af3a75df02defd967d3a9505b0ccb79d7bd9abe03959b1\"\n    },\n    {\n      \"bytes\": 77399,\n      \"path\": \"technical-tools-migration-inventory-v1.0.3.md\",\n      \"sha256\": \"7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c\"\n    }\n  ],\n  \"findings\": [],\n  \"implementationSha256\": {\n    \"evidence_redaction.py\": \"a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7\",\n    \"scan-evidence-secrets.py\": \"9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b\"\n  },\n  \"knownCredentialCount\": 1,\n  \"manifestSha256\": \"7e2790df8319a64cf180ef18620d1158ecec7f06f76edb3773ce1f6d7f516e6e\",\n  \"policy\": \"mcpcli-evidence-redaction/v1\",\n  \"receiptExcluded\": null,\n  \"result\": \"clean\",\n  \"schema\": \"mcpcli-evidence-secret-scan/v1\",\n  \"scope\": \"all regular files; UTF-8 or BOM-marked UTF-16; links and binary files refused\"\n}\n",
+  "stderr": "",
+  "verifiedAfterScan": true
+}

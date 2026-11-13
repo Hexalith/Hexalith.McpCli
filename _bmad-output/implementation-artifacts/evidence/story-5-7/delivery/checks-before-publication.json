@@ -1,0 +1,39 @@
+[
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py"
+    ],
+    "exitCode": 0,
+    "stdout": "amendments-before-publication.stdout.txt",
+    "stderr": "amendments-before-publication.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py"
+    ],
+    "exitCode": 0,
+    "stdout": "labels-before-publication.stdout.txt",
+    "stderr": "labels-before-publication.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "stdout": "tests-before-publication.stdout.txt",
+    "stderr": "tests-before-publication.stderr.txt"
+  }
+]

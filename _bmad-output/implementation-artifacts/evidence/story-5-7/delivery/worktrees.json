@@ -1,0 +1,177 @@
+[
+  {
+    "repository": "eventstore",
+    "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/eventstore",
+    "baseRevision": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+    "branch": "docs/mcpcli-5-7-inventory-labels",
+    "worktreeCommand": [
+      "git",
+      "-c",
+      "submodule.recurse=false",
+      "worktree",
+      "add",
+      "-b",
+      "docs/mcpcli-5-7-inventory-labels",
+      "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/eventstore",
+      "origin/main"
+    ],
+    "patchCommand": [
+      "git",
+      "apply",
+      "--unidiff-zero",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/eventstore/README.patch"
+    ],
+    "onlyChangedPath": "README.md",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/eventstore.txt"
+  },
+  {
+    "repository": "frontcomposer",
+    "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/frontcomposer",
+    "baseRevision": "56c9206167b7f18c3a95f610f814dfa39d9dcd01",
+    "branch": "docs/mcpcli-5-7-inventory-labels",
+    "worktreeCommand": [
+      "git",
+      "-c",
+      "submodule.recurse=false",
+      "worktree",
+      "add",
+      "-b",
+      "docs/mcpcli-5-7-inventory-labels",
+      "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/frontcomposer",
+      "origin/main"
+    ],
+    "patchCommand": [
+      "git",
+      "apply",
+      "--unidiff-zero",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/frontcomposer/README.patch"
+    ],
+    "onlyChangedPath": "README.md",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/frontcomposer.txt"
+  },
+  {
+    "repository": "parties",
+    "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/parties",
+    "baseRevision": "f532145038992217f6433cd3dc1e36e61a1acc38",
+    "branch": "docs/mcpcli-5-7-inventory-labels",
+    "worktreeCommand": [
+      "git",
+      "-c",
+      "submodule.recurse=false",
+      "worktree",
+      "add",
+      "-b",
+      "docs/mcpcli-5-7-inventory-labels",
+      "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/parties",
+      "origin/main"
+    ],
+    "patchCommand": [
+      "git",
+      "apply",
+      "--unidiff-zero",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/parties/README.patch"
+    ],
+    "onlyChangedPath": "README.md",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/parties.txt"
+  },
+  {
+    "repository": "memories",
+    "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/memories",
+    "baseRevision": "3e98dc990675fdaed83aff2bf4856440a191986f",
+    "branch": "docs/mcpcli-5-7-inventory-labels",
+    "worktreeCommand": [
+      "git",
+      "-c",
+      "submodule.recurse=false",
+      "worktree",
+      "add",
+      "-b",
+      "docs/mcpcli-5-7-inventory-labels",
+      "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/memories",
+      "origin/main"
+    ],
+    "patchCommand": [
+      "git",
+      "apply",
+      "--unidiff-zero",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/memories/README.patch"
+    ],
+    "onlyChangedPath": "README.md",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/memories.txt"
+  },
+  {
+    "repository": "projects",
+    "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/projects",
+    "baseRevision": "1ea04f7959e9ca393bc19d3b96b03cb350088e72",
+    "branch": "docs/mcpcli-5-7-inventory-labels",
+    "worktreeCommand": [
+      "git",
+      "-c",
+      "submodule.recurse=false",
+      "worktree",
+      "add",
+      "-b",
+      "docs/mcpcli-5-7-inventory-labels",
+      "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/projects",
+      "origin/main"
+    ],
+    "patchCommand": [
+      "git",
+      "apply",
+      "--unidiff-zero",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/projects/README.patch"
+    ],
+    "onlyChangedPath": "README.md",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/projects.txt"
+  },
+  {
+    "repository": "folders",
+    "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/folders",
+    "baseRevision": "7eab70e9332c0573b50dce5b219e425b6a2d363c",
+    "branch": "docs/mcpcli-5-7-inventory-labels",
+    "worktreeCommand": [
+      "git",
+      "-c",
+      "submodule.recurse=false",
+      "worktree",
+      "add",
+      "-b",
+      "docs/mcpcli-5-7-inventory-labels",
+      "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/folders",
+      "origin/main"
+    ],
+    "patchCommand": [
+      "git",
+      "apply",
+      "--unidiff-zero",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/folders/README.patch"
+    ],
+    "onlyChangedPath": "README.md",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/folders.txt"
+  },
+  {
+    "repository": "chatbot",
+    "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/chatbot",
+    "baseRevision": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+    "branch": "docs/mcpcli-5-7-inventory-labels",
+    "worktreeCommand": [
+      "git",
+      "-c",
+      "submodule.recurse=false",
+      "worktree",
+      "add",
+      "-b",
+      "docs/mcpcli-5-7-inventory-labels",
+      "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/chatbot",
+      "origin/main"
+    ],
+    "patchCommand": [
+      "git",
+      "apply",
+      "--unidiff-zero",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/chatbot/README.patch"
+    ],
+    "onlyChangedPath": "README.md",
+    "messageFile": "/tmp/story-5-7-validated-messages-itc_j5_c/chatbot.txt"
+  }
+]

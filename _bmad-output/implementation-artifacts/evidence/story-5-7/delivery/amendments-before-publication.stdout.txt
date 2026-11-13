@@ -1,0 +1,3 @@
+PASS: eventstore-admin: 91 rows, 277 pinned anchors, complete delta/hash chain
+PASS: technical-tools: 68 rows, 105 pinned anchors, complete delta/hash chain
+PASS: candidate verified; owner decision: approved; completion requires owner approval and integrated labels

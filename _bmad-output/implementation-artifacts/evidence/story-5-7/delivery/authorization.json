@@ -1,0 +1,9 @@
+{
+  "responseVerbatim": "approve",
+  "approvalReceiptSha256": "5b0044a505f6cdcb95c5ceaa087f79dd705da54de3225ea9358f2b50f48e3b90",
+  "inventoryArtifacts": {
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+  },
+  "scope": "Commit and push the exact approved McpCli inventories/approval and prepared README-only label updates in seven owning repositories; preserve unrelated work and immutable historical artifacts."
+}

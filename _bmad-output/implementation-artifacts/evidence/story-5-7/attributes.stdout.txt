@@ -1,0 +1,4 @@
+_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json: text: unset
+_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/frontcomposer/README.patch: text: unset
+_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md: text: unset
+_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md: text: unset

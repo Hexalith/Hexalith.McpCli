@@ -1,0 +1,12 @@
+{
+  "repository": "parties",
+  "command": [
+    "npm",
+    "ci",
+    "--ignore-scripts",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "exitCode": 1,
+  "reason": "EBADENGINE: required Node 24.22.1 and npm 11.19.1; active shell was Node 26.4.0 and npm 11.18.0. Resolved using the already installed pinned runtime, without changing repository configuration."
+}

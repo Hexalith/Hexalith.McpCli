@@ -1,0 +1,70 @@
+{
+  "pinnedCli": "21.2.4",
+  "records": [
+    {
+      "candidate": "test: delivered inventory fixture\n",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "stdout": "\u29d7   --- input ---\ntest: delivered inventory fixture\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "candidate": "test: delivered label fixture\n",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "stdout": "\u29d7   --- input ---\ntest: delivered label fixture\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "candidate": "test: fixture\n",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "stdout": "\u29d7   --- input ---\ntest: fixture\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "candidate": "test: separate main inventory fixture\n",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "stdout": "\u29d7   --- input ---\ntest: separate main inventory fixture\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    },
+    {
+      "candidate": "test: separate main label fixture\n",
+      "command": [
+        "npx",
+        "--no",
+        "--",
+        "commitlint",
+        "--verbose"
+      ],
+      "exitCode": 0,
+      "stdout": "\u29d7   --- input ---\ntest: separate main label fixture\n\u2714   found 0 problems, 0 warnings\n",
+      "stderr": ""
+    }
+  ]
+}

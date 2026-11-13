@@ -1,0 +1,112 @@
+[
+  {
+    "name": "amendments",
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py"
+    ],
+    "exitCode": 0,
+    "stdout": "amendments.stdout.txt",
+    "stderr": "amendments.stderr.txt",
+    "expectedExitCode": 0
+  },
+  {
+    "name": "labels",
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py"
+    ],
+    "exitCode": 0,
+    "stdout": "labels.stdout.txt",
+    "stderr": "labels.stderr.txt",
+    "expectedExitCode": 0
+  },
+  {
+    "name": "tests",
+    "command": [
+      "python3",
+      "-I",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "stdout": "tests.stdout.txt",
+    "stderr": "tests.stderr.txt",
+    "expectedExitCode": 0
+  },
+  {
+    "name": "adoption",
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+    ],
+    "exitCode": 0,
+    "stdout": "adoption.stdout.txt",
+    "stderr": "adoption.stderr.txt",
+    "expectedExitCode": 0
+  },
+  {
+    "name": "completion",
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py",
+      "--approved-completion"
+    ],
+    "exitCode": 1,
+    "stdout": "completion.stdout.txt",
+    "stderr": "completion.stderr.txt",
+    "expectedExitCode": 1
+  },
+  {
+    "name": "label-completion",
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py",
+      "--approved-completion"
+    ],
+    "exitCode": 1,
+    "stdout": "label-completion.stdout.txt",
+    "stderr": "label-completion.stderr.txt",
+    "expectedExitCode": 1
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "stdout": "diff-check.stdout.txt",
+    "stderr": "diff-check.stderr.txt",
+    "expectedExitCode": 0
+  },
+  {
+    "name": "attributes",
+    "command": [
+      "git",
+      "check-attr",
+      "text",
+      "--",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/frontcomposer/README.patch",
+      "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md"
+    ],
+    "exitCode": 0,
+    "stdout": "attributes.stdout.txt",
+    "stderr": "attributes.stderr.txt",
+    "expectedExitCode": 0
+  }
+]
