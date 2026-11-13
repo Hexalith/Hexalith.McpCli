@@ -1,0 +1,23 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "pinnedVersion": "21.2.4",
+  "message": "test: harden story 5.7 inventory amendment verification\n",
+  "messageSha256": "93975514b21afcb575212d5157c525d349a1f6a329d86d172dc2f6b87b8c7b04",
+  "messageFile": "/tmp/mcpcli-story57-commit-ss0yix7q.txt",
+  "exitCode": 0,
+  "stdout": "commitlint.stdout.txt",
+  "stderr": "commitlint.stderr.txt",
+  "toolingPreparation": {
+    "command": [
+      "npm",
+      "ci"
+    ],
+    "exitCode": 0
+  }
+}

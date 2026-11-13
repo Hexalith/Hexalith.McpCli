@@ -1,0 +1,24 @@
+{
+  "temporaryRoot": "/tmp/mcpcli-story57-final-inputs-habeuvyn",
+  "files": [
+    {
+      "source": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "copy": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "bytes": 120822,
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "copy": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "bytes": 77399,
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "copy": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "bytes": 31887,
+      "sha256": "6e15053ddca7025d334e7e022d3a2800063ec2e709e6e72211cd47ad363d1ce6"
+    }
+  ],
+  "preservation": "Byte-preserving copies with repository-relative paths; no normalization, redaction or symlinks."
+}

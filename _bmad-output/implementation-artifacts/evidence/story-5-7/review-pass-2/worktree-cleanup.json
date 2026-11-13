@@ -1,0 +1,1014 @@
+{
+  "observedAt": "2026-11-13T08:51:53.676802+00:00",
+  "scope": "Remove only the seven clean Story 5.7 delivery worktrees and local merged branches named by the spec.",
+  "repositories": [
+    {
+      "name": "eventstore",
+      "owner": "/home/administrator/projects/hexalith/eventstore",
+      "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/eventstore",
+      "branch": "docs/mcpcli-5-7-inventory-labels",
+      "branchRevision": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+      "cleanStatus": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/eventstore",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "integratedAncestry": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/eventstore",
+          "merge-base",
+          "--is-ancestor",
+          "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "origin/main"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/eventstore",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "originalHeadBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/eventstore",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13\n",
+        "stderr": ""
+      },
+      "worktreeRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/eventstore",
+          "-c",
+          "submodule.recurse=false",
+          "worktree",
+          "remove",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/eventstore"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "branchRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/eventstore",
+          "branch",
+          "-d",
+          "docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 0,
+        "stdout": "Deleted branch docs/mcpcli-5-7-inventory-labels (was 639c9d5c0).\n",
+        "stderr": ""
+      },
+      "worktreesAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/eventstore",
+          "worktree",
+          "list",
+          "--porcelain"
+        ],
+        "exitCode": 0,
+        "stdout": "worktree /home/administrator/projects/hexalith/eventstore\nHEAD 639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13\nbranch refs/heads/main\n\n",
+        "stderr": ""
+      },
+      "branchAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/eventstore",
+          "show-ref",
+          "--verify",
+          "--quiet",
+          "refs/heads/docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/eventstore",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "originalHeadAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/eventstore",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13\n",
+        "stderr": ""
+      },
+      "originalStatusUnchanged": true
+    },
+    {
+      "name": "frontcomposer",
+      "owner": "/home/administrator/projects/hexalith/frontcomposer",
+      "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/frontcomposer",
+      "branch": "docs/mcpcli-5-7-inventory-labels",
+      "branchRevision": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+      "cleanStatus": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/frontcomposer",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "integratedAncestry": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/frontcomposer",
+          "merge-base",
+          "--is-ancestor",
+          "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+          "origin/main"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/frontcomposer",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": " M references/Hexalith.Parties\n M references/Hexalith.Platform\n?? _bmad-output/implementation-artifacts/spec-finish-parties-ci-blocker.md\n",
+        "stderr": "",
+        "stdoutBytes": 138,
+        "stdoutSha256": "ac06e3393cbdca6213fa2723526b05be4b2751de739b779fa2353beb17b34436"
+      },
+      "originalHeadBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/frontcomposer",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "19418a0c29daf38eef03b0891958cd8aa93c59bf\n",
+        "stderr": ""
+      },
+      "worktreeRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/frontcomposer",
+          "-c",
+          "submodule.recurse=false",
+          "worktree",
+          "remove",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/frontcomposer"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "branchRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/frontcomposer",
+          "branch",
+          "-d",
+          "docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 0,
+        "stdout": "Deleted branch docs/mcpcli-5-7-inventory-labels (was 19418a0c).\n",
+        "stderr": ""
+      },
+      "worktreesAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/frontcomposer",
+          "worktree",
+          "list",
+          "--porcelain"
+        ],
+        "exitCode": 0,
+        "stdout": "worktree /home/administrator/projects/hexalith/frontcomposer\nHEAD 19418a0c29daf38eef03b0891958cd8aa93c59bf\nbranch refs/heads/main\n\n",
+        "stderr": ""
+      },
+      "branchAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/frontcomposer",
+          "show-ref",
+          "--verify",
+          "--quiet",
+          "refs/heads/docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/frontcomposer",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": " M references/Hexalith.Parties\n M references/Hexalith.Platform\n?? _bmad-output/implementation-artifacts/spec-finish-parties-ci-blocker.md\n",
+        "stderr": "",
+        "stdoutBytes": 138,
+        "stdoutSha256": "ac06e3393cbdca6213fa2723526b05be4b2751de739b779fa2353beb17b34436"
+      },
+      "originalHeadAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/frontcomposer",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "19418a0c29daf38eef03b0891958cd8aa93c59bf\n",
+        "stderr": ""
+      },
+      "originalStatusUnchanged": true
+    },
+    {
+      "name": "parties",
+      "owner": "/home/administrator/projects/hexalith/parties",
+      "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/parties",
+      "branch": "docs/mcpcli-5-7-inventory-labels",
+      "branchRevision": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+      "cleanStatus": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/parties",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "integratedAncestry": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/parties",
+          "merge-base",
+          "--is-ancestor",
+          "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+          "origin/main"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/parties",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "originalHeadBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/parties",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "50d97379249a7059b4db92cbf93bcc05f96a7722\n",
+        "stderr": ""
+      },
+      "worktreeRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/parties",
+          "-c",
+          "submodule.recurse=false",
+          "worktree",
+          "remove",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/parties"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "branchRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/parties",
+          "branch",
+          "-d",
+          "docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 0,
+        "stdout": "Deleted branch docs/mcpcli-5-7-inventory-labels (was 6bc68c8f).\n",
+        "stderr": ""
+      },
+      "worktreesAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/parties",
+          "worktree",
+          "list",
+          "--porcelain"
+        ],
+        "exitCode": 0,
+        "stdout": "worktree /home/administrator/projects/hexalith/parties\nHEAD 50d97379249a7059b4db92cbf93bcc05f96a7722\nbranch refs/heads/main\n\n",
+        "stderr": ""
+      },
+      "branchAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/parties",
+          "show-ref",
+          "--verify",
+          "--quiet",
+          "refs/heads/docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/parties",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "originalHeadAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/parties",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "50d97379249a7059b4db92cbf93bcc05f96a7722\n",
+        "stderr": ""
+      },
+      "originalStatusUnchanged": true
+    },
+    {
+      "name": "memories",
+      "owner": "/home/administrator/projects/hexalith/memories",
+      "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/memories",
+      "branch": "docs/mcpcli-5-7-inventory-labels",
+      "branchRevision": "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+      "cleanStatus": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/memories",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "integratedAncestry": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/memories",
+          "merge-base",
+          "--is-ancestor",
+          "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+          "origin/main"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/memories",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": " M references/Hexalith.Builds\n M references/Hexalith.Platform\n",
+        "stderr": "",
+        "stdoutBytes": 62,
+        "stdoutSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5"
+      },
+      "originalHeadBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/memories",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "a3f0b3a4a0f0905f6b88da039491ceb286103207\n",
+        "stderr": ""
+      },
+      "worktreeRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/memories",
+          "-c",
+          "submodule.recurse=false",
+          "worktree",
+          "remove",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/memories"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "branchRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/memories",
+          "branch",
+          "-d",
+          "docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 0,
+        "stdout": "Deleted branch docs/mcpcli-5-7-inventory-labels (was a3f0b3a4).\n",
+        "stderr": ""
+      },
+      "worktreesAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/memories",
+          "worktree",
+          "list",
+          "--porcelain"
+        ],
+        "exitCode": 0,
+        "stdout": "worktree /home/administrator/projects/hexalith/memories\nHEAD a3f0b3a4a0f0905f6b88da039491ceb286103207\nbranch refs/heads/main\n\nworktree /home/administrator/evidence/story-27-4-worktree\nHEAD 9bdaa30fbfa6d002d8753aa7eb63d1fc507937ac\ndetached\n\n",
+        "stderr": ""
+      },
+      "branchAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/memories",
+          "show-ref",
+          "--verify",
+          "--quiet",
+          "refs/heads/docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/memories",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": " M references/Hexalith.Builds\n M references/Hexalith.Platform\n",
+        "stderr": "",
+        "stdoutBytes": 62,
+        "stdoutSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5"
+      },
+      "originalHeadAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/memories",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "a3f0b3a4a0f0905f6b88da039491ceb286103207\n",
+        "stderr": ""
+      },
+      "originalStatusUnchanged": true
+    },
+    {
+      "name": "projects",
+      "owner": "/home/administrator/projects/hexalith/projects",
+      "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/projects",
+      "branch": "docs/mcpcli-5-7-inventory-labels",
+      "branchRevision": "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+      "cleanStatus": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/projects",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "integratedAncestry": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/projects",
+          "merge-base",
+          "--is-ancestor",
+          "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+          "origin/main"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/projects",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stderr": "",
+        "stdoutBytes": 1277778,
+        "stdoutSha256": "923f6ef58034c1a8a7f2f3ca599b039a63ef6b2466688d9792765f11f5344db5",
+        "stdoutRetention": "Digest and byte length retained; unrelated original-checkout paths omitted."
+      },
+      "originalHeadBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/projects",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "77067782154d35a794ea50d86af1c5e73c8351b6\n",
+        "stderr": ""
+      },
+      "worktreeRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/projects",
+          "-c",
+          "submodule.recurse=false",
+          "worktree",
+          "remove",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/projects"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "branchRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/projects",
+          "branch",
+          "-d",
+          "docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 0,
+        "stdout": "Deleted branch docs/mcpcli-5-7-inventory-labels (was 065f047).\n",
+        "stderr": "warning: deleting branch 'docs/mcpcli-5-7-inventory-labels' that has been merged to\n         'refs/remotes/origin/main', but not yet merged to HEAD\n"
+      },
+      "worktreesAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/projects",
+          "worktree",
+          "list",
+          "--porcelain"
+        ],
+        "exitCode": 0,
+        "stdout": "worktree /home/administrator/projects/hexalith/projects\nHEAD 77067782154d35a794ea50d86af1c5e73c8351b6\nbranch refs/heads/main\n\nworktree /home/administrator/projects/hexalith/g6-committed-closure-20261001\nHEAD 9506193e11d85ef65580207da48e5671624d9e2d\ndetached\nprunable gitdir file points to non-existent location\n\nworktree /tmp/story61-isolated-20261103-r5tqvlm3/projects\nHEAD 98efe700b60cacfe0b3cc3cb0c134e0902419b4c\ndetached\nprunable gitdir file points to non-existent location\n\n",
+        "stderr": ""
+      },
+      "branchAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/projects",
+          "show-ref",
+          "--verify",
+          "--quiet",
+          "refs/heads/docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/projects",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stderr": "",
+        "stdoutBytes": 1277778,
+        "stdoutSha256": "923f6ef58034c1a8a7f2f3ca599b039a63ef6b2466688d9792765f11f5344db5",
+        "stdoutRetention": "Digest and byte length retained; unrelated original-checkout paths omitted."
+      },
+      "originalHeadAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/projects",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "77067782154d35a794ea50d86af1c5e73c8351b6\n",
+        "stderr": ""
+      },
+      "originalStatusUnchanged": true
+    },
+    {
+      "name": "folders",
+      "owner": "/home/administrator/projects/hexalith/folders",
+      "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/folders",
+      "branch": "docs/mcpcli-5-7-inventory-labels",
+      "branchRevision": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+      "cleanStatus": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/folders",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "integratedAncestry": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/folders",
+          "merge-base",
+          "--is-ancestor",
+          "583d3d492f94217809a8efe00424b80ce3fdfa61",
+          "origin/main"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/folders",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": " M references/Hexalith.Builds\n M references/Hexalith.Platform\n",
+        "stderr": "",
+        "stdoutBytes": 62,
+        "stdoutSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5"
+      },
+      "originalHeadBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/folders",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "583d3d492f94217809a8efe00424b80ce3fdfa61\n",
+        "stderr": ""
+      },
+      "worktreeRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/folders",
+          "-c",
+          "submodule.recurse=false",
+          "worktree",
+          "remove",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/folders"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "branchRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/folders",
+          "branch",
+          "-d",
+          "docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 0,
+        "stdout": "Deleted branch docs/mcpcli-5-7-inventory-labels (was 583d3d49).\n",
+        "stderr": ""
+      },
+      "worktreesAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/folders",
+          "worktree",
+          "list",
+          "--porcelain"
+        ],
+        "exitCode": 0,
+        "stdout": "worktree /home/administrator/projects/hexalith/folders\nHEAD 583d3d492f94217809a8efe00424b80ce3fdfa61\nbranch refs/heads/main\n\n",
+        "stderr": ""
+      },
+      "branchAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/folders",
+          "show-ref",
+          "--verify",
+          "--quiet",
+          "refs/heads/docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/folders",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": " M references/Hexalith.Builds\n M references/Hexalith.Platform\n",
+        "stderr": "",
+        "stdoutBytes": 62,
+        "stdoutSha256": "4b8b4400db8e9d0e1b7cd871b943b22cef3d261c1a2fbc756d4818bae3eb65f5"
+      },
+      "originalHeadAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/folders",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "583d3d492f94217809a8efe00424b80ce3fdfa61\n",
+        "stderr": ""
+      },
+      "originalStatusUnchanged": true
+    },
+    {
+      "name": "chatbot",
+      "owner": "/home/administrator/projects/hexalith/chatbot",
+      "worktree": "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/chatbot",
+      "branch": "docs/mcpcli-5-7-inventory-labels",
+      "branchRevision": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+      "cleanStatus": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/chatbot",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "integratedAncestry": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/chatbot",
+          "merge-base",
+          "--is-ancestor",
+          "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+          "origin/main"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/chatbot",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "originalHeadBefore": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/chatbot",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d\n",
+        "stderr": ""
+      },
+      "worktreeRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/chatbot",
+          "-c",
+          "submodule.recurse=false",
+          "worktree",
+          "remove",
+          "/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/chatbot"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": ""
+      },
+      "branchRemoval": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/chatbot",
+          "branch",
+          "-d",
+          "docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 0,
+        "stdout": "Deleted branch docs/mcpcli-5-7-inventory-labels (was 6a4ca07).\n",
+        "stderr": "warning: deleting branch 'docs/mcpcli-5-7-inventory-labels' that has been merged to\n         'refs/remotes/origin/main', but not yet merged to HEAD\n"
+      },
+      "worktreesAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/chatbot",
+          "worktree",
+          "list",
+          "--porcelain"
+        ],
+        "exitCode": 0,
+        "stdout": "worktree /home/administrator/projects/hexalith/chatbot\nHEAD 82f20d5ecca74993f93e73151a6ae3766d3d6a1d\nbranch refs/heads/main\n\nworktree /tmp/chatbot-story-1-1-z7h4zaad/checkout\nHEAD e73e60c6622aa487badfac542cf4570c6530a6e4\ndetached\nprunable gitdir file points to non-existent location\n\n",
+        "stderr": ""
+      },
+      "branchAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/chatbot",
+          "show-ref",
+          "--verify",
+          "--quiet",
+          "refs/heads/docs/mcpcli-5-7-inventory-labels"
+        ],
+        "exitCode": 1,
+        "stdout": "",
+        "stderr": ""
+      },
+      "originalStatusAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/chatbot",
+          "status",
+          "--porcelain=v1",
+          "--untracked-files=all"
+        ],
+        "exitCode": 0,
+        "stdout": "",
+        "stderr": "",
+        "stdoutBytes": 0,
+        "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "originalHeadAfter": {
+        "command": [
+          "git",
+          "-C",
+          "/home/administrator/projects/hexalith/chatbot",
+          "rev-parse",
+          "HEAD"
+        ],
+        "exitCode": 0,
+        "stdout": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d\n",
+        "stderr": ""
+      },
+      "originalStatusUnchanged": true
+    }
+  ]
+}

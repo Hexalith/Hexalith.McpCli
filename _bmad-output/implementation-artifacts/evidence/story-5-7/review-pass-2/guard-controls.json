@@ -1,0 +1,208 @@
+{
+  "scope": "In-memory one-guard removals only; approved inputs and verifier source files are never modified.",
+  "controls": [
+    {
+      "removedGuard": "label row coverage/duplicate mismatch",
+      "test": "LabelTests.test_register_predecessor_coverage_inventory_patch_and_anchor_damage",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "removal gate differs from successor inventory",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "technical citation version/path mismatch",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "cited technical hash mismatch",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "Admin citation/hash mismatch",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 2,
+      "errors": 0
+    },
+    {
+      "removedGuard": "Admin gate semantics missing",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "independent module citation changed",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "retained compiler exemption/gates missing",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 2,
+      "errors": 0
+    },
+    {
+      "removedGuard": "exemption/four-mode/independent safety gate missing",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "paired host/plugin gate missing",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "forwarded-authority gate lost",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "Parties blocked verdict missing",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "unsupported replacement claim",
+      "test": "LabelTests.test_citation_gate_and_required_semantics_damaged_with_rehashed_label",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "compatibility intro missing",
+      "test": "LabelTests.test_compatibility_intro_guard_with_rehashed_snapshots_and_patch",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "integrated label bytes mismatch",
+      "test": "LabelTests.test_complete_delivery_fixture_and_each_completion_binding",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "delivered change is not README-only",
+      "test": "LabelTests.test_complete_delivery_fixture_and_each_completion_binding",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "published inventory differs from approved candidate",
+      "test": "LabelTests.test_complete_delivery_fixture_and_each_completion_binding",
+      "detected": true,
+      "failures": 2,
+      "errors": 0
+    },
+    {
+      "removedGuard": "integrated commit byte hash mismatch",
+      "test": "LabelTests.test_complete_delivery_fixture_and_each_completion_binding",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "approved predecessor bytes changed",
+      "test": "AmendmentTests.test_preserved_predecessor_authority_adoption_and_exemption_guards",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "preserved authority changed",
+      "test": "AmendmentTests.test_preserved_predecessor_authority_adoption_and_exemption_guards",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "exemption amendment is not integrated",
+      "test": "AmendmentTests.test_preserved_predecessor_authority_adoption_and_exemption_guards",
+      "detected": true,
+      "failures": 2,
+      "errors": 0
+    },
+    {
+      "removedGuard": "AD-23 exact-byte owner adoption is required",
+      "test": "AmendmentTests.test_preserved_predecessor_authority_adoption_and_exemption_guards",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "approval required roles/source mismatch",
+      "test": "AmendmentTests.test_hash_delta_and_pending_approval_claim_guards",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "verify: completion = True",
+      "test": "AmendmentTests.test_claimed_done_in_spec_or_sprint_cannot_bypass_approval",
+      "detected": true,
+      "failures": 12,
+      "errors": 0
+    },
+    {
+      "removedGuard": "verify: completion = True",
+      "test": "AmendmentTests.test_integrated_register_forces_completion_on_amendment_path",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "verify: _, _, completion = labels.verify(root, completion)",
+      "test": "AmendmentTests.test_explicit_completion_requires_delivered_labels_after_owner_approval",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "source_pins: git(root, 'show', f'{BASELINE}:.gitmodules').decode()",
+      "test": "AmendmentTests.test_new_root_submodule_reports_drift_and_keeps_original_pins",
+      "detected": true,
+      "failures": 0,
+      "errors": 1
+    },
+    {
+      "removedGuard": "github_repository: parsed.hostname is not None and parsed.hostname.lower() == 'github.com'",
+      "test": "LabelTests.test_checkout_origin_identity_accepts_standard_urls_and_rejects_wrong_owner",
+      "detected": true,
+      "failures": 1,
+      "errors": 0
+    },
+    {
+      "removedGuard": "check_rows: expected = before.replace('inventory 1.0.0', 'inventory 1.0.2').replace('eventstore-admin-migration-inventory-v1.md', 'eventstore-admin-migration-inventory-v1.0.2.md')",
+      "test": "AmendmentTests.test_protected_registration_route_effect_confirmation_security_and_anchors",
+      "detected": true,
+      "failures": 2,
+      "errors": 0
+    }
+  ]
+}

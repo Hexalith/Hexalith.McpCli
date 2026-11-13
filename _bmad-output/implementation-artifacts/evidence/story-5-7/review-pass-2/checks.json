@@ -1,0 +1,102 @@
+{
+  "observedAt": "2026-11-13T08:55:04.291546+00:00",
+  "checks": [
+    {
+      "name": "amendments",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py"
+      ],
+      "exitCode": 0,
+      "stdout": "amendments.stdout.txt",
+      "stderr": "amendments.stderr.txt"
+    },
+    {
+      "name": "labels",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py"
+      ],
+      "exitCode": 0,
+      "stdout": "labels.stdout.txt",
+      "stderr": "labels.stderr.txt"
+    },
+    {
+      "name": "approved-completion",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py",
+        "--approved-completion"
+      ],
+      "exitCode": 0,
+      "stdout": "approved-completion.stdout.txt",
+      "stderr": "approved-completion.stderr.txt"
+    },
+    {
+      "name": "label-approved-completion",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py",
+        "--approved-completion"
+      ],
+      "exitCode": 0,
+      "stdout": "label-approved-completion.stdout.txt",
+      "stderr": "label-approved-completion.stderr.txt"
+    },
+    {
+      "name": "tests",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "stdout": "tests.stdout.txt",
+      "stderr": "tests.stderr.txt"
+    },
+    {
+      "name": "direct-tests",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py"
+      ],
+      "exitCode": 0,
+      "stdout": "direct-tests.stdout.txt",
+      "stderr": "direct-tests.stderr.txt"
+    },
+    {
+      "name": "ad23",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "stdout": "ad23.stdout.txt",
+      "stderr": "ad23.stderr.txt"
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "diff-check.stdout.txt",
+      "stderr": "diff-check.stderr.txt"
+    }
+  ]
+}

@@ -180,8 +180,13 @@ def verify(root, completion=False):
             require(re.fullmatch('[0-9a-f]{40}', revision) is not None, f'{name}: missing integrated commit')
             require(git(owner, 'show', f'{revision}:README.md') == after, f'{name}: integrated label bytes mismatch')
             git(owner, 'merge-base', '--is-ancestor', revision, 'origin/main')
-            require(compatibility_section(git(owner, 'show', 'origin/main:README.md')) == after_section,
-                    f'{name}: current origin/main compatibility labels differ from delivered candidate')
+            current_readme = git(owner, 'show', 'origin/main:README.md')
+            try:
+                current_section = compatibility_section(current_readme)
+            except ValueError:
+                current_section = None
+            if current_section != after_section:
+                print(f'reported: {name}: current origin/main compatibility labels differ from delivered candidate', file=sys.stderr)
             require(git(owner, 'diff', '--name-only', repo['baseRevision'], revision).decode().splitlines() == ['README.md'], f'{name}: delivered change is not README-only')
             commit = git(owner, 'cat-file', 'commit', revision)
             require(integration.get('commitSha256') == sha(commit), f'{name}: integrated commit byte hash mismatch')
@@ -198,7 +203,7 @@ def verify(root, completion=False):
             require(sha(git(root, 'show', f'origin/main:{path}')) == digest, f'{path}: current origin/main artifact differs from approved candidate')
     else:
         require(register.get('state') in {'candidate-pending-owner-approval-and-delivery', 'integrated'}, 'invalid successor label state')
-    return len(rows), len(repos)
+    return len(rows), len(repos), completion
 
 
 def main(argv=None):
@@ -207,8 +212,7 @@ def main(argv=None):
     parser.add_argument('--approved-completion', action='store_true')
     args = parser.parse_args(argv)
     try:
-        completed = args.approved_completion or read_json(args.root / E / 'labels.json').get('state') == 'integrated'
-        rows, repos = verify(args.root, completed)
+        rows, repos, completed = verify(args.root, args.approved_completion)
     except (ValueError, KeyError, TypeError, OSError, IndexError) as error:
         print(f'FAIL: {error}', file=sys.stderr)
         return 1

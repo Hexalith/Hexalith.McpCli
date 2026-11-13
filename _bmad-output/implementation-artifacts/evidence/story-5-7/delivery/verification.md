@@ -39,4 +39,29 @@ The immediate parent runs were cancelled, so no claim is made that they produced
 
 GitHub reported **"Bypassed rule violations for refs/heads/main"** on the EventStore and Memories maintainer pushes. Their exact server messages are preserved in label-publications.json. All pushes were fast-forward deliveries under the explicit owner authorization; no force push was used.
 
+The 2026-11-13 review follow-up resolves the initially queued owner checks above.
+[Final owner CI observations](../review-pass-2/owner-ci-final.json) retain the
+GitHub GET URLs, terminal workflow states, failed steps and bounded log excerpts:
+
+| Owner delivery | Final required-workflow result | Inherited failure evidence |
+| --- | --- | --- |
+| EventStore `639c9d5c` | [CI failed](https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260) | `Prepare module build` reports unavailable Platform release-tag/cohort prerequisites (HXW011/HXW009/HXW007); `Fail on blocking test failures` then reports no Tier 1 failure count. Earlier main `d457ecd5` and `f2062f7f` already fail the same two steps. The delivery remains README-only; no build failure is attributed to label text. |
+| Memories `a3f0b3a4` | [CI passed](https://github.com/Hexalith/Hexalith.Memories/actions/runs/43388157817) | All observed workflows passed. |
+| FrontComposer `19418a0c` | [CI passed](https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43388143372) | Quality and other observed workflows also passed. |
+| Projects `065f0477` | [CI passed](https://github.com/Hexalith/Hexalith.Projects/actions/runs/43388163130) | All observed workflows passed. |
+| Folders `583d3d49` | [CI passed](https://github.com/Hexalith/Hexalith.Folders/actions/runs/43388170637) | The contract-spine gate and other observed workflows also passed. |
+| ChatBot `6a4ca07b` | [ci failed](https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975); [release failed](https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176969) | Parent `62e82201` fails the same xUnit runner/evidence-producer and live topology/recovery/evidence steps. Both topology logs report `SelectedEndpointStartupException` with the chatbot resource `FailedToStart`; the ordinary test step's console redirects its detailed results to artifacts, so no narrower cause is claimed. |
+| Parties `6bc68c8f` | [CI cancelled](https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065) | Some jobs failed before cancellation. The UI build repeats parent `f5321450`'s NU1109 downgrade from Fluent UI 5.0.1's required ASP.NET 11 preview to the central 10.0.15 pin; the parent CI also failed. CodeQL was cancelled; commitlint and the release-candidate gate passed. Cancellation is not a passing acceptance result. |
+
+EventStore's separate Integration Tests workflow was still running at this
+follow-up observation; its result is not represented as terminal or passing.
+These findings retain the bypass disclosure and do not expand Story 5.7 into
+upstream build, dependency or runtime repairs.
+
+The seven clean delivery worktrees and their merged local branches were removed
+without force during the review follow-up. [Cleanup evidence](../review-pass-2/worktree-cleanup.json)
+records clean-status and ancestry checks, exact removal commands and unchanged
+original checkout HEAD/status observations. Historical creation records in
+`worktrees.json` remain intact.
+
 Story implementation is complete and its sprint entry is review. The broad CI blockers remain visible and were not weakened or repaired through dependency, census or gitlink changes in this task.

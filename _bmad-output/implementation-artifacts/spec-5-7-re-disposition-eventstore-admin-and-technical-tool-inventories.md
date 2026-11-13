@@ -2,7 +2,7 @@
 title: '5.7 Re-disposition EventStore Admin and technical-tool inventories'
 type: 'chore'
 created: '2026-11-13'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '48076b1bd041b45250597937da82594e202985f3'
@@ -68,7 +68,7 @@ Code review pass 2 (bmad-code-review, 2026-11-13, after the in-spec pass 1). The
 
 Generated stdout/stderr, scan receipts, delivery transcripts and pre-refresh snapshots were left out. Four layers ran (Blind B, Edge E, Acceptance A, Verification V); none failed.
 
-- [ ] [Review][Patch] The completion gates fail once later approved work changes owner compatibility sections or root `.gitmodules` (Decision 1 resolved: **A. Report, don't fail**)
+- [x] [Review][Patch] The completion gates fail once later approved work changes owner compatibility sections or root `.gitmodules` (Decision 1 resolved: **A. Report, don't fail**)
   - `verify_labels.py:183` requires each owner's current `origin/main` compatibility section to equal the 5.7 after-section. `labels.json` is `integrated`, so completion is forced on every run.
   - `verify_amendments.py:326` requires root `.gitmodules` to equal the baseline, and `source_pins` (`:138`) requires the Story 5.1 pin set to equal the working `.gitmodules`.
   - Stories 5.9 and 5.10 will rewrite the PS08/PS09/PS14 labels, and any new root reference changes `.gitmodules`. Either turns both gates red, and `test_real_cli_candidate_and_completion_process_streams` with them.
@@ -84,49 +84,49 @@ Generated stdout/stderr, scan receipts, delivery transcripts and pre-refresh sna
   - All 14 integrated README labels link readers straight to these pages. Unlike AD-23, the bytes never say that the separate receipt sets the effective status.
   - The successors should state the approved status, cite the 5.7 receipt and move the labels with them. They can also carry the rejected cosmetic fixes B10 and A6.
   - (B1, E18, A1)
-- [ ] [Review][Patch] The completion triggers have no test that isolates them
+- [x] [Review][Patch] The completion triggers have no test that isolates them
   - Spec/sprint `done` trigger: with the real register integrated, `test_claimed_done_in_spec_or_sprint_cannot_bypass_approval` passes even when `verify_amendments.py:358-359` is removed. Feed it a candidate register.
   - Integrated-register trigger on the `V.verify` path (`verify_labels.py:98-99`): removed, `V.main([])` returns 0 on a forged integrated register. No test covers it.
   - `--approved-completion` delivery requirement (`verify_amendments.py:362`): removed, an approved receipt with undelivered labels returns 0. No test covers it.
   - Assert exit, empty stdout and the exact stderr in each case.
   - (V1, V2, V3, E14) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:335]
-- [ ] [Review][Patch] The label semantic guards are hidden behind a `FAIL:` prefix assertion
+- [x] [Review][Patch] The label semantic guards are hidden behind a `FAIL:` prefix assertion
   - `test_citation_gate_and_required_semantics_damaged_with_rehashed_label` and `test_register_predecessor_coverage_inventory_patch_and_anchor_damage` assert only the prefix, so the gate and surface guards fire first.
   - Removing `verify_labels.py:154`, `:157`, `:160`, `:163`, `:165`, `:174` or `:175`, or `:106` (row coverage), still passes all 27 tests.
   - Assert `FAIL: <key>: <message>` exactly per subtest. Add cases for the technical SHA, the Admin citation/hash, the Admin "No Admin Gateway replacement" text, a module citation version, PS03 "never counted as retired", a replacement claim and the intro sentence.
   - (V4, E16, A2) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:454]
-- [ ] [Review][Patch] The delivery read-back guards are untested
+- [x] [Review][Patch] The delivery read-back guards are untested
   - `completion_fixture` always returns the candidate README and `README.md\n` for `diff`.
   - Removing `verify_labels.py:181` (integrated README bytes) or `:185` (README-only delivery) still passes every test.
   - The inventory/receipt blobs at `inventoryRevision` (`:197`) are never damaged.
   - Add subcases to `test_complete_delivery_fixture_and_each_completion_binding`.
   - (V5, A2) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:498]
-- [ ] [Review][Patch] The preserved-authority guards have no tests
+- [x] [Review][Patch] The preserved-authority guards have no tests
   - No test triggers `approved predecessor bytes changed`, `preserved authority changed`, `root .gitmodules changed`, `exemption amendment is not integrated`, `AD-23 exact-byte owner adoption is required` or `approval required roles/source mismatch`. Add damage cases with exact stderr.
   - The `.gitmodules` case follows the outcome of the first decision.
   - (A2) [_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py:325]
-- [ ] [Review][Patch] The origin-URL test never tries a non-GitHub host
+- [x] [Review][Patch] The origin-URL test never tries a non-GitHub host
   - Removing the host condition makes `https://gitlab.example/Hexalith/Hexalith.EventStore.git` pass.
   - (V6) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:583]
-- [ ] [Review][Patch] The PS01/PS02 `Operation inventory` rewrite has no damage test
+- [x] [Review][Patch] The PS01/PS02 `Operation inventory` rewrite has no damage test
   - Replacing `verify_amendments.py:230` with `continue` still passes all tests.
   - Add a subcase that restores the Admin 1.0.0 citation and expects `technical-tools:PS01: changed protected source field Operation inventory`.
   - (V7) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:111]
-- [ ] [Review][Patch] The default verifier says completion is still required after verifying it
+- [x] [Review][Patch] The default verifier says completion is still required after verifying it
   - Reproduced: plain `verify_amendments.py` prints "owner decision: approved; completion requires owner approval and integrated labels", because `main` reads only the CLI flag while `verify()` forced completion from the spec status.
   - Return the effective completion from `verify()` and print from it.
   - (B8, E10, A8) [_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py:378]
-- [ ] [Review][Patch] Running the test file directly reports an error
+- [x] [Review][Patch] Running the test file directly reports an error
   - Reproduced: `python3 -I …/test_verify_amendments.py` ends with `FAILED (errors=1)`. In `__main__`, `__cached__` is `None`, so `Path(__cached__)` raises `TypeError` in `tearDownModule`.
   - Return early when it is `None`.
   - (E15) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:57]
-- [ ] [Review][Patch] Delivery evidence never records the final results of the owner CI runs whose required checks were bypassed
+- [x] [Review][Patch] Delivery evidence never records the final results of the owner CI runs whose required checks were bypassed
   - Observed 2026-11-13: EventStore `CI` on `639c9d5c` failed at "Fail on blocking test failures". EventStore `main` CI already failed on `d457ecd5` and `f2062f7f`.
   - ChatBot `ci` and `release` failed on `6a4ca07b` and on its parent `62e82201`. Parties `CI` was cancelled (its parent failed).
   - FrontComposer, Memories, Projects and Folders are green.
   - Record these final states and their inherited causes next to the bypass note.
   - (B13, A4) [_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/verification.md:40]
-- [ ] [Review][Patch] Seven delivery worktrees and branches were left behind
+- [x] [Review][Patch] Seven delivery worktrees and branches were left behind
   - Each owner repository still has a `/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/<repo>` worktree and the local branch `docs/mcpcli-5-7-inventory-labels`. All seven branches are ancestors of `origin/main`.
   - Remove the worktrees and delete the merged branches.
   - (A9) [_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/worktrees.json:1]
@@ -184,6 +184,8 @@ Generated stdout/stderr, scan receipts, delivery transcripts and pre-refresh sna
 
 - 2026-11-13 completion: Published the approved inventory/receipt packet at 42d3c2fd48405e0f2c27f9b61f6d7025e4246934 and integrated all fourteen labels in seven owner main branches. Both approved-completion commands and all 27 tests pass after integration. [Delivery evidence](evidence/story-5-7/delivery/verification.md) records canonical commits, exact read-backs, authorization and CI observations. Concurrent /pushall work adopted prepared files and moved reference pins before publication; the publication commit's build/census inputs match its actual parent. Broad CI is blocked by inherited net10/net11 dependency incompatibility and Builds census drift, recorded separately without changing those inputs. Original checkouts were not edited by this task; concurrent changes and the unrelated Platform gitlink modification are preserved.
 
+- 2026-11-13 review pass 2 implementation: Closed all eleven patch groups. Current owner compatibility-section drift (including absent or malformed sections) and working `.gitmodules` drift now emit exact `reported:` diagnostics with exit 0; original source coverage reads the baseline `.gitmodules` blob. Recorded delivery bytes, ancestry, README-only scope, commit hashes and immutable published inventory/receipt blobs remain blocking. Added isolated completion-trigger tests, exact semantic/authority/read-back/URL/citation diagnostics and real-process drift coverage; direct-file teardown handles an absent bytecode cache, and the default PASS message reports effective completion. Final owner CI outcomes and inherited failures are retained beside the bypass disclosure, and all seven clean merged delivery worktrees/branches were removed while preserving original checkouts. The 34-test focused suite and both completion gates pass. See [review pass 2 evidence](evidence/story-5-7/review-pass-2/verification.md). Workflow review and the parent final scan follow this implementation handoff; the two accepted deferrals remain unchanged.
+
 ## Spec Change Log
 
 ## Review Triage Log
@@ -206,3 +208,25 @@ Generated stdout/stderr, scan receipts, delivery transcripts and pre-refresh sna
 | Edge E2: no-op status fixture | medium | patch | Same reproduced failure as B1; the supplied diff already has in-review while the test replaces only in-progress. |
 | Verification V1: ancestry guard-removal gap | medium | patch | Reviewer removed both merge-base checks and all four LabelTests still passed. Add negative merged/unmerged Git graph cases for owner and inventory commits, asserting exit and both streams. |
 | Verification V2: suite fails after workflow transition | medium | patch | Parent independently reproduced the filed failure. Same status-fixture defect as B1/E2; refresh evidence after fixing it. |
+
+
+### Continuation workflow review (2026-11-13)
+
+All three required layers completed. Edge-case tracing returned no findings. Blind review and verification-gap review found the following additional regression gaps; each existing guard is reachable, but its specific rejection was not isolated in the test suite. All route to focused test patches and require no change to approved intent or runtime behavior.
+
+| Finding | Verdict | Route | Verified evidence |
+| --- | --- | --- | --- |
+| Blind B1: label path confinement | medium | patch | `verify_labels.py:53` rejects escaping paths; no label-file absolute/symlink escape case exists in the tests. Add exact refusal and both-stream coverage using temporary files. |
+| Blind B2: label schema | medium | patch | `verify_labels.py:97` checks schemaVersion, but no label schema damage fixture reaches it. Add an otherwise valid candidate with a changed schema. |
+| Blind B3: historical owner identity | medium | patch | `verify_labels.py:117` binds registered owner identity; current tests damage checkout origin only. Mutate the registered repository independently. |
+| Blind B4: canonical base revision | medium | patch | `verify_labels.py:121` requires a full canonical revision; no abbreviated-but-resolvable base fixture exists. Add its exact format refusal. |
+| Blind B5: committed before snapshot | medium | patch | `verify_labels.py:124` binds the full before README hash; existing hash damage targets patch artifacts instead. Damage beforeSha256 alone. |
+| Blind B6: per-owner row assignment | medium | patch | `verify_labels.py:128` checks ownership after global coverage; no fixture preserves global IDs while reassigning one owner. Add that case. |
+| Blind B7: after reconstruction | medium | patch | `verify_labels.py:136` binds reconstructed full/section bytes; no isolated afterSha256 or independently rehashed section damage case exists. Add both. |
+| Blind B8: exact README patch | medium | patch | `verify_labels.py:140` compares reconstructed patch bytes; the old test damages only the outer hash. Rehash a patch with an unrelated file/edit and require the exact patch-content error. |
+| Blind B9: registered surface identity | medium | patch | `verify_labels.py:144` checks row.surface; the current test changes displayed label text. Change only the registered surface. |
+| Blind B10: baseline root declaration coverage | medium | patch | `verify_amendments.py:138` checks historical source-pin coverage; the new drift fixture changes working declarations only. Damage the baseline Git blob independently. |
+| Verification V1: approved builder overwrite refusal | medium | patch | `build_candidate.py:138` refuses approved regeneration before any writes, but tests import only source_fact. Add an isolated approved-packet entry-point refusal test with exact streams and unchanged artifact bytes. |
+
+
+All eleven continuation-review findings above are patched by six additional isolated test methods. Parent verification passes all **40 tests** through discovery and direct execution, both completion gates, unchanged AD-23 adoption and whitespace checks. No review finding remains open; the two previously accepted deferrals remain already tracked in `deferred-work.md:1030` and `deferred-work.md:1038`. Final parent evidence and fresh exact-input/packet secret scans are retained in [parent verification](evidence/story-5-7/review-pass-2/parent-review/verification.md). The spec is done and sprint status is review, as required by the build workflow.

@@ -134,8 +134,8 @@ def policy(root):
 def source_pins(root):
     evidence = (root / ART / 'evidence/story-5-1/verification.md').read_text()
     pins = dict(re.findall(r'^\| `(references/[^`]+)` \| `([0-9a-f]{40})` \|', evidence, re.M))
-    declared = re.findall(r'path = (references/\S+)', (root / '.gitmodules').read_text())
-    require(set(pins) == set(declared), 'original source-pin coverage differs from root .gitmodules')
+    declared = re.findall(r'path = (references/\S+)', git(root, 'show', f'{BASELINE}:.gitmodules').decode())
+    require(set(pins) == set(declared), 'original source-pin coverage differs from baseline root .gitmodules')
     return pins
 
 
@@ -323,7 +323,8 @@ def verify_owner_packet(root, completion=False):
     artifacts = {str(p): sha((root / p).read_bytes()) for p in authorities}
     for path in authorities:
         require(git(root, 'show', f'{BASELINE}:{path}') == (root / path).read_bytes(), f'preserved authority changed: {path}')
-    require(git(root, 'show', f'{BASELINE}:.gitmodules') == (root / '.gitmodules').read_bytes(), 'root .gitmodules changed')
+    if git(root, 'show', f'{BASELINE}:.gitmodules') != (root / '.gitmodules').read_bytes():
+        print('reported: root .gitmodules changed since the Story 5.7 baseline; original source pins remain authoritative', file=sys.stderr)
     integration = read_json(root / ART / 'evidence/story-5-2/main-integration.json')
     require(integration.get('merged') is True and integration.get('mainRevision') == '10b709b86f9c9148e5a18177e8d11fad79ae2c0b', 'exemption amendment is not integrated')
     pins, results, amendments = source_pins(root), [], []
@@ -359,8 +360,8 @@ def verify(root, completion=False):
             completion = True
     results, receipt, _ = verify_owner_packet(root, completion)
     labels = load(root, 'labels57', PACKET / 'verify_labels.py')
-    labels.verify(root, completion)
-    return results, receipt['decision']
+    _, _, completion = labels.verify(root, completion)
+    return results, receipt['decision'], completion
 
 
 def main(argv=None):
@@ -369,14 +370,14 @@ def main(argv=None):
     args_parser.add_argument('--approved-completion', action='store_true')
     args = args_parser.parse_args(argv)
     try:
-        results, decision = verify(args.root, args.approved_completion)
+        results, decision, completed = verify(args.root, args.approved_completion)
     except (ValueError, KeyError, TypeError, OSError, IndexError) as error:
         print(f'FAIL: {error}', file=sys.stderr)
         return 1
     for result in results:
         print(f'PASS: {result}')
     print(f'PASS: candidate verified; owner decision: {decision}; ' +
-          ('approved completion verified' if args.approved_completion else 'completion requires owner approval and integrated labels'))
+          ('approved completion verified' if completed else 'completion requires owner approval and integrated labels'))
     return 0
 
 

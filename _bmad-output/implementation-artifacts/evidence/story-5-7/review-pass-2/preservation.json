@@ -1,0 +1,40 @@
+{
+  "comparison": "Current HEAD and approved receipt bindings; no protected input changes in this implementation.",
+  "command": [
+    "git",
+    "diff",
+    "--exit-code",
+    "HEAD",
+    "--",
+    "src",
+    "tests",
+    "tools",
+    "references",
+    ".gitmodules",
+    ".gitattributes",
+    ".editorconfig",
+    "Directory.Build.props",
+    "Directory.Build.targets",
+    "Directory.Packages.props",
+    "global.json",
+    "Hexalith.McpCli.slnx",
+    ".github"
+  ],
+  "exitCode": 0,
+  "stdout": "",
+  "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n",
+  "approvedInputs": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json": "5b0044a505f6cdcb95c5ceaa087f79dd705da54de3225ea9358f2b50f48e3b90",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json": "7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/main-integration.json": "be51f67f9f3036bb328ceb7c72125777964138d537e96875f4c887286432430d",
+    "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e",
+    "_bmad-output/implementation-artifacts/evidence/story-5-1/verification.md": "3fa6e07b25b00f9c7db9df1a371c56145df976e369b1073349abe3d7701fbfe5",
+    "_bmad-output/implementation-artifacts/evidence/story-5-5/labels.json": "196a2f700f02f23aa69d4e32d1f4dc1dbcd3d32fd8aa169cea7e46ebb248d43b",
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+  }
+}

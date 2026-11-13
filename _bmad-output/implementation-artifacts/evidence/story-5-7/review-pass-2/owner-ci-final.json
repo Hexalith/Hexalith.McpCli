@@ -1,0 +1,1501 @@
+{
+  "observedAt": "2026-11-13T08:52:29.556Z",
+  "source": "GitHub plugin GET requests; final owner CI and parent comparisons, no retries or workflow mutations.",
+  "runs": [
+    {
+      "repository": "Hexalith/Hexalith.EventStore",
+      "commit": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+      "runs": [
+        {
+          "id": 43388135774,
+          "name": "OQ8 governing-design availability",
+          "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135774",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388135774/jobs"
+        },
+        {
+          "id": 43388135780,
+          "name": "Payload Protection Azure",
+          "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135780",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388135780/jobs"
+        },
+        {
+          "id": 43388135974,
+          "name": "CodeQL",
+          "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135974",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388135974/jobs"
+        },
+        {
+          "id": 43388136073,
+          "name": "Commitlint",
+          "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136073",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388136073/jobs"
+        },
+        {
+          "id": 43388135697,
+          "name": "Payload Protection Lifecycle",
+          "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135697",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388135697/jobs"
+        },
+        {
+          "id": 43388135879,
+          "name": "Payload Protection",
+          "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135879",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388135879/jobs"
+        },
+        {
+          "id": 43388135731,
+          "name": "Advisory Tests",
+          "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135731",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388135731/jobs"
+        },
+        {
+          "id": 43388135678,
+          "name": "Integration Tests",
+          "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "status": "in_progress",
+          "conclusion": null,
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135678",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388135678/jobs"
+        },
+        {
+          "id": 43388136260,
+          "name": "CI",
+          "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388136260/jobs"
+        }
+      ],
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs?head_sha=639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13&per_page=30"
+    },
+    {
+      "repository": "Hexalith/Hexalith.FrontComposer",
+      "commit": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.FrontComposer/actions/runs?head_sha=19418a0c29daf38eef03b0891958cd8aa93c59bf&per_page=30",
+      "runs": [
+        {
+          "id": 43390859031,
+          "name": "Flaky Test Governance",
+          "head_sha": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43390859031",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.FrontComposer/actions/runs/43390859031/jobs"
+        },
+        {
+          "id": 43388143167,
+          "name": "Commitlint",
+          "head_sha": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43388143167",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.FrontComposer/actions/runs/43388143167/jobs"
+        },
+        {
+          "id": 43388143286,
+          "name": "CodeQL",
+          "head_sha": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43388143286",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.FrontComposer/actions/runs/43388143286/jobs"
+        },
+        {
+          "id": 43388143372,
+          "name": "CI",
+          "head_sha": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43388143372",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.FrontComposer/actions/runs/43388143372/jobs"
+        },
+        {
+          "id": 43388142861,
+          "name": "Quality",
+          "head_sha": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43388142861",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.FrontComposer/actions/runs/43388142861/jobs"
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.Memories",
+      "commit": "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Memories/actions/runs?head_sha=a3f0b3a4a0f0905f6b88da039491ceb286103207&per_page=30",
+      "runs": [
+        {
+          "id": 43388157817,
+          "name": "CI",
+          "head_sha": "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/43388157817",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Memories/actions/runs/43388157817/jobs"
+        },
+        {
+          "id": 43388157908,
+          "name": "Commitlint",
+          "head_sha": "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/43388157908",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Memories/actions/runs/43388157908/jobs"
+        },
+        {
+          "id": 43388157783,
+          "name": "CodeQL",
+          "head_sha": "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/43388157783",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Memories/actions/runs/43388157783/jobs"
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.Projects",
+      "commit": "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Projects/actions/runs?head_sha=065f04773a34a8e68b702caeb99937ae7b8e89c8&per_page=30",
+      "runs": [
+        {
+          "id": 43388163130,
+          "name": "CI",
+          "head_sha": "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Projects/actions/runs/43388163130",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Projects/actions/runs/43388163130/jobs"
+        },
+        {
+          "id": 43388163158,
+          "name": "CodeQL",
+          "head_sha": "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Projects/actions/runs/43388163158",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Projects/actions/runs/43388163158/jobs"
+        },
+        {
+          "id": 43388163071,
+          "name": "Commitlint",
+          "head_sha": "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Projects/actions/runs/43388163071",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Projects/actions/runs/43388163071/jobs"
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.Folders",
+      "commit": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Folders/actions/runs?head_sha=583d3d492f94217809a8efe00424b80ce3fdfa61&per_page=30",
+      "runs": [
+        {
+          "id": 43388170631,
+          "name": "Commitlint",
+          "head_sha": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Folders/actions/runs/43388170631",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Folders/actions/runs/43388170631/jobs"
+        },
+        {
+          "id": 43388170325,
+          "name": "contract-spine-gates",
+          "head_sha": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Folders/actions/runs/43388170325",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Folders/actions/runs/43388170325/jobs"
+        },
+        {
+          "id": 43388170694,
+          "name": "CodeQL",
+          "head_sha": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Folders/actions/runs/43388170694",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Folders/actions/runs/43388170694/jobs"
+        },
+        {
+          "id": 43388170637,
+          "name": "CI",
+          "head_sha": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Folders/actions/runs/43388170637",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Folders/actions/runs/43388170637/jobs"
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.ChatBot",
+      "commit": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs?head_sha=6a4ca07b18e9b58500dc79dfede1f308da36c828&per_page=30",
+      "runs": [
+        {
+          "id": 43388176969,
+          "name": "release",
+          "head_sha": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176969",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs/43388176969/jobs"
+        },
+        {
+          "id": 43388176975,
+          "name": "ci",
+          "head_sha": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs/43388176975/jobs"
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.Parties",
+      "commit": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs?head_sha=6bc68c8fad27209b80c4dd1a5a0271519de09f33&per_page=30",
+      "runs": [
+        {
+          "id": 43388149046,
+          "name": "CodeQL",
+          "head_sha": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149046",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43388149046/jobs"
+        },
+        {
+          "id": 43388148608,
+          "name": "Release Candidate Gate",
+          "head_sha": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388148608",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43388148608/jobs"
+        },
+        {
+          "id": 43388148949,
+          "name": "Commitlint",
+          "head_sha": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388148949",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43388148949/jobs"
+        },
+        {
+          "id": 43388149065,
+          "name": "CI",
+          "head_sha": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43388149065/jobs"
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.EventStore",
+      "commit": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs?head_sha=d457ecd51a17b8ecc0c678b02d19d7ee92c13141&per_page=30",
+      "runs": [
+        {
+          "id": 43386281615,
+          "name": "Commitlint",
+          "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281615",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386281615/jobs"
+        },
+        {
+          "id": 43386281949,
+          "name": "CI",
+          "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386281949/jobs"
+        },
+        {
+          "id": 43386281014,
+          "name": "Advisory Tests",
+          "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281014",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386281014/jobs"
+        },
+        {
+          "id": 43386280972,
+          "name": "Payload Protection Lifecycle",
+          "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386280972",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386280972/jobs"
+        },
+        {
+          "id": 43386281106,
+          "name": "Payload Protection",
+          "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281106",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386281106/jobs"
+        },
+        {
+          "id": 43386281079,
+          "name": "Integration Tests",
+          "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281079",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386281079/jobs"
+        },
+        {
+          "id": 43386281505,
+          "name": "CodeQL",
+          "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281505",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386281505/jobs"
+        },
+        {
+          "id": 43386281004,
+          "name": "OQ8 governing-design availability",
+          "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281004",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386281004/jobs"
+        },
+        {
+          "id": 43386280973,
+          "name": "Payload Protection Azure",
+          "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386280973",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386280973/jobs"
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.EventStore",
+      "commit": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs?head_sha=f2062f7f7bd8b3dcae946ba209b933ad8e610ff2&per_page=30",
+      "runs": [
+        {
+          "id": 43329036007,
+          "name": "Payload Protection Lifecycle",
+          "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036007",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036007/jobs"
+        },
+        {
+          "id": 43329036178,
+          "name": "Payload Protection",
+          "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036178",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036178/jobs"
+        },
+        {
+          "id": 43329036554,
+          "name": "CI",
+          "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036554/jobs"
+        },
+        {
+          "id": 43329036249,
+          "name": "Advisory Tests",
+          "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036249",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036249/jobs"
+        },
+        {
+          "id": 43329036520,
+          "name": "CodeQL",
+          "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036520",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036520/jobs"
+        },
+        {
+          "id": 43329036003,
+          "name": "Integration Tests",
+          "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036003",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036003/jobs"
+        },
+        {
+          "id": 43329036038,
+          "name": "OQ8 governing-design availability",
+          "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036038",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036038/jobs"
+        },
+        {
+          "id": 43329036621,
+          "name": "Commitlint",
+          "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036621",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036621/jobs"
+        },
+        {
+          "id": 43329036168,
+          "name": "Payload Protection Azure",
+          "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036168",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036168/jobs"
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.ChatBot",
+      "commit": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs?head_sha=62e82201d10c8b01445433ba82d3b8619f332ea8&per_page=30",
+      "runs": [
+        {
+          "id": 43178214620,
+          "name": "ci",
+          "head_sha": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214620",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs/43178214620/jobs"
+        },
+        {
+          "id": 43178214683,
+          "name": "release",
+          "head_sha": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214683",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs/43178214683/jobs"
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.Parties",
+      "commit": "f532145038992217f6433cd3dc1e36e61a1acc38",
+      "url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs?head_sha=f532145038992217f6433cd3dc1e36e61a1acc38&per_page=30",
+      "runs": [
+        {
+          "id": 43328520768,
+          "name": "Commitlint",
+          "head_sha": "f532145038992217f6433cd3dc1e36e61a1acc38",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520768",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43328520768/jobs"
+        },
+        {
+          "id": 43328520716,
+          "name": "CI",
+          "head_sha": "f532145038992217f6433cd3dc1e36e61a1acc38",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43328520716/jobs"
+        },
+        {
+          "id": 43328520573,
+          "name": "CodeQL",
+          "head_sha": "f532145038992217f6433cd3dc1e36e61a1acc38",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520573",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43328520573/jobs"
+        },
+        {
+          "id": 43328520234,
+          "name": "Release Candidate Gate",
+          "head_sha": "f532145038992217f6433cd3dc1e36e61a1acc38",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520234",
+          "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43328520234/jobs"
+        }
+      ]
+    }
+  ],
+  "failedAndCancelledJobDetails": [
+    {
+      "repository": "Hexalith/Hexalith.EventStore",
+      "commit": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+      "run": {
+        "id": 43388136260,
+        "name": "CI",
+        "head_sha": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260",
+        "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43388136260/jobs"
+      },
+      "jobs": [
+        {
+          "id": 131761458064,
+          "name": "ci / checkpointed process packages",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260/job/131761458064",
+          "steps": []
+        },
+        {
+          "id": 131761458285,
+          "name": "ci / semantic-release-governance",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260/job/131761458285",
+          "steps": []
+        },
+        {
+          "id": 131761458293,
+          "name": "ci / tenants-source-mode",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260/job/131761458293",
+          "steps": []
+        },
+        {
+          "id": 131761458384,
+          "name": "ci / build-and-test",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260/job/131761458384",
+          "steps": [
+            {
+              "name": "Prepare module build",
+              "conclusion": "failure",
+              "number": 10
+            },
+            {
+              "name": "Fail on blocking test failures",
+              "conclusion": "failure",
+              "number": 24
+            }
+          ]
+        },
+        {
+          "id": 131761458407,
+          "name": "ci / contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260/job/131761458407",
+          "steps": []
+        },
+        {
+          "id": 131761458424,
+          "name": "ci / folded-snapshot-compatibility",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260/job/131761458424",
+          "steps": []
+        },
+        {
+          "id": 131762366041,
+          "name": "ci / aspire-tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260/job/131762366041",
+          "steps": []
+        },
+        {
+          "id": 131762366258,
+          "name": "ci / performance-tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260/job/131762366258",
+          "steps": []
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.ChatBot",
+      "commit": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+      "run": {
+        "id": 43388176969,
+        "name": "release",
+        "head_sha": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176969",
+        "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs/43388176969/jobs"
+      },
+      "jobs": [
+        {
+          "id": 131761485176,
+          "name": "required Aspire + DAPR topology acceptance",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176969/job/131761485176",
+          "steps": [
+            {
+              "name": "Run required fail-closed tenant-bound topology smoke",
+              "conclusion": "failure",
+              "number": 9
+            }
+          ]
+        },
+        {
+          "id": 131761485590,
+          "name": "required live recovery validation sweep",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176969/job/131761485590",
+          "steps": [
+            {
+              "name": "Run all live recovery coordinators and retain evidence",
+              "conclusion": "failure",
+              "number": 9
+            }
+          ]
+        },
+        {
+          "id": 131764770784,
+          "name": "required independent live recovery evidence gate",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176969/job/131764770784",
+          "steps": [
+            {
+              "name": "Evaluate the release evidence gate out of process",
+              "conclusion": "failure",
+              "number": 7
+            }
+          ]
+        },
+        {
+          "id": 131768332169,
+          "name": "semantic-release",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176969/job/131768332169",
+          "steps": []
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.ChatBot",
+      "commit": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+      "run": {
+        "id": 43388176975,
+        "name": "ci",
+        "head_sha": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975",
+        "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs/43388176975/jobs"
+      },
+      "jobs": [
+        {
+          "id": 131761485168,
+          "name": "build",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975/job/131761485168",
+          "steps": [
+            {
+              "name": "Test every xUnit project independently through its v4 runner",
+              "conclusion": "failure",
+              "number": 9
+            }
+          ]
+        },
+        {
+          "id": 131761486987,
+          "name": "pull-request synthetic merge build and test",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975/job/131761486987",
+          "steps": []
+        },
+        {
+          "id": 131768680539,
+          "name": "story-evidence-integrity",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975/job/131768680539",
+          "steps": [
+            {
+              "name": "Require successful general machine-result producer",
+              "conclusion": "failure",
+              "number": 7
+            }
+          ]
+        },
+        {
+          "id": 131768682379,
+          "name": "scheduled live recovery validation sweep",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975/job/131768682379",
+          "steps": []
+        },
+        {
+          "id": 131768682517,
+          "name": "required Aspire + DAPR topology acceptance",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975/job/131768682517",
+          "steps": []
+        },
+        {
+          "id": 131768683477,
+          "name": "scheduled live recovery evidence gate",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975/job/131768683477",
+          "steps": []
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.Parties",
+      "commit": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+      "run": {
+        "id": 43388149065,
+        "name": "CI",
+        "head_sha": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+        "status": "completed",
+        "conclusion": "cancelled",
+        "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065",
+        "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43388149065/jobs"
+      },
+      "jobs": [
+        {
+          "id": 131761394422,
+          "name": "UI accessibility",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394422",
+          "steps": [
+            {
+              "name": "Build UI with published dependencies",
+              "conclusion": "failure",
+              "number": 11
+            }
+          ]
+        },
+        {
+          "id": 131761394566,
+          "name": "BMAD configuration tests",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394566",
+          "steps": []
+        },
+        {
+          "id": 131761394630,
+          "name": "EventStore 4.0.4 package cohort (offline)",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394630",
+          "steps": []
+        },
+        {
+          "id": 131761394700,
+          "name": "Owner publisher qualification",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394700",
+          "steps": []
+        },
+        {
+          "id": 131761394718,
+          "name": "Published catalog concurrent runtime",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394718",
+          "steps": [
+            {
+              "name": "Build the test entry point before freezing runtime artifacts",
+              "conclusion": "failure",
+              "number": 8
+            },
+            {
+              "name": "Retain the actual runtime result",
+              "conclusion": "failure",
+              "number": 11
+            }
+          ]
+        },
+        {
+          "id": 131761394732,
+          "name": "ci / build-and-test",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394732",
+          "steps": [
+            {
+              "name": "Prepare module build",
+              "conclusion": "failure",
+              "number": 11
+            },
+            {
+              "name": "Fail on blocking test failures",
+              "conclusion": "failure",
+              "number": 29
+            }
+          ]
+        },
+        {
+          "id": 131761394758,
+          "name": "Parties Platform declaration",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394758",
+          "steps": []
+        },
+        {
+          "id": 131761394762,
+          "name": "EventStore 4.2.0 package cohort (offline)",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394762",
+          "steps": []
+        },
+        {
+          "id": 131761394773,
+          "name": "Lifecycle controller tests",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394773",
+          "steps": [
+            {
+              "name": "Initialize direct controller dependencies",
+              "conclusion": "cancelled",
+              "number": 3
+            }
+          ]
+        },
+        {
+          "id": 131761394854,
+          "name": "Memories 3.0.18 package protocol",
+          "status": "completed",
+          "conclusion": "cancelled",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131761394854",
+          "steps": []
+        },
+        {
+          "id": 131762747294,
+          "name": "verify-public-package-integration",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065/job/131762747294",
+          "steps": [
+            {
+              "name": "Require the owning integration job to pass",
+              "conclusion": "failure",
+              "number": 2
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.EventStore",
+      "commit": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+      "run": {
+        "id": 43386281949,
+        "name": "CI",
+        "head_sha": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949",
+        "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43386281949/jobs"
+      },
+      "jobs": [
+        {
+          "id": 131755420154,
+          "name": "ci / contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949/job/131755420154",
+          "steps": []
+        },
+        {
+          "id": 131755420507,
+          "name": "ci / tenants-source-mode",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949/job/131755420507",
+          "steps": []
+        },
+        {
+          "id": 131755420531,
+          "name": "ci / folded-snapshot-compatibility",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949/job/131755420531",
+          "steps": []
+        },
+        {
+          "id": 131755420546,
+          "name": "ci / build-and-test",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949/job/131755420546",
+          "steps": [
+            {
+              "name": "Prepare module build",
+              "conclusion": "failure",
+              "number": 10
+            },
+            {
+              "name": "Fail on blocking test failures",
+              "conclusion": "failure",
+              "number": 24
+            }
+          ]
+        },
+        {
+          "id": 131755420560,
+          "name": "ci / checkpointed process packages",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949/job/131755420560",
+          "steps": []
+        },
+        {
+          "id": 131755420597,
+          "name": "ci / semantic-release-governance",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949/job/131755420597",
+          "steps": []
+        },
+        {
+          "id": 131755934358,
+          "name": "ci / aspire-tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949/job/131755934358",
+          "steps": []
+        },
+        {
+          "id": 131755934411,
+          "name": "ci / performance-tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43386281949/job/131755934411",
+          "steps": []
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.EventStore",
+      "commit": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+      "run": {
+        "id": 43329036554,
+        "name": "CI",
+        "head_sha": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554",
+        "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.EventStore/actions/runs/43329036554/jobs"
+      },
+      "jobs": [
+        {
+          "id": 131568905037,
+          "name": "ci / semantic-release-governance",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554/job/131568905037",
+          "steps": []
+        },
+        {
+          "id": 131568905198,
+          "name": "ci / checkpointed process packages",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554/job/131568905198",
+          "steps": []
+        },
+        {
+          "id": 131568905312,
+          "name": "ci / folded-snapshot-compatibility",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554/job/131568905312",
+          "steps": []
+        },
+        {
+          "id": 131568905364,
+          "name": "ci / contracts",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554/job/131568905364",
+          "steps": []
+        },
+        {
+          "id": 131568905433,
+          "name": "ci / tenants-source-mode",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554/job/131568905433",
+          "steps": []
+        },
+        {
+          "id": 131568905751,
+          "name": "ci / build-and-test",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554/job/131568905751",
+          "steps": [
+            {
+              "name": "Prepare module build",
+              "conclusion": "failure",
+              "number": 10
+            },
+            {
+              "name": "Fail on blocking test failures",
+              "conclusion": "failure",
+              "number": 24
+            }
+          ]
+        },
+        {
+          "id": 131569970977,
+          "name": "ci / performance-tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554/job/131569970977",
+          "steps": []
+        },
+        {
+          "id": 131569971324,
+          "name": "ci / aspire-tests",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43329036554/job/131569971324",
+          "steps": []
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.ChatBot",
+      "commit": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+      "run": {
+        "id": 43178214620,
+        "name": "ci",
+        "head_sha": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214620",
+        "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs/43178214620/jobs"
+      },
+      "jobs": [
+        {
+          "id": 131047518399,
+          "name": "build",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214620/job/131047518399",
+          "steps": [
+            {
+              "name": "Test every xUnit project independently through its v4 runner",
+              "conclusion": "failure",
+              "number": 9
+            }
+          ]
+        },
+        {
+          "id": 131047520471,
+          "name": "pull-request synthetic merge build and test",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214620/job/131047520471",
+          "steps": []
+        },
+        {
+          "id": 131054238231,
+          "name": "story-evidence-integrity",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214620/job/131054238231",
+          "steps": [
+            {
+              "name": "Require successful general machine-result producer",
+              "conclusion": "failure",
+              "number": 7
+            }
+          ]
+        },
+        {
+          "id": 131054239758,
+          "name": "scheduled live recovery validation sweep",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214620/job/131054239758",
+          "steps": []
+        },
+        {
+          "id": 131054239816,
+          "name": "required Aspire + DAPR topology acceptance",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214620/job/131054239816",
+          "steps": []
+        },
+        {
+          "id": 131054240880,
+          "name": "scheduled live recovery evidence gate",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214620/job/131054240880",
+          "steps": []
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.ChatBot",
+      "commit": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+      "run": {
+        "id": 43178214683,
+        "name": "release",
+        "head_sha": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214683",
+        "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.ChatBot/actions/runs/43178214683/jobs"
+      },
+      "jobs": [
+        {
+          "id": 131047519077,
+          "name": "required Aspire + DAPR topology acceptance",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214683/job/131047519077",
+          "steps": [
+            {
+              "name": "Run required fail-closed tenant-bound topology smoke",
+              "conclusion": "failure",
+              "number": 9
+            }
+          ]
+        },
+        {
+          "id": 131047519591,
+          "name": "required live recovery validation sweep",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214683/job/131047519591",
+          "steps": [
+            {
+              "name": "Run all live recovery coordinators and retain evidence",
+              "conclusion": "failure",
+              "number": 9
+            }
+          ]
+        },
+        {
+          "id": 131056134719,
+          "name": "required independent live recovery evidence gate",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214683/job/131056134719",
+          "steps": [
+            {
+              "name": "Evaluate the release evidence gate out of process",
+              "conclusion": "failure",
+              "number": 7
+            }
+          ]
+        },
+        {
+          "id": 131059373804,
+          "name": "semantic-release",
+          "status": "completed",
+          "conclusion": "skipped",
+          "html_url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43178214683/job/131059373804",
+          "steps": []
+        }
+      ]
+    },
+    {
+      "repository": "Hexalith/Hexalith.Parties",
+      "commit": "f532145038992217f6433cd3dc1e36e61a1acc38",
+      "run": {
+        "id": 43328520716,
+        "name": "CI",
+        "head_sha": "f532145038992217f6433cd3dc1e36e61a1acc38",
+        "status": "completed",
+        "conclusion": "failure",
+        "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716",
+        "jobs_url": "https://api.github.com/repos/Hexalith/Hexalith.Parties/actions/runs/43328520716/jobs"
+      },
+      "jobs": [
+        {
+          "id": 131567016726,
+          "name": "Owner publisher qualification",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567016726",
+          "steps": []
+        },
+        {
+          "id": 131567017139,
+          "name": "Memories 3.0.18 package protocol",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567017139",
+          "steps": []
+        },
+        {
+          "id": 131567017168,
+          "name": "EventStore 4.0.4 package cohort (offline)",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567017168",
+          "steps": []
+        },
+        {
+          "id": 131567017177,
+          "name": "ci / build-and-test",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567017177",
+          "steps": [
+            {
+              "name": "Prepare module build",
+              "conclusion": "failure",
+              "number": 11
+            },
+            {
+              "name": "Fail on blocking test failures",
+              "conclusion": "failure",
+              "number": 29
+            }
+          ]
+        },
+        {
+          "id": 131567017183,
+          "name": "UI accessibility",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567017183",
+          "steps": [
+            {
+              "name": "Build UI with published dependencies",
+              "conclusion": "failure",
+              "number": 11
+            }
+          ]
+        },
+        {
+          "id": 131567017191,
+          "name": "Lifecycle controller tests",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567017191",
+          "steps": []
+        },
+        {
+          "id": 131567017203,
+          "name": "Parties Platform declaration",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567017203",
+          "steps": []
+        },
+        {
+          "id": 131567017221,
+          "name": "BMAD configuration tests",
+          "status": "completed",
+          "conclusion": "success",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567017221",
+          "steps": []
+        },
+        {
+          "id": 131567017238,
+          "name": "EventStore 4.2.0 package cohort (offline)",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567017238",
+          "steps": [
+            {
+              "name": "Build public packages and run focused catalog qualification",
+              "conclusion": "failure",
+              "number": 5
+            }
+          ]
+        },
+        {
+          "id": 131567017287,
+          "name": "Published catalog concurrent runtime",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567017287",
+          "steps": [
+            {
+              "name": "Build the test entry point before freezing runtime artifacts",
+              "conclusion": "failure",
+              "number": 8
+            },
+            {
+              "name": "Retain the actual runtime result",
+              "conclusion": "failure",
+              "number": 11
+            }
+          ]
+        },
+        {
+          "id": 131567606049,
+          "name": "verify-public-package-integration",
+          "status": "completed",
+          "conclusion": "failure",
+          "html_url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43328520716/job/131567606049",
+          "steps": [
+            {
+              "name": "Require the owning integration job to pass",
+              "conclusion": "failure",
+              "number": 2
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "logExcerpts": [
+    {
+      "jobId": 131761458384,
+      "tool": "mcp__codex_apps__github_fetch_workflow_job_logs",
+      "excerpts": [
+        "2026-11-13T07:48:54.4198142Z prepare-module-build: dotnet exited 2: {\"status\":\"failed\",\"outcome\":{\"exitCode\":\"PrerequisiteUnavailable\",\"phase\":\"Prerequisite\",\"category\":\"PrerequisiteUnavailable\",\"ruleId\":\"HXW011\"},\"diagnostics\":[{\"ruleId\":\"HXW011\",\"phase\":\"Prerequisite\",\"category\":\"PrerequisiteUnavailable\",\"message\":\"Platform identity 8483559f068f8cd7282d878dcdc75ac10870c784 has no local v\\u003CSemVer\\u003E release tag.\",\"field\":\"/home/runner/work/Hexalith.EventStore/Hexalith.EventStore/references/Hexalith.Platform\",\"hint\":\"Fetch Platform tags, then retry.\",\"source\":null,\"location\":null,\"row\":null},{\"ruleId\":\"HXW009\",\"phase\":\"Prerequisite\",\"category\":\"PrerequisiteUnavailable\",\"message\":\"Builds catalog \\u0027/home/runner/work/Hexalith.EventStore/Hexalith.EventStore/references/Hexalith.Builds\\u0027 is staged 05a75b626fb73c6e386d16c41e885f193d3cff16, checked out 05a75b626fb73c6e386d16c41e885f193d3cff16; Platform 8483559f068f8cd7282d878dcdc75ac10870c784 pins 565b9e63bce9d3b5b43483d01da81ef7ceb33a20.\",\"field\":\"/home/runner/work/Hexalith.EventStore/Hexalith.EventStore/references/Hexalith.Builds\",\"hint\":null,\"source\":null,\"location\":null,\"row\":null},{\"ruleId\":\"HXW007\",\"phase\":\"Prerequisite\",\"category\":\"PrerequisiteUnavailable\",\"message\":\"Local Git inspection failed at \\u0027/home/runner/work/Hexalith.EventStore/Hexalith.EventStore/references/Hexalith.Builds\\u0027: show 565b9e63bce9d3b5b43483d01da81ef7ceb33a20:Props/Directory.Packages.props.\",\"field\":\"/home/runner/work/Hexalith.EventStore/Hexalith.EventStore/references/Hexalith.Builds\",\"hint\":null,\"source\":null,\"location\":null,\"row\":null}]}",
+        "2026-11-13T07:48:54.4438234Z \u001b[36;1m    echo '::error title=Missing test shard output::Tier 1 Microsoft.Testing.Platform did not report a failure count.'\u001b[0m",
+        "2026-11-13T07:48:54.4588820Z ##[error]Tier 1 Microsoft.Testing.Platform did not report a failure count."
+      ],
+      "failedTests": [],
+      "consoleLimit": null
+    },
+    {
+      "jobId": 131755420546,
+      "tool": "mcp__codex_apps__github_fetch_workflow_job_logs",
+      "excerpts": [
+        "2026-11-13T07:32:10.4367461Z prepare-module-build: dotnet exited 2: {\"status\":\"failed\",\"outcome\":{\"exitCode\":\"PrerequisiteUnavailable\",\"phase\":\"Prerequisite\",\"category\":\"PrerequisiteUnavailable\",\"ruleId\":\"HXW011\"},\"diagnostics\":[{\"ruleId\":\"HXW011\",\"phase\":\"Prerequisite\",\"category\":\"PrerequisiteUnavailable\",\"message\":\"Platform identity add09b79e61b6e08469bc37f9ec12e82899531db has no local v\\u003CSemVer\\u003E release tag.\",\"field\":\"/home/runner/work/Hexalith.EventStore/Hexalith.EventStore/references/Hexalith.Platform\",\"hint\":\"Fetch Platform tags, then retry.\",\"source\":null,\"location\":null,\"row\":null}]}",
+        "2026-11-13T07:32:10.4574287Z \u001b[36;1m    echo '::error title=Missing test shard output::Tier 1 Microsoft.Testing.Platform did not report a failure count.'\u001b[0m",
+        "2026-11-13T07:32:10.4702789Z ##[error]Tier 1 Microsoft.Testing.Platform did not report a failure count."
+      ],
+      "failedTests": [],
+      "consoleLimit": null
+    },
+    {
+      "jobId": 131761485168,
+      "tool": "mcp__codex_apps__github_fetch_workflow_job_logs",
+      "excerpts": [],
+      "failedTests": [],
+      "consoleLimit": "The failed test command redirects detailed results to workflow artifacts; this console establishes the failed step only."
+    },
+    {
+      "jobId": 131047518399,
+      "tool": "mcp__codex_apps__github_fetch_workflow_job_logs",
+      "excerpts": [],
+      "failedTests": [],
+      "consoleLimit": "The failed test command redirects detailed results to workflow artifacts; this console establishes the failed step only."
+    },
+    {
+      "jobId": 131761485176,
+      "tool": "mcp__codex_apps__github_fetch_workflow_job_logs",
+      "excerpts": [],
+      "failedTests": [
+        {
+          "type": "test-failed",
+          "exceptionTypes": [
+            "Hexalith.ChatBot.IntegrationTests.SelectedEndpointStartupException"
+          ],
+          "messages": [
+            "Selected resource 'chatbot' reached state 'FailedToStart' with health '' before accepting TCP connections on assigned HTTP port 33765."
+          ]
+        }
+      ],
+      "consoleLimit": null
+    },
+    {
+      "jobId": 131047519077,
+      "tool": "mcp__codex_apps__github_fetch_workflow_job_logs",
+      "excerpts": [],
+      "failedTests": [
+        {
+          "type": "test-failed",
+          "exceptionTypes": [
+            "Hexalith.ChatBot.IntegrationTests.SelectedEndpointStartupException"
+          ],
+          "messages": [
+            "Selected resource 'chatbot' reached state 'FailedToStart' with health '' before accepting TCP connections on assigned HTTP port 36827."
+          ]
+        }
+      ],
+      "consoleLimit": null
+    },
+    {
+      "jobId": 131761394422,
+      "tool": "mcp__codex_apps__github_fetch_workflow_job_logs",
+      "excerpts": [
+        "2026-11-13T07:48:10.6903712Z /home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.ConsumerPortal/Hexalith.Parties.ConsumerPortal.csproj : error NU1109: Detected package downgrade: Microsoft.AspNetCore.Components.Web from 11.0.0-rc.1.26425.128 to centrally defined 10.0.15. Update the centrally managed package version to a higher version.  [/home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj]",
+        "2026-11-13T07:48:10.6912242Z /home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.AdminPortal/Hexalith.Parties.AdminPortal.csproj : error NU1109: Detected package downgrade: Microsoft.AspNetCore.Components.Web from 11.0.0-rc.1.26425.128 to centrally defined 10.0.15. Update the centrally managed package version to a higher version.  [/home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj]",
+        "2026-11-13T07:48:10.6919385Z /home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj : error NU1109: Detected package downgrade: Microsoft.AspNetCore.Components.Web from 11.0.0-rc.1.26425.128 to centrally defined 10.0.15. Update the centrally managed package version to a higher version. "
+      ],
+      "failedTests": [],
+      "consoleLimit": null
+    },
+    {
+      "jobId": 131567017183,
+      "tool": "mcp__codex_apps__github_fetch_workflow_job_logs",
+      "excerpts": [
+        "2026-11-12T23:25:08.1762498Z /home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.ConsumerPortal/Hexalith.Parties.ConsumerPortal.csproj : error NU1109: Detected package downgrade: Microsoft.AspNetCore.Components.Web from 11.0.0-rc.1.26425.128 to centrally defined 10.0.15. Update the centrally managed package version to a higher version.  [/home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj]",
+        "2026-11-12T23:25:08.2852116Z /home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.AdminPortal/Hexalith.Parties.AdminPortal.csproj : error NU1109: Detected package downgrade: Microsoft.AspNetCore.Components.Web from 11.0.0-rc.1.26425.128 to centrally defined 10.0.15. Update the centrally managed package version to a higher version.  [/home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj]",
+        "2026-11-12T23:25:08.6424594Z /home/runner/work/Hexalith.Parties/Hexalith.Parties/src/Hexalith.Parties.UI/Hexalith.Parties.UI.csproj : error NU1109: Detected package downgrade: Microsoft.AspNetCore.Components.Web from 11.0.0-rc.1.26425.128 to centrally defined 10.0.15. Update the centrally managed package version to a higher version. "
+      ],
+      "failedTests": [],
+      "consoleLimit": null
+    }
+  ]
+}

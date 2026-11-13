@@ -1,0 +1,90 @@
+{
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "python3",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "stdout": "tests.stdout.txt",
+      "stderr": "tests.stderr.txt"
+    },
+    {
+      "name": "direct-tests",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py"
+      ],
+      "exitCode": 0,
+      "stdout": "direct-tests.stdout.txt",
+      "stderr": "direct-tests.stderr.txt"
+    },
+    {
+      "name": "amendments",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py"
+      ],
+      "exitCode": 0,
+      "stdout": "amendments.stdout.txt",
+      "stderr": "amendments.stderr.txt"
+    },
+    {
+      "name": "completion",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py",
+        "--approved-completion"
+      ],
+      "exitCode": 0,
+      "stdout": "completion.stdout.txt",
+      "stderr": "completion.stderr.txt"
+    },
+    {
+      "name": "labels",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py",
+        "--approved-completion"
+      ],
+      "exitCode": 0,
+      "stdout": "labels.stdout.txt",
+      "stderr": "labels.stderr.txt"
+    },
+    {
+      "name": "adoption",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "stdout": "adoption.stdout.txt",
+      "stderr": "adoption.stderr.txt"
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "whitespace.stdout.txt",
+      "stderr": "whitespace.stderr.txt"
+    }
+  ]
+}
