@@ -172,11 +172,11 @@ def anchor_evidence(root, module, rows, pins):
                 source = current
             elif current == '.github/CODEOWNERS':
                 declared_repo = re.search(r'`(references/Hexalith\.[^`/]+)`', row['text'])
-                require(declared_repo is not None, f'{key}: CODEOWNERS lacks repository context')
+                require(declared_repo is not None, f'{module}:{key}: CODEOWNERS lacks repository context')
                 repo, source = declared_repo[1], current
             else:
                 raise InvalidAmendment(f'{module}:{key}: unresolved source anchor {current}')
-            require(repo in pins and not source.endswith('/SKILL.md'), f'{key}: source outside declared ordinary files')
+            require(repo in pins and not source.endswith('/SKILL.md'), f'{module}:{key}: source outside declared ordinary files')
             token = (repo, source)
             if token not in cache:
                 cache[token] = git(root / repo, 'show', f'{pins[repo]}:{source}').decode('utf-8').splitlines()
@@ -186,12 +186,15 @@ def anchor_evidence(root, module, rows, pins):
     return count
 
 
-def check_replacement(class_id, outcome, action, replacement):
-    """Admission branch is explicit: Story 5.7 has no proved decorated replacement."""
+def check_replacement(label, outcome, action, replacement):
+    """Admission branch is explicit: Story 5.7 has no proved decorated replacement.
+
+    ``label`` names the damaged row as ``module:key (class)``.
+    """
     require(action != 'replace' or outcome == 'decorated-gateway-contract',
-            f'{class_id}: restricted or non-Gateway replacement is forbidden')
-    require(action != 'replace', f'{class_id}: replacement lacks exact decorated type at source pin and agent eligibility')
-    require(replacement == 'none', f'{class_id}: invented replacement; pinned decorated type/eligibility not established')
+            f'{label}: restricted or non-Gateway replacement is forbidden')
+    require(action != 'replace', f'{label}: replacement lacks exact decorated type at source pin and agent eligibility')
+    require(replacement == 'none', f'{label}: invented replacement; pinned decorated type/eligibility not established')
 
 
 def source_fact(module, cell):
@@ -214,7 +217,7 @@ def check_rows(module, old_rows, new_rows, inventory, classes):
         expected_outcome = classes[cid]['outcome'] if cid != 'record' else 'governance-record'
         require(fields['Adopted outcome'] == expected_outcome, f'{module}:{key}: outcome disagrees with adopted class')
         action = fields['Amendment disposition']
-        check_replacement(cid, expected_outcome, action, fields['Exact replacement'])
+        check_replacement(f'{module}:{key} ({cid})', expected_outcome, action, fields['Exact replacement'])
         expected_action = ('retain' if cid == 'record' else 'defer' if expected_outcome in
                            {'decorated-gateway-contract', 'continued-deferral'} else 'withdraw')
         require(action == expected_action, f'{module}:{key}: invalid disposition for adopted outcome')
@@ -232,7 +235,7 @@ def check_rows(module, old_rows, new_rows, inventory, classes):
                 tokens = (('Admin 1.0.2 G1–G6', 'confidential UI coverage', 'authorization/effect proof', 'G4 safety fixes', 'before retirement')
                           if key in {'PS01', 'PS02'} else ('Retained local compiler exemption', 'merged AI.Tools plan 1.2.0', 'no retirement or Gateway replacement')
                           if key == 'PS03' else ('Retained owner-held vector-migration exemption', 'merged AI.Tools plan 1.2.0', 'four-mode inventory', 'independent safety gates remain'))
-                require(all(token in after for token in tokens), f'{key}: lost adopted removal-gate semantics')
+                require(all(token in after for token in tokens), f'{module}:{key}: lost adopted removal-gate semantics')
                 continue  # independently checked by labels and required gate semantics below
             require(after == expected, f'{module}:{key}: changed protected source field {header}')
         reason, owner = fields['Amendment rationale or gap'], fields['Amendment owner']
@@ -242,27 +245,27 @@ def check_rows(module, old_rows, new_rows, inventory, classes):
         if expected_outcome != 'continued-deferral':
             require(owner == original_owner, f'{module}:{key}: owning role differs from preserved source governance')
         if expected_outcome == 'continued-deferral':
-            require(reason == classes[cid]['gap'] and owner == classes[cid]['ownerRole'], f'{key}: deferral gap/owner disagrees with AD-23')
+            require(reason == classes[cid]['gap'] and owner == classes[cid]['ownerRole'], f'{module}:{key}: deferral gap/owner disagrees with AD-23')
         elif expected_outcome == 'decorated-gateway-contract':
             require('exact decorated' in reason and 'pin' in reason and 'handler' in reason and 'eligibility' in reason,
-                    f'{key}: undeclared Gateway deferral lacks pinned Contracts/handler/eligibility gap')
+                    f'{module}:{key}: undeclared Gateway deferral lacks pinned Contracts/handler/eligibility gap')
         elif expected_outcome == 'confidential-ui-only':
             require(all(s in reason for s in ('Confidential UI coverage', 'before legacy-head retirement', 'G4', 'AV10', 'AV11', 'raw-token', 'URL', 'persisted effects')),
-                    f'{key}: UI withdrawal loses coverage or G4 prerequisites')
+                    f'{module}:{key}: UI withdrawal loses coverage or G4 prerequisites')
         elif expected_outcome == 'withdrawal':
-            require('Accept loss' in reason, f'{key}: withdrawal lacks accepted loss')
+            require('Accept loss' in reason, f'{module}:{key}: withdrawal lacks accepted loss')
             if cid == 'A7':
-                require(all(s in reason for s in ('profiles.json', 'link-following', 'overwrite', 'Never read or migrate')), f'{key}: lost profile withdrawal safety')
+                require(all(s in reason for s in ('profiles.json', 'link-following', 'overwrite', 'Never read or migrate')), f'{module}:{key}: lost profile withdrawal safety')
             if cid == 'K08':
-                require(all(s in reason for s in ('timed_out/needs_review', 'acceptance is not completion', 'subscriptions')), f'{key}: lost lifecycle losses')
+                require(all(s in reason for s in ('timed_out/needs_review', 'acceptance is not completion', 'subscriptions')), f'{module}:{key}: lost lifecycle losses')
             if cid == 'K07':
-                require(all(s in reason for s in ('resource URIs', 'schema negotiation', 'packages, README and AI.Tools')), f'{key}: lost documentation delivery losses')
+                require(all(s in reason for s in ('resource URIs', 'schema negotiation', 'packages, README and AI.Tools')), f'{module}:{key}: lost documentation delivery losses')
         elif expected_outcome == 'exempt-local-tooling':
             require(all(s in reason for s in ('Retain', 'merged AI.Tools plan 1.2.0', '10b709b86f9c9148e5a18177e8d11fad79ae2c0b', 'local')),
-                    f'{key}: exemption lacks merged authority or retained local limit')
+                    f'{module}:{key}: exemption lacks merged authority or retained local limit')
             if cid == 'K14':
                 require(all(s in reason for s in ('--dry-run', '--live', '--rollback', '--abort', 'Story 5.10', 'independent safety')),
-                        f'{key}: lost PS14 four-mode accounting or safety gate')
+                        f'{module}:{key}: lost PS14 four-mode accounting or safety gate')
         if key in records:
             governing = {k: entries[key][k] for k in ('kind', 'governedBy', 'governingRule') if k in entries[key]}
             require(json.loads(fields['Governance'], object_pairs_hook=unique) == governing, f'{module}:{key}: record governance differs from AD-23')
@@ -270,7 +273,7 @@ def check_rows(module, old_rows, new_rows, inventory, classes):
                 require(all(token in reason for token in PREREQUISITE_TOKENS[module][key]),
                         f'{module}:{key}: prerequisite applicability is not reconciled with adopted AD-23')
         else:
-            require(fields['Governance'] == 'AD-23 rowClasses; cross-cutting authorization and parity gates remain', f'{key}: operation lost cross-cutting governance')
+            require(fields['Governance'] == 'AD-23 rowClasses; cross-cutting authorization and parity gates remain', f'{module}:{key}: operation lost cross-cutting governance')
         delta.append({'id': key, 'fromSha256': sha(old['text'].encode()), 'toSha256': sha(new['text'].encode())})
     return delta
 

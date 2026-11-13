@@ -1,0 +1,596 @@
+{
+  "summary": {
+    "detected": 26,
+    "total": 26,
+    "pass3Controls": 18,
+    "pass3DetectedWithLiveGlobals": 18,
+    "pass3SupportedByPass3Receipt": 11,
+    "pass4Controls": 8,
+    "identityDetected": [
+      false
+    ]
+  },
+  "controls": [
+    {
+      "guard": "child imports disable bytecode first",
+      "introducedInPass": 3,
+      "test": "AmendmentTests.test_real_process_accepts_only_exact_permitted_drift_reports",
+      "diagnostic": "__pycache__",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 2,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_real_process_accepts_only_exact_permitted_drift_reports (controls57tests.AmendmentTests.test_real_process_accepts_only_exact_permitted_drift_reports) ... \n  test_real_process_accepts_only_exact_permitted_drift_reports (controls57tests.AmendmentTests.test_real_process_accepts_only_exact_permitted_drift_reports) (script='verify_amendments.py') ... FAIL\n  test_real_process_accepts_only_exact_permitted_drift_reports (controls57tests.AmendmentTests.test_real_process_accepts_only_exact_permitted_drift_reports) (script='verify_labels.py') ... FAIL\n\n======================================================================\nFAIL: test_real_process_accepts_only_exact_permitted_drift_reports (controls57tests.AmendmentTests.test_real_process_accepts_only_exact_permitted_drift_reports) (script='verify_amendments.py')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 697, in test_real_process_accepts_only_exact_permitted_drift_reports\n    self.assertEqual([], list(HERE.rglob('__pycache__')))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: [] != [PosixPath('/home/administrator/projects/h[81 chars]__')]\n\nSecond list contains 1 additional elements.\nFirst extra element 0:\nPosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/__pycache__')\n\n- []\n+ [PosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/__pycache__')]\n\n======================================================================\nFAIL: test_real_process_accepts_only_exact_permitted_drift_reports (controls57tests.AmendmentTests.test_real_process_accepts_only_exact_permitted_drift_reports) (script='verify_labels.py')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 697, in test_real_process_accepts_only_exact_permitted_drift_reports\n    self.assertEqual([], list(HERE.rglob('__pycache__')))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Lists differ: [] != [PosixPath('/home/administrator/projects/h[81 chars]__')]\n\nSecond list contains 1 additional elements.\nFirst extra element 0:\nPosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/__pycache__')\n\n- []\n+ [PosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/__pycache__')]\n\n----------------------------------------------------------------------\nRan 1 test in 0.984s\n\nFAILED (failures=2)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "pinned-anchor re-read",
+      "introducedInPass": 3,
+      "test": "AmendmentTests.test_default_success_reports_effective_completion_from_status_or_integrated_labels",
+      "diagnostic": "277 pinned anchors",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 2,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_default_success_reports_effective_completion_from_status_or_integrated_labels (controls57tests.AmendmentTests.test_default_success_reports_effective_completion_from_status_or_integrated_labels) ... \n  test_default_success_reports_effective_completion_from_status_or_integrated_labels (controls57tests.AmendmentTests.test_default_success_reports_effective_completion_from_status_or_integrated_labels) (args=[]) ... FAIL\n  test_default_success_reports_effective_completion_from_status_or_integrated_labels (controls57tests.AmendmentTests.test_default_success_reports_effective_completion_from_status_or_integrated_labels) (args=['--approved-completion']) ... FAIL\n\n======================================================================\nFAIL: test_default_success_reports_effective_completion_from_status_or_integrated_labels (controls57tests.AmendmentTests.test_default_success_reports_effective_completion_from_status_or_integrated_labels) (args=[])\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 564, in test_default_success_reports_effective_completion_from_status_or_integrated_labels\n    self.assertEqual((0,\n    ~~~~~~~~~~~~~~~~^^^^\n                      'PASS: eventstore-admin: 91 rows, 277 pinned anchors, complete delta/hash chain\\n'\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      'PASS: technical-tools: 68 rows, 105 pinned anchors, complete delta/hash chain\\n'\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      'PASS: candidate verified; owner decision: approved; approved completion verified\\n', ''),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                     invoke_main(V, args))\n                     ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (0, '[28 chars]ows, 277 pinned anchors, complete delta/hash c[168 chars], '') != (0, '[28 chars]ows, 0 pinned anchors, complete delta/hash cha[164 chars], '')\n\nFirst differing element 1:\n'PASS[24 chars]ows, 277 pinned anchors, complete delta/hash c[163 chars]ed\\n'\n'PASS[24 chars]ows, 0 pinned anchors, complete delta/hash cha[159 chars]ed\\n'\n\nDiff is 657 characters long. Set self.maxDiff to None to see it.\n\n======================================================================\nFAIL: test_default_success_reports_effective_completion_from_status_or_integrated_labels (controls57tests.AmendmentTests.test_default_success_reports_effective_completion_from_status_or_integrated_labels) (args=['--approved-completion'])\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 564, in test_default_success_reports_effective_completion_from_status_or_integrated_labels\n    self.assertEqual((0,\n    ~~~~~~~~~~~~~~~~^^^^\n                      'PASS: eventstore-admin: 91 rows, 277 pinned anchors, complete delta/hash chain\\n'\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      'PASS: technical-tools: 68 rows, 105 pinned anchors, complete delta/hash chain\\n'\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                      'PASS: candidate verified; owner decision: approved; approved completion verified\\n', ''),\n                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                     invoke_main(V, args))\n                     ^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (0, '[28 chars]ows, 277 pinned anchors, complete delta/hash c[168 chars], '') != (0, '[28 chars]ows, 0 pinned anchors, complete delta/hash cha[164 chars], '')\n\nFirst differing element 1:\n'PASS[24 chars]ows, 277 pinned anchors, complete delta/hash c[163 chars]ed\\n'\n'PASS[24 chars]ows, 0 pinned anchors, complete delta/hash cha[159 chars]ed\\n'\n\nDiff is 657 characters long. Set self.maxDiff to None to see it.\n\n----------------------------------------------------------------------\nRan 1 test in 0.685s\n\nFAILED (failures=2)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "source Disposition",
+      "introducedInPass": 3,
+      "test": "AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action",
+      "diagnostic": "changed protected source field Disposition",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 2,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_source_dispositions_must_reflect_the_adopted_amendment_action (controls57tests.AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action) ... \n  test_source_dispositions_must_reflect_the_adopted_amendment_action (controls57tests.AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action) (module='eventstore-admin', key='AC01', header='Disposition') ... FAIL\n  test_source_dispositions_must_reflect_the_adopted_amendment_action (controls57tests.AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action) (module='technical-tools', key='FV06', header='Disposition / coverage') ... FAIL\n\n======================================================================\nFAIL: test_source_dispositions_must_reflect_the_adopted_amendment_action (controls57tests.AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action) (module='eventstore-admin', key='AC01', header='Disposition')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 251, in test_source_dispositions_must_reflect_the_adopted_amendment_action\n    self.reject(lambda: self.check(module, changed), f'{module}:{key}: changed protected source field {header}')\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '[16 chars]tore-admin:AC01: changed protected source field Disposition\\n') != (1, '[16 chars]tore-admin:AC02: changed protected source field Disposition\\n')\n\nFirst differing element 2:\n'FAIL: eventstore-admin:AC01: changed protected source field Disposition\\n'\n'FAIL: eventstore-admin:AC02: changed protected source field Disposition\\n'\n\n  (1,\n   '',\n-  'FAIL: eventstore-admin:AC01: changed protected source field Disposition\\n')\n?                             ^\n\n+  'FAIL: eventstore-admin:AC02: changed protected source field Disposition\\n')\n?                             ^\n\n\n======================================================================\nFAIL: test_source_dispositions_must_reflect_the_adopted_amendment_action (controls57tests.AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action) (module='technical-tools', key='FV06', header='Disposition / coverage')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 251, in test_source_dispositions_must_reflect_the_adopted_amendment_action\n    self.reject(lambda: self.check(module, changed), f'{module}:{key}: changed protected source field {header}')\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '[22 chars]ols:FV06: changed protected source field Dispo[16 chars]e\\n') != (1, '[22 chars]ols:FH01: changed protected source field Disposition\\n')\n\nFirst differing element 2:\n'FAIL[14 chars]ols:FV06: changed protected source field Dispo[15 chars]ge\\n'\n'FAIL[14 chars]ols:FH01: changed protected source field Disposition\\n'\n\n  (1,\n   '',\n-  'FAIL: technical-tools:FV06: changed protected source field Disposition / '\n?                          ^ ^                                            ^^^\n\n+  'FAIL: technical-tools:FH01: changed protected source field Disposition\\n')\n?                          ^ ^                                            ^^ +\n\n-  'coverage\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 0.017s\n\nFAILED (failures=2)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "source Disposition / coverage",
+      "introducedInPass": 3,
+      "test": "AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action",
+      "diagnostic": "changed protected source field Disposition / coverage",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_source_dispositions_must_reflect_the_adopted_amendment_action (controls57tests.AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action) ... \n  test_source_dispositions_must_reflect_the_adopted_amendment_action (controls57tests.AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action) (module='technical-tools', key='FV06', header='Disposition / coverage') ... FAIL\n\n======================================================================\nFAIL: test_source_dispositions_must_reflect_the_adopted_amendment_action (controls57tests.AmendmentTests.test_source_dispositions_must_reflect_the_adopted_amendment_action) (module='technical-tools', key='FV06', header='Disposition / coverage')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 251, in test_source_dispositions_must_reflect_the_adopted_amendment_action\n    self.reject(lambda: self.check(module, changed), f'{module}:{key}: changed protected source field {header}')\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '[24 chars]s:FV06: changed protected source field Disposi[14 chars]e\\n') != (1, '[24 chars]s:FV01: changed protected source field Disposi[14 chars]e\\n')\n\nFirst differing element 2:\n'FAIL[16 chars]s:FV06: changed protected source field Disposi[13 chars]ge\\n'\n'FAIL[16 chars]s:FV01: changed protected source field Disposi[13 chars]ge\\n'\n\n  (1,\n   '',\n-  'FAIL: technical-tools:FV06: changed protected source field Disposition / '\n?                            ^\n\n+  'FAIL: technical-tools:FV01: changed protected source field Disposition / '\n?                            ^\n\n   'coverage\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 0.016s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "invalid successor label state",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_register_state_and_each_delivery_authorization_field",
+      "diagnostic": "invalid successor label state",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) ... FAIL\n\n======================================================================\nFAIL: test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 939, in test_register_state_and_each_delivery_authorization_field\n    self.assertEqual((1, '', 'FAIL: invalid successor label state\\n'), self.invoke(data))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: invalid successor label state\\n') != (0, 'PASS: successor register, 14 labels i[89 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: invalid successor label state\\n')\n+ (0,\n+  'PASS: successor register, 14 labels in 7 README-only patches; candidate '\n+  'only; integrated delivery remains a completion gate\\n',\n+  '')\n\n----------------------------------------------------------------------\nRan 1 test in 0.030s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "label register must designate integrated successor state",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_register_state_and_each_delivery_authorization_field",
+      "diagnostic": "label register must designate integrated successor state",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) ... FAIL\n\n======================================================================\nFAIL: test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 944, in test_register_state_and_each_delivery_authorization_field\n    self.assertEqual((1, '', 'FAIL: label register must designate integrated successor state\\n'),\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n                     self.invoke(data, ['--approved-completion']))\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: label register must designa[28 chars]e\\n') != (0, 'PASS: successor register, 14 labels i[56 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: label register must designate integrated successor state\\n')\n+ (0,\n+  'PASS: successor register, 14 labels in 7 README-only patches; integrated '\n+  'delivery verified\\n',\n+  '')\n\n----------------------------------------------------------------------\nRan 1 test in 0.310s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "delivery authorization exactWords",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_register_state_and_each_delivery_authorization_field",
+      "diagnostic": "completion requires explicit upstream delivery authorization",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) ... \n  test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) (field='exactWords') ... FAIL\n\n======================================================================\nFAIL: test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) (field='exactWords')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 950, in test_register_state_and_each_delivery_authorization_field\n    self.assertEqual((1, '', 'FAIL: completion requires explicit upstream delivery authorization\\n'), self.invoke(data))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: completion requires explici[32 chars]n\\n') != (0, 'PASS: successor register, 14 labels i[56 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: completion requires explicit upstream delivery authorization\\n')\n+ (0,\n+  'PASS: successor register, 14 labels in 7 README-only patches; integrated '\n+  'delivery verified\\n',\n+  '')\n\n----------------------------------------------------------------------\nRan 1 test in 1.130s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": false,
+        "failures": 1,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "delivery authorization source",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_register_state_and_each_delivery_authorization_field",
+      "diagnostic": "completion requires explicit upstream delivery authorization",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) ... \n  test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) (field='source') ... FAIL\n\n======================================================================\nFAIL: test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) (field='source')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 950, in test_register_state_and_each_delivery_authorization_field\n    self.assertEqual((1, '', 'FAIL: completion requires explicit upstream delivery authorization\\n'), self.invoke(data))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: completion requires explici[32 chars]n\\n') != (0, 'PASS: successor register, 14 labels i[56 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: completion requires explicit upstream delivery authorization\\n')\n+ (0,\n+  'PASS: successor register, 14 labels in 7 README-only patches; integrated '\n+  'delivery verified\\n',\n+  '')\n\n----------------------------------------------------------------------\nRan 1 test in 1.178s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": false,
+        "failures": 1,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "delivery authorization approvedOn",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_register_state_and_each_delivery_authorization_field",
+      "diagnostic": "completion requires explicit upstream delivery authorization",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) ... \n  test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) (field='approvedOn') ... FAIL\n\n======================================================================\nFAIL: test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) (field='approvedOn')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 950, in test_register_state_and_each_delivery_authorization_field\n    self.assertEqual((1, '', 'FAIL: completion requires explicit upstream delivery authorization\\n'), self.invoke(data))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: completion requires explici[32 chars]n\\n') != (0, 'PASS: successor register, 14 labels i[56 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: completion requires explicit upstream delivery authorization\\n')\n+ (0,\n+  'PASS: successor register, 14 labels in 7 README-only patches; integrated '\n+  'delivery verified\\n',\n+  '')\n\n----------------------------------------------------------------------\nRan 1 test in 1.234s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": false,
+        "failures": 1,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "label file",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_registered_label_hash_file_and_gate_damaged_independently",
+      "diagnostic": "label hash/file mismatch",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_registered_label_hash_file_and_gate_damaged_independently (controls57tests.LabelTests.test_registered_label_hash_file_and_gate_damaged_independently) ... \n  test_registered_label_hash_file_and_gate_damaged_independently (controls57tests.LabelTests.test_registered_label_hash_file_and_gate_damaged_independently) (field='file') ... FAIL\n\n======================================================================\nFAIL: test_registered_label_hash_file_and_gate_damaged_independently (controls57tests.LabelTests.test_registered_label_hash_file_and_gate_damaged_independently) (field='file')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 836, in test_registered_label_hash_file_and_gate_damaged_independently\n    self.assertEqual((1, '', f'FAIL: {row[\"id\"]}: {message}\\n'), self.invoke(data))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: PS01: label hash/file mismatch\\n') != (0, 'PASS: successor register, 14 labels i[89 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: PS01: label hash/file mismatch\\n')\n+ (0,\n+  'PASS: successor register, 14 labels in 7 README-only patches; candidate '\n+  'only; integrated delivery remains a completion gate\\n',\n+  '')\n\n----------------------------------------------------------------------\nRan 1 test in 0.033s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": false,
+        "failures": 3,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "label sha256",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_registered_label_hash_file_and_gate_damaged_independently",
+      "diagnostic": "label hash/file mismatch",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_registered_label_hash_file_and_gate_damaged_independently (controls57tests.LabelTests.test_registered_label_hash_file_and_gate_damaged_independently) ... \n  test_registered_label_hash_file_and_gate_damaged_independently (controls57tests.LabelTests.test_registered_label_hash_file_and_gate_damaged_independently) (field='sha256') ... FAIL\n\n======================================================================\nFAIL: test_registered_label_hash_file_and_gate_damaged_independently (controls57tests.LabelTests.test_registered_label_hash_file_and_gate_damaged_independently) (field='sha256')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 836, in test_registered_label_hash_file_and_gate_damaged_independently\n    self.assertEqual((1, '', f'FAIL: {row[\"id\"]}: {message}\\n'), self.invoke(data))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: PS01: label hash/file mismatch\\n') != (0, 'PASS: successor register, 14 labels i[89 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: PS01: label hash/file mismatch\\n')\n+ (0,\n+  'PASS: successor register, 14 labels in 7 README-only patches; candidate '\n+  'only; integrated delivery remains a completion gate\\n',\n+  '')\n\n----------------------------------------------------------------------\nRan 1 test in 0.030s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": false,
+        "failures": 3,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "label gate",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_registered_label_hash_file_and_gate_damaged_independently",
+      "diagnostic": "removal gate differs from successor inventory",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_registered_label_hash_file_and_gate_damaged_independently (controls57tests.LabelTests.test_registered_label_hash_file_and_gate_damaged_independently) ... \n  test_registered_label_hash_file_and_gate_damaged_independently (controls57tests.LabelTests.test_registered_label_hash_file_and_gate_damaged_independently) (field='gate') ... FAIL\n\n======================================================================\nFAIL: test_registered_label_hash_file_and_gate_damaged_independently (controls57tests.LabelTests.test_registered_label_hash_file_and_gate_damaged_independently) (field='gate')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 836, in test_registered_label_hash_file_and_gate_damaged_independently\n    self.assertEqual((1, '', f'FAIL: {row[\"id\"]}: {message}\\n'), self.invoke(data))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: PS01: removal gate differs [23 chars]y\\n') != (0, 'PASS: successor register, 14 labels i[89 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: PS01: removal gate differs from successor inventory\\n')\n+ (0,\n+  'PASS: successor register, 14 labels in 7 README-only patches; candidate '\n+  'only; integrated delivery remains a completion gate\\n',\n+  '')\n\n----------------------------------------------------------------------\nRan 1 test in 0.029s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": false,
+        "failures": 3,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "canonical integration commit",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_complete_delivery_fixture_and_each_completion_binding",
+      "diagnostic": "eventstore: missing integrated commit",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_complete_delivery_fixture_and_each_completion_binding (controls57tests.LabelTests.test_complete_delivery_fixture_and_each_completion_binding) ... FAIL\n\n======================================================================\nFAIL: test_complete_delivery_fixture_and_each_completion_binding (controls57tests.LabelTests.test_complete_delivery_fixture_and_each_completion_binding)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 971, in test_complete_delivery_fixture_and_each_completion_binding\n    self.assertEqual((1, '', 'FAIL: eventstore: missing integrated commit\\n'), self.invoke(changed))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: eventstore: missing integrated commit\\n') != (1, '', \"FAIL: git show aaaaaaaaaaaa:README.md fa[118 chars].\\n\")\n\nFirst differing element 2:\n'FAIL: eventstore: missing integrated commit\\n'\n\"FAIL: git show aaaaaaaaaaaa:README.md fa[117 chars]'.\\n\"\n\n- (1, '', 'FAIL: eventstore: missing integrated commit\\n')\n+ (1,\n+  '',\n+  'FAIL: git show aaaaaaaaaaaa:README.md failed for label evidence in '\n+  '/home/administrator/projects/hexalith/eventstore: fatal: invalid object name '\n+  \"'aaaaaaaaaaaa'.\\n\")\n\n----------------------------------------------------------------------\nRan 1 test in 1.635s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "before section matches committed base",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_readme_bindings_row_owner_and_rehashed_patch_damaged_independently",
+      "diagnostic": "before snapshot differs from committed base",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_readme_bindings_row_owner_and_rehashed_patch_damaged_independently (controls57tests.LabelTests.test_readme_bindings_row_owner_and_rehashed_patch_damaged_independently) ... \n  test_readme_bindings_row_owner_and_rehashed_patch_damaged_independently (controls57tests.LabelTests.test_readme_bindings_row_owner_and_rehashed_patch_damaged_independently) (field='before') ... FAIL\n\n======================================================================\nFAIL: test_readme_bindings_row_owner_and_rehashed_patch_damaged_independently (controls57tests.LabelTests.test_readme_bindings_row_owner_and_rehashed_patch_damaged_independently) (field='before')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 805, in test_readme_bindings_row_owner_and_rehashed_patch_damaged_independently\n    self.assertEqual((1, '', f'FAIL: eventstore: {message}\\n'), self.invoke(data))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: eventstore: before snapshot[27 chars]e\\n') != (0, 'PASS: successor register, 14 labels i[89 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: eventstore: before snapshot differs from committed base\\n')\n+ (0,\n+  'PASS: successor register, 14 labels in 7 README-only patches; candidate '\n+  'only; integrated delivery remains a completion gate\\n',\n+  '')\n\n----------------------------------------------------------------------\nRan 1 test in 0.044s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": false,
+        "failures": 6,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "duplicate workflow key",
+      "introducedInPass": 3,
+      "test": "AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars",
+      "diagnostic": "duplicate workflow status",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 2,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) ... \n  test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) (target='spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md', value='status: in-progress\\nstatus: done') ... FAIL\n  test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) (target='sprint-status.yaml', value='  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: in-progress\\n  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: done') ... FAIL\n\n======================================================================\nFAIL: test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) (target='spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md', value='status: in-progress\\nstatus: done')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 552, in test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), invoke_main(V))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: duplicate workflow status status\\n') != (0, 'PASS: eventstore-admin: 91 rows, 277 [233 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: duplicate workflow status status\\n')\n+ (0,\n+  'PASS: eventstore-admin: 91 rows, 277 pinned anchors, complete delta/hash '\n+  'chain\\n'\n+  'PASS: technical-tools: 68 rows, 105 pinned anchors, complete delta/hash '\n+  'chain\\n'\n+  'PASS: candidate verified; owner decision: approved; completion requires '\n+  'owner approval and integrated labels\\n',\n+  '')\n\n======================================================================\nFAIL: test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) (target='sprint-status.yaml', value='  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: in-progress\\n  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: done')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 552, in test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), invoke_main(V))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: duplicate workflow status 5-7-re-disposit[48 chars]i\\n') != (1, '', 'FAIL: eventstore: completion requires integrate[24 chars]e\\n')\n\nFirst differing element 2:\n'FAIL: duplicate workflow status 5-7-re-disposit[47 chars]ri\\n'\n'FAIL: eventstore: completion requires integrate[23 chars]ce\\n'\n\n  (1,\n   '',\n+  'FAIL: eventstore: completion requires integrated upstream label evidence\\n')\n-  'FAIL: duplicate workflow status '\n-  '5-7-re-disposition-eventstore-admin-and-technical-tool-inventori\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 0.781s\n\nFAILED (failures=2)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "unsupported workflow scalar",
+      "introducedInPass": 3,
+      "test": "AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars",
+      "diagnostic": "unsupported workflow status scalar",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 2,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) ... \n  test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) (target='spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md', value='status: [done]') ... FAIL\n  test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) (target='sprint-status.yaml', value='  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: [done]') ... FAIL\n\n======================================================================\nFAIL: test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) (target='spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md', value='status: [done]')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 552, in test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), invoke_main(V))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: unsupported workflow status[13 chars]s\\n') != (0, 'PASS: eventstore-admin: 91 rows, 277 [233 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1, '', 'FAIL: unsupported workflow status scalar status\\n')\n+ (0,\n+  'PASS: eventstore-admin: 91 rows, 277 pinned anchors, complete delta/hash '\n+  'chain\\n'\n+  'PASS: technical-tools: 68 rows, 105 pinned anchors, complete delta/hash '\n+  'chain\\n'\n+  'PASS: candidate verified; owner decision: approved; completion requires '\n+  'owner approval and integrated labels\\n',\n+  '')\n\n======================================================================\nFAIL: test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars (controls57tests.AmendmentTests.test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars) (target='sprint-status.yaml', value='  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: [done]')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 552, in test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), invoke_main(V))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: unsupported workflow status scalar 5-7-re[57 chars]i\\n') != (1, '', 'FAIL: eventstore: completion requires integrate[24 chars]e\\n')\n\nFirst differing element 2:\n'FAIL: unsupported workflow status scalar 5-7-re[56 chars]ri\\n'\n'FAIL: eventstore: completion requires integrate[23 chars]ce\\n'\n\n  (1,\n   '',\n+  'FAIL: eventstore: completion requires integrated upstream label evidence\\n')\n-  'FAIL: unsupported workflow status scalar '\n-  '5-7-re-disposition-eventstore-admin-and-technical-tool-inventori\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 0.792s\n\nFAILED (failures=2)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "Git repository diagnostic",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts",
+      "diagnostic": "failed for label evidence in ",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts (controls57tests.LabelTests.test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts) ... FAIL\n\n======================================================================\nFAIL: test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts (controls57tests.LabelTests.test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 1073, in test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts\n    self.assertEqual((1, '', f'FAIL: git show origin/main:README.md failed for label evidence in {owner}: fatal: current README unavailable\\n'), self.invoke(register))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '[61 chars]dence in /home/administrator/projects/hexalith[45 chars]e\\n') != (1, '[61 chars]dence: fatal: current README unavailable\\n')\n\nFirst differing element 2:\n'FAIL[53 chars]dence in /home/administrator/projects/hexalith[44 chars]le\\n'\n'FAIL[53 chars]dence: fatal: current README unavailable\\n'\n\n  (1,\n   '',\n-  'FAIL: git show origin/main:README.md failed for label evidence in '\n?                                                                 ^^^\n\n+  'FAIL: git show origin/main:README.md failed for label evidence: fatal: '\n?                                                                 ^^^^^^^^\n\n+  'current README unavailable\\n')\n-  '/home/administrator/projects/hexalith/eventstore: fatal: current README '\n-  'unavailable\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 1.995s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "Git stderr diagnostic",
+      "introducedInPass": 3,
+      "test": "LabelTests.test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts",
+      "diagnostic": "fatal: current README unavailable",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts (controls57tests.LabelTests.test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts) ... FAIL\n\n======================================================================\nFAIL: test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts (controls57tests.LabelTests.test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 1073, in test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts\n    self.assertEqual((1, '', f'FAIL: git show origin/main:README.md failed for label evidence in {owner}: fatal: current README unavailable\\n'), self.invoke(register))\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '[94 chars]ects/hexalith/eventstore: fatal: current README unavailable\\n') != (1, '[94 chars]ects/hexalith/eventstore\\n')\n\nFirst differing element 2:\n'FAIL[85 chars]jects/hexalith/eventstore: fatal: current README unavailable\\n'\n'FAIL[85 chars]jects/hexalith/eventstore\\n'\n\n  (1,\n   '',\n   'FAIL: git show origin/main:README.md failed for label evidence in '\n-  '/home/administrator/projects/hexalith/eventstore: fatal: current README '\n?                                                   ^^^^^^^^^^^^^^ ---------\n\n+  '/home/administrator/projects/hexalith/eventstore\\n')\n?                                                   ^  +\n\n-  'unavailable\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 2.015s\n\nFAILED (failures=1)\n",
+      "pass3MechanismIdentity": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      }
+    },
+    {
+      "guard": "check_rows checks the Exact replacement column",
+      "introducedInPass": 4,
+      "test": "AmendmentTests.test_exact_replacement_column_is_checked_through_every_row",
+      "diagnostic": "invented replacement; pinned decorated type/eligibility not established",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 4,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_exact_replacement_column_is_checked_through_every_row (controls57tests.AmendmentTests.test_exact_replacement_column_is_checked_through_every_row) ... \n  test_exact_replacement_column_is_checked_through_every_row (controls57tests.AmendmentTests.test_exact_replacement_column_is_checked_through_every_row) (key='AC01', field='Exact replacement') ... FAIL\n  test_exact_replacement_column_is_checked_through_every_row (controls57tests.AmendmentTests.test_exact_replacement_column_is_checked_through_every_row) (key='AC01', field='Amendment disposition') ... FAIL\n  test_exact_replacement_column_is_checked_through_every_row (controls57tests.AmendmentTests.test_exact_replacement_column_is_checked_through_every_row) (key='FH02', field='Exact replacement') ... FAIL\n  test_exact_replacement_column_is_checked_through_every_row (controls57tests.AmendmentTests.test_exact_replacement_column_is_checked_through_every_row) (key='FH02', field='Amendment disposition') ... FAIL\n\n======================================================================\nFAIL: test_exact_replacement_column_is_checked_through_every_row (controls57tests.AmendmentTests.test_exact_replacement_column_is_checked_through_every_row) (key='AC01', field='Exact replacement')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 301, in test_exact_replacement_column_is_checked_through_every_row\n    self.reject(lambda: self.check(module, changed), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: eventstore-admin:AC01 (A2):[71 chars]d\\n') != (0, 'PASS: fixture checked\\nPASS: candidat[96 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1,\n+ (0,\n+  'PASS: fixture checked\\n'\n+  'PASS: candidate verified; owner decision: pending; completion requires owner '\n+  'approval and integrated labels\\n',\n-  '',\n?    ^\n\n+  '')\n?    ^\n\n-  'FAIL: eventstore-admin:AC01 (A2): invented replacement; pinned decorated '\n-  'type/eligibility not established\\n')\n\n======================================================================\nFAIL: test_exact_replacement_column_is_checked_through_every_row (controls57tests.AmendmentTests.test_exact_replacement_column_is_checked_through_every_row) (key='AC01', field='Amendment disposition')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 301, in test_exact_replacement_column_is_checked_through_every_row\n    self.reject(lambda: self.check(module, changed), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '[26 chars]:AC01 (A2): restricted or non-Gateway replacem[15 chars]n\\n') != (1, '[26 chars]:AC01: invalid disposition for adopted outcome\\n')\n\nFirst differing element 2:\n'FAIL[18 chars]:AC01 (A2): restricted or non-Gateway replacem[14 chars]en\\n'\n'FAIL[18 chars]:AC01: invalid disposition for adopted outcome\\n'\n\n  (1,\n   '',\n+  'FAIL: eventstore-admin:AC01: invalid disposition for adopted outcome\\n')\n-  'FAIL: eventstore-admin:AC01 (A2): restricted or non-Gateway replacement is '\n-  'forbidden\\n')\n\n======================================================================\nFAIL: test_exact_replacement_column_is_checked_through_every_row (controls57tests.AmendmentTests.test_exact_replacement_column_is_checked_through_every_row) (key='FH02', field='Exact replacement')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 301, in test_exact_replacement_column_is_checked_through_every_row\n    self.reject(lambda: self.check(module, changed), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: technical-tools:FH02 (K01):[71 chars]d\\n') != (0, 'PASS: fixture checked\\nPASS: candidat[96 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1,\n+ (0,\n+  'PASS: fixture checked\\n'\n+  'PASS: candidate verified; owner decision: pending; completion requires owner '\n+  'approval and integrated labels\\n',\n-  '',\n?    ^\n\n+  '')\n?    ^\n\n-  'FAIL: technical-tools:FH02 (K01): invented replacement; pinned decorated '\n-  'type/eligibility not established\\n')\n\n======================================================================\nFAIL: test_exact_replacement_column_is_checked_through_every_row (controls57tests.AmendmentTests.test_exact_replacement_column_is_checked_through_every_row) (key='FH02', field='Amendment disposition')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 301, in test_exact_replacement_column_is_checked_through_every_row\n    self.reject(lambda: self.check(module, changed), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '[25 chars]:FH02 (K01): replacement lacks exact decorated[40 chars]y\\n') != (1, '[25 chars]:FH02: invalid disposition for adopted outcome\\n')\n\nFirst differing element 2:\n'FAIL[17 chars]:FH02 (K01): replacement lacks exact decorated[39 chars]ty\\n'\n'FAIL[17 chars]:FH02: invalid disposition for adopted outcome\\n'\n\n+ (1, '', 'FAIL: technical-tools:FH02: invalid disposition for adopted outcome\\n')\n- (1,\n-  '',\n-  'FAIL: technical-tools:FH02 (K01): replacement lacks exact decorated type at '\n-  'source pin and agent eligibility\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 0.021s\n\nFAILED (failures=4)\n"
+    },
+    {
+      "guard": "successor version",
+      "introducedInPass": 4,
+      "test": "AmendmentTests.test_owner_packet_checks_successor_version_and_metadata",
+      "diagnostic": "successor version mismatch",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 2,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) ... \n  test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) (module='eventstore-admin', field='inventory_version') ... FAIL\n  test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) (module='technical-tools', field='inventory_version') ... FAIL\n\n======================================================================\nFAIL: test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) (module='eventstore-admin', field='inventory_version')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 488, in test_owner_packet_checks_successor_version_and_metadata\n    self.reject(lambda: V.verify_owner_packet(ROOT), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '[23 chars]min: successor version mismatch\\n') != (1, '[23 chars]min: metadata/pin/scope/approval state differs[21 chars]y\\n')\n\nFirst differing element 2:\n'FAIL[15 chars]min: successor version mismatch\\n'\n'FAIL[15 chars]min: metadata/pin/scope/approval state differs[20 chars]cy\\n'\n\n- (1, '', 'FAIL: eventstore-admin: successor version mismatch\\n')\n+ (1,\n+  '',\n+  'FAIL: eventstore-admin: metadata/pin/scope/approval state differs from '\n+  'candidate policy\\n')\n\n======================================================================\nFAIL: test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) (module='technical-tools', field='inventory_version')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 488, in test_owner_packet_checks_successor_version_and_metadata\n    self.reject(lambda: V.verify_owner_packet(ROOT), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '[22 chars]ols: successor version mismatch\\n') != (1, '[22 chars]ols: metadata/pin/scope/approval state differs[21 chars]y\\n')\n\nFirst differing element 2:\n'FAIL[14 chars]ols: successor version mismatch\\n'\n'FAIL[14 chars]ols: metadata/pin/scope/approval state differs[20 chars]cy\\n'\n\n- (1, '', 'FAIL: technical-tools: successor version mismatch\\n')\n+ (1,\n+  '',\n+  'FAIL: technical-tools: metadata/pin/scope/approval state differs from '\n+  'candidate policy\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 0.408s\n\nFAILED (failures=2)\n"
+    },
+    {
+      "guard": "successor metadata",
+      "introducedInPass": 4,
+      "test": "AmendmentTests.test_owner_packet_checks_successor_version_and_metadata",
+      "diagnostic": "metadata/pin/scope/approval state differs from candidate policy",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 2,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) ... \n  test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) (module='eventstore-admin', field='source_revision') ... FAIL\n  test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) (module='technical-tools', field='source_revision') ... FAIL\n\n======================================================================\nFAIL: test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) (module='eventstore-admin', field='source_revision')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 488, in test_owner_packet_checks_successor_version_and_metadata\n    self.reject(lambda: V.verify_owner_packet(ROOT), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: eventstore-admin: metadata/[53 chars]y\\n') != (0, 'PASS: fixture checked\\nPASS: candidat[96 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1,\n+ (0,\n+  'PASS: fixture checked\\n'\n+  'PASS: candidate verified; owner decision: pending; completion requires owner '\n+  'approval and integrated labels\\n',\n-  '',\n?    ^\n\n+  '')\n?    ^\n\n-  'FAIL: eventstore-admin: metadata/pin/scope/approval state differs from '\n-  'candidate policy\\n')\n\n======================================================================\nFAIL: test_owner_packet_checks_successor_version_and_metadata (controls57tests.AmendmentTests.test_owner_packet_checks_successor_version_and_metadata) (module='technical-tools', field='source_revision')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 488, in test_owner_packet_checks_successor_version_and_metadata\n    self.reject(lambda: V.verify_owner_packet(ROOT), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: technical-tools: metadata/p[52 chars]y\\n') != (0, 'PASS: fixture checked\\nPASS: candidat[96 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1,\n+ (0,\n+  'PASS: fixture checked\\n'\n+  'PASS: candidate verified; owner decision: pending; completion requires owner '\n+  'approval and integrated labels\\n',\n-  '',\n?    ^\n\n+  '')\n?    ^\n\n-  'FAIL: technical-tools: metadata/pin/scope/approval state differs from '\n-  'candidate policy\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 0.696s\n\nFAILED (failures=2)\n"
+    },
+    {
+      "guard": "anchor continuation has a path",
+      "introducedInPass": 4,
+      "test": "AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files",
+      "diagnostic": "source anchor continuation has no path",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) ... \n  test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`:12`') ... FAIL\n\n======================================================================\nFAIL: test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`:12`')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 461, in test_anchor_paths_must_resolve_to_declared_ordinary_files\n    self.reject(lambda: V.anchor_evidence(ROOT, module, rows, pins), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: eventstore-admin:AC01: source anchor continuation has no path\\n') != ('uncaught', \"AttributeError: 'NoneType' object has no attribute 'partition'\")\n\nFirst differing element 0:\n1\n'uncaught'\n\nFirst tuple contains 1 additional elements.\nFirst extra element 2:\n'FAIL: eventstore-admin:AC01: source anchor continuation has no path\\n'\n\n- (1, '', 'FAIL: eventstore-admin:AC01: source anchor continuation has no path\\n')\n+ ('uncaught', \"AttributeError: 'NoneType' object has no attribute 'partition'\")\n\n----------------------------------------------------------------------\nRan 1 test in 0.017s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "CODEOWNERS anchor names its repository",
+      "introducedInPass": 4,
+      "test": "AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files",
+      "diagnostic": "CODEOWNERS lacks repository context",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) ... \n  test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`.github/CODEOWNERS:3`') ... FAIL\n\n======================================================================\nFAIL: test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`.github/CODEOWNERS:3`')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 461, in test_anchor_paths_must_resolve_to_declared_ordinary_files\n    self.reject(lambda: V.anchor_evidence(ROOT, module, rows, pins), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: technical-tools:FC01: CODEOWNERS lacks repository context\\n') != (1, '', \"FAIL: 'NoneType' object is not subscriptable\\n\")\n\nFirst differing element 2:\n'FAIL: technical-tools:FC01: CODEOWNERS lacks repository context\\n'\n\"FAIL: 'NoneType' object is not subscriptable\\n\"\n\n- (1, '', 'FAIL: technical-tools:FC01: CODEOWNERS lacks repository context\\n')\n+ (1, '', \"FAIL: 'NoneType' object is not subscriptable\\n\")\n\n----------------------------------------------------------------------\nRan 1 test in 0.018s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "anchor path resolves",
+      "introducedInPass": 4,
+      "test": "AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files",
+      "diagnostic": "unresolved source anchor Unknown/Command.cs",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) ... \n  test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`Unknown/Command.cs:12`') ... FAIL\n\n======================================================================\nFAIL: test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`Unknown/Command.cs:12`')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 461, in test_anchor_paths_must_resolve_to_declared_ordinary_files\n    self.reject(lambda: V.anchor_evidence(ROOT, module, rows, pins), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: eventstore-admin:AC01: unre[38 chars]s\\n') != (0, 'PASS: fixture checked\\nPASS: candidat[96 chars], '')\n\nFirst differing element 0:\n1\n0\n\n- (1,\n+ (0,\n+  'PASS: fixture checked\\n'\n+  'PASS: candidate verified; owner decision: pending; completion requires owner '\n+  'approval and integrated labels\\n',\n-  '',\n?    ^\n\n+  '')\n?    ^\n\n-  'FAIL: eventstore-admin:AC01: unresolved source anchor Unknown/Command.cs\\n')\n\n----------------------------------------------------------------------\nRan 1 test in 0.017s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "anchor repository is declared",
+      "introducedInPass": 4,
+      "test": "AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files",
+      "diagnostic": "source outside declared ordinary files",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) ... \n  test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`references/Hexalith.Unknown/src/Tool.cs:12`') ... FAIL\n\n======================================================================\nFAIL: test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`references/Hexalith.Unknown/src/Tool.cs:12`')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 461, in test_anchor_paths_must_resolve_to_declared_ordinary_files\n    self.reject(lambda: V.anchor_evidence(ROOT, module, rows, pins), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: technical-tools:FC01: source outside declared ordinary files\\n') != (1, '', \"FAIL: 'references/Hexalith.Unknown'\\n\")\n\nFirst differing element 2:\n'FAIL: technical-tools:FC01: source outside declared ordinary files\\n'\n\"FAIL: 'references/Hexalith.Unknown'\\n\"\n\n- (1, '', 'FAIL: technical-tools:FC01: source outside declared ordinary files\\n')\n+ (1, '', \"FAIL: 'references/Hexalith.Unknown'\\n\")\n\n----------------------------------------------------------------------\nRan 1 test in 0.017s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "anchor is not an agent skill",
+      "introducedInPass": 4,
+      "test": "AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files",
+      "diagnostic": "source outside declared ordinary files",
+      "detected": true,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 1,
+        "errors": 0,
+        "diagnosticInFailedAssertion": true
+      },
+      "removedOutput": "test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) ... \n  test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`references/Hexalith.FrontComposer/docs/skills/frontcomposer/SKILL.md:12`') ... FAIL\n\n======================================================================\nFAIL: test_anchor_paths_must_resolve_to_declared_ordinary_files (controls57tests.AmendmentTests.test_anchor_paths_must_resolve_to_declared_ordinary_files) (anchor='`references/Hexalith.FrontComposer/docs/skills/frontcomposer/SKILL.md:12`')\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 461, in test_anchor_paths_must_resolve_to_declared_ordinary_files\n    self.reject(lambda: V.anchor_evidence(ROOT, module, rows, pins), message)\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py\", line 181, in reject\n    self.assertEqual((1, '', f'FAIL: {message}\\n'), outcome)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-4/run_guard_controls.py\", line 183, in recording\n    assert_equal(first, second, msg)\n    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^\nAssertionError: Tuples differ: (1, '', 'FAIL: technical-tools:FC01: source outsi[25 chars]s\\n') != (1, '', \"FAIL: git show fbb9c3822dfa407e72739238c[167 chars]'\\n\")\n\nFirst differing element 2:\n'FAIL: technical-tools:FC01: source outsi[24 chars]es\\n'\n\"FAIL: git show fbb9c3822dfa407e72739238c[166 chars]2'\\n\"\n\n- (1, '', 'FAIL: technical-tools:FC01: source outside declared ordinary files\\n')\n+ (1,\n+  '',\n+  'FAIL: git show '\n+  'fbb9c3822dfa407e72739238cd472567f45f1e82:docs/skills/frontcomposer/SKILL.md '\n+  \"failed: fatal: path 'docs/skills/frontcomposer/SKILL.md' does not exist in \"\n+  \"'fbb9c3822dfa407e72739238cd472567f45f1e82'\\n\")\n\n----------------------------------------------------------------------\nRan 1 test in 0.020s\n\nFAILED (failures=1)\n"
+    },
+    {
+      "guard": "identity (nothing removed)",
+      "introducedInPass": null,
+      "test": "LabelTests.test_register_state_and_each_delivery_authorization_field",
+      "diagnostic": "completion requires explicit upstream delivery authorization",
+      "detected": false,
+      "baseline": {
+        "passed": true,
+        "failures": 0,
+        "errors": 0
+      },
+      "removed": {
+        "failures": 0,
+        "errors": 0,
+        "diagnosticInFailedAssertion": false
+      },
+      "removedOutput": "test_register_state_and_each_delivery_authorization_field (controls57tests.LabelTests.test_register_state_and_each_delivery_authorization_field) ... ok\n\n----------------------------------------------------------------------\nRan 1 test in 1.157s\n\nOK\n",
+      "pass3MechanismIdentity": {
+        "passed": false,
+        "failures": 1,
+        "errors": 0
+      }
+    }
+  ]
+}

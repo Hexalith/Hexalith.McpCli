@@ -2,15 +2,27 @@
 
 ## Final state (2026-11-13)
 
-The [final parent verification](review-pass-3/parent-review/verification.md)
-records all 46 tests, completed workflow review, both completion gates and fresh
-scans after the final status and triage edits.
+The [review pass 4 packet](review-pass-4/verification.md) records the six
+accepted patch groups, all 49 tests, and corrected guard controls: all 26 are
+detected against the live module globals. It also corrects pass 3's "18/18
+detected" claim; that receipt supported only 11 of the 18.
+
+The [46-test parent verification](review-pass-3/parent-review/verification.md)
+records the pass-3 workflow review, both completion gates and fresh scans after
+the final status and triage edits.
 
 The [40-test parent verification packet](review-pass-2/parent-review/verification.md)
 records the completed continuation review, both completion gates and fresh scans.
 The subsequent [review pass 3 packet](review-pass-3/verification.md) records the
-ten accepted patch groups, all 44 focused tests and the current verification.
+ten accepted patch groups and all 44 focused tests.
 Earlier test counts and pending-state statements below remain historical.
+Delivery rebased the EventStore, Projects and ChatBot patches onto newer owner
+mains without changing any label text. The upstream table below therefore lists
+their pre-refresh base revisions and the pre-refresh EventStore patch hash.
+[delivery/label-publications.json](delivery/label-publications.json) holds the
+rebase transcripts and [delivery/pre-refresh/](delivery/pre-refresh/) the
+superseded snapshots. [labels.json](labels.json) is authoritative for the
+delivered bases and patch hashes.
 
 ## Completed delivery (2026-11-13)
 
