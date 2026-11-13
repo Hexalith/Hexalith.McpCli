@@ -2,7 +2,7 @@
 title: '5.7 Re-disposition EventStore Admin and technical-tool inventories'
 type: 'chore'
 created: '2026-11-13'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '48076b1bd041b45250597937da82594e202985f3'
@@ -59,6 +59,110 @@ Paths below use `A = _bmad-output/implementation-artifacts` and `E = A/evidence/
 - Given adopted AD-23, when successors are checked, then every row is accounted for and prior approved bytes remain identical.
 - Given existing labels, when amendments complete, then integrated labels/register match approved gates and citations.
 - Given owner approval, when recorded, then named roles/exact hashes grant disposition authority only, never execution, enrollment or retirement.
+
+### Review Findings
+
+Code review pass 2 (bmad-code-review, 2026-11-13, after the in-spec pass 1). The scope was the deliverables, 3,813 diff lines in 18 files:
+- the seven upstream label commits on `main`: EventStore `639c9d5c`, FrontComposer `19418a0c`, Parties `6bc68c8f`, Memories `a3f0b3a4`, Projects `065f0477`, Folders `583d3d49` and ChatBot `6a4ca07b`;
+- both successor inventories, `.gitattributes`, the four evidence scripts, `approval.json`, `labels.json`, `verification.md` and `delivery/verification.md`.
+
+Generated stdout/stderr, scan receipts, delivery transcripts and pre-refresh snapshots were left out. Four layers ran (Blind B, Edge E, Acceptance A, Verification V); none failed.
+
+- [ ] [Review][Patch] The completion gates fail once later approved work changes owner compatibility sections or root `.gitmodules` (Decision 1 resolved: **A. Report, don't fail**)
+  - `verify_labels.py:183` requires each owner's current `origin/main` compatibility section to equal the 5.7 after-section. `labels.json` is `integrated`, so completion is forced on every run.
+  - `verify_amendments.py:326` requires root `.gitmodules` to equal the baseline, and `source_pins` (`:138`) requires the Story 5.1 pin set to equal the working `.gitmodules`.
+  - Stories 5.9 and 5.10 will rewrite the PS08/PS09/PS14 labels, and any new root reference changes `.gitmodules`. Either turns both gates red, and `test_real_cli_candidate_and_completion_process_streams` with them.
+  - Fix:
+    - Current-section drift and a changed working `.gitmodules` become `reported: …` stderr lines with exit 0, the repo's "reported, never failed" convention.
+    - `source_pins` reads the baseline `.gitmodules` blob.
+    - These still fail: recorded-commit bytes, ancestry, README-only delivery, commit hash and the immutable McpCli inventory/receipt blobs.
+    - The current-section test expects the exact report, and a new-submodule test is added.
+  - The user chose this after a deeper comparison with a supersession pointer and leave-as-is. Story 5.5's gate likewise checks recorded revisions only.
+  - (B7, E5, E7) [_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py:183]
+- [x] [Review][Defer] The approved inventory bytes still describe themselves as pending and undelivered [_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md:3] — deferred: correcting approved bytes needs a new version and exact-byte approval. The next technical (Stories 5.9/5.10) and Admin (Story 5.11) successors carry it (Decision 2 resolved: **Fold into next amendment**).
+  - Both successors carry `status: pending`, `approval_status: pending`, the heading "A2 Amendment approval pending", "Candidate amendment … pending exact-byte owner approval" and "Candidate label patches remain undelivered". `check_metadata` (`verify_amendments.py:87`) requires those values.
+  - All 14 integrated README labels link readers straight to these pages. Unlike AD-23, the bytes never say that the separate receipt sets the effective status.
+  - The successors should state the approved status, cite the 5.7 receipt and move the labels with them. They can also carry the rejected cosmetic fixes B10 and A6.
+  - (B1, E18, A1)
+- [ ] [Review][Patch] The completion triggers have no test that isolates them
+  - Spec/sprint `done` trigger: with the real register integrated, `test_claimed_done_in_spec_or_sprint_cannot_bypass_approval` passes even when `verify_amendments.py:358-359` is removed. Feed it a candidate register.
+  - Integrated-register trigger on the `V.verify` path (`verify_labels.py:98-99`): removed, `V.main([])` returns 0 on a forged integrated register. No test covers it.
+  - `--approved-completion` delivery requirement (`verify_amendments.py:362`): removed, an approved receipt with undelivered labels returns 0. No test covers it.
+  - Assert exit, empty stdout and the exact stderr in each case.
+  - (V1, V2, V3, E14) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:335]
+- [ ] [Review][Patch] The label semantic guards are hidden behind a `FAIL:` prefix assertion
+  - `test_citation_gate_and_required_semantics_damaged_with_rehashed_label` and `test_register_predecessor_coverage_inventory_patch_and_anchor_damage` assert only the prefix, so the gate and surface guards fire first.
+  - Removing `verify_labels.py:154`, `:157`, `:160`, `:163`, `:165`, `:174` or `:175`, or `:106` (row coverage), still passes all 27 tests.
+  - Assert `FAIL: <key>: <message>` exactly per subtest. Add cases for the technical SHA, the Admin citation/hash, the Admin "No Admin Gateway replacement" text, a module citation version, PS03 "never counted as retired", a replacement claim and the intro sentence.
+  - (V4, E16, A2) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:454]
+- [ ] [Review][Patch] The delivery read-back guards are untested
+  - `completion_fixture` always returns the candidate README and `README.md\n` for `diff`.
+  - Removing `verify_labels.py:181` (integrated README bytes) or `:185` (README-only delivery) still passes every test.
+  - The inventory/receipt blobs at `inventoryRevision` (`:197`) are never damaged.
+  - Add subcases to `test_complete_delivery_fixture_and_each_completion_binding`.
+  - (V5, A2) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:498]
+- [ ] [Review][Patch] The preserved-authority guards have no tests
+  - No test triggers `approved predecessor bytes changed`, `preserved authority changed`, `root .gitmodules changed`, `exemption amendment is not integrated`, `AD-23 exact-byte owner adoption is required` or `approval required roles/source mismatch`. Add damage cases with exact stderr.
+  - The `.gitmodules` case follows the outcome of the first decision.
+  - (A2) [_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py:325]
+- [ ] [Review][Patch] The origin-URL test never tries a non-GitHub host
+  - Removing the host condition makes `https://gitlab.example/Hexalith/Hexalith.EventStore.git` pass.
+  - (V6) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:583]
+- [ ] [Review][Patch] The PS01/PS02 `Operation inventory` rewrite has no damage test
+  - Replacing `verify_amendments.py:230` with `continue` still passes all tests.
+  - Add a subcase that restores the Admin 1.0.0 citation and expects `technical-tools:PS01: changed protected source field Operation inventory`.
+  - (V7) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:111]
+- [ ] [Review][Patch] The default verifier says completion is still required after verifying it
+  - Reproduced: plain `verify_amendments.py` prints "owner decision: approved; completion requires owner approval and integrated labels", because `main` reads only the CLI flag while `verify()` forced completion from the spec status.
+  - Return the effective completion from `verify()` and print from it.
+  - (B8, E10, A8) [_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py:378]
+- [ ] [Review][Patch] Running the test file directly reports an error
+  - Reproduced: `python3 -I …/test_verify_amendments.py` ends with `FAILED (errors=1)`. In `__main__`, `__cached__` is `None`, so `Path(__cached__)` raises `TypeError` in `tearDownModule`.
+  - Return early when it is `None`.
+  - (E15) [_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py:57]
+- [ ] [Review][Patch] Delivery evidence never records the final results of the owner CI runs whose required checks were bypassed
+  - Observed 2026-11-13: EventStore `CI` on `639c9d5c` failed at "Fail on blocking test failures". EventStore `main` CI already failed on `d457ecd5` and `f2062f7f`.
+  - ChatBot `ci` and `release` failed on `6a4ca07b` and on its parent `62e82201`. Parties `CI` was cancelled (its parent failed).
+  - FrontComposer, Memories, Projects and Folders are green.
+  - Record these final states and their inherited causes next to the bypass note.
+  - (B13, A4) [_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/verification.md:40]
+- [ ] [Review][Patch] Seven delivery worktrees and branches were left behind
+  - Each owner repository still has a `/home/administrator/projects/hexalith/.scratchpad/story-5-7-delivery/<repo>` worktree and the local branch `docs/mcpcli-5-7-inventory-labels`. All seven branches are ancestors of `origin/main`.
+  - Remove the worktrees and delete the merged branches.
+  - (A9) [_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/worktrees.json:1]
+- [x] [Review][Defer] McpCli `main` CI stays red for reasons outside 5.7, and no ledger entry tracks it [.github/workflows/ci.yml:1] — deferred: pre-existing.
+  - Restore fails NU1202: Hexalith.Commons.UniqueIds 3.0.0 supports only net11.0 while the targets remain net10.0.
+  - The census check fails on Builds-pin source drift (`Tools/package-version-audit.json` and three PowerShell qualification scripts).
+  - Recorded only in the sprint-status comment and `delivery/verification.md:33-36`; still failing on `36a2d51`.
+  - (B12)
+
+**Rejected (26):**
+- B2 false: overwritten Disposition/Removal gate cells. The intro lists the preserved fields and omits both. The predecessor stays immutable. `exclude` is mandatory without `replace`, so the hard-coded coverage is policy, not loss.
+- B3 low: PS01/PS02/AV13 governance points at the v1 files. The cells reproduce the adopted, immutable AD-23 map, and changing them would need an AD-23 amendment.
+- B4 false: PS03 governance. The AD-23 map governs PS03 by `classId` K13, and its row carries K13 and `exempt-local-tooling`.
+- B5 false: row owners missing from `rolesCovered`. AD-23's normative policy fixes the required coverage. The owner column preserves source governance and claims no approval.
+- B6 low: loose receipt bindings (no hashes in the request text, `candidatePacket` by path, free-form date, unvalidated `approvalRequest`, also A8). The inventory hashes are bound in `artifacts` and `delivery/authorization.json`, and adding guards to an approved receipt brings no reachable benefit.
+- B6/A4 false: one "approve" covering approval and push. The request explicitly asked for both. The limit says delivery is not implied, and it was not.
+- B9/E9/V8 low: removal-gate cells are checked by tokens and column positions. The approved bytes are hash-bound to the receipt, and the builder refuses to run on an approved packet.
+- B10 low: shared intro text and the "deferred backup backend" wording. Changing approved bytes needs an amendment; it can ride along if the second decision chooses one.
+- B11/A3 low: `blob/main` citations. The successor paths are immutable and every label carries the content SHA-256; re-pinning needs seven more upstream pushes.
+- B11 false: the PS01 label omits local Admin losses. The spec requires UI gates in labels; the inventory records the losses.
+- B12 false: no tracking for UI coverage and G4 fixes. They are owner-assigned open gates in the approved inventories, and Story 5.11 reconciles remaining gates.
+- B14 false: stale sections and status mismatch. `verification.md` opens by marking the later pending statements as history. Spec `done` against sprint `review` is the normal state during review.
+- B15 low: the final `git diff --check` saw only the working tree. `git diff --check 48076b1 HEAD` over every deliverable is clean.
+- E1 low: the builder's `git status` can refresh an owner index. The builder refuses the approved packet, so this cannot recur.
+- E2 low: the builder `assert` under `-O`. Unreachable for the same reason.
+- E3 low: the `re.sub` template. The fixed gate constants contain no backslashes, and the builder is retired.
+- E4 low: `baseRevision` not checked as the parent. The publication transcripts show every base is the rebased parent, and a check would add a guard.
+- E6 low: absolute `ownerCheckout` paths. Settled in pass 1 (B6); other locations fail closed.
+- E8 false: an unknown outcome defaults to `withdraw`. The class map must equal its baseline bytes (`verify_amendments.py:325`), so no unknown outcome can reach the code.
+- E11 low: tracebacks on malformed JSON or map. Settled in pass 1 (B9); the map is immutable.
+- E12 false: the standalone label verifier while the spec says `done`. It prints "candidate only" and claims no completion.
+- E13 false: `splitlines` separators. None of the seven delivered READMEs contains a non-`\n` separator, so label lines match Git's.
+- E17 false: PS14 loses the Memories refresh. The gate keeps "four-mode inventory", and the label names Story 5.10 accounting.
+- A5 low: the candidate reached `main` in a concurrent `/pushall` before approval. The delivery evidence records it, the bytes were unchanged, and nothing is left to fix.
+- A6 low: dropped census and authority headings. The tables are intact and no consumer parses those headings; this can ride along in an amendment.
+- A7 false: weaker anchor checks. Row cells must equal the approved predecessor bytes at immutable pins, which Story 5.1's gate verified content by content.
 
 ## Verification
 
