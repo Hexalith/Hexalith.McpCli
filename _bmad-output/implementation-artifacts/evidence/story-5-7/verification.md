@@ -1,5 +1,21 @@
 # Story 5.7 candidate verification and owner packet
 
+## Owner approval and authorized delivery (2026-11-13)
+
+The user replied **"approve"** directly to the request to approve these exact
+inventory candidates under the previously confirmed owner roles and authorize
+committing and pushing the inventories and seven README label updates.
+[approval.json](approval.json) records the unchanged inventory hashes, exact words,
+approver and all twelve confirmed roles. [delivery/authorization.json](delivery/authorization.json)
+records the Git delivery scope. Earlier pending-approval statements below are
+historical. Inventory adoption grants disposition authority only; no operation
+execution, enrollment, package publication, parity or retirement is authorized.
+
+Seven isolated README-only commits are prepared from freshly fetched main tips;
+the original owning checkouts, including unrelated user work, remain untouched.
+Pinned commitlint validation, fetch provenance, workspace preservation and actual
+delivery/read-back evidence are retained under [delivery/](delivery/).
+
 ## Current approval packet after review
 
 The [parent review packet](review-pass-1/verification.md) records final validation

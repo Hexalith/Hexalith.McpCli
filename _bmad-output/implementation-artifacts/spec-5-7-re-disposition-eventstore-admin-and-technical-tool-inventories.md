@@ -50,9 +50,9 @@ Paths below use `A = _bmad-output/implementation-artifacts` and `E = A/evidence/
 **Execution:**
 - [x] `A/eventstore-admin-migration-inventory-v1.0.2.md` and `A/technical-tools-migration-inventory-v1.0.3.md` — add successors; correct PS01/PS02 to Admin 1.0.2 and current summary to 68. Keep historical 65-row approval distinct; record losses and retained gates.
 - [x] `E/{verify_amendments.py,test_verify_amendments.py}` — retain row, registration, destructive, confirmation and anchor checks; add class/outcome, delta/hash-chain, role and completion checks. Test every matrix failure and disposition branch with guard-removal controls, process exit and both streams.
-- [ ] `E/{approval.json,verification.md}` — SHA-256-bind predecessors, decision/map, candidates and changed rows. Record exact owner words/roles only after approval; retain commands, preservation checks and blockers. Candidate chain and verification packet are prepared; exact-byte owner approval remains pending.
+- [x] `E/{approval.json,verification.md}` — SHA-256-bind predecessors, decision/map, candidates and changed rows. The user approved the exact candidates with "approve" on 2026-11-13 under all previously confirmed owner roles; the receipt records the exact instruction, roles and separate Git delivery authorization.
 - [x] Owning `README.md` files in EventStore, FrontComposer, Memories, Parties, Projects, Folders and ChatBot — prepare isolated README-only patches: UI gates PS01/PS02, retained exemptions PS03/PS14, all technical citations. Keep PS14 four-mode accounting, independent gates and Parties' blocked verdict.
-- [ ] `E/{labels.json,verify_labels.py}` — designate successor register chained to Story 5.5; bind patch/commit bytes, inventory hashes, label anchors/hashes. Verify citation contents and gate text; require integrated upstream evidence for completion. Candidate register, seven patches and verifier are prepared; integrated commit evidence remains pending separate delivery authorization.
+- [ ] `E/{labels.json,verify_labels.py}` — designate successor register chained to Story 5.5; bind patch/commit bytes, inventory hashes, label anchors/hashes. Verify citation contents and gate text; require integrated upstream evidence for completion. Delivery is authorized; integrated commit evidence remains pending.
 - [x] `E/`, this spec and `A/sprint-status.yaml` — retain validation/secret-scan evidence and record only the supported approval/delivery state.
 
 **Acceptance Criteria:**
@@ -69,6 +69,8 @@ Paths below use `A = _bmad-output/implementation-artifacts` and `E = A/evidence/
 - `git diff --check` and baseline hash comparison — clean; historical approvals, inventories, AD-23, census and references unchanged.
 
 ## Implementation Notes
+
+- 2026-11-13 delivery: The user replied "approve" directly to the exact-candidate and commit/push request. Recorded approval of the unchanged inventory hashes under all twelve previously confirmed roles, plus Git delivery authorization. Refreshed three upstream bases without changing label text and prepared seven isolated README-only commits, preserving original owner worktrees. Approval exposed state-dependent negative fixtures; tests now construct pending receipts independently of actual adoption and retain real process refusal coverage. All 27 focused tests pass after adoption. Earlier pending-approval notes below describe the pre-approval history.
 
 - 2026-11-13: The user approved this specification with "approve and continue". Frozen intent is locked; exact-byte inventory approval and upstream delivery remain pending their concrete packets.
 
