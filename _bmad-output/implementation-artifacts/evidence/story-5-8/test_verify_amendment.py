@@ -2,6 +2,7 @@
 import contextlib
 import copy
 import importlib.util
+import inspect
 import io
 import json
 import os
@@ -416,6 +417,151 @@ class AmendmentTests(PendingCase):
         with patch.object(Path,'read_bytes',approved),patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
             self.assertEqual((1,'','FAIL: refusing to overwrite an approved or unknown-state packet\n'),invoke(B))
 
+    def test_builder_refuses_existing_successor_with_missing_receipts(self):
+        for missing in [('approval.json',),('labels.json',),('approval.json','labels.json')]:
+            with self.subTest(missing=missing),workspace_view(pending=False) as root:
+                for name in missing:
+                    (root/B.E/name).unlink()
+                def snapshot():
+                    return {p:p.read_bytes() for p in [root/B.NEW,*(root/B.E).rglob('*')] if p.is_file()}
+                before = snapshot()
+                expected = (1,'','FAIL: refusing to overwrite an existing successor without approval and label receipts\n')
+                with patch.object(B,'ROOT',root),patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
+                    self.assertEqual(expected,invoke(B))
+                result = fixture_process(root/B.E/'build_candidate.py')
+                self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
+                self.assertEqual(before,snapshot())
+
+    def test_builder_allows_receipt_free_initialization(self):
+        with workspace_view() as root:
+            for path in [B.NEW,B.E/'approval.json',B.E/'labels.json']:
+                (root/path).unlink()
+            shutil.rmtree(root/B.E/'upstream')
+            result = fixture_process(root/B.E/'build_candidate.py')
+            expected = 'Prepared Folders 1.1.0 pending candidate and PS10/PS11 README-only patch; no approval or delivery granted.\n'
+            self.assertEqual((0,expected,''),(result.returncode,result.stdout,result.stderr))
+            self.assertEqual((ROOT/B.NEW).read_bytes(),(root/B.NEW).read_bytes())
+            self.assertEqual('pending',V.read_json(root/B.E/'approval.json')['decision'])
+            self.assertEqual('candidate-pending-owner-approval-and-delivery',V.read_json(root/B.E/'labels.json')['state'])
+
+    def test_integrated_labels_force_owner_approval_without_done_status(self):
+        path = self.root/B.E/'labels.json'
+        register = V.read_json(path)
+        register['state'] = 'integrated'
+        path.write_text(json.dumps(register)+'\n')
+        self.assertFalse(V.completion_requested(self.root,False))
+        expected = (1,'','FAIL: completion requires exact-byte owner approval and covered Folders roles\n')
+        self.assertEqual(expected,invoke(V))
+        result = fixture_process(HERE/'verify_amendment.py','--root',str(self.root))
+        self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
+        # Remove the actual trigger from the function, retaining its live module
+        # globals. Isolate the downstream label gate, tested independently below.
+        trigger = "    completion = completion or labels.get('state') == 'integrated'\n"
+        source = inspect.getsource(V.verify)
+        self.assertEqual(1,source.count(trigger))
+        namespace = {}
+        exec(source.replace(trigger,''),V.__dict__,namespace)
+        self.assertIs(namespace['verify'].__globals__,V.__dict__)
+        load_module = V.load
+        with patch.object(V,'load',side_effect=lambda root,name,file:L if file == B.E/'verify_labels.py' else load_module(root,name,file)),patch.object(L,'verify',return_value=None):
+            self.assertEqual(expected,invoke(V))
+            with patch.object(V,'verify',namespace['verify']):
+                self.assertEqual((0,PASS,''),invoke(V))
+
+    def test_builder_refuses_integrated_labels_before_any_write(self):
+        path = self.root/B.E/'labels.json'
+        register = V.read_json(path)
+        register['state'] = 'integrated'
+        path.write_text(json.dumps(register)+'\n')
+        before = {p:p.read_bytes() for p in (self.root/B.E).rglob('*') if p.is_file()}
+        expected = (1,'','FAIL: refusing to overwrite a delivered or unknown-state label packet\n')
+        with patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
+            self.assertEqual(expected,invoke(B))
+        result = fixture_process(self.root/B.E/'build_candidate.py')
+        self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
+        self.assertEqual(before,{p:p.read_bytes() for p in (self.root/B.E).rglob('*') if p.is_file()})
+
+    def test_published_predecessor_tree_binding_and_guard_removal(self):
+        git,run = B.git,subprocess.run
+        def present(command,*args,**kwargs):
+            if command == ['git','-C',str(ROOT/B.REPO),'rev-parse','--verify','--quiet',B.OLD_PIN+'^{commit}']:
+                return subprocess.CompletedProcess(command,0,(B.OLD_PIN+'\n').encode(),b'')
+            return run(command,*args,**kwargs)
+        for pin,message in [
+            (B.OLD_SOURCE_PIN,'folders: published predecessor src tree differs from recorded old pin'),
+            (B.OLD_PIN,'folders: historical predecessor src tree differs from recorded old pin'),
+        ]:
+            with self.subTest(pin=pin):
+                def changed(repo,*args):
+                    if args == ('rev-parse',pin+':src'): return ('0'*40+'\n').encode()
+                    if args == ('rev-parse',B.OLD_PIN+':src'): return (B.OLD_SOURCE_TREE+'\n').encode()
+                    return git(repo,*args)
+                # The optional original-object branch stays covered even after
+                # that object has been pruned from this checkout.
+                with patch.object(subprocess,'run',side_effect=present),patch.object(B,'git',side_effect=changed):
+                    self.guard(lambda:V.check_source_drift(ROOT,self.surface),message)
+
+    def test_published_predecessor_survives_missing_historical_commit(self):
+        run,source = subprocess.run,B.source
+        reads = []
+        def pruned(command,*args,**kwargs):
+            if command == ['git','-C',str(ROOT/B.REPO),'rev-parse','--verify','--quiet',B.OLD_PIN+'^{commit}']:
+                return subprocess.CompletedProcess(command,1,b'',b'')
+            return run(command,*args,**kwargs)
+        def observed(root,path,pin=B.PIN):
+            reads.append(pin)
+            return source(root,path,pin)
+        with patch.object(subprocess,'run',side_effect=pruned),patch.object(B,'source',side_effect=observed):
+            self.assertEqual((0,PASS,''),self.run_check(lambda:V.check_source_drift(ROOT,self.surface)))
+        self.assertIn(B.OLD_SOURCE_PIN,reads)
+        self.assertNotIn(B.OLD_PIN,reads)
+
+    def test_real_verifier_calls_source_drift_guard_and_deletion_control(self):
+        with workspace_view() as root:
+            builder = root/B.E/'build_candidate.py'
+            source = builder.read_text()
+            recorded = f"OLD_SOURCE_TREE = '{B.OLD_SOURCE_TREE}'"
+            self.assertEqual(1,source.count(recorded))
+            builder.write_text(source.replace(recorded,"OLD_SOURCE_TREE = '"+'0'*40+"'"))
+            verifier = root/B.E/'verify_amendment.py'
+            result = fixture_process(verifier,'--root',str(root))
+            self.assertEqual((1,'','FAIL: folders: published predecessor src tree differs from recorded old pin\n'),(result.returncode,result.stdout,result.stderr))
+            source = verifier.read_text()
+            invocation = '    check_source_drift(root,surface)\n'
+            self.assertEqual(1,source.count(invocation))
+            verifier.write_text(source.replace(invocation,''))
+            result = fixture_process(verifier,'--root',str(root))
+            self.assertEqual((0,PASS,''),(result.returncode,result.stdout,result.stderr))
+
+    def test_mcpcli_route_uses_committed_baseline_and_guard_removal(self):
+        path = 'src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs'
+        read,git = Path.read_text,B.git
+        def working_tree(candidate,*args,**kwargs):
+            if candidate == ROOT/path:
+                raise AssertionError('route evidence read mutable working tree')
+            return read(candidate,*args,**kwargs)
+        with patch.object(Path,'read_text',working_tree):
+            V.check_declarations(ROOT,self.old,self.new,self.decl,self.surface)
+        def changed(repo,*args):
+            data = git(repo,*args)
+            return data.replace(b'new SubmitCommandRequest(',b'new InventedRequest(') if repo == ROOT and args == ('show',B.BASELINE+':'+path) else data
+        with patch.object(B,'git',side_effect=changed):
+            self.guard(lambda:V.check_declarations(ROOT,self.old,self.new,self.decl,self.surface),'folders: McpCli wire route evidence mismatch')
+
+    def test_required_fence_attributes_and_guard_removal(self):
+        source = B.source
+        path = 'src/Hexalith.Folders.Client/Generated/HexalithFoldersClient.g.cs'
+        for prop in ['expectedFileVersion','expectedLockFence']:
+            with self.subTest(property=prop):
+                before = f'JsonProperty("{prop}", Required = Newtonsoft.Json.Required.Always)'
+                after = f'JsonProperty("{prop}", Required = Newtonsoft.Json.Required.DisallowNull)'
+                self.assertIn(before,source(ROOT,path))
+                def optional(root,name,pin=B.PIN):
+                    text = source(root,name,pin)
+                    return text.replace(before,after) if name == path and pin == B.PIN else text
+                with patch.object(B,'source',side_effect=optional):
+                    self.guard(lambda:V.check_source_drift(ROOT,self.surface),f'folders: FileMutationRequest.{prop} required fence semantics missing')
+
     def test_source_drift_fields_are_proved_against_both_git_pins(self):
         V.check_source_drift(ROOT,self.surface)
         original = B.source
@@ -637,6 +783,66 @@ class LabelTests(PendingCase):
     def test_completion_requires_label_integration_after_owner_approval(self):
         with patch.object(L.V,'verify_owner_packet',return_value=None):
             self.assertEqual((1,'','FAIL: completion requires integrated Folders PS10/PS11 labels\n'),self.invoke_register(self.register,True))
+
+    @contextlib.contextmanager
+    def published_graph_fixture(self):
+        """Read real published blobs/commits through an isolated owner Git graph.
+
+        Only temporary refs and origin configuration are written. Neither owner
+        source bytes nor root publication reads are substituted.
+        """
+        original = L.B.git
+        register = L.read_json(ROOT/B.E/'labels.json')
+        (self.root/B.E/'approval.json').write_bytes((ROOT/B.E/'approval.json').read_bytes())
+        owner_source = Path(register['repository']['ownerCheckout'])
+        with tempfile.TemporaryDirectory() as temp:
+            owner = Path(temp)
+            original(owner,'init','--quiet')
+            objects = Path(original(owner_source,'rev-parse','--git-path','objects').decode().strip())
+            if not objects.is_absolute(): objects = owner_source/objects
+            (owner/'.git/objects/info/alternates').write_text(str(objects.resolve())+'\n')
+            original(owner,'remote','add','origin','https://github.com/Hexalith/Hexalith.Folders.git')
+            current = original(owner_source,'rev-parse','origin/main').decode().strip()
+            original(owner,'update-ref','refs/remotes/origin/main',current)
+            register['repository']['ownerCheckout'] = str(owner)
+            yield register,owner,original
+
+    def published_guard_control(self,register,message):
+        expected = (1,'','FAIL: '+message+'\n')
+        self.assertEqual(expected,self.invoke_register(register,True))
+        original = L.require
+        def removed(condition,actual):
+            if actual != message: original(condition,actual)
+        with patch.object(L,'require',side_effect=removed):
+            integrated = LABEL_PASS.replace('candidate only; owner approval and delivery pending','integrated delivery verified')
+            self.assertEqual((0,integrated,''),self.invoke_register(register,True))
+
+    def test_real_publication_rejects_revision_before_inventory(self):
+        with self.published_graph_fixture() as (register,owner,git):
+            revision = git(ROOT,'rev-parse','85a5437^{commit}').decode().strip()
+            register['inventoryRevision'] = revision
+            message = f"git show {revision}:{B.NEW} failed: fatal: path '{B.NEW}' exists on disk, but not in '{revision}'"
+            self.assertEqual((1,'','FAIL: '+message+'\n'),self.invoke_register(register,True))
+
+    def test_real_publication_rejects_pending_receipt_and_guard_removal(self):
+        with self.published_graph_fixture() as (register,owner,git):
+            register['inventoryRevision'] = git(ROOT,'rev-parse','cab549c^{commit}').decode().strip()
+            self.published_guard_control(register,f'{B.E}/approval.json: published artifact differs from owner-approved bytes')
+
+    def test_real_delivery_rejects_old_readme_and_guard_removal(self):
+        with self.published_graph_fixture() as (register,owner,git):
+            register['repository']['integration'] = {'commit':B.LABEL_PIN,'commitSha256':B.sha(git(owner,'cat-file','commit',B.LABEL_PIN))}
+            self.published_guard_control(register,'folders: integrated README bytes differ from candidate')
+
+    def test_real_delivery_rejects_fork_origin_and_guard_removal(self):
+        with self.published_graph_fixture() as (register,owner,git):
+            git(owner,'remote','set-url','origin','https://github.com/fixture-fork/Hexalith.Folders.git')
+            self.published_guard_control(register,'folders: checkout origin does not match owning repository')
+
+    def test_real_delivery_rejects_commit_hash_and_guard_removal(self):
+        with self.published_graph_fixture() as (register,owner,git):
+            register['repository']['integration']['commitSha256'] = '0'*64
+            self.published_guard_control(register,'folders: integrated commit byte hash mismatch')
 
     def test_completion_chain_and_exact_delivery_bytes(self):
         register = copy.deepcopy(self.register)

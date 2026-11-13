@@ -16,22 +16,80 @@ The label commit changes only README.md; unrelated owner work remains outside it
 No enrollment, module execution, parity or retirement is claimed. The K12
 reconciliation remains an Epic 6 catalog hold.
 
-The pending-state tests now run against isolated copies so they preserve their
+## Reproduction prerequisites
+
+Run from the McpCli repository root with Python 3 and Git. The approved label
+register requires the existing absolute owner checkout
+`/home/administrator/projects/hexalith/folders`, with `origin` identifying
+`Hexalith/Hexalith.Folders`; the register is unchanged. That checkout must contain
+the committed README base `583d3d492f94217809a8efe00424b80ce3fdfa61`, delivery
+`db40bda8a107fcb03405e074810be16c0d47c85f` and its local `origin/main` ref.
+McpCli needs baseline `a92a2969db6903b8c6cca7e437446167e135ec9d`, published
+inventory/approval revision `f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091` and its
+local `origin/main` ref. Both delivery revisions must be ancestors of the
+respective local refs. The tests additionally use existing McpCli commits
+`85a5437b98d0e126147460ca1ee1fa6a36041a21` and
+`cab549c7b06fa4eef08e46cfcde038f62ea81fbf`.
+
+The root-declared `references/Hexalith.Folders` checkout must contain committed
+source objects for `7eab70e9332c0573b50dce5b219e425b6a2d363c` and published
+ancestor `2236855ee181bdeed2a103537c66316a1612c792`. The unpublished original
+`e2252f29a2dba2b64786ee483eb59fbceaadd387` is optional. The verifiers read these
+local objects and refs; they do not fetch or perform network operations.
+
+## Code-review patch verification (2026-11-14)
+
+All nine accepted patch entries and five review follow-up patch groups are implemented.
+The final suite passed **50 tests in 46.608 seconds**, with no skips. Its new cases protect the published predecessor tree binding and
+missing-original-object path, committed-baseline route evidence, both required
+fence attributes, integrated-label completion and builder refusal, and real
+publication/delivery failures. The latter read actual Git blobs and commits:
+pre-inventory revision `85a5437b98d0e126147460ca1ee1fa6a36041a21`, pending-receipt
+revision `cab549c7b06fa4eef08e46cfcde038f62ea81fbf`, the older README-only label
+commit, a fork origin and a damaged commit hash. Refusal checks assert the exit
+code and complete stdout/stderr; guard-removal controls prove the relevant
+failures depend on their guards. The final additions refuse an existing successor
+with either receipt missing, permit pristine initialization, and prove that the
+real owner entrypoint invokes the source-drift checks through a caller-deletion control.
+
+The [final command manifest](review-final-20261114/commands.json) binds all executed
+repository Python helpers, exact commands, root working directory, results and both stream
+hashes for the suite, both real default completion verifiers, AD-23 verification
+and `git diff --check`. All pass. The approved inventory, approval receipt,
+delivered label register and other authorities remain byte-identical. Existing
+K12 deferrals remain open; their approved inventory text needs a separately
+approved successor. Review also recorded two pre-existing source-drift omissions
+for that successor: SDK end-anchor tightening and disabled automatic redirects.
+The spec is done and sprint tracking is review. All five follow-up patch groups
+passed final verification; the edge-case review returned no findings. No commit
+or push was performed.
+
+Final scan after review and workflow closure:
+`python3 scripts/scan-evidence-secrets.py _bmad-output/implementation-artifacts/evidence/story-5-8 --receipt _bmad-output/implementation-artifacts/evidence/story-5-8/secret-scan-review-final-20261114.json`.
+The [final receipt](secret-scan-review-final-20261114.json) binds the complete
+updated evidence packet. The preceding [47-test capture](review-patches-20261114/commands.json)
+and its [scan](secret-scan-review-patches-20261114.json) remain historical. No .NET build or live acceptance is claimed for these
+documentary and Python-test changes.
+
+## Historical delivery evidence
+
+The pending-state tests run against isolated copies so they preserve their
 exact refusal streams and live-global guard controls after real approval and
-integration. All 31 tests passed both from the pending source (29.830 seconds)
-and from an isolated approved/integrated/done source view (28.138 seconds).
+integration. The historical pre-delivery 31-test runs passed both from the
+pending source (29.830 seconds) and from an isolated approved/integrated/done
+source view (28.138 seconds); the later delivery suite contained 36 tests.
 The proof and raw output are retained in [delivery/](delivery/). This lifecycle
 fixture is test evidence only; real delivery is established by the published
 revision/blob/README checks, recorded in [integration.json](delivery/integration.json).
 
-## Final delivery verification
+## Historical final-delivery verification (2026-11-13)
 
 The focused follow-up review completed all three independent layers. Eight direct
 patch groups improved fixture scope and evidence reproduction; one finding was
 rejected because the synthetic lifecycle source never claims real acceptance.
 No new review work was deferred. The original K12 catalog hold remains open.
 
-The final suite passed **36 tests in 24.761 seconds** with the real spec
+The delivery suite passed **36 tests in 24.761 seconds** with the real spec
 marked done and the published approval/labels present. The saved lifecycle proof
 also passed **36 tests in 25.477 seconds** and confirmed that real
 candidate, receipt and workflow bytes were unchanged. Five new tests protect
@@ -52,8 +110,9 @@ Every command record binds full stdout/stderr bytes. The lifecycle summary uses
 relative sidecars and a repository-relative helper command; the pending run has
 its own [command manifest](delivery/lifecycle-pending.json). The retained
 [review snapshot and summary](delivery/review-followup.json) record the scope and
-triage. The story spec is done; sprint tracking is review, as required by the
-build workflow. All user-authorized publication and label delivery are complete.
+triage. At that delivery checkpoint the story spec was done and sprint tracking
+was review, as required by the build workflow. All user-authorized publication
+and label delivery were complete.
 
 Final scan command:
 `python3 scripts/scan-evidence-secrets.py _bmad-output/implementation-artifacts/evidence/story-5-8 --receipt _bmad-output/implementation-artifacts/evidence/story-5-8/secret-scan-delivery-final.json`.
@@ -77,9 +136,15 @@ No new commits or commit messages were created by the graph fixtures; they use
 existing objects and temporary local refs. The original command and scan captures
 remain historical; the `review-1-*` captures are the final verification evidence.
 
-The source pin is `7eab70e9332c0573b50dce5b219e425b6a2d363c`; the predecessor's
-`e2252f29a2dba2b64786ee483eb59fbceaadd387` is read as an independent historical
-pin. Every source read uses committed Git objects. The README patch base is the
+The source pin is `7eab70e9332c0573b50dce5b219e425b6a2d363c`; the original
+predecessor was `e2252f29a2dba2b64786ee483eb59fbceaadd387`. The review patch
+reads its source via the published ancestor
+`2236855ee181bdeed2a103537c66316a1612c792`, whose `src` tree must match the
+recorded predecessor tree `d0f81f0f00570c2d8ba1f34af2fcdf7bccb9d7e0`.
+The original commit's tree is also compared when that object is present; its
+absence no longer prevents verification. McpCli route evidence comes from
+baseline `a92a2969db6903b8c6cca7e437446167e135ec9d`. Every source read uses
+committed Git objects. The README patch base is the
 previously delivered Story 5.7 Folders commit
 `583d3d492f94217809a8efe00424b80ce3fdfa61`, because the root gitlink predates its
 PS10/PS11 labels. No fetch, checkout, branch, index, owner-file or remote mutation
@@ -140,8 +205,8 @@ model-field anchors. The current three internal query handlers and configured
 file defaults do not establish live behavior for the 28 declared Queries; the
 commit executor remains unavailable. No services or module operations ran.
 
-Preserved authority hashes (also enforced against the baseline commit and bound
-by [approval.json](approval.json)):
+Preserved authority hashes, enforced against the baseline commit and bound by
+[approval.json](approval.json):
 
 | Artifact | SHA-256 |
 | --- | --- |
@@ -149,13 +214,17 @@ by [approval.json](approval.json)):
 | AD-23 decision | `f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560` |
 | AD-23 map | `21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3` |
 | Technical 1.0.3 | `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c` |
-| Folders 1.1.0 pending candidate | `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407` |
+
+The approved Folders 1.1.0 successor is SHA-256
+`54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.
+It did not exist at the baseline: deterministic regeneration, the exact-byte
+approval receipt and the published-artifact checks bind its bytes.
 
 The named K12 gap was added under its own source-spec heading in
 [deferred-work.md](../../deferred-work.md), after grep found no equivalent Folders
 entry. The pre-existing Parties entry was retained. Epic 6 cannot catalog
-Contracts 1.4.0 until the separate owner resolution exists. The pending receipt
-names the Folders roles it must cover and supersedes A1 only once approved.
+Contracts 1.4.0 until the separate owner resolution exists. The approved receipt
+names the covered Folders roles and supersedes A1 for this successor.
 The PS10/PS11 patch changes the Folders citation and adds its exact hash; it
 preserves the technical 1.0.3 citation and removal gate. Technical inventory bytes
 and the AI.Tools migration plan remain unchanged for their later successors.

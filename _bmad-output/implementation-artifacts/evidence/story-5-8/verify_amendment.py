@@ -183,7 +183,7 @@ def check_declarations(root, old, new, decl, surface):
             else:
                 key_attributes = re.search(r'\[property:\s*((?:[^"\]]|"(?:\\.|[^"\\])*")*)\]\s*string\s+IdempotencyKey\b',d['source'])
                 require('IdempotencyKeyProperty = nameof(IdempotencyKey)' in d['source'] and key_attributes is not None and re.search(r'\bJsonRequired\b',key_attributes[1]) is not None and 'JsonPropertyName("idempotencyKey")' in key_attributes[1], f'folders:{key}: {t} required caller key declaration missing')
-    route = (root / 'src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs').read_text()
+    route = B.git(root,'show',B.BASELINE+':src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs').decode()
     require('new SubmitCommandRequest(messageId!, tenant!, operation.Routing.Domain, aggregateId!,' in route and 'operation.Routing.WireType, rebuilt, correlationId,' in route and 'new SubmitQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,' in route and 'operation.Routing.ProjectionType' in route, 'folders: McpCli wire route evidence mismatch')
 
 
@@ -193,10 +193,16 @@ def check_drift(new, decl):
 
 
 def check_source_drift(root,surface):
-    old_surface = B.surfaces(root,B.OLD_PIN)
+    repo = root/B.REPO
+    require(B.git(repo,'rev-parse',B.OLD_SOURCE_PIN+':src').decode().strip() == B.OLD_SOURCE_TREE, 'folders: published predecessor src tree differs from recorded old pin')
+    historical = B.subprocess.run(['git','-C',str(repo),'rev-parse','--verify','--quiet',B.OLD_PIN+'^{commit}'],capture_output=True)
+    require(historical.returncode in {0,1}, 'folders: cannot inspect historical predecessor object')
+    if historical.returncode == 0:
+        require(B.git(repo,'rev-parse',B.OLD_PIN+':src').decode().strip() == B.OLD_SOURCE_TREE, 'folders: historical predecessor src tree differs from recorded old pin')
+    old_surface = B.surfaces(root,B.OLD_SOURCE_PIN)
     require(all(set(a) == set(b) for a,b in zip(old_surface,surface)), 'folders: source drift added, removed or renamed a legacy surface')
     path = 'src/Hexalith.Folders.Client/Generated/HexalithFoldersClient.g.cs'
-    before,after = B.source(root,path,B.OLD_PIN),B.source(root,path)
+    before,after = B.source(root,path,B.OLD_SOURCE_PIN),B.source(root,path)
     for model,properties in [('FileMutationRequest',['ownerFileId','expectedFileVersion','expectedLockFence']),('FileMetadataItem',['fileId','version']),('LockLeaseMetadata',['lockFence'])]:
         def block(text):
             match = re.search(r'public partial class '+model+r'[^\n]*\n(.*?)(?=\n    \[System.CodeDom.Compiler.|\Z)',text,re.S)
@@ -206,6 +212,8 @@ def check_source_drift(root,surface):
             require(needle not in block(before) and needle in block(after), f'folders: source drift {model}.{prop} is not evidenced at both pins')
             if prop == 'ownerFileId' and needle in block(after):
                 require('Optional explicit owner incarnation; an exact accepted path is resolved by the owner when omitted.' in block(after) and re.search(r'JsonProperty\("ownerFileId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore\)',block(after)) is not None, 'folders: ownerFileId optional owner-incarnation semantics missing')
+            elif prop in {'expectedFileVersion','expectedLockFence'} and needle in block(after):
+                require(re.search(r'JsonProperty\("'+prop+r'", Required = Newtonsoft.Json.Required.Always\)',block(after)) is not None, f'folders: {model}.{prop} required fence semantics missing')
     policy = B.source(root,'src/shared/AdapterCore/BearerTransportPolicy.cs')
     require('Uri.UriSchemeHttps' in policy and 'IPAddress.IsLoopback(address)' in policy and 'Uri.UriSchemeHttp' in policy, 'folders: HTTPS/loopback credential source premise missing')
     defaults = B.source(root,'src/Hexalith.Folders.Server/FoldersServerServiceCollectionExtensions.cs')

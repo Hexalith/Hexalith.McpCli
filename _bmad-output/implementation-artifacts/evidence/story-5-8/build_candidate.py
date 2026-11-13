@@ -21,6 +21,10 @@ AD = Path('_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026
 BASELINE = 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 PIN = '7eab70e9332c0573b50dce5b219e425b6a2d363c'
 OLD_PIN = 'e2252f29a2dba2b64786ee483eb59fbceaadd387'
+# The unpublished predecessor only removed editor configuration. Its exact src
+# tree survives at this published ancestor, independently of local reflog expiry.
+OLD_SOURCE_PIN = '2236855ee181bdeed2a103537c66316a1612c792'
+OLD_SOURCE_TREE = 'd0f81f0f00570c2d8ba1f34af2fcdf7bccb9d7e0'
 LABEL_PIN = '583d3d492f94217809a8efe00424b80ce3fdfa61'
 REPO = Path('references/Hexalith.Folders')
 OLD = ART / 'folders-migration-inventory-v1.md'
@@ -533,9 +537,10 @@ def label_candidate(root, digest):
 def main(argv=None):
     try:
         receipt_path = ROOT / E / 'approval.json'
+        labels_path = ROOT / E / 'labels.json'
+        require(not (ROOT/NEW).exists() or (receipt_path.exists() and labels_path.exists()), 'refusing to overwrite an existing successor without approval and label receipts')
         if receipt_path.exists() and read_json(receipt_path).get('decision') != 'pending':
             raise ValueError('refusing to overwrite an approved or unknown-state packet')
-        labels_path = ROOT / E / 'labels.json'
         if labels_path.exists():
             labels = read_json(labels_path)
             require(isinstance(labels.get('repository'),dict),'Folders label repository must be an object')

@@ -1,0 +1,121 @@
+{
+  "inputs": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "7340fdb6288cd9d955b8fc147cabe4cb55e4d092c37766ad7c785e40628a0ebd",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "e0c0b9216432c82650d23f281581564f02aa1fbd5874d3e44366a64e18ce7b8f",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "574e51d85e13255577e2769490971428e72f5967710a23cf1e63081664df904f",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "ecd324d95dc50fb4fef36cfe1dce3c6159007fefc473dfe288de297ff1da60e7",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655"
+  },
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": ".",
+      "cwdBase": "McpCli repository root",
+      "exitCode": 0,
+      "elapsedSeconds": 46.12,
+      "stdout": {
+        "path": "review-patches-20261114/tests.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-patches-20261114/tests.stderr.txt",
+        "sha256": "8b9f2d4059053bcc195c74695d3528f5ea87b9ac72c1e6bf6c1855bfb615e07e"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "cwd": ".",
+      "cwdBase": "McpCli repository root",
+      "exitCode": 0,
+      "elapsedSeconds": 1.573,
+      "stdout": {
+        "path": "review-patches-20261114/inventory.stdout.txt",
+        "sha256": "51d77d50053d0b9714406efa30fa9cb49de704a10e686c9205e1a7d5c0a4437b"
+      },
+      "stderr": {
+        "path": "review-patches-20261114/inventory.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "cwd": ".",
+      "cwdBase": "McpCli repository root",
+      "exitCode": 0,
+      "elapsedSeconds": 1.498,
+      "stdout": {
+        "path": "review-patches-20261114/labels.stdout.txt",
+        "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
+      },
+      "stderr": {
+        "path": "review-patches-20261114/labels.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "cwd": ".",
+      "cwdBase": "McpCli repository root",
+      "exitCode": 0,
+      "elapsedSeconds": 0.048,
+      "stdout": {
+        "path": "review-patches-20261114/ad23.stdout.txt",
+        "sha256": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2"
+      },
+      "stderr": {
+        "path": "review-patches-20261114/ad23.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "diff",
+        "--check"
+      ],
+      "cwd": ".",
+      "cwdBase": "McpCli repository root",
+      "exitCode": 0,
+      "elapsedSeconds": 0.112,
+      "stdout": {
+        "path": "review-patches-20261114/diff-check.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-patches-20261114/diff-check.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

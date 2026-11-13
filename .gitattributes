@@ -43,7 +43,7 @@ _bmad-output/implementation-artifacts/evidence/story-5-7/** -text whitespace=-bl
 _bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md -text
 _bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md -text
 
-# Story 5.8 binds the exact successor, pending receipts and README-only patch bytes.
+# Story 5.8 binds the exact approved successor, receipts and README-only patch bytes.
 _bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md -text
 _bmad-output/implementation-artifacts/evidence/story-5-8/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 

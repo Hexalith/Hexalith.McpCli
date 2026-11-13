@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -135,7 +135,7 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
 
 The approved 1.1.0 bytes (SHA-256 `54a6f61d…`), `approval.json` and the delivered Folders labels can change only through a versioned successor with a fresh exact-byte approval.
 
-- [ ] [Review][Patch] The verifier reads old Folders pin `e2252f29`, which survives only in local reflog entries that expire soon (medium; Decision 1 resolved: **Read via 2236855e**) — `check_source_drift` reads `B.surfaces(root, OLD_PIN)` and the generated client at `OLD_PIN` on every verifier and test run (`verify_amendment.py:196`, `:199`).
+- [x] [Review][Patch] The verifier reads old Folders pin `e2252f29`, which survives only in local reflog entries that expire soon (medium; Decision 1 resolved: **Read via 2236855e**) — `check_source_drift` reads `B.surfaces(root, OLD_PIN)` and the generated client at `OLD_PIN` on every verifier and test run (`verify_amendment.py:196`, `:199`).
   - `e2252f29` is in no ref of `references/Hexalith.Folders`, is absent from the owner checkout, and GitHub returns 422 "No commit found".
   - Only four HEAD/main reflog entries from 2026-10-16 retain it. Unreachable entries expire after 30 days by default (about 2026-11-15), and a later gc can prune the object.
   - Once it is pruned, both completion verifiers and all 36 tests fail permanently. They already cannot run in any fresh clone.
@@ -154,36 +154,36 @@ The approved 1.1.0 bytes (SHA-256 `54a6f61d…`), `approval.json` and the delive
   - At `7eab70e9` both fences are `Required = Newtonsoft.Json.Required.Always` (`HexalithFoldersClient.g.cs:11711`, `:11717`), and the legacy `add-file`/`change-file` tools take them as non-optional `long` parameters. The Code Map says "now require".
   - `ownerFileId` is reachable from the legacy tools only through the `remove-file` `RemoveFileRequest` JSON body. `add-file`/`change-file` never expose it.
   - (A1) [_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md:99] — deferred: same reason as Decision 2. Tracked in the same ledger section.
-- [ ] [Review][Patch] The completion gate's published-artifact binding has no refusal test — Replacing the guard at `verify_labels.py:89` with `True` still passes all 36 tests. Both test fixtures fake every root `git show`.
+- [x] [Review][Patch] The completion gate's published-artifact binding has no refusal test — Replacing the guard at `verify_labels.py:89` with `True` still passes all 36 tests. Both test fixtures fake every root `git show`.
   - On an isolated copy of the real packet with `inventoryRevision=85a5437`, the real code fails, while the code with the guard removed prints the PASS for integrated delivery.
   - Add `LabelTests` cases against real graph revisions: a revision older than the inventory, and `cab549c`, which holds the pending receipt. Assert the exact `(1, '', 'FAIL: …\n')` streams.
   - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:641]
-- [ ] [Review][Patch] The Folders delivery bindings have no refusal tests — Disabling the integrated README byte check (`verify_labels.py:80`), the owning-origin check (`:57`) or the commit byte-hash check (`:83`) still passes all 36 tests.
+- [x] [Review][Patch] The Folders delivery bindings have no refusal tests — Disabling the integrated README byte check (`verify_labels.py:80`), the owning-origin check (`:57`) or the commit byte-hash check (`:83`) still passes all 36 tests.
   - Real `583d3d49`, which is README-only, on `origin/main` and still cites 1.0.0, passes once `:80` is disabled.
   - Add real-graph cases for `583d3d49` as the integration, a fork `origin`, and a tampered `commitSha256`, each with exact streams.
   - (V2) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:695]
-- [ ] [Review][Patch] The completion trigger from integrated labels and the builder's delivered-label refusal are untested — Removing `verify_amendment.py:299` (`labels.state == 'integrated'` forces completion) or `build_candidate.py:542` (refuse to rebuild after integrated labels) still passes all 36 tests.
+- [x] [Review][Patch] The completion trigger from integrated labels and the builder's delivered-label refusal are untested — Removing `verify_amendment.py:299` (`labels.state == 'integrated'` forces completion) or `build_candidate.py:542` (refuse to rebuild after integrated labels) still passes all 36 tests.
   - `:299` is the only approval gate on this path, because `owner_checked=True` makes `verify_labels.verify` skip its own check.
   - Add a `V` entrypoint case with a pending receipt, integrated labels and spec/sprint not done, expecting the exact approval FAIL. Add a builder case expecting the refusal with no writes.
   - (V3) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:299]
-- [ ] [Review][Patch] The McpCli route evidence is read from the mutable working tree — `verify_amendment.py:186` uses `(root / 'src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs').read_text()`, while every other authority comes from committed objects.
+- [x] [Review][Patch] The McpCli route evidence is read from the mutable working tree — `verify_amendment.py:186` uses `(root / 'src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs').read_text()`, while every other authority comes from committed objects.
   - `verification.md:82` claims "Every source read uses committed Git objects".
   - A later Epic 6 refactor of request construction would fail Story 5.8's completion gate for reasons unrelated to it. An uncommitted edit changes the verifier's result.
   - Read the file with `git show BASELINE:` (`a92a296` line 251 is the cited `SubmitCommandRequest`) and keep the claim true.
   - (B4, E13, E21) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:186]
-- [ ] [Review][Patch] The evidence claims to prove that `expectedFileVersion`/`expectedLockFence` are required, but only checks that they exist — `verification.md:136-137` says the both-pin checks prove "required expectedFileVersion/expectedLockFence".
+- [x] [Review][Patch] The evidence claims to prove that `expectedFileVersion`/`expectedLockFence` are required, but only checks that they exist — `verification.md:136-137` says the both-pin checks prove "required expectedFileVersion/expectedLockFence".
   - `check_source_drift` checks only that `JsonProperty("<prop>"` is absent at the old pin and present at the new one. Only `ownerFileId` gets a required-mode assertion.
   - Assert `Required = Newtonsoft.Json.Required.Always` for both fences in the new-pin class block, and add a guard-removal and corruption test.
   - (E20, A2) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:204]
-- [ ] [Review][Patch] The new K12 ledger entry has wrong anchors and stale status — AD-23 `:36` should be `:38` (restriction precedence), and `:155` should be `:157` (the C10 add/change-plus-removal variant). The inventory's `:39` should be `:40` (the IDs) and `:42`–`:43` (the catalog hold).
+- [x] [Review][Patch] The new K12 ledger entry has wrong anchors and stale status — AD-23 `:36` should be `:38` (restriction precedence), and `:155` should be `:157` (the C10 add/change-plus-removal variant). The inventory's `:39` should be `:40` (the IDs) and `:42`–`:43` (the catalog hold).
   - The status still says "neither decoration nor this pending candidate overrides AD-23", but 1.1.0 is approved and published at `f3c8f5f`.
   - (B2, E16, A5) [_bmad-output/implementation-artifacts/deferred-work.md:1049]
-- [ ] [Review][Patch] Some current-state wording still describes the pre-delivery state — `verification.md:19-24` says "All 31 tests passed …" as current fact, which conflicts with the final 36-test record.
+- [x] [Review][Patch] Some current-state wording still describes the pre-delivery state — `verification.md:19-24` says "All 31 tests passed …" as current fact, which conflicts with the final 36-test record.
   - `verification.md:150` labels the 1.1.0 hash "pending candidate", and `:158-159` says "The pending receipt names the Folders roles it must cover".
   - The new `.gitattributes` comment says "pending receipts".
   - Mark these as historical or update them to the approved/integrated state.
   - (B15) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:21]
-- [ ] [Review][Patch] `verification.md` says the 1.1.0 hash is enforced against the baseline commit — The table header at `:141-142` says the hashes are "also enforced against the baseline commit", and the table includes Folders 1.1.0.
+- [x] [Review][Patch] `verification.md` says the 1.1.0 hash is enforced against the baseline commit — The table header at `:141-142` says the hashes are "also enforced against the baseline commit", and the table includes Folders 1.1.0.
   - 1.1.0 is not in `B.AUTHORITIES` and does not exist at `a92a296`. Deterministic regeneration and the receipt check it, not the baseline.
   - Split the row out, or state what actually checks it.
   - (E22) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:141]
@@ -247,6 +247,10 @@ Derivation rules (the decisions above apply first):
 
 - 2026-11-13: Delivery follow-up review applied eight direct patch groups, rejected one finding and added no review deferrals. The final 36-test suite and retained synthetic-lifecycle proof both pass, as do both real default approved-completion entrypoints and the AD-23 adoption gate. The approved candidate remains SHA-256 `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`. All story acceptance conditions are satisfied; spec status is done and sprint status is review per the build workflow. The separately recorded K12 catalog hold remains open for Epic 6.
 
+- 2026-11-14: Applied all nine code-review patch entries without changing approved inventory, approval or label bytes. Historical Folders source now reads published ancestor `2236855ee181bdeed2a103537c66316a1612c792`, bound to recorded `src` tree `d0f81f0f00570c2d8ba1f34af2fcdf7bccb9d7e0`; the original object is checked when present. Route evidence reads the original McpCli baseline, and both mutation fences require `Required.Always`. Added real-graph publication/delivery refusal cases, integrated-label lifecycle refusals, absent-object and corruption controls. The 47-test suite, both real default completion gates and AD-23 adoption verification pass. Corrected the existing K12 ledger anchors/status and historical evidence wording; the three approved-byte deferrals remain in the existing ledger. Final retained checks are in `evidence/story-5-8/review-patches-20261114/commands.json`. No commit, push, enrollment, execution, parity or retirement was performed.
+
+- 2026-11-14: Resumed build completed the nine requested review patches and five follow-up patch groups. Final verification passed all 50 tests, both real completion verifiers and the AD-23 gate, with exact-stream captures and complete executable-input hashes in [the final command manifest](evidence/story-5-8/review-final-20261114/commands.json). Matrix coverage and protected artifact bytes were audited. Two pre-existing approved-byte drift omissions were added to the versioned-successor ledger; three prior K12-successor defects remain there without duplicate entries. Spec is done and sprint tracking is review. Approved inventory, approval, labels, production code, dependencies and gitlinks remain unchanged. The frozen scope requires separate explicit commit authorization; no commit or push was performed.
+
 ## Spec Change Log
 
 ## Review Triage Log
@@ -291,3 +295,23 @@ All three independent layers completed before triage. The edge-case and verifica
 | D9: sprint comment still presents delivered gates as pending | low | patch | The tracker comment was not yet updated during staged publication. Replace the stale pending statement with the real published completion state and move tracking to review when the build workflow finishes. |
 
 Eight direct patch groups were accepted; one finding was rejected on the explicit fixture/acceptance distinction. No new review deferrals were added. The approved inventory and its authorities remain unchanged, and the existing K12 reconciliation remains open.
+
+### Resumed build review (2026-11-14)
+
+All three independent layers completed before triage. The edge-case layer returned no findings and independently passed the suite. The verification layer passed all 47 tests and both completion commands, then demonstrated an undetected caller-deletion mutation. The blind layer returned ten findings. The full review snapshot is `/tmp/mcpcli-story-5-8-7lmi9bve.diff`, against the preserved baseline `a92a2969db6903b8c6cca7e437446167e135ec9d`; this resumed implementation began at `ab05973f63388447984d9d21742f97700254acdb`.
+
+| Finding | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| B1: missing receipts permit rebuilding an existing approved successor | medium | patch | The builder skips both state checks when their files are absent and derives a pending packet. Refuse missing receipts when the successor exists, with exact-stream/no-write tests; pristine initialization remains supported. |
+| B2: SDK end-anchor tightening is absent from approved source drift | low | defer | The pinned client validators changed `$` to `\z`, while the approved inventory omits that tightening. This predates the resumed patches and changes approved documentary bytes; track the correction for the versioned successor, with affected-row analysis before any parity claim. |
+| B3: redirect disabling is absent from approved source drift | low | defer | The pinned bearer handler explicitly sets `AllowAutoRedirect = false`, and MCP registration selects it. The approved transport paragraph omits that setting. Track this pre-existing approved-byte omission for the successor; no existing receipt or label is rewritten. |
+| B4: mutation drift requiredness and ownerFileId reachability | low | defer | carried: the same approved-byte defect and user decision remain unchanged; already tracked (`deferred-work.md:1064`). No duplicate ledger entry. |
+| B5: K01 rationale incorrectly describes its adopted outcome | low | defer | carried: the approved rows and the prior K12-successor decision remain unchanged; already tracked (`deferred-work.md:1054`). No duplicate ledger entry. |
+| B6: deferred K12 rows present replace-style routes | low | defer | carried: the same approved replacement-column wording remains reserved for the K12 successor; already tracked (`deferred-work.md:1059`). No duplicate ledger entry. |
+| B7: Code Map omits Q17 from its K06 list | low | reject | The implementation and approved diagnostic scope correctly include all seven entries. This finding proposes only editing this build's spec, which the review workflow explicitly rejects; it demonstrates no verifier defect. |
+| B8: historical delivery section presents its old workflow state as current | low | patch | Its heading is at the same level as the historical heading, so the old done/review sentence is ambiguous during resumed review. Date and label that section explicitly as historical. |
+| B9: absolute owner-checkout reproduction prerequisites are implicit | low | patch | The earlier decision rejecting a configurable-checkout feature remains in force. A direct documentation correction can state the existing owner path and required local objects/refs without changing the immutable register or verifier surface. |
+| B10: new command manifest omits executable helper dependencies | low | patch | The captured input list has only four Python files, while the suite imports the lifecycle helper and Story 5.2/5.7 code. Bind those unchanged executable inputs, and include the full set in final verification. |
+| V1: source-drift checks can be disconnected from the real owner entrypoint | medium | patch | Pre-verified: deleting `check_source_drift(root,surface)` leaves all 47 tests passing and accepts a copied builder with an invalid recorded tree. Add a real copied-entrypoint corruption test and a caller-deletion control with exact output assertions. |
+
+The five direct patch groups were applied by the original implementation agent and verified by the parent: all 50 tests passed in 46.608 seconds, both real completion entrypoints passed, and AD-23 and whitespace checks passed. Two newly identified omissions in already-approved bytes are recorded under this source spec in the ledger; the three existing K12-successor corrections are carried without duplication. The approved inventory, receipts and delivered labels remain immutable.

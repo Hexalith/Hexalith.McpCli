@@ -1,0 +1,46 @@
+{
+  "suite": "50 tests passed; no skipped or disabled matrix cases",
+  "testLogSha256": "249df82929a6b175ebbde6bf309a9cca20986a6e7b8aa5d1d56b8097d251f23d",
+  "matrixCoverage": {
+    "complete candidate": [
+      "test_deterministic_candidate_and_all_disposition_branches",
+      "test_real_candidate_and_completion_process_streams"
+    ],
+    "invented or undecorated replacement": [
+      "test_real_process_rejects_damaged_rows_and_invented_replacement",
+      "test_decorated_type_wire_route_key_and_owner_eligibility_guards"
+    ],
+    "damaged row, anchor, drift, class, gap or chain": [
+      "test_duplicate_and_damaged_rows_rejected_with_guard_controls",
+      "test_anchor_and_drift_guards",
+      "test_k12_catalog_hold_diagnostics_and_empty_gap_owner",
+      "test_pending_approved_role_and_chain_controls"
+    ],
+    "completion without approval or label": [
+      "test_standalone_completion_does_not_bypass_owner_approval",
+      "test_completion_requires_label_integration_after_owner_approval",
+      "test_integrated_labels_force_owner_approval_without_done_status"
+    ]
+  },
+  "protectedArtifactsUnchangedFromHead": {
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json": "7adc8fbe4cf7ab7d37ea4746c36b0e1c99754c56bf8bc2dde7912940e83cd7a1"
+  },
+  "frozenIntentUnchanged": true,
+  "specStatus": "done",
+  "sprintStatus": "review",
+  "review": {
+    "blindFindings": 10,
+    "edgeFindings": 0,
+    "verificationFindings": 1,
+    "patchGroupsApplied": 5,
+    "newApprovedByteDeferrals": 2,
+    "existingDeferralsCarried": 3,
+    "rejectedSpecOnlyFindings": 1
+  }
+}
