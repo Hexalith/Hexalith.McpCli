@@ -1,0 +1,240 @@
+{
+  "commands": [
+    {
+      "id": "candidate",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/candidate.stdout.txt",
+        "sha256": "ee539729906bea3dd86a104b75e75289724af7f0e067fb2f91e374a381e07ede"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/candidate.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "labels",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/labels.stdout.txt",
+        "sha256": "055c7e2d7676d90cd409c8e5674f6c65ee678d85bba827db6277e63b1229f7c9"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/labels.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "approved-completion",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/approved-completion.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/approved-completion.stderr.txt",
+        "sha256": "0882f39a33359e1d6a6b02afaeee28004e8c983db32815891ecdfc115b549748"
+      }
+    },
+    {
+      "id": "tests",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/tests.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/tests.stderr.txt",
+        "sha256": "11499328a57e2512f19a0cad6062df923418fdf9561a1aa71912b1a57301670c"
+      }
+    },
+    {
+      "id": "ad23",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/ad23.stdout.txt",
+        "sha256": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/ad23.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "whitespace",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/whitespace.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/whitespace.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "review-1-candidate",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-candidate.stdout.txt",
+        "sha256": "ee539729906bea3dd86a104b75e75289724af7f0e067fb2f91e374a381e07ede"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-candidate.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "review-1-labels",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-labels.stdout.txt",
+        "sha256": "055c7e2d7676d90cd409c8e5674f6c65ee678d85bba827db6277e63b1229f7c9"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-labels.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "review-1-approved-completion",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-approved-completion.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-approved-completion.stderr.txt",
+        "sha256": "0882f39a33359e1d6a6b02afaeee28004e8c983db32815891ecdfc115b549748"
+      }
+    },
+    {
+      "id": "review-1-tests",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-tests.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-tests.stderr.txt",
+        "sha256": "b163eb65d1d34b040e21e2ab7df1e5718fa79f23ac7eb5b2b6f0854f629c22b4"
+      }
+    },
+    {
+      "id": "review-1-ad23",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-ad23.stdout.txt",
+        "sha256": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-ad23.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "id": "review-1-whitespace",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-whitespace.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/checks/review-1-whitespace.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

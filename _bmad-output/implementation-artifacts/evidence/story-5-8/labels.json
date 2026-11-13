@@ -1,0 +1,62 @@
+{
+  "schemaVersion": "1.0.0",
+  "state": "candidate-pending-owner-approval-and-delivery",
+  "predecessor": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/labels.json",
+    "sha256": "06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6"
+  },
+  "inventoryArtifacts": {
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407"
+  },
+  "inventoryRevision": null,
+  "deliveryAuthorization": null,
+  "repository": {
+    "name": "folders",
+    "repository": "https://github.com/Hexalith/Hexalith.Folders",
+    "ownerCheckout": "/home/administrator/projects/hexalith/folders",
+    "baseRevision": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+    "readme": {
+      "beforeSha256": "bfec790c274b8952313dd17d25b69f025bca9d172fddb22d461fe148fa87c75e",
+      "afterSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e"
+    },
+    "integration": null,
+    "before": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/upstream/folders/README.before.section.md",
+      "sha256": "efd17b99b386b40e988e785d986e76bf4753665998d535f9efadaa0655f38eb3"
+    },
+    "after": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/upstream/folders/README.after.section.md",
+      "sha256": "ba0a093f2d28968c93221d07ab9733522b467649e3f41c45a598699682c97182"
+    },
+    "patch": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/upstream/folders/README.patch",
+      "sha256": "ec9febc718a75008114ab39eac6de55ac01ab8160e61f848943865a22956be2f"
+    }
+  },
+  "rows": [
+    {
+      "id": "PS10",
+      "repository": "folders",
+      "surface": "Hexalith.Folders.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 60,
+        "text": "- `Hexalith.Folders.Cli` (.NET tool `folders`): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS10; [Folders inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Folders inventory SHA-256: `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.",
+        "sha256": "d8e4648af3e4cb04dfe8f13e2448d5a1e19d96b58f8b3ec4b0f567615e9b0b94"
+      },
+      "gate": "Folders inventory gates"
+    },
+    {
+      "id": "PS11",
+      "repository": "folders",
+      "surface": "Hexalith.Folders.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 61,
+        "text": "- `Hexalith.Folders.Mcp` (stdio MCP server): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS11; [Folders inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Folders inventory SHA-256: `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.",
+        "sha256": "9f2ac1a428b633f48d2e24fc15cabcef6bc540cd0747fbdba49e14c7c162a813"
+      },
+      "gate": "Folders inventory gates"
+    }
+  ]
+}

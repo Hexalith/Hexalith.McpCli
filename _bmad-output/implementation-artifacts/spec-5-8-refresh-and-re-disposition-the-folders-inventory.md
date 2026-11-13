@@ -2,7 +2,8 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'ready-for-dev'
+status: 'in-progress'
+baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -100,9 +101,9 @@ story_key: '5-8-refresh-and-re-disposition-the-folders-inventory'
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] `A/folders-migration-inventory-v1.1.0.md` and `.gitattributes` (`-text`): write the successor from the derivation rules below. Corrected premises go in G/V cells and the source section. A2 stays pending.
-- [ ] `E/build_candidate.py`: generate it deterministically from the 1.0.0 bytes, `git show 7eab70e9:` sources and the 5.12 record. Refuse to overwrite an approved packet.
-- [ ] `E/{verify_amendment.py,test_verify_amendment.py}` cover:
+- [x] `A/folders-migration-inventory-v1.1.0.md` and `.gitattributes` (`-text`): write the successor from the derivation rules below. Corrected premises go in G/V cells and the source section. A2 stays pending.
+- [x] `E/build_candidate.py`: generate it deterministically from the 1.0.0 bytes, `git show 7eab70e9:` sources and the 5.12 record. Refuse to overwrite an approved packet.
+- [x] `E/{verify_amendment.py,test_verify_amendment.py}` cover:
   - candidate and approved-completion modes;
   - 161-entry accounting against the AD-23 map;
   - anchors and drift;
@@ -110,8 +111,8 @@ story_key: '5-8-refresh-and-re-disposition-the-folders-inventory'
   - include⇔replace, gap/owner and K12 handling;
   - G-story status, the hash chain and roles.
   - Test every matrix row and disposition branch with guard-removal controls, the process exit and both streams.
-- [ ] `E/{approval.json,labels.json,verify_labels.py,upstream/folders/}`: a pending receipt bound to the 1.0.0/1.1.0 hashes and their authorities, and a README-only PS10/PS11 citation patch whose register is chained to the 5.7 register.
-- [ ] `A/deferred-work.md` (grep first), `E/verification.md`, the secret-scan receipt, this spec and `A/sprint-status.yaml`: record only the supported state.
+- [x] `E/{approval.json,labels.json,verify_labels.py,upstream/folders/}`: a pending receipt bound to the 1.0.0/1.1.0 hashes and their authorities, and a README-only PS10/PS11 citation patch whose register is chained to the 5.7 register.
+- [x] `A/deferred-work.md` (grep first), `E/verification.md`, the secret-scan receipt, this spec and `A/sprint-status.yaml`: record only the supported state.
 
 **Acceptance Criteria:**
 - Given the candidate, when the verifier runs, then all 161 entries pass and the 1.0.0, AD-23 and technical 1.0.3 bytes are unchanged.
@@ -140,7 +141,32 @@ Derivation rules (the decisions above apply first):
 ## Implementation Notes
 
 - 2026-11-13: The user approved this spec with "approve and stop". The frozen intent and decisions are locked, and implementation resumes in a fresh `bmad-build` session. Exact-byte inventory approval and Folders label delivery remain pending their own requests. Planning scratch (per-row drift anchors) lived in a session scratchpad only; regenerate anchors from `git show 7eab70e9:` sources.
+- 2026-11-13: Implemented the pending 1.1.0 successor and deterministic generator, with 161 entries (123 replace, 33 defer, 5 withdraw). Candidate and PS10/PS11 patch verifiers pass; 21 tests cover matrix scenarios, exact process streams and live-global guard removal. Both-pin source checks preserve the 49-tool/2-resource/42-leaf sets and prove added model fields. Verification is recorded in [the Story 5.8 packet](evidence/story-5-8/verification.md). The candidate receipt supersedes A1 only upon exact-byte approval; no approval, delivery, enrollment, parity or retirement is asserted. Story status stays in-progress because exact-byte owner approval and separately authorized upstream label integration remain unsatisfied completion conditions.
+- 2026-11-13: Build review 1 applied all 11 patch groups; the final 31-test suite, candidate verifier, label verifier and adopted AD-23 gate pass. Completion still fails with the exact pending-approval diagnostic. The final candidate SHA-256 is `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`. No review deferrals were added; the approved K12 reconciliation remains open. The approved story's completion conditions take precedence over the build workflow's generic done/commit steps: status remains in-progress and no commit or delivery is authorized.
 
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Build review 1 (2026-11-13)
+
+All three independent layers completed before triage. Each finding below has its own verdict; shared fixes are grouped only after those verdicts. The review snapshot is `/tmp/mcpcli-story-5-8-5grc5k44.diff`.
+
+| Finding | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| B1: absolute owner checkout prevents fresh-clone reproduction | low | reject | The new verifier uses the exact owner checkout already recorded and required by Story 5.7's immutable label register (`verify_labels.py:119`). This documentary packet is reproducible in its recorded workspace; adding checkout configuration for other machines is more than a direct correction and is unlikely to affect this bounded approval run. |
+| B2: cumulative label diff rejects intervening source commits | medium | patch | `verify_labels.py:81` compares the delivery revision to the historical label base. A later source-only commit plus a README-only delivery therefore fails the stated delivery check; compare the delivery commit with its parent while retaining the exact README-byte check. |
+| B3: omitted ownerFileId drift | medium | patch | The pinned generated-client diff adds optional `FileMutationRequest.ownerFileId` with owner-incarnation semantics alongside both fence fields. Its absence leaves the affected mutation rows' drift evidence incomplete; add the field, semantics, anchors and both-pin check. |
+| B4: diagnostic Query heading asserts nonexistent types | low | patch | The heading says CLR type at the pin even for the seven undecorated diagnostic roadmap entries. Correct the heading directly without changing their defer/exclude outcomes. |
+| B5: N03 repeats N04 renewal rationale | low | patch | The shared N03/N04 branch describes RenewWorkspaceLock for organization ACL baseline/grant/revoke. Give N03 its own rationale; its lack of a decorated replacement remains unchanged. |
+| B6: JsonRequired checked anywhere in Command source | medium | patch | The guard only checks a file-wide substring; other required properties keep it true when the idempotency property's annotation is removed. Check that property's attributes and protect the check with the demonstrated corruption. |
+| B7: inferred names do not prove actual client/target links | medium | patch | MCP targets derive from tool names and File CLI targets from leaf names. The report claims call-link verification, but neither detects a changed client call or upload-kind branch; check those existing call sites and add controls. |
+| B8: hard-coded group discovery ignores root registrations | medium | patch | The pinned CliApplication registers the seven groups at lines 45–51, but discovery never reads those registrations. An additional registration is invisible to the claimed complete leaf-set check; validate the registered group set and reject unsupported registrations. |
+| B9: duplicate JSON members bypass overwrite protection | medium | patch | Ordinary json.loads accepts an approved decision followed by pending, whereas the verifier rejects duplicate members. Apply duplicate rejection before generator writes and cover both protected state files. |
+| B10: non-object JSON produces traceback | medium | patch (with E2) | Top-level lists in approval/labels and null/list repository values reach unchecked .get calls. Validate those demonstrated shapes and assert controlled failures through entrypoints. |
+| E1: approval can race a running generator | low | reject | A concurrent external approval between the initial pending check and writes can race regeneration. No approval writer or concurrent workflow is part of this run; an update lock/transaction adds state and coordination for an unlikely documentary maintenance race, so the low finding is rejected under the workflow's complexity rule. |
+| E2: null/list repository produces traceback | medium | patch (with B10) | The unchecked repository .get call raises AttributeError for both demonstrated values. This is the same malformed-document root cause as B10 and shares its fix. |
+| V1: automatic done triggers lack protecting tests | medium | patch | The verification-gap reviewer removed both completion_requested helpers in memory and all 21 tests still passed. Cover spec and sprint done independently through both default verifier entrypoints, with guard-removal controls. |
+| V2: Git ancestry calls lack protecting tests | medium | patch | The verification-gap reviewer removed both merge-base calls in memory and all six label tests still passed. Real temporary Git graphs must reject unmerged owner-label and inventory revisions with exact output assertions. |
+
+The surviving findings form 11 small patch groups (B10/E2 share one). They were sent to the original implementation agent together and all were applied. The final full 31-test run and both verifiers pass, and approved-completion still rejects the pending receipt. No intent or specification change was required, and the frozen decisions remain untouched.
