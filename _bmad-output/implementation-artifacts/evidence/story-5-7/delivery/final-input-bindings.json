@@ -1,0 +1,30 @@
+{
+  "files": [
+    {
+      "source": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "copy": "/tmp/story57-final-approved-inputs-ywg_t_v8/eventstore-admin-migration-inventory-v1.0.2.md",
+      "bytes": 120822,
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "copy": "/tmp/story57-final-approved-inputs-ywg_t_v8/technical-tools-migration-inventory-v1.0.3.md",
+      "bytes": 77399,
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+    },
+    {
+      "source": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "copy": "/tmp/story57-final-approved-inputs-ywg_t_v8/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "bytes": 14086,
+      "sha256": "fde5f3a2e42bf4714387feff19be2d138415e3cc3683c67386d68e6540607bc2"
+    }
+  ],
+  "command": [
+    "python3",
+    "scripts/scan-evidence-secrets.py",
+    "/tmp/story57-final-approved-inputs-ywg_t_v8",
+    "--receipt",
+    "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/final-input-scan.json"
+  ],
+  "exitCode": 0
+}

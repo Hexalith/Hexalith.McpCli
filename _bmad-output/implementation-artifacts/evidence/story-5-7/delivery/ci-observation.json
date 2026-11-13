@@ -1,0 +1,393 @@
+[
+  {
+    "repository": "Hexalith/Hexalith.McpCli",
+    "commit": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "-R",
+      "Hexalith/Hexalith.McpCli",
+      "--commit",
+      "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+      "--limit",
+      "30",
+      "--json",
+      "databaseId,workflowName,status,conclusion,url"
+    ],
+    "exitCode": 0,
+    "runs": [
+      {
+        "conclusion": "success",
+        "databaseId": 43387948382,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948382",
+        "workflowName": "Commitlint"
+      },
+      {
+        "conclusion": "failure",
+        "databaseId": 43387948285,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285",
+        "workflowName": "CI"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 43387948026,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948026",
+        "workflowName": "Agent instructions sync"
+      },
+      {
+        "conclusion": "failure",
+        "databaseId": 43387948146,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948146",
+        "workflowName": "Bootstrap package"
+      }
+    ]
+  },
+  {
+    "repository": "Hexalith/Hexalith.EventStore",
+    "commit": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "-R",
+      "Hexalith/Hexalith.EventStore",
+      "--commit",
+      "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+      "--limit",
+      "30",
+      "--json",
+      "databaseId,workflowName,status,conclusion,url"
+    ],
+    "exitCode": 0,
+    "runs": [
+      {
+        "conclusion": "",
+        "databaseId": 43388135697,
+        "status": "in_progress",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135697",
+        "workflowName": "Payload Protection Lifecycle"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388136260,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136260",
+        "workflowName": "CI"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388135678,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135678",
+        "workflowName": "Integration Tests"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388135879,
+        "status": "in_progress",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135879",
+        "workflowName": "Payload Protection"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 43388135774,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135774",
+        "workflowName": "OQ8 governing-design availability"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 43388135780,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135780",
+        "workflowName": "Payload Protection Azure"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388135731,
+        "status": "in_progress",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135731",
+        "workflowName": "Advisory Tests"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388136073,
+        "status": "in_progress",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388136073",
+        "workflowName": "Commitlint"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388135974,
+        "status": "in_progress",
+        "url": "https://github.com/Hexalith/Hexalith.EventStore/actions/runs/43388135974",
+        "workflowName": "CodeQL"
+      }
+    ]
+  },
+  {
+    "repository": "Hexalith/Hexalith.FrontComposer",
+    "commit": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "-R",
+      "Hexalith/Hexalith.FrontComposer",
+      "--commit",
+      "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+      "--limit",
+      "30",
+      "--json",
+      "databaseId,workflowName,status,conclusion,url"
+    ],
+    "exitCode": 0,
+    "runs": [
+      {
+        "conclusion": "",
+        "databaseId": 43388142861,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43388142861",
+        "workflowName": "Quality"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388143372,
+        "status": "in_progress",
+        "url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43388143372",
+        "workflowName": "CI"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388143286,
+        "status": "in_progress",
+        "url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43388143286",
+        "workflowName": "CodeQL"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 43388143167,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.FrontComposer/actions/runs/43388143167",
+        "workflowName": "Commitlint"
+      }
+    ]
+  },
+  {
+    "repository": "Hexalith/Hexalith.Parties",
+    "commit": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "-R",
+      "Hexalith/Hexalith.Parties",
+      "--commit",
+      "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+      "--limit",
+      "30",
+      "--json",
+      "databaseId,workflowName,status,conclusion,url"
+    ],
+    "exitCode": 0,
+    "runs": [
+      {
+        "conclusion": "success",
+        "databaseId": 43388148608,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388148608",
+        "workflowName": "Release Candidate Gate"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388149065,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149065",
+        "workflowName": "CI"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 43388148949,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388148949",
+        "workflowName": "Commitlint"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388149046,
+        "status": "in_progress",
+        "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43388149046",
+        "workflowName": "CodeQL"
+      }
+    ]
+  },
+  {
+    "repository": "Hexalith/Hexalith.Memories",
+    "commit": "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "-R",
+      "Hexalith/Hexalith.Memories",
+      "--commit",
+      "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+      "--limit",
+      "30",
+      "--json",
+      "databaseId,workflowName,status,conclusion,url"
+    ],
+    "exitCode": 0,
+    "runs": [
+      {
+        "conclusion": "",
+        "databaseId": 43388157817,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/43388157817",
+        "workflowName": "CI"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388157783,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/43388157783",
+        "workflowName": "CodeQL"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 43388157908,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.Memories/actions/runs/43388157908",
+        "workflowName": "Commitlint"
+      }
+    ]
+  },
+  {
+    "repository": "Hexalith/Hexalith.Projects",
+    "commit": "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "-R",
+      "Hexalith/Hexalith.Projects",
+      "--commit",
+      "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+      "--limit",
+      "30",
+      "--json",
+      "databaseId,workflowName,status,conclusion,url"
+    ],
+    "exitCode": 0,
+    "runs": [
+      {
+        "conclusion": "",
+        "databaseId": 43388163158,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.Projects/actions/runs/43388163158",
+        "workflowName": "CodeQL"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388163130,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.Projects/actions/runs/43388163130",
+        "workflowName": "CI"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388163071,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.Projects/actions/runs/43388163071",
+        "workflowName": "Commitlint"
+      }
+    ]
+  },
+  {
+    "repository": "Hexalith/Hexalith.Folders",
+    "commit": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "-R",
+      "Hexalith/Hexalith.Folders",
+      "--commit",
+      "583d3d492f94217809a8efe00424b80ce3fdfa61",
+      "--limit",
+      "30",
+      "--json",
+      "databaseId,workflowName,status,conclusion,url"
+    ],
+    "exitCode": 0,
+    "runs": [
+      {
+        "conclusion": "",
+        "databaseId": 43388170694,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.Folders/actions/runs/43388170694",
+        "workflowName": "CodeQL"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388170325,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.Folders/actions/runs/43388170325",
+        "workflowName": "contract-spine-gates"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388170637,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.Folders/actions/runs/43388170637",
+        "workflowName": "CI"
+      },
+      {
+        "conclusion": "success",
+        "databaseId": 43388170631,
+        "status": "completed",
+        "url": "https://github.com/Hexalith/Hexalith.Folders/actions/runs/43388170631",
+        "workflowName": "Commitlint"
+      }
+    ]
+  },
+  {
+    "repository": "Hexalith/Hexalith.ChatBot",
+    "commit": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "-R",
+      "Hexalith/Hexalith.ChatBot",
+      "--commit",
+      "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+      "--limit",
+      "30",
+      "--json",
+      "databaseId,workflowName,status,conclusion,url"
+    ],
+    "exitCode": 0,
+    "runs": [
+      {
+        "conclusion": "",
+        "databaseId": 43388176975,
+        "status": "queued",
+        "url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176975",
+        "workflowName": "ci"
+      },
+      {
+        "conclusion": "",
+        "databaseId": 43388176969,
+        "status": "in_progress",
+        "url": "https://github.com/Hexalith/Hexalith.ChatBot/actions/runs/43388176969",
+        "workflowName": "release"
+      }
+    ]
+  }
+]

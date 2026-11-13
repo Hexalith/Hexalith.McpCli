@@ -1,5 +1,16 @@
 # Story 5.7 candidate verification and owner packet
 
+## Completed delivery (2026-11-13)
+
+The exact inventory candidates are owner-approved and published with their receipt
+at McpCli `42d3c2fd48405e0f2c27f9b61f6d7025e4246934`. All fourteen compatibility
+labels are integrated in seven owning main branches. Both approved-completion
+gates and all 27 tests pass after integration. The authoritative successor
+[labels.json](labels.json) records exact commits, content hashes and read-backs.
+[delivery/verification.md](delivery/verification.md) records final delivery,
+concurrent workspace activity and the separate broad-CI blockers. Earlier
+pending-approval and pending-delivery statements below are retained history.
+
 ## Owner approval and authorized delivery (2026-11-13)
 
 The user replied **"approve"** directly to the request to approve these exact

@@ -1,11 +1,11 @@
 {
   "schemaVersion": "1.0.0",
-  "state": "candidate-pending-owner-approval-and-delivery",
+  "state": "integrated",
   "predecessor": {
     "path": "_bmad-output/implementation-artifacts/evidence/story-5-5/labels.json",
     "sha256": "196a2f700f02f23aa69d4e32d1f4dc1dbcd3d32fd8aa169cea7e46ebb248d43b"
   },
-  "inventoryRevision": null,
+  "inventoryRevision": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
   "inventoryArtifacts": {
     "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2",
     "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
@@ -21,7 +21,7 @@
       "name": "eventstore",
       "repository": "https://github.com/Hexalith/Hexalith.EventStore",
       "ownerCheckout": "/home/administrator/projects/hexalith/eventstore",
-      "baseRevision": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+      "baseRevision": "c08fcae810e4cd35bed876bf064f5e2426b43e22",
       "before": {
         "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/upstream/eventstore/README.before.section.md",
         "sha256": "f387517bdb37dfe0f34b2d264a5dbcba5ff7aee82930598f26773d108f5e2f22"
@@ -44,7 +44,12 @@
         "statusEntries": 0,
         "readmeSha256": "7af1f83ec57c3ec55e5062ce7a32241982a9235890113b95263dedcd9e1384ae"
       },
-      "integration": null,
+      "integration": {
+        "commit": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+        "commitSha256": "47d0d240451919edee0e4c34c3e189c83e41e86cb82fa3164b310ad4331d916e",
+        "remoteMainWhenReadBack": "639c9d5c0c8c8fba14aaec536dd1c2e3ceaccc13",
+        "readmeSha256": "31d1cbf7e617cdeb38dcca67eada11d5c1d592f7ede9b9813000c26a4bd5e497"
+      },
       "preparedBaseRevision": "f2062f7f7bd8b3dcae946ba209b933ad8e610ff2"
     },
     {
@@ -74,7 +79,12 @@
         "statusEntries": 0,
         "readmeSha256": "146f09112ca8d2512f760edd77832dbb67b01382244fad4f75cb2fd61a8563d3"
       },
-      "integration": null,
+      "integration": {
+        "commit": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+        "commitSha256": "b2f3973f507a72e20ad4a8eab0d3c31f39dee98853207ef36c91641b0b4514e6",
+        "remoteMainWhenReadBack": "19418a0c29daf38eef03b0891958cd8aa93c59bf",
+        "readmeSha256": "65b2be3c12f3eaeb7e039535c040d4bab4d9e06acc3301a725addb1f96c636a8"
+      },
       "preparedBaseRevision": "56c9206167b7f18c3a95f610f814dfa39d9dcd01"
     },
     {
@@ -104,7 +114,12 @@
         "statusEntries": 2,
         "readmeSha256": "edbc1eb0076f709df2170904aec2505a856d1ae8ffde6d4de6ebecfa31fa288b"
       },
-      "integration": null,
+      "integration": {
+        "commit": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+        "commitSha256": "ee390811788a67aedbf9ea19416e689eec82ef9b163b65851fff286d55aaa77c",
+        "remoteMainWhenReadBack": "6bc68c8fad27209b80c4dd1a5a0271519de09f33",
+        "readmeSha256": "525ac80f800621875625de31e370391de347384c99a297816369512be9ec8b71"
+      },
       "preparedBaseRevision": "f532145038992217f6433cd3dc1e36e61a1acc38"
     },
     {
@@ -134,7 +149,12 @@
         "statusEntries": 2,
         "readmeSha256": "e7af927daa6ccb3f84dbdb5a1cea0b144e0993ed2c5bf93c59d671a79629d601"
       },
-      "integration": null,
+      "integration": {
+        "commit": "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+        "commitSha256": "65b687a8ce42c50932d574e1271af4c1b78880338bd62132f64559fbd4951c21",
+        "remoteMainWhenReadBack": "a3f0b3a4a0f0905f6b88da039491ceb286103207",
+        "readmeSha256": "38dc0310dbbe3076442e49b15c80b7e1532be09e8bc9837f394198211085389a"
+      },
       "preparedBaseRevision": "3e98dc990675fdaed83aff2bf4856440a191986f"
     },
     {
@@ -164,7 +184,12 @@
         "statusEntries": 7893,
         "readmeSha256": "1d3ea35dbc751bcc5f6eca7e0500a500b92ddcdadb36081848efdf0ae4c3aa90"
       },
-      "integration": null,
+      "integration": {
+        "commit": "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+        "commitSha256": "69358f543490ca5c12549de35dd8001a35c7b6abead026d7f694a4a5e24d62b4",
+        "remoteMainWhenReadBack": "065f04773a34a8e68b702caeb99937ae7b8e89c8",
+        "readmeSha256": "d093eb74092a75dfa6ab1d374c8a61da54533e5cce0a9855930aa6c238cb8e45"
+      },
       "preparedBaseRevision": "77067782154d35a794ea50d86af1c5e73c8351b6"
     },
     {
@@ -194,7 +219,12 @@
         "statusEntries": 2,
         "readmeSha256": "9cf95d525ee0e75caeebf9a72e95d30b7bb57760096663b4dd7e1c4a1c18f740"
       },
-      "integration": null,
+      "integration": {
+        "commit": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+        "commitSha256": "a29585305db39bfc681d675403bcd8141804a472ba8950ee54f0b0891b80e8ed",
+        "remoteMainWhenReadBack": "583d3d492f94217809a8efe00424b80ce3fdfa61",
+        "readmeSha256": "bfec790c274b8952313dd17d25b69f025bca9d172fddb22d461fe148fa87c75e"
+      },
       "preparedBaseRevision": "7eab70e9332c0573b50dce5b219e425b6a2d363c"
     },
     {
@@ -224,7 +254,12 @@
         "statusEntries": 0,
         "readmeSha256": "619cb807c81d9188156d1181b1c04db90cee5afda5e06b3a9ef047345c55923d"
       },
-      "integration": null,
+      "integration": {
+        "commit": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+        "commitSha256": "7be60ad7d1214a41e04dbbf76a3a233b548e7f1aa9ba67997251c636de720693",
+        "remoteMainWhenReadBack": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+        "readmeSha256": "6b3874701fbb50035d7187d92e740a1cb07080eddaa2910404fe1dd7ec114c03"
+      },
       "preparedBaseRevision": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d"
     }
   ],

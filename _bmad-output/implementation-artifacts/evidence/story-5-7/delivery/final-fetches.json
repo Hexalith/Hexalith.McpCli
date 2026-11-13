@@ -1,0 +1,93 @@
+[
+  {
+    "repository": "eventstore",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.EventStore\n * branch                main       -> FETCH_HEAD\n"
+  },
+  {
+    "repository": "frontcomposer",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.FrontComposer\n * branch              main       -> FETCH_HEAD\n"
+  },
+  {
+    "repository": "parties",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Parties\n * branch              main       -> FETCH_HEAD\n"
+  },
+  {
+    "repository": "memories",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Memories\n * branch              main       -> FETCH_HEAD\n"
+  },
+  {
+    "repository": "projects",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Projects\n * branch            main       -> FETCH_HEAD\n"
+  },
+  {
+    "repository": "folders",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.Folders\n * branch              main       -> FETCH_HEAD\n"
+  },
+  {
+    "repository": "chatbot",
+    "command": [
+      "git",
+      "fetch",
+      "--no-recurse-submodules",
+      "origin",
+      "main"
+    ],
+    "exitCode": 0,
+    "stdout": "",
+    "stderr": "From https://github.com/Hexalith/Hexalith.ChatBot\n * branch            main       -> FETCH_HEAD\n"
+  }
+]

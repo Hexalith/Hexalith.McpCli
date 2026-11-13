@@ -2,7 +2,7 @@
 title: '5.7 Re-disposition EventStore Admin and technical-tool inventories'
 type: 'chore'
 created: '2026-11-13'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '48076b1bd041b45250597937da82594e202985f3'
@@ -52,7 +52,7 @@ Paths below use `A = _bmad-output/implementation-artifacts` and `E = A/evidence/
 - [x] `E/{verify_amendments.py,test_verify_amendments.py}` — retain row, registration, destructive, confirmation and anchor checks; add class/outcome, delta/hash-chain, role and completion checks. Test every matrix failure and disposition branch with guard-removal controls, process exit and both streams.
 - [x] `E/{approval.json,verification.md}` — SHA-256-bind predecessors, decision/map, candidates and changed rows. The user approved the exact candidates with "approve" on 2026-11-13 under all previously confirmed owner roles; the receipt records the exact instruction, roles and separate Git delivery authorization.
 - [x] Owning `README.md` files in EventStore, FrontComposer, Memories, Parties, Projects, Folders and ChatBot — prepare isolated README-only patches: UI gates PS01/PS02, retained exemptions PS03/PS14, all technical citations. Keep PS14 four-mode accounting, independent gates and Parties' blocked verdict.
-- [ ] `E/{labels.json,verify_labels.py}` — designate successor register chained to Story 5.5; bind patch/commit bytes, inventory hashes, label anchors/hashes. Verify citation contents and gate text; require integrated upstream evidence for completion. Delivery is authorized; integrated commit evidence remains pending.
+- [x] `E/{labels.json,verify_labels.py}` — successor register chains Story 5.5 to the approved inventories, fourteen labels and seven integrated README-only commits. Both approved-completion gates pass against published receipt/inventory bytes and current owner main sections.
 - [x] `E/`, this spec and `A/sprint-status.yaml` — retain validation/secret-scan evidence and record only the supported approval/delivery state.
 
 **Acceptance Criteria:**
@@ -77,6 +77,8 @@ Paths below use `A = _bmad-output/implementation-artifacts` and `E = A/evidence/
 - 2026-11-13: Candidate Admin 1.0.2 and technical 1.0.3 account for all 91/68 rows; all source facts and predecessor bytes remain preserved. Added explicit current applicability for historical decision prerequisites and retained independent UI/safety/retirement gates. Both candidate verifiers and all 20 focused tests pass, including 12 guard-removal controls. Seven isolated README-only patches pass read-only apply checks; exact section snapshots/full-blob hashes keep unrelated redactable README content out of the packet. Narrow byte-preservation attributes and final validation/secret-scan evidence are recorded in [the verification packet](evidence/story-5-7/verification.md).
 - 2026-11-13: Status remains in-progress. Exact-byte owner approval, separate delivery authorization, inventory publication and seven upstream label integrations are still pending; both approved-completion modes correctly fail. No legacy operation, production change, census/gitlink update, upstream edit, stage, commit, push or merge was performed.
 - 2026-11-13: Three independent review layers completed; all nine surviving patch groups are fixed, with three negligible findings rejected and none deferred. Final parent verification passes all 27 tests, both candidate verifiers and unchanged AD-23 adoption; both completion modes refuse the pending packet. Final evidence is retained in [review pass 1](evidence/story-5-7/review-pass-1/verification.md). The expanded scan required a typography-only correction to copied Admin header-scheme prose; the verifier requires that exact normalization, approved predecessors and technical inventory stay byte-identical, and pending Admin/EventStore hash bindings are refreshed. The story remains in-progress because its frozen completion gate requires exact-byte owner approval and integrated labels; the generic workflow's terminal done/commit actions cannot run yet.
+
+- 2026-11-13 completion: Published the approved inventory/receipt packet at 42d3c2fd48405e0f2c27f9b61f6d7025e4246934 and integrated all fourteen labels in seven owner main branches. Both approved-completion commands and all 27 tests pass after integration. [Delivery evidence](evidence/story-5-7/delivery/verification.md) records canonical commits, exact read-backs, authorization and CI observations. Concurrent /pushall work adopted prepared files and moved reference pins before publication; the publication commit's build/census inputs match its actual parent. Broad CI is blocked by inherited net10/net11 dependency incompatibility and Builds census drift, recorded separately without changing those inputs. Original checkouts were not edited by this task; concurrent changes and the unrelated Platform gitlink modification are preserved.
 
 ## Spec Change Log
 

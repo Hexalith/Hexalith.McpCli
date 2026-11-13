@@ -1,0 +1,34 @@
+{
+  "errors": [],
+  "exitCode": 0,
+  "fileCount": 3,
+  "files": [
+    {
+      "bytes": 120822,
+      "path": "eventstore-admin-migration-inventory-v1.0.2.md",
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2"
+    },
+    {
+      "bytes": 14086,
+      "path": "spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "sha256": "fde5f3a2e42bf4714387feff19be2d138415e3cc3683c67386d68e6540607bc2"
+    },
+    {
+      "bytes": 77399,
+      "path": "technical-tools-migration-inventory-v1.0.3.md",
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+    }
+  ],
+  "findings": [],
+  "implementationSha256": {
+    "evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7",
+    "scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b"
+  },
+  "knownCredentialCount": 1,
+  "manifestSha256": "c2e2aade22cc021dfa8c38d3bc2976e86975c14a5788a07c1caad1b2caaaec3b",
+  "policy": "mcpcli-evidence-redaction/v1",
+  "receiptExcluded": null,
+  "result": "clean",
+  "schema": "mcpcli-evidence-secret-scan/v1",
+  "scope": "all regular files; UTF-8 or BOM-marked UTF-16; links and binary files refused"
+}

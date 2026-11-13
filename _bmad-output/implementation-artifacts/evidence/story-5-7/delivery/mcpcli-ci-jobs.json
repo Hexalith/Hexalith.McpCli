@@ -1,0 +1,726 @@
+[
+  {
+    "run": {
+      "conclusion": "failure",
+      "databaseId": 43387948285,
+      "status": "completed",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285",
+      "workflowName": "CI"
+    },
+    "jobs": [
+      {
+        "completedAt": "2026-11-13T07:45:51Z",
+        "conclusion": "failure",
+        "databaseId": 131760872582,
+        "name": "topology-vector-discovery",
+        "startedAt": "2026-11-13T07:45:10Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Initialize root-declared Builds submodule",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Set up .NET",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Install pinned non-live plan validator",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Build and discover every live vector plus the independent cases without starting source services",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Retain complete live preflight receipts and diagnostics",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Post Set up .NET",
+            "number": 13,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 14,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 15,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285/job/131760872582"
+      },
+      {
+        "completedAt": "2026-11-13T07:46:27Z",
+        "conclusion": "failure",
+        "databaseId": 131760872600,
+        "name": "enrolled-module-conformance",
+        "startedAt": "2026-11-13T07:45:10Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Initialize root-declared Builds submodule",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Set up .NET",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Restore and build exact production catalog",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Benchmark first v1 Catalog construction in a fresh process",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Validate restored-package integrity, Operation Shape coverage and both heads",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Retain enrolled-module receipts, inputs and diagnostics",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Post Set up .NET",
+            "number": 15,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 16,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 17,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285/job/131760872600"
+      },
+      {
+        "completedAt": "2026-11-13T07:45:59Z",
+        "conclusion": "failure",
+        "databaseId": 131760872708,
+        "name": "conformance-vector-loopback",
+        "startedAt": "2026-11-13T07:45:10Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Initialize root-declared Builds submodule",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Set up .NET",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Install vector runner test tooling",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Run packaged Contracts through CLI and MCP against reset Gateway replay",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Post Set up .NET",
+            "number": 11,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 12,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285/job/131760872708"
+      },
+      {
+        "completedAt": "2026-11-13T07:48:33Z",
+        "conclusion": "failure",
+        "databaseId": 131760872769,
+        "name": "proprietary-surface-census",
+        "startedAt": "2026-11-13T07:45:10Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Initialize committed root-declared references without recursion",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Verify proprietary surface census refusal fixtures",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Scan committed root reference pins for proprietary surfaces",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Retain sanitized proprietary surface census report",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 12,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285/job/131760872769"
+      },
+      {
+        "completedAt": "2026-11-13T07:47:36Z",
+        "conclusion": "success",
+        "databaseId": 131760872792,
+        "name": "release-automation",
+        "startedAt": "2026-11-13T07:45:20Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run npm ci",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Verify pinned release automation and refusal guards",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Verify detached-source semantic-release version selection",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/setup-node@820762786026740c76f36085b0efc47a31fe5020",
+            "number": 11,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 12,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 13,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285/job/131760872792"
+      },
+      {
+        "completedAt": "2026-11-13T07:45:44Z",
+        "conclusion": "failure",
+        "databaseId": 131760872857,
+        "name": "conformance-vector-contract",
+        "startedAt": "2026-11-13T07:45:10Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Initialize root-declared Builds submodule",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Set up .NET",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Pack and validate the shared vector contract without a Head or Gateway",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Post Set up .NET",
+            "number": 9,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 10,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 11,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285/job/131760872857"
+      },
+      {
+        "completedAt": "2026-11-13T07:48:09Z",
+        "conclusion": "failure",
+        "databaseId": 131760873140,
+        "name": "ci / build-and-test",
+        "startedAt": "2026-11-13T07:45:28Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Validate governed CI contract",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Checkout approved Builds actions",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Evaluate governed workflow provenance",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Initialize root-declared submodules (governed)",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Initialize root-declared submodules",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Initialize .NET",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Checkout workflow-owned Builds preparation",
+            "number": 9,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Prepare module build",
+            "number": 10,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Cache NuGet packages",
+            "number": 11,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Validate test platform input",
+            "number": 12,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Prepare package dependencies",
+            "number": 13,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Restore",
+            "number": 14,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Build",
+            "number": 15,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Validate package consumer references",
+            "number": 16,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Unit tests (Tier 1, VSTest)",
+            "number": 17,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Unit tests (Tier 1, Microsoft.Testing.Platform)",
+            "number": 18,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Install and initialize Dapr (governed)",
+            "number": 19,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Install and initialize Dapr",
+            "number": 20,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Integration tests (Tier 2, VSTest)",
+            "number": 21,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Integration tests (Tier 2, Microsoft.Testing.Platform)",
+            "number": 22,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Validate coverage gates",
+            "number": 23,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Fail on blocking test failures",
+            "number": 24,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Upload test and coverage evidence",
+            "number": 25,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Post Cache NuGet packages",
+            "number": 48,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Post Initialize .NET",
+            "number": 49,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 50,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 51,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285/job/131760873140"
+      },
+      {
+        "completedAt": "2026-11-13T07:48:09Z",
+        "conclusion": "skipped",
+        "databaseId": 131762060055,
+        "name": "ci / performance-tests",
+        "startedAt": "2026-11-13T07:48:10Z",
+        "status": "completed",
+        "steps": [],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285/job/131762060055"
+      },
+      {
+        "completedAt": "2026-11-13T07:48:09Z",
+        "conclusion": "skipped",
+        "databaseId": 131762060288,
+        "name": "ci / aspire-tests",
+        "startedAt": "2026-11-13T07:48:10Z",
+        "status": "completed",
+        "steps": [],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948285/job/131762060288"
+      }
+    ]
+  },
+  {
+    "run": {
+      "conclusion": "failure",
+      "databaseId": 43387948146,
+      "status": "completed",
+      "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948146",
+      "workflowName": "Bootstrap package"
+    },
+    "jobs": [
+      {
+        "completedAt": "2026-11-13T07:47:38Z",
+        "conclusion": "failure",
+        "databaseId": 131760793184,
+        "name": "bootstrap-package",
+        "startedAt": "2026-11-13T07:44:57Z",
+        "status": "completed",
+        "steps": [
+          {
+            "conclusion": "success",
+            "name": "Set up job",
+            "number": 1,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 2,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Initialize root-declared Builds submodule",
+            "number": 3,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Set up .NET",
+            "number": 4,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Set up pinned release-test Node runtime",
+            "number": 5,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Install pinned release tooling",
+            "number": 6,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Verify detached-source version selection with real local Git history",
+            "number": 7,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Retain fixture commit validation and complete source-ref evidence",
+            "number": 8,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Verify release rejection and source gates without publication",
+            "number": 9,
+            "status": "completed"
+          },
+          {
+            "conclusion": "failure",
+            "name": "Build and run author-time tests independently of the tool",
+            "number": 10,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Prepare and validate only the bootstrap production projects",
+            "number": 11,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Post Set up pinned release-test Node runtime",
+            "number": 20,
+            "status": "completed"
+          },
+          {
+            "conclusion": "skipped",
+            "name": "Post Set up .NET",
+            "number": 21,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Post Run actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1",
+            "number": 22,
+            "status": "completed"
+          },
+          {
+            "conclusion": "success",
+            "name": "Complete job",
+            "number": 23,
+            "status": "completed"
+          }
+        ],
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43387948146/job/131760793184"
+      }
+    ]
+  }
+]

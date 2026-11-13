@@ -1,0 +1,61 @@
+[
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py",
+      "--approved-completion"
+    ],
+    "exitCode": 0,
+    "stdout": "completion-final.stdout.txt",
+    "stderr": "completion-final.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py",
+      "--approved-completion"
+    ],
+    "exitCode": 0,
+    "stdout": "label-completion-final.stdout.txt",
+    "stderr": "label-completion-final.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "_bmad-output/implementation-artifacts/evidence/story-5-7",
+      "-p",
+      "test_*.py"
+    ],
+    "exitCode": 0,
+    "stdout": "tests-final.stdout.txt",
+    "stderr": "tests-final.stderr.txt"
+  },
+  {
+    "command": [
+      "python3",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+    ],
+    "exitCode": 0,
+    "stdout": "adoption-final.stdout.txt",
+    "stderr": "adoption-final.stderr.txt"
+  },
+  {
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "stdout": "diff-check-final.stdout.txt",
+    "stderr": "diff-check-final.stderr.txt"
+  }
+]

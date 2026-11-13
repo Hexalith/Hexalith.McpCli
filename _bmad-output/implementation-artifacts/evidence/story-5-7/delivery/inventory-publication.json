@@ -1,0 +1,146 @@
+{
+  "repository": "https://github.com/Hexalith/Hexalith.McpCli",
+  "revision": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+  "remoteRevision": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+  "stagedFileCount": 4,
+  "transcript": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-only"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "fetch",
+        "--no-recurse-submodules",
+        "origin",
+        "main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/Hexalith/Hexalith.McpCli\n * branch            main       -> FETCH_HEAD\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "3c24dcf003727a40c782d9040c65e50009e48b41\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "3c24dcf003727a40c782d9040c65e50009e48b41\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "add",
+        "--",
+        ".gitattributes",
+        "_bmad-output/implementation-artifacts/epic-5-context.md",
+        "_bmad-output/implementation-artifacts/sprint-status.yaml",
+        "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+        "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+        "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--name-only"
+      ],
+      "exitCode": 0,
+      "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/local-label-commits.json\n_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/pre-publication-input-bindings.json\n_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/pre-publication-input-scan.json\n_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/pre-publication-packet-scan.json\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "commit",
+        "--file",
+        "/tmp/story-5-7-validated-messages-itc_j5_c/inventory.txt"
+      ],
+      "exitCode": 0,
+      "stdout": "[main 42d3c2f] docs: adopt story 5.7 inventory amendments\n 4 files changed, 769 insertions(+), 28 deletions(-)\n create mode 100644 _bmad-output/implementation-artifacts/evidence/story-5-7/delivery/pre-publication-input-bindings.json\n create mode 100644 _bmad-output/implementation-artifacts/evidence/story-5-7/delivery/pre-publication-input-scan.json\n create mode 100644 _bmad-output/implementation-artifacts/evidence/story-5-7/delivery/pre-publication-packet-scan.json\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:refs/heads/main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "To https://github.com/Hexalith/Hexalith.McpCli.git\n   3c24dcf..42d3c2f  HEAD -> main\n"
+    },
+    {
+      "command": [
+        "git",
+        "ls-remote",
+        "--heads",
+        "origin",
+        "refs/heads/main"
+      ],
+      "exitCode": 0,
+      "stdout": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934\trefs/heads/main\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "fetch",
+        "--no-recurse-submodules",
+        "origin",
+        "main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/Hexalith/Hexalith.McpCli\n * branch            main       -> FETCH_HEAD\n"
+    }
+  ]
+}

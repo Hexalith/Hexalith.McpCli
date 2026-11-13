@@ -1,0 +1,55 @@
+{
+  "publicationCommit": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+  "actualParentCommit": "3c24dcf003727a40c782d9040c65e50009e48b41",
+  "buildAndCensusInputDiff": {
+    "command": [
+      "git",
+      "diff",
+      "--exit-code",
+      "3c24dcf003727a40c782d9040c65e50009e48b41",
+      "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+      "--",
+      "src",
+      "tests",
+      "tools",
+      "references",
+      "Directory.Build.props",
+      "Directory.Packages.props",
+      "global.json",
+      ".github",
+      ".gitmodules"
+    ],
+    "exitCode": 0,
+    "unchanged": true
+  },
+  "concurrentHistory": "The parent is a concurrent build: sync local changes via /pushall commit, not the original story baseline. That concurrent history moved ten root gitlinks. The task publication commit changes only delivery evidence files.",
+  "nugetRestoreFailure": " Package Hexalith.Commons.UniqueIds 3.0.0 is not compatible with net10.0 (.NETCoreApp,Version=v10.0). Package Hexalith.Commons.UniqueIds 3.0.0 supports: net11.0 (.NETCoreApp,Version=v11.0) [/home/runner/work/Hexalith.McpCli/Hexalith.McpCli/tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj]",
+  "censusErrors": [
+    {
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/package-version-audit.json",
+      "repository": "references/Hexalith.Builds",
+      "rule": "excluded-fixture-source-drift:Tools/package-version-audit.json"
+    },
+    {
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/test-g4-packaged-platform-loader.ps1",
+      "repository": "references/Hexalith.Builds",
+      "rule": "unresolved-publication-target:Tools/test-g4-packaged-platform-loader.ps1",
+      "target": "(Join-Path"
+    },
+    {
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/test-g4-tool-package-contracts.ps1",
+      "repository": "references/Hexalith.Builds",
+      "rule": "unresolved-publication-directory:Tools/test-g4-tool-package-contracts.ps1"
+    },
+    {
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/test-platform-version-catalog.ps1",
+      "repository": "references/Hexalith.Builds",
+      "rule": "unresolved-publication-target:Tools/test-platform-version-catalog.ps1",
+      "target": "(Join-Path"
+    }
+  ]
+}
