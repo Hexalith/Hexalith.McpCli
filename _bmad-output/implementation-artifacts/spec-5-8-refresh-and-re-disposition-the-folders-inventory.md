@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'done'
+status: 'in-progress'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -117,6 +117,103 @@ story_key: '5-8-refresh-and-re-disposition-the-folders-inventory'
 **Acceptance Criteria:**
 - Given the candidate, when the verifier runs, then all 161 entries pass and the 1.0.0, AD-23 and technical 1.0.3 bytes are unchanged.
 - Given exact-byte owner approval and separate delivery authorization, when completion runs, then the receipt names the covered Folders roles and the integrated Folders label cites 1.1.0. The approval grants no enrollment, execution or retirement.
+
+### Review Findings
+
+This is code review pass 1 (bmad-code-review, 2026-11-13), run after the two in-spec bmad-build reviews.
+
+**Scope:** the deliverables, 3,404 diff lines in 13 files:
+- the 1.1.0 inventory and `.gitattributes`;
+- `build_candidate.py`, `verify_amendment.py`, `test_verify_amendment.py`, `verify_labels.py` and `delivery/lifecycle-proof.py`;
+- `approval.json`, `labels.json`, `verification.md` and `upstream/folders/README.patch`;
+- this story's ledger hunk;
+- the Folders label commit `db40bda8`.
+
+The baseline is `a92a296..HEAD` at `c3bd5b9`. Stream captures, secret-scan receipts, `commands.json` and `review-followup.diff` were left out.
+
+Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. They raised 51 findings: 18 survive in 12 entries, and 33 were rejected.
+
+The approved 1.1.0 bytes (SHA-256 `54a6f61d…`), `approval.json` and the delivered Folders labels can change only through a versioned successor with a fresh exact-byte approval.
+
+- [ ] [Review][Patch] The verifier reads old Folders pin `e2252f29`, which survives only in local reflog entries that expire soon (medium; Decision 1 resolved: **Read via 2236855e**) — `check_source_drift` reads `B.surfaces(root, OLD_PIN)` and the generated client at `OLD_PIN` on every verifier and test run (`verify_amendment.py:196`, `:199`).
+  - `e2252f29` is in no ref of `references/Hexalith.Folders`, is absent from the owner checkout, and GitHub returns 422 "No commit found".
+  - Only four HEAD/main reflog entries from 2026-10-16 retain it. Unreachable entries expire after 30 days by default (about 2026-11-15), and a later gc can prune the object.
+  - Once it is pruned, both completion verifiers and all 36 tests fail permanently. They already cannot run in any fresh clone.
+  - `e2252f29` is a single commit on top of the published `2236855e`, which is on GitHub and an ancestor of the `7eab70e9` gitlink. It only deletes `.mcp.json` and `.vscode/mcp.json`, so every `src/` byte the verifier reads is identical at `2236855e`.
+  - Fix: record the `e2252f29:src` tree id in the builder constants while the object still exists. Read the old-pin sources at the published `2236855e`, and require its `src` tree id to equal the recorded id (and `e2252f29`'s, when present). Add a guard-removal test. Approved bytes stay unchanged.
+  - (E1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:196]
+- [x] [Review][Defer] The K12 rationale on M01/M04/L24/L25 contradicts the adopted outcome next to it (low; approved bytes; Decision 2 resolved: **Fold into K12 successor**) — The four rows show `K01` / `decorated-gateway-contract`, but their rationale says "adopted confidential UI only conflicts with 5.12 owner decoration". Inventory `:42` repeats the claim for all ten entries.
+  - These rows are deferred only because their target C10 is K12-restricted (AD-23 `:157`). `disposition()` gives every K12 key one shared string (`build_candidate.py:240`).
+  - Epic 6 reads these rows when it resolves the K12 gap.
+  - (B1, A4) [_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md:99] — deferred: correcting approved bytes needs a new version, a new exact-byte approval and a PS10/PS11 relabel. Epic 6 cannot catalog Folders until the K12 successor exists, so that successor carries the fix and may also carry the rejected cosmetic items. Tracked in the ledger under "code review of spec-5-8".
+- [x] [Review][Defer] The deferred K12 rows carry a full replace-style "Exact replacement" (low; approved bytes; Decision 3 resolved: **Fold into K12 successor**) — M01/M02/M04/M13/L10/L24–L26/C01/C10 are `defer / exclude`, yet each shows "C10: `…MutateFiles`; owner eligible; wire …; SubmitCommandRequest(…)".
+  - Other deferred rows say "no decorated replacement" or "None; named prerequisite remains open". `replacement()` checks eligibility but not K12 membership.
+  - The Exact replacement column can therefore read as an approved replacement for exactly the operations that Epic 6 is told not to catalog.
+  - (A3) [_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md:162] — deferred: same reason as Decision 2. Tracked in the same ledger section.
+- [x] [Review][Defer] The file-mutation drift leaves out that the fence fields are now required and credits `ownerFileId` to the add/change rows (low; approved bytes; Decision 4 resolved: **Fold into K12 successor**) — The drift cells on M01/M04/M13/L24–L26/C10 say only "gains ownerFileId/expectedFileVersion/expectedLockFence".
+  - At `7eab70e9` both fences are `Required = Newtonsoft.Json.Required.Always` (`HexalithFoldersClient.g.cs:11711`, `:11717`), and the legacy `add-file`/`change-file` tools take them as non-optional `long` parameters. The Code Map says "now require".
+  - `ownerFileId` is reachable from the legacy tools only through the `remove-file` `RemoveFileRequest` JSON body. `add-file`/`change-file` never expose it.
+  - (A1) [_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md:99] — deferred: same reason as Decision 2. Tracked in the same ledger section.
+- [ ] [Review][Patch] The completion gate's published-artifact binding has no refusal test — Replacing the guard at `verify_labels.py:89` with `True` still passes all 36 tests. Both test fixtures fake every root `git show`.
+  - On an isolated copy of the real packet with `inventoryRevision=85a5437`, the real code fails, while the code with the guard removed prints the PASS for integrated delivery.
+  - Add `LabelTests` cases against real graph revisions: a revision older than the inventory, and `cab549c`, which holds the pending receipt. Assert the exact `(1, '', 'FAIL: …\n')` streams.
+  - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:641]
+- [ ] [Review][Patch] The Folders delivery bindings have no refusal tests — Disabling the integrated README byte check (`verify_labels.py:80`), the owning-origin check (`:57`) or the commit byte-hash check (`:83`) still passes all 36 tests.
+  - Real `583d3d49`, which is README-only, on `origin/main` and still cites 1.0.0, passes once `:80` is disabled.
+  - Add real-graph cases for `583d3d49` as the integration, a fork `origin`, and a tampered `commitSha256`, each with exact streams.
+  - (V2) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:695]
+- [ ] [Review][Patch] The completion trigger from integrated labels and the builder's delivered-label refusal are untested — Removing `verify_amendment.py:299` (`labels.state == 'integrated'` forces completion) or `build_candidate.py:542` (refuse to rebuild after integrated labels) still passes all 36 tests.
+  - `:299` is the only approval gate on this path, because `owner_checked=True` makes `verify_labels.verify` skip its own check.
+  - Add a `V` entrypoint case with a pending receipt, integrated labels and spec/sprint not done, expecting the exact approval FAIL. Add a builder case expecting the refusal with no writes.
+  - (V3) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:299]
+- [ ] [Review][Patch] The McpCli route evidence is read from the mutable working tree — `verify_amendment.py:186` uses `(root / 'src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs').read_text()`, while every other authority comes from committed objects.
+  - `verification.md:82` claims "Every source read uses committed Git objects".
+  - A later Epic 6 refactor of request construction would fail Story 5.8's completion gate for reasons unrelated to it. An uncommitted edit changes the verifier's result.
+  - Read the file with `git show BASELINE:` (`a92a296` line 251 is the cited `SubmitCommandRequest`) and keep the claim true.
+  - (B4, E13, E21) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:186]
+- [ ] [Review][Patch] The evidence claims to prove that `expectedFileVersion`/`expectedLockFence` are required, but only checks that they exist — `verification.md:136-137` says the both-pin checks prove "required expectedFileVersion/expectedLockFence".
+  - `check_source_drift` checks only that `JsonProperty("<prop>"` is absent at the old pin and present at the new one. Only `ownerFileId` gets a required-mode assertion.
+  - Assert `Required = Newtonsoft.Json.Required.Always` for both fences in the new-pin class block, and add a guard-removal and corruption test.
+  - (E20, A2) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:204]
+- [ ] [Review][Patch] The new K12 ledger entry has wrong anchors and stale status — AD-23 `:36` should be `:38` (restriction precedence), and `:155` should be `:157` (the C10 add/change-plus-removal variant). The inventory's `:39` should be `:40` (the IDs) and `:42`–`:43` (the catalog hold).
+  - The status still says "neither decoration nor this pending candidate overrides AD-23", but 1.1.0 is approved and published at `f3c8f5f`.
+  - (B2, E16, A5) [_bmad-output/implementation-artifacts/deferred-work.md:1049]
+- [ ] [Review][Patch] Some current-state wording still describes the pre-delivery state — `verification.md:19-24` says "All 31 tests passed …" as current fact, which conflicts with the final 36-test record.
+  - `verification.md:150` labels the 1.1.0 hash "pending candidate", and `:158-159` says "The pending receipt names the Folders roles it must cover".
+  - The new `.gitattributes` comment says "pending receipts".
+  - Mark these as historical or update them to the approved/integrated state.
+  - (B15) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:21]
+- [ ] [Review][Patch] `verification.md` says the 1.1.0 hash is enforced against the baseline commit — The table header at `:141-142` says the hashes are "also enforced against the baseline commit", and the table includes Folders 1.1.0.
+  - 1.1.0 is not in `B.AUTHORITIES` and does not exist at `a92a296`. Deterministic regeneration and the receipt check it, not the baseline.
+  - Split the row out, or state what actually checks it.
+  - (E22) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:141]
+
+**Rejected (33):**
+- B3 low: the hard-coded prose anchors and the ancestry sentence resolve at immutable pins, and the approved hash freezes the builder output. They cannot drift, and checking them would add guards.
+- B5/E19 low: the `blob/main` link uses an immutable, versioned filename and carries the exact SHA-256, and it follows the technical 1.0.3 citation convention approved in 5.7. Fixing it needs another owner-repo delivery.
+- B6/E11 low: the 5.7 register input is immutable and hash-chained. The delivered PS10/PS11 text cites 1.1.0, and `README.md` bytes are verified exactly, so the stale-citation case cannot occur.
+- B7 false: the approval guards are tested through fixtures (`owner approval lacks identity` and `lacks required covered` are asserted). Because the spec is done, damage to the real `approval.json` fails the default verifier entrypoint.
+- B8/E2/E3 low: build review 1 already rejected the absolute owner checkout (B1) for this documentary packet. Ancestry against `origin/main` is backed by retained `ls-remote` readbacks (D3). Live remote checks would add network state.
+- B9/E15/A6 low: the real receipt's `rolesCovered` equals `requiredApprovalRoles` exactly. Amendment owners name who must close each gap, not approvers, and no gate depends on mapping them. Changing the policy wording means changing receipt bytes.
+- B10 false: the receipt's `artifacts` and `amendment.toSha256` bind the 1.1.0 hash, and `check_approval` requires them to equal the recomputed hashes.
+- B11/A9 low: the seven diagnostic rows repeat one anchor (cosmetic, approved bytes). The CLR-type part is false, because the column heading admits "undecorated roadmap candidate" names.
+- B12 low: the A2 sentence at `:28` is broken (cosmetic, approved bytes). The K12 successor can carry the fix.
+- B13 false: the 5.12 record (`declarations.md:155`) declares the loss under the joint "V04/V05" decision. V05 is still deferred for staging, which is consistent with that.
+- B14 low: V04's withdrawal is permitted by AD-23 `:152-153`, and only the citation is missing (approved bytes). The K12 successor can carry it.
+- B16 low: the duplicated replacement listing in the V rows is a readability issue only (approved bytes). The K12 successor can carry the fix.
+- E4 false: completion already requires `origin/main` for ancestry, so the drift read cannot change the outcome. Failing loudly when the remote branch is missing is correct.
+- E5 false: every `next()` lookup runs over hash-chained or immutable inputs (the 5.7 register, the AD-23 map, PS10/PS11 coverage checked first), so a miss cannot be reached.
+- E6 low: the builder refuses the approved packet, so it cannot run now. A transactional write would add complexity.
+- E7 low: the recorded run used `-B -I`, not `-O`. Changing the helper would desynchronize its retained captures.
+- E8 low: rerunning the helper intentionally regenerates its captures, and Git shows the change.
+- E9/E10 false: the pinned declaration table has 48 unique IDs (counted), and the MCP resources are unique at the immutable pin.
+- E12 false: neither pin has a class whose name begins with `FileMutationRequest`, `FileMetadataItem` or `LockLeaseMetadata` (checked with `grep`).
+- E14 low: the tests deliberately load helpers from isolated `--root` views. Ordinary runs use the real root.
+- E17 low: "Above inclusive 1048576 is invalid" is ambiguous wording (cosmetic, approved bytes). The K12 successor can carry the fix.
+- E18 low: `README.patch` is a byte-bound record, verified by equality and never applied. The delivery is complete.
+- E23 low: commit subjects already published on `main` cannot be changed without rewriting history, and they are outside the reviewed diff.
+- A7 low: V09 points to "their affected rows in the 5.12 source table" (`:67`), so the rows are referenced (approved bytes). The K12 successor can carry the full list.
+- A8 low: G4/G5/V05 have new-pin anchors, and the verifier checks the premises (`verify_amendment.py:211-218`). Only the source-line citations are missing (approved bytes). The K12 successor can carry them.
 
 ## Design Notes
 
