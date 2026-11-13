@@ -1,5 +1,17 @@
 # Story 5.7 candidate verification and owner packet
 
+## Final state (2026-11-13)
+
+The [final parent verification](review-pass-3/parent-review/verification.md)
+records all 46 tests, completed workflow review, both completion gates and fresh
+scans after the final status and triage edits.
+
+The [40-test parent verification packet](review-pass-2/parent-review/verification.md)
+records the completed continuation review, both completion gates and fresh scans.
+The subsequent [review pass 3 packet](review-pass-3/verification.md) records the
+ten accepted patch groups, all 44 focused tests and the current verification.
+Earlier test counts and pending-state statements below remain historical.
+
 ## Completed delivery (2026-11-13)
 
 The exact inventory candidates are owner-approved and published with their receipt

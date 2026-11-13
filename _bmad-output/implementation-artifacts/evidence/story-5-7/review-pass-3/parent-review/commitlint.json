@@ -1,0 +1,15 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "npmCiExitCode": 0,
+  "cliVersion": "21.2.4",
+  "message": "test: harden story 5.7 inventory amendment gates\n",
+  "messageFile": "/tmp/mcpcli-5-7-commit-9f74_x5r.txt",
+  "messageSha256": "9663713674fde96d61a6bcbdb0470503c2427514a582671a017932e2c7ebfbdc",
+  "exitCode": 0
+}

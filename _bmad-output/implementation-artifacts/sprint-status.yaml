@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-13-2026 14:46'
+last_updated: '11-13-2026 15:15'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -97,7 +97,7 @@ development_status:
   # Code review pass 2 2026-11-10: all 7 patches applied (MCP reply deadline, 5.4 packet gitattributes, receipt-reuse test, README order, private-name and per-call Kelvin pins, shared concurrent launcher); R54-D7–D12 prerequisite follow-ups deferred; live boundary edits not re-run on CI.
   5-5-retire-legacy-packages-and-platform-routes: done # Code review pass 2 2026-11-10: 13 patches applied (evidence only), 0 deferred, 35 rejected. Build review pass 1 2026-11-10: 8 patch groups applied, 1 deferred, 7 rejected. Delivery complete 2026-11-10: all PS01–PS14 labels on main in 7 owner repos (FrontComposer README-only; PS03/PS04 Descriptions await its reseal). Memories main green; EventStore, FrontComposer, Projects, ChatBot and Parties red runs pre-existing (identical on parents); Folders contract-spine-gates already red from its own PD10 drift, plus the label's csproj drift for its requalification. Platform census clean; Parties.Mcp retirement retained blocked by G01–G06 (deferred-work.md:944); SM-3 deadline 2027-02-05.
   5-6-reject-new-proprietary-surfaces-in-ci: done # 2026-11-12: census green at b381563 (policy 1.0.6, 17/17 roots). Release chain kept; owner 1.0.5/1.0.6 not in it; Compile excuse removed per owner choice A'. Owner hash-only 1.0.7 written (20 exclusions, 1 allowance; scan green, 17/17 roots); 21 allowances and 12 exclusions remain waiver-only.
-  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: in-progress # Delivered 2026-11-13. Code review pass 3 (2026-11-13) left 10 patch action items open: test-run bytecode breaks the packet secret scan, five untested guards (anchor counts, Disposition rewrite, register state/authorization, register fields, status parser), partial test assertions, label-gate diagnostics, a final-state pointer and the tracked pending-wording ledger scope. Approved bytes unchanged; two accepted deferrals remain tracked (approved-byte pending self-description; inherited NU1202/census CI red).
+  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: review # Delivered 2026-11-13. All ten pass-3 patch groups and nine continuation regression findings closed; three workflow reviews complete. Parent discovery/direct each pass 46 tests, both completion gates and 18 guard-removal controls pass; final scans refreshed after status edits. Approved bytes unchanged; two accepted deferrals remain tracked (approved-byte pending self-description; inherited NU1202/census CI red).
   5-8-refresh-and-re-disposition-the-folders-inventory: backlog # 2026-11-10: waits on Hexalith.Folders Story 5.12 (sprint-change-proposal-2026-11-10).
   5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent: backlog
   5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: backlog

@@ -44,7 +44,8 @@ def read_json(path):
 
 def git(repo, *args):
     result = subprocess.run(['git', '-C', str(repo), *args], capture_output=True)
-    require(result.returncode == 0, f'git {" ".join(args)} failed for label evidence')
+    detail = result.stderr.decode(errors='replace').strip() or '(no stderr)'
+    require(result.returncode == 0, f'git {" ".join(args)} failed for label evidence in {repo}: {detail}')
     return result.stdout
 
 
@@ -199,7 +200,7 @@ def verify(root, completion=False):
         git(root, 'merge-base', '--is-ancestor', revision, 'origin/main')
         published = {**inventories, str(E / 'approval.json'): sha(approval_bytes)}
         for path, digest in published.items():
-            require(sha(git(root, 'show', f'{revision}:{path}')) == digest, f'{path}: published inventory differs from approved candidate')
+            require(sha(git(root, 'show', f'{revision}:{path}')) == digest, f'{path}: published artifact differs from approved candidate')
             require(sha(git(root, 'show', f'origin/main:{path}')) == digest, f'{path}: current origin/main artifact differs from approved candidate')
     else:
         require(register.get('state') in {'candidate-pending-owner-approval-and-delivery', 'integrated'}, 'invalid successor label state')

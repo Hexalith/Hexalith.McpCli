@@ -1,0 +1,204 @@
+{
+  "continuationHead": "7862574e19ae7b8123985af907b59afc3461da6a",
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "python3",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "streams": [
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/tests.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/tests.stderr.txt",
+          "bytes": 7904,
+          "sha256": "fd52ea6e7de1fe1811eadf9a3125be92a16ba5c7daaf6625b8a2d733d8f74f77"
+        }
+      ]
+    },
+    {
+      "name": "direct-tests",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/test_verify_amendments.py"
+      ],
+      "exitCode": 0,
+      "streams": [
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/direct-tests.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/direct-tests.stderr.txt",
+          "bytes": 146,
+          "sha256": "bffa55f183e216a14c1264a3a2ed1b6a58f90bc6a18f4f7630863779260ae032"
+        }
+      ]
+    },
+    {
+      "name": "amendments",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py"
+      ],
+      "exitCode": 0,
+      "streams": [
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/amendments.stdout.txt",
+          "bytes": 238,
+          "sha256": "001611ccf8f3b0f00a8665ed2660d8954257e4ed5f8a23d625adb93f981bc2c2"
+        },
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/amendments.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "name": "completion",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py",
+        "--approved-completion"
+      ],
+      "exitCode": 0,
+      "streams": [
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/completion.stdout.txt",
+          "bytes": 238,
+          "sha256": "001611ccf8f3b0f00a8665ed2660d8954257e4ed5f8a23d625adb93f981bc2c2"
+        },
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/completion.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "name": "labels",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py"
+      ],
+      "exitCode": 0,
+      "streams": [
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/labels.stdout.txt",
+          "bytes": 91,
+          "sha256": "fc97cf6f185102c5d586a2b6a119cc25d1fb4091eab99c7aee3cfea3820439a3"
+        },
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/labels.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "name": "label-completion",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py",
+        "--approved-completion"
+      ],
+      "exitCode": 0,
+      "streams": [
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/label-completion.stdout.txt",
+          "bytes": 91,
+          "sha256": "fc97cf6f185102c5d586a2b6a119cc25d1fb4091eab99c7aee3cfea3820439a3"
+        },
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/label-completion.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "name": "adoption",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "streams": [
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/adoption.stdout.txt",
+          "bytes": 1167,
+          "sha256": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2"
+        },
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/adoption.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "name": "guard-controls",
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/run_guard_controls.py"
+      ],
+      "exitCode": 0,
+      "streams": [
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/guard-controls.stdout.txt",
+          "bytes": 60317,
+          "sha256": "5e2cc0aae741a34e057c07bd38d61c7b02c32ed240c417e375671baaa5bf33dd"
+        },
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/guard-controls.stderr.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      ]
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "streams": [
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/diff-check.stdout.txt",
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        {
+          "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/review-pass-3/parent-review/diff-check.stderr.txt",
+          "bytes": 94,
+          "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+        }
+      ]
+    }
+  ],
+  "noPacketBytecode": true
+}

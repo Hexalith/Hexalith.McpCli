@@ -1,0 +1,102 @@
+{
+  "specStatus": "done",
+  "sprintStatus": "review",
+  "approvedArtifacts": [
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md",
+      "sha256": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json",
+      "sha256": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json",
+      "sha256": "7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/main-integration.json",
+      "sha256": "be51f67f9f3036bb328ceb7c72125777964138d537e96875f4c887286432430d",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+      "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/verification.md",
+      "sha256": "3fa6e07b25b00f9c7db9df1a371c56145df976e369b1073349abe3d7701fbfe5",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-5/labels.json",
+      "sha256": "196a2f700f02f23aa69d4e32d1f4dc1dbcd3d32fd8aa169cea7e46ebb248d43b",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+      "sha256": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+      "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+      "matchesApprovedReceipt": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c",
+      "matchesApprovedReceipt": true
+    }
+  ],
+  "approvalReceiptUnchanged": true,
+  "protectedPathsUnchanged": [
+    ".gitmodules",
+    "Directory.Build.props",
+    "Directory.Packages.props",
+    "global.json",
+    "tools/dependency-policy.json",
+    "tools/proprietary-surfaces",
+    "references",
+    "src",
+    "tests",
+    "scripts",
+    "AGENTS.md",
+    "CLAUDE.md",
+    ".github/copilot-instructions.md"
+  ],
+  "noPacketBytecode": true,
+  "finalCompletionChecks": [
+    {
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py",
+        "--approved-completion"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "001611ccf8f3b0f00a8665ed2660d8954257e4ed5f8a23d625adb93f981bc2c2",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py",
+        "--approved-completion"
+      ],
+      "exitCode": 0,
+      "stdoutSha256": "fc97cf6f185102c5d586a2b6a119cc25d1fb4091eab99c7aee3cfea3820439a3",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

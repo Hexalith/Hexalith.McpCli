@@ -1,0 +1,38 @@
+{
+  "bindings": [
+    {
+      "sourcePath": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "scannedPath": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "byteOffset": 0,
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2",
+      "bytes": 120822,
+      "entireSource": true
+    },
+    {
+      "sourcePath": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "scannedPath": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "byteOffset": 0,
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c",
+      "bytes": 77399,
+      "entireSource": true
+    },
+    {
+      "sourcePath": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "scannedPath": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "byteOffset": 0,
+      "sha256": "03a63825970964e06b2ab8d3d7445ce327ad0e2d82e6fad7674bdf8a509bb461",
+      "bytes": 46153,
+      "entireSource": true
+    },
+    {
+      "sourcePath": "_bmad-output/implementation-artifacts/deferred-work.md",
+      "scannedPath": "_bmad-output/implementation-artifacts/deferred-work.story-5-7-excerpt.md",
+      "byteOffset": 185222,
+      "sha256": "726a5004ba55d2a1b5c37bfc965042865cc34e4e4367085553b5c51318c35466",
+      "bytes": 3582,
+      "entireSource": false
+    }
+  ],
+  "copyMatchesSourceSelection": true,
+  "recheckedAfterScan": true
+}

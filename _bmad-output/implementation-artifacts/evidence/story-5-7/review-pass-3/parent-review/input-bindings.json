@@ -1,0 +1,54 @@
+{
+  "bindings": [
+    {
+      "sourcePath": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "scannedPath": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "byteOffset": 0,
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2",
+      "bytes": 120822,
+      "entireSource": true
+    },
+    {
+      "sourcePath": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "scannedPath": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "byteOffset": 0,
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c",
+      "bytes": 77399,
+      "entireSource": true
+    },
+    {
+      "sourcePath": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "scannedPath": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "byteOffset": 0,
+      "sha256": "061e28ed8755996446f6bb986f343facda24f0135fedecdb24fa35c2aadc19d5",
+      "bytes": 50796,
+      "entireSource": true
+    },
+    {
+      "sourcePath": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+      "scannedPath": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+      "byteOffset": 0,
+      "sha256": "27b72d2116601dc1cbeabf3264bf4c9830674f6b02f75156017f412716213f2b",
+      "bytes": 19523,
+      "entireSource": true
+    },
+    {
+      "sourcePath": "_bmad-output/implementation-artifacts/deferred-work.md",
+      "scannedPath": "_bmad-output/implementation-artifacts/deferred-work.story-5-7-excerpt.md",
+      "byteOffset": 185222,
+      "sha256": "726a5004ba55d2a1b5c37bfc965042865cc34e4e4367085553b5c51318c35466",
+      "bytes": 3582,
+      "entireSource": false
+    }
+  ],
+  "copyMatchesSourceSelection": true,
+  "recheckedAfterScan": true,
+  "scanCommand": [
+    "python3",
+    "-B",
+    "scripts/scan-evidence-secrets.py",
+    "/tmp/mcpcli-5-7-final-inputs-pe9_wqn2",
+    "--receipt",
+    "/tmp/mcpcli-5-7-final-input-scan-a44m47ix.json"
+  ]
+}

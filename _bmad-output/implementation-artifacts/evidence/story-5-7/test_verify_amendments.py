@@ -217,6 +217,15 @@ class AmendmentTests(PacketTests):
         changed = self.damaged('eventstore-admin', key, header, cell.replace('HTTP', 'HTTPS', 1))
         self.reject(lambda: self.check('eventstore-admin', changed), f'eventstore-admin:{key}: changed protected source field {header}')
 
+    def test_source_dispositions_must_reflect_the_adopted_amendment_action(self):
+        for module, key, header, value in [
+            ('eventstore-admin', 'AC01', 'Disposition', 'defer'),
+            ('technical-tools', 'FV06', 'Disposition / coverage', 'defer / exclude'),
+        ]:
+            with self.subTest(module=module, key=key, header=header):
+                changed = self.damaged(module, key, header, value)
+                self.reject(lambda: self.check(module, changed), f'{module}:{key}: changed protected source field {header}')
+
     def test_missing_extra_and_duplicate_rows(self):
         old, new, inv = self.inputs['technical-tools']
         for mode in ('missing', 'extra'):
@@ -313,6 +322,7 @@ class AmendmentTests(PacketTests):
         for field, value, message in [
             ('artifacts', {}, 'approval artifact/hash-chain binding mismatch'),
             ('amendments', [], 'amendment versions/changed-row delta/hash chain mismatch'),
+            ('schemaVersion', 'invalid', 'approval schema/baseline mismatch'),
             ('baselineCommit', '0' * 40, 'approval schema/baseline mismatch'),
             ('approver', 'invented', 'pending packet must not claim owner words, identity or roles'),
             ('decision', 'done', 'unknown approval decision'),
@@ -338,6 +348,20 @@ class AmendmentTests(PacketTests):
         self.reject(lambda: V.check_approval(approved, artifacts, amendments, True), 'owner approval lacks source/date')
         approved.update(approvalSource='unit test fixture; no authority', approvedOn='fixture')
         V.check_approval(approved, artifacts, amendments, True)
+        for field, message in [
+            ('approver', 'owner approval lacks identity or exact words'),
+            ('exactApprovalInstruction', 'owner approval lacks identity or exact words'),
+            ('approvalSource', 'owner approval lacks source/date'),
+            ('approvedOn', 'owner approval lacks source/date'),
+        ]:
+            for mode, value in [('missing', None), ('empty', ''), ('whitespace', ' \t ')]:
+                with self.subTest(field=field, mode=mode):
+                    changed = copy.deepcopy(approved)
+                    if mode == 'missing':
+                        del changed[field]
+                    else:
+                        changed[field] = value
+                    self.reject(lambda: V.check_approval(changed, artifacts, amendments, True), message)
         del approved['rolesCovered'][-1]
         self.reject(lambda: V.check_approval(approved, artifacts, amendments, True), 'owner approval lacks required named roles')
 
@@ -378,6 +402,18 @@ class AmendmentTests(PacketTests):
         old['AC01']['text'] = old['AC01']['text'].replace('HealthCommand.cs:47', 'HealthCommand.cs:9999')
         self.reject(lambda: V.anchor_evidence(ROOT, 'eventstore-admin', old, V.source_pins(ROOT)),
                     'eventstore-admin:AC01: damaged anchor Cli/Commands/HealthCommand.cs:9999')
+        pins = V.source_pins(ROOT)
+        owner = ROOT / 'references/Hexalith.EventStore'
+        source = pins['references/Hexalith.EventStore'] + ':src/Hexalith.EventStore.Admin.Cli/Commands/HealthCommand.cs'
+        git = V.git
+        lines = git(owner, 'show', source).splitlines(keepends=True)
+        self.assertTrue(lines[46].strip(), 'the pinned line must be nonblank before damage')
+        lines[46] = b' \t \r\n'
+        def blank_line(repo, *args):
+            return b''.join(lines) if repo == owner and args == ('show', source) else git(repo, *args)
+        with patch.object(V, 'git', side_effect=blank_line):
+            self.reject(lambda: V.anchor_evidence(ROOT, 'eventstore-admin', self.inputs['eventstore-admin'][0], pins),
+                        'eventstore-admin:AC01: damaged anchor Cli/Commands/HealthCommand.cs:47')
 
     def test_metadata_pin_scope_and_approval_state_damage(self):
         old = (ROOT / V.ART / 'technical-tools-migration-inventory-v1.md').read_text()
@@ -437,6 +473,24 @@ class AmendmentTests(PacketTests):
         with workflow_statuses(), owner_receipt(pending_receipt()), label_register(register):
             self.assertEqual((1, '', 'FAIL: completion requires exact-byte owner approval and all required roles\n'), invoke_main(V))
 
+    def test_workflow_status_rejects_duplicate_keys_and_unsupported_scalars(self):
+        spec = ROOT / V.ART / 'spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md'
+        sprint = ROOT / V.ART / 'sprint-status.yaml'
+        read = Path.read_text
+        for target, key in [(spec, 'status'), (sprint, '  5-7-re-disposition-eventstore-admin-and-technical-tool-inventori')]:
+            for value, message in [
+                (f'{key}: in-progress\n{key}: done', f'duplicate workflow status {key.strip()}'),
+                (f'{key}: [done]', f'unsupported workflow status scalar {key.strip()}'),
+            ]:
+                with self.subTest(target=target.name, value=value):
+                    original = read(target)
+                    changed, count = re.subn(rf'^{re.escape(key)}:[^\n]*$', lambda _: value, original, count=1, flags=re.M)
+                    self.assertEqual(1, count)
+                    def modified(path, *args, **kwargs):
+                        return changed if path == target else read(path, *args, **kwargs)
+                    with workflow_statuses(), label_register(LabelTests().candidate_register()), patch.object(Path, 'read_text', modified):
+                        self.assertEqual((1, '', f'FAIL: {message}\n'), invoke_main(V))
+
     def test_explicit_completion_requires_delivered_labels_after_owner_approval(self):
         with workflow_statuses(), owner_receipt(LabelTests().approved_receipt()), label_register(LabelTests().candidate_register()):
             self.assertEqual((1, '', 'FAIL: eventstore: completion requires integrated upstream label evidence\n'),
@@ -445,9 +499,13 @@ class AmendmentTests(PacketTests):
     def test_default_success_reports_effective_completion_from_status_or_integrated_labels(self):
         register, committed = LabelTests().completion_fixture()
         with workflow_statuses(), owner_receipt(LabelTests().approved_receipt()), label_register(register), patch.object(L, 'git', side_effect=committed):
-            code, stdout, stderr = invoke_main(V)
-        self.assertEqual((0, ''), (code, stderr))
-        self.assertTrue(stdout.endswith('PASS: candidate verified; owner decision: approved; approved completion verified\n'), stdout)
+            for args in ([], ['--approved-completion']):
+                with self.subTest(args=args):
+                    self.assertEqual((0,
+                                      'PASS: eventstore-admin: 91 rows, 277 pinned anchors, complete delta/hash chain\n'
+                                      'PASS: technical-tools: 68 rows, 105 pinned anchors, complete delta/hash chain\n'
+                                      'PASS: candidate verified; owner decision: approved; approved completion verified\n', ''),
+                                     invoke_main(V, args))
 
     def test_preserved_predecessor_authority_adoption_and_exemption_guards(self):
         git = V.git
@@ -520,31 +578,34 @@ class AmendmentTests(PacketTests):
         completed = receipt['decision'] == 'approved' and register['state'] == 'integrated'
         for script in ('verify_amendments.py', 'verify_labels.py'):
             reports = expected_process_reports(script) if completed else ''
+            expected = ('PASS: eventstore-admin: 91 rows, 277 pinned anchors, complete delta/hash chain\n'
+                        'PASS: technical-tools: 68 rows, 105 pinned anchors, complete delta/hash chain\n'
+                        f'PASS: candidate verified; owner decision: {receipt["decision"]}; ' +
+                        ('approved completion verified\n' if completed else 'completion requires owner approval and integrated labels\n')
+                        if script == 'verify_amendments.py' else
+                        'PASS: successor register, 14 labels in 7 README-only patches; ' +
+                        ('integrated delivery verified\n' if completed else 'candidate only; integrated delivery remains a completion gate\n'))
             run = subprocess.run([sys.executable, '-I', str(HERE / script)], capture_output=True, text=True)
-            self.assertEqual(0, run.returncode, run.stderr)
-            self.assertTrue(run.stdout.startswith('PASS:'))
-            self.assertEqual(reports, run.stderr)
+            self.assertEqual((0, expected, reports), (run.returncode, run.stdout, run.stderr))
             run = subprocess.run([sys.executable, '-I', str(HERE / script), '--approved-completion'], capture_output=True, text=True)
-            self.assertEqual(0 if completed else 1, run.returncode, run.stderr)
             if completed:
-                self.assertTrue(run.stdout.startswith('PASS:'))
-                self.assertEqual(reports, run.stderr)
+                self.assertEqual((0, expected, reports), (run.returncode, run.stdout, run.stderr))
             else:
-                self.assertEqual('', run.stdout)
-                self.assertTrue(run.stderr.startswith('FAIL: '))
-                self.assertIn('completion requires', run.stderr)
+                self.assertEqual((1, '', 'FAIL: completion requires exact-byte owner approval and all required roles\n'),
+                                 (run.returncode, run.stdout, run.stderr))
             with tempfile.TemporaryDirectory() as invalid_root:
                 refused = subprocess.run([sys.executable, '-I', str(HERE / script), '--root', invalid_root, '--approved-completion'], capture_output=True, text=True)
-            self.assertEqual(1, refused.returncode)
-            self.assertEqual('', refused.stdout)
-            self.assertTrue(refused.stderr.startswith('FAIL: '))
+                missing = Path(invalid_root) / V.ART / ('evidence/story-5-2/verify_class_map.py' if script == 'verify_amendments.py' else 'evidence/story-5-7/labels.json')
+                self.assertEqual((1, '', f"FAIL: [Errno 2] No such file or directory: '{missing}'\n"),
+                                 (refused.returncode, refused.stdout, refused.stderr))
 
     def test_real_process_accepts_only_exact_permitted_drift_reports(self):
         # Inject later source bytes only inside the child Python process. The
         # approved files, owner repositories and Git objects stay untouched.
-        code = '''import importlib.util
+        code = '''import sys
+sys.dont_write_bytecode = True
+import importlib.util
 from pathlib import Path
-import sys
 root, filename, owner = Path(sys.argv[1]), sys.argv[2], Path(sys.argv[3])
 path = root / '_bmad-output/implementation-artifacts/evidence/story-5-7' / filename
 spec = importlib.util.spec_from_file_location('process57', path)
@@ -570,6 +631,10 @@ else:
     drift(module)
 sys.exit(module.main([]))
 '''
+        # Discovery may cache this test module before its code can disable
+        # bytecode. Remove that one cache before checking the child imports.
+        tearDownModule()
+        self.assertEqual([], list(HERE.rglob('__pycache__')))
         owner = Path(L.read_json(HERE / 'labels.json')['repositories'][0]['ownerCheckout'])
         modules = (ROOT / '.gitmodules').read_bytes() + b'\n[submodule "references/Hexalith.Future"]\n\tpath = references/Hexalith.Future\n'
         for script in ('verify_amendments.py', 'verify_labels.py'):
@@ -578,6 +643,7 @@ sys.exit(module.main([]))
                 self.assertEqual(0, run.returncode, run.stderr)
                 self.assertTrue(run.stdout.startswith('PASS:'), run.stdout)
                 self.assertEqual(expected_process_reports(script, gitmodules=modules, current_readmes={owner: b'# Later approved README\n'}), run.stderr)
+                self.assertEqual([], list(HERE.rglob('__pycache__')))
 
 
 class LabelTests(PacketTests):
@@ -621,13 +687,13 @@ class LabelTests(PacketTests):
             return git(repo_path, *args)
         return register, committed
 
-    def invoke(self, register):
+    def invoke(self, register, args=None):
         original = L.read_json
         def read(path):
             return register if path == HERE / 'labels.json' else original(path)
         stdout, stderr = io.StringIO(), io.StringIO()
         with patch.object(L, 'read_json', side_effect=read), contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
-            code = L.main([])
+            code = L.main(args or [])
         return code, stdout.getvalue(), stderr.getvalue()
 
     def test_label_paths_reject_absolute_and_escaping_symlink_with_valid_hashes(self):
@@ -674,6 +740,7 @@ class LabelTests(PacketTests):
                 self.assertEqual((1, '', f'FAIL: eventstore: {message}\n'), self.invoke(data))
         with tempfile.TemporaryDirectory(dir=ROOT) as temporary:
             for field, suffix, message in [
+                ('before', b'Unexpected before-section content.\n', 'before snapshot differs from committed base'),
                 ('after', b'Unexpected after-section content.\n', 'candidate reconstruction/section hash mismatch'),
                 ('patch', b'--- a/OTHER.md\n+++ b/OTHER.md\n@@ -0,0 +1 @@\n+unrelated\n', 'patch bytes are not the isolated README diff'),
             ]:
@@ -695,6 +762,28 @@ class LabelTests(PacketTests):
         data['rows'][0]['surface'] = 'Nonexistent.Package'
         self.assertEqual((1, '', 'FAIL: PS01: surface mismatch\n'), self.invoke(data))
 
+    def test_duplicate_compatibility_heading_is_rejected(self):
+        data = b'## Legacy compatibility surfaces\n\nFirst section.\n\n## Legacy compatibility surfaces\n'
+        def verify(*_):
+            L.compatibility_section(data)
+            return 14, 7, False
+        with patch.object(L, 'verify', side_effect=verify):
+            self.assertEqual((1, '', 'FAIL: README must have exactly one compatibility section\n'), invoke_main(L))
+
+    def test_registered_label_hash_file_and_gate_damaged_independently(self):
+        original = self.candidate_register()
+        for field, value, message in [
+            ('sha256', '0' * 64, 'label hash/file mismatch'),
+            ('file', 'OTHER.md', 'label hash/file mismatch'),
+            ('gate', 'retire now', 'removal gate differs from successor inventory'),
+        ]:
+            with self.subTest(field=field):
+                data = copy.deepcopy(original)
+                row = data['rows'][0]
+                target = row if field == 'gate' else row['label']
+                target[field] = value
+                self.assertEqual((1, '', f'FAIL: {row["id"]}: {message}\n'), self.invoke(data))
+
     def test_register_predecessor_coverage_inventory_patch_and_anchor_damage(self):
         original = self.candidate_register()
         cases = []
@@ -713,6 +802,12 @@ class LabelTests(PacketTests):
         data = copy.deepcopy(original)
         data['rows'][0]['label']['line'] += 1
         cases.append((data, data['rows'][0]['id'] + ': label anchor mismatch or duplicate'))
+        for separator in ('\r', '\n'):
+            data = copy.deepcopy(original)
+            label = data['rows'][0]['label']
+            label['text'] += separator + 'Unexpected label continuation.'
+            label['sha256'] = L.sha(label['text'].encode())
+            cases.append((data, data['rows'][0]['id'] + ': label must be one line'))
         for data, message in cases:
             with self.subTest(message=message):
                 self.assertEqual((1, '', f'FAIL: {message}\n'), self.invoke(data))
@@ -732,6 +827,7 @@ class LabelTests(PacketTests):
                  ('PS03', 'FrontComposer inventory 1.0.0', 'FrontComposer inventory 1.0.1', 'independent module citation changed'),
                  ('PS14', '--abort', '--invented', 'exemption/four-mode/independent safety gate missing'),
                  ('PS05', 'retirement-blocked', 'retired', 'Parties blocked verdict missing'),
+                 ('PS05', 'owner-approval.json', 'owner-record.json', 'Parties blocked verdict missing'),
                  ('PS09', 'retire together.', 'retire independently.', 'paired host/plugin gate missing'),
                  ('PS06', 'necessary but not sufficient', 'sufficient', 'forwarded-authority gate lost'),
                  ('PS04', 'Hexalith.FrontComposer.Mcp', 'Nonexistent.Package', 'displayed surface differs from historical identity'),
@@ -784,8 +880,23 @@ class LabelTests(PacketTests):
         data['state'] = 'integrated'
         with self.owner_receipt(pending_receipt()):
             code, stdout, stderr = self.invoke(data)
-        self.assertEqual((1, ''), (code, stdout))
-        self.assertIn('completion requires exact-byte owner approval and all required roles', stderr)
+        self.assertEqual((1, '', 'FAIL: completion requires exact-byte owner approval and all required roles\n'), (code, stdout, stderr))
+
+    def test_register_state_and_each_delivery_authorization_field(self):
+        data = self.candidate_register()
+        data['state'] = 'Integrated'
+        self.assertEqual((1, '', 'FAIL: invalid successor label state\n'), self.invoke(data))
+        register, committed = self.completion_fixture()
+        with self.owner_receipt(self.approved_receipt()), patch.object(L, 'git', side_effect=committed):
+            data = copy.deepcopy(register)
+            data['state'] = 'candidate-pending-owner-approval-and-delivery'
+            self.assertEqual((1, '', 'FAIL: label register must designate integrated successor state\n'),
+                             self.invoke(data, ['--approved-completion']))
+            for field in ('exactWords', 'source', 'approvedOn'):
+                with self.subTest(field=field):
+                    data = copy.deepcopy(register)
+                    del data['deliveryAuthorization'][field]
+                    self.assertEqual((1, '', 'FAIL: completion requires explicit upstream delivery authorization\n'), self.invoke(data))
 
     def test_complete_delivery_fixture_and_each_completion_binding(self):
         # Deliberately synthetic in-memory evidence; no approval, commit or owner
@@ -807,11 +918,14 @@ class LabelTests(PacketTests):
             changed = copy.deepcopy(register)
             changed['repositories'][0]['integration']['commitSha256'] = '0' * 64
             self.assertEqual((1, '', 'FAIL: eventstore: integrated commit byte hash mismatch\n'), self.invoke(changed))
+            changed = copy.deepcopy(register)
+            changed['repositories'][0]['integration']['commit'] = register['repositories'][0]['integration']['commit'][:12]
+            self.assertEqual((1, '', 'FAIL: eventstore: missing integrated commit\n'), self.invoke(changed))
             first = register['repositories'][0]
             owner, revision = Path(first['ownerCheckout']), first['integration']['commit']
             cases = [(owner, ('show', revision + ':README.md'), b'damaged recorded README', first['name'] + ': integrated label bytes mismatch'),
                      (owner, ('diff', '--name-only', first['baseRevision'], revision), b'README.md\nsrc/unrelated.cs\n', first['name'] + ': delivered change is not README-only')]
-            cases.extend((ROOT, ('show', register['inventoryRevision'] + ':' + path), b'damaged recorded inventory', path + ': published inventory differs from approved candidate')
+            cases.extend((ROOT, ('show', register['inventoryRevision'] + ':' + path), b'damaged recorded inventory', path + ': published artifact differs from approved candidate')
                          for path in register['inventoryArtifacts'])
             for repository, arguments, value, message in cases:
                 with self.subTest(message=message):
@@ -823,23 +937,35 @@ class LabelTests(PacketTests):
     def test_standalone_completion_requires_full_owner_role_and_binding_validation(self):
         register, committed = self.completion_fixture()
         approved = self.approved_receipt()
-        cases = [(pending_receipt(), 'completion requires exact-byte owner approval'),
-                 (None, 'approval receipt missing'),
+        cases = [(pending_receipt(), 'completion requires exact-byte owner approval and all required roles'),
+                 (None, 'fixture approval receipt missing'),
                  (dict(approved, rolesCovered=[]), 'owner approval lacks required named roles'),
                  (dict(approved, artifacts={}), 'approval artifact/hash-chain binding mismatch'),
                  (dict(approved, amendments=[]), 'amendment versions/changed-row delta/hash chain mismatch')]
         for receipt, message in cases:
             with self.subTest(message=message), self.owner_receipt(receipt), patch.object(L, 'git', side_effect=committed):
                 code, stdout, stderr = self.invoke(register)
-                self.assertEqual((1, ''), (code, stdout))
-                self.assertTrue(stderr.startswith('FAIL: '))
-                self.assertIn(message, stderr)
+                self.assertEqual((1, '', f'FAIL: {message}\n'), (code, stdout, stderr))
+
+    def test_resolvable_abbreviated_inventory_revision_is_rejected(self):
+        register = L.read_json(HERE / 'labels.json')
+        self.assertEqual('integrated', register['state'])
+        revision = register['inventoryRevision']
+        abbreviated = L.git(ROOT, 'rev-parse', '--short=12', revision).decode().strip()
+        self.assertLess(len(abbreviated), 40)
+        self.assertEqual(revision, L.git(ROOT, 'rev-parse', abbreviated).decode().strip())
+        register['inventoryRevision'] = abbreviated
+        self.assertEqual((1, '', 'FAIL: completion requires integrated inventory revision\n'), self.invoke(register))
 
     def test_published_approval_receipt_must_exist_and_match_validated_approved_bytes(self):
         register, committed = self.completion_fixture()
         pending = (json.dumps(pending_receipt(), ensure_ascii=False, indent=2) + '\n').encode()
         path = str(L.E / 'approval.json')
-        for selector, value in [(register['inventoryRevision'], pending), (register['inventoryRevision'], None), ('origin/main', pending)]:
+        for selector, value, message in [
+            (register['inventoryRevision'], pending, path + ': published artifact differs from approved candidate'),
+            (register['inventoryRevision'], None, 'published approval receipt missing'),
+            ('origin/main', pending, path + ': current origin/main artifact differs from approved candidate'),
+        ]:
             with self.subTest(revision=selector, absent=value is None):
                 def damaged(repo, *args):
                     if repo == ROOT and args == ('show', selector + ':' + path):
@@ -849,9 +975,7 @@ class LabelTests(PacketTests):
                     return committed(repo, *args)
                 with self.owner_receipt(self.approved_receipt()), patch.object(L, 'git', side_effect=damaged):
                     code, stdout, stderr = self.invoke(register)
-                self.assertEqual((1, ''), (code, stdout))
-                self.assertTrue(stderr.startswith('FAIL: '))
-                self.assertIn('approval', stderr)
+                self.assertEqual((1, '', f'FAIL: {message}\n'), (code, stdout, stderr))
 
     def test_current_origin_main_reports_section_drift_and_retains_exact_inventory_artifacts(self):
         register, committed = self.completion_fixture()
@@ -879,14 +1003,18 @@ class LabelTests(PacketTests):
                     return b'reverted inventory' if repo == ROOT and args == ('show', 'origin/main:' + path) else committed(repo, *args)
                 with self.owner_receipt(self.approved_receipt()), patch.object(L, 'git', side_effect=reverted_inventory):
                     code, stdout, stderr = self.invoke(register)
-                self.assertEqual((1, ''), (code, stdout))
-                self.assertIn('current origin/main artifact differs', stderr)
-        def unreadable(repo, *args):
-            if repo == owner and args == ('show', 'origin/main:README.md'):
-                raise ValueError('git show origin/main:README.md failed for label evidence')
-            return committed(repo, *args)
-        with self.owner_receipt(self.approved_receipt()), patch.object(L, 'git', side_effect=unreadable):
-            self.assertEqual((1, '', 'FAIL: git show origin/main:README.md failed for label evidence\n'), self.invoke(register))
+                self.assertEqual((1, '', f'FAIL: {path}: current origin/main artifact differs from approved candidate\n'), (code, stdout, stderr))
+        run = subprocess.run
+        arguments = ['git', '-C', str(owner), 'show', 'origin/main:README.md']
+        def unreadable(args, **kwargs):
+            if args == arguments:
+                return subprocess.CompletedProcess(args, 128, b'', b'fatal: current README unavailable\n')
+            return run(args, **kwargs)
+        git = L.git
+        def current_git(repo, *args):
+            return git(repo, *args) if repo == owner and args == ('show', 'origin/main:README.md') else committed(repo, *args)
+        with self.owner_receipt(self.approved_receipt()), patch.object(L, 'git', side_effect=current_git), patch.object(subprocess, 'run', side_effect=unreadable):
+            self.assertEqual((1, '', f'FAIL: git show origin/main:README.md failed for label evidence in {owner}: fatal: current README unavailable\n'), self.invoke(register))
 
     def test_checkout_origin_identity_accepts_standard_urls_and_rejects_wrong_owner(self):
         expected = 'hexalith/hexalith.eventstore'
@@ -898,7 +1026,9 @@ class LabelTests(PacketTests):
         register = self.candidate_register()
         git = L.git
         for origin, message in [('https://github.com/Other/Unrelated.git', 'eventstore: checkout origin does not match owning repository'),
-                                ('https://gitlab.example/Hexalith/Hexalith.EventStore.git', 'origin is not a standard GitHub repository URL')]:
+                                ('https://gitlab.example/Hexalith/Hexalith.EventStore.git', 'origin is not a standard GitHub repository URL'),
+                                ('https://github.com/Hexalith/Hexalith.EventStore.git?view=readme', 'origin is not a standard GitHub repository URL'),
+                                ('https://github.com/Hexalith/Hexalith.EventStore.git#readme', 'origin is not a standard GitHub repository URL')]:
             with self.subTest(origin=origin):
                 def wrong(repo, *args):
                     return (origin + '\n').encode() if args == ('remote', 'get-url', 'origin') else git(repo, *args)
@@ -944,7 +1074,7 @@ class LabelTests(PacketTests):
             with self.owner_receipt(self.approved_receipt()), patch.object(L, 'git', side_effect=graph):
                 code, stdout, stderr = self.invoke(register)
             self.assertEqual((1, ''), (code, stdout))
-            self.assertEqual(f'FAIL: git merge-base --is-ancestor {delivery} origin/main failed for label evidence\n', stderr)
+            self.assertEqual(f'FAIL: git merge-base --is-ancestor {delivery} origin/main failed for label evidence in {owner}: (no stderr)\n', stderr)
             def removed(repo, *args):
                 return b'' if repo == owner and args[0] == 'merge-base' else graph(repo, *args)
             with self.owner_receipt(self.approved_receipt()), patch.object(L, 'git', side_effect=removed):
@@ -971,7 +1101,7 @@ class LabelTests(PacketTests):
             with patch.object(L, 'git', side_effect=graph):
                 code, stdout, stderr = self.invoke(register)
             self.assertEqual((1, ''), (code, stdout))
-            self.assertEqual(f'FAIL: git merge-base --is-ancestor {delivery} origin/main failed for label evidence\n', stderr)
+            self.assertEqual(f'FAIL: git merge-base --is-ancestor {delivery} origin/main failed for label evidence in {repository}: (no stderr)\n', stderr)
             def removed(repo, *args):
                 return b'' if repo == ROOT and args[0] == 'merge-base' else graph(repo, *args)
             with patch.object(L, 'git', side_effect=removed):

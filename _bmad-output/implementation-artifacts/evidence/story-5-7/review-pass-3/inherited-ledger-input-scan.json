@@ -1,0 +1,44 @@
+{
+  "errors": [],
+  "exitCode": 1,
+  "fileCount": 4,
+  "files": [
+    {
+      "bytes": 188804,
+      "path": "_bmad-output/implementation-artifacts/deferred-work.md",
+      "sha256": "491fac845642aefb44322a90b989237e6fb36d35debcc58718226e4a4169f66e"
+    },
+    {
+      "bytes": 120822,
+      "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2"
+    },
+    {
+      "bytes": 46153,
+      "path": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "sha256": "03a63825970964e06b2ab8d3d7445ce327ad0e2d82e6fad7674bdf8a509bb461"
+    },
+    {
+      "bytes": 77399,
+      "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+    }
+  ],
+  "findings": [
+    {
+      "path": "_bmad-output/implementation-artifacts/deferred-work.md",
+      "rule": "redaction-required"
+    }
+  ],
+  "implementationSha256": {
+    "evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7",
+    "scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b"
+  },
+  "knownCredentialCount": 1,
+  "manifestSha256": "1105605960226c61ecdf95f9d24ec1d282604f48908c1e3ab17e28a55a72af49",
+  "policy": "mcpcli-evidence-redaction/v1",
+  "receiptExcluded": null,
+  "result": "secrets-detected",
+  "schema": "mcpcli-evidence-secret-scan/v1",
+  "scope": "all regular files; UTF-8 or BOM-marked UTF-16; links and binary files refused"
+}

@@ -1,0 +1,44 @@
+{
+  "errors": [],
+  "exitCode": 0,
+  "fileCount": 5,
+  "files": [
+    {
+      "bytes": 3582,
+      "path": "_bmad-output/implementation-artifacts/deferred-work.story-5-7-excerpt.md",
+      "sha256": "726a5004ba55d2a1b5c37bfc965042865cc34e4e4367085553b5c51318c35466"
+    },
+    {
+      "bytes": 120822,
+      "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+      "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2"
+    },
+    {
+      "bytes": 50796,
+      "path": "_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md",
+      "sha256": "061e28ed8755996446f6bb986f343facda24f0135fedecdb24fa35c2aadc19d5"
+    },
+    {
+      "bytes": 19523,
+      "path": "_bmad-output/implementation-artifacts/sprint-status.yaml",
+      "sha256": "27b72d2116601dc1cbeabf3264bf4c9830674f6b02f75156017f412716213f2b"
+    },
+    {
+      "bytes": 77399,
+      "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c"
+    }
+  ],
+  "findings": [],
+  "implementationSha256": {
+    "evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7",
+    "scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b"
+  },
+  "knownCredentialCount": 1,
+  "manifestSha256": "1c7cd95938802e3a9efd79956a9383df254720205fa8bfb10d6daa6e60aa42b7",
+  "policy": "mcpcli-evidence-redaction/v1",
+  "receiptExcluded": null,
+  "result": "clean",
+  "schema": "mcpcli-evidence-secret-scan/v1",
+  "scope": "all regular files; UTF-8 or BOM-marked UTF-16; links and binary files refused"
+}
