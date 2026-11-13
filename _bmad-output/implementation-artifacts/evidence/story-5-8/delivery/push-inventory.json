@@ -1,0 +1,21 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "core.commitGraph=false",
+    "push",
+    "origin",
+    "main"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 2.329,
+  "stdout": {
+    "path": "push-inventory.stdout.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "push-inventory.stderr.txt",
+    "sha256": "05ff4c871e205b600a697b4635b3b005f807417ce415d3706239ec4f1f37623b"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "command": [
+    "python3",
+    "-I",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8",
+    "-p",
+    "test_*.py"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "sourceState": "pending; retained pre-approval run reported by the implementation agent",
+  "elapsedSeconds": 29.83,
+  "stdout": {
+    "path": "lifecycle-pending.stdout.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "lifecycle-pending.stderr.txt",
+    "sha256": "4a440f385e2b1b012df67ee90a44b36e9ecccdf93b1db961b25b9d0279013170"
+  }
+}

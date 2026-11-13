@@ -1,0 +1,21 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "core.commitGraph=false",
+    "commit",
+    "--file",
+    "/tmp/mcpcli-story-5-8-folders-labels.msg"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/folders",
+  "exitCode": 0,
+  "elapsedSeconds": 0.023,
+  "stdout": {
+    "path": "commit-folders.stdout.txt",
+    "sha256": "1ccbbbc46cabde652813dddb515bde02741e5a0c9061ed9116e2e358985e9337"
+  },
+  "stderr": {
+    "path": "commit-folders.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

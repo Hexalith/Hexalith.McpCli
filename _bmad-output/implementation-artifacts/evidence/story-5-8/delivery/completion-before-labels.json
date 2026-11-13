@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "-I",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py",
+    "--approved-completion"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 1,
+  "elapsedSeconds": 1.583,
+  "stdout": {
+    "path": "completion-before-labels.stdout.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "completion-before-labels.stderr.txt",
+    "sha256": "f7223517212a79473b44e8e70d15c7a22616bc29983ed1ff6e1a7f5510630bd3"
+  }
+}

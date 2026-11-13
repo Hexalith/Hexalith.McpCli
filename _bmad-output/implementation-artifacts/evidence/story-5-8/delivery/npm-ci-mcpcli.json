@@ -1,0 +1,19 @@
+{
+  "command": [
+    "npm",
+    "ci",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 6.906,
+  "stdout": {
+    "path": "npm-ci-mcpcli.stdout.txt",
+    "sha256": "fc54a7ae523246f922b1230c9b419da45e00d90466a8371b15476bf641325840"
+  },
+  "stderr": {
+    "path": "npm-ci-mcpcli.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

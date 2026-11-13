@@ -4,7 +4,9 @@ import copy
 import importlib.util
 import io
 import json
+import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import sys
@@ -39,8 +41,70 @@ def invoke(module,args=None):
     return code,out.getvalue(),err.getvalue()
 
 
+def pending_approval(receipt):
+    """Derive a pending fixture without changing the real exact-byte approval."""
+    receipt = copy.deepcopy(receipt)
+    receipt['decision'] = 'pending'
+    for key in ['approver','exactApprovalInstruction','approvalSource','approvedOn','rolesCovered']:
+        receipt.pop(key,None)
+    return receipt
+
+
+def pending_inputs(root):
+    """Reset only copied lifecycle state; candidate and authority bytes stay exact."""
+    path = root/B.E/'approval.json'
+    path.write_text(json.dumps(pending_approval(V.read_json(path)),indent=2)+'\n')
+    path = root/B.E/'labels.json'
+    register = V.read_json(path)
+    register.update(state='candidate-pending-owner-approval-and-delivery',inventoryRevision=None,deliveryAuthorization=None)
+    register['repository']['integration'] = None
+    path.write_text(json.dumps(register,indent=2)+'\n')
+    for path,key in [(root/B.SPEC,'status'),(root/B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory')]:
+        workflow_status(path,key,'in-progress')
+
+
+def workflow_status(path,key,value):
+    text,count = re.subn(r'^'+re.escape(key)+r':[^\n]*',key+': '+value,path.read_text(),flags=re.M)
+    if count != 1:
+        raise AssertionError('fixture requires one workflow status: '+str(path))
+    path.write_text(text)
+
+
+def registered_owner():
+    return V.read_json(ROOT/B.E/'labels.json')['repository']['ownerCheckout']
+
+
+def pinned_observation(run):
+    """Keep a pending fixture's current-owner observation at its historical base."""
+    owner = registered_owner()
+    def current(command,*args,**kwargs):
+        if isinstance(command,list) and command[:3] == ['git','-C',owner] and command[3:] == ['show','origin/main:README.md']:
+            command = [*command[:-1],B.LABEL_PIN+':README.md']
+        return run(command,*args,**kwargs)
+    return current
+
+
+def fixture_process(script,*args):
+    # Pin only the observational current-owner read in the child as well. Every
+    # source/hash/ancestry guard still executes through the actual entrypoint.
+    runner = '''import runpy, subprocess, sys
+run = subprocess.run
+pin = sys.argv[1]
+owner = sys.argv[2]
+def historical(command, *args, **kwargs):
+    if isinstance(command, list) and command[:3] == ['git', '-C', owner] and command[3:] == ['show', 'origin/main:README.md']:
+        command = [*command[:-1], pin + ':README.md']
+    return run(command, *args, **kwargs)
+subprocess.run = historical
+script = sys.argv[3]
+sys.argv = sys.argv[3:]
+runpy.run_path(script, run_name='__main__')
+'''
+    return subprocess.run([sys.executable,'-I','-c',runner,B.LABEL_PIN,registered_owner(),str(script),*args],capture_output=True,text=True)
+
+
 @contextlib.contextmanager
-def workspace_view():
+def workspace_view(*,pending=True):
     """Copy documentary inputs, sharing only read-only repository objects/source."""
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)
@@ -56,6 +120,8 @@ def workspace_view():
                 shutil.copytree(story,art/'evidence'/story.name,ignore=shutil.ignore_patterns('__pycache__'))
             else:
                 (art/'evidence'/story.name).symlink_to(story,target_is_directory=story.is_dir())
+        if pending:
+            pending_inputs(root)
         yield root
 
 
@@ -67,7 +133,111 @@ def tearDownModule():
         except OSError: pass
 
 
-class AmendmentTests(unittest.TestCase):
+class FixtureTests(unittest.TestCase):
+    def test_pinned_observation_only_rewrites_registered_owner(self):
+        owner = registered_owner()
+        calls = []
+        def run(command,**kwargs):
+            calls.append((command,kwargs))
+            return 'captured'
+        observe = pinned_observation(run)
+        for checkout in [owner,str(ROOT)]:
+            self.assertEqual('captured',observe(['git','-C',checkout,'show','origin/main:README.md'],capture_output=True))
+        self.assertEqual([
+            (['git','-C',owner,'show',B.LABEL_PIN+':README.md'],{'capture_output':True}),
+            (['git','-C',str(ROOT),'show','origin/main:README.md'],{'capture_output':True}),
+        ],calls)
+
+    def test_fixture_process_only_rewrites_registered_owner(self):
+        owner = registered_owner()
+        with tempfile.TemporaryDirectory() as temp:
+            directory = Path(temp)
+            git = directory/'git'
+            git.write_text('#!'+sys.executable+'\nimport json, sys\nprint(json.dumps(sys.argv[1:]))\n')
+            git.chmod(0o700)
+            script = directory/'observe.py'
+            script.write_text('import subprocess\nfor owner in '+repr([owner,str(ROOT)])+':\n'
+                              '    result = subprocess.run(["git", "-C", owner, "show", "origin/main:README.md"], capture_output=True, text=True)\n'
+                              '    print(result.stdout, end="")\n')
+            with patch.dict(os.environ,{'PATH':str(directory)+os.pathsep+os.environ.get('PATH','')}):
+                result = fixture_process(script)
+        expected = '\n'.join(json.dumps(command) for command in [
+            ['-C',owner,'show',B.LABEL_PIN+':README.md'],
+            ['-C',str(ROOT),'show','origin/main:README.md'],
+        ])+'\n'
+        self.assertEqual((0,expected,''),(result.returncode,result.stdout,result.stderr))
+
+    def test_pending_inputs_reject_duplicate_workflow_statuses(self):
+        for path,key in [(B.SPEC,'status'),(B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory')]:
+            with self.subTest(path=path),workspace_view(pending=False) as root:
+                target = root/path
+                duplicated = target.read_text()+'\n'+key+': done\n'
+                target.write_text(duplicated)
+                with self.assertRaisesRegex(AssertionError,re.escape('fixture requires one workflow status: '+str(target))):
+                    pending_inputs(root)
+                self.assertEqual(duplicated,target.read_text())
+
+    def test_lifecycle_proof_binds_local_captures_and_replay(self):
+        proof = load('lifecycle58proof','delivery/lifecycle-proof.py')
+        run = subprocess.run
+        command = [sys.executable,'-I','-m','unittest','discover','-v','-s',str(B.E),'-p','test_*.py']
+        output,error = b'fixture stdout\n',b'fixture stderr\n'
+        def child(arguments,**kwargs):
+            if arguments == command:
+                fixture = kwargs['cwd']
+                self.assertEqual('approved',V.read_json(fixture/B.E/'approval.json')['decision'])
+                self.assertEqual('integrated',V.read_json(fixture/B.E/'labels.json')['state'])
+                self.assertTrue(V.completion_requested(fixture,False))
+                self.assertEqual({'cwd':fixture,'capture_output':True},kwargs)
+                return subprocess.CompletedProcess(arguments,0,output,error)
+            return run(arguments,**kwargs)
+        with tempfile.TemporaryDirectory() as temp,patch.object(subprocess,'run',side_effect=child),contextlib.redirect_stdout(io.StringIO()):
+            delivery = Path(temp)
+            self.assertEqual(0,proof.main(delivery=delivery))
+            summary = V.read_json(delivery/'lifecycle-integrated.json')
+            self.assertEqual({'command':command,'cwd':'.','cwdBase':'isolated synthetic lifecycle workspace created by this helper'},summary['child'])
+            self.assertEqual({'command':['python3','-B','-I',str(B.E/'delivery/lifecycle-proof.py')],
+                              'cwd':'.','cwdBase':'repository root containing this retained script'},summary['helper'])
+            self.assertEqual('Suite independence from synthetic lifecycle metadata; real approved-completion is verified separately.',summary['claim'])
+            self.assertTrue(summary['realInputsUnchanged'])
+            for stream,data in [('stdout',output),('stderr',error)]:
+                name = 'lifecycle-integrated.'+stream+'.txt'
+                self.assertEqual(data,(delivery/name).read_bytes())
+                self.assertEqual({'path':name,'sha256':B.sha(data)},summary[stream])
+            self.assertNotIn(temp,json.dumps(summary))
+
+    def test_lifecycle_proof_rejects_duplicate_workflow_statuses(self):
+        proof = load('lifecycle58duplicates','delivery/lifecycle-proof.py')
+        module = proof.load_tests(ROOT)
+        workspace = module.workspace_view
+        for path,key in [(B.SPEC,'status'),(B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory')]:
+            @contextlib.contextmanager
+            def duplicated_workspace(**kwargs):
+                with workspace(**kwargs) as fixture:
+                    target = fixture/path
+                    duplicated = target.read_text()+'\n'+key+': done\n'
+                    target.write_text(duplicated)
+                    try:
+                        yield fixture
+                    finally:
+                        self.assertEqual(duplicated,target.read_text())
+            with self.subTest(path=path),tempfile.TemporaryDirectory() as temp,patch.object(proof,'load_tests',return_value=module),patch.object(module,'workspace_view',side_effect=duplicated_workspace):
+                with self.assertRaisesRegex(AssertionError,'fixture requires one workflow status:'):
+                    proof.main(delivery=Path(temp))
+                self.assertEqual([],list(Path(temp).iterdir()))
+
+
+class PendingCase(unittest.TestCase):
+    def setUp(self):
+        stack = contextlib.ExitStack()
+        self.addCleanup(stack.close)
+        self.root = stack.enter_context(workspace_view())
+        for module in [V,L,L.V,B]:
+            stack.enter_context(patch.object(module,'ROOT',self.root))
+        stack.enter_context(patch.object(subprocess,'run',side_effect=pinned_observation(subprocess.run)))
+
+
+class AmendmentTests(PendingCase):
     @classmethod
     def setUpClass(cls):
         cls.old = V.parse((ROOT/B.OLD).read_text())
@@ -76,7 +246,7 @@ class AmendmentTests(unittest.TestCase):
         cls.inventory = next(i for i in mapping['inventories'] if i['path'] == str(B.OLD))
         cls.classes = {c['id']:c for c in mapping['classes']}
         cls.decl,cls.surface = B.declarations(ROOT),B.surfaces(ROOT)
-        cls.receipt = V.read_json(HERE/'approval.json')
+        cls.receipt = pending_approval(V.read_json(HERE/'approval.json'))
 
     def changed(self,key,header,value):
         rows = copy.deepcopy(self.new)
@@ -120,7 +290,7 @@ class AmendmentTests(unittest.TestCase):
             ('verify_labels.py',['--approved-completion'],(1,'','FAIL: completion requires exact-byte owner approval and covered Folders roles\n')),
         ]:
             with self.subTest(script=name,flags=flags):
-                r = subprocess.run([sys.executable,'-I',str(HERE/name),*flags],capture_output=True,text=True)
+                r = fixture_process(HERE/name,'--root',str(self.root),*flags)
                 self.assertEqual(expected,(r.returncode,r.stdout,r.stderr))
 
     def test_deterministic_candidate_and_all_disposition_branches(self):
@@ -242,7 +412,7 @@ class AmendmentTests(unittest.TestCase):
     def test_builder_refuses_approved_packet_before_any_write(self):
         read = Path.read_bytes
         def approved(path,*args,**kwargs):
-            return json.dumps(self.approved()).encode() if path == HERE/'approval.json' else read(path,*args,**kwargs)
+            return json.dumps(self.approved()).encode() if path == self.root/B.E/'approval.json' else read(path,*args,**kwargs)
         with patch.object(Path,'read_bytes',approved),patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
             self.assertEqual((1,'','FAIL: refusing to overwrite an approved or unknown-state packet\n'),invoke(B))
 
@@ -336,7 +506,7 @@ class AmendmentTests(unittest.TestCase):
                 (e/'labels.json').write_text('{"state":"candidate-pending-owner-approval-and-delivery","repository":{}}')
                 (e/name).write_text(data)
                 before = {p.name:p.read_bytes() for p in e.iterdir()}
-                r = subprocess.run([sys.executable,'-I',str(e/'build_candidate.py')],capture_output=True,text=True)
+                r = fixture_process(e/'build_candidate.py')
                 self.assertEqual((1,'','FAIL: '+message+'\n'),(r.returncode,r.stdout,r.stderr))
                 self.assertEqual(before,{p.name:p.read_bytes() for p in e.iterdir()})
 
@@ -349,7 +519,7 @@ class AmendmentTests(unittest.TestCase):
                     for script in (['verify_amendment.py'] if name == 'approval.json' else ['verify_amendment.py','verify_labels.py']):
                         with self.subTest(name=name,value=value,script=script):
                             (root/B.E/name).write_text(json.dumps(value))
-                            r = subprocess.run([sys.executable,'-I',str(HERE/script),'--root',str(root)],capture_output=True,text=True)
+                            r = fixture_process(HERE/script,'--root',str(root))
                             self.assertEqual((1,'',f'FAIL: JSON document must be an object: {name}\n'),(r.returncode,r.stdout,r.stderr))
                     (root/B.E/name).write_bytes(approval if name == 'approval.json' else labels)
             for value in [None,[]]:
@@ -358,14 +528,13 @@ class AmendmentTests(unittest.TestCase):
                 for script in ['verify_amendment.py','verify_labels.py','build_candidate.py']:
                     with self.subTest(repository=value,script=script):
                         # Builder obtains the isolated root from its own copied entrypoint.
-                        args = [sys.executable,'-I',str(root/B.E/script)]
-                        if script != 'build_candidate.py': args += ['--root',str(root)]
-                        r = subprocess.run(args,capture_output=True,text=True)
+                        args = ['--root',str(root)] if script != 'build_candidate.py' else []
+                        r = fixture_process(root/B.E/script,*args)
                         self.assertEqual((1,'','FAIL: Folders label repository must be an object\n'),(r.returncode,r.stdout,r.stderr))
 
     def test_spec_and_sprint_done_default_entrypoint_controls(self):
         read,load_module = Path.read_text,V.load
-        paths = [(ROOT/B.SPEC,'status: done\n'),(ROOT/B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory: done\n')]
+        paths = [(self.root/B.SPEC,'status: done\n'),(self.root/B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory: done\n')]
         for path,done in paths:
             with self.subTest(path=path):
                 def status(candidate,*args,**kwargs):
@@ -402,35 +571,22 @@ class AmendmentTests(unittest.TestCase):
             ('M03','Pinned evidence','`src/Hexalith.Folders.Mcp/Tools/FolderTools.cs:999999`','folders:M03: pinned anchor identity mismatch'),
         ]
         for key,header,value,message in cases:
-            with self.subTest(field=header),tempfile.TemporaryDirectory() as temp:
-                root = Path(temp)
-                for name in ['.git','.gitmodules','references','src']:
-                    (root/name).symlink_to(ROOT/name,target_is_directory=(ROOT/name).is_dir())
-                art = root/B.ART; art.mkdir(parents=True)
-                shutil.copytree(ROOT/B.AD,root/B.AD)
-                for path in (ROOT/B.ART).iterdir():
-                    if path.is_file() and path.name != B.NEW.name:
-                        shutil.copyfile(path,art/path.name)
-                (art/'evidence').mkdir()
-                for story in (ROOT/B.ART/'evidence').iterdir():
-                    if story.name == 'story-5-2':
-                        shutil.copytree(story,art/'evidence'/story.name)
-                    else:
-                        (art/'evidence'/story.name).symlink_to(story,target_is_directory=story.is_dir())
+            with self.subTest(field=header),workspace_view() as root:
                 rows = self.changed(key,header,value)
                 text = (ROOT/B.NEW).read_text().replace(self.new[key]['text'],'| '+' | '.join(rows[key]['cells'])+' |')
                 (root/B.NEW).write_text(text)
-                result = subprocess.run([sys.executable,'-I',str(HERE/'verify_amendment.py'),'--root',str(root)],capture_output=True,text=True)
+                result = fixture_process(HERE/'verify_amendment.py','--root',str(root))
                 self.assertEqual((1,'','FAIL: '+message+'\n'),(result.returncode,result.stdout,result.stderr))
 
 
-class LabelTests(unittest.TestCase):
+class LabelTests(PendingCase):
     def setUp(self):
-        self.register = L.read_json(HERE/'labels.json')
+        super().setUp()
+        self.register = L.read_json(self.root/B.E/'labels.json')
 
     def invoke_register(self,register,complete=False):
         read = L.read_json
-        with patch.object(L,'read_json',side_effect=lambda path:register if path == HERE/'labels.json' else read(path)):
+        with patch.object(L,'read_json',side_effect=lambda path:register if path == self.root/B.E/'labels.json' else read(path)):
             return invoke(L,['--approved-completion'] if complete else [])
 
     def reject(self,register,message):
@@ -496,7 +652,7 @@ class LabelTests(unittest.TestCase):
             if args[0] == 'merge-base': return b''
             if repo == owner and args[0] == 'diff': return b'README.md\n'
             if repo == owner and args[:2] == ('cat-file','commit'): return b'fixture commit'
-            if repo == ROOT and args[0] == 'show': return (ROOT/args[1].split(':',1)[1]).read_bytes()
+            if repo == self.root and args[0] == 'show': return (self.root/args[1].split(':',1)[1]).read_bytes()
             return git(repo,*args)
         integrated = LABEL_PASS.replace('candidate only; owner approval and delivery pending','integrated delivery verified')
         with patch.object(L.V,'verify_owner_packet',return_value=None),patch.object(L.B,'git',side_effect=delivered):
@@ -547,9 +703,9 @@ class LabelTests(unittest.TestCase):
             def committed(repo,*args):
                 if repo == owner and args == ('show',historical+':README.md'): return before
                 if repo == owner and args in [('show',delivery+':README.md'),('show','origin/main:README.md')]: return after
-                if repo == ROOT and args[0] == 'merge-base': return original(published,*args)
-                if repo == ROOT and args[0] == 'show' and args[1].split(':',1)[0] in {inventory,'origin/main'}:
-                    return (ROOT/args[1].split(':',1)[1]).read_bytes()
+                if repo == self.root and args[0] == 'merge-base': return original(published,*args)
+                if repo == self.root and args[0] == 'show' and args[1].split(':',1)[0] in {inventory,'origin/main'}:
+                    return (self.root/args[1].split(':',1)[1]).read_bytes()
                 return original(repo,*args)
             with patch.object(L.B,'LABEL_PIN',historical),patch.object(L.B,'label_candidate',return_value=(expected,files)),patch.object(L.V,'verify_owner_packet',return_value=None):
                 yield register,committed,owner,published,delivery,inventory,original
@@ -577,7 +733,7 @@ class LabelTests(unittest.TestCase):
             with patch.object(L.B,'git',side_effect=committed):
                 self.assertEqual((1,'',f'FAIL: git merge-base --is-ancestor {inventory} origin/main failed: (no stderr)\n'),self.invoke_register(register,True))
             def removed(repo,*args):
-                return b'' if repo == ROOT and args == ('merge-base','--is-ancestor',inventory,'origin/main') else committed(repo,*args)
+                return b'' if repo == self.root and args == ('merge-base','--is-ancestor',inventory,'origin/main') else committed(repo,*args)
             with patch.object(L.B,'git',side_effect=removed):
                 self.assertEqual((0,LABEL_PASS.replace('candidate only; owner approval and delivery pending','integrated delivery verified'),''),self.invoke_register(register,True))
 

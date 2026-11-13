@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python3",
+    "-I",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 0.044,
+  "stdout": {
+    "path": "final-ad23.stdout.txt",
+    "sha256": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2"
+  },
+  "stderr": {
+    "path": "final-ad23.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

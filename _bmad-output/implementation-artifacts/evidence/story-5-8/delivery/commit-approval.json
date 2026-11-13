@@ -1,0 +1,21 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "core.commitGraph=false",
+    "commit",
+    "--file",
+    "/tmp/mcpcli-story-5-8-mcpcli-approval.msg"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 0.03,
+  "stdout": {
+    "path": "commit-approval.stdout.txt",
+    "sha256": "b4163a2b62948174dbe288b862d887bb6ca9d8088146383e14bf54a37393824c"
+  },
+  "stderr": {
+    "path": "commit-approval.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

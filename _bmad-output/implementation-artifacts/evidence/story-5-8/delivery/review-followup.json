@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "cab549c7b06fa4eef08e46cfcde038f62ea81fbf",
+  "scope": "Follow-up lifecycle tests and delivery records; the initial implementation review remains recorded in the story spec.",
+  "diff": "review-followup.diff",
+  "diffSha256": "7f9275eb57933119a992a4b9331a1dc1c7b4b73029962acf7f8efca24f5c7fc5",
+  "layers": {
+    "blind-hunter": {
+      "findings": 9
+    },
+    "edge-case-hunter": {
+      "findings": 0
+    },
+    "verification-gap": {
+      "findings": 0,
+      "testsPassed": 31,
+      "realCompletionVerifiersPassed": 2
+    }
+  },
+  "triage": {
+    "patched": 8,
+    "rejected": 1,
+    "deferred": 0
+  },
+  "approvedInventoryBytesChanged": false
+}

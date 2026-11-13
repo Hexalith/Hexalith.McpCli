@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "-I",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py",
+    "--approved-completion"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 1.372,
+  "stdout": {
+    "path": "integrated-labels.stdout.txt",
+    "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
+  },
+  "stderr": {
+    "path": "integrated-labels.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

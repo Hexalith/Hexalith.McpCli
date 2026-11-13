@@ -1,0 +1,19 @@
+{
+  "command": [
+    "npm",
+    "ci",
+    "--no-audit",
+    "--no-fund"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/folders",
+  "exitCode": 0,
+  "elapsedSeconds": 3.979,
+  "stdout": {
+    "path": "npm-ci-folders.stdout.txt",
+    "sha256": "ae46c4ca483801e861f7e252ff738c4ffdc0987ca65a992bc48078de89e800f2"
+  },
+  "stderr": {
+    "path": "npm-ci-folders.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

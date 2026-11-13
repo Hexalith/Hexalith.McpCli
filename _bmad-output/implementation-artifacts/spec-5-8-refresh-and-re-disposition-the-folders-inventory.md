@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -144,6 +144,12 @@ Derivation rules (the decisions above apply first):
 - 2026-11-13: Implemented the pending 1.1.0 successor and deterministic generator, with 161 entries (123 replace, 33 defer, 5 withdraw). Candidate and PS10/PS11 patch verifiers pass; 21 tests cover matrix scenarios, exact process streams and live-global guard removal. Both-pin source checks preserve the 49-tool/2-resource/42-leaf sets and prove added model fields. Verification is recorded in [the Story 5.8 packet](evidence/story-5-8/verification.md). The candidate receipt supersedes A1 only upon exact-byte approval; no approval, delivery, enrollment, parity or retirement is asserted. Story status stays in-progress because exact-byte owner approval and separately authorized upstream label integration remain unsatisfied completion conditions.
 - 2026-11-13: Build review 1 applied all 11 patch groups; the final 31-test suite, candidate verifier, label verifier and adopted AD-23 gate pass. Completion still fails with the exact pending-approval diagnostic. The final candidate SHA-256 is `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`. No review deferrals were added; the approved K12 reconciliation remains open. The approved story's completion conditions take precedence over the build workflow's generic done/commit steps: status remains in-progress and no commit or delivery is authorized.
 
+- 2026-11-13: The user replied "approve" to the exact candidate and required-role approval question, then separately "authorize" for publication and README-only label delivery. The approval receipt now records those words and the inherited repository-owner identity, without changing the approved candidate bytes. Pending-state test cases now use isolated copies, retaining their exact refusal streams and guard-removal controls after real approval and delivery. Both 31-test runs pass: current source and an isolated approved/integrated/done source view. Publication and integrated-label verification are the remaining delivery steps.
+
+- 2026-11-13: Published the approved inventory/receipt at `f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091` and delivered the exact README-only PS10/PS11 patch at Folders `db40bda8a107fcb03405e074810be16c0d47c85f`. Remote main revisions and exact artifact bytes were read back. Both real approved-completion verifiers pass. The approved candidate and authorities remain unchanged; the existing K12 reconciliation remains open. A focused follow-up review covers the lifecycle-test maintenance and delivery records since the previously reviewed implementation at `cab549c7b06fa4eef08e46cfcde038f62ea81fbf`; the original story baseline remains unchanged.
+
+- 2026-11-13: Delivery follow-up review applied eight direct patch groups, rejected one finding and added no review deferrals. The final 36-test suite and retained synthetic-lifecycle proof both pass, as do both real default approved-completion entrypoints and the AD-23 adoption gate. The approved candidate remains SHA-256 `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`. All story acceptance conditions are satisfied; spec status is done and sprint status is review per the build workflow. The separately recorded K12 catalog hold remains open for Epic 6.
+
 ## Spec Change Log
 
 ## Review Triage Log
@@ -170,3 +176,21 @@ All three independent layers completed before triage. Each finding below has its
 | V2: Git ancestry calls lack protecting tests | medium | patch | The verification-gap reviewer removed both merge-base calls in memory and all six label tests still passed. Real temporary Git graphs must reject unmerged owner-label and inventory revisions with exact output assertions. |
 
 The surviving findings form 11 small patch groups (B10/E2 share one). They were sent to the original implementation agent together and all were applied. The final full 31-test run and both verifiers pass, and approved-completion still rejects the pending receipt. No intent or specification change was required, and the frozen decisions remain untouched.
+
+### Delivery follow-up review (2026-11-13)
+
+All three independent layers completed before triage. The edge-case and verification-gap layers returned no findings; the verification-gap reviewer reran all 31 tests and both real approved-completion entrypoints successfully. The blind reviewer returned the nine findings below. The [retained review snapshot](evidence/story-5-8/delivery/review-followup.diff) covers delivery/lifecycle maintenance since the already-reviewed implementation at `cab549c7b06fa4eef08e46cfcde038f62ea81fbf`; the original story baseline remains unchanged.
+
+| Finding | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| D1: synthetic lifecycle source is not a valid completed delivery fixture | false | reject | The proof tests that pending-state test fixtures remain independent of synthetic approved/integrated/done metadata; it does not claim the synthetic delivery passes the acceptance gate. `verification.md` explicitly states that this fixture is test evidence only and that real delivery comes from the separate published revision/blob/README checks. Both real approved-completion captures already pass, so the described false acceptance does not occur. |
+| D2: extra integration observation fields are not validated | low | patch | `verify_labels.py` validates the delivery commit and commit byte hash, then independently checks its README bytes and ancestry. The two additional observational fields add no authority and can become misleading; remove them from `labels.json` and retain their observations in the bound delivery evidence. |
+| D3: remote readbacks are claimed without retained query output | medium | patch | The readbacks were executed in the delivery orchestration, but their raw stdout was not retained. Capture post-publication `ls-remote` for both repositories and bind the observed revisions and exact published artifact comparisons in `delivery/integration.json`. |
+| D4: lifecycle proof hardcodes its original checkout | low | patch | The retained helper would run against the original absolute checkout after copying the packet elsewhere. Derive its root directly from the saved helper's repository location; the recorded owner checkout remains governed by the existing immutable label chain. |
+| D5: lifecycle proof writes global temporary filenames and retains temporary references | low | patch | The proof's `/tmp` sidecars are not relative to the retained packet and can be overwritten by another checkout. Write them beside the helper in its task-owned delivery directory and use relative sidecar references. No concurrent approval or locking workflow is added. |
+| D6: lifecycle captures lack command/cwd/hash bindings | medium | patch | The pending stdout/stderr are retained, but have no companion command record; the synthetic lifecycle summary does not hash its logs. Bind both captures to their exact command, working directory, exit status and full stream SHA-256s, and retain the helper command for reproduction. |
+| D7: test-only README observation rewrite applies to unrelated repositories | low | patch | Both observation wrappers match a command suffix without checking its repository. Restrict substitution to the registered Folders owner checkout and test owner substitution and unrelated-repository pass-through; source/approval/ancestry guards remain unchanged. |
+| D8: count=1 prevents the fixture helper from detecting duplicate statuses | low | patch | Both fixture copies claim exactly-one status but cap `re.subn` at one match. Count all matching lines and refuse duplicate workflow status before accepting the modified fixture. |
+| D9: sprint comment still presents delivered gates as pending | low | patch | The tracker comment was not yet updated during staged publication. Replace the stale pending statement with the real published completion state and move tracking to review when the build workflow finishes. |
+
+Eight direct patch groups were accepted; one finding was rejected on the explicit fixture/acceptance distinction. No new review deferrals were added. The approved inventory and its authorities remain unchanged, and the existing K12 reconciliation remains open.

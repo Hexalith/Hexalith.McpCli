@@ -1,0 +1,25 @@
+{
+  "command": [
+    "python3",
+    "-I",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8",
+    "-p",
+    "test_*.py"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 24.878,
+  "stdout": {
+    "path": "final-tests.stdout.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "final-tests.stderr.txt",
+    "sha256": "95ee859c883b68af65124cd776e9eaa83412b755e1bb21718485985a2fe8c6fa"
+  }
+}

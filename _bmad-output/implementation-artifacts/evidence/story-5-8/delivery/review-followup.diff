@@ -1,0 +1,1156 @@
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json
+index 790d48a..f305c87 100644
+--- a/_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json
+@@ -1,6 +1,6 @@
+ {
+   "schemaVersion": "1.0.0",
+-  "decision": "pending",
++  "decision": "approved",
+   "baselineCommit": "a92a2969db6903b8c6cca7e437446167e135ec9d",
+   "sourceRevision": "7eab70e9332c0573b50dce5b219e425b6a2d363c",
+   "supersedes": "A1",
+@@ -893,5 +893,21 @@
+     "Disposition authority only; no execution, enrollment, publication, parity or retirement authority.",
+     "Completion requires exact-byte owner approval and separate authorized upstream label integration.",
+     "Commits, pushes and merges require separate explicit authorization."
++  ],
++  "approver": "Jérôme Piquot (GitHub jpiquot)",
++  "exactApprovalInstruction": "approve",
++  "approvalSource": "Current conversation: the user replied \"approve\" to the exact Folders 1.1.0 candidate SHA-256 and requiredApprovalRoles approval question, then separately replied \"authorize\" for committing/pushing the McpCli publication and prepared README-only PS10/PS11 delivery in the owning Folders repository. Approver identity is the repository owner recorded in the prior Story 5.7 receipt.",
++  "approvedOn": "2026-11-13",
++  "rolesCovered": [
++    "Folders owning maintainer",
++    "Folders Contracts maintainer",
++    "Folders security maintainer",
++    "Folders query/file/privacy/runtime maintainer",
++    "Folders provider maintainer",
++    "EventStore/Gateway admission maintainer",
++    "McpCli product/architecture owner",
++    "McpCli security and contract/transport maintainer",
++    "McpCli dependency/Catalog maintainer",
++    "Platform architecture/security and platform/operator maintainer"
+   ]
+ }
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json
+index 20aaf18..5bc87dd 100644
+--- a/_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json
+@@ -1,6 +1,6 @@
+ {
+   "schemaVersion": "1.0.0",
+-  "state": "candidate-pending-owner-approval-and-delivery",
++  "state": "integrated",
+   "predecessor": {
+     "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/labels.json",
+     "sha256": "06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6"
+@@ -8,8 +8,12 @@
+   "inventoryArtifacts": {
+     "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407"
+   },
+-  "inventoryRevision": null,
+-  "deliveryAuthorization": null,
++  "inventoryRevision": "f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091",
++  "deliveryAuthorization": {
++    "exactWords": "authorize",
++    "source": "Current conversation: after replying \"approve\" to exact-byte candidate and required-role approval, the user separately replied \"authorize\" for committing/pushing the McpCli publication and the prepared README-only PS10/PS11 patch in the owning Folders repository.",
++    "approvedOn": "2026-11-13"
++  },
+   "repository": {
+     "name": "folders",
+     "repository": "https://github.com/Hexalith/Hexalith.Folders",
+@@ -19,7 +23,12 @@
+       "beforeSha256": "bfec790c274b8952313dd17d25b69f025bca9d172fddb22d461fe148fa87c75e",
+       "afterSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e"
+     },
+-    "integration": null,
++    "integration": {
++      "commit": "db40bda8a107fcb03405e074810be16c0d47c85f",
++      "commitSha256": "f1c32a7dc45d942b36669ebafe692f65fd5a775963a6a3f0a0a897cce8a4824a",
++      "remoteMainWhenReadBack": "db40bda8a107fcb03405e074810be16c0d47c85f",
++      "readmeSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e"
++    },
+     "before": {
+       "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/upstream/folders/README.before.section.md",
+       "sha256": "efd17b99b386b40e988e785d986e76bf4753665998d535f9efadaa0655f38eb3"
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py b/_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py
+index 10da167..ae64646 100644
+--- a/_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py
+@@ -5,6 +5,7 @@ import importlib.util
+ import io
+ import json
+ from pathlib import Path
++import re
+ import shutil
+ import subprocess
+ import sys
+@@ -39,8 +40,60 @@ def invoke(module,args=None):
+     return code,out.getvalue(),err.getvalue()
+ 
+ 
++def pending_approval(receipt):
++    """Derive a pending fixture without changing the real exact-byte approval."""
++    receipt = copy.deepcopy(receipt)
++    receipt['decision'] = 'pending'
++    for key in ['approver','exactApprovalInstruction','approvalSource','approvedOn','rolesCovered']:
++        receipt.pop(key,None)
++    return receipt
++
++
++def pending_inputs(root):
++    """Reset only copied lifecycle state; candidate and authority bytes stay exact."""
++    path = root/B.E/'approval.json'
++    path.write_text(json.dumps(pending_approval(V.read_json(path)),indent=2)+'\n')
++    path = root/B.E/'labels.json'
++    register = V.read_json(path)
++    register.update(state='candidate-pending-owner-approval-and-delivery',inventoryRevision=None,deliveryAuthorization=None)
++    register['repository']['integration'] = None
++    path.write_text(json.dumps(register,indent=2)+'\n')
++    for path,key in [(root/B.SPEC,'status'),(root/B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory')]:
++        text,count = re.subn(r'^'+re.escape(key)+r':[^\n]*',key+': in-progress',path.read_text(),count=1,flags=re.M)
++        if count != 1:
++            raise AssertionError('fixture requires one workflow status: '+str(path))
++        path.write_text(text)
++
++
++def pinned_observation(run):
++    """Keep a pending fixture's current-owner observation at its historical base."""
++    def current(command,*args,**kwargs):
++        if isinstance(command,list) and command[:1] == ['git'] and command[-2:] == ['show','origin/main:README.md']:
++            command = [*command[:-1],B.LABEL_PIN+':README.md']
++        return run(command,*args,**kwargs)
++    return current
++
++
++def fixture_process(script,*args):
++    # Pin only the observational current-owner read in the child as well. Every
++    # source/hash/ancestry guard still executes through the actual entrypoint.
++    runner = '''import runpy, subprocess, sys
++run = subprocess.run
++pin = sys.argv[1]
++def historical(command, *args, **kwargs):
++    if isinstance(command, list) and command[:1] == ['git'] and command[-2:] == ['show', 'origin/main:README.md']:
++        command = [*command[:-1], pin + ':README.md']
++    return run(command, *args, **kwargs)
++subprocess.run = historical
++script = sys.argv[2]
++sys.argv = sys.argv[2:]
++runpy.run_path(script, run_name='__main__')
++'''
++    return subprocess.run([sys.executable,'-I','-c',runner,B.LABEL_PIN,str(script),*args],capture_output=True,text=True)
++
++
+ @contextlib.contextmanager
+-def workspace_view():
++def workspace_view(*,pending=True):
+     """Copy documentary inputs, sharing only read-only repository objects/source."""
+     with tempfile.TemporaryDirectory() as temp:
+         root = Path(temp)
+@@ -56,6 +109,8 @@ def workspace_view():
+                 shutil.copytree(story,art/'evidence'/story.name,ignore=shutil.ignore_patterns('__pycache__'))
+             else:
+                 (art/'evidence'/story.name).symlink_to(story,target_is_directory=story.is_dir())
++        if pending:
++            pending_inputs(root)
+         yield root
+ 
+ 
+@@ -67,7 +122,17 @@ def tearDownModule():
+         except OSError: pass
+ 
+ 
+-class AmendmentTests(unittest.TestCase):
++class PendingCase(unittest.TestCase):
++    def setUp(self):
++        stack = contextlib.ExitStack()
++        self.addCleanup(stack.close)
++        self.root = stack.enter_context(workspace_view())
++        for module in [V,L,L.V,B]:
++            stack.enter_context(patch.object(module,'ROOT',self.root))
++        stack.enter_context(patch.object(subprocess,'run',side_effect=pinned_observation(subprocess.run)))
++
++
++class AmendmentTests(PendingCase):
+     @classmethod
+     def setUpClass(cls):
+         cls.old = V.parse((ROOT/B.OLD).read_text())
+@@ -76,7 +141,7 @@ class AmendmentTests(unittest.TestCase):
+         cls.inventory = next(i for i in mapping['inventories'] if i['path'] == str(B.OLD))
+         cls.classes = {c['id']:c for c in mapping['classes']}
+         cls.decl,cls.surface = B.declarations(ROOT),B.surfaces(ROOT)
+-        cls.receipt = V.read_json(HERE/'approval.json')
++        cls.receipt = pending_approval(V.read_json(HERE/'approval.json'))
+ 
+     def changed(self,key,header,value):
+         rows = copy.deepcopy(self.new)
+@@ -120,7 +185,7 @@ class AmendmentTests(unittest.TestCase):
+             ('verify_labels.py',['--approved-completion'],(1,'','FAIL: completion requires exact-byte owner approval and covered Folders roles\n')),
+         ]:
+             with self.subTest(script=name,flags=flags):
+-                r = subprocess.run([sys.executable,'-I',str(HERE/name),*flags],capture_output=True,text=True)
++                r = fixture_process(HERE/name,'--root',str(self.root),*flags)
+                 self.assertEqual(expected,(r.returncode,r.stdout,r.stderr))
+ 
+     def test_deterministic_candidate_and_all_disposition_branches(self):
+@@ -242,7 +307,7 @@ class AmendmentTests(unittest.TestCase):
+     def test_builder_refuses_approved_packet_before_any_write(self):
+         read = Path.read_bytes
+         def approved(path,*args,**kwargs):
+-            return json.dumps(self.approved()).encode() if path == HERE/'approval.json' else read(path,*args,**kwargs)
++            return json.dumps(self.approved()).encode() if path == self.root/B.E/'approval.json' else read(path,*args,**kwargs)
+         with patch.object(Path,'read_bytes',approved),patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
+             self.assertEqual((1,'','FAIL: refusing to overwrite an approved or unknown-state packet\n'),invoke(B))
+ 
+@@ -336,7 +401,7 @@ class AmendmentTests(unittest.TestCase):
+                 (e/'labels.json').write_text('{"state":"candidate-pending-owner-approval-and-delivery","repository":{}}')
+                 (e/name).write_text(data)
+                 before = {p.name:p.read_bytes() for p in e.iterdir()}
+-                r = subprocess.run([sys.executable,'-I',str(e/'build_candidate.py')],capture_output=True,text=True)
++                r = fixture_process(e/'build_candidate.py')
+                 self.assertEqual((1,'','FAIL: '+message+'\n'),(r.returncode,r.stdout,r.stderr))
+                 self.assertEqual(before,{p.name:p.read_bytes() for p in e.iterdir()})
+ 
+@@ -349,7 +414,7 @@ class AmendmentTests(unittest.TestCase):
+                     for script in (['verify_amendment.py'] if name == 'approval.json' else ['verify_amendment.py','verify_labels.py']):
+                         with self.subTest(name=name,value=value,script=script):
+                             (root/B.E/name).write_text(json.dumps(value))
+-                            r = subprocess.run([sys.executable,'-I',str(HERE/script),'--root',str(root)],capture_output=True,text=True)
++                            r = fixture_process(HERE/script,'--root',str(root))
+                             self.assertEqual((1,'',f'FAIL: JSON document must be an object: {name}\n'),(r.returncode,r.stdout,r.stderr))
+                     (root/B.E/name).write_bytes(approval if name == 'approval.json' else labels)
+             for value in [None,[]]:
+@@ -358,14 +423,13 @@ class AmendmentTests(unittest.TestCase):
+                 for script in ['verify_amendment.py','verify_labels.py','build_candidate.py']:
+                     with self.subTest(repository=value,script=script):
+                         # Builder obtains the isolated root from its own copied entrypoint.
+-                        args = [sys.executable,'-I',str(root/B.E/script)]
+-                        if script != 'build_candidate.py': args += ['--root',str(root)]
+-                        r = subprocess.run(args,capture_output=True,text=True)
++                        args = ['--root',str(root)] if script != 'build_candidate.py' else []
++                        r = fixture_process(root/B.E/script,*args)
+                         self.assertEqual((1,'','FAIL: Folders label repository must be an object\n'),(r.returncode,r.stdout,r.stderr))
+ 
+     def test_spec_and_sprint_done_default_entrypoint_controls(self):
+         read,load_module = Path.read_text,V.load
+-        paths = [(ROOT/B.SPEC,'status: done\n'),(ROOT/B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory: done\n')]
++        paths = [(self.root/B.SPEC,'status: done\n'),(self.root/B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory: done\n')]
+         for path,done in paths:
+             with self.subTest(path=path):
+                 def status(candidate,*args,**kwargs):
+@@ -402,35 +466,22 @@ class AmendmentTests(unittest.TestCase):
+             ('M03','Pinned evidence','`src/Hexalith.Folders.Mcp/Tools/FolderTools.cs:999999`','folders:M03: pinned anchor identity mismatch'),
+         ]
+         for key,header,value,message in cases:
+-            with self.subTest(field=header),tempfile.TemporaryDirectory() as temp:
+-                root = Path(temp)
+-                for name in ['.git','.gitmodules','references','src']:
+-                    (root/name).symlink_to(ROOT/name,target_is_directory=(ROOT/name).is_dir())
+-                art = root/B.ART; art.mkdir(parents=True)
+-                shutil.copytree(ROOT/B.AD,root/B.AD)
+-                for path in (ROOT/B.ART).iterdir():
+-                    if path.is_file() and path.name != B.NEW.name:
+-                        shutil.copyfile(path,art/path.name)
+-                (art/'evidence').mkdir()
+-                for story in (ROOT/B.ART/'evidence').iterdir():
+-                    if story.name == 'story-5-2':
+-                        shutil.copytree(story,art/'evidence'/story.name)
+-                    else:
+-                        (art/'evidence'/story.name).symlink_to(story,target_is_directory=story.is_dir())
++            with self.subTest(field=header),workspace_view() as root:
+                 rows = self.changed(key,header,value)
+                 text = (ROOT/B.NEW).read_text().replace(self.new[key]['text'],'| '+' | '.join(rows[key]['cells'])+' |')
+                 (root/B.NEW).write_text(text)
+-                result = subprocess.run([sys.executable,'-I',str(HERE/'verify_amendment.py'),'--root',str(root)],capture_output=True,text=True)
++                result = fixture_process(HERE/'verify_amendment.py','--root',str(root))
+                 self.assertEqual((1,'','FAIL: '+message+'\n'),(result.returncode,result.stdout,result.stderr))
+ 
+ 
+-class LabelTests(unittest.TestCase):
++class LabelTests(PendingCase):
+     def setUp(self):
+-        self.register = L.read_json(HERE/'labels.json')
++        super().setUp()
++        self.register = L.read_json(self.root/B.E/'labels.json')
+ 
+     def invoke_register(self,register,complete=False):
+         read = L.read_json
+-        with patch.object(L,'read_json',side_effect=lambda path:register if path == HERE/'labels.json' else read(path)):
++        with patch.object(L,'read_json',side_effect=lambda path:register if path == self.root/B.E/'labels.json' else read(path)):
+             return invoke(L,['--approved-completion'] if complete else [])
+ 
+     def reject(self,register,message):
+@@ -496,7 +547,7 @@ class LabelTests(unittest.TestCase):
+             if args[0] == 'merge-base': return b''
+             if repo == owner and args[0] == 'diff': return b'README.md\n'
+             if repo == owner and args[:2] == ('cat-file','commit'): return b'fixture commit'
+-            if repo == ROOT and args[0] == 'show': return (ROOT/args[1].split(':',1)[1]).read_bytes()
++            if repo == self.root and args[0] == 'show': return (self.root/args[1].split(':',1)[1]).read_bytes()
+             return git(repo,*args)
+         integrated = LABEL_PASS.replace('candidate only; owner approval and delivery pending','integrated delivery verified')
+         with patch.object(L.V,'verify_owner_packet',return_value=None),patch.object(L.B,'git',side_effect=delivered):
+@@ -547,9 +598,9 @@ class LabelTests(unittest.TestCase):
+             def committed(repo,*args):
+                 if repo == owner and args == ('show',historical+':README.md'): return before
+                 if repo == owner and args in [('show',delivery+':README.md'),('show','origin/main:README.md')]: return after
+-                if repo == ROOT and args[0] == 'merge-base': return original(published,*args)
+-                if repo == ROOT and args[0] == 'show' and args[1].split(':',1)[0] in {inventory,'origin/main'}:
+-                    return (ROOT/args[1].split(':',1)[1]).read_bytes()
++                if repo == self.root and args[0] == 'merge-base': return original(published,*args)
++                if repo == self.root and args[0] == 'show' and args[1].split(':',1)[0] in {inventory,'origin/main'}:
++                    return (self.root/args[1].split(':',1)[1]).read_bytes()
+                 return original(repo,*args)
+             with patch.object(L.B,'LABEL_PIN',historical),patch.object(L.B,'label_candidate',return_value=(expected,files)),patch.object(L.V,'verify_owner_packet',return_value=None):
+                 yield register,committed,owner,published,delivery,inventory,original
+@@ -577,7 +628,7 @@ class LabelTests(unittest.TestCase):
+             with patch.object(L.B,'git',side_effect=committed):
+                 self.assertEqual((1,'',f'FAIL: git merge-base --is-ancestor {inventory} origin/main failed: (no stderr)\n'),self.invoke_register(register,True))
+             def removed(repo,*args):
+-                return b'' if repo == ROOT and args == ('merge-base','--is-ancestor',inventory,'origin/main') else committed(repo,*args)
++                return b'' if repo == self.root and args == ('merge-base','--is-ancestor',inventory,'origin/main') else committed(repo,*args)
+             with patch.object(L.B,'git',side_effect=removed):
+                 self.assertEqual((0,LABEL_PASS.replace('candidate only; owner approval and delivery pending','integrated delivery verified'),''),self.invoke_register(register,True))
+ 
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md b/_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md
+index d3f7d5d..65d9338 100644
+--- a/_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md
+@@ -1,9 +1,34 @@
+ # Story 5.8 verification (2026-11-13)
+ 
+-The Folders 1.1.0 candidate is implemented and statically verified. Exact-byte
+-owner approval and separate upstream label delivery remain pending. Story/spec
+-status stays in-progress. No execution, enrollment, publication, parity, retirement,
+-production/dependency/census change, gitlink move or owner-repository write occurred.
++The Folders 1.1.0 inventory and exact-byte owner approval were published at
++McpCli `f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091`. The separately authorized PS10/PS11
++README-only update was published at Folders `db40bda8a107fcb03405e074810be16c0d47c85f`.
++Both revisions were read back from their remote `main` branches. Both approved
++completion verifiers pass against the real published artifacts and README bytes.
++
++The approved inventory SHA-256 remains
++`54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.
++Its pending metadata/A2 heading are immutable approved bytes; effective owner
++approval is recorded in [approval.json](approval.json). The receipt covers the
++listed Folders roles, supersedes A1 and grants disposition authority only.
++The user's separate `authorize` message is retained in [labels.json](labels.json).
++The label commit changes only README.md; unrelated owner work remains outside it.
++No enrollment, module execution, parity or retirement is claimed. The K12
++reconciliation remains an Epic 6 catalog hold.
++
++The pending-state tests now run against isolated copies so they preserve their
++exact refusal streams and live-global guard controls after real approval and
++integration. All 31 tests passed both from the pending source (29.830 seconds)
++and from an isolated approved/integrated/done source view (28.138 seconds).
++The proof and raw output are retained in [delivery/](delivery/). This lifecycle
++fixture is test evidence only; real delivery is established by the published
++revision/blob/README checks, recorded in [integration.json](delivery/integration.json).
++
++## Historical pre-approval candidate evidence
++
++The following records describe the reviewed pending candidate before the user
++approved its exact bytes. References to pending approval/delivery in this section
++are historical; the publication and completion evidence above supersedes them.
+ 
+ Three independent review layers produced 14 findings: 12 were addressed in 11
+ patch groups, two low findings were rejected, and no review findings were deferred.
+diff --git a/_bmad-output/implementation-artifacts/spec-5-8-refresh-and-re-disposition-the-folders-inventory.md b/_bmad-output/implementation-artifacts/spec-5-8-refresh-and-re-disposition-the-folders-inventory.md
+index 966287f..466dcd4 100644
+--- a/_bmad-output/implementation-artifacts/spec-5-8-refresh-and-re-disposition-the-folders-inventory.md
++++ b/_bmad-output/implementation-artifacts/spec-5-8-refresh-and-re-disposition-the-folders-inventory.md
+@@ -2,7 +2,7 @@
+ title: '5.8 Refresh and re-disposition the Folders inventory'
+ type: 'chore'
+ created: '2026-11-13'
+-status: 'in-progress'
++status: 'in-review'
+ baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
+ route: 'dispatch'
+ review_loop_iteration: 0
+@@ -144,6 +144,10 @@ Derivation rules (the decisions above apply first):
+ - 2026-11-13: Implemented the pending 1.1.0 successor and deterministic generator, with 161 entries (123 replace, 33 defer, 5 withdraw). Candidate and PS10/PS11 patch verifiers pass; 21 tests cover matrix scenarios, exact process streams and live-global guard removal. Both-pin source checks preserve the 49-tool/2-resource/42-leaf sets and prove added model fields. Verification is recorded in [the Story 5.8 packet](evidence/story-5-8/verification.md). The candidate receipt supersedes A1 only upon exact-byte approval; no approval, delivery, enrollment, parity or retirement is asserted. Story status stays in-progress because exact-byte owner approval and separately authorized upstream label integration remain unsatisfied completion conditions.
+ - 2026-11-13: Build review 1 applied all 11 patch groups; the final 31-test suite, candidate verifier, label verifier and adopted AD-23 gate pass. Completion still fails with the exact pending-approval diagnostic. The final candidate SHA-256 is `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`. No review deferrals were added; the approved K12 reconciliation remains open. The approved story's completion conditions take precedence over the build workflow's generic done/commit steps: status remains in-progress and no commit or delivery is authorized.
+ 
++- 2026-11-13: The user replied "approve" to the exact candidate and required-role approval question, then separately "authorize" for publication and README-only label delivery. The approval receipt now records those words and the inherited repository-owner identity, without changing the approved candidate bytes. Pending-state test cases now use isolated copies, retaining their exact refusal streams and guard-removal controls after real approval and delivery. Both 31-test runs pass: current source and an isolated approved/integrated/done source view. Publication and integrated-label verification are the remaining delivery steps.
++
++- 2026-11-13: Published the approved inventory/receipt at `f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091` and delivered the exact README-only PS10/PS11 patch at Folders `db40bda8a107fcb03405e074810be16c0d47c85f`. Remote main revisions and exact artifact bytes were read back. Both real approved-completion verifiers pass. The approved candidate and authorities remain unchanged; the existing K12 reconciliation remains open. A focused follow-up review covers the lifecycle-test maintenance and delivery records since the previously reviewed implementation at `cab549c7b06fa4eef08e46cfcde038f62ea81fbf`; the original story baseline remains unchanged.
++
+ ## Spec Change Log
+ 
+ ## Review Triage Log
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-candidate.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-candidate.json
+new file mode 100644
+index 0000000..4861fa4
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-candidate.json
+@@ -0,0 +1,18 @@
++{
++  "command": [
++    "python3",
++    "-I",
++    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 1.606,
++  "stdout": {
++    "path": "approved-candidate.stdout.txt",
++    "sha256": "7be36922c459e125245d4c1dc36d2da5dfa831c2553a6e14dd151feda42fb20b"
++  },
++  "stderr": {
++    "path": "approved-candidate.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-candidate.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-candidate.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-candidate.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-candidate.stdout.txt
+new file mode 100644
+index 0000000..b366d62
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-candidate.stdout.txt
+@@ -0,0 +1,2 @@
++PASS: folders: 161 entries, pinned declarations/anchors/drift, AD-23 dispositions and complete hash chain
++PASS: owner decision: approved; candidate only; approval and integrated PS10/PS11 labels remain completion gates
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-completion.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-completion.json
+new file mode 100644
+index 0000000..239e025
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-completion.json
+@@ -0,0 +1,19 @@
++{
++  "command": [
++    "python3",
++    "-I",
++    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py",
++    "--approved-completion"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 1.399,
++  "stdout": {
++    "path": "approved-completion.stdout.txt",
++    "sha256": "51d77d50053d0b9714406efa30fa9cb49de704a10e686c9205e1a7d5c0a4437b"
++  },
++  "stderr": {
++    "path": "approved-completion.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-completion.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-completion.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-completion.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-completion.stdout.txt
+new file mode 100644
+index 0000000..447b788
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-completion.stdout.txt
+@@ -0,0 +1,2 @@
++PASS: folders: 161 entries, pinned declarations/anchors/drift, AD-23 dispositions and complete hash chain
++PASS: owner decision: approved; approved completion verified
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-label-candidate.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-label-candidate.json
+new file mode 100644
+index 0000000..5c29ea8
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-label-candidate.json
+@@ -0,0 +1,18 @@
++{
++  "command": [
++    "python3",
++    "-I",
++    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 0.068,
++  "stdout": {
++    "path": "approved-label-candidate.stdout.txt",
++    "sha256": "055c7e2d7676d90cd409c8e5674f6c65ee678d85bba827db6277e63b1229f7c9"
++  },
++  "stderr": {
++    "path": "approved-label-candidate.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-label-candidate.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-label-candidate.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-label-candidate.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-label-candidate.stdout.txt
+new file mode 100644
+index 0000000..53a729d
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/approved-label-candidate.stdout.txt
+@@ -0,0 +1 @@
++PASS: Story 5.7 register chain; PS10/PS11 Folders 1.1.0 README-only citation patch; candidate only; owner approval and delivery pending
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-approval.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-approval.json
+new file mode 100644
+index 0000000..4811531
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-approval.json
+@@ -0,0 +1,21 @@
++{
++  "command": [
++    "git",
++    "-c",
++    "core.commitGraph=false",
++    "commit",
++    "--file",
++    "/tmp/mcpcli-story-5-8-mcpcli-approval.msg"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 0.03,
++  "stdout": {
++    "path": "commit-approval.stdout.txt",
++    "sha256": "b4163a2b62948174dbe288b862d887bb6ca9d8088146383e14bf54a37393824c"
++  },
++  "stderr": {
++    "path": "commit-approval.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-approval.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-approval.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-approval.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-approval.stdout.txt
+new file mode 100644
+index 0000000..a0a2123
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-approval.stdout.txt
+@@ -0,0 +1,2 @@
++[main f3c8f5f] docs: approve the Folders 1.1.0 migration inventory
++ 1 file changed, 17 insertions(+), 1 deletion(-)
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-folders.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-folders.json
+new file mode 100644
+index 0000000..192592a
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-folders.json
+@@ -0,0 +1,21 @@
++{
++  "command": [
++    "git",
++    "-c",
++    "core.commitGraph=false",
++    "commit",
++    "--file",
++    "/tmp/mcpcli-story-5-8-folders-labels.msg"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/folders",
++  "exitCode": 0,
++  "elapsedSeconds": 0.023,
++  "stdout": {
++    "path": "commit-folders.stdout.txt",
++    "sha256": "1ccbbbc46cabde652813dddb515bde02741e5a0c9061ed9116e2e358985e9337"
++  },
++  "stderr": {
++    "path": "commit-folders.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-folders.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-folders.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-folders.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-folders.stdout.txt
+new file mode 100644
+index 0000000..22a12a4
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commit-folders.stdout.txt
+@@ -0,0 +1,2 @@
++[main db40bda8] docs: cite the approved Folders 1.1.0 migration inventory
++ 1 file changed, 2 insertions(+), 2 deletions(-)
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-approval.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-approval.json
+new file mode 100644
+index 0000000..367938c
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-approval.json
+@@ -0,0 +1,22 @@
++{
++  "command": [
++    "npx",
++    "--no",
++    "--",
++    "commitlint",
++    "--verbose",
++    "--edit",
++    "/tmp/mcpcli-story-5-8-mcpcli-approval.msg"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 0.708,
++  "stdout": {
++    "path": "commitlint-approval.stdout.txt",
++    "sha256": "f45e1ac3356f5b9432e80fcd60bf99f83ef88ff218bfe934702ecf86e711ff08"
++  },
++  "stderr": {
++    "path": "commitlint-approval.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-approval.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-approval.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-approval.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-approval.stdout.txt
+new file mode 100644
+index 0000000..ca33d60
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-approval.stdout.txt
+@@ -0,0 +1,3 @@
++⧗   --- input ---
++docs: approve the Folders 1.1.0 migration inventory
++✔   found 0 problems, 0 warnings
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-completion.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-completion.json
+new file mode 100644
+index 0000000..40316c9
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-completion.json
+@@ -0,0 +1,22 @@
++{
++  "command": [
++    "npx",
++    "--no",
++    "--",
++    "commitlint",
++    "--verbose",
++    "--edit",
++    "/tmp/mcpcli-story-5-8-mcpcli-completion.msg"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 0.733,
++  "stdout": {
++    "path": "commitlint-completion.stdout.txt",
++    "sha256": "98bbecdfe942c3b9db131287d6721b4474ef65425b015fca9b92bb4a002782c6"
++  },
++  "stderr": {
++    "path": "commitlint-completion.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-completion.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-completion.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-completion.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-completion.stdout.txt
+new file mode 100644
+index 0000000..7335afc
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-completion.stdout.txt
+@@ -0,0 +1,3 @@
++⧗   --- input ---
++docs: complete story 5.8 inventory and label delivery
++✔   found 0 problems, 0 warnings
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-folders.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-folders.json
+new file mode 100644
+index 0000000..f5b0ed1
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-folders.json
+@@ -0,0 +1,22 @@
++{
++  "command": [
++    "npx",
++    "--no",
++    "--",
++    "commitlint",
++    "--verbose",
++    "--edit",
++    "/tmp/mcpcli-story-5-8-folders-labels.msg"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/folders",
++  "exitCode": 0,
++  "elapsedSeconds": 0.716,
++  "stdout": {
++    "path": "commitlint-folders.stdout.txt",
++    "sha256": "2aa075986cf2662578f23b964936dd83e16fb68dae706c6aeb37182c6c2cf445"
++  },
++  "stderr": {
++    "path": "commitlint-folders.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-folders.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-folders.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-folders.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-folders.stdout.txt
+new file mode 100644
+index 0000000..f9b2ecc
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/commitlint-folders.stdout.txt
+@@ -0,0 +1,3 @@
++⧗   --- input ---
++docs: cite the approved Folders 1.1.0 migration inventory
++✔   found 0 problems, 0 warnings
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/completion-before-labels.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/completion-before-labels.json
+new file mode 100644
+index 0000000..3707b0a
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/completion-before-labels.json
+@@ -0,0 +1,19 @@
++{
++  "command": [
++    "python3",
++    "-I",
++    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py",
++    "--approved-completion"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 1,
++  "elapsedSeconds": 1.583,
++  "stdout": {
++    "path": "completion-before-labels.stdout.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  },
++  "stderr": {
++    "path": "completion-before-labels.stderr.txt",
++    "sha256": "f7223517212a79473b44e8e70d15c7a22616bc29983ed1ff6e1a7f5510630bd3"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/completion-before-labels.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/completion-before-labels.stderr.txt
+new file mode 100644
+index 0000000..67d5155
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/completion-before-labels.stderr.txt
+@@ -0,0 +1 @@
++FAIL: completion requires integrated Folders PS10/PS11 labels
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/completion-before-labels.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/completion-before-labels.stdout.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-folders.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-folders.json
+new file mode 100644
+index 0000000..861f33d
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-folders.json
+@@ -0,0 +1,21 @@
++{
++  "command": [
++    "git",
++    "-c",
++    "core.commitGraph=false",
++    "fetch",
++    "--no-recurse-submodules",
++    "origin"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/folders",
++  "exitCode": 0,
++  "elapsedSeconds": 0.393,
++  "stdout": {
++    "path": "fetch-folders.stdout.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  },
++  "stderr": {
++    "path": "fetch-folders.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-folders.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-folders.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-folders.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-folders.stdout.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-mcpcli.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-mcpcli.json
+new file mode 100644
+index 0000000..85a4eea
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-mcpcli.json
+@@ -0,0 +1,21 @@
++{
++  "command": [
++    "git",
++    "-c",
++    "core.commitGraph=false",
++    "fetch",
++    "--no-recurse-submodules",
++    "origin"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 0.385,
++  "stdout": {
++    "path": "fetch-mcpcli.stdout.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  },
++  "stderr": {
++    "path": "fetch-mcpcli.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-mcpcli.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-mcpcli.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-mcpcli.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/fetch-mcpcli.stdout.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integrated-labels.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integrated-labels.json
+new file mode 100644
+index 0000000..53677e1
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integrated-labels.json
+@@ -0,0 +1,19 @@
++{
++  "command": [
++    "python3",
++    "-I",
++    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py",
++    "--approved-completion"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 1.372,
++  "stdout": {
++    "path": "integrated-labels.stdout.txt",
++    "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
++  },
++  "stderr": {
++    "path": "integrated-labels.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integrated-labels.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integrated-labels.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integrated-labels.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integrated-labels.stdout.txt
+new file mode 100644
+index 0000000..6c584f6
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integrated-labels.stdout.txt
+@@ -0,0 +1 @@
++PASS: Story 5.7 register chain; PS10/PS11 Folders 1.1.0 README-only citation patch; integrated delivery verified
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integration.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integration.json
+new file mode 100644
+index 0000000..f26e22a
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/integration.json
+@@ -0,0 +1,11 @@
++{
++  "inventoryRevision": "f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091",
++  "foldersDeliveryRevision": "db40bda8a107fcb03405e074810be16c0d47c85f",
++  "approvedCandidateSha256": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407",
++  "publishedReceiptSha256": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e",
++  "foldersReadmeSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e",
++  "deliveredFiles": [
++    "README.md"
++  ],
++  "remoteMainReadBack": true
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-integrated.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-integrated.json
+new file mode 100644
+index 0000000..be97970
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-integrated.json
+@@ -0,0 +1,8 @@
++{
++  "suiteExitCode": 0,
++  "sourceFixture": "approved / integrated / spec done / sprint done",
++  "realInputsUnchanged": true,
++  "candidateSha256": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407",
++  "stdout": "/tmp/mcpcli-story-5-8-lifecycle-integrated.stdout.txt",
++  "stderr": "/tmp/mcpcli-story-5-8-lifecycle-integrated.stderr.txt"
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-integrated.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-integrated.stderr.txt
+new file mode 100644
+index 0000000..2fd621d
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-integrated.stderr.txt
+@@ -0,0 +1,37 @@
++test_actual_client_calls_and_upload_kinds_are_checked (test_verify_amendment.AmendmentTests.test_actual_client_calls_and_upload_kinds_are_checked) ... ok
++test_anchor_and_drift_guards (test_verify_amendment.AmendmentTests.test_anchor_and_drift_guards) ... ok
++test_builder_refuses_approved_packet_before_any_write (test_verify_amendment.AmendmentTests.test_builder_refuses_approved_packet_before_any_write) ... ok
++test_class_outcome_and_loss_owner_guards (test_verify_amendment.AmendmentTests.test_class_outcome_and_loss_owner_guards) ... ok
++test_decorated_type_wire_route_key_and_owner_eligibility_guards (test_verify_amendment.AmendmentTests.test_decorated_type_wire_route_key_and_owner_eligibility_guards) ... ok
++test_deterministic_candidate_and_all_disposition_branches (test_verify_amendment.AmendmentTests.test_deterministic_candidate_and_all_disposition_branches) ... ok
++test_duplicate_and_damaged_rows_rejected_with_guard_controls (test_verify_amendment.AmendmentTests.test_duplicate_and_damaged_rows_rejected_with_guard_controls) ... ok
++test_idempotency_key_own_jsonrequired_attribute_control (test_verify_amendment.AmendmentTests.test_idempotency_key_own_jsonrequired_attribute_control) ... ok
++test_k12_and_diagnostic_disposition_guard_removal (test_verify_amendment.AmendmentTests.test_k12_and_diagnostic_disposition_guard_removal) ... ok
++test_k12_catalog_hold_diagnostics_and_empty_gap_owner (test_verify_amendment.AmendmentTests.test_k12_catalog_hold_diagnostics_and_empty_gap_owner) ... ok
++test_malformed_json_shapes_use_controlled_entrypoint_streams (test_verify_amendment.AmendmentTests.test_malformed_json_shapes_use_controlled_entrypoint_streams) ... ok
++test_new_root_group_is_not_ignored (test_verify_amendment.AmendmentTests.test_new_root_group_is_not_ignored) ... ok
++test_owner_file_id_drift_semantics_and_both_pin_controls (test_verify_amendment.AmendmentTests.test_owner_file_id_drift_semantics_and_both_pin_controls) ... ok
++test_pending_approved_role_and_chain_controls (test_verify_amendment.AmendmentTests.test_pending_approved_role_and_chain_controls) ... ok
++test_protected_json_duplicates_and_shapes_fail_before_writes (test_verify_amendment.AmendmentTests.test_protected_json_duplicates_and_shapes_fail_before_writes) ... ok
++test_real_candidate_and_completion_process_streams (test_verify_amendment.AmendmentTests.test_real_candidate_and_completion_process_streams) ... ok
++test_real_process_rejects_damaged_rows_and_invented_replacement (test_verify_amendment.AmendmentTests.test_real_process_rejects_damaged_rows_and_invented_replacement)
++Use a task-owned read-only view of repository objects and real entrypoints. ... ok
++test_replace_include_equivalence_and_each_required_action (test_verify_amendment.AmendmentTests.test_replace_include_equivalence_and_each_required_action) ... ok
++test_source_drift_fields_are_proved_against_both_git_pins (test_verify_amendment.AmendmentTests.test_source_drift_fields_are_proved_against_both_git_pins) ... ok
++test_spec_and_sprint_done_default_entrypoint_controls (test_verify_amendment.AmendmentTests.test_spec_and_sprint_done_default_entrypoint_controls) ... ok
++test_story_status_and_metadata_corrections (test_verify_amendment.AmendmentTests.test_story_status_and_metadata_corrections) ... ok
++test_unresolvable_anchor_and_wrong_g_story_status_controls (test_verify_amendment.AmendmentTests.test_unresolvable_anchor_and_wrong_g_story_status_controls) ... ok
++test_completion_chain_and_exact_delivery_bytes (test_verify_amendment.LabelTests.test_completion_chain_and_exact_delivery_bytes) ... ok
++test_completion_requires_label_integration_after_owner_approval (test_verify_amendment.LabelTests.test_completion_requires_label_integration_after_owner_approval) ... ok
++test_current_owner_drift_is_report_only (test_verify_amendment.LabelTests.test_current_owner_drift_is_report_only) ... ok
++test_label_chain_hash_and_citation_guard_removal (test_verify_amendment.LabelTests.test_label_chain_hash_and_citation_guard_removal) ... ok
++test_real_inventory_commit_outside_origin_main_and_guard_removal (test_verify_amendment.LabelTests.test_real_inventory_commit_outside_origin_main_and_guard_removal) ... ok
++test_real_owner_label_commit_outside_origin_main_and_guard_removal (test_verify_amendment.LabelTests.test_real_owner_label_commit_outside_origin_main_and_guard_removal) ... ok
++test_register_chain_coverage_hash_citation_and_no_false_delivery (test_verify_amendment.LabelTests.test_register_chain_coverage_hash_citation_and_no_false_delivery) ... ok
++test_source_commit_before_valid_readme_delivery_is_allowed (test_verify_amendment.LabelTests.test_source_commit_before_valid_readme_delivery_is_allowed) ... ok
++test_standalone_completion_does_not_bypass_owner_approval (test_verify_amendment.LabelTests.test_standalone_completion_does_not_bypass_owner_approval) ... ok
++
++----------------------------------------------------------------------
++Ran 31 tests in 28.138s
++
++OK
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-integrated.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-integrated.stdout.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-pending.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-pending.stderr.txt
+new file mode 100644
+index 0000000..74fc4d5
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-pending.stderr.txt
+@@ -0,0 +1,37 @@
++test_actual_client_calls_and_upload_kinds_are_checked (test_verify_amendment.AmendmentTests.test_actual_client_calls_and_upload_kinds_are_checked) ... ok
++test_anchor_and_drift_guards (test_verify_amendment.AmendmentTests.test_anchor_and_drift_guards) ... ok
++test_builder_refuses_approved_packet_before_any_write (test_verify_amendment.AmendmentTests.test_builder_refuses_approved_packet_before_any_write) ... ok
++test_class_outcome_and_loss_owner_guards (test_verify_amendment.AmendmentTests.test_class_outcome_and_loss_owner_guards) ... ok
++test_decorated_type_wire_route_key_and_owner_eligibility_guards (test_verify_amendment.AmendmentTests.test_decorated_type_wire_route_key_and_owner_eligibility_guards) ... ok
++test_deterministic_candidate_and_all_disposition_branches (test_verify_amendment.AmendmentTests.test_deterministic_candidate_and_all_disposition_branches) ... ok
++test_duplicate_and_damaged_rows_rejected_with_guard_controls (test_verify_amendment.AmendmentTests.test_duplicate_and_damaged_rows_rejected_with_guard_controls) ... ok
++test_idempotency_key_own_jsonrequired_attribute_control (test_verify_amendment.AmendmentTests.test_idempotency_key_own_jsonrequired_attribute_control) ... ok
++test_k12_and_diagnostic_disposition_guard_removal (test_verify_amendment.AmendmentTests.test_k12_and_diagnostic_disposition_guard_removal) ... ok
++test_k12_catalog_hold_diagnostics_and_empty_gap_owner (test_verify_amendment.AmendmentTests.test_k12_catalog_hold_diagnostics_and_empty_gap_owner) ... ok
++test_malformed_json_shapes_use_controlled_entrypoint_streams (test_verify_amendment.AmendmentTests.test_malformed_json_shapes_use_controlled_entrypoint_streams) ... ok
++test_new_root_group_is_not_ignored (test_verify_amendment.AmendmentTests.test_new_root_group_is_not_ignored) ... ok
++test_owner_file_id_drift_semantics_and_both_pin_controls (test_verify_amendment.AmendmentTests.test_owner_file_id_drift_semantics_and_both_pin_controls) ... ok
++test_pending_approved_role_and_chain_controls (test_verify_amendment.AmendmentTests.test_pending_approved_role_and_chain_controls) ... ok
++test_protected_json_duplicates_and_shapes_fail_before_writes (test_verify_amendment.AmendmentTests.test_protected_json_duplicates_and_shapes_fail_before_writes) ... ok
++test_real_candidate_and_completion_process_streams (test_verify_amendment.AmendmentTests.test_real_candidate_and_completion_process_streams) ... ok
++test_real_process_rejects_damaged_rows_and_invented_replacement (test_verify_amendment.AmendmentTests.test_real_process_rejects_damaged_rows_and_invented_replacement)
++Use a task-owned read-only view of repository objects and real entrypoints. ... ok
++test_replace_include_equivalence_and_each_required_action (test_verify_amendment.AmendmentTests.test_replace_include_equivalence_and_each_required_action) ... ok
++test_source_drift_fields_are_proved_against_both_git_pins (test_verify_amendment.AmendmentTests.test_source_drift_fields_are_proved_against_both_git_pins) ... ok
++test_spec_and_sprint_done_default_entrypoint_controls (test_verify_amendment.AmendmentTests.test_spec_and_sprint_done_default_entrypoint_controls) ... ok
++test_story_status_and_metadata_corrections (test_verify_amendment.AmendmentTests.test_story_status_and_metadata_corrections) ... ok
++test_unresolvable_anchor_and_wrong_g_story_status_controls (test_verify_amendment.AmendmentTests.test_unresolvable_anchor_and_wrong_g_story_status_controls) ... ok
++test_completion_chain_and_exact_delivery_bytes (test_verify_amendment.LabelTests.test_completion_chain_and_exact_delivery_bytes) ... ok
++test_completion_requires_label_integration_after_owner_approval (test_verify_amendment.LabelTests.test_completion_requires_label_integration_after_owner_approval) ... ok
++test_current_owner_drift_is_report_only (test_verify_amendment.LabelTests.test_current_owner_drift_is_report_only) ... ok
++test_label_chain_hash_and_citation_guard_removal (test_verify_amendment.LabelTests.test_label_chain_hash_and_citation_guard_removal) ... ok
++test_real_inventory_commit_outside_origin_main_and_guard_removal (test_verify_amendment.LabelTests.test_real_inventory_commit_outside_origin_main_and_guard_removal) ... ok
++test_real_owner_label_commit_outside_origin_main_and_guard_removal (test_verify_amendment.LabelTests.test_real_owner_label_commit_outside_origin_main_and_guard_removal) ... ok
++test_register_chain_coverage_hash_citation_and_no_false_delivery (test_verify_amendment.LabelTests.test_register_chain_coverage_hash_citation_and_no_false_delivery) ... ok
++test_source_commit_before_valid_readme_delivery_is_allowed (test_verify_amendment.LabelTests.test_source_commit_before_valid_readme_delivery_is_allowed) ... ok
++test_standalone_completion_does_not_bypass_owner_approval (test_verify_amendment.LabelTests.test_standalone_completion_does_not_bypass_owner_approval) ... ok
++
++----------------------------------------------------------------------
++Ran 31 tests in 29.830s
++
++OK
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-pending.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-pending.stdout.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py
+new file mode 100644
+index 0000000..f16996f
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py
+@@ -0,0 +1,62 @@
++"""Run the Story 5.8 suite from an isolated completed documentary source view."""
++import hashlib
++import importlib.util
++import json
++from pathlib import Path
++import re
++import subprocess
++import sys
++
++sys.dont_write_bytecode = True
++root = Path('/home/administrator/projects/hexalith/mcpcli')
++packet = Path('_bmad-output/implementation-artifacts/evidence/story-5-8')
++spec = importlib.util.spec_from_file_location('lifecycle58', root / packet / 'test_verify_amendment.py')
++module = importlib.util.module_from_spec(spec)
++spec.loader.exec_module(module)
++B = module.B
++protected = [B.NEW, B.E / 'approval.json', B.E / 'labels.json', B.SPEC, B.ART / 'sprint-status.yaml']
++before = {str(path): (root / path).read_bytes() for path in protected}
++with module.workspace_view(pending=False) as fixture:
++    approval_path = fixture / B.E / 'approval.json'
++    approval = module.V.read_json(approval_path)
++    approval.update(decision='approved', approver='Synthetic lifecycle fixture owner',
++                    exactApprovalInstruction='Synthetic fixture approval only',
++                    approvalSource='Isolated lifecycle test, no real authority',
++                    approvedOn='2026-11-13', rolesCovered=B.ROLES[:])
++    approval_path.write_text(json.dumps(approval, indent=2) + '\n')
++    labels_path = fixture / B.E / 'labels.json'
++    labels = module.V.read_json(labels_path)
++    labels.update(state='integrated', inventoryRevision=B.git(root, 'rev-parse', 'HEAD').decode().strip(),
++                  deliveryAuthorization={'exactWords': 'Synthetic fixture delivery',
++                                         'source': 'Isolated lifecycle test only', 'approvedOn': '2026-11-13'})
++    labels['repository']['integration'] = {'commit': B.LABEL_PIN,
++                                          'commitSha256': B.sha(B.git(Path(labels['repository']['ownerCheckout']), 'cat-file', 'commit', B.LABEL_PIN))}
++    labels_path.write_text(json.dumps(labels, indent=2) + '\n')
++    for path, key in [(fixture / B.SPEC, 'status'),
++                      (fixture / B.ART / 'sprint-status.yaml', '  5-8-refresh-and-re-disposition-the-folders-inventory')]:
++        text, count = re.subn(r'^' + re.escape(key) + r':[^\n]*', key + ': done', path.read_text(), count=1, flags=re.M)
++        assert count == 1
++        path.write_text(text)
++    assert module.V.read_json(approval_path)['decision'] == 'approved'
++    assert module.V.read_json(labels_path)['state'] == 'integrated'
++    assert module.V.completion_requested(fixture, False)
++    assert (fixture / B.NEW).read_bytes() == before[str(B.NEW)]
++    result = subprocess.run([sys.executable, '-I', '-m', 'unittest', 'discover', '-v',
++                             '-s', str(fixture / packet), '-p', 'test_*.py'],
++                            cwd=fixture, capture_output=True, text=True)
++    Path('/tmp/mcpcli-story-5-8-lifecycle-integrated.stdout.txt').write_text(result.stdout)
++    Path('/tmp/mcpcli-story-5-8-lifecycle-integrated.stderr.txt').write_text(result.stderr)
++    after_fixture = module.V.read_json(approval_path), module.V.read_json(labels_path)
++    assert after_fixture[0] == approval and after_fixture[1] == labels
++    assert module.V.completion_requested(fixture, False)
++after = {str(path): (root / path).read_bytes() for path in protected}
++assert before == after, 'real candidate/receipt/workflow bytes changed'
++summary = {'suiteExitCode': result.returncode, 'sourceFixture': 'approved / integrated / spec done / sprint done',
++           'realInputsUnchanged': True,
++           'candidateSha256': hashlib.sha256(before[str(B.NEW)]).hexdigest(),
++           'stdout': '/tmp/mcpcli-story-5-8-lifecycle-integrated.stdout.txt',
++           'stderr': '/tmp/mcpcli-story-5-8-lifecycle-integrated.stderr.txt'}
++Path('/tmp/mcpcli-story-5-8-lifecycle-integrated.json').write_text(json.dumps(summary, indent=2) + '\n')
++print(json.dumps(summary, indent=2))
++print('\n'.join(result.stderr.splitlines()[-5:]))
++sys.exit(result.returncode)
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-folders.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-folders.json
+new file mode 100644
+index 0000000..8395114
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-folders.json
+@@ -0,0 +1,19 @@
++{
++  "command": [
++    "npm",
++    "ci",
++    "--no-audit",
++    "--no-fund"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/folders",
++  "exitCode": 0,
++  "elapsedSeconds": 3.979,
++  "stdout": {
++    "path": "npm-ci-folders.stdout.txt",
++    "sha256": "ae46c4ca483801e861f7e252ff738c4ffdc0987ca65a992bc48078de89e800f2"
++  },
++  "stderr": {
++    "path": "npm-ci-folders.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-folders.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-folders.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-folders.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-folders.stdout.txt
+new file mode 100644
+index 0000000..ec55617
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-folders.stdout.txt
+@@ -0,0 +1,2 @@
++
++added 317 packages in 4s
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-mcpcli.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-mcpcli.json
+new file mode 100644
+index 0000000..9aa5d6b
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-mcpcli.json
+@@ -0,0 +1,19 @@
++{
++  "command": [
++    "npm",
++    "ci",
++    "--no-audit",
++    "--no-fund"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 6.906,
++  "stdout": {
++    "path": "npm-ci-mcpcli.stdout.txt",
++    "sha256": "fc54a7ae523246f922b1230c9b419da45e00d90466a8371b15476bf641325840"
++  },
++  "stderr": {
++    "path": "npm-ci-mcpcli.stderr.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-mcpcli.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-mcpcli.stderr.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-mcpcli.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-mcpcli.stdout.txt
+new file mode 100644
+index 0000000..55dafd5
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/npm-ci-mcpcli.stdout.txt
+@@ -0,0 +1,2 @@
++
++added 357 packages in 7s
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-folders.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-folders.json
+new file mode 100644
+index 0000000..027e2eb
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-folders.json
+@@ -0,0 +1,21 @@
++{
++  "command": [
++    "git",
++    "-c",
++    "core.commitGraph=false",
++    "push",
++    "origin",
++    "main"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/folders",
++  "exitCode": 0,
++  "elapsedSeconds": 2.262,
++  "stdout": {
++    "path": "push-folders.stdout.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  },
++  "stderr": {
++    "path": "push-folders.stderr.txt",
++    "sha256": "d9b2aaef204032ca5fc6b61d84ce83b7516658704d7c8568cb01074627cda301"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-folders.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-folders.stderr.txt
+new file mode 100644
+index 0000000..dfd706e
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-folders.stderr.txt
+@@ -0,0 +1,2 @@
++To https://github.com/Hexalith/Hexalith.Folders.git
++   6fed61e2..db40bda8  main -> main
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-folders.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-folders.stdout.txt
+new file mode 100644
+index 0000000..e69de29
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-inventory.json b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-inventory.json
+new file mode 100644
+index 0000000..f916c0f
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-inventory.json
+@@ -0,0 +1,21 @@
++{
++  "command": [
++    "git",
++    "-c",
++    "core.commitGraph=false",
++    "push",
++    "origin",
++    "main"
++  ],
++  "cwd": "/home/administrator/projects/hexalith/mcpcli",
++  "exitCode": 0,
++  "elapsedSeconds": 2.329,
++  "stdout": {
++    "path": "push-inventory.stdout.txt",
++    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
++  },
++  "stderr": {
++    "path": "push-inventory.stderr.txt",
++    "sha256": "05ff4c871e205b600a697b4635b3b005f807417ce415d3706239ec4f1f37623b"
++  }
++}
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-inventory.stderr.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-inventory.stderr.txt
+new file mode 100644
+index 0000000..28ad583
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-inventory.stderr.txt
+@@ -0,0 +1,2 @@
++To https://github.com/Hexalith/Hexalith.McpCli.git
++   a92a296..f3c8f5f  main -> main
+diff --git a/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-inventory.stdout.txt b/_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/push-inventory.stdout.txt
+new file mode 100644
+index 0000000..e69de29

@@ -1,0 +1,22 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose",
+    "--edit",
+    "/tmp/mcpcli-story-5-8-folders-labels.msg"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/folders",
+  "exitCode": 0,
+  "elapsedSeconds": 0.716,
+  "stdout": {
+    "path": "commitlint-folders.stdout.txt",
+    "sha256": "2aa075986cf2662578f23b964936dd83e16fb68dae706c6aeb37182c6c2cf445"
+  },
+  "stderr": {
+    "path": "commitlint-folders.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

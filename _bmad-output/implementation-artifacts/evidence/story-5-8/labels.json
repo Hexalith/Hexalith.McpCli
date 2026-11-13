@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "state": "candidate-pending-owner-approval-and-delivery",
+  "state": "integrated",
   "predecessor": {
     "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/labels.json",
     "sha256": "06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6"
@@ -8,8 +8,12 @@
   "inventoryArtifacts": {
     "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407"
   },
-  "inventoryRevision": null,
-  "deliveryAuthorization": null,
+  "inventoryRevision": "f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091",
+  "deliveryAuthorization": {
+    "exactWords": "authorize",
+    "source": "Current conversation: after replying \"approve\" to exact-byte candidate and required-role approval, the user separately replied \"authorize\" for committing/pushing the McpCli publication and the prepared README-only PS10/PS11 patch in the owning Folders repository.",
+    "approvedOn": "2026-11-13"
+  },
   "repository": {
     "name": "folders",
     "repository": "https://github.com/Hexalith/Hexalith.Folders",
@@ -19,7 +23,10 @@
       "beforeSha256": "bfec790c274b8952313dd17d25b69f025bca9d172fddb22d461fe148fa87c75e",
       "afterSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e"
     },
-    "integration": null,
+    "integration": {
+      "commit": "db40bda8a107fcb03405e074810be16c0d47c85f",
+      "commitSha256": "f1c32a7dc45d942b36669ebafe692f65fd5a775963a6a3f0a0a897cce8a4824a"
+    },
     "before": {
       "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/upstream/folders/README.before.section.md",
       "sha256": "efd17b99b386b40e988e785d986e76bf4753665998d535f9efadaa0655f38eb3"

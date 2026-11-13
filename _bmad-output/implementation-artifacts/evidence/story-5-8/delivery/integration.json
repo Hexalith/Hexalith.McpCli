@@ -1,0 +1,50 @@
+{
+  "inventoryRevision": "f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091",
+  "foldersDeliveryRevision": "db40bda8a107fcb03405e074810be16c0d47c85f",
+  "approvedCandidateSha256": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407",
+  "publishedReceiptSha256": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e",
+  "foldersReadmeSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e",
+  "deliveredFiles": [
+    "README.md"
+  ],
+  "remoteMainReadBack": true,
+  "remoteReadbacks": {
+    "mcpcli": {
+      "commandRecord": "remote-main-mcpcli.json",
+      "stdoutSha256": "61209c701665ac38eee4e16a2b43bd9bca899c3dc8ff4f07ff272b0b2a425cc1",
+      "observedRevision": "f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091"
+    },
+    "folders": {
+      "commandRecord": "remote-main-folders.json",
+      "stdoutSha256": "d673f2d04b76c939fcf21bbca666edde59d05bb6961d529c4042228d81d3d2f5",
+      "observedRevision": "db40bda8a107fcb03405e074810be16c0d47c85f"
+    }
+  },
+  "publishedArtifactChecks": [
+    {
+      "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md",
+      "revision": "f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091",
+      "sha256": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407",
+      "matchesLocalBytes": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md",
+      "revision": "origin/main",
+      "sha256": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407",
+      "matchesLocalBytes": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json",
+      "revision": "f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091",
+      "sha256": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e",
+      "matchesLocalBytes": true
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json",
+      "revision": "origin/main",
+      "sha256": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e",
+      "matchesLocalBytes": true
+    }
+  ],
+  "foldersDeliveredFilesRecord": "folders-delivery-files.json"
+}

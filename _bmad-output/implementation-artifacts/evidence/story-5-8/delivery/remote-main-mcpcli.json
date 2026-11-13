@@ -1,0 +1,22 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "core.commitGraph=false",
+    "ls-remote",
+    "--refs",
+    "origin",
+    "refs/heads/main"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 0.414,
+  "stdout": {
+    "path": "remote-main-mcpcli.stdout.txt",
+    "sha256": "61209c701665ac38eee4e16a2b43bd9bca899c3dc8ff4f07ff272b0b2a425cc1"
+  },
+  "stderr": {
+    "path": "remote-main-mcpcli.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

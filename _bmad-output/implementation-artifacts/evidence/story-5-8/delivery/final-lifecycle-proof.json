@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "-B",
+    "-I",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 25.702,
+  "stdout": {
+    "path": "final-lifecycle-proof.stdout.txt",
+    "sha256": "cfeddf7e7ee472d4e2aaa2a48245fe0381e4d60ad6c6093c2845e66f07b01063"
+  },
+  "stderr": {
+    "path": "final-lifecycle-proof.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

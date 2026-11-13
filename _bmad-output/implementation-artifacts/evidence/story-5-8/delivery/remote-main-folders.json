@@ -1,0 +1,22 @@
+{
+  "command": [
+    "git",
+    "-c",
+    "core.commitGraph=false",
+    "ls-remote",
+    "--refs",
+    "origin",
+    "refs/heads/main"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/folders",
+  "exitCode": 0,
+  "elapsedSeconds": 0.391,
+  "stdout": {
+    "path": "remote-main-folders.stdout.txt",
+    "sha256": "d673f2d04b76c939fcf21bbca666edde59d05bb6961d529c4042228d81d3d2f5"
+  },
+  "stderr": {
+    "path": "remote-main-folders.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

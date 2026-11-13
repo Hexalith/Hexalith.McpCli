@@ -1,0 +1,22 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose",
+    "--edit",
+    "/tmp/mcpcli-story-5-8-mcpcli-completion.msg"
+  ],
+  "cwd": "/home/administrator/projects/hexalith/mcpcli",
+  "exitCode": 0,
+  "elapsedSeconds": 0.733,
+  "stdout": {
+    "path": "commitlint-completion.stdout.txt",
+    "sha256": "98bbecdfe942c3b9db131287d6721b4474ef65425b015fca9b92bb4a002782c6"
+  },
+  "stderr": {
+    "path": "commitlint-completion.stderr.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+}

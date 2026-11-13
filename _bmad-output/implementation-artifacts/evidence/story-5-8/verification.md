@@ -1,9 +1,71 @@
 # Story 5.8 verification (2026-11-13)
 
-The Folders 1.1.0 candidate is implemented and statically verified. Exact-byte
-owner approval and separate upstream label delivery remain pending. Story/spec
-status stays in-progress. No execution, enrollment, publication, parity, retirement,
-production/dependency/census change, gitlink move or owner-repository write occurred.
+The Folders 1.1.0 inventory and exact-byte owner approval were published at
+McpCli `f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091`. The separately authorized PS10/PS11
+README-only update was published at Folders `db40bda8a107fcb03405e074810be16c0d47c85f`.
+Both revisions were read back from their remote `main` branches. Both approved
+completion verifiers pass against the real published artifacts and README bytes.
+
+The approved inventory SHA-256 remains
+`54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.
+Its pending metadata/A2 heading are immutable approved bytes; effective owner
+approval is recorded in [approval.json](approval.json). The receipt covers the
+listed Folders roles, supersedes A1 and grants disposition authority only.
+The user's separate `authorize` message is retained in [labels.json](labels.json).
+The label commit changes only README.md; unrelated owner work remains outside it.
+No enrollment, module execution, parity or retirement is claimed. The K12
+reconciliation remains an Epic 6 catalog hold.
+
+The pending-state tests now run against isolated copies so they preserve their
+exact refusal streams and live-global guard controls after real approval and
+integration. All 31 tests passed both from the pending source (29.830 seconds)
+and from an isolated approved/integrated/done source view (28.138 seconds).
+The proof and raw output are retained in [delivery/](delivery/). This lifecycle
+fixture is test evidence only; real delivery is established by the published
+revision/blob/README checks, recorded in [integration.json](delivery/integration.json).
+
+## Final delivery verification
+
+The focused follow-up review completed all three independent layers. Eight direct
+patch groups improved fixture scope and evidence reproduction; one finding was
+rejected because the synthetic lifecycle source never claims real acceptance.
+No new review work was deferred. The original K12 catalog hold remains open.
+
+The final suite passed **36 tests in 24.761 seconds** with the real spec
+marked done and the published approval/labels present. The saved lifecycle proof
+also passed **36 tests in 25.477 seconds** and confirmed that real
+candidate, receipt and workflow bytes were unchanged. Five new tests protect
+owner-only observation substitution, unrelated-repository pass-through, duplicate
+workflow status rejection and capture/replay bindings.
+
+| Captured check | Result |
+| --- | --- |
+| [Final suite](delivery/final-tests.json) | exit 0; 36 tests, no skips |
+| [Saved lifecycle proof](delivery/final-lifecycle-proof.json) | exit 0; synthetic lifecycle metadata only; 36 tests |
+| [Default inventory verifier](delivery/final-default-completion.json) | exit 0; spec-done trigger enforces approved completion |
+| [Default label verifier](delivery/final-default-labels.json) | exit 0; integrated delivery verified |
+| [AD-23](delivery/final-ad23.json) | exit 0; exact-byte adoption retained |
+| [McpCli remote main readback](delivery/remote-main-mcpcli.json) | published inventory/approval revision retained |
+| [Folders remote main readback](delivery/remote-main-folders.json) | exact README-only delivery revision retained |
+
+Every command record binds full stdout/stderr bytes. The lifecycle summary uses
+relative sidecars and a repository-relative helper command; the pending run has
+its own [command manifest](delivery/lifecycle-pending.json). The retained
+[review snapshot and summary](delivery/review-followup.json) record the scope and
+triage. The story spec is done; sprint tracking is review, as required by the
+build workflow. All user-authorized publication and label delivery are complete.
+
+Final scan command:
+`python3 scripts/scan-evidence-secrets.py _bmad-output/implementation-artifacts/evidence/story-5-8 --receipt _bmad-output/implementation-artifacts/evidence/story-5-8/secret-scan-delivery-final.json`.
+Its result and exact packet file hashes are recorded in the
+[final receipt](secret-scan-delivery-final.json). No .NET build or live acceptance
+is claimed for these documentary and Python-test changes.
+
+## Historical pre-approval candidate evidence
+
+The following records describe the reviewed pending candidate before the user
+approved its exact bytes. References to pending approval/delivery in this section
+are historical; the publication and completion evidence above supersedes them.
 
 Three independent review layers produced 14 findings: 12 were addressed in 11
 patch groups, two low findings were rejected, and no review findings were deferred.
