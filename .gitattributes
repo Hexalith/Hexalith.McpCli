@@ -83,3 +83,6 @@ evidence/release-maintenance-20261112/census-1.0.6/** -text whitespace=-blank-at
 
 # Preserve current compiler diagnostics as captured fixture-only evidence.
 evidence/release-maintenance-20261112/current-tenant-logging-generation/** -text
+
+# Preserve exact delegated release-maintenance decision and census receipts.
+evidence/release-sync-2026-11-14/** -text

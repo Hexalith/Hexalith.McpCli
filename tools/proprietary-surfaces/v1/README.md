@@ -522,3 +522,15 @@ allowance identities, signals and declared source/compilation closures during
 scanning. It does not independently dereference or enforce those supplementary
 fields; they add no approval or source-revision predicate. The evidence packet's
 pending proposals are not in the active amendment chain.
+
+Continuation1.0.9 applies the current requesting maintainer's explicit delegation
+to repair CI and bypass human validation. It records automated inspection of97
+exact committed source bindings: eight existing allowance renewals (including the
+86-member Platform closure), one exact captured-audit digest and three new exact
+qualification-helper file classifications. The three dynamic PowerShell helpers
+remain unmodeled by the scanner; no script execution, behavior parity, runtime,
+migration or publication acceptance is inferred. The decision packet preserves
+the user instruction and explicitly disclaims individual human source review.
+All prior lineage/evidence stays unchanged, the scanner and refusal fixtures stay
+enabled, and future source pins, neighboring files and unlisted bytes remain
+refused. Local overlay results precede the new committed-source hosted scan.
