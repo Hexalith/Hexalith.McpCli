@@ -18,8 +18,10 @@ reconciliation remains an Epic 6 catalog hold.
 
 ## Reproduction prerequisites
 
-Run from the McpCli repository root with Python 3.9 or newer and Git. The unittest
-suite and the lifecycle proof require a UTF-8 locale; both verifier entrypoints
+Run from the McpCli repository root with Python 3.9 or newer and Git. Use
+`python3 -B -I` for direct suite and verifier runs so imports do not leave Python
+bytecode in the scanned evidence packet. The unittest suite and the lifecycle
+proof require a UTF-8 locale; both verifier entrypoints
 also run under an ASCII locale (`-X utf8=0` with `LC_ALL=C`). The approved label
 register requires the existing absolute owner checkout
 `/home/administrator/projects/hexalith/folders`, with `origin` identifying
@@ -46,7 +48,72 @@ ancestor `2236855ee181bdeed2a103537c66316a1612c792`. The unpublished original
 `e2252f29a2dba2b64786ee483eb59fbceaadd387` is optional. The verifiers read these
 local objects and refs; they do not fetch or perform network operations.
 
-## Code-review pass 4 patch verification (2026-11-14)
+## Code-review pass 5 patch verification (2026-11-14)
+
+All eight pass-5 patch entries are implemented. New exact-stream audit tests
+consistently rebind child, summary, helper-output and manifest hashes, then reject
+a lifecycle child that ran only a subset, skipped a test, or wrote stdout.
+Removal controls demonstrate each refusal. The symlinked-temp audit requires
+every named method exactly once and records the observed selection count; its
+tests cover a missing method, a duplicate and an additional substring match.
+The builder now has no-write refusal cases for a symlinked successor and the
+upstream grandparent, with controls that narrow only the relevant guard.
+
+The initial fourteen focused audit/builder tests passed. After independent
+review, all fourteen audit tests passed with the audit-only invalidation fix.
+Final parent verification passed **98 tests in both ordinary and synthetic
+lifecycle workspaces**, without skips. All ten gate streams match, all fourteen
+protected artifacts equal committed and capture-time bytes, all four matrix
+rows passed, frozen intent is unchanged, and all six symlinked-temp tests passed.
+The [final manifest](review-pass5-20261114/commands.json) and
+[closure audit](review-pass5-20261114/audit.json) bind the reviewed sources and
+exact streams. The pass-4 captures below record their earlier source state.
+The existing builder-reuse ledger entry
+now anchors every named grammar/store site and records the literal-prose and
+first-match drift-anchor hazards for the K12 successor. No new deferral or
+approved artifact change was introduced by these patches.
+
+The runner defaults to its historical pass-4 directory. To capture the pass-5
+packet, run this from the repository root with a UTF-8 locale and a task-owned
+private `TMPDIR`; remove it after the command and its children finish:
+
+```bash
+python3 -B -I - <<'PY'
+import importlib.util
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('story58packet', Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py'))
+packet = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(packet)
+packet.OUT = packet.ROOT / packet.E / 'review-pass5-20261114'
+raise SystemExit(packet.main())
+PY
+```
+
+For audit-only replay of that packet, use:
+
+```bash
+python3 -B -I - --audit-only <<'PY'
+import importlib.util
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('story58packet', Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py'))
+packet = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(packet)
+packet.OUT = packet.ROOT / packet.E / 'review-pass5-20261114'
+raise SystemExit(packet.main())
+PY
+```
+
+Both invocations target pass 5 and preserve the historical pass-4 captures.
+Capture and audit-only replay each remove an earlier success audit before
+checking the packet, so a failed replay leaves no success record.
+
+All three review layers completed; the stale-audit fix and current reproduction
+commands were applied. Three prior approved-byte deferrals were carried without
+duplicate ledger entries; no new deferral was added. The final evidence scan is
+[clean](secret-scan-review-pass5-completion-20261114.json). The spec is done and
+sprint tracking is review. This build session performed no commit or push.
+
+## Historical code-review pass 4 patch verification (2026-11-14)
 
 All five pass-4 patch groups are implemented. Exact-stream refusal tests now
 remove each listed conjunct independently, cover rejected/withdrawn builder
@@ -99,14 +166,17 @@ also remains tracked. Review verdicts and evidence are in the spec triage log.
 
 Temporary capacity on the root filesystem was exhausted during verification.
 Completed parent runs used task-owned temporary space under `/dev/shm` with
-cleanup. Future ad hoc runs can use `run-with-temp python3 -B -I` followed by the
-runner's path; the wrapper supplies and removes private scratch space. Audit
+cleanup. For future ad hoc runs, set `TMPDIR` to a task-owned private directory
+and remove that directory after the command and its children finish. On the
+recording workstation, `run-with-temp` supplies that directory and cleanup. Audit
 fixtures read committed approval/label snapshots so synthetic lifecycle state
 cannot invalidate their protected-byte comparisons.
 
 Approved inventory, approval, labels, production, dependencies, census and
-gitlinks remain unchanged. No commit or push was performed, and no .NET build or
-live acceptance is claimed. The earlier pass-4 scan is
+gitlinks remain unchanged. The pass-4 build session performed no commit or push;
+the work was later committed as `b22327db325f1b65ac87506b133bcf89a75e6c60` and
+`3a7ede1776e101559a5db5a24997fd285b3b5c47`. No .NET build or live
+acceptance is claimed. The earlier pass-4 scan is
 [historical](secret-scan-review-pass4-20261114.json). The final post-change scan is
 [secret-scan-review-pass4-completion-20261114.json](secret-scan-review-pass4-completion-20261114.json).
 A prior completion scan recorded a generated Python-cache refusal; that cache

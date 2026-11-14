@@ -1,0 +1,11 @@
+test_lifecycle_proof_rejects_child_candidate_mutation_without_writes (test_verify_amendment.FixtureTests.test_lifecycle_proof_rejects_child_candidate_mutation_without_writes) ... ok
+test_lifecycle_proof_rejects_child_workflow_mutation_without_writes (test_verify_amendment.FixtureTests.test_lifecycle_proof_rejects_child_workflow_mutation_without_writes) ... ok
+test_lifecycle_proof_rejects_each_damaged_setup_without_writes (test_verify_amendment.FixtureTests.test_lifecycle_proof_rejects_each_damaged_setup_without_writes) ... ok
+test_completion_rejects_rewritten_published_artifacts_and_half_removal (test_verify_amendment.LabelTests.test_completion_rejects_rewritten_published_artifacts_and_half_removal) ... ok
+test_completion_reports_later_owner_compatibility_drift (test_verify_amendment.LabelTests.test_completion_reports_later_owner_compatibility_drift) ... ok
+test_label_artifact_path_guards_and_removal (test_verify_amendment.LabelTests.test_label_artifact_path_guards_and_removal) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.103s
+
+OK

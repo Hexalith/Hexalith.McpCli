@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -524,7 +524,7 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
 
 The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged.
 
-- [ ] [Review][Patch] The audit's check that the synthetic lifecycle child ran the full suite has no test (medium) — `verify_packet.py:208-209` requires empty child stdout and checks the child's stderr with `check_tests(…, names, 'lifecycle child')`. These are the only checks behind `lifecycleSuiteTestsRan` (`:239`) and the "94 tests in both ordinary and synthetic lifecycle workspaces" claim (`verification.md:82`).
+- [x] [Review][Patch] The audit's check that the synthetic lifecycle child ran the full suite has no test (medium) — `verify_packet.py:208-209` requires empty child stdout and checks the child's stderr with `check_tests(…, names, 'lifecycle child')`. These are the only checks behind `lifecycleSuiteTestsRan` (`:239`) and the "94 tests in both ordinary and synthetic lifecycle workspaces" claim (`verification.md:82`).
   - The only lifecycle-child audit case corrupts the summary's stdout `sha256`, so it fails at the binding check first. No test contains `lifecycle child: exact unittest stderr mismatch` or `lifecycle child: exact stdout mismatch`.
   - The V layer replaced the child stderr with a 2-test `OK` stream and rebound the hashes, in an isolated copy. The real audit refused it. With `:209` removed, `audit()` passed and wrote `lifecycleSuiteTestsRan=94`.
   - Fix: add the following cases to `test_packet_audit_rejects_damaged_manifest_and_capture_bindings` or a sibling test that uses `audit_fixture`:
@@ -532,38 +532,38 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
     - a non-empty child stdout.
   - For each case, rebind the summary, helper-stdout and manifest hashes consistently, assert the exact refusal, and add a removal control.
   - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py:209]
-- [ ] [Review][Patch] The symlinked-temp audit accepts a dropped test and records a constant count (low) — `verify_packet.py:195-196` selects the discovered names that contain any `SYMLINK_TESTS` entry, and only requires the selection to be non-empty. `:240` then writes `symlinkTempTestsRan` as `len(SYMLINK_TESTS)`, not the number selected.
+- [x] [Review][Patch] The symlinked-temp audit accepts a dropped test and records a constant count (low) — `verify_packet.py:195-196` selects the discovered names that contain any `SYMLINK_TESTS` entry, and only requires the selection to be non-empty. `:240` then writes `symlinkTempTestsRan` as `len(SYMLINK_TESTS)`, not the number selected.
   - `audit_fixture` builds its stream with the same derived selection (`test_verify_amendment.py:455`), so no test can disagree with the audit.
   - The V layer renamed one entry to a name absent from the suite and rebuilt a matching 5-test stream in an isolated copy. `audit()` passed and still wrote `symlinkTempTestsRan=6`.
   - A renamed symlinked-`TMPDIR` regression test would therefore silently stop running while the audit still certifies six. Because `-k` matches substrings, an extra test can also be selected without changing the count.
   - Fix: require each `SYMLINK_TESTS` method to be selected exactly once, record `len(selected)`, and add a `PacketAuditTests` refusal case for a missing method, modelled on `test_packet_audit_rejects_changed_frozen_intent_and_missing_matrix_test`.
   - (V2, B8) [_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py:195]
-- [ ] [Review][Patch] The builder's symlink-refusal test covers only the upstream patch outputs (low) — `build_candidate.py:569-572` refuses, for all six planned writes, a destination or ancestor under `ROOT` that is a symlink. `test_builder_refuses_output_file_and_parent_symlinks_before_writes` (`test_verify_amendment.py:987`) symlinks only `upstream/folders/README.patch` and its `upstream/folders` parent.
+- [x] [Review][Patch] The builder's symlink-refusal test covers only the upstream patch outputs (low) — `build_candidate.py:569-572` refuses, for all six planned writes, a destination or ancestor under `ROOT` that is a symlink. `test_builder_refuses_output_file_and_parent_symlinks_before_writes` (`test_verify_amendment.py:987`) symlinks only `upstream/folders/README.patch` and its `upstream/folders` parent.
   - The V layer narrowed the guard to `[destination, destination.parent]`, and separately to the upstream outputs only. The test passed both times.
   - With either narrowing, the successor, receipt or label register could again be written through a symlinked file or ancestor. That is the case the pass-4 build review (E1) reproduced.
   - Fix: add two subtests, each asserting no writes and adding a removal control:
     - symlink `B.NEW`, and expect a refusal that names it, the first planned write;
     - symlink the `B.E/'upstream'` grandparent.
   - (V3) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:987]
-- [ ] [Review][Patch] `verification.md` again says no commit or push happened (low) — `verification.md:108` says "No commit or push was performed" without the build-session scope that pass 2 (B9/A5) restored.
+- [x] [Review][Patch] `verification.md` again says no commit or push happened (low) — `verification.md:108` says "No commit or push was performed" without the build-session scope that pass 2 (B9/A5) restored.
   - That text is committed in `3a7ede1`, which equals `origin/main`.
   - The pass-3 work was committed as `b22327d`, which `review-pass4-20261114/audit.json` records as `headAtCapture`.
   - Neither commit is named in the packet.
   - Fix: say that the pass-4 build session performed no commit or push, and that the work was later committed as `b22327d` and `3a7ede1`, following the `edd15cf` precedent (`verification.md:353`). Do not assert an authorization that is not recorded.
   - The same wording in this spec's Implementation Notes and triage log is left alone, because this review does not edit the spec under review. The sprint-status comment is refreshed with the status update.
   - (A1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:108]
-- [ ] [Review][Patch] The reproduction prerequisites omit `-B` for direct suite runs, so a documented run writes bytecode into the scanned packet (low) — `test_verify_amendment.py:19` sets `sys.dont_write_bytecode` only after the importer has already cached the test module.
+- [x] [Review][Patch] The reproduction prerequisites omit `-B` for direct suite runs, so a documented run writes bytecode into the scanned packet (low) — `test_verify_amendment.py:19` sets `sys.dont_write_bytecode` only after the importer has already cached the test module.
   - A run of `python3 -I -m unittest discover …` without `-B` therefore writes `evidence/story-5-8/__pycache__/test_verify_amendment.cpython-*.pyc`.
   - The secret scanner refuses binary files, and `verification.md:112` already records one generated-cache refusal.
   - This review's own baseline run without `-B` produced exactly that cache, and the A layer then observed it.
   - The prerequisites (`verification.md:21`) give no interpreter flags. Only the pass-4 runner instructions say `python3 -B -I` (`:60`), and that is also the runner's own suite command (`verify_packet.py:116`).
   - Fix: state in the prerequisites that direct suite and verifier runs use `python3 -B -I`, or that `__pycache__` is removed before scanning. The spec's Verification command is not edited.
   - (A2) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:21]
-- [ ] [Review][Patch] `verification.md` recommends a wrapper that exists only on the recording workstation (low) — `verification.md:102-103` says "Future ad hoc runs can use `run-with-temp python3 -B -I` …; the wrapper supplies and removes private scratch space".
+- [x] [Review][Patch] `verification.md` recommends a wrapper that exists only on the recording workstation (low) — `verification.md:102-103` says "Future ad hoc runs can use `run-with-temp python3 -B -I` …; the wrapper supplies and removes private scratch space".
   - `run-with-temp` is `~/.local/bin/run-with-temp`. It is not tracked or described in the repository, so the instruction fails elsewhere.
   - Fix: describe the portable step instead: set `TMPDIR` to a task-owned private directory and remove it afterwards. Alternatively, say that the wrapper is local to the recording workstation.
   - (B10) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:102]
-- [ ] [Review][Patch] The builder-reuse ledger entry names guard sites without anchors (low) — `deferred-work.md:1121` names the file-remove grammar guards in `surfaces()` and the guards in `upload_operations()` and `client_operations()`.
+- [x] [Review][Patch] The builder-reuse ledger entry names guard sites without anchors (low) — `deferred-work.md:1121` names the file-remove grammar guards in `surfaces()` and the guards in `upload_operations()` and `client_operations()`.
   - Its evidence (`:1124`) stops at `:188`, `:501-508` and `:519-520`, but CLAUDE.md requires `path:line` anchors for ledger entries.
   - Missing anchors:
     - `build_candidate.py:191`, `:193` and `:196`: file-remove registration and grammar;
@@ -572,7 +572,7 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
     - `:231`: the unchecked store.
   - Fix: add these anchors to the entry's evidence.
   - (B5) [_bmad-output/implementation-artifacts/deferred-work.md:1124]
-- [ ] [Review][Patch] The builder-reuse ledger entry omits the builder's unverified literal prose anchors (low) — The header and footer prose (`build_candidate.py:439-440`, `:478-483`) emits five literal anchors:
+- [x] [Review][Patch] The builder-reuse ledger entry omits the builder's unverified literal prose anchors (low) — The header and footer prose (`build_candidate.py:439-440`, `:478-483`) emits five literal anchors:
   - `BearerTransportPolicy.cs:12`;
   - `WorkspaceNativeEndpoints.cs:33`;
   - `FoldersModule.cs:3`;
@@ -678,9 +678,36 @@ Derivation rules (the decisions above apply first):
 
 - 2026-11-14: Final resumed pass-4 build completed all five code-review patches and four follow-up build-review patch groups. All three independent review layers completed; one new approved-byte explicit-null omission is assigned to the K12 successor, with five earlier deferrals carried without duplicate entries. The parent passed all 94 tests in ordinary and synthetic lifecycle runs, all ten exact gate stream checks, six symlinked-temp tests, both real completion gates under UTF-8/ASCII, AD-23, and tracked/untracked whitespace. The retained audit binds eleven executable inputs and fourteen protected artifacts against both current HEAD and capture-time hashes, confirms matrix coverage and frozen intent, and removes stale success on a failed rerun. Generator output/parent symlinks are refused before any write. Final evidence is in [the pass-4 manifest](evidence/story-5-8/review-pass4-20261114/commands.json) and [audit](evidence/story-5-8/review-pass4-20261114/audit.json). Spec is done and sprint tracking is review. Approved inventory, receipts, labels, production, dependencies, census and gitlinks are unchanged. The frozen scope requires separate explicit commit authorization; no commit or push was performed.
 
+- 2026-11-14: Implemented all eight code-review-pass-5 patch entries. Exact-stream audit tests consistently rebind lifecycle child/summary/helper/manifest hashes before testing subset, skipped-test and non-empty-stdout refusals, with removal controls. Symlinked-temp audit selection now requires each named method exactly once and records the observed count, protected by missing/duplicate/additional-match cases. Builder symlink tests cover the successor itself and the upstream grandparent, with controls narrowing only the demonstrated guard parts. Corrected reproduction flags, portable temporary-directory guidance, pass-4 commit history and the existing builder-reuse ledger's missing grammar/prose/drift anchors. All fourteen focused audit/builder tests pass; the final full capture/audit is left to coordinator verification after review. Approved inventory, receipts, labels, frozen intent, production, dependencies, census and gitlinks remain unchanged. This implementation session performed no commit or push.
+
+- 2026-11-14: Final resumed pass-5 build completed all eight code-review patches and both follow-up review patch groups. Parent verification passed all 98 tests in ordinary and synthetic lifecycle workspaces, ten exact gate stream checks, fourteen protected artifacts and their capture-time hashes, all four matrix rows, frozen intent and six symlinked-temp tests. The final [manifest](evidence/story-5-8/review-pass5-20261114/commands.json), [audit](evidence/story-5-8/review-pass5-20261114/audit.json) and [secret-scan receipt](evidence/story-5-8/secret-scan-review-pass5-completion-20261114.json) retain the evidence. Three existing approved-byte deferrals were carried without duplicate ledger entries; no new deferral was added. Spec is done and sprint tracking is review. Approved inventory, receipts, labels, frozen intent, production, dependencies, census and gitlinks are unchanged. This build session performed no commit or push.
+
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Resumed pass-5 build review (2026-11-14)
+
+All three independent layers completed before triage. The full snapshot is `/tmp/hexalith-job.5Zz4jvHG/story-5-8-review.diff`, against the preserved baseline `a92a2969db6903b8c6cca7e437446167e135ec9d`; this resumed run began at `2b366a24d7b93e37ef394e0cd78d090290c83fbc`. Parent verification passed all 97 tests in ordinary and synthetic lifecycle workspaces, ten exact gate stream checks, fourteen protected artifacts, six symlinked-temp tests, matrix coverage and frozen intent.
+
+| Finding | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| B1: failed audit-only replay retains a successful audit | medium | patch | Independently reproduced by the parent with `PacketAuditTests.audit_fixture`: after a successful audit, changing the tests exit code to 1 returns `(1, '', 'FAIL: tests: gate command/result mismatch\n')` while the old report remains byte-identical. Invalidate the report at audit entry and protect the success-then-failure case with a removal control. |
+| B2: manifest head and baseline fields are unvalidated | low | reject | Confirmed: changing only these informational fields still passes, and the arbitrary head is copied to `headAtCapture`. Capture itself obtains the canonical head from Git and writes the fixed baseline; executable inputs, exact gate streams, capture-time protected hashes, current committed bytes and frozen intent are independently checked. Deliberately rewriting generated provenance is unlikely in this bounded packet; new revision/schema guards add complexity without proving capture provenance. |
+| B3: duplicate manifest members use last-member semantics | low | reject | Confirmed with a duplicate exitCode member: the ordinary JSON reader uses the last value. The retained manifest and summary are generated by `json.dumps` and have no duplicates; duplicate rejection would add guards for hand-corrupted generated captures. The owner approval/overwrite boundary already rejects duplicates independently. |
+| B4: the runner defaults to the historical pass-4 directory | low | patch | The default path is intentional and earlier overwrite objections remain rejected. The new pass-5 packet nevertheless needs its exact capture and audit-only invocation documented. Add those commands using the existing `OUT` override, preserving the historical captures; a new output-directory CLI option is unnecessary. |
+| B5: a child can reserialize synthetic receipts without refusal | false | reject | The post-child comparison intentionally checks parsed synthetic approval/label state. Compact serialization leaves that state and the summary's approved/integrated fixture claim unchanged. Real candidate/receipt/workflow bytes are compared separately before and after the child; no real authority or required exact synthetic formatting boundary is bypassed. |
+| B6: census output can overwrite a measured Git file after comparison | medium | reject | The report writes follow the measured comparison and do not confine their destinations, so the described caller-selected output can invalidate its unchanged claim. This belongs to independent census maintenance included only by the preserved baseline. The frozen intent expressly forbids census changes; the helper is unchanged in this run and requires a separate maintenance task, as the prior pass-4 V1 scope decision established. |
+| B7: census receipt copying follows symlinked parents | medium | reject | `copy_receipts` checks only the final source component with `is_symlink()`; `is_file()` follows an intermediate link. This is the same independently maintained census helper, expressly excluded by the frozen intent. No census change or new story deferral is made. |
+| B8: semantic-retention claims exceed name-level evidence | medium | defer | carried: the same per-surface semantic-drift audit and successor decision remain in force; already tracked (`deferred-work.md:1085`). No duplicate entry or approved-byte edit. |
+| B9: K01 rows inherit the confidential-UI rationale | low | defer | carried: the same approved-byte defect remains assigned to the K12 successor; already tracked (`deferred-work.md:1054`). No duplicate entry. |
+| B10: V03 omits Q08 optional TaskId | low | defer | carried: the same M22/L38/Q08/V03 correction and independent authorization treatment remain assigned to the successor; already tracked (`deferred-work.md:1103`). No duplicate entry. |
+| E1: failed audit-only replay retains a successful audit | medium | patch | Same reproduced stale-report defect as B1; grouped only after its independent verdict. |
+| V1: failed audit-only replay retains a successful audit | medium | patch | The verification layer filed this under Other findings; the parent's independent reproduction confirms it. Same defect as B1/E1. |
+
+Two direct patch groups survive: audit-only invalidation and the current packet's reproduction commands. Three existing approved-byte deferrals are carried without duplicate entries. Approved artifacts remain unchanged.
+
+Both patch groups were applied by the original implementation agent. Parent verification then passed all 98 tests in both ordinary and synthetic lifecycle runs, all ten exact gate stream checks, fourteen protected artifacts, six symlinked-temp tests, all matrix rows, frozen intent and tracked/untracked whitespace. The [final pass-5 audit](evidence/story-5-8/review-pass5-20261114/audit.json) binds the final reviewed sources; the completion scan and post-transition replay are retained with the packet.
 
 ### Resumed pass-4 build review (2026-11-14)
 

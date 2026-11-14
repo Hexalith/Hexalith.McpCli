@@ -1,0 +1,87 @@
+{
+  "head": "2b366a24d7b93e37ef394e0cd78d090290c83fbc",
+  "specStatus": "done",
+  "sprintStatus": "review",
+  "commands": [
+    {
+      "name": "inventory",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass5-20261114/post-transition-inventory.stdout.txt",
+        "sha256": "51d77d50053d0b9714406efa30fa9cb49de704a10e686c9205e1a7d5c0a4437b"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass5-20261114/post-transition-inventory.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "labels",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass5-20261114/post-transition-labels.stdout.txt",
+        "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass5-20261114/post-transition-labels.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "audit-only",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-c",
+        "from pathlib import Path; import importlib.util; p=Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py'); s=importlib.util.spec_from_file_location('story58_replay',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.OUT=Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass5-20261114').resolve(); raise SystemExit(m.main())",
+        "--audit-only"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass5-20261114/post-transition-audit-only.stdout.txt",
+        "sha256": "ec02a8216a1d401237f0faf1d1133043b57952dcf5cac8bb8f9339f410f1668f"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass5-20261114/post-transition-audit-only.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "diff",
+        "--check",
+        "a92a2969db6903b8c6cca7e437446167e135ec9d"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass5-20261114/post-transition-whitespace.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass5-20261114/post-transition-whitespace.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

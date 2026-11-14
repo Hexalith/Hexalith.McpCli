@@ -406,6 +406,32 @@ class PendingCase(unittest.TestCase):
 
 
 class PacketAuditTests(unittest.TestCase):
+    def unittest_stream(self,names):
+        return (''.join(name+' ... ok\n' for name in names)+'\n'+'-'*70+'\nRan '+str(len(names))+' tests in 0.001s\n\nOK\n').encode()
+
+    def audit_entrypoint(self,runner):
+        out,err = io.StringIO(),io.StringIO()
+        with patch.object(sys,'argv',[runner.__file__,'--audit-only']),contextlib.redirect_stdout(out),contextlib.redirect_stderr(err):
+            code = runner.main()
+        return code,out.getvalue(),err.getvalue()
+
+    def rebind_stream(self,runner,manifest,name,stream,data):
+        row = next(row for row in manifest['commands'] if row['name'] == name)
+        (ROOT/B.E/row[stream]['path']).write_bytes(data)
+        row[stream]['sha256'] = B.sha(data)
+        runner.write(runner.OUT/'commands.json',manifest)
+
+    def rebind_lifecycle_child(self,runner,manifest,stream,data):
+        """Keep every outer binding valid while damaging the child claim itself."""
+        path = runner.OUT/('lifecycle-integrated.'+stream+'.txt')
+        path.write_bytes(data)
+        summary = runner.read(runner.OUT/'lifecycle-integrated.json')
+        summary[stream] = {'path':path.name,'sha256':B.sha(data)}
+        runner.write(runner.OUT/'lifecycle-integrated.json',summary)
+        stderr = (runner.OUT/'lifecycle-integrated.stderr.txt').read_text(encoding='utf-8')
+        stdout = (json.dumps(summary,indent=2)+'\n'+'\n'.join(stderr.splitlines()[-5:])+'\n').encode()
+        self.rebind_stream(runner,manifest,'lifecycle','stdout',stdout)
+
     def test_packet_audit_uses_unittest_verbose_descriptions(self):
         runner = load('packet58descriptions','review-pass4-20261114/verify_packet.py')
         case = unittest.FunctionTestCase(lambda:None,description='Documented test description')
@@ -429,8 +455,7 @@ class PacketAuditTests(unittest.TestCase):
             return pinned[path] if path in pinned else read(path,*args,**kwargs)
         with tempfile.TemporaryDirectory(dir=HERE,prefix='audit-fixture-') as temp,patch.object(runner,'OUT',Path(temp).resolve()),patch.object(Path,'read_bytes',committed):
             names = runner.test_names()
-            def tests(selected):
-                return (''.join(name+' ... ok\n' for name in selected)+'\n'+'-'*70+'\nRan '+str(len(selected))+' tests in 0.001s\n\nOK\n').encode()
+            tests = self.unittest_stream
             child = {'stdout':b'','stderr':tests(names)}
             summary = {
                 'suiteExitCode':0,'claim':'Suite independence from synthetic lifecycle metadata; real approved-completion is verified separately.',
@@ -570,6 +595,68 @@ class PacketAuditTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,'^'+re.escape(message)+'$'):
                     runner.audit()
 
+    def test_packet_audit_rejects_incomplete_lifecycle_child_and_removal_controls(self):
+        for damage in ['subset','skipped','stdout']:
+            with self.subTest(damage=damage),self.audit_fixture() as (runner,manifest):
+                names = runner.test_names()
+                if damage == 'stdout':
+                    stream,data,message = 'stdout',b'Unexpected child output\n','lifecycle child: exact stdout mismatch'
+                else:
+                    data = self.unittest_stream(names[:2]) if damage == 'subset' else self.unittest_stream(names).replace(
+                        (names[0]+' ... ok\n').encode(),(names[0]+" ... skipped 'fixture skip'\n").encode(),1).replace(b'\n\nOK\n',b'\n\nOK (skipped=1)\n')
+                    stream,message = 'stderr','lifecycle child: exact unittest stderr mismatch'
+                self.rebind_lifecycle_child(runner,manifest,stream,data)
+                self.assertEqual((1,'','FAIL: '+message+'\n'),self.audit_entrypoint(runner))
+                self.assertFalse((runner.OUT/'audit.json').exists())
+                original = runner.require
+                def removed(condition,actual):
+                    if actual != message: original(condition,actual)
+                with patch.object(runner,'require',side_effect=removed):
+                    expected = 'PASS: 10 exact gate streams, 14 protected artifacts, '+str(len(names))+' tests and synthetic lifecycle verified\n'
+                    self.assertEqual((0,expected,''),self.audit_entrypoint(runner))
+
+    def test_packet_audit_requires_each_symlink_method_once_and_removal_controls(self):
+        for damage in ['missing','duplicate']:
+            with self.subTest(damage=damage),self.audit_fixture() as (runner,manifest):
+                names = runner.test_names()
+                method = runner.SYMLINK_TESTS[0]
+                if damage == 'missing':
+                    methods = [method+'_missing',*runner.SYMLINK_TESTS[1:]]
+                else:
+                    methods = runner.SYMLINK_TESTS[:]
+                    names.append(next(name for name in names if name.split(' ',1)[0] == method))
+                selected = [name for name in names if any(method in name for method in methods)]
+                with patch.object(runner,'SYMLINK_TESTS',methods),patch.object(runner,'test_names',return_value=names):
+                    row = next(row for row in manifest['commands'] if row['name'] == 'symlink-temp-tests')
+                    row['command'] = next(command for name,command,environment in runner.commands() if name == row['name'])
+                    self.rebind_stream(runner,manifest,'tests','stderr',self.unittest_stream(names))
+                    self.rebind_lifecycle_child(runner,manifest,'stderr',self.unittest_stream(names))
+                    self.rebind_stream(runner,manifest,'symlink-temp-tests','stderr',self.unittest_stream(selected))
+                    message = 'symlink-temp-tests: required method selection mismatch'
+                    self.assertEqual((1,'','FAIL: '+message+'\n'),self.audit_entrypoint(runner))
+                    self.assertFalse((runner.OUT/'audit.json').exists())
+                    original = runner.require
+                    def removed(condition,actual):
+                        if actual != message: original(condition,actual)
+                    with patch.object(runner,'require',side_effect=removed):
+                        expected = 'PASS: 10 exact gate streams, 14 protected artifacts, '+str(len(names))+' tests and synthetic lifecycle verified\n'
+                        self.assertEqual((0,expected,''),self.audit_entrypoint(runner))
+                    self.assertEqual(len(selected),runner.read(runner.OUT/'audit.json')['symlinkTempTestsRan'])
+
+    def test_packet_audit_counts_additional_symlink_substring_matches(self):
+        with self.audit_fixture() as (runner,manifest):
+            names = runner.test_names()
+            method = runner.SYMLINK_TESTS[0]
+            names.append(next(name for name in names if name.split(' ',1)[0] == method).replace(method,method+'_additional'))
+            selected = [name for name in names if any(method in name for method in runner.SYMLINK_TESTS)]
+            with patch.object(runner,'test_names',return_value=names):
+                self.rebind_stream(runner,manifest,'tests','stderr',self.unittest_stream(names))
+                self.rebind_lifecycle_child(runner,manifest,'stderr',self.unittest_stream(names))
+                self.rebind_stream(runner,manifest,'symlink-temp-tests','stderr',self.unittest_stream(selected))
+                expected = 'PASS: 10 exact gate streams, 14 protected artifacts, '+str(len(names))+' tests and synthetic lifecycle verified\n'
+                self.assertEqual((0,expected,''),self.audit_entrypoint(runner))
+            self.assertEqual(7,runner.read(runner.OUT/'audit.json')['symlinkTempTestsRan'])
+
     def test_packet_audit_rejects_changed_frozen_intent_and_missing_matrix_test(self):
         with self.audit_fixture() as (runner,manifest):
             read = Path.read_bytes
@@ -631,6 +718,28 @@ class PacketAuditTests(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError,'^fixture: gate failed; inspect retained streams$'):
                         runner.capture()
                 self.assertEqual(previous,audit_path.read_bytes())
+
+    def test_failed_audit_only_invalidates_prior_audit_and_removal_control(self):
+        with self.audit_fixture() as (runner,manifest):
+            expected = 'PASS: 10 exact gate streams, 14 protected artifacts, '+str(len(runner.test_names()))+' tests and synthetic lifecycle verified\n'
+            self.assertEqual((0,expected,''),self.audit_entrypoint(runner))
+            audit_path = runner.OUT/'audit.json'
+            previous = audit_path.read_bytes()
+            manifest['inputs'] = {}
+            runner.write(runner.OUT/'commands.json',manifest)
+            failure = (1,'','FAIL: recorded executable inputs differ from current files\n')
+            self.assertEqual(failure,self.audit_entrypoint(runner))
+            self.assertFalse(audit_path.exists())
+            audit_path.write_bytes(previous)
+            line = "    (OUT/'audit.json').unlink(missing_ok=True)\n"
+            source = inspect.getsource(runner.audit)
+            self.assertEqual(1,source.count(line))
+            namespace = {}
+            exec(source.replace(line,''),runner.__dict__,namespace)
+            self.assertIs(namespace['audit'].__globals__,runner.__dict__)
+            with patch.object(runner,'audit',namespace['audit']):
+                self.assertEqual(failure,self.audit_entrypoint(runner))
+            self.assertEqual(previous,audit_path.read_bytes())
 
     def test_untracked_whitespace_accepts_diff_status_only_with_empty_streams(self):
         runner = load('packet58whitespace','review-pass4-20261114/verify_packet.py')
@@ -988,26 +1097,29 @@ class AmendmentTests(PendingCase):
         paths = [B.NEW,B.E/'approval.json',B.E/'labels.json',*[B.E/'upstream/folders'/name for name in
                  ['README.before.section.md','README.after.section.md','README.patch']]]
         output = B.E/'upstream/folders/README.patch'
-        for kind in ['file','parent']:
+        for kind in ['file','parent','successor','grandparent']:
             with self.subTest(kind=kind),workspace_view() as root,tempfile.TemporaryDirectory() as temp:
                 external = Path(temp).resolve()/'user-documents'
                 external.mkdir()
-                if kind == 'file':
+                if kind in {'file','successor'}:
                     target = external/'user-document.txt'
                     target.write_bytes(b'Existing user document.\n')
-                    (root/output).unlink()
-                    (root/output).symlink_to(target)
-                    refused = output
+                    refused = B.NEW if kind == 'successor' else output
+                    (root/refused).unlink()
+                    (root/refused).symlink_to(target)
                 else:
+                    link = output.parent if kind == 'parent' else B.E/'upstream'
+                    documents = external if kind == 'parent' else external/'folders'
+                    documents.mkdir(exist_ok=True)
                     for path in paths[-3:]:
-                        (external/path.name).write_bytes(b'Existing user document: '+path.name.encode()+b'\n')
-                    shutil.rmtree(root/output.parent)
-                    (root/output.parent).symlink_to(external,target_is_directory=True)
+                        (documents/path.name).write_bytes(b'Existing user document: '+path.name.encode()+b'\n')
+                    shutil.rmtree(root/link)
+                    (root/link).symlink_to(external,target_is_directory=True)
                     refused = paths[-3]
                 def outputs():
                     return {str(path):(root/path).read_bytes() for path in paths}
                 def user_documents():
-                    return {path.name:path.read_bytes() for path in external.iterdir()}
+                    return {str(path.relative_to(external)):path.read_bytes() for path in external.rglob('*') if path.is_file()}
                 before,external_before = outputs(),user_documents()
                 message = 'refusing symlink output destination: '+str(refused)
                 expected = (1,'','FAIL: '+message+'\n')
@@ -1020,7 +1132,19 @@ class AmendmentTests(PendingCase):
                 original = B.require
                 def removed(condition,actual):
                     if not actual.startswith('refusing symlink output destination: '): original(condition,actual)
-                with patch.object(B,'ROOT',root),patch.object(B,'require',side_effect=removed):
+                if kind in {'successor','grandparent'}:
+                    condition = 'not any(part.is_symlink() for part in [destination,*destination.parents] if part.is_relative_to(ROOT))'
+                    narrowed = ('not path.is_relative_to(E / \'upstream\') or '+condition if kind == 'successor'
+                                else condition.replace('[destination,*destination.parents]','[destination,destination.parent]'))
+                    source = inspect.getsource(B.main)
+                    self.assertEqual(1,source.count(condition))
+                    namespace = {}
+                    exec(source.replace(condition,narrowed),B.__dict__,namespace)
+                    self.assertIs(namespace['main'].__globals__,B.__dict__)
+                    control = patch.object(B,'main',namespace['main'])
+                else:
+                    control = patch.object(B,'require',side_effect=removed)
+                with patch.object(B,'ROOT',root),control:
                     self.assertEqual((0,'Prepared Folders 1.1.0 pending candidate and PS10/PS11 README-only patch; no approval or delivery granted.\n',''),invoke(B))
                 self.assertNotEqual(external_before,user_documents())
 

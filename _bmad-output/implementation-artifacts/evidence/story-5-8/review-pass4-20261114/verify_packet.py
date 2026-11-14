@@ -168,12 +168,14 @@ def capture():
 
 
 def audit():
+    (OUT/'audit.json').unlink(missing_ok=True)
     manifest = read(OUT/'commands.json')
     require(manifest['inputs'] == input_hashes(),'recorded executable inputs differ from current files')
     expected_commands = commands()
     require([row['name'] for row in manifest['commands']] == [row[0] for row in expected_commands],'gate manifest coverage/order mismatch')
     names = test_names()
     streams = {}
+    symlink_selected = []
     for row,(name,command,environment) in zip(manifest['commands'],expected_commands):
         require(row['exitCode'] == 0 and row['command'] == command and row['cwd'] == str(ROOT),name+': gate command/result mismatch')
         expected_environment = dict(environment)
@@ -194,6 +196,10 @@ def audit():
             require(stdout == b'',name+': exact stdout mismatch')
             selected = names if name == 'tests' else [test for test in names if any(method in test for method in SYMLINK_TESTS)]
             require(bool(selected),name+': no test methods selected')
+            if name == 'symlink-temp-tests':
+                require(all(sum(test.split(' ',1)[0] == method for test in selected) == 1 for method in SYMLINK_TESTS),
+                        name+': required method selection mismatch')
+                symlink_selected = selected
             check_tests(stderr,selected,name)
         elif name != 'lifecycle':
             expected_stdout = INVENTORY_PASS if name.startswith('inventory') else LABEL_PASS if name.startswith('labels') else AD23_PASS if name == 'ad23' else b''
@@ -237,7 +243,7 @@ def audit():
         'commandsInManifest':len(manifest['commands']),'commandsWithBothStreamHashesAndExactContentVerified':len(streams),
         'executableInputHashesRecorded':len(manifest['inputs']),'executableInputsEqualCurrent':True,
         'suiteTestsRan':len(names),'suiteSkips':0,'lifecycleSuiteTestsRan':len(names),
-        'lifecycleRealInputsUnchanged':True,'symlinkTempTestsRan':len(SYMLINK_TESTS),
+        'lifecycleRealInputsUnchanged':True,'symlinkTempTestsRan':len(symlink_selected),
         'matrixCoverage':coverage,'matrixRowsAllPassed':True,'protectedArtifacts':protected,
         'protectedArtifactsAllEqualHead':True,'protectedArtifactsEqualCapture':True,'frozenIntentUnchanged':True}
     write(OUT/'audit.json',result)
