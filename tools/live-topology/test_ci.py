@@ -31,6 +31,10 @@ COMPATIBILITY_VERSIONS = {
     'Microsoft.AspNetCore.SignalR.StackExchangeRedis': '10.0.15',
     'Microsoft.OpenApi': '2.13.0',
 }
+PARTIES_COMPATIBILITY_VERSIONS = {
+    'Hexalith.Commons': '2.30.10',
+    'Hexalith.Commons.Http': '2.30.10',
+}
 
 TOOL = r'''#!/usr/bin/env python3
 import hashlib, json, os, pathlib, subprocess, sys
@@ -923,7 +927,8 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         catalog = self.root / 'references/Hexalith.Builds/Props/Directory.Packages.props'
         original_versions = {package: '11.0.0' for package in COMPATIBILITY_VERSIONS}
         original_versions.update({'Hexalith.Commons.UniqueIds': '3.0.0', 'Microsoft.OpenApi': '3.11.0',
-                                  'Unrelated.Package': '99.0.0'})
+                                  'Unrelated.Package': '99.0.0', 'Hexalith.Commons.Other': '3.0.0'})
+        original_versions.update({package: '3.0.0' for package in PARTIES_COMPATIBILITY_VERSIONS})
         catalog.write_text('<Project><ItemGroup>' + ''.join(
             '<PackageVersion Include="' + package + '" Version="' + version + '" />'
             for package, version in original_versions.items()) + '</ItemGroup></Project>')
@@ -940,12 +945,14 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             ('references/Hexalith.Tenants/src/Hexalith.Tenants.Server', 'net10.0', True),
             ('references/Hexalith.Parties/src/Hexalith.Parties', 'net10.0', True),
             ('references/Hexalith.Parties/src/Hexalith.Parties.Contracts', 'net10.0', True),
+            ('references/Hexalith.Parties/src/Hexalith.Parties.Security', 'net10.0', True),
             ('references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions', 'net10.0', True),
             ('src/Hexalith.McpCli', 'net10.0', False),
             ('tests/Hexalith.McpCli.ConformanceHost', 'net10.0', False),
             ('tests/Hexalith.McpCli.AppHost', 'net10.0', False),
             ('references/Other/src/Hexalith.Tenants', 'net10.0', False),
             ('references/Hexalith.Tenants/src-extra/Other.Host', 'net10.0', False),
+            ('references/Hexalith.Parties/src-extra/Other.Host', 'net10.0', False),
         ]
         projects.extend((relative, 'net11.0', selected) for relative, _, selected in list(projects) if selected)
         for phase in ('overlay-only', 'hook-only', 'both'):
@@ -970,7 +977,10 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                     actual = json.loads(result.stdout)
                     self.assertEqual(framework, actual['Properties']['TargetFramework'])
                     compatible = selected and framework == 'net10.0' and phase != 'overlay-only'
-                    self.assertEqual(original_versions | (COMPATIBILITY_VERSIONS if compatible else {}),
+                    expected = original_versions | (COMPATIBILITY_VERSIONS if compatible else {})
+                    if compatible and relative.startswith('references/Hexalith.Parties/src/'):
+                        expected |= PARTIES_COMPATIBILITY_VERSIONS
+                    self.assertEqual(expected,
                                      {item['Identity']: item['Version'] for item in actual['Items']['PackageVersion']})
 
     def test_source_compatibility_refuses_changed_missing_duplicate_conditional_and_unknown_root_rows(self):

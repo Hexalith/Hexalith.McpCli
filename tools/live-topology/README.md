@@ -237,7 +237,12 @@ the root's exact five reviewed net10 compatibility overrides: UniqueIds 2.30.10,
 JwtBearer/OpenApi/SignalR.StackExchangeRedis 10.0.15 and Microsoft.OpenApi 2.13.0.
 These apply only to net10 builds of the selected owners' source project graphs and the owned
 gateway host; the ordinary CLI and enrolled-module package selections retain
-their own catalog. Missing, changed, conditional, duplicate or unknown root
+their own catalog. The archived net10 Parties source graph additionally selects
+exact public `Hexalith.Commons` and `Hexalith.Commons.Http` 2.30.10 archives in the
+late hook. These two private selections preserve the source host's framework;
+they are separate from the seven validated root override rows and do not pin
+other Commons packages or apply to Tenants, the gateway, CLI or net11 builds.
+Missing, changed, conditional, duplicate or unknown root
 package overrides refuse preparation and execution. A task-owned MSBuild
 post-import override also reaches SDK
 owner preparation and later Aspire child rebuilds, clearing owner-appended

@@ -47,6 +47,11 @@ SOURCE_COMPATIBILITY_VERSIONS = {
     'Microsoft.AspNetCore.SignalR.StackExchangeRedis': '10.0.15',
     'Microsoft.OpenApi': '2.13.0',
 }
+# Private selections for the archived net10 Parties host; these are not root overrides.
+PARTIES_SOURCE_COMPATIBILITY_VERSIONS = {
+    'Hexalith.Commons': '2.30.10',
+    'Hexalith.Commons.Http': '2.30.10',
+}
 
 
 def current_runtime_profile() -> dict:
@@ -628,6 +633,14 @@ def prepare(evidence: Path) -> None:
             'Condition': "'$(TargetFramework)' == 'net10.0' And (" + source_condition + ')'})
         for package, version in compatibility.items():
             ET.SubElement(compatible_packages, 'PackageVersion', {'Update': package, 'Version': version})
+        # The frozen Parties host/Security graph also directly references these two
+        # Commons packages, whose current catalog versions require net11. Keep this
+        # private compatibility selection separate from the seven root override rows.
+        parties_condition = "'$(TargetFramework)' == 'net10.0' And $(MSBuildProjectFullPath.StartsWith('" \
+            + msbuild_path_literal(ROOT / 'references/Hexalith.Parties/src') + "/'))"
+        parties_packages = ET.SubElement(overrides_xml, 'ItemGroup', {'Condition': parties_condition})
+        for package, version in PARTIES_SOURCE_COMPATIBILITY_VERSIONS.items():
+            ET.SubElement(parties_packages, 'PackageVersion', {'Update': package, 'Version': version})
         # The AppHost loads the root's Abstractions assembly. Source owners must
         # compile against that same version, including later SDK/Aspire rebuilds.
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
