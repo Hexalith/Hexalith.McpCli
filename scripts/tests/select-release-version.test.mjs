@@ -46,7 +46,7 @@ function git(cwd, ...args) {
 function snapshot(cwd) {
     return {
         head: git(cwd, 'rev-parse', 'HEAD'),
-        headFile: readFileSync(join(cwd, '.git/HEAD'), 'utf8'),
+        headFile: readFileSync(resolve(cwd, git(cwd, 'rev-parse', '--git-path', 'HEAD')), 'utf8'),
         refs: git(cwd, 'for-each-ref', '--format=%(refname) %(objectname) %(symref)'),
         status: git(cwd, 'status', '--porcelain', '--untracked-files=all'),
     };
