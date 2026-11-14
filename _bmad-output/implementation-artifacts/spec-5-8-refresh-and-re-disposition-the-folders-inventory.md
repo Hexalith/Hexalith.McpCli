@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'done'
+status: 'in-progress'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -512,6 +512,116 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
 - B12 false: the scope was the user's choice. The excluded files are captures and receipts, as in passes 1–3.
 - V other false: same as B8.
 - A3 low: the pass-3 "Thirteen" miscount. Fixing it would edit the earlier review row, so it gets the erratum note above instead.
+
+Code review pass 5 (bmad-code-review, 2026-11-14). It ran after `3a7ede1` committed the pass-4 patches and the resumed pass-4 build review's four patch groups.
+
+**Scope:** the deliverables, 5,346 diff lines in 15 files, `a92a296..HEAD` at `3a7ede1`. The set is the pass-4 file set plus the new `review-pass4-20261114/verify_packet.py` and the Folders label commit `db40bda8`. Stream captures, secret-scan receipts, `commands.json`, `audit.json` and the `pre-whitespace-capture/sources/` snapshot copies were left out.
+
+Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. They raised 32 findings: 10 survive in 8 entries (8 patch), and 22 were rejected.
+- The V layer demonstrated its gaps in isolated `workspace_view(pending=False)` copies. The real sources stayed unchanged.
+- The A layer reran both completion gates and AD-23, plus an audit-only replay redirected away from the retained `audit.json`. All passed.
+- Before triage, all 94 tests, both default completion gates and AD-23 also passed at `3a7ede1`.
+
+The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged.
+
+- [ ] [Review][Patch] The audit's check that the synthetic lifecycle child ran the full suite has no test (medium) — `verify_packet.py:208-209` requires empty child stdout and checks the child's stderr with `check_tests(…, names, 'lifecycle child')`. These are the only checks behind `lifecycleSuiteTestsRan` (`:239`) and the "94 tests in both ordinary and synthetic lifecycle workspaces" claim (`verification.md:82`).
+  - The only lifecycle-child audit case corrupts the summary's stdout `sha256`, so it fails at the binding check first. No test contains `lifecycle child: exact unittest stderr mismatch` or `lifecycle child: exact stdout mismatch`.
+  - The V layer replaced the child stderr with a 2-test `OK` stream and rebound the hashes, in an isolated copy. The real audit refused it. With `:209` removed, `audit()` passed and wrote `lifecycleSuiteTestsRan=94`.
+  - Fix: add the following cases to `test_packet_audit_rejects_damaged_manifest_and_capture_bindings` or a sibling test that uses `audit_fixture`:
+    - a child stderr that ran a subset or skipped tests;
+    - a non-empty child stdout.
+  - For each case, rebind the summary, helper-stdout and manifest hashes consistently, assert the exact refusal, and add a removal control.
+  - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py:209]
+- [ ] [Review][Patch] The symlinked-temp audit accepts a dropped test and records a constant count (low) — `verify_packet.py:195-196` selects the discovered names that contain any `SYMLINK_TESTS` entry, and only requires the selection to be non-empty. `:240` then writes `symlinkTempTestsRan` as `len(SYMLINK_TESTS)`, not the number selected.
+  - `audit_fixture` builds its stream with the same derived selection (`test_verify_amendment.py:455`), so no test can disagree with the audit.
+  - The V layer renamed one entry to a name absent from the suite and rebuilt a matching 5-test stream in an isolated copy. `audit()` passed and still wrote `symlinkTempTestsRan=6`.
+  - A renamed symlinked-`TMPDIR` regression test would therefore silently stop running while the audit still certifies six. Because `-k` matches substrings, an extra test can also be selected without changing the count.
+  - Fix: require each `SYMLINK_TESTS` method to be selected exactly once, record `len(selected)`, and add a `PacketAuditTests` refusal case for a missing method, modelled on `test_packet_audit_rejects_changed_frozen_intent_and_missing_matrix_test`.
+  - (V2, B8) [_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py:195]
+- [ ] [Review][Patch] The builder's symlink-refusal test covers only the upstream patch outputs (low) — `build_candidate.py:569-572` refuses, for all six planned writes, a destination or ancestor under `ROOT` that is a symlink. `test_builder_refuses_output_file_and_parent_symlinks_before_writes` (`test_verify_amendment.py:987`) symlinks only `upstream/folders/README.patch` and its `upstream/folders` parent.
+  - The V layer narrowed the guard to `[destination, destination.parent]`, and separately to the upstream outputs only. The test passed both times.
+  - With either narrowing, the successor, receipt or label register could again be written through a symlinked file or ancestor. That is the case the pass-4 build review (E1) reproduced.
+  - Fix: add two subtests, each asserting no writes and adding a removal control:
+    - symlink `B.NEW`, and expect a refusal that names it, the first planned write;
+    - symlink the `B.E/'upstream'` grandparent.
+  - (V3) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:987]
+- [ ] [Review][Patch] `verification.md` again says no commit or push happened (low) — `verification.md:108` says "No commit or push was performed" without the build-session scope that pass 2 (B9/A5) restored.
+  - That text is committed in `3a7ede1`, which equals `origin/main`.
+  - The pass-3 work was committed as `b22327d`, which `review-pass4-20261114/audit.json` records as `headAtCapture`.
+  - Neither commit is named in the packet.
+  - Fix: say that the pass-4 build session performed no commit or push, and that the work was later committed as `b22327d` and `3a7ede1`, following the `edd15cf` precedent (`verification.md:353`). Do not assert an authorization that is not recorded.
+  - The same wording in this spec's Implementation Notes and triage log is left alone, because this review does not edit the spec under review. The sprint-status comment is refreshed with the status update.
+  - (A1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:108]
+- [ ] [Review][Patch] The reproduction prerequisites omit `-B` for direct suite runs, so a documented run writes bytecode into the scanned packet (low) — `test_verify_amendment.py:19` sets `sys.dont_write_bytecode` only after the importer has already cached the test module.
+  - A run of `python3 -I -m unittest discover …` without `-B` therefore writes `evidence/story-5-8/__pycache__/test_verify_amendment.cpython-*.pyc`.
+  - The secret scanner refuses binary files, and `verification.md:112` already records one generated-cache refusal.
+  - This review's own baseline run without `-B` produced exactly that cache, and the A layer then observed it.
+  - The prerequisites (`verification.md:21`) give no interpreter flags. Only the pass-4 runner instructions say `python3 -B -I` (`:60`), and that is also the runner's own suite command (`verify_packet.py:116`).
+  - Fix: state in the prerequisites that direct suite and verifier runs use `python3 -B -I`, or that `__pycache__` is removed before scanning. The spec's Verification command is not edited.
+  - (A2) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:21]
+- [ ] [Review][Patch] `verification.md` recommends a wrapper that exists only on the recording workstation (low) — `verification.md:102-103` says "Future ad hoc runs can use `run-with-temp python3 -B -I` …; the wrapper supplies and removes private scratch space".
+  - `run-with-temp` is `~/.local/bin/run-with-temp`. It is not tracked or described in the repository, so the instruction fails elsewhere.
+  - Fix: describe the portable step instead: set `TMPDIR` to a task-owned private directory and remove it afterwards. Alternatively, say that the wrapper is local to the recording workstation.
+  - (B10) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:102]
+- [ ] [Review][Patch] The builder-reuse ledger entry names guard sites without anchors (low) — `deferred-work.md:1121` names the file-remove grammar guards in `surfaces()` and the guards in `upload_operations()` and `client_operations()`.
+  - Its evidence (`:1124`) stops at `:188`, `:501-508` and `:519-520`, but CLAUDE.md requires `path:line` anchors for ledger entries.
+  - Missing anchors:
+    - `build_candidate.py:191`, `:193` and `:196`: file-remove registration and grammar;
+    - `:205`: `upload_operations()` grammar;
+    - `:223`, `:225` and `:229`: the `client_operations()` upload kind, helper link and call grammar;
+    - `:231`: the unchecked store.
+  - Fix: add these anchors to the entry's evidence.
+  - (B5) [_bmad-output/implementation-artifacts/deferred-work.md:1124]
+- [ ] [Review][Patch] The builder-reuse ledger entry omits the builder's unverified literal prose anchors (low) — The header and footer prose (`build_candidate.py:439-440`, `:478-483`) emits five literal anchors:
+  - `BearerTransportPolicy.cs:12`;
+  - `WorkspaceNativeEndpoints.cs:33`;
+  - `FoldersModule.cs:3`;
+  - `OperationExecutor.cs:251`;
+  - `declarations.md:1`.
+
+  Only `Program.cs:61` is content-checked (`verify_amendment.py:163`). The byte-equality check compares against the same literals, so it cannot catch a stale one.
+  - `drift_evidence()` (`build_candidate.py:351`) anchors the first `JsonProperty("<field>"` anywhere in the generated client. It checks neither that the hit is unique nor that it falls inside a model block.
+  - At `7eab70e9`, every literal resolves to the intended line and each drift field has a single hit (checked). The approved bytes are therefore correct, and pass-1 B3 stands for the fixed pins.
+  - But this ledger entry exists for reusing the builder at a new pin. There, these anchors would go stale and still pass.
+  - Fix: add both hazards to the entry's summary and evidence. Prose anchors should be derived or resolved with `anchor()`, and each drift hit should be unique and inside the validated model block.
+  - (B6, E12) [_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py:439]
+
+**Rejected (22):**
+- B1 low: the README-only delivery check does not compare the delivery parent's README with the base.
+  - The delivered commit `db40bda8` is immutable, and its diff is exactly the two PS10/PS11 lines shown in the reviewed diff, so `verification.md:15` is true of it.
+  - Binding the parent would add a guard to a verifier that only ever runs against that commit (pass-2 V5).
+- B2 low: the receipt and register schemas are open, and `rolesCovered` is only checked as a superset.
+  - Completion binds the receipt bytes to `inventoryRevision` and `origin/main` (`verify_labels.py:89`), and the real `rolesCovered` equals `requiredApprovalRoles`.
+  - The register's structural fields are compared with the builder output. No gate reads an extra key (pass-1 B9, pass-2 V5, pass-3 B3).
+- B3 low: the approver is not compared with the 5.7 receipt. The receipt is byte-bound to the published revision, its `approvalSource` records the inherited identity, and the comparison would add a guard (pass-3 B3/B4).
+- B4 low: the "Exact replacement" route text omits `run.EntityId` and `ProjectionActorType`.
+  - The column is a routing summary that equally omits message ID, payload, correlation, extensions and paging. No pinned Folders Query declares a projection actor type.
+  - This is in approved bytes, and the K12 successor can list every forwarded field.
+- B7 false: the lifecycle proof's synthetic integrated state. The proof claims only that the suite is independent of synthetic lifecycle metadata, and real completion is verified separately (pass-3 B8).
+- B9 low: one test asserts Git's English `fatal:` text (pass-2 E7, pass-4 E13).
+- B11 low: no story owns the K12 successor, and Story 6.1 omits the hold. Story 5.12's gate fails cataloged excluded operations, and the ledger tracks the hold. Editing Epic 6 planning is outside this story (pass-2 B14, pass-3 B11).
+- E1 false: the audit requires empty verifier stderr, so a report-only `reported:` drift line fails it. Pass 4 (B1, B2) required exact gate streams precisely so that such a line cannot pass unnoticed. A capture taken under owner drift has to be reviewed and recaptured.
+- E2 false: `--audit-only` refuses under a different interpreter. The replay compares capture-time commands that name `sys.executable`, so a different interpreter fails loudly, and recapturing is the remedy.
+- E3 false: lifecycle-proof `main(root=…)` with a non-ancestor root, or a failed summary write. No caller passes a root, and the sidecars are written only after every check (pass-4 E7/E14).
+- E4 false: a prior label without the exact 1.0.0 link. The 5.7 register is hash-chained, and the delivered README bytes are compared exactly (pass-1 B6/E11, pass-3 B2).
+- E5 low: non-transactional builder writes. The builder refuses the approved packet (pass-1 E6, pass-3 E5, pass-4 E8).
+- E6 false: a duplicate pinned declaration ID. The pinned table has 48 unique IDs (pass-1 E9/E10, pass-3 B6). Duplicate checks for a new pin are already in the builder-reuse entry (`deferred-work.md:1121`).
+- E7 low: a different `ownerCheckout` clone (pass-4 B4).
+- E8 false: `check_anchors` uses `splitlines()` while `anchor()` counts `\n`.
+  - All 70 anchored files number their lines identically both ways at `7eab70e9` (checked).
+  - The anchored line always contains its needle, so a shift could only cause a loud failure, never a false pass.
+- E9 false: a bare `next()` raising StopIteration (pass-1 E5, pass-3 B5/E6, pass-4 E3).
+- E10 low: `verify_packet.py` raises a traceback on missing frozen markers or malformed manifest types. Both are loud nonzero failures. The markers exist in the spec and at the baseline, and named diagnostics would add guards.
+- E11 low: `compatibility_section()` ends at any `#` line.
+  - At the README base, the delivery and the current `origin/main`, the section is the last one and contains no `#` line (checked).
+  - Delivered bytes are compared as the whole README, so only the report-only drift line could be affected. Fence parsing would add complexity.
+- E13 false: model-class prefix matching. No class at either pin starts with the three model names (pass-1 E12, pass-4 E5).
+- E14 low: a `.git` gitfile with a relative `gitdir` breaks `workspace_view`.
+  - The failure is loud.
+  - McpCli has that layout only as other repositories' read-only `references/` submodule. That checkout lacks the nested Folders objects and the owner checkout that the suite already requires.
+  - Symlinking the resolved gitdir instead would change fixture isolation (`core.worktree`).
+- E15 low: free-form `approvedOn` dates (pass-2 B12, pass-3 B3, pass-4 E11).
+- E16 low: the delivered labels use `blob/main` (pass-1 B5/E19, pass-3 B1/E10).
 
 ## Design Notes
 

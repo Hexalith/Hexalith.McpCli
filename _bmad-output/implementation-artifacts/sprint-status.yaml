@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-14-2026 09:42'
+last_updated: '11-14-2026 10:15'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -98,7 +98,7 @@ development_status:
   5-5-retire-legacy-packages-and-platform-routes: done # Code review pass 2 2026-11-10: 13 patches applied (evidence only), 0 deferred, 35 rejected. Build review pass 1 2026-11-10: 8 patch groups applied, 1 deferred, 7 rejected. Delivery complete 2026-11-10: all PS01–PS14 labels on main in 7 owner repos (FrontComposer README-only; PS03/PS04 Descriptions await its reseal). Memories main green; EventStore, FrontComposer, Projects, ChatBot and Parties red runs pre-existing (identical on parents); Folders contract-spine-gates already red from its own PD10 drift, plus the label's csproj drift for its requalification. Platform census clean; Parties.Mcp retirement retained blocked by G01–G06 (deferred-work.md:944); SM-3 deadline 2027-02-05.
   5-6-reject-new-proprietary-surfaces-in-ci: done # 2026-11-12: census green at b381563 (policy 1.0.6, 17/17 roots). Release chain kept; owner 1.0.5/1.0.6 not in it; Compile excuse removed per owner choice A'. Owner hash-only 1.0.7 written (20 exclusions, 1 allowance; scan green, 17/17 roots); 21 allowances and 12 exclusions remain waiver-only.
   5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: done # Delivered 2026-11-13. Code review pass 4 2026-11-13: 6 patch groups applied, 0 deferred, 8 rejected; 49 tests, both completion gates and 26/26 guard-removal controls (live globals, identity control undetected) pass; corrects pass 3, whose 18-control claim supported 11. Approved bytes unchanged; two accepted deferrals remain tracked (approved-byte pending self-description; inherited NU1202/census CI red).
-  5-8-refresh-and-re-disposition-the-folders-inventory: review # 2026-11-14: all 5 pass-4 patches and 4 build-review groups complete; 94 tests pass in ordinary/synthetic runs; 10 exact gate streams, 14 protected/capture-time artifacts, matrix/frozen-intent checks, completion/ASCII/AD-23/symlink/whitespace gates pass. Three independent review layers complete. One new explicit-null approved-byte omission deferred to the K12 successor; five existing deferrals carried, technical re-citation retained. Approved inventory/receipt/labels unchanged. No commit or push.
+  5-8-refresh-and-re-disposition-the-folders-inventory: in-progress # 2026-11-14: code review pass 5 (deliverables a92a296..HEAD at 3a7ede1, 5,346 lines) left 8 patches as action items: 1 medium audit test gap (lifecycle child stream check), 2 low test gaps (symlink-temp selection/count, builder symlink outputs), 3 low verification.md fixes (commit-scope wording, -B prerequisite, local-only run-with-temp) and 2 low builder-reuse ledger fixes; 22 rejected, no new deferrals. 94 tests and both completion gates pass at 3a7ede1. Approved inventory/receipt/labels unchanged. Pass-3/4 work committed as b22327d and 3a7ede1.
   5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent: backlog
   5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: backlog
   5-11-reconcile-product-claims-and-the-migration-plan: backlog
