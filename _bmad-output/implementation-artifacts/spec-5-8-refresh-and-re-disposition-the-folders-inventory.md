@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'done'
+status: 'in-progress'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -214,6 +214,114 @@ The approved 1.1.0 bytes (SHA-256 `54a6f61d…`), `approval.json` and the delive
 - E23 low: commit subjects already published on `main` cannot be changed without rewriting history, and they are outside the reviewed diff.
 - A7 low: V09 points to "their affected rows in the 5.12 source table" (`:67`), so the rows are referenced (approved bytes). The K12 successor can carry the full list.
 - A8 low: G4/G5/V05 have new-pin anchors, and the verifier checks the premises (`verify_amendment.py:211-218`). Only the source-line citations are missing (approved bytes). The K12 successor can carry them.
+
+Code review pass 2 (bmad-code-review, 2026-11-14). It ran after `edd15cf` applied the pass-1 patches and the resumed build review's five patch groups.
+
+**Scope:** the deliverables again, 3,720 diff lines in 13 files. The range is `a92a296..HEAD` at `edd15cf`, over the pass-1 file set plus the Folders label commit `db40bda8`.
+
+Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. They raised 33 findings: 22 survive in 13 entries (10 patch, 3 defer), and 11 were rejected.
+
+The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged. The three defers follow pass-1 Decision 2: fold approved-byte defects into the K12 successor.
+
+- [ ] [Review][Patch] The published-graph fixture reads mutable state, so the retained lifecycle proof now fails and a later Folders relabel will break four tests (medium)
+  - `published_graph_fixture` reads the register from the working-tree `labels.json` and copies the working-tree `approval.json` (`test_verify_amendment.py:795-796`).
+  - It also points the fixture's `origin/main` at the owner checkout's moving `origin/main` (`:806`).
+  - I reran `delivery/lifecycle-proof.py` with its delivery directory redirected to a scratch folder. It now reports `Ran 50 tests … FAILED (failures=5)`: all five `test_real_publication_*` and `test_real_delivery_*` cases fail.
+    - In the synthetic lifecycle register, the integration commit is `LABEL_PIN` and the approval is synthetic, so the guard-removal runs never reach PASS.
+    - The retained `delivery/lifecycle-integrated.*` captures still show the 36-test pass from before the patches. `review-final-20261114/commands.json` never reran the helper.
+  - `published_guard_control` asserts empty stderr. But `verify_labels.py:97-98` prints a `reported:` line whenever the current `origin/main` compatibility section differs from the delivered one.
+    - Folders `origin/main` has already moved to `b915d3ec`; its README is unchanged so far.
+    - The planned K12-successor relabel of PS10/PS11 will make the four guard-control tests fail.
+  - Fix:
+    - Read the register and approval from their published commits with `git show`, and set the fixture's `refs/remotes/origin/main` to the delivery commit `db40bda8`.
+    - Rerun the lifecycle proof into a new task-owned packet and record its exact streams.
+  - (E1, B8) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:795]
+- [ ] [Review][Patch] The duplicate workflow-status guard has no test (medium) — `completion_requested` rejects a second status line (`verify_amendment.py:266`). Without that check, a second `done` line silently disables the done trigger at `:267`.
+  - The two "duplicate workflow statuses" tests assert the test-only helper's `fixture requires one workflow status` error (`test_verify_amendment.py:67-71`), not the verifier's.
+  - The V layer deleted `:266` in an isolated copy. Both `verify_amendment.py` and `verify_labels.py` then exit 0 with the pending PASS on a duplicated spec or sprint status, and all 50 tests still pass.
+  - Fix:
+    - For both the spec key and the sprint key, add a `workspace_view()` case that appends a second status line. Assert `(1, '', 'FAIL: duplicate workflow status …\n')` from both entrypoints through `fixture_process`.
+    - Add a deletion control like `test_real_verifier_calls_source_drift_guard_and_deletion_control`.
+  - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:266]
+- [ ] [Review][Patch] Label-register and inventory-verifier guards have no failing-input tests or removal controls (medium) — The test file contains none of these guards' messages, so disabling any one of them leaves all 50 tests passing.
+  - Label guards, demonstrated by the V layer on the real integrated register: with only the named `require` disabled, each tampered input returns `(0, 'PASS: … integrated delivery verified\n', '')`.
+    - `verify_labels.py:78`, canonical integrated label commit: a 12-character `db40bda8a107` resolves.
+    - `:39`, register schema: `schemaVersion = '9.9.9'`.
+    - `:54`, repository/base: `baseRevision = '0'*40` or a fork URL.
+    - `:61`, README hashes: `readme.beforeSha256 = '0'*64`.
+    - `:62`, README-only patch: an appended `src/Other.cs` hunk with a matching `sha256`.
+    - `:72`, retention semantics: no test either.
+  - Inventory-verifier guards (A layer):
+    - Some have mutable inputs, and removing them only changes the diagnostic, because the receipt hash chain and `:293` still reject: `:116` legacy identity, `:119` target-disposition inheritance, `:276` preserved authority (AC1) and `:293` candidate prose.
+    - The others have pinned inputs: `:145-147` set checks, `:164-166` registration and module, `:172` no decorated target, `:203` surface drift, `:218-223` premises and `:280` AD-23 adoption.
+  - Fix:
+    - Add exact-stream refusal cases with guard-removal controls for each guard.
+    - For the label cases, use `invoke_register`/`reject` and write the changed patch file into `self.root`.
+    - For the pinned premises, patch `B.source`, as `test_required_fence_attributes_and_guard_removal` does.
+    - CLAUDE.md requires a removal-sensitive test for every new guard.
+  - (V2, V3, A1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py:78]
+- [ ] [Review][Patch] The lifecycle proof's "real inputs unchanged" claim is a literal, not the checked comparison (low) — `delivery/lifecycle-proof.py:68` writes `'realInputsUnchanged': True`, and the only check is the `assert` at `:64`.
+  - Deleting `:64` leaves `test_lifecycle_proof_binds_local_captures_and_replay` green, because it asserts the constant (`test_verify_amendment.py:203`). Under `python -O` the `assert` is stripped, so the field stays `True` even if the real bytes changed.
+  - Fix:
+    - Compute the field from `before == after` and raise an exception instead of using `assert`.
+    - Add a negative control that changes a protected path's second snapshot, and assert the failure with no summary written.
+  - (V4, E2) [_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py:64]
+- [ ] [Review][Patch] Three 5.8 ledger anchors point at the wrong builder lines (low) — `deferred-work.md:1057`, `:1062` and `:1067` cite `build_candidate.py:241`, `:266` and `:304`.
+  - `edd15cf` added four lines, so these now land on a blank line, the R01/R02 gaps line and `row_name`.
+  - The targets are now `:245` (the shared K12 string), `:270` (`replacement()`) and `:308` (`drift()`). The newer SDK entry already cites `:308`.
+  - (B1, E8, A3) [_bmad-output/implementation-artifacts/deferred-work.md:1057]
+- [ ] [Review][Patch] The two resumed-build-review deferrals sit under the pass-1 code-review heading (low) — The SDK end-anchor and redirect entries (`deferred-work.md:1068-1077`) say "identified during resumed build review on 2026-11-14". They are filed under `## Deferred from: code review of spec-5-8… (2026-11-13)`.
+  - Their delivery vehicle, "next versioned Folders successor", also reads differently from the neighbouring entries' "K12 reconciliation successor".
+  - Fix: give them their own source/date heading, and name the K12 reconciliation successor as the vehicle. Epic 6 cannot catalog Folders before it exists, so that successor is the next Folders version.
+  - (B2, A4) [_bmad-output/implementation-artifacts/deferred-work.md:1068]
+- [ ] [Review][Patch] The SDK end-anchor ledger entry cites 2 of the 23 changed files (low) — The entry frames the change as client-SDK tightening and cites only `Oq2RequestValidation.cs:13` and `Oq2WireObjectConverter.cs:16`.
+  - Between `2236855e` and `7eab70e9`, `\z` anchors were added in 23 `src` files (none at `2236855e`). They include server and domain validators the legacy heads reach: `FolderCommandValidator`, `WorkspacePathPolicyValidator`, `StreamNameSegment`, `OrganizationAclCommandValidator`, `OrganizationProviderBindingCommandValidator`, and the provider-readiness and diagnostics query handlers.
+  - The successor's "determine affected rows" work would start from an incomplete premise. Fix: extend the summary and evidence to the server and domain validators.
+  - (B3) [_bmad-output/implementation-artifacts/deferred-work.md:1069]
+- [ ] [Review][Patch] `verification.md` still says no commit or push happened (low) — `verification.md:63-65` says "No commit or push was performed", but that text was committed in `edd15cf`, which equals `origin/main`. The title still says "(2026-11-13)" above the 2026-11-14 current-state section.
+  - The commit carries the user's authorship and no agent attribution, so the frozen "Never commit" rule (which binds the agent) is not shown to be violated. Only the current-state wording is stale.
+  - Fix: say that the build session performed no commit and that the user later committed the work as `edd15cf`, and date the title.
+  - (B9, A5) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:64]
+- [ ] [Review][Patch] The preserved-authority hash table lists 4 of the 8 bound authorities (low) — The table under "Preserved authority hashes, enforced against the baseline commit and bound by approval.json" omits four authorities that `B.AUTHORITIES` (`build_candidate.py:48-51`) pins and `approval.json` binds.
+  - The missing four are story-5-2 `approval.json` and `main-integration.json`, and story-5-7 `approval.json` and `labels.json`.
+  - Fix: add the four rows.
+  - (B10) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:208]
+- [ ] [Review][Patch] Test fixtures compare unresolved temp paths with the verifiers' resolved roots (low) — Three fixtures use `root = Path(temp)` (`test_verify_amendment.py:111`, `:649`, `:799`), while `verify_amendment.verify` and `verify_labels.verify` call `Path(root).resolve()`.
+  - Patched reads such as `path == self.root/B.E/'labels.json'` (`:735`) therefore miss under a symlinked `TMPDIR`, for example macOS `/private/var`.
+  - Fix: resolve each temp root (`Path(temp).resolve()`).
+  - (E6) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:111]
+- [x] [Review][Defer] Most M/L rows claim "unchanged … existing semantics retained", backed only by name-set checks (medium; approved bytes) — 96 rows say `unchanged: … existing semantics retained`.
+  - `check_source_drift` compares only tool, resource and leaf name sets plus six generated-model properties. `check_drift` compares cells with the builder's own `drift()` text.
+  - Between `2236855e` and `7eab70e9`, 28 legacy-head and AdapterCore files changed, for example:
+    - `CommandPipeline`, `CommandOptions`, `FileCommand` and `CredentialResolver` (CLI);
+    - `ToolPipeline`, `RequestBody`, `FileTools` and `McpCredentialResolver` (MCP);
+    - `RequestBodyParser`, `MutationSourcing`, `QuerySourcing`, `SafeBearerTokenHandler` and `LoopbackBypassProxy` (shared AdapterCore).
+  - The SDK end-anchor and redirect omissions (`deferred-work.md:1068`, `:1073`) are two instances. No ledger entry covers the remaining unaudited legacy-head drift.
+  - A retirement or parity decision that takes "existing semantics retained" at face value would miss unrecorded behavior differences, which the epic says block retirement.
+  - The A-layer point that the spec claims all acceptance conditions are satisfied would require editing this spec, so that part is rejected.
+  - (B7, A2) [_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md:113] — deferred: approved bytes. Correcting them needs a new version, exact-byte approval and a PS10/PS11 relabel. Per pass-1 Decision 2 the K12 successor carries a per-surface semantic drift audit, and its verifier should compare tool parameters and CLI options between the pins. Ledger: "code review pass 2 of spec-5-8".
+- [x] [Review][Defer] The approved 1.1.0 bytes still describe themselves as pending (low; approved bytes) — The metadata says `status: pending` and `approval_ref: '#a2-amendment-approval-pending'`, and the A2 section says "Until then this is a pending proposal". Every Approval cell links `#a2-amendment-approval-pending`.
+  - The delivered Folders README sends readers straight to this file.
+  - The 5.7 code review tracked the same defect for Admin 1.0.2 and technical 1.0.3 (`deferred-work.md:1037`). No Folders entry exists.
+  - (B4) [_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md:3] — deferred: approved bytes. The K12 successor should state approved status and cite `evidence/story-5-8/approval.json`. Ledger: "code review pass 2 of spec-5-8".
+- [x] [Review][Defer] Query-target replace rows attribute G1/G2 to Folders Story 5.14 (low; approved bytes) — `disposition()` emits `G1/G2/G4/G5 / Story 5.14` for every Query-target `replace` row (`build_candidate.py:259`). That is 114 occurrences in the inventory, for example M15 and Q16.
+  - In this document "gap / Story" names the owning story (as in `G6 / Story 5.10`). The G table says G1 is Folders 5.12 (done) and G2 is Folders 5.13.
+  - The Command variant, `G1/G2/G3/G5; command-payload-translation / Story 5.13`, is ambiguous in the same way.
+  - Epic 6 planning could read G2 as closing with 5.14.
+  - (A6) [_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md:113] — deferred: approved bytes. The K12 successor should give each gap its own story. Ledger: "code review pass 2 of spec-5-8".
+
+**Rejected (11):**
+- B5 low: bare story numbers in the approved bytes (Folders 5.10/5.12/5.13/5.14 next to McpCli 5.11). The G table names "Folders Story" for each gap, so readers can resolve them. This is cosmetic, in approved bytes, and the K12 successor can qualify them.
+- B6 low: the verifier "checks determinism, not correctness". By design it pairs builder derivation with independent checks at the pin: accounting, decorated type/wire/domain/aggregate/projection, resolvable anchors, G-story status and both-pin model fields. The semantic defects it missed are tracked for the successor. Independent rules for them would fail the approved bytes now.
+- B11 low: `git diff --check` without a revision, plus the packet-wide whitespace exemption. `git diff --check a92a296 HEAD` is clean, and no packet script, JSON, `verification.md` or `README.patch` has trailing whitespace or lacks a final newline. The exemption is the repository convention for scanned packets (5.7 pass-3 B16).
+- B12 low: free-form `approvedOn` dates and no ordering check. The receipts are immutable, both record `2026-11-13`, and a fix would add guards.
+- B13 low: the N01 anchor is the doc-comment line `:16` instead of `MapFolderPermissionMaintenance(` at `:17`. The anchor resolves to the adjacent non-blank line of the right member. This is cosmetic, in approved bytes, and the K12 successor can use exact declaration needles.
+- B14 low: the Epic 6 catalog hold exists only in prose. Enrollment needs an approved coverage inventory under `tools/inventory-coverage/v1/`, and Story 5.12's gate fails cataloged excluded operations. The hold is tracked at `deferred-work.md:1045`. A Folders-specific refusal in production gates is forbidden by the zero-module-specific rule and this story's Never list.
+- E3 low: the lifecycle proof's default delivery folder overwrites retained captures on rerun. Settled in pass 1 (E8): a rerun regenerates captures intentionally and Git shows the change. A transactional write adds complexity.
+- E4 false: a hard FAIL when the owner checkout lacks `origin/main` or a README. Completion requires `origin/main` for ancestry (`verify_labels.py:81`), so failing loudly is correct (pass-1 E4). No Folders revision without `README.md` has been shown.
+- E5 low: the executed 5.2 and 5.7 helpers are not pinned to the baseline. Both are immutable evidence of earlier stories, their hashes are bound in `review-final-20261114/commands.json`, and a pin would add a guard.
+- E7 low: the exact git `fatal:` text is locale-dependent. The recorded workspace runs `C.UTF-8` without git translations. Forcing `LC_ALL=C` would add an environment parameter to the shared builder's `git()` helper, and the exact-stream assertion is the repository rule.
+- V5 low: completion does not compare `labels.json` or the README patch with a published copy. Every structural field is checked against the builder output and the owner graph (`verify_labels.py:54-83`), so only the free-text delivery authorization is unpinned. The integrated register was not yet on `inventoryRevision`, so a fix needs a new revision binding and guard.
 
 ## Design Notes
 
