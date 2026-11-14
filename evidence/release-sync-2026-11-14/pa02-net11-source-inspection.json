@@ -1,0 +1,61 @@
+{
+  "parentRevision": "b791c56176c34cc1d3f0c602e9f983821b6378f9",
+  "repository": "references/Hexalith.Conversations",
+  "sourceRevision": "fc7200f84eb5a91ae331883f85a48ccb758c4302",
+  "surface": {
+    "repository": "references/Hexalith.Conversations",
+    "path": "_bmad/scripts/epic16_native_helper/Epic16.NativeHelper.csproj",
+    "kind": "project",
+    "identity": "Epic16.NativeHelper"
+  },
+  "classification": "non-surface-qualification-fixture",
+  "signals": [
+    "executable-project"
+  ],
+  "sourcePrefix": "_bmad/scripts/epic16_native_helper",
+  "compilationClosure": true,
+  "sources": [
+    {
+      "path": "Directory.Build.props",
+      "sha256": "d0c29b17319f684f86f7654c2bcd2b075464c876005e35924374008914f0f8be"
+    },
+    {
+      "path": "_bmad/scripts/epic16_native_helper/Epic16.NativeHelper.csproj",
+      "sha256": "f3057cab73b03ec077940f41c8b23a30032c563c1989dc680ac7b60764d4fcb5"
+    },
+    {
+      "path": "_bmad/scripts/epic16_native_helper/EventStore-LICENSE",
+      "sha256": "6af66baf053023d456706de321e3cea6a6edbb288ffec10f673186b1befe7ac2"
+    },
+    {
+      "path": "_bmad/scripts/epic16_native_helper/ProductMetadata.cs",
+      "sha256": "ef75fbd3b889b78c2e2678db4d99cdb7448f231f29b3d22cb300dff0bb5e3902"
+    },
+    {
+      "path": "_bmad/scripts/epic16_native_helper/Program.cs",
+      "sha256": "ca06233bdb4466306b9f0f329f1c087fec71a3f46005562454410503491a5e9a"
+    },
+    {
+      "path": "_bmad/scripts/epic16_native_helper/README.md",
+      "sha256": "e65d5be2a5597753bc167e6ebcebd4ce48a71e100d87e3e329601246d55138ac"
+    },
+    {
+      "path": "_bmad/scripts/epic16_native_helper/ReadModelBatchCanonicalJson.cs",
+      "sha256": "1f9430e33cefaa51757c36f27d57ed509a31d08aa5f35b05a4159b7d806362f9"
+    },
+    {
+      "path": "_bmad/scripts/epic16_native_helper/SignatureNames.cs",
+      "sha256": "a65eb6120957a90478e644ba06f02f38085bfbd8b767d1a97e2ad36838e03450"
+    },
+    {
+      "path": "_bmad/scripts/epic16_native_helper/TestConstruction.cs",
+      "sha256": "48b39a9048eadd8f6c094db9a267069bfdaf24af65e5a069e46337af7dbbe218"
+    }
+  ],
+  "changedSources": [
+    "Directory.Build.props"
+  ],
+  "change": "Only inherited TargetFramework net10.0 to net11.0; eight fixture files are byte-identical.",
+  "runtimeAcceptance": false,
+  "publicationAuthorized": false
+}
