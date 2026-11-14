@@ -232,7 +232,14 @@ checks every package archive and extracted asset against that proof, then builds
 `--no-restore`. Only the isolated advisory-feed refresh is disabled; native evidence
 retains the exact audited graph. No server dependency edge or loader exception is added. The source
 catalog retains the pinned root-declared Builds revision with the root's exact
-Redis 3.4.31 override. A task-owned MSBuild post-import override also reaches SDK
+Redis 3.4.31 override. After framework selection, the required post-import hook reuses
+the root's exact five reviewed net10 compatibility overrides: UniqueIds 2.30.10,
+JwtBearer/OpenApi/SignalR.StackExchangeRedis 10.0.15 and Microsoft.OpenApi 2.13.0.
+These apply only to net10 builds of the selected owners' source project graphs and the owned
+gateway host; the ordinary CLI and enrolled-module package selections retain
+their own catalog. Missing, changed, conditional, duplicate or unknown root
+package overrides refuse preparation and execution. A task-owned MSBuild
+post-import override also reaches SDK
 owner preparation and later Aspire child rebuilds, clearing owner-appended
 `WarningsNotAsErrors` exemptions so their compiler policy and deterministic bytes
 match preparation. Preparation hashes both private

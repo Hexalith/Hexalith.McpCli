@@ -40,6 +40,13 @@ NAMESPACES = {'user', 'pid', 'net', 'mnt'}
 OWNER_FILE = '.mcpcli-ci-owner'
 ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v13.6.5/aspire-cli-linux-x64-13.6.5.tar.gz'
 ASPIRE_CLI_SHA256 = '6e22bd4daaa62d09320638246e57bfaf56ed147a3a87cdd5eafec277726ca978'
+SOURCE_COMPATIBILITY_VERSIONS = {
+    'Hexalith.Commons.UniqueIds': '2.30.10',
+    'Microsoft.AspNetCore.Authentication.JwtBearer': '10.0.15',
+    'Microsoft.AspNetCore.OpenApi': '10.0.15',
+    'Microsoft.AspNetCore.SignalR.StackExchangeRedis': '10.0.15',
+    'Microsoft.OpenApi': '2.13.0',
+}
 
 
 def current_runtime_profile() -> dict:
@@ -308,6 +315,28 @@ def gateway_package_provenance() -> dict:
             'configurationSourceCommit': commit, 'configuration': configuration}
 
 
+def source_compatibility_versions(own_versions: ET.Element) -> dict[str, str]:
+    """Reuse only the exact reviewed, unconditional root package selections."""
+    expected = SOURCE_COMPATIBILITY_VERSIONS | {
+        'Hexalith.EventStore.Testing.Integration': EVENTSTORE_COHORT,
+        'StackExchange.Redis': '3.4.31',
+    }
+    rows = own_versions.findall('./ItemGroup/PackageVersion')
+    if len(rows) != len(expected) or len(list(own_versions.iter('PackageVersion'))) != len(rows) \
+            or any(group.attrib for group in own_versions.findall('ItemGroup') if group.findall('PackageVersion')) \
+            or any(item.attrib != {'Update': item.get('Update'), 'Version': expected.get(item.get('Update'))}
+                   or len(item) for item in rows) \
+            or {item.get('Update') for item in rows} != set(expected):
+        raise ValueError('The source compatibility selections require the exact finite unconditional root package overrides.')
+    return {item.get('Update'): item.get('Version') for item in rows
+            if item.get('Update') in SOURCE_COMPATIBILITY_VERSIONS}
+
+
+def msbuild_path_literal(path: Path) -> str:
+    """Escape a literal path before embedding it in MSBuild expressions or imports."""
+    return re.sub(r"[%$@'();?*]", lambda match: f'%{ord(match[0]):02X}', str(path))
+
+
 def require_source_catalog(prepared: dict) -> Path:
     """Recheck the pinned source catalog and exact private override before any child rebuild."""
     require_current_runtime_profile(prepared)
@@ -327,10 +356,12 @@ def require_source_catalog(prepared: dict) -> Path:
         path = private / name
         if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected.get(key):
             raise ValueError('The prepared private source package override changed or is missing.')
-    redis = [item.get('Version') for item in ET.parse(ROOT / 'Directory.Build.props').getroot().iter('PackageVersion')
+    own_versions = ET.parse(ROOT / 'Directory.Build.props').getroot()
+    redis = [item.get('Version') for item in own_versions.iter('PackageVersion')
              if item.get('Update') == 'StackExchange.Redis']
     if redis != ['3.4.31']:
         raise ValueError('The prepared source package override differs from the exact root Redis pin.')
+    source_compatibility_versions(own_versions)
     return private / 'source-runtime-overrides.targets'
 
 
@@ -552,7 +583,7 @@ def prepare(evidence: Path) -> None:
                      url, '-o', str(archive)], 130, evidence / ('public-' + package['id']))
             native_cohort.verify_archive(archive, package)
         # Source checkouts do not initialize their nested Builds gitlinks. Use the pinned root
-        # catalog and its explicit Redis floor for the qualified source host builds.
+        # catalog and the root's reviewed net10 compatibility selections for source hosts.
         builds_root = ROOT / 'references/Hexalith.Builds'
         declared_builds = bounded(['git', 'rev-parse', 'HEAD:references/Hexalith.Builds'],
                                   10, evidence / 'builds-declared', cwd=ROOT)
@@ -570,9 +601,16 @@ def prepare(evidence: Path) -> None:
         mcpcli = [item.text for item in own_versions.iter('HexalithMcpCliVersion')]
         if mcpcli != ['2.0.1']:
             raise ValueError('The qualified source catalog requires the exact root McpCli 2.0.1 pin.')
+        compatibility = source_compatibility_versions(own_versions)
+        # Include the selected owners' local project graphs, whose centrally pinned
+        # transitive dependencies also need net10-compatible versions. Apply these
+        # only in the post-import hook, after the owner has selected its framework.
+        source_condition = "$(MSBuildProjectFullPath.Equals('" + msbuild_path_literal(ROOT / PACKAGE_GATEWAY) + "'))"
+        for owner in ('Hexalith.Tenants', 'Hexalith.Parties'):
+            source_condition += " Or $(MSBuildProjectFullPath.StartsWith('" + msbuild_path_literal(ROOT / 'references' / owner / 'src') + "/'))"
         overlay = private / 'source-runtime-packages.props'
         project_xml = ET.Element('Project')
-        ET.SubElement(project_xml, 'Import', {'Project': str(catalog)})
+        ET.SubElement(project_xml, 'Import', {'Project': msbuild_path_literal(catalog)})
         ET.SubElement(ET.SubElement(project_xml, 'ItemGroup'), 'PackageVersion',
                       {'Update': 'StackExchange.Redis', 'Version': redis[0]})
         ET.ElementTree(project_xml).write(overlay, encoding='utf-8', xml_declaration=True)
@@ -586,6 +624,10 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(ET.SubElement(overrides_xml, 'PropertyGroup'), 'WarningsNotAsErrors')
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
                       {'Update': 'StackExchange.Redis', 'Version': redis[0]})
+        compatible_packages = ET.SubElement(overrides_xml, 'ItemGroup', {
+            'Condition': "'$(TargetFramework)' == 'net10.0' And (" + source_condition + ')'})
+        for package, version in compatibility.items():
+            ET.SubElement(compatible_packages, 'PackageVersion', {'Update': package, 'Version': version})
         # The AppHost loads the root's Abstractions assembly. Source owners must
         # compile against that same version, including later SDK/Aspire rebuilds.
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',

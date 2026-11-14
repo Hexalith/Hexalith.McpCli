@@ -24,6 +24,13 @@ from unittest.mock import patch
 from zipfile import ZipFile
 
 HERE = Path(__file__).resolve().parent
+COMPATIBILITY_VERSIONS = {
+    'Hexalith.Commons.UniqueIds': '2.30.10',
+    'Microsoft.AspNetCore.Authentication.JwtBearer': '10.0.15',
+    'Microsoft.AspNetCore.OpenApi': '10.0.15',
+    'Microsoft.AspNetCore.SignalR.StackExchangeRedis': '10.0.15',
+    'Microsoft.OpenApi': '2.13.0',
+}
 
 TOOL = r'''#!/usr/bin/env python3
 import hashlib, json, os, pathlib, subprocess, sys
@@ -346,7 +353,10 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         (self.root / '.gitmodules').touch()
         (self.root / 'Directory.Build.props').write_text(
             '<Project><PropertyGroup><HexalithMcpCliVersion>2.0.1</HexalithMcpCliVersion></PropertyGroup>'
-            '<ItemGroup><PackageVersion Update="StackExchange.Redis" Version="3.4.31" /></ItemGroup></Project>')
+            '<ItemGroup>' + ''.join('<PackageVersion Update="' + package + '" Version="' + version + '" />'
+                                   for package, version in (COMPATIBILITY_VERSIONS | {
+                                       'Hexalith.EventStore.Testing.Integration': '4.2.0',
+                                       'StackExchange.Redis': '3.4.31'}).items()) + '</ItemGroup></Project>')
         builds = self.root / 'references/Hexalith.Builds'
         (builds / 'Props').mkdir(parents=True)
         (builds / 'Props/Directory.Packages.props').write_text('<Project><ItemGroup /></Project>')
@@ -895,6 +905,121 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                 self.assertEqual(0, actual.returncode, actual.stdout + actual.stderr)
                 self.assertEqual('false' if name in ('Hexalith.McpCli.EventStoreGateway.TestHost', 'Hexalith.Tenants',
                                  'Hexalith.Parties.EventStoreExtensions') else 'true', actual.stdout.strip())
+
+    def test_source_compatibility_reaches_initial_import_and_later_net10_project_graphs(self):
+        self.assert_source_compatibility_project_graphs()
+
+    def test_source_compatibility_escapes_quoted_and_special_workspace_path_literals(self):
+        with tempfile.TemporaryDirectory(prefix="mcpcli ' & % $ @ (owner) ") as directory:
+            fixture = CiHooksTests()
+            with patch.object(tempfile, 'tempdir', directory):
+                fixture.setUp()
+            try:
+                fixture.assert_source_compatibility_project_graphs()
+            finally:
+                fixture.doCleanups()
+
+    def assert_source_compatibility_project_graphs(self):
+        catalog = self.root / 'references/Hexalith.Builds/Props/Directory.Packages.props'
+        original_versions = {package: '11.0.0' for package in COMPATIBILITY_VERSIONS}
+        original_versions.update({'Hexalith.Commons.UniqueIds': '3.0.0', 'Microsoft.OpenApi': '3.11.0',
+                                  'Unrelated.Package': '99.0.0'})
+        catalog.write_text('<Project><ItemGroup>' + ''.join(
+            '<PackageVersion Include="' + package + '" Version="' + version + '" />'
+            for package, version in original_versions.items()) + '</ItemGroup></Project>')
+        prepared = self.prepare()
+        private = Path(prepared['privateDirectory'])
+        overlay = private / 'source-runtime-packages.props'
+        override = private / 'source-runtime-overrides.targets'
+        self.assertEqual([('StackExchange.Redis', '3.4.31')],
+                         [(item.get('Update'), item.get('Version')) for item in ET.parse(overlay).getroot().iter('PackageVersion')])
+        projects = [
+            ('tests/Hexalith.McpCli.EventStoreGateway.TestHost', 'net10.0', True),
+            ('references/Hexalith.Tenants/src/Hexalith.Tenants', 'net10.0', True),
+            ('references/Hexalith.Tenants/src/Hexalith.Tenants.Contracts', 'net10.0', True),
+            ('references/Hexalith.Tenants/src/Hexalith.Tenants.Server', 'net10.0', True),
+            ('references/Hexalith.Parties/src/Hexalith.Parties', 'net10.0', True),
+            ('references/Hexalith.Parties/src/Hexalith.Parties.Contracts', 'net10.0', True),
+            ('references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions', 'net10.0', True),
+            ('src/Hexalith.McpCli', 'net10.0', False),
+            ('tests/Hexalith.McpCli.ConformanceHost', 'net10.0', False),
+            ('tests/Hexalith.McpCli.AppHost', 'net10.0', False),
+            ('references/Other/src/Hexalith.Tenants', 'net10.0', False),
+            ('references/Hexalith.Tenants/src-extra/Other.Host', 'net10.0', False),
+        ]
+        projects.extend((relative, 'net11.0', selected) for relative, _, selected in list(projects) if selected)
+        for phase in ('overlay-only', 'hook-only', 'both'):
+            for relative, framework, selected in projects:
+                with self.subTest(phase=phase, project=relative):
+                    directory = self.root / relative
+                    directory.mkdir(parents=True, exist_ok=True)
+                    project = directory / (directory.name + '.csproj')
+                    # The initial catalog import precedes the owner's TargetFramework.
+                    document = ET.Element('Project', {'Sdk': 'Microsoft.NET.Sdk'})
+                    ET.SubElement(document, 'Import', {'Project': str(catalog if phase == 'hook-only' else overlay)})
+                    ET.SubElement(ET.SubElement(document, 'PropertyGroup'), 'TargetFramework').text = framework
+                    ET.ElementTree(document).write(project, encoding='utf-8', xml_declaration=True)
+                    environment = os.environ.copy()
+                    environment.pop('CustomAfterMicrosoftCommonTargets', None)
+                    if phase != 'overlay-only':
+                        environment['CustomAfterMicrosoftCommonTargets'] = str(override)
+                    result = subprocess.run([shutil.which('dotnet'), 'msbuild', str(project), '-nologo',
+                                             '-getItem:PackageVersion', '-getProperty:TargetFramework'],
+                                            cwd=self.root, env=environment, capture_output=True, text=True, timeout=30)
+                    self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+                    actual = json.loads(result.stdout)
+                    self.assertEqual(framework, actual['Properties']['TargetFramework'])
+                    compatible = selected and framework == 'net10.0' and phase != 'overlay-only'
+                    self.assertEqual(original_versions | (COMPATIBILITY_VERSIONS if compatible else {}),
+                                     {item['Identity']: item['Version'] for item in actual['Items']['PackageVersion']})
+
+    def test_source_compatibility_refuses_changed_missing_duplicate_conditional_and_unknown_root_rows(self):
+        module = self.ci_module()
+        original = (self.root / 'Directory.Build.props').read_text()
+        self.assertEqual(COMPATIBILITY_VERSIONS, module.source_compatibility_versions(ET.fromstring(original)))
+        for package in COMPATIBILITY_VERSIONS:
+            for defect in ('version', 'missing', 'duplicate', 'conditional-row', 'conditional-group', 'metadata'):
+                with self.subTest(package=package, defect=defect):
+                    document = ET.fromstring(original)
+                    group = document.find('ItemGroup')
+                    row = next(item for item in group if item.get('Update') == package)
+                    if defect == 'version': row.set('Version', '99.0.0')
+                    if defect == 'missing': group.remove(row)
+                    if defect == 'duplicate': group.append(ET.fromstring(ET.tostring(row)))
+                    if defect == 'conditional-row': row.set('Condition', "'$(TargetFramework)' == 'net10.0'")
+                    if defect == 'conditional-group': group.set('Condition', 'false')
+                    if defect == 'metadata': ET.SubElement(row, 'Version').text = '99.0.0'
+                    with self.assertRaisesRegex(ValueError, 'exact finite unconditional root package overrides'):
+                        module.source_compatibility_versions(document)
+        document = ET.fromstring(original)
+        ET.SubElement(document.find('ItemGroup'), 'PackageVersion', {'Update': 'Unreviewed.Package', 'Version': '1.0.0'})
+        with self.assertRaisesRegex(ValueError, 'exact finite unconditional root package overrides'):
+            module.source_compatibility_versions(document)
+        document = ET.fromstring(original)
+        nested = ET.SubElement(ET.SubElement(document, 'Target', {'Name': 'OverrideVersions'}), 'ItemGroup')
+        ET.SubElement(nested, 'PackageVersion', {'Update': 'Microsoft.OpenApi', 'Version': '3.11.0'})
+        with self.assertRaisesRegex(ValueError, 'exact finite unconditional root package overrides'):
+            module.source_compatibility_versions(document)
+
+    def test_root_compatibility_drift_refuses_preparation_and_execution_before_live(self):
+        props = self.root / 'Directory.Build.props'
+        original = props.read_text()
+        error = 'The source compatibility selections require the exact finite unconditional root package overrides.'
+        props.write_text(original.replace('Version="2.30.10"', 'Version="3.0.0"'))
+        result = self.invoke('prepare-ci.sh')
+        self.assertEqual(1, result.returncode)
+        self.assertEqual('Live CI failed: ValueError: ' + error + '\n', result.stderr)
+        self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
+        self.assertEqual('ValueError: ' + error, json.loads((self.evidence / 'preparation.json').read_text())['error'])
+        props.write_text(original)
+        self.fresh_evidence()
+        self.prepare()
+        props.write_text(original.replace('Version="2.13.0"', 'Version="3.11.0"'))
+        result = self.invoke('run-ci.sh')
+        self.assertEqual(1, result.returncode)
+        self.assertEqual('Live CI failed: ValueError: ' + error + '\n', result.stderr)
+        self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
+        self.assertEqual('ValueError: ' + error, json.loads((self.evidence / 'ci-live.json').read_text())['error'])
 
 
     def test_mismatched_root_mcpcli_pin_refuses_before_source_builds(self):
