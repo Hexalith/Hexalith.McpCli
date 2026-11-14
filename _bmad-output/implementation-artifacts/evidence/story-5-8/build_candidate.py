@@ -566,6 +566,10 @@ def main(argv=None):
         labels, files = label_candidate(ROOT, sha(data))
         writes = {NEW:data,E / 'approval.json':(json.dumps(receipt,indent=2)+'\n').encode(), E / 'labels.json':(json.dumps(labels,indent=2)+'\n').encode(),
                   **{E / 'upstream/folders' / name:blob for name,blob in files.items()}}
+        for path in writes:
+            destination = ROOT / path
+            require(not any(part.is_symlink() for part in [destination,*destination.parents] if part.is_relative_to(ROOT)),
+                    f'refusing symlink output destination: {path}')
         for path, blob in writes.items():
             (ROOT / path).parent.mkdir(parents=True,exist_ok=True)
             (ROOT / path).write_bytes(blob)

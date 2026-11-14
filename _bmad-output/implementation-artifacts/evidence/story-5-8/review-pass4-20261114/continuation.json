@@ -1,0 +1,115 @@
+{
+  "claim": "Pre-whitespace-fix ordinary and synthetic suites passed 88 tests; current whitespace fix and six audit tests pass. A full current-input capture and audit remain pending parent verification.",
+  "priorCaptureDirectory": "review-pass4-20261114/pre-whitespace-capture",
+  "priorManifestSha256": "7ae81e3b65720c4777eb377c792165963096c5f3972dc73ee70367fb2d8e7850",
+  "priorExecutableInputs": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "630962e4378dc08f0220814c7c1b73fb1593d455f8ea6dfdda9a6d67dc1e079d",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "ad9d6ee2ae21f1ee91a8a49cb66e6a84b996eb9cc9b0eb8253b15768e914171b",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+    "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+    "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py": "c90c4a3fc3f79968eeba9cfaf37e583048936c0b330343c5f28583d01964ebdf"
+  },
+  "changedSources": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py": {
+      "beforeSha256": "c90c4a3fc3f79968eeba9cfaf37e583048936c0b330343c5f28583d01964ebdf",
+      "currentSha256": "be9f32dfc9e7b03e8953daf351a53e71eec052d14b653115216e62fab952996c",
+      "archivedSource": "review-pass4-20261114/pre-whitespace-capture/sources/verify_packet.py"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": {
+      "beforeSha256": "630962e4378dc08f0220814c7c1b73fb1593d455f8ea6dfdda9a6d67dc1e079d",
+      "currentSha256": "264c63839c1fd191ff94a521206ac2898461ab22168efed0fed634b84775694a",
+      "archivedSource": "review-pass4-20261114/pre-whitespace-capture/sources/test_verify_amendment.py"
+    }
+  },
+  "commands": [
+    {
+      "name": "focused-audit",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8",
+        "-p",
+        "test_*.py",
+        "-k",
+        "PacketAuditTests"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "environment": {
+        "TMPDIR": "/dev/shm/mcpcli-story5-8-pass4-vu7gdown"
+      },
+      "exitCode": 0,
+      "elapsedSeconds": 1.596,
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "264c63839c1fd191ff94a521206ac2898461ab22168efed0fed634b84775694a",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "ad9d6ee2ae21f1ee91a8a49cb66e6a84b996eb9cc9b0eb8253b15768e914171b",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py": "be9f32dfc9e7b03e8953daf351a53e71eec052d14b653115216e62fab952996c"
+      },
+      "stdout": {
+        "path": "review-pass4-20261114/continuation-focused-audit.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass4-20261114/continuation-focused-audit.stderr.txt",
+        "sha256": "a6b20557181ea343a9fbc223ac47573ea3709742effb4fdfbbcf81f036803e76"
+      }
+    },
+    {
+      "name": "untracked-whitespace",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-c",
+        "import subprocess\nprefix = ['git', '-c', 'core.commitGraph=false']\npaths = subprocess.run(prefix+['ls-files', '--others', '--exclude-standard', '-z'], check=True, capture_output=True).stdout.split(b'\\0')\nfor path in paths:\n    if path:\n        result = subprocess.run(prefix+['diff', '--no-index', '--check', '--', '/dev/null', path.decode()], capture_output=True)\n        if result.returncode not in {0, 1} or result.stdout or result.stderr:\n            raise SystemExit('untracked whitespace check failed: '+path.decode())\n"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "environment": {
+        "TMPDIR": "/dev/shm/mcpcli-story5-8-pass4-vu7gdown"
+      },
+      "exitCode": 0,
+      "elapsedSeconds": 0.229,
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "264c63839c1fd191ff94a521206ac2898461ab22168efed0fed634b84775694a",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "ad9d6ee2ae21f1ee91a8a49cb66e6a84b996eb9cc9b0eb8253b15768e914171b",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py": "be9f32dfc9e7b03e8953daf351a53e71eec052d14b653115216e62fab952996c"
+      },
+      "stdout": {
+        "path": "review-pass4-20261114/continuation-untracked-whitespace.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass4-20261114/continuation-untracked-whitespace.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "finalCurrentInputAuditPassed": false
+}

@@ -46,7 +46,73 @@ ancestor `2236855ee181bdeed2a103537c66316a1612c792`. The unpublished original
 `e2252f29a2dba2b64786ee483eb59fbceaadd387` is optional. The verifiers read these
 local objects and refs; they do not fetch or perform network operations.
 
-## Final resumed pass-3 build verification (2026-11-14)
+## Code-review pass 4 patch verification (2026-11-14)
+
+All five pass-4 patch groups are implemented. Exact-stream refusal tests now
+remove each listed conjunct independently, cover rejected/withdrawn builder
+states without writes, and exercise all four lifecycle setup checks plus a
+child that changes only the approval. Every lifecycle refusal leaves its output
+directory empty. The existing builder-guard deferral now names all five omitted
+sites; the technical-inventory re-citation remains in its existing ledger entry.
+
+The retained [capture and audit runner](review-pass4-20261114/verify_packet.py)
+regenerates the final command manifest, streams and closure audit. Run it from
+the repository root with `python3 -B -I` and its repository-relative path.
+Append `--audit-only` to validate existing captures without running the gates.
+The runner compares all fourteen protected artifacts with committed `HEAD`
+bytes, binds all eleven executed inputs including itself, and checks each gate's
+exact stdout and stderr. Only the unittest duration varies; every test name,
+outcome and summary byte is checked. Git commands in the runner disable
+commit-graph reads. New audit tests reject a wrong PASS line and unexpected
+stderr even after the manifest hashes are updated, corrupt each protected
+artifact independently, and prove the checks with removal controls.
+
+Before the final whitespace correction, both ordinary and synthetic suites
+passed **88 tests** (87.505 and 87.516 seconds), with no skips. Both real
+completion gates, their ASCII-locale variants, AD-23, six symlinked-temp tests
+and tracked whitespace also passed. The last untracked check incorrectly treated
+Git's normal diff exit 1 as failure. It now accepts only exits 0/1 with both
+streams empty; a new test covers clean statuses, findings and Git errors.
+
+The [preserved capture](review-pass4-20261114/pre-whitespace-capture/commands.json)
+and [continuation](review-pass4-20261114/continuation.json) describe historical
+source states. Their hashes remain evidence of those runs, rather than the
+current inputs.
+
+Final parent verification passed **94 tests in both ordinary and synthetic
+lifecycle workspaces**, without skips. All ten gate streams matched exact
+expected content, all fourteen protected artifacts equal committed `HEAD` and
+their capture-time hashes, all matrix rows passed, and frozen intent is unchanged.
+The final [manifest](review-pass4-20261114/commands.json) and
+[audit](review-pass4-20261114/audit.json) supersede intermediate captures.
+A regression test covers unittest verbose docstrings; the checker uses unittest's
+own descriptions. The retained runner refuses mixed input versions.
+
+All three independent build-review layers completed. Four patch groups were
+applied: capture-time protected hashes, invalidation of an earlier success audit
+before a new capture, generator output/parent symlink refusal before any write,
+and the final scan citation. All fifteen focused audit/builder tests passed
+before the final full run. One newly confirmed approved-byte omission, explicit-null
+admission in G3/G4, is assigned to the K12 successor; five existing deferrals were
+carried without duplicate ledger entries. The technical-successor re-citation
+also remains tracked. Review verdicts and evidence are in the spec triage log.
+
+Temporary capacity on the root filesystem was exhausted during verification.
+Completed parent runs used task-owned temporary space under `/dev/shm` with
+cleanup. Future ad hoc runs can use `run-with-temp python3 -B -I` followed by the
+runner's path; the wrapper supplies and removes private scratch space. Audit
+fixtures read committed approval/label snapshots so synthetic lifecycle state
+cannot invalidate their protected-byte comparisons.
+
+Approved inventory, approval, labels, production, dependencies, census and
+gitlinks remain unchanged. No commit or push was performed, and no .NET build or
+live acceptance is claimed. The earlier pass-4 scan is
+[historical](secret-scan-review-pass4-20261114.json). The final post-change scan is
+[secret-scan-review-pass4-completion-20261114.json](secret-scan-review-pass4-completion-20261114.json).
+A prior completion scan recorded a generated Python-cache refusal; that cache
+was removed before the successful final scan.
+
+## Historical resumed pass-3 build verification (2026-11-14)
 
 All eight code-review-pass-3 patch entries and all eight build-review patch
 groups are complete. The parent's final verification passed **77 tests in
@@ -64,15 +130,16 @@ The following also passed:
 - `git diff --check` against the baseline;
 - a `--no-index --check` of all 58 untracked files.
 
-The isolated-copy guard-removal report still detects all 27 mutations, and its
-recorded inputs equal the current sources.
+The isolated-copy guard-removal report detected all 27 mutations against its
+recorded pass-3 inputs. Pass 4 adds partial-removal controls directly to the suite.
 
 The [final command manifest](review-pass3-final-20261114/commands.json) binds all
 eleven executable inputs, exact commands, environments, exit codes and both
 stream hashes. The [closure audit](review-pass3-final-20261114/audit.json) was
-computed after the last command. It verifies all ten command streams, the passing
-tests for every matrix row, the protected bytes against `HEAD` and the frozen
-intent against the baseline.
+computed after the last command. It verifies the ten stream hashes and matrix
+coverage, eight protected artifacts against `HEAD`, and frozen intent against the
+baseline. It did not assert exact stream content and omitted six protected files;
+the retained pass-4 runner and fourteen-artifact audit above supersede that scope.
 
 All three independent build-review layers completed. Their surviving findings
 formed eight patch groups:

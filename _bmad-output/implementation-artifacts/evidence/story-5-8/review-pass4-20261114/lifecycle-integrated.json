@@ -1,0 +1,41 @@
+{
+  "suiteExitCode": 0,
+  "claim": "Suite independence from synthetic lifecycle metadata; real approved-completion is verified separately.",
+  "sourceFixture": "approved / integrated / spec done / sprint done",
+  "realInputsUnchanged": true,
+  "candidateSha256": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407",
+  "child": {
+    "command": [
+      "/usr/bin/python3",
+      "-I",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "_bmad-output/implementation-artifacts/evidence/story-5-8",
+      "-p",
+      "test_*.py"
+    ],
+    "cwd": ".",
+    "cwdBase": "isolated synthetic lifecycle workspace created by this helper"
+  },
+  "helper": {
+    "command": [
+      "python3",
+      "-B",
+      "-I",
+      "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py"
+    ],
+    "cwd": ".",
+    "cwdBase": "repository root containing this retained script"
+  },
+  "stdout": {
+    "path": "lifecycle-integrated.stdout.txt",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "stderr": {
+    "path": "lifecycle-integrated.stderr.txt",
+    "sha256": "d830a5a86b80f6eb521d75f000addcf7366574e6a41656695cba79aa73b7bf9c"
+  }
+}

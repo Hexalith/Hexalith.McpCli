@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -441,7 +441,7 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
 
 The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged.
 
-- [ ] [Review][Patch] Parts of combined verifier guards have no test (medium) — Each part below can be deleted with all 77 tests still passing:
+- [x] [Review][Patch] Parts of combined verifier guards have no test (medium) — Each part below can be deleted with all 77 tests still passing:
   - **V1:** the `all(V.nonblank(auth.get(k)) …)` part of the delivery-authorization check (`verify_labels.py:76`). The only refusal case sets `deliveryAuthorization = None`, so a `{}` or blank-`exactWords` authorization would pass the real completion gate.
   - **V2:** the `deliveryAuthorization` and `integration` parts of the pending no-false-delivery guard (`verify_labels.py:91`). Only `inventoryRevision` is tested.
   - **V3:** the `surface` and `repository` parts of the row binding (`verify_labels.py:67`). In completion this is the only check on a row's surface, so a label attached to the wrong legacy surface would pass both verifiers.
@@ -452,16 +452,16 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
   - The published-bytes check at `verify_labels.py:89` still protects the real receipt, but not the register, the rows or the authorization.
   - Fix: add exact-stream refusal cases for each part, with removal controls that disable only that part. Use the half-removal pattern of `test_completion_rejects_rewritten_published_artifacts_and_half_removal`, and extend `test_completion_chain_and_exact_delivery_bytes`, `test_register_chain_coverage_hash_citation_and_no_false_delivery` and the approval-receipt guard tables.
   - (V1, V2, V3, A1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py:76]
-- [ ] [Review][Patch] The builder's overwrite refusals are tested only for `approved` and `integrated` (low) — `build_candidate.py:542-543` refuses any decision other than `pending`, and `:547-548` any label state other than the pending one.
+- [x] [Review][Patch] The builder's overwrite refusals are tested only for `approved` and `integrated` (low) — `build_candidate.py:542-543` refuses any decision other than `pending`, and `:547-548` any label state other than the pending one.
   - `test_builder_refuses_approved_packet_before_any_write` uses only `decision='approved'`, and `test_builder_refuses_integrated_labels_before_any_write` only `state='integrated'`.
   - Narrowing either condition to the tested value leaves all 77 tests passing. A recorded rejection or an unknown label state would then be overwritten by a fresh pending packet.
   - Fix: add a `'rejected'` decision subcase and a `'withdrawn'` state subcase, each asserting the exact refusal and no writes.
   - (V4, V5) [_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py:542]
-- [ ] [Review][Patch] Five lifecycle-proof checks have no removal-sensitive test (low) — Removing the approval half of the post-child check (`delivery/lifecycle-proof.py:63`, `after_fixture[0] == approval and`) leaves all six lifecycle tests passing. A child that resets the synthetic approval would then still get a success summary.
+- [x] [Review][Patch] Five lifecycle-proof checks have no removal-sensitive test (low) — Removing the approval half of the post-child check (`delivery/lifecycle-proof.py:63`, `after_fixture[0] == approval and`) leaves all six lifecycle tests passing. A child that resets the synthetic approval would then still get a success summary.
   - The four setup checks at `:48-55` (approval, labels, workflow, candidate) appear in no test.
   - Fix: add a child that rewrites only the fixture approval, and a setup failure for each check by patching the helper's `workflow_status` or `write_text`. Assert each exact refusal and an empty delivery folder.
   - (A2) [_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py:63]
-- [ ] [Review][Patch] The final closure audit checks fewer protected files than earlier audits, and cannot be regenerated (low) — `review-pass3-final-20261114/audit.json` lists 8 protected artifacts. The pass-2-final and pass-3 audits each list 14.
+- [x] [Review][Patch] The final closure audit checks fewer protected files than earlier audits, and cannot be regenerated (low) — `review-pass3-final-20261114/audit.json` lists 8 protected artifacts. The pass-2-final and pass-3 audits each list 14.
   - It drops Story 5.2 `approval.json`/`main-integration.json`, Story 5.7 `approval.json`/`labels.json`, and the two `upstream/folders/README.*.section.md` files that `labels.json` binds by hash. `verification.md` nonetheless says the audit "verifies … the protected bytes against `HEAD`".
   - The generating runner was kept only in a session scratchpad.
   - The audit checks exit codes and hash consistency but not stream content, so a `reported:` drift line or a wrong PASS line would pass.
@@ -471,7 +471,7 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
     - Assert the exact expected stdout and stderr of every gate, and run git with `-c core.commitGraph=false`.
     - Regenerate the final packet and correct the `verification.md` claim.
   - (B1, B2) [_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-final-20261114/audit.json:1]
-- [ ] [Review][Patch] The pass-3 builder-guard ledger entry omits untested builder guards (low) — `deferred-work.md:1121` lists the untested builder guards to exercise before a re-pin. It omits:
+- [x] [Review][Patch] The pass-3 builder-guard ledger entry omits untested builder guards (low) — `deferred-work.md:1121` lists the untested builder guards to exercise before a re-pin. It omits:
   - `anchor()`'s `pinned source missing` (`build_candidate.py:121`), which a re-pin hits first;
   - `damaged or duplicate pinned CLI root registrations` (`:166`);
   - `unsupported pinned file CLI registration` and `upload kind` (`:177`, `:179`);
@@ -564,9 +564,36 @@ Derivation rules (the decisions above apply first):
   - Approved artifacts and the frozen intent are unchanged.
   - Spec is done and sprint tracking is review. The frozen scope requires separate explicit commit authorization, so no commit or push was performed.
 
+- 2026-11-14: Implemented all five code-review-pass-4 patch groups. Exact-stream refusal cases independently remove the listed guard conjuncts, cover rejected/withdrawn builder states without writes, and exercise all four lifecycle setup checks plus child-only approval corruption with empty output directories. The retained `review-pass4-20261114/verify_packet.py` captures gates and supports `--audit-only`, binds eleven executable inputs, restores all fourteen protected artifacts, checks exact gate streams and disables commit-graph reads. Focused tests cover its stream, input, capture, protected-byte, frozen-intent and matrix refusals. Audit fixtures use committed approval/label snapshots and share `scripts/` read-only in copied workspaces. The existing builder-guard ledger entry now lists the five omitted sites; no duplicate deferral was added. Before the final untracked-whitespace correction, ordinary and synthetic suites each passed 88 tests, as did both real completion gates under UTF-8/ASCII locales, AD-23, six symlinked-temp tests and tracked whitespace. Their exact source snapshots/streams are preserved in `review-pass4-20261114/pre-whitespace-capture/`. The final whitespace fix accepts Git diff exits 0/1 only with empty streams; its new test brings the current suite to 89. A hash-bound continuation passes all six current audit tests and the corrected untracked check. Full current-input capture/audit remain pending parent verification, using task-owned `/dev/shm` temporary space because the root filesystem filled. Spec/sprint remain in-progress for workflow review. Approved artifacts, frozen intent, production, dependencies, census and gitlinks are unchanged. No commit or push was performed.
+
+- 2026-11-14: Final resumed pass-4 build completed all five code-review patches and four follow-up build-review patch groups. All three independent review layers completed; one new approved-byte explicit-null omission is assigned to the K12 successor, with five earlier deferrals carried without duplicate entries. The parent passed all 94 tests in ordinary and synthetic lifecycle runs, all ten exact gate stream checks, six symlinked-temp tests, both real completion gates under UTF-8/ASCII, AD-23, and tracked/untracked whitespace. The retained audit binds eleven executable inputs and fourteen protected artifacts against both current HEAD and capture-time hashes, confirms matrix coverage and frozen intent, and removes stale success on a failed rerun. Generator output/parent symlinks are refused before any write. Final evidence is in [the pass-4 manifest](evidence/story-5-8/review-pass4-20261114/commands.json) and [audit](evidence/story-5-8/review-pass4-20261114/audit.json). Spec is done and sprint tracking is review. Approved inventory, receipts, labels, production, dependencies, census and gitlinks are unchanged. The frozen scope requires separate explicit commit authorization; no commit or push was performed.
+
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Resumed pass-4 build review (2026-11-14)
+
+All three independent layers completed before triage. The snapshot is `/dev/shm/mcpcli-story58-review-2snkthi1.diff`, against the preserved full baseline `a92a2969db6903b8c6cca7e437446167e135ec9d`. It includes earlier independent maintenance commits as well as this story. Parent verification passed 90 tests in both ordinary and synthetic lifecycle runs, all ten exact gate stream checks, all fourteen protected artifacts, matrix coverage, frozen intent, and an audit-only replay.
+
+| Finding | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| B1: audit does not bind mutable workflow bytes | low | reject | The duplicate-status counterexample is real, but the replay audits retained gate streams and current executable/protected inputs; it does not claim mutable workflow text is unchanged. Both default verifiers independently reject duplicate statuses. Binding whole spec/sprint bytes would require a new transition protocol for the workflow's legitimate in-progress/in-review/done edits, beyond a direct correction. Frozen human intent remains bound. |
+| B2: protected artifacts can inherit captures after a later HEAD change | medium | patch | The new audit compares protected bytes only with current HEAD. A later commit changing a receipt can therefore inherit older successful streams. Bind capture-time protected hashes and reject a later matching working-tree/HEAD rewrite. |
+| B3: failed capture retains an earlier success audit | low | patch | Capture overwrites streams and its manifest but leaves the old audit on failure. Delete that success record before starting the next capture and test the demonstrated failed-rerun case. |
+| B4: verification links a stale scan receipt | low | patch | The earlier scan is historical after the parent formatter fix and regenerated streams. Point the current verification claim to a final post-change scan and retain the old receipt as history. |
+| B5: explicit-null admission requirement omitted | medium | defer | Confirmed at the pinned declaration's lines 286–293: optional CLR omission does not admit wire null, except FileMutationRequest.byteLength. Approved G3/G4 omit this duty. The frozen scope forbids editing approved bytes; the established K12 successor decision carries this additional correction. No existing explicit-null ledger entry was found. |
+| B6: K01 rows use a confidential-UI rationale | low | defer | carried: same approved-byte defect and decision as the earlier reviews; already tracked (`deferred-work.md:1054`). No duplicate entry or approved-byte edit. |
+| B7: deferred K12 rows present affirmative replacements | low | defer | carried: same approved-byte replacement-column defect; already tracked (`deferred-work.md:1059`). No duplicate entry. |
+| B8: semantic-retention claim exceeds name-level evidence | medium | defer | carried: the per-surface parameter, option, validation and transport audit remains assigned to the K12 successor; already tracked (`deferred-work.md:1085`). No duplicate entry. |
+| B9: G2 drops predecessor admission requirements | medium | defer | carried: same egress, envelope-comparison and denied-access omission; already tracked (`deferred-work.md:1111`). No duplicate entry. |
+| B10: V03 omits Q08 optional TaskId | low | defer | carried: same M22/L38/Q08/V03 correction; already tracked (`deferred-work.md:1103`). No duplicate entry. |
+| E1: generator follows output symlinks | medium | patch | The pending generator writes its fixed outputs without checking files or parent directories for symlinks. The reviewer reproduced an external user document being overwritten. Validate every planned destination before any write, with exact refusal/no-write and removal-sensitive tests. |
+| V1: candidate-census receipt-copy corruption is untested | medium | reject | Pre-verified, but belongs to independent maintenance in `evidence/mcpcli-current-ci-2026-11-14`, present only because the original story baseline is preserved. This story's frozen intent explicitly excludes census changes. None of that helper or its tests changed in this resumed run; it needs its own authorized maintenance task. |
+
+The four surviving patch groups are capture provenance, failed-capture invalidation, the final scan citation, and generator destination confinement. One new approved-byte omission is assigned to the K12 successor; five existing deferrals are carried without duplicates.
+
+The original implementation agent applied all four groups and passed all fifteen focused audit/builder tests. Final parent verification passed all 94 tests in both ordinary and synthetic lifecycle runs, all ten exact gate stream checks, all fourteen protected artifacts and their capture-time hashes, all matrix rows, frozen intent, six symlinked-temp tests and whitespace. Both default completion entrypoints and audit-only replay passed again after the status transition. The [final completion scan](evidence/story-5-8/secret-scan-review-pass4-completion-20261114.json) is clean across 327 files. Spec is done, sprint tracking is review, and no commit or push was performed.
 
 ### Build review 1 (2026-11-13)
 

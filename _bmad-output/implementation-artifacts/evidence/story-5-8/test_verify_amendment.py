@@ -117,7 +117,7 @@ def workspace_view(*,pending=True):
     """Copy documentary inputs, sharing only read-only repository objects/source."""
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp).resolve()
-        for name in ['.git','.gitmodules','references','src']:
+        for name in ['.git','.gitmodules','references','src','scripts']:
             (root/name).symlink_to(ROOT/name,target_is_directory=(ROOT/name).is_dir())
         art = root/B.ART; art.mkdir(parents=True)
         shutil.copytree(ROOT/B.AD,root/B.AD)
@@ -297,6 +297,60 @@ class FixtureTests(unittest.TestCase):
                 proof.main(delivery=delivery)
             self.assertEqual([],list(delivery.iterdir()))
 
+    def test_lifecycle_proof_rejects_child_approval_mutation_without_writes(self):
+        proof = load('lifecycle58approval','delivery/lifecycle-proof.py')
+        run = subprocess.run
+        def child(command,**kwargs):
+            if command[:5] == [sys.executable,'-I','-m','unittest','discover']:
+                path = kwargs['cwd']/B.E/'approval.json'
+                receipt = V.read_json(path)
+                receipt['decision'] = 'pending'
+                path.write_text(json.dumps(receipt)+'\n')
+                return subprocess.CompletedProcess(command,0,b'',b'')
+            return run(command,**kwargs)
+        with tempfile.TemporaryDirectory() as temp,patch.object(subprocess,'run',side_effect=child):
+            delivery = Path(temp).resolve()
+            with self.assertRaisesRegex(ValueError,'^synthetic lifecycle receipt or labels changed during child run$'):
+                proof.main(delivery=delivery)
+            self.assertEqual([],list(delivery.iterdir()))
+
+    def test_lifecycle_proof_rejects_each_damaged_setup_without_writes(self):
+        cases = [
+            ('approval','synthetic lifecycle approval is not approved'),
+            ('labels','synthetic lifecycle labels are not integrated'),
+            ('workflow','synthetic lifecycle workflow is not done'),
+            ('candidate','synthetic lifecycle candidate bytes changed'),
+        ]
+        for field,message in cases:
+            with self.subTest(field=field):
+                proof = load('lifecycle58setup','delivery/lifecycle-proof.py')
+                module = proof.load_tests(ROOT)
+                workflow,run = module.workflow_status,subprocess.run
+                def damaged(path,key,value):
+                    workflow(path,key,value)
+                    if key == 'status': return
+                    fixture = path.parents[2]
+                    if field in {'approval','labels'}:
+                        target = fixture/B.E/(field+'.json')
+                        document = V.read_json(target)
+                        document['decision' if field == 'approval' else 'state'] = 'pending'
+                        target.write_text(json.dumps(document)+'\n')
+                    elif field == 'workflow':
+                        workflow(fixture/B.SPEC,'status','review')
+                        workflow(path,key,'review')
+                    else:
+                        target = fixture/B.NEW
+                        target.write_bytes(target.read_bytes()+b'Damaged setup.\n')
+                def child(command,**kwargs):
+                    if command[:5] == [sys.executable,'-I','-m','unittest','discover']:
+                        return subprocess.CompletedProcess(command,0,b'',b'')
+                    return run(command,**kwargs)
+                with tempfile.TemporaryDirectory() as temp,patch.object(proof,'load_tests',return_value=module),patch.object(module,'workflow_status',side_effect=damaged),patch.object(subprocess,'run',side_effect=child):
+                    delivery = Path(temp).resolve()
+                    with self.assertRaisesRegex(ValueError,'^'+re.escape(message)+'$'):
+                        proof.main(delivery=delivery)
+                    self.assertEqual([],list(delivery.iterdir()))
+
     def test_lifecycle_proof_rejects_child_candidate_mutation_without_writes(self):
         proof = load('lifecycle58candidate','delivery/lifecycle-proof.py')
         run = subprocess.run
@@ -340,6 +394,260 @@ class PendingCase(unittest.TestCase):
         for module in [V,L,L.V,B]:
             stack.enter_context(patch.object(module,'ROOT',self.root))
         stack.enter_context(patch.object(subprocess,'run',side_effect=pinned_observation(subprocess.run)))
+
+    def removed_condition(self,module,function,condition):
+        """Disable only one conjunct, preserving its sibling checks and globals."""
+        source = inspect.getsource(getattr(module,function))
+        self.assertEqual(1,source.count(condition))
+        namespace = {}
+        exec(source.replace(condition,'True'),module.__dict__,namespace)
+        self.assertIs(namespace[function].__globals__,module.__dict__)
+        return patch.object(module,function,namespace[function])
+
+
+class PacketAuditTests(unittest.TestCase):
+    def test_packet_audit_uses_unittest_verbose_descriptions(self):
+        runner = load('packet58descriptions','review-pass4-20261114/verify_packet.py')
+        case = unittest.FunctionTestCase(lambda:None,description='Documented test description')
+        output = io.StringIO()
+        unittest.TextTestRunner(stream=output,verbosity=2).run(unittest.TestSuite([case,case]))
+        with patch.object(unittest.TestLoader,'discover',return_value=unittest.TestSuite([case,case])):
+            names = runner.test_names()
+        self.assertEqual([str(case)+'\nDocumented test description']*2,names)
+        runner.check_tests(output.getvalue().encode(),names,'documented test')
+
+    @contextlib.contextmanager
+    def audit_fixture(self):
+        """Construct valid captures without executing gates or changing real evidence."""
+        runner = load('packet58audit','review-pass4-20261114/verify_packet.py')
+        # Lifecycle proof deliberately replaces these working-tree documents.
+        # Audit fixtures instead observe their committed bytes, independently
+        # of synthetic approval/label state, while retaining the real Git guard.
+        read = Path.read_bytes
+        pinned = {ROOT/B.E/name:B.git(ROOT,'show','HEAD:'+str(B.E/name)) for name in ['approval.json','labels.json']}
+        def committed(path,*args,**kwargs):
+            return pinned[path] if path in pinned else read(path,*args,**kwargs)
+        with tempfile.TemporaryDirectory(dir=HERE,prefix='audit-fixture-') as temp,patch.object(runner,'OUT',Path(temp).resolve()),patch.object(Path,'read_bytes',committed):
+            names = runner.test_names()
+            def tests(selected):
+                return (''.join(name+' ... ok\n' for name in selected)+'\n'+'-'*70+'\nRan '+str(len(selected))+' tests in 0.001s\n\nOK\n').encode()
+            child = {'stdout':b'','stderr':tests(names)}
+            summary = {
+                'suiteExitCode':0,'claim':'Suite independence from synthetic lifecycle metadata; real approved-completion is verified separately.',
+                'sourceFixture':'approved / integrated / spec done / sprint done','realInputsUnchanged':True,
+                'candidateSha256':B.sha((ROOT/B.NEW).read_bytes()),
+                'child':{'command':[sys.executable,'-I','-m','unittest','discover','-v','-s',str(B.E),'-p','test_*.py'],
+                         'cwd':'.','cwdBase':'isolated synthetic lifecycle workspace created by this helper'},
+                'helper':{'command':['python3','-B','-I',str(B.E/'delivery/lifecycle-proof.py')],
+                          'cwd':'.','cwdBase':'repository root containing this retained script'},
+            }
+            for stream,data in child.items():
+                name = 'lifecycle-integrated.'+stream+'.txt'
+                (runner.OUT/name).write_bytes(data)
+                summary[stream] = {'path':name,'sha256':B.sha(data)}
+            runner.write(runner.OUT/'lifecycle-integrated.json',summary)
+            manifest = {'head':B.git(ROOT,'rev-parse','HEAD').decode().strip(),'baselineCommit':B.BASELINE,
+                        'inputs':runner.input_hashes(),'protectedInputs':runner.protected_hashes(),'commands':[]}
+            for name,command,environment in runner.commands():
+                stdout,stderr = b'',b''
+                if name == 'tests': stderr = tests(names)
+                elif name == 'symlink-temp-tests':
+                    stderr = tests([test for test in names if any(method in test for method in runner.SYMLINK_TESTS)])
+                    environment = dict(environment,TMPDIR='/synthetic/link')
+                elif name == 'lifecycle':
+                    stdout = (json.dumps(summary,indent=2)+'\n'+'\n'.join(child['stderr'].decode().splitlines()[-5:])+'\n').encode()
+                elif name.startswith('inventory'): stdout = runner.INVENTORY_PASS
+                elif name.startswith('labels'): stdout = runner.LABEL_PASS
+                elif name == 'ad23': stdout = runner.AD23_PASS
+                row = {'name':name,'command':command,'cwd':str(ROOT),'environment':environment,'exitCode':0}
+                for stream,data in [('stdout',stdout),('stderr',stderr)]:
+                    path = runner.OUT/(name+'.'+stream+'.txt'); path.write_bytes(data)
+                    row[stream] = {'path':str(path.relative_to(ROOT/B.E)),'sha256':B.sha(data)}
+                manifest['commands'].append(row)
+            runner.write(runner.OUT/'commands.json',manifest)
+            yield runner,manifest
+
+    def test_packet_audit_checks_exact_gate_streams_and_removal_controls(self):
+        for stream,data in [('stdout',b'PASS: wrong claim\n'),('stderr',b'reported: unexpected owner drift\n')]:
+            with self.subTest(stream=stream),self.audit_fixture() as (runner,manifest):
+                row = next(row for row in manifest['commands'] if row['name'] == 'inventory')
+                path = ROOT/B.E/row[stream]['path']; path.write_bytes(data)
+                row[stream]['sha256'] = B.sha(data)
+                runner.write(runner.OUT/'commands.json',manifest)
+                message = 'inventory: exact '+stream+' mismatch'
+                with self.assertRaisesRegex(ValueError,'^'+message+'$'):
+                    runner.audit()
+                original = runner.require
+                def removed(condition,actual):
+                    if actual != message: original(condition,actual)
+                with patch.object(runner,'require',side_effect=removed),contextlib.redirect_stdout(io.StringIO()):
+                    runner.audit()
+
+    def test_packet_audit_covers_all_fourteen_protected_artifacts(self):
+        with self.audit_fixture() as (runner,manifest),contextlib.redirect_stdout(io.StringIO()):
+            runner.audit()
+            result = runner.read(runner.OUT/'audit.json')
+            expected = set(B.AUTHORITIES+[B.NEW,B.E/'approval.json',B.E/'labels.json',*[B.E/'upstream/folders'/name for name in ['README.before.section.md','README.after.section.md','README.patch']]])
+            self.assertEqual(14,len(expected))
+            self.assertEqual({str(path) for path in expected},set(result['protectedArtifacts']))
+            self.assertEqual(10,result['commandsWithBothStreamHashesAndExactContentVerified'])
+            read = Path.read_bytes
+            for protected in expected:
+                snapshots = 0
+                def damaged(path,*args,**kwargs):
+                    nonlocal snapshots
+                    data = read(path,*args,**kwargs)
+                    if path == ROOT/protected:
+                        snapshots += 1
+                        # Candidate hash also appears in the earlier lifecycle
+                        # summary check; target the later protected-byte check.
+                        if protected != B.NEW or snapshots >= 2:
+                            return data+b'Unapproved protected bytes.\n'
+                    return data
+                with self.subTest(path=protected),patch.object(Path,'read_bytes',damaged):
+                    with self.assertRaisesRegex(ValueError,'^'+re.escape(str(protected)+': protected bytes differ from HEAD')+'$'):
+                        runner.audit()
+                    snapshots = 0
+                    original = runner.require
+                    def removed(condition,actual):
+                        if actual != str(protected)+': protected bytes differ from HEAD': original(condition,actual)
+                    with patch.object(runner,'require',side_effect=removed):
+                        with self.assertRaisesRegex(ValueError,'^protected artifacts differ from capture-time bytes$'):
+                            runner.audit()
+
+    def test_packet_audit_rejects_committed_protected_rewrite_and_removal_control(self):
+        with self.audit_fixture() as (runner,manifest),contextlib.redirect_stdout(io.StringIO()):
+            protected = B.E/'approval.json'
+            read,git = Path.read_bytes,runner.git
+            changed = read(ROOT/protected)+b'\n'
+            def rewritten(path,*args,**kwargs):
+                return changed if path == ROOT/protected else read(path,*args,**kwargs)
+            def committed(*args):
+                return changed if args == ('show','HEAD:'+str(protected)) else git(*args)
+            with patch.object(Path,'read_bytes',rewritten),patch.object(runner,'git',side_effect=committed):
+                message = 'protected artifacts differ from capture-time bytes'
+                with self.assertRaisesRegex(ValueError,'^'+message+'$'):
+                    runner.audit()
+                original = runner.require
+                def removed(condition,actual):
+                    if actual != message: original(condition,actual)
+                with patch.object(runner,'require',side_effect=removed):
+                    runner.audit()
+
+    def test_packet_audit_rejects_damaged_manifest_and_capture_bindings(self):
+        cases = [
+            ('manifest',['inputs'],{},'recorded executable inputs differ from current files'),
+            ('manifest',['protectedInputs'],{},'protected artifacts differ from capture-time bytes'),
+            ('manifest',['commands'],[],'gate manifest coverage/order mismatch'),
+            ('manifest',['commands',0,'exitCode'],1,'tests: gate command/result mismatch'),
+            ('manifest',['commands',0,'command'],[],'tests: gate command/result mismatch'),
+            ('manifest',['commands',0,'cwd'],'.','tests: gate command/result mismatch'),
+            ('manifest',['commands',0,'environment'],{'unexpected':'value'},'tests: environment mismatch'),
+            ('manifest',['commands',7,'environment','TMPDIR'],'/unexpected','symlink TMPDIR missing'),
+            ('manifest',['commands',0,'stdout','path'],'elsewhere.txt','tests: stream path mismatch'),
+            ('manifest',['commands',0,'stdout','sha256'],'0'*64,'tests: stdout hash mismatch'),
+            ('summary',['suiteExitCode'],1,'lifecycle summary differs from expected proof'),
+            ('summary',['stdout','sha256'],'0'*64,'lifecycle child stdout binding mismatch'),
+            ('stream',['tests','stdout'],b'Unexpected test output\n','tests: exact stdout mismatch'),
+            ('stream',['tests','stderr'],b'Unexpected unittest result\n','tests: exact unittest stderr mismatch'),
+            ('stream',['lifecycle','stdout'],b'Unexpected lifecycle output\n','lifecycle: exact stdout/stderr mismatch'),
+            ('stream',['lifecycle','stderr'],b'reported: unexpected diagnostic\n','lifecycle: exact stdout/stderr mismatch'),
+        ]
+        for target,keys,value,message in cases:
+            with self.subTest(target=target,keys=keys),self.audit_fixture() as (runner,manifest):
+                if target == 'stream':
+                    name,stream = keys
+                    row = next(row for row in manifest['commands'] if row['name'] == name)
+                    (ROOT/B.E/row[stream]['path']).write_bytes(value)
+                    row[stream]['sha256'] = B.sha(value)
+                    runner.write(runner.OUT/'commands.json',manifest)
+                else:
+                    document = manifest if target == 'manifest' else runner.read(runner.OUT/'lifecycle-integrated.json')
+                    item = document
+                    for key in keys[:-1]: item = item[key]
+                    item[keys[-1]] = value
+                    runner.write(runner.OUT/('commands.json' if target == 'manifest' else 'lifecycle-integrated.json'),document)
+                with self.assertRaisesRegex(ValueError,'^'+re.escape(message)+'$'):
+                    runner.audit()
+
+    def test_packet_audit_rejects_changed_frozen_intent_and_missing_matrix_test(self):
+        with self.audit_fixture() as (runner,manifest):
+            read = Path.read_bytes
+            def changed(path,*args,**kwargs):
+                data = read(path,*args,**kwargs)
+                return data.replace(b'human-owned intent',b'altered intent') if path == ROOT/B.SPEC else data
+            with patch.object(Path,'read_bytes',changed):
+                with self.assertRaisesRegex(ValueError,'^frozen intent changed$'):
+                    runner.audit()
+            with patch.dict(runner.MATRIX,{'Missing matrix row':['nonexistent_test_method']}):
+                with self.assertRaisesRegex(ValueError,'^matrix test coverage missing$'):
+                    runner.audit()
+
+    def test_packet_capture_rejects_failed_gate_and_changed_inputs(self):
+        with self.audit_fixture() as (runner,manifest),contextlib.redirect_stdout(io.StringIO()):
+            with patch.object(runner,'commands',return_value=[('fixture',['fixture-command'],{})]):
+                result = subprocess.CompletedProcess(['fixture-command'],1,b'',b'fixture failure\n')
+                with patch.object(subprocess,'run',return_value=result),patch.object(runner,'git',return_value=b'fixture-head\n'):
+                    with self.assertRaisesRegex(ValueError,'^fixture: gate failed; inspect retained streams$'):
+                        runner.capture()
+                result = subprocess.CompletedProcess(['fixture-command'],0,b'',b'')
+                with patch.object(subprocess,'run',return_value=result),patch.object(runner,'git',return_value=b'fixture-head\n'),patch.object(runner,'input_hashes',side_effect=[{'source':'before'},{'source':'after'}]):
+                    with self.assertRaisesRegex(ValueError,'^executable inputs changed during capture$'):
+                        runner.capture()
+
+    def test_packet_capture_rejects_changed_protected_inputs_and_removal_control(self):
+        with self.audit_fixture() as (runner,manifest),contextlib.redirect_stdout(io.StringIO()):
+            original = runner.protected_hashes()
+            changed = dict(original); changed[str(B.E/'approval.json')] = '0'*64
+            result = subprocess.CompletedProcess(['fixture-command'],0,b'',b'')
+            with patch.object(runner,'commands',return_value=[('fixture',['fixture-command'],{})]),patch.object(subprocess,'run',return_value=result),patch.object(runner,'git',return_value=b'fixture-head\n'):
+                with patch.object(runner,'protected_hashes',side_effect=[original,changed]):
+                    with self.assertRaisesRegex(ValueError,'^protected artifacts changed during capture$'):
+                        runner.capture()
+                require = runner.require
+                def removed(condition,message):
+                    if message != 'protected artifacts changed during capture': require(condition,message)
+                with patch.object(runner,'protected_hashes',side_effect=[original,changed]),patch.object(runner,'require',side_effect=removed):
+                    runner.capture()
+                self.assertEqual(original,runner.read(runner.OUT/'commands.json')['protectedInputs'])
+
+    def test_failed_capture_invalidates_prior_audit_and_removal_control(self):
+        with self.audit_fixture() as (runner,manifest),contextlib.redirect_stdout(io.StringIO()):
+            runner.audit()
+            audit_path = runner.OUT/'audit.json'
+            previous = audit_path.read_bytes()
+            result = subprocess.CompletedProcess(['fixture-command'],1,b'',b'fixture failure\n')
+            with patch.object(runner,'commands',return_value=[('fixture',['fixture-command'],{})]),patch.object(subprocess,'run',return_value=result),patch.object(runner,'git',return_value=b'fixture-head\n'):
+                with self.assertRaisesRegex(ValueError,'^fixture: gate failed; inspect retained streams$'):
+                    runner.capture()
+                self.assertFalse(audit_path.exists())
+                audit_path.write_bytes(previous)
+                line = "    (OUT/'audit.json').unlink(missing_ok=True)\n"
+                source = inspect.getsource(runner.capture)
+                self.assertEqual(1,source.count(line))
+                namespace = {}
+                exec(source.replace(line,''),runner.__dict__,namespace)
+                with patch.object(runner,'capture',namespace['capture']):
+                    with self.assertRaisesRegex(ValueError,'^fixture: gate failed; inspect retained streams$'):
+                        runner.capture()
+                self.assertEqual(previous,audit_path.read_bytes())
+
+    def test_untracked_whitespace_accepts_diff_status_only_with_empty_streams(self):
+        runner = load('packet58whitespace','review-pass4-20261114/verify_packet.py')
+        command = next(command for name,command,environment in runner.commands() if name == 'untracked-whitespace')
+        for code,out,err,valid in [(0,b'',b'',True),(1,b'',b'',True),(2,b'',b'',False),
+                                   (1,b'fixture whitespace finding\n',b'',False),(1,b'',b'fixture git error\n',False)]:
+            with self.subTest(code=code,stdout=out,stderr=err):
+                def git(arguments,**kwargs):
+                    if arguments[3] == 'ls-files':
+                        return subprocess.CompletedProcess(arguments,0,b'fixture.txt\0',b'')
+                    return subprocess.CompletedProcess(arguments,code,out,err)
+                with patch.object(subprocess,'run',side_effect=git):
+                    if valid:
+                        exec(command[-1],{})
+                    else:
+                        with self.assertRaisesRegex(SystemExit,'^untracked whitespace check failed: fixture.txt$'):
+                            exec(command[-1],{})
 
 
 class AmendmentTests(PendingCase):
@@ -624,12 +932,30 @@ class AmendmentTests(PendingCase):
         self.guard(lambda:self.approval(r),'pending receipt must not claim owner approval')
         self.guard(lambda:self.approval(self.receipt,True),'completion requires exact-byte owner approval and covered Folders roles')
 
+    def test_approval_receipt_conjuncts_and_partial_removal(self):
+        for key,value,condition,message in [
+            ('baselineCommit','0'*40,"receipt.get('baselineCommit') == B.BASELINE",'approval schema/baseline/pin mismatch'),
+            ('sourceRevision','0'*40,"receipt.get('sourceRevision') == B.PIN",'approval schema/baseline/pin mismatch'),
+            ('rolesPolicy','Invented policy',"receipt.get('rolesPolicy') == 'Folders roles covered for this successor only; no cross-module authority is inferred.'",'approval required Folders roles mismatch'),
+        ]:
+            with self.subTest(field=key):
+                receipt = copy.deepcopy(self.receipt); receipt[key] = value
+                self.reject(lambda:self.approval(receipt),message)
+                with self.removed_condition(V,'check_approval',condition):
+                    self.assertEqual((0,PASS,''),self.run_check(lambda:self.approval(receipt)))
+
     def test_builder_refuses_approved_packet_before_any_write(self):
-        read = Path.read_bytes
-        def approved(path,*args,**kwargs):
-            return json.dumps(self.approved()).encode() if path == self.root/B.E/'approval.json' else read(path,*args,**kwargs)
-        with patch.object(Path,'read_bytes',approved),patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
-            self.assertEqual((1,'','FAIL: refusing to overwrite an approved or unknown-state packet\n'),invoke(B))
+        for decision in ['approved','rejected']:
+            with self.subTest(decision=decision):
+                receipt = self.approved(); receipt['decision'] = decision
+                (self.root/B.E/'approval.json').write_text(json.dumps(receipt)+'\n')
+                before = {p:p.read_bytes() for p in [self.root/B.NEW,*(self.root/B.E).rglob('*')] if p.is_file()}
+                expected = (1,'','FAIL: refusing to overwrite an approved or unknown-state packet\n')
+                with patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
+                    self.assertEqual(expected,invoke(B))
+                result = fixture_process(self.root/B.E/'build_candidate.py')
+                self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
+                self.assertEqual(before,{p:p.read_bytes() for p in [self.root/B.NEW,*(self.root/B.E).rglob('*')] if p.is_file()})
 
     def test_builder_refuses_existing_successor_with_missing_receipts(self):
         for missing in [('approval.json',),('labels.json',),('approval.json','labels.json')]:
@@ -658,6 +984,46 @@ class AmendmentTests(PendingCase):
             self.assertEqual('pending',V.read_json(root/B.E/'approval.json')['decision'])
             self.assertEqual('candidate-pending-owner-approval-and-delivery',V.read_json(root/B.E/'labels.json')['state'])
 
+    def test_builder_refuses_output_file_and_parent_symlinks_before_writes(self):
+        paths = [B.NEW,B.E/'approval.json',B.E/'labels.json',*[B.E/'upstream/folders'/name for name in
+                 ['README.before.section.md','README.after.section.md','README.patch']]]
+        output = B.E/'upstream/folders/README.patch'
+        for kind in ['file','parent']:
+            with self.subTest(kind=kind),workspace_view() as root,tempfile.TemporaryDirectory() as temp:
+                external = Path(temp).resolve()/'user-documents'
+                external.mkdir()
+                if kind == 'file':
+                    target = external/'user-document.txt'
+                    target.write_bytes(b'Existing user document.\n')
+                    (root/output).unlink()
+                    (root/output).symlink_to(target)
+                    refused = output
+                else:
+                    for path in paths[-3:]:
+                        (external/path.name).write_bytes(b'Existing user document: '+path.name.encode()+b'\n')
+                    shutil.rmtree(root/output.parent)
+                    (root/output.parent).symlink_to(external,target_is_directory=True)
+                    refused = paths[-3]
+                def outputs():
+                    return {str(path):(root/path).read_bytes() for path in paths}
+                def user_documents():
+                    return {path.name:path.read_bytes() for path in external.iterdir()}
+                before,external_before = outputs(),user_documents()
+                message = 'refusing symlink output destination: '+str(refused)
+                expected = (1,'','FAIL: '+message+'\n')
+                with patch.object(B,'ROOT',root),patch.object(Path,'mkdir',side_effect=AssertionError('unexpected mkdir')),patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
+                    self.assertEqual(expected,invoke(B))
+                result = fixture_process(root/B.E/'build_candidate.py')
+                self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
+                self.assertEqual(before,outputs())
+                self.assertEqual(external_before,user_documents())
+                original = B.require
+                def removed(condition,actual):
+                    if not actual.startswith('refusing symlink output destination: '): original(condition,actual)
+                with patch.object(B,'ROOT',root),patch.object(B,'require',side_effect=removed):
+                    self.assertEqual((0,'Prepared Folders 1.1.0 pending candidate and PS10/PS11 README-only patch; no approval or delivery granted.\n',''),invoke(B))
+                self.assertNotEqual(external_before,user_documents())
+
     def test_integrated_labels_force_owner_approval_without_done_status(self):
         path = self.root/B.E/'labels.json'
         register = V.read_json(path)
@@ -685,15 +1051,17 @@ class AmendmentTests(PendingCase):
     def test_builder_refuses_integrated_labels_before_any_write(self):
         path = self.root/B.E/'labels.json'
         register = V.read_json(path)
-        register['state'] = 'integrated'
-        path.write_text(json.dumps(register)+'\n')
-        before = {p:p.read_bytes() for p in (self.root/B.E).rglob('*') if p.is_file()}
-        expected = (1,'','FAIL: refusing to overwrite a delivered or unknown-state label packet\n')
-        with patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
-            self.assertEqual(expected,invoke(B))
-        result = fixture_process(self.root/B.E/'build_candidate.py')
-        self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
-        self.assertEqual(before,{p:p.read_bytes() for p in (self.root/B.E).rglob('*') if p.is_file()})
+        for state in ['integrated','withdrawn']:
+            with self.subTest(state=state):
+                register['state'] = state
+                path.write_text(json.dumps(register)+'\n')
+                before = {p:p.read_bytes() for p in [self.root/B.NEW,*(self.root/B.E).rglob('*')] if p.is_file()}
+                expected = (1,'','FAIL: refusing to overwrite a delivered or unknown-state label packet\n')
+                with patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')):
+                    self.assertEqual(expected,invoke(B))
+                result = fixture_process(self.root/B.E/'build_candidate.py')
+                self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
+                self.assertEqual(before,{p:p.read_bytes() for p in [self.root/B.NEW,*(self.root/B.E).rglob('*')] if p.is_file()})
 
     def test_published_predecessor_tree_binding_and_guard_removal(self):
         git,run = B.git,subprocess.run
@@ -1048,6 +1416,38 @@ class LabelTests(PendingCase):
             with self.subTest(message=message,repository=register['repository']):
                 self.guard(register,message)
 
+    def test_readme_section_conjuncts_and_partial_removal(self):
+        message = 'folders: committed base or candidate README hash mismatch'
+        for field,condition in [
+            ('before',"before_section == files['README.before.section.md']"),
+            ('after',"after_section == files['README.after.section.md']"),
+        ]:
+            with self.subTest(section=field):
+                register = copy.deepcopy(self.register)
+                item = register['repository'][field]
+                path = self.root/item['path']
+                original = path.read_bytes()
+                data = original+b'Unapproved section prose.\n'
+                path.write_bytes(data); item['sha256'] = B.sha(data)
+                try:
+                    self.reject(register,message)
+                    with self.removed_condition(L,'verify',condition):
+                        expected = ((0,LABEL_PASS,'') if field == 'after' else
+                                    (1,'','FAIL: folders: compatibility retention semantics missing\n'))
+                        self.assertEqual(expected,self.invoke_register(register))
+                finally:
+                    path.write_bytes(original)
+
+    def test_row_binding_conjuncts_and_partial_removal(self):
+        for row_index in [0,1]:
+            for field,condition in [('repository',"row.get('repository') == 'folders'"),('surface',"row.get('surface') == old['surface']")]:
+                with self.subTest(row=row_index,field=field):
+                    register = copy.deepcopy(self.register)
+                    row = register['rows'][row_index]; row[field] = 'Unrelated legacy surface'
+                    self.reject(register,row['id']+': surface, owner or removal gate changed')
+                    with self.removed_condition(L,'verify',condition):
+                        self.assertEqual((0,LABEL_PASS,''),self.invoke_register(register))
+
     def test_unknown_register_state_entrypoints_and_guard_removal(self):
         register = copy.deepcopy(self.register); register['state'] = 'withdrawn'
         self.guard(register,'invalid label register state')
@@ -1137,6 +1537,20 @@ class LabelTests(PendingCase):
         self.reject(r,'PS10: surface, owner or removal gate changed')
         r = copy.deepcopy(self.register); r['repository']['patch']['sha256'] = '0'*64
         self.reject(r,'label artifact hash mismatch: '+str(B.E/'upstream/folders/README.patch'))
+
+    def test_pending_delivery_conjuncts_and_partial_removal(self):
+        for field,value,condition in [
+            ('inventoryRevision','1'*40,"register.get('inventoryRevision') is None"),
+            ('deliveryAuthorization',{},"register.get('deliveryAuthorization') is None"),
+            ('integration',{},"repo.get('integration') is None"),
+        ]:
+            with self.subTest(field=field):
+                register = copy.deepcopy(self.register)
+                target = register['repository'] if field == 'integration' else register
+                target[field] = value
+                self.reject(register,'pending label packet must not claim integration or delivery authorization')
+                with self.removed_condition(L,'verify',condition):
+                    self.assertEqual((0,LABEL_PASS,''),self.invoke_register(register))
 
     def test_current_owner_drift_is_report_only(self):
         git = L.B.git
@@ -1255,6 +1669,13 @@ class LabelTests(PendingCase):
             self.assertEqual((0,integrated,''),self.invoke_register(register,True))
             broken = copy.deepcopy(register); broken['deliveryAuthorization'] = None
             self.assertEqual((1,'','FAIL: completion requires separate explicit label delivery authorization\n'),self.invoke_register(broken,True))
+            for authorization in [{},*[dict(register['deliveryAuthorization'],**{key:''}) for key in ['exactWords','source','approvedOn']]]:
+                with self.subTest(authorization=authorization):
+                    broken = copy.deepcopy(register); broken['deliveryAuthorization'] = authorization
+                    self.assertEqual((1,'','FAIL: completion requires separate explicit label delivery authorization\n'),self.invoke_register(broken,True))
+                    condition = "all(V.nonblank(auth.get(k)) for k in ['exactWords','source','approvedOn'])"
+                    with self.removed_condition(L,'verify',condition):
+                        self.assertEqual((0,integrated,''),self.invoke_register(broken,True))
             broken = copy.deepcopy(register); broken['inventoryRevision'] = '2'*12
             self.assertEqual((1,'','FAIL: completion requires canonical integrated inventory revision\n'),self.invoke_register(broken,True))
             def other_file(repo,*args):

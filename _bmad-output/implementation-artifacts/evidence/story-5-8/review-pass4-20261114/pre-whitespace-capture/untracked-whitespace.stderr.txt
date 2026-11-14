@@ -1,0 +1,1 @@
+untracked whitespace check failed: _bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/ad23.stderr.txt

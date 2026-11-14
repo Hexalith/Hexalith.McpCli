@@ -1,0 +1,11 @@
+test_packet_audit_checks_exact_gate_streams_and_removal_controls (test_verify_amendment.PacketAuditTests.test_packet_audit_checks_exact_gate_streams_and_removal_controls) ... ok
+test_packet_audit_covers_all_fourteen_protected_artifacts (test_verify_amendment.PacketAuditTests.test_packet_audit_covers_all_fourteen_protected_artifacts) ... ok
+test_packet_audit_rejects_changed_frozen_intent_and_missing_matrix_test (test_verify_amendment.PacketAuditTests.test_packet_audit_rejects_changed_frozen_intent_and_missing_matrix_test) ... ok
+test_packet_audit_rejects_damaged_manifest_and_capture_bindings (test_verify_amendment.PacketAuditTests.test_packet_audit_rejects_damaged_manifest_and_capture_bindings) ... ok
+test_packet_capture_rejects_failed_gate_and_changed_inputs (test_verify_amendment.PacketAuditTests.test_packet_capture_rejects_failed_gate_and_changed_inputs) ... ok
+test_untracked_whitespace_accepts_diff_status_only_with_empty_streams (test_verify_amendment.PacketAuditTests.test_untracked_whitespace_accepts_diff_status_only_with_empty_streams) ... ok
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.486s
+
+OK
