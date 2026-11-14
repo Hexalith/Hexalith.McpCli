@@ -30,6 +30,7 @@ def load(name,filename):
 V = load('verify58tests','verify_amendment.py')
 L = load('labels58tests','verify_labels.py')
 B = V.B
+PUBLISHED_LABEL_REVISION = 'c3bd5b9a49b538282db14c5ee9780f63fe70c8b9'
 PASS = ('PASS: folders: 161 entries, pinned declarations/anchors/drift, AD-23 dispositions and complete hash chain\n'
         'PASS: owner decision: pending; candidate only; approval and integrated PS10/PS11 labels remain completion gates\n')
 LABEL_PASS = 'PASS: Story 5.7 register chain; PS10/PS11 Folders 1.1.0 README-only citation patch; candidate only; owner approval and delivery pending\n'
@@ -108,7 +109,7 @@ runpy.run_path(script, run_name='__main__')
 def workspace_view(*,pending=True):
     """Copy documentary inputs, sharing only read-only repository objects/source."""
     with tempfile.TemporaryDirectory() as temp:
-        root = Path(temp)
+        root = Path(temp).resolve()
         for name in ['.git','.gitmodules','references','src']:
             (root/name).symlink_to(ROOT/name,target_is_directory=(ROOT/name).is_dir())
         art = root/B.ART; art.mkdir(parents=True)
@@ -135,6 +136,25 @@ def tearDownModule():
 
 
 class FixtureTests(unittest.TestCase):
+    def test_verifiers_reject_duplicate_workflow_statuses_and_deletion_control(self):
+        guard = "            require(len(keys) <= 1, 'duplicate workflow status '+key.strip())\n"
+        for path,key in [(B.SPEC,'status'),(B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory')]:
+            for value in ['done','','[]']:
+                with self.subTest(path=path,value=value),workspace_view() as root:
+                    target = root/path
+                    target.write_text(target.read_text()+'\n'+key+': '+value+'\n')
+                    verifier = root/B.E/'verify_amendment.py'
+                    source = verifier.read_text()
+                    self.assertEqual(1,source.count(guard))
+                    for script in ['verify_amendment.py','verify_labels.py']:
+                        result = fixture_process(root/B.E/script,'--root',str(root))
+                        self.assertEqual((1,'','FAIL: duplicate workflow status '+key.strip()+'\n'),
+                                         (result.returncode,result.stdout,result.stderr))
+                    verifier.write_text(source.replace(guard,''))
+                    for script,output in [('verify_amendment.py',PASS),('verify_labels.py',LABEL_PASS)]:
+                        result = fixture_process(root/B.E/script,'--root',str(root))
+                        self.assertEqual((0,output,''),(result.returncode,result.stdout,result.stderr))
+
     def test_pinned_observation_only_rewrites_registered_owner(self):
         owner = registered_owner()
         calls = []
@@ -226,6 +246,49 @@ class FixtureTests(unittest.TestCase):
                 with self.assertRaisesRegex(AssertionError,'fixture requires one workflow status:'):
                     proof.main(delivery=Path(temp))
                 self.assertEqual([],list(Path(temp).iterdir()))
+
+    def test_lifecycle_proof_rejects_changed_real_inputs_without_summary(self):
+        proof = load('lifecycle58changed','delivery/lifecycle-proof.py')
+        read,run = Path.read_bytes,subprocess.run
+        protected = ROOT/B.NEW
+        snapshots = 0
+        def changed(path,*args,**kwargs):
+            nonlocal snapshots
+            data = read(path,*args,**kwargs)
+            if path == protected:
+                snapshots += 1
+                if snapshots == 2:
+                    return data+b'changed second snapshot\n'
+            return data
+        def child(command,**kwargs):
+            if command[:5] == [sys.executable,'-I','-m','unittest','discover']:
+                return subprocess.CompletedProcess(command,0,b'',b'')
+            return run(command,**kwargs)
+        with tempfile.TemporaryDirectory() as temp,patch.object(Path,'read_bytes',changed),patch.object(subprocess,'run',side_effect=child):
+            delivery = Path(temp).resolve()
+            with self.assertRaisesRegex(ValueError,'^real candidate/receipt/workflow bytes changed$'):
+                proof.main(delivery=delivery)
+            self.assertEqual(2,snapshots)
+            self.assertFalse((delivery/'lifecycle-integrated.json').exists())
+
+    def test_lifecycle_proof_rejects_child_label_mutation_under_optimization(self):
+        proof = load('lifecycle58childmutation','delivery/lifecycle-proof.py')
+        # Execute the helper with assertions stripped, as Python -O does.
+        exec(compile(Path(proof.__file__).read_text(),proof.__file__,'exec',optimize=1),proof.__dict__)
+        run = subprocess.run
+        def child(command,**kwargs):
+            if command[:5] == [sys.executable,'-I','-m','unittest','discover']:
+                path = kwargs['cwd']/B.E/'labels.json'
+                labels = V.read_json(path)
+                labels['state'] = 'candidate-pending-owner-approval-and-delivery'
+                path.write_text(json.dumps(labels)+'\n')
+                return subprocess.CompletedProcess(command,0,b'',b'')
+            return run(command,**kwargs)
+        with tempfile.TemporaryDirectory() as temp,patch.object(subprocess,'run',side_effect=child):
+            delivery = Path(temp).resolve()
+            with self.assertRaisesRegex(ValueError,'^synthetic lifecycle receipt or labels changed during child run$'):
+                proof.main(delivery=delivery)
+            self.assertFalse((delivery/'lifecycle-integrated.json').exists())
 
 
 class PendingCase(unittest.TestCase):
@@ -328,6 +391,43 @@ class AmendmentTests(PendingCase):
                 rows = self.changed(key,header,value)
                 self.guard(lambda:self.rows(rows),f'folders:{key}: {message}')
 
+    def test_legacy_identity_and_target_inheritance_guard_removal(self):
+        rows = copy.deepcopy(self.new)
+        rows['M03']['cells'][6] += ' altered security/freshness'
+        self.guard(lambda:self.rows(rows),'folders:M03: legacy identity/mapping/security/freshness changed')
+        class SelectedRows(dict):
+            def items(self):
+                return [('M03',self['M03'])]
+        rows = SelectedRows(copy.deepcopy(self.new))
+        rows['C02']['cells'][rows['C02']['headers'].index('Amendment disposition')] = 'defer'
+        self.guard(lambda:self.rows(rows),'folders:M03: target disposition inheritance mismatch')
+
+    def test_preserved_authority_and_adoption_guard_removal(self):
+        git = B.git
+        path = B.AUTHORITIES[0]
+        def damaged(repo,*args):
+            data = git(repo,*args)
+            return data+b'altered committed authority\n' if repo == self.root and args == ('show',f'{B.BASELINE}:{path}') else data
+        with patch.object(B,'git',side_effect=damaged):
+            self.guard(lambda:V.verify_owner_packet(self.root),f'preserved authority changed: {path}')
+        load_module = V.load
+        ad_fixture = type('AdoptionFixture',(),{'verify':staticmethod(lambda *args:({},'pending'))})()
+        def pending(root,name,path):
+            return ad_fixture if path == B.ART/'evidence/story-5-2/verify_class_map.py' else load_module(root,name,path)
+        with patch.object(V,'load',side_effect=pending):
+            self.guard(lambda:V.verify_owner_packet(self.root),'AD-23 exact-byte owner adoption is required')
+
+    def test_candidate_prose_guard_removal_reaches_hash_chain_refusal(self):
+        path = self.root/B.NEW
+        path.write_bytes(path.read_bytes()+b'Unapproved factual prose.\n')
+        message = 'folders: candidate prose/source premises differ from deterministic derivation'
+        self.reject(lambda:V.verify_owner_packet(self.root),message)
+        original = V.require
+        def removed(condition,actual):
+            if actual != message: original(condition,actual)
+        with patch.object(V,'require',side_effect=removed):
+            self.reject(lambda:V.verify_owner_packet(self.root),'approval artifact/hash-chain binding mismatch')
+
     def test_replace_include_equivalence_and_each_required_action(self):
         rows = self.changed('V07','Amendment coverage','exclude')
         rows['V07']['cells'][2] = 'replace / exclude'
@@ -381,6 +481,36 @@ class AmendmentTests(PendingCase):
                 self.guard(lambda:V.check_declarations(ROOT,self.old,self.new,decl,self.surface),diagnostic,source_guard=True)
         decl = copy.deepcopy(self.decl); decl['C02']['eligibility'] = 'excluded'
         self.reject(lambda:V.check_declarations(ROOT,self.old,self.new,decl,self.surface),'folders: 48-candidate/41-decoration owner set mismatch')
+
+    def test_pinned_surface_sets_and_missing_target_guard_removal(self):
+        for index,key,value,message in [
+            (0,'invented-tool','invented.cs:1','folders: exact pinned 49-tool set mismatch'),
+            (1,('invented-resource','invented://uri'),'invented.cs:1','folders: exact pinned two-resource set mismatch'),
+            (2,'invented leaf',('Invented','invented.cs:1'),'folders: exact pinned 42-leaf set mismatch'),
+        ]:
+            with self.subTest(message=message):
+                surface = copy.deepcopy(self.surface)
+                surface[index][key] = value
+                self.guard(lambda:V.check_declarations(ROOT,self.old,self.new,self.decl,surface),message)
+        with patch.object(B,'variant_targets',return_value=[]):
+            self.guard(lambda:V.check_declarations(ROOT,self.old,{'V07':self.new['V07']},self.decl,self.surface),
+                       'folders:V07: replacement has no decorated target')
+
+    def test_pinned_registration_and_module_guard_removal(self):
+        source = B.source
+        for path,before,after,message in [
+            ('src/Hexalith.Folders.Mcp/Program.cs','.WithToolsFromAssembly()','.WithoutToolsFromAssembly()',
+             'folders: pinned registration mismatch'),
+            ('src/Hexalith.Folders.Contracts/FoldersModule.cs','IdentifierKind.String','IdentifierKind.Ulid',
+             'folders: module domain/String identifier declaration mismatch'),
+        ]:
+            with self.subTest(message=message):
+                self.assertIn(before,source(ROOT,path))
+                def damaged(root,name,pin=B.PIN):
+                    text = source(root,name,pin)
+                    return text.replace(before,after) if name == path and pin == B.PIN else text
+                with patch.object(B,'source',side_effect=damaged):
+                    self.guard(lambda:V.check_declarations(ROOT,self.old,self.new,self.decl,self.surface),message)
 
     def test_story_status_and_metadata_corrections(self):
         rows = self.changed('G4','Gap and required evidence','Folders Story 5.14: done at the pin.')
@@ -533,6 +663,29 @@ class AmendmentTests(PendingCase):
             result = fixture_process(verifier,'--root',str(root))
             self.assertEqual((0,PASS,''),(result.returncode,result.stdout,result.stderr))
 
+    def test_real_verifier_calls_declarations_guard_and_deletion_control(self):
+        with workspace_view() as root:
+            builder = root/B.E/'build_candidate.py'
+            source = builder.read_text()
+            source += '''\n_original_source_for_module_control = source
+def source(root, path, pin=PIN):
+    text = _original_source_for_module_control(root, path, pin)
+    if path == 'src/Hexalith.Folders.Contracts/FoldersModule.cs' and pin == PIN:
+        return text.replace('IdentifierKind.String', 'IdentifierKind.Ulid')
+    return text
+'''
+            builder.write_text(source)
+            verifier = root/B.E/'verify_amendment.py'
+            result = fixture_process(verifier,'--root',str(root))
+            self.assertEqual((1,'','FAIL: folders: module domain/String identifier declaration mismatch\n'),
+                             (result.returncode,result.stdout,result.stderr))
+            source = verifier.read_text()
+            invocation = '    check_declarations(root,old,new,decl,surface)\n'
+            self.assertEqual(1,source.count(invocation))
+            verifier.write_text(source.replace(invocation,''))
+            result = fixture_process(verifier,'--root',str(root))
+            self.assertEqual((0,PASS,''),(result.returncode,result.stdout,result.stderr))
+
     def test_mcpcli_route_uses_committed_baseline_and_guard_removal(self):
         path = 'src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs'
         read,git = Path.read_text,B.git
@@ -571,6 +724,32 @@ class AmendmentTests(PendingCase):
             return text.replace('JsonProperty("expectedFileVersion"','JsonProperty("removedExpectedVersion"') if name == path and pin == B.PIN else text
         with patch.object(B,'source',side_effect=missing):
             self.guard(lambda:V.check_source_drift(ROOT,self.surface),'folders: source drift FileMutationRequest.expectedFileVersion is not evidenced at both pins')
+
+    def test_legacy_surface_drift_guard_removal(self):
+        surface = copy.deepcopy(self.surface)
+        surface[0]['invented-tool'] = 'invented.cs:1'
+        self.guard(lambda:V.check_source_drift(ROOT,surface),'folders: source drift added, removed or renamed a legacy surface')
+
+    def test_pinned_transport_defaults_and_internal_query_premise_guard_removal(self):
+        source = B.source
+        cases = [
+            ('src/shared/AdapterCore/BearerTransportPolicy.cs','Uri.UriSchemeHttps','Uri.UriSchemeInvented',
+             'folders: HTTPS/loopback credential source premise missing'),
+            ('src/Hexalith.Folders.Server/FoldersServerServiceCollectionExtensions.cs',
+             'IWorkspaceCommitExecutor, UnavailableWorkspaceCommitExecutor','IWorkspaceCommitExecutor, InventedExecutor',
+             'folders: default implementation/commit-executor source premise missing'),
+        ]
+        for query in ['FolderFileOwnerRead','FolderFileReferenceRead','FolderOwnerRead']:
+            cases.append((f'src/Hexalith.Folders.Server/Queries/{query}QueryHandler.cs','IDomainQueryHandler','IInventedQueryHandler',
+                          f'folders: internal {query} query-handler premise missing'))
+        for path,before,after,message in cases:
+            with self.subTest(message=message):
+                self.assertIn(before,source(ROOT,path))
+                def damaged(root,name,pin=B.PIN):
+                    text = source(root,name,pin)
+                    return text.replace(before,after) if name == path and pin == B.PIN else text
+                with patch.object(B,'source',side_effect=damaged):
+                    self.guard(lambda:V.check_source_drift(ROOT,self.surface),message)
 
     def test_owner_file_id_drift_semantics_and_both_pin_controls(self):
         for key in ['M01','M04','M13','L24','L25','L26','C10']:
@@ -646,7 +825,7 @@ class AmendmentTests(PendingCase):
         ]
         for name,data,message in cases:
             with self.subTest(name=name,data=data),tempfile.TemporaryDirectory() as temp:
-                root = Path(temp);e = root/B.E;e.mkdir(parents=True)
+                root = Path(temp).resolve();e = root/B.E;e.mkdir(parents=True)
                 shutil.copyfile(HERE/'build_candidate.py',e/'build_candidate.py')
                 (e/'approval.json').write_text('{"decision":"pending"}')
                 (e/'labels.json').write_text('{"state":"candidate-pending-owner-approval-and-delivery","repository":{}}')
@@ -738,6 +917,47 @@ class LabelTests(PendingCase):
     def reject(self,register,message):
         self.assertEqual((1,'','FAIL: '+message+'\n'),self.invoke_register(register))
 
+    def guard(self,register,message):
+        self.reject(register,message)
+        original = L.require
+        def removed(condition,actual):
+            if actual != message: original(condition,actual)
+        self.assertIs(L.verify.__globals__,L.__dict__)
+        with patch.object(L,'require',side_effect=removed):
+            self.assertEqual((0,LABEL_PASS,''),self.invoke_register(register))
+
+    def test_register_schema_repository_base_and_readme_hash_guard_removal(self):
+        cases = []
+        register = copy.deepcopy(self.register); register['schemaVersion'] = '9.9.9'
+        cases.append((register,'unsupported label register schema'))
+        for key,value in [('baseRevision','0'*40),('repository','https://github.com/fixture-fork/Hexalith.Folders')]:
+            register = copy.deepcopy(self.register); register['repository'][key] = value
+            cases.append((register,'Folders label repository/base mismatch'))
+        register = copy.deepcopy(self.register); register['repository']['readme']['beforeSha256'] = '0'*64
+        cases.append((register,'folders: committed base or candidate README hash mismatch'))
+        for register,message in cases:
+            with self.subTest(message=message,repository=register['repository']):
+                self.guard(register,message)
+
+    def test_exact_readme_patch_guard_removal(self):
+        register = copy.deepcopy(self.register)
+        item = register['repository']['patch']
+        path = self.root/item['path']
+        path.write_bytes(path.read_bytes()+b'--- a/src/Other.cs\n+++ b/src/Other.cs\n@@ -0,0 +1 @@\n+invented\n')
+        item['sha256'] = B.sha(path.read_bytes())
+        self.guard(register,'folders: patch is not exact README-only citation diff')
+
+    def test_retention_semantics_guard_removal(self):
+        register = copy.deepcopy(self.register)
+        item = register['repository']['after']
+        path = self.root/item['path']
+        path.write_bytes(path.read_bytes().replace(b'They are not retired',b'They are retired'))
+        item['sha256'] = B.sha(path.read_bytes())
+        expected,files = L.B.label_candidate(self.root,B.sha((self.root/B.NEW).read_bytes()))
+        files['README.after.section.md'] = path.read_bytes()
+        with patch.object(L.B,'label_candidate',return_value=(expected,files)):
+            self.guard(register,'folders: compatibility retention semantics missing')
+
     def test_register_chain_coverage_hash_citation_and_no_false_delivery(self):
         self.assertEqual((0,LABEL_PASS,''),self.invoke_register(self.register))
         cases = [('predecessor',{},'Story 5.7 label predecessor chain mismatch'),('rows',self.register['rows'][:1],'Folders PS10/PS11 label coverage/duplicate mismatch'),('inventoryArtifacts',{},'labels bind wrong Folders inventory hash'),('inventoryRevision','1'*40,'pending label packet must not claim integration or delivery authorization')]
@@ -792,18 +1012,17 @@ class LabelTests(PendingCase):
         source bytes nor root publication reads are substituted.
         """
         original = L.B.git
-        register = L.read_json(ROOT/B.E/'labels.json')
-        (self.root/B.E/'approval.json').write_bytes((ROOT/B.E/'approval.json').read_bytes())
+        register = json.loads(original(ROOT,'show',f'{PUBLISHED_LABEL_REVISION}:{B.E}/labels.json'))
+        (self.root/B.E/'approval.json').write_bytes(original(ROOT,'show',f'{register["inventoryRevision"]}:{B.E}/approval.json'))
         owner_source = Path(register['repository']['ownerCheckout'])
         with tempfile.TemporaryDirectory() as temp:
-            owner = Path(temp)
+            owner = Path(temp).resolve()
             original(owner,'init','--quiet')
             objects = Path(original(owner_source,'rev-parse','--git-path','objects').decode().strip())
             if not objects.is_absolute(): objects = owner_source/objects
             (owner/'.git/objects/info/alternates').write_text(str(objects.resolve())+'\n')
             original(owner,'remote','add','origin','https://github.com/Hexalith/Hexalith.Folders.git')
-            current = original(owner_source,'rev-parse','origin/main').decode().strip()
-            original(owner,'update-ref','refs/remotes/origin/main',current)
+            original(owner,'update-ref','refs/remotes/origin/main',register['repository']['integration']['commit'])
             register['repository']['ownerCheckout'] = str(owner)
             yield register,owner,original
 
@@ -843,6 +1062,11 @@ class LabelTests(PendingCase):
         with self.published_graph_fixture() as (register,owner,git):
             register['repository']['integration']['commitSha256'] = '0'*64
             self.published_guard_control(register,'folders: integrated commit byte hash mismatch')
+
+    def test_real_delivery_rejects_abbreviated_commit_and_guard_removal(self):
+        with self.published_graph_fixture() as (register,owner,git):
+            register['repository']['integration']['commit'] = register['repository']['integration']['commit'][:12]
+            self.published_guard_control(register,'folders: completion requires canonical integrated label commit')
 
     def test_completion_chain_and_exact_delivery_bytes(self):
         register = copy.deepcopy(self.register)

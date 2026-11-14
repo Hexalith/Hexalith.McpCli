@@ -262,8 +262,10 @@ def check_metadata(text):
 def completion_requested(root,requested):
     for path,key in [(B.SPEC,'status'),(ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory')]:
         if (root/path).exists():
-            found = re.findall(r'^'+re.escape(key)+r':\s*[\'"]?([\w-]+)',(root/path).read_text(),re.M)
-            require(len(found) <= 1, 'duplicate workflow status '+key.strip())
+            text = (root/path).read_text()
+            keys = re.findall(r'^'+re.escape(key)+r':',text,re.M)
+            require(len(keys) <= 1, 'duplicate workflow status '+key.strip())
+            found = re.findall(r'^'+re.escape(key)+r':\s*[\'"]?([\w-]+)',text,re.M)
             requested = requested or found == ['done']
     return requested
 

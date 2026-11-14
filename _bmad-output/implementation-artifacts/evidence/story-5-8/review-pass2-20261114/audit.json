@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "a92a2969db6903b8c6cca7e437446167e135ec9d",
+  "head": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8",
+  "executableInputsMatchCapturedRun": true,
+  "protected": {
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md": {
+      "sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+      "unchangedFrom": "a92a2969db6903b8c6cca7e437446167e135ec9d"
+    },
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md": {
+      "sha256": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+      "unchangedFrom": "a92a2969db6903b8c6cca7e437446167e135ec9d"
+    },
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json": {
+      "sha256": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3",
+      "unchangedFrom": "a92a2969db6903b8c6cca7e437446167e135ec9d"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json": {
+      "sha256": "7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498",
+      "unchangedFrom": "a92a2969db6903b8c6cca7e437446167e135ec9d"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/main-integration.json": {
+      "sha256": "be51f67f9f3036bb328ceb7c72125777964138d537e96875f4c887286432430d",
+      "unchangedFrom": "a92a2969db6903b8c6cca7e437446167e135ec9d"
+    },
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md": {
+      "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c",
+      "unchangedFrom": "a92a2969db6903b8c6cca7e437446167e135ec9d"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json": {
+      "sha256": "5b0044a505f6cdcb95c5ceaa087f79dd705da54de3225ea9358f2b50f48e3b90",
+      "unchangedFrom": "a92a2969db6903b8c6cca7e437446167e135ec9d"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/labels.json": {
+      "sha256": "06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6",
+      "unchangedFrom": "a92a2969db6903b8c6cca7e437446167e135ec9d"
+    },
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md": {
+      "sha256": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407",
+      "unchangedFrom": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json": {
+      "sha256": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e",
+      "unchangedFrom": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json": {
+      "sha256": "7adc8fbe4cf7ab7d37ea4746c36b0e1c99754c56bf8bc2dde7912940e83cd7a1",
+      "unchangedFrom": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/upstream/folders/README.before.section.md": {
+      "sha256": "efd17b99b386b40e988e785d986e76bf4753665998d535f9efadaa0655f38eb3",
+      "unchangedFrom": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/upstream/folders/README.after.section.md": {
+      "sha256": "ba0a093f2d28968c93221d07ab9733522b467649e3f41c45a598699682c97182",
+      "unchangedFrom": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8"
+    },
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/upstream/folders/README.patch": {
+      "sha256": "ec9febc718a75008114ab39eac6de55ac01ab8160e61f848943865a22956be2f",
+      "unchangedFrom": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8"
+    }
+  }
+}

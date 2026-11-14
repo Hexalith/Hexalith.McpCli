@@ -1,4 +1,4 @@
-# Story 5.8 verification (2026-11-13)
+# Story 5.8 verification (2026-11-14)
 
 The Folders 1.1.0 inventory and exact-byte owner approval were published at
 McpCli `f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091`. The separately authorized PS10/PS11
@@ -18,7 +18,7 @@ reconciliation remains an Epic 6 catalog hold.
 
 ## Reproduction prerequisites
 
-Run from the McpCli repository root with Python 3 and Git. The approved label
+Run from the McpCli repository root with Python 3.9 or newer and Git. The approved label
 register requires the existing absolute owner checkout
 `/home/administrator/projects/hexalith/folders`, with `origin` identifying
 `Hexalith/Hexalith.Folders`; the register is unchanged. That checkout must contain
@@ -29,7 +29,8 @@ inventory/approval revision `f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091` and its
 local `origin/main` ref. Both delivery revisions must be ancestors of the
 respective local refs. The tests additionally use existing McpCli commits
 `85a5437b98d0e126147460ca1ee1fa6a36041a21` and
-`cab549c7b06fa4eef08e46cfcde038f62ea81fbf`.
+`cab549c7b06fa4eef08e46cfcde038f62ea81fbf`, plus the published label-register
+revision `c3bd5b9a49b538282db14c5ee9780f63fe70c8b9`.
 
 The root-declared `references/Hexalith.Folders` checkout must contain committed
 source objects for `7eab70e9332c0573b50dce5b219e425b6a2d363c` and published
@@ -37,7 +38,81 @@ ancestor `2236855ee181bdeed2a103537c66316a1612c792`. The unpublished original
 `e2252f29a2dba2b64786ee483eb59fbceaadd387` is optional. The verifiers read these
 local objects and refs; they do not fetch or perform network operations.
 
-## Code-review patch verification (2026-11-14)
+## Final resumed-build verification (2026-11-14)
+
+All ten pass-2 patch entries and four follow-up build-review patch groups are
+complete. Final verification passed **65 tests in 75.261 seconds** in the ordinary
+workspace and **65 tests in 78.173 seconds** in the synthetic approved/integrated/done
+lifecycle workspace, with no skips. The lifecycle proof computed unchanged real
+inputs and now preserves both real-input and synthetic-state checks under Python
+optimization. Its negative child-mutation case runs optimized helper code and
+requires refusal without a success summary. Blank and malformed duplicate status
+keys are refused through both actual entrypoints, and a copied-entrypoint mutation
+proves the owner verifier calls its declaration checks.
+
+Three focused tests also passed with a symlinked temporary-directory root
+(14.229 seconds), covering workspace copies, protected-JSON fixtures and published
+owner graphs. Both real completion verifiers, AD-23 adoption and the full-baseline
+whitespace check passed. The [final command manifest](review-pass2-final-20261114/commands.json)
+binds all ten executed repository helpers and exact commands, streams and hashes.
+The [closure audit](review-pass2-final-20261114/audit.json) checks protected bytes,
+frozen intent, matrix coverage and the final done/review workflow state.
+
+All three independent review layers completed. Four direct patch groups were
+applied; one new approved-byte omission (Q08 optional task context in V03) is
+assigned to the K12 successor, and six prior deferrals were carried without
+duplicates. The catalog hold remains open. Approved inventory, receipts, labels,
+production, dependencies, census and gitlinks are unchanged. This build session
+performed no commit or push; no .NET or live acceptance is claimed.
+
+Final scan command:
+`python3 -B scripts/scan-evidence-secrets.py _bmad-output/implementation-artifacts/evidence/story-5-8 --receipt _bmad-output/implementation-artifacts/evidence/story-5-8/secret-scan-review-pass2-final-20261114.json`.
+The [final receipt](secret-scan-review-pass2-final-20261114.json) covers the completed
+packet after review and workflow closure; earlier captures and scans are historical.
+
+## Historical code-review pass 2 patch verification (2026-11-14)
+
+All ten accepted patch entries are implemented. The retained ordinary suite passed
+**63 tests in 63.186 seconds**, and the fresh synthetic approved/integrated/done
+lifecycle run passed **63 tests in 63.013 seconds**, with no skips. The lifecycle
+proof computed `realInputsUnchanged: true`; a negative control supplies a changed
+second snapshot and requires an exception without a success summary. Its real-input
+comparison now remains active under Python optimization.
+
+The published-graph fixtures read the integrated register at McpCli
+`c3bd5b9a49b538282db14c5ee9780f63fe70c8b9` and the approval at its recorded
+inventory revision, using committed objects. Their temporary owner `origin/main`
+points to Folders delivery `db40bda8a107fcb03405e074810be16c0d47c85f`, so synthetic
+lifecycle state and later owner relabels do not change the fixture. Temp roots are
+resolved before comparisons with verifier roots.
+
+New exact-stream refusal and removal controls cover duplicate spec/sprint statuses
+through both real entrypoints; label schema, repository/base, README hashes, patch
+scope, retention and canonical delivery commits; legacy identity and disposition
+inheritance; complete pinned surface sets, registration and module declarations;
+missing replacement targets; source drift and transport/default/query premises;
+preserved authority, AD-23 adoption and candidate prose. Removing the prose guard
+is shown to reach the independent receipt hash-chain refusal.
+
+The [command manifest](review-pass2-20261114/commands.json) binds all ten executable
+repository inputs, exact commands, working directories, exit codes and both complete
+stream hashes. It includes the explicit invocation that redirects the lifecycle proof
+to this new packet; the older delivery captures remain historical. Both real default
+completion verifiers, AD-23 and whitespace checks pass. The ledger now has current
+builder anchors, a separate resumed-review heading, and the full client/server/domain
+scope of the 23-file end-anchor tightening, all assigned to the K12 successor.
+All eight preserved authorities are listed below. Approved inventory, receipt,
+register, label-patch and delivered README bytes remain unchanged. This session
+performed no commit or push. No .NET build or live acceptance is claimed for these
+documentary and Python-test changes.
+
+Pass-2 scan command:
+`python3 -B scripts/scan-evidence-secrets.py _bmad-output/implementation-artifacts/evidence/story-5-8 --receipt _bmad-output/implementation-artifacts/evidence/story-5-8/secret-scan-review-pass2-20261114.json`.
+The [receipt](secret-scan-review-pass2-20261114.json) binds the packet at this
+implementation handoff; subsequent build-review and workflow closure evidence
+requires its own final scan.
+
+## Historical code-review pass 1 patch verification (2026-11-14)
 
 All nine accepted patch entries and five review follow-up patch groups are implemented.
 The final suite passed **50 tests in 46.608 seconds**, with no skips. Its new cases protect the published predecessor tree binding and
@@ -61,8 +136,9 @@ K12 deferrals remain open; their approved inventory text needs a separately
 approved successor. Review also recorded two pre-existing source-drift omissions
 for that successor: SDK end-anchor tightening and disabled automatic redirects.
 The spec is done and sprint tracking is review. All five follow-up patch groups
-passed final verification; the edge-case review returned no findings. No commit
-or push was performed.
+passed final verification; the edge-case review returned no findings. That build
+session performed no commit or push. The user later committed its work as
+`edd15cfe372ba7ecdd0c835966fa93073a072fae`.
 
 Final scan after review and workflow closure:
 `python3 scripts/scan-evidence-secrets.py _bmad-output/implementation-artifacts/evidence/story-5-8 --receipt _bmad-output/implementation-artifacts/evidence/story-5-8/secret-scan-review-final-20261114.json`.
@@ -213,7 +289,11 @@ Preserved authority hashes, enforced against the baseline commit and bound by
 | Folders 1.0.0 | `57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b` |
 | AD-23 decision | `f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560` |
 | AD-23 map | `21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3` |
+| Story 5.2 approval.json | `7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498` |
+| Story 5.2 main-integration.json | `be51f67f9f3036bb328ceb7c72125777964138d537e96875f4c887286432430d` |
 | Technical 1.0.3 | `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c` |
+| Story 5.7 approval.json | `5b0044a505f6cdcb95c5ceaa087f79dd705da54de3225ea9358f2b50f48e3b90` |
+| Story 5.7 labels.json | `06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6` |
 
 The approved Folders 1.1.0 successor is SHA-256
 `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.

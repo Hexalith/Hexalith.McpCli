@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -223,7 +223,7 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
 
 The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged. The three defers follow pass-1 Decision 2: fold approved-byte defects into the K12 successor.
 
-- [ ] [Review][Patch] The published-graph fixture reads mutable state, so the retained lifecycle proof now fails and a later Folders relabel will break four tests (medium)
+- [x] [Review][Patch] The published-graph fixture reads mutable state, so the retained lifecycle proof now fails and a later Folders relabel will break four tests (medium)
   - `published_graph_fixture` reads the register from the working-tree `labels.json` and copies the working-tree `approval.json` (`test_verify_amendment.py:795-796`).
   - It also points the fixture's `origin/main` at the owner checkout's moving `origin/main` (`:806`).
   - I reran `delivery/lifecycle-proof.py` with its delivery directory redirected to a scratch folder. It now reports `Ran 50 tests … FAILED (failures=5)`: all five `test_real_publication_*` and `test_real_delivery_*` cases fail.
@@ -236,14 +236,14 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
     - Read the register and approval from their published commits with `git show`, and set the fixture's `refs/remotes/origin/main` to the delivery commit `db40bda8`.
     - Rerun the lifecycle proof into a new task-owned packet and record its exact streams.
   - (E1, B8) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:795]
-- [ ] [Review][Patch] The duplicate workflow-status guard has no test (medium) — `completion_requested` rejects a second status line (`verify_amendment.py:266`). Without that check, a second `done` line silently disables the done trigger at `:267`.
+- [x] [Review][Patch] The duplicate workflow-status guard has no test (medium) — `completion_requested` rejects a second status line (`verify_amendment.py:266`). Without that check, a second `done` line silently disables the done trigger at `:267`.
   - The two "duplicate workflow statuses" tests assert the test-only helper's `fixture requires one workflow status` error (`test_verify_amendment.py:67-71`), not the verifier's.
   - The V layer deleted `:266` in an isolated copy. Both `verify_amendment.py` and `verify_labels.py` then exit 0 with the pending PASS on a duplicated spec or sprint status, and all 50 tests still pass.
   - Fix:
     - For both the spec key and the sprint key, add a `workspace_view()` case that appends a second status line. Assert `(1, '', 'FAIL: duplicate workflow status …\n')` from both entrypoints through `fixture_process`.
     - Add a deletion control like `test_real_verifier_calls_source_drift_guard_and_deletion_control`.
   - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:266]
-- [ ] [Review][Patch] Label-register and inventory-verifier guards have no failing-input tests or removal controls (medium) — The test file contains none of these guards' messages, so disabling any one of them leaves all 50 tests passing.
+- [x] [Review][Patch] Label-register and inventory-verifier guards have no failing-input tests or removal controls (medium) — The test file contains none of these guards' messages, so disabling any one of them leaves all 50 tests passing.
   - Label guards, demonstrated by the V layer on the real integrated register: with only the named `require` disabled, each tampered input returns `(0, 'PASS: … integrated delivery verified\n', '')`.
     - `verify_labels.py:78`, canonical integrated label commit: a 12-character `db40bda8a107` resolves.
     - `:39`, register schema: `schemaVersion = '9.9.9'`.
@@ -260,33 +260,33 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
     - For the pinned premises, patch `B.source`, as `test_required_fence_attributes_and_guard_removal` does.
     - CLAUDE.md requires a removal-sensitive test for every new guard.
   - (V2, V3, A1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py:78]
-- [ ] [Review][Patch] The lifecycle proof's "real inputs unchanged" claim is a literal, not the checked comparison (low) — `delivery/lifecycle-proof.py:68` writes `'realInputsUnchanged': True`, and the only check is the `assert` at `:64`.
+- [x] [Review][Patch] The lifecycle proof's "real inputs unchanged" claim is a literal, not the checked comparison (low) — `delivery/lifecycle-proof.py:68` writes `'realInputsUnchanged': True`, and the only check is the `assert` at `:64`.
   - Deleting `:64` leaves `test_lifecycle_proof_binds_local_captures_and_replay` green, because it asserts the constant (`test_verify_amendment.py:203`). Under `python -O` the `assert` is stripped, so the field stays `True` even if the real bytes changed.
   - Fix:
     - Compute the field from `before == after` and raise an exception instead of using `assert`.
     - Add a negative control that changes a protected path's second snapshot, and assert the failure with no summary written.
   - (V4, E2) [_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py:64]
-- [ ] [Review][Patch] Three 5.8 ledger anchors point at the wrong builder lines (low) — `deferred-work.md:1057`, `:1062` and `:1067` cite `build_candidate.py:241`, `:266` and `:304`.
+- [x] [Review][Patch] Three 5.8 ledger anchors point at the wrong builder lines (low) — `deferred-work.md:1057`, `:1062` and `:1067` cite `build_candidate.py:241`, `:266` and `:304`.
   - `edd15cf` added four lines, so these now land on a blank line, the R01/R02 gaps line and `row_name`.
   - The targets are now `:245` (the shared K12 string), `:270` (`replacement()`) and `:308` (`drift()`). The newer SDK entry already cites `:308`.
   - (B1, E8, A3) [_bmad-output/implementation-artifacts/deferred-work.md:1057]
-- [ ] [Review][Patch] The two resumed-build-review deferrals sit under the pass-1 code-review heading (low) — The SDK end-anchor and redirect entries (`deferred-work.md:1068-1077`) say "identified during resumed build review on 2026-11-14". They are filed under `## Deferred from: code review of spec-5-8… (2026-11-13)`.
+- [x] [Review][Patch] The two resumed-build-review deferrals sit under the pass-1 code-review heading (low) — The SDK end-anchor and redirect entries (`deferred-work.md:1068-1077`) say "identified during resumed build review on 2026-11-14". They are filed under `## Deferred from: code review of spec-5-8… (2026-11-13)`.
   - Their delivery vehicle, "next versioned Folders successor", also reads differently from the neighbouring entries' "K12 reconciliation successor".
   - Fix: give them their own source/date heading, and name the K12 reconciliation successor as the vehicle. Epic 6 cannot catalog Folders before it exists, so that successor is the next Folders version.
   - (B2, A4) [_bmad-output/implementation-artifacts/deferred-work.md:1068]
-- [ ] [Review][Patch] The SDK end-anchor ledger entry cites 2 of the 23 changed files (low) — The entry frames the change as client-SDK tightening and cites only `Oq2RequestValidation.cs:13` and `Oq2WireObjectConverter.cs:16`.
+- [x] [Review][Patch] The SDK end-anchor ledger entry cites 2 of the 23 changed files (low) — The entry frames the change as client-SDK tightening and cites only `Oq2RequestValidation.cs:13` and `Oq2WireObjectConverter.cs:16`.
   - Between `2236855e` and `7eab70e9`, `\z` anchors were added in 23 `src` files (none at `2236855e`). They include server and domain validators the legacy heads reach: `FolderCommandValidator`, `WorkspacePathPolicyValidator`, `StreamNameSegment`, `OrganizationAclCommandValidator`, `OrganizationProviderBindingCommandValidator`, and the provider-readiness and diagnostics query handlers.
   - The successor's "determine affected rows" work would start from an incomplete premise. Fix: extend the summary and evidence to the server and domain validators.
   - (B3) [_bmad-output/implementation-artifacts/deferred-work.md:1069]
-- [ ] [Review][Patch] `verification.md` still says no commit or push happened (low) — `verification.md:63-65` says "No commit or push was performed", but that text was committed in `edd15cf`, which equals `origin/main`. The title still says "(2026-11-13)" above the 2026-11-14 current-state section.
+- [x] [Review][Patch] `verification.md` still says no commit or push happened (low) — `verification.md:63-65` says "No commit or push was performed", but that text was committed in `edd15cf`, which equals `origin/main`. The title still says "(2026-11-13)" above the 2026-11-14 current-state section.
   - The commit carries the user's authorship and no agent attribution, so the frozen "Never commit" rule (which binds the agent) is not shown to be violated. Only the current-state wording is stale.
   - Fix: say that the build session performed no commit and that the user later committed the work as `edd15cf`, and date the title.
   - (B9, A5) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:64]
-- [ ] [Review][Patch] The preserved-authority hash table lists 4 of the 8 bound authorities (low) — The table under "Preserved authority hashes, enforced against the baseline commit and bound by approval.json" omits four authorities that `B.AUTHORITIES` (`build_candidate.py:48-51`) pins and `approval.json` binds.
+- [x] [Review][Patch] The preserved-authority hash table lists 4 of the 8 bound authorities (low) — The table under "Preserved authority hashes, enforced against the baseline commit and bound by approval.json" omits four authorities that `B.AUTHORITIES` (`build_candidate.py:48-51`) pins and `approval.json` binds.
   - The missing four are story-5-2 `approval.json` and `main-integration.json`, and story-5-7 `approval.json` and `labels.json`.
   - Fix: add the four rows.
   - (B10) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:208]
-- [ ] [Review][Patch] Test fixtures compare unresolved temp paths with the verifiers' resolved roots (low) — Three fixtures use `root = Path(temp)` (`test_verify_amendment.py:111`, `:649`, `:799`), while `verify_amendment.verify` and `verify_labels.verify` call `Path(root).resolve()`.
+- [x] [Review][Patch] Test fixtures compare unresolved temp paths with the verifiers' resolved roots (low) — Three fixtures use `root = Path(temp)` (`test_verify_amendment.py:111`, `:649`, `:799`), while `verify_amendment.verify` and `verify_labels.verify` call `Path(root).resolve()`.
   - Patched reads such as `path == self.root/B.E/'labels.json'` (`:735`) therefore miss under a symlinked `TMPDIR`, for example macOS `/private/var`.
   - Fix: resolve each temp root (`Path(temp).resolve()`).
   - (E6) [_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py:111]
@@ -359,6 +359,10 @@ Derivation rules (the decisions above apply first):
 
 - 2026-11-14: Resumed build completed the nine requested review patches and five follow-up patch groups. Final verification passed all 50 tests, both real completion verifiers and the AD-23 gate, with exact-stream captures and complete executable-input hashes in [the final command manifest](evidence/story-5-8/review-final-20261114/commands.json). Matrix coverage and protected artifact bytes were audited. Two pre-existing approved-byte drift omissions were added to the versioned-successor ledger; three prior K12-successor defects remain there without duplicate entries. Spec is done and sprint tracking is review. Approved inventory, approval, labels, production code, dependencies and gitlinks remain unchanged. The frozen scope requires separate explicit commit authorization; no commit or push was performed.
 
+- 2026-11-14: Implemented all ten code-review-pass-2 patch entries. Published-graph fixtures now read the committed register/approval and pin their temporary owner ref to the delivered label commit. Added exact-stream refusal/removal controls for the listed workflow, label and inventory guards, plus a fail-closed lifecycle snapshot comparison and negative control. The retained ordinary suite passed all 63 tests in 63.186 seconds; the fresh synthetic lifecycle proof passed all 63 in 63.013 seconds and computed that real protected inputs were unchanged. Both real completion verifiers, AD-23 and whitespace checks passed. Ledger anchors, review grouping, 23-file client/server/domain validation evidence, verification history and the complete eight-authority hash table are corrected. Exact commands, complete streams and executable-input hashes are in [the pass-2 command manifest](evidence/story-5-8/review-pass2-20261114/commands.json). Approved inventory, approval, label register, delivered labels, production, dependencies, census and gitlinks remain unchanged. The three pass-2 approved-byte deferrals remain in the existing K12-successor ledger. Spec/sprint transition follows the build workflow review; no commit or push was performed.
+
+- 2026-11-14: Completed all ten pass-2 patch entries and four follow-up build-review patch groups. Final ordinary and synthetic-lifecycle suites each passed all 65 tests, including optimized child-mutation refusal, blank/malformed duplicate status detection and the real declaration-caller deletion control. Three focused checks also passed under a symlinked temporary directory. Both real completion gates, AD-23 and whitespace checks pass; evidence is retained in [the final pass-2 command manifest](evidence/story-5-8/review-pass2-final-20261114/commands.json). One new approved-byte omission (Q08 optional task context) is assigned to the K12 successor, and six existing deferrals were carried without duplicates. Spec is done and sprint tracking is review. Approved artifacts and frozen intent remain unchanged. No commit or push was performed.
+
 ## Spec Change Log
 
 ## Review Triage Log
@@ -423,3 +427,23 @@ All three independent layers completed before triage. The edge-case layer return
 | V1: source-drift checks can be disconnected from the real owner entrypoint | medium | patch | Pre-verified: deleting `check_source_drift(root,surface)` leaves all 47 tests passing and accepts a copied builder with an invalid recorded tree. Add a real copied-entrypoint corruption test and a caller-deletion control with exact output assertions. |
 
 The five direct patch groups were applied by the original implementation agent and verified by the parent: all 50 tests passed in 46.608 seconds, both real completion entrypoints passed, and AD-23 and whitespace checks passed. Two newly identified omissions in already-approved bytes are recorded under this source spec in the ledger; the three existing K12-successor corrections are carried without duplication. The approved inventory, receipts and delivered labels remain immutable.
+
+### Resumed pass-2 build review (2026-11-14)
+
+All three independent layers completed before triage. The edge-case layer returned no findings. The blind layer returned ten findings; the verification layer demonstrated that deleting the declaration-check invocation leaves all 63 tests passing and permits a corrupted module declaration. The review snapshot is `/tmp/mcpcli-story-5-8-dshza010.diff`, against the preserved baseline `a92a2969db6903b8c6cca7e437446167e135ec9d`; this resumed implementation began at `7fa3df6a6b827f85fba6e12ec22c5efa08034ac8`.
+
+| Finding | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| B1: optimized lifecycle helper can lose its synthetic-state checks | medium | patch | The remaining setup and post-child assertions disappear under Python optimization, so a child that changes the copied label state can leave a successful integrated-fixture claim. Replace the demonstrated checks with explicit failures and test child corruption without a success summary. |
+| B2: duplicate status keys with blank values escape counting | medium | patch | `completion_requested` counts only values matching its word pattern; a second empty status key is therefore invisible. Count every exact key occurrence independently of value parsing and extend both copied-entrypoint deletion controls. A new policy validating every sole workflow-state value is unnecessary to correct this duplicate-key defect. |
+| B3: V03 omits Q08 optional task context | low | defer | The pinned `GetFolderIndexingStatus` declares optional `TaskId`, while V03's target list omits Q08 and the legacy MCP/CLI adapters send null. This pre-existing approved-byte omission must be accounted for in the K12 successor, including affected M22/L38/Q08/V03 rows and the independent authority treatment. Ledger grep found no matching entry before append. |
+| B4: Python reproduction prerequisite omits the minimum version | low | patch | The helpers use `Path.is_relative_to`, so the documented prerequisite must state Python 3.9 or newer. This is a direct documentation correction. |
+| B5: K01 rows inherit a contradictory K12 rationale | low | defer | carried: the same approved-byte defect and owner decision remain unchanged; already tracked (`deferred-work.md:1054`). No duplicate entry or approved-byte edit. |
+| B6: deferred K12 rows still present affirmative replacement routes | low | defer | carried: the same blocked-candidate wording remains reserved for the K12 successor; already tracked (`deferred-work.md:1059`). No duplicate entry. |
+| B7: mutation drift omits fence requiredness and misattributes ownerFileId | low | defer | carried: the same approved-byte defect and successor decision remain unchanged; already tracked (`deferred-work.md:1064`). No duplicate entry. |
+| B8: semantic-retention claims exceed name-level drift evidence | medium | defer | carried: the per-surface semantic drift audit remains assigned to the K12 successor; already tracked (`deferred-work.md:1085`). No duplicate entry. |
+| B9: approved inventory retains its pending self-description | low | defer | carried: approved metadata and anchors remain immutable and the effective receipt is linked; the successor correction is already tracked (`deferred-work.md:1090`). No duplicate entry. |
+| B10: collective story suffix misattributes G1/G2 | low | defer | carried: each gap's owning story will be corrected in the approved successor; already tracked (`deferred-work.md:1095`). No duplicate entry. |
+| V1: declaration checks can be disconnected from the owner entrypoint | medium | patch | Pre-verified: deleting `check_declarations(root,old,new,decl,surface)` leaves all 63 tests passing and accepts a pinned module changed from String to Ulid. Add a copied-entrypoint corruption test and caller-deletion control with exact streams. |
+
+The original implementation agent applied all four patch groups and passed seven focused tests. Parent verification then passed all 65 tests in both ordinary and synthetic-lifecycle runs, plus three focused tests under a symlinked temporary directory, both real completion entrypoints, AD-23 and whitespace checks. The final [command manifest](evidence/story-5-8/review-pass2-final-20261114/commands.json) binds the executed sources and exact streams. One new approved-byte omission was assigned to the K12 successor; six existing deferrals were carried without duplicate ledger entries.
