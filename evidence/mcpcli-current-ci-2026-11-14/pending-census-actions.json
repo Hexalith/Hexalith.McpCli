@@ -1,0 +1,1158 @@
+{
+  "decision": "pending",
+  "activePolicyChange": false,
+  "scope": "Concrete inactive mutations for a later owning-maintainer decision; no approval, amendment version, publication or native acceptance is inferred.",
+  "prospectiveContext": {
+    "mcpcliRevision": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8",
+    "existingStandaloneHead": "733fc7114a572758c67a0fdb2e55e128c1c3044b",
+    "platformRevision": "1cece242bd4a82c517bb92447c6d6799f6313b6f",
+    "localPlatform38402bcIsHistoricalOnly": true
+  },
+  "summary": {
+    "fixtureOrTemplateHashRenewals": 6,
+    "tenantsHelperRenewals": 1,
+    "newerPlatformFullClosureReplacements": 1,
+    "auditSnapshotDigestRenewals": 1,
+    "newExactFileQualificationHelperExclusions": 3
+  },
+  "actions": [
+    {
+      "decision": "pending",
+      "kind": "fixture-or-template-hash-renewal",
+      "sourceRepository": "references/Hexalith.Builds",
+      "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+          "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+          "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+        }
+      },
+      "rationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+      "mutations": {
+        "removeAllowances": [
+          {
+            "identity": "Hexalith.Sample.HookTests",
+            "kind": "project",
+            "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        ],
+        "addAllowances": [
+          {
+            "surface": {
+              "identity": "Hexalith.Sample.HookTests",
+              "kind": "project",
+              "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+              "repository": "references/Hexalith.Builds"
+            },
+            "row": "PE05",
+            "classification": "test-fixture",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "PROPOSED ONLY, pending specific owning-maintainer approval. Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+            "signals": [
+              "executable-project"
+            ],
+            "sources": [
+              {
+                "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+                "sha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d"
+              }
+            ]
+          }
+        ]
+      },
+      "sourceUrls": [
+        "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj"
+      ]
+    },
+    {
+      "decision": "pending",
+      "kind": "fixture-or-template-hash-renewal",
+      "sourceRepository": "references/Hexalith.Builds",
+      "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+          "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+          "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+        }
+      },
+      "rationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+      "mutations": {
+        "removeAllowances": [
+          {
+            "identity": "Hexalith.Sample.IntegrationTests",
+            "kind": "project",
+            "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        ],
+        "addAllowances": [
+          {
+            "surface": {
+              "identity": "Hexalith.Sample.IntegrationTests",
+              "kind": "project",
+              "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+              "repository": "references/Hexalith.Builds"
+            },
+            "row": "PE05",
+            "classification": "test-fixture",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "PROPOSED ONLY, pending specific owning-maintainer approval. Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+            "signals": [
+              "executable-project"
+            ],
+            "sources": [
+              {
+                "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+                "sha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d"
+              }
+            ]
+          }
+        ]
+      },
+      "sourceUrls": [
+        "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj"
+      ]
+    },
+    {
+      "decision": "pending",
+      "kind": "fixture-or-template-hash-renewal",
+      "sourceRepository": "references/Hexalith.Builds",
+      "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+          "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+          "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+        }
+      },
+      "rationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+      "mutations": {
+        "removeAllowances": [
+          {
+            "identity": "Hexalith.Sample.UnitTests",
+            "kind": "project",
+            "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        ],
+        "addAllowances": [
+          {
+            "surface": {
+              "identity": "Hexalith.Sample.UnitTests",
+              "kind": "project",
+              "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+              "repository": "references/Hexalith.Builds"
+            },
+            "row": "PE05",
+            "classification": "test-fixture",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "PROPOSED ONLY, pending specific owning-maintainer approval. Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+            "signals": [
+              "executable-project"
+            ],
+            "sources": [
+              {
+                "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+                "sha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d"
+              }
+            ]
+          }
+        ]
+      },
+      "sourceUrls": [
+        "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj"
+      ]
+    },
+    {
+      "decision": "pending",
+      "kind": "fixture-or-template-hash-renewal",
+      "sourceRepository": "references/Hexalith.Builds",
+      "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+          "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+          "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+        }
+      },
+      "rationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+      "mutations": {
+        "removeAllowances": [
+          {
+            "identity": "Hexalith.Sample.WindowsTests",
+            "kind": "project",
+            "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        ],
+        "addAllowances": [
+          {
+            "surface": {
+              "identity": "Hexalith.Sample.WindowsTests",
+              "kind": "project",
+              "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+              "repository": "references/Hexalith.Builds"
+            },
+            "row": "PE05",
+            "classification": "test-fixture",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "PROPOSED ONLY, pending specific owning-maintainer approval. Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+            "signals": [
+              "executable-project"
+            ],
+            "sources": [
+              {
+                "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+                "sha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d"
+              }
+            ]
+          }
+        ]
+      },
+      "sourceUrls": [
+        "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj"
+      ]
+    },
+    {
+      "decision": "pending",
+      "kind": "fixture-or-template-hash-renewal",
+      "sourceRepository": "references/Hexalith.Builds",
+      "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3.json",
+          "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+          "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+        }
+      },
+      "rationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+      "mutations": {
+        "removeAllowances": [
+          {
+            "identity": "package:Hexalith.Builds.Module.EventStoreHost",
+            "kind": "publication",
+            "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        ],
+        "addAllowances": [
+          {
+            "surface": {
+              "identity": "package:Hexalith.Builds.Module.EventStoreHost",
+              "kind": "publication",
+              "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+              "repository": "references/Hexalith.Builds"
+            },
+            "row": "PE01",
+            "classification": "existing-build-tooling-template",
+            "owner": "Requesting user via the current release instruction",
+            "reason": "PROPOSED ONLY, pending specific owning-maintainer approval. Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+            "signals": [
+              "package-metadata"
+            ],
+            "sources": [
+              {
+                "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+                "sha256": "ee9ef9beb67089dc36e11035dbc0f366961be8cb97b32493ffdb16997fe61e1b"
+              }
+            ]
+          }
+        ]
+      },
+      "sourceUrls": [
+        "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj"
+      ]
+    },
+    {
+      "decision": "pending",
+      "kind": "fixture-or-template-hash-renewal",
+      "sourceRepository": "references/Hexalith.Builds",
+      "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3.json",
+          "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+          "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+        }
+      },
+      "rationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+      "mutations": {
+        "removeAllowances": [
+          {
+            "identity": "package:Hexalith.Builds.Module.UiHost",
+            "kind": "publication",
+            "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+            "repository": "references/Hexalith.Builds"
+          }
+        ],
+        "addAllowances": [
+          {
+            "surface": {
+              "identity": "package:Hexalith.Builds.Module.UiHost",
+              "kind": "publication",
+              "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+              "repository": "references/Hexalith.Builds"
+            },
+            "row": "PE01",
+            "classification": "existing-build-tooling-template",
+            "owner": "Requesting user via the current release instruction",
+            "reason": "PROPOSED ONLY, pending specific owning-maintainer approval. Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal.",
+            "signals": [
+              "package-metadata"
+            ],
+            "sources": [
+              {
+                "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+                "sha256": "3915eb518f51c86869186b035f06919558db494a0138c5fc512676a35b7c5b0c"
+              }
+            ]
+          }
+        ]
+      },
+      "sourceUrls": [
+        "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj"
+      ]
+    },
+    {
+      "decision": "pending",
+      "kind": "newer-platform-full-compilation-closure-replacement",
+      "sourceRepository": "references/Hexalith.Platform",
+      "sourceRevision": "1cece242bd4a82c517bb92447c6d6799f6313b6f",
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.4.json",
+          "sha256": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.4-approval.json",
+          "sha256": "cb3c2f09ce4ed8684766e29d9ce0b215e624905f48916cc259627bf564023df1"
+        }
+      },
+      "rationale": "Prospective scope uses already-investigated Platform1cece242bd4a82c517bb92447c6d6799f6313b6f, including all nine changed/added closure bindings; local38402bc remains historical only.",
+      "mutations": {
+        "removeAllowances": [
+          {
+            "identity": "Hexalith.Platform.Composition",
+            "kind": "project",
+            "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+            "repository": "references/Hexalith.Platform"
+          }
+        ],
+        "addAllowances": [
+          {
+            "surface": {
+              "identity": "Hexalith.Platform.Composition",
+              "kind": "project",
+              "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+              "repository": "references/Hexalith.Platform"
+            },
+            "row": "PE03",
+            "classification": "existing-platform-composition-tooling",
+            "owner": "Requesting user via the current release instruction",
+            "reason": "PROPOSED ONLY, pending specific owning-maintainer approval. Prospective scope uses already-investigated Platform1cece242bd4a82c517bb92447c6d6799f6313b6f, including all nine changed/added closure bindings; local38402bc remains historical only.",
+            "signals": [
+              "executable-project"
+            ],
+            "sourcePrefix": "src/Hexalith.Platform.Composition",
+            "compilationClosure": true,
+            "sources": [
+              {
+                "path": "DaprSelfHostedMtls.cs",
+                "sha256": "3fa9ccf46cd70cdc2253dda51ad06b3bcf5f7f696b3b74a95ca1b86913489a7c"
+              },
+              {
+                "path": "DaprSelfHostedMtlsSubscriber.cs",
+                "sha256": "35e5f5b4418814e8df7fc5f73b3d25ea2531215978723b8dcf49060cd2cd7e24"
+              },
+              {
+                "path": "Directory.Build.props",
+                "sha256": "7f7a292a9d7e9cdd3a120fd8366664814e70e03a5c0f789b290a04850a517ca0"
+              },
+              {
+                "path": "Directory.Build.targets",
+                "sha256": "3b5f138ed080e38afc0b901193accb52387aac90f06733644af029932c9efcd0"
+              },
+              {
+                "path": "eng/SourceRestore.props",
+                "sha256": "2e433f7e5d30eb94beb7030f22fe0ddee7798ece8177eaec045084040851d100"
+              },
+              {
+                "path": "src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs",
+                "sha256": "162e683d228cd2866f26fcf9cf48f7f4c3d5cc270ac58b4a810c1a7ffc4b9a91"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AcceptedDependencyRecords.cs",
+                "sha256": "5ff92bd47d6e18a04bcbd13f6407756a329b2efd6742f558d000e211d352e32d"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AcceptedLaunchArtifactLease.cs",
+                "sha256": "bf81c81653536a4cf896543ca1ed09107106fee7d5d3693b13ab17fd5a04c412"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AcceptedLaunchLeaseOwner.cs",
+                "sha256": "3666fff71ae86022ca791218880f6abb295640ac7ed9a8db45de27c017d01e39"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AcceptedLaunchLifetime.cs",
+                "sha256": "08bbbfd556e4874ab6fa90a1fbf57238385e1fb62f8f4792cab35a5d2d76ee95"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AcceptedListenerBindings.cs",
+                "sha256": "3774d514f2c27e5d26106c4c393d28c68873fd837e4d1c1af6ebe67f3e50ffbf"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AcceptedResourceListener.cs",
+                "sha256": "625d33e42afe07f62b9b479b086b61a8ac8fa450a9c5895f6280361d2b6947bc"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AgentsDeploymentProfile.cs",
+                "sha256": "1b7e83575454d661a6d1cee1f7d21dce2ad5061301a68b932819498b67941f25"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AgentsDeploymentProfileModel.cs",
+                "sha256": "358c955a44a872aa3ab3aef0efe9db7bb4bb3ffe4245efc0066a3182094c6573"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AgentsHostComposition.cs",
+                "sha256": "ddfbb66c7378bc2029f71bcbadcea23803f89e3625ecf052e202af6f8f8ce975"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/AgentsIngressDenialContext.cs",
+                "sha256": "ace389a666b5eb920c78387ac3aa6785f7124f7c32d21e37eba57f00ae96a546"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/BoundedDevelopmentFile.cs",
+                "sha256": "52af9c0c0b8a3a4cb70c24d4c225ae46a1ff9f79768a4f81fb2a9e2dfd2d4ebe"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/CoordinatedProtectionAcceptance.cs",
+                "sha256": "048184a0d3e2cd970f4314fb893e1a1e047feb9509434fcca2ba8ae279642e00"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/Declarations/eventstore.json",
+                "sha256": "21eda6da824d5ae6135ff342dd8a5aae950b02420319b953a836dddeb00ce495"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/Declarations/local-profile.json",
+                "sha256": "6cf2cc9bcda7c7e158a595b4a6839b864381d88cfb541a382ec8c45597b6bd50"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/Declarations/memories.json",
+                "sha256": "56f6dc8134d3f7cea06910e923a4736a450e00241e8e4a565ac9226897881840"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/Declarations/provenance.json",
+                "sha256": "bbfcd7d73f6a92467360fd56dfead6c574cb48ca08bb961c7a949356a4d72b39"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/Declarations/tenants.json",
+                "sha256": "1588f3428ec29296c452fdd35bf95146142315aad3ad8ceb934e7a791f1fb522"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+                "sha256": "eaca9740bec4daa5d275ecbce94024adb328cb01f352f590c46bdd2333181341"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformAppModel.cs",
+                "sha256": "6dbad91fb874816001eb1d5ddaf682a21b5601765dd4351408c226ddee9a7b24"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformApplicationGraph.cs",
+                "sha256": "42378f4ac70f4145bf414c4007ba7a0f3a69b4dfa7edb02de8206e7134427374"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformCatalogContractBinding.cs",
+                "sha256": "0d9754ffc3654672618a8a4cb47eb0ee0028a6b08c23adfc5fd962797c19e6df"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformCommittedCatalogProof.cs",
+                "sha256": "0323ad3f8ccfc8896b7d9c9e1767a61b4be69b83255e41a21c5430e032efd5cb"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformCompositionOptions.cs",
+                "sha256": "98d06cb516b51cb645284479644ebd5398a506e569945369b8a3355285807749"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformCompositionWorkspace.cs",
+                "sha256": "2b8c2d912c50952e5a9c5afddadc4e1473a1b8471f436d17f559ff450187fc44"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformCurrentOwnerObservation.cs",
+                "sha256": "0083fca821b43b8639244fde0fb19857077168291d94106d9ad001a2ceeaa96d"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformCurrentOwnerProof.cs",
+                "sha256": "0066343b2e3f92f230e20af59b4941214c8e2d1a2f95cd8776f379bb27a33906"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformCurrentOwnerSourceInventory.cs",
+                "sha256": "1f6bd27d0e1cf5f3db7778b53c8645ef480de742ff3de97318b398b52e419466"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformCurrentOwnerSourceState.cs",
+                "sha256": "e2757d9a530ef286c29d6c3a1b7556f81b06950b44056df073db054372f4fa6f"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformDaprBindings.cs",
+                "sha256": "adaabe21b30e90d8ef14c05ac73ccc506deb6cb224370db30580f7e858a69e27"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformDaprDiagnosticFile.cs",
+                "sha256": "a7332df57b1ab08d9044f45a9413f5db07faee3e129e71e1dc5c921749d4e8e5"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformDaprDiagnosticRedactor.cs",
+                "sha256": "78c1325a0ed40e7ad9bdefccb9cee4da9d6b9d19abf785d7eb0b947109b66a58"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformDaprDiagnosticResource.cs",
+                "sha256": "d32ef6e6ad150b5c79dc92083d5fd4ee059d7d9f37757fa93428cbf69b87f417"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformDaprDiagnostics.cs",
+                "sha256": "4bc6dffa4f46734fd501343565123a4e72593cad26b3b660736b836a52490b34"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformDaprEndpointSubscriber.cs",
+                "sha256": "cb11f7daa1f90370493ea47a61293248f84f5db1d3e9dd8c05be95b613c2a8ef"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformDeclarationSet.cs",
+                "sha256": "3d0662d7bcbba28ea25e47399c71b63ba35b3af6d0b699670b1e951140524af3"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformEventStoreExtensionBinding.cs",
+                "sha256": "ef5f90b120b9a5af90c93bf23bc8f4cdbd7a81c034ddca0863654ce5d94e5666"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformEventStoreExtensionBindings.cs",
+                "sha256": "d9ae60ac0c332f69d63eb77e45f9be40c7358224df90cdfd55716b8221375645"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformEventStoreHostBinding.cs",
+                "sha256": "51c06a65f4ad137210470447281659593d3cfade0e9cafda7badbe24d0ecc1cd"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformGatewayConfiguration.cs",
+                "sha256": "8f158eaa188610032df2179b49203fd149702a05a1095705097aeca4fb055b76"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformGatewayStartup.cs",
+                "sha256": "24e2596a126878a2afee70dcdff83b3c4ea4f52d027294377cff918b34eb380d"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformHostedPublishing.cs",
+                "sha256": "31a4954b66fd64462edf43c4ae4d75fd7b30612ce9ba217383f82bf520123411"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformHostedReferenceMapping.cs",
+                "sha256": "63dcaad2446cbbddc21ff4115e4075e609632d4cd366efd8fe57758c52956557"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformLocalProfile.cs",
+                "sha256": "960107ec705ffa65f15f4c076e063d9e1b2bd5c1e3f519ca869bd63e30e27c37"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformLoopbackRegistryProbe.cs",
+                "sha256": "6ce566a244e1e573870465a4a54c65cf6fd812adbfe90cb0f9cf8e85ba695c58"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformMappedArtifact.cs",
+                "sha256": "b14c693049de9fd0505cf2ed815bd9879f2e30a83245a117665fc5579fd07d5f"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformMcpCliCatalogVersion.cs",
+                "sha256": "97eb30e8da9d2d8957535f813119fe4fdad33ac7dc158bb8262e82851ee03492"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformNativeGatewayContract.cs",
+                "sha256": "200f226d1bfc7cbe4ee1f5b8555182ed4bc44b5aa016748884a314247e359ca6"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformNativeHostDiagnostics.cs",
+                "sha256": "68a17206f960421ef87926f83a0ebd9a29127eec592c159a9c5a120170bfd3ae"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformNativeInvocationAccess.cs",
+                "sha256": "230ca876f8e7174f28a88a7cf8caa190ba799453a1cf47415c68cb2d098c4d46"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformNativeTestPreparation.cs",
+                "sha256": "efa6380b1173d0e06f08c24a7e784486341a1a15d9c001852ed01745eae3c8b0"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformOwnerClientBinding.cs",
+                "sha256": "84f01c62520146d945652c74f29128e2604eb2c11aba1cdf4a3d7533418c70c0"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformOwnerServices.cs",
+                "sha256": "1136ef3a0abd7737df9c42e375291be2ad20616e97437116c5d4e472a7a609e3"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformPackageCatalogQualification.cs",
+                "sha256": "51befecf6aeb60d7186115206dda122104c698233c9ca032236fdc576e784ca0"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformPackageCatalogReader.cs",
+                "sha256": "e58972d81aaa7eaf6066b4d5d2d9ad84ef454c5bc6148c373fe26f22b151e318"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformPartiesPackageCatalogQualification.cs",
+                "sha256": "12d19c8e49487b7d8ff83122fc9fd4b8666eab6753bb5fbe86d1368642a5be2c"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformPartiesRunProof.cs",
+                "sha256": "8cda86f6aa01acb9ab62e5b68eb946efd190596070d8cfdb9132f589558ff5e0"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformPartiesValidationContext.cs",
+                "sha256": "38df7cc61e0386949729dfa4c4334af795db7a1f3608420b89e79dfa8c26c32b"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformPostgresqlHealthCheck.cs",
+                "sha256": "694dad5a9ba81a1aa5c7d2938a64057933ff87d43252f9657e8a33518a9d9751"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformQualificationOwnerProof.cs",
+                "sha256": "c42df24e965b24362b177d1322ad20c04fbb894b1535532258970ab616ea0486"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformRedisHealthCheck.cs",
+                "sha256": "2548f5dd02b64c639f0f08bd6ca43ef29ffe80688c26f10097820978ddc086a9"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformResourceOwnerAnnotation.cs",
+                "sha256": "0e6371a16cc7e72cce3f400284fe12c85c27aa861bbdbeb462614f4b2c4891f9"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformRetentionProfile.cs",
+                "sha256": "5bb847f9db271b8c2065300070392725cad5e878844740b9ccb4fd554650dbfb"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformRoutingCatalog.cs",
+                "sha256": "5f423009a0fe25ba30588e17ea6c90ab17615889409e3baa1eadb7ad3be40662"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformRoutingCatalogBootstrap.cs",
+                "sha256": "8f720334b3b91f5d9a8130106f1a1de01747f9c5ba812fc1d82a608307a74208"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformRoutingCatalogComponentRenderer.cs",
+                "sha256": "d3f49c5a895429b2d1b9421cb5db076d36ecb2a6143efc8a40b1041e83b93f29"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformRoutingCatalogMetadata.cs",
+                "sha256": "d045a49c7009b6fb2a01ccfd055737567068b447f0c64808a94b37674c972e3f"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformServerAnnotation.cs",
+                "sha256": "e6e694457827249572c3b44006235ccbcf761c047ebb3d558b2e54c9bcbc33c2"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformServerBinding.cs",
+                "sha256": "909f6bbf4c05ec3bef05063d4bba0bfcebc30b80f472e0bb6b461597539aa35c"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformServerBindings.cs",
+                "sha256": "a92b30da3591c0384253822060d87b31e41af16cbb7e7cebcbbe75bd5c263013"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformSourceStateWorker.cs",
+                "sha256": "fb3a5014fd3a2fb285c62091e9b997836ff99609f2d2bebdc45a938918edc112"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformTenantBootstrapAccess.cs",
+                "sha256": "2981949e158bd3782a78b89db8ae4a630a53e48a31878e98f181243f1e9d426a"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformTimesheetsBinding.cs",
+                "sha256": "9aeb4ba3adade96b728c4ec74c5708ea86d2b5f525b8e0436b9351519ef889a2"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PlatformWorkloadEnrollment.cs",
+                "sha256": "68f4bfca1a2c5f812badc3df9aa0799acce9b583a78ee9180b2952cf3acf6d53"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/PythonCanonicalJson.cs",
+                "sha256": "ee2cde753d50bae2942ac64f2bfc42e089e51f08d9c8429eb60f95d2d38612e9"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/SdkReadinessHealthCheck.cs",
+                "sha256": "ec57f02a8453306aff5f31978f9374694daa39fba2c82f86141e1ba557fd140f"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/WorksDevelopmentCatalogProfile.cs",
+                "sha256": "aa685b047f0b349a08157e6256faea2f1ba42fb2f3edc90433c4aca75b495b99"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/WorksPreviewManagedRuntime.cs",
+                "sha256": "3c15f3a8678493145a5154094ee1a80630a3c9d8c5fe8591d8c10b89a6c2c355"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
+                "sha256": "6d990e6b926b1154962f5c24c33c26cbb67d2c47f647a88b99aeabc133b51f7d"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/WorksProductionProfile.cs",
+                "sha256": "1dca97f316ec39e56f755403907bbc85acae50b044b43ed7809a2cf5c114c9e7"
+              },
+              {
+                "path": "src/Hexalith.Platform.Composition/WorksRoutingCatalogLifetime.cs",
+                "sha256": "418d3056665f5ac04caa9e8f56129df95ae73f749b3dcad445473e31d750aa5f"
+              }
+            ]
+          }
+        ]
+      },
+      "sourceUrls": [
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/DaprSelfHostedMtls.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/DaprSelfHostedMtlsSubscriber.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/Directory.Build.props",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/Directory.Build.targets",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/eng/SourceRestore.props",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AcceptedDependencyRecords.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AcceptedLaunchArtifactLease.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AcceptedLaunchLeaseOwner.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AcceptedLaunchLifetime.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AcceptedListenerBindings.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AcceptedResourceListener.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AgentsDeploymentProfile.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AgentsDeploymentProfileModel.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AgentsHostComposition.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/AgentsIngressDenialContext.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/BoundedDevelopmentFile.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/CoordinatedProtectionAcceptance.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/Declarations/eventstore.json",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/Declarations/local-profile.json",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/Declarations/memories.json",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/Declarations/provenance.json",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/Declarations/tenants.json",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformAppModel.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformApplicationGraph.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformCatalogContractBinding.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformCommittedCatalogProof.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformCompositionOptions.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformCompositionWorkspace.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformCurrentOwnerObservation.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformCurrentOwnerProof.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformCurrentOwnerSourceInventory.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformCurrentOwnerSourceState.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformDaprBindings.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformDaprDiagnosticFile.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformDaprDiagnosticRedactor.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformDaprDiagnosticResource.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformDaprDiagnostics.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformDaprEndpointSubscriber.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformDeclarationSet.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformEventStoreExtensionBinding.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformEventStoreExtensionBindings.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformEventStoreHostBinding.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformGatewayConfiguration.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformGatewayStartup.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformHostedPublishing.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformHostedReferenceMapping.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformLocalProfile.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformLoopbackRegistryProbe.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformMappedArtifact.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformMcpCliCatalogVersion.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformNativeGatewayContract.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformNativeHostDiagnostics.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformNativeInvocationAccess.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformNativeTestPreparation.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformOwnerClientBinding.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformOwnerServices.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformPackageCatalogQualification.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformPackageCatalogReader.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformPartiesPackageCatalogQualification.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformPartiesRunProof.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformPartiesValidationContext.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformPostgresqlHealthCheck.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformQualificationOwnerProof.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformRedisHealthCheck.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformResourceOwnerAnnotation.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformRetentionProfile.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformRoutingCatalog.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformRoutingCatalogBootstrap.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformRoutingCatalogComponentRenderer.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformRoutingCatalogMetadata.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformServerAnnotation.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformServerBinding.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformServerBindings.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformSourceStateWorker.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformTenantBootstrapAccess.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformTimesheetsBinding.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PlatformWorkloadEnrollment.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/PythonCanonicalJson.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/SdkReadinessHealthCheck.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/WorksDevelopmentCatalogProfile.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/WorksPreviewManagedRuntime.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/WorksProductionProfile.cs",
+        "https://github.com/Hexalith/Hexalith.Platform/blob/1cece242bd4a82c517bb92447c6d6799f6313b6f/src/Hexalith.Platform.Composition/WorksRoutingCatalogLifetime.cs"
+      ]
+    },
+    {
+      "decision": "pending",
+      "kind": "tenants-performance-helper-renewal",
+      "sourceRepository": "references/Hexalith.Tenants",
+      "sourceRevision": "8ce40cdfe9b1bdd0ec3bd643b0f3386501e514c2",
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3.json",
+          "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+          "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+        }
+      },
+      "rationale": "Replaces hard-coded net10.0 AppHost DLL path with MSBuild evaluation, requires exactly net11.0, and builds the DLL path from that target. The seed project identity remains the existing test-data publication observation.",
+      "mutations": {
+        "removeAllowances": [
+          {
+            "identity": "tests/performance/tenant-audit/seed.csproj",
+            "kind": "publication",
+            "path": "scripts/run-tenant-audit-performance.sh",
+            "repository": "references/Hexalith.Tenants"
+          }
+        ],
+        "addAllowances": [
+          {
+            "surface": {
+              "identity": "tests/performance/tenant-audit/seed.csproj",
+              "kind": "publication",
+              "path": "scripts/run-tenant-audit-performance.sh",
+              "repository": "references/Hexalith.Tenants"
+            },
+            "row": "PE09",
+            "classification": "existing-performance-test-data-tooling",
+            "owner": "Requesting user via the current release instruction",
+            "reason": "PROPOSED ONLY, pending specific owning-maintainer approval. Replaces hard-coded net10.0 AppHost DLL path with MSBuild evaluation, requires exactly net11.0, and builds the DLL path from that target. The seed project identity remains the existing test-data publication observation.",
+            "signals": [
+              "project-publication-reference"
+            ],
+            "sources": [
+              {
+                "path": "scripts/run-tenant-audit-performance.sh",
+                "sha256": "85b1735a172068ce1ad7df27bb34320bf8f3132ceb8f02cdd312bb0d92e12a70"
+              }
+            ]
+          }
+        ]
+      },
+      "sourceUrls": [
+        "https://github.com/Hexalith/Hexalith.Tenants/blob/8ce40cdfe9b1bdd0ec3bd643b0f3386501e514c2/scripts/run-tenant-audit-performance.sh"
+      ]
+    },
+    {
+      "decision": "pending",
+      "kind": "audit-snapshot-digest-renewal",
+      "priorAuthority": [
+        {
+          "classification": {
+            "row": "PE07",
+            "classification": "captured-evidence",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Exact retained package audit snapshot; approved captured-evidence scope, not a publication manifest."
+          },
+          "approvedSha256": [
+            "2d3ab7421bf8b7091cfb7caf8e4381be60b80385a6d350e2cbd703e95d21968e",
+            "d48664651a1ab94143d6b83e7b4b01d1ab341cc6d64cfee83dae47afe07119de"
+          ],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        },
+        {
+          "classification": {
+            "row": "PE07",
+            "classification": "captured-evidence",
+            "owner": "Requesting user via the current release instruction",
+            "reason": "Exact captured package audit output; data, not a release command or runtime manifest."
+          },
+          "approvedSha256": [
+            "173efbb30709e624ee0ec041ea5c0a62188499b5b5b1cf1a4d516dd045af71e2"
+          ],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.3.json",
+              "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+              "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+            }
+          }
+        },
+        {
+          "classification": {
+            "row": "PE07",
+            "classification": "captured-evidence",
+            "owner": "Requesting user via the current release instruction",
+            "reason": "Bounded renewal of the existing exact file classification for the inspected current release pins; no publication target, MCP operation, image or native acceptance authority is added."
+          },
+          "approvedSha256": [
+            "1a677bfd370048fc84de8e51b895d625d90d070da4dd052eae62cfd5f27d2163"
+          ],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.4.json",
+              "sha256": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.4-approval.json",
+              "sha256": "cb3c2f09ce4ed8684766e29d9ce0b215e624905f48916cc259627bf564023df1"
+            }
+          }
+        }
+      ],
+      "source": {
+        "path": "Tools/package-version-audit.json",
+        "sha256": "beea62f4a6b2485c39aa5f536b4eb135ca3e2eece3406e903526f69ba495397f",
+        "sourceUrl": "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/Tools/package-version-audit.json"
+      },
+      "mutations": {
+        "addExclusions": [
+          {
+            "repository": "references/Hexalith.Builds",
+            "prefix": "Tools/package-version-audit.json",
+            "row": "PE07",
+            "classification": "captured-evidence",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "PROPOSED ONLY: exact captured package-audit snapshot digest at the inspected source revision; data classification requires specific renewal approval. No publication or runtime authority.",
+            "scope": "file",
+            "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+            "sha256": "beea62f4a6b2485c39aa5f536b4eb135ca3e2eece3406e903526f69ba495397f"
+          }
+        ]
+      }
+    },
+    {
+      "decision": "pending",
+      "kind": "new-exact-file-qualification-helper-exclusion",
+      "priorExactFileAuthority": null,
+      "existingIdentityObservationsAreNotFileApproval": [],
+      "source": {
+        "path": "Tools/test-g4-packaged-platform-loader.ps1",
+        "sha256": "6361d83f4f26cf3b851e51556408eced8f0e8b7b6df0b5d830313797c2976755",
+        "sourceUrl": "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/Tools/test-g4-packaged-platform-loader.ps1"
+      },
+      "snapshot": {
+        "path": "source-snapshots/Builds-05a75b626fb73c6e386d16c41e885f193d3cff16/Tools/test-g4-packaged-platform-loader.ps1.txt",
+        "sha256": "6361d83f4f26cf3b851e51556408eced8f0e8b7b6df0b5d830313797c2976755",
+        "sanitized": true,
+        "identicalToCommittedSource": true
+      },
+      "mutations": {
+        "addExclusions": [
+          {
+            "repository": "references/Hexalith.Builds",
+            "prefix": "Tools/test-g4-packaged-platform-loader.ps1",
+            "row": "PE05",
+            "classification": "qualification-evidence-tooling",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "PROPOSED NEW exact-file qualification-helper exclusion, pending specific approval. PowerShell loader regression helper extracts a supplied package, validates packaged/runtime assembly identities, builds a private fixture and runs bounded packaged-host children. Its Join-Path project/file targets are outside the scanner static subset; source inspection does not prove runtime behavior. PowerShell target evaluation is not modeled or executed by the census. Only this exact body at this exact source revision is proposed; neighboring files, future pins, other targets and runtime acceptance are excluded.",
+            "scope": "file",
+            "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+            "sha256": "6361d83f4f26cf3b851e51556408eced8f0e8b7b6df0b5d830313797c2976755"
+          }
+        ]
+      }
+    },
+    {
+      "decision": "pending",
+      "kind": "new-exact-file-qualification-helper-exclusion",
+      "priorExactFileAuthority": null,
+      "existingIdentityObservationsAreNotFileApproval": [
+        {
+          "surface": {
+            "repository": "references/Hexalith.Builds",
+            "path": "Tools/test-g4-tool-package-contracts.ps1",
+            "kind": "publication",
+            "identity": "Hexalith.Builds.Evidence.Cli"
+          },
+          "classification": {
+            "row": "PE05",
+            "classification": "test-fixture-observation",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only."
+          },
+          "approvedSha256": [],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        },
+        {
+          "surface": {
+            "repository": "references/Hexalith.Builds",
+            "path": "Tools/test-g4-tool-package-contracts.ps1",
+            "kind": "publication",
+            "identity": "Hexalith.Builds.Module.Cli"
+          },
+          "classification": {
+            "row": "PE05",
+            "classification": "test-fixture-observation",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only."
+          },
+          "approvedSha256": [],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        },
+        {
+          "surface": {
+            "repository": "references/Hexalith.Builds",
+            "path": "Tools/test-g4-tool-package-contracts.ps1",
+            "kind": "publication",
+            "identity": "hexalith.builds.evidence.cli"
+          },
+          "classification": {
+            "row": "PE05",
+            "classification": "test-fixture-observation",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only."
+          },
+          "approvedSha256": [],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        },
+        {
+          "surface": {
+            "repository": "references/Hexalith.Builds",
+            "path": "Tools/test-g4-tool-package-contracts.ps1",
+            "kind": "publication",
+            "identity": "hexalith.builds.module.cli"
+          },
+          "classification": {
+            "row": "PE05",
+            "classification": "test-fixture-observation",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only."
+          },
+          "approvedSha256": [],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        }
+      ],
+      "source": {
+        "path": "Tools/test-g4-tool-package-contracts.ps1",
+        "sha256": "0aa2efebe07e38c8eecdea2cdc9bbd96c0f8441e232468131588650861f13194",
+        "sourceUrl": "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/Tools/test-g4-tool-package-contracts.ps1"
+      },
+      "snapshot": {
+        "path": "source-snapshots/Builds-05a75b626fb73c6e386d16c41e885f193d3cff16/Tools/test-g4-tool-package-contracts.ps1.txt",
+        "sha256": "e71ad0bb063b17efb0064fb47449a0ca3c6b4ab95d90814e74b218dfed60f64f",
+        "sanitized": true,
+        "identicalToCommittedSource": false
+      },
+      "mutations": {
+        "addExclusions": [
+          {
+            "repository": "references/Hexalith.Builds",
+            "prefix": "Tools/test-g4-tool-package-contracts.ps1",
+            "row": "PE05",
+            "classification": "qualification-evidence-tooling",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "PROPOSED NEW exact-file qualification-helper exclusion, pending specific approval. PowerShell G4 tool-package qualification invokes dotnet through helpers and runtime-derived fixture directories. Four exact tool/package reference observations were previously allowed, but they do not resolve the opaque publication directory or grant a whole-file exemption. PowerShell target evaluation is not modeled or executed by the census. Only this exact body at this exact source revision is proposed; neighboring files, future pins, other targets and runtime acceptance are excluded.",
+            "scope": "file",
+            "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+            "sha256": "0aa2efebe07e38c8eecdea2cdc9bbd96c0f8441e232468131588650861f13194"
+          }
+        ]
+      }
+    },
+    {
+      "decision": "pending",
+      "kind": "new-exact-file-qualification-helper-exclusion",
+      "priorExactFileAuthority": null,
+      "existingIdentityObservationsAreNotFileApproval": [],
+      "source": {
+        "path": "Tools/test-platform-version-catalog.ps1",
+        "sha256": "c93fc176d090874066234e51912263fdc6dfe3e79329361dd7bc1f9a8cb45c48",
+        "sourceUrl": "https://github.com/Hexalith/Hexalith.Builds/blob/05a75b626fb73c6e386d16c41e885f193d3cff16/Tools/test-platform-version-catalog.ps1"
+      },
+      "snapshot": {
+        "path": "source-snapshots/Builds-05a75b626fb73c6e386d16c41e885f193d3cff16/Tools/test-platform-version-catalog.ps1.txt",
+        "sha256": "c93fc176d090874066234e51912263fdc6dfe3e79329361dd7bc1f9a8cb45c48",
+        "sanitized": true,
+        "identicalToCommittedSource": true
+      },
+      "mutations": {
+        "addExclusions": [
+          {
+            "repository": "references/Hexalith.Builds",
+            "prefix": "Tools/test-platform-version-catalog.ps1",
+            "row": "PE05",
+            "classification": "qualification-evidence-tooling",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "PROPOSED NEW exact-file qualification-helper exclusion, pending specific approval. PowerShell version-catalog regression helper generates temporary catalogs/projects, evaluates MSBuild metadata and rebuilds an isolated tooling copy. The Join-Path target is unmodeled; no exact-file prior authority was found. PowerShell target evaluation is not modeled or executed by the census. Only this exact body at this exact source revision is proposed; neighboring files, future pins, other targets and runtime acceptance are excluded.",
+            "scope": "file",
+            "sourceRevision": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+            "sha256": "c93fc176d090874066234e51912263fdc6dfe3e79329361dd7bc1f9a8cb45c48"
+          }
+        ]
+      }
+    }
+  ]
+}

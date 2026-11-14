@@ -1,0 +1,127 @@
+[
+  {
+    "id": "Hexalith.Commons.UniqueIds",
+    "version": "2.30.10",
+    "source": "https://api.nuget.org/v3-flatcontainer/hexalith.commons.uniqueids/2.30.10/hexalith.commons.uniqueids.2.30.10.nupkg",
+    "sha256": "b26ee4ecded5f9fe38e4e5837af00180530949a784996dafd964395510df26ca",
+    "restoredArchiveMatchesOfficial": true,
+    "dependencyGroups": [
+      {
+        "targetFramework": "net10.0",
+        "dependencies": [
+          {
+            "id": "ByteAether.Ulid",
+            "version": "1.4.2",
+            "exclude": "Build,Analyzers"
+          }
+        ]
+      }
+    ],
+    "libraryTargets": [
+      "net10.0"
+    ]
+  },
+  {
+    "id": "Microsoft.AspNetCore.Authentication.JwtBearer",
+    "version": "10.0.15",
+    "source": "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.authentication.jwtbearer/10.0.15/microsoft.aspnetcore.authentication.jwtbearer.10.0.15.nupkg",
+    "sha256": "2f6924b5dbef4d00cda6e4c7d2d4b8660a4c9ee4b76339fdab81ecc1c023bb79",
+    "restoredArchiveMatchesOfficial": true,
+    "dependencyGroups": [
+      {
+        "targetFramework": "net10.0",
+        "dependencies": [
+          {
+            "id": "Microsoft.IdentityModel.Protocols.OpenIdConnect",
+            "version": "8.19.2",
+            "exclude": "Build,Analyzers"
+          }
+        ]
+      }
+    ],
+    "libraryTargets": [
+      "net10.0"
+    ]
+  },
+  {
+    "id": "Microsoft.AspNetCore.SignalR.StackExchangeRedis",
+    "version": "10.0.15",
+    "source": "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.signalr.stackexchangeredis/10.0.15/microsoft.aspnetcore.signalr.stackexchangeredis.10.0.15.nupkg",
+    "sha256": "a9e00145cf138b30d61f1ae5bd8893b40d97e04c8e797efb155e4cd6594760ed",
+    "restoredArchiveMatchesOfficial": true,
+    "dependencyGroups": [
+      {
+        "targetFramework": "net10.0",
+        "dependencies": [
+          {
+            "id": "MessagePack",
+            "version": "2.5.303",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "Microsoft.Extensions.Options",
+            "version": "10.0.15",
+            "exclude": "Build,Analyzers"
+          },
+          {
+            "id": "StackExchange.Redis",
+            "version": "2.7.27",
+            "exclude": "Build,Analyzers"
+          }
+        ]
+      }
+    ],
+    "libraryTargets": [
+      "net10.0"
+    ]
+  },
+  {
+    "id": "Microsoft.AspNetCore.OpenApi",
+    "version": "10.0.15",
+    "source": "https://api.nuget.org/v3-flatcontainer/microsoft.aspnetcore.openapi/10.0.15/microsoft.aspnetcore.openapi.10.0.15.nupkg",
+    "sha256": "021c0bc50f3e877cf8ffd5d3bba0666950584406f69190d8735e43169c21fce9",
+    "restoredArchiveMatchesOfficial": true,
+    "dependencyGroups": [
+      {
+        "targetFramework": "net10.0",
+        "dependencies": [
+          {
+            "id": "Microsoft.OpenApi",
+            "version": "[2.13.0, 3.0.0)",
+            "exclude": "Build,Analyzers"
+          }
+        ]
+      }
+    ],
+    "libraryTargets": [
+      "net10.0"
+    ]
+  },
+  {
+    "id": "Microsoft.OpenApi",
+    "version": "2.13.0",
+    "source": "https://api.nuget.org/v3-flatcontainer/microsoft.openapi/2.13.0/microsoft.openapi.2.13.0.nupkg",
+    "sha256": "f377b54c159b7e7f47e8587390666cb9dff8bb4e55af82c4edbc90d1c0d2f943",
+    "restoredArchiveMatchesOfficial": true,
+    "dependencyGroups": [
+      {
+        "targetFramework": "net8.0",
+        "dependencies": []
+      },
+      {
+        "targetFramework": ".NETStandard2.0",
+        "dependencies": [
+          {
+            "id": "System.Text.Json",
+            "version": "8.0.5",
+            "exclude": "Build,Analyzers"
+          }
+        ]
+      }
+    ],
+    "libraryTargets": [
+      "net8.0",
+      "netstandard2.0"
+    ]
+  }
+]

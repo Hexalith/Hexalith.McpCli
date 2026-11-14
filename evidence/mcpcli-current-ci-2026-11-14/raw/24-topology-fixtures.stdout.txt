@@ -1,0 +1,91 @@
+Running (1s): inert-child
+Running (1s): inert-child
+Running (1s): inert-child
+Running (960s): /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/mcpcli-live-ci-db76tzzt/venv/bin/python /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/tools/live-topology/run-isolated.py -- dotnet /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests -failSkips -result-xml /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/evidence/860376ac8c4d41159f01b8d311dd0d0e/boundary/tests.xml
+Running (15180s): /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/mcpcli-live-ci-db76tzzt/venv/bin/python /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/tools/live-topology/run-vectors.py --output /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/evidence/860376ac8c4d41159f01b8d311dd0d0e/vectors
+Running (960s): /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/mcpcli-live-ci-db76tzzt/venv/bin/python /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/tools/live-topology/run-isolated.py -- dotnet /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll -class Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests -failSkips -result-xml /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/evidence/6ccf2cf691804e9c9e57dc811775c2b0/boundary/tests.xml
+Running (15180s): /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/mcpcli-live-ci-db76tzzt/venv/bin/python /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/tools/live-topology/run-vectors.py --output /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpg9cw_77w/evidence/6ccf2cf691804e9c9e57dc811775c2b0/vectors
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp36_gqja1/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmptgg19y3q/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmprt4igngo/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpvlqu5kdk/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp5l1640pv/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmppij2mlld/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpxasqqjuj/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmptfpzj6u3/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmprc42tuqi/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpdi07tgdw/live-lane.json
+PASSED: full live acceptance=True; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpw0izr0oo/live-lane.json
+PARTIAL: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpp27ym0m2/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp80srh8mb/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp0japsxk5/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp5i9xtff9/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmph_gxp6tb/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp090gettn/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp4mcmrjka/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp_gcf1mpz/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpw3g0cc1m/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpq_qx4f10/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpm35r0tkz/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpa9yqcoj8/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpo8ouwoz8/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp5ebe722g/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmprmoucp0a/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpytcb8lun/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpnnw3g9u4/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp74jgfn9l/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpc64_2bez/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpcgqalyhk/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpa9o0y1yv/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpjf1ubbj6/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp6f28efs7/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpp8ct_o0f/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpm1aoz433/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp6xoo4epj/live-lane.json
+FAILED: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmprfug18p5/live-lane.json
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmps4_b7xh7/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpynuxcju8/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp_z2aucfc/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpn4ygxdq7/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpj9710ih2/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp2g0t28zw/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpy3zkyrma/live-result.json
+VectorError: Selected live inputs differ from the parent preflight binding.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpfngbyoht/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpk3dne0u2/live-result.json
+VectorError: Live execution requires the isolated topology wrapper.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpypm54v4i/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpvr44_iyr/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpap583pox/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpffav841k/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp7wp2wshm/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpak_cp7p1/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpcxts7gl8/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmphq8bax8c/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpzhygh_8o/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp55cwf2rd/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpz8knwqu9/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpbxzbw_86/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+FAILED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp61zccirx/live-result.json
+VectorError: Private discovered loopback endpoint and short-lived identity are required.
+PASSED fixture.operation; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmp0pum5p1b/live-result.json
+Verified four private runtime binaries in /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch/tmpu72v023m/runtime

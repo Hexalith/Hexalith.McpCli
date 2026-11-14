@@ -1,0 +1,7 @@
+test_catalog_and_workflow_pins_keep_their_approved_identities (test_ci.CiWorkflowTests.test_catalog_and_workflow_pins_keep_their_approved_identities) ... ok
+test_builds_reference_guard_rejects_catalog_and_executor_drift (test_ci.CiWorkflowTests.test_builds_reference_guard_rejects_catalog_and_executor_drift) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.008s
+
+OK

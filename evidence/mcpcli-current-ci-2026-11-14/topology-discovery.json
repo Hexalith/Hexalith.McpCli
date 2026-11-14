@@ -1,0 +1,31 @@
+{
+  "status": "passed",
+  "liveVectorCases": 21,
+  "independentCases": 2,
+  "totalCases": 23,
+  "operations": [
+    "parties.create-party",
+    "parties.deactivate-party",
+    "parties.get-party",
+    "parties.list-parties",
+    "parties.reactivate-party",
+    "parties.search-parties",
+    "parties.update-party",
+    "tenants.add-user-to-tenant",
+    "tenants.change-user-role",
+    "tenants.create-tenant",
+    "tenants.disable-tenant",
+    "tenants.enable-tenant",
+    "tenants.get-tenant",
+    "tenants.get-tenant-audit",
+    "tenants.get-tenant-users",
+    "tenants.get-user-tenants",
+    "tenants.list-tenants",
+    "tenants.remove-tenant-configuration",
+    "tenants.remove-user-from-tenant",
+    "tenants.set-tenant-configuration",
+    "tenants.update-tenant"
+  ],
+  "exactCiSetComparison": true,
+  "discoverySha256": "53190d5434a40707086585f6255b0ce8250d83764ecdbb4fa6feef8ec14aa8c6"
+}

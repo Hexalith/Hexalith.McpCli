@@ -1,0 +1,16 @@
+{
+  "command": [
+    "dotnet",
+    "build",
+    "Hexalith.McpCli.slnx",
+    "--no-restore",
+    "--configuration",
+    "Release",
+    "-warnaserror"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T01:47:35.547280+00:00",
+  "elapsedSeconds": 5.609,
+  "exitCode": 1,
+  "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages"
+}

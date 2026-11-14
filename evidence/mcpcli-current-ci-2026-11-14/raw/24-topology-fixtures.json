@@ -1,0 +1,18 @@
+{
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "tools/live-topology",
+    "-p",
+    "test_*.py"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T01:59:17.981498+00:00",
+  "elapsedSeconds": 689.801,
+  "exitCode": 1,
+  "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages"
+}

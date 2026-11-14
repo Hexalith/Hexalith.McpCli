@@ -1,0 +1,131 @@
+restore stdout (full output retained in /tmp/mcpcli-current-ci-20261114-agfi8ppn/enrolled/Hexalith.Parties.Contracts/restore.stdout.txt):
+stics.eventlog/index.json'.
+  No space left on device : '/home/administrator/.local/share/NuGet/http-cache/670c1461c29885f9aa22c281d8b7da90845b38e4$ps:_api.nuget.org_v3_index.json/list_system.diagnostics.eventlog.dat-new'
+  Failed to download package 'Dapr.Client.1.19.1' from 'https://api.nuget.org/v3-flatcontainer/dapr.client/1.19.1/dapr.client.1.19.1.nupkg'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/jtuh3ejq.vnn'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/40v5oe4p.p15'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/0wvupkmx.2e3'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.codeanalysis.common/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/00grf4x1.2xm'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/5igbde4a.dyw'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/4510u1sg.lzy'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/h5h3xmd2.uea'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/nniav553.z1a'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/zz5osfgt.mep'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.diagnostics.eventlog/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/eujunwhy.0hp'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/0pu5syip.50m'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.diagnostics.eventlog/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/dqnyzfap.tq1'
+/home/administrator/.dotnet/sdk/11.0.100/NuGet.targets(200,5): error : Failed to download package 'Dapr.Client.1.19.1' from 'https://api.nuget.org/v3-flatcontainer/dapr.client/1.19.1/dapr.client.1.19.1.nupkg'. [/tmp/mcpcli-artifact-42rml2gd/host/ArtifactHost.csproj]
+/home/administrator/.dotnet/sdk/11.0.100/NuGet.targets(200,5): error : No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/jg1vxkxr.zyh' [/tmp/mcpcli-artifact-42rml2gd/host/ArtifactHost.csproj]
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/home/administrator/.local/share/NuGet/http-cache/670c1461c29885f9aa22c281d8b7da90845b38e4$ps:_api.nuget.org_v3_index.json/list_dapr.client.dat-new'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/home/administrator/.local/share/NuGet/http-cache/670c1461c29885f9aa22c281d8b7da90845b38e4$ps:_api.nuget.org_v3_index.json/list_dapr.client.dat-new'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/home/administrator/.local/share/NuGet/http-cache/670c1461c29885f9aa22c281d8b7da90845b38e4$ps:_api.nuget.org_v3_index.json/list_dapr.client.dat-new'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/home/administrator/.local/share/NuGet/http-cache/670c1461c29885f9aa22c281d8b7da90845b38e4$ps:_api.nuget.org_v3_index.json/list_dapr.client.dat-new'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/svscixcu.3ng'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/pj5qbexb.hwa'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/lt335oak.2lu'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/ntiewjgc.ecd'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.codeanalysis.common/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/wqvdqmzj.a03'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/jnhtbydj.p4n'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/ocnsqqdr.owc'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.diagnostics.eventlog/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/j5k2f32f.3ds'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/cftwxcjv.qr4'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/rmqb0p5n.2c4'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.diagnostics.eventlog/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/dpqalp3k.vzz'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/jxns4vmr.25u'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/co0ukfvd.cm5'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/irm03emc.osl'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/mk03m4qp.wpm'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/nz43sgtz.m1h'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/r5bxgana.eal'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.codeanalysis.common/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/gcokcxlm.ac3'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/zj5l3jur.egw'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/ml4nunud.npa'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/mb20j3hy.my1'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/0any2gym.gjz'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.diagnostics.eventlog/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/epxijhce.bro'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/nzns1um0.1f4'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/p1vn1hbt.5xf'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.diagnostics.eventlog/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/kkz34azl.m2m'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/iiekhndt.mqz'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/fkigv45p.bld'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/4jwnqswe.mkb'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/waiyudcg.kx3'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.codeanalysis.common/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/socprujo.a5m'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/sayxro5f.srs'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/fnq4ish4.3fy'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/reupnwmq.irq'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/naj04zw5.wbu'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/microsoft.extensions.filesystemglobbing/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/byaraopr.vpl'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/tisuk2mo.s55'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.diagnostics.eventlog/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/upaab5ol.eey'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/jsonpointer.net/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/par25lo0.2m5'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.text.encodings.web/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/e2mwjjau.mbx'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/system.diagnostics.eventlog/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/2pu5ejya.oum'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/talatjho.ylt'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/4lv0edgx.lwn'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/ar3skcfy.ri3'
+  Retrying 'FindPackagesByIdAsync' for source 'https://api.nuget.org/v3-flatcontainer/dapr.client/index.json'.
+  No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/5xzexwfn.prh'
+/tmp/mcpcli-artifact-42rml2gd/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj : error NU1301: Failed to retrieve information about 'Microsoft.CodeAnalysis.Common' from remote source 'https://api.nuget.org/v3-flatcontainer/microsoft.codeanalysis.common/index.json'. [/tmp/mcpcli-artifact-42rml2gd/host/ArtifactHost.csproj]
+/tmp/mcpcli-artifact-42rml2gd/src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj : error NU1301:   No space left on device : '/tmp/NuGetScratchadministrator/c6e77b3f-3316-4325-b19f-a9a9872937b5/hvdph4e2.cmh' [/tmp/mcpcli-artifact-42rml2gd/host/ArtifactHost.csproj]
+/home/administrator/.dotnet/sdk/11.0.100/NuGet.targets(200,5): error : No space left on device : '/tmp/mcpcli-artifact-42rml2gd/src/Hexalith.McpCli.Analyzers/obj' [/tmp/mcpcli-artifact-42rml2gd/host/ArtifactHost.csproj]
+restore failed with exit 1; see /tmp/mcpcli-current-ci-20261114-agfi8ppn/enrolled/Hexalith.Parties.Contracts.

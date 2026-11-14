@@ -1,0 +1,60 @@
+{
+  "verificationStep": "40-helper-regressions-final",
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "evidence/mcpcli-current-ci-2026-11-14",
+    "-p",
+    "test_run_candidate_census.py"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T02:55:13.166744+00:00",
+  "elapsedSeconds": 0.387,
+  "exitCode": 0,
+  "rawOutput": {
+    "stdout": {
+      "path": "raw/40-helper-regressions-final.stdout.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    "stderr": {
+      "path": "raw/40-helper-regressions-final.stderr.txt",
+      "sha256": "1ec463b1b2b23a10783d41ba205539a57e6c9b7e9e6211710baa0603f1725d63",
+      "bytes": 1368
+    }
+  },
+  "sourceContext": {
+    "kind": "captured-before-execution",
+    "files": [
+      {
+        "path": "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+        "sha256": "334b466a9d37e663dd57bc53f9a831fdfc276462a95e68e03d9421c0f0b94d1c"
+      },
+      {
+        "path": "evidence/mcpcli-current-ci-2026-11-14/test_run_candidate_census.py",
+        "sha256": "d893bd93afa5fb6de7f99ce4ccd04539a04c01685e2948f1620d327ba75141ea"
+      },
+      {
+        "path": "tools/proprietary-surfaces/v1/check.py",
+        "sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388"
+      },
+      {
+        "path": "tools/proprietary-surfaces/v1/amendments.json",
+        "sha256": "90cbecfe6df72fc15e03947853a3ed3fabb3978ce2b3a72b9039eef5cf0ad7f5"
+      },
+      {
+        "path": "tools/proprietary-surfaces/v1/amendments/1.0.8.json",
+        "sha256": "1b529f98cacf9bb8eba002ac51997fda32e0bad7395adbd9ee999f937ce98c2e"
+      },
+      {
+        "path": "tools/proprietary-surfaces/v1/amendments/1.0.8-approval.json",
+        "sha256": "443e64512b93d0bf4c68ee86c360bfd9e5430537e4319124e450234181794799"
+      }
+    ],
+    "scope": "Only the named helper/test/checker/policy inputs; no ordinary .NET or long suites were rerun."
+  }
+}

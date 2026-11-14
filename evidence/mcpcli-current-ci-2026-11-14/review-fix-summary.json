@@ -1,0 +1,26 @@
+{
+  "scope": "Evidence-helper and provenance fixes only; no .NET, enrollment, long topology or sample suites rerun",
+  "helperRegressions": {
+    "passed": 7,
+    "includesRealOptimizedPythonSubprocess": true,
+    "record": "raw/40-helper-regressions-final.json"
+  },
+  "durableRawOriginals": {
+    "count": 120,
+    "directory": "raw",
+    "copiedBytesVerifiedAgainstOriginals": true
+  },
+  "candidateRegeneration": {
+    "record": "raw/39-candidate-census-final.json",
+    "newlyApproved": 2,
+    "existingRejectedAllowances": 8,
+    "existingInspectionErrors": 4,
+    "fullAcceptance": false
+  },
+  "approvalLineage": {
+    "onlyNew108ReceiptAmendmentIndexRefreshed": true,
+    "frozenSnapshotBlockUnchanged": true,
+    "allPriorReceiptsAndBaselineUnchanged": true,
+    "newPendingActionsActivated": false
+  }
+}

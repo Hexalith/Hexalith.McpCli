@@ -1,0 +1,12 @@
+{
+  "command": [
+    "bash",
+    "tools/conformance-vectors/v1/run-sample-validation.sh",
+    "Release"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T01:59:27.043281+00:00",
+  "elapsedSeconds": 20.887,
+  "exitCode": 0,
+  "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages"
+}

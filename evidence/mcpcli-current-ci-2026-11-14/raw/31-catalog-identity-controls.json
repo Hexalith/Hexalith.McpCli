@@ -1,0 +1,17 @@
+{
+  "command": [
+    "env",
+    "PYTHONPATH=tools/live-topology",
+    "python3",
+    "-m",
+    "unittest",
+    "-v",
+    "test_ci.CiWorkflowTests.test_catalog_and_workflow_pins_keep_their_approved_identities",
+    "test_ci.CiWorkflowTests.test_builds_reference_guard_rejects_catalog_and_executor_drift"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T02:23:04.350074+00:00",
+  "elapsedSeconds": 0.09,
+  "exitCode": 0,
+  "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages"
+}

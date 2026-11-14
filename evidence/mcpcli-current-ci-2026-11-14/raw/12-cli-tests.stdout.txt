@@ -1,0 +1,39 @@
+Running tests from /home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:40271/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:40271/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 3.9748ms - 202
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 4.0871ms - 202
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:40227/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:40227/api/v1/commands
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 1.0081ms - 202
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 1.1105ms - 202
+skipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsInaccessibleExistingOutputPreventsProfileMutationAsync
+  Windows ACLs are required for this fixture.
+  from /home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+skipped Hexalith.McpCli.Cli.Tests.CliOutputContractTests.WindowsReadOnlyExistingOutputPreventsProfileMutationAsync
+  Windows file attributes are required for this fixture.
+  from /home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64)
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[100]
+      Start processing HTTP request POST http://127.0.0.1:41389/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[100]
+      Sending HTTP request POST http://127.0.0.1:41389/api/v1/queries
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.ClientHandler[101]
+      Received HTTP response headers after 1.1514ms - 200
+info: System.Net.Http.HttpClient.IEventStoreGatewayClient.LogicalHandler[101]
+      End processing HTTP request after 1.2239ms - 200
+/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli/tests/Hexalith.McpCli.Cli.Tests/bin/Release/net10.0/Hexalith.McpCli.Cli.Tests.dll (net10.0|x64) passed [+623/x0/?2] (45s 803ms)
+
+Test run summary: Passed!
+  total: 625
+  failed: 0
+  succeeded: 623
+  skipped: 2
+  duration: 45s 951ms

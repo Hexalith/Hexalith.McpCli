@@ -1,0 +1,54 @@
+{
+  "schema": "mcpcli-local-review-result/v1",
+  "status": "local-review-complete-ci-blocked",
+  "completedAtUtc": "2026-11-14T03:03:37.308531+00:00",
+  "owningHead": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+  "independentLayers": {
+    "blindHunter": "completed; all findings triaged",
+    "edgeCaseHunter": "completed; three original counterexamples rechecked after correction; no residual defects",
+    "verificationGap": "completed; focused correction/source/evidence recheck found no residual gaps"
+  },
+  "correctedFindings": [
+    "receipt/index path admission",
+    "receipt symlink refusal",
+    "diagnostic redaction",
+    "fresh failure provenance",
+    "unconditional optimized-mode metadata refusal",
+    "supplementary binding documentation",
+    "durable raw evidence",
+    "final source contexts",
+    "archived snapshot link",
+    "measured metadata scope"
+  ],
+  "targetedHelperTests": {
+    "passed": 7,
+    "failed": 0,
+    "parentIndependentlyRepeated": true
+  },
+  "parentIntegrityVerification": {
+    "sourceHashes": 42,
+    "reviewFixScannedFiles": 173,
+    "commandLogs": 40,
+    "allMatched": true,
+    "priorApprovalLineagePreserved": true
+  },
+  "remaining": {
+    "allowanceSourceDrifts": 8,
+    "inspectionErrors": 4,
+    "pendingCensusActions": 12,
+    "source": "pending-census-actions.json",
+    "committedSourceHostedNativeAcceptance": false
+  },
+  "repositoryActions": {
+    "staged": false,
+    "committed": false,
+    "pushed": false,
+    "nestedReferencesInitialized": false
+  },
+  "scope": "Local review and correction evidence only. Additional source classifications, exact committed-source hosted/native acceptance and publication remain pending.",
+  "parentRawWhitespaceCheck": {
+    "result": "corrected with four exact captured-data attribute entries",
+    "rawBytesChanged": false,
+    "executableCodeExempted": false
+  }
+}

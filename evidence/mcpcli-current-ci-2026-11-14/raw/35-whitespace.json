@@ -1,0 +1,12 @@
+{
+  "command": [
+    "git",
+    "diff",
+    "--check"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T02:24:04.795999+00:00",
+  "elapsedSeconds": 0.013,
+  "exitCode": 0,
+  "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages"
+}

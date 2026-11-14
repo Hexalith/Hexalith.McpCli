@@ -1,0 +1,12 @@
+test_failed_policy_rerun_replaces_prior_success_and_its_provenance (test_run_candidate_census.CandidateCensusTests.test_failed_policy_rerun_replaces_prior_success_and_its_provenance) ... ok
+test_index_path_is_validated_before_reading_an_outside_amendment (test_run_candidate_census.CandidateCensusTests.test_index_path_is_validated_before_reading_an_outside_amendment) ... ok
+test_metadata_refusal_is_unconditional_under_optimized_python (test_run_candidate_census.CandidateCensusTests.test_metadata_refusal_is_unconditional_under_optimized_python) ... ok
+test_prerequisite_failures_replace_prior_success_before_inspection (test_run_candidate_census.CandidateCensusTests.test_prerequisite_failures_replace_prior_success_before_inspection) ... ok
+test_receipt_traversal_cannot_overwrite_or_create_outside_scratch (test_run_candidate_census.CandidateCensusTests.test_receipt_traversal_cannot_overwrite_or_create_outside_scratch) ... ok
+test_source_diagnostic_is_redacted_in_stdout_and_retained_output (test_run_candidate_census.CandidateCensusTests.test_source_diagnostic_is_redacted_in_stdout_and_retained_output) ... ok
+test_symlink_receipt_is_refused_before_copying (test_run_candidate_census.CandidateCensusTests.test_symlink_receipt_is_refused_before_copying) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.332s
+
+OK

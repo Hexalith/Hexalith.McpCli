@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "fullLiveAcceptance": false,
+  "completeReceipt": {
+    "path": "raw/topology-preflight.json",
+    "sha256": "b0b98c2fb2f14956d7cd586fdf084c4f8e8c6c6bbe1417b8894514f0d9a8af7f",
+    "bytes": 2616
+  }
+}

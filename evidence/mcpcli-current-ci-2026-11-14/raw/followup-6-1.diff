@@ -1,0 +1,11 @@
+--- 3c8a52056a510d371f336fd012b888aa1405ab9b:src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj
++++ 05a75b626fb73c6e386d16c41e885f193d3cff16:src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj
+@@ -8,7 +8,7 @@
+   <Import Project="PackagedHost.props" Condition="Exists('$(MSBuildThisFileDirectory)PackagedHost.props')" />
+   <Import Project="Sdk.props" Sdk="Microsoft.NET.Sdk" />
+   <PropertyGroup>
+-    <TargetFramework>net10.0</TargetFramework>
++    <TargetFramework>net11.0</TargetFramework>
+     <OutputType>Exe</OutputType>
+     <AssemblyName>Hexalith.Builds.Module.UiHost</AssemblyName>
+     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>

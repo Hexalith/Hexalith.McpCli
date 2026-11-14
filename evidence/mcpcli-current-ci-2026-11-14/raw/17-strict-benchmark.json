@@ -1,0 +1,16 @@
+{
+  "command": [
+    "env",
+    "MCPCLI_BENCHMARK_REQUIRE_V1=true",
+    "MCPCLI_BENCHMARK_OUTPUT=evidence/mcpcli-current-ci-2026-11-14/catalog-benchmark.json",
+    "dotnet",
+    "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+    "-class",
+    "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T01:55:58.330015+00:00",
+  "elapsedSeconds": 0.778,
+  "exitCode": 0,
+  "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages"
+}

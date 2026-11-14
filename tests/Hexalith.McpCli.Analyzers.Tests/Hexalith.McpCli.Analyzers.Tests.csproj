@@ -1,4 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Roslyn 5.9's netstandard analyzer closure uses System.Collections.Immutable 11; test it on the SDK 11 host. -->
+    <TargetFramework>net11.0</TargetFramework>
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="../../src/Hexalith.McpCli.Analyzers/Hexalith.McpCli.Analyzers.csproj" />
     <ProjectReference Include="../../src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj" />

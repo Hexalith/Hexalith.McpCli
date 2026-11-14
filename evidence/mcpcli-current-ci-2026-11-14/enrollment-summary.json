@@ -1,0 +1,271 @@
+{
+  "result": "passed",
+  "fullV1Accepted": true,
+  "packages": [
+    "Hexalith.Parties.Contracts",
+    "Hexalith.Tenants.Contracts"
+  ],
+  "shapes": [
+    {
+      "module": "parties",
+      "shape": "kind=command;identifierKind=string;wireTypeConvention=fullTypeName;tenantSource=public;aggregateIdSource=property;projectionSelector=none;idempotencyKey=optional",
+      "operations": [
+        "parties.create-party",
+        "parties.deactivate-party",
+        "parties.reactivate-party",
+        "parties.update-party"
+      ],
+      "vectors": [
+        "parties.create-party",
+        "parties.deactivate-party",
+        "parties.reactivate-party",
+        "parties.update-party"
+      ]
+    },
+    {
+      "module": "parties",
+      "shape": "kind=query;identifierKind=string;wireTypeConvention=fullTypeName;tenantSource=public;aggregateIdSource=constant;projectionSelector=projectionType;idempotencyKey=optional",
+      "operations": [
+        "parties.list-parties",
+        "parties.search-parties"
+      ],
+      "vectors": [
+        "parties.list-parties",
+        "parties.search-parties"
+      ]
+    },
+    {
+      "module": "parties",
+      "shape": "kind=query;identifierKind=string;wireTypeConvention=fullTypeName;tenantSource=public;aggregateIdSource=property;projectionSelector=projectionType;idempotencyKey=optional",
+      "operations": [
+        "parties.get-party"
+      ],
+      "vectors": [
+        "parties.get-party"
+      ]
+    },
+    {
+      "module": "tenants",
+      "shape": "kind=command;identifierKind=string;wireTypeConvention=explicit;tenantSource=platformScope;aggregateIdSource=property;projectionSelector=none;idempotencyKey=optional",
+      "operations": [
+        "tenants.add-user-to-tenant",
+        "tenants.change-user-role",
+        "tenants.create-tenant",
+        "tenants.disable-tenant",
+        "tenants.enable-tenant",
+        "tenants.remove-tenant-configuration",
+        "tenants.remove-user-from-tenant",
+        "tenants.set-tenant-configuration",
+        "tenants.update-tenant"
+      ],
+      "vectors": [
+        "tenants.add-user-to-tenant",
+        "tenants.change-user-role",
+        "tenants.create-tenant",
+        "tenants.disable-tenant",
+        "tenants.enable-tenant",
+        "tenants.remove-tenant-configuration",
+        "tenants.remove-user-from-tenant",
+        "tenants.set-tenant-configuration",
+        "tenants.update-tenant"
+      ]
+    },
+    {
+      "module": "tenants",
+      "shape": "kind=query;identifierKind=string;wireTypeConvention=explicit;tenantSource=platformScope;aggregateIdSource=constant;projectionSelector=projectionType;idempotencyKey=optional",
+      "operations": [
+        "tenants.get-user-tenants",
+        "tenants.list-tenants"
+      ],
+      "vectors": [
+        "tenants.get-user-tenants",
+        "tenants.list-tenants"
+      ]
+    },
+    {
+      "module": "tenants",
+      "shape": "kind=query;identifierKind=string;wireTypeConvention=explicit;tenantSource=public;aggregateIdSource=property;projectionSelector=projectionType;idempotencyKey=optional",
+      "operations": [
+        "tenants.get-tenant",
+        "tenants.get-tenant-audit",
+        "tenants.get-tenant-users"
+      ],
+      "vectors": [
+        "tenants.get-tenant",
+        "tenants.get-tenant-audit",
+        "tenants.get-tenant-users"
+      ]
+    }
+  ],
+  "reported": [],
+  "missingRequiredModules": [],
+  "completeReceipt": {
+    "path": "raw/enrolled.json",
+    "sha256": "36926627c2936a3d92af5fd0a2cead9ab3eaef3dfe1ec1f79df3a33c0af6ce2c",
+    "bytes": 95358
+  },
+  "modules": [
+    {
+      "result": "passed",
+      "packageId": "Hexalith.Parties.Contracts",
+      "version": "3.1.1",
+      "artifactHash": "sha512-7JLooWpFpHX11qEnkWbnjpF1rQBkPztTh81WWi2Giv2edQj0gmmmxPdy6YQvGELhux/ZC0UcHeilyO9gVZWvFA==",
+      "operations": [
+        "parties.create-party",
+        "parties.deactivate-party",
+        "parties.get-party",
+        "parties.list-parties",
+        "parties.reactivate-party",
+        "parties.search-parties",
+        "parties.update-party"
+      ],
+      "shapes": [
+        {
+          "module": "parties",
+          "shape": "kind=command;identifierKind=string;wireTypeConvention=fullTypeName;tenantSource=public;aggregateIdSource=property;projectionSelector=none;idempotencyKey=optional",
+          "operations": [
+            "parties.create-party",
+            "parties.deactivate-party",
+            "parties.reactivate-party",
+            "parties.update-party"
+          ],
+          "vectors": [
+            "parties.create-party",
+            "parties.deactivate-party",
+            "parties.reactivate-party",
+            "parties.update-party"
+          ]
+        },
+        {
+          "module": "parties",
+          "shape": "kind=query;identifierKind=string;wireTypeConvention=fullTypeName;tenantSource=public;aggregateIdSource=constant;projectionSelector=projectionType;idempotencyKey=optional",
+          "operations": [
+            "parties.list-parties",
+            "parties.search-parties"
+          ],
+          "vectors": [
+            "parties.list-parties",
+            "parties.search-parties"
+          ]
+        },
+        {
+          "module": "parties",
+          "shape": "kind=query;identifierKind=string;wireTypeConvention=fullTypeName;tenantSource=public;aggregateIdSource=property;projectionSelector=projectionType;idempotencyKey=optional",
+          "operations": [
+            "parties.get-party"
+          ],
+          "vectors": [
+            "parties.get-party"
+          ]
+        }
+      ]
+    },
+    {
+      "result": "passed",
+      "packageId": "Hexalith.Tenants.Contracts",
+      "version": "7.0.7",
+      "artifactHash": "sha512-0cdcXSfo2qGaO0Nm3tsmFJkIgto8qRFyRjoWIjX5tQMuCYRcg+dMJBxr+qp29iPgYMPMOqRAuIaiH+G+mo6u/g==",
+      "operations": [
+        "tenants.add-user-to-tenant",
+        "tenants.change-user-role",
+        "tenants.create-tenant",
+        "tenants.disable-tenant",
+        "tenants.enable-tenant",
+        "tenants.get-tenant",
+        "tenants.get-tenant-audit",
+        "tenants.get-tenant-users",
+        "tenants.get-user-tenants",
+        "tenants.list-tenants",
+        "tenants.remove-tenant-configuration",
+        "tenants.remove-user-from-tenant",
+        "tenants.set-tenant-configuration",
+        "tenants.update-tenant"
+      ],
+      "shapes": [
+        {
+          "module": "tenants",
+          "shape": "kind=command;identifierKind=string;wireTypeConvention=explicit;tenantSource=platformScope;aggregateIdSource=property;projectionSelector=none;idempotencyKey=optional",
+          "operations": [
+            "tenants.add-user-to-tenant",
+            "tenants.change-user-role",
+            "tenants.create-tenant",
+            "tenants.disable-tenant",
+            "tenants.enable-tenant",
+            "tenants.remove-tenant-configuration",
+            "tenants.remove-user-from-tenant",
+            "tenants.set-tenant-configuration",
+            "tenants.update-tenant"
+          ],
+          "vectors": [
+            "tenants.add-user-to-tenant",
+            "tenants.change-user-role",
+            "tenants.create-tenant",
+            "tenants.disable-tenant",
+            "tenants.enable-tenant",
+            "tenants.remove-tenant-configuration",
+            "tenants.remove-user-from-tenant",
+            "tenants.set-tenant-configuration",
+            "tenants.update-tenant"
+          ]
+        },
+        {
+          "module": "tenants",
+          "shape": "kind=query;identifierKind=string;wireTypeConvention=explicit;tenantSource=platformScope;aggregateIdSource=constant;projectionSelector=projectionType;idempotencyKey=optional",
+          "operations": [
+            "tenants.get-user-tenants",
+            "tenants.list-tenants"
+          ],
+          "vectors": [
+            "tenants.get-user-tenants",
+            "tenants.list-tenants"
+          ]
+        },
+        {
+          "module": "tenants",
+          "shape": "kind=query;identifierKind=string;wireTypeConvention=explicit;tenantSource=public;aggregateIdSource=property;projectionSelector=projectionType;idempotencyKey=optional",
+          "operations": [
+            "tenants.get-tenant",
+            "tenants.get-tenant-audit",
+            "tenants.get-tenant-users"
+          ],
+          "vectors": [
+            "tenants.get-tenant",
+            "tenants.get-tenant-audit",
+            "tenants.get-tenant-users"
+          ]
+        }
+      ]
+    }
+  ],
+  "productionReplay": {
+    "result": "passed",
+    "checks": [
+      {
+        "command": [
+          "dotnet",
+          "restore",
+          "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "-p:ConformanceProduction=true"
+        ],
+        "result": "passed",
+        "exitCode": 0
+      },
+      {
+        "command": [
+          "dotnet",
+          "build",
+          "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli/tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj",
+          "--no-restore",
+          "-c",
+          "Release",
+          "-m:1",
+          "-warnaserror",
+          "-p:ConformanceProduction=true"
+        ],
+        "result": "passed",
+        "exitCode": 0
+      }
+    ],
+    "reported": []
+  }
+}

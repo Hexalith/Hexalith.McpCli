@@ -1,0 +1,9 @@
+{
+  "mode": "existing-installed-pinned-library",
+  "jsonschemaVersion": "4.26.0",
+  "requiredVersion": "4.26.0",
+  "venvBlocker": "No space left on device; failed task environments removed; no system packages changed",
+  "finalMode": "fresh-task-owned-venv",
+  "venv": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/venv",
+  "finalInstall": "pip install -r tools/conformance-vectors/v1/requirements.txt passed"
+}

@@ -1,0 +1,21 @@
+{
+  "command": "python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'",
+  "totalTests": 246,
+  "passed": 245,
+  "failed": 1,
+  "failure": "test_catalog_and_workflow_pins_keep_their_approved_identities",
+  "path": "tools/live-topology/test_ci.py:2502",
+  "expectedApprovedBuildsPin": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b",
+  "actualCommittedBuildsPin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+  "disposition": "Corrected only stale catalog expectation/negative-control baseline to the already-approved existing catalog; executor and source pins unchanged.",
+  "focusedRetest": {
+    "class": "test_ci.CiWorkflowTests",
+    "tests": [
+      "test_catalog_and_workflow_pins_keep_their_approved_identities",
+      "test_builds_reference_guard_rejects_catalog_and_executor_drift"
+    ],
+    "passed": 2,
+    "mutationRefusalControls": 11,
+    "fullSuiteNotRepeated": true
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "formatVersion": 1,
+  "date": "2026-11-14",
+  "mode": "read-only-planning-investigation",
+  "ownerApproval": "pending-not-an-approval-receipt",
+  "rootBaseline": "401d926eb7d51bdf332696ed3f0fe39a812b3501",
+  "owningLocalHead": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+  "investigatedRemoteHead": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8",
+  "ci": {
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43536045450",
+    "createdAt": "2026-11-14T00:43:02Z",
+    "status": "completed",
+    "conclusion": "failure",
+    "failedJobs": [
+      "proprietary-surface-census",
+      "topology-vector-discovery",
+      "ci / build-and-test",
+      "enrolled-module-conformance",
+      "conformance-vector-contract",
+      "conformance-vector-loopback"
+    ],
+    "skippedJobs": [
+      "ci / performance-tests",
+      "ci / aspire-tests"
+    ],
+    "passedJobs": [
+      "release-automation"
+    ],
+    "restoreErrors": {
+      "code": "NU1202",
+      "target": "net10.0",
+      "incompatibleSelections": {
+        "Hexalith.Commons.UniqueIds": "3.0.0",
+        "Microsoft.AspNetCore.Authentication.JwtBearer": "11.0.0",
+        "Microsoft.AspNetCore.SignalR.StackExchangeRedis": "11.0.0"
+      }
+    }
+  },
+  "compatiblePackages": [
+    {
+      "id": "Hexalith.Commons.UniqueIds",
+      "version": "2.30.10",
+      "sha256": "b26ee4ecded5f9fe38e4e5837af00180530949a784996dafd964395510df26ca",
+      "source": "https://api.nuget.org/v3-flatcontainer/",
+      "evidence": "Read-only investigation agent independently downloaded the official archive in memory and matched the available cache; published cohort nuspecs permit this net10 selection."
+    },
+    {
+      "id": "Microsoft.AspNetCore.Authentication.JwtBearer",
+      "version": "10.0.15",
+      "sha256": "2f6924b5dbef4d00cda6e4c7d2d4b8660a4c9ee4b76339fdab81ecc1c023bb79",
+      "source": "https://api.nuget.org/v3-flatcontainer/",
+      "evidence": "Read-only investigation agent independently downloaded the official archive in memory and matched the available cache; published cohort nuspecs permit this net10 selection."
+    },
+    {
+      "id": "Microsoft.AspNetCore.SignalR.StackExchangeRedis",
+      "version": "10.0.15",
+      "sha256": "a9e00145cf138b30d61f1ae5bd8893b40d97e04c8e797efb155e4cd6594760ed",
+      "source": "https://api.nuget.org/v3-flatcontainer/",
+      "evidence": "Read-only investigation agent independently downloaded the official archive in memory and matched the available cache; published cohort nuspecs permit this net10 selection."
+    }
+  ],
+  "censusProposal": {
+    "sourceRepository": "references/Hexalith.EventStore",
+    "sourceRevision": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+    "decision": "pending",
+    "candidates": [
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": ".github/workflows/ci.yml",
+          "kind": "publication",
+          "identity": "Microsoft.DotNet.ApiCompat.Tool"
+        },
+        "row": "PE06",
+        "classification": "external-developer-tool",
+        "signals": [
+          "tool-install"
+        ],
+        "sources": [
+          {
+            "path": ".github/workflows/ci.yml",
+            "sha256": "327eb78c7cd0128f2db77462c0e272db0911116d47b78a39c570488e94536922"
+          }
+        ],
+        "rationale": "Pinned Microsoft tool 11.0.100 is consumed for offline API compatibility tests; no Hexalith module operation or new publication is defined."
+      },
+      {
+        "surface": {
+          "repository": "references/Hexalith.EventStore",
+          "path": "tools/Hexalith.EventStore.RuntimeIdentityProbe/Hexalith.EventStore.RuntimeIdentityProbe.csproj",
+          "kind": "project",
+          "identity": "Hexalith.EventStore.RuntimeIdentityProbe"
+        },
+        "row": "PE09",
+        "classification": "qualification-evidence-tooling",
+        "signals": [
+          "executable-project"
+        ],
+        "compilationClosure": true,
+        "sourcePrefix": "tools/Hexalith.EventStore.RuntimeIdentityProbe",
+        "sources": [
+          {
+            "path": "../Hexalith.Builds/Props/Directory.Packages.props",
+            "sha256": "fb90d42b50bab7d497808b93904fd67ddd9e3167efc6512a45d00fd98fe25aea"
+          },
+          {
+            "path": "../Hexalith.Builds/Props/Logging.Build.targets",
+            "sha256": "7e01de7239cfaaa7840863b82540d2f5d6cd6623a9a0107d4e1b275f3748ca6e"
+          },
+          {
+            "path": "Directory.Build.props",
+            "sha256": "0010f094df7f40bf9cecaaea4d47493737f9e9409d914c206d0396a64a406b81"
+          },
+          {
+            "path": "Directory.Build.targets",
+            "sha256": "d95dd40a0f6676bbcb46eca3e1a4d7a0a8c94fa64e13c908be7cdeb4beada3ff"
+          },
+          {
+            "path": "references/Hexalith.Builds/Props/Directory.Packages.props",
+            "sha256": "c55bf73782fa24478fab3a1c963f418cf90440a9532a15f96aee477fdb3b32ea"
+          },
+          {
+            "path": "references/Hexalith.Builds/Props/Logging.Build.targets",
+            "sha256": "7e01de7239cfaaa7840863b82540d2f5d6cd6623a9a0107d4e1b275f3748ca6e"
+          },
+          {
+            "path": "tools/Hexalith.EventStore.RuntimeIdentityProbe/Hexalith.EventStore.RuntimeIdentityProbe.csproj",
+            "sha256": "32e4803284336ac6a970c8c57e52b90e33e6f77b036360076a50e3cbd71b8959"
+          },
+          {
+            "path": "tools/Hexalith.EventStore.RuntimeIdentityProbe/Program.cs",
+            "sha256": "933e9a171e2a5972702e70346704304e3859c43b82af8decce834f20589f7f74"
+          }
+        ],
+        "rationale": "Nonpackable/nonpublishable zero-argument process hashes its own runtime host/framework assemblies and emits identity JSON. No business operation, MCP registration, network service or remotely callable tool."
+      }
+    ]
+  },
+  "closureVerification": {
+    "result": "pass",
+    "method": "Unmodified check.py Tree, Workspace, declarations, Resolver and compilation_closure APIs; committed objects only, using permitted top-level stores without initializing nested submodules.",
+    "workspaceBaseline": "401d926eb7d51bdf332696ed3f0fe39a812b3501",
+    "selectedEventStoreCommit": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+    "topLevelBuildsCommit": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+    "eventStoreNestedBuildsCommit": "3c2f5944aaa28dc7854a00a8a9df171aa810b0c7",
+    "remoteBuildsPinVerification": "GitHub git/trees API verified current McpCli main and top-level workspace both select Builds 05a75b626fb73c6e386d16c41e885f193d3cff16; EventStore source also matches current McpCli pin.",
+    "sourceCount": 8,
+    "earlierAttempt": "Agent attempt using the uninitialized nested workspace failed nested-object-unavailable:Directory.Build.props; using the permitted top-level stores resolved the prerequisite without fetching, checkout changes or guard changes."
+  },
+  "completedDispositions": [
+    {
+      "id": "DW-117",
+      "status": "done 2026-10-28",
+      "archived": "2026-10-30",
+      "audit": "one matching ledger stub and archived full record; zero open maintenance rows"
+    },
+    {
+      "id": "DW-118",
+      "status": "done 2026-10-28",
+      "archived": "2026-10-30",
+      "audit": "one matching ledger stub and archived full record; zero open maintenance rows"
+    },
+    {
+      "id": "DW-133",
+      "status": "done 2026-10-28",
+      "archived": "2026-10-30",
+      "audit": "one matching ledger stub and archived full record; zero open maintenance rows"
+    },
+    {
+      "id": "DW-365",
+      "status": "done 2026-10-28",
+      "archived": "2026-10-30",
+      "audit": "one matching ledger stub and archived full record; zero open maintenance rows"
+    },
+    {
+      "id": "DW-367",
+      "status": "done 2026-10-29",
+      "archived": "2026-10-30",
+      "audit": "one matching ledger stub and archived full record; zero open maintenance rows"
+    }
+  ],
+  "notPerformed": [
+    "source edits",
+    "dependency updates",
+    "staging",
+    "commits",
+    "pushes",
+    "fetches",
+    "nested-submodule initialization",
+    "new approval receipts",
+    "fresh ordinary or live qualification"
+  ]
+}

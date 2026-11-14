@@ -1,0 +1,8 @@
+{
+  "reason": "Disk filesystem exhausted during isolated artifact restore; no unrelated data removed",
+  "originalTask": "/tmp/mcpcli-current-ci-20261114-agfi8ppn",
+  "newTaskOwnedMemoryDirectory": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq",
+  "packageCacheMovedIntact": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+  "temporaryDirectory": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/scratch",
+  "scope": "Per-command NUGET_PACKAGES/TMPDIR only; no system defaults changed"
+}

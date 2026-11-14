@@ -1,0 +1,13 @@
+{
+  "command": [
+    "python3",
+    "tools/conformance-vectors/v1/check_enrolled.py",
+    "--output",
+    "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/enrolled"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T01:57:49.985507+00:00",
+  "elapsedSeconds": 394.649,
+  "exitCode": 0,
+  "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages"
+}

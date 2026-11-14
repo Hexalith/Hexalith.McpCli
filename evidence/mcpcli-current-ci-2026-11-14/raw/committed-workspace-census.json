@@ -1,0 +1,9 @@
+{
+  "errors": [
+    {
+      "rule": "git-object-unavailable"
+    }
+  ],
+  "schema": "mcpcli-proprietary-surface-census/v1",
+  "status": "failed"
+}

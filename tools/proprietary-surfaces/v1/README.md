@@ -503,3 +503,22 @@ and publication prerequisites. Historical bootstrap recovery keeps its existing
 gates and the publication-stage job map remains separate.
 
 Current continuation 1.0.6 preserves all canonical 1.0.1–1.0.5 records and renews fourteen exact existing files at their selected source revisions and digests. Thirteen bodies are identical; Projects CI only initializes its already-declared Builds checkout for existing G-6 fixtures. It adds no allowances, exceptions, MCP operations or publication targets. The strict Compile guard remains unchanged. External overwrite/approval assertions are preserved separately under `evidence/release-maintenance-20261112/foreign-1.0.5-assertions` as unverified documentary history. The requesting user bypassed human validation; all automated source, hash, inventory and behavior gates remain mandatory.
+
+Continuation 1.0.8 follows the unchanged 1.0.7 owner receipt and records the
+requesting user's specific 2026-11-14 approval of two EventStore observations:
+the PE06 Microsoft.DotNet.ApiCompat.Tool installation and the PE09 runtime
+identity probe. It binds the workflow and all eight probe compilation sources
+at EventStore `d457ecd51a17b8ecc0c678b02d19d7ee92c13141`. The receipt grants
+no additional surface, source renewal, publication or runtime acceptance. Local
+candidate-policy checks and remaining source-drift failures are retained under
+`evidence/mcpcli-current-ci-2026-11-14`; exact committed-source hosted CI remains
+required.
+
+In the 1.0.8 receipt, `approvalEvidence`, `sourcePins`, `sourceBindings` and
+`sourceChecker` retain supplementary authoring/provenance information. The
+unchanged validator binds the receipt bytes, validates the prior `authority`,
+matches `authorization` to the complete amendment mutations, and enforces the
+allowance identities, signals and declared source/compilation closures during
+scanning. It does not independently dereference or enforce those supplementary
+fields; they add no approval or source-revision predicate. The evidence packet's
+pending proposals are not in the active amendment chain.

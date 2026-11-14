@@ -58,6 +58,15 @@ evidence/release-maintenance-20261112/census-1.0.3/** -text
 evidence/release-maintenance-20261112/census-1.0.4/** -text
 evidence/release-maintenance-20261112/census-1.0.5/** -text
 
+# Preserve the approved current-cohort source packet and verification hashes.
+evidence/mcpcli-current-ci-2026-11-14/** -text
+
+# Preserve verbatim whitespace in the four hash-bound raw captures.
+evidence/mcpcli-current-ci-2026-11-14/raw/11-manifest-tests.stdout.txt whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+evidence/mcpcli-current-ci-2026-11-14/raw/14-python-tooling.stderr.txt whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+evidence/mcpcli-current-ci-2026-11-14/raw/followup-7-1.diff whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+evidence/mcpcli-current-ci-2026-11-14/raw/followup-7-2.diff whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+
 # Current qualification keeps historical vectors and approvals immutable.
 tools/conformance-vectors/v1/current/** -text
 tools/live-topology/plans-current/** -text

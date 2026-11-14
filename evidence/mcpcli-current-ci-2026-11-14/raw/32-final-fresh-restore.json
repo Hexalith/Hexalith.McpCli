@@ -1,0 +1,14 @@
+{
+  "command": [
+    "dotnet",
+    "restore",
+    "Hexalith.McpCli.slnx",
+    "--force",
+    "--no-http-cache"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T02:23:10.317273+00:00",
+  "elapsedSeconds": 2.178,
+  "exitCode": 0,
+  "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages"
+}

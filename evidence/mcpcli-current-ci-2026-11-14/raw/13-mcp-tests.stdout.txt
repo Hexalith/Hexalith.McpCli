@@ -1,0 +1,9 @@
+Running tests from /home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll (net10.0|x64)
+/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli/tests/Hexalith.McpCli.Mcp.Tests/bin/Release/net10.0/Hexalith.McpCli.Mcp.Tests.dll (net10.0|x64) passed [+94/x0/?0] (2s 161ms)
+
+Test run summary: Passed!
+  total: 94
+  failed: 0
+  succeeded: 94
+  skipped: 0
+  duration: 2s 293ms

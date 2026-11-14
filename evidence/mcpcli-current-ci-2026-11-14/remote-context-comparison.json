@@ -1,0 +1,37 @@
+{
+  "localRevision": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+  "investigatedRevision": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8",
+  "policyTreeUnchanged": true,
+  "differences": [
+    {
+      "command": [
+        "git",
+        "-C",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "diff",
+        "--stat",
+        "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+        "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8",
+        "--",
+        "tools/proprietary-surfaces/v1",
+        ".gitmodules",
+        "references"
+      ],
+      "output": " references/Hexalith.Platform | 2 +-\n 1 file changed, 1 insertion(+), 1 deletion(-)\n"
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "diff",
+        "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+        "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8",
+        "--",
+        "references/Hexalith.Platform"
+      ],
+      "output": "Submodule references/Hexalith.Platform 38402bc..1cece24:\n  > fix(tuple): select the refreshed historical qualification sources\n  > fix(build): bind the signed Builds 5.0.1 tuple\n  > fix(ci): bind refreshed source qualification cohorts\n  > fix(ci): synchronize the source release candidate\n  > fix(ci): synchronize the source release candidate\n  > fix(ci): reconcile the platform source tuple\n  > build: merge refs/remotes/origin/chore/broker-candidate-02-source into main via /pushall\n  > docs(4-17): diagnose the candidate-01 packet and propose candidate-02\n  > docs(4-17): record refused deletion of orphaned queued runs\n  > docs(4-17): record broker candidate-01 hosted attempt 2\n  > docs(4-17): investigate broker candidate-01 startup failure\n  > test(2-11): apply part 3 code review pass 3 corrections\n  > fix: submodules\n  > fix(runtime): bind the eventstore run port\n  > docs(2-11): record part 3 code review pass 2 findings\n  > build: merge refs/remotes/origin/main into main via /pushall\n  > build: merge refs/remotes/origin/eventstore/net11-builds-5.0.1 into main via /pushall\n  > build: sync local changes via /pushall\n  > build: merge refs/remotes/origin/main into main via /pushall\n  > build: sync local changes via /pushall\n  > fix: release\n  > chore(ci): bind the Builds 4.48.3 historical replay sources\n  > fix(builds): retain the original closed release manifest\n  > fix(builds): authenticate the shared release publication handoff\n"
+    }
+  ],
+  "interpretation": "The census policy and all source pins except Platform are identical. Earlier Builds/Tenants policy drift is therefore not caused by this candidate overlay or absent later policy renewals. The proposal names two newly discovered identities, but does not contain the full earlier scan report."
+}

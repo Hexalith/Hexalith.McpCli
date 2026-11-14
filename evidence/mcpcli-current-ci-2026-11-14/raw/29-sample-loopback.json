@@ -1,0 +1,11 @@
+{
+  "command": [
+    "bash",
+    "tools/conformance-vectors/v1/run-sample-loopback.sh"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T02:11:13.990905+00:00",
+  "elapsedSeconds": 689.048,
+  "exitCode": 0,
+  "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages"
+}

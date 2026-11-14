@@ -1,0 +1,94 @@
+{
+  "productionMatchesApprovedPolicyExactly": true,
+  "dependencyPolicySha256": "0cbb7944bbcaac1199d6aabf8b5f48347c347e82cfc0575880348aaa72cfc41d",
+  "productionPackages": {
+    "ByteAether.Ulid": "1.4.2",
+    "Dapr.Client": "1.19.1",
+    "Dapr.Common": "1.19.1",
+    "Dapr.Protos": "1.19.1",
+    "Google.Api.CommonProtos": "2.17.0",
+    "Google.Protobuf": "3.35.0",
+    "Grpc.Core.Api": "2.80.0",
+    "Grpc.Net.Client": "2.80.0",
+    "Grpc.Net.Common": "2.80.0",
+    "Grpc.Reflection": "2.80.0",
+    "Hexalith.Commons.UniqueIds": "2.30.10",
+    "Hexalith.EventStore.Client": "4.2.0",
+    "Hexalith.EventStore.Contracts": "4.2.0",
+    "Hexalith.Parties.Contracts": "3.1.1",
+    "Hexalith.Tenants.Contracts": "7.0.7",
+    "Humanizer.Core": "3.0.10",
+    "Json.More.Net": "3.0.1",
+    "JsonPointer.Net": "7.0.4",
+    "JsonSchema.Net": "9.6.0",
+    "Microsoft.AspNetCore.DataProtection.Abstractions": "11.0.0",
+    "Microsoft.Extensions.AI.Abstractions": "10.11.0",
+    "Microsoft.Extensions.Caching.Abstractions": "10.0.14",
+    "Microsoft.Extensions.Configuration": "11.0.0",
+    "Microsoft.Extensions.Configuration.Abstractions": "11.0.0",
+    "Microsoft.Extensions.Configuration.Binder": "11.0.0",
+    "Microsoft.Extensions.Configuration.CommandLine": "11.0.0",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "11.0.0",
+    "Microsoft.Extensions.Configuration.FileExtensions": "11.0.0",
+    "Microsoft.Extensions.Configuration.Json": "11.0.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "11.0.0",
+    "Microsoft.Extensions.DependencyInjection": "11.0.0",
+    "Microsoft.Extensions.DependencyInjection.Abstractions": "11.0.0",
+    "Microsoft.Extensions.Diagnostics": "11.0.0",
+    "Microsoft.Extensions.Diagnostics.Abstractions": "11.0.0",
+    "Microsoft.Extensions.FileProviders.Abstractions": "11.0.0",
+    "Microsoft.Extensions.FileProviders.Physical": "11.0.0",
+    "Microsoft.Extensions.FileSystemGlobbing": "11.0.0",
+    "Microsoft.Extensions.Hosting": "11.0.0",
+    "Microsoft.Extensions.Hosting.Abstractions": "11.0.0",
+    "Microsoft.Extensions.Http": "11.0.0",
+    "Microsoft.Extensions.Logging": "11.0.0",
+    "Microsoft.Extensions.Logging.Abstractions": "11.0.0",
+    "Microsoft.Extensions.Logging.Configuration": "11.0.0",
+    "Microsoft.Extensions.Logging.Console": "11.0.0",
+    "Microsoft.Extensions.Logging.Debug": "11.0.0",
+    "Microsoft.Extensions.Logging.EventLog": "11.0.0",
+    "Microsoft.Extensions.Logging.EventSource": "11.0.0",
+    "Microsoft.Extensions.Options": "11.0.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "11.0.0",
+    "Microsoft.Extensions.Primitives": "11.0.0",
+    "ModelContextProtocol": "2.4.0",
+    "ModelContextProtocol.Core": "2.4.0",
+    "System.CommandLine": "3.0.0",
+    "System.Diagnostics.DiagnosticSource": "11.0.0",
+    "System.Diagnostics.EventLog": "11.0.0",
+    "System.IO.Pipelines": "11.0.0",
+    "System.Text.Encodings.Web": "11.0.0",
+    "System.Text.Json": "11.0.0"
+  },
+  "aspireHelperHexalithClosure": {
+    "Hexalith.Commons.UniqueIds": "2.30.10",
+    "Hexalith.EventStore.Aspire": "4.2.0",
+    "Hexalith.EventStore.Client": "4.2.0",
+    "Hexalith.EventStore.Contracts": "4.2.0",
+    "Hexalith.EventStore.ServiceDefaults": "4.2.0",
+    "Hexalith.Parties.Aspire": "3.1.1",
+    "Hexalith.Tenants.Aspire": "7.0.7"
+  },
+  "productFrameworks": {
+    "src/Hexalith.McpCli": [
+      "net10.0"
+    ],
+    "src/Hexalith.McpCli.Abstractions": [
+      "net10.0"
+    ],
+    "src/Hexalith.McpCli.Analyzers": [
+      "netstandard2.0"
+    ],
+    "src/Hexalith.McpCli.Core": [
+      "net10.0"
+    ],
+    "src/Hexalith.McpCli.Mcp": [
+      "net10.0"
+    ]
+  },
+  "analyzerTestFrameworks": [
+    "net11.0"
+  ],
+  "manifestBoundaryControls": "370 passing tests include real production, helper and integration closure checks"
+}

@@ -1,0 +1,162 @@
+{
+  "status": "failed",
+  "mode": "candidate-policy-overlay-against-committed-source-trees",
+  "ownerRevision": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+  "fullReport": {
+    "path": "raw/candidate-census-final.json",
+    "sha256": "5265d7301d811a4c21498e4a7fb309200805241c018580e2584fa227b06b9f28",
+    "bytes": 428645
+  },
+  "newlyApproved": [
+    {
+      "surface": {
+        "identity": "Microsoft.DotNet.ApiCompat.Tool",
+        "kind": "publication",
+        "path": ".github/workflows/ci.yml",
+        "repository": "references/Hexalith.EventStore"
+      },
+      "row": "PE06",
+      "classification": "external-developer-tool",
+      "status": "approved"
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.EventStore.RuntimeIdentityProbe",
+        "kind": "project",
+        "path": "tools/Hexalith.EventStore.RuntimeIdentityProbe/Hexalith.EventStore.RuntimeIdentityProbe.csproj",
+        "repository": "references/Hexalith.EventStore"
+      },
+      "row": "PE09",
+      "classification": "qualification-evidence-tooling",
+      "status": "approved"
+    }
+  ],
+  "remainingRejected": [
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.HookTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "reason": "allowance-signal-or-source-drift",
+      "changedSources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.IntegrationTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "reason": "allowance-signal-or-source-drift",
+      "changedSources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.UnitTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "reason": "allowance-signal-or-source-drift",
+      "changedSources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.WindowsTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "reason": "allowance-signal-or-source-drift",
+      "changedSources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.EventStoreHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "reason": "allowance-signal-or-source-drift",
+      "changedSources": [
+        "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.UiHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "reason": "allowance-signal-or-source-drift",
+      "changedSources": [
+        "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Platform.Composition",
+        "kind": "project",
+        "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+        "repository": "references/Hexalith.Platform"
+      },
+      "reason": "allowance-signal-or-source-drift",
+      "changedSources": [
+        "src/Hexalith.Platform.Composition/WorksPreviewManagedRuntime.cs",
+        "src/Hexalith.Platform.Composition/WorksPreviewModel.cs"
+      ]
+    },
+    {
+      "surface": {
+        "identity": "tests/performance/tenant-audit/seed.csproj",
+        "kind": "publication",
+        "path": "scripts/run-tenant-audit-performance.sh",
+        "repository": "references/Hexalith.Tenants"
+      },
+      "reason": "allowance-signal-or-source-drift",
+      "changedSources": [
+        "scripts/run-tenant-audit-performance.sh"
+      ]
+    }
+  ],
+  "inspectionErrors": [
+    {
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/package-version-audit.json",
+      "repository": "references/Hexalith.Builds",
+      "rule": "excluded-fixture-source-drift:Tools/package-version-audit.json"
+    },
+    {
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/test-g4-packaged-platform-loader.ps1",
+      "repository": "references/Hexalith.Builds",
+      "rule": "unresolved-publication-target:Tools/test-g4-packaged-platform-loader.ps1",
+      "target": "(Join-Path"
+    },
+    {
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/test-g4-tool-package-contracts.ps1",
+      "repository": "references/Hexalith.Builds",
+      "rule": "unresolved-publication-directory:Tools/test-g4-tool-package-contracts.ps1"
+    },
+    {
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/test-platform-version-catalog.ps1",
+      "repository": "references/Hexalith.Builds",
+      "rule": "unresolved-publication-target:Tools/test-platform-version-catalog.ps1",
+      "target": "(Join-Path"
+    }
+  ],
+  "finalCommittedOrHostedAcceptance": false
+}

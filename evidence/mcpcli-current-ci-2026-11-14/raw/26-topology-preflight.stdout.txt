@@ -1,0 +1,1 @@
+PREFLIGHT-ONLY: full live acceptance=False; receipt: /dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/live-preflight/live-lane.json

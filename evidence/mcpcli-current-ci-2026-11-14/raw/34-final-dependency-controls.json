@@ -1,0 +1,17 @@
+{
+  "command": [
+    "dotnet",
+    "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+    "-method",
+    "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ProductionContractsStayWithinPinnedDependencyClosure",
+    "-method",
+    "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers",
+    "-method",
+    "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.IntegrationFixtureUsesOnlyItsReviewedHexalithPackageClosure"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T02:23:38.508950+00:00",
+  "elapsedSeconds": 0.319,
+  "exitCode": 0,
+  "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages"
+}

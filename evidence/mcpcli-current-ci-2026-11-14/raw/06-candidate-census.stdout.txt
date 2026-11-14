@@ -1,0 +1,220 @@
+{
+  "status": "failed",
+  "mode": "candidate-policy-overlay-against-committed-source-trees",
+  "surfaces": 449,
+  "errors": [
+    {
+      "repository": "references/Hexalith.Builds",
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/package-version-audit.json",
+      "rule": "excluded-fixture-source-drift:Tools/package-version-audit.json"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/test-g4-packaged-platform-loader.ps1",
+      "rule": "unresolved-publication-target:Tools/test-g4-packaged-platform-loader.ps1",
+      "target": "(Join-Path"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/test-g4-tool-package-contracts.ps1",
+      "rule": "unresolved-publication-directory:Tools/test-g4-tool-package-contracts.ps1"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "path": "Tools/test-platform-version-catalog.ps1",
+      "rule": "unresolved-publication-target:Tools/test-platform-version-catalog.ps1",
+      "target": "(Join-Path"
+    }
+  ],
+  "rejected": [
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Sample.HookTests"
+      },
+      "signals": [
+        "executable-project"
+      ],
+      "sources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj"
+      ],
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "status": "rejected",
+      "classification": "test-fixture",
+      "row": "PE05",
+      "reason": "allowance-signal-or-source-drift",
+      "unexpectedSignals": [],
+      "changedSources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Sample.IntegrationTests"
+      },
+      "signals": [
+        "executable-project"
+      ],
+      "sources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj"
+      ],
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "status": "rejected",
+      "classification": "test-fixture",
+      "row": "PE05",
+      "reason": "allowance-signal-or-source-drift",
+      "unexpectedSignals": [],
+      "changedSources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Sample.UnitTests"
+      },
+      "signals": [
+        "executable-project"
+      ],
+      "sources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj"
+      ],
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "status": "rejected",
+      "classification": "test-fixture",
+      "row": "PE05",
+      "reason": "allowance-signal-or-source-drift",
+      "unexpectedSignals": [],
+      "changedSources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Sample.WindowsTests"
+      },
+      "signals": [
+        "executable-project"
+      ],
+      "sources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj"
+      ],
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "status": "rejected",
+      "classification": "test-fixture",
+      "row": "PE05",
+      "reason": "allowance-signal-or-source-drift",
+      "unexpectedSignals": [],
+      "changedSources": [
+        "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+        "kind": "publication",
+        "identity": "package:Hexalith.Builds.Module.EventStoreHost"
+      },
+      "signals": [
+        "package-metadata"
+      ],
+      "sources": [
+        "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj"
+      ],
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "status": "rejected",
+      "classification": "existing-build-tooling-template",
+      "row": "PE01",
+      "reason": "allowance-signal-or-source-drift",
+      "unexpectedSignals": [],
+      "changedSources": [
+        "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Builds",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+        "kind": "publication",
+        "identity": "package:Hexalith.Builds.Module.UiHost"
+      },
+      "signals": [
+        "package-metadata"
+      ],
+      "sources": [
+        "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj"
+      ],
+      "gitlink": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "status": "rejected",
+      "classification": "existing-build-tooling-template",
+      "row": "PE01",
+      "reason": "allowance-signal-or-source-drift",
+      "unexpectedSignals": [],
+      "changedSources": [
+        "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj"
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Platform",
+        "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+        "kind": "project",
+        "identity": "Hexalith.Platform.Composition"
+      },
+      "signals": [
+        "executable-project"
+      ],
+      "sources": [
+        "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj"
+      ],
+      "gitlink": "38402bc77ac0be3e6902002d08923c51d0e73a77",
+      "status": "rejected",
+      "classification": "existing-platform-composition-tooling",
+      "row": "PE03",
+      "reason": "allowance-signal-or-source-drift",
+      "unexpectedSignals": [],
+      "changedSources": [
+        "src/Hexalith.Platform.Composition/WorksPreviewManagedRuntime.cs",
+        "src/Hexalith.Platform.Composition/WorksPreviewModel.cs"
+      ]
+    },
+    {
+      "surface": {
+        "repository": "references/Hexalith.Tenants",
+        "path": "scripts/run-tenant-audit-performance.sh",
+        "kind": "publication",
+        "identity": "tests/performance/tenant-audit/seed.csproj"
+      },
+      "signals": [
+        "project-publication-reference"
+      ],
+      "sources": [
+        "scripts/run-tenant-audit-performance.sh"
+      ],
+      "gitlink": "8ce40cdfe9b1bdd0ec3bd643b0f3386501e514c2",
+      "status": "rejected",
+      "classification": "existing-performance-test-data-tooling",
+      "row": "PE09",
+      "reason": "allowance-signal-or-source-drift",
+      "unexpectedSignals": [],
+      "changedSources": [
+        "scripts/run-tenant-audit-performance.sh"
+      ]
+    }
+  ]
+}

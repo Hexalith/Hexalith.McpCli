@@ -1,0 +1,574 @@
+{
+  "status": "read-only-follow-up-no-new-approval",
+  "ownerRevision": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+  "scope": "Eight existing allowance source drifts and four inspection errors; none is authorized by amendment 1.0.8. Raw source diffs retained outside tracked evidence.",
+  "entries": [
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.HookTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "allowance-signal-or-source-drift",
+      "priorClassification": {
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority."
+      },
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+          "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+          "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+        }
+      },
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+          "approvedSha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3",
+          "currentSha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d",
+          "approvedBytesFoundAtCommit": "93c9db2e2892be80ab8595052b91cbda5b7d158f",
+          "rawDiff": {
+            "path": "raw/followup-1-1.diff",
+            "sha256": "1b77fe76b411bdd9ff04d61bc59f7791a3d749351b8b25573fa87c0bab78e5f4"
+          }
+        }
+      ],
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal."
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.IntegrationTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "allowance-signal-or-source-drift",
+      "priorClassification": {
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority."
+      },
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+          "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+          "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+        }
+      },
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+          "approvedSha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3",
+          "currentSha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d",
+          "approvedBytesFoundAtCommit": "93c9db2e2892be80ab8595052b91cbda5b7d158f",
+          "rawDiff": {
+            "path": "raw/followup-2-1.diff",
+            "sha256": "9e5703901759ec43c4c8620b08fb72420e55978b526ffc93f1b66374e1eb34de"
+          }
+        }
+      ],
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal."
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.UnitTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "allowance-signal-or-source-drift",
+      "priorClassification": {
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority."
+      },
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+          "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+          "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+        }
+      },
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+          "approvedSha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3",
+          "currentSha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d",
+          "approvedBytesFoundAtCommit": "93c9db2e2892be80ab8595052b91cbda5b7d158f",
+          "rawDiff": {
+            "path": "raw/followup-3-1.diff",
+            "sha256": "ab21d327115541353af4496e736f46f4dec6cdaf583d630d547f8aba63570c44"
+          }
+        }
+      ],
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal."
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Sample.WindowsTests",
+        "kind": "project",
+        "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "allowance-signal-or-source-drift",
+      "priorClassification": {
+        "row": "PE05",
+        "classification": "test-fixture",
+        "owner": "Hexalith.Builds owning maintainer",
+        "reason": "Existing xUnit test/qualification fixture at the task-inspected gitlink; preserves the approved PE05 test-fixture class through an exact identity, with no directory-name authority."
+      },
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+          "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+          "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+        }
+      },
+      "sources": [
+        {
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+          "approvedSha256": "76ba4e3242fae967078f59a5d49b39e5b31be27d85f25010fcd7e823a711dfb3",
+          "currentSha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d",
+          "approvedBytesFoundAtCommit": "93c9db2e2892be80ab8595052b91cbda5b7d158f",
+          "rawDiff": {
+            "path": "raw/followup-4-1.diff",
+            "sha256": "4d17b29840476570e73582f829597b974bc39e6b2b1b8e6a4752fde81d295a49"
+          }
+        }
+      ],
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal."
+    },
+    {
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.EventStoreHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "allowance-signal-or-source-drift",
+      "priorClassification": {
+        "row": "PE01",
+        "classification": "existing-build-tooling-template",
+        "owner": "Requesting user via the current release instruction",
+        "reason": "Exact existing Builds packaging template or disposable release fixture; no module operations are introduced."
+      },
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3.json",
+          "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+          "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+        }
+      },
+      "sources": [
+        {
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+          "approvedSha256": "a03945c7044bee30586a80d9a8326dd4a60f58363ee2af1e9ea1abef21810827",
+          "currentSha256": "ee9ef9beb67089dc36e11035dbc0f366961be8cb97b32493ffdb16997fe61e1b",
+          "approvedBytesFoundAtCommit": "3c8a52056a510d371f336fd012b888aa1405ab9b",
+          "rawDiff": {
+            "path": "raw/followup-5-1.diff",
+            "sha256": "23b29f88f9a277baaa31fb7d763aa40d75a33d2ae2564c5eb3081529147bfadd"
+          }
+        }
+      ],
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal."
+    },
+    {
+      "surface": {
+        "identity": "package:Hexalith.Builds.Module.UiHost",
+        "kind": "publication",
+        "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+        "repository": "references/Hexalith.Builds"
+      },
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "allowance-signal-or-source-drift",
+      "priorClassification": {
+        "row": "PE01",
+        "classification": "existing-build-tooling-template",
+        "owner": "Requesting user via the current release instruction",
+        "reason": "Exact existing Builds packaging template or disposable release fixture; no module operations are introduced."
+      },
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3.json",
+          "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+          "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+        }
+      },
+      "sources": [
+        {
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+          "approvedSha256": "16813c251a95d259e4efdc622466412cea00ced7766b18af13f920619a7f5943",
+          "currentSha256": "3915eb518f51c86869186b035f06919558db494a0138c5fc512676a35b7c5b0c",
+          "approvedBytesFoundAtCommit": "3c8a52056a510d371f336fd012b888aa1405ab9b",
+          "rawDiff": {
+            "path": "raw/followup-6-1.diff",
+            "sha256": "3eea1ce8de33d0ca3b6e4033d6dc5131517a0c0f3003c640256d37ece8396b84"
+          }
+        }
+      ],
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "Exact retained fixture/template body changes only TargetFramework from net10.0 to net11.0; the package/project identity and static signal set are unchanged. This observation does not authorize renewal."
+    },
+    {
+      "surface": {
+        "identity": "Hexalith.Platform.Composition",
+        "kind": "project",
+        "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+        "repository": "references/Hexalith.Platform"
+      },
+      "sourcePin": "38402bc77ac0be3e6902002d08923c51d0e73a77",
+      "failure": "allowance-signal-or-source-drift",
+      "priorClassification": {
+        "row": "PE03",
+        "classification": "existing-platform-composition-tooling",
+        "owner": "Requesting user via the current release instruction",
+        "reason": "Existing project/publication observation with unchanged signal set at the exact inspected current sources; compiled source hashes are renewed without adding a proprietary surface, MCP capability or native/image authority."
+      },
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.4.json",
+          "sha256": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.4-approval.json",
+          "sha256": "cb3c2f09ce4ed8684766e29d9ce0b215e624905f48916cc259627bf564023df1"
+        }
+      },
+      "sources": [
+        {
+          "path": "src/Hexalith.Platform.Composition/WorksPreviewManagedRuntime.cs",
+          "approvedSha256": null,
+          "currentSha256": "3c15f3a8678493145a5154094ee1a80630a3c9d8c5fe8591d8c10b89a6c2c355",
+          "approvedBytesFoundAtCommit": null,
+          "rawDiff": {
+            "path": "raw/followup-7-1.diff",
+            "sha256": "c677737293de86e71f6b4e3aac1f6fb977a5484ae49ab580256659d66648cccd"
+          }
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
+          "approvedSha256": "a0307696c4554e42551305a3ab369410b2afe3c03bab68c6ea485e48b0e60743",
+          "currentSha256": "6d990e6b926b1154962f5c24c33c26cbb67d2c47f647a88b99aeabc133b51f7d",
+          "approvedBytesFoundAtCommit": "38de4c15aa5990d169cd20be34e37ef6cc823491",
+          "rawDiff": {
+            "path": "raw/followup-7-2.diff",
+            "sha256": "240e2eb86e33821300457b5c88f6927119837bee25f1cfd728c9c93c6d85974c"
+          }
+        }
+      ],
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "Adds WorksPreviewManagedRuntime.cs with an exact shared-runtime/exporter validation gate, calls it from WorksPreviewModel, and selects LatestMajor for one Development resource. A new compilation-closure member and changed runtime behavior require specific owner review, not a hash-only renewal."
+    },
+    {
+      "surface": {
+        "identity": "tests/performance/tenant-audit/seed.csproj",
+        "kind": "publication",
+        "path": "scripts/run-tenant-audit-performance.sh",
+        "repository": "references/Hexalith.Tenants"
+      },
+      "sourcePin": "8ce40cdfe9b1bdd0ec3bd643b0f3386501e514c2",
+      "failure": "allowance-signal-or-source-drift",
+      "priorClassification": {
+        "row": "PE09",
+        "classification": "existing-performance-test-data-tooling",
+        "owner": "Requesting user via the current release instruction",
+        "reason": "Existing tenant-audit performance seed test tooling; not an operator head."
+      },
+      "priorAuthority": {
+        "policy": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3.json",
+          "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+        },
+        "receipt": {
+          "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+          "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+        }
+      },
+      "sources": [
+        {
+          "path": "scripts/run-tenant-audit-performance.sh",
+          "approvedSha256": "15937f379ef2f77bbbf2657b02b31051df337edf80cf2e0c5f8fbe8ac9a24db3",
+          "currentSha256": "85b1735a172068ce1ad7df27bb34320bf8f3132ceb8f02cdd312bb0d92e12a70",
+          "approvedBytesFoundAtCommit": "c157c394b8fca5f392b5f8a6a5ff1f51f4ac77a0",
+          "rawDiff": {
+            "path": "raw/followup-8-1.diff",
+            "sha256": "b8f194566dcf8f2fbff89edfa9416e3b4ce0aeb04aecb29cd2f43f0bac193575"
+          }
+        }
+      ],
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "Replaces hard-coded net10.0 AppHost DLL path with MSBuild evaluation, requires exactly net11.0, and builds the DLL path from that target. The seed project identity remains the existing test-data publication observation."
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "path": "Tools/package-version-audit.json",
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "excluded-fixture-source-drift:Tools/package-version-audit.json",
+      "target": null,
+      "currentSha256": "beea62f4a6b2485c39aa5f536b4eb135ca3e2eece3406e903526f69ba495397f",
+      "priorBindings": [
+        {
+          "classification": {
+            "row": "PE07",
+            "classification": "captured-evidence",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Exact retained package audit snapshot; approved captured-evidence scope, not a publication manifest."
+          },
+          "approvedSha256": [
+            "2d3ab7421bf8b7091cfb7caf8e4381be60b80385a6d350e2cbd703e95d21968e",
+            "d48664651a1ab94143d6b83e7b4b01d1ab341cc6d64cfee83dae47afe07119de"
+          ],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        },
+        {
+          "classification": {
+            "row": "PE07",
+            "classification": "captured-evidence",
+            "owner": "Requesting user via the current release instruction",
+            "reason": "Exact captured package audit output; data, not a release command or runtime manifest."
+          },
+          "approvedSha256": [
+            "173efbb30709e624ee0ec041ea5c0a62188499b5b5b1cf1a4d516dd045af71e2"
+          ],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.3.json",
+              "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+              "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+            }
+          }
+        },
+        {
+          "classification": {
+            "row": "PE07",
+            "classification": "captured-evidence",
+            "owner": "Requesting user via the current release instruction",
+            "reason": "Bounded renewal of the existing exact file classification for the inspected current release pins; no publication target, MCP operation, image or native acceptance authority is added."
+          },
+          "approvedSha256": [
+            "1a677bfd370048fc84de8e51b895d625d90d070da4dd052eae62cfd5f27d2163"
+          ],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.4.json",
+              "sha256": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.4-approval.json",
+              "sha256": "cb3c2f09ce4ed8684766e29d9ce0b215e624905f48916cc259627bf564023df1"
+            }
+          }
+        }
+      ],
+      "priorClassification": "See priorBindings; an identity observation does not authorize an opaque file exemption",
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "The captured audit schema/object structure is retained; changed JSON paths below include catalog and package-audit data. No execution occurred. Existing PE07 captured-evidence authority does not permit automatic digest renewal.",
+      "comparedApprovedDigest": "1a677bfd370048fc84de8e51b895d625d90d070da4dd052eae62cfd5f27d2163",
+      "approvedBytesFoundAtCommit": "840ac7bb69c326e0aab5c4034676c5b5fd0eaf32",
+      "changedJsonPaths": [
+        "/catalogRawSha256",
+        "/catalogSha256",
+        "/consumerEvidence/entries (array contents)",
+        "/consumerEvidence/repositoryRevision",
+        "/consumerEvidence/sha256",
+        "/familyDecisions (array contents)",
+        "/generatedFromRevision",
+        "/packages (array contents)",
+        "/snapshot/auditedAtUtc",
+        "/snapshot/preservedFamilies (array contents)",
+        "/snapshot/refreshedFamilies (array contents)"
+      ]
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "path": "Tools/test-g4-packaged-platform-loader.ps1",
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "unresolved-publication-target:Tools/test-g4-packaged-platform-loader.ps1",
+      "target": "(Join-Path",
+      "currentSha256": "6361d83f4f26cf3b851e51556408eced8f0e8b7b6df0b5d830313797c2976755",
+      "priorBindings": [],
+      "priorClassification": "No prior file/identity classification found",
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "PowerShell loader regression helper extracts a supplied package, validates packaged/runtime assembly identities, builds a private fixture and runs bounded packaged-host children. Its Join-Path project/file targets are outside the scanner static subset; source inspection does not prove runtime behavior.",
+      "identityResolution": "The unchanged checker refuses the unresolved target/directory expression. No additional identity or exemption is inferred."
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "path": "Tools/test-g4-tool-package-contracts.ps1",
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "unresolved-publication-directory:Tools/test-g4-tool-package-contracts.ps1",
+      "target": null,
+      "currentSha256": "0aa2efebe07e38c8eecdea2cdc9bbd96c0f8441e232468131588650861f13194",
+      "priorBindings": [
+        {
+          "surface": {
+            "repository": "references/Hexalith.Builds",
+            "path": "Tools/test-g4-tool-package-contracts.ps1",
+            "kind": "publication",
+            "identity": "Hexalith.Builds.Evidence.Cli"
+          },
+          "classification": {
+            "row": "PE05",
+            "classification": "test-fixture-observation",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only."
+          },
+          "approvedSha256": [],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        },
+        {
+          "surface": {
+            "repository": "references/Hexalith.Builds",
+            "path": "Tools/test-g4-tool-package-contracts.ps1",
+            "kind": "publication",
+            "identity": "Hexalith.Builds.Module.Cli"
+          },
+          "classification": {
+            "row": "PE05",
+            "classification": "test-fixture-observation",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only."
+          },
+          "approvedSha256": [],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        },
+        {
+          "surface": {
+            "repository": "references/Hexalith.Builds",
+            "path": "Tools/test-g4-tool-package-contracts.ps1",
+            "kind": "publication",
+            "identity": "hexalith.builds.evidence.cli"
+          },
+          "classification": {
+            "row": "PE05",
+            "classification": "test-fixture-observation",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only."
+          },
+          "approvedSha256": [],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        },
+        {
+          "surface": {
+            "repository": "references/Hexalith.Builds",
+            "path": "Tools/test-g4-tool-package-contracts.ps1",
+            "kind": "publication",
+            "identity": "hexalith.builds.module.cli"
+          },
+          "classification": {
+            "row": "PE05",
+            "classification": "test-fixture-observation",
+            "owner": "Hexalith.Builds owning maintainer",
+            "reason": "Mechanical census correction at the original approved inventory 1.0.2 source pin; exact identity only."
+          },
+          "approvedSha256": [],
+          "authority": {
+            "policy": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+              "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+            },
+            "receipt": {
+              "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+              "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+            }
+          }
+        }
+      ],
+      "priorClassification": "See priorBindings; an identity observation does not authorize an opaque file exemption",
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "PowerShell G4 tool-package qualification invokes dotnet through helpers and runtime-derived fixture directories. Four exact tool/package reference observations were previously allowed, but they do not resolve the opaque publication directory or grant a whole-file exemption.",
+      "identityResolution": "The unchanged checker refuses the unresolved target/directory expression. No additional identity or exemption is inferred."
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "path": "Tools/test-platform-version-catalog.ps1",
+      "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+      "failure": "unresolved-publication-target:Tools/test-platform-version-catalog.ps1",
+      "target": "(Join-Path",
+      "currentSha256": "c93fc176d090874066234e51912263fdc6dfe3e79329361dd7bc1f9a8cb45c48",
+      "priorBindings": [],
+      "priorClassification": "No prior file/identity classification found",
+      "decision": "pending-owning-maintainer-review",
+      "boundedSourceChangeRationale": "PowerShell version-catalog regression helper generates temporary catalogs/projects, evaluates MSBuild metadata and rebuilds an isolated tooling copy. The Join-Path target is unmodeled; no exact-file prior authority was found.",
+      "identityResolution": "The unchanged checker refuses the unresolved target/directory expression. No additional identity or exemption is inferred."
+    }
+  ],
+  "publicationContextEvidence": {
+    "path": "evidence/mcpcli-current-ci-2026-11-14/source-context-comparison.json",
+    "sha256": "c9665fed3942c57267f1e7d5714b9a9033047ee1c40514b44bb8a530328c7e74"
+  },
+  "publicationContextLimit": "Local Platform38402bc is historical context for this patch. Investigated7fa3 and existing standalone733fc71 both select Platform1cece24 with nine unapproved closure differences. No obsolete or newer Platform source is approved here; later publication must select/review its own exact full closure."
+}

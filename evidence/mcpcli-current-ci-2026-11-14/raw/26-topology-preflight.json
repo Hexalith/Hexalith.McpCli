@@ -1,0 +1,14 @@
+{
+  "command": [
+    "python3",
+    "tools/live-topology/run-vectors.py",
+    "--output",
+    "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/live-preflight",
+    "--preflight-only"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T02:00:30.072016+00:00",
+  "elapsedSeconds": 45.378,
+  "exitCode": 0,
+  "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages"
+}

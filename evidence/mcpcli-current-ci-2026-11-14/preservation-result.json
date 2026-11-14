@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "checkedPriorFiles": 110,
+  "onlyExpectedChanges": [
+    "tools/proprietary-surfaces/v1/README.md",
+    "tools/proprietary-surfaces/v1/amendments.json"
+  ],
+  "priorAmendmentReceiptBaselineBytesUnchanged": true,
+  "currentAndHistoricalVectorPlanRuntimeSelectionBytesUnchanged": true,
+  "frozenIntentUnchanged": true,
+  "frozenIntentSha256": "31d96038b134eaa223393f9ceb326f52647ece55068bec14cebc606c1b2954b9"
+}

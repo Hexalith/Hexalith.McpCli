@@ -14,6 +14,13 @@
   <Import Project="$(HexalithBuildPackageVersions2)" Condition="Exists('$(HexalithBuildPackageVersions2)') And '$(HexalithVersionsLoaded)' != 'true'" />
   <Import Project="$(HexalithBuildPackageVersions3)" Condition="Exists('$(HexalithBuildPackageVersions3)') And '$(HexalithVersionsLoaded)' != 'true'" />
   <ItemGroup>
+    <!-- Preserve the product's .NET 10 target when the shared catalog advances to .NET 11-only packages. -->
+    <PackageVersion Update="Hexalith.Commons.UniqueIds" Version="2.30.10" />
+    <PackageVersion Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.15" />
+    <PackageVersion Update="Microsoft.AspNetCore.OpenApi" Version="10.0.15" />
+    <PackageVersion Update="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="10.0.15" />
+    <!-- OpenApi 10 requires the compatible 2.x document model rather than the catalog's 3.x selection. -->
+    <PackageVersion Update="Microsoft.OpenApi" Version="2.13.0" />
     <!-- The isolated suite owns its AppHost lifecycle through Aspire; all SDK packages use the current cohort. -->
     <PackageVersion Update="Hexalith.EventStore.Testing.Integration" Version="4.2.0" />
     <!-- Keep the EventStore 4.2.0 Redis floor explicit across Builds catalog revisions. -->

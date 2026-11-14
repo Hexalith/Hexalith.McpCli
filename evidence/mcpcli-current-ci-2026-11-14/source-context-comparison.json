@@ -1,0 +1,201 @@
+{
+  "mode": "read-only-context-comparison-not-an-approval",
+  "checkerSha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388",
+  "contexts": {
+    "local": {
+      "revision": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+      "sourcePins": {
+        "references/Hexalith.AI.Tools": "10b709b86f9c9148e5a18177e8d11fad79ae2c0b",
+        "references/Hexalith.Agents": "4a65f67d040bec4d646a830ed72b65c0e8951048",
+        "references/Hexalith.Builds": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+        "references/Hexalith.ChatBot": "62e82201d10c8b01445433ba82d3b8619f332ea8",
+        "references/Hexalith.Commons": "fbf4e94233821f6ca336af91a06feaaeb7a16855",
+        "references/Hexalith.Conversations": "36cd13159f6c66d249942c6cfeca179adf3c4ec8",
+        "references/Hexalith.EventStore": "d457ecd51a17b8ecc0c678b02d19d7ee92c13141",
+        "references/Hexalith.Folders": "7eab70e9332c0573b50dce5b219e425b6a2d363c",
+        "references/Hexalith.FrontComposer": "56c9206167b7f18c3a95f610f814dfa39d9dcd01",
+        "references/Hexalith.Memories": "3e98dc990675fdaed83aff2bf4856440a191986f",
+        "references/Hexalith.Parties": "f532145038992217f6433cd3dc1e36e61a1acc38",
+        "references/Hexalith.Platform": "38402bc77ac0be3e6902002d08923c51d0e73a77",
+        "references/Hexalith.PolymorphicSerializations": "e97b56930e213f674b64c157551f499b0473ec43",
+        "references/Hexalith.Projects": "1ea04f7959e9ca393bc19d3b96b03cb350088e72",
+        "references/Hexalith.Tenants": "8ce40cdfe9b1bdd0ec3bd643b0f3386501e514c2",
+        "references/Hexalith.Timesheets": "aafdae771e81f152671d18c506a0470ce0deee7f",
+        "references/Hexalith.Works": "e18535ed1e23ea7c70c0b09f891d308f80a4b4e8"
+      },
+      "platformClosureCount": 85,
+      "platformClosureSha256": "c4956ad66bb09df205e5b9a9914cbaf298105e1c03066781bcd0d3737ce1b064",
+      "platformUnapprovedClosureDifferences": [
+        {
+          "path": "src/Hexalith.Platform.Composition/WorksPreviewManagedRuntime.cs",
+          "approvedSha256": null,
+          "currentSha256": "3c15f3a8678493145a5154094ee1a80630a3c9d8c5fe8591d8c10b89a6c2c355"
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
+          "approvedSha256": "a0307696c4554e42551305a3ab369410b2afe3c03bab68c6ea485e48b0e60743",
+          "currentSha256": "6d990e6b926b1154962f5c24c33c26cbb67d2c47f647a88b99aeabc133b51f7d"
+        }
+      ],
+      "remainingPaths": [
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d"
+        },
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.IntegrationTests/Hexalith.Sample.IntegrationTests.csproj",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d"
+        },
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.UnitTests/Hexalith.Sample.UnitTests.csproj",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d"
+        },
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "Samples/Hexalith.Sample/test/Hexalith.Sample.WindowsTests/Hexalith.Sample.WindowsTests.csproj",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "e99d36e06fb6efba3fc29686e38dc452c778c9d6ef8feea8614891766074fb0d"
+        },
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/EventStore/Host.csproj",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "ee9ef9beb67089dc36e11035dbc0f366961be8cb97b32493ffdb16997fe61e1b"
+        },
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "src/libraries/Hexalith.Builds.Module.Cli/pack/projects/Ui/Host.csproj",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "3915eb518f51c86869186b035f06919558db494a0138c5fc512676a35b7c5b0c"
+        },
+        {
+          "repository": "references/Hexalith.Platform",
+          "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+          "sourcePin": "38402bc77ac0be3e6902002d08923c51d0e73a77",
+          "sha256": "eaca9740bec4daa5d275ecbce94024adb328cb01f352f590c46bdd2333181341"
+        },
+        {
+          "repository": "references/Hexalith.Tenants",
+          "path": "scripts/run-tenant-audit-performance.sh",
+          "sourcePin": "8ce40cdfe9b1bdd0ec3bd643b0f3386501e514c2",
+          "sha256": "85b1735a172068ce1ad7df27bb34320bf8f3132ceb8f02cdd312bb0d92e12a70"
+        },
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/package-version-audit.json",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "beea62f4a6b2485c39aa5f536b4eb135ca3e2eece3406e903526f69ba495397f"
+        },
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-g4-packaged-platform-loader.ps1",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "6361d83f4f26cf3b851e51556408eced8f0e8b7b6df0b5d830313797c2976755"
+        },
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-g4-tool-package-contracts.ps1",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "0aa2efebe07e38c8eecdea2cdc9bbd96c0f8441e232468131588650861f13194"
+        },
+        {
+          "repository": "references/Hexalith.Builds",
+          "path": "Tools/test-platform-version-catalog.ps1",
+          "sourcePin": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+          "sha256": "c93fc176d090874066234e51912263fdc6dfe3e79329361dd7bc1f9a8cb45c48"
+        }
+      ],
+      "decision": "Context only; all changed/additional bindings remain pending-specific-owner-review",
+      "sourcePinsSha256": "8a4820bb0fbfc75a97d404594c52aa3e446f075197c7af5a15f00f3be95fff7e"
+    },
+    "investigatedRemote": {
+      "revision": "7fa3df6a6b827f85fba6e12ec22c5efa08034ac8",
+      "platformClosureCount": 86,
+      "platformClosureSha256": "b1c2b18264013d9a0e0454c29fa0e4eb6d6c3d89f66d49428893a318fb4203b3",
+      "platformUnapprovedClosureDifferences": [
+        {
+          "path": "Directory.Build.props",
+          "approvedSha256": "16c8cf6435a4d295789d6a1e0b039c504968898b2d990436330aa98b16dec063",
+          "currentSha256": "7f7a292a9d7e9cdd3a120fd8366664814e70e03a5c0f789b290a04850a517ca0"
+        },
+        {
+          "path": "src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs",
+          "approvedSha256": "f82f7fd364780b47b5797d1c7347b3994facf532d225d0b8636fcd5c2be90681",
+          "currentSha256": "162e683d228cd2866f26fcf9cf48f7f4c3d5cc270ac58b4a810c1a7ffc4b9a91"
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformAppModel.cs",
+          "approvedSha256": "446ca0b88df40f03dbd4785ec806d6979978606a58ee5af4cd52a147718c87d9",
+          "currentSha256": "6dbad91fb874816001eb1d5ddaf682a21b5601765dd4351408c226ddee9a7b24"
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformCurrentOwnerProof.cs",
+          "approvedSha256": "aeb36d9aa364367e34483d3cb099df53c68e8dd3da5398fc2661a9185880fa72",
+          "currentSha256": "0066343b2e3f92f230e20af59b4941214c8e2d1a2f95cd8776f379bb27a33906"
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformMcpCliCatalogVersion.cs",
+          "approvedSha256": null,
+          "currentSha256": "97eb30e8da9d2d8957535f813119fe4fdad33ac7dc158bb8262e82851ee03492"
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformPackageCatalogQualification.cs",
+          "approvedSha256": "7a52c741990d83a6ce61315b43fded691d7aaf4171b3537a365795aedae45f94",
+          "currentSha256": "51befecf6aeb60d7186115206dda122104c698233c9ca032236fdc576e784ca0"
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/PlatformPartiesValidationContext.cs",
+          "approvedSha256": "3ad772f72407fc0b2df455ec5cf5f63c1f083a8aa82920ca064adcfbeaf3ae04",
+          "currentSha256": "38df7cc61e0386949729dfa4c4334af795db7a1f3608420b89e79dfa8c26c32b"
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/WorksPreviewManagedRuntime.cs",
+          "approvedSha256": null,
+          "currentSha256": "3c15f3a8678493145a5154094ee1a80630a3c9d8c5fe8591d8c10b89a6c2c355"
+        },
+        {
+          "path": "src/Hexalith.Platform.Composition/WorksPreviewModel.cs",
+          "approvedSha256": "a0307696c4554e42551305a3ab369410b2afe3c03bab68c6ea485e48b0e60743",
+          "currentSha256": "6d990e6b926b1154962f5c24c33c26cbb67d2c47f647a88b99aeabc133b51f7d"
+        }
+      ],
+      "decision": "Context only; all changed/additional bindings remain pending-specific-owner-review",
+      "changedPinsFromLocal": {
+        "references/Hexalith.Platform": {
+          "local": "38402bc77ac0be3e6902002d08923c51d0e73a77",
+          "context": "1cece242bd4a82c517bb92447c6d6799f6313b6f"
+        }
+      },
+      "sourcePinsSha256": "0f81a6938191b6b7f01cf51dd74627c1d12099ab255fc6c889aa9e8a5a27baf4",
+      "remainingPathDifferencesFromLocal": [
+        {
+          "repository": "references/Hexalith.Platform",
+          "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+          "sourcePin": "1cece242bd4a82c517bb92447c6d6799f6313b6f",
+          "sha256": "eaca9740bec4daa5d275ecbce94024adb328cb01f352f590c46bdd2333181341"
+        }
+      ]
+    },
+    "existingStandaloneHead": {
+      "revision": "733fc7114a572758c67a0fdb2e55e128c1c3044b",
+      "platformClosureCount": 86,
+      "platformClosureSha256": "b1c2b18264013d9a0e0454c29fa0e4eb6d6c3d89f66d49428893a318fb4203b3",
+      "decision": "Context only; all changed/additional bindings remain pending-specific-owner-review",
+      "changedPinsFromLocal": {
+        "references/Hexalith.Platform": {
+          "local": "38402bc77ac0be3e6902002d08923c51d0e73a77",
+          "context": "1cece242bd4a82c517bb92447c6d6799f6313b6f"
+        }
+      },
+      "sourcePinsSha256": "0f81a6938191b6b7f01cf51dd74627c1d12099ab255fc6c889aa9e8a5a27baf4",
+      "sameSourceBindingsAs": "investigatedRemote"
+    }
+  },
+  "interpretation": "The local Platform entry is not a request to approve an obsolete release selection. Any later publication decision must select its exact candidate revision and review its complete current closure; newer changed/added source bindings shown here are pending."
+}

@@ -1,0 +1,185 @@
+{
+  "schema": "mcpcli-local-final-source-manifest/v1",
+  "capturedAtUtc": "2026-11-14T03:05:45.420435+00:00",
+  "owningHead": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+  "scope": "All edited code/config/test/approval inputs and selected unchanged qualification inputs. Other unchanged tracked code is bound by owningHead. Raw logs are historical evidence, not final source snapshots.",
+  "changedTrackedFiles": [
+    ".gitattributes",
+    "Directory.Build.props",
+    "tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj",
+    "tools/live-topology/test_ci.py",
+    "tools/proprietary-surfaces/v1/README.md",
+    "tools/proprietary-surfaces/v1/amendments.json"
+  ],
+  "files": [
+    {
+      "path": ".editorconfig",
+      "sha256": "792434f98c2fa39b66e53edb3faf54757d30feba46413f8303309ad2c9ec52ef"
+    },
+    {
+      "path": ".gitattributes",
+      "sha256": "c298b2cc49d582ee05beee9ace0c8da7080b4a64ce7a456529686347336c90e9"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "4006602fa33c7f91b1863e8b2dec2daae9cb2a8be3bd0b3f10028d4dbc43781e"
+    },
+    {
+      "path": ".github/workflows/commitlint.yml",
+      "sha256": "9d2d3383707aec53e13d8a467e242cefa168f5b7085ce0bef559721491391b59"
+    },
+    {
+      "path": "Directory.Build.props",
+      "sha256": "0b04729a1403d2eada3b7dc69a922acf732c72e71dbb611d8d44819839daaa2f"
+    },
+    {
+      "path": "Directory.Packages.props",
+      "sha256": "168d3c552300017ddbba0ecb7ef30f7d77c66e2e1b3369b8111cdb11a2f1f0b0"
+    },
+    {
+      "path": "Hexalith.McpCli.slnx",
+      "sha256": "593f034cb1c476844b31d5e0da96c989067a6b44a4aa9626963aea1b52ae76bf"
+    },
+    {
+      "path": "evidence/mcpcli-current-ci-2026-11-14/README.md",
+      "sha256": "825f7b602bf6f45a8273b3e48738cbf77bd0caf385dcbfc2a70f449142fc8bae"
+    },
+    {
+      "path": "evidence/mcpcli-current-ci-2026-11-14/approved-spec.md",
+      "sha256": "1f3f1dbdd254f2a394803643624a30e65b7ffb56f58504614598074ec28e7406"
+    },
+    {
+      "path": "evidence/mcpcli-current-ci-2026-11-14/investigation.json",
+      "sha256": "c206fcd7a456f7442f1e930b833ee97e269a9fa6b91b6a5fa6b94d85c67da9d7"
+    },
+    {
+      "path": "evidence/mcpcli-current-ci-2026-11-14/pending-census-actions.json",
+      "sha256": "4e959ea483c71c85a3d7e498b4ff9e60aeeb0a765575dfefc1727c501542f213"
+    },
+    {
+      "path": "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+      "sha256": "334b466a9d37e663dd57bc53f9a831fdfc276462a95e68e03d9421c0f0b94d1c"
+    },
+    {
+      "path": "evidence/mcpcli-current-ci-2026-11-14/source-bindings.json",
+      "sha256": "066598e318cf4eec13952010638bac11aa7873fba0b42ebd3271184d9a786252"
+    },
+    {
+      "path": "evidence/mcpcli-current-ci-2026-11-14/test_run_candidate_census.py",
+      "sha256": "d893bd93afa5fb6de7f99ce4ccd04539a04c01685e2948f1620d327ba75141ea"
+    },
+    {
+      "path": "global.json",
+      "sha256": "5feaf50426a6c5554654e326bedd2f6c6273f13b948b1ec6e11e12cae68f9f05"
+    },
+    {
+      "path": "tests/Directory.Build.props",
+      "sha256": "847af220385a410294dfee16f4bba17b76d22f29373a1e343ce7667636a51555"
+    },
+    {
+      "path": "tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj",
+      "sha256": "06c65b4aed56f99afeff31af0c5a03d373d65f568edf8a5e8d5c42960b3dc4f8"
+    },
+    {
+      "path": "tools/dependency-policy.json",
+      "sha256": "0cbb7944bbcaac1199d6aabf8b5f48347c347e82cfc0575880348aaa72cfc41d"
+    },
+    {
+      "path": "tools/live-topology/native-runtime-current.json",
+      "sha256": "9b14a1fa2942d38d81d64f2c83fc477d95b32c92c0563f24ee012d4db0f15ac5"
+    },
+    {
+      "path": "tools/live-topology/runtime-profile-current.json",
+      "sha256": "d6853877ab323e701d83de962183602dbb592ac8d30fd75676567c77c3444f5d"
+    },
+    {
+      "path": "tools/live-topology/test_ci.py",
+      "sha256": "184d35645f4114d4d5cfd2141ccb3168ada9aaefc0b3afe1b70067f6339c96d9"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/README.md",
+      "sha256": "100556f9a23d2b623df65a45656cf55db910d8fa46506dc8d0e91cb5f3b793aa"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments.json",
+      "sha256": "90cbecfe6df72fc15e03947853a3ed3fabb3978ce2b3a72b9039eef5cf0ad7f5"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1-approval.json",
+      "sha256": "b3fe06ebb470b896f5efd47c4aa5de306fa220c9856ce3c39a16a6fcbd5c4203"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.1.json",
+      "sha256": "8339d6351499cbf21fa48aa8575733630183f359b6f883f9a1760fd0c1ef7f19"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.2-approval.json",
+      "sha256": "ff331d0c9a4ae3edba709b314f41d207e3125e4d0bfd4a6223a26bb1c90c9d8b"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.2.json",
+      "sha256": "01d73d9a51a76a3e535c8f553d78e899e5dc1263ad872032ab490435f4dc5d78"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.3-approval.json",
+      "sha256": "cdaba2cca005dffd4cee8f42893bbd320eb46d5e78517f8232f8e4b61b5b465c"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.3.json",
+      "sha256": "e53032b36e5e035aa3268dca161ed4de326a4331489a689d9342ecbbc717800c"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.4-approval.json",
+      "sha256": "cb3c2f09ce4ed8684766e29d9ce0b215e624905f48916cc259627bf564023df1"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.4.json",
+      "sha256": "a77495b466ebac883af16b2625622119c3b6452fc441436bcd0adf0c4bee4e61"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.5-approval.json",
+      "sha256": "bf16c2e75990de71b451d75460f8eff0a33cd11a63c6bc468894262e21239d52"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.5.json",
+      "sha256": "1784345c0ff853ed35952c9de2b1e7f2c20a88a455309375e56aecb95da5e887"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.6-approval.json",
+      "sha256": "2be9c64c62edc802424274ceab75cf0ace44e5ecc1a1d8fa9a0c5396b02f0b54"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.6.json",
+      "sha256": "dcc6e833c45a78bd47e493e89cd7730843918488732ed8c518433f807b3c0297"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.7-approval.json",
+      "sha256": "14771b70c5e50de35d476df12713a50f57fe0d4ce951ea13983a3df2e9b25e3b"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.7.json",
+      "sha256": "48b8463b6fcbd69d436461e380f86b57d0a912221b38bf75f85f1e567df0cfba"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.8-approval.json",
+      "sha256": "443e64512b93d0bf4c68ee86c360bfd9e5430537e4319124e450234181794799"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.8.json",
+      "sha256": "1b529f98cacf9bb8eba002ac51997fda32e0bad7395adbd9ee999f937ce98c2e"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/baseline.json",
+      "sha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/check.py",
+      "sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388"
+    },
+    {
+      "path": "tools/proprietary-surfaces/v1/legacy-receipts.json",
+      "sha256": "22055d14e2e5590d27be70291bf03045f3df8d9bf48a3b8f90cf84135f2f12ce"
+    }
+  ],
+  "postReviewDocumentationUpdate": "After focused re-review, packet README review status and four exact raw-capture whitespace attribute entries changed. Runtime/build/test/approval bytes and command-specific source contexts remain unchanged; captured raw bytes are preserved."
+}

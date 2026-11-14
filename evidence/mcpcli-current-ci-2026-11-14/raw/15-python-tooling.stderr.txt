@@ -1,0 +1,1 @@
+/tmp/mcpcli-current-ci-20261114-agfi8ppn/python-venv/bin/python3: No module named pip

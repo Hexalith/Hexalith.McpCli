@@ -1,0 +1,1565 @@
+{
+  "commands": [
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx",
+        "--force",
+        "--no-http-cache"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:47:15.514570+00:00",
+      "elapsedSeconds": 4.374,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "01-fresh-restore",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/01-fresh-restore.stdout.txt",
+          "sha256": "0aa4fe91e720e18342d957cc63649ebdc6bd1dec786f69a39a0461e60ecee304",
+          "bytes": 4574
+        },
+        "stderr": {
+          "path": "raw/01-fresh-restore.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:47:35.547280+00:00",
+      "elapsedSeconds": 5.609,
+      "exitCode": 1,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "02-release-build",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/02-release-build.stdout.txt",
+          "sha256": "3c9be1023a4bc075928a71a6c292e9a287cbb671b8642e20d1c2d9b8e4321cd2",
+          "bytes": 16294
+        },
+        "stderr": {
+          "path": "raw/02-release-build.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-m:1",
+        "-p:ImportDirectorySolutionTargets=false"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:48:16.801209+00:00",
+      "elapsedSeconds": 2.086,
+      "exitCode": 1,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "03-isolated-release-build",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/03-isolated-release-build.stdout.txt",
+          "sha256": "eece40d3e377f6328bebc33bb78909652aca2d99bcf560a2d2ed021380a2458f",
+          "bytes": 15794
+        },
+        "stderr": {
+          "path": "raw/03-isolated-release-build.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx",
+        "--force",
+        "--no-http-cache"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:49:42.381355+00:00",
+      "elapsedSeconds": 1.803,
+      "exitCode": 1,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "04-fresh-restore",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/04-fresh-restore.stdout.txt",
+          "sha256": "1007beb51c81cdf929036bb136b643a849d642c67b234381492ce6c3637dcd6a",
+          "bytes": 5039
+        },
+        "stderr": {
+          "path": "raw/04-fresh-restore.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx",
+        "--force",
+        "--no-http-cache"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:50:13.212550+00:00",
+      "elapsedSeconds": 1.087,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "05-fresh-restore",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/05-fresh-restore.stdout.txt",
+          "sha256": "949255280c8dae0f2bc5c0e6834d3e4ab24342170300ce0e5771bcc5b1e8f873",
+          "bytes": 4533
+        },
+        "stderr": {
+          "path": "raw/05-fresh-restore.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+        "--owner",
+        ".",
+        "--object-stores",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "--output",
+        "evidence/mcpcli-current-ci-2026-11-14/candidate-census.json"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:50:50.198735+00:00",
+      "elapsedSeconds": 19.087,
+      "exitCode": 1,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "06-candidate-census",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/06-candidate-census.stdout.txt",
+          "sha256": "2015f234c7a38f2d13cf0af44c10afb178982b50e6084e8f80205b8ffe83c684",
+          "bytes": 7874
+        },
+        "stderr": {
+          "path": "raw/06-candidate-census.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:50:56.698394+00:00",
+      "elapsedSeconds": 4.697,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "07-release-build",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/07-release-build.stdout.txt",
+          "sha256": "fb1d09b94bea9e62fafb6c3fc7379486894683d9eff9bc58e2a9d516c1e1214f",
+          "bytes": 5289
+        },
+        "stderr": {
+          "path": "raw/07-release-build.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Abstractions.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:51:31.120965+00:00",
+      "elapsedSeconds": 1.127,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "08-abstractions-tests",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/08-abstractions-tests.stdout.txt",
+          "sha256": "90f8dfe76a77d5b900d5b3fbe019334e8fc3f0e8c955b252da1cc0dcd2481347",
+          "bytes": 518
+        },
+        "stderr": {
+          "path": "raw/08-abstractions-tests.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Analyzers.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:51:37.926009+00:00",
+      "elapsedSeconds": 2.869,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "09-analyzers-tests",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/09-analyzers-tests.stdout.txt",
+          "sha256": "9c654dc317944b8ed21930e55c1f0594a5d86b16a364fdcd6db87108dc28070a",
+          "bytes": 512
+        },
+        "stderr": {
+          "path": "raw/09-analyzers-tests.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Core.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:51:54.899524+00:00",
+      "elapsedSeconds": 2.932,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "10-core-tests",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/10-core-tests.stdout.txt",
+          "sha256": "60208ff7a18b095b8f8a9a6926b04a47e3d8a44fdcbb2b5ae3c27f08d14d8eee",
+          "bytes": 1793
+        },
+        "stderr": {
+          "path": "raw/10-core-tests.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:52:12.413276+00:00",
+      "elapsedSeconds": 132.251,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "11-manifest-tests",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/11-manifest-tests.stdout.txt",
+          "sha256": "1b4b541a9dffaa341314b55e8c41dfd11db24e3eeb0f3ad5e615e1d95139614e",
+          "bytes": 17187
+        },
+        "stderr": {
+          "path": "raw/11-manifest-tests.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Cli.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:52:40.192788+00:00",
+      "elapsedSeconds": 46.397,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "12-cli-tests",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/12-cli-tests.stdout.txt",
+          "sha256": "9562e183fb2364cc00d26a904e8de797de8e6b286d24d99fae53770a0851c950",
+          "bytes": 2902
+        },
+        "stderr": {
+          "path": "raw/12-cli-tests.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "test",
+        "tests/Hexalith.McpCli.Mcp.Tests",
+        "--no-build",
+        "--configuration",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:53:13.729727+00:00",
+      "elapsedSeconds": 2.737,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "13-mcp-tests",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/13-mcp-tests.stdout.txt",
+          "sha256": "64ca2259c813ddc12f445483779677e7c2a6e673f0921326bcb803a5da2b382b",
+          "bytes": 488
+        },
+        "stderr": {
+          "path": "raw/13-mcp-tests.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "pip",
+        "install",
+        "-r",
+        "tools/conformance-vectors/v1/requirements.txt"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:55:07.783798+00:00",
+      "elapsedSeconds": 0.406,
+      "exitCode": 1,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "14-python-tooling",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/14-python-tooling.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/14-python-tooling.stderr.txt",
+          "sha256": "9d8e3279ad958f2def527ed25bb800f6e20d443c00586a3f913e312a8ca3c817",
+          "bytes": 1024
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "pip",
+        "install",
+        "-r",
+        "tools/conformance-vectors/v1/requirements.txt"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:55:18.667188+00:00",
+      "elapsedSeconds": 0.018,
+      "exitCode": 1,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "15-python-tooling",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/15-python-tooling.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/15-python-tooling.stderr.txt",
+          "sha256": "078a2e96c37c142457c1235fcef083b0f318d34d17d3930ca0e4409c2277d746",
+          "bytes": 86
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Core.Tests.EnrolledModuleCoverageTests"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:55:52.037309+00:00",
+      "elapsedSeconds": 0.632,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "16-enrollment-coverage",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/16-enrollment-coverage.stdout.txt",
+          "sha256": "784e14dbbeaa19e69c921f30ad2c9c251edf72eaf00a420cd51cfdcc593e2974",
+          "bytes": 445
+        },
+        "stderr": {
+          "path": "raw/16-enrollment-coverage.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "env",
+        "MCPCLI_BENCHMARK_REQUIRE_V1=true",
+        "MCPCLI_BENCHMARK_OUTPUT=evidence/mcpcli-current-ci-2026-11-14/catalog-benchmark.json",
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:55:58.330015+00:00",
+      "elapsedSeconds": 0.778,
+      "exitCode": 0,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "17-strict-benchmark",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/17-strict-benchmark.stdout.txt",
+          "sha256": "b4310ecb91013945677350c4825c8b1651e80382a6c8dfc4923064b6d6091319",
+          "bytes": 586
+        },
+        "stderr": {
+          "path": "raw/17-strict-benchmark.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/conformance-vectors/v1/check_enrolled.py",
+        "--output",
+        "/tmp/mcpcli-current-ci-20261114-agfi8ppn/enrolled"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:56:15.976814+00:00",
+      "elapsedSeconds": 13.358,
+      "exitCode": 1,
+      "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages",
+      "verificationStep": "18-enrolled-replay",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/18-enrolled-replay.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/18-enrolled-replay.stderr.txt",
+          "sha256": "df51f11c8c9d1240fb587d01cce6198479fa4f89cbc58594f989c7c9eeced7ff",
+          "bytes": 16248
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx",
+        "--force",
+        "--no-http-cache"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:57:35.039848+00:00",
+      "elapsedSeconds": 2.654,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "19-restore-after-cache-move",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/19-restore-after-cache-move.stdout.txt",
+          "sha256": "7af0360edadb85902687b8b34d60e1f82268645804dadbe6317df80621811be9",
+          "bytes": 4552
+        },
+        "stderr": {
+          "path": "raw/19-restore-after-cache-move.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "pip",
+        "install",
+        "-r",
+        "tools/conformance-vectors/v1/requirements.txt"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:57:42.059496+00:00",
+      "elapsedSeconds": 0.845,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "20-python-tooling",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/20-python-tooling.stdout.txt",
+          "sha256": "2cb10bc5f249452d4c01a93a43b1159da76f7ac04a2e5f39996f23e9b0c9fd75",
+          "bytes": 1517
+        },
+        "stderr": {
+          "path": "raw/20-python-tooling.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/conformance-vectors/v1/check_enrolled.py",
+        "--output",
+        "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/enrolled"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:57:49.985507+00:00",
+      "elapsedSeconds": 394.649,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "21-enrolled-replay",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/21-enrolled-replay.stdout.txt",
+          "sha256": "213bae408797c9c1add079d14f742d34e0a841ea042459d285463f00ef449451",
+          "bytes": 289
+        },
+        "stderr": {
+          "path": "raw/21-enrolled-replay.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/proprietary-surfaces/v1",
+        "-p",
+        "test_*.py"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:58:43.725584+00:00",
+      "elapsedSeconds": 26.825,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "22-census-fixtures",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/22-census-fixtures.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/22-census-fixtures.stderr.txt",
+          "sha256": "f6ba4cea9ac7004a83a6442ac5d8414f81e1fdc9d06d94b35328753b3db9d004",
+          "bytes": 36809
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "env",
+        "MCPCLI_BENCHMARK_REQUIRE_V1=true",
+        "MCPCLI_BENCHMARK_OUTPUT=/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli/evidence/mcpcli-current-ci-2026-11-14/catalog-benchmark.json",
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:59:06.831033+00:00",
+      "elapsedSeconds": 0.789,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "23-strict-benchmark",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/23-strict-benchmark.stdout.txt",
+          "sha256": "41bd643604da49c0b8afa948e2a412ba4ce5aeac38cc8bf89257d9ccc2531305",
+          "bytes": 586
+        },
+        "stderr": {
+          "path": "raw/23-strict-benchmark.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "tools/live-topology",
+        "-p",
+        "test_*.py"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:59:17.981498+00:00",
+      "elapsedSeconds": 689.801,
+      "exitCode": 1,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "24-topology-fixtures",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/24-topology-fixtures.stdout.txt",
+          "sha256": "2fc6bd0c50a39afc328a886e82a1918c45891f949ec190c3c2b39cd510a3b2f1",
+          "bytes": 11371
+        },
+        "stderr": {
+          "path": "raw/24-topology-fixtures.stderr.txt",
+          "sha256": "528f00f16bc214f9c9f056a945ab655b07133b436615e9a8a2d55bbab7766de4",
+          "bytes": 41239
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-failing-topology-input",
+        "owningHead": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+        "files": [
+          {
+            "path": "tools/live-topology/test_ci.py",
+            "sha256": "7a6c6c879cd1deb306bb2ab3a6a9160fef0f1d08ff61c661326148b5680a15e6"
+          }
+        ],
+        "matchesFinalTestBytes": false,
+        "basis": "The full topology run preceded the two-line stale catalog expectation correction. Its raw failure is preserved."
+      }
+    },
+    {
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-validation.sh",
+        "Release"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T01:59:27.043281+00:00",
+      "elapsedSeconds": 20.887,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "25-sample-validation",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/25-sample-validation.stdout.txt",
+          "sha256": "413022d671dc4995d37d3fd96b1a3904a4afd7bbc32f432623dc8fe38e1255a4",
+          "bytes": 2016
+        },
+        "stderr": {
+          "path": "raw/25-sample-validation.stderr.txt",
+          "sha256": "500f3e8122bbc8460ddb623528a0c5d7256c241c84a71779c6203a33664e4a30",
+          "bytes": 286
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/live-topology/run-vectors.py",
+        "--output",
+        "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/live-preflight",
+        "--preflight-only"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:00:30.072016+00:00",
+      "elapsedSeconds": 45.378,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "26-topology-preflight",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/26-topology-preflight.stdout.txt",
+          "sha256": "00aa4adc4760e7752fad254fe079e915d7ea6f4dcd34c2acb67fd8b71c6ee29c",
+          "bytes": 128
+        },
+        "stderr": {
+          "path": "raw/26-topology-preflight.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "tools/proprietary-surfaces/v1/check.py",
+        "--output",
+        "/tmp/mcpcli-current-ci-20261114-agfi8ppn/raw-evidence/committed-workspace-census.json"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:00:39.010810+00:00",
+      "elapsedSeconds": 0.151,
+      "exitCode": 1,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "27-committed-workspace-census",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/27-committed-workspace-census.stdout.txt",
+          "sha256": "c36af4cbe8f55318b0b31aa3fef1b8599584e05b9e33d3b7353603fbaffe1e07",
+          "bytes": 147
+        },
+        "stderr": {
+          "path": "raw/27-committed-workspace-census.stderr.txt",
+          "sha256": "d2d19b66e161cfa709dd7118ad1b544a4ce72d83ea5310f59cb155f22e2e450f",
+          "bytes": 42
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll",
+        "-preEnumerateTheories",
+        "-list",
+        "tests"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:00:39.378041+00:00",
+      "elapsedSeconds": 0.193,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "verificationStep": "28-topology-discovery",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/28-topology-discovery.stdout.txt",
+          "sha256": "53190d5434a40707086585f6255b0ce8250d83764ecdbb4fa6feef8ec14aa8c6",
+          "bytes": 2912
+        },
+        "stderr": {
+          "path": "raw/28-topology-discovery.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-loopback.sh"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:11:13.990905+00:00",
+      "elapsedSeconds": 689.048,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/29-sample-loopback.stdout.txt",
+          "sha256": "2442a87ad8b5b0b2af5c609ff8f1ba8d7a3da872a88570ca97768afabf5ee3a1",
+          "bytes": 5794
+        },
+        "stderr": {
+          "path": "raw/29-sample-loopback.stderr.txt",
+          "sha256": "5b4d2fbf894249332fde9c406eca9ba10f8cf6e3308aa6e5a6e4973cedaa36f3",
+          "bytes": 286
+        }
+      },
+      "verificationStep": "29-sample-loopback",
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "env",
+        "PYTHONPATH=tools/live-topology",
+        "python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_ci.CiHooksTests.test_catalog_and_workflow_pins_keep_their_approved_identities",
+        "test_ci.CiHooksTests.test_builds_reference_guard_rejects_catalog_and_executor_drift"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:22:53.273135+00:00",
+      "elapsedSeconds": 0.075,
+      "exitCode": 1,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/30-catalog-identity-controls.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/30-catalog-identity-controls.stderr.txt",
+          "sha256": "40d3a50d715760a7fe83002ad795c9bac257f19ac927ac363f092551241e8430",
+          "bytes": 1302
+        }
+      },
+      "verificationStep": "30-catalog-identity-controls",
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "command": [
+        "env",
+        "PYTHONPATH=tools/live-topology",
+        "python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_ci.CiWorkflowTests.test_catalog_and_workflow_pins_keep_their_approved_identities",
+        "test_ci.CiWorkflowTests.test_builds_reference_guard_rejects_catalog_and_executor_drift"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:23:04.350074+00:00",
+      "elapsedSeconds": 0.09,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/31-catalog-identity-controls.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/31-catalog-identity-controls.stderr.txt",
+          "sha256": "96cd3817558dc231fab0ede478f4e8581e059c74220457a489e43043fab3b877",
+          "bytes": 414
+        }
+      },
+      "verificationStep": "31-catalog-identity-controls",
+      "sourceContext": {
+        "kind": "specific-inputs-unchanged-since-execution",
+        "owningHead": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+        "files": [
+          {
+            "path": "tools/live-topology/test_ci.py",
+            "sha256": "184d35645f4114d4d5cfd2141ccb3168ada9aaefc0b3afe1b70067f6339c96d9"
+          }
+        ],
+        "basis": "Only these specific inputs are bound. They have not changed since this invocation. Later evidence-helper/docs/approval edits were not tested by this historical command; no complete final-tree verification is claimed."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx",
+        "--force",
+        "--no-http-cache"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:23:10.317273+00:00",
+      "elapsedSeconds": 2.178,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/32-final-fresh-restore.stdout.txt",
+          "sha256": "46b466c652545eddea72481f10b8fbff2212add765fba2ab87b098522bb100df",
+          "bytes": 4549
+        },
+        "stderr": {
+          "path": "raw/32-final-fresh-restore.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "verificationStep": "32-final-fresh-restore",
+      "sourceContext": {
+        "kind": "specific-inputs-unchanged-since-execution",
+        "owningHead": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+        "files": [
+          {
+            "path": "Directory.Build.props",
+            "sha256": "0b04729a1403d2eada3b7dc69a922acf732c72e71dbb611d8d44819839daaa2f"
+          },
+          {
+            "path": "Directory.Packages.props",
+            "sha256": "168d3c552300017ddbba0ecb7ef30f7d77c66e2e1b3369b8111cdb11a2f1f0b0"
+          },
+          {
+            "path": "global.json",
+            "sha256": "5feaf50426a6c5554654e326bedd2f6c6273f13b948b1ec6e11e12cae68f9f05"
+          },
+          {
+            "path": "Hexalith.McpCli.slnx",
+            "sha256": "593f034cb1c476844b31d5e0da96c989067a6b44a4aa9626963aea1b52ae76bf"
+          },
+          {
+            "path": "tests/Directory.Build.props",
+            "sha256": "847af220385a410294dfee16f4bba17b76d22f29373a1e343ce7667636a51555"
+          },
+          {
+            "path": "tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj",
+            "sha256": "06c65b4aed56f99afeff31af0c5a03d373d65f568edf8a5e8d5c42960b3dc4f8"
+          }
+        ],
+        "basis": "Only these specific inputs are bound. They have not changed since this invocation. Later evidence-helper/docs/approval edits were not tested by this historical command; no complete final-tree verification is claimed."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:23:16.098307+00:00",
+      "elapsedSeconds": 9.767,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/33-final-production-build.stdout.txt",
+          "sha256": "6f2e5a41ff92774e13a36e13eb161d903c6b649ff38282297566bc878ca077bf",
+          "bytes": 5289
+        },
+        "stderr": {
+          "path": "raw/33-final-production-build.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "verificationStep": "33-final-production-build",
+      "sourceContext": {
+        "kind": "specific-inputs-unchanged-since-execution",
+        "owningHead": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+        "files": [
+          {
+            "path": "Directory.Build.props",
+            "sha256": "0b04729a1403d2eada3b7dc69a922acf732c72e71dbb611d8d44819839daaa2f"
+          },
+          {
+            "path": "Directory.Packages.props",
+            "sha256": "168d3c552300017ddbba0ecb7ef30f7d77c66e2e1b3369b8111cdb11a2f1f0b0"
+          },
+          {
+            "path": "global.json",
+            "sha256": "5feaf50426a6c5554654e326bedd2f6c6273f13b948b1ec6e11e12cae68f9f05"
+          },
+          {
+            "path": "Hexalith.McpCli.slnx",
+            "sha256": "593f034cb1c476844b31d5e0da96c989067a6b44a4aa9626963aea1b52ae76bf"
+          },
+          {
+            "path": "tests/Directory.Build.props",
+            "sha256": "847af220385a410294dfee16f4bba17b76d22f29373a1e343ce7667636a51555"
+          },
+          {
+            "path": "tests/Hexalith.McpCli.Analyzers.Tests/Hexalith.McpCli.Analyzers.Tests.csproj",
+            "sha256": "06c65b4aed56f99afeff31af0c5a03d373d65f568edf8a5e8d5c42960b3dc4f8"
+          }
+        ],
+        "basis": "Only these specific inputs are bound. They have not changed since this invocation. Later evidence-helper/docs/approval edits were not tested by this historical command; no complete final-tree verification is claimed."
+      }
+    },
+    {
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net10.0/Hexalith.McpCli.Manifest.Tests.dll",
+        "-method",
+        "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.ProductionContractsStayWithinPinnedDependencyClosure",
+        "-method",
+        "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.TestAppHostUsesOnlyReviewedPublishedServerFreeHelpers",
+        "-method",
+        "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests.IntegrationFixtureUsesOnlyItsReviewedHexalithPackageClosure"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:23:38.508950+00:00",
+      "elapsedSeconds": 0.319,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/34-final-dependency-controls.stdout.txt",
+          "sha256": "d6dc986ae0bca57bffe1f951575e7bea5da1966184edf4bddad2954b75d20443",
+          "bytes": 464
+        },
+        "stderr": {
+          "path": "raw/34-final-dependency-controls.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "verificationStep": "34-final-dependency-controls",
+      "sourceContext": {
+        "kind": "specific-inputs-unchanged-since-execution",
+        "owningHead": "42d3c2fd48405e0f2c27f9b61f6d7025e4246934",
+        "files": [
+          {
+            "path": "tools/dependency-policy.json",
+            "sha256": "0cbb7944bbcaac1199d6aabf8b5f48347c347e82cfc0575880348aaa72cfc41d"
+          },
+          {
+            "path": "tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs",
+            "sha256": "591a15e154b6d12c14d6525a16a1b37ff6c97bcc72c65e8c406c1d0f3cebd17f"
+          }
+        ],
+        "basis": "Only these specific inputs are bound. They have not changed since this invocation. Later evidence-helper/docs/approval edits were not tested by this historical command; no complete final-tree verification is claimed."
+      }
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:24:04.795999+00:00",
+      "elapsedSeconds": 0.013,
+      "exitCode": 0,
+      "packageCache": "/dev/shm/mcpcli-current-ci-20261114-4p4i3ooq/packages",
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/35-whitespace.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/35-whitespace.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "verificationStep": "35-whitespace",
+      "sourceContext": {
+        "kind": "historical-invocation",
+        "completeDirtyTreeSnapshotCaptured": false,
+        "coveredByFinalManifest": false,
+        "basis": "Original command/output retained. No claim that this invocation used corrected helper, test or approval bytes."
+      }
+    },
+    {
+      "verificationStep": "36-helper-regressions",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "evidence/mcpcli-current-ci-2026-11-14",
+        "-p",
+        "test_run_candidate_census.py"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:48:41.610651+00:00",
+      "elapsedSeconds": 0.382,
+      "exitCode": 0,
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/36-helper-regressions.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/36-helper-regressions.stderr.txt",
+          "sha256": "03c9cc820ff698f722d78ff7f8b7410cc0d9707202a2fa2a5d2a2d0a2645823a",
+          "bytes": 1178
+        }
+      },
+      "sourceContext": {
+        "kind": "captured-before-execution",
+        "files": [
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+            "sha256": "10643e4bb6db18df5e40dcc2841c4655415cda455c49d53374ac59fdb4782b34"
+          },
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/test_run_candidate_census.py",
+            "sha256": "51d7efbfdabb07ab1231fd48e9b68365e7f29baddef0cc525de912dd19c8e70e"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/check.py",
+            "sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments.json",
+            "sha256": "90cbecfe6df72fc15e03947853a3ed3fabb3978ce2b3a72b9039eef5cf0ad7f5"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8.json",
+            "sha256": "1b529f98cacf9bb8eba002ac51997fda32e0bad7395adbd9ee999f937ce98c2e"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8-approval.json",
+            "sha256": "443e64512b93d0bf4c68ee86c360bfd9e5430537e4319124e450234181794799"
+          }
+        ],
+        "scope": "Observed helper/test/checker/policy bytes before execution. Tests use isolated synthetic policy fixtures; active policy bytes are supplementary provenance only."
+      }
+    },
+    {
+      "verificationStep": "37-candidate-census-reviewed",
+      "command": [
+        "python3",
+        "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+        "--owner",
+        ".",
+        "--object-stores",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "--output",
+        "evidence/mcpcli-current-ci-2026-11-14/raw/candidate-census-reviewed.json"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:48:52.262663+00:00",
+      "elapsedSeconds": 15.442,
+      "exitCode": 1,
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/37-candidate-census-reviewed.stdout.txt",
+          "sha256": "2015f234c7a38f2d13cf0af44c10afb178982b50e6084e8f80205b8ffe83c684",
+          "bytes": 7874
+        },
+        "stderr": {
+          "path": "raw/37-candidate-census-reviewed.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "captured-before-execution",
+        "files": [
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+            "sha256": "10643e4bb6db18df5e40dcc2841c4655415cda455c49d53374ac59fdb4782b34"
+          },
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/test_run_candidate_census.py",
+            "sha256": "51d7efbfdabb07ab1231fd48e9b68365e7f29baddef0cc525de912dd19c8e70e"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/check.py",
+            "sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments.json",
+            "sha256": "90cbecfe6df72fc15e03947853a3ed3fabb3978ce2b3a72b9039eef5cf0ad7f5"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8.json",
+            "sha256": "1b529f98cacf9bb8eba002ac51997fda32e0bad7395adbd9ee999f937ce98c2e"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8-approval.json",
+            "sha256": "443e64512b93d0bf4c68ee86c360bfd9e5430537e4319124e450234181794799"
+          }
+        ],
+        "scope": "Only the named helper/test/checker/policy inputs; no ordinary .NET or long suites were rerun."
+      }
+    },
+    {
+      "verificationStep": "38-helper-regressions-final",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "evidence/mcpcli-current-ci-2026-11-14",
+        "-p",
+        "test_run_candidate_census.py"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:53:31.940755+00:00",
+      "elapsedSeconds": 0.402,
+      "exitCode": 0,
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/38-helper-regressions-final.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/38-helper-regressions-final.stderr.txt",
+          "sha256": "e3e879962a918eb356033478b247270a31e8bbba0dbe5df8e2ee4a00d3d2576d",
+          "bytes": 1368
+        }
+      },
+      "sourceContext": {
+        "kind": "captured-before-execution",
+        "files": [
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+            "sha256": "334b466a9d37e663dd57bc53f9a831fdfc276462a95e68e03d9421c0f0b94d1c"
+          },
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/test_run_candidate_census.py",
+            "sha256": "a5452adcd81388e5dc58120c253387f81af908721a1a54d6f245ea8b3d5a65e2"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/check.py",
+            "sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments.json",
+            "sha256": "90cbecfe6df72fc15e03947853a3ed3fabb3978ce2b3a72b9039eef5cf0ad7f5"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8.json",
+            "sha256": "1b529f98cacf9bb8eba002ac51997fda32e0bad7395adbd9ee999f937ce98c2e"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8-approval.json",
+            "sha256": "443e64512b93d0bf4c68ee86c360bfd9e5430537e4319124e450234181794799"
+          }
+        ],
+        "scope": "Observed helper/test/checker/policy bytes before execution. Tests use isolated synthetic policy fixtures; active policy bytes are supplementary provenance only."
+      }
+    },
+    {
+      "verificationStep": "39-candidate-census-final",
+      "command": [
+        "python3",
+        "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+        "--owner",
+        ".",
+        "--object-stores",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "--output",
+        "evidence/mcpcli-current-ci-2026-11-14/raw/candidate-census-final.json"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:53:42.886429+00:00",
+      "elapsedSeconds": 14.446,
+      "exitCode": 1,
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/39-candidate-census-final.stdout.txt",
+          "sha256": "2015f234c7a38f2d13cf0af44c10afb178982b50e6084e8f80205b8ffe83c684",
+          "bytes": 7874
+        },
+        "stderr": {
+          "path": "raw/39-candidate-census-final.stderr.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        }
+      },
+      "sourceContext": {
+        "kind": "captured-before-execution",
+        "files": [
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+            "sha256": "334b466a9d37e663dd57bc53f9a831fdfc276462a95e68e03d9421c0f0b94d1c"
+          },
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/test_run_candidate_census.py",
+            "sha256": "a5452adcd81388e5dc58120c253387f81af908721a1a54d6f245ea8b3d5a65e2"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/check.py",
+            "sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments.json",
+            "sha256": "90cbecfe6df72fc15e03947853a3ed3fabb3978ce2b3a72b9039eef5cf0ad7f5"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8.json",
+            "sha256": "1b529f98cacf9bb8eba002ac51997fda32e0bad7395adbd9ee999f937ce98c2e"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8-approval.json",
+            "sha256": "443e64512b93d0bf4c68ee86c360bfd9e5430537e4319124e450234181794799"
+          }
+        ],
+        "scope": "Only the named helper/test/checker/policy inputs; no ordinary .NET or long suites were rerun."
+      }
+    },
+    {
+      "verificationStep": "40-helper-regressions-final",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "evidence/mcpcli-current-ci-2026-11-14",
+        "-p",
+        "test_run_candidate_census.py"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+      "startedAt": "2026-11-14T02:55:13.166744+00:00",
+      "elapsedSeconds": 0.387,
+      "exitCode": 0,
+      "rawOutput": {
+        "stdout": {
+          "path": "raw/40-helper-regressions-final.stdout.txt",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "bytes": 0
+        },
+        "stderr": {
+          "path": "raw/40-helper-regressions-final.stderr.txt",
+          "sha256": "1ec463b1b2b23a10783d41ba205539a57e6c9b7e9e6211710baa0603f1725d63",
+          "bytes": 1368
+        }
+      },
+      "sourceContext": {
+        "kind": "captured-before-execution",
+        "files": [
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+            "sha256": "334b466a9d37e663dd57bc53f9a831fdfc276462a95e68e03d9421c0f0b94d1c"
+          },
+          {
+            "path": "evidence/mcpcli-current-ci-2026-11-14/test_run_candidate_census.py",
+            "sha256": "d893bd93afa5fb6de7f99ce4ccd04539a04c01685e2948f1620d327ba75141ea"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/check.py",
+            "sha256": "e98ae599203249434e3c49f106d3d76d330cf09aed6d509a7636d68c542e4388"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments.json",
+            "sha256": "90cbecfe6df72fc15e03947853a3ed3fabb3978ce2b3a72b9039eef5cf0ad7f5"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8.json",
+            "sha256": "1b529f98cacf9bb8eba002ac51997fda32e0bad7395adbd9ee999f937ce98c2e"
+          },
+          {
+            "path": "tools/proprietary-surfaces/v1/amendments/1.0.8-approval.json",
+            "sha256": "443e64512b93d0bf4c68ee86c360bfd9e5430537e4319124e450234181794799"
+          }
+        ],
+        "scope": "Observed helper/test/checker/policy bytes before execution. Tests use isolated synthetic policy fixtures; active policy bytes are supplementary provenance only."
+      }
+    }
+  ],
+  "rawEvidenceDirectory": "raw",
+  "historicalRawEvidenceDirectory": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/raw-evidence",
+  "finalSourceManifest": {
+    "path": "final-source-manifest.json",
+    "sha256": "d3f446a3a031ff571036f0edc84864c4eda82826eb34bd9ac4d060fd261ce432"
+  }
+}

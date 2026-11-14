@@ -1,0 +1,17 @@
+test_catalog_and_workflow_pins_keep_their_approved_identities (unittest.loader._FailedTest.test_catalog_and_workflow_pins_keep_their_approved_identities) ... ERROR
+test_builds_reference_guard_rejects_catalog_and_executor_drift (unittest.loader._FailedTest.test_builds_reference_guard_rejects_catalog_and_executor_drift) ... ERROR
+
+======================================================================
+ERROR: test_catalog_and_workflow_pins_keep_their_approved_identities (unittest.loader._FailedTest.test_catalog_and_workflow_pins_keep_their_approved_identities)
+----------------------------------------------------------------------
+AttributeError: type object 'CiHooksTests' has no attribute 'test_catalog_and_workflow_pins_keep_their_approved_identities'
+
+======================================================================
+ERROR: test_builds_reference_guard_rejects_catalog_and_executor_drift (unittest.loader._FailedTest.test_builds_reference_guard_rejects_catalog_and_executor_drift)
+----------------------------------------------------------------------
+AttributeError: type object 'CiHooksTests' has no attribute 'test_builds_reference_guard_rejects_catalog_and_executor_drift'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.000s
+
+FAILED (errors=2)

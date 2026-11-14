@@ -1,0 +1,13 @@
+--- c157c394b8fca5f392b5f8a6a5ff1f51f4ac77a0:scripts/run-tenant-audit-performance.sh
++++ 8ce40cdfe9b1bdd0ec3bd643b0f3386501e514c2:scripts/run-tenant-audit-performance.sh
+@@ -5,7 +5,9 @@
+ # Validate before creating logs/results or invoking preparation, build, seed or measurement tools.
+ source_provenance=$(python3 "$repo_root/scripts/tenant-audit-source-provenance.py" "$repo_root")
+ apphost_project="$repo_root/src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj"
+-apphost_dll="$repo_root/src/Hexalith.Tenants.AppHost/bin/Release/net10.0/Hexalith.Tenants.AppHost.dll"
++target_framework="$(dotnet msbuild "$repo_root/src/Hexalith.Tenants.AppHost/Hexalith.Tenants.AppHost.csproj" -nologo -p:Configuration=Release -getProperty:TargetFramework)"
++[[ "$target_framework" == "net11.0" ]] || { echo "The current audit host must target net11.0." >&2; exit 1; }
++apphost_dll="$repo_root/src/Hexalith.Tenants.AppHost/bin/Release/$target_framework/Hexalith.Tenants.AppHost.dll"
+ performance_dir="$repo_root/tests/performance/tenant-audit"
+ memories_server_project="$repo_root/references/Hexalith.Memories/src/Hexalith.Memories.Server/Hexalith.Memories.Server.csproj"
+ result_dir=${AUDIT_PERF_RESULT_DIR:-"$repo_root/_bmad-output/implementation-artifacts/story-5-1-performance-run-$(date -u +%Y%m%dT%H%M%SZ)"}

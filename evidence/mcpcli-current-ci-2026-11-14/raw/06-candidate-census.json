@@ -1,0 +1,17 @@
+{
+  "command": [
+    "python3",
+    "evidence/mcpcli-current-ci-2026-11-14/run-candidate-census.py",
+    "--owner",
+    ".",
+    "--object-stores",
+    "/home/administrator/projects/hexalith/mcpcli",
+    "--output",
+    "evidence/mcpcli-current-ci-2026-11-14/candidate-census.json"
+  ],
+  "workingDirectory": "/home/administrator/projects/hexalith/tenants/references/Hexalith.McpCli",
+  "startedAt": "2026-11-14T01:50:50.198735+00:00",
+  "elapsedSeconds": 19.087,
+  "exitCode": 1,
+  "packageCache": "/tmp/mcpcli-current-ci-20261114-agfi8ppn/packages"
+}

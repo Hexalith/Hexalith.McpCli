@@ -1,0 +1,10 @@
+--- 93c9db2e2892be80ab8595052b91cbda5b7d158f:Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj
++++ 05a75b626fb73c6e386d16c41e885f193d3cff16:Samples/Hexalith.Sample/test/Hexalith.Sample.HookTests/Hexalith.Sample.HookTests.csproj
+@@ -1,6 +1,6 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+-    <TargetFramework>net10.0</TargetFramework>
++    <TargetFramework>net11.0</TargetFramework>
+     <OutputType>Exe</OutputType>
+     <IsTestProject>true</IsTestProject>
+     <IsPackable>false</IsPackable>

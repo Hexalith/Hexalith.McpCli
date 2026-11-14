@@ -1,0 +1,1 @@
+error: {"rule": "git-object-unavailable"}
