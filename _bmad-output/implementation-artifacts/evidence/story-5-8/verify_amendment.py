@@ -262,7 +262,7 @@ def check_metadata(text):
 def completion_requested(root,requested):
     for path,key in [(B.SPEC,'status'),(ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory')]:
         if (root/path).exists():
-            text = (root/path).read_text()
+            text = (root/path).read_text(encoding='utf-8')
             keys = re.findall(r'^'+re.escape(key)+r':',text,re.M)
             require(len(keys) <= 1, 'duplicate workflow status '+key.strip())
             found = re.findall(r'^'+re.escape(key)+r':\s*[\'"]?([\w-]+)',text,re.M)
@@ -282,8 +282,8 @@ def verify_owner_packet(root,completion=False):
     require(state == 'adopted', 'AD-23 exact-byte owner adoption is required')
     mapping = read_json(root/B.AD/'AD-23-capability-class-map.json')
     inv = next(i for i in mapping['inventories'] if i['path'] == str(B.OLD))
-    old, new = parse((root/B.OLD).read_text()), parse((root/B.NEW).read_text())
-    check_metadata((root/B.NEW).read_text())
+    old, new = parse((root/B.OLD).read_text(encoding='utf-8')), parse((root/B.NEW).read_text(encoding='utf-8'))
+    check_metadata((root/B.NEW).read_text(encoding='utf-8'))
     accounting(old,new,inv)
     decl,surface = B.declarations(root),B.surfaces(root)
     check_rows(root,old,new,inv,{c['id']:c for c in mapping['classes']},decl)

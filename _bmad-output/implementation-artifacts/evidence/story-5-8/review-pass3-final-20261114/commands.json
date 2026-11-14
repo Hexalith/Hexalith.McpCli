@@ -1,0 +1,239 @@
+{
+  "head": "733fc7114a572758c67a0fdb2e55e128c1c3044b",
+  "baselineCommit": "a92a2969db6903b8c6cca7e437446167e135ec9d",
+  "inputs": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "44c22afabc3ece9be0063d5c0efe43d2fe083d9ddfe1831dd86cf72109ba0d1f",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "ad9d6ee2ae21f1ee91a8a49cb66e6a84b996eb9cc9b0eb8253b15768e914171b",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "c73de860eb15317959e221362bdcb646038c3beaa2fea7619f630bb9dfe95d83",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+    "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+    "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+  },
+  "commands": [
+    {
+      "name": "tests",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 75.713,
+      "stdout": {
+        "path": "review-pass3-final-20261114/tests.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/tests.stderr.txt",
+        "sha256": "44c328a688056f6a4c038514d47720734dfeaa56f53d9f765395f6132beda3ff"
+      }
+    },
+    {
+      "name": "lifecycle",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-c",
+        "from pathlib import Path; import importlib.util; p=Path('_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py'); s=importlib.util.spec_from_file_location('lifecycle58pass3final',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); raise SystemExit(m.main(delivery=Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-final-20261114')))"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 75.894,
+      "stdout": {
+        "path": "review-pass3-final-20261114/lifecycle.stdout.txt",
+        "sha256": "93b545b9712cf28e8fab79fc3c71ba0cf5ae5d25336b6161f66a58a21f635dea"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/lifecycle.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "inventory",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.3,
+      "stdout": {
+        "path": "review-pass3-final-20261114/inventory.stdout.txt",
+        "sha256": "51d77d50053d0b9714406efa30fa9cb49de704a10e686c9205e1a7d5c0a4437b"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/inventory.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "labels",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.29,
+      "stdout": {
+        "path": "review-pass3-final-20261114/labels.stdout.txt",
+        "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/labels.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "inventory-ascii-locale",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-X",
+        "utf8=0",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.263,
+      "environment": {
+        "LC_ALL": "C"
+      },
+      "stdout": {
+        "path": "review-pass3-final-20261114/inventory-ascii-locale.stdout.txt",
+        "sha256": "51d77d50053d0b9714406efa30fa9cb49de704a10e686c9205e1a7d5c0a4437b"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/inventory-ascii-locale.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "labels-ascii-locale",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-X",
+        "utf8=0",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.293,
+      "environment": {
+        "LC_ALL": "C"
+      },
+      "stdout": {
+        "path": "review-pass3-final-20261114/labels-ascii-locale.stdout.txt",
+        "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/labels-ascii-locale.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "ad23",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.039,
+      "stdout": {
+        "path": "review-pass3-final-20261114/ad23.stdout.txt",
+        "sha256": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/ad23.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "symlink-temp",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-c",
+        "from pathlib import Path\nimport importlib.util,os,tempfile,unittest\np=Path('_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py').resolve()\nwith tempfile.TemporaryDirectory() as directory:\n base=Path(directory); actual=base/'actual'; actual.mkdir(); alias=base/'alias'; alias.symlink_to(actual,target_is_directory=True)\n os.environ['TMPDIR']=str(alias); tempfile.tempdir=None\n s=importlib.util.spec_from_file_location('symlink58pass3final',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m)\n names=['LabelTests.test_label_artifact_path_guards_and_removal','LabelTests.test_completion_rejects_rewritten_published_artifacts_and_half_removal','LabelTests.test_completion_reports_later_owner_compatibility_drift','FixtureTests.test_lifecycle_proof_rejects_child_candidate_mutation_without_writes','FixtureTests.test_lifecycle_proof_rejects_child_workflow_mutation_without_writes']\n suite=unittest.defaultTestLoader.loadTestsFromNames(names,m); result=unittest.TextTestRunner(verbosity=2).run(suite)\n raise SystemExit(not result.wasSuccessful())\n"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.561,
+      "stdout": {
+        "path": "review-pass3-final-20261114/symlink-temp.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/symlink-temp.stderr.txt",
+        "sha256": "a64986cf8bbf78c0a5b753496ddac36eca2c9d518e16bac30f8556b610c4850e"
+      }
+    },
+    {
+      "name": "whitespace",
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "a92a2969db6903b8c6cca7e437446167e135ec9d"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.112,
+      "stdout": {
+        "path": "review-pass3-final-20261114/whitespace.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/whitespace.stderr.txt",
+        "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+      }
+    },
+    {
+      "name": "whitespace-untracked",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-c",
+        "import subprocess,sys\nfiles=subprocess.run(['git','ls-files','--others','--exclude-standard'],capture_output=True,text=True,check=True).stdout.split()\nbad=[]\nfor f in files:\n r=subprocess.run(['git','diff','--no-index','--check','--','/dev/null',f],capture_output=True,text=True)\n if r.stdout or r.returncode not in (0,1): bad.append(f+': '+(r.stdout+r.stderr).strip())\nprint(f'checked {len(files)} untracked files')\nprint('\\n'.join(bad),file=sys.stderr)\nraise SystemExit(1 if bad else 0)\n"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.128,
+      "stdout": {
+        "path": "review-pass3-final-20261114/whitespace-untracked.stdout.txt",
+        "sha256": "72d8707fe3583a3bb8409cd1fae0d0d39957b931f0f5865390140fa0ff349530"
+      },
+      "stderr": {
+        "path": "review-pass3-final-20261114/whitespace-untracked.stderr.txt",
+        "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+      }
+    }
+  ]
+}

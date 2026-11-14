@@ -1,0 +1,542 @@
+{
+  "isolation": "each run uses a fresh workspace_view(pending=False) copy; real sources are never written",
+  "baseline": {
+    "tests": [
+      "test_unknown_approval_decision",
+      "test_amendment_columns",
+      "test_anchor_escape",
+      "test_published_predecessor_tree_binding",
+      "test_story_status_and_metadata",
+      "test_entrypoints_decode",
+      "test_label_artifact_path",
+      "test_unknown_register_state",
+      "test_standalone_integrated",
+      "test_retained_authority",
+      "test_completion_rejects_rewritten",
+      "test_lifecycle_proof_rejects_child_workflow",
+      "test_lifecycle_proof_rejects_child_candidate",
+      "test_lifecycle_proof_rejects_changed_real_inputs",
+      "test_lifecycle_proof_rejects_child_label_mutation"
+    ],
+    "exitCode": 0,
+    "testsRan": 15,
+    "summary": [
+      "Ran 15 tests in 14.116s",
+      "OK"
+    ],
+    "assertions": [],
+    "stderrSha256": "e44b21132d4916964f7f77fcf2d7b8088849b04e50ffa8d7b35e98014cea8be5",
+    "elapsedSeconds": 14.235,
+    "passed": true
+  },
+  "mutations": [
+    {
+      "mutation": "verify_amendment.py:234 unknown approval decision",
+      "tests": [
+        "test_unknown_approval_decision"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 1.581s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: unknown approval decision\\n') != (0, 'PASS: folders: 161 entries, pinned de[185 chars], '')"
+      ],
+      "stderrSha256": "b69d7c55c2ee8ddf4fac67f201722baea94ef73f95380ffdecc39f740864232b",
+      "elapsedSeconds": 1.663,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:91 amendment columns",
+      "tests": [
+        "test_amendment_columns"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.203s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: folders:M03: amendment columns damaged\\n') != (0, 'PASS: folders: 161 entries, pinned de[184 chars], '')"
+      ],
+      "stderrSha256": "0cdfd0171d30ff0d9ffa6225efd098cc4065d88312a2223c22a7962567a568ce",
+      "elapsedSeconds": 0.287,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:111 legacy disposition",
+      "tests": [
+        "test_amendment_columns"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.232s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: folders:M03: legacy/amendme[22 chars]h\\n') != (0, 'PASS: folders: 161 entries, pinned de[184 chars], '')"
+      ],
+      "stderrSha256": "7ee2db97b785cabd23d0b9f04e4276b43aac4ef0e12fe5f34d836fedf06b9383",
+      "elapsedSeconds": 0.329,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:112 legacy coverage",
+      "tests": [
+        "test_amendment_columns"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.219s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: folders:M03: legacy/amendme[19 chars]h\\n') != (0, 'PASS: folders: 161 entries, pinned de[184 chars], '')"
+      ],
+      "stderrSha256": "0c7bf314557ad5c95054346bca16827edfed95c66433eb20bce0df1984ca8eb1",
+      "elapsedSeconds": 0.311,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:113 combined disposition",
+      "tests": [
+        "test_amendment_columns"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.208s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: folders:V07: combined dispo[14 chars]h\\n') != (0, 'PASS: folders: 161 entries, pinned de[184 chars], '')"
+      ],
+      "stderrSha256": "a1e726f1c9e2eb4ef25d2075d44c0cfb75a9f5ff3f63c49f470b2fceb3d834cc",
+      "elapsedSeconds": 0.29,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:131 anchor path escapes",
+      "tests": [
+        "test_anchor_escape"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 2.313s",
+        "FAILED (failures=2)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: folders:M03: anchor path escapes source\\n') != (0, 'PASS: folders: 161 entries, pinned de[184 chars], '')"
+      ],
+      "stderrSha256": "49f1307e4cbb3f343a4fb00c8520c5727a7926abece6932f8b0466d4946b6615",
+      "elapsedSeconds": 2.396,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:135 source anchor",
+      "tests": [
+        "test_anchor_escape"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 2.368s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: folders:M03: source anchor [15 chars]n\\n') != (0, 'PASS: folders: 161 entries, pinned de[184 chars], '')"
+      ],
+      "stderrSha256": "fd4d720d195b83f6bd7aa01a1d553d521e2380be8567d38dca4cf1bdf8b01c5d",
+      "elapsedSeconds": 2.452,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:199 historical predecessor inspection",
+      "tests": [
+        "test_published_predecessor_tree_binding"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.345s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: folders: cannot inspect his[25 chars]t\\n') != (0, 'PASS: folders: 161 entries, pinned de[184 chars], '')"
+      ],
+      "stderrSha256": "e3f235bf6603c2bff56b980832d72d28f3983aead0b8447dcf078146ed1393e6",
+      "elapsedSeconds": 0.426,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:246 frontmatter",
+      "tests": [
+        "test_story_status_and_metadata"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.198s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: folders: inventory frontmatter missing\\n') != (0, 'PASS: folders: 161 entries, pinned de[184 chars], '')"
+      ],
+      "stderrSha256": "452780ec1abca1202b104db08aadc511775758a954441ebb23fed55ae87fea0e",
+      "elapsedSeconds": 0.281,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:252 duplicate metadata",
+      "tests": [
+        "test_story_status_and_metadata"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.221s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: folders: damaged or duplicate metadata\\n') != (0, 'PASS: folders: 161 entries, pinned de[184 chars], '')"
+      ],
+      "stderrSha256": "8d2f5c76c5dffc1e53f6458ccb7014eca6fde9019ee4e1b70af75ec251e5fe12",
+      "elapsedSeconds": 0.301,
+      "detected": true
+    },
+    {
+      "mutation": "utf-8 reads reverted together (verify_amendment.py:265/285/286, build_candidate.py:357/512)",
+      "tests": [
+        "test_entrypoints_decode"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.359s",
+        "FAILED (failures=2)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (0, 'PASS: Story 5.7 register chain; PS10/[101 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [51 chars])\\n\")",
+        "AssertionError: Tuples differ: (0, 'PASS: folders: 161 entries, pinned de[184 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [51 chars])\\n\")"
+      ],
+      "stderrSha256": "8859597b2ccf02443772c1007ff20d1b638dd64978ffbae869941f34f53d4603",
+      "elapsedSeconds": 0.446,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:265 read alone reverted",
+      "tests": [
+        "test_entrypoints_decode"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.349s",
+        "FAILED (failures=2)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (0, 'PASS: Story 5.7 register chain; PS10/[101 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [51 chars])\\n\")",
+        "AssertionError: Tuples differ: (0, 'PASS: folders: 161 entries, pinned de[184 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [51 chars])\\n\")"
+      ],
+      "stderrSha256": "2a4a91473b55e4ef0c1e05361dda23c86528a689f865af31067fd2e36cf4a149",
+      "elapsedSeconds": 0.431,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:285 B.OLD read alone reverted",
+      "tests": [
+        "test_entrypoints_decode"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.394s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (0, 'PASS: folders: 161 entries, pinned de[184 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [52 chars])\\n\")"
+      ],
+      "stderrSha256": "07728e18bc6fd9c75693381df2f35af35a009e6a02bd3fd57d4ea868f6e63096",
+      "elapsedSeconds": 0.474,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:285 B.NEW read alone reverted",
+      "tests": [
+        "test_entrypoints_decode"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.360s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (0, 'PASS: folders: 161 entries, pinned de[184 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [52 chars])\\n\")"
+      ],
+      "stderrSha256": "10922553890176b3a643a1fc515083825b0868c92808568515886eb7a1e871e5",
+      "elapsedSeconds": 0.456,
+      "detected": true
+    },
+    {
+      "mutation": "verify_amendment.py:286 read alone reverted",
+      "tests": [
+        "test_entrypoints_decode"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.438s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (0, 'PASS: folders: 161 entries, pinned de[184 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [52 chars])\\n\")"
+      ],
+      "stderrSha256": "98b30d17de1d293c2c40d8a27a4d3b604856ea25e9e784e3537505b4a5d27d39",
+      "elapsedSeconds": 0.548,
+      "detected": true
+    },
+    {
+      "mutation": "build_candidate.py:357 read alone reverted",
+      "tests": [
+        "test_entrypoints_decode"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 1.245s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (0, 'PASS: folders: 161 entries, pinned de[184 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [52 chars])\\n\")"
+      ],
+      "stderrSha256": "7c5f52157962b4bd3765a8a9b7e3b379a59789d86993e020fd78b9efd6e637ef",
+      "elapsedSeconds": 1.326,
+      "detected": true
+    },
+    {
+      "mutation": "build_candidate.py:512 read alone reverted",
+      "tests": [
+        "test_entrypoints_decode"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 1.564s",
+        "FAILED (failures=2)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (0, 'PASS: Story 5.7 register chain; PS10/[101 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [53 chars])\\n\")",
+        "AssertionError: Tuples differ: (0, 'PASS: folders: 161 entries, pinned de[184 chars], '') != (1, '', \"FAIL: 'ascii' codec can't decode [53 chars])\\n\")"
+      ],
+      "stderrSha256": "7325128945f1219c128e5c47e7fec23c6bba9dfabc5d1f82b3f3dedd9330b077",
+      "elapsedSeconds": 1.641,
+      "detected": true
+    },
+    {
+      "mutation": "verify_labels.py:28 label artifact path",
+      "tests": [
+        "test_label_artifact_path"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.039s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: label artifact path missing\\n') != (1, '', \"FAIL: 'path'\\n\")"
+      ],
+      "stderrSha256": "da352ccab9f8f1ef3570c82b2d0ee09f5f95e0916bb8cb65c9fe512f2c483f43",
+      "elapsedSeconds": 0.117,
+      "detected": true
+    },
+    {
+      "mutation": "verify_labels.py:30 label path escapes",
+      "tests": [
+        "test_label_artifact_path"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.053s",
+        "FAILED (failures=2)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: label path escapes repository\\n') != (0, 'PASS: Story 5.7 register chain; PS10/[101 chars], '')"
+      ],
+      "stderrSha256": "f257a6909498c1deb30707e333a4cf4339552ffe89df133e535d742dc400af0a",
+      "elapsedSeconds": 0.134,
+      "detected": true
+    },
+    {
+      "mutation": "verify_labels.py:40 invalid register state",
+      "tests": [
+        "test_unknown_register_state"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.040s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: invalid label register state\\n') != (0, 'PASS: Story 5.7 register chain; PS10/[101 chars], '')"
+      ],
+      "stderrSha256": "81089db082865a1ff88aaa85123ede7e1712ce8fd76fb46127788d1efc73c2c1",
+      "elapsedSeconds": 0.126,
+      "detected": true
+    },
+    {
+      "mutation": "verify_labels.py:41 integrated-state trigger",
+      "tests": [
+        "test_standalone_integrated"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.057s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: completion requires exact-b[43 chars]s\\n') != (0, 'PASS: Story 5.7 register chain; PS10/[101 chars], '')"
+      ],
+      "stderrSha256": "66c682fd8f69a86f0df6d6d882b5eb9869cf6fe1795a62e1ff86a2e6c344eae8",
+      "elapsedSeconds": 0.149,
+      "detected": true
+    },
+    {
+      "mutation": "verify_labels.py:70 retained authority text",
+      "tests": [
+        "test_retained_authority"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.053s",
+        "FAILED (failures=3)"
+      ],
+      "assertions": [
+        "AssertionError: Tuples differ: (1, '', 'FAIL: PS10: retained technical au[32 chars]g\\n') != (0, 'PASS: Story 5.7 register chain; PS10/[101 chars], '')"
+      ],
+      "stderrSha256": "0c9eb4206a2654c1b290bc2f087b08b7f7d774a2647aae2792d2b3f730f9bba1",
+      "elapsedSeconds": 0.143,
+      "detected": true
+    },
+    {
+      "mutation": "verify_labels.py:89 origin/main half",
+      "tests": [
+        "test_completion_rejects_rewritten"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.171s",
+        "FAILED (failures=4)"
+      ],
+      "assertions": [
+        "AssertionError: 1 != 0",
+        "AssertionError: Tuples differ: (1, '', 'FAIL: _bmad-output/implementation[101 chars]s\\n') != (0, 'PASS: Story 5.7 register chain; PS10/[78 chars], '')",
+        "AssertionError: Tuples differ: (1, '', 'FAIL: _bmad-output/implementation[96 chars]s\\n') != (0, 'PASS: Story 5.7 register chain; PS10/[78 chars], '')"
+      ],
+      "stderrSha256": "b6c578f37fa56b08aa4d491bdc774d7d260d2302538bae4283f570d162475c4d",
+      "elapsedSeconds": 0.257,
+      "detected": true
+    },
+    {
+      "mutation": "verify_labels.py:89 inventoryRevision half",
+      "tests": [
+        "test_completion_rejects_rewritten"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.196s",
+        "FAILED (failures=4)"
+      ],
+      "assertions": [
+        "AssertionError: 1 != 0",
+        "AssertionError: Tuples differ: (1, '', 'FAIL: _bmad-output/implementation[101 chars]s\\n') != (0, 'PASS: Story 5.7 register chain; PS10/[78 chars], '')",
+        "AssertionError: Tuples differ: (1, '', 'FAIL: _bmad-output/implementation[96 chars]s\\n') != (0, 'PASS: Story 5.7 register chain; PS10/[78 chars], '')"
+      ],
+      "stderrSha256": "fbb54c0811ad42331b8fdae207104b41d820b2535f17d66a6c2c2ebdc7873dee",
+      "elapsedSeconds": 0.282,
+      "detected": true
+    },
+    {
+      "mutation": "lifecycle-proof.py post-child workflow bytes check reverted to completion_requested",
+      "tests": [
+        "test_lifecycle_proof_rejects_child_workflow"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.137s",
+        "FAILED (failures=2)"
+      ],
+      "assertions": [
+        "AssertionError: ValueError not raised"
+      ],
+      "stderrSha256": "8ab0de1003ca99614eb143e9fe170fb2f86688d47039ba85377239318a36150c",
+      "elapsedSeconds": 0.23,
+      "detected": true
+    },
+    {
+      "mutation": "lifecycle-proof.py post-child candidate bytes check removed",
+      "tests": [
+        "test_lifecycle_proof_rejects_child_candidate"
+      ],
+      "exitCode": 1,
+      "testsRan": 1,
+      "summary": [
+        "Ran 1 test in 0.069s",
+        "FAILED (failures=1)"
+      ],
+      "assertions": [
+        "AssertionError: ValueError not raised"
+      ],
+      "stderrSha256": "24f1ae40c3e46ab6a3613bae6a30909789612332d8d659e5e130c6a3306361b2",
+      "elapsedSeconds": 0.16,
+      "detected": true
+    },
+    {
+      "mutation": "lifecycle-proof.py sidecars written before integrity checks",
+      "tests": [
+        "test_lifecycle_proof_rejects_changed_real_inputs",
+        "test_lifecycle_proof_rejects_child_label_mutation",
+        "test_lifecycle_proof_rejects_child_workflow",
+        "test_lifecycle_proof_rejects_child_candidate"
+      ],
+      "exitCode": 1,
+      "testsRan": 4,
+      "summary": [
+        "Ran 4 tests in 0.346s",
+        "FAILED (failures=5)"
+      ],
+      "assertions": [
+        "AssertionError: Lists differ: [] != [PosixPath('/tmp/tmp8tjnwkl5/lifecycle-int[79 chars]xt')]",
+        "AssertionError: Lists differ: [] != [PosixPath('/tmp/tmpknp1ky04/lifecycle-int[79 chars]xt')]",
+        "AssertionError: Lists differ: [] != [PosixPath('/tmp/tmpl4iu5fg_/lifecycle-int[79 chars]xt')]",
+        "AssertionError: Lists differ: [] != [PosixPath('/tmp/tmpnbamp0ex/lifecycle-int[79 chars]xt')]",
+        "AssertionError: Lists differ: [] != [PosixPath('/tmp/tmpxo1v4grb/lifecycle-int[79 chars]xt')]"
+      ],
+      "stderrSha256": "a671cc8a87f0c8c81d743237e8d69f70cc67cd28fdab4bb84dfc06a230fa2b9d",
+      "elapsedSeconds": 0.444,
+      "detected": true
+    }
+  ],
+  "allDetected": true,
+  "realSourcesUnchanged": true,
+  "realSourceSha256": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "ad9d6ee2ae21f1ee91a8a49cb66e6a84b996eb9cc9b0eb8253b15768e914171b",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00"
+  }
+}

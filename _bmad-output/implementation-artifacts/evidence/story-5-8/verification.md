@@ -18,7 +18,9 @@ reconciliation remains an Epic 6 catalog hold.
 
 ## Reproduction prerequisites
 
-Run from the McpCli repository root with Python 3.9 or newer and Git. The approved label
+Run from the McpCli repository root with Python 3.9 or newer and Git. The unittest
+suite and the lifecycle proof require a UTF-8 locale; both verifier entrypoints
+also run under an ASCII locale (`-X utf8=0` with `LC_ALL=C`). The approved label
 register requires the existing absolute owner checkout
 `/home/administrator/projects/hexalith/folders`, with `origin` identifying
 `Hexalith/Hexalith.Folders`; the register is unchanged. That checkout must contain
@@ -30,7 +32,13 @@ local `origin/main` ref. Both delivery revisions must be ancestors of the
 respective local refs. The tests additionally use existing McpCli commits
 `85a5437b98d0e126147460ca1ee1fa6a36041a21` and
 `cab549c7b06fa4eef08e46cfcde038f62ea81fbf`, plus the published label-register
-revision `c3bd5b9a49b538282db14c5ee9780f63fe70c8b9`.
+revision `c3bd5b9a49b538282db14c5ee9780f63fe70c8b9`. The graph fixtures and the
+lifecycle proof also read the current McpCli `HEAD` and its first parent `HEAD^`,
+so the clone must contain both. In the owner checkout the graph fixtures also read
+the README base's parent `7eab70e9332c0573b50dce5b219e425b6a2d363c` (`583d3d49^`)
+and grandparent `6a8cf4f9e28786176d26522b41bb921e18b922da` (`583d3d49^^`). A
+shallow clone without these objects fails with a Git error; the tests have no
+skip branches.
 
 The root-declared `references/Hexalith.Folders` checkout must contain committed
 source objects for `7eab70e9332c0573b50dce5b219e425b6a2d363c` and published
@@ -38,7 +46,144 @@ ancestor `2236855ee181bdeed2a103537c66316a1612c792`. The unpublished original
 `e2252f29a2dba2b64786ee483eb59fbceaadd387` is optional. The verifiers read these
 local objects and refs; they do not fetch or perform network operations.
 
-## Final resumed-build verification (2026-11-14)
+## Final resumed pass-3 build verification (2026-11-14)
+
+All eight code-review-pass-3 patch entries and all eight build-review patch
+groups are complete. The parent's final verification passed **77 tests in
+75.575 seconds** in the ordinary workspace and **77 tests in 75.638 seconds** in
+the synthetic approved/integrated/done lifecycle workspace, with no skips. The
+lifecycle proof computed unchanged real inputs.
+
+The following also passed:
+
+- both real completion gates, under the default UTF-8 locale and under an ASCII locale;
+- AD-23 adoption;
+- five focused tests with a symlinked temporary-directory root: label-path escapes,
+  published-bytes halves, completion-mode owner drift, and the lifecycle candidate
+  and workflow refusals;
+- `git diff --check` against the baseline;
+- a `--no-index --check` of all 58 untracked files.
+
+The isolated-copy guard-removal report still detects all 27 mutations, and its
+recorded inputs equal the current sources.
+
+The [final command manifest](review-pass3-final-20261114/commands.json) binds all
+eleven executable inputs, exact commands, environments, exit codes and both
+stream hashes. The [closure audit](review-pass3-final-20261114/audit.json) was
+computed after the last command. It verifies all ten command streams, the passing
+tests for every matrix row, the protected bytes against `HEAD` and the frozen
+intent against the baseline.
+
+All three independent build-review layers completed. Their surviving findings
+formed eight patch groups:
+
+- two missing tests: the corrupt-predecessor guard and completion-mode drift;
+- the guard-removal helper's in-place mutation, detection rule and individual
+  encoding reverts;
+- the lifecycle candidate check;
+- the UTF-8 suite prerequisite;
+- the closure audit's scope.
+
+All eight were applied. One pre-existing approved-byte omission, the G3/G4 gate
+narrowing, is assigned to the K12 successor under its own ledger heading. The
+remaining findings were rejected with reasons in the spec triage log. Approved
+inventory, receipts, labels, production, dependencies, census and gitlinks are
+unchanged. This build session performed no commit or push, and no .NET build or
+live acceptance is claimed.
+
+Final scan command:
+`python3 -B scripts/scan-evidence-secrets.py _bmad-output/implementation-artifacts/evidence/story-5-8 --receipt _bmad-output/implementation-artifacts/evidence/story-5-8/secret-scan-review-pass3-final-20261114.json`.
+The [final receipt](secret-scan-review-pass3-final-20261114.json) is clean over
+266 files. Earlier captures and scans are historical.
+
+## Historical code-review pass 3 patch verification (2026-11-14)
+
+All eight pass-3 patch entries are implemented. The ordinary suite passed
+**75 tests in 81.438 seconds**, and the fresh synthetic approved/integrated/done
+lifecycle run passed **75 tests in 82.982 seconds**, with no skips. The
+lifecycle proof computed `realInputsUnchanged: true`. Both real completion
+verifiers, AD-23 adoption and the full-baseline whitespace check passed.
+
+New exact-stream refusal cases and removal controls cover:
+
+- an unknown approval decision, through the real entrypoint and in-process;
+  without the guard, `decision: "rejected"` reaches the pending PASS;
+- an unknown label-register state, through both entrypoints;
+- a standalone `verify_labels.py` run where only `state` is `integrated`. It
+  fails with the owner-approval diagnostic; deleting the integrated-state trigger
+  from the copied entrypoint yields the pending PASS;
+- inventory or receipt bytes rewritten at `origin/main` or at `inventoryRevision`.
+  Each half of the published-bytes condition is disabled separately, so each is
+  shown to be necessary.
+
+Each of the eleven backstopped guard sites that pass 3 listed now has a refusal
+case and a removal control:
+
+- inventory verifier: amendment columns; legacy disposition, coverage and
+  combined cells; relative and absolute anchor escapes; the source anchor;
+  frontmatter; and duplicate metadata;
+- label verifier: a missing artifact path, whose removal leaves only the
+  non-actionable `FAIL: 'path'`; absolute and relative path escapes that name the
+  exact approved bytes; and the technical-authority, gate and successor-hash text.
+
+The lifecycle proof now snapshots the fixture spec and sprint bytes after
+setting both to done and requires them unchanged after the child. A child that
+rewrites only one status, which still satisfies `completion_requested`, is
+refused. Stream sidecars are written only after every check passes. All three
+negative lifecycle tests require an empty delivery folder.
+
+All six verifier and builder text reads decode UTF-8 explicitly. A new test runs
+both entrypoints with `-X utf8=0` and `LC_ALL=C`, an ASCII locale, and requires
+the pending PASS. Both real completion gates also pass under that locale. Before
+the fix, both failed with `'ascii' codec can't decode byte 0xe2`. Two tests now
+use full commit SHAs, and the prerequisites above list every parent commit the
+graph tests read.
+
+The retained [guard-removal helper](review-pass3-20261114/guard-removal.py) applies
+27 mutations, each in a fresh isolated workspace copy, and never writes the real
+packet sources. They delete each new guard and the historical-predecessor
+inspection guard, revert each of the six encoding fixes individually and all of
+them together, and revert the three lifecycle fixes. An unmutated copy first
+passes all 15 selected tests. A mutation counts as detected only if at least one
+test ran and the run ends in a failures-only summary with an `AssertionError`;
+all 27 are detected. Its [report](review-pass3-20261114/guard-removal.json)
+records each result and shows the real source hashes unchanged.
+
+The [command manifest](review-pass3-20261114/commands.json) binds each command to
+the executable input hashes it ran with, plus its exact command, environment,
+exit code and both stream hashes. Three focused tests also passed with a
+symlinked temporary-directory root: the label-path escapes, the published-bytes
+halves and the lifecycle workflow refusal.
+
+Review follow-up (2026-11-14): new cases cover a corrupt original predecessor
+object (rev-parse exit 128), whose removal control shows the historical tree
+binding would otherwise be skipped, and completion-mode owner drift, which
+reports `differ from delivered candidate` and still passes. The lifecycle proof
+now also compares the fixture candidate bytes after the child, and a child that
+rewrites the candidate is refused with no files written. The guard-removal
+helper was rewritten to use isolated copies and the stricter detection rule; its
+earlier in-place capture is replaced. Only the 8 tests covering the edited files
+were rerun (all passed) together with the helper. The 75-test ordinary and
+lifecycle captures above predate this follow-up, which adds two tests, so the
+full suite now has 77 tests. Its full rerun belongs to the coordinator's
+verification. The [closure audit](review-pass3-20261114/audit.json) states which
+records ran with the current inputs.
+
+This session added no ledger entry; the resumed pass-3 build review then
+recorded the G3/G4 deferral above. The three pass-3 approved-byte and builder
+defers remain under their own ledger heading. Approved inventory, receipt, label
+register, label-patch and delivered README bytes are unchanged, as are
+production, dependencies, census and gitlinks. This session performed no commit
+or push. No .NET build or live acceptance is claimed for these documentary and
+Python-test changes.
+
+Pass-3 scan command:
+`python3 -B scripts/scan-evidence-secrets.py _bmad-output/implementation-artifacts/evidence/story-5-8 --receipt _bmad-output/implementation-artifacts/evidence/story-5-8/secret-scan-review-pass3-followup-20261114.json`.
+The [receipt](secret-scan-review-pass3-followup-20261114.json) binds the packet
+after the review follow-up; the first pass-3
+[receipt](secret-scan-review-pass3-20261114.json) and earlier scans are historical.
+
+## Historical resumed pass-2 build verification (2026-11-14)
 
 All ten pass-2 patch entries and four follow-up build-review patch groups are
 complete. Final verification passed **65 tests in 75.261 seconds** in the ordinary

@@ -44,6 +44,7 @@ def main(*, root=None, delivery=None):
         for path, key in [(fixture / B.SPEC, 'status'),
                           (fixture / B.ART / 'sprint-status.yaml', '  5-8-refresh-and-re-disposition-the-folders-inventory')]:
             module.workflow_status(path, key, 'done')
+        workflow = {path: (fixture / path).read_bytes() for path in [B.SPEC, B.ART / 'sprint-status.yaml']}
         module.V.require(module.V.read_json(approval_path)['decision'] == 'approved',
                          'synthetic lifecycle approval is not approved')
         module.V.require(module.V.read_json(labels_path)['state'] == 'integrated',
@@ -55,21 +56,24 @@ def main(*, root=None, delivery=None):
         command = [sys.executable, '-I', '-m', 'unittest', 'discover', '-v',
                    '-s', str(PACKET), '-p', 'test_*.py']
         result = subprocess.run(command, cwd=fixture, capture_output=True)
-        captures = {}
-        for stream in ['stdout', 'stderr']:
-            name = 'lifecycle-integrated.' + stream + '.txt'
-            data = getattr(result, stream)
-            (delivery / name).write_bytes(data)
-            captures[stream] = {'path': name, 'sha256': hashlib.sha256(data).hexdigest()}
+        streams = {stream: getattr(result, stream) for stream in ['stdout', 'stderr']}
+        captures = {stream: {'path': 'lifecycle-integrated.' + stream + '.txt', 'sha256': hashlib.sha256(data).hexdigest()}
+                    for stream, data in streams.items()}
         after_fixture = module.V.read_json(approval_path), module.V.read_json(labels_path)
         module.V.require(after_fixture[0] == approval and after_fixture[1] == labels,
                          'synthetic lifecycle receipt or labels changed during child run')
-        module.V.require(module.V.completion_requested(fixture, False),
+        module.V.require(all((fixture / path).read_bytes() == data for path, data in workflow.items()),
                          'synthetic lifecycle workflow changed during child run')
+        module.V.require((fixture / B.NEW).read_bytes() == before[str(B.NEW)],
+                         'synthetic lifecycle candidate bytes changed during child run')
     after = {str(path): (root / path).read_bytes() for path in protected}
     real_inputs_unchanged = before == after
     if not real_inputs_unchanged:
         raise ValueError('real candidate/receipt/workflow bytes changed')
+    # Sidecars are written only after every integrity check, so a refusal never
+    # leaves captures that disagree with a retained summary.
+    for stream, data in streams.items():
+        (delivery / captures[stream]['path']).write_bytes(data)
     summary = {'suiteExitCode': result.returncode,
                'claim': 'Suite independence from synthetic lifecycle metadata; real approved-completion is verified separately.',
                'sourceFixture': 'approved / integrated / spec done / sprint done',

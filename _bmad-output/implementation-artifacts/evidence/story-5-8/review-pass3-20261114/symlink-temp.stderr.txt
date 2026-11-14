@@ -1,0 +1,8 @@
+test_label_artifact_path_guards_and_removal (symlink58pass3.LabelTests.test_label_artifact_path_guards_and_removal) ... ok
+test_completion_rejects_rewritten_published_artifacts_and_half_removal (symlink58pass3.LabelTests.test_completion_rejects_rewritten_published_artifacts_and_half_removal) ... ok
+test_lifecycle_proof_rejects_child_workflow_mutation_without_writes (symlink58pass3.FixtureTests.test_lifecycle_proof_rejects_child_workflow_mutation_without_writes) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.378s
+
+OK

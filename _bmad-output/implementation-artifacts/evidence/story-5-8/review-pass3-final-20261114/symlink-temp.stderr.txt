@@ -1,0 +1,10 @@
+test_label_artifact_path_guards_and_removal (symlink58pass3final.LabelTests.test_label_artifact_path_guards_and_removal) ... ok
+test_completion_rejects_rewritten_published_artifacts_and_half_removal (symlink58pass3final.LabelTests.test_completion_rejects_rewritten_published_artifacts_and_half_removal) ... ok
+test_completion_reports_later_owner_compatibility_drift (symlink58pass3final.LabelTests.test_completion_reports_later_owner_compatibility_drift) ... ok
+test_lifecycle_proof_rejects_child_candidate_mutation_without_writes (symlink58pass3final.FixtureTests.test_lifecycle_proof_rejects_child_candidate_mutation_without_writes) ... ok
+test_lifecycle_proof_rejects_child_workflow_mutation_without_writes (symlink58pass3final.FixtureTests.test_lifecycle_proof_rejects_child_workflow_mutation_without_writes) ... ok
+
+----------------------------------------------------------------------
+Ran 5 tests in 0.482s
+
+OK

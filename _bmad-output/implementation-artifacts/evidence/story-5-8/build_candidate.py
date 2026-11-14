@@ -354,7 +354,7 @@ def drift_evidence(root, key):
 def candidate(root):
     parser = load(root, 'classmap58build', ART / 'evidence/story-5-2/verify_class_map.py')
     _, rows = parser.inventory_rows(root / OLD)
-    mapping = json.loads((root / AD / 'AD-23-capability-class-map.json').read_text())
+    mapping = json.loads((root / AD / 'AD-23-capability-class-map.json').read_text(encoding='utf-8'))
     inv = next(i for i in mapping['inventories'] if i['path'] == str(OLD))
     classes = {c['id']: c for c in mapping['classes']}
     entries = {r['id']: r['classId'] for r in inv['rows']}
@@ -509,7 +509,7 @@ def compatibility_section(data):
 
 
 def label_candidate(root, digest):
-    prior = json.loads((root / ART / 'evidence/story-5-7/labels.json').read_text())
+    prior = json.loads((root / ART / 'evidence/story-5-7/labels.json').read_text(encoding='utf-8'))
     repo = next(r for r in prior['repositories'] if r['name'] == 'folders')
     owner = Path(repo['ownerCheckout'])
     before = git(owner, 'show', LABEL_PIN + ':README.md')

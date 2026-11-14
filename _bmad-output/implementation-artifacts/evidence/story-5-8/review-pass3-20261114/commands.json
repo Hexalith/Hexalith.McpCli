@@ -1,0 +1,486 @@
+{
+  "head": "733fc7114a572758c67a0fdb2e55e128c1c3044b",
+  "baselineCommit": "a92a2969db6903b8c6cca7e437446167e135ec9d",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8",
+        "-p",
+        "test_*.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 81.595,
+      "stdout": {
+        "path": "review-pass3-20261114/tests.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/tests.stderr.txt",
+        "sha256": "8b972b3ed52c69b4fc30cea8247f87030461c451f4242d84237405fe2baa2013"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-c",
+        "from pathlib import Path; import importlib.util; p=Path('_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py'); s=importlib.util.spec_from_file_location('lifecycle58pass3',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); raise SystemExit(m.main(delivery=Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114')))"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 83.269,
+      "stdout": {
+        "path": "review-pass3-20261114/lifecycle.stdout.txt",
+        "sha256": "041c3a224309da2bf7c710f45ddf2a71bc8a3c547cb42c69dbfb850e7c6460ac"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/lifecycle.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.37,
+      "stdout": {
+        "path": "review-pass3-20261114/inventory.stdout.txt",
+        "sha256": "51d77d50053d0b9714406efa30fa9cb49de704a10e686c9205e1a7d5c0a4437b"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/inventory.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.398,
+      "stdout": {
+        "path": "review-pass3-20261114/labels.stdout.txt",
+        "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/labels.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-X",
+        "utf8=0",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.4,
+      "environment": {
+        "LC_ALL": "C"
+      },
+      "stdout": {
+        "path": "review-pass3-20261114/inventory-ascii-locale.stdout.txt",
+        "sha256": "51d77d50053d0b9714406efa30fa9cb49de704a10e686c9205e1a7d5c0a4437b"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/inventory-ascii-locale.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-X",
+        "utf8=0",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.358,
+      "environment": {
+        "LC_ALL": "C"
+      },
+      "stdout": {
+        "path": "review-pass3-20261114/labels-ascii-locale.stdout.txt",
+        "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/labels-ascii-locale.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.041,
+      "stdout": {
+        "path": "review-pass3-20261114/ad23.stdout.txt",
+        "sha256": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/ad23.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-c",
+        "from pathlib import Path\nimport importlib.util,os,tempfile,unittest\np=Path('_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py').resolve()\nwith tempfile.TemporaryDirectory() as directory:\n base=Path(directory); actual=base/'actual'; actual.mkdir(); alias=base/'alias'; alias.symlink_to(actual,target_is_directory=True)\n os.environ['TMPDIR']=str(alias); tempfile.tempdir=None\n s=importlib.util.spec_from_file_location('symlink58pass3',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m)\n names=['LabelTests.test_label_artifact_path_guards_and_removal','LabelTests.test_completion_rejects_rewritten_published_artifacts_and_half_removal','FixtureTests.test_lifecycle_proof_rejects_child_workflow_mutation_without_writes']\n suite=unittest.defaultTestLoader.loadTestsFromNames(names,m); result=unittest.TextTestRunner(verbosity=2).run(suite)\n raise SystemExit(not result.wasSuccessful())\n"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.459,
+      "stdout": {
+        "path": "review-pass3-20261114/symlink-temp.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/symlink-temp.stderr.txt",
+        "sha256": "6de849bfa63cfc06cf21b6a45cd9ac2152fc30588ac992f6c1d88c012feaab6e"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "a92a2969db6903b8c6cca7e437446167e135ec9d"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.121,
+      "stdout": {
+        "path": "review-pass3-20261114/whitespace.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/whitespace.stderr.txt",
+        "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.644,
+      "stdout": {
+        "path": "review-pass3-20261114/inventory-after-closure.stdout.txt",
+        "sha256": "51d77d50053d0b9714406efa30fa9cb49de704a10e686c9205e1a7d5c0a4437b"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/inventory-after-closure.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 1.696,
+      "stdout": {
+        "path": "review-pass3-20261114/labels-after-closure.stdout.txt",
+        "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/labels-after-closure.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "a92a2969db6903b8c6cca7e437446167e135ec9d"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "elapsedSeconds": 0.149,
+      "stdout": {
+        "path": "review-pass3-20261114/whitespace-after-closure.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/whitespace-after-closure.stderr.txt",
+        "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+      },
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "785150b1656c4b27d90da4650d2d2b3b1b9b582db700d1680570659209fe5781",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "5142b0b9e87c7228815e888404b4f035b864edecc99d5aa9abdfe90a263465a8",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "7222290cc44a46835e32ddedfd3253d182737cdd34adce109f395df0e557d2d1",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8",
+        "-p",
+        "test_*.py",
+        "-k",
+        "test_published_predecessor_tree_binding",
+        "-k",
+        "test_completion_reports_later_owner",
+        "-k",
+        "test_lifecycle_proof"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "44c22afabc3ece9be0063d5c0efe43d2fe083d9ddfe1831dd86cf72109ba0d1f",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "ad9d6ee2ae21f1ee91a8a49cb66e6a84b996eb9cc9b0eb8253b15768e914171b",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "c73de860eb15317959e221362bdcb646038c3beaa2fea7619f630bb9dfe95d83",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      },
+      "exitCode": 0,
+      "elapsedSeconds": 1.033,
+      "stdout": {
+        "path": "review-pass3-20261114/targeted.stdout.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/targeted.stderr.txt",
+        "sha256": "5052a8de44adfd00839b3d507143c7c35b86660b287a717626e500611305898f"
+      }
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "inputs": {
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py": "8297c1d38fd29a72d78d861895dabf7958cd5002a1d84371234de50b838048b5",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py": "02b633c0c76c105dfbf3a9775fe3f029f561a0b66005bff0ca70fbfbff6eb014",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py": "d22627ce00f2aeed257eddef31ada4b6f1c6f69b92e9825aa96338b293152b00",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/test_verify_amendment.py": "44c22afabc3ece9be0063d5c0efe43d2fe083d9ddfe1831dd86cf72109ba0d1f",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/delivery/lifecycle-proof.py": "ad9d6ee2ae21f1ee91a8a49cb66e6a84b996eb9cc9b0eb8253b15768e914171b",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass3-20261114/guard-removal.py": "c73de860eb15317959e221362bdcb646038c3beaa2fea7619f630bb9dfe95d83",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "644111a06e999fa25cf3219d5175def259ca827229fbfc9400bec3887369a715",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_labels.py": "fb36789c38ad4bc999eca679c1121b44d88a2f080f678e74bdcc2da0ae28f655",
+        "_bmad-output/implementation-artifacts/evidence/story-5-7/verify_amendments.py": "c988824b7135b611f325e73b5527d2131cfb20d4962f5e6d5a5ef1f8d89e0f8a",
+        "scripts/scan-evidence-secrets.py": "9ff59a9c06c106185ac129a516fcbd2f35ea0d0243b6f015361f3b2450378f1b",
+        "scripts/evidence_redaction.py": "a8f9aaad4c7a24b2175704475daedf82a1d7b76b6b764d7a2810b597be6254b7"
+      },
+      "exitCode": 0,
+      "elapsedSeconds": 31.272,
+      "stdout": {
+        "path": "review-pass3-20261114/guard-removal.stdout.txt",
+        "sha256": "6df1d5b70292c374c7f9b0e83307f33c5a20bbd23d61c1ce8715e6c40ef8ced2"
+      },
+      "stderr": {
+        "path": "review-pass3-20261114/guard-removal.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 """Exact-stream damaged-input tests and live-global guard-removal controls."""
+import codecs
 import contextlib
 import copy
 import importlib.util
@@ -86,7 +87,12 @@ def pinned_observation(run):
     return current
 
 
-def fixture_process(script,*args):
+def ascii_locale():
+    """Interpreter flags and environment for a non-UTF-8 (ASCII) locale child."""
+    return ['-X','utf8=0'],dict(os.environ,LC_ALL='C')
+
+
+def fixture_process(script,*args,non_utf8=False):
     # Pin only the observational current-owner read in the child as well. Every
     # source/hash/ancestry guard still executes through the actual entrypoint.
     runner = '''import runpy, subprocess, sys
@@ -102,7 +108,8 @@ script = sys.argv[3]
 sys.argv = sys.argv[3:]
 runpy.run_path(script, run_name='__main__')
 '''
-    return subprocess.run([sys.executable,'-I','-c',runner,B.LABEL_PIN,registered_owner(),str(script),*args],capture_output=True,text=True)
+    flags,env = ascii_locale() if non_utf8 else ([],None)
+    return subprocess.run([sys.executable,'-I',*flags,'-c',runner,B.LABEL_PIN,registered_owner(),str(script),*args],capture_output=True,text=True,env=env)
 
 
 @contextlib.contextmanager
@@ -269,7 +276,7 @@ class FixtureTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError,'^real candidate/receipt/workflow bytes changed$'):
                 proof.main(delivery=delivery)
             self.assertEqual(2,snapshots)
-            self.assertFalse((delivery/'lifecycle-integrated.json').exists())
+            self.assertEqual([],list(delivery.iterdir()))
 
     def test_lifecycle_proof_rejects_child_label_mutation_under_optimization(self):
         proof = load('lifecycle58childmutation','delivery/lifecycle-proof.py')
@@ -288,7 +295,41 @@ class FixtureTests(unittest.TestCase):
             delivery = Path(temp).resolve()
             with self.assertRaisesRegex(ValueError,'^synthetic lifecycle receipt or labels changed during child run$'):
                 proof.main(delivery=delivery)
-            self.assertFalse((delivery/'lifecycle-integrated.json').exists())
+            self.assertEqual([],list(delivery.iterdir()))
+
+    def test_lifecycle_proof_rejects_child_candidate_mutation_without_writes(self):
+        proof = load('lifecycle58candidate','delivery/lifecycle-proof.py')
+        run = subprocess.run
+        def child(command,**kwargs):
+            if command[:5] == [sys.executable,'-I','-m','unittest','discover']:
+                path = kwargs['cwd']/B.NEW
+                path.write_bytes(path.read_bytes()+b'Unapproved child prose.\n')
+                return subprocess.CompletedProcess(command,0,b'',b'')
+            return run(command,**kwargs)
+        with tempfile.TemporaryDirectory() as temp,patch.object(subprocess,'run',side_effect=child):
+            delivery = Path(temp).resolve()
+            with self.assertRaisesRegex(ValueError,'^synthetic lifecycle candidate bytes changed during child run$'):
+                proof.main(delivery=delivery)
+            self.assertEqual([],list(delivery.iterdir()))
+
+    def test_lifecycle_proof_rejects_child_workflow_mutation_without_writes(self):
+        # Either status alone still satisfies completion_requested, so the
+        # helper must compare both workflow files' bytes after the child.
+        for path,key in [(B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory'),(B.SPEC,'status')]:
+            with self.subTest(path=path):
+                proof = load('lifecycle58workflow','delivery/lifecycle-proof.py')
+                run = subprocess.run
+                def child(command,**kwargs):
+                    if command[:5] == [sys.executable,'-I','-m','unittest','discover']:
+                        workflow_status(kwargs['cwd']/path,key,'review')
+                        self.assertTrue(V.completion_requested(kwargs['cwd'],False))
+                        return subprocess.CompletedProcess(command,0,b'',b'')
+                    return run(command,**kwargs)
+                with tempfile.TemporaryDirectory() as temp,patch.object(subprocess,'run',side_effect=child):
+                    delivery = Path(temp).resolve()
+                    with self.assertRaisesRegex(ValueError,'^synthetic lifecycle workflow changed during child run$'):
+                        proof.main(delivery=delivery)
+                    self.assertEqual([],list(delivery.iterdir()))
 
 
 class PendingCase(unittest.TestCase):
@@ -401,6 +442,44 @@ class AmendmentTests(PendingCase):
         rows = SelectedRows(copy.deepcopy(self.new))
         rows['C02']['cells'][rows['C02']['headers'].index('Amendment disposition')] = 'defer'
         self.guard(lambda:self.rows(rows),'folders:M03: target disposition inheritance mismatch')
+
+    def test_amendment_columns_and_legacy_disposition_guard_removal(self):
+        rows = copy.deepcopy(self.new)
+        rows['M03']['headers'][-1] = 'Drift note'
+        self.guard(lambda:self.rows(rows),'folders:M03: amendment columns damaged')
+        for key,header,value,message in [
+            ('M03','Disposition','defer','legacy/amendment disposition mismatch'),
+            ('M03','Coverage','exclude','legacy/amendment coverage mismatch'),
+            ('V07','Disposition / coverage','defer / include','combined disposition mismatch'),
+        ]:
+            with self.subTest(key=key,header=header):
+                rows = self.changed(key,header,value)
+                self.guard(lambda:self.rows(rows),f'folders:{key}: {message}')
+
+    def test_unknown_approval_decision_entrypoints_and_guard_removal(self):
+        path = self.root/B.E/'approval.json'
+        receipt = V.read_json(path)
+        receipt['decision'] = 'rejected'
+        path.write_text(json.dumps(receipt,indent=2)+'\n')
+        expected = (1,'','FAIL: unknown approval decision\n')
+        result = fixture_process(HERE/'verify_amendment.py','--root',str(self.root))
+        self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
+        self.assertEqual(expected,invoke(V))
+        original = V.require
+        def removed(condition,actual):
+            if actual != 'unknown approval decision': original(condition,actual)
+        with patch.object(V,'require',side_effect=removed):
+            self.assertEqual((0,PASS.replace('owner decision: pending;','owner decision: rejected;'),''),invoke(V))
+
+    def test_entrypoints_decode_utf8_under_non_utf8_locale(self):
+        flags,env = ascii_locale()
+        probe = subprocess.run([sys.executable,'-I',*flags,'-c','import locale; print(locale.getpreferredencoding(False))'],capture_output=True,text=True,env=env)
+        self.assertNotEqual('utf-8',codecs.lookup(probe.stdout.strip()).name)
+        self.assertIn('–',(ROOT/B.NEW).read_text(encoding='utf-8'))
+        for name,expected in [('verify_amendment.py',PASS),('verify_labels.py',LABEL_PASS)]:
+            with self.subTest(script=name):
+                result = fixture_process(HERE/name,'--root',str(self.root),non_utf8=True)
+                self.assertEqual((0,expected,''),(result.returncode,result.stdout,result.stderr))
 
     def test_preserved_authority_and_adoption_guard_removal(self):
         git = B.git
@@ -517,6 +596,11 @@ class AmendmentTests(PendingCase):
         self.guard(lambda:self.rows(rows),'folders:G4: story/status or corrected prerequisite premise mismatch')
         text = (ROOT/B.NEW).read_text().replace(B.PIN,'0'*40,1)
         self.guard(lambda:V.check_metadata(text),'folders: candidate metadata/pin/approval state mismatch')
+        text = (ROOT/B.NEW).read_text(encoding='utf-8')
+        self.guard(lambda:V.check_metadata('\n'+text),'folders: inventory frontmatter missing')
+        self.assertEqual(1,text.count('\nmodule: folders\n'))
+        duplicated = text.replace('\nmodule: folders\n','\nmodule: folders\nmodule: folders\n',1)
+        self.guard(lambda:V.check_metadata(duplicated),'folders: damaged or duplicate metadata')
 
     def approval(self,receipt,complete=False):
         V.check_approval(receipt,self.receipt['artifacts'],self.receipt['pinnedArtifacts'],self.receipt['amendment'],complete)
@@ -630,6 +714,13 @@ class AmendmentTests(PendingCase):
                 # that object has been pruned from this checkout.
                 with patch.object(subprocess,'run',side_effect=present),patch.object(B,'git',side_effect=changed):
                     self.guard(lambda:V.check_source_drift(ROOT,self.surface),message)
+        # A corrupt original object (exit 128) must not silently skip its tree binding.
+        def corrupt(command,*args,**kwargs):
+            if command == ['git','-C',str(ROOT/B.REPO),'rev-parse','--verify','--quiet',B.OLD_PIN+'^{commit}']:
+                return subprocess.CompletedProcess(command,128,b'',b'fatal: corrupt')
+            return run(command,*args,**kwargs)
+        with patch.object(subprocess,'run',side_effect=corrupt):
+            self.guard(lambda:V.check_source_drift(ROOT,self.surface),'folders: cannot inspect historical predecessor object')
 
     def test_published_predecessor_survives_missing_historical_commit(self):
         run,source = subprocess.run,B.source
@@ -874,6 +965,22 @@ def source(root, path, pin=PIN):
                         self.assertEqual((0,PASS,''),invoke(V))
                         self.assertEqual((0,LABEL_PASS,''),invoke(L))
 
+    def test_anchor_escape_and_source_anchor_guard_removal(self):
+        evidence,source = B.evidence,B.source
+        for escaped in ['../outside/FolderTools.cs','/outside/FolderTools.cs']:
+            with self.subTest(path=escaped):
+                anchor = escaped+':1'
+                rows = self.changed('M03','Pinned evidence','`'+anchor+'`')
+                rows['M03']['cells'][7] = '`'+anchor+'`'
+                def resolved(root,path,pin=B.PIN):
+                    # A reader that resolves the escaping path leaves only this guard.
+                    return 'escaped source line\n' if path == escaped else source(root,path,pin)
+                with patch.object(B,'evidence',side_effect=lambda root,key,*args:anchor if key == 'M03' else evidence(root,key,*args)),patch.object(B,'source',side_effect=resolved):
+                    self.guard(lambda:V.check_anchors(ROOT,self.old,rows,self.decl,self.surface),'folders:M03: anchor path escapes source')
+        rows = copy.deepcopy(self.new)
+        rows['M03']['cells'][7] = '`src/Hexalith.Folders.Mcp/Tools/FolderTools.cs:1`'
+        self.guard(lambda:V.check_anchors(ROOT,self.old,rows,self.decl,self.surface),'folders:M03: source anchor differs from pin')
+
     def test_unresolvable_anchor_and_wrong_g_story_status_controls(self):
         rows = self.changed('M03','Pinned evidence','`src/Hexalith.Folders.Mcp/Tools/FolderTools.cs:999999`')
         rows['M03']['cells'][7] = V.fields(rows['M03'])['Pinned evidence']
@@ -917,14 +1024,16 @@ class LabelTests(PendingCase):
     def reject(self,register,message):
         self.assertEqual((1,'','FAIL: '+message+'\n'),self.invoke_register(register))
 
-    def guard(self,register,message):
+    def guard(self,register,message,*,backstop=None):
+        """Remove the live guard; a backstopped guard must yield its later refusal."""
         self.reject(register,message)
         original = L.require
         def removed(condition,actual):
             if actual != message: original(condition,actual)
         self.assertIs(L.verify.__globals__,L.__dict__)
         with patch.object(L,'require',side_effect=removed):
-            self.assertEqual((0,LABEL_PASS,''),self.invoke_register(register))
+            expected = (0,LABEL_PASS,'') if backstop is None else (1,'','FAIL: '+backstop+'\n')
+            self.assertEqual(expected,self.invoke_register(register))
 
     def test_register_schema_repository_base_and_readme_hash_guard_removal(self):
         cases = []
@@ -938,6 +1047,63 @@ class LabelTests(PendingCase):
         for register,message in cases:
             with self.subTest(message=message,repository=register['repository']):
                 self.guard(register,message)
+
+    def test_unknown_register_state_entrypoints_and_guard_removal(self):
+        register = copy.deepcopy(self.register); register['state'] = 'withdrawn'
+        self.guard(register,'invalid label register state')
+        (self.root/B.E/'labels.json').write_text(json.dumps(register,indent=2)+'\n')
+        for script in ['verify_amendment.py','verify_labels.py']:
+            with self.subTest(script=script):
+                result = fixture_process(HERE/script,'--root',str(self.root))
+                self.assertEqual((1,'','FAIL: invalid label register state\n'),(result.returncode,result.stdout,result.stderr))
+
+    def test_standalone_integrated_register_forces_owner_approval_and_trigger_removal(self):
+        register = copy.deepcopy(self.register); register['state'] = 'integrated'
+        (self.root/B.E/'labels.json').write_text(json.dumps(register,indent=2)+'\n')
+        self.assertFalse(V.completion_requested(self.root,False))
+        expected = (1,'','FAIL: completion requires exact-byte owner approval and covered Folders roles\n')
+        self.assertEqual(expected,invoke(L))
+        script = self.root/B.E/'verify_labels.py'
+        result = fixture_process(script,'--root',str(self.root))
+        self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
+        # Delete only the integrated-state trigger from the copied real entrypoint.
+        source = script.read_text(encoding='utf-8')
+        trigger = "register.get('state') == 'integrated' or "
+        self.assertEqual(1,source.count(trigger))
+        script.write_text(source.replace(trigger,''),encoding='utf-8')
+        result = fixture_process(script,'--root',str(self.root))
+        self.assertEqual((0,LABEL_PASS,''),(result.returncode,result.stdout,result.stderr))
+
+    def test_label_artifact_path_guards_and_removal(self):
+        register = copy.deepcopy(self.register); del register['repository']['before']['path']
+        # Without its guard the damage is refused only by a non-actionable KeyError.
+        self.guard(register,'label artifact path missing',backstop="'path'")
+        item = self.register['repository']['before']
+        with tempfile.TemporaryDirectory() as temp:
+            outside = Path(temp).resolve()/'README.before.section.md'
+            shutil.copyfile(self.root/item['path'],outside)
+            # Both escapes name the exact approved bytes, so only the guard refuses them.
+            for escaped in [str(self.root/item['path']),os.path.relpath(outside,self.root)]:
+                with self.subTest(path=escaped):
+                    register = copy.deepcopy(self.register); register['repository']['before']['path'] = escaped
+                    self.guard(register,'label path escapes repository')
+
+    def test_retained_authority_and_successor_hash_text_guard_removal(self):
+        expected,files = L.B.label_candidate(self.root,B.sha((self.root/B.NEW).read_bytes()))
+        row = self.register['rows'][0]
+        for before,after in [('[technical-tools inventory 1.0.3]','[technical-tools inventory]'),
+                             (row['gate'],'removal gate omitted'),
+                             ('Folders inventory SHA-256: `','Folders inventory digest: `')]:
+            with self.subTest(text=before):
+                self.assertIn(before,row['label']['text'])
+                register = copy.deepcopy(self.register)
+                label = register['rows'][0]['label']
+                label['text'] = label['text'].replace(before,after)
+                # The builder target carries the same damage, so only this guard refuses it.
+                target = copy.deepcopy(expected)
+                next(r for r in target['rows'] if r['id'] == row['id'])['label'] = copy.deepcopy(label)
+                with patch.object(L.B,'label_candidate',return_value=(target,files)):
+                    self.guard(register,row['id']+': retained technical authority or successor hash missing')
 
     def test_exact_readme_patch_guard_removal(self):
         register = copy.deepcopy(self.register)
@@ -1038,14 +1204,14 @@ class LabelTests(PendingCase):
 
     def test_real_publication_rejects_revision_before_inventory(self):
         with self.published_graph_fixture() as (register,owner,git):
-            revision = git(ROOT,'rev-parse','85a5437^{commit}').decode().strip()
+            revision = git(ROOT,'rev-parse','85a5437b98d0e126147460ca1ee1fa6a36041a21^{commit}').decode().strip()
             register['inventoryRevision'] = revision
             message = f"git show {revision}:{B.NEW} failed: fatal: path '{B.NEW}' exists on disk, but not in '{revision}'"
             self.assertEqual((1,'','FAIL: '+message+'\n'),self.invoke_register(register,True))
 
     def test_real_publication_rejects_pending_receipt_and_guard_removal(self):
         with self.published_graph_fixture() as (register,owner,git):
-            register['inventoryRevision'] = git(ROOT,'rev-parse','cab549c^{commit}').decode().strip()
+            register['inventoryRevision'] = git(ROOT,'rev-parse','cab549c7b06fa4eef08e46cfcde038f62ea81fbf^{commit}').decode().strip()
             self.published_guard_control(register,f'{B.E}/approval.json: published artifact differs from owner-approved bytes')
 
     def test_real_delivery_rejects_old_readme_and_guard_removal(self):
@@ -1140,6 +1306,17 @@ class LabelTests(PendingCase):
             with patch.object(L.B,'LABEL_PIN',historical),patch.object(L.B,'label_candidate',return_value=(expected,files)),patch.object(L.V,'verify_owner_packet',return_value=None):
                 yield register,committed,owner,published,delivery,inventory,original
 
+    def test_completion_reports_later_owner_compatibility_drift(self):
+        integrated = LABEL_PASS.replace('candidate only; owner approval and delivery pending','integrated delivery verified')
+        with self.existing_graph_fixture() as (register,committed,owner,published,delivery,inventory,original):
+            self.assertIn(b'They are not retired',committed(owner,'show','origin/main:README.md'))
+            def relabelled(repo,*args):
+                data = committed(repo,*args)
+                return data.replace(b'They are not retired',b'They remain unretired') if repo == owner and args == ('show','origin/main:README.md') else data
+            with patch.object(L.B,'git',side_effect=relabelled):
+                self.assertEqual((0,integrated,'reported: folders: current origin/main compatibility labels differ from delivered candidate\n'),
+                                 self.invoke_register(register,True))
+
     def test_source_commit_before_valid_readme_delivery_is_allowed(self):
         with self.existing_graph_fixture() as (register,committed,owner,published,delivery,inventory,original):
             # Historical base -> delivery contains an intervening source change;
@@ -1148,6 +1325,29 @@ class LabelTests(PendingCase):
             self.assertEqual(['README.md'],original(owner,'diff','--name-only',delivery+'^',delivery).decode().splitlines())
             with patch.object(L.B,'git',side_effect=committed):
                 self.assertEqual((0,LABEL_PASS.replace('candidate only; owner approval and delivery pending','integrated delivery verified'),''),self.invoke_register(register,True))
+
+    def test_completion_rejects_rewritten_published_artifacts_and_half_removal(self):
+        integrated = LABEL_PASS.replace('candidate only; owner approval and delivery pending','integrated delivery verified')
+        halves = {'inventory':"B.sha(B.git(root,'show',f'{inv_revision}:{path}')) == digest",
+                  'origin/main':"B.sha(B.git(root,'show',f'origin/main:{path}')) == digest"}
+        condition = halves['inventory']+' and '+halves['origin/main']
+        for path in [B.NEW,B.E/'approval.json']:
+            for ref,half in halves.items():
+                with self.subTest(path=path,ref=ref),self.existing_graph_fixture() as (register,committed,owner,published,delivery,inventory,original):
+                    revision = inventory if ref == 'inventory' else 'origin/main'
+                    def rewritten(repo,*args):
+                        data = committed(repo,*args)
+                        return data+b'rewritten after owner approval\n' if repo == self.root and args == ('show',f'{revision}:{path}') else data
+                    with patch.object(L.B,'git',side_effect=rewritten):
+                        self.assertEqual((1,'',f'FAIL: {path}: published artifact differs from owner-approved bytes\n'),self.invoke_register(register,True))
+                        # Disable only this half; the other publication read stays enforced.
+                        source = inspect.getsource(L.verify)
+                        self.assertEqual(1,source.count(condition))
+                        namespace = {}
+                        exec(source.replace(condition,condition.replace(half,'True')),L.__dict__,namespace)
+                        self.assertIs(namespace['verify'].__globals__,L.__dict__)
+                        with patch.object(L,'verify',namespace['verify']):
+                            self.assertEqual((0,integrated,''),self.invoke_register(register,True))
 
     def test_real_owner_label_commit_outside_origin_main_and_guard_removal(self):
         with self.existing_graph_fixture(owner_outside=True) as (register,committed,owner,published,delivery,inventory,original):

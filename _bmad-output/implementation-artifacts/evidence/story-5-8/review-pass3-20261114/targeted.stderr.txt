@@ -1,0 +1,13 @@
+test_published_predecessor_tree_binding_and_guard_removal (test_verify_amendment.AmendmentTests.test_published_predecessor_tree_binding_and_guard_removal) ... ok
+test_lifecycle_proof_binds_local_captures_and_replay (test_verify_amendment.FixtureTests.test_lifecycle_proof_binds_local_captures_and_replay) ... ok
+test_lifecycle_proof_rejects_changed_real_inputs_without_summary (test_verify_amendment.FixtureTests.test_lifecycle_proof_rejects_changed_real_inputs_without_summary) ... ok
+test_lifecycle_proof_rejects_child_candidate_mutation_without_writes (test_verify_amendment.FixtureTests.test_lifecycle_proof_rejects_child_candidate_mutation_without_writes) ... ok
+test_lifecycle_proof_rejects_child_label_mutation_under_optimization (test_verify_amendment.FixtureTests.test_lifecycle_proof_rejects_child_label_mutation_under_optimization) ... ok
+test_lifecycle_proof_rejects_child_workflow_mutation_without_writes (test_verify_amendment.FixtureTests.test_lifecycle_proof_rejects_child_workflow_mutation_without_writes) ... ok
+test_lifecycle_proof_rejects_duplicate_workflow_statuses (test_verify_amendment.FixtureTests.test_lifecycle_proof_rejects_duplicate_workflow_statuses) ... ok
+test_completion_reports_later_owner_compatibility_drift (test_verify_amendment.LabelTests.test_completion_reports_later_owner_compatibility_drift) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.941s
+
+OK
