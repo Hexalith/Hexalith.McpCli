@@ -73,6 +73,18 @@ sub-condition mutants**. The standalone adopted stdout remains byte-identical;
 all real artifacts in the success test are now verified from verbatim copies.
 The earlier 64-test result describes the retained pass-1 checkpoint.
 
+## Dated note (2026-11-15, code review pass 3)
+
+The [pass-3 packet](review-pass-3/README.md) records:
+- **74 passing verifier process tests** and the **eight runner controls**;
+- **four focused sub-condition mutants**, each killed only by the new cases;
+- a fresh **57-of-57** guard sweep.
+
+`.gitattributes` now keeps the decision, map, eight bound inventories and this evidence
+folder byte-exact on checkout. The spine's AD-23 Provenance names `28bcbbb`'s nine gitlink
+moves. The approved bytes, the receipt and the adopted stdout are unchanged. The 70-test
+figure above describes the pass-2 checkpoint.
+
 ## Candidate and independent authority
 
 The [decision](../../../planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md)

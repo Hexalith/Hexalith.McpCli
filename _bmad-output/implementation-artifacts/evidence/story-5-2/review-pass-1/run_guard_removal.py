@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Remove each require guard in an isolated copy and run the process suite.
 
-Run under run-with-temp; all disposable repository copies respect TMPDIR.
+All disposable repository copies respect TMPDIR; give the run a private one,
+as the portable recipe in this folder's README does. (`run-with-temp` is an
+untracked helper on the recording workstation only.)
 Only the requested output packet survives, including each unittest transcript.
 No source inspection assertion is added to the behavioral process tests.
 """

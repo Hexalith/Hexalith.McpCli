@@ -307,6 +307,98 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
 - E18 false: `release.yml` runs only by `workflow_dispatch` with operator acceptance, so a `fix:` subject cuts no automatic release. `fix: story N` is this repository's established subject form.
 - A3 false: the spec's forbidden paths do not include `.gitattributes`. The entries cover only raw, hash-bound captures whose trailing whitespace is genuine process output, following the pattern already used for other evidence folders. `verification.md:157` sits in the historical 2026-11-12 section.
 
+Code review pass 3 (bmad-code-review, 2026-11-15). It ran after `55f8a02` applied the pass-2 patches and the five build-review findings.
+
+**Scope:** the deliverables, 4,511 diff lines in 29 files: `80a7857^..HEAD` at `55f8a02`.
+- It covers the pass-2 file set, plus the new `review-pass-2/` README and its `checks`, `candidate-scope-and-whitespace`, `final-verification` and `subcondition-mutations` JSON.
+- `parent-verification.json` (mostly embedded raw channels), the 1 MB `guard-sweep-complete.json`, raw captures and scan receipts were left out.
+- The AD-23 decision, class map, receipt and AI.Tools amendment are unchanged since pass 1.
+
+Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. They raised 48 findings: 13 survive in 6 entries (5 patch, 1 defer), and 35 were rejected. No finding needed a decision.
+
+**Re-run checks at HEAD `55f8a02`:**
+- The standalone verifier exits 0 with empty stderr. Its stdout is byte-identical to `verifier.stdout.txt`.
+- All 70 verifier tests and all 8 runner controls pass.
+- A fresh guard-removal sweep into a scratch folder kills 57 of 57 guards, with zero survivors and zero errors.
+- All 12 candidate-file hashes in `review-pass-2/final-verification.json` match HEAD.
+- `main` CI is still red at `32a3e65` (run 43710307324). That waits on the separate Builds `build(deps)` alignment the owner chose in pass 2. `55f8a02` is unpushed.
+
+- [x] [Review][Patch] `.gitattributes` leaves the AD-23 hash-bound artifacts and most Story 5.2 evidence open to checkout line-ending conversion (medium)
+  - `git check-attr text` reports `unspecified` for the decision, the class map, all eight bound v1 inventories, `approval.json`, `verifier.stdout.txt` and every `review-pass-2/` receipt. The repository has no `* text=auto`.
+  - The pass-1 entries (`.gitattributes:97-99`) cover only the `review-pass-1/**` captures and JSON.
+  - Git for Windows installs with `core.autocrlf=true`, which converts unspecified text files to CRLF on checkout. The verifier then fails with `decision hash mismatch`, the raw byte comparison in `test_actual_packet_complete` fails, and so does Story 5.7's gate, which requires `adopted` (`evidence/story-5-7/verify_amendments.py:128-129`).
+  - Stories 5.4–5.8 already mark their evidence folders and successor inventories `-text` (`.gitattributes:35-54`).
+  - **Fix:** add `-text` for `_bmad-output/implementation-artifacts/evidence/story-5-2/**`, the two AD-23 files and the eight bound v1 inventories. Keep the existing `review-pass-1` whitespace lines. No file bytes change.
+  - (B5, E16, V-O1) [.gitattributes:97]
+- [x] [Review][Patch] Four more verifier sub-conditions can be broken without failing any test (low) — each mutant below passed all 70 tests in a scratch copy of the 14 runner inputs. The whole-guard sweep cannot see them.
+  - **Approval limit.** Dropping `nonblank(expected.get("approvalLimit")) and` (`verify_class_map.py:215`) lets a decision and map that both omit `approvalLimit` verify.
+  - **Map-owned evidence.** Replacing `restrictions.setdefault(row_id, evidence)` with `pass` (`:235`) means map-owned `restrictionEvidence` no longer forces a restricted outcome. No test notices, because every synthetic and real map-evidence row is also decision-required.
+  - **Failure channel.** Removing `KeyError`, or separately `TypeError`, from the `FAIL:` tuple (`:306`) makes a missing member or a wrong type print a traceback, against `verification.md:194-195`.
+  - AD-23 `:274` claims "Its damaged-input tests exercise each guard". The approved bytes stay unchanged; the new tests close the gap.
+  - **Fix:** add one damaged-input process case for each:
+    - both sides without `approvalLimit`;
+    - map-only `restrictionEvidence` for the admitted row `R1`;
+    - a deleted `classes` member;
+    - `rows: 5`.
+    Each asserts exit 1, empty stdout and the exact full `FAIL:` line. Record the four mutants and a fresh sweep in a new `review-pass-3/` packet. Success stdout must stay byte-identical.
+  - (B6, V1, V2, V-O2) [_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py:235]
+- [x] [Review][Patch] The spine's AD-23 Provenance still says the reference gitlinks "remain unchanged" (low)
+  - `ARCHITECTURE-SPINE.md:208` (spine updated 2026-11-15) says "Census baseline and reference gitlink bytes remain unchanged".
+  - Story commit `28bcbbb` moved nine gitlinks, as the pass-2 dated corrections in `verification.md:39-75` and `review-pass-1/README.md` record. Pass 2 corrected only those two files. The spine is unbound, so it can be edited directly.
+  - **Fix:** limit the sentence to the adoption and merge, which changed no census baseline or gitlink bytes. Name `28bcbbb`'s nine moves, kept on `main` by owner decision, and link the dated correction.
+  - (B3, E17, A2) [_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:208]
+- [x] [Review][Patch] The `review-pass-2/` packet has no secret-scan receipt (low)
+  - MR11 (`epics.md:216`) requires shared secret scanning for committed evidence. Every earlier packet keeps a receipt (`secret-scan*.json`, `review-pass-1/parent-verification/final-secret-scan.json`).
+  - None of the seven `review-pass-2/` files has one, although they hold 116 raw channels and absolute paths.
+  - The Acceptance layer ran `scripts/scan-evidence-secrets.py` over the packet into scratch and got 0 findings. Only the receipt is missing.
+  - **Fix:** run the shared scanner over `review-pass-2/` and the new pass-3 packet, and keep the receipt in `review-pass-3/`.
+  - (A5) [_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/README.md:1]
+- [x] [Review][Patch] The runner docstring names the local `run-with-temp` wrapper without saying it is local (low)
+  - `review-pass-1/run_guard_removal.py:4` says "Run under run-with-temp", and `--help` prints it. Pass 2 labeled the wrapper local only in the README.
+  - **Fix:** say it is the recording workstation's untracked helper, point to the README's portable recipe, and record the new runner hash with the fresh pass-3 sweep.
+  - (A6) [_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/run_guard_removal.py:4]
+- [x] [Review][Defer] `epics.md` MR1 still requires a generic catalog/transport extension before Admin retirement, which AD-23 replaces (medium) [_bmad-output/planning-artifacts/epics.md:206] — deferred: the fix edits the planning epics, outside this story's deliverables. Tracked in `deferred-work.md` under the 2026-11-15 Story 5.2 code-review heading.
+  - MR1 says that before retiring a surface that exposes infrastructure administration, MCP resources, migration diagnostics or REST/Dapr-only behavior, a generic catalog/transport extension must be approved. It cites the 2026-09-27 Spine Design Paradigm.
+  - AD-23 binds MR1 (`AD-23-non-gateway-capability-classes.md:6`) but admits no extension. A1–A4 retire the Admin heads on confidential UI coverage (`:165`, `:249`; Owner Decision 1). Pass 1 updated only the spine's Design Paradigm.
+  - `epics.md:302` applies "MR1–MR9 and MR11 … as written" to Epic 6, so later retirement specs read two conflicting rules.
+  - (A4)
+
+**Rejected (35):**
+- B1/A1 low: re-raises the pass-2 decision. The owner chose "Keep pins, align apart": Builds alignment is a separate `build(deps)` change and explicitly not a ledger deferral. `main` CI stays red until it lands.
+- B2 low: the pass-2 Review Findings record that decision verbatim with its date ("resolved by the user on 2026-11-15: option 1"). It grants no artifact authority, so it needs no receipt of its own.
+- B4 low: pass-1 B16/B13 and pass-2 B11/B13. The receipt is outside the hash binding, post-adoption edits only added delivery state, and `upstream-delivery.json` is the dated push receipt.
+- B6 (anchor and reset parts) low: pass-1 E1–E3/B12 and pass-2 E4/E6. Dropping the `^` anchor or the `headers = []` reset changes nothing on the eight decision-bound inventories: each has one `inventory_version` line, and every Markdown table starts with a header row that resets `headers`.
+- B7 false: pass-2 B9. `requiredRestrictions` can only force a restricted outcome, so a weak anchor cannot admit a row. Rewording anchors means new approved bytes.
+- B8 rejected: pass-1 B8 and pass-2 B10. The spec fixes K10's owner.
+- B9 false: pass-1 E9/B13.
+- B10/E18 false: `final-verification.json` is linked from the same README as the final check. It binds all 12 committed candidate files, including `sprint-status.yaml`, and all 12 match HEAD. The scope receipt is labeled a checkpoint, and a README correction would make that final hash stale.
+- B11/V4 low: pass-2 B18. The spec's Never rule forbids CI changes, and the downstream 5.7 and 5.8 gates call `verify()` and fail loudly.
+- B12 false: Story 5.7's `verify_amendments.py:128-129` calls `verify()`, and `:216-218` requires each successor row's class and outcome to match the adopted map.
+- B13 low: pass-1 B18 and pass-2 B20. Story 5.11 owns the next plan version.
+- B14 low: pass-2 B6. Missing members still fail closed on the `FAIL:` channel; its exception-tuple coverage is in the sub-condition patch above. The pinned `AttributeError` text is stable CPython wording.
+- B15 low: pass-1 E1–E3/B12. `resolve()` handles symlink aliases without a separate branch, as the docstring says.
+- B16 false: pass-1 B7.
+- B17 false: pass-1 E10.
+- E1 low: pass-1 E1.
+- E2 low: pass-2 E4/E6.
+- E3 low: pass-2 E4/E6. Each bound inventory gives `inventory_version` a value.
+- E4 low: pass-1 E4/B11/A8.
+- E5 low: fails closed. A negated mention can only force a restricted outcome, and the real packet passes. See pass-1 E5.
+- E6 low: pass-1 E5 and pass-2 B8/E5.
+- E7 low: iteration-1 B8.
+- E8 low: iteration-2 2-E2 and pass-1 E7.
+- E9 low: pass-2 E7.
+- E10 low: pass-2 E9.
+- E11 low: pass-2 E8.
+- E12 low: pass-2 E11.
+- E13 false: pass-2 E12.
+- E14 low: the verifier source is pure ASCII with LF endings (checked), and the `.gitattributes` patch stops checkout from converting it.
+- E15 low: pass-2 E14.
+- V3 low: a broken default fails loudly (missing input, `FAIL:`, exit 1) on the standard no-argument command that every packet run uses.
+- A3 low: Owner Decision 5 explicitly assigns FC01/FC02 to exempt local tooling, and AC2 holds. The "developer tooling" wording is in approved bytes, which would need a new candidate.
+
+A2's `verification.md:254` half is false. The pass-2 correction at the top of the document (`verification.md:39-75`) names the nine moves and states that AC3 does not hold for them. `:254` describes the 2026-11-12 merge, which moved no gitlink. A2's spine half survives above.
+
 ## Design Notes
 
 **Classes.** A tag in the form D# cites the Owner Decision that set the outcome. Implementation may split or rename classes when a row's primary capability requires it, but it may not change an outcome.
@@ -520,3 +612,18 @@ The final parent verification covers every frozen matrix scenario with a
 passing executed test. Spec status is done and sprint status is review.
 No new work is deferred. The separately authorized Builds alignment and
 existing Parties, Folders, enrollment and retirement gates remain separate.
+
+### Code review pass 3 patches (2026-11-15)
+
+All five pass-3 patches are applied. The [pass-3 packet](evidence/story-5-2/review-pass-3/README.md) holds the evidence, and the tree is uncommitted at the time of writing.
+- **Checks.** Its retained recorder shows that 74 verifier process tests and 8 runner controls pass. The standalone verifier exits 0 with empty stderr and byte-identical adopted stdout.
+- **Mutants.** Each of the four focused sub-condition mutants survives the prior 70-test suite at `55f8a02` and is killed by its new case, with no test errors.
+- **Sweep.** A fresh sweep with the corrected runner kills 57 of 57 guards.
+- **Line endings.** `.gitattributes` keeps `evidence/story-5-2/**`, the AD-23 decision and map, and the eight bound v1 inventories byte-exact on checkout.
+- **Spine.** The AD-23 Provenance names `28bcbbb`'s nine gitlink moves.
+- **Runner docstring.** It labels `run-with-temp` as a workstation-only helper.
+- **Secret scans.** Shared-scanner receipts for the pass-2 and pass-3 packets are both clean.
+
+The approved decision (`f47b64c7…`), class map (`21cb3643…`), approval receipt (`7c43dbec…`), inventories, verifier, adopted stdout and frozen block (5,884 bytes, `8adb4def…`) are unchanged. So are `src/`, `tests/`, `tools/`, `scripts/`, `references/`, CI and dependency files. Whitespace checks pass for tracked changes and for every untracked addition.
+
+The MR1 reconciliation is deferred to the ledger. `main` CI still waits on the separate Builds `build(deps)` alignment.

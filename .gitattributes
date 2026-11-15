@@ -97,3 +97,18 @@ evidence/net11-release-20261115/** -text whitespace=-blank-at-eol,-blank-at-eof,
 _bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/**/*.stdout.txt -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 _bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/**/*.stderr.txt -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 _bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/**/*.json -text
+_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-3/**/*.stdout.txt -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-3/**/*.stderr.txt -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+
+# Keep every AD-23 hash-bound input and Story 5.2 evidence byte-exact on checkout.
+_bmad-output/implementation-artifacts/evidence/story-5-2/** -text
+_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md -text
+_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json -text
+_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md -text
+_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md -text
+_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md -text
+_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md -text
+_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md -text
+_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md -text
+_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md -text
+_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md -text

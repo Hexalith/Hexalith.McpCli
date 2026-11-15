@@ -160,6 +160,16 @@ class ClassMapTests(ProcessFixture):
         self.map_path.write_text("null", encoding="utf-8")
         self.reject_result("'NoneType' object has no attribute 'get'", self.process())
 
+    def test_missing_member_uses_fail_channel(self):
+        damaged = copy.deepcopy(self.document)
+        del damaged["classes"]
+        self.reject("'classes'", damaged)
+
+    def test_wrong_member_type_uses_fail_channel(self):
+        damaged = copy.deepcopy(self.document)
+        damaged["inventories"][0]["rows"] = 5
+        self.reject("'int' object is not iterable", damaged)
+
     def test_inventory_source_requires_version_and_rows(self):
         original = self.inventory.read_text()
         self.inventory.write_text(original.replace("inventory_version:", "other_version:"))
@@ -230,6 +240,17 @@ class ClassMapTests(ProcessFixture):
         self.save_policy()
         self.reject("no inventories")
 
+    def test_agreed_approval_limit_must_be_nonblank(self):
+        for value in (None, "", " \t"):
+            with self.subTest(value=value):
+                for inventory in (self.document["inventories"][0], self.policy["inventories"][0]):
+                    if value is None:
+                        inventory.pop("approvalLimit", None)
+                    else:
+                        inventory["approvalLimit"] = value
+                self.save_policy()
+                self.reject("inventory.md: approval limit disagrees with decision")
+
     def test_inventories_require_array(self):
         self.document["inventories"] = {}
         self.reject("inventories: expected array", bind_receipt=False)
@@ -267,6 +288,10 @@ class ClassMapTests(ProcessFixture):
     def test_supplementary_restriction_requires_known_source_row(self):
         self.document["inventories"][0]["restrictionEvidence"][0]["id"] = "Z99"
         self.reject("inventory.md: unknown restricted row Z99")
+
+    def test_map_owned_restriction_evidence_alone_blocks_admission(self):
+        self.document["inventories"][0]["restrictionEvidence"].append({"id": "R1", "sourceText": "plain read"})
+        self.reject("inventory.md: R1: restricted row leaks into read")
 
     def test_agreed_record_requires_governing_reference(self):
         for record in (self.document["inventories"][0]["records"][0],

@@ -1027,6 +1027,14 @@ status: open
   status: open; separate owner-approved inventory/exposure resolution required; AD-23 adoption does not authorize runtime removal or override existing approvals.
   evidence: `_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md:134` and `:153` label L03–L05 and T04/T05/T07 destructive; C03–C05 carry the corresponding creation/removal/deactivation variants at `:180`. `src/Hexalith.McpCli/Hexalith.McpCli.csproj:24` still enrolls Parties Contracts. Acceptance requires an exact-byte owner-approved inventory/architecture resolution, corresponding exposure evidence through both heads and direct/chained authorization denials with zero unauthorized persisted effects; retain the retirement gate until that evidence passes. Parent searched the ledger before appending and found no equivalent entry.
 
+## Deferred from: code review of spec-5-2-decide-generic-non-gateway-capability-contracts.md (2026-11-15)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-2-decide-generic-non-gateway-capability-contracts.md`
+  summary: Reconcile epics MR1 with adopted AD-23. MR1 still requires approving a generic catalog/transport extension before retiring any surface that exposes infrastructure administration, MCP resources, migration diagnostics or REST/Dapr-only behavior. AD-23 binds MR1 but admits no extension and retires the Admin heads on confidential UI coverage, so later retirement specs read two conflicting rules.
+  owner: McpCli product/architecture owner; reconcile MR1, and its Epic 6 "as written" application, before any Admin or diagnostic-surface retirement spec relies on it, at the latest in Story 5.11.
+  status: open; AD-23's approved bytes stay unchanged; the fix edits `epics.md`, outside Story 5.2's deliverables.
+  evidence: `_bmad-output/planning-artifacts/epics.md:206` (MR1, citing the 2026-09-27 Spine Design Paradigm) and `:302` (Epic 6 applies MR1–MR9 and MR11 as written); `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md:6` binds MR1, and `:165` and `:249` retire the Admin heads on UI coverage; spec Owner Decision 1 (`spec-5-2-decide-generic-non-gateway-capability-contracts.md:47`). Story 5.2 code review pass 3 searched the ledger for MR1 and "catalog/transport extension" before appending and found no equivalent entry.
+
 ## Deferred from: code review of spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md (2026-11-13)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md`
