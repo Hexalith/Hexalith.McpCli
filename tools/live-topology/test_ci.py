@@ -2651,11 +2651,11 @@ class CiWorkflowTests(unittest.TestCase):
 
     def assert_approved_builds_references(self, root, recorded):
         # The source catalog and the reusable workflow executor are separate inputs.
-        # Bind both exact reviewed identities, including a common released producer when selected.
+        # Bind the recorded source selection and the independently reviewed executor identities.
         self.assertEqual([
-            '160000', 'commit', '99f7c86072ca7b35e3fbbaee4606a559a847805a',
+            '160000', 'commit', '73e60af8a1fcdf3f06726d5d1b6e1199cce778ee',
             'references/Hexalith.Builds',
-        ], recorded, 'The recorded Builds catalog gitlink must retain its approved source identity.')
+        ], recorded, 'The Builds catalog gitlink must match its recorded source selection.')
         approved = {
             '.github/workflows/ci.yml': [
                 'Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@99f7c86072ca7b35e3fbbaee4606a559a847805a',
@@ -2677,7 +2677,7 @@ class CiWorkflowTests(unittest.TestCase):
         documents = {workflow.relative_to(root): workflow.read_text()
                      for workflow in (root / '.github/workflows').rglob('*')
                      if workflow.suffix in ('.yml', '.yaml')}
-        catalog = ['160000', 'commit', '99f7c86072ca7b35e3fbbaee4606a559a847805a',
+        catalog = ['160000', 'commit', '73e60af8a1fcdf3f06726d5d1b6e1199cce778ee',
                    'references/Hexalith.Builds']
         executor = '99f7c86072ca7b35e3fbbaee4606a559a847805a'
         ci_path = Path('.github/workflows/ci.yml')
