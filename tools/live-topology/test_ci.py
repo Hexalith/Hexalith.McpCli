@@ -587,14 +587,18 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                          prepared['sourcePackageCatalog']['overlaySha256'])
         self.assertIn(str(self.root / 'references/Hexalith.Builds/Props/Directory.Packages.props'),
                       overlay.read_text())
-        self.assertIn('Update="StackExchange.Redis" Version="3.4.35"', overlay.read_text())
+        self.assertEqual([{mode: package, 'Version': version} for package, (mode, version) in SOURCE_PACKAGE_VERSIONS.items()],
+                         [row.attrib for row in ET.parse(overlay).getroot().iter('PackageVersion')])
         overrides = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
         self.assertIn('Update="Hexalith.McpCli.Abstractions" Version="2.0.1"', overrides.read_text())
         overrides_xml = ET.parse(overrides).getroot()
         self.assertEqual([], overrides_xml.findall('.//PackageReference'))
         self.assertEqual([], overrides_xml.findall('.//RestoreEnablePackagePruning'))
-        self.assertEqual([{'Update': 'StackExchange.Redis', 'Version': '3.4.35'},
-                          {'Update': 'Hexalith.McpCli.Abstractions', 'Version': '2.0.1'}],
+        expected_overrides = []
+        for package, (_, version) in SOURCE_PACKAGE_VERSIONS.items():
+            expected_overrides.extend([{'Include': package, 'Exclude': '@(PackageVersion)', 'Version': version},
+                                       {'Update': package, 'Version': version}])
+        self.assertEqual([*expected_overrides, {'Update': 'Hexalith.McpCli.Abstractions', 'Version': '2.0.1'}],
                          [row.attrib for row in overrides_xml.iter('PackageVersion')])
         for call in source_builds:
             self.assertFalse(any(argument.startswith('-p:RestoreEnablePackagePruning=') for argument in call))
@@ -938,6 +942,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         original_versions.update({'Hexalith.Commons.UniqueIds': '3.0.0', 'Microsoft.OpenApi': '3.11.0',
                                   'Unrelated.Package': '99.0.0', 'Hexalith.Commons.Other': '3.0.0'})
         original_versions.update({package: '3.0.0' for package in ('Hexalith.Commons', 'Hexalith.Commons.Http')})
+        original_versions.update({package: '0.0.1' for package, (mode, _) in SOURCE_PACKAGE_VERSIONS.items() if mode == 'Update'})
         catalog.write_text('<Project><ItemGroup>' + ''.join(
             '<PackageVersion Include="' + package + '" Version="' + version + '" />'
             for package, version in original_versions.items()) + '</ItemGroup></Project>')
@@ -945,8 +950,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         private = Path(prepared['privateDirectory'])
         overlay = private / 'source-runtime-packages.props'
         override = private / 'source-runtime-overrides.targets'
-        self.assertEqual([('StackExchange.Redis', '3.4.35')],
-                         [(item.get('Update'), item.get('Version')) for item in ET.parse(overlay).getroot().iter('PackageVersion')])
+        self.assertEqual([{mode: package, 'Version': version} for package, (mode, version) in SOURCE_PACKAGE_VERSIONS.items()],
+                         [item.attrib for item in ET.parse(overlay).getroot().iter('PackageVersion')])
+        expected_versions = original_versions | {package: version for package, (_, version) in SOURCE_PACKAGE_VERSIONS.items()}
         projects = [
             ('tests/Hexalith.McpCli.EventStoreGateway.TestHost', 'net11.0', True),
             ('references/Hexalith.Tenants/src/Hexalith.Tenants', 'net11.0', True),
@@ -986,8 +992,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                     self.assertEqual(0, result.returncode, result.stdout + result.stderr)
                     actual = json.loads(result.stdout)
                     self.assertEqual(framework, actual['Properties']['TargetFramework'])
-                    self.assertEqual(original_versions,
+                    self.assertEqual(expected_versions,
                                      {item['Identity']: item['Version'] for item in actual['Items']['PackageVersion']})
+                    self.assertEqual(len(expected_versions), len(actual['Items']['PackageVersion']))
 
     def test_current_source_policy_refuses_changed_missing_duplicate_conditional_and_unknown_root_rows(self):
         module = self.ci_module()

@@ -237,8 +237,10 @@ Preparation requires low-level auditing without advisory exclusions or NU19xx wa
 checks every package archive and extracted asset against that proof, then builds with
 `--no-restore`. Only the isolated advisory-feed refresh is disabled; native evidence
 retains the exact audited graph. No server dependency edge or loader exception is added. The source
-catalog retains the pinned root-declared Builds revision with the root's exact
-Redis 3.4.35 override. The selected owners use their native .NET 11 framework and
+catalog retains the pinned root-declared Builds revision and every validated root
+package selection, including the Google.Protobuf and gRPC transitive pins. The
+post-import hook adds missing selections and updates existing ones so later owner
+rebuilds use the same graph as the isolated reader. The selected owners use their native .NET 11 framework and
 current package graph. No .NET 10 compatibility packages, logging reference metadata
 or package-pruning settings are injected. Preparation and execution validate the
 exact finite unconditional root PackageVersion rows, including their Include/Update

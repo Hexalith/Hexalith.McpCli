@@ -99,3 +99,9 @@ The implementation/review workflow is complete after the focused corrections bel
 ## Verification
 
 Run disposable checks under run-with-temp; logs in the external task directory. Use narrow checks after fixes, then final required full gates. No skip/suppression substitutes for passing behavior. Root requires fresh exact-SHA hosted CI/live, immutable three-OS staging, automated candidate-bound acceptance, paired publication and independent official NuGet signature/content/consumer/tool verification.
+
+### Post-review hosted CI source alignment correction
+
+Exact-source CI run43660988102/job132651837186 at dc39e2644fec0a8e4abcd74d1a1d9334b7634e26 correctly refused the native catalog reader's different prepared Google.Protobuf.dll. Source preparation validated all eleven root package selections but serialized only Redis into the owner overlay/hook, leaving owners on Protobuf3.35.0/gRPC2.80.0 while root/reader selected3.36.2/2.85.0. The correction serializes every finite validated selection and makes the later hook add absent rows and update existing ones while retaining metadata. Reader byte equality, restore audit and input seals remain unchanged.
+
+Four focused CI-hook tests pass, covering real MSBuild overlay-only, hook-only and combined evaluation, exact row counts, malformed selections and special paths. A disposable real build of the three exact archived owner projects reproduces the original policy's reader byte refusal; corrected overlay and hook-only package graphs match, and actual unmodified reader restore/audit/build/catalog generation passes. All common DLLs match for Tenants54, Parties55 and adapter53. New evidence is isolated in `evidence/net11-ci-source-alignment-20261115/`; prior observations and review triage are preserved. This focused proof starts no services and does not establish hosted live or release acceptance; primary continuation remains pending.

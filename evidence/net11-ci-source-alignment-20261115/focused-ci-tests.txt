@@ -1,0 +1,9 @@
+test_preparation_order_bounds_source_flags_and_nonsecret_exports (test_ci.CiHooksTests.test_preparation_order_bounds_source_flags_and_nonsecret_exports) ... ok
+test_current_source_catalog_preserves_owner_framework_and_package_graphs (test_ci.CiHooksTests.test_current_source_catalog_preserves_owner_framework_and_package_graphs) ... ok
+test_current_source_catalog_escapes_quoted_and_special_workspace_path_literals (test_ci.CiHooksTests.test_current_source_catalog_escapes_quoted_and_special_workspace_path_literals) ... ok
+test_current_source_policy_refuses_changed_missing_duplicate_conditional_and_unknown_root_rows (test_ci.CiHooksTests.test_current_source_policy_refuses_changed_missing_duplicate_conditional_and_unknown_root_rows) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 53.011s
+
+OK

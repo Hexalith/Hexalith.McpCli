@@ -604,12 +604,14 @@ def prepare(evidence: Path) -> None:
         mcpcli = [item.text for item in own_versions.iter('HexalithMcpCliVersion')]
         if mcpcli != ['2.0.1']:
             raise ValueError('The qualified source catalog requires the exact root McpCli 2.0.1 pin.')
-        source_package_versions(own_versions)
+        selections = source_package_versions(own_versions)
         overlay = private / 'source-runtime-packages.props'
         project_xml = ET.Element('Project')
         ET.SubElement(project_xml, 'Import', {'Project': msbuild_path_literal(catalog)})
-        ET.SubElement(ET.SubElement(project_xml, 'ItemGroup'), 'PackageVersion',
-                      {'Update': 'StackExchange.Redis', 'Version': redis[0]})
+        versions = ET.SubElement(project_xml, 'ItemGroup')
+        for package, version in selections.items():
+            ET.SubElement(versions, 'PackageVersion',
+                          {SOURCE_PACKAGE_VERSIONS[package][0]: package, 'Version': version})
         ET.ElementTree(project_xml).write(overlay, encoding='utf-8', xml_declaration=True)
         # Standard MSBuild post-import configuration reaches SDK preparation and Aspire's
         # later dotnet rebuilds without changing an owner's source or nested catalog.
@@ -619,8 +621,12 @@ def prepare(evidence: Path) -> None:
         # preparation. Owner props can append exemptions even when the inherited
         # TreatWarningsAsErrors is true, changing deterministic assembly bytes.
         ET.SubElement(ET.SubElement(overrides_xml, 'PropertyGroup'), 'WarningsNotAsErrors')
-        ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
-                      {'Update': 'StackExchange.Redis', 'Version': redis[0]})
+        versions = ET.SubElement(overrides_xml, 'ItemGroup')
+        for package, version in selections.items():
+            # Later SDK/Aspire rebuilds can import the bare catalog, which lacks some root Include rows.
+            ET.SubElement(versions, 'PackageVersion',
+                          {'Include': package, 'Exclude': '@(PackageVersion)', 'Version': version})
+            ET.SubElement(versions, 'PackageVersion', {'Update': package, 'Version': version})
         # The AppHost loads the root's Abstractions assembly. Source owners must
         # compile against that same version, including later SDK/Aspire rebuilds.
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',

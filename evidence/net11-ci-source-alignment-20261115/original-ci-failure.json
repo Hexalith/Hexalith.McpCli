@@ -1,0 +1,86 @@
+{
+  "failure": "The catalog reader restored a different prepared runtime binary: Google.Protobuf.dll.",
+  "jobUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43660988102/job/132651837186",
+  "location": "NativeCatalogTool.cs:131",
+  "packageVersions": {
+    "references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj": {
+      "Google.Protobuf": "3.35.0",
+      "Grpc.Core.Api": "2.80.0",
+      "Grpc.Net.Client": "2.80.0",
+      "Grpc.Net.Common": "2.80.0",
+      "Grpc.Reflection": "2.80.0"
+    },
+    "references/Hexalith.Parties/src/Hexalith.Parties/Hexalith.Parties.csproj": {
+      "Google.Protobuf": "3.35.0",
+      "Grpc.Core.Api": "2.80.0",
+      "Grpc.Net.Client": "2.80.0",
+      "Grpc.Net.Common": "2.80.0",
+      "Grpc.Reflection": "2.80.0"
+    },
+    "references/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj": {
+      "Google.Protobuf": "3.35.0",
+      "Grpc.Core.Api": "2.80.0",
+      "Grpc.Net.Client": "2.80.0",
+      "Grpc.Net.Common": "2.80.0",
+      "Grpc.Reflection": "2.80.0"
+    },
+    "tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj": {
+      "Google.Protobuf": "3.36.2",
+      "Grpc.Core.Api": "2.85.0",
+      "Grpc.Net.Client": "2.85.0",
+      "Grpc.Net.Common": "2.85.0",
+      "Grpc.Reflection": "2.85.0"
+    },
+    "tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj": {
+      "Google.Protobuf": "3.36.2",
+      "Grpc.Core.Api": "2.85.0",
+      "Grpc.Net.Client": "2.85.0",
+      "Grpc.Net.Common": "2.85.0",
+      "Grpc.Reflection": "2.85.0"
+    },
+    "tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj": {
+      "Google.Protobuf": "3.36.2",
+      "Grpc.Core.Api": "2.85.0",
+      "Grpc.Net.Client": "2.85.0",
+      "Grpc.Net.Common": "2.85.0",
+      "Grpc.Reflection": "2.85.0"
+    }
+  },
+  "preparedDllSha256": {
+    "adapter": {
+      "Google.Protobuf.dll": "e9b892ac667931162ffefa411ef8dc3eae777d634d8bfe8beddc28b1de95a612",
+      "Grpc.Core.Api.dll": "5674c1203706b5a261e8bbd3499147d94fc80b5f077bf45f9934ca28a9c8574b",
+      "Grpc.Net.Client.dll": "f884d8444feb888656cbb7de87ee8f53a50811329bb32c6e7a7a81cb1de008ef",
+      "Grpc.Net.Common.dll": "fdff383bbd8e5015f3c4aaaa7508b769228f33c92ba14fec4e59d35c5d78e6ae",
+      "Grpc.Reflection.dll": "87795d17c1385e7c05469c447ad8eecc883c3c71b4804319c5918a5a490c8d57"
+    },
+    "gateway": {
+      "Google.Protobuf.dll": "0f93ce18692e0b789c41299d0d2af2b477644fc4b13482bd0680b29289603996",
+      "Grpc.Core.Api.dll": "d9b5751a0988cdcf209f669b166e20b76b6ea3af1bc6601e03f3349e97059385",
+      "Grpc.Net.Client.dll": "a2bdafc8d6a7baa8b8f6c0b39d8a7f859ad84af14380ccae118c2f5316602212",
+      "Grpc.Net.Common.dll": "b2354e7717e4d1b5b23a80d1eaf65ecc128f1b458bf052a7b83334dcbe3f6206",
+      "Grpc.Reflection.dll": "cf9d3941e298b0184059bbaea50f4261325d3d8b8e4905c49447a18e480ba81b"
+    },
+    "parties": {
+      "Google.Protobuf.dll": "e9b892ac667931162ffefa411ef8dc3eae777d634d8bfe8beddc28b1de95a612",
+      "Grpc.Core.Api.dll": "5674c1203706b5a261e8bbd3499147d94fc80b5f077bf45f9934ca28a9c8574b",
+      "Grpc.Net.Client.dll": "f884d8444feb888656cbb7de87ee8f53a50811329bb32c6e7a7a81cb1de008ef",
+      "Grpc.Net.Common.dll": "fdff383bbd8e5015f3c4aaaa7508b769228f33c92ba14fec4e59d35c5d78e6ae",
+      "Grpc.Reflection.dll": "87795d17c1385e7c05469c447ad8eecc883c3c71b4804319c5918a5a490c8d57"
+    },
+    "tenants": {
+      "Google.Protobuf.dll": "e9b892ac667931162ffefa411ef8dc3eae777d634d8bfe8beddc28b1de95a612",
+      "Grpc.Core.Api.dll": "5674c1203706b5a261e8bbd3499147d94fc80b5f077bf45f9934ca28a9c8574b",
+      "Grpc.Net.Client.dll": "f884d8444feb888656cbb7de87ee8f53a50811329bb32c6e7a7a81cb1de008ef",
+      "Grpc.Net.Common.dll": "fdff383bbd8e5015f3c4aaaa7508b769228f33c92ba14fec4e59d35c5d78e6ae",
+      "Grpc.Reflection.dll": "87795d17c1385e7c05469c447ad8eecc883c3c71b4804319c5918a5a490c8d57"
+    }
+  },
+  "retainedArtifactFiles": {
+    "04a738e3cbd44fddad6faeecfa641c73/boundary/tests.xml": "2b82cf5f06880e020318f92a894cea5f947caca843136dc8128d166264037865",
+    "native-reader-audit.json": "41d6b36c50d8da565f5557b80c9f029d59e937617d865aa3b519530fc082a104",
+    "preparation.json": "56e0160efd92549b948424f666b4846272dbbdebee9a4bc4a4bc578f6c62a79c"
+  },
+  "runUrl": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43660988102",
+  "sourceCommit": "dc39e2644fec0a8e4abcd74d1a1d9334b7634e26"
+}

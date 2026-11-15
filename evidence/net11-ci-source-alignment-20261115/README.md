@@ -1,0 +1,9 @@
+# Native source dependency alignment correction
+
+Exact-source [CI run 43660988102, job 132651837186](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43660988102/job/132651837186) failed at `dc39e26`: the catalog reader correctly refused a prepared `Google.Protobuf.dll` with different bytes. [Original evidence](original-ci-failure.json) retains the actual package selections and artifact hashes. Owners restored Protobuf 3.35.0 and gRPC 2.80.0 while root/reader selected 3.36.2 and 2.85.0.
+
+`ci.py` validated eleven root pins but serialized only Redis into the source overlay and hook. The correction carries all eleven finite validated selections into the overlay and makes the later hook add missing rows and update existing rows while preserving metadata. Frameworks, unrelated catalog selections, audit policy and byte-equality seals are unchanged.
+
+[Four focused tests](focused-ci-tests.txt) passed, including real MSBuild overlay-only, hook-only and combined evaluation, exact row counts, special paths and malformed root selections. [Actual source/reader proof](actual-source-reader-proof.json) built the three exact archived owner projects under the original and corrected policies in a disposable repository. The original policy reproduced a real reader byte refusal (gRPC was the first mismatch locally). Corrected overlay and hook-only restores selected the same package graphs; the actual unmodified reader restore/audit/build/catalog generation passed. Every DLL common to the reader and each prepared output matched: Hexalith.Tenants: 54, Hexalith.Parties: 55, Hexalith.Parties.EventStoreExtensions: 53.
+
+[Input and external-log hashes](verification-inputs.json) bind the patch, generated policy files and retained raw logs. The original CI observations and earlier release packets remain unchanged. These focused checks do not start services or establish live acceptance; exact committed-source hosted CI and release continuation remain pending.
