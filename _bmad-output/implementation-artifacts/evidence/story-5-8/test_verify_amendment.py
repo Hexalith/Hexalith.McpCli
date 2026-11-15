@@ -682,6 +682,85 @@ class PacketAuditTests(unittest.TestCase):
                     with self.assertRaisesRegex(ValueError,'^executable inputs changed during capture$'):
                         runner.capture()
 
+    def test_packet_capture_creates_new_output_directory_before_running_gates(self):
+        with self.audit_fixture() as (runner,manifest),contextlib.redirect_stdout(io.StringIO()):
+            with patch.object(runner,'OUT',runner.OUT/'new'/'packet'):
+                self.assertFalse(runner.OUT.exists())
+                def child(command,**kwargs):
+                    self.assertTrue(runner.OUT.is_dir())
+                    return subprocess.CompletedProcess(command,0,b'fixture output\n',b'')
+                with patch.object(runner,'commands',return_value=[('fixture',['fixture-command'],{})]),patch.object(subprocess,'run',side_effect=child),patch.object(runner,'git',return_value=b'fixture-head\n'):
+                    runner.capture()
+                captured = runner.read(runner.OUT/'commands.json')
+                self.assertEqual(['fixture'],[row['name'] for row in captured['commands']])
+                self.assertEqual(b'fixture output\n',(runner.OUT/'fixture.stdout.txt').read_bytes())
+                self.assertEqual(b'',(runner.OUT/'fixture.stderr.txt').read_bytes())
+
+    def refuse_symlink_output_without_writes(self,runner,symlink):
+        expected = (1,'','FAIL: refusing symlink packet output: '+str(symlink)+'\n')
+        for flags in [[],['--audit-only']]:
+            with self.subTest(flags=flags),patch.object(sys,'argv',[runner.__file__,*flags]):
+                out,err = io.StringIO(),io.StringIO()
+                with patch.object(Path,'mkdir',side_effect=AssertionError('unexpected mkdir')),patch.object(Path,'unlink',side_effect=AssertionError('unexpected deletion')),patch.object(Path,'write_bytes',side_effect=AssertionError('unexpected write')),patch.object(Path,'write_text',side_effect=AssertionError('unexpected write')),patch.object(subprocess,'run',side_effect=AssertionError('unexpected gate')),contextlib.redirect_stdout(out),contextlib.redirect_stderr(err):
+                    code = runner.main()
+                self.assertEqual(expected,(code,out.getvalue(),err.getvalue()))
+
+    def test_packet_output_preflight_rejects_every_destination_symlink_without_writes(self):
+        runner = load('packet58destinations','review-pass4-20261114/verify_packet.py')
+        names = ['audit.json','commands.json','lifecycle-integrated.json',
+                 'lifecycle-integrated.stdout.txt','lifecycle-integrated.stderr.txt']
+        names += [name+'.'+stream+'.txt' for name,_,_ in runner.commands() for stream in ['stdout','stderr']]
+        for name in names:
+            with self.subTest(destination=name),self.audit_fixture() as (runner,manifest),tempfile.TemporaryDirectory() as temp:
+                external = Path(temp).resolve()/'existing.log'
+                external.write_bytes(b'Existing external log.\n')
+                destination = runner.OUT/name
+                destination.unlink(missing_ok=True)
+                destination.symlink_to(external)
+                self.refuse_symlink_output_without_writes(runner,destination)
+                self.assertEqual(b'Existing external log.\n',external.read_bytes())
+                self.assertTrue(destination.is_symlink())
+
+    def test_packet_output_preflight_rejects_directory_and_parent_symlinks_without_writes(self):
+        for depth in [0,1,2]:
+            with self.subTest(parent_depth=depth),self.audit_fixture() as (runner,manifest),tempfile.TemporaryDirectory() as temp:
+                external = Path(temp).resolve()
+                (external/'existing.log').write_bytes(b'Existing external log.\n')
+                symlink = runner.OUT/'linked-output'
+                symlink.symlink_to(external,target_is_directory=True)
+                output = symlink
+                for level in range(depth): output /= 'new-'+str(level)
+                with patch.object(runner,'OUT',output):
+                    self.refuse_symlink_output_without_writes(runner,symlink)
+                self.assertEqual(['existing.log'],[path.name for path in external.iterdir()])
+                self.assertEqual(b'Existing external log.\n',(external/'existing.log').read_bytes())
+
+    def test_packet_output_preflight_guard_and_capture_caller_removal_controls(self):
+        with self.audit_fixture() as (runner,manifest),tempfile.TemporaryDirectory() as temp:
+            external = Path(temp).resolve()/'existing.log'
+            destination = runner.OUT/'tests.stdout.txt'
+            destination.unlink()
+            destination.symlink_to(external)
+            external.write_bytes(b'Existing external log.\n')
+            self.refuse_symlink_output_without_writes(runner,destination)
+            source = inspect.getsource(runner.capture)
+            invocation = '    preflight_outputs(plan)\n'
+            self.assertEqual(1,source.count(invocation))
+            namespace = {}
+            exec(source.replace(invocation,''),runner.__dict__,namespace)
+            require = runner.require
+            def removed(condition,message):
+                if not message.startswith('refusing symlink packet output: '): require(condition,message)
+            for control in [patch.object(runner,'require',side_effect=removed),patch.object(runner,'capture',namespace['capture'])]:
+                with self.subTest(control=control),control:
+                    external.write_bytes(b'Existing external log.\n')
+                    out = io.StringIO()
+                    result = subprocess.CompletedProcess(['fixture'],0,b'Captured output.\n',b'')
+                    with patch.object(subprocess,'run',return_value=result),patch.object(runner,'git',return_value=b'fixture-head\n'),contextlib.redirect_stdout(out):
+                        runner.capture()
+                    self.assertEqual(''.join(name+': exit 0\n' for name,_,_ in runner.commands()),out.getvalue())
+                    self.assertEqual(b'Captured output.\n',external.read_bytes())
+
     def test_packet_capture_rejects_changed_protected_inputs_and_removal_control(self):
         with self.audit_fixture() as (runner,manifest),contextlib.redirect_stdout(io.StringIO()):
             original = runner.protected_hashes()
@@ -962,19 +1041,31 @@ class AmendmentTests(PendingCase):
                 self.guard(lambda:V.check_drift(rows,self.decl),f'folders:{key}: source drift missing or incorrect')
 
     def test_decorated_type_wire_route_key_and_owner_eligibility_guards(self):
-        for key,old,new,diagnostic in [
-            ('C02','[HexalithCommand(','[Undecorated(', 'folders:M03: C02 replacement is absent, undecorated or owner-ineligible'),
-            ('C02','public sealed record BindRepository(','public sealed record Invented(', 'folders:M03: C02 replacement is absent, undecorated or owner-ineligible'),
-            ('C02','WireType = "Hexalith.Folders.Commands.BindRepository"','WireType = "Invented"','folders:M03: C02 decorated wire/domain mismatch'),
-            ('C02','AggregateIdProperty = nameof(FolderId)','AggregateIdProperty = nameof(TenantId)','folders:M03: C02 aggregate route mismatch'),
-            ('Q02','ProjectionType = "get-branch-ref-policy"','ProjectionType = "invented"','folders:M16: Q02 projection route mismatch'),
-            ('C02','IdempotencyKeyProperty = nameof(IdempotencyKey)','IdempotencyKeyProperty = nameof(MessageId)','folders:M03: C02 required caller key declaration missing'),
+        for key,old,new,diagnostic,condition in [
+            ('C02','[HexalithCommand(','[Undecorated(', 'folders:M03: C02 replacement is absent, undecorated or owner-ineligible',None),
+            ('C02','public sealed record BindRepository(','public sealed record Invented(', 'folders:M03: C02 replacement is absent, undecorated or owner-ineligible',None),
+            ('C02','WireType = "Hexalith.Folders.Commands.BindRepository"','WireType = "Invented"','folders:M03: C02 decorated wire/domain mismatch',None),
+            ('C02','Domain = "folders"','Domain = "invented"','folders:M03: C02 decorated wire/domain mismatch','\'Domain = "folders"\' in d[\'source\']'),
+            ('C02','AggregateIdProperty = nameof(FolderId)','AggregateIdProperty = nameof(TenantId)','folders:M03: C02 aggregate route mismatch',None),
+            ('Q02','ProjectionType = "get-branch-ref-policy"','ProjectionType = "invented"','folders:M16: Q02 projection route mismatch',None),
+            ('C02','IdempotencyKeyProperty = nameof(IdempotencyKey)','IdempotencyKeyProperty = nameof(MessageId)','folders:M03: C02 required caller key declaration missing',None),
         ]:
             with self.subTest(key=key,diagnostic=diagnostic):
                 decl = copy.deepcopy(self.decl)
                 self.assertIn(old,decl[key]['source'])
                 decl[key]['source'] = decl[key]['source'].replace(old,new)
-                self.guard(lambda:V.check_declarations(ROOT,self.old,self.new,decl,self.surface),diagnostic,source_guard=True)
+                check = lambda:V.check_declarations(ROOT,self.old,self.new,decl,self.surface)
+                if condition is None:
+                    self.guard(check,diagnostic,source_guard=True)
+                else:
+                    self.reject(check,diagnostic)
+                    with self.removed_condition(V,'check_declarations',condition):
+                        self.assertEqual((0,PASS,''),self.run_check(check))
+        decl = copy.deepcopy(self.decl); decl['C02']['wire'] = 'Invented'
+        check = lambda:V.check_declarations(ROOT,self.old,self.new,decl,self.surface)
+        self.reject(check,'folders:M03: C02 decorated wire/domain mismatch')
+        with self.removed_condition(V,'check_declarations',"d['wire'] == expected_wire"):
+            self.assertEqual((0,PASS,''),self.run_check(check))
         decl = copy.deepcopy(self.decl); decl['C02']['eligibility'] = 'excluded'
         self.reject(lambda:V.check_declarations(ROOT,self.old,self.new,decl,self.surface),'folders: 48-candidate/41-decoration owner set mismatch')
 
@@ -994,11 +1085,17 @@ class AmendmentTests(PendingCase):
 
     def test_pinned_registration_and_module_guard_removal(self):
         source = B.source
-        for path,before,after,message in [
+        for path,before,after,message,condition in [
             ('src/Hexalith.Folders.Mcp/Program.cs','.WithToolsFromAssembly()','.WithoutToolsFromAssembly()',
-             'folders: pinned registration mismatch'),
+             'folders: pinned registration mismatch',None),
+            ('src/Hexalith.Folders.Mcp/Program.cs','.WithResourcesFromAssembly()','.WithoutResourcesFromAssembly()',
+             'folders: pinned registration mismatch',"'.WithResourcesFromAssembly()' in program"),
+            ('src/Hexalith.Folders.Mcp/Program.cs','.WithStdioServerTransport()','.WithoutStdioServerTransport()',
+             'folders: pinned registration mismatch',"'.WithStdioServerTransport()' in program.splitlines()[60]"),
+            ('src/Hexalith.Folders.Contracts/FoldersModule.cs','[assembly: HexalithModule("folders",','[assembly: HexalithModule("invented",',
+             'folders: module domain/String identifier declaration mismatch','\'[assembly: HexalithModule("folders",\' in module'),
             ('src/Hexalith.Folders.Contracts/FoldersModule.cs','IdentifierKind.String','IdentifierKind.Ulid',
-             'folders: module domain/String identifier declaration mismatch'),
+             'folders: module domain/String identifier declaration mismatch',None),
         ]:
             with self.subTest(message=message):
                 self.assertIn(before,source(ROOT,path))
@@ -1006,7 +1103,13 @@ class AmendmentTests(PendingCase):
                     text = source(root,name,pin)
                     return text.replace(before,after) if name == path and pin == B.PIN else text
                 with patch.object(B,'source',side_effect=damaged):
-                    self.guard(lambda:V.check_declarations(ROOT,self.old,self.new,self.decl,self.surface),message)
+                    check = lambda:V.check_declarations(ROOT,self.old,self.new,self.decl,self.surface)
+                    if condition is None:
+                        self.guard(check,message)
+                    else:
+                        self.reject(check,message)
+                        with self.removed_condition(V,'check_declarations',condition):
+                            self.assertEqual((0,PASS,''),self.run_check(check))
 
     def test_story_status_and_metadata_corrections(self):
         rows = self.changed('G4','Gap and required evidence','Folders Story 5.14: done at the pin.')
@@ -1092,6 +1195,10 @@ class AmendmentTests(PendingCase):
             self.assertEqual((ROOT/B.NEW).read_bytes(),(root/B.NEW).read_bytes())
             self.assertEqual('pending',V.read_json(root/B.E/'approval.json')['decision'])
             self.assertEqual('candidate-pending-owner-approval-and-delivery',V.read_json(root/B.E/'labels.json')['state'])
+            for script,output in [('verify_amendment.py',PASS),('verify_labels.py',LABEL_PASS)]:
+                with self.subTest(script=script):
+                    result = fixture_process(root/B.E/script,'--root',str(root))
+                    self.assertEqual((0,output,''),(result.returncode,result.stdout,result.stderr))
 
     def test_builder_refuses_output_file_and_parent_symlinks_before_writes(self):
         paths = [B.NEW,B.E/'approval.json',B.E/'labels.json',*[B.E/'upstream/folders'/name for name in
@@ -1307,6 +1414,21 @@ def source(root, path, pin=PIN):
             return text.replace('JsonProperty("expectedFileVersion"','JsonProperty("removedExpectedVersion"') if name == path and pin == B.PIN else text
         with patch.object(B,'source',side_effect=missing):
             self.guard(lambda:V.check_source_drift(ROOT,self.surface),'folders: source drift FileMutationRequest.expectedFileVersion is not evidenced at both pins')
+        for model,properties in [('FileMutationRequest',['ownerFileId','expectedFileVersion','expectedLockFence']),('FileMetadataItem',['fileId','version']),('LockLeaseMetadata',['lockFence'])]:
+            for prop in properties:
+                with self.subTest(model=model,property=prop):
+                    def already_present(root,name,pin=B.PIN):
+                        text = original(root,name,pin)
+                        if name == path and pin == B.OLD_SOURCE_PIN:
+                            text,count = re.subn(r'(public partial class '+model+r'[^\n]*\n    \{)',
+                                                 lambda match:match[0]+'\n        [Newtonsoft.Json.JsonProperty("'+prop+'")]\n',text)
+                            self.assertEqual(1,count)
+                        return text
+                    with patch.object(B,'source',side_effect=already_present):
+                        check = lambda:V.check_source_drift(ROOT,self.surface)
+                        self.reject(check,f'folders: source drift {model}.{prop} is not evidenced at both pins')
+                        with self.removed_condition(V,'check_source_drift','needle not in block(before)'):
+                            self.assertEqual((0,PASS,''),self.run_check(check))
 
     def test_legacy_surface_drift_guard_removal(self):
         surface = copy.deepcopy(self.surface)
@@ -1317,22 +1439,32 @@ def source(root, path, pin=PIN):
         source = B.source
         cases = [
             ('src/shared/AdapterCore/BearerTransportPolicy.cs','Uri.UriSchemeHttps','Uri.UriSchemeInvented',
-             'folders: HTTPS/loopback credential source premise missing'),
+             'folders: HTTPS/loopback credential source premise missing',None),
+            ('src/shared/AdapterCore/BearerTransportPolicy.cs','IPAddress.IsLoopback(address)','IPAddress.IsInvented(address)',
+             'folders: HTTPS/loopback credential source premise missing',"'IPAddress.IsLoopback(address)' in policy"),
+            ('src/shared/AdapterCore/BearerTransportPolicy.cs','Uri.UriSchemeHttp\n','Uri.UriSchemeInvented\n',
+             'folders: HTTPS/loopback credential source premise missing',"re.search(r'Uri\\.UriSchemeHttp\\b',policy) is not None"),
             ('src/Hexalith.Folders.Server/FoldersServerServiceCollectionExtensions.cs',
              'IWorkspaceCommitExecutor, UnavailableWorkspaceCommitExecutor','IWorkspaceCommitExecutor, InventedExecutor',
-             'folders: default implementation/commit-executor source premise missing'),
+             'folders: default implementation/commit-executor source premise missing',None),
         ]
         for query in ['FolderFileOwnerRead','FolderFileReferenceRead','FolderOwnerRead']:
             cases.append((f'src/Hexalith.Folders.Server/Queries/{query}QueryHandler.cs','IDomainQueryHandler','IInventedQueryHandler',
-                          f'folders: internal {query} query-handler premise missing'))
-        for path,before,after,message in cases:
+                          f'folders: internal {query} query-handler premise missing',None))
+        for path,before,after,message,condition in cases:
             with self.subTest(message=message):
                 self.assertIn(before,source(ROOT,path))
                 def damaged(root,name,pin=B.PIN):
                     text = source(root,name,pin)
                     return text.replace(before,after) if name == path and pin == B.PIN else text
                 with patch.object(B,'source',side_effect=damaged):
-                    self.guard(lambda:V.check_source_drift(ROOT,self.surface),message)
+                    check = lambda:V.check_source_drift(ROOT,self.surface)
+                    if condition is None:
+                        self.guard(check,message)
+                    else:
+                        self.reject(check,message)
+                        with self.removed_condition(V,'check_source_drift',condition):
+                            self.assertEqual((0,PASS,''),self.run_check(check))
 
     def test_owner_file_id_drift_semantics_and_both_pin_controls(self):
         for key in ['M01','M04','M13','L24','L25','L26','C10']:
@@ -1360,6 +1492,14 @@ def source(root, path, pin=PIN):
         self.assertEqual(1,count)
         self.assertIn('JsonRequired',decl['C02']['source'])
         self.guard(lambda:V.check_declarations(ROOT,self.old,self.new,decl,self.surface),'folders:M03: C02 required caller key declaration missing',source_guard=True)
+        decl = copy.deepcopy(self.decl)
+        before = 'JsonPropertyName("idempotencyKey")'
+        self.assertEqual(1,decl['C02']['source'].count(before))
+        decl['C02']['source'] = decl['C02']['source'].replace(before,'JsonPropertyName("inventedKey")')
+        check = lambda:V.check_declarations(ROOT,self.old,self.new,decl,self.surface)
+        self.reject(check,'folders:M03: C02 required caller key declaration missing')
+        with self.removed_condition(V,'check_declarations','\'JsonPropertyName("idempotencyKey")\' in key_attributes[1]'):
+            self.assertEqual((0,PASS,''),self.run_check(check))
 
     def test_actual_client_calls_and_upload_kinds_are_checked(self):
         source = B.source

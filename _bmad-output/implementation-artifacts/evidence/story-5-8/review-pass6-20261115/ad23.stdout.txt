@@ -1,0 +1,9 @@
+PASS: _bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md: 71 classified rows + 20 non-operation records = 91
+PASS: _bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md: 28 classified rows + 40 non-operation records = 68
+PASS: _bmad-output/implementation-artifacts/folders-migration-inventory-v1.md: 103 classified rows + 58 non-operation records = 161
+PASS: _bmad-output/implementation-artifacts/projects-migration-inventory-v1.md: 46 classified rows + 6 non-operation records = 52
+PASS: _bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md: 26 classified rows + 4 non-operation records = 30
+PASS: _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md: 39 classified rows + 9 non-operation records = 48
+PASS: _bmad-output/implementation-artifacts/memories-migration-inventory-v1.md: 39 classified rows + 12 non-operation records = 51
+PASS: _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md: 20 classified rows + 4 non-operation records = 24
+PASS: exact-byte partition verified; effective decision status: adopted; parity remains a separate gate

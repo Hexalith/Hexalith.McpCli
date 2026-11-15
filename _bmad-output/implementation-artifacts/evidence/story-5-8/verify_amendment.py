@@ -215,7 +215,7 @@ def check_source_drift(root,surface):
             elif prop in {'expectedFileVersion','expectedLockFence'} and needle in block(after):
                 require(re.search(r'JsonProperty\("'+prop+r'", Required = Newtonsoft.Json.Required.Always\)',block(after)) is not None, f'folders: {model}.{prop} required fence semantics missing')
     policy = B.source(root,'src/shared/AdapterCore/BearerTransportPolicy.cs')
-    require('Uri.UriSchemeHttps' in policy and 'IPAddress.IsLoopback(address)' in policy and 'Uri.UriSchemeHttp' in policy, 'folders: HTTPS/loopback credential source premise missing')
+    require('Uri.UriSchemeHttps' in policy and 'IPAddress.IsLoopback(address)' in policy and re.search(r'Uri\.UriSchemeHttp\b',policy) is not None, 'folders: HTTPS/loopback credential source premise missing')
     defaults = B.source(root,'src/Hexalith.Folders.Server/FoldersServerServiceCollectionExtensions.cs')
     require('IWorkspaceCommitExecutor, UnavailableWorkspaceCommitExecutor' in defaults and all(name in defaults for name in ['IWorkspaceFileContentStore','provider.GetRequiredService','WorkspaceContentMutationAdapter']), 'folders: default implementation/commit-executor source premise missing')
     for query in ['FolderFileOwnerRead','FolderFileReferenceRead','FolderOwnerRead']:

@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -634,38 +634,38 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
 
 The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged.
 
-- [ ] [Review][Patch] The documented `--audit-only` replay deletes the tracked pass-4 audit and always fails (low) — The runner docstring (`verify_packet.py:4-6`) and `verification.md:128` say `--audit-only` validates existing captures.
+- [x] [Review][Patch] The documented `--audit-only` replay deletes the tracked pass-4 audit and always fails (low) — The runner docstring (`verify_packet.py:4-6`) and `verification.md:128` say `--audit-only` validates existing captures.
   - The default `OUT` is the historical pass-4 folder (`:23`). Since the pass-5 fix, `audit()` first deletes `OUT/audit.json` (`:171`).
   - The pass-4 manifest's recorded inputs no longer match the current `test_verify_amendment.py` and `verify_packet.py`. The replay therefore prints `FAIL: recorded executable inputs differ from current files` and leaves the tracked `review-pass4-20261114/audit.json` deleted. The B and A layers reproduced this on copies.
   - `verification.md:106` ("preserve the historical pass-4 captures") is true only of the two documented pass-5 invocations.
   - Fix: in the docstring and the pass-4 section, say that the default directory is the historical pass-4 packet, which no longer replays against current inputs, and that `git checkout` restores its audit after such a run. Point to the `OUT` override for the current packet. Add no new option.
   - The lifecycle proof's default delivery folder (also raised by B) is settled: pass-1 E8, pass-2 E3, pass-3 E4.
   - (B2, A1) [_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py:4]
-- [ ] [Review][Patch] `verification.md` does not name the commit that holds the pass-5 work (low) — The pass-5 section ends "This build session performed no commit or push" (`verification.md:114`).
+- [x] [Review][Patch] `verification.md` does not name the commit that holds the pass-5 work (low) — The pass-5 section ends "This build session performed no commit or push" (`verification.md:114`).
   - The work was committed as `fbcf9b6`, which the packet never names.
   - `review-pass5-20261114/audit.json` and `post-transition.json` record `headAtCapture` `2b366a2`, which does not contain the audited inputs.
   - Since pass-5 A1, the pass-4 section names `b22327d` and `3a7ede1` (`:176-177`).
   - Fix: add the same sentence naming `fbcf9b6`. Do not assert an authorization that is not recorded.
   - (A2) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:114]
-- [ ] [Review][Patch] The builder-reuse ledger entry omits the declaration table's last-wins storage (low) — `declarations()` assigns `result[key]` without a duplicate check (`build_candidate.py:137`).
+- [x] [Review][Patch] The builder-reuse ledger entry omits the declaration table's last-wins storage (low) — `declarations()` assigns `result[key]` without a duplicate check (`build_candidate.py:137`).
   - A duplicated `| C05 |` row with a different eligibility, wire or aggregate silently replaces the first, while `ownerEvidence` anchors the first copy.
   - `len(decl) == 48` (`verify_amendment.py:167`) counts keys, so it cannot catch this.
   - At `7eab70e9` the table has 48 unique IDs, so the approved bytes are correct.
   - The builder-reuse entry (`deferred-work.md:1121`) says only resources and client calls are stored without duplicate checks. Pass-5 E6's rejection relied on that entry covering this site.
   - Fix: add `build_candidate.py:137` to the entry's summary and evidence.
   - (B7) [_bmad-output/implementation-artifacts/deferred-work.md:1121]
-- [ ] [Review][Patch] Capture into a new packet directory fails only after the full suite (low) — `capture()` never creates `OUT` (`verify_packet.py:142-160`).
+- [x] [Review][Patch] Capture into a new packet directory fails only after the full suite (low) — `capture()` never creates `OUT` (`verify_packet.py:142-160`).
   - With the documented `OUT` override pointing at a new `review-pass-N` folder, `unlink(missing_ok=True)` succeeds and the suite runs (about 100 s). The first stream write (`:160`) then raises `FileNotFoundError`, reported as `FAIL: [Errno 2] …`.
   - The next packet is created exactly this way.
   - Fix: call `OUT.mkdir(parents=True, exist_ok=True)` at the start of `capture()`.
   - (E5) [_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py:143]
-- [ ] [Review][Patch] The predecessor-pin half of the drift-field check has no test (low) — `verify_amendment.py:212` requires each drift needle to be absent from the `OLD_SOURCE_PIN` model block and present at the pin.
+- [x] [Review][Patch] The predecessor-pin half of the drift-field check has no test (low) — `verify_amendment.py:212` requires each drift needle to be absent from the `OLD_SOURCE_PIN` model block and present at the pin.
   - The both-pin tests damage sources only when `pin == B.PIN`: `test_verify_amendment.py:1287-1309` and `:1337-1353`.
   - The V layer reduced `:212` to `needle in block(after)`, and all 98 tests passed.
   - The `:197` src-tree binding keeps today's predecessor fixed, so the approved drift cells stay correct. But the guard can be removed silently, against the guard-test rule, and the K12 successor reuses it.
   - Fix: in `test_source_drift_fields_are_proved_against_both_git_pins`, inject `JsonProperty("<field>"` into the model block when `pin == B.OLD_SOURCE_PIN`. Assert the exact `folders: source drift <Model>.<field> is not evidenced at both pins` refusal, and add a removal control.
   - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:212]
-- [ ] [Review][Patch] Several pinned-premise conjuncts can be deleted without a failing test (low) — No refusal case damages these conjuncts:
+- [x] [Review][Patch] Several pinned-premise conjuncts can be deleted without a failing test (low) — No refusal case damages these conjuncts:
   - `verify_amendment.py:164`: `.WithResourcesFromAssembly()`, and `.WithStdioServerTransport()` on `Program.cs` line 61 (the only content-checked literal anchor);
   - `:166`: `[assembly: HexalithModule("folders",`;
   - `:178`: `d['wire'] == expected_wire` and `Domain = "folders"`;
@@ -679,12 +679,12 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
     - `test_decorated_type_wire_route_key_and_owner_eligibility_guards` (`:964`);
     - `test_idempotency_key_own_jsonrequired_attribute_control` (`:1355`).
   - (V2) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:164]
-- [ ] [Review][Patch] The plain-HTTP conjunct of the transport premise is vacuous (low) — `verify_amendment.py:218` checks `'Uri.UriSchemeHttp' in policy` beside `'Uri.UriSchemeHttps' in policy`. The second string contains the first, so the conjunct always passes.
+- [x] [Review][Patch] The plain-HTTP conjunct of the transport premise is vacuous (low) — `verify_amendment.py:218` checks `'Uri.UriSchemeHttp' in policy` beside `'Uri.UriSchemeHttps' in policy`. The second string contains the first, so the conjunct always passes.
   - The pinned `BearerTransportPolicy.cs` has `Uri.UriSchemeHttps` at line 19 and the loopback `Uri.UriSchemeHttp` branch at line 24 (checked).
   - The "or to a loopback host" premise (`folders-migration-inventory-v1.1.0.md:76-77`) therefore rests only on `IPAddress.IsLoopback(address)`.
   - Fix: match `Uri\.UriSchemeHttp\b`, and cover it with the previous entry's damage subtest.
   - (V other) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:218]
-- [ ] [Review][Patch] A successful builder initialization is never checked by the verifiers (low) — `test_builder_allows_receipt_free_initialization` (`test_verify_amendment.py:1084-1094`) checks only stdout, the successor bytes, `decision == 'pending'` and the label state.
+- [x] [Review][Patch] A successful builder initialization is never checked by the verifiers (low) — `test_builder_allows_receipt_free_initialization` (`test_verify_amendment.py:1084-1094`) checks only stdout, the successor bytes, `decision == 'pending'` and the label state.
   - The builder writes the receipt's `artifacts`, `pinnedArtifacts`, `amendment.changedRows` and `limits`, plus the register (`build_candidate.py:553-568`).
   - `check_approval` and `verify_labels.verify` recompute those fields independently, but no test runs either of them on builder output.
   - A builder that wrote a wrong `changedRows` hash or dropped `limits` would pass this test, and the K12 successor reuses the builder.
@@ -784,9 +784,33 @@ Derivation rules (the decisions above apply first):
 
 - 2026-11-14: Final resumed pass-5 build completed all eight code-review patches and both follow-up review patch groups. Parent verification passed all 98 tests in ordinary and synthetic lifecycle workspaces, ten exact gate stream checks, fourteen protected artifacts and their capture-time hashes, all four matrix rows, frozen intent and six symlinked-temp tests. The final [manifest](evidence/story-5-8/review-pass5-20261114/commands.json), [audit](evidence/story-5-8/review-pass5-20261114/audit.json) and [secret-scan receipt](evidence/story-5-8/secret-scan-review-pass5-completion-20261114.json) retain the evidence. Three existing approved-byte deferrals were carried without duplicate ledger entries; no new deferral was added. Spec is done and sprint tracking is review. Approved inventory, receipts, labels, frozen intent, production, dependencies, census and gitlinks are unchanged. This build session performed no commit or push.
 
+- 2026-11-15: Implemented all eight code-review-pass-6 patch entries. The transport premise now matches `Uri.UriSchemeHttp` at a token boundary. Exact-stream refusal cases independently remove each previously untested pinned-premise conjunct and the predecessor-pin half of all six drift fields. Fresh builder initialization now passes both verifier entrypoints, and capture creates a new nested output directory before gates run. Corrected historical audit-only replay guidance, recorded the pass-5 commit and expanded the existing builder-reuse ledger entry with the declaration-table last-wins store. All seven focused tests passed in 5.418 seconds. Final full capture/audit, independent workflow review and status transition remain with the coordinator. Approved inventory, receipt, label register, delivered labels, frozen intent, production, dependencies, census and gitlinks remain unchanged. This implementation session performed no commit or push.
+
+- 2026-11-15: Final resumed pass-6 build completed all eight review patches and the follow-up packet-output symlink correction. The original implementation agent passed all 18 focused audit tests; parent verification then passed all 102 tests in both ordinary and synthetic lifecycle workspaces, ten exact gate stream checks, fourteen protected artifacts and their capture-time hashes, six symlinked-temp tests, all four matrix rows, frozen intent and tracked/untracked whitespace. All three independent review layers completed; one existing approved-byte semantic-drift deferral was carried without a duplicate entry. Final evidence is in [the pass-6 manifest](evidence/story-5-8/review-pass6-20261115/commands.json), [audit](evidence/story-5-8/review-pass6-20261115/audit.json) and [completion scan](evidence/story-5-8/secret-scan-review-pass6-completion-20261115.json). Spec is done and sprint tracking is review. Approved artifacts, production, dependencies, census and gitlinks are unchanged. The frozen scope requires separate explicit commit authorization; no commit or push was performed.
+
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Resumed pass-6 build review (2026-11-15)
+
+All three independent layers completed before triage. The full snapshot is `/tmp/hexalith-job.Nofa5eTi/story-5-8-full-review.diff`, against the preserved baseline `a92a2969db6903b8c6cca7e437446167e135ec9d`; this resumed run began at `0795509fca063aaf2fd8dba8ac7a8213b57485a2`. The cumulative snapshot includes earlier independent maintenance. Parent verification passed all 99 tests in ordinary and synthetic lifecycle workspaces, ten exact gate stream checks, fourteen protected artifacts, six symlinked-temp tests, all matrix rows and frozen intent. The verification-gap layer found no gaps.
+
+| Finding | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| B1: whitespace before a workflow YAML colon bypasses the text trigger | false | reject | carried: the same reformatted-workflow claim was rejected in code-review pass 3 (B13/E7) and pass 6 (E11). The real register is integrated; both verifier entrypoints force completion independently of workflow formatting (`verify_amendment.py:309`, `verify_labels.py:41`). A reformatted pending fixture cannot downgrade the approved packet. |
+| B2: packet capture follows output-file symlinks | medium | patch | Parent reproduced `capture()` overwriting a disposable external existing log through `tests.stdout.txt`. Unlike the already fixed builder destinations, the runner writes its streams without checking links. Preflight the output directory/parent chain and every planned packet destination before deletion or writing; add exact refusal/no-write and removal-sensitive tests. |
+| B3: default capture or replay changes the historical pass-4 packet | low | reject | carried: same default-output behavior as resumed pass-5 B4 and the earlier lifecycle overwrite findings. Pass-6 documentation now explicitly describes historical replay invalidation/restoration and gives the current `OUT` override. Requiring a new destination option adds surface beyond the settled direct documentation correction. |
+| B4: manifest head and baseline fields are unvalidated | low | reject | carried: same location and claim as resumed pass-5 B2. Capture obtains the canonical HEAD from Git and writes the fixed baseline; executable inputs, exact streams, protected bytes and frozen intent are checked independently. Additional guards for manually rewritten informational provenance remain rejected. |
+| B5: packet JSON accepts duplicate members | low | reject | carried: same ordinary-JSON-reader claim as resumed pass-5 B3. Generated manifests/summaries have no duplicate keys; the approval/overwrite boundary independently rejects duplicates. New guards for hand-corrupted generated capture documents remain rejected. |
+| B6: JSON false compares equal to exit code zero | low | reject | Parent confirmed that rewriting all manifest exit codes to false still passes. Capture writes actual `subprocess` integer return codes, and the audit separately requires exact success streams. Meeting this case requires manually changing generated captures; schema/type guards add complexity for negligible harm in this bounded packet. |
+| B7: malformed nested manifest shapes raise tracebacks | low | reject | carried: same loud failure as code-review pass-5 E10 and pass-6 E7. Damaged shapes fail nonzero; per-shape controlled diagnostics add guards without admitting a bad packet. |
+| B8: additional discovered test files are not in the fixed input list | low | reject | The current discovery root contains exactly `test_verify_amendment.py`, which is bound before/after capture and on replay. No unbound test source exists in this packet. Expanding discovery in a future successor needs its input list updated; dynamic closure or closed-set guards add complexity for a hypothetical new file. |
+| B9: absolute owner checkout prevents other-layout reproduction | low | reject | carried: same claim as build review 1 B1 and code-review pass-6 B5. The immutable register's exact checkout and required objects are documented. A configurable-checkout feature remains rejected for this bounded recorded workspace. |
+| B10: semantic-retention prose exceeds name/model drift evidence | medium | defer | carried: same approved-byte defect as code-review pass-2 B7/A2 and resumed pass-4 B8. The per-surface semantic audit is already tracked (`deferred-work.md:1093`) for the K12 reconciliation successor; no duplicate entry or approved-byte edit. |
+| E1: a McpCli fork origin with the same approved history passes completion | low | reject | Confirmed by tracing `verify_labels.py:84-89`: the root's local `origin/main` is checked for ancestry and exact approved bytes, without an origin-URL predicate. The demonstration changes local Git trust configuration while retaining the same approved commits and contents; it grants no different disposition or approval. A new URL guard neither authenticates local refs nor re-proves the recorded publication and adds complexity for this deliberately altered workstation state. |
+
+One direct patch group survived: packet capture destination confinement. The original implementation agent added a shared preflight before capture/audit deletion or writes, covering all 25 planned destinations and output-directory ancestors. Exact-stream tests prove no writes on refusal and restore the external-log overwrite when the guard/capture call is removed. All 18 focused audit tests passed. Parent final verification passed all 102 tests in ordinary and synthetic lifecycle workspaces, all ten exact gate stream checks, fourteen protected artifacts, six symlinked-temp tests, all matrix rows, frozen intent and whitespace. The [final pass-6 audit](evidence/story-5-8/review-pass6-20261115/audit.json) binds the corrected sources. One existing approved-byte deferral is carried without a duplicate ledger entry.
 
 ### Resumed pass-5 build review (2026-11-14)
 

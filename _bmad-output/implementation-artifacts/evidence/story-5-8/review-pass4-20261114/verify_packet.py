@@ -3,7 +3,13 @@
 
 Run from the repository root with a UTF-8 locale:
 python3 -B -I _bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py
-Use --audit-only to validate retained captures without rerunning the gates.
+The default output is the historical pass-4 packet. Its recorded inputs no
+longer match the current sources, so --audit-only fails and deletes its audit.
+After such a run, git checkout -- followed by the repository-relative
+review-pass4-20261114/audit.json path restores that historical audit. Override
+OUT when loading this module to capture or replay the current packet, as shown
+in ../verification.md. --audit-only validates that selected packet's retained
+captures without rerunning the gates.
 """
 import argparse
 import hashlib
@@ -139,13 +145,25 @@ for path in paths:
     ]
 
 
+def preflight_outputs(plan):
+    names = ['audit.json','commands.json','lifecycle-integrated.json',
+             'lifecycle-integrated.stdout.txt','lifecycle-integrated.stderr.txt']
+    names += [name+'.'+stream+'.txt' for name,_,_ in plan for stream in ['stdout','stderr']]
+    for destination in [OUT,*(OUT/name for name in names)]:
+        for part in [destination,*destination.parents]:
+            require(not part.is_symlink(),f'refusing symlink packet output: {part}')
+
+
 def capture():
+    plan = commands()
+    preflight_outputs(plan)
+    OUT.mkdir(parents=True,exist_ok=True)
     (OUT/'audit.json').unlink(missing_ok=True)
     before = input_hashes()
     protected_before = protected_hashes()
     manifest = {'head':git('rev-parse','HEAD').decode().strip(),'baselineCommit':BASELINE,'inputs':before,
                 'protectedInputs':protected_before,'commands':[]}
-    for name,command,environment in commands():
+    for name,command,environment in plan:
         with tempfile.TemporaryDirectory() as temp:
             if name == 'symlink-temp-tests':
                 directory = Path(temp); (directory/'real').mkdir()
@@ -168,6 +186,7 @@ def capture():
 
 
 def audit():
+    preflight_outputs(commands())
     (OUT/'audit.json').unlink(missing_ok=True)
     manifest = read(OUT/'commands.json')
     require(manifest['inputs'] == input_hashes(),'recorded executable inputs differ from current files')

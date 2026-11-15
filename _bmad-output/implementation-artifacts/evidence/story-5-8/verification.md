@@ -1,4 +1,4 @@
-# Story 5.8 verification (2026-11-14)
+# Story 5.8 verification (2026-11-15)
 
 The Folders 1.1.0 inventory and exact-byte owner approval were published at
 McpCli `f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091`. The separately authorized PS10/PS11
@@ -48,7 +48,75 @@ ancestor `2236855ee181bdeed2a103537c66316a1612c792`. The unpublished original
 `e2252f29a2dba2b64786ee483eb59fbceaadd387` is optional. The verifiers read these
 local objects and refs; they do not fetch or perform network operations.
 
-## Code-review pass 5 patch verification (2026-11-14)
+## Code-review pass 6 patch verification (2026-11-15)
+
+The eight pass-6 patch entries preserve the approved inventory, receipt and label
+bytes. The transport premise now matches the plain-HTTP token independently of
+HTTPS. Exact-stream refusal tests cover the predecessor-pin half of every drift
+field and the previously untested registration, module, wire, domain, caller-key
+and transport conjuncts, with controls removing only the affected condition.
+Both verifier entrypoints also check the complete pending packet produced by a
+fresh builder initialization. A capture into a new nested output directory
+creates it before running any gate. The existing builder-reuse ledger entry now
+includes the declaration table's unchecked last-wins storage.
+
+Independent review added one correction: capture and audit now preflight all 25
+planned packet destinations and output-directory ancestors before deletion or
+writes. Exact-stream tests cover linked files/directories without writes and
+demonstrate the external-log overwrite when the guard or capture call is removed.
+All 18 focused audit tests passed before final parent verification.
+
+For the current packet, load the retained runner and override `OUT` from the
+repository root. On the recording workstation, use `run-with-temp` for capture;
+elsewhere set a private task-owned `TMPDIR` and remove it after all children exit:
+
+```bash
+run-with-temp python3 -B -I - <<'PY'
+import importlib.util
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('story58packet', Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py'))
+packet = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(packet)
+packet.OUT = packet.ROOT / packet.E / 'review-pass6-20261115'
+raise SystemExit(packet.main())
+PY
+```
+
+For audit-only replay of that packet, use the same module load and `OUT`
+override, passing `--audit-only` to the interpreter:
+
+```bash
+python3 -B -I - --audit-only <<'PY'
+import importlib.util
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('story58packet', Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py'))
+packet = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(packet)
+packet.OUT = packet.ROOT / packet.E / 'review-pass6-20261115'
+raise SystemExit(packet.main())
+PY
+```
+
+Final parent verification passed **102 tests in both ordinary and synthetic
+lifecycle workspaces**, without skips. All ten gate streams matched, all fourteen
+protected artifacts equal committed and capture-time bytes, all four matrix rows
+passed, frozen intent is unchanged, and all six symlinked-temp tests passed.
+The [final manifest](review-pass6-20261115/commands.json) and
+[closure audit](review-pass6-20261115/audit.json) bind the corrected executable
+inputs and exact streams. Both real completion gates passed under UTF-8 and
+ASCII locales, along with AD-23 and tracked/untracked whitespace.
+
+All three independent review layers completed. The verification-gap layer found
+no gaps; one capture-output correction was applied, and one existing approved-byte
+semantic-drift deferral was carried without a duplicate ledger entry. The final
+[evidence scan](secret-scan-review-pass6-completion-20261115.json) covers the
+completed packet. Spec is done and sprint tracking is review. The K12 successor
+remains an Epic 6 catalog prerequisite. This build session performed no commit or
+push; no .NET build or live acceptance is claimed.
+The [post-transition checks](review-pass6-20261115/post-transition.json) bind both
+real completion entrypoints and audit-only replay after the final status update.
+
+## Historical code-review pass 5 patch verification (2026-11-14)
 
 All eight pass-5 patch entries are implemented. New exact-stream audit tests
 consistently rebind child, summary, helper-output and manifest hashes, then reject
@@ -111,7 +179,9 @@ All three review layers completed; the stale-audit fix and current reproduction
 commands were applied. Three prior approved-byte deferrals were carried without
 duplicate ledger entries; no new deferral was added. The final evidence scan is
 [clean](secret-scan-review-pass5-completion-20261114.json). The spec is done and
-sprint tracking is review. This build session performed no commit or push.
+sprint tracking is review. That build session performed no commit or push;
+the pass-5 work was later committed as
+`fbcf9b6bb2e0cf93bb6afb99f67ebc7821c5a892`.
 
 ## Historical code-review pass 4 patch verification (2026-11-14)
 
@@ -123,9 +193,12 @@ directory empty. The existing builder-guard deferral now names all five omitted
 sites; the technical-inventory re-citation remains in its existing ledger entry.
 
 The retained [capture and audit runner](review-pass4-20261114/verify_packet.py)
-regenerates the final command manifest, streams and closure audit. Run it from
-the repository root with `python3 -B -I` and its repository-relative path.
-Append `--audit-only` to validate existing captures without running the gates.
+defaults to this historical pass-4 directory. Its recorded executable inputs
+no longer match current sources: a direct `--audit-only` run fails and removes
+the tracked historical audit before checking those inputs. After such a run,
+`git checkout -- _bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/audit.json`
+restores that historical audit. Use the current packet's `OUT` override shown
+above for a fresh capture or audit-only replay; no new runner option is needed.
 The runner compares all fourteen protected artifacts with committed `HEAD`
 bytes, binds all eleven executed inputs including itself, and checks each gate's
 exact stdout and stderr. Only the unittest duration varies; every test name,

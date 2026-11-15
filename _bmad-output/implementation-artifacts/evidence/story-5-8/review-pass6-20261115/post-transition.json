@@ -1,0 +1,67 @@
+{
+  "head": "0795509fca063aaf2fd8dba8ac7a8213b57485a2",
+  "baselineCommit": "a92a2969db6903b8c6cca7e437446167e135ec9d",
+  "specStatus": "done",
+  "sprintStatus": "review",
+  "commands": [
+    {
+      "name": "inventory",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": {
+        "path": "post-transition-inventory.stdout.txt",
+        "sha256": "51d77d50053d0b9714406efa30fa9cb49de704a10e686c9205e1a7d5c0a4437b"
+      },
+      "stderr": {
+        "path": "post-transition-inventory.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "labels",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": {
+        "path": "post-transition-labels.stdout.txt",
+        "sha256": "cef84e407875c3fe6254e8318685c0410691e86e1df5d9b3ba452c940e5a2a8e"
+      },
+      "stderr": {
+        "path": "post-transition-labels.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "name": "audit-only",
+      "command": [
+        "python3",
+        "-B",
+        "-I",
+        "-c",
+        "import importlib.util; from pathlib import Path; p=Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py'); s=importlib.util.spec_from_file_location('packet58final',p); m=importlib.util.module_from_spec(s); s.loader.exec_module(m); m.OUT=m.ROOT/m.E/'review-pass6-20261115'; raise SystemExit(m.main())",
+        "--audit-only"
+      ],
+      "cwd": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": {
+        "path": "post-transition-audit-only.stdout.txt",
+        "sha256": "e716102b99bd59177607ee153e501331d47b373d52a96cc5dbfda7b1eecd61c6"
+      },
+      "stderr": {
+        "path": "post-transition-audit-only.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ]
+}
