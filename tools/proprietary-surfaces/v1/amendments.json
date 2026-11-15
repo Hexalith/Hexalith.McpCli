@@ -42,5 +42,9 @@
   {
     "path": "amendments/1.0.11.json",
     "sha256": "e24c1b1822d0ef27c2011808b97c7d7a6475c8b6cb9a29be0f96aa0347378995"
+  },
+  {
+    "path": "amendments/1.0.12.json",
+    "sha256": "fa3c13ccaf80874967ba8bc0f06013365e5b6fdd0f1ce56a9ee1b8719f829112"
   }
 ]

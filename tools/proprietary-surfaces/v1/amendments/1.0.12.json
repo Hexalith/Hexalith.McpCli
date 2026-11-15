@@ -1,0 +1,99 @@
+{
+  "schema": "mcpcli-proprietary-surface-census/v1",
+  "fromVersion": "1.0.11",
+  "toVersion": "1.0.12",
+  "previousSha256": "e24c1b1822d0ef27c2011808b97c7d7a6475c8b6cb9a29be0f96aa0347378995",
+  "approval": {
+    "owner": "Requesting maintainer via explicit delegated CI repair",
+    "reason": "Renew seven existing exact-file exclusions at the committed McpCli reference pins after automated comparison with their prior approved bodies. Four bodies are unchanged; two remain existing CI/compiler helpers and one remains captured audit data. All prior evidence and scanner rules are preserved. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+    "decision": "approved",
+    "date": "2026-11-15",
+    "evidence": {
+      "path": "tools/proprietary-surfaces/v1/amendments/1.0.12-approval.json",
+      "sha256": "9387c3ee946b31e64c96d4823792b5bc633fe3b8972948da448d61f7fdff0d99"
+    }
+  },
+  "addAllowances": [],
+  "removeAllowances": [],
+  "addExceptions": [],
+  "removeExceptions": [],
+  "addExclusions": [
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": "Tools/package-version-audit.json",
+      "row": "PE07",
+      "classification": "captured-evidence",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Structured schema-v2 audit data retains 317 package rows, 157 family decisions and the same NuGet source. This renews only captured data classification, not dependency compatibility or acceptance. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "73e60af8a1fcdf3f06726d5d1b6e1199cce778ee",
+      "sha256": "0007681aa58a834a8ea2c0c04012f4d815f8eea16b0121d9d349fc4d1715a67f"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": "Tools/test-g4-packaged-platform-loader.ps1",
+      "row": "PE05",
+      "classification": "qualification-evidence-tooling",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Body is byte-identical to the previous exact approved loader regression helper. Renew only the inspected source revision. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "73e60af8a1fcdf3f06726d5d1b6e1199cce778ee",
+      "sha256": "6361d83f4f26cf3b851e51556408eced8f0e8b7b6df0b5d830313797c2976755"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": "Tools/test-g4-tool-package-contracts.ps1",
+      "row": "PE05",
+      "classification": "qualification-evidence-tooling",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Body is byte-identical to the previous exact approved tool-package regression helper. Renew only the inspected source revision. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "73e60af8a1fcdf3f06726d5d1b6e1199cce778ee",
+      "sha256": "da45ef0303b3d6ec185870648bdc92fd810ced12cdf7d55c765b48426d031b9a"
+    },
+    {
+      "repository": "references/Hexalith.Builds",
+      "prefix": "Tools/test-platform-version-catalog.ps1",
+      "row": "PE05",
+      "classification": "qualification-evidence-tooling",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Body is byte-identical to the previous exact approved catalog regression helper. Renew only the inspected source revision. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "73e60af8a1fcdf3f06726d5d1b6e1199cce778ee",
+      "sha256": "c93fc176d090874066234e51912263fdc6dfe3e79329361dd7bc1f9a8cb45c48"
+    },
+    {
+      "repository": "references/Hexalith.FrontComposer",
+      "prefix": ".github/workflows/quality.yml",
+      "row": "PE05",
+      "classification": "existing-ci-qualification-helper",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Relative to the last approved body, the existing quality workflow adds only the test_stryker_compat and test_trace_mutation_run Python test invocations. Existing compiler/tool commands and classification remain unchanged. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "09e5dd0fce32df9653365759d955e1e78df74ed7",
+      "sha256": "4e6ed9f9d2c32a5cccd8fd8afe8dac9e9d7d45b5e9dec4a66240e9f97ae4ccaf"
+    },
+    {
+      "repository": "references/Hexalith.Projects",
+      "prefix": "tests/e2e/run-live-apphost.sh",
+      "row": "PE05",
+      "classification": "qualification-evidence-tooling",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Body is byte-identical to the previous exact approved browser qualification script. Renew only the inspected source revision; no script or resource was executed. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "fc58cefde69d72d7d3daa574b5022f73f830a85e",
+      "sha256": "04810550b014536cb011be5575498e0343d6592a70ecf16e8016ede9033a2ab3"
+    },
+    {
+      "repository": "references/Hexalith.Projects",
+      "prefix": "tests/tools/run-frontcomposer-inspect-gate.ps1",
+      "row": "PE05",
+      "classification": "existing-compiler-qualification-helper",
+      "owner": "Requesting maintainer via explicit delegated CI repair",
+      "reason": "Existing compiler inspection gate now evaluates and validates TargetFramework, removes only that framework-specific generated output, rebuilds Contracts with compiler-generated files enabled, and passes the exact framework to the existing FrontComposer inspect command. Dynamic PowerShell paths remain outside the static subset; classification is limited to this exact helper and source revision. Automated exact-source classification under the current dependency and CI maintenance delegation; no individual human source review, runtime, migration or publication acceptance is claimed.",
+      "scope": "file",
+      "sourceRevision": "fc58cefde69d72d7d3daa574b5022f73f830a85e",
+      "sha256": "a3d70a1554e0068d736fe0af63c9e31209e0343b98845b54e709c0f56fa77eab"
+    }
+  ]
+}
