@@ -1,0 +1,269 @@
+{
+  "schema": "story-5-2-complete-candidate-checks/v1",
+  "recordedAt": "2026-11-15T12:02:42.070136+00:00",
+  "runStart": "32a3e65989136f28b34500a4d9db8f04cf601885",
+  "scope": "Union of baseline-to-working-tree tracked changes, baseline-to-staged-index changes, and every non-ignored untracked addition. No path-limited dependency/forbidden-path filter.",
+  "allowedExactPaths": [
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/README.md",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/verification.md",
+    "_bmad-output/implementation-artifacts/spec-5-2-decide-generic-non-gateway-capability-contracts.md",
+    "_bmad-output/implementation-artifacts/sprint-status.yaml",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md"
+  ],
+  "allowedEvidencePrefix": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/",
+  "nameQueries": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-renames",
+        "--name-only",
+        "-z",
+        "32a3e65989136f28b34500a4d9db8f04cf601885",
+        "--"
+      ],
+      "exitCode": 0,
+      "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/README.md\u0000_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\u0000_bmad-output/implementation-artifacts/evidence/story-5-2/verification.md\u0000_bmad-output/implementation-artifacts/spec-5-2-decide-generic-non-gateway-capability-contracts.md\u0000_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md\u0000",
+      "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--no-renames",
+        "--name-only",
+        "-z",
+        "32a3e65989136f28b34500a4d9db8f04cf601885",
+        "--"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "ls-files",
+        "--others",
+        "--exclude-standard",
+        "-z"
+      ],
+      "exitCode": 0,
+      "stdout": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/README.md\u0000_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/candidate-scope-and-whitespace.json\u0000_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/checks.json\u0000_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/guard-sweep-complete.json\u0000_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/parent-verification.json\u0000_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/subcondition-mutations.json\u0000",
+      "stderr": ""
+    }
+  ],
+  "changedFiles": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/README.md",
+      "workingTree": true,
+      "stagedSnapshot": false,
+      "untrackedAddition": false,
+      "bytes": 12124,
+      "sha256": "76547ea920cd9409ba50cc55d1b1b913f746d47e6e9d91f40b463819895670c5"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/README.md",
+      "workingTree": false,
+      "stagedSnapshot": false,
+      "untrackedAddition": true,
+      "bytes": 5310,
+      "sha256": "0a8180c659fada10ae163c01607d5bb7cf4adf4c7ca1744ea466dcc71c0c8e1c"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/candidate-scope-and-whitespace.json",
+      "workingTree": false,
+      "stagedSnapshot": false,
+      "untrackedAddition": true,
+      "sha256": null,
+      "hashOmission": "This receipt is included in path/whitespace checks; its own hash is omitted to avoid a self-referential digest."
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/checks.json",
+      "workingTree": false,
+      "stagedSnapshot": false,
+      "untrackedAddition": true,
+      "bytes": 15197,
+      "sha256": "557415978ce0530ee5e59a0ead92757924a721167c1cc71733ad6caa3fdafd08"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/guard-sweep-complete.json",
+      "workingTree": false,
+      "stagedSnapshot": false,
+      "untrackedAddition": true,
+      "bytes": 1061409,
+      "sha256": "7493546394f5540a7fcd7057ad1c86deb93f060cf12f8af428db2324cd8bc3d7"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/parent-verification.json",
+      "workingTree": false,
+      "stagedSnapshot": false,
+      "untrackedAddition": true,
+      "bytes": 93209,
+      "sha256": "80fd969c421ac6413d62628d3632400797391d5ec800ff98a9a63f33b0caf28a"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/subcondition-mutations.json",
+      "workingTree": false,
+      "stagedSnapshot": false,
+      "untrackedAddition": true,
+      "bytes": 20560,
+      "sha256": "bcb4d457a43921714abdd23dae9aaa3267d6ee9199298c5aad65a3f082715e1c"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py",
+      "workingTree": true,
+      "stagedSnapshot": false,
+      "untrackedAddition": false,
+      "bytes": 36770,
+      "sha256": "100671133665c566d113c7f02adac1cc9615250328818fcd21b54ed34bd8ea23"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/verification.md",
+      "workingTree": true,
+      "stagedSnapshot": false,
+      "untrackedAddition": false,
+      "bytes": 28657,
+      "sha256": "186b80bd81e55b94cd024691f42684b64638163d867372cc5982f737cb277b85"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/spec-5-2-decide-generic-non-gateway-capability-contracts.md",
+      "workingTree": true,
+      "stagedSnapshot": false,
+      "untrackedAddition": false,
+      "bytes": 70220,
+      "sha256": "364aaf34fb2100eb6edd63b98dc3cd8f63538d1bb074f86cc70ad882358f17c3"
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md",
+      "workingTree": true,
+      "stagedSnapshot": false,
+      "untrackedAddition": false,
+      "bytes": 77397,
+      "sha256": "c2bd56ef120af6d783eef024d0e2677cb469121c710ab2316a47185742c4a431"
+    }
+  ],
+  "unexpectedPaths": [],
+  "allChangedPathsAllowed": true,
+  "whitespaceCommands": [
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check",
+        "32a3e65989136f28b34500a4d9db8f04cf601885",
+        "--"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--cached",
+        "--check",
+        "32a3e65989136f28b34500a4d9db8f04cf601885",
+        "--"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/README.md"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/candidate-scope-and-whitespace.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/checks.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/guard-sweep-complete.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/parent-verification.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--no-index",
+        "--check",
+        "--",
+        "/dev/null",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-2/subcondition-mutations.json"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "whitespacePassed": true,
+  "whitespaceExitCodeRule": "Tracked diffs require exit 0. --no-index implies difference exit 1 for nonempty clean additions; exit 0 or 1 is accepted only with both channels empty. Whitespace errors have nonempty diagnostic output and fail.",
+  "selfVerification": "After writing this final receipt, repeat all name/whitespace commands; require the identical sets and successful outputs, and verify all other candidate hashes.",
+  "priorReceiptSha256": {
+    "checks.json": "557415978ce0530ee5e59a0ead92757924a721167c1cc71733ad6caa3fdafd08",
+    "subcondition-mutations.json": "bcb4d457a43921714abdd23dae9aaa3267d6ee9199298c5aad65a3f082715e1c",
+    "parent-verification.json": "80fd969c421ac6413d62628d3632400797391d5ec800ff98a9a63f33b0caf28a"
+  }
+}

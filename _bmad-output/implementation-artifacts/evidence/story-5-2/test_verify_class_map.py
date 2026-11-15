@@ -174,6 +174,18 @@ class ClassMapTests(ProcessFixture):
         self.bind_source()
         self.reject("inventory.md: inventory version mismatch")
 
+    def test_rebound_inventory_hash_must_still_match_decision(self):
+        self.inventory.write_bytes(self.inventory.read_bytes() + b"\n")
+        self.document["inventories"][0]["sha256"] = digest(self.inventory)
+        self.reject("inventory.md: inventory hash mismatch")
+
+    def test_rebound_inventory_version_must_still_match_decision(self):
+        self.inventory.write_text(self.inventory.read_text(encoding="utf-8").replace("'1.0.0'", "'9.0.0'"),
+                                  encoding="utf-8")
+        self.document["inventories"][0]["version"] = "9.0.0"
+        self.bind_source()
+        self.reject("inventory.md: inventory version mismatch")
+
     def test_map_and_policy_schema_versions_are_checked(self):
         damaged = copy.deepcopy(self.document)
         damaged["schemaVersion"] = "9.0.0"
@@ -199,11 +211,13 @@ class ClassMapTests(ProcessFixture):
         ):
             with self.subTest(key=key):
                 prior = self.policy[key]
-                (self.root / other_path).write_text("{}")
-                self.policy[key] = other_path
-                self.save_policy()
-                self.reject(message)
-                self.policy[key] = prior
+                try:
+                    (self.root / other_path).write_text("{}")
+                    self.policy[key] = other_path
+                    self.save_policy()
+                    self.reject(message)
+                finally:
+                    self.policy[key] = prior
 
     def test_empty_agreed_class_and_inventory_sets_are_rejected(self):
         original = copy.deepcopy(self.document)
@@ -362,6 +376,13 @@ class ClassMapTests(ProcessFixture):
         next(r for r in inventory["rows"] if r["id"] == "V1")["classId"] = "read"
         self.reject("inventory.md: V1: restricted row leaks into read")
 
+    def test_restricted_row_cannot_take_decision_agreed_deferral(self):
+        inventory, policy_inventory = self.document["inventories"][0], self.policy["inventories"][0]
+        next(row for row in inventory["rows"] if row["id"] == "R2")["classId"] = "later"
+        policy_inventory["rowClasses"]["R2"] = "later"
+        self.save_policy()
+        self.reject("inventory.md: R2: restricted row leaks into later")
+
     def test_effect_column_alone_requires_restricted_outcome(self):
         self.check_restriction_column("Effect", "Destructive write")
 
@@ -446,6 +467,10 @@ class ClassMapTests(ProcessFixture):
         self.document["inventories"][0]["records"][0]["governingRule"] = "changed rule"
         self.reject("inventory.md: N1: record governing policy disagrees with decision")
 
+    def test_record_kind_must_match_decision(self):
+        self.document["inventories"][0]["records"][0]["kind"] = "changed kind"
+        self.reject("inventory.md: N1: record governing policy disagrees with decision")
+
     def test_declared_governing_reference_must_resolve(self):
         for record in (self.policy["inventories"][0]["eligibleRecords"][0], self.document["inventories"][0]["records"][0]):
             del record["governingRule"]
@@ -485,6 +510,22 @@ class ClassMapTests(ProcessFixture):
         result = self.process()
         self.reject_result("duplicate JSON member outcome", result)
 
+    def test_duplicate_decision_policy_members_are_rejected_by_process(self):
+        path = self.root / "decision.md"
+        path.write_text(path.read_text(encoding="utf-8").replace(
+            '"schemaVersion": "1.0.0"', '"schemaVersion": "1.0.0", "schemaVersion": "1.0.0"', 1),
+            encoding="utf-8")
+        self.document["decision"]["sha256"] = digest(path)
+        self.reject("duplicate JSON member schemaVersion")
+
+    def test_duplicate_receipt_members_are_rejected_by_process(self):
+        self.save()
+        path = self.root / self.document["approvalPath"]
+        path.write_text(path.read_text(encoding="utf-8").replace(
+            '"decision": "pending"', '"decision": "pending", "decision": "pending"', 1),
+            encoding="utf-8")
+        self.reject_result("duplicate JSON member decision", self.process())
+
     def approve(self):
         self.receipt.update(decision="approved", approver="fixture owner", exactApprovalInstruction="approve fixture bytes",
                             rolesCovered=["product owner", "security owner"])
@@ -495,9 +536,11 @@ class ClassMapTests(ProcessFixture):
             for value in (None, "", " \t\n", True, ["owner"], 1):
                 with self.subTest(field=field, value=value):
                     prior = self.receipt[field]
-                    self.receipt[field] = value
-                    self.reject(f"adoption approval lacks nonblank {field}")
-                    self.receipt[field] = prior
+                    try:
+                        self.receipt[field] = value
+                        self.reject(f"adoption approval lacks nonblank {field}")
+                    finally:
+                        self.receipt[field] = prior
 
     def test_approval_requires_array_of_nonblank_roles_and_all_bound_roles(self):
         self.approve()
@@ -550,20 +593,19 @@ class ActualPacketRegressionTests(ProcessFixture):
 
     def setUp(self):
         self.temporary_root()
-        self.document = json.loads((REPOSITORY / MAP).read_text())
+        self.document = json.loads((REPOSITORY / MAP).read_text(encoding="utf-8"))
         self.map_path = self.root / MAP
         for relative in [MAP.as_posix(), self.document["decision"]["path"], self.document["approvalPath"],
                          *[item["path"] for item in self.document["inventories"]]]:
             target = self.root / relative
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copyfile(REPOSITORY / relative, target)
-        self.receipt = json.loads((self.root / self.document["approvalPath"]).read_text())
+        self.receipt = json.loads((self.root / self.document["approvalPath"]).read_text(encoding="utf-8"))
 
     def inventory(self, prefix):
         return next(item for item in self.document["inventories"] if Path(item["path"]).name.startswith(prefix))
 
     def test_actual_packet_complete(self):
-        self.save()
         result = self.process(text=False)
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertEqual(b"", result.stderr)
@@ -635,7 +677,7 @@ class ActualPacketRegressionTests(ProcessFixture):
         self.save()
         candidates = [self.map_path, self.root / self.document["decision"]["path"]]
         before = [p.read_bytes() for p in candidates]
-        policy = VERIFIER.parse_json(VERIFIER.POLICY.findall(candidates[1].read_text())[0])
+        policy = VERIFIER.parse_json(VERIFIER.POLICY.findall(candidates[1].read_text(encoding="utf-8"))[0])
         self.receipt.update(decision="approved", approver="synthetic regression owner",
                             exactApprovalInstruction="fixture only; no actual approval authority",
                             rolesCovered=policy["requiredApprovalRoles"])

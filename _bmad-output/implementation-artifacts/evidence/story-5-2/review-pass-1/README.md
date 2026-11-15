@@ -1,6 +1,11 @@
 # Story 5.2 review pass 1 — 2026-11-15
 
-The final parent verification passes **64 verifier process tests** and **eight
+The [code-review pass-2 patch evidence](../review-pass-2/README.md) records the
+current 70-test suite and six sub-condition mutation checks. The 64-test parent
+results below are retained pass-1 checkpoints. The dated scope and frozen-hash
+corrections below qualify their preservation claims without changing receipts.
+
+The retained pass-1 parent verification passes **64 verifier process tests** and **eight
 runner process controls**. The corrected [57-guard sweep](guard-removal-corrected/results.json)
 reports **57 killed, zero survivors and zero errors**, requiring assertion
 failures with no unittest/process errors. Its receipt binds the executed frozen
@@ -51,22 +56,93 @@ labels old local/pending-merge paragraphs as checkpoint history and states the
 final approved AI.Tools push and main merge. The unbound spine now applies
 AD-23 in its Design Paradigm and FR-21/FR-22 trace.
 
-## Reproduce the behavioral checks
+## Dated scope correction (2026-11-15, code review pass 2)
 
-Run from the repository root. `run-with-temp` supplies private scratch space;
-fixtures clean up after their processes finish. Save fresh outputs at a new
-task-owned path because the mutation runner refuses an existing output folder.
+The story-labeled commit `28bcbbb898b6530838a7872f2ba450c34e56cc70`
+also carried the following nine **non-story gitlink moves**. These are part of
+that commit, rather than unrelated changes that predated the story. AC3's
+requirement that `references/` stay unchanged **does not hold for `28bcbbb`**.
+The owner chose **“Keep pins, align apart”** on 2026-11-15: these published
+revisions stay on `main`. Builds workflow/dependency-policy alignment and
+census reconciliation belong to a separate `build(deps)` change under the
+repository's Builds-move procedure, outside Story 5.2. They are not a story
+ledger deferral, and this correction makes no CI-success claim.
 
-```bash
-run-with-temp python3 -I -B -m unittest discover -v -s _bmad-output/implementation-artifacts/evidence/story-5-2 -p 'test_*.py'
-run-with-temp python3 -I -B _bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py
-run-with-temp python3 -I -B _bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/test_run_guard_removal.py -v
-review_result_parent=$(mktemp -d -p evidence story-5-2-guard-removal.XXXXXX)
-run-with-temp python3 -I -B _bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/run_guard_removal.py --output "$review_result_parent/results" --jobs 4
+| Gitlink | Before `28bcbbb` | In `28bcbbb` |
+| --- | --- | --- |
+| `references/Hexalith.Builds` | `99f7c86072ca7b35e3fbbaee4606a559a847805a` | `73e60af8a1fcdf3f06726d5d1b6e1199cce778ee` |
+| `references/Hexalith.EventStore` | `5c5c0cce54541f18ec4f290f085d8678d517e8f8` | `fdb59895975e86a1e234325a01237f259cdbd53b` |
+| `references/Hexalith.Folders` | `6ac670743c94f7819bb80f0914801cdbf84ceb3f` | `bb990a8766a9feac42ff7ecf02c8b7ca42a7ba15` |
+| `references/Hexalith.FrontComposer` | `bfc8f8ae74e3ff0baa2d1d4abf083b0b47e6dca3` | `09e5dd0fce32df9653365759d955e1e78df74ed7` |
+| `references/Hexalith.Memories` | `2c2e9b58990638ededf22e8e67ff5c12de75b434` | `66e2441e2536fc37708aca2bd3456fd4cd21a439` |
+| `references/Hexalith.Parties` | `53844114ffcedc5af96fbf1cb15e126adaae02a9` | `e59aed9ca2d111b0195afe078611e2184b6de4c5` |
+| `references/Hexalith.Platform` | `9a1cf867b931d93451a2e2cf5749b1b444f7bb7a` | `f6f85032598865b9123f16364448bfd02c0ff5b0` |
+| `references/Hexalith.Projects` | `b756d01aef5a53ad7f52f0d3a8bc76a1d03d441b` | `fc58cefde69d72d7d3daa574b5022f73f830a85e` |
+| `references/Hexalith.Tenants` | `30b9b61845e35052187c86968880c79d8e76cd2b` | `2ec938397c5b330cf1e694e8cc442cb4ad022f2b` |
+
+The retained review-pass-1 receipts are unchanged. Their empty forbidden-path
+checks cover only `28bcbbb..5f35a70`; every “unchanged in this run” statement
+for that packet is limited to the follow-up ending at `5f35a70`. Those checks
+do not establish AC3 for `28bcbbb` or erase the nine moves above. The current
+pass-2 patch starts at `32a3e65989136f28b34500a4d9db8f04cf601885` and preserves
+those pins, all inventory bytes, the approved decision/map and owner receipt.
+
+## Frozen-block hash clarification (2026-11-15)
+
+The retained `parent-verification/preservation.json` value
+`02f0011d5007094c3101452a56ef3f580fc1739535ad1083bc4144116b0beea3`
+hashes 5,838 bytes **after** the literal `<frozen-after-approval` token and
+**before** `</frozen-after-approval>`; it includes the opening tag's remaining
+attributes and `>` but neither delimiter token. It used this extraction:
+
+```python
+data.split(b"<frozen-after-approval", 1)[1].split(b"</frozen-after-approval>", 1)[0]
 ```
 
-The fresh output example creates a new task-owned result parent and passes an
-unused child directory to the runner. It preserves the retained captures.
+The tag-inclusive block uses the following extraction, with no trailing newline
+beyond the closing tag:
+
+```python
+re.search(rb"<frozen-after-approval\b.*?</frozen-after-approval>", data, re.S).group()
+```
+
+Those **5,884 bytes** hash to
+`8adb4def1bffac05e6a601412216854fb11a0ea19eb865e3d1a1f5c2b52a521b`,
+matching `preservation-checks.json`. Both extractions were independently checked
+at `80a7857`, `28bcbbb`, `5f35a70` and the current run start; each yields its
+same respective hash. The frozen intent did not change. The retained receipt
+is left untouched; this note supplies its previously missing extraction scope.
+
+## Reproduce the behavioral checks
+
+Run these portable Bash/Python 3.9 or later steps from the repository root
+(`Path.is_relative_to` requires Python 3.9). They create a private `TMPDIR`
+(also `TMP`/`TEMP`) and remove it after all child work exits. The retained
+result parent is created with `TMPDIR`, `TMP` and `TEMP` unset, using system
+temporary storage outside the caller's disposable `TMPDIR` and the repository;
+it remains available for inspection after scratch cleanup. The mutation runner
+receives an unused child directory because it refuses existing output folders.
+On the recording workstation, the untracked
+`~/.local/bin/run-with-temp` helper supplies equivalent scratch isolation.
+
+```bash
+review_result_parent=$(env -u TMPDIR -u TMP -u TEMP mktemp -d)
+(
+    set -e
+    review_scratch=$(mktemp -d)
+    trap 'rm -rf -- "$review_scratch"' EXIT
+    export TMPDIR="$review_scratch" TMP="$review_scratch" TEMP="$review_scratch"
+    python3 -I -B -m unittest discover -v -s _bmad-output/implementation-artifacts/evidence/story-5-2 -p 'test_*.py'
+    python3 -I -B _bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py
+    python3 -I -B _bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/test_run_guard_removal.py -v
+    python3 -I -B _bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/run_guard_removal.py --output "$review_result_parent/results" --jobs 4
+)
+```
+
+The real artifact reads explicitly use UTF-8 under Python's isolated `-I`
+mode. The actual-packet success test runs the verbatim map/decision/receipt
+copies without re-serialization or hash rebinding, and compares raw stdout
+against the retained adopted bytes. These steps preserve all retained captures.
 
 [The original mutation results](guard-removal/results.json) reported 57 kills
 against their recorded script/test hashes. They predate corrected error
@@ -98,13 +174,15 @@ empty. Git's existing missing commit-graph warnings remain in stderr.
 The current-run start was clean
 `28bcbbb898b6530838a7872f2ba450c34e56cc70`. The spec's historical baseline
 `f4bb819925d4fac5fa5afd262341692296a52042` is retained. Its whole-tree diff
-includes previously published work, so it is captured separately and is not
-treated as changes made by this patch. No intervening work was reverted.
+includes the nine non-story moves carried by `28bcbbb`, detailed in the
+dated correction above, as well as other published work. It is captured
+separately. No intervening work was reverted.
 
 The checks also confirm all ten receipt-bound decision/map/inventory hashes,
 the unchanged approval receipt and the byte-identical frozen spec block.
 Production, root tests, dependencies, CI, tools, references, census and all
-inventory files are unchanged in this run. This initial checkpoint preceded
+inventory files are unchanged only in the pass-1 follow-up ending at
+`5f35a70`. This initial checkpoint preceded
 the parent workflow's independent review and completion step.
 
 [secret-scan.json](secret-scan.json) is also the historical initial packet scan;

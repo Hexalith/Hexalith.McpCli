@@ -1,0 +1,158 @@
+{
+  "inputSource": "single exact-byte snapshot before mutation",
+  "inputs": {
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json": "7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498",
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597",
+    "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "6e05770b136bc0cfc1a29fec1fd5ac64928cea3e40484afc0fe3c5729272cfb5",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py": "100671133665c566d113c7f02adac1cc9615250328818fcd21b54ed34bd8ea23",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/verifier.stdout.txt": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2"
+  },
+  "mutations": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py",
+        "ClassMapTests.test_restricted_row_cannot_take_decision_agreed_deferral",
+        "-v"
+      ],
+      "cwd": "private temporary snapshot",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "test_restricted_row_cannot_take_decision_agreed_deferral (__main__.ClassMapTests.test_restricted_row_cannot_take_decision_agreed_deferral) ... FAIL\n\n======================================================================\nFAIL: test_restricted_row_cannot_take_decision_agreed_deferral (__main__.ClassMapTests.test_restricted_row_cannot_take_decision_agreed_deferral)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/restricted-deferral/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 384, in test_restricted_row_cannot_take_decision_agreed_deferral\n    self.reject(\"inventory.md: R2: restricted row leaks into later\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/restricted-deferral/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 64, in reject\n    self.reject_result(message, self.run_map(document, bind_receipt))\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/restricted-deferral/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 59, in reject_result\n    self.assertEqual(1, result.returncode, result)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0 : CompletedProcess(args=['/usr/bin/python3', '-I', '-B', '/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/restricted-deferral/_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py', '--root', '/tmp/hexalith-job.yg1clYpY/tmpqkli_mem', '--map', '/tmp/hexalith-job.yg1clYpY/tmpqkli_mem/map.json'], returncode=0, stdout='PASS: inventory.md: 7 classified rows + 3 non-operation records = 10\\nPASS: exact-byte partition verified; effective decision status: proposed; parity remains a separate gate\\n', stderr='')\n\n----------------------------------------------------------------------\nRan 1 test in 0.037s\n\nFAILED (failures=1)\n",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "a7ff07f53b619f6ff1e26ddc68a265030b99ba2589005a505b4590f2061a8343",
+      "id": "restricted-deferral",
+      "before": "\"confidential-ui-only\", \"exempt-local-tooling\", \"withdrawal\",\n})",
+      "after": "\"confidential-ui-only\", \"exempt-local-tooling\", \"withdrawal\", \"continued-deferral\",\n})",
+      "test": "test_restricted_row_cannot_take_decision_agreed_deferral",
+      "mutatedScriptSha256": "9740d11df31dbe614f7a7c9d9ab7fdc7c85c0be1b4a1fba8763e6db14790b984",
+      "killed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py",
+        "ClassMapTests.test_record_kind_must_match_decision",
+        "-v"
+      ],
+      "cwd": "private temporary snapshot",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "test_record_kind_must_match_decision (__main__.ClassMapTests.test_record_kind_must_match_decision) ... FAIL\n\n======================================================================\nFAIL: test_record_kind_must_match_decision (__main__.ClassMapTests.test_record_kind_must_match_decision)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/record-kind/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 472, in test_record_kind_must_match_decision\n    self.reject(\"inventory.md: N1: record governing policy disagrees with decision\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/record-kind/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 64, in reject\n    self.reject_result(message, self.run_map(document, bind_receipt))\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/record-kind/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 59, in reject_result\n    self.assertEqual(1, result.returncode, result)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0 : CompletedProcess(args=['/usr/bin/python3', '-I', '-B', '/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/record-kind/_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py', '--root', '/tmp/hexalith-job.yg1clYpY/tmpskdq727_', '--map', '/tmp/hexalith-job.yg1clYpY/tmpskdq727_/map.json'], returncode=0, stdout='PASS: inventory.md: 7 classified rows + 3 non-operation records = 10\\nPASS: exact-byte partition verified; effective decision status: proposed; parity remains a separate gate\\n', stderr='')\n\n----------------------------------------------------------------------\nRan 1 test in 0.033s\n\nFAILED (failures=1)\n",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "c7919aa68df9286d869e8781cd6014af1cf2e406e8b21c50a91a21a58444f916",
+      "id": "record-kind",
+      "before": "(\"kind\", \"classId\", \"governingRule\")",
+      "after": "(\"classId\", \"governingRule\")",
+      "test": "test_record_kind_must_match_decision",
+      "mutatedScriptSha256": "c87cbc3599205d14d0aa4f366174419c79d421a4b909c9aec38dd7494f7e37d3",
+      "killed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py",
+        "ClassMapTests.test_rebound_inventory_hash_must_still_match_decision",
+        "-v"
+      ],
+      "cwd": "private temporary snapshot",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "test_rebound_inventory_hash_must_still_match_decision (__main__.ClassMapTests.test_rebound_inventory_hash_must_still_match_decision) ... FAIL\n\n======================================================================\nFAIL: test_rebound_inventory_hash_must_still_match_decision (__main__.ClassMapTests.test_rebound_inventory_hash_must_still_match_decision)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/decision-hash/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 180, in test_rebound_inventory_hash_must_still_match_decision\n    self.reject(\"inventory.md: inventory hash mismatch\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/decision-hash/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 64, in reject\n    self.reject_result(message, self.run_map(document, bind_receipt))\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/decision-hash/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 59, in reject_result\n    self.assertEqual(1, result.returncode, result)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0 : CompletedProcess(args=['/usr/bin/python3', '-I', '-B', '/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/decision-hash/_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py', '--root', '/tmp/hexalith-job.yg1clYpY/tmpn55o4p1n', '--map', '/tmp/hexalith-job.yg1clYpY/tmpn55o4p1n/map.json'], returncode=0, stdout='PASS: inventory.md: 7 classified rows + 3 non-operation records = 10\\nPASS: exact-byte partition verified; effective decision status: proposed; parity remains a separate gate\\n', stderr='')\n\n----------------------------------------------------------------------\nRan 1 test in 0.033s\n\nFAILED (failures=1)\n",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "83e5f5ce53deaea578010d4d76b9961a4f9517e82bc5538e61bee5cd192bff64",
+      "id": "decision-hash",
+      "before": "inventory[\"sha256\"] == expected[\"sha256\"] == sha256(path)",
+      "after": "inventory[\"sha256\"] == sha256(path)",
+      "test": "test_rebound_inventory_hash_must_still_match_decision",
+      "mutatedScriptSha256": "2fe7665f0ab4a49cfff28db336d299f8538b401e1ea422a3dd62f26dbdb7b9a3",
+      "killed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py",
+        "ClassMapTests.test_rebound_inventory_version_must_still_match_decision",
+        "-v"
+      ],
+      "cwd": "private temporary snapshot",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "test_rebound_inventory_version_must_still_match_decision (__main__.ClassMapTests.test_rebound_inventory_version_must_still_match_decision) ... FAIL\n\n======================================================================\nFAIL: test_rebound_inventory_version_must_still_match_decision (__main__.ClassMapTests.test_rebound_inventory_version_must_still_match_decision)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/decision-version/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 187, in test_rebound_inventory_version_must_still_match_decision\n    self.reject(\"inventory.md: inventory version mismatch\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/decision-version/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 64, in reject\n    self.reject_result(message, self.run_map(document, bind_receipt))\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/decision-version/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 59, in reject_result\n    self.assertEqual(1, result.returncode, result)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0 : CompletedProcess(args=['/usr/bin/python3', '-I', '-B', '/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/decision-version/_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py', '--root', '/tmp/hexalith-job.yg1clYpY/tmpvvkdyfzg', '--map', '/tmp/hexalith-job.yg1clYpY/tmpvvkdyfzg/map.json'], returncode=0, stdout='PASS: inventory.md: 7 classified rows + 3 non-operation records = 10\\nPASS: exact-byte partition verified; effective decision status: proposed; parity remains a separate gate\\n', stderr='')\n\n----------------------------------------------------------------------\nRan 1 test in 0.034s\n\nFAILED (failures=1)\n",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "303339b7dda70ecce53dbd61d05821be737ecb687ec43b2136d54da79f25dbdc",
+      "id": "decision-version",
+      "before": "inventory[\"version\"] == expected[\"version\"] == version",
+      "after": "inventory[\"version\"] == version",
+      "test": "test_rebound_inventory_version_must_still_match_decision",
+      "mutatedScriptSha256": "d446fae555fb674801be85fd68c14b16abbbe044ca548c963da9ded7c1bf52bf",
+      "killed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py",
+        "ClassMapTests.test_duplicate_decision_policy_members_are_rejected_by_process",
+        "-v"
+      ],
+      "cwd": "private temporary snapshot",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "test_duplicate_decision_policy_members_are_rejected_by_process (__main__.ClassMapTests.test_duplicate_decision_policy_members_are_rejected_by_process) ... FAIL\n\n======================================================================\nFAIL: test_duplicate_decision_policy_members_are_rejected_by_process (__main__.ClassMapTests.test_duplicate_decision_policy_members_are_rejected_by_process)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/duplicate-policy/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 519, in test_duplicate_decision_policy_members_are_rejected_by_process\n    self.reject(\"duplicate JSON member schemaVersion\")\n    ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/duplicate-policy/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 64, in reject\n    self.reject_result(message, self.run_map(document, bind_receipt))\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/duplicate-policy/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 59, in reject_result\n    self.assertEqual(1, result.returncode, result)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0 : CompletedProcess(args=['/usr/bin/python3', '-I', '-B', '/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/duplicate-policy/_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py', '--root', '/tmp/hexalith-job.yg1clYpY/tmp4beilcq2', '--map', '/tmp/hexalith-job.yg1clYpY/tmp4beilcq2/map.json'], returncode=0, stdout='PASS: inventory.md: 7 classified rows + 3 non-operation records = 10\\nPASS: exact-byte partition verified; effective decision status: proposed; parity remains a separate gate\\n', stderr='')\n\n----------------------------------------------------------------------\nRan 1 test in 0.036s\n\nFAILED (failures=1)\n",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "6a02fc524b868cefb4e337676a107aca1e0e7afae01103eda89bab8aecfdbb19",
+      "id": "duplicate-policy",
+      "before": "policy = parse_json(blocks[0])",
+      "after": "policy = json.loads(blocks[0])",
+      "test": "test_duplicate_decision_policy_members_are_rejected_by_process",
+      "mutatedScriptSha256": "faa4e95ab60a02982f8a4a958cbca673a04649175d5f937e18d879704a23d406",
+      "killed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py",
+        "ClassMapTests.test_duplicate_receipt_members_are_rejected_by_process",
+        "-v"
+      ],
+      "cwd": "private temporary snapshot",
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "test_duplicate_receipt_members_are_rejected_by_process (__main__.ClassMapTests.test_duplicate_receipt_members_are_rejected_by_process) ... FAIL\n\n======================================================================\nFAIL: test_duplicate_receipt_members_are_rejected_by_process (__main__.ClassMapTests.test_duplicate_receipt_members_are_rejected_by_process)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/duplicate-receipt/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 527, in test_duplicate_receipt_members_are_rejected_by_process\n    self.reject_result(\"duplicate JSON member decision\", self.process())\n    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/duplicate-receipt/_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py\", line 59, in reject_result\n    self.assertEqual(1, result.returncode, result)\n    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 1 != 0 : CompletedProcess(args=['/usr/bin/python3', '-I', '-B', '/tmp/hexalith-job.yg1clYpY/story-5-2-subconditions-kjvg9a2d/duplicate-receipt/_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py', '--root', '/tmp/hexalith-job.yg1clYpY/tmpzd4l79gh', '--map', '/tmp/hexalith-job.yg1clYpY/tmpzd4l79gh/map.json'], returncode=0, stdout='PASS: inventory.md: 7 classified rows + 3 non-operation records = 10\\nPASS: exact-byte partition verified; effective decision status: proposed; parity remains a separate gate\\n', stderr='')\n\n----------------------------------------------------------------------\nRan 1 test in 0.032s\n\nFAILED (failures=1)\n",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "eab549df704bdeb7cbabac2d6d582d5a6ef754f865d9c73dce5fb4e8c5f94acf",
+      "id": "duplicate-receipt",
+      "before": "receipt = read_json(local_path(root, policy[\"approvalPath\"]))",
+      "after": "receipt = json.loads(local_path(root, policy[\"approvalPath\"]).read_text(encoding=\"utf-8\"))",
+      "test": "test_duplicate_receipt_members_are_rejected_by_process",
+      "mutatedScriptSha256": "c0d4563f782c7c4ab706819596d46e73e749e02a18f1c819dfedac05935e4b2c",
+      "killed": true
+    }
+  ],
+  "summary": {
+    "killed": 6,
+    "survived": 0,
+    "errors": 0
+  }
+}

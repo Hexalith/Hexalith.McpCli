@@ -36,13 +36,42 @@ adopted stdout. The explicit-record set check runs before generic missing-row
 validation and names missing/extra record IDs. Success stdout is unchanged.
 The unbound spine's Design Paradigm and FR-21/FR-22 trace now cite adopted AD-23.
 
-The spec retains its historical `f4bb8199…` implementation baseline. This review
-patch began at clean `28bcbbb898b6530838a7872f2ba450c34e56cc70`; intervening
-published changes mean the historical whole-tree empty-diff expectation no
-longer describes this run. The new packet compares forbidden paths and all
-inventory bytes against that current-run start, preserves every approved
-artifact hash and the frozen intent, and separately records the historical
-baseline's existing differences. It does not revert those intervening changes.
+## Dated scope correction (2026-11-15, code review pass 2)
+
+The story-labeled commit `28bcbbb898b6530838a7872f2ba450c34e56cc70`
+also carried the following nine **non-story gitlink moves**. These are part of
+that commit, rather than unrelated changes that predated the story. AC3's
+requirement that `references/` stay unchanged **does not hold for `28bcbbb`**.
+The owner chose **“Keep pins, align apart”** on 2026-11-15: these published
+revisions stay on `main`. Builds workflow/dependency-policy alignment and
+census reconciliation belong to a separate `build(deps)` change under the
+repository's Builds-move procedure, outside Story 5.2. They are not a story
+ledger deferral, and this correction makes no CI-success claim.
+
+| Gitlink | Before `28bcbbb` | In `28bcbbb` |
+| --- | --- | --- |
+| `references/Hexalith.Builds` | `99f7c86072ca7b35e3fbbaee4606a559a847805a` | `73e60af8a1fcdf3f06726d5d1b6e1199cce778ee` |
+| `references/Hexalith.EventStore` | `5c5c0cce54541f18ec4f290f085d8678d517e8f8` | `fdb59895975e86a1e234325a01237f259cdbd53b` |
+| `references/Hexalith.Folders` | `6ac670743c94f7819bb80f0914801cdbf84ceb3f` | `bb990a8766a9feac42ff7ecf02c8b7ca42a7ba15` |
+| `references/Hexalith.FrontComposer` | `bfc8f8ae74e3ff0baa2d1d4abf083b0b47e6dca3` | `09e5dd0fce32df9653365759d955e1e78df74ed7` |
+| `references/Hexalith.Memories` | `2c2e9b58990638ededf22e8e67ff5c12de75b434` | `66e2441e2536fc37708aca2bd3456fd4cd21a439` |
+| `references/Hexalith.Parties` | `53844114ffcedc5af96fbf1cb15e126adaae02a9` | `e59aed9ca2d111b0195afe078611e2184b6de4c5` |
+| `references/Hexalith.Platform` | `9a1cf867b931d93451a2e2cf5749b1b444f7bb7a` | `f6f85032598865b9123f16364448bfd02c0ff5b0` |
+| `references/Hexalith.Projects` | `b756d01aef5a53ad7f52f0d3a8bc76a1d03d441b` | `fc58cefde69d72d7d3daa574b5022f73f830a85e` |
+| `references/Hexalith.Tenants` | `30b9b61845e35052187c86968880c79d8e76cd2b` | `2ec938397c5b330cf1e694e8cc442cb4ad022f2b` |
+
+The retained review-pass-1 receipts are unchanged. Their empty forbidden-path
+checks cover only `28bcbbb..5f35a70`; every “unchanged in this run” statement
+for that packet is limited to the follow-up ending at `5f35a70`. Those checks
+do not establish AC3 for `28bcbbb` or erase the nine moves above. The current
+pass-2 patch starts at `32a3e65989136f28b34500a4d9db8f04cf601885` and preserves
+those pins, all inventory bytes, the approved decision/map and owner receipt.
+
+The current [pass-2 patch evidence](review-pass-2/README.md) records **70 passing
+verifier process tests**, **eight runner controls**, and **six killed focused
+sub-condition mutants**. The standalone adopted stdout remains byte-identical;
+all real artifacts in the success test are now verified from verbatim copies.
+The earlier 64-test result describes the retained pass-1 checkpoint.
 
 ## Candidate and independent authority
 

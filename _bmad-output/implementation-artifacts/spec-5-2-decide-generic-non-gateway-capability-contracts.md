@@ -2,7 +2,7 @@
 title: '5.2 Decide generic non-gateway capability contracts'
 type: 'chore'
 created: '2026-11-12'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: 'f4bb819925d4fac5fa5afd262341692296a52042'
@@ -230,7 +230,7 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
     2. Restore the nine `23072f0` pins in a story commit, and record that revert as the AC3 evidence.
     3. Defer the alignment to the ledger, correct the evidence, and leave CI red.
   - (A1, A2) [.github/workflows/ci.yml:18]
-- [ ] [Review][Patch] The review-pass-1 evidence treats `28bcbbb`'s nine gitlink moves as "previously published work" (high; resolved from the decision above)
+- [x] [Review][Patch] The review-pass-1 evidence treats `28bcbbb`'s nine gitlink moves as "previously published work" (high; resolved from the decision above)
   - **Fix:** add a dated correction to `review-pass-1/README.md` and `verification.md`, leaving the retained receipts unchanged. It should state:
     - that the story-labeled commit `28bcbbb` also carried nine non-story gitlink moves, listed with their before and after revisions;
     - that AC3's "`references/` unchanged" therefore does not hold for that commit;
@@ -238,21 +238,21 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
     - that the Builds alignment is a separate `build(deps)` change.
   - **Constraint:** keep the "unchanged in this run" claims scoped to `5f35a70`.
   - (A1, A2) [_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/README.md:98]
-- [ ] [Review][Patch] Four verifier sub-conditions can be broken without failing any test (medium) — the guard-removal sweep deletes whole `require(...)` statements only, as the README discloses, so it cannot detect these.
+- [x] [Review][Patch] Four verifier sub-conditions can be broken without failing any test (medium) — the guard-removal sweep deletes whole `require(...)` statements only, as the README discloses, so it cannot detect these.
   - **Restricted outcomes.** Adding `"continued-deferral"` to `RESTRICTED_OUTCOMES` (`verify_class_map.py:22`) still passes all 64 tests. Every leak case moves a restricted row into a gateway class, never into a deferral class. Story 5.7's `build_candidate.py:126-127` turns a deferral into `defer`, which keeps the legacy surface.
   - **Record kind.** Dropping `"kind"` from `record_policy` (`:151`) still passes, because no test changes only a record's kind. `build_candidate.py:113` writes that kind into amendment governance text.
   - **Decision-side bindings.** Dropping `expected["sha256"] ==` (`:212`) or `expected["version"] ==` (`:214`) still passes. No test rebinds the map and receipt while the decision keeps its old values.
   - **Duplicate keys.** Parsing the policy block (`:183`) or the receipt (`:281`) with plain `json.loads` still passes. The only duplicate-member test damages the map.
   - **Fix:** add a damaged-input process case for each, asserting exit 1, empty stdout and the exact full `FAIL:` line. Success stdout must stay byte-identical.
   - (V1–V4) [_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py:22]
-- [ ] [Review][Patch] The final preservation receipt records a frozen-block hash that no earlier receipt uses (low)
+- [x] [Review][Patch] The final preservation receipt records a frozen-block hash that no earlier receipt uses (low)
   - `parent-verification/preservation.json:16` records `02f0011d…`.
   - `preservation-checks.json:3` and the spec's tag-delimited block both give `8adb4def…` (5,884 bytes).
   - `02f0011d…` can be reproduced only from the bytes after the `<frozen-after-approval` token up to the closing tag, and the receipt doesn't say so. Read at face value, it says the frozen intent changed.
   - The block is in fact unchanged at `80a7857`, `28bcbbb` and `5f35a70`.
   - **Fix:** add a dated note in the packet README that states the extraction and the tag-inclusive hash, and leave the receipt itself untouched.
   - (B1, E17, V-O1, A4) [_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/parent-verification/preservation.json:16]
-- [ ] [Review][Patch] The reproduction steps depend on the recording workstation and write into the tracked tree (low) — the steps are at `review-pass-1/README.md:56-65`.
+- [x] [Review][Patch] The reproduction steps depend on the recording workstation and write into the tracked tree (low) — the steps are at `review-pass-1/README.md:56-65`.
   - **Wrapper.** `run-with-temp` is `~/.local/bin/run-with-temp`, which is neither tracked nor described. Story 5.8 fixed the same wording (`spec-5-8-…md:562`).
   - **Output location.** `mktemp -d -p evidence` creates results under the tracked, non-ignored root `evidence/` folder, where an all-files commit could pick them up.
   - **Encoding.** The tests read the real map, decision and receipt with locale-default `read_text()` (`test_verify_class_map.py:553`, `:560`, `:638`), while the verifier uses UTF-8. With `-I`, `PYTHONUTF8` is ignored, so a non-UTF-8 Windows locale mis-decodes the map's non-ASCII line.
@@ -261,18 +261,18 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
     - Create the output folder with `mktemp -d` outside the repository.
     - Pass `encoding="utf-8"` to those reads.
   - (B15, A5) [_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/README.md:64]
-- [ ] [Review][Patch] Two subtest loops restore fixture state only after a passing assertion (low)
+- [x] [Review][Patch] Two subtest loops restore fixture state only after a passing assertion (low)
   - `test_decision_map_and_approval_paths_must_match` (`test_verify_class_map.py:195-206`) and `test_approval_requires_nonblank_typed_owner_and_instruction` (`:492-500`) reset `self.policy[key]` and `self.receipt[field]` after `self.reject(...)`.
   - When one subtest fails, its damaged value leaks into the next subtest, which then reports a different guard's message. For example, a failed `mapPath` case makes the `approvalPath` case report "map path disagrees".
   - Pass 1 fixed the same pattern only in the restricted-record test.
   - **Fix:** restore in `finally`.
   - (E15) [_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py:206]
-- [ ] [Review][Patch] The actual-packet test re-serializes the map and rebinds the receipt, so it never checks the approved bytes (low)
+- [x] [Review][Patch] The actual-packet test re-serializes the map and rebinds the receipt, so it never checks the approved bytes (low)
   - `test_actual_packet_complete` (`test_verify_class_map.py:565-570`) calls `self.save()`. That writes `json.dumps` of the parsed map and replaces the receipt's `artifacts` with fresh digests.
   - So a real map edit that breaks the receipt binding, or a duplicate member in the real map, still passes the 64-test suite and the sweep. Only the standalone run would catch it.
   - **Fix:** run the verifier on the verbatim copies, without calling `save()`.
   - (E16) [_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py:566]
-- [ ] [Review][Patch] The spine re-dates the 2026-09-27 approved direction (low)
+- [x] [Review][Patch] The spine re-dates the 2026-09-27 approved direction (low)
   - `ARCHITECTURE-SPINE.md:36` changed "Approved ecosystem direction (2026-09-27)" to "(2026-11-12, AD-23)".
   - The paragraph's first three sentences (gateway-only first increment, obsolete proprietary surfaces, no module-specific implementation) still carry the 2026-09-27 approval, so their date is now wrong.
   - **Fix:** use "(2026-09-27; amended 2026-11-12 by AD-23)".
@@ -462,3 +462,61 @@ All six original review patches and all ten findings from the independent follow
 The parent independently confirms the byte-identical adopted stdout, empty stderr, all ten approved artifact hashes, unchanged approval receipt and frozen intent, empty current-run forbidden-path/inventory diff and clean whitespace. Every frozen matrix scenario has a passing executed process test. The [final evidence packet](evidence/story-5-2/review-pass-1/README.md) distinguishes current proof from historical captures. No new work is deferred; existing Parties reconciliation, Folders staging and later enrollment/retirement gates remain open. Spec status is done and the sprint story returns to review under the build workflow.
 
 Narrow `.gitattributes` entries preserve the hash-bound raw process captures, including unittest-generated trailing whitespace, and JSON receipt bytes. Source and ordinary documentation retain their whitespace checks. The final evidence scan uses a temporary text snapshot and leaves pre-existing generated Python caches untouched.
+
+
+### Code review pass 2 implementation (2026-11-15)
+
+All seven direct patch items are implemented. The [pass-2 evidence](evidence/story-5-2/review-pass-2/README.md) records 70 passing verifier process tests, eight passing runner controls, six killed sub-condition mutants and byte-identical adopted stdout with empty stderr. The six new cases independently protect restricted deferral, record kind, decision-side source hash/version and duplicate members in policy/receipt. The real-packet success case executes verbatim approved bytes, UTF-8 reads are explicit, and both identified subtest loops restore state in `finally`.
+
+Dated corrections in the pass-1 README and verification narrative list `28bcbbb`'s nine non-story gitlink moves, acknowledge that AC3 does not hold for that commit, and retain the owner's “Keep pins, align apart” decision. Builds alignment remains a separate `build(deps)` change. The README states the two frozen-block extraction scopes without changing receipts and provides portable reproduction outside the tracked tree. The spine retains the original direction's approval date and identifies the AD-23 amendment separately.
+
+This implementation began at `32a3e65989136f28b34500a4d9db8f04cf601885`. Existing captures/receipts, approved artifacts, inventories, reference pins, forbidden paths, the historical frontmatter baseline and frozen intent are preserved. Parent verification, the wider guard sweep, workflow review and final status synchronization remain with the parent workflow. No new work is deferred.
+
+### Independent build review of the pass-2 patches (2026-11-15)
+
+All three context-free layers returned before triage. Edge Case Hunter returned
+no findings after independently passing the 70-test suite; Verification Gap
+Reviewer found no verification gaps. Blind Hunter returned the ten findings
+below. The review used this follow-up's complete candidate diff from
+`32a3e65989136f28b34500a4d9db8f04cf601885`, including untracked evidence.
+The full diff from the preserved historical frontmatter baseline was retained
+separately in the workflow's private temporary workspace; unrelated published
+work was preserved. The parent independently passed 70 process tests, eight
+runner controls, the byte-identical adopted output and the 57/57 guard sweep.
+
+| Finding | Verdict | Route | Verified evidence |
+| --- | --- | --- | --- |
+| Blind B1: sweep transcripts disappear | medium | patch | The new parent receipt retains filenames and hashes, while its scratch directory has been removed. Retain matching raw channels with a fresh sweep receipt so the current classification evidence is inspectable; preserve the first receipt as a checkpoint. |
+| Blind B2: no executable six-mutant recipe | low | rejected | The receipt records exact inputs, before/after substitutions, commands, mutant hashes and complete channels; the behavioral reproduction recipe is accurately limited to the process suite and whole-guard sweep. A new mutation runner or snapshot recipe adds machinery beyond a direct correction; no fully automated reproduction of arbitrary sub-condition mutants is claimed. |
+| Blind B3: evidence-only deferral combination | low | rejected | The reviewer demonstrated a newly inserted conditional exception surviving. Current code has no such exception: the same outcome check governs source and decision evidence, with V1 admission already covered and the new global deferral-set mutation killed. Enumerating additional conditional bypasses adds combinatorial tests, rather than correcting a missing current branch or the six named regressions. |
+| Blind B4: record-only deferral combination | low | rejected | The injected records-specific exception survives, but current rows and records use the same outcome-set guard. Existing agreed-record regressions cover both source/evidence restrictions with admitted or missing classes; the global deferral-set mutation is killed. The proposed extra combination protects invented branching rather than an existing untreated branch. |
+| Blind B5: nested-only duplicate exception | low | rejected | The six requested regressions prove both policy and receipt use the duplicate-rejecting parser. Its object-pairs hook checks every object without a depth branch. The passing mutant introduces a root-only parser behavior absent from current code; additional nesting combinations exceed a direct correction, and the packet claims no exhaustive arbitrary-program mutation coverage. |
+| Blind B6: retained output inherits TMPDIR | low | patch | `mktemp -d` honors a repository-local or enclosing disposable TMPDIR, defeating the new recipe's retained-output claim. Unset temporary-directory overrides only for the retained parent allocation and document its system-temp lifetime. |
+| Blind B7: Python minimum unspecified | low | patch | `Path.is_relative_to` requires Python 3.9 or later; replace the generic Python 3 prerequisite with that minimum in the recipe. |
+| Blind B8: dependency scope evidence omits root files | low | patch | The recorded path-limited diff does not cover all dependency files, although the complete candidate currently changes none. Add a complete changed-file allowlist check instead of extending a partial exclusion list. |
+| Blind B9: whitespace evidence excludes additions | low | patch | Plain `git diff --check` omits staged work and untracked additions. Check the current-run tracked candidate and every untracked addition before the final packet-wide claim. |
+| Blind B10: workflow status remains in progress | false | rejected | The review snapshot is an intermediate workflow state: step 4 sets only spec `in-review`, and step 5 performs final spec/sprint synchronization. The handoff explicitly leaves that step pending; finalization will replace the seven-patches comment with current evidence. |
+
+The five surviving findings are direct documentary/evidence patches, grouped
+only where they share a cause (retention, reproduction prerequisites, complete
+candidate checks). No finding requires an intent change, approved-artifact
+rewrite or new deferral. The original implementation agent applied them.
+
+### Pass-2 build completion (2026-11-15)
+
+All seven code-review patches and the five surviving build-review findings are
+resolved. The [complete sweep packet](evidence/story-5-2/review-pass-2/guard-sweep-complete.json)
+retains its exact receipt and all 116 raw process channels: 57 guards killed,
+zero survivors/errors. All 70 verifier process tests and eight runner controls
+pass, and all six focused sub-condition mutants are killed. The parent checked
+the retained channels against every receipt hash and classification. The
+approved decision/map, ten artifact hashes, approval receipt, frozen intent
+and byte-identical adopted output remain unchanged.
+
+The [final evidence packet](evidence/story-5-2/review-pass-2/README.md) distinguishes
+the initial parent checkpoint from the fully retained sweep, records the
+complete candidate scope/whitespace checks and preserves all earlier receipts.
+The final parent verification covers every frozen matrix scenario with a
+passing executed test. Spec status is done and sprint status is review.
+No new work is deferred. The separately authorized Builds alignment and
+existing Parties, Folders, enrollment and retirement gates remain separate.
