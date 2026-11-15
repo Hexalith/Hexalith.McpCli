@@ -395,12 +395,12 @@ class PendingCase(unittest.TestCase):
             stack.enter_context(patch.object(module,'ROOT',self.root))
         stack.enter_context(patch.object(subprocess,'run',side_effect=pinned_observation(subprocess.run)))
 
-    def removed_condition(self,module,function,condition):
+    def removed_condition(self,module,function,condition,*,replacement='True'):
         """Disable only one conjunct, preserving its sibling checks and globals."""
         source = inspect.getsource(getattr(module,function))
         self.assertEqual(1,source.count(condition))
         namespace = {}
-        exec(source.replace(condition,'True'),module.__dict__,namespace)
+        exec(source.replace(condition,replacement),module.__dict__,namespace)
         self.assertIs(namespace[function].__globals__,module.__dict__)
         return patch.object(module,function,namespace[function])
 
@@ -1068,6 +1068,12 @@ class AmendmentTests(PendingCase):
             self.assertEqual((0,PASS,''),self.run_check(check))
         decl = copy.deepcopy(self.decl); decl['C02']['eligibility'] = 'excluded'
         self.reject(lambda:V.check_declarations(ROOT,self.old,self.new,decl,self.surface),'folders: 48-candidate/41-decoration owner set mismatch')
+        # Preserve the owner-set count so only the target's eligibility refuses it.
+        decl['Q04']['eligibility'] = 'eligible'
+        check = lambda:V.check_declarations(ROOT,self.old,{'M03':self.new['M03']},decl,self.surface)
+        self.reject(check,'folders:M03: C02 replacement is absent, undecorated or owner-ineligible')
+        with self.removed_condition(V,'check_declarations',"d['eligibility'] == 'eligible'"):
+            self.assertEqual((0,PASS,''),self.run_check(check))
 
     def test_pinned_surface_sets_and_missing_target_guard_removal(self):
         for index,key,value,message in [
@@ -1385,11 +1391,27 @@ def source(root, path, pin=PIN):
             return read(candidate,*args,**kwargs)
         with patch.object(Path,'read_text',working_tree):
             V.check_declarations(ROOT,self.old,self.new,self.decl,self.surface)
-        def changed(repo,*args):
-            data = git(repo,*args)
-            return data.replace(b'new SubmitCommandRequest(',b'new InventedRequest(') if repo == ROOT and args == ('show',B.BASELINE+':'+path) else data
-        with patch.object(B,'git',side_effect=changed):
-            self.guard(lambda:V.check_declarations(ROOT,self.old,self.new,self.decl,self.surface),'folders: McpCli wire route evidence mismatch')
+        for before,after,condition in [
+            (b'new SubmitCommandRequest(',b'new InventedRequest(',
+             "'new SubmitCommandRequest(messageId!, tenant!, operation.Routing.Domain, aggregateId!,' in route"),
+            (b'operation.Routing.WireType, rebuilt, correlationId,',b'operation.Routing.WireType, invented, correlationId,',
+             "'operation.Routing.WireType, rebuilt, correlationId,' in route"),
+            (b'new SubmitQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,',
+             b'new InventedQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,',
+             "'new SubmitQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,' in route"),
+            (b'operation.Routing.ProjectionType',b'operation.Routing.InventedProjection',
+             "'operation.Routing.ProjectionType' in route"),
+        ]:
+            with self.subTest(condition=condition):
+                self.assertIn(before,git(ROOT,'show',B.BASELINE+':'+path))
+                def changed(repo,*args):
+                    data = git(repo,*args)
+                    return data.replace(before,after) if repo == ROOT and args == ('show',B.BASELINE+':'+path) else data
+                with patch.object(B,'git',side_effect=changed):
+                    check = lambda:V.check_declarations(ROOT,self.old,self.new,self.decl,self.surface)
+                    self.reject(check,'folders: McpCli wire route evidence mismatch')
+                    with self.removed_condition(V,'check_declarations',condition):
+                        self.assertEqual((0,PASS,''),self.run_check(check))
 
     def test_required_fence_attributes_and_guard_removal(self):
         source = B.source
@@ -1451,6 +1473,13 @@ def source(root, path, pin=PIN):
         for query in ['FolderFileOwnerRead','FolderFileReferenceRead','FolderOwnerRead']:
             cases.append((f'src/Hexalith.Folders.Server/Queries/{query}QueryHandler.cs','IDomainQueryHandler','IInventedQueryHandler',
                           f'folders: internal {query} query-handler premise missing',None))
+        cases.extend([
+            ('src/Hexalith.Folders.Server/Queries/FolderOwnerReadQueryHandler.cs','FolderOwnerReadQuery','InventedOwnerReadQuery',
+             'folders: internal FolderOwnerRead query-handler premise missing',"query+'Query' in text"),
+            ('src/Hexalith.Folders.Server/Queries/FolderOwnerReadQueryHandler.cs','using System.Text.Json;',
+             'using Hexalith.Folders.Contracts.Queries;\nusing System.Text.Json;',
+             'folders: internal FolderOwnerRead query-handler premise missing',"'Hexalith.Folders.Contracts.Queries' not in text"),
+        ])
         for path,before,after,message,condition in cases:
             with self.subTest(message=message):
                 self.assertIn(before,source(ROOT,path))
@@ -1465,6 +1494,19 @@ def source(root, path, pin=PIN):
                         self.reject(check,message)
                         with self.removed_condition(V,'check_source_drift',condition):
                             self.assertEqual((0,PASS,''),self.run_check(check))
+        path = 'src/Hexalith.Folders.Server/FoldersServerServiceCollectionExtensions.cs'
+        for name in ['IWorkspaceFileContentStore','provider.GetRequiredService','WorkspaceContentMutationAdapter']:
+            with self.subTest(default_implementation=name):
+                self.assertIn(name,source(ROOT,path))
+                def damaged(root,filename,pin=B.PIN):
+                    text = source(root,filename,pin)
+                    return text.replace(name,'InventedDefault') if filename == path and pin == B.PIN else text
+                with patch.object(B,'source',side_effect=damaged):
+                    check = lambda:V.check_source_drift(ROOT,self.surface)
+                    self.reject(check,'folders: default implementation/commit-executor source premise missing')
+                    with self.removed_condition(V,'check_source_drift','name in defaults',
+                                                replacement=f'name == {name!r} or name in defaults'):
+                        self.assertEqual((0,PASS,''),self.run_check(check))
 
     def test_owner_file_id_drift_semantics_and_both_pin_controls(self):
         for key in ['M01','M04','M13','L24','L25','L26','C10']:
@@ -1483,6 +1525,16 @@ def source(root, path, pin=PIN):
             return text.replace('JsonProperty("ownerFileId", Required = Newtonsoft.Json.Required.DisallowNull','JsonProperty("ownerFileId", Required = Newtonsoft.Json.Required.Always') if name == path and pin == B.PIN else text
         with patch.object(B,'source',side_effect=required):
             self.guard(lambda:V.check_source_drift(ROOT,self.surface),'folders: ownerFileId optional owner-incarnation semantics missing')
+        before = 'Optional explicit owner incarnation; an exact accepted path is resolved by the owner when omitted.'
+        self.assertIn(before,source(ROOT,path))
+        def changed_comment(root,name,pin=B.PIN):
+            text = source(root,name,pin)
+            return text.replace(before,'Owner incarnation is required.') if name == path and pin == B.PIN else text
+        with patch.object(B,'source',side_effect=changed_comment):
+            check = lambda:V.check_source_drift(ROOT,self.surface)
+            self.reject(check,'folders: ownerFileId optional owner-incarnation semantics missing')
+            with self.removed_condition(V,'check_source_drift',repr(before)+' in block(after)'):
+                self.assertEqual((0,PASS,''),self.run_check(check))
 
     def test_idempotency_key_own_jsonrequired_attribute_control(self):
         decl = copy.deepcopy(self.decl)
@@ -1505,6 +1557,7 @@ def source(root, path, pin=PIN):
         source = B.source
         cases = [
             ('src/Hexalith.Folders.Mcp/Tools/FolderTools.cs','client.GetBranchRefPolicyAsync(','client.GetCommitEvidenceAsync(','M16'),
+            ('src/Hexalith.Folders.Mcp/Resources/FolderTreeResource.cs','client.ListFolderFilesAsync(','client.ListFolderAclEntriesAsync(','R02'),
             ('src/Hexalith.Folders.Mcp/Tools/FileTools.cs','=> Upload(pipeline, FileMutationRequestFileOperationKind.Add,','=> Upload(pipeline, FileMutationRequestFileOperationKind.Change,','M01'),
             ('src/Hexalith.Folders.Cli/Commands/File/FileCommand.cs','"Add a file (mutating).", FileMutationRequestFileOperationKind.Add','"Add a file (mutating).", FileMutationRequestFileOperationKind.Change','L24'),
             ('src/Hexalith.Folders.Cli/Commands/File/FileCommand.cs','client.RemoveFileAsync(','client.ChangeFileAsync(','L26'),

@@ -725,6 +725,112 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
 - E11 false: a missing spec or sprint file cannot skip completion. `labels.json` is `integrated`, which forces completion at `verify_amendment.py:309` and `verify_labels.py:41`.
 - E13 low: the delivered labels use `blob/main` (pass-1 B5/E19, pass-3 B1/E10, pass-5 E16).
 
+Code review pass 7 (bmad-code-review, 2026-11-15). It ran after `321d4aa` committed the pass-6 patches and the resumed pass-6 build review's correction. At review time, `321d4aa` was one commit ahead of `origin/main` and not pushed.
+
+**Scope:** the deliverables, 5,778 diff lines in 15 files, `a92a296..HEAD` at `321d4aa`. This is the pass-6 file set, keeping only the Story 5.8 `.gitattributes` and ledger hunks.
+- Non-story commits were left out.
+- Also left out: stream captures, secret-scan receipts, `commands.json`, `audit.json`, `post-transition.json` and the `pre-whitespace-capture/sources/` copies.
+
+Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. They raised 32 findings. Eleven survive in 7 patch entries, and 21 were rejected.
+- The V and A layers demonstrated their gaps in isolated `workspace_view(pending=False)` copies or in scratchpad copies. The real sources stayed unchanged.
+- Before triage, the following passed at `321d4aa`, run with `python3 -B -I` and a scratch `TMPDIR`:
+  - all 102 tests;
+  - both default completion gates, under UTF-8 and under ASCII locales;
+  - AD-23.
+
+The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged.
+
+- [x] [Review][Patch] Three of the four McpCli route-evidence conjuncts have no test that fails when they are removed (low) — `verify_amendment.py:187` requires four substrings of the baseline `OperationExecutor.cs`.
+  - `test_mcpcli_route_uses_committed_baseline_and_guard_removal` (`test_verify_amendment.py:1379-1392`) damages only `new SubmitCommandRequest(`.
+  - Three conjuncts are never damaged:
+    - `operation.Routing.WireType, rebuilt, correlationId,`;
+    - `new SubmitQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,`;
+    - `operation.Routing.ProjectionType`.
+  - The V and A layers deleted those three conjuncts, and all tests still passed.
+  - The approved route claims depend on this guard: every Query replacement cell (`SubmitQueryRequest(tenant, folders, aggregateId, wire, projection)`) and the footer at `folders-migration-inventory-v1.1.0.md:291`.
+  - Pass-6 V2 did not list `:187`.
+  - Fix: add one damage subtest per conjunct to that test, each asserting the exact `folders: McpCli wire route evidence mismatch` refusal, with a `removed_condition` control.
+  - (V2, A1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:187]
+- [x] [Review][Patch] The R-row resource client-call mapping has no test (low) — In `check_declarations`, the `R` branch reads each pinned resource's actual client call (`verify_amendment.py:155-157`). `:162` then requires that call to equal the CLR name of the row's declared target.
+  - It is the only check tying `FolderTreeResource.cs` and `AuditTrailResource.cs` to the R01/R02 targets Q28 and Q30.
+  - `test_actual_client_calls_and_upload_kinds_are_checked` (`test_verify_amendment.py:1504-1529`) damages only M16, M01, L24, L26 and the SDK upload helper.
+  - The V layer narrowed `'MRL'` to `'ML'` at `:151`, and all 102 tests passed.
+  - Fix: add a `FolderTreeResource.cs` case (`client.ListFolderFilesAsync(` changed to `client.ListFolderAclEntriesAsync(`, `key='R02'`) to that test's `cases` table, so its existing `self.guard(...)` call asserts the exact `folders:R02: pinned client call/kind or operation-to-target mapping mismatch` refusal and the removal control.
+  - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:155]
+- [x] [Review][Patch] Source-drift premise conjuncts behind G4, G5 and `ownerFileId` have no test (low) — The existing tests damage only the first conjunct of each condition: `test_verify_amendment.py:1448`, `:1452` and `:1483`. No test damages these:
+  - `verify_amendment.py:214`: the `Optional explicit owner incarnation; …` doc-comment conjunct.
+  - `:220`: the `IWorkspaceFileContentStore`, `provider.GetRequiredService` and `WorkspaceContentMutationAdapter` names.
+  - `:223`: `query+'Query' in text`, and the absence of `Hexalith.Folders.Contracts.Queries`.
+
+  The V layer deleted all four conjuncts, and all 102 tests passed.
+  - These checks are the only source evidence for the literal approved prose:
+    - G4 at `folders-migration-inventory-v1.1.0.md:91` and `:299` ("none serves these 28 decorated types");
+    - G5 at `:92` and `:300`;
+    - the `ownerFileId` drift wording.
+  - Fix: add exact-refusal subtests, each with a per-conjunct `removed_condition` control, to `test_pinned_transport_defaults_and_internal_query_premise_guard_removal` (`:1438`) and `test_owner_file_id_drift_semantics_and_both_pin_controls` (`:1469`). The damages:
+    - prefix `using Hexalith.Folders.Contracts.Queries;` onto a pinned internal handler;
+    - rename `FolderOwnerReadQuery`;
+    - drop each default-implementation name;
+    - change the `ownerFileId` doc comment.
+  - (V3) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:220]
+- [x] [Review][Patch] The owner-eligibility conjunct on each `replace` target has no isolated test (low) — `verify_amendment.py:176` starts with `d['eligibility'] == 'eligible'`.
+  - The only ineligible-target case (`test_verify_amendment.py:1069`, C02 set to `excluded`) is refused first by the 41-count check at `:167`, so it never reaches `:176`.
+  - The A layer deleted that conjunct, and all 102 tests passed.
+  - The frozen Always rule requires owner eligibility for `replace`. The candidate-bytes check still catches a swapped set end to end, but the named diagnostic is unprotected.
+  - Fix: in `test_decorated_type_wire_route_key_and_owner_eligibility_guards` (`:1043`), mark one replace target ineligible and one ineligible candidate eligible, so the count stays 41. Assert the exact `folders:<row>: <target> replacement is absent, undecorated or owner-ineligible` refusal, with a removal control.
+  - (A2) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:176]
+- [x] [Review][Patch] Three anchors in the Story 5.8 ledger entries are stale (low) — Later commits moved the lines they cite.
+  - Story 5.2 commit `0795509` inserted eight lines before the Story 5.7 entries:
+    - `deferred-work.md:1101` ("The Admin/technical equivalent is at `deferred-work.md:1037`") should cite `:1045`;
+    - `deferred-work.md:1148` should cite `:1047` instead of `:1039`.
+    - Lines `:1037` and `:1039` are now blank.
+  - The net11 commit `dc39e26` moved the "queries carry no extensions" sentence that `deferred-work.md:1140` cites from `README.md:578` to `:583`.
+  - `321d4aa` edited this ledger region and left all three.
+  - The Parties precedent at `:1024` and the cited verifier lines are still correct (checked).
+  - Fix: correct the three anchors.
+  - (E2, E3, A3) [_bmad-output/implementation-artifacts/deferred-work.md:1101]
+- [x] [Review][Patch] `verification.md` does not name the commit that holds the pass-6 work (low) — The pass-6 section ends "This build session performed no commit or push" (`verification.md:114-115`).
+  - `review-pass6-20261115/commands.json`, `audit.json` (`headAtCapture`) and `post-transition.json` record `0795509`. That is a Story 5.2 commit, which does not contain the audited inputs.
+  - The work landed in `321d4aa65064e579797446002dfef8462c666176`, which the packet never names. This is the defect pass-6 A2 fixed for pass 5.
+  - Fix: add the same sentence naming `321d4aa`. Do not assert an authorization that is not recorded.
+  - (A4) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:114]
+- [x] [Review][Patch] `verification.md` says the runner binds "eleven executed inputs", but two are never executed (low) — `verify_packet.py:36-40` hashes `scripts/scan-evidence-secrets.py` and `scripts/evidence_redaction.py` among its eleven inputs.
+  - None of the ten `commands()` gates (`:121-145`) runs them. The evidence scans are separate manual commands with their own receipts.
+  - `verification.md:203` says "binds all eleven executed inputs including itself", so a reader can infer the audited manifest proves a scan ran.
+  - Fix: reword `:203` to say the runner binds eleven executable inputs: itself, the scripts its gates execute, and the two scanner scripts used for the separate evidence scan. Keep the runner unchanged, since editing it would break the pass-6 audit-only replay.
+  - (E14, B5) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:203]
+
+**Rejected (21):**
+- B1 false: the G-row and receipt anchors are Folders-relative by declaration. `folders-migration-inventory-v1.1.0.md:19` says every evidence anchor is relative to the Folders repository, and the receipt's `sourceRevision` names the pin.
+- B2 low: the G5 premise checks cover only some of the default implementations. Path, delete and context, and whether a `TryAdd*` registration is effective, are not checked.
+  - The approved claim is true at the pin (the layer checked).
+  - More checks would add guards for a re-pin that no story owns yet.
+- B3 low: the G4 premise is not enumerated. A fourth handler, `MapPost("/query"` or a `using` alias would go undetected. This has the same reasoning as B2, and V3 covers the existing conjuncts.
+- B4 low: Query rows' 1.0.0 observed freshness and their 5.12 declared freshness are never compared.
+  - All 28 agree today (the layer checked).
+  - They may legitimately differ when a loss is recorded, so a comparison would add a guard.
+- B6 low: `post-transition.json` has no generator. It records exact argv, exit codes and stream hashes, which can be rerun.
+  - Its claim at `verification.md:116-117` names only the completion entrypoints and the audit-only replay, so the dropped whitespace command is not claimed.
+  - `git diff --check a92a296` is clean at `321d4aa` (checked).
+- B7 low: `workspace_view` shares `.git`, `src` and other stories' evidence read-only by use, not by permission. No builder, verifier or helper writes to those symlinked trees, so a write would need a hypothetical faulty child.
+- B8 low: each fixture copies about 8.5 MB of 5.2, 5.8 and AD-23 evidence plus the top-level artifacts.
+  - `TemporaryDirectory` removes each copy, so peak use is one copy per nesting level.
+  - Narrowing the copy risks breaking tests that read retained packets.
+- B9 low: the unscoped whitespace gates can only fail loudly on unrelated files, and a pass over the superset still holds for the 5.8 files.
+- B10 low: the receipt's row-hash delta is exact. A summary of transitions would be a presentation idea for the K12 successor, and the receipt is approved bytes.
+- B11 low: all 15 `-k` patterns in `guard-removal.py` still match current test names (checked). The helper is the historical pass-3 record, and a selection check would add a guard.
+- E1 low: a missing owner `origin/main` or README fails loudly (pass-6 E4).
+- E4 false: a bare `next()` raising `StopIteration` (pass-1 E5 through pass-6 B8/E2).
+- E5 low: missing frozen markers or malformed manifest shapes raise tracebacks (pass-5 E10, pass-6 E7).
+- E6 low: no subprocess timeouts (pass-6 E9).
+- E7 low: the lifecycle proof's default delivery folder was settled in pass-1 E8, pass-2 E3 and pass-3 E4. A symlinked sidecar would need a symlink planted in a tracked folder.
+- E8 low: a killed process can leave `audit_fixture` folders behind (pass-6 A3).
+- E9 false: model-class prefix matching. Rechecked: at both `2236855e` and `7eab70e9`, each of the three model names occurs exactly once as `public partial class <name>`, and no longer class name shares the prefix.
+- E10 low: superset `rolesCovered` and free-form `approvedOn` (pass-6 B10/E12).
+- E11 low: non-transactional builder writes (pass-6 B11/E1).
+- E12 false: the prior labels are bound by the Story 5.7 register chain and all contain the 1.0.0 link. `verify_labels.py:68` requires each label to equal the builder output (pass-5 E4, pass-6 E3).
+- E13 low: the delivered labels use `blob/main` (pass-6 E13).
+
 ## Design Notes
 
 Derivation rules (the decisions above apply first):
@@ -788,9 +894,46 @@ Derivation rules (the decisions above apply first):
 
 - 2026-11-15: Final resumed pass-6 build completed all eight review patches and the follow-up packet-output symlink correction. The original implementation agent passed all 18 focused audit tests; parent verification then passed all 102 tests in both ordinary and synthetic lifecycle workspaces, ten exact gate stream checks, fourteen protected artifacts and their capture-time hashes, six symlinked-temp tests, all four matrix rows, frozen intent and tracked/untracked whitespace. All three independent review layers completed; one existing approved-byte semantic-drift deferral was carried without a duplicate entry. Final evidence is in [the pass-6 manifest](evidence/story-5-8/review-pass6-20261115/commands.json), [audit](evidence/story-5-8/review-pass6-20261115/audit.json) and [completion scan](evidence/story-5-8/secret-scan-review-pass6-completion-20261115.json). Spec is done and sprint tracking is review. Approved artifacts, production, dependencies, census and gitlinks are unchanged. The frozen scope requires separate explicit commit authorization; no commit or push was performed.
 
+- 2026-11-15: Implemented all seven code-review-pass-7 patch entries. Exact-stream refusal cases now independently remove all four McpCli route-evidence conjuncts, bind R02 to its pinned resource client call, isolate owner eligibility while preserving the 41-eligible set count, and cover the remaining default-implementation, internal-query and ownerFileId doc-comment premises. All five focused tests passed in 4.453 seconds. Corrected the three existing ledger anchors, recorded pass-6 commit `321d4aa65064e579797446002dfef8462c666176`, and distinguished the runner's executable-input hashes from the separately executed scanner scripts. The retained packet runner and historical captures are unchanged. Final full capture/audit, independent workflow review and status transition remain with the coordinator. Approved inventory, receipt, label register, delivered labels, frozen intent, production, dependencies, census and gitlinks remain unchanged. This implementation session performed no commit or push.
+
 ## Spec Change Log
 
+- 2026-11-15: Completed the resumed pass-7 build. All seven requested patches are applied. Parent verification passed all 102 tests in ordinary and synthetic lifecycle workspaces, all ten exact gate streams, fourteen protected artifacts, six symlinked-temp tests, every frozen matrix row and frozen intent. All three independent reviews completed; ten existing approved-byte deferrals were carried without duplicate entries, and no new patch or deferral resulted. The [pass-7 audit](evidence/story-5-8/review-pass7-20261115/audit.json), [post-transition checks](evidence/story-5-8/review-pass7-20261115/post-transition.json) and [completion scan](evidence/story-5-8/secret-scan-review-pass7-completion-20261115.json) retain final evidence. Spec is done and sprint tracking is review. Approved artifacts, the retained runner, production, dependencies, census and gitlinks remain unchanged. The K12 successor remains an Epic 6 catalog prerequisite. The frozen scope requires separate explicit commit authorization; no commit or push was performed.
+
 ## Review Triage Log
+
+### Resumed pass-7 build review (2026-11-15)
+
+All three independent layers completed before triage. The edge-case and
+verification-gap layers returned no findings. The blind layer returned ten
+findings, each matching an existing approved-byte deferral and its recorded
+verdict. The full review snapshot was
+`/tmp/hexalith-job.2x6J4gmZ/story-5-8-review-km3ik05d.diff`, against preserved
+baseline `a92a2969db6903b8c6cca7e437446167e135ec9d`; this resumed run began at
+`321d4aa65064e579797446002dfef8462c666176`. Independent maintenance included by
+that baseline remains outside this story's frozen intent.
+
+| Finding | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| B1: K01 rows inherit the confidential-UI rationale | low | defer (carried) | carried: the same approved-byte rationale and owner decision remain assigned to the K12 successor; already tracked (`deferred-work.md:1062`). No duplicate entry or approved-byte edit. |
+| B2: excluded K12 rows present affirmative replacement routes | low | defer (carried) | carried: the same prospective-target wording defect remains assigned to the approved successor; already tracked (`deferred-work.md:1067`). No duplicate entry. |
+| B3: mutation drift omits required fences and misattributes ownerFileId | low | defer (carried) | carried: the same requiredness and remove-only reachability corrections remain reserved for the K12 successor; already tracked (`deferred-work.md:1072`). No duplicate entry. |
+| B4: G2 drops egress, envelope-comparison and denial obligations | medium | defer (carried) | carried: the same approved-byte gate narrowing remains assigned to the successor; already tracked (`deferred-work.md:1119`). No duplicate entry. |
+| B5: G3 omits pinned admission requirements | medium | defer (carried) | carried: the same conditional-input, duplicate, byte-limit and audit-metadata omission remains assigned to the successor; already tracked (`deferred-work.md:1137`). No duplicate entry. |
+| B6: G4 omits the v1 query-transport limitation | medium | defer (carried) | carried: the same predecessor query-extension/freshness and payload-translation obligation remains in the existing G3/G4 successor entry (`deferred-work.md:1137`). No duplicate entry. |
+| B7: V03 omits Q08 optional task context | low | defer (carried) | carried: the same M22/L38/Q08/V03 capability and independent-authorization correction remains assigned to the successor; already tracked (`deferred-work.md:1111`). No duplicate entry. |
+| B8: semantic-retention claims exceed name-level evidence | medium | defer (carried) | carried: the same per-surface parameter, option, validation and transport audit remains assigned to the successor; already tracked (`deferred-work.md:1093`). No duplicate entry. |
+| B9: approved inventory describes itself as pending | low | defer (carried) | carried: the same approved metadata and receipt-citation correction remains assigned to the successor; already tracked (`deferred-work.md:1098`). No duplicate entry. |
+| B10: collective gap suffix misattributes G1/G2 ownership | low | defer (carried) | carried: the same individual story-ownership correction remains assigned to the successor; already tracked (`deferred-work.md:1103`). No duplicate entry. |
+
+No new patch or deferral resulted. Parent verification passed all 102 tests in
+both ordinary and synthetic lifecycle workspaces, all ten exact gate-stream
+checks, fourteen protected artifacts, six symlinked-temp tests, all four matrix
+rows and frozen intent. Both real completion entrypoints passed under UTF-8 and
+ASCII locales, along with AD-23 and tracked/untracked whitespace. The retained
+[pass-7 manifest](evidence/story-5-8/review-pass7-20261115/commands.json) and
+[audit](evidence/story-5-8/review-pass7-20261115/audit.json) bind the final
+executable inputs. Approved artifacts and the retained runner are unchanged.
 
 ### Resumed pass-6 build review (2026-11-15)
 

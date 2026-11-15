@@ -48,7 +48,59 @@ ancestor `2236855ee181bdeed2a103537c66316a1612c792`. The unpublished original
 `e2252f29a2dba2b64786ee483eb59fbceaadd387` is optional. The verifiers read these
 local objects and refs; they do not fetch or perform network operations.
 
-## Code-review pass 6 patch verification (2026-11-15)
+## Code-review pass 7 patch verification (2026-11-15)
+
+All seven pass-7 patch entries are implemented. Exact-stream refusal tests now
+exercise each McpCli route-evidence conjunct, the R02 resource-to-client mapping,
+the remaining default-implementation and internal-query premises, the ownerFileId
+doc comment, and replacement eligibility while preserving the 41-eligible count.
+Each new conjunct case removes only its own condition to prove the refusal is
+necessary. The five focused tests passed in 4.453 seconds.
+
+The three ledger anchors, pass-6 commit attribution and executable-input wording
+below are corrected. The retained packet runner is unchanged. Parent verification
+passed all **102 tests in both ordinary and synthetic lifecycle workspaces**,
+without skips, all ten exact gate-stream checks, all six symlinked-temp tests,
+and all four matrix rows. Both completion entrypoints passed under UTF-8 and
+ASCII locales, along with AD-23 and tracked/untracked whitespace. The
+[manifest](review-pass7-20261115/commands.json) and
+[audit](review-pass7-20261115/audit.json) bind eleven executable inputs and
+fourteen protected artifacts against committed and capture-time bytes; frozen
+intent is unchanged. All three independent workflow review layers completed.
+The edge-case and verification-gap layers returned no findings; the blind
+layer repeated ten previously recorded approved-byte deferrals. Their existing
+K12-successor dispositions were carried without duplicate ledger entries. No
+new patch or deferral resulted.
+
+To reproduce the current capture from the repository root with a UTF-8 locale,
+run the following. For audit-only replay, add `--audit-only` after the
+interpreter's `-` argument; retain the same `OUT` override.
+
+```bash
+run-with-temp python3 -B -I - <<'PY'
+import importlib.util
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('story58packet', Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py'))
+packet = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(packet)
+packet.OUT = packet.ROOT / packet.E / 'review-pass7-20261115'
+raise SystemExit(packet.main())
+PY
+```
+
+Historical captures and approved artifacts are unchanged. This resumed run
+started at `321d4aa65064e579797446002dfef8462c666176` and performed no commit
+or push. The K12 successor remains an Epic 6 catalog prerequisite; no .NET build
+or live acceptance is claimed.
+
+Spec is done and sprint tracking is review. The
+[post-transition checks](review-pass7-20261115/post-transition.json) bind both
+completion entrypoints under UTF-8 and ASCII locales, AD-23, audit-only replay
+and tracked/untracked whitespace after the final status update. The final
+[evidence scan](secret-scan-review-pass7-completion-20261115.json) covers the
+completed packet.
+
+## Historical code-review pass 6 patch verification (2026-11-15)
 
 The eight pass-6 patch entries preserve the approved inventory, receipt and label
 bytes. The transport premise now matches the plain-HTTP token independently of
@@ -66,7 +118,7 @@ writes. Exact-stream tests cover linked files/directories without writes and
 demonstrate the external-log overwrite when the guard or capture call is removed.
 All 18 focused audit tests passed before final parent verification.
 
-For the current packet, load the retained runner and override `OUT` from the
+For the pass-6 packet, load the retained runner and override `OUT` from the
 repository root. On the recording workstation, use `run-with-temp` for capture;
 elsewhere set a private task-owned `TMPDIR` and remove it after all children exit:
 
@@ -111,8 +163,10 @@ no gaps; one capture-output correction was applied, and one existing approved-by
 semantic-drift deferral was carried without a duplicate ledger entry. The final
 [evidence scan](secret-scan-review-pass6-completion-20261115.json) covers the
 completed packet. Spec is done and sprint tracking is review. The K12 successor
-remains an Epic 6 catalog prerequisite. This build session performed no commit or
-push; no .NET build or live acceptance is claimed.
+remains an Epic 6 catalog prerequisite. That build session performed no commit or
+push; the pass-6 work was later committed as
+`321d4aa65064e579797446002dfef8462c666176`. No .NET build or live acceptance is
+claimed.
 The [post-transition checks](review-pass6-20261115/post-transition.json) bind both
 real completion entrypoints and audit-only replay after the final status update.
 
@@ -200,8 +254,9 @@ the tracked historical audit before checking those inputs. After such a run,
 restores that historical audit. Use the current packet's `OUT` override shown
 above for a fresh capture or audit-only replay; no new runner option is needed.
 The runner compares all fourteen protected artifacts with committed `HEAD`
-bytes, binds all eleven executed inputs including itself, and checks each gate's
-exact stdout and stderr. Only the unittest duration varies; every test name,
+bytes, binds eleven executable inputs: itself, the scripts its gates execute,
+and the two scanner scripts used for the separate evidence scan. It checks each
+gate's exact stdout and stderr. Only the unittest duration varies; every test name,
 outcome and summary byte is checked. Git commands in the runner disable
 commit-graph reads. New audit tests reject a wrong PASS line and unexpected
 stderr even after the manifest hashes are updated, corrupt each protected
