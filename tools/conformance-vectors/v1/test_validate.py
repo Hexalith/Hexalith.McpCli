@@ -312,7 +312,7 @@ class VectorContractTests(unittest.TestCase):
     def test_gateway_request_bodies_require_every_emitted_field_at_every_call_position(self) -> None:
         required = (
             (self.command, ("messageId", "tenant", "domain", "aggregateId", "commandType", "payload", "correlationId")),
-            (self.query, ("tenant", "domain", "aggregateId", "queryType", "projectionType")),
+            (self.query, ("tenant", "domain", "aggregateId", "queryType")),
         )
         for template, fields in required:
             for position in POSITIONS:
@@ -321,6 +321,16 @@ class VectorContractTests(unittest.TestCase):
                         document, step, pointer = self._step_at(template, position)
                         del step["expectedGateway"]["body"][field]
                         self._assert_rejected(document, f"{pointer}/expectedGateway/body/{field}")
+
+    def test_computed_query_can_omit_projection_selectors_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            for actor in (None, "ItemProjectionActor"):
+                with self.subTest(position=position, actor=actor):
+                    document, step, _ = self._step_at(self.query, position)
+                    del step["expectedGateway"]["body"]["projectionType"]
+                    if actor is not None:
+                        step["expectedGateway"]["body"]["projectionActorType"] = actor
+                    self.assertEqual([], self._validate(document))
 
     def test_gateway_request_bodies_reject_unknown_and_mistyped_fields_at_every_call_position(self) -> None:
         mistyped = (

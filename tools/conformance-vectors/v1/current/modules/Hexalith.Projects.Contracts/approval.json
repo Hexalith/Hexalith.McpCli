@@ -1,0 +1,13 @@
+{
+  "packageId": "Hexalith.Projects.Contracts",
+  "version": "2.0.0-story66.2",
+  "module": "projects",
+  "inventorySha256": "18f9366ed6e9ab4c35cb1db02270ccdf1ad9e6f6a6470ecf0c3c8994e75112e8",
+  "approvalReference": "https://github.com/Hexalith/Hexalith.Projects/blob/ce71717a965eb21454b3e13068b9072404dac5f5/_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md#e8-mcpcli-sibling-repository-authorization-story-66-only",
+  "vectorFilesSha256": {
+    "describe.vector.json": "c8e0f49bc1080004b2f90d92e0cfa21d0aa797a242f582f632f4679a1e37d34f",
+    "list.vector.json": "dd44ac729ca3128fc4977376b0ffa333a5701092f9289b0670f2131b2a45cba6",
+    "trace-attachments.vector.json": "f259746c2356b4c30b4bf0bc285c6cdee5e78d250fedefcb3002f861a6ab61fd",
+    "trace-conversation.vector.json": "36f9e5e46fa51445ac538b7300d1a1f70a1bbb1d3937bbb62946858300fb5ade"
+  }
+}

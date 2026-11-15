@@ -38,7 +38,9 @@ public sealed class HexalithQueryAttribute(string description) : Attribute
     /// <summary>Gets or sets a constant aggregate identifier for a list query; mutually exclusive with <see cref="AggregateIdProperty"/>.</summary>
     public string? AggregateId { get; set; }
 
-    /// <summary>Gets or sets the gateway projection type when no contract interface supplies it.</summary>
+    /// <summary>Gets or sets the optional gateway projection type when no contract interface supplies it.</summary>
+    /// <remarks>Computed domain queries may omit both projection selectors. Omission is preserved for the Gateway
+    /// to select its committed route; explicit values must match that route and retain their normal validation.</remarks>
     public string? ProjectionType { get; set; }
 
     /// <summary>Gets or sets the named projection actor type, when used.</summary>

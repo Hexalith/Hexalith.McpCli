@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "operation": "projects.list",
+  "vectorSha256": "dd44ac729ca3128fc4977376b0ffa333a5701092f9289b0670f2131b2a45cba6",
+  "deadlineSeconds": 45,
+  "pollSeconds": 0.5,
+  "actions": [
+    {
+      "step": "/invocation"
+    }
+  ]
+}

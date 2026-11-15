@@ -1,0 +1,89 @@
+{
+  "formatVersion": 1,
+  "module": "projects",
+  "purpose": "release",
+  "targets": [
+    {
+      "id": "T01",
+      "name": "projects.list",
+      "contractType": "Hexalith.Projects.Contracts.Queries.ListProjectsQuery"
+    },
+    {
+      "id": "T02",
+      "name": "projects.describe",
+      "contractType": "Hexalith.Projects.Contracts.Queries.GetProjectQuery"
+    },
+    {
+      "id": "T03",
+      "name": "projects.trace-conversation",
+      "contractType": "Hexalith.Projects.Contracts.Queries.ResolveProjectFromConversationQuery"
+    },
+    {
+      "id": "T04",
+      "name": "projects.trace-attachments",
+      "contractType": "Hexalith.Projects.Contracts.Queries.ResolveProjectFromAttachmentsQuery"
+    }
+  ],
+  "legacyRows": [
+    {
+      "id": "T01",
+      "legacyOperation": "supported Project inventory read",
+      "targetIds": [
+        "T01"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Jerome's 2026-11-15 \u00a7E8 session approval enrolls this new supported read target only. No external owning-maintainer sign-off, publication, parity acceptance or retirement readiness is asserted. Every legacy Markdown R01\u2013R11, M01\u2013M05, L01\u2013L18 and V01\u2013V12 row remains defer / exclude in inventory v2.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "https://github.com/Hexalith/Hexalith.Projects/blob/ce71717a965eb21454b3e13068b9072404dac5f5/_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md#e8-mcpcli-sibling-repository-authorization-story-66-only"
+      }
+    },
+    {
+      "id": "T02",
+      "legacyOperation": "supported Project detail and reference-health inspection",
+      "targetIds": [
+        "T02"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Jerome's 2026-11-15 \u00a7E8 session approval enrolls this new supported read target only. No external owning-maintainer sign-off, publication, parity acceptance or retirement readiness is asserted. Every legacy Markdown R01\u2013R11, M01\u2013M05, L01\u2013L18 and V01\u2013V12 row remains defer / exclude in inventory v2.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "https://github.com/Hexalith/Hexalith.Projects/blob/ce71717a965eb21454b3e13068b9072404dac5f5/_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md#e8-mcpcli-sibling-repository-authorization-story-66-only"
+      }
+    },
+    {
+      "id": "T03",
+      "legacyOperation": "supported Conversation advisory trace",
+      "targetIds": [
+        "T03"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Jerome's 2026-11-15 \u00a7E8 session approval enrolls this new supported read target only. No external owning-maintainer sign-off, publication, parity acceptance or retirement readiness is asserted. Every legacy Markdown R01\u2013R11, M01\u2013M05, L01\u2013L18 and V01\u2013V12 row remains defer / exclude in inventory v2.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "https://github.com/Hexalith/Hexalith.Projects/blob/ce71717a965eb21454b3e13068b9072404dac5f5/_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md#e8-mcpcli-sibling-repository-authorization-story-66-only"
+      }
+    },
+    {
+      "id": "T04",
+      "legacyOperation": "supported attachment advisory trace",
+      "targetIds": [
+        "T04"
+      ],
+      "disposition": "replace",
+      "coverage": "include",
+      "rationale": "Jerome's 2026-11-15 \u00a7E8 session approval enrolls this new supported read target only. No external owning-maintainer sign-off, publication, parity acceptance or retirement readiness is asserted. Every legacy Markdown R01\u2013R11, M01\u2013M05, L01\u2013L18 and V01\u2013V12 row remains defer / exclude in inventory v2.",
+      "approval": {
+        "status": "approved",
+        "authority": "owning-maintainer",
+        "reference": "https://github.com/Hexalith/Hexalith.Projects/blob/ce71717a965eb21454b3e13068b9072404dac5f5/_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md#e8-mcpcli-sibling-repository-authorization-story-66-only"
+      }
+    }
+  ]
+}

@@ -336,6 +336,35 @@ public sealed class OperationExecutorTests
         await gateway.Received(1).SubmitQueryAsync(Arg.Any<SubmitQueryRequest>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
     }
 
+    /// <summary>Computed query omission and explicit interface/attribute selectors survive the complete executor path.</summary>
+    [Theory]
+    [InlineData("routing-fixture.computed-status", "{}", null, null)]
+    [InlineData("routing-fixture.interface-item", "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", "routing-items", "RoutingProjectionActor")]
+    public async Task QueryPreservesAbsentAndExplicitProjectionSelectorsAsync(string operation, string payload, string? projectionType, string? actorType)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        SubmitQueryRequest? captured = null;
+        gateway.SubmitQueryAsync(Arg.Do<SubmitQueryRequest>(request => captured = request), Arg.Any<string?>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new EventStoreQueryResult(CorrelationId, JsonSerializer.SerializeToElement(new { current = true }), false, null)));
+        IOperationExecutor executor = Create(gateway, typeof(Routing.Module), hasGatewayUrl: true);
+        OperationOutcome outcome = await executor.ExecuteAsync(new RunQueryArguments(operation, payload, AggregateId: ItemId),
+            new EnvelopeContext("acme", null, false, new HashSet<string>()), TestContext.Current.CancellationToken);
+        outcome.Error.ShouldBeNull();
+        outcome.Document.ShouldBeOfType<CoreQueryResult>().Document!.Value.GetProperty("current").GetBoolean().ShouldBeTrue();
+        captured.ShouldNotBeNull();
+        captured.ProjectionType.ShouldBe(projectionType);
+        captured.ProjectionActorType.ShouldBe(actorType);
+        captured.Domain.ShouldBe("routing");
+        captured.AggregateId.ShouldBe(ItemId);
+        JsonElement wire = JsonSerializer.SerializeToElement(captured, new JsonSerializerOptions(JsonSerializerDefaults.Web)
+        {
+            DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+        });
+        if (projectionType is null) wire.TryGetProperty("projectionType", out _).ShouldBeFalse();
+        if (actorType is null) wire.TryGetProperty("projectionActorType", out _).ShouldBeFalse();
+        await gateway.Received(1).SubmitQueryAsync(Arg.Any<SubmitQueryRequest>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+    }
+
     /// <summary>Cursor and offset conflict is rejected before any Gateway call.</summary>
     [Fact]
     public async Task QueryPagingConflictFailsBeforeGatewayAsync()

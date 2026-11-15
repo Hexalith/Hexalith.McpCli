@@ -119,7 +119,7 @@ public sealed class DiscoveryCommandTests
                 {"name":"explicit-fixture","description":"Explicit wire type fixture.","operationCount":1},
                 {"name":"lint-fixture","description":"Description quality fixtures.","operationCount":4},
                 {"name":"marked-empty","description":"Module with no operations.","operationCount":0},
-                {"name":"routing-fixture","description":"Valid routing, aggregate source, and envelope variants.","operationCount":12},
+                {"name":"routing-fixture","description":"Valid routing, aggregate source, and envelope variants.","operationCount":13},
                 {"name":"sample","description":"Synthetic operations for testing module declarations.","operationCount":3}
             ]}
             """;
@@ -139,7 +139,7 @@ public sealed class DiscoveryCommandTests
             list.GetProperty("module").GetString().ShouldBe("routing-fixture");
             list.GetProperty("operations").EnumerateArray().Select(item => item.GetProperty("name").GetString()).ShouldBe(
             [
-                "routing-fixture.colon-wire", "routing-fixture.competing-route", "routing-fixture.computed-envelope", "routing-fixture.envelope-item",
+                "routing-fixture.colon-wire", "routing-fixture.competing-route", "routing-fixture.computed-envelope", "routing-fixture.computed-status", "routing-fixture.envelope-item",
                 "routing-fixture.get-http2-status", "routing-fixture.interface-item", "routing-fixture.items-list",
                 "routing-fixture.nullable-idempotency", "routing-fixture.redundant-convention",
                 "routing-fixture.redundant-interface", "routing-fixture.renamed-aggregate",
@@ -599,7 +599,7 @@ public sealed class DiscoveryCommandTests
         => (warning, verb) switch
         {
             (true, "modules") => """
-                {"modules":[{"name":"routing-fixture","description":"Valid routing, aggregate source, and envelope variants.","operationCount":12}]}
+                {"modules":[{"name":"routing-fixture","description":"Valid routing, aggregate source, and envelope variants.","operationCount":13}]}
                 """,
             (false, "modules") => """
                 {"modules":[{"name":"explicit-fixture","description":"Explicit wire type fixture.","operationCount":1}]}
@@ -609,6 +609,7 @@ public sealed class DiscoveryCommandTests
                     {"name":"routing-fixture.colon-wire","kind":"write","description":"Command with a colon in its wire type."},
                     {"name":"routing-fixture.competing-route","kind":"write","description":"Command with competing route values."},
                     {"name":"routing-fixture.computed-envelope","kind":"write","description":"Command with a computed aggregate identifier and envelope members."},
+                    {"name":"routing-fixture.computed-status","kind":"read","description":"Read computed status."},
                     {"name":"routing-fixture.envelope-item","kind":"write","description":"Change an item using mapped envelope values."},
                     {"name":"routing-fixture.get-http2-status","kind":"read","description":"Read HTTP2 status."},
                     {"name":"routing-fixture.interface-item","kind":"read","description":"Read an item through the query interface."},

@@ -277,3 +277,5 @@ The [artifact and matrix audit](../../../_bmad-output/implementation-artifacts/e
 binds that source, those artifacts and the named passing regressions. The earlier
 Story 4.8 scratch package and 5.9.0 pin are historical and do not authorize current
 published bytes.
+
+Computed domain Query vectors may omit both `projectionType` and `projectionActorType` in the expected Gateway body. An explicit selector keeps its existing strict type and grammar checks; JSON null is not an emitted selector. The C# Catalog remains the source of Operation Shapes, including the `none` selector shape.

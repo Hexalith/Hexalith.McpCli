@@ -1,0 +1,14 @@
+[
+  {
+    "operation": "projects.list",
+    "code": "payload_paging_member",
+    "property": "/properties/cursor",
+    "approvalReference": "https://github.com/Hexalith/Hexalith.Projects/blob/ce71717a965eb21454b3e13068b9072404dac5f5/_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md#e8-mcpcli-sibling-repository-authorization-story-66-only"
+  },
+  {
+    "operation": "projects.list",
+    "code": "payload_paging_member",
+    "property": "/properties/pageSize",
+    "approvalReference": "https://github.com/Hexalith/Hexalith.Projects/blob/ce71717a965eb21454b3e13068b9072404dac5f5/_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md#e8-mcpcli-sibling-repository-authorization-story-66-only"
+  }
+]

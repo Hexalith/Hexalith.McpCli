@@ -19,6 +19,7 @@ public sealed class OperationShapeTests
     /// <summary>Gets fixture operations whose shapes together take every value of every component.</summary>
     public static TheoryData<string, string> FixtureShapes => new()
     {
+        { "routing-fixture.computed-status", "kind=query;identifierKind=ulid;wireTypeConvention=kebabCase;tenantSource=public;aggregateIdSource=none;projectionSelector=none;idempotencyKey=optional" },
         { "sample.create-item", "kind=command;identifierKind=ulid;wireTypeConvention=kebabCase;tenantSource=fixedTenant;aggregateIdSource=property;projectionSelector=none;idempotencyKey=optional" },
         { "sample.get-item", "kind=query;identifierKind=ulid;wireTypeConvention=kebabCase;tenantSource=fixedTenant;aggregateIdSource=property;projectionSelector=projectionType;idempotencyKey=optional" },
         { "string-fixture.lookup", "kind=query;identifierKind=string;wireTypeConvention=fullTypeName;tenantSource=fixedTenant;aggregateIdSource=property;projectionSelector=projectionType;idempotencyKey=optional" },

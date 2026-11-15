@@ -1,0 +1,72 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.Projects.Contracts",
+    "version": "2.0.0-story66.2"
+  },
+  "operation": "projects.trace-attachments",
+  "kind": "query",
+  "prerequisites": [],
+  "invocation": {
+    "operation": "projects.trace-attachments",
+    "kind": "query",
+    "payload": {
+      "attachments": [
+        {
+          "referenceKind": "folder",
+          "referenceId": "folder-a"
+        }
+      ]
+    },
+    "envelope": {
+      "tenant": "tenant-a"
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "projects",
+        "aggregateId": "projects",
+        "queryType": "Hexalith.Projects.Queries.ResolveProjectFromAttachments.v1",
+        "payload": {
+          "attachments": [
+            {
+              "referenceKind": "folder",
+              "referenceId": "folder-a"
+            }
+          ]
+        }
+      },
+      "maskGenerated": []
+    },
+    "scriptedResponse": {
+      "statusCode": 200,
+      "body": {
+        "success": true,
+        "payload": {
+          "candidates": [],
+          "incomplete": true,
+          "result": null,
+          "unsupportedInputKinds": [],
+          "evaluatedAt": "2026-11-15T00:00:00+00:00"
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      },
+      "echoRequestFields": []
+    },
+    "assertions": [
+      {
+        "path": "/operation",
+        "operator": "equals",
+        "value": "projects.trace-attachments"
+      },
+      {
+        "path": "/document/incomplete",
+        "operator": "equals",
+        "value": true
+      }
+    ]
+  },
+  "postconditions": []
+}

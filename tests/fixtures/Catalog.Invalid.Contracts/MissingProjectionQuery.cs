@@ -2,6 +2,6 @@ using Hexalith.McpCli.Abstractions;
 
 namespace Catalog.Invalid.Contracts;
 
-/// <summary>Exercises exclusion of an attribute-routed Query without a projection type.</summary>
-[HexalithQuery("Query missing its projection type.", Domain = "invalid")]
+/// <summary>Preserves the former missing-selector case as an accepted computed query regression.</summary>
+[HexalithQuery("Computed query without projection selectors.", Domain = "invalid")]
 public sealed record MissingProjectionQuery;

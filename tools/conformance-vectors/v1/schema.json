@@ -139,7 +139,7 @@
     "queryGatewayBody": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["tenant", "domain", "aggregateId", "queryType", "projectionType"],
+      "required": ["tenant", "domain", "aggregateId", "queryType"],
       "properties": {
         "tenant": { "$ref": "#/$defs/requestScope" },
         "domain": { "$ref": "#/$defs/tenant" },

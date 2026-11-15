@@ -2508,7 +2508,7 @@ public sealed class ConfigCommandTests
                 else
                 {
                     document.GetProperty("modules").EnumerateArray().Select(module => module.GetProperty("name").GetString())
-                        .ShouldBe(["parties", "tenants"]);
+                        .ShouldBe(["parties", "projects", "tenants"]);
                 }
             }
 

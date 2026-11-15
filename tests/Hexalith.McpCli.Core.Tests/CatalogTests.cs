@@ -53,7 +53,7 @@ public sealed class CatalogTests
             (typeof(Routing.RedundantConventionQuery).FullName!, "redundant_value", "warning"),
             (typeof(Routing.RedundantInterfaceCommand).FullName!, "redundant_value", "warning"),
         ]);
-        routing.Modules.Single().Operations.Count.ShouldBe(12);
+        routing.Modules.Single().Operations.Count.ShouldBe(13);
     }
 
     /// <summary>Each routing field reports its own warning, and the interface value wins a conflict.</summary>
@@ -144,6 +144,20 @@ public sealed class CatalogTests
         OperationDescriptor sourceFree = Find(routing, "routing-fixture.get-http2-status");
         sourceFree.AggregateIdRequired.ShouldBeTrue();
         sourceFree.AggregateIdAccessor.ShouldBeNull();
+        OperationDescriptor computed = Find(routing, "routing-fixture.computed-status");
+        computed.Routing.ProjectionType.ShouldBeNull();
+        computed.Routing.ProjectionActorType.ShouldBeNull();
+    }
+
+    /// <summary>Computed queries preserve omitted selectors without a declaration diagnostic.</summary>
+    [Fact]
+    public void QueryWithoutProjectionSelectorsIsAccepted()
+    {
+        CatalogSnapshot catalog = CatalogBuilder.Build([typeof(Invalid.Module).Assembly]);
+        OperationDescriptor computed = catalog.Modules.Single().Operations.Single(operation => operation.ContractType == typeof(Invalid.MissingProjectionQuery));
+        computed.Routing.ProjectionType.ShouldBeNull();
+        computed.Routing.ProjectionActorType.ShouldBeNull();
+        catalog.Diagnostics.ShouldNotContain(diagnostic => diagnostic.TypeName == typeof(Invalid.MissingProjectionQuery).FullName);
     }
 
     /// <summary>Module policy and property bindings remain available without head reflection.</summary>
@@ -251,7 +265,7 @@ public sealed class CatalogTests
     [InlineData(typeof(Invalid.JsonArrayMemberCommand), "invalid_schema", "Free-form member Value")]
     [InlineData(typeof(Invalid.JsonObjectMemberCommand), "invalid_schema", "Free-form member Value")]
     [InlineData(typeof(Invalid.MissingDescriptionQuery), "missing_description", "HexalithQuery.Description")]
-    [InlineData(typeof(Invalid.MissingProjectionQuery), "missing_routing_values", "supplies ProjectionType")]
+    [InlineData(typeof(Invalid.WhitespaceProjectionQuery), "invalid_routing_value", "ProjectionType '   '")]
     [InlineData(typeof(Invalid.NoAggregateCommand), "missing_routing_values", "AggregateIdProperty")]
     [InlineData(typeof(Invalid.ObjectListCommand), "invalid_schema", "Free-form element type System.Object of member Value")]
     [InlineData(typeof(Invalid.OpaqueRoleCommand), "invalid_property_reference", "names Tenant, whose custom JsonConverter")]
@@ -318,7 +332,7 @@ public sealed class CatalogTests
     {
         CatalogSnapshot catalog = CatalogBuilder.Build([typeof(Invalid.Module).Assembly]);
         catalog.Modules.Single().Operations.Select(operation => operation.ContractType)
-            .ShouldBe([typeof(Invalid.DuplicateFirstQuery)]);
+            .ShouldBe([typeof(Invalid.DuplicateFirstQuery), typeof(Invalid.MissingProjectionQuery)]);
         catalog.Diagnostics.Count.ShouldBe(35);
     }
 

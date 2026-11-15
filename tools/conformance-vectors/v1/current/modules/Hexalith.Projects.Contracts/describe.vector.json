@@ -1,0 +1,76 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.Projects.Contracts",
+    "version": "2.0.0-story66.2"
+  },
+  "operation": "projects.describe",
+  "kind": "query",
+  "prerequisites": [],
+  "invocation": {
+    "operation": "projects.describe",
+    "kind": "query",
+    "payload": {},
+    "envelope": {
+      "tenant": "tenant-a",
+      "aggregateId": "project-a"
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "projects",
+        "aggregateId": "project-a",
+        "queryType": "Hexalith.Projects.Queries.GetProject.v1",
+        "payload": {}
+      },
+      "maskGenerated": []
+    },
+    "scriptedResponse": {
+      "statusCode": 200,
+      "body": {
+        "success": true,
+        "payload": {
+          "projectId": "project-a",
+          "snapshot": {
+            "responseState": "Partial",
+            "asOf": "2026-11-15T00:00:00+00:00",
+            "projectVersion": 2,
+            "components": [],
+            "recoveryActions": []
+          },
+          "lifecycleState": "Active",
+          "createdAt": "2026-11-15T00:00:00+00:00",
+          "updatedAt": "2026-11-15T00:00:00+00:00",
+          "references": []
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      },
+      "echoRequestFields": []
+    },
+    "assertions": [
+      {
+        "path": "/operation",
+        "operator": "equals",
+        "value": "projects.describe"
+      },
+      {
+        "path": "/document/projectId",
+        "operator": "equals",
+        "value": "project-a"
+      },
+      {
+        "path": "/document/snapshot/responseState",
+        "operator": "equals",
+        "value": "Partial"
+      },
+      {
+        "path": "/document/lifecycleState",
+        "operator": "equals",
+        "value": "Active"
+      }
+    ]
+  },
+  "postconditions": []
+}

@@ -1,0 +1,86 @@
+{
+  "formatVersion": 1,
+  "package": {
+    "id": "Hexalith.Projects.Contracts",
+    "version": "2.0.0-story66.2"
+  },
+  "operation": "projects.list",
+  "kind": "query",
+  "prerequisites": [],
+  "invocation": {
+    "operation": "projects.list",
+    "kind": "query",
+    "payload": {
+      "pageSize": 50
+    },
+    "envelope": {
+      "tenant": "tenant-a"
+    },
+    "expectedGateway": {
+      "method": "POST",
+      "path": "/api/v1/queries",
+      "body": {
+        "tenant": "tenant-a",
+        "domain": "projects",
+        "aggregateId": "projects",
+        "queryType": "Hexalith.Projects.Queries.ListProjects.v1",
+        "payload": {
+          "pageSize": 50
+        }
+      },
+      "maskGenerated": []
+    },
+    "scriptedResponse": {
+      "statusCode": 200,
+      "body": {
+        "success": true,
+        "payload": {
+          "items": [],
+          "cursor": null,
+          "snapshot": {
+            "responseState": "Unavailable",
+            "asOf": "2026-11-15T00:00:00+00:00",
+            "projectVersion": 0,
+            "components": [
+              {
+                "name": "Project",
+                "included": false,
+                "freshness": "Unavailable",
+                "reason": "ProjectionUnavailable"
+              }
+            ],
+            "recoveryActions": [
+              "Retry"
+            ]
+          },
+          "hasMore": false
+        },
+        "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK"
+      },
+      "echoRequestFields": []
+    },
+    "assertions": [
+      {
+        "path": "/operation",
+        "operator": "equals",
+        "value": "projects.list"
+      },
+      {
+        "path": "/document/items",
+        "operator": "arrayLength",
+        "value": 0
+      },
+      {
+        "path": "/document/snapshot/responseState",
+        "operator": "equals",
+        "value": "Unavailable"
+      },
+      {
+        "path": "/document/snapshot/components/0/freshness",
+        "operator": "equals",
+        "value": "Unavailable"
+      }
+    ]
+  },
+  "postconditions": []
+}
