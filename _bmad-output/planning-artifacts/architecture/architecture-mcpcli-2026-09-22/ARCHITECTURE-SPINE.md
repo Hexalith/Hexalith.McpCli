@@ -7,7 +7,7 @@ paradigm: hexagonal (ports and adapters), two adapters on one core
 scope: Hexalith.McpCli v1 — Decoration Package, Catalog, executor, MCP Server head, CLI head, profiles, build-time manifest, test harness, release; the HTTP transport only as a seam
 status: final
 created: '2026-09-22'
-updated: '2026-11-12'
+updated: '2026-11-15'
 binds: [FR-1, FR-2, FR-3, FR-4, FR-5, FR-6, FR-7, FR-8, FR-9, FR-10, FR-11, FR-12, FR-13, FR-14, FR-15, FR-16, FR-17, FR-18, FR-19, FR-20, FR-21, FR-22, NFR-1, NFR-2, NFR-3, NFR-4, NFR-5, NFR-6, NFR-7, NFR-8]
 sources:
   - _bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md (adopted 2026-11-12; receipt-controlled exact-byte approval)
@@ -33,7 +33,7 @@ companions: []
 
 **Hexagonal.** One core that knows Contracts types, the Catalog, validation, the Envelope, and the gateway port. Two adapters (the MCP Server head and the CLI head) that translate their protocol into the core's call model and back, and nothing else. The gateway client, the settings sources, and id generation are ports.
 
-**Approved ecosystem direction (2026-09-27).** This gateway-only design is the first increment of the sole target Hexalith-owned MCP/CLI implementation. Proprietary module MCP servers, plug-ins, and CLIs, including EventStore Admin, are obsolete migration sources. Do not add a module-specific implementation to either head. Before retiring a legacy surface that exposes infrastructure administration, MCP resources, migration diagnostics, or REST/Dapr-only behavior, approve a generic catalog/transport extension with contract versioning, actor and surface authorization, audit, and conformance evidence. The current first-increment gateway and dependency rules remain binding until that decision is made; an unsupported capability is not represented as migrated.
+**Approved ecosystem direction (2026-11-12, AD-23).** This gateway-only design is the first increment of the sole target Hexalith-owned MCP/CLI implementation. Proprietary module MCP servers, plug-ins, and CLIs, including EventStore Admin, are obsolete migration sources. Do not add a module-specific implementation to either head. Apply AD-23's adopted capability classes before changing inventory dispositions: eligible module operations use existing decorated Gateway Commands/Queries; remote Admin requires confidential UI; other restricted operations take their confidential UI, owner-held local-tooling or withdrawal outcome; documentation and synthetic lifecycle observation are withdrawn; staging/streams and HTTP caller authority retain named deferrals. The named compiler and operator tools remain local exemptions. AD-23 admits no catalog/transport extension. Any later admission beyond v1 requires the separate Platform/product decisions and authorization, audit and conformance evidence named by that deferral. Existing inventory, parity, release and retirement gates remain binding; an unsupported capability is not represented as migrated.
 
 | Hexagon layer | Project | Namespace root |
 | --- | --- | --- |
@@ -330,8 +330,8 @@ sequenceDiagram
 | FR-15 to FR-17, FR-19 Executor, Envelope, Read-only | `Core.Execution` | AD-5, AD-6, AD-9, AD-10, AD-19, AD-20, AD-22 |
 | FR-18 Profiles | `Core.Settings`, `config` verbs | AD-13, AD-14, AD-22 |
 | FR-20 Coverage of v1 Modules | `Hexalith.McpCli` package references, conformance vectors, inventory gate | AD-2, AD-4, AD-15, AD-16, AD-21 |
-| FR-21 Migration plan and coverage check | versioned inventories outside `src/`, generic Catalog check in `tests/` | AD-21 |
-| FR-22 Upstream rule | authoritative Hexalith.AI.Tools instructions, paired release preflight | AD-17 |
+| FR-21 Migration plan and coverage check | versioned inventories outside `src/`, generic Catalog check in `tests/` | AD-21, AD-23 |
+| FR-22 Upstream rule | authoritative Hexalith.AI.Tools instructions, paired release preflight | AD-17, AD-23 |
 | NFR-1 Startup < 500 ms | `Core.Catalog` | AD-3 (build once), AD-4 (no folder scan); benchmark test |
 | NFR-2 Tool budget | `Hexalith.McpCli.Mcp` | AD-12 |
 | NFR-4, NFR-5 Channels, secrets | both heads | conventions (channels), AD-10 |

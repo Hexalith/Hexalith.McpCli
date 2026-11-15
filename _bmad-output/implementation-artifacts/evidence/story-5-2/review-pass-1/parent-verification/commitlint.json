@@ -1,0 +1,14 @@
+{
+  "command": [
+    "npx",
+    "--no",
+    "--",
+    "commitlint",
+    "--verbose"
+  ],
+  "input": "commit-message.txt",
+  "inputSha256": "2e8f5ecd44f6486d38a926756ff1365ca1c2674ef1a46423d8abd38838df2bc4",
+  "exitCode": 0,
+  "pinnedCliVersion": "21.2.4",
+  "npmCiExitCode": 0
+}

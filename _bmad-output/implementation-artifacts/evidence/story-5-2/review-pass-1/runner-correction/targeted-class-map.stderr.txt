@@ -1,0 +1,8 @@
+test_missing_explicit_record_has_record_set_diagnostic (__main__.ClassMapTests.test_missing_explicit_record_has_record_set_diagnostic) ... ok
+test_agreed_restricted_records_require_restricted_class (__main__.ClassMapTests.test_agreed_restricted_records_require_restricted_class) ... ok
+test_actual_packet_complete (__main__.ActualPacketRegressionTests.test_actual_packet_complete) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.271s
+
+OK

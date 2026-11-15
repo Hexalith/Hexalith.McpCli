@@ -5,6 +5,45 @@ The receipt establishes effective ADOPTED status and the spine records it; no
 row has been re-dispositioned. The decision/map bytes remain unchanged. This packet grants
 no execution, enrollment, publication or retirement authority.
 
+The exact AI.Tools amendment `10b709b86f9c9148e5a18177e8d11fad79ae2c0b`
+was separately approved, pushed and merged to AI.Tools main on 2026-11-12;
+[delivery](upstream-delivery.json) and [integration](main-integration.json)
+record that final state. Its amendment merge gate is satisfied. Census
+reclassification still requires its own approval.
+
+## Dated correction (2026-11-15, review pass 1)
+
+The approval-time partition sentence retained and labeled below overstates the
+total and classified counts by 100. The bound source identities, original
+table and byte-identical verifier output establish **525 total identities =
+372 classified rows + 153 explicit records**, consistent with the spec's
+estimate. The approved decision, map, inventories and adoption receipt remain
+unchanged; this note corrects the presented packet without rewriting that
+historical sentence.
+
+The local-only amendment paragraph and pending-merge delivery paragraph below
+are labeled point-in-time records. Both precede the separately authorized
+main integration. The final state is pushed and merged as stated above;
+exemption never counts as retirement or automatically reclassifies the census.
+
+The current [review-pass-1 packet](review-pass-1/README.md) records **64 passing
+verifier process tests**, **eight runner process controls**, and the corrected
+single-removal sweep that kills all **57 require guards**,
+with zero survivors or runner errors. Every rejection pins exit 1, empty stdout
+and the exact full `FAIL: …` stderr line. Malformed non-object JSON now uses
+that channel too, and the real-packet success test pins the entire original
+adopted stdout. The explicit-record set check runs before generic missing-row
+validation and names missing/extra record IDs. Success stdout is unchanged.
+The unbound spine's Design Paradigm and FR-21/FR-22 trace now cite adopted AD-23.
+
+The spec retains its historical `f4bb8199…` implementation baseline. This review
+patch began at clean `28bcbbb898b6530838a7872f2ba450c34e56cc70`; intervening
+published changes mean the historical whole-tree empty-diff expectation no
+longer describes this run. The new packet compares forbidden paths and all
+inventory bytes against that current-run start, preserves every approved
+artifact hash and the frozen intent, and separately records the historical
+baseline's existing differences. It does not revert those intervening changes.
+
 ## Candidate and independent authority
 
 The [decision](../../../planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md)
@@ -49,10 +88,13 @@ It does not grant the explicitly separate AI.Tools push approval.
 
 ## Complete source partition and approval limits
 
-All **625** source table identities are accounted for: **472 classified rows**
-and **153 explicit records**. The approximate problem-size estimate in the
-spec does not replace the actual source identity set. Cross-reference tables
-do not duplicate identities; `Gate`, `Gap` and `ID / legacy rows` headers are
+**Approval-time wording retained for provenance; corrected 2026-11-15 above:**
+
+> All **625** source table identities are accounted for: **472 classified rows**
+> and **153 explicit records**. The approximate problem-size estimate in the
+> spec does not replace the actual source identity set.
+
+Cross-reference tables do not duplicate identities; `Gate`, `Gap` and `ID / legacy rows` headers are
 recognized. Folders C/Q roadmap candidates remain records, not legacy operations.
 
 | Inventory | Version | Classified | Records | Total | Approval limit preserved |
@@ -73,7 +115,11 @@ and its receipt, and grants no execution, parity, publication or retirement
 authority. This packet preserves it byte for byte. It does not resolve the
 separate destructive-label/enrollment conflict.
 
-## Executed verification
+## Executed verification (2026-11-12 historical checkpoint)
+
+The commands, 45-test count and original scan receipts in this section describe
+the completed adoption checkpoint. The 2026-11-15 review-pass-1 packet linked
+above contains the current verification; original captures remain unchanged.
 
 The review corrections added **eight regressions**, bringing the suite to
 **45 tests**. The implementation subagent first ran the **14 directly affected
@@ -148,6 +194,9 @@ governing references and escaping paths. Adoption tests use only temporary
 fixture copies and explicitly synthetic approval words, never this receipt.
 
 ## Retained upstream amendment
+
+**Point-in-time implementation record (before the separate push and merge;
+superseded by Main integration below):**
 
 The AI.Tools amendment remains the existing local commit
 `10b709b86f9c9148e5a18177e8d11fad79ae2c0b` on
@@ -273,6 +322,10 @@ approved packet; the scanner correctly refuses to overwrite existing receipts.
 
 
 ## Separately approved upstream delivery (2026-11-12)
+
+**Point-in-time branch-push checkpoint.** The pending-merge and frozen-surface
+statements in this section describe that checkpoint; Main integration below
+supersedes them.
 
 The user replied **"approve"** directly after the completed AD-23 adoption
 summary identified the AI.Tools push as the remaining separate approval.

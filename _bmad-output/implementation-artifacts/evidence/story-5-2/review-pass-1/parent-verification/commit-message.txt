@@ -1,0 +1,1 @@
+fix: harden story 5.2 capability verification

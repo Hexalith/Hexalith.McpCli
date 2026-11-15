@@ -269,8 +269,11 @@ def verify(root, map_path):
                 for link in entry.get("governedBy", []):
                     pending_links.append((label, (path_key(root, link["inventory"]), link["id"])))
         missing_rows = source_rows.keys() - seen
+        require(actual_records == records.keys(),
+                f"{name}: non-operation record set disagrees with decision; "
+                f"missing: {', '.join(sorted(records.keys() - actual_records))}; "
+                f"extra: {', '.join(sorted(actual_records - records.keys()))}")
         require(not missing_rows, f"{name}: missing rows {', '.join(sorted(missing_rows))}")
-        require(actual_records == records.keys(), f"{name}: non-operation record set disagrees with decision")
         counts.append((name, len(inventory["rows"]), len(inventory["records"])))
     for label, target in pending_links:
         require(target in all_entries, f"{label}: unresolved governing reference {target}")
@@ -300,7 +303,7 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         counts, status = verify(args.root, args.map)
-    except (InvalidMap, KeyError, TypeError, ValueError, OSError) as error:
+    except (InvalidMap, KeyError, TypeError, ValueError, OSError, AttributeError) as error:
         print(f"FAIL: {error}", file=sys.stderr)
         return 1
     for name, rows, records in counts:

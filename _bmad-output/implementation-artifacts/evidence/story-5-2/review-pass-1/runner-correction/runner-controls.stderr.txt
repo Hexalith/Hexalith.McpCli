@@ -1,0 +1,22 @@
+test_assertion_failure_kills_guard_and_exits_zero (__main__.RunnerProcessTests.test_assertion_failure_kills_guard_and_exits_zero) ... ok
+test_assertion_plus_unittest_error_is_still_error (__main__.RunnerProcessTests.test_assertion_plus_unittest_error_is_still_error) ... ok
+test_baseline_timeout_also_produces_receipt_and_exit_one (__main__.RunnerProcessTests.test_baseline_timeout_also_produces_receipt_and_exit_one) ... ok
+test_incomplete_zero_exit_is_error (__main__.RunnerProcessTests.test_incomplete_zero_exit_is_error) ... FAIL
+test_live_input_edits_cannot_change_snapshot_hash_or_mutation (__main__.RunnerProcessTests.test_live_input_edits_cannot_change_snapshot_hash_or_mutation) ... ok
+test_survivor_is_reported_and_exits_one (__main__.RunnerProcessTests.test_survivor_is_reported_and_exits_one) ... ok
+test_timeout_retains_partial_channels_and_receipt_and_exits_one (__main__.RunnerProcessTests.test_timeout_retains_partial_channels_and_receipt_and_exits_one) ... ok
+test_unittest_error_is_never_a_kill_and_exits_one (__main__.RunnerProcessTests.test_unittest_error_is_never_a_kill_and_exits_one) ... ok
+
+======================================================================
+FAIL: test_incomplete_zero_exit_is_error (__main__.RunnerProcessTests.test_incomplete_zero_exit_is_error)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/test_run_guard_removal.py", line 96, in test_incomplete_zero_exit_is_error
+    self.assertFalse(receipt["guards"][0]["completedSuite"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.946s
+
+FAILED (failures=1)

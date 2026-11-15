@@ -1,0 +1,27 @@
+[
+  {
+    "label": "targeted-class-map",
+    "command": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py",
+      "ClassMapTests.test_missing_explicit_record_has_record_set_diagnostic",
+      "ClassMapTests.test_agreed_restricted_records_require_restricted_class",
+      "ActualPacketRegressionTests.test_actual_packet_complete",
+      "-v"
+    ],
+    "exitCode": 0
+  },
+  {
+    "label": "runner-controls",
+    "command": [
+      "/usr/bin/python3",
+      "-I",
+      "-B",
+      "_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/test_run_guard_removal.py",
+      "-v"
+    ],
+    "exitCode": 1
+  }
+]

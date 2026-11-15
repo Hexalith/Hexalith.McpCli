@@ -1,0 +1,13 @@
+{
+  "summary": {
+    "guardCount": 57,
+    "killed": 57,
+    "survived": 0,
+    "error": 0
+  },
+  "inputHashesMatch": true,
+  "streamHashesMatch": true,
+  "guardIdentitiesMatch": true,
+  "everyKillHasAssertionAndNoErrors": true,
+  "baselinePassed": true
+}

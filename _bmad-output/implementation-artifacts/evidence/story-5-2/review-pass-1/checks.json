@@ -1,0 +1,195 @@
+{
+  "currentRunStart": "28bcbbb898b6530838a7872f2ba450c34e56cc70",
+  "historicalBaseline": "f4bb819925d4fac5fa5afd262341692296a52042",
+  "checks": [
+    {
+      "label": "verifier",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "stdout": {
+        "path": "verifier.stdout.txt",
+        "bytes": 1167,
+        "sha256": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2"
+      },
+      "stderr": {
+        "path": "verifier.stderr.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "label": "tests",
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "stdout": {
+        "path": "tests.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "tests.stderr.txt",
+        "bytes": 9981,
+        "sha256": "2f74e4e59385c89a491d4fdd68804acdb81789e302289314fe4f194294eb0cfd"
+      }
+    },
+    {
+      "label": "scope-diff-current-run",
+      "command": [
+        "git",
+        "diff",
+        "--stat",
+        "28bcbbb898b6530838a7872f2ba450c34e56cc70",
+        "--",
+        "src",
+        "tests",
+        "tools",
+        "references",
+        ".github",
+        "Directory.Build.props",
+        "Directory.Build.targets",
+        "Directory.Packages.props",
+        "global.json",
+        "package.json",
+        "package-lock.json",
+        "_bmad-output/implementation-artifacts/*-migration-inventory-*.md"
+      ],
+      "exitCode": 0,
+      "stdout": {
+        "path": "scope-diff-current-run.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "scope-diff-current-run.stderr.txt",
+        "bytes": 94,
+        "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+      }
+    },
+    {
+      "label": "scope-diff-historical",
+      "command": [
+        "git",
+        "diff",
+        "--shortstat",
+        "f4bb819925d4fac5fa5afd262341692296a52042",
+        "--",
+        "src",
+        "tests",
+        "tools",
+        "references",
+        ".github",
+        "Directory.Build.props",
+        "Directory.Build.targets",
+        "Directory.Packages.props",
+        "global.json",
+        "package.json",
+        "package-lock.json",
+        "_bmad-output/implementation-artifacts/*-migration-inventory-*.md"
+      ],
+      "exitCode": 0,
+      "stdout": {
+        "path": "scope-diff-historical.stdout.txt",
+        "bytes": 56,
+        "sha256": "bd072862b3b326fc1cc099bc9f837317652cac3f61e96a34867eeb1bc3cda615"
+      },
+      "stderr": {
+        "path": "scope-diff-historical.stderr.txt",
+        "bytes": 94,
+        "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+      }
+    },
+    {
+      "label": "diff-check",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": {
+        "path": "diff-check.stdout.txt",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "diff-check.stderr.txt",
+        "bytes": 94,
+        "sha256": "0d4fcdbc441a99763e2886a18971b9e98d840ae1f42183b207e2319be9fc2beb"
+      }
+    }
+  ],
+  "verifierStdoutByteIdentical": true,
+  "currentRunForbiddenPathsUnchanged": true,
+  "approvedArtifacts": [
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md",
+      "sha256": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560"
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json",
+      "sha256": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+      "sha256": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+      "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+      "sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+      "sha256": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+      "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+      "sha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+      "sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+      "sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28"
+    }
+  ],
+  "approvalReceiptUnchanged": {
+    "sha256": "7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498"
+  },
+  "frozenSpecBlockUnchanged": {
+    "sha256": "8adb4def1bffac05e6a601412216854fb11a0ea19eb865e3d1a1f5c2b52a521b",
+    "bytes": 5884
+  },
+  "guardRemovalSummary": {
+    "guardCount": 57,
+    "killed": 57,
+    "survived": 0,
+    "error": 0
+  }
+}

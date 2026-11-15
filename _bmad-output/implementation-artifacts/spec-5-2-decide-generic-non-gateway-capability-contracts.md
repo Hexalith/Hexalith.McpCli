@@ -2,7 +2,7 @@
 title: '5.2 Decide generic non-gateway capability contracts'
 type: 'chore'
 created: '2026-11-12'
-status: 'in-progress'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: 'f4bb819925d4fac5fa5afd262341692296a52042'
@@ -140,7 +140,7 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
 - All 45 process tests pass.
 - None of the 11 bound or successor inventories has a dropped ID row or a cell/header count mismatch.
 
-- [ ] [Review][Patch] 25 of the 57 verifier guards can be removed without failing any test — AD-23 `:274` claims "Its damaged-input tests exercise each guard". A single-removal sweep in a scratch copy disproved it: replacing each `require(...)` with `pass` left all 45 tests passing for 25 guards (V1–V3, B2, B3, V-O2).
+- [x] [Review][Patch] 25 of the 57 verifier guards can be removed without failing any test — AD-23 `:274` claims "Its damaged-input tests exercise each guard". A single-removal sweep in a scratch copy disproved it: replacing each `require(...)` with `pass` left all 45 tests passing for 25 guards (V1–V3, B2, B3, V-O2).
   - **Outcome and transport (`:138`, `:140`).** `reject()` (`test_verify_class_map.py:57`) matches only a substring. `test_zero_two_and_unlisted_outcomes_are_rejected` (`:164-172`) asserts only `read:`, which the later "class outcome/deferral disagrees" message also contains. No test damages the policy side, so a decision admitting `generic-authenticated-transport` would verify with the guard deleted.
   - **Restricted records (`:255-256`, `:266-267`).** No case has the policy and the map agree on a restricted row placed in `eligibleRecords`, with or without a `classId`.
   - **Binding guards.** Untested: the source-version conjunct of `:214`, the single policy block at `:182`, `mapPath` at `:188`, and the receipt decision value at `:279`. Without the last, a receipt that records `"decision": "rejected"` verifies as PASS with status proposed.
@@ -148,23 +148,23 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
   - **Fix:** assert the exact full `FAIL: …` stderr line, empty stdout and exit 1 for every case, and add the missing policy-side cases. Keep a guard-removal runner and its results in a new `evidence/story-5-2/review-pass-1/` packet. Rerun it until no guard survives.
   - **Constraint:** success stdout must stay byte-identical, because Stories 5.7 and 5.8 consume this verifier.
   - [_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py:57]
-- [ ] [Review][Patch] `verification.md` overstates the partition by 100 rows — `:52` says "All **625** source table identities… **472 classified rows** and **153 explicit records**". It then states that the spec's estimate "does not replace the actual source identity set".
+- [x] [Review][Patch] `verification.md` overstates the partition by 100 rows — `:52` says "All **625** source table identities… **472 classified rows** and **153 explicit records**". It then states that the spec's estimate "does not replace the actual source identity set".
   - The table at `:58-67` and `verifier.stdout.txt` sum to 372 + 153 = **525**, which is the spec's own figure.
   - This file is the `presentedPacket` of the adoption request in `approval.json`. Add a dated correction note that leaves the approval-time sentence identifiable, rather than rewriting it silently.
   - (E13, B1, A1) [_bmad-output/implementation-artifacts/evidence/story-5-2/verification.md:52]
-- [ ] [Review][Patch] `verification.md` still says the AI.Tools amendment is local, unmerged and frozen — `:150-158` says the amendment "remains the existing local commit" and "did not recommit or push", and `:297-299` says "Merge remains pending and exempt surfaces remain frozen".
+- [x] [Review][Patch] `verification.md` still says the AI.Tools amendment is local, unmerged and frozen — `:150-158` says the amendment "remains the existing local commit" and "did not recommit or push", and `:297-299` says "Merge remains pending and exempt surfaces remain frozen".
   - The later Main integration section (`:310`) supersedes both, but neither passage is marked historical. The opening summary (`:3-6`) also never states the final push and merge state.
   - Label both passages as point-in-time and state the final state in the summary, in the same correction note.
   - (E15, B4) [_bmad-output/implementation-artifacts/evidence/story-5-2/verification.md:150]
-- [ ] [Review][Patch] A non-object JSON item escapes the `FAIL:` channel — `main()` catches only `InvalidMap, KeyError, TypeError, ValueError, OSError`.
+- [x] [Review][Patch] A non-object JSON item escapes the `FAIL:` channel — `main()` catches only `InvalidMap, KeyError, TypeError, ValueError, OSError`.
   - A non-object array item (for example `classes[0] = "A1"` in the real packet) raises `AttributeError` from `item.get`. That prints a raw traceback, which contradicts `verification.md:118-119` ("Each failure must exit 1, produce empty stdout, and begin stderr with `FAIL: `").
   - This re-raises iteration-1 E4 and pass-2 B7/E1, which were rejected as needing schema machinery. The direct fix is to add `AttributeError` to the tuple and one process test.
   - (E6, E14, V-O1) [_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py:303]
-- [ ] [Review][Patch] The real-packet test does not pin the adopted status or the counts — `test_actual_packet_complete` checks only that the number of "classified rows +" lines equals the number of inventories.
+- [x] [Review][Patch] The real-packet test does not pin the adopted status or the counts — `test_actual_packet_complete` checks only that the number of "classified rows +" lines equals the number of inventories.
   - A receipt that reverts to pending, or a per-inventory count drift, passes the suite.
   - Assert the exact stdout lines recorded in `verifier.stdout.txt`, which still match at HEAD.
   - (B20) [_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py:396]
-- [ ] [Review][Patch] The spine's Design Paradigm and FR trace table still predate AD-23 — `:34` still requires "approve a generic catalog/transport extension" before retiring infrastructure-administration, MCP-resource or migration-diagnostic surfaces. AD-23 admits no extension; it routes those surfaces to confidential UI, withdrawal or named deferral.
+- [x] [Review][Patch] The spine's Design Paradigm and FR trace table still predate AD-23 — `:34` still requires "approve a generic catalog/transport extension" before retiring infrastructure-administration, MCP-resource or migration-diagnostic surfaces. AD-23 admits no extension; it routes those surfaces to confidential UI, withdrawal or named deferral.
   - The trace rows at `:333-334` list only AD-21 and AD-17 for FR-21/FR-22, although AD-23 binds both.
   - The spine is not in the receipt's hash binding, so a direct edit is allowed.
   - (A6) [_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:34]
@@ -319,3 +319,37 @@ After the adoption summary identified the AI.Tools push as the remaining separat
 ### Main integration (2026-11-12)
 
 The user requested **"merge all changes to main"**. AI.Tools main was clean and fast-forwarded to the exact approved amendment `10b709b86f9c9148e5a18177e8d11fad79ae2c0b`; its remote main read-back confirms that revision. The [integration record](evidence/story-5-2/main-integration.json) retains the request and successful commands. The amendment merge gate is satisfied; earlier pending-merge notes above are historical. All McpCli story and delivery commits are published together to main under the same request. No approved decision/map/input, census baseline, inventory or reference gitlink bytes changed; remaining Parties, Folders and later release/retirement gates stay open.
+
+
+### Review pass 1 implementation (2026-11-15)
+
+All six patch findings above are implemented. The [review-pass-1 packet](evidence/story-5-2/review-pass-1/README.md) records 64 passing process tests, exact full failure-channel assertions, and a reproducible single-removal sweep: all 57 require guards are killed, with zero survivors/errors. The real adopted stdout stays byte-identical. Non-object JSON now uses the FAIL channel; the explicit-record set guard precedes generic missing-row validation to give it a reachable diagnostic. The verification packet retains and labels its approval-time count error, with a dated correction to 525 total identities (372 classified + 153 records), and marks local/pending-merge descriptions as point-in-time history. The unbound spine applies adopted AD-23 in its Design Paradigm and FR-21/FR-22 trace.
+
+The approved decision/map/input bytes, approval receipt and frozen intent remain unchanged. This run began at clean `28bcbbb898b6530838a7872f2ba450c34e56cc70`; forbidden-path and all-inventory comparisons use that current-run start because the preserved historical baseline predates unrelated published changes. The evidence captures that historical diff separately without reverting intervening work. No upstream or domain operation ran. Workflow state stays in progress pending the parent workflow's independent review and completion/status synchronization.
+
+### Independent build review of the follow-up (2026-11-15)
+
+All three context-free layers completed before triage. They reviewed this run's substantive diff from `28bcbbb898b6530838a7872f2ba450c34e56cc70`, including the new runner and evidence index. Full historical and current diffs, including raw captures, were retained separately in the workflow's private temporary workspace; unrelated published work was preserved. The parent independently passed all 64 process tests and checked the byte-identical adopted stdout, all mutation input/capture hashes and all 130 scanned evidence-file hashes.
+
+| Finding | Verdict | Route | Verified evidence |
+| --- | --- | --- | --- |
+| Blind B1: missing record identity | medium | patch | Moving the record-set guard before the missing-row guard makes removal of N1 report only the inventory. The frozen matrix requires the missing ID; include missing/extra record identities in this reachable diagnostic. |
+| Blind B2: subtest state contamination | low | patch | The guard-46 transcript contains subsequent R2/V1 KeyErrors after an earlier failed assertion bypasses fixture restoration. Restore document and policy in finally so each damaged-input case remains independent. |
+| Blind B3: test errors counted as kills | medium | patch | The new runner accepts completed FAILED(errors=1) output without an assertion failure, so a broken fixture can certify coverage for its README consumer. Distinguish assertion failures from test errors and verify the outcome with process controls. |
+| Blind B4: timeout drops receipt | low | patch | subprocess.run's 120-second timeout escapes the new worker and prevents results.json from being written. Preserve partial output and an explicit error result, keeping a nonzero final status. |
+| Blind B5: live rather than executed hashes | low | patch | The runner executes template copies but hashes the live inputs after execution. Hash and derive mutant text from the same frozen template, so a later workspace edit cannot change the recorded tested bytes. |
+| Blind B6: text equality normalizes bytes | medium | patch | Both text=True capture and read_text normalize newlines, so the new actual-packet assertion cannot protect the requested byte-identical stdout contract. Compare raw process output to read_bytes. |
+| Blind B7: reproduction output already exists | low | patch | The README command targets the retained guard-removal directory and the runner refuses existing directories. Make the copyable example choose a fresh task-owned output path. |
+| Blind B8: discovery wider than copied suite | low | patch | The runner copies one test file but discovers test_*.py. Explicitly select its supported verifier test module so later files cannot silently disappear from the claimed suite. |
+| Edge E1: timeout drops partial evidence | low | patch | Same demonstrated subprocess timeout path as B4; retain the partial transcript and aggregate error receipt. |
+| Verification V1: missing survivor/error controls | medium | patch | Pre-verified: the 64 verifier tests never exercise the runner, and all retained mutations are killed. Its README consumer needs negative process controls proving survivor/error classifications and exit 1; address together with B3/B4 rather than deferring this newly introduced evidence-harness behavior. |
+
+The runner findings share the new evidence generator's reliability boundary and are patched together; the verifier diagnostic, fixture isolation, byte assertion and reproduction wording receive their direct corrections. No finding changes the approved decision, class map, receipt, inventories or frozen intent.
+
+### Follow-up completion (2026-11-15)
+
+All six original review patches and all ten findings from the independent follow-up review are resolved. The parent reran all **64 verifier process tests** and **eight runner process controls** successfully. The corrected [guard-removal sweep](evidence/story-5-2/review-pass-1/guard-removal-corrected/results.json) catches all **57 require guards**, with zero survivors and zero test/process errors under the stricter classifier. Controls prove kill, survivor, error, incomplete-run and timeout behavior, raw partial-output retention, and immutable snapshot provenance. The missing-record diagnostic names N1 in its regression, fixtures restore even after failed assertions, and the actual-packet assertion compares raw bytes.
+
+The parent independently confirms the byte-identical adopted stdout, empty stderr, all ten approved artifact hashes, unchanged approval receipt and frozen intent, empty current-run forbidden-path/inventory diff and clean whitespace. Every frozen matrix scenario has a passing executed process test. The [final evidence packet](evidence/story-5-2/review-pass-1/README.md) distinguishes current proof from historical captures. No new work is deferred; existing Parties reconciliation, Folders staging and later enrollment/retirement gates remain open. Spec status is done and the sprint story returns to review under the build workflow.
+
+Narrow `.gitattributes` entries preserve the hash-bound raw process captures, including unittest-generated trailing whitespace, and JSON receipt bytes. Source and ordinary documentation retain their whitespace checks. The final evidence scan uses a temporary text snapshot and leaves pre-existing generated Python caches untouched.

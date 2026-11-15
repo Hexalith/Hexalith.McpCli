@@ -44,22 +44,24 @@ class ProcessFixture(unittest.TestCase):
             self.receipt["artifacts"] = artifacts
         (self.root / document["approvalPath"]).write_text(json.dumps(self.receipt), encoding="utf-8")
 
-    def process(self):
+    def process(self, text=True):
         return subprocess.run(
             [sys.executable, "-I", "-B", str(SCRIPT), "--root", str(self.root), "--map", str(self.map_path)],
-            text=True, capture_output=True, check=False, timeout=30,
+            text=text, capture_output=True, check=False, timeout=30,
         )
 
     def run_map(self, document=None, bind_receipt=True):
         self.save(document, bind_receipt)
         return self.process()
 
-    def reject(self, marker, document=None, bind_receipt=True):
-        result = self.run_map(document, bind_receipt)
+    def reject_result(self, message, result):
+        """Pin the whole failure document so a later guard cannot stand in."""
         self.assertEqual(1, result.returncode, result)
         self.assertEqual("", result.stdout)
-        self.assertTrue(result.stderr.startswith("FAIL: "), result.stderr)
-        self.assertIn(marker, result.stderr)
+        self.assertEqual(f"FAIL: {message}\n", result.stderr)
+
+    def reject(self, message, document=None, bind_receipt=True):
+        self.reject_result(message, self.run_map(document, bind_receipt))
 
 
 class ClassMapTests(ProcessFixture):
@@ -128,11 +130,176 @@ class ClassMapTests(ProcessFixture):
         )
         self.document["decision"]["sha256"] = digest(self.root / "decision.md")
 
+    def bind_source(self):
+        """Rebind only the synthetic source, leaving its version policy explicit."""
+        for inventory in (self.document["inventories"][0], self.policy["inventories"][0]):
+            inventory["sha256"] = digest(self.inventory)
+        self.save_policy()
+
+    def test_input_paths_require_nonblank_existing_files(self):
+        for value, message in (("", "missing input path"), ("absent.md", "missing input: absent.md")):
+            with self.subTest(value=value):
+                damaged = copy.deepcopy(self.document)
+                damaged["inventories"][0]["path"] = value
+                self.reject(message, damaged, bind_receipt=False)
+
+    def test_class_declarations_require_array_and_nonblank_ids(self):
+        damaged = copy.deepcopy(self.document)
+        damaged["classes"] = {}
+        self.reject("classes: expected array", damaged)
+        for value in (None, "", " "):
+            with self.subTest(value=value):
+                damaged = copy.deepcopy(self.document)
+                damaged["classes"][0]["id"] = value
+                self.reject("classes: missing id", damaged)
+
+    def test_non_object_json_items_use_fail_channel(self):
+        self.document["classes"][0] = "read"
+        self.reject("'str' object has no attribute 'get'")
+        self.save()
+        self.map_path.write_text("null", encoding="utf-8")
+        self.reject_result("'NoneType' object has no attribute 'get'", self.process())
+
+    def test_inventory_source_requires_version_and_rows(self):
+        original = self.inventory.read_text()
+        self.inventory.write_text(original.replace("inventory_version:", "other_version:"))
+        self.bind_source()
+        self.reject("inventory.md: inventory_version missing")
+        self.inventory.write_text("---\ninventory_version: '1.0.0'\n---\n")
+        self.bind_source()
+        self.reject("inventory.md: no inventory rows")
+
+    def test_source_version_must_match_both_bound_versions(self):
+        self.inventory.write_text(self.inventory.read_text().replace("'1.0.0'", "'9.0.0'"))
+        self.bind_source()
+        self.reject("inventory.md: inventory version mismatch")
+
+    def test_map_and_policy_schema_versions_are_checked(self):
+        damaged = copy.deepcopy(self.document)
+        damaged["schemaVersion"] = "9.0.0"
+        self.reject("unsupported map schemaVersion", damaged)
+        self.policy["schemaVersion"] = "9.0.0"
+        self.save_policy()
+        self.reject("unsupported decision policy schemaVersion")
+
+    def test_decision_requires_exactly_one_policy_block(self):
+        self.save_policy()
+        path = self.root / "decision.md"
+        original = path.read_text()
+        for text in ("no policy\n", original + original):
+            with self.subTest(blocks=text.count("<!-- capability-verifier-policy -->")):
+                path.write_text(text)
+                self.document["decision"]["sha256"] = digest(path)
+                self.reject("decision must bind exactly one verifier policy")
+
+    def test_decision_map_and_approval_paths_must_match(self):
+        for key, other_path, message in (
+            ("mapPath", "other-map.json", "map path disagrees with decision"),
+            ("approvalPath", "other-approval.json", "approval path disagrees with decision"),
+        ):
+            with self.subTest(key=key):
+                prior = self.policy[key]
+                (self.root / other_path).write_text("{}")
+                self.policy[key] = other_path
+                self.save_policy()
+                self.reject(message)
+                self.policy[key] = prior
+
+    def test_empty_agreed_class_and_inventory_sets_are_rejected(self):
+        original = copy.deepcopy(self.document)
+        original_policy = copy.deepcopy(self.policy)
+        self.document["classes"] = self.policy["classes"] = []
+        self.save_policy()
+        self.reject("no capability classes")
+        self.document, self.policy = original, original_policy
+        self.document["inventories"] = self.policy["inventories"] = []
+        self.save_policy()
+        self.reject("no inventories")
+
+    def test_inventories_require_array(self):
+        self.document["inventories"] = {}
+        self.reject("inventories: expected array", bind_receipt=False)
+
+    def test_policy_side_outcome_and_transport_are_rejected(self):
+        for value in (None, [], ["withdrawal", "confidential-ui-only"], "invented", "generic-authenticated-transport"):
+            with self.subTest(value=value):
+                self.policy["classes"][0]["outcome"] = value
+                self.save_policy()
+                message = ("read: transport beyond v1" if value == "generic-authenticated-transport"
+                           else f"read: invalid sole outcome {value!r}")
+                self.reject(message)
+
+    def test_decision_records_must_exist_in_source(self):
+        self.policy["inventories"][0]["eligibleRecords"].append({"id": "Z99"})
+        self.save_policy()
+        self.reject("inventory.md: decision record absent from source")
+
+    def test_decision_row_classes_must_match_source_operations(self):
+        for value in ({}, []):
+            with self.subTest(value=value):
+                self.policy["inventories"][0]["rowClasses"] = value
+                self.save_policy()
+                self.reject("inventory.md: decision row class set disagrees with source operations")
+
+    def test_decision_restrictions_require_known_rows_and_source_evidence(self):
+        evidence = self.policy["inventories"][0]["requiredRestrictions"][0]
+        evidence["id"] = "Z99"
+        self.save_policy()
+        self.reject("inventory.md: unknown restricted row Z99")
+        evidence.update(id="V1", sourceText="invented")
+        self.save_policy()
+        self.reject("inventory.md: V1 restriction evidence missing from source")
+
+    def test_supplementary_restriction_requires_known_source_row(self):
+        self.document["inventories"][0]["restrictionEvidence"][0]["id"] = "Z99"
+        self.reject("inventory.md: unknown restricted row Z99")
+
+    def test_agreed_record_requires_governing_reference(self):
+        for record in (self.document["inventories"][0]["records"][0],
+                       self.policy["inventories"][0]["eligibleRecords"][0]):
+            del record["governingRule"]
+        self.save_policy()
+        self.reject("inventory.md: N1: record lacks governing reference")
+
+    def test_agreed_restricted_records_require_restricted_class(self):
+        for row_id in ("R2", "V1"):
+            for class_id in ("read", None):
+                with self.subTest(row_id=row_id, class_id=class_id):
+                    original, original_policy = copy.deepcopy(self.document), copy.deepcopy(self.policy)
+                    try:
+                        inventory, policy_inventory = self.document["inventories"][0], self.policy["inventories"][0]
+                        inventory["rows"] = [r for r in inventory["rows"] if r["id"] != row_id]
+                        del policy_inventory["rowClasses"][row_id]
+                        record = {"id": row_id, "kind": "fixture", "reason": "fixture", "governingRule": "fixture"}
+                        if class_id is not None:
+                            record["classId"] = class_id
+                        inventory["records"].append(record)
+                        policy_inventory["eligibleRecords"].append({k: v for k, v in record.items() if k != "reason"})
+                        self.save_policy()
+                        message = (f"inventory.md: {row_id}: restricted row has no class" if class_id is None
+                                   else f"inventory.md: {row_id}: restricted row leaks into read")
+                        self.reject(message)
+                    finally:
+                        self.document, self.policy = original, original_policy
+
+    def test_missing_explicit_record_has_record_set_diagnostic(self):
+        self.document["inventories"][0]["records"].pop(0)
+        self.reject("inventory.md: non-operation record set disagrees with decision; missing: N1; extra: ")
+
+    def test_receipt_decision_rejects_unknown_values(self):
+        for value in (None, "rejected", "", "ADOPTED"):
+            with self.subTest(value=value):
+                self.receipt["decision"] = value
+                self.reject("invalid approval decision")
+
     def test_complete_partition_prints_inventory_counts(self):
         result = self.run_map()
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertIn("inventory.md: 7 classified rows + 3 non-operation records = 10", result.stdout)
-        self.assertIn("effective decision status: proposed", result.stdout)
+        self.assertEqual(
+            "PASS: inventory.md: 7 classified rows + 3 non-operation records = 10\n"
+            "PASS: exact-byte partition verified; effective decision status: proposed; parity remains a separate gate\n",
+            result.stdout,
+        )
         self.assertEqual("", result.stderr)
 
     def test_missing_row_names_inventory_and_id(self):
@@ -169,7 +336,9 @@ class ClassMapTests(ProcessFixture):
                     del damaged["classes"][0]["outcome"]
                 else:
                     damaged["classes"][0]["outcome"] = value
-                self.reject("read:", damaged)
+                message = ("read: transport beyond v1" if value == "generic-authenticated-transport"
+                           else f"read: invalid sole outcome {value!r}")
+                self.reject(message, damaged)
 
     def test_outcome_and_required_class_set_must_match_decision(self):
         damaged = copy.deepcopy(self.document)
@@ -185,13 +354,13 @@ class ClassMapTests(ProcessFixture):
             with self.subTest(row_id=row_id):
                 damaged = copy.deepcopy(self.document)
                 next(r for r in damaged["inventories"][0]["rows"] if r["id"] == row_id)["classId"] = "read"
-                self.reject(f"inventory.md: {row_id}: restricted row leaks", damaged)
+                self.reject(f"inventory.md: {row_id}: restricted row leaks into read", damaged)
 
     def test_inherited_restriction_survives_deleted_map_owned_evidence(self):
         inventory = self.document["inventories"][0]
         del inventory["restrictionEvidence"]
         next(r for r in inventory["rows"] if r["id"] == "V1")["classId"] = "read"
-        self.reject("inventory.md: V1: restricted row leaks")
+        self.reject("inventory.md: V1: restricted row leaks into read")
 
     def test_effect_column_alone_requires_restricted_outcome(self):
         self.check_restriction_column("Effect", "Destructive write")
@@ -248,7 +417,7 @@ class ClassMapTests(ProcessFixture):
         damaged["classes"].append(copy.deepcopy(damaged["classes"][0]))
         self.reject("classes: duplicate read", damaged)
         self.document["inventories"][0]["rows"][0]["classId"] = "unknown"
-        self.reject("inventory.md: R1: unknown class")
+        self.reject("inventory.md: R1: unknown class 'unknown'")
 
     def test_inventory_aliases_are_detected_after_normalization(self):
         (self.root / "subdir").mkdir()
@@ -263,12 +432,12 @@ class ClassMapTests(ProcessFixture):
     def test_whole_inventory_omission_and_extra_inventory_are_rejected(self):
         damaged = copy.deepcopy(self.document)
         damaged["inventories"] = []
-        self.reject("inventory set disagrees with decision; missing: inventory.md", damaged)
+        self.reject("inventory set disagrees with decision; missing: inventory.md; extra: ", damaged)
         (self.root / "extra.md").write_bytes(self.inventory.read_bytes())
         extra = copy.deepcopy(damaged)
         extra["inventories"] = [copy.deepcopy(self.document["inventories"][0])]
         extra["inventories"][0]["path"] = "extra.md"
-        self.reject("extra: extra.md", extra)
+        self.reject("inventory set disagrees with decision; missing: inventory.md; extra: extra.md", extra)
 
     def test_record_requires_reason_and_decision_governing_policy(self):
         damaged = copy.deepcopy(self.document)
@@ -282,7 +451,7 @@ class ClassMapTests(ProcessFixture):
             del record["governingRule"]
             record["governedBy"] = [{"inventory": "inventory.md", "id": "Z99"}]
         self.save_policy()
-        self.reject("inventory.md: N1: unresolved governing reference")
+        self.reject("inventory.md: N1: unresolved governing reference ('inventory.md', 'Z99')")
 
     def test_record_cannot_be_reclassified_as_operation(self):
         inventory = self.document["inventories"][0]
@@ -306,15 +475,15 @@ class ClassMapTests(ProcessFixture):
             with self.subTest(path=path):
                 damaged = copy.deepcopy(self.document)
                 damaged["inventories"][0]["path"] = path
-                self.reject("input path", damaged, bind_receipt=False)
+                message = (f"absolute input path: {path}" if Path(path).is_absolute()
+                           else f"input path escapes root: {path}")
+                self.reject(message, damaged, bind_receipt=False)
 
     def test_duplicate_json_members_are_rejected_by_process(self):
         self.save()
         self.map_path.write_text('{"outcome":"withdrawal","outcome":"confidential-ui-only"}')
         result = self.process()
-        self.assertEqual(1, result.returncode)
-        self.assertEqual("", result.stdout)
-        self.assertTrue(result.stderr.startswith("FAIL: duplicate JSON member outcome"), result.stderr)
+        self.reject_result("duplicate JSON member outcome", result)
 
     def approve(self):
         self.receipt.update(decision="approved", approver="fixture owner", exactApprovalInstruction="approve fixture bytes",
@@ -335,12 +504,12 @@ class ClassMapTests(ProcessFixture):
         for value in (None, "product owner", {"product owner": True}, [" "], [1], [True], ["product owner", ""]):
             with self.subTest(value=value):
                 self.receipt["rolesCovered"] = value
-                self.reject("rolesCovered must be an array of nonblank strings")
+                self.reject("adoption rolesCovered must be an array of nonblank strings")
         for value in ([], ["unrelated owner"], ["product owner"], ["security owner"]):
             with self.subTest(value=value):
                 self.receipt["rolesCovered"] = value
                 self.receipt["rolesRequiringConfirmation"] = value
-                self.reject("lacks required roles from decision")
+                self.reject("adoption approval lacks required roles from decision")
 
     def test_pending_candidate_requires_nonblank_role_policy(self):
         for value in (None, [], "owner", {"owner": True}, [""], [" \t\n"], [True], [1]):
@@ -394,52 +563,54 @@ class ActualPacketRegressionTests(ProcessFixture):
         return next(item for item in self.document["inventories"] if Path(item["path"]).name.startswith(prefix))
 
     def test_actual_packet_complete(self):
-        result = self.run_map()
+        self.save()
+        result = self.process(text=False)
         self.assertEqual(0, result.returncode, result.stderr)
-        self.assertEqual("", result.stderr)
-        self.assertEqual(len(self.document["inventories"]), result.stdout.count("classified rows +"))
+        self.assertEqual(b"", result.stderr)
+        self.assertEqual(SCRIPT.with_name("verifier.stdout.txt").read_bytes(), result.stdout)
 
     def test_actual_admin_ac13_cannot_move_to_owner_held_migration_class(self):
         inventory = self.inventory("eventstore-admin-")
         next(row for row in inventory["rows"] if row["id"] == "AC13")["classId"] = "K14"
-        self.reject("AC13: row class disagrees with decision")
+        self.reject(f"{inventory['path']}: AC13: row class disagrees with decision")
 
     def test_actual_folders_v04_cannot_bypass_staging_deferral(self):
         inventory = self.inventory("folders-")
         next(row for row in inventory["rows"] if row["id"] == "V04")["classId"] = "K01"
-        self.reject("V04: row class disagrees with decision")
+        self.reject(f"{inventory['path']}: V04: row class disagrees with decision")
 
     def test_actual_session_approval_cannot_claim_owning_maintainer(self):
-        self.inventory("projects-")["approvalLimit"] = "Approved owning-maintainer inventory."
-        self.reject("approval limit disagrees with decision")
+        inventory = self.inventory("projects-")
+        inventory["approvalLimit"] = "Approved owning-maintainer inventory."
+        self.reject(f"{inventory['path']}: approval limit disagrees with decision")
 
     def test_actual_folders_c01_record_class_cannot_change(self):
         inventory = self.inventory("folders-")
         next(row for row in inventory["records"] if row["id"] == "C01")["classId"] = "K13"
-        self.reject("C01: record governing policy disagrees with decision")
+        self.reject(f"{inventory['path']}: C01: record governing policy disagrees with decision")
 
     def test_actual_technical_ps09_governing_row_cannot_change(self):
         inventory = self.inventory("technical-tools-")
         next(row for row in inventory["records"] if row["id"] == "PS09")["governedBy"][0]["id"] = "L01"
-        self.reject("PS09: record governing policy disagrees with decision")
+        self.reject(f"{inventory['path']}: PS09: record governing policy disagrees with decision")
 
     def test_actual_whole_technical_inventory_omission_is_rejected(self):
         inventory = self.inventory("technical-tools-")
         self.document["inventories"].remove(inventory)
-        self.reject("missing: " + inventory["path"])
+        self.reject(f"inventory set disagrees with decision; missing: {inventory['path']}; extra: ")
 
     def test_actual_ps14_cannot_be_admitted_after_removing_all_map_restrictions(self):
         for inventory in self.document["inventories"]:
             inventory.pop("restrictionEvidence", None)
         inventory = self.inventory("technical-tools-")
         next(row for row in inventory["rows"] if row["id"] == "PS14")["classId"] = "K01"
-        self.reject("PS14: restricted row leaks into K01")
+        self.reject(f"{inventory['path']}: PS14: restricted row leaks into K01")
 
     def test_actual_parties_t01_cannot_become_record(self):
         inventory = self.inventory("parties-")
         inventory["rows"] = [row for row in inventory["rows"] if row["id"] != "T01"]
         inventory["records"].append({"id": "T01", "kind": "bookkeeping", "reason": "fake", "governingRule": "fake"})
-        self.reject("T01: not an eligible non-operation record")
+        self.reject(f"{inventory['path']}: T01: not an eligible non-operation record")
 
     def test_actual_k09_cannot_disagree_with_deferred_decision(self):
         next(item for item in self.document["classes"] if item["id"] == "K09")["outcome"] = "withdrawal"
@@ -452,13 +623,13 @@ class ActualPacketRegressionTests(ProcessFixture):
                 inventory = next(item for item in damaged["inventories"] if Path(item["path"]).name.startswith("parties-"))
                 inventory.pop("restrictionEvidence", None)
                 next(row for row in inventory["rows"] if row["id"] == row_id)["classId"] = "K01"
-                self.reject(f"{row_id}: restricted row leaks into K01", damaged)
+                self.reject(f"{inventory['path']}: {row_id}: restricted row leaks into K01", damaged)
 
     def test_actual_technical_path_alias_cannot_double_count(self):
         duplicate = copy.deepcopy(self.inventory("technical-tools-"))
         duplicate["path"] = "./" + duplicate["path"]
         self.document["inventories"].append(duplicate)
-        self.reject("duplicate inventory _bmad-output/implementation-artifacts/technical-tools-")
+        self.reject(f"duplicate inventory {self.inventory('technical-tools-')['path']}")
 
     def test_actual_receipt_drives_adoption_without_mutating_candidate(self):
         self.save()

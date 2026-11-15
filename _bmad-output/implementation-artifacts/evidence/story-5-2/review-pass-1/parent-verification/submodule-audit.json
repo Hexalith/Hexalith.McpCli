@@ -1,0 +1,1365 @@
+{
+  "scope": "Read-only audit of unchanged root-declared submodules; remote containment uses existing local remote-tracking refs, with no fetch or push.",
+  "submodules": [
+    {
+      "path": "references/Hexalith.AI.Tools",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "17a37d83db193f0b7494c1b931fd1e82a67c1424",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.AI.Tools.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.AI.Tools.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "17a37d83db193f0b7494c1b931fd1e82a67c1424 build(deps): refresh commit validation transitives",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Commons",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "fbf4e94233821f6ca336af91a06feaaeb7a16855",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Commons.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Commons.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "fbf4e94233821f6ca336af91a06feaaeb7a16855 chore(release): 3.0.0 [skip ci]",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.PolymorphicSerializations",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "e97b56930e213f674b64c157551f499b0473ec43",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.PolymorphicSerializations.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.PolymorphicSerializations.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "e97b56930e213f674b64c157551f499b0473ec43 build: merge setup-dotnet-6.1.0 dependabot branch via /pushall",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Conversations",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "c34dc3c1e0469765c75ea608f2960381f649579c",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Conversations.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Conversations.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "c34dc3c1e0469765c75ea608f2960381f649579c ci(release): wait for NuGet package processing",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.EventStore",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "fdb59895975e86a1e234325a01237f259cdbd53b",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.EventStore.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.EventStore.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "fdb59895975e86a1e234325a01237f259cdbd53b build: sync submodule pointers with origin",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Memories",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "66e2441e2536fc37708aca2bd3456fd4cd21a439",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Memories.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Memories.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "66e2441e2536fc37708aca2bd3456fd4cd21a439 build: sync submodule pointers with origin",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Tenants",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "2ec938397c5b330cf1e694e8cc442cb4ad022f2b",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Tenants.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Tenants.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "2ec938397c5b330cf1e694e8cc442cb4ad022f2b build: sync local changes via /pushall",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Builds",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": "warning: unable to find all commit-graph files"
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "73e60af8a1fcdf3f06726d5d1b6e1199cce778ee",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Builds.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Builds.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "73e60af8a1fcdf3f06726d5d1b6e1199cce778ee fix: update",
+          "stderr": "warning: unable to find all commit-graph files"
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": "warning: unable to find all commit-graph files"
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": "warning: unable to find all commit-graph files"
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.FrontComposer",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "09e5dd0fce32df9653365759d955e1e78df74ed7",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.FrontComposer.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.FrontComposer.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "09e5dd0fce32df9653365759d955e1e78df74ed7 build: record synchronized submodule pointers",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Parties",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "e59aed9ca2d111b0195afe078611e2184b6de4c5",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Parties.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Parties.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "e59aed9ca2d111b0195afe078611e2184b6de4c5 build: sync submodule pointers with origin",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Agents",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": "warning: unable to find all commit-graph files"
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "4a65f67d040bec4d646a830ed72b65c0e8951048",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Agents.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Agents.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "4a65f67d040bec4d646a830ed72b65c0e8951048 fix(ci): refresh workflow identities and measured consumer assets",
+          "stderr": "warning: unable to find all commit-graph files"
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": "warning: unable to find all commit-graph files"
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": "warning: unable to find all commit-graph files"
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Projects",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "fc58cefde69d72d7d3daa574b5022f73f830a85e",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Projects.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Projects.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "fc58cefde69d72d7d3daa574b5022f73f830a85e build: sync local changes via /pushall",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Folders",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "bb990a8766a9feac42ff7ecf02c8b7ca42a7ba15",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Folders.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Folders.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "bb990a8766a9feac42ff7ecf02c8b7ca42a7ba15 build: record synced root submodule pointers",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.ChatBot",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.ChatBot.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.ChatBot.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "6a4ca07b18e9b58500dc79dfede1f308da36c828 docs: align story 5.7 compatibility labels",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Works",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "b2985d22b3bfbc6d86bcde28a5da722ae7f930c3",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Works.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Works.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "b2985d22b3bfbc6d86bcde28a5da722ae7f930c3 build(deps): Bump Microsoft.Build.Framework from 18.9.6 to 18.12.2",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Timesheets",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "aafdae771e81f152671d18c506a0470ce0deee7f",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Timesheets.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Timesheets.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "aafdae771e81f152671d18c506a0470ce0deee7f ci(build): bind the qualified platform toolchain",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "path": "references/Hexalith.Platform",
+      "checks": [
+        {
+          "command": [
+            "git",
+            "status",
+            "--porcelain=v1"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "--show-current"
+          ],
+          "exitCode": 0,
+          "stdout": "main",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-parse",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "f6f85032598865b9123f16364448bfd02c0ff5b0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "remote",
+            "-v"
+          ],
+          "exitCode": 0,
+          "stdout": "origin\thttps://github.com/Hexalith/Hexalith.Platform.git (fetch)\norigin\thttps://github.com/Hexalith/Hexalith.Platform.git (push)",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "log",
+            "-1",
+            "--format=%H %s"
+          ],
+          "exitCode": 0,
+          "stdout": "f6f85032598865b9123f16364448bfd02c0ff5b0 fix: submodules",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "rev-list",
+            "--left-right",
+            "--count",
+            "HEAD...@{upstream}"
+          ],
+          "exitCode": 0,
+          "stdout": "0\t0",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "branch",
+            "-r",
+            "--contains",
+            "HEAD"
+          ],
+          "exitCode": 0,
+          "stdout": "origin/HEAD -> origin/main\n  origin/main",
+          "stderr": ""
+        }
+      ]
+    }
+  ]
+}

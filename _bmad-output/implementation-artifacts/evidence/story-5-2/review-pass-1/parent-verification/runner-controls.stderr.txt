@@ -1,0 +1,13 @@
+test_assertion_failure_kills_guard_and_exits_zero (test_run_guard_removal.RunnerProcessTests.test_assertion_failure_kills_guard_and_exits_zero) ... ok
+test_assertion_plus_unittest_error_is_still_error (test_run_guard_removal.RunnerProcessTests.test_assertion_plus_unittest_error_is_still_error) ... ok
+test_baseline_timeout_also_produces_receipt_and_exit_one (test_run_guard_removal.RunnerProcessTests.test_baseline_timeout_also_produces_receipt_and_exit_one) ... ok
+test_incomplete_zero_exit_is_error (test_run_guard_removal.RunnerProcessTests.test_incomplete_zero_exit_is_error) ... ok
+test_live_input_edits_cannot_change_snapshot_hash_or_mutation (test_run_guard_removal.RunnerProcessTests.test_live_input_edits_cannot_change_snapshot_hash_or_mutation) ... ok
+test_survivor_is_reported_and_exits_one (test_run_guard_removal.RunnerProcessTests.test_survivor_is_reported_and_exits_one) ... ok
+test_timeout_retains_partial_channels_and_receipt_and_exits_one (test_run_guard_removal.RunnerProcessTests.test_timeout_retains_partial_channels_and_receipt_and_exits_one) ... ok
+test_unittest_error_is_never_a_kill_and_exits_one (test_run_guard_removal.RunnerProcessTests.test_unittest_error_is_never_a_kill_and_exits_one) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.896s
+
+OK

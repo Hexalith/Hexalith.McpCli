@@ -1,0 +1,1177 @@
+{
+  "startedAt": "2026-11-15T10:36:37.487905+00:00",
+  "finishedAt": "2026-11-15T10:37:58.640258+00:00",
+  "command": [
+    "/usr/bin/python3",
+    "-I",
+    "-B",
+    "-m",
+    "unittest",
+    "discover",
+    "-v",
+    "-s",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2",
+    "-p",
+    "test_*.py"
+  ],
+  "cwd": "private temporary repository copy",
+  "jobs": 4,
+  "mutation": "Replace one complete require(...) expression statement with pass; keep line numbering.",
+  "inputs": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py": "b72727fafbb69254e85c7308fbf4ca0c9112f30393d6f0a3171a4a5f5bdbda46",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py": "da15306775d2c6fe4b6787bee14855256fbaa10f1a042d453a11f51eb66412de",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/verifier.stdout.txt": "b6fb26ef54bb56065204432200a1b9722d5c6e32f7f0ca83eb4b12e30e0291e2",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json": "7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498",
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+    "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597",
+    "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28"
+  },
+  "baseline": {
+    "returncode": 0,
+    "seconds": 4.814,
+    "stdout": "baseline.stdout.txt",
+    "stderr": "baseline.stderr.txt",
+    "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "stderrSha256": "4cb454453417e720b1c665015a72e08136f827054efc6c9b5ff164e2d3bf7db7",
+    "failedTests": [],
+    "completedSuite": true,
+    "failedSuite": false
+  },
+  "summary": {
+    "guardCount": 57,
+    "killed": 57,
+    "survived": 0,
+    "error": 0
+  },
+  "guards": [
+    {
+      "returncode": 1,
+      "seconds": 5.095,
+      "stdout": "guard-01-line-61.stdout.txt",
+      "stderr": "guard-01-line-61.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "ea78eb2213b1d3f95c4bc2c089e273d0db9fd9f6308935767e2d3370bdef0f40",
+      "failedTests": [
+        "FAIL: test_duplicate_json_members_are_rejected_by_process (test_verify_class_map.ClassMapTests.test_duplicate_json_members_are_rejected_by_process)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-01-line-61",
+      "line": 61,
+      "endLine": 61,
+      "guard": "require(key not in result, f\"duplicate JSON member {key}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.096,
+      "stdout": "guard-02-line-74.stdout.txt",
+      "stderr": "guard-02-line-74.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "44fa9377496b79285f8afaa029abfc8ac0c845ea3b1a41fcf289a9d915f2236f",
+      "failedTests": [
+        "FAIL: test_input_paths_require_nonblank_existing_files (test_verify_class_map.ClassMapTests.test_input_paths_require_nonblank_existing_files) (value='')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-02-line-74",
+      "line": 74,
+      "endLine": 74,
+      "guard": "require(nonblank(value), \"missing input path\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.161,
+      "stdout": "guard-03-line-76.stdout.txt",
+      "stderr": "guard-03-line-76.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "2efd5edcff9ff75860d2c58ae0f21370b5c47678c2c0f51f72333cea8ab17ebc",
+      "failedTests": [
+        "FAIL: test_paths_cannot_escape_repository (test_verify_class_map.ClassMapTests.test_paths_cannot_escape_repository) (path='/tmp/hexalith-job.wXbi1IlC/tmp1qi_jg79/inventory.md')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-03-line-76",
+      "line": 76,
+      "endLine": 76,
+      "guard": "require(not path.is_absolute(), f\"absolute input path: {value}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.098,
+      "stdout": "guard-04-line-78.stdout.txt",
+      "stderr": "guard-04-line-78.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "3dbf4f240925e4dbf3dc64699840e7db2f9085c6193f4122cc9ef01a0a027960",
+      "failedTests": [
+        "FAIL: test_paths_cannot_escape_repository (test_verify_class_map.ClassMapTests.test_paths_cannot_escape_repository) (path='../inventory.md')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-04-line-78",
+      "line": 78,
+      "endLine": 78,
+      "guard": "require(resolved.is_relative_to(root), f\"input path escapes root: {value}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.055,
+      "stdout": "guard-05-line-79.stdout.txt",
+      "stderr": "guard-05-line-79.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "0f0667d546e7ca68622d6409c25602eed0c4139dcd8edbbc62e0909e708c9e33",
+      "failedTests": [
+        "FAIL: test_input_paths_require_nonblank_existing_files (test_verify_class_map.ClassMapTests.test_input_paths_require_nonblank_existing_files) (value='absent.md')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-05-line-79",
+      "line": 79,
+      "endLine": 79,
+      "guard": "require(resolved.is_file(), f\"missing input: {value}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 4.949,
+      "stdout": "guard-06-line-90.stdout.txt",
+      "stderr": "guard-06-line-90.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "cfee24b0d4f51ed2f17e4b9a083999158818c4761e8719b51d7187ddeda43761",
+      "failedTests": [
+        "FAIL: test_class_declarations_require_array_and_nonblank_ids (test_verify_class_map.ClassMapTests.test_class_declarations_require_array_and_nonblank_ids)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-06-line-90",
+      "line": 90,
+      "endLine": 90,
+      "guard": "require(isinstance(items, list), f\"{label}: expected array\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.052,
+      "stdout": "guard-07-line-94.stdout.txt",
+      "stderr": "guard-07-line-94.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "d1dde3d3758ee781b01b7227f02bc6543ac9684d2507ced2d91222adc2ada696",
+      "failedTests": [
+        "FAIL: test_class_declarations_require_array_and_nonblank_ids (test_verify_class_map.ClassMapTests.test_class_declarations_require_array_and_nonblank_ids) (value=None)",
+        "FAIL: test_class_declarations_require_array_and_nonblank_ids (test_verify_class_map.ClassMapTests.test_class_declarations_require_array_and_nonblank_ids) (value='')",
+        "FAIL: test_class_declarations_require_array_and_nonblank_ids (test_verify_class_map.ClassMapTests.test_class_declarations_require_array_and_nonblank_ids) (value=' ')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-07-line-94",
+      "line": 94,
+      "endLine": 94,
+      "guard": "require(nonblank(identity), f\"{label}: missing {key}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.074,
+      "stdout": "guard-08-line-95.stdout.txt",
+      "stderr": "guard-08-line-95.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "b3e03e1355bbe0f8ae0a413463c47bcb722c50d6f9c645dcf0f01c2261941f6f",
+      "failedTests": [
+        "FAIL: test_duplicate_inventory_class_and_unknown_class_are_rejected (test_verify_class_map.ClassMapTests.test_duplicate_inventory_class_and_unknown_class_are_rejected)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-08-line-95",
+      "line": 95,
+      "endLine": 95,
+      "guard": "require(identity not in result, f\"{label}: duplicate {identity}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.069,
+      "stdout": "guard-09-line-104.stdout.txt",
+      "stderr": "guard-09-line-104.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "6a5cd37850c0c2750ef435d2b8b3615ad2c809c967fe5e62c75f72e49c3c908a",
+      "failedTests": [
+        "FAIL: test_inventory_source_requires_version_and_rows (test_verify_class_map.ClassMapTests.test_inventory_source_requires_version_and_rows)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-09-line-104",
+      "line": 104,
+      "endLine": 104,
+      "guard": "require(version is not None, f\"{path.name}: inventory_version missing\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.15,
+      "stdout": "guard-10-line-120.stdout.txt",
+      "stderr": "guard-10-line-120.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "af283e33ed5b6eff4bbd2c4486f769bb7b277a277c649be63e0e02a42550326c",
+      "failedTests": [
+        "FAIL: test_duplicate_source_id_is_rejected_but_relation_table_is_not_a_row (test_verify_class_map.ClassMapTests.test_duplicate_source_id_is_rejected_but_relation_table_is_not_a_row)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-10-line-120",
+      "line": 120,
+      "endLine": 120,
+      "guard": "require(row_id not in rows, f\"{path.name}: duplicate source row {row_id}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.148,
+      "stdout": "guard-11-line-122.stdout.txt",
+      "stderr": "guard-11-line-122.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "9980121444f877ad168c318bdebaa1fc3f83aeb6f35c47affe33d34cafb84817",
+      "failedTests": [
+        "FAIL: test_inventory_source_requires_version_and_rows (test_verify_class_map.ClassMapTests.test_inventory_source_requires_version_and_rows)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-11-line-122",
+      "line": 122,
+      "endLine": 122,
+      "guard": "require(bool(rows), f\"{path.name}: no inventory rows\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.181,
+      "stdout": "guard-12-line-138.stdout.txt",
+      "stderr": "guard-12-line-138.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "f93ce13cc4e13162d7ee67f6ee2a869317b918422208e6e21c66dbed8f847b3d",
+      "failedTests": [
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value=None)",
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value=[])",
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value=['withdrawal', 'confidential-ui-only'])",
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value='invented')",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value=None)",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value=[])",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value=['withdrawal', 'confidential-ui-only'])",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value='invented')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-12-line-138",
+      "line": 138,
+      "endLine": 139,
+      "guard": "require(isinstance(outcome, str) and outcome in OUTCOMES,\n            f\"{item['id']}: invalid sole outcome {outcome!r}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.154,
+      "stdout": "guard-13-line-140.stdout.txt",
+      "stderr": "guard-13-line-140.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "fd6628c9cfe60c95c43ad4cc8a4ece616769cc9b4903d623a1523390ba59253f",
+      "failedTests": [
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value='generic-authenticated-transport')",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value='generic-authenticated-transport')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-13-line-140",
+      "line": 140,
+      "endLine": 140,
+      "guard": "require(outcome != \"generic-authenticated-transport\", f\"{item['id']}: transport beyond v1\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.141,
+      "stdout": "guard-14-line-144.stdout.txt",
+      "stderr": "guard-14-line-144.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "06ecdc40197ee68ee9808127ea72400b4d4c29f15cef1d7b4e4b186de795ad95",
+      "failedTests": [
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='gap', value=None)",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='gap', value='')",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='gap', value='  ')",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='ownerRole', value=None)",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='ownerRole', value='')",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='ownerRole', value='  ')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-14-line-144",
+      "line": 144,
+      "endLine": 144,
+      "guard": "require(nonblank(item.get(field)), f\"{item['id']}: deferral lacks {field}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.176,
+      "stdout": "guard-15-line-162.stdout.txt",
+      "stderr": "guard-15-line-162.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "36342a10f87b5fb68b221f99e0ab656381790247cc96e976cc6376a2ffb66547",
+      "failedTests": [
+        "FAIL: test_inventories_require_array (test_verify_class_map.ClassMapTests.test_inventories_require_array)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-15-line-162",
+      "line": 162,
+      "endLine": 162,
+      "guard": "require(isinstance(items, list), f\"{label}: expected array\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.07,
+      "stdout": "guard-16-line-166.stdout.txt",
+      "stderr": "guard-16-line-166.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "eba054944d4fbdeed4868211aecf1419e9c337a43ca7dde8e265be3b34d556b8",
+      "failedTests": [
+        "FAIL: test_actual_technical_path_alias_cannot_double_count (test_verify_class_map.ActualPacketRegressionTests.test_actual_technical_path_alias_cannot_double_count)",
+        "FAIL: test_duplicate_inventory_class_and_unknown_class_are_rejected (test_verify_class_map.ClassMapTests.test_duplicate_inventory_class_and_unknown_class_are_rejected)",
+        "FAIL: test_inventory_aliases_are_detected_after_normalization (test_verify_class_map.ClassMapTests.test_inventory_aliases_are_detected_after_normalization) (alias='./inventory.md')",
+        "FAIL: test_inventory_aliases_are_detected_after_normalization (test_verify_class_map.ClassMapTests.test_inventory_aliases_are_detected_after_normalization) (alias='subdir/../inventory.md')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-16-line-166",
+      "line": 166,
+      "endLine": 166,
+      "guard": "require(name not in result, f\"duplicate inventory {name}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.143,
+      "stdout": "guard-17-line-176.stdout.txt",
+      "stderr": "guard-17-line-176.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "326dd825582d5651d543c8c2ccaba9f57c528cadb174830d8cca9abfe9faaef3",
+      "failedTests": [
+        "FAIL: test_map_and_policy_schema_versions_are_checked (test_verify_class_map.ClassMapTests.test_map_and_policy_schema_versions_are_checked)",
+        "FAIL: test_non_object_json_items_use_fail_channel (test_verify_class_map.ClassMapTests.test_non_object_json_items_use_fail_channel)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-17-line-176",
+      "line": 176,
+      "endLine": 176,
+      "guard": "require(document.get(\"schemaVersion\") == \"1.0.0\", \"unsupported map schemaVersion\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.138,
+      "stdout": "guard-18-line-178.stdout.txt",
+      "stderr": "guard-18-line-178.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "341ec56e27ae7e2ee17fce4c9025ea27ca9be24f43e85da23b12b732dfc2263b",
+      "failedTests": [
+        "FAIL: test_map_cannot_declare_its_own_adoption_status (test_verify_class_map.ClassMapTests.test_map_cannot_declare_its_own_adoption_status)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-18-line-178",
+      "line": 178,
+      "endLine": 178,
+      "guard": "require(\"status\" not in decision, \"decision status belongs only to the approval receipt\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.151,
+      "stdout": "guard-19-line-180.stdout.txt",
+      "stderr": "guard-19-line-180.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "19d0a14fb1e5d70fafef5f182c438a25cbcac01e65f741f0064ae4a9da9bf0c4",
+      "failedTests": [
+        "FAIL: test_stale_version_and_decision_hash_are_rejected (test_verify_class_map.ClassMapTests.test_stale_version_and_decision_hash_are_rejected)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-19-line-180",
+      "line": 180,
+      "endLine": 180,
+      "guard": "require(sha256(decision_path) == decision[\"sha256\"], \"decision hash mismatch\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.195,
+      "stdout": "guard-20-line-182.stdout.txt",
+      "stderr": "guard-20-line-182.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "80bacef1d66fc37a147de2e7376ff1cd8cc819690d3fd2790b2b215cdfc57c86",
+      "failedTests": [
+        "FAIL: test_decision_requires_exactly_one_policy_block (test_verify_class_map.ClassMapTests.test_decision_requires_exactly_one_policy_block) (blocks=0)",
+        "FAIL: test_decision_requires_exactly_one_policy_block (test_verify_class_map.ClassMapTests.test_decision_requires_exactly_one_policy_block) (blocks=2)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-20-line-182",
+      "line": 182,
+      "endLine": 182,
+      "guard": "require(len(blocks) == 1, \"decision must bind exactly one verifier policy\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.015,
+      "stdout": "guard-21-line-184.stdout.txt",
+      "stderr": "guard-21-line-184.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "1faf67878cef68a93933eaeee36c7a58633e025fab14000d0c5cc67dbc501c3b",
+      "failedTests": [
+        "FAIL: test_map_and_policy_schema_versions_are_checked (test_verify_class_map.ClassMapTests.test_map_and_policy_schema_versions_are_checked)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-21-line-184",
+      "line": 184,
+      "endLine": 184,
+      "guard": "require(policy.get(\"schemaVersion\") == \"1.0.0\", \"unsupported decision policy schemaVersion\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.049,
+      "stdout": "guard-22-line-186.stdout.txt",
+      "stderr": "guard-22-line-186.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "29b6fb5c01f69b46caef0f9744f3f1cf129a2b5b813985965c2b8f80c4a91db1",
+      "failedTests": [
+        "FAIL: test_pending_candidate_requires_nonblank_role_policy (test_verify_class_map.ClassMapTests.test_pending_candidate_requires_nonblank_role_policy) (value=None)",
+        "FAIL: test_pending_candidate_requires_nonblank_role_policy (test_verify_class_map.ClassMapTests.test_pending_candidate_requires_nonblank_role_policy) (value=[])",
+        "FAIL: test_pending_candidate_requires_nonblank_role_policy (test_verify_class_map.ClassMapTests.test_pending_candidate_requires_nonblank_role_policy) (value='owner')",
+        "FAIL: test_pending_candidate_requires_nonblank_role_policy (test_verify_class_map.ClassMapTests.test_pending_candidate_requires_nonblank_role_policy) (value={'owner': True})",
+        "FAIL: test_pending_candidate_requires_nonblank_role_policy (test_verify_class_map.ClassMapTests.test_pending_candidate_requires_nonblank_role_policy) (value=[''])",
+        "FAIL: test_pending_candidate_requires_nonblank_role_policy (test_verify_class_map.ClassMapTests.test_pending_candidate_requires_nonblank_role_policy) (value=[' \\t\\n'])",
+        "FAIL: test_pending_candidate_requires_nonblank_role_policy (test_verify_class_map.ClassMapTests.test_pending_candidate_requires_nonblank_role_policy) (value=[True])",
+        "FAIL: test_pending_candidate_requires_nonblank_role_policy (test_verify_class_map.ClassMapTests.test_pending_candidate_requires_nonblank_role_policy) (value=[1])",
+        "FAIL: test_pending_candidate_requires_nonblank_role_policy (test_verify_class_map.ClassMapTests.test_pending_candidate_requires_nonblank_role_policy)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-22-line-186",
+      "line": 186,
+      "endLine": 187,
+      "guard": "require(isinstance(required_roles, list) and required_roles and all(map(nonblank, required_roles)),\n            \"decision lacks required approval roles\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.023,
+      "stdout": "guard-23-line-188.stdout.txt",
+      "stderr": "guard-23-line-188.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "84c52c0c451ab26d28ae72f691d31e36d82fba549513b06a6a1f7399d58ac1a9",
+      "failedTests": [
+        "FAIL: test_decision_map_and_approval_paths_must_match (test_verify_class_map.ClassMapTests.test_decision_map_and_approval_paths_must_match) (key='mapPath')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-23-line-188",
+      "line": 188,
+      "endLine": 189,
+      "guard": "require(path_key(root, policy[\"mapPath\"]) == map_path.relative_to(root).as_posix(),\n            \"map path disagrees with decision\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.023,
+      "stdout": "guard-24-line-190.stdout.txt",
+      "stderr": "guard-24-line-190.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "5c9ed8b151cd7770ed005ddcce37efbff8c0e261fe68161b152584dedd49ccdc",
+      "failedTests": [
+        "FAIL: test_decision_map_and_approval_paths_must_match (test_verify_class_map.ClassMapTests.test_decision_map_and_approval_paths_must_match) (key='approvalPath')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-24-line-190",
+      "line": 190,
+      "endLine": 191,
+      "guard": "require(path_key(root, policy[\"approvalPath\"]) == path_key(root, document[\"approvalPath\"]),\n            \"approval path disagrees with decision\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.108,
+      "stdout": "guard-25-line-195.stdout.txt",
+      "stderr": "guard-25-line-195.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "dd734f62dfcba40b489ba00771a09be7098ca1a96b284d1f6699b554f7a9d4cf",
+      "failedTests": [
+        "FAIL: test_outcome_and_required_class_set_must_match_decision (test_verify_class_map.ClassMapTests.test_outcome_and_required_class_set_must_match_decision)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-25-line-195",
+      "line": 195,
+      "endLine": 195,
+      "guard": "require(classes.keys() == expected_classes.keys(), \"class set disagrees with decision\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.068,
+      "stdout": "guard-26-line-196.stdout.txt",
+      "stderr": "guard-26-line-196.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e023d812f99273d7c2102c5f0b5eed7d6ea7b760402f9a0f44652581764c82fe",
+      "failedTests": [
+        "FAIL: test_empty_agreed_class_and_inventory_sets_are_rejected (test_verify_class_map.ClassMapTests.test_empty_agreed_class_and_inventory_sets_are_rejected)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-26-line-196",
+      "line": 196,
+      "endLine": 196,
+      "guard": "require(bool(classes), \"no capability classes\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.051,
+      "stdout": "guard-27-line-198.stdout.txt",
+      "stderr": "guard-27-line-198.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "2597eac8b5ef638348acdf9c57313a758d66af83478216041a33d509f0c808e9",
+      "failedTests": [
+        "FAIL: test_actual_k09_cannot_disagree_with_deferred_decision (test_verify_class_map.ActualPacketRegressionTests.test_actual_k09_cannot_disagree_with_deferred_decision)",
+        "FAIL: test_changed_deferral_owner_or_gap_disagrees_with_decision (test_verify_class_map.ClassMapTests.test_changed_deferral_owner_or_gap_disagrees_with_decision) (field='gap')",
+        "FAIL: test_changed_deferral_owner_or_gap_disagrees_with_decision (test_verify_class_map.ClassMapTests.test_changed_deferral_owner_or_gap_disagrees_with_decision) (field='ownerRole')",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='gap', value=None)",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='gap', value='')",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='gap', value='  ')",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='ownerRole', value=None)",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='ownerRole', value='')",
+        "FAIL: test_deferred_class_needs_nonblank_gap_and_owner_role (test_verify_class_map.ClassMapTests.test_deferred_class_needs_nonblank_gap_and_owner_role) (field='ownerRole', value='  ')",
+        "FAIL: test_outcome_and_required_class_set_must_match_decision (test_verify_class_map.ClassMapTests.test_outcome_and_required_class_set_must_match_decision)",
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value=None)",
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value=[])",
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value=['withdrawal', 'confidential-ui-only'])",
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value='invented')",
+        "FAIL: test_policy_side_outcome_and_transport_are_rejected (test_verify_class_map.ClassMapTests.test_policy_side_outcome_and_transport_are_rejected) (value='generic-authenticated-transport')",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value=None)",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value=[])",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value=['withdrawal', 'confidential-ui-only'])",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value='invented')",
+        "FAIL: test_zero_two_and_unlisted_outcomes_are_rejected (test_verify_class_map.ClassMapTests.test_zero_two_and_unlisted_outcomes_are_rejected) (value='generic-authenticated-transport')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-27-line-198",
+      "line": 198,
+      "endLine": 199,
+      "guard": "require(class_policy(item) == class_policy(expected_classes[key]),\n                f\"{key}: class outcome/deferral disagrees with decision\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.065,
+      "stdout": "guard-28-line-205.stdout.txt",
+      "stderr": "guard-28-line-205.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "06fd07119bd34d92c497db855873b831e4e77a0425f6e59277e02bd0d1fa51e8",
+      "failedTests": [
+        "FAIL: test_actual_whole_technical_inventory_omission_is_rejected (test_verify_class_map.ActualPacketRegressionTests.test_actual_whole_technical_inventory_omission_is_rejected)",
+        "FAIL: test_whole_inventory_omission_and_extra_inventory_are_rejected (test_verify_class_map.ClassMapTests.test_whole_inventory_omission_and_extra_inventory_are_rejected)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-28-line-205",
+      "line": 205,
+      "endLine": 206,
+      "guard": "require(not missing and not extra,\n            f\"inventory set disagrees with decision; missing: {', '.join(sorted(missing))}; extra: {', '.join(sorted(extra))}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.085,
+      "stdout": "guard-29-line-207.stdout.txt",
+      "stderr": "guard-29-line-207.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "46f25f00b1dbef7d0170006d685d1c3a8ea84f33df8db84d605bbce6fa832f99",
+      "failedTests": [
+        "FAIL: test_empty_agreed_class_and_inventory_sets_are_rejected (test_verify_class_map.ClassMapTests.test_empty_agreed_class_and_inventory_sets_are_rejected)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-29-line-207",
+      "line": 207,
+      "endLine": 207,
+      "guard": "require(bool(inventories), \"no inventories\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.092,
+      "stdout": "guard-30-line-212.stdout.txt",
+      "stderr": "guard-30-line-212.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "cdc831e5fdca00232354e8f7250bebbd0bc72862be72c43cd4e5c8877e14a4e1",
+      "failedTests": [
+        "FAIL: test_stale_inventory_hash_is_rejected (test_verify_class_map.ClassMapTests.test_stale_inventory_hash_is_rejected)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-30-line-212",
+      "line": 212,
+      "endLine": 212,
+      "guard": "require(inventory[\"sha256\"] == expected[\"sha256\"] == sha256(path), f\"{name}: inventory hash mismatch\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.052,
+      "stdout": "guard-31-line-214.stdout.txt",
+      "stderr": "guard-31-line-214.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "ad94a6fcf88b046dd386b3d4c852b992f2379b41371b2dcebb2c2f7a9f2ec30b",
+      "failedTests": [
+        "FAIL: test_source_version_must_match_both_bound_versions (test_verify_class_map.ClassMapTests.test_source_version_must_match_both_bound_versions)",
+        "FAIL: test_stale_version_and_decision_hash_are_rejected (test_verify_class_map.ClassMapTests.test_stale_version_and_decision_hash_are_rejected)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-31-line-214",
+      "line": 214,
+      "endLine": 214,
+      "guard": "require(inventory[\"version\"] == expected[\"version\"] == version, f\"{name}: inventory version mismatch\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.061,
+      "stdout": "guard-32-line-215.stdout.txt",
+      "stderr": "guard-32-line-215.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "c5f618490cff61b27c6ab452d61b55184e06165766b27831e1e66328a90d703a",
+      "failedTests": [
+        "FAIL: test_actual_session_approval_cannot_claim_owning_maintainer (test_verify_class_map.ActualPacketRegressionTests.test_actual_session_approval_cannot_claim_owning_maintainer)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-32-line-215",
+      "line": 215,
+      "endLine": 216,
+      "guard": "require(nonblank(expected.get(\"approvalLimit\")) and inventory.get(\"approvalLimit\") == expected[\"approvalLimit\"],\n                f\"{name}: approval limit disagrees with decision\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.095,
+      "stdout": "guard-33-line-218.stdout.txt",
+      "stderr": "guard-33-line-218.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "b3e813ccb7a9b918fab2d296a9f61206d8a8783205f44866d48e80c57566178a",
+      "failedTests": [
+        "FAIL: test_decision_records_must_exist_in_source (test_verify_class_map.ClassMapTests.test_decision_records_must_exist_in_source)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-33-line-218",
+      "line": 218,
+      "endLine": 218,
+      "guard": "require(records.keys() <= source_rows.keys(), f\"{name}: decision record absent from source\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.089,
+      "stdout": "guard-34-line-220.stdout.txt",
+      "stderr": "guard-34-line-220.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "0d54817322ec41f7f458359fffa4eef1d43f0f10b9cd1ca9e3cf9297608dfcae",
+      "failedTests": [
+        "FAIL: test_decision_row_classes_must_match_source_operations (test_verify_class_map.ClassMapTests.test_decision_row_classes_must_match_source_operations) (value={})",
+        "FAIL: test_decision_row_classes_must_match_source_operations (test_verify_class_map.ClassMapTests.test_decision_row_classes_must_match_source_operations) (value=[])"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-34-line-220",
+      "line": 220,
+      "endLine": 221,
+      "guard": "require(isinstance(row_classes, dict) and row_classes.keys() == source_rows.keys() - records.keys(),\n                f\"{name}: decision row class set disagrees with source operations\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.05,
+      "stdout": "guard-35-line-224.stdout.txt",
+      "stderr": "guard-35-line-224.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "2f002432631a736e00a1868f87c6e9a7e8f5f2eea7f8a907876130d65d40a66c",
+      "failedTests": [
+        "FAIL: test_decision_restrictions_require_known_rows_and_source_evidence (test_verify_class_map.ClassMapTests.test_decision_restrictions_require_known_rows_and_source_evidence)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-35-line-224",
+      "line": 224,
+      "endLine": 224,
+      "guard": "require(row_id in source_rows, f\"{name}: unknown restricted row {row_id}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.099,
+      "stdout": "guard-36-line-226.stdout.txt",
+      "stderr": "guard-36-line-226.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "071149cb3fa60057cf4056c7e113244ccf1dc6a86ff35f07f04b105a32fce981",
+      "failedTests": [
+        "FAIL: test_decision_restrictions_require_known_rows_and_source_evidence (test_verify_class_map.ClassMapTests.test_decision_restrictions_require_known_rows_and_source_evidence)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-36-line-226",
+      "line": 226,
+      "endLine": 227,
+      "guard": "require(nonblank(quote) and quote in source_rows[row_id][\"text\"],\n                    f\"{name}: {row_id} restriction evidence missing from source\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.046,
+      "stdout": "guard-37-line-232.stdout.txt",
+      "stderr": "guard-37-line-232.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "1c1cee226f256021479fe3cf9e8cb748a2a2f8cd4a6c3cced0a96e4e60364425",
+      "failedTests": [
+        "FAIL: test_supplementary_restriction_requires_known_source_row (test_verify_class_map.ClassMapTests.test_supplementary_restriction_requires_known_source_row)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-37-line-232",
+      "line": 232,
+      "endLine": 232,
+      "guard": "require(row_id in source_rows, f\"{name}: unknown restricted row {row_id}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.05,
+      "stdout": "guard-38-line-233.stdout.txt",
+      "stderr": "guard-38-line-233.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "3bf28eb3b80d43cd745ff3937494d3715551652b988762dc163872ddf72e499e",
+      "failedTests": [
+        "FAIL: test_restriction_evidence_must_exist_at_named_source_row (test_verify_class_map.ClassMapTests.test_restriction_evidence_must_exist_at_named_source_row)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-38-line-233",
+      "line": 233,
+      "endLine": 234,
+      "guard": "require(nonblank(evidence.get(\"sourceText\")) and evidence[\"sourceText\"] in source_rows[row_id][\"text\"],\n                    f\"{name}: {row_id} restriction evidence missing from source\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.034,
+      "stdout": "guard-39-line-242.stdout.txt",
+      "stderr": "guard-39-line-242.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "460cfe9054abf35f78dac97343b6c3e74963afef8e8b1a2937e29fedca7fa2d6",
+      "failedTests": [
+        "FAIL: test_unknown_row_names_inventory_and_id (test_verify_class_map.ClassMapTests.test_unknown_row_names_inventory_and_id)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-39-line-242",
+      "line": 242,
+      "endLine": 242,
+      "guard": "require(row_id in source_rows, f\"{label}: unknown row\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.034,
+      "stdout": "guard-40-line-243.stdout.txt",
+      "stderr": "guard-40-line-243.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "82406cf6fc5a06f49a06232718933eda5d11cc9b722f37903d6f84b4840bd19f",
+      "failedTests": [
+        "FAIL: test_duplicate_row_and_cross_section_duplicate_are_rejected (test_verify_class_map.ClassMapTests.test_duplicate_row_and_cross_section_duplicate_are_rejected) (section='rows')",
+        "FAIL: test_duplicate_row_and_cross_section_duplicate_are_rejected (test_verify_class_map.ClassMapTests.test_duplicate_row_and_cross_section_duplicate_are_rejected) (section='records')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-40-line-243",
+      "line": 243,
+      "endLine": 243,
+      "guard": "require(row_id not in seen, f\"{label}: duplicate mapped row\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.096,
+      "stdout": "guard-41-line-246.stdout.txt",
+      "stderr": "guard-41-line-246.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "8a0eda4b757edde72b3d62906854e4d638836688cef0202fd1207dbcf5fa0953",
+      "failedTests": [
+        "FAIL: test_actual_parties_t01_cannot_become_record (test_verify_class_map.ActualPacketRegressionTests.test_actual_parties_t01_cannot_become_record)",
+        "FAIL: test_restricted_operation_cannot_be_laundered_as_record (test_verify_class_map.ClassMapTests.test_restricted_operation_cannot_be_laundered_as_record)",
+        "FAIL: test_unrestricted_operation_cannot_be_laundered_as_record (test_verify_class_map.ClassMapTests.test_unrestricted_operation_cannot_be_laundered_as_record)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-41-line-246",
+      "line": 246,
+      "endLine": 246,
+      "guard": "require(row_id in records, f\"{label}: not an eligible non-operation record\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.049,
+      "stdout": "guard-42-line-247.stdout.txt",
+      "stderr": "guard-42-line-247.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "29e51997291e0171455bf2e74ee4660d18640bd011bab69d2cadf7519d43edb3",
+      "failedTests": [
+        "FAIL: test_record_requires_reason_and_decision_governing_policy (test_verify_class_map.ClassMapTests.test_record_requires_reason_and_decision_governing_policy)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-42-line-247",
+      "line": 247,
+      "endLine": 248,
+      "guard": "require(nonblank(entry.get(\"kind\")) and nonblank(entry.get(\"reason\")),\n                            f\"{label}: incomplete non-operation record\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.065,
+      "stdout": "guard-43-line-249.stdout.txt",
+      "stderr": "guard-43-line-249.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "cb355bdd27c582ee54493548cc8e216ce4b98256f9b3d6267d754fc254921b27",
+      "failedTests": [
+        "FAIL: test_actual_folders_c01_record_class_cannot_change (test_verify_class_map.ActualPacketRegressionTests.test_actual_folders_c01_record_class_cannot_change)",
+        "FAIL: test_actual_technical_ps09_governing_row_cannot_change (test_verify_class_map.ActualPacketRegressionTests.test_actual_technical_ps09_governing_row_cannot_change)",
+        "FAIL: test_record_requires_reason_and_decision_governing_policy (test_verify_class_map.ClassMapTests.test_record_requires_reason_and_decision_governing_policy)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-43-line-249",
+      "line": 249,
+      "endLine": 250,
+      "guard": "require(record_policy(root, entry) == record_policy(root, records[row_id]),\n                            f\"{label}: record governing policy disagrees with decision\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.104,
+      "stdout": "guard-44-line-253.stdout.txt",
+      "stderr": "guard-44-line-253.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "9f70499fd938011f5a781c59907b9bf779d0b2f009d0dd797ccabf36692050db",
+      "failedTests": [
+        "FAIL: test_record_cannot_be_reclassified_as_operation (test_verify_class_map.ClassMapTests.test_record_cannot_be_reclassified_as_operation)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-44-line-253",
+      "line": 253,
+      "endLine": 253,
+      "guard": "require(row_id not in records, f\"{label}: decision requires a non-operation record\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.067,
+      "stdout": "guard-45-line-256.stdout.txt",
+      "stderr": "guard-45-line-256.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "27d9cf7229681102fe6327a4a157344ab2a0de1665390fb017526c27edb64e5b",
+      "failedTests": [
+        "FAIL: test_duplicate_inventory_class_and_unknown_class_are_rejected (test_verify_class_map.ClassMapTests.test_duplicate_inventory_class_and_unknown_class_are_rejected)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-45-line-256",
+      "line": 256,
+      "endLine": 256,
+      "guard": "require(class_id in classes, f\"{label}: unknown class {class_id!r}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 4.994,
+      "stdout": "guard-46-line-258.stdout.txt",
+      "stderr": "guard-46-line-258.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "6ef8205039af854c67898a0807de3a4d0d4544cf0d4d63ae442b1867f6d1aac8",
+      "failedTests": [
+        "ERROR: test_agreed_restricted_records_require_restricted_class (test_verify_class_map.ClassMapTests.test_agreed_restricted_records_require_restricted_class) (row_id='R2', class_id=None)",
+        "ERROR: test_agreed_restricted_records_require_restricted_class (test_verify_class_map.ClassMapTests.test_agreed_restricted_records_require_restricted_class) (row_id='V1', class_id=None)",
+        "FAIL: test_actual_parties_mixed_variants_inherit_restrictions (test_verify_class_map.ActualPacketRegressionTests.test_actual_parties_mixed_variants_inherit_restrictions) (row_id='C03')",
+        "FAIL: test_actual_parties_mixed_variants_inherit_restrictions (test_verify_class_map.ActualPacketRegressionTests.test_actual_parties_mixed_variants_inherit_restrictions) (row_id='C04')",
+        "FAIL: test_actual_parties_mixed_variants_inherit_restrictions (test_verify_class_map.ActualPacketRegressionTests.test_actual_parties_mixed_variants_inherit_restrictions) (row_id='C05')",
+        "FAIL: test_actual_ps14_cannot_be_admitted_after_removing_all_map_restrictions (test_verify_class_map.ActualPacketRegressionTests.test_actual_ps14_cannot_be_admitted_after_removing_all_map_restrictions)",
+        "FAIL: test_agreed_restricted_records_require_restricted_class (test_verify_class_map.ClassMapTests.test_agreed_restricted_records_require_restricted_class) (row_id='R2', class_id='read')",
+        "FAIL: test_agreed_restricted_records_require_restricted_class (test_verify_class_map.ClassMapTests.test_agreed_restricted_records_require_restricted_class) (row_id='V1', class_id='read')",
+        "FAIL: test_confirmation_column_alone_requires_restricted_outcome (test_verify_class_map.ClassMapTests.test_confirmation_column_alone_requires_restricted_outcome)",
+        "FAIL: test_effect_column_alone_requires_restricted_outcome (test_verify_class_map.ClassMapTests.test_effect_column_alone_requires_restricted_outcome)",
+        "FAIL: test_inherited_restriction_survives_deleted_map_owned_evidence (test_verify_class_map.ClassMapTests.test_inherited_restriction_survives_deleted_map_owned_evidence)",
+        "FAIL: test_restricted_source_classes_and_variant_evidence_block_admission (test_verify_class_map.ClassMapTests.test_restricted_source_classes_and_variant_evidence_block_admission) (row_id='R2')",
+        "FAIL: test_restricted_source_classes_and_variant_evidence_block_admission (test_verify_class_map.ClassMapTests.test_restricted_source_classes_and_variant_evidence_block_admission) (row_id='R3')",
+        "FAIL: test_restricted_source_classes_and_variant_evidence_block_admission (test_verify_class_map.ClassMapTests.test_restricted_source_classes_and_variant_evidence_block_admission) (row_id='R4')",
+        "FAIL: test_restricted_source_classes_and_variant_evidence_block_admission (test_verify_class_map.ClassMapTests.test_restricted_source_classes_and_variant_evidence_block_admission) (row_id='R5')",
+        "FAIL: test_restricted_source_classes_and_variant_evidence_block_admission (test_verify_class_map.ClassMapTests.test_restricted_source_classes_and_variant_evidence_block_admission) (row_id='V1')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-46-line-258",
+      "line": 258,
+      "endLine": 259,
+      "guard": "require(classes[class_id][\"outcome\"] in RESTRICTED_OUTCOMES,\n                                f\"{label}: restricted row leaks into {class_id}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.068,
+      "stdout": "guard-47-line-261.stdout.txt",
+      "stderr": "guard-47-line-261.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "4ca0938273eaba73bd0bffcd14ec28283a941adcd726fe2c1b8d72774f4fa835",
+      "failedTests": [
+        "FAIL: test_actual_admin_ac13_cannot_move_to_owner_held_migration_class (test_verify_class_map.ActualPacketRegressionTests.test_actual_admin_ac13_cannot_move_to_owner_held_migration_class)",
+        "FAIL: test_actual_folders_v04_cannot_bypass_staging_deferral (test_verify_class_map.ActualPacketRegressionTests.test_actual_folders_v04_cannot_bypass_staging_deferral)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-47-line-261",
+      "line": 261,
+      "endLine": 262,
+      "guard": "require(class_id == row_classes[row_id],\n                                f\"{label}: row class disagrees with decision\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.072,
+      "stdout": "guard-48-line-264.stdout.txt",
+      "stderr": "guard-48-line-264.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "a07b75af6592bb63f8b1359207391a6ac996e6dd8757fb71883853903f812e71",
+      "failedTests": [
+        "FAIL: test_agreed_record_requires_governing_reference (test_verify_class_map.ClassMapTests.test_agreed_record_requires_governing_reference)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-48-line-264",
+      "line": 264,
+      "endLine": 265,
+      "guard": "require(entry.get(\"governedBy\") or nonblank(entry.get(\"governingRule\")),\n                            f\"{label}: record lacks governing reference\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.138,
+      "stdout": "guard-49-line-266.stdout.txt",
+      "stderr": "guard-49-line-266.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "eb1b5a1d592213783c45c1a7bc0cf2ec71149e1af894b6b5e0626de109a9da15",
+      "failedTests": [
+        "FAIL: test_agreed_restricted_records_require_restricted_class (test_verify_class_map.ClassMapTests.test_agreed_restricted_records_require_restricted_class) (row_id='R2', class_id=None)",
+        "FAIL: test_agreed_restricted_records_require_restricted_class (test_verify_class_map.ClassMapTests.test_agreed_restricted_records_require_restricted_class) (row_id='V1', class_id=None)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-49-line-266",
+      "line": 266,
+      "endLine": 267,
+      "guard": "require(row_id not in restrictions and not restricted_source(source_rows[row_id]),\n                            f\"{label}: restricted row has no class\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.165,
+      "stdout": "guard-50-line-272.stdout.txt",
+      "stderr": "guard-50-line-272.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "aa7a49dc60504f426352bde842d695bd253f92b33a9fe17af74f5733827d82fc",
+      "failedTests": [
+        "FAIL: test_missing_explicit_record_has_record_set_diagnostic (test_verify_class_map.ClassMapTests.test_missing_explicit_record_has_record_set_diagnostic)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-50-line-272",
+      "line": 272,
+      "endLine": 272,
+      "guard": "require(actual_records == records.keys(), f\"{name}: non-operation record set disagrees with decision\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.096,
+      "stdout": "guard-51-line-273.stdout.txt",
+      "stderr": "guard-51-line-273.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "6f4774cb081d4b2eb7e3ea1d94f61e9a5269d98592649da02b780deacea77da2",
+      "failedTests": [
+        "FAIL: test_missing_row_names_inventory_and_id (test_verify_class_map.ClassMapTests.test_missing_row_names_inventory_and_id)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-51-line-273",
+      "line": 273,
+      "endLine": 273,
+      "guard": "require(not missing_rows, f\"{name}: missing rows {', '.join(sorted(missing_rows))}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.09,
+      "stdout": "guard-52-line-276.stdout.txt",
+      "stderr": "guard-52-line-276.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e27fd2fb587d4a553f574467865f1a6b6e74748db0778aa843a9385bc5ea9eba",
+      "failedTests": [
+        "FAIL: test_declared_governing_reference_must_resolve (test_verify_class_map.ClassMapTests.test_declared_governing_reference_must_resolve)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-52-line-276",
+      "line": 276,
+      "endLine": 276,
+      "guard": "require(target in all_entries, f\"{label}: unresolved governing reference {target}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.064,
+      "stdout": "guard-53-line-279.stdout.txt",
+      "stderr": "guard-53-line-279.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "aaf72a8010b3bcbab34e70dc2c570e67bc02d32720d2830d0005d57b62cabfe6",
+      "failedTests": [
+        "FAIL: test_receipt_decision_rejects_unknown_values (test_verify_class_map.ClassMapTests.test_receipt_decision_rejects_unknown_values) (value=None)",
+        "FAIL: test_receipt_decision_rejects_unknown_values (test_verify_class_map.ClassMapTests.test_receipt_decision_rejects_unknown_values) (value='rejected')",
+        "FAIL: test_receipt_decision_rejects_unknown_values (test_verify_class_map.ClassMapTests.test_receipt_decision_rejects_unknown_values) (value='')",
+        "FAIL: test_receipt_decision_rejects_unknown_values (test_verify_class_map.ClassMapTests.test_receipt_decision_rejects_unknown_values) (value='ADOPTED')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-53-line-279",
+      "line": 279,
+      "endLine": 279,
+      "guard": "require(receipt.get(\"decision\") in {\"pending\", \"approved\"}, \"invalid approval decision\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.1,
+      "stdout": "guard-54-line-283.stdout.txt",
+      "stderr": "guard-54-line-283.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "b4cc6a9b152e5b4086ff7305091e8e8f8ccebd98de1cb2644a553b3e4ae58cd0",
+      "failedTests": [
+        "FAIL: test_receipt_artifact_binding_is_required_for_pending_and_adopted (test_verify_class_map.ClassMapTests.test_receipt_artifact_binding_is_required_for_pending_and_adopted) (state='pending')",
+        "FAIL: test_receipt_artifact_binding_is_required_for_pending_and_adopted (test_verify_class_map.ClassMapTests.test_receipt_artifact_binding_is_required_for_pending_and_adopted) (state='approved')"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-54-line-283",
+      "line": 283,
+      "endLine": 283,
+      "guard": "require(receipt.get(\"artifacts\") == expected_artifacts, \"approval artifact binding mismatch\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.067,
+      "stdout": "guard-55-line-286.stdout.txt",
+      "stderr": "guard-55-line-286.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "a0b21afae8b81986610091df409f115e6da82c9e31e8ecaafe8190277424ff85",
+      "failedTests": [
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='approver', value=None)",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='approver', value='')",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='approver', value=' \\t\\n')",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='approver', value=True)",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='approver', value=['owner'])",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='approver', value=1)",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='exactApprovalInstruction', value=None)",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='exactApprovalInstruction', value='')",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='exactApprovalInstruction', value=' \\t\\n')",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='exactApprovalInstruction', value=True)",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='exactApprovalInstruction', value=['owner'])",
+        "FAIL: test_approval_requires_nonblank_typed_owner_and_instruction (test_verify_class_map.ClassMapTests.test_approval_requires_nonblank_typed_owner_and_instruction) (field='exactApprovalInstruction', value=1)"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-55-line-286",
+      "line": 286,
+      "endLine": 286,
+      "guard": "require(nonblank(receipt.get(field)), f\"adoption approval lacks nonblank {field}\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.087,
+      "stdout": "guard-56-line-288.stdout.txt",
+      "stderr": "guard-56-line-288.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "1869bdb4cd4ce6dbd097e67898f1a351ff6752c788a543ed2702614d600c07b8",
+      "failedTests": [
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value=None)",
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value='product owner')",
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value={'product owner': True})",
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value=[' '])",
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value=[1])",
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value=[True])",
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value=['product owner', ''])"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-56-line-288",
+      "line": 288,
+      "endLine": 289,
+      "guard": "require(isinstance(roles, list) and all(map(nonblank, roles)),\n                \"adoption rolesCovered must be an array of nonblank strings\")",
+      "outcome": "killed"
+    },
+    {
+      "returncode": 1,
+      "seconds": 5.129,
+      "stdout": "guard-57-line-290.stdout.txt",
+      "stderr": "guard-57-line-290.stderr.txt",
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "5c546d2c9ecfe1231323ea780e05785e35b1d82c56973d97b336141ba6e7cf6d",
+      "failedTests": [
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value=[])",
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value=['unrelated owner'])",
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value=['product owner'])",
+        "FAIL: test_approval_requires_array_of_nonblank_roles_and_all_bound_roles (test_verify_class_map.ClassMapTests.test_approval_requires_array_of_nonblank_roles_and_all_bound_roles) (value=['security owner'])"
+      ],
+      "completedSuite": true,
+      "failedSuite": true,
+      "id": "guard-57-line-290",
+      "line": 290,
+      "endLine": 290,
+      "guard": "require(set(required_roles) <= set(roles), \"adoption approval lacks required roles from decision\")",
+      "outcome": "killed"
+    }
+  ]
+}
