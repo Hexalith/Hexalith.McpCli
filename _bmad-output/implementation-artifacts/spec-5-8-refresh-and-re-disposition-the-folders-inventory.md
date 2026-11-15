@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'in-progress'
+status: 'done'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -845,39 +845,39 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
 
 The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged.
 
-- [ ] [Review][Patch] `verification.md` names an unreachable commit for the pass-6 work and the pass-7 run (low) — `321d4aa` was rebased away at 18:43:15 into `eaecf88`. No ref contains it (`git branch -a --contains 321d4aa` is empty), so a fresh clone cannot resolve it, and the reflog entry will expire.
+- [x] [Review][Patch] `verification.md` names an unreachable commit for the pass-6 work and the pass-7 run (low) — `321d4aa` was rebased away at 18:43:15 into `eaecf88`. No ref contains it (`git branch -a --contains 321d4aa` is empty), so a fresh clone cannot resolve it, and the reflog entry will expire.
   - `verification.md:166-168` says "the pass-6 work was later committed as `321d4aa…`".
   - `verification.md:92` says the pass-7 run "started at `321d4aa…`". But the pass-7 `commands.json` `head`, `audit.json` `headAtCapture` and `post-transition.json` `head` all record `eaecf88`.
   - The pass-7 section names no commit for its own work. The audited `test_verify_amendment.py` first appears in `9ca592b` (rebased from `0667b54`). This repeats the gap that pass-6 A2 and pass-7 A4 fixed for earlier passes.
   - Fix: cite `eaecf888a0bace9981ae78a81fd6aa7486927d22` as the published commit holding the pass-6 work and the pass-7 capture head. Add that the pass-7 work was committed as `9ca592b1d1259bc5aedf724c5c7ccb20329b8c34`. Do not assert an authorization that is not recorded. The spec's own `321d4aa` mentions are review history and stay unchanged.
   - (A1, B1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:92]
-- [ ] [Review][Patch] The current pass-7 reproduction command depends on the workstation-only `run-with-temp` without a caveat (low) — `verification.md:76-80` gives `run-with-temp python3 -B -I - <<'PY'` as the way to reproduce the current capture.
+- [x] [Review][Patch] The current pass-7 reproduction command depends on the workstation-only `run-with-temp` without a caveat (low) — `verification.md:76-80` gives `run-with-temp python3 -B -I - <<'PY'` as the way to reproduce the current capture.
   - Pass-5 B10 required portable guidance for this wrapper (`~/.local/bin/run-with-temp`, untracked).
   - The caveat now survives only in the historical pass-6 section (`:122-123`) and the general note (`:297-299`).
   - Fix: add the pass-6 sentence to the pass-7 section: use `run-with-temp` on the recording workstation; elsewhere set a private task-owned `TMPDIR` and remove it after all children exit.
   - (A2, B11, V other) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:80]
-- [ ] [Review][Patch] No test covers the inventory verifier forwarding `--approved-completion` to the label gate (low) — `verify_amendment.py:312` passes `completion` to `label_module.verify`, and that argument is the only way the flag reaches the "completion requires integrated Folders PS10/PS11 labels" refusal (`verify_labels.py:74`).
+- [x] [Review][Patch] No test covers the inventory verifier forwarding `--approved-completion` to the label gate (low) — `verify_amendment.py:312` passes `completion` to `label_module.verify`, and that argument is the only way the flag reaches the "completion requires integrated Folders PS10/PS11 labels" refusal (`verify_labels.py:74`).
   - The only test asserting that refusal, `test_completion_requires_label_integration_after_owner_approval` (`test_verify_amendment.py:1900`), calls `verify_labels` directly with `verify_owner_packet` patched out. Every inventory-verifier run in the suite uses a pending receipt.
   - The V layer replaced `completion` with `False` at `:312`, and all 102 tests passed. On an isolated copy with the approved receipt, a pending `labels.json` and an in-progress spec and sprint status, the mutant exits 0 with `PASS: owner decision: approved; approved completion verified`. The original exits 1 with the label refusal.
   - This is the frozen matrix row "Completion without approval or label". The K12 successor reuses this verifier and will pass through the approved-but-undelivered state again.
   - Fix: add a `workspace_view(pending=False)` test that resets only `labels.json` to the pending register and the spec and sprint status to `in-progress`. Run `fixture_process(HERE/'verify_amendment.py','--root',root,'--approved-completion')` and assert exactly `(1,'','FAIL: completion requires integrated Folders PS10/PS11 labels\n')`. Add a removal control that forwards `False` and shows the approved-completion PASS stream.
   - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:312]
-- [ ] [Review][Patch] Only one field of each approval-receipt field list is tested (low) — `verify_amendment.py:236` requires non-blank `approver`, `exactApprovalInstruction`, `approvalSource` and `approvedOn`. `:240` refuses any of those four, or `rolesCovered`, on a pending receipt.
+- [x] [Review][Patch] Only one field of each approval-receipt field list is tested (low) — `verify_amendment.py:236` requires non-blank `approver`, `exactApprovalInstruction`, `approvalSource` and `approvedOn`. `:240` refuses any of those four, or `rolesCovered`, on a pending receipt.
   - `test_pending_approved_role_and_chain_controls` (`test_verify_amendment.py:1137`) blanks only `exactApprovalInstruction` (`:1147-1148`) and adds only `approver` to a pending receipt (`:1149-1150`).
   - The V layer narrowed `:236` to `['exactApprovalInstruction']` and, separately, `:240` to `['approver']`. All 102 tests passed both times. The first mutant's `check_approval(...,True)` accepts an approved receipt with a blank `approver`, `approvalSource` or `approvedOn`.
   - Fix: add one blank-field subtest per remaining approved field and one pending-claim subtest per remaining pending field, each asserting the exact refusal with a per-key `removed_condition` control, as `test_completion_chain_and_exact_delivery_bytes` does for `deliveryAuthorization`.
   - (V2) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:236]
-- [ ] [Review][Patch] The label register's duplicate-row and repository-name checks have no test (low) — `verify_labels.py:49` requires `len(rows) == 2`, and `:54` requires `repo.get('name') == 'folders'`.
+- [x] [Review][Patch] The label register's duplicate-row and repository-name checks have no test (low) — `verify_labels.py:49` requires `len(rows) == 2`, and `:54` requires `repo.get('name') == 'folders'`.
   - The only rows case passes `rows[:1]` (`test_verify_amendment.py:1846`), which the ID-set check also refuses. `test_register_schema_repository_base_and_readme_hash_guard_removal` (`:1723`) damages only `baseRevision` and the repository URL.
   - The V layer removed `len(rows) == 2 and`, and all 102 tests passed. On an isolated copy of the integrated packet with a duplicated PS10 row, both `verify_labels.py` and `verify_amendment.py` then exit 0 with their completion PASS lines. Removing the `name` check also left all tests passing.
   - Fix: add a duplicated-PS10-row case to `test_register_chain_coverage_hash_citation_and_no_false_delivery` and a changed `repository.name` case to the repository/base guard test. Each asserts the exact refusal and has a `removed_condition` control.
   - (V3) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py:49]
-- [ ] [Review][Patch] Rows with too many or too few cells are never tested, although `parse()` promises to reject damaged widths (low) — `verify_amendment.py:72` requires `len(cells) == len(headers)`, and the docstring at `:56` says "reject … damaged table widths".
+- [x] [Review][Patch] Rows with too many or too few cells are never tested, although `parse()` promises to reject damaged widths (low) — `verify_amendment.py:72` requires `len(cells) == len(headers)`, and the docstring at `:56` says "reject … damaged table widths".
   - `test_duplicate_and_damaged_rows_rejected_with_guard_controls` (`test_verify_amendment.py:910`) only empties a cell (`:913-914`), which `all(cells)` refuses first.
   - The V layer removed the width check, and all 102 tests passed. With an extra trailing cell on M03, the mutant reports only the later `folders: candidate prose/source premises differ from deterministic derivation`, losing the row-naming diagnostic. Passes 3 to 7 treated other refused-later guards the same way.
   - Fix: add extra-cell and missing-cell cases asserting `folders:<id>: damaged row or empty cell`, with a `removed_condition` control on `len(cells) == len(headers)`.
   - (V4) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:72]
-- [ ] [Review][Patch] The builder docstring says it never writes receipts, but `main()` writes `approval.json` (low) — `build_candidate.py:4-5` reads "Never write references, owner checkouts, approved inventories, receipts, indices or remote refs". `main()` writes the successor inventory, the pending `approval.json` and `labels.json`.
+- [x] [Review][Patch] The builder docstring says it never writes receipts, but `main()` writes `approval.json` (low) — `build_candidate.py:4-5` reads "Never write references, owner checkouts, approved inventories, receipts, indices or remote refs". `main()` writes the successor inventory, the pending `approval.json` and `labels.json`.
   - The builder refuses an approved packet (pass-1 E6), so the intended rule is "never overwrite an approved or delivered packet", but the literal sentence says the opposite of what the code does.
   - Fix: reword it to say the builder writes only the pending candidate inventory, receipt and label register, never overwrites an approved or delivered packet, and never writes references, owner checkouts, indices or remote refs. The output bytes do not change.
   - (B12) [_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py:4]
@@ -991,11 +991,48 @@ Derivation rules (the decisions above apply first):
 
 - 2026-11-15: Implemented all seven code-review-pass-7 patch entries. Exact-stream refusal cases now independently remove all four McpCli route-evidence conjuncts, bind R02 to its pinned resource client call, isolate owner eligibility while preserving the 41-eligible set count, and cover the remaining default-implementation, internal-query and ownerFileId doc-comment premises. All five focused tests passed in 4.453 seconds. Corrected the three existing ledger anchors, recorded pass-6 commit `321d4aa65064e579797446002dfef8462c666176`, and distinguished the runner's executable-input hashes from the separately executed scanner scripts. The retained packet runner and historical captures are unchanged. Final full capture/audit, independent workflow review and status transition remain with the coordinator. Approved inventory, receipt, label register, delivered labels, frozen intent, production, dependencies, census and gitlinks remain unchanged. This implementation session performed no commit or push.
 
+- 2026-11-15: Implemented all seven code-review-pass-8 patch entries. The copied-entrypoint test proves that `--approved-completion` reaches the pending-label refusal, then forwards only `False` in the isolated copy to demonstrate the exact approved-completion PASS control. Per-key receipt tests cover every approved identity/source/date field and every forbidden pending approval claim; the label tests isolate duplicate-row count and repository-name checks, and the parser tests isolate both damaged row widths. Corrected the published pass-6/pass-7 commit attribution, current reproduction portability guidance and builder docstring without moving the builder's existing anchors. All five focused tests passed in 6.710 seconds, and both real completion gates, AD-23 and whitespace passed. The suite now contains 103 tests. Final full capture/audit, independent workflow review and status transition remain with the coordinator. The new approved-byte readiness/retention omission is already assigned to the K12 successor at `deferred-work.md:1160`; no duplicate ledger entry was added. Approved inventory, receipt, label register, delivered labels, frozen intent, retained packet runner, production, dependencies, census and gitlinks remain unchanged. Spec/sprint remain in-progress. This implementation session performed no commit or push.
+
 ## Spec Change Log
+
+- 2026-11-15: Completed the resumed pass-8 build. All seven requested patches are applied. Parent verification passed 103 tests in ordinary and synthetic lifecycle workspaces, all ten exact gate streams, fourteen protected artifacts, six symlinked-temp tests, every frozen matrix row and frozen intent. All three independent reviews completed; eight existing approved-byte deferrals and the census exclusion were carried, and one independent CI runtime-maintenance issue was recorded in the ledger. The [pass-8 audit](evidence/story-5-8/review-pass8-20261115/audit.json), [post-transition checks](evidence/story-5-8/review-pass8-20261115/post-transition.json) and [completion scan](evidence/story-5-8/secret-scan-review-pass8-completion-20261115.json) retain final evidence. Spec is done and sprint tracking is review. Approved artifacts, the retained runner, production, dependencies, census and gitlinks remain unchanged. The K12 successor remains an Epic 6 catalog prerequisite. The frozen scope requires separate explicit commit authorization; no commit or push was performed.
 
 - 2026-11-15: Completed the resumed pass-7 build. All seven requested patches are applied. Parent verification passed all 102 tests in ordinary and synthetic lifecycle workspaces, all ten exact gate streams, fourteen protected artifacts, six symlinked-temp tests, every frozen matrix row and frozen intent. All three independent reviews completed; ten existing approved-byte deferrals were carried without duplicate entries, and no new patch or deferral resulted. The [pass-7 audit](evidence/story-5-8/review-pass7-20261115/audit.json), [post-transition checks](evidence/story-5-8/review-pass7-20261115/post-transition.json) and [completion scan](evidence/story-5-8/secret-scan-review-pass7-completion-20261115.json) retain final evidence. Spec is done and sprint tracking is review. Approved artifacts, the retained runner, production, dependencies, census and gitlinks remain unchanged. The K12 successor remains an Epic 6 catalog prerequisite. The frozen scope requires separate explicit commit authorization; no commit or push was performed.
 
 ## Review Triage Log
+
+### Resumed pass-8 build review (2026-11-15)
+
+All three independent layers completed before triage. The edge-case and
+verification-gap layers returned no findings. The blind layer returned ten
+findings; eight match existing approved-byte deferrals and one matches the
+previous census exclusion. The full review snapshot is
+`/home/administrator/.codex/tmp/mcpcli-story-5-8-pp9r9vnl.diff`, against preserved
+baseline `a92a2969db6903b8c6cca7e437446167e135ec9d`; this resumed run began at
+`80fb9e897fb251ba8c5a215e9e82fa7439d00e57`. The snapshot also contains independent
+repository maintenance since that baseline.
+
+| Finding | Verdict | Route | Evidence and decision |
+| --- | --- | --- | --- |
+| B1: CI SDK wildcard can advance beyond the exact runtime seal | medium | defer | Verified the installed-SDK input in `.github/workflows/ci.yml:21` and the runtime-selection caller at `tools/live-topology/ci.py:504`. The unmodified guard accepts 11.0.0 and refuses 11.0.1; the retained static reproduction records both. This independent net11 maintenance predates this run and is newly tracked under this spec's resumed-pass-8 ledger heading. Preserve the qualification guard; no CI or dependency change is made here. |
+| B2: census receipt copying follows symlinked parents | medium | reject (carried) | carried: same helper, source-component check and claim as resumed-pass-5 B7. Census changes are expressly excluded by the frozen intent; no new census patch or story deferral is made. |
+| B3: G2 drops egress, envelope comparison and denial proof | medium | defer (carried) | carried: same approved-byte gate narrowing and successor decision; already tracked (`deferred-work.md:1119`). No duplicate entry. |
+| B4: successor omits full readiness and retention obligations | medium | defer (carried) | carried: same approved-byte omission recorded by code-review-pass-8 B3 and assigned to the K12 successor; already tracked (`deferred-work.md:1160`). No duplicate entry. |
+| B5: K01 rows inherit the confidential-UI rationale | low | defer (carried) | carried: same approved-byte rationale and owner decision; already tracked (`deferred-work.md:1061`). No approved-byte edit or duplicate entry. |
+| B6: excluded K12 rows present affirmative replacement routes | low | defer (carried) | carried: same prospective-target wording defect reserved for the approved successor; already tracked (`deferred-work.md:1066`). No duplicate entry. |
+| B7: mutation drift omits required fences and misattributes ownerFileId | low | defer (carried) | carried: same requiredness and remove-only reachability corrections; already tracked (`deferred-work.md:1071`). No duplicate entry. |
+| B8: semantic-retention claims exceed name-level evidence | medium | defer (carried) | carried: same per-surface parameter, option, validation and transport audit; already tracked (`deferred-work.md:1093`). No duplicate entry or parity claim. |
+| B9: V03 omits Q08 optional task context | low | defer (carried) | carried: same M22/L38/Q08/V03 capability and independent-authorization correction; already tracked (`deferred-work.md:1111`). No duplicate entry. |
+| B10: collective gap suffix misattributes G1/G2 ownership | low | defer (carried) | carried: same individual story-ownership correction reserved for the successor; already tracked (`deferred-work.md:1103`). No duplicate entry. |
+
+No new Story 5.8 patch resulted. One independent CI maintenance issue was added
+to the ledger after the required duplicate search. Parent verification passed
+all 103 tests in both ordinary and synthetic lifecycle workspaces, ten exact
+gate-stream checks, fourteen protected artifacts, six symlinked-temp tests,
+all four matrix rows and frozen intent. The
+[pass-8 manifest](evidence/story-5-8/review-pass8-20261115/commands.json) and
+[audit](evidence/story-5-8/review-pass8-20261115/audit.json) bind the unchanged
+executable inputs. Approved artifacts and the retained runner remain unchanged.
 
 ### Resumed pass-7 build review (2026-11-15)
 

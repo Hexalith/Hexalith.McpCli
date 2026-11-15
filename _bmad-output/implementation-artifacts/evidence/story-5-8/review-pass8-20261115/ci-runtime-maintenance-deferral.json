@@ -1,0 +1,20 @@
+{
+  "scope": "Static reproduction of a pre-existing CI SDK wildcard versus sealed runtime; no SDK installed or policy changed.",
+  "workflow": ".github/workflows/ci.yml:21",
+  "installation": "additional-sdk-version: 11.0.x",
+  "guard": "tools/live-topology/ci.py:86",
+  "sourceSha256": "8c5b5089ffed2af4501e42af27630d0ead4e92290588ac0294bb5860106fa23c",
+  "results": [
+    {
+      "version": "11.0.0",
+      "selected": {
+        "Microsoft.AspNetCore.App": "11.0.0",
+        "Microsoft.NETCore.App": "11.0.0"
+      }
+    },
+    {
+      "version": "11.0.1",
+      "refusal": "Current native resources require highest installed Core and ASP.NET runtime 11.0.0."
+    }
+  ]
+}

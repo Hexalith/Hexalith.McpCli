@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
-"""Deterministically prepare the pending Folders successor and README-only patch.
-
-All owner source is read with git show at canonical pins. Never write references,
-owner checkouts, approved inventories, receipts, indices or remote refs.
+"""Deterministically prepare only the pending inventory, receipt and label register,
+plus README-only patch artifacts. Read owner source with git show at canonical pins.
+Never overwrite an approved or delivered packet, or write references, owner
+checkouts, indices or remote refs.
 """
 import difflib
 import hashlib

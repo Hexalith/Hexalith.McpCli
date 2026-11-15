@@ -48,7 +48,59 @@ ancestor `2236855ee181bdeed2a103537c66316a1612c792`. The unpublished original
 `e2252f29a2dba2b64786ee483eb59fbceaadd387` is optional. The verifiers read these
 local objects and refs; they do not fetch or perform network operations.
 
-## Code-review pass 7 patch verification (2026-11-15)
+## Code-review pass 8 patch verification (2026-11-15)
+
+All seven pass-8 patch entries are implemented. Exact-stream tests cover the
+inventory entrypoint forwarding `--approved-completion` to pending labels, every
+required approved-receipt field and forbidden pending approval claim, duplicate
+label rows, repository name, and both damaged table widths. Each control removes
+only its affected condition in an isolated module or workspace. The published
+commit citations, temporary-directory guidance and builder docstring are corrected.
+
+Parent verification passed **103 tests in both ordinary and synthetic lifecycle
+workspaces**, without skips, all ten exact gate-stream checks, all six
+symlinked-temp tests and every frozen matrix row. Both real completion entrypoints
+passed under UTF-8 and ASCII locales; AD-23 and tracked/untracked whitespace also
+passed. The [manifest](review-pass8-20261115/commands.json) and
+[audit](review-pass8-20261115/audit.json) bind eleven executable inputs and fourteen
+unchanged protected artifacts. Frozen intent and the retained packet runner are
+unchanged. No .NET build or live acceptance is claimed.
+
+All three independent workflow reviews completed. The edge-case and
+verification-gap layers found no issues. Eight existing approved-byte corrections
+remain assigned to the K12 successor without duplicate ledger entries; the
+previous census exclusion stands. One independent CI SDK wildcard/runtime-seal
+maintenance issue is recorded in the deferred-work ledger, with a
+[static reproduction](review-pass8-20261115/ci-runtime-maintenance-deferral.json).
+No new Story 5.8 patch resulted from review.
+
+To reproduce the current capture, run this from the repository root with a UTF-8
+locale. On the recording workstation, use `run-with-temp`; elsewhere set a private
+task-owned `TMPDIR` and remove it after all children exit. For audit-only replay,
+add `--audit-only` after the interpreter's `-` argument, retaining this `OUT`:
+
+```bash
+run-with-temp python3 -B -I - <<'PY'
+import importlib.util
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('story58packet', Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py'))
+packet = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(packet)
+packet.OUT = packet.ROOT / packet.E / 'review-pass8-20261115'
+raise SystemExit(packet.main())
+PY
+```
+
+This resumed run began at `80fb9e897fb251ba8c5a215e9e82fa7439d00e57` and performed
+no commit or push. Spec is done and sprint tracking is review. The
+[post-transition checks](review-pass8-20261115/post-transition.json) bind both
+completion entrypoints under UTF-8 and ASCII locales, AD-23, audit-only replay
+and tracked/untracked whitespace after the status update. The final
+[evidence scan](secret-scan-review-pass8-completion-20261115.json) covers the
+completed packet. The approved inventory, approval, register and delivered labels
+remain unchanged; K12 reconciliation remains an Epic 6 catalog prerequisite.
+
+## Historical code-review pass 7 patch verification (2026-11-15)
 
 All seven pass-7 patch entries are implemented. Exact-stream refusal tests now
 exercise each McpCli route-evidence conjunct, the R02 resource-to-client mapping,
@@ -75,6 +127,8 @@ new patch or deferral resulted.
 To reproduce the current capture from the repository root with a UTF-8 locale,
 run the following. For audit-only replay, add `--audit-only` after the
 interpreter's `-` argument; retain the same `OUT` override.
+On the recording workstation, use `run-with-temp` for capture; elsewhere set a
+private task-owned `TMPDIR` and remove it after all children exit.
 
 ```bash
 run-with-temp python3 -B -I - <<'PY'
@@ -89,9 +143,10 @@ PY
 ```
 
 Historical captures and approved artifacts are unchanged. This resumed run
-started at `321d4aa65064e579797446002dfef8462c666176` and performed no commit
-or push. The K12 successor remains an Epic 6 catalog prerequisite; no .NET build
-or live acceptance is claimed.
+started at published commit `eaecf888a0bace9981ae78a81fd6aa7486927d22` and
+performed no commit or push. The pass-7 work was later committed as
+`9ca592b1d1259bc5aedf724c5c7ccb20329b8c34`. The K12 successor remains an Epic 6
+catalog prerequisite; no .NET build or live acceptance is claimed.
 
 Spec is done and sprint tracking is review. The
 [post-transition checks](review-pass7-20261115/post-transition.json) bind both
@@ -165,8 +220,8 @@ semantic-drift deferral was carried without a duplicate ledger entry. The final
 completed packet. Spec is done and sprint tracking is review. The K12 successor
 remains an Epic 6 catalog prerequisite. That build session performed no commit or
 push; the pass-6 work was later committed as
-`321d4aa65064e579797446002dfef8462c666176`. No .NET build or live acceptance is
-claimed.
+published commit `eaecf888a0bace9981ae78a81fd6aa7486927d22`. No .NET build or
+live acceptance is claimed.
 The [post-transition checks](review-pass6-20261115/post-transition.json) bind both
 real completion entrypoints and audit-only replay after the final status update.
 

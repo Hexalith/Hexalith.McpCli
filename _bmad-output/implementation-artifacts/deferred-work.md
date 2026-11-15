@@ -1162,3 +1162,11 @@ status: open
   owner: Folders owning maintainer and McpCli migration-inventory, enrollment/parity and product/architecture owners. Deliver through the K12 reconciliation successor with exact-byte approval and a PS10/PS11 relabel.
   status: open; found in 5.8 code review pass 8 (2026-11-15). This is a pre-existing approved-byte omission; the approved inventory, receipt and labels remain unchanged.
   evidence: `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md:316-332` (1.0.0 readiness and retention gates) against `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md:31`, `:64-65` and `:74`. Ledger grep for "execution vector", "Readiness and retention", "AD-21", "live persisted", "post-v1" and "resource endpoint" found no existing entry.
+
+## Deferred from: resumed pass-8 build review of spec-5-8-refresh-and-re-disposition-the-folders-inventory.md (2026-11-15)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-8-refresh-and-re-disposition-the-folders-inventory.md`
+  summary: Align CI SDK installation with the exact qualified managed runtime before a later .NET 11 patch is selected. The workflow requests `11.0.x`, but topology preparation requires the highest installed Core and ASP.NET runtime to be exactly `11.0.0`; a newer patch therefore refuses preparation. Preserve the runtime qualification guard while either pinning installation or separately qualifying a newer runtime and its bound artifacts.
+  owner: McpCli CI and live-topology maintenance owners.
+  status: open; independent net11 maintenance included by the preserved Story 5.8 baseline, not caused by the pass-8 patches. No CI, dependency or runtime policy is changed here.
+  evidence: `.github/workflows/ci.yml:21` supplies the SDK wildcard; `tools/live-topology/ci.py:86` implements exact runtime selection and `tools/live-topology/ci.py:504` applies it to `dotnet --list-runtimes` during preparation. `_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass8-20261115/ci-runtime-maintenance-deferral.json` records the unmodified guard accepting `11.0.0` and refusing `11.0.1`. Ledger searches for `11.0.x`, `11.0.0`, `wildcard` and `highest installed` found no existing entry before append.

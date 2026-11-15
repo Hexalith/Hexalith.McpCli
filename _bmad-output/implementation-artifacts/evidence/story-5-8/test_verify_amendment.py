@@ -912,6 +912,13 @@ class AmendmentTests(PendingCase):
         self.reject(lambda:V.parse(text+'\n'+self.new['M01']['text']), 'folders:M01: duplicate entry')
         damaged = text.replace(self.new['M01']['text'],self.new['M01']['text'].replace(' | defer |',' | |',1))
         self.reject(lambda:V.parse(damaged),'folders:M01: damaged row or empty cell')
+        cells = self.new['M03']['cells']
+        for width,changed_cells in [('extra',[*cells,'Unexpected cell']),('missing',cells[:-1])]:
+            with self.subTest(width=width):
+                damaged = text.replace(self.new['M03']['text'],'| '+' | '.join(changed_cells)+' |')
+                self.reject(lambda:V.parse(damaged),'folders:M03: damaged row or empty cell')
+                with self.removed_condition(V,'parse','len(cells) == len(headers)'):
+                    self.assertEqual((0,PASS,''),self.run_check(lambda:V.parse(damaged)))
         changed = copy.deepcopy(self.new); del changed['M01']
         self.guard(lambda:V.accounting(self.old,changed,self.inventory),'folders: 161-entry AD-23 accounting mismatch')
 
@@ -1144,10 +1151,20 @@ class AmendmentTests(PendingCase):
                 self.guard(lambda:self.approval(r),message)
         r = self.approved(); r['rolesCovered'] = ['Folders owning maintainer']
         self.guard(lambda:self.approval(r,True),'owner approval lacks required covered Folders roles')
-        r = self.approved(); r['exactApprovalInstruction'] = ''
-        self.guard(lambda:self.approval(r,True),'owner approval lacks identity, exact words, source or date')
-        r = dict(self.receipt,approver='Invented')
-        self.guard(lambda:self.approval(r),'pending receipt must not claim owner approval')
+        for key in ['approver','exactApprovalInstruction','approvalSource','approvedOn']:
+            with self.subTest(approved_field=key):
+                r = self.approved(); r[key] = ''
+                self.reject(lambda:self.approval(r,True),'owner approval lacks identity, exact words, source or date')
+                with self.removed_condition(V,'check_approval','nonblank(receipt.get(k))',
+                                            replacement=f'k == {key!r} or nonblank(receipt.get(k))'):
+                    self.assertEqual((0,PASS,''),self.run_check(lambda:self.approval(r,True)))
+        for key in ['approver','exactApprovalInstruction','approvalSource','approvedOn','rolesCovered']:
+            with self.subTest(pending_field=key):
+                r = copy.deepcopy(self.receipt); r[key] = self.approved()[key]
+                self.reject(lambda:self.approval(r),'pending receipt must not claim owner approval')
+                with self.removed_condition(V,'check_approval','k in receipt',
+                                            replacement=f'k != {key!r} and k in receipt'):
+                    self.assertEqual((0,PASS,''),self.run_check(lambda:self.approval(r)))
         self.guard(lambda:self.approval(self.receipt,True),'completion requires exact-byte owner approval and covered Folders roles')
 
     def test_approval_receipt_conjuncts_and_partial_removal(self):
@@ -1284,6 +1301,31 @@ class AmendmentTests(PendingCase):
             self.assertEqual(expected,invoke(V))
             with patch.object(V,'verify',namespace['verify']):
                 self.assertEqual((0,PASS,''),invoke(V))
+
+    def test_approved_completion_is_forwarded_to_pending_label_gate(self):
+        with workspace_view(pending=False) as root:
+            path = root/B.E/'labels.json'
+            register = V.read_json(path)
+            register.update(state='candidate-pending-owner-approval-and-delivery',inventoryRevision=None,deliveryAuthorization=None)
+            register['repository']['integration'] = None
+            path.write_text(json.dumps(register,indent=2)+'\n')
+            for path,key in [(root/B.SPEC,'status'),(root/B.ART/'sprint-status.yaml','  5-8-refresh-and-re-disposition-the-folders-inventory')]:
+                workflow_status(path,key,'in-progress')
+            self.assertFalse(V.completion_requested(root,False))
+            self.assertEqual('approved',V.read_json(root/B.E/'approval.json')['decision'])
+            expected = (1,'','FAIL: completion requires integrated Folders PS10/PS11 labels\n')
+            result = fixture_process(HERE/'verify_amendment.py','--root',str(root),'--approved-completion')
+            self.assertEqual(expected,(result.returncode,result.stdout,result.stderr))
+            # Change only the forwarded flag in the copied real entrypoint.
+            script = root/B.E/'verify_amendment.py'
+            source = script.read_text(encoding='utf-8')
+            call = 'label_module.verify(root,completion,owner_checked=True)'
+            self.assertEqual(1,source.count(call))
+            script.write_text(source.replace(call,'label_module.verify(root,False,owner_checked=True)'),encoding='utf-8')
+            result = fixture_process(script,'--root',str(root),'--approved-completion')
+            approved_pass = PASS.replace('owner decision: pending; candidate only; approval and integrated PS10/PS11 labels remain completion gates',
+                                         'owner decision: approved; approved completion verified')
+            self.assertEqual((0,approved_pass,''),(result.returncode,result.stdout,result.stderr))
 
     def test_builder_refuses_integrated_labels_before_any_write(self):
         path = self.root/B.E/'labels.json'
@@ -1732,6 +1774,10 @@ class LabelTests(PendingCase):
         for register,message in cases:
             with self.subTest(message=message,repository=register['repository']):
                 self.guard(register,message)
+        register = copy.deepcopy(self.register); register['repository']['name'] = 'unrelated'
+        self.reject(register,'Folders label repository/base mismatch')
+        with self.removed_condition(L,'verify',"repo.get('name') == 'folders'"):
+            self.assertEqual((0,LABEL_PASS,''),self.invoke_register(register))
 
     def test_readme_section_conjuncts_and_partial_removal(self):
         message = 'folders: committed base or candidate README hash mismatch'
@@ -1848,6 +1894,10 @@ class LabelTests(PendingCase):
             with self.subTest(key=key):
                 r = copy.deepcopy(self.register); r[key] = value
                 self.reject(r,message)
+        r = copy.deepcopy(self.register); r['rows'].append(copy.deepcopy(r['rows'][0]))
+        self.reject(r,'Folders PS10/PS11 label coverage/duplicate mismatch')
+        with self.removed_condition(L,'verify','len(rows) == 2'):
+            self.assertEqual((0,LABEL_PASS,''),self.invoke_register(r))
         r = copy.deepcopy(self.register); r['rows'][0]['label']['text'] = 'invented replacement'
         self.reject(r,'PS10: version/hash/anchor/citation differs from Folders 1.1.0')
         r = copy.deepcopy(self.register); r['rows'][0]['gate'] = 'retired'
