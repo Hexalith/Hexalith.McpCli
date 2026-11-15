@@ -2,7 +2,7 @@
 title: '5.8 Refresh and re-disposition the Folders inventory'
 type: 'chore'
 created: '2026-11-13'
-status: 'done'
+status: 'in-progress'
 baseline_commit: 'a92a2969db6903b8c6cca7e437446167e135ec9d'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -830,6 +830,101 @@ The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged
 - E11 low: non-transactional builder writes (pass-6 B11/E1).
 - E12 false: the prior labels are bound by the Story 5.7 register chain and all contain the 1.0.0 link. `verify_labels.py:68` requires each label to equal the builder output (pass-5 E4, pass-6 E3).
 - E13 low: the delivered labels use `blob/main` (pass-6 E13).
+
+Code review pass 8 (bmad-code-review, 2026-11-15). It ran at `9ca592b`, which is published on `origin/main`. A concurrent /pushall rebased the pass-7 commit `0667b54` onto `4cf120c`, producing `9ca592b`; the Story 5.8 bytes are the same in both.
+
+**Scope:** the deliverables, 5,885 diff lines (650 KB) in 15 files, `a92a296..HEAD`. This is the pass-7 file set, keeping only the Story 5.8 `.gitattributes` and ledger hunks plus Folders `db40bda8`. Since pass 7, only `test_verify_amendment.py`, `verification.md` and three ledger anchors changed. Neither Story 5.8 commit since pass 7 moves `references/`.
+
+Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. They raised 46 findings. Eleven survive in 7 patch entries and 1 defer, and 35 were rejected.
+- The V layer demonstrated each gap by applying a one-line mutation in an isolated copy and running the full suite. All six mutations left 102 tests passing. The real sources stayed unchanged.
+- Before triage, the following passed at `9ca592b`, run with `python3 -B -I` and a scratch `TMPDIR`:
+  - all 102 tests;
+  - both default completion gates, under UTF-8 and under ASCII locales;
+  - AD-23;
+  - `git diff --check a92a296`.
+
+The approved 1.1.0 bytes, `approval.json` and the delivered labels are unchanged.
+
+- [ ] [Review][Patch] `verification.md` names an unreachable commit for the pass-6 work and the pass-7 run (low) — `321d4aa` was rebased away at 18:43:15 into `eaecf88`. No ref contains it (`git branch -a --contains 321d4aa` is empty), so a fresh clone cannot resolve it, and the reflog entry will expire.
+  - `verification.md:166-168` says "the pass-6 work was later committed as `321d4aa…`".
+  - `verification.md:92` says the pass-7 run "started at `321d4aa…`". But the pass-7 `commands.json` `head`, `audit.json` `headAtCapture` and `post-transition.json` `head` all record `eaecf88`.
+  - The pass-7 section names no commit for its own work. The audited `test_verify_amendment.py` first appears in `9ca592b` (rebased from `0667b54`). This repeats the gap that pass-6 A2 and pass-7 A4 fixed for earlier passes.
+  - Fix: cite `eaecf888a0bace9981ae78a81fd6aa7486927d22` as the published commit holding the pass-6 work and the pass-7 capture head. Add that the pass-7 work was committed as `9ca592b1d1259bc5aedf724c5c7ccb20329b8c34`. Do not assert an authorization that is not recorded. The spec's own `321d4aa` mentions are review history and stay unchanged.
+  - (A1, B1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:92]
+- [ ] [Review][Patch] The current pass-7 reproduction command depends on the workstation-only `run-with-temp` without a caveat (low) — `verification.md:76-80` gives `run-with-temp python3 -B -I - <<'PY'` as the way to reproduce the current capture.
+  - Pass-5 B10 required portable guidance for this wrapper (`~/.local/bin/run-with-temp`, untracked).
+  - The caveat now survives only in the historical pass-6 section (`:122-123`) and the general note (`:297-299`).
+  - Fix: add the pass-6 sentence to the pass-7 section: use `run-with-temp` on the recording workstation; elsewhere set a private task-owned `TMPDIR` and remove it after all children exit.
+  - (A2, B11, V other) [_bmad-output/implementation-artifacts/evidence/story-5-8/verification.md:80]
+- [ ] [Review][Patch] No test covers the inventory verifier forwarding `--approved-completion` to the label gate (low) — `verify_amendment.py:312` passes `completion` to `label_module.verify`, and that argument is the only way the flag reaches the "completion requires integrated Folders PS10/PS11 labels" refusal (`verify_labels.py:74`).
+  - The only test asserting that refusal, `test_completion_requires_label_integration_after_owner_approval` (`test_verify_amendment.py:1900`), calls `verify_labels` directly with `verify_owner_packet` patched out. Every inventory-verifier run in the suite uses a pending receipt.
+  - The V layer replaced `completion` with `False` at `:312`, and all 102 tests passed. On an isolated copy with the approved receipt, a pending `labels.json` and an in-progress spec and sprint status, the mutant exits 0 with `PASS: owner decision: approved; approved completion verified`. The original exits 1 with the label refusal.
+  - This is the frozen matrix row "Completion without approval or label". The K12 successor reuses this verifier and will pass through the approved-but-undelivered state again.
+  - Fix: add a `workspace_view(pending=False)` test that resets only `labels.json` to the pending register and the spec and sprint status to `in-progress`. Run `fixture_process(HERE/'verify_amendment.py','--root',root,'--approved-completion')` and assert exactly `(1,'','FAIL: completion requires integrated Folders PS10/PS11 labels\n')`. Add a removal control that forwards `False` and shows the approved-completion PASS stream.
+  - (V1) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:312]
+- [ ] [Review][Patch] Only one field of each approval-receipt field list is tested (low) — `verify_amendment.py:236` requires non-blank `approver`, `exactApprovalInstruction`, `approvalSource` and `approvedOn`. `:240` refuses any of those four, or `rolesCovered`, on a pending receipt.
+  - `test_pending_approved_role_and_chain_controls` (`test_verify_amendment.py:1137`) blanks only `exactApprovalInstruction` (`:1147-1148`) and adds only `approver` to a pending receipt (`:1149-1150`).
+  - The V layer narrowed `:236` to `['exactApprovalInstruction']` and, separately, `:240` to `['approver']`. All 102 tests passed both times. The first mutant's `check_approval(...,True)` accepts an approved receipt with a blank `approver`, `approvalSource` or `approvedOn`.
+  - Fix: add one blank-field subtest per remaining approved field and one pending-claim subtest per remaining pending field, each asserting the exact refusal with a per-key `removed_condition` control, as `test_completion_chain_and_exact_delivery_bytes` does for `deliveryAuthorization`.
+  - (V2) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:236]
+- [ ] [Review][Patch] The label register's duplicate-row and repository-name checks have no test (low) — `verify_labels.py:49` requires `len(rows) == 2`, and `:54` requires `repo.get('name') == 'folders'`.
+  - The only rows case passes `rows[:1]` (`test_verify_amendment.py:1846`), which the ID-set check also refuses. `test_register_schema_repository_base_and_readme_hash_guard_removal` (`:1723`) damages only `baseRevision` and the repository URL.
+  - The V layer removed `len(rows) == 2 and`, and all 102 tests passed. On an isolated copy of the integrated packet with a duplicated PS10 row, both `verify_labels.py` and `verify_amendment.py` then exit 0 with their completion PASS lines. Removing the `name` check also left all tests passing.
+  - Fix: add a duplicated-PS10-row case to `test_register_chain_coverage_hash_citation_and_no_false_delivery` and a changed `repository.name` case to the repository/base guard test. Each asserts the exact refusal and has a `removed_condition` control.
+  - (V3) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_labels.py:49]
+- [ ] [Review][Patch] Rows with too many or too few cells are never tested, although `parse()` promises to reject damaged widths (low) — `verify_amendment.py:72` requires `len(cells) == len(headers)`, and the docstring at `:56` says "reject … damaged table widths".
+  - `test_duplicate_and_damaged_rows_rejected_with_guard_controls` (`test_verify_amendment.py:910`) only empties a cell (`:913-914`), which `all(cells)` refuses first.
+  - The V layer removed the width check, and all 102 tests passed. With an extra trailing cell on M03, the mutant reports only the later `folders: candidate prose/source premises differ from deterministic derivation`, losing the row-naming diagnostic. Passes 3 to 7 treated other refused-later guards the same way.
+  - Fix: add extra-cell and missing-cell cases asserting `folders:<id>: damaged row or empty cell`, with a `removed_condition` control on `len(cells) == len(headers)`.
+  - (V4) [_bmad-output/implementation-artifacts/evidence/story-5-8/verify_amendment.py:72]
+- [ ] [Review][Patch] The builder docstring says it never writes receipts, but `main()` writes `approval.json` (low) — `build_candidate.py:4-5` reads "Never write references, owner checkouts, approved inventories, receipts, indices or remote refs". `main()` writes the successor inventory, the pending `approval.json` and `labels.json`.
+  - The builder refuses an approved packet (pass-1 E6), so the intended rule is "never overwrite an approved or delivered packet", but the literal sentence says the opposite of what the code does.
+  - Fix: reword it to say the builder writes only the pending candidate inventory, receipt and label register, never overwrites an approved or delivered packet, and never writes references, owner checkouts, indices or remote refs. The output bytes do not change.
+  - (B12) [_bmad-output/implementation-artifacts/evidence/story-5-8/build_candidate.py:4]
+- [x] [Review][Defer] Approved 1.1.0 drops 1.0.0's "Readiness and retention gates" obligations (medium) [_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md:64] — deferred: pre-existing approved-byte omission. Routed to the K12 reconciliation successor per the pass-1 "fold into the K12 successor" decision. Ledger entry added (`deferred-work.md:1160`).
+  - 1.0.0 `:316-332` requires the following for any included operation:
+    - one approved execution vector per included operation, with loopback request/result parity and live persisted semantic proof;
+    - AD-21's independent Catalog set/type match;
+    - both legacy heads kept until approved replacement or explicit withdrawal plus authorization, behavior and release evidence exist;
+    - resource replacement never authorizes a resource endpoint;
+    - Folders stays post-v1.
+  - 1.1.0 turns 123 rows into `include`, but keeps only "G1 still owes AD-15 package closure and Epic 6.1 Catalog acceptance; G2–G6 … remain gates" (`:64-65`), "Both legacy heads remain compatibility binaries" (`:31`) and the closed retirement gate (`:74`).
+  - Repository policy requires vectors per Operation Shape and a plan per Operation kind, not per-operation live proof. Epic 6 could therefore read 1.1.0 as accepting less evidence than 1.0.0 required.
+  - (B3)
+
+**Rejected (35):**
+- B2 low: the packet runner records a `head` that does not contain the hashed inputs. This is by design: capture runs before the commit, because the frozen scope requires separate commit authorization. `headAtCapture` truthfully records the parent, and `protectedArtifactsAllEqualHead` covers the protected bytes. An `inputsEqualHead` field or refusal would change the retained runner. The first patch above corrects the attribution.
+- B4 false: the delivered labels quote the PS10/PS11 Removal gate cell of technical 1.0.3 (`:147-148`) verbatim, with its link. "Folders inventory gates" names the Folders inventory's gates in general, which 1.1.0 retains: the `:33` "retained gates" heading, G1–G6 and the retirement gate at `:74`. The technical re-citation is already tracked (`deferred-work.md:1145`).
+- B5 low: the C01/C10 Prerequisites cells lost 1.0.0's "G1–G3; linked tool/variant rules" (verified). But M01's rationale keeps its G list, all ten K12 rows are deferred with no exposure, and the K12 successor must re-disposition them with builder-derived gaps. This is in approved bytes, and the K12 successor can carry it.
+- B6 low: already tracked (`deferred-work.md:1119`). That G2 entry names the seven M rows that cite G2 for path/egress policy and restores content/search egress to G2. 1.1.0 G6 is provider egress (Folders 5.10), so leaving G6 off non-provider context reads is consistent.
+- B7 low: "product C13 not-applicable decision" can be confused with the C13 Command row. This is cosmetic, in approved bytes, and the K12 successor can qualify it (pass-2 B5).
+- B8 low: the V and G anchors cite section headings rather than per-item lines. Every anchor resolves at the immutable pin. This is cosmetic, in approved bytes (pass-1 B11/A9, pass-2 B13, pass-4 E12).
+- B9 false: the AD-23 `requiredApprovalRoles` (`AD-23-non-gateway-capability-classes.md:299-316`) governs the AD-23 decision receipt (`approvalPath` Story 5.2), not inventory successors, so the 5.8 list cannot contradict it. The policy wording and the missing `requiredRolesSource` were settled in pass-1 B9 and pass-3 B4.
+- B10 low: `schemaVersion` `1.0.0` is reused for differently shaped 5.7 and 5.8 receipts and registers. No consumer reads the version yet, the Story 5.11 index is not built, and the receipt shape was settled in pass-3 B4. Changing it means new published bytes.
+- B13 low: `pinnedArtifacts` hashes only the declarations table and the 41 decorated types. `sourceRevision` names the pin commit, which binds every pinned source, and nothing claims the list is exhaustive. Approved bytes.
+- B14 low: "provider-binding-reserved-actor where applicable" does not say which row it applies to, although `:60` names C05/Q13/Q35. This is cosmetic, in approved bytes, and the K12 successor can scope it per row.
+- E1 low: non-transactional builder writes (pass-1 E6 through pass-7 E11).
+- E2, E3 and E4 false: a bare `next()` raising `StopIteration` over checked inputs (pass-1 E5 through pass-7 E4).
+- E5 low: missing frozen markers raise a traceback (pass-5 E10, pass-6 E7, pass-7 E5).
+- E6 low: a missing owner `origin/main` or README fails loudly (pass-6 E4, pass-7 E1).
+- E7 false: a `reported:` drift line failing capture (pass-5 E1).
+- E8 and E9 low: superset `rolesCovered` and free-form `approvedOn` (pass-6 B10/E12, pass-7 E10).
+- E10 false: a missing spec or sprint file cannot skip completion, because integrated labels force it (pass-3 B13/E7, pass-4 E4, pass-6 E11).
+- E11 false: audit under a different interpreter or checkout (pass-5 E2, pass-6 E6).
+- E12 low: lifecycle-proof symlinked delivery folder (pass-7 E7).
+- E13 false: lifecycle-proof `main(root=…)` with a foreign root (pass-4 E7/E14, pass-5 E3).
+- E14 low: `guard-removal.py` writes through a symlinked report path. It is the historical pass-3 helper (pass-7 B11), and a symlink would have to be planted in the tracked packet (pass-7 E7).
+- E15 false: a prior label without exactly one 1.0.0 link (pass-1 B6/E11 through pass-7 E12).
+- E16 low: `compatibility_section()` ends at any `#` line (pass-5 E11).
+- E17 false: `splitlines()` against `\n` counting (pass-5 E8).
+- E18 false: model-class prefix matching (pass-7 E9).
+- E19 false: the summary regex hard-codes "tests". The runner's only unittest gates select 102 and 6 tests (`verify_packet.py:121-145`), so no gate prints "Ran 1 test".
+- E20 low: symlink-test selection by description (pass-6 E8).
+- E21 low: a relative `ownerCheckout`. The register is immutable with an absolute path (pass-4 B4, pass-5 E7).
+- E22 low: `--root` loads helpers from the target tree (pass-1 E14, pass-4 B9).
+- E23 low: no subprocess timeouts (pass-6 E9, pass-7 E6).
+- E24 low: the delivered labels use `blob/main` (pass-1 B5/E19 through pass-7 E13).
+- E25 false: `test_completion_reports_later_owner_compatibility_drift` asserts the exact `(0, integrated, 'reported: …')` stream (`test_verify_amendment.py:2048-2056`), so removing the report path fails it. The commit claim holds.
 
 ## Design Notes
 
