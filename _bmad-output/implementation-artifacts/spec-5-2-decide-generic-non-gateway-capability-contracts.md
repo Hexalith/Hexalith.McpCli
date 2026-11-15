@@ -2,7 +2,7 @@
 title: '5.2 Decide generic non-gateway capability contracts'
 type: 'chore'
 created: '2026-11-12'
-status: 'done'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: 'f4bb819925d4fac5fa5afd262341692296a52042'
@@ -197,6 +197,115 @@ Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. 
 - A3 low: approved Folders 1.1.0 (`:67-70`) already binds V09's accepted losses, and V10 records an absence. Adding K15 evidence means approved bytes.
 - A4 false: D4 governs imports and exports. The source labels L11, L12 and V12 as a "local file write", not destructive, unlike Admin AV03.
 - A5 low: ChatBot V15/X04 and Memories X04 are absence rows. K09's gap requires the same Platform AD and PRD change that the v1 refusal does.
+
+Code review pass 2 (bmad-code-review, 2026-11-15). It ran after `5f35a70` applied the pass-1 patches and the ten follow-up build-review findings.
+
+**Scope:** the deliverables, 3,423 diff lines in 24 files: `80a7857^..HEAD` at `5f35a70`.
+- It covers the pass-1 file set, plus the new `review-pass-1/` runner, its controls and README.
+- It also covers the check, audit, preservation and scope JSON, `runner-correction/commands.json` and the story's `.gitattributes` hunk.
+- Raw captures, sweep results and scan receipts were left out.
+- The AD-23 decision, class map, receipt and AI.Tools amendment are unchanged since pass 1.
+
+Four layers ran: Blind B, Edge E, Verification V and Acceptance A. None failed. They raised 49 findings: 15 survive in 7 entries (1 decision, 6 patch), and 34 were rejected. The decision resolved into one more patch, for 7 patches in total.
+
+**Re-run checks at HEAD `5f35a70`:**
+- The standalone verifier exits 0 with empty stderr. Its stdout is byte-identical to `verifier.stdout.txt`.
+- All 64 verifier tests and all 8 runner controls pass.
+- A fresh guard-removal sweep into a scratch folder kills 57 of 57 guards, with zero survivors and zero errors.
+- `main` CI run 43704517177 for `28bcbbb` failed two jobs:
+  - `topology-vector-discovery`: `test_catalog_and_workflow_pins_keep_their_approved_identities` finds that the Builds gitlink is no longer `99f7c86`.
+  - `proprietary-surface-census`: it now also reports Builds `73e60af` source drift.
+- The `23072f0` run had already failed the census job, and only that job. `5f35a70` is unpushed.
+
+- [x] [Review][Decision] Story commit `28bcbbb` moved nine `references/` gitlinks and turned a new `main` CI job red, and the review-pass-1 evidence starts after that commit (high) — resolved by the user on 2026-11-15: option 1, "Keep pins, align apart".
+  - The published pins stay on `main`.
+  - Builds alignment is a separate, non-story `build(deps)` change under the CLAUDE.md procedure: CI and commitlint workflow pins, a fresh restore, Manifest.Tests, `tools/dependency-policy.json`, and census reconciliation. It is not part of this story, and it is not a ledger deferral.
+  - The story-side evidence correction is the first patch below.
+  - **What moved.** `28bcbbb` ("fix: story 5.2") records the pass-1 findings. It also moves nine gitlinks (`git diff --raw 28bcbbb^ 28bcbbb -- references/`): Builds `99f7c86`→`73e60af`, plus EventStore, Folders, FrontComposer, Memories, Parties, Platform, Projects and Tenants.
+  - **Rules broken.** The spec's Never rule and AC3 forbid `references/` changes, and the receipt's limit says "no census edit or gitlink move" (`approval.json:93`).
+  - **Builds procedure skipped.** The move skips the CLAUDE.md Builds-move procedure: `.github/workflows/ci.yml:18` and `commitlint.yml:19` still pin `99f7c86`, and `tools/dependency-policy.json` was not updated. CI run 43704517177 fails a pin test that passed at `63df6d2`.
+  - **Evidence starts too late.** The packet's scope checks diff from `28bcbbb` (`review-pass-1/parent-verification/checks.json:58`), so they never see that commit. `review-pass-1/README.md:98-107` and `verification.md:39-44` call the remaining difference "previously published work" and say references are "unchanged in this run". This hides that the story's own commit moved them.
+  - **Options:**
+    1. Keep the published pins. Align Builds in a separate, non-story `build(deps)` change under the CLAUDE.md procedure, and correct the 5.2 evidence to name `28bcbbb`'s nine moves as non-story content.
+    2. Restore the nine `23072f0` pins in a story commit, and record that revert as the AC3 evidence.
+    3. Defer the alignment to the ledger, correct the evidence, and leave CI red.
+  - (A1, A2) [.github/workflows/ci.yml:18]
+- [ ] [Review][Patch] The review-pass-1 evidence treats `28bcbbb`'s nine gitlink moves as "previously published work" (high; resolved from the decision above)
+  - **Fix:** add a dated correction to `review-pass-1/README.md` and `verification.md`, leaving the retained receipts unchanged. It should state:
+    - that the story-labeled commit `28bcbbb` also carried nine non-story gitlink moves, listed with their before and after revisions;
+    - that AC3's "`references/` unchanged" therefore does not hold for that commit;
+    - that the moves are kept on `main` by owner decision;
+    - that the Builds alignment is a separate `build(deps)` change.
+  - **Constraint:** keep the "unchanged in this run" claims scoped to `5f35a70`.
+  - (A1, A2) [_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/README.md:98]
+- [ ] [Review][Patch] Four verifier sub-conditions can be broken without failing any test (medium) — the guard-removal sweep deletes whole `require(...)` statements only, as the README discloses, so it cannot detect these.
+  - **Restricted outcomes.** Adding `"continued-deferral"` to `RESTRICTED_OUTCOMES` (`verify_class_map.py:22`) still passes all 64 tests. Every leak case moves a restricted row into a gateway class, never into a deferral class. Story 5.7's `build_candidate.py:126-127` turns a deferral into `defer`, which keeps the legacy surface.
+  - **Record kind.** Dropping `"kind"` from `record_policy` (`:151`) still passes, because no test changes only a record's kind. `build_candidate.py:113` writes that kind into amendment governance text.
+  - **Decision-side bindings.** Dropping `expected["sha256"] ==` (`:212`) or `expected["version"] ==` (`:214`) still passes. No test rebinds the map and receipt while the decision keeps its old values.
+  - **Duplicate keys.** Parsing the policy block (`:183`) or the receipt (`:281`) with plain `json.loads` still passes. The only duplicate-member test damages the map.
+  - **Fix:** add a damaged-input process case for each, asserting exit 1, empty stdout and the exact full `FAIL:` line. Success stdout must stay byte-identical.
+  - (V1–V4) [_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py:22]
+- [ ] [Review][Patch] The final preservation receipt records a frozen-block hash that no earlier receipt uses (low)
+  - `parent-verification/preservation.json:16` records `02f0011d…`.
+  - `preservation-checks.json:3` and the spec's tag-delimited block both give `8adb4def…` (5,884 bytes).
+  - `02f0011d…` can be reproduced only from the bytes after the `<frozen-after-approval` token up to the closing tag, and the receipt doesn't say so. Read at face value, it says the frozen intent changed.
+  - The block is in fact unchanged at `80a7857`, `28bcbbb` and `5f35a70`.
+  - **Fix:** add a dated note in the packet README that states the extraction and the tag-inclusive hash, and leave the receipt itself untouched.
+  - (B1, E17, V-O1, A4) [_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/parent-verification/preservation.json:16]
+- [ ] [Review][Patch] The reproduction steps depend on the recording workstation and write into the tracked tree (low) — the steps are at `review-pass-1/README.md:56-65`.
+  - **Wrapper.** `run-with-temp` is `~/.local/bin/run-with-temp`, which is neither tracked nor described. Story 5.8 fixed the same wording (`spec-5-8-…md:562`).
+  - **Output location.** `mktemp -d -p evidence` creates results under the tracked, non-ignored root `evidence/` folder, where an all-files commit could pick them up.
+  - **Encoding.** The tests read the real map, decision and receipt with locale-default `read_text()` (`test_verify_class_map.py:553`, `:560`, `:638`), while the verifier uses UTF-8. With `-I`, `PYTHONUTF8` is ignored, so a non-UTF-8 Windows locale mis-decodes the map's non-ASCII line.
+  - **Fix:**
+    - Describe the portable step (a task-owned private `TMPDIR`, removed afterwards) or label the wrapper as local.
+    - Create the output folder with `mktemp -d` outside the repository.
+    - Pass `encoding="utf-8"` to those reads.
+  - (B15, A5) [_bmad-output/implementation-artifacts/evidence/story-5-2/review-pass-1/README.md:64]
+- [ ] [Review][Patch] Two subtest loops restore fixture state only after a passing assertion (low)
+  - `test_decision_map_and_approval_paths_must_match` (`test_verify_class_map.py:195-206`) and `test_approval_requires_nonblank_typed_owner_and_instruction` (`:492-500`) reset `self.policy[key]` and `self.receipt[field]` after `self.reject(...)`.
+  - When one subtest fails, its damaged value leaks into the next subtest, which then reports a different guard's message. For example, a failed `mapPath` case makes the `approvalPath` case report "map path disagrees".
+  - Pass 1 fixed the same pattern only in the restricted-record test.
+  - **Fix:** restore in `finally`.
+  - (E15) [_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py:206]
+- [ ] [Review][Patch] The actual-packet test re-serializes the map and rebinds the receipt, so it never checks the approved bytes (low)
+  - `test_actual_packet_complete` (`test_verify_class_map.py:565-570`) calls `self.save()`. That writes `json.dumps` of the parsed map and replaces the receipt's `artifacts` with fresh digests.
+  - So a real map edit that breaks the receipt binding, or a duplicate member in the real map, still passes the 64-test suite and the sweep. Only the standalone run would catch it.
+  - **Fix:** run the verifier on the verbatim copies, without calling `save()`.
+  - (E16) [_bmad-output/implementation-artifacts/evidence/story-5-2/test_verify_class_map.py:566]
+- [ ] [Review][Patch] The spine re-dates the 2026-09-27 approved direction (low)
+  - `ARCHITECTURE-SPINE.md:36` changed "Approved ecosystem direction (2026-09-27)" to "(2026-11-12, AD-23)".
+  - The paragraph's first three sentences (gateway-only first increment, obsolete proprietary surfaces, no module-specific implementation) still carry the 2026-09-27 approval, so their date is now wrong.
+  - **Fix:** use "(2026-09-27; amended 2026-11-12 by AD-23)".
+  - (A6) [_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:36]
+
+**Rejected (34):**
+- B2 low: `guard-audit.json` and `preservation.json` summarize the parent's audit. The runner reproduces the sweep (this review's fresh run killed 57 of 57). Recapturing the parent's unrecorded commands is more than a direct correction.
+- B3/E13 low: the corrected runner and its results were committed together in `5f35a70`, and a rerun reproduces 57 of 57. Adding a runner digest would mean regenerating the retained receipt.
+- B4/E10 false: every `require` in `verify_class_map.py` is a standalone statement. None shares a line with other code or follows non-ASCII text. The real sweep kills all 18 multi-line guards, and none of them errors.
+- B5 low: the untested paths work, as code reading shows (`mkdir(exist_ok=False)` refuses an existing folder) and as the real `--jobs 4` sweep shows. Adding controls is more than a direct correction.
+- E14 low (maybe-false): no timeout was observed. The controls ran in 2.8 s, against a 1 s budget for each trivial suite. If a timeout did occur, it would be a low flake in controls that are only run by hand.
+- B6 low: missing keys still fail closed, through the `FAIL:` channel with exit 1. Field-path diagnostics need the schema machinery that pass 1 and earlier passes rejected.
+- B7/E1/E2/E3 low: re-raised from pass 1 (E1/E2/E3/B12). The 8 bound inventories are hash-bound and unchanged.
+- E4/E6 low: none of the 8 bound inventories has fenced or indented table rows, and each has exactly one `inventory_version` line (checked). The fix would add parser guards.
+- B8/E5 low: re-raised from pass 1 (E5). No scanned column of the unchanged bound inventories uses these synonyms.
+- B9 false: `requiredRestrictions` can only force a restricted outcome (`verify_class_map.py:257-259`), so a weak quote cannot admit a row.
+- B10 rejected: pass-1 B8; the spec fixes K10's owner, so the fix would edit the spec. The ledger's "product/architecture/security owners" names the owners of a different item, the Parties reconciliation.
+- B11 low: pass-1 B16. The cited `limits` and push-`scope` texts were accurate when written and do not contradict the merge record.
+- B12 false: pass-1 B15/A7.
+- B13 low: pass-1 B14. `upstream-delivery.json` is the dated push receipt and `main-integration.json` records the merge; `verification.md:8-12` cites both.
+- B14 false: pass-1 E9/B13.
+- B16 false: the corrected figures match the verifier output (71+28+103+46+26+39+39+20 = 372, and 372+153 = 525). A total line would change the pinned stdout that Stories 5.7 and 5.8 consume.
+- B17 false: the requirement table sits in the section labeled "2026-11-12 historical checkpoint". All 31 test names it cites exist, and the packet README lists the added cases.
+- B18 low: the spec's Never rule forbids CI changes in this story. The downstream 5.7 and 5.8 verifiers call `verify()` on the same hash-bound packet.
+- B19 low: the spec does not bind the identity source, and checking it would add a guard to an unbound receipt.
+- B20 low: pass-1 B18. The amendment is merged upstream, and Story 5.11 owns the next plan version.
+- E7 low: the inputs are approved, hash-bound JSON with no deep nesting and no newline values. The fix would add handling.
+- E8 low: nobody passes `nan` or `inf`, and the fix would add a guard.
+- E9 low: the runner targets this verifier's 57 guards. A verifier with zero guards cannot occur without rewriting it.
+- E11 low: worker copy, write or remove failures need a broken disk, and the fix would add exception handling.
+- E12 false: the runner's inputs come from the receipt-bound map, whose paths are all repository-relative. The verifier rejects absolute and escaping paths (`verify_class_map.py:76-78`).
+- E18 false: `release.yml` runs only by `workflow_dispatch` with operator acceptance, so a `fix:` subject cuts no automatic release. `fix: story N` is this repository's established subject form.
+- A3 false: the spec's forbidden paths do not include `.gitattributes`. The entries cover only raw, hash-bound captures whose trailing whitespace is genuine process output, following the pattern already used for other evidence folders. `verification.md:157` sits in the historical 2026-11-12 section.
 
 ## Design Notes
 
