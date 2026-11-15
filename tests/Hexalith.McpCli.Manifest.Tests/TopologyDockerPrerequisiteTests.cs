@@ -15,7 +15,7 @@ public sealed class TopologyDockerPrerequisiteTests
     {
         string root = DependencyPolicyTests.FindRepositoryRoot();
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
-        string executable = Path.Combine(root, "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net10.0",
+        string executable = Path.Combine(root, "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net11.0",
             OperatingSystem.IsWindows() ? "dapr.exe" : "dapr");
         string? priorExit = Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_VERSION_EXIT");
         string? priorDelay = Environment.GetEnvironmentVariable("MCPCLI_TEST_DAPR_DELAY_MS");

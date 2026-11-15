@@ -1,8 +1,4 @@
 <Project Sdk="Aspire.AppHost.Sdk/13.6.5">
-  <!-- Only the current native fixture selects framework 11; product TFMs remain net10.0. -->
-  <PropertyGroup Condition="'$(McpCliCurrentNativeProfile)' == 'true'">
-    <RuntimeFrameworkVersion>11.0.0</RuntimeFrameworkVersion>
-  </PropertyGroup>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <AspireUseCliBundle>true</AspireUseCliBundle>

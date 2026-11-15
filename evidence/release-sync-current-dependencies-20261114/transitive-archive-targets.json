@@ -1,0 +1,170 @@
+{
+  "Google.Protobuf": {
+    "version": "3.36.2",
+    "url": "https://api.nuget.org/v3-flatcontainer/google.protobuf/3.36.2/google.protobuf.3.36.2.nupkg",
+    "targets": [
+      "net8.0",
+      "netstandard2.0"
+    ],
+    "dependencyGroups": [
+      {
+        "targetFramework": "net8.0"
+      },
+      {
+        "targetFramework": ".NETStandard2.0"
+      }
+    ]
+  },
+  "Grpc.Core.Api": {
+    "version": "2.85.0",
+    "url": "https://api.nuget.org/v3-flatcontainer/grpc.core.api/2.85.0/grpc.core.api.2.85.0.nupkg",
+    "targets": [
+      "net462",
+      "netstandard2.0",
+      "netstandard2.1"
+    ],
+    "dependencyGroups": [
+      {
+        "targetFramework": ".NETFramework4.6.2"
+      },
+      {
+        "targetFramework": ".NETStandard2.0"
+      },
+      {
+        "targetFramework": ".NETStandard2.1"
+      }
+    ]
+  },
+  "Grpc.Net.Client": {
+    "version": "2.85.0",
+    "url": "https://api.nuget.org/v3-flatcontainer/grpc.net.client/2.85.0/grpc.net.client.2.85.0.nupkg",
+    "targets": [
+      "net10.0",
+      "net462",
+      "net8.0",
+      "net9.0",
+      "netstandard2.0",
+      "netstandard2.1"
+    ],
+    "dependencyGroups": [
+      {
+        "targetFramework": "net10.0"
+      },
+      {
+        "targetFramework": ".NETFramework4.6.2"
+      },
+      {
+        "targetFramework": "net8.0"
+      },
+      {
+        "targetFramework": "net9.0"
+      },
+      {
+        "targetFramework": ".NETStandard2.0"
+      },
+      {
+        "targetFramework": ".NETStandard2.1"
+      }
+    ]
+  },
+  "Grpc.Net.Common": {
+    "version": "2.85.0",
+    "url": "https://api.nuget.org/v3-flatcontainer/grpc.net.common/2.85.0/grpc.net.common.2.85.0.nupkg",
+    "targets": [
+      "net10.0",
+      "net8.0",
+      "net9.0",
+      "netstandard2.0",
+      "netstandard2.1"
+    ],
+    "dependencyGroups": [
+      {
+        "targetFramework": "net10.0"
+      },
+      {
+        "targetFramework": "net8.0"
+      },
+      {
+        "targetFramework": "net9.0"
+      },
+      {
+        "targetFramework": ".NETStandard2.0"
+      },
+      {
+        "targetFramework": ".NETStandard2.1"
+      }
+    ]
+  },
+  "Grpc.Reflection": {
+    "version": "2.85.0",
+    "url": "https://api.nuget.org/v3-flatcontainer/grpc.reflection/2.85.0/grpc.reflection.2.85.0.nupkg",
+    "targets": [
+      "net462",
+      "netstandard2.0"
+    ],
+    "dependencyGroups": [
+      {
+        "targetFramework": ".NETFramework4.6.2"
+      },
+      {
+        "targetFramework": ".NETStandard2.0"
+      }
+    ]
+  },
+  "Microsoft.Extensions.AI.Abstractions": {
+    "version": "11.0.0",
+    "url": "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.ai.abstractions/11.0.0/microsoft.extensions.ai.abstractions.11.0.0.nupkg",
+    "targets": [
+      "net10.0",
+      "net11.0",
+      "net462",
+      "net8.0",
+      "net9.0",
+      "netstandard2.0"
+    ],
+    "dependencyGroups": [
+      {
+        "targetFramework": "net10.0"
+      },
+      {
+        "targetFramework": "net11.0"
+      },
+      {
+        "targetFramework": ".NETFramework4.6.2"
+      },
+      {
+        "targetFramework": "net8.0"
+      },
+      {
+        "targetFramework": "net9.0"
+      },
+      {
+        "targetFramework": ".NETStandard2.0"
+      }
+    ]
+  },
+  "Microsoft.Extensions.Caching.Abstractions": {
+    "version": "11.0.0",
+    "url": "https://api.nuget.org/v3-flatcontainer/microsoft.extensions.caching.abstractions/11.0.0/microsoft.extensions.caching.abstractions.11.0.0.nupkg",
+    "targets": [
+      "net10.0",
+      "net11.0",
+      "net462",
+      "netstandard2.0"
+    ],
+    "dependencyGroups": [
+      {
+        "targetFramework": "net10.0"
+      },
+      {
+        "targetFramework": "net11.0"
+      },
+      {
+        "targetFramework": ".NETFramework4.6.2"
+      },
+      {
+        "targetFramework": ".NETStandard2.0"
+      }
+    ]
+  }
+}

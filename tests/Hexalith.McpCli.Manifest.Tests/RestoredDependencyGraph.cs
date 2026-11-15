@@ -11,14 +11,15 @@ internal sealed record RestoredDependencyGraph(
     IReadOnlyDictionary<string, RestoredDependencyNode> Nodes,
     IReadOnlyList<string> LoadFailures)
 {
-    /// <summary>Loads the .NET 10 target, including project roots and framework references.</summary>
+    /// <summary>Loads the sole restored target, including project roots and framework references.</summary>
     public static RestoredDependencyGraph Load(JsonElement assets, string projectPath)
     {
         string rootId = Path.GetFileNameWithoutExtension(projectPath);
         var failures = new List<string>();
-        Dictionary<string, RestoredDependencyNode> nodes = ReadNodes(assets.GetProperty("targets").GetProperty("net10.0"),
+        string targetFramework = assets.GetProperty("project").GetProperty("frameworks").EnumerateObject().Single().Name;
+        Dictionary<string, RestoredDependencyNode> nodes = ReadNodes(assets.GetProperty("targets").GetProperty(targetFramework),
             assets.GetProperty("libraries"), Path.GetDirectoryName(projectPath)!, rootId, failures);
-        JsonElement framework = assets.GetProperty("project").GetProperty("frameworks").GetProperty("net10.0");
+        JsonElement framework = assets.GetProperty("project").GetProperty("frameworks").GetProperty(targetFramework);
         var dependencies = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
         if (framework.TryGetProperty("dependencies", out JsonElement packages))
         {
@@ -29,7 +30,7 @@ internal sealed record RestoredDependencyGraph(
         }
 
         JsonElement restoreFramework = assets.GetProperty("project").GetProperty("restore")
-            .GetProperty("frameworks").GetProperty("net10.0");
+            .GetProperty("frameworks").GetProperty(targetFramework);
         if (restoreFramework.TryGetProperty("projectReferences", out JsonElement projects))
         {
             foreach (JsonProperty project in projects.EnumerateObject())

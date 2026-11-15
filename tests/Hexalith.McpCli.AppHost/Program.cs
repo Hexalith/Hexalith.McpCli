@@ -105,11 +105,11 @@ IResourceBuilder<ProjectResource> parties = builder.AddHexalithPartiesServer(top
     .WithGeneratedEventStoreAppChannelToken();
 
 // Current qualification uses one managed runtime for metadata and its isolated resource processes.
-// This changes only test launch environment; selected owner sources and net10.0 exports stay intact.
+// Refuse roll-forward so every current net11 resource uses the sealed runtime image.
 if (string.Equals(Environment.GetEnvironmentVariable("McpCliCurrentNativeProfile"), "true", StringComparison.OrdinalIgnoreCase))
 {
     foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
-        resource.WithEnvironment("DOTNET_ROLL_FORWARD", "LatestMajor");
+        resource.WithEnvironment("DOTNET_ROLL_FORWARD", "Disable");
 }
 
 // Tenants proves its current administrator and owner state through the real,
@@ -131,7 +131,7 @@ foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants,
     resource.WithEnvironment("UseHexalithProjectReferences", "false")
         .WithEnvironment("UseNuGetDeps", "true")
         .WithEnvironment("HexalithEventStoreFromSource", "false")
-        .WithEnvironment("HexalithEventStoreVersion", "4.2.0")
+        .WithEnvironment("HexalithEventStoreVersion", "5.1.0")
         .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
         .WithEnvironment("DOTNET_ENVIRONMENT", "Development")
         .WithEnvironment("Authentication__JwtBearer__Authority", string.Empty)

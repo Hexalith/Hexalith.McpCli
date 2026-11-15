@@ -10,8 +10,8 @@ public sealed class DaprPrerequisiteWorkspace : IDisposable
     {
         string repository = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
-        string source = Path.Combine(repository, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net10.0");
-        string target = Path.Combine(Root, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net10.0");
+        string source = Path.Combine(repository, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net11.0");
+        string target = Path.Combine(Root, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net11.0");
         Directory.CreateDirectory(Path.Combine(Root, "src"));
         try
         {

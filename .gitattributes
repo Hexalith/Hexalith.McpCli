@@ -86,3 +86,9 @@ evidence/release-maintenance-20261112/current-tenant-logging-generation/** -text
 
 # Preserve exact delegated release-maintenance decision and census receipts.
 evidence/release-sync-2026-11-14/** -text
+
+# Preserve the exact current dependency-maintenance approvals and verification packet.
+evidence/release-sync-current-dependencies-20261114/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+
+# Preserve the framework decision and exact net11 migration verification receipts.
+evidence/net11-release-20261115/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

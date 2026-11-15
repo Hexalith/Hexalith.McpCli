@@ -1,0 +1,29 @@
+{
+  "scope": "Task-owned pre-migration raw logs retained without ignore exceptions; filenames changed from .log to .txt for ordinary staging. Log bytes and the SDK10 correction truth are unchanged.",
+  "files": [
+    {
+      "originalFilename": "sdk10-api512-unisolated-observation.log",
+      "path": "sdk10-api512-unisolated-observation.txt",
+      "sha256": "b0d6614ba71e4f4a97783f9759d41d83c9768790162fd31c2adaeb984fcbc774",
+      "bytesPreserved": true
+    },
+    {
+      "originalFilename": "sdk10-isolated-failure.log",
+      "path": "sdk10-isolated-failure.txt",
+      "sha256": "7e4b08fa9302af9ae6e0dd645a819d957d553b8bf1506aba4cb58b6e4178c367",
+      "bytesPreserved": true
+    },
+    {
+      "originalFilename": "sdk10-unisolated-false-positive.log",
+      "path": "sdk10-unisolated-false-positive.txt",
+      "sha256": "e17a6c97faa538507c0c6a4c4bf6d438e14c0753d80b99fe46e7a7dfc75e9204",
+      "bytesPreserved": true
+    },
+    {
+      "originalFilename": "workflow-pin-tests.log",
+      "path": "workflow-pin-tests.txt",
+      "sha256": "9b75bfb7715a0e395610d4777d649e7b01be65fd2e3a96c4e81993f499905303",
+      "bytesPreserved": true
+    }
+  ]
+}

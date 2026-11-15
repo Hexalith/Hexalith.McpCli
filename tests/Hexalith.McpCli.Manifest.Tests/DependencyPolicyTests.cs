@@ -47,7 +47,7 @@ public sealed class DependencyPolicyTests
         string[] helpers = ["Hexalith.EventStore.Aspire", "Hexalith.Parties.Aspire", "Hexalith.Tenants.Aspire"];
         Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckAspireHelperClosure(policy, graph, helpers));
         Assert.Equal(graph.RootId, Assert.Single(graph.Nodes.Values, node => node.Type == "project").Id);
-        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/2.30.10", "Hexalith.EventStore.Aspire/4.2.0", "Hexalith.EventStore.Client/4.2.0", "Hexalith.EventStore.Contracts/4.2.0", "Hexalith.EventStore.ServiceDefaults/4.2.0", "Hexalith.Parties.Aspire/3.1.1", "Hexalith.Tenants.Aspire/7.0.7" },
+        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/3.0.0", "Hexalith.EventStore.Aspire/5.1.0", "Hexalith.EventStore.Client/5.1.0", "Hexalith.EventStore.Contracts/5.1.0", "Hexalith.EventStore.ServiceDefaults/5.1.0", "Hexalith.Parties.Aspire/3.1.1", "Hexalith.Tenants.Aspire/8.0.0" },
             graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase))
                 .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }
@@ -724,21 +724,39 @@ public sealed class DependencyPolicyTests
     }
 
     /// <summary>Loading assets preserves root project-reference edges and omits versions from their paths.</summary>
-    [Fact]
-    public void AssetsLoadedRootProjectReferenceHasItsPath()
+    /// <param name="targetFramework">The current or historical assets target.</param>
+    [Theory]
+    [InlineData("net10.0")]
+    [InlineData("net11.0")]
+    public void AssetsLoadedRootProjectReferenceHasItsPath(string targetFramework)
     {
-        RestoredDependencyGraph graph = LoadSyntheticAssets();
+        RestoredDependencyGraph graph = LoadSyntheticAssets(targetFramework: targetFramework);
         Assert.Equal("Hexalith.McpCli > Hexalith.McpCli.Core", graph.PathsFrom(graph.RootId, "Hexalith.McpCli.Abstractions")["Hexalith.McpCli.Core"]);
         Assert.Equal(Path.Combine(TestRoot, "src", "Hexalith.McpCli.Core", "Hexalith.McpCli.Core.csproj"), graph.Nodes["Hexalith.McpCli.Core"].ProjectPath);
     }
 
     /// <summary>Framework references from the root assets object are enforced after loading.</summary>
-    [Fact]
-    public void AssetsLoadedRootWebFrameworkFails()
+    /// <param name="targetFramework">The current or historical assets target.</param>
+    [Theory]
+    [InlineData("net10.0")]
+    [InlineData("net11.0")]
+    public void AssetsLoadedRootWebFrameworkFails(string targetFramework)
     {
         var (policy, _, projects) = Minimal();
-        RestoredDependencyGraph graph = LoadSyntheticAssets("Microsoft.AspNetCore.App");
+        RestoredDependencyGraph graph = LoadSyntheticAssets("Microsoft.AspNetCore.App", targetFramework);
         Assert.Equal(["Project Hexalith.McpCli adds framework reference Microsoft.AspNetCore.App: Hexalith.McpCli"], Check(policy, graph, projects));
+    }
+
+    /// <summary>Multiple restored framework targets are ambiguous and are rejected.</summary>
+    [Fact]
+    public void AssetsLoaderRejectsMultipleFrameworkTargets()
+    {
+        using JsonDocument assets = JsonDocument.Parse("""
+            {"targets":{"net10.0":{},"net11.0":{}},"libraries":{},
+             "project":{"frameworks":{"net10.0":{},"net11.0":{}},
+               "restore":{"frameworks":{"net10.0":{},"net11.0":{}}}}}
+            """);
+        Assert.Throws<InvalidOperationException>(() => RestoredDependencyGraph.Load(assets.RootElement, ToolProject));
     }
 
     /// <summary>Path selection is stable for shared dependencies, insertion order, and cycles.</summary>
@@ -918,7 +936,7 @@ public sealed class DependencyPolicyTests
     private static RestoredDependencyNode Package(string id, string version, Dictionary<string, string>? dependencies = null)
         => new(id, version, "package", dependencies ?? new(), []);
 
-    private static RestoredDependencyGraph LoadSyntheticAssets(string framework = "Microsoft.NETCore.App")
+    private static RestoredDependencyGraph LoadSyntheticAssets(string framework = "Microsoft.NETCore.App", string targetFramework = "net10.0")
     {
         JsonObject assets = JsonNode.Parse("""
             {"targets":{"net10.0":{
@@ -932,7 +950,7 @@ public sealed class DependencyPolicyTests
         string core = Path.Combine(TestRoot, "src", "Hexalith.McpCli.Core", "Hexalith.McpCli.Core.csproj");
         assets["project"]!["frameworks"]!["net10.0"]!["frameworkReferences"]![framework] = new JsonObject();
         assets["project"]!["restore"]!["frameworks"]!["net10.0"]!["projectReferences"]![core] = new JsonObject { ["projectPath"] = core };
-        using JsonDocument document = JsonDocument.Parse(assets.ToJsonString());
+        using JsonDocument document = JsonDocument.Parse(assets.ToJsonString().Replace("net10.0", targetFramework, StringComparison.Ordinal));
         return RestoredDependencyGraph.Load(document.RootElement, ToolProject);
     }
 
@@ -1054,19 +1072,19 @@ public sealed class DependencyPolicyTests
         Assert.Empty(graph.LoadFailures);
         Assert.Equal(new[]
         {
-            "Hexalith.Commons.UniqueIds/2.30.10",
-            "Hexalith.EventStore.Aspire/4.2.0",
-            "Hexalith.EventStore.Client/4.2.0",
-            "Hexalith.EventStore.Contracts/4.2.0",
-            "Hexalith.EventStore.DomainService/4.2.0",
-            "Hexalith.EventStore.Server/4.2.0",
-            "Hexalith.EventStore.ServiceDefaults/4.2.0",
-            "Hexalith.EventStore.Testing/4.2.0",
-            "Hexalith.EventStore.Testing.Integration/4.2.0",
+            "Hexalith.Commons.UniqueIds/3.0.0",
+            "Hexalith.EventStore.Aspire/5.1.0",
+            "Hexalith.EventStore.Client/5.1.0",
+            "Hexalith.EventStore.Contracts/5.1.0",
+            "Hexalith.EventStore.DomainService/5.1.0",
+            "Hexalith.EventStore.Server/5.1.0",
+            "Hexalith.EventStore.ServiceDefaults/5.1.0",
+            "Hexalith.EventStore.Testing/5.1.0",
+            "Hexalith.EventStore.Testing.Integration/5.1.0",
             "Hexalith.McpCli.Abstractions/2.0.1",
             "Hexalith.Parties.Aspire/3.1.1",
-            "Hexalith.Tenants.Aspire/7.0.7",
-            "Hexalith.Tenants.Contracts/7.0.7",
+            "Hexalith.Tenants.Aspire/8.0.0",
+            "Hexalith.Tenants.Contracts/8.0.0",
         }, graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase))
             .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }

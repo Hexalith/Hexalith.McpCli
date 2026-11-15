@@ -165,7 +165,7 @@ def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--operation', required=True)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--host', type=Path, default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll')
+    parser.add_argument('--host', type=Path, default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll')
     args = parser.parse_args(argv)
     args.output.mkdir(parents=True, exist_ok=True)
     report = {'operation': args.operation, 'result': 'pending', 'phases': []}

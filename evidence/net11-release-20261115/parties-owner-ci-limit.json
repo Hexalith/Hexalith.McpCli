@@ -1,0 +1,109 @@
+{
+  "scope": "Read-only causality audit of the published Parties SDK5.1 owner prerequisite; no owner full-CI green or native acceptance claim.",
+  "base": {
+    "commit": "0911387de9edaefbeb8a93437ce760e8e9a366f1",
+    "run": 43574736293,
+    "job": 132386647032,
+    "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43574736293/job/132386647032"
+  },
+  "current": {
+    "commit": "785f8164d51579a191405a15a917232795f93449",
+    "run": 43654818155,
+    "job": 132630920782,
+    "url": "https://github.com/Hexalith/Hexalith.Parties/actions/runs/43654818155/job/132630920782"
+  },
+  "ownerFullCiStatus": "red",
+  "identicalPreexistingDeterministicFailures": 8,
+  "additionalUnchangedV404ChildExitFailures": 1,
+  "relevantIndependentCurrentLanes": [
+    {
+      "job": 132630920465,
+      "name": "EventStore4.0.4 package cohort (offline)",
+      "availabilityCases": 30,
+      "failures": 0,
+      "skips": 0,
+      "log": "current-sdk404-offline.log"
+    },
+    {
+      "job": 132630920734,
+      "name": "EventStore4.2.0 package cohort (offline)",
+      "availabilityAndTransportCases": 51,
+      "failures": 0,
+      "skips": 0,
+      "log": "current-sdk420-offline.log"
+    }
+  ],
+  "localUnchangedRowRechecks": {
+    "base": {
+      "attempts": 10,
+      "successes": 10
+    },
+    "current": {
+      "attempts": 10,
+      "successes": 10
+    },
+    "runtimeAcceptance": false
+  },
+  "unchangedInputs": [
+    {
+      "path": "tests/Hexalith.Parties.Tests/FitnessTests/RetainedCatalogViewTests.cs",
+      "baseBlob": "457b06114d37ba2a052654db29450fbcaea5d208",
+      "currentBlob": "457b06114d37ba2a052654db29450fbcaea5d208",
+      "identical": true
+    },
+    {
+      "path": "tests/Hexalith.Parties.Tests/Gateway/EventStoreGatewayRoutingTests.cs",
+      "baseBlob": "79736e7bd94faa5937f628496f36dd163671469b",
+      "currentBlob": "79736e7bd94faa5937f628496f36dd163671469b",
+      "identical": true
+    },
+    {
+      "path": "tests/Hexalith.Parties.Tests/FitnessTests/PlatformApiPrerequisitesTests.cs",
+      "baseBlob": "a13315d1f034e52f08286886480ebb37fd871cd5",
+      "currentBlob": "a13315d1f034e52f08286886480ebb37fd871cd5",
+      "identical": true
+    },
+    {
+      "path": "Directory.Build.props",
+      "baseBlob": "48279186a23168d35606526066f80b2b78792afd",
+      "currentBlob": "48279186a23168d35606526066f80b2b78792afd",
+      "identical": true
+    },
+    {
+      "path": "Directory.Packages.props",
+      "baseBlob": "908ef9fd967b357910dfde6a38dc86670820a03a",
+      "currentBlob": "908ef9fd967b357910dfde6a38dc86670820a03a",
+      "identical": true
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "baseBlob": "95a60632f3a275b87bbe93f25dc51a4ae4440280",
+      "currentBlob": "95a60632f3a275b87bbe93f25dc51a4ae4440280",
+      "identical": true
+    },
+    {
+      "path": "references/Hexalith.Builds",
+      "baseCommit": "3c2f5944aaa28dc7854a00a8a9df171aa810b0c7",
+      "currentCommit": "3c2f5944aaa28dc7854a00a8a9df171aa810b0c7",
+      "identical": true
+    },
+    {
+      "path": "references/Hexalith.Platform",
+      "baseCommit": "32643bde39b4da0e4538f8388e225727f82122f6",
+      "currentCommit": "32643bde39b4da0e4538f8388e225727f82122f6",
+      "identical": true
+    }
+  ],
+  "conclusion": "No SDK5.1 admission defect was found. Eight deterministic failures already fail identically at the parent. The additional unchanged v4.0.4 child-process exit passes independent current lanes and 20 local base/current checks; its exact cause is unproven. Fresh complete McpCli SDK5.1/Tenants8 hosted native acceptance remains required.",
+  "sourceAudit": {
+    "README.md": {
+      "path": "/home/administrator/mcpcli-maintenance-20261114/net11-recon/parties-sdk51/ci-audit/README.md",
+      "sha256": "d5f29f3be15056971ff3312ca4a010bbe2389a21bcfedad716374df074738c44"
+    },
+    "comparison.json": {
+      "path": "/home/administrator/mcpcli-maintenance-20261114/net11-recon/parties-sdk51/ci-audit/comparison.json",
+      "sha256": "465894a96305ba2b10be719080878b240a5b9c0c4bb4964dcec3ed14b651142b"
+    }
+  },
+  "nativeAcceptance": false
+}

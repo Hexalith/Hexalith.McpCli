@@ -176,29 +176,35 @@ Every live child still proves all four private namespaces; setup or probe failur
 fails preparation.
 
 `prepare-ci.sh` authenticates the complete native runtime selection in
-`native-runtime-current.json`: exact public EventStore **4.2.0** archives, public Tenants
-**7.0.7** archives and their embedded repository commits, plus the separately
-qualified Parties and Platform source revisions. The current
-Testing.Integration **4.2.0** package consumes Platform descriptors. This isolated
+`native-runtime-current.json`: exact public EventStore **5.1.0** archives, public Tenants
+**8.0.0** archives and their embedded repository commits, plus the separately
+qualified Parties and Platform source revisions. Parties source commit
+`785f8164d51579a191405a15a917232795f93449` explicitly admits SDK 5.1.0;
+its public Contracts and Aspire helpers remain 3.1.1. Tenants 8.0.0 binds
+`0cfe90e887e4d9d9f0168cba98fca1852cb80313`. The current
+Testing.Integration **5.1.0** package consumes Platform descriptors. This isolated
 suite retains ownership of its AppHost through Aspire’s public testing API,
 with bounded startup, named endpoint discovery, liveness and independent cleanup.
-The current fixture hosts select the shared .NET **11.0.0** runtime through
-`McpCliCurrentNativeProfile=true`; their compilation targets and the selected
-owner exports remain `net10.0`. Only the three isolated resource launch
-environments select `DOTNET_ROLL_FORWARD=LatestMajor`. Preparation and every
+The product, current fixture hosts and selected owner exports target `net11.0`.
+The current fixture requires the shared .NET **11.0.0** runtime through
+`McpCliCurrentNativeProfile=true`. The three isolated resource launch
+environments select `DOTNET_ROLL_FORWARD=Disable`. Preparation and every
 execution recheck require the highest installed Core and ASP.NET runtime to be
-exactly 11.0.0, so this policy cannot admit another installed version. The actual
+exactly 11.0.0, and no resource may substitute another runtime version. The actual
 fixture and AppHost require `JsonElement` to come from the trusted shared-runtime
 directory. A single runtime keeps the SDK's compiled owner schemas identical to
 the running owners; its loader, operation digests and inventory checks remain
 required. This configuration grants no acceptance before the full live lane.
 
-The historical `native-runtime.json` and its receipts remain unchanged.
+The historical `native-runtime.json`, approved current vectors and plans, and prior receipts remain unchanged.
+Current vectors retain their bound Tenants 7.0.7 version; the ordinary conformance gate reports
+the restored 8.0.0 difference. The newly decorated RefreshTenantAccess operation shares an approved
+Operation Shape; its omitted inventory row is reported, and no live repair-semantics proof is claimed.
 
 Generic CLI and MCP query requests preserve every descriptor-declared
 `projectionActorType`, when the current owner declares one. The current Parties annotations omit the
 deprecated compatibility hint and retain the same domain-service projection target. SDK
-4.2.0 supplies the exact owner-enrolled selector policy. The immutable Parties
+5.1.0 supplies the exact owner-enrolled selector policy. The immutable Parties
 source selection includes its three digest-bound compatibility bindings; foreign
 selectors remain refused. The committed catalog chooses the actual receiver.
 Fresh complete native CI remains required for this selected cohort; offline
@@ -214,11 +220,11 @@ All builds and nested preparation processes inherit a fresh task-owned
 Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the current root catalog’s published dependency selections. Source hosts and
 the separate adapter use the root McpCli 2.0.1 pin so their Abstractions identity
 matches the AppHost, including later SDK/Aspire rebuilds. The current Tenant
-source build uses the standard `Microsoft.Extensions.Logging.Abstractions` 11.0.0
-`LoggerMessage` generator. The telemetry replacement generator emits its two nested
+source build uses the standard `LoggerMessage` generator from the exact
+`Microsoft.NETCore.App.Ref` 11.0.0 targeting pack. The telemetry replacement generator emits its two nested
 `Log` types in an unstable order, changing DLL/PDB hashes on an unchanged rebuild.
 The private post-import target requires exactly one generator from each expected
-11.0.0 package, removes only the telemetry logging replacement, and retains the
+11.0.0 package or targeting pack (including exact framework metadata), removes only the telemetry logging replacement, and retains the
 metrics generator and all runtime/reference packages. This same configuration is
 sealed before execution and inherited by the ordinary SDK preparation and Aspire
 rebuilds. Historical profiles remain unchanged. The Parties
@@ -232,16 +238,11 @@ checks every package archive and extracted asset against that proof, then builds
 `--no-restore`. Only the isolated advisory-feed refresh is disabled; native evidence
 retains the exact audited graph. No server dependency edge or loader exception is added. The source
 catalog retains the pinned root-declared Builds revision with the root's exact
-Redis 3.4.31 override. After framework selection, the required post-import hook reuses
-the root's exact five reviewed net10 compatibility overrides: UniqueIds 2.30.10,
-JwtBearer/OpenApi/SignalR.StackExchangeRedis 10.0.15 and Microsoft.OpenApi 2.13.0.
-These apply only to net10 builds of the selected owners' source project graphs and the owned
-gateway host; the ordinary CLI and enrolled-module package selections retain
-their own catalog. The archived net10 Parties source graph additionally selects
-exact public `Hexalith.Commons` and `Hexalith.Commons.Http` 2.30.10 archives in the
-late hook. These two private selections preserve the source host's framework;
-they are separate from the seven validated root override rows and do not pin
-other Commons packages or apply to Tenants, the gateway, CLI or net11 builds.
+Redis 3.4.35 override. The selected owners use their native .NET 11 framework and
+current package graph. No .NET 10 compatibility packages, logging reference metadata
+or package-pruning settings are injected. Preparation and execution validate the
+exact finite unconditional root PackageVersion rows, including their Include/Update
+form, so an extra row or a changed version cannot silently change source qualification.
 Missing, changed, conditional, duplicate or unknown root
 package overrides refuse preparation and execution. A task-owned MSBuild
 post-import override also reaches SDK
@@ -252,7 +253,7 @@ catalog files and the pinned catalog; execution rejects source or file drift
 before vectors and again before smoke. Server build commands retain their
 separate 300-second bounds. The owned gateway's mandatory
 configuration snapshot is verified against native source commit
-`aa16227bd07f0564a3026d619a5abd973e02656f`, matching the public 4.2.0 archive
+`49084f66f8d6545cae442875355a7066d5f5e73d`, matching the public 5.1.0 archive
 metadata; normal overrides, real JWT validation and sidecar tokens remain active.
 
 Before creating any digest material or catalog authority, the AppHost verifies
@@ -428,3 +429,5 @@ owner verdict.
 Paired package publication requires exact-source CI, a successful staged pair,
 candidate-bound acceptance and production approval; see
 `docs/release/operator-setup-checklist.md`.
+
+The 2026-11-14 delegated maintenance renews the root Builds catalog and reusable CI/commitlint executor identities to `99f7c86072ca7b35e3fbbaee4606a559a847805a`. The strict workflow-reference guard retains exact mode, object type, path and complete reference-list checks. Both reusable workflow bodies equal the previously approved executor bytes. The [exact renewal record](../../evidence/release-sync-current-dependencies-20261114/builds-reference-renewal.json) binds that comparison and the requesting maintainer's delegation; native runtime, package and owner-source selections remain unchanged.

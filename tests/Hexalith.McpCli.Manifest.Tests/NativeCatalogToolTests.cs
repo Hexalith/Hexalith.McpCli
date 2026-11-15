@@ -140,7 +140,7 @@ public sealed class NativeCatalogToolTests : IDisposable
         {
             libraries = new Dictionary<string, object> { [identity] = new { type = "package", sha512 = kind == "changed" ? "changed-hash" : digest } },
             packageFolders = new Dictionary<string, object> { [cache] = new { } },
-            targets = new Dictionary<string, object> { ["net10.0"] = new Dictionary<string, object> { [identity] = new
+            targets = new Dictionary<string, object> { ["net11.0"] = new Dictionary<string, object> { [identity] = new
             { compile = new Dictionary<string, object> { ["lib/Fixture.dll"] = new { } } } } },
         }));
         if (kind == "archive") File.AppendAllText(archive, "changed archive");
@@ -152,7 +152,7 @@ public sealed class NativeCatalogToolTests : IDisposable
         string bin = Path.Combine(_root, "controlled-dotnet");
         Directory.CreateDirectory(bin);
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
-        string stub = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net10.0");
+        string stub = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net11.0");
         foreach (string file in Directory.EnumerateFiles(stub)) File.Copy(file, Path.Combine(bin, Path.GetFileName(file)));
         File.Move(Path.Combine(bin, OperatingSystem.IsWindows() ? "dapr.exe" : "dapr"), Path.Combine(bin, OperatingSystem.IsWindows() ? "dotnet.exe" : "dotnet"));
         string calls = Path.Combine(_root, "calls.jsonl");
@@ -341,7 +341,7 @@ public sealed class NativeCatalogToolTests : IDisposable
         string path = Path.Combine(_root, "inherited-pipes"), pidFile = Path.Combine(_root, "descendant.pid");
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
         string executable = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "fixtures", "Topology.DaprStub", "bin",
-            configuration, "net10.0", OperatingSystem.IsWindows() ? "dapr.exe" : "dapr");
+            configuration, "net11.0", OperatingSystem.IsWindows() ? "dapr.exe" : "dapr");
         MethodInfo run = typeof(NativeCatalogTool).GetMethod("RunAsync", BindingFlags.NonPublic | BindingFlags.Static)!;
         try
         {

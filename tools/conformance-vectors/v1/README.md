@@ -224,7 +224,7 @@ dotnet restore Hexalith.McpCli.slnx
 dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror
 python3 tools/conformance-vectors/v1/check_enrolled.py --output /tmp/mcpcli-story411-evidence
 MCPCLI_BENCHMARK_REQUIRE_V1=true MCPCLI_BENCHMARK_OUTPUT=/tmp/mcpcli-story411-evidence/catalog-benchmark.json \
-  dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net10.0/Hexalith.McpCli.Core.Tests.dll \
+  dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net11.0/Hexalith.McpCli.Core.Tests.dll \
   -class Hexalith.McpCli.Core.Tests.CatalogPerformanceTests
 ```
 
@@ -258,10 +258,13 @@ warm-up builds or retries. Evidence records the assembly/module/operation popula
 identifier kinds, elapsed milliseconds, 500 ms limit, missing modules and diagnostics.
 The existing isolated String-kind Catalog test remains part of Core.Tests.
 
-Current enrollment binds the authentic signed Tenants 7.0.4 Contracts artifact to
-all fourteen version-refreshed vectors and the approved twenty inventory decisions.
-The exact current approval is linked above; scripted replay establishes transport
-parity. Full remote isolated live acceptance, actual operator-client acceptance,
+Current enrollment selects the authentic signed Tenants 8.0.0 Contracts artifact and
+retains all fourteen approved vectors and the twenty inventory decisions byte for
+byte. Version differences and the unmentioned `tenants.refresh-tenant-access`
+operation are reported without failure. The new operation shares an already
+approved Operation Shape, so no per-operation vector is added. Scripted replay
+establishes transport parity for the approved vectors; it does not prove the new
+operation's downstream repair semantics. Full remote isolated live acceptance, actual operator-client acceptance,
 privacy sanitization, persisted effects and legacy retirement retain their
 separate gates.
 

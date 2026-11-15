@@ -1,0 +1,40 @@
+{
+  "schema": "mcpcli-builds-reference-renewal/v1",
+  "decision": "approved",
+  "authority": {
+    "path": "evidence/release-sync-current-dependencies-20261114/user-authorization.json",
+    "sha256": "54974ce7d41f64a759ac9c7a5b8b23196600d7f0a256ce96f6d3330bdf5fe90f"
+  },
+  "reason": "Current explicit dependency maintenance, root-reference synchronization and CI-repair delegation renews the exact source catalog and reusable workflow identities. The two selected reusable workflow bodies are byte-identical to the previous approved executor. Strict mode/type/path/reference-list/equality guards remain in force; no native runtime, owner source or package cohort selection is renewed by this record.",
+  "previous": {
+    "catalog": "05a75b626fb73c6e386d16c41e885f193d3cff16",
+    "executor": "6ad5854aa14a9950e1fbfc32d7e27953a1c4b82b"
+  },
+  "selected": {
+    "catalog": "99f7c86072ca7b35e3fbbaee4606a559a847805a",
+    "executor": "99f7c86072ca7b35e3fbbaee4606a559a847805a"
+  },
+  "executorSourceBindings": [
+    {
+      "path": ".github/workflows/domain-ci.yml",
+      "previousSha256": "beb4c0a0e3ed532030ae9dbafae56f01e24018574faf264adae969290fabc37d",
+      "selectedSha256": "beb4c0a0e3ed532030ae9dbafae56f01e24018574faf264adae969290fabc37d",
+      "bytesUnchanged": true
+    },
+    {
+      "path": ".github/workflows/commitlint.yml",
+      "previousSha256": "a7a6034c82b68b3b1b1f48a8dd6ceee0f5a3fd00eac3672ef7773f3ec88f9140",
+      "selectedSha256": "a7a6034c82b68b3b1b1f48a8dd6ceee0f5a3fd00eac3672ef7773f3ec88f9140",
+      "bytesUnchanged": true
+    }
+  ],
+  "unchangedFrozenRuntimeFiles": {
+    "tools/live-topology/native-runtime-current.json": "9b14a1fa2942d38d81d64f2c83fc477d95b32c92c0563f24ee012d4db0f15ac5",
+    "tools/live-topology/runtime-profile-current.json": "d6853877ab323e701d83de962183602dbb592ac8d30fd75676567c77c3444f5d",
+    "tools/live-topology/binaries-current.json": "c8c5f621ff4a5d2afc80daf1158c7455fdaccfad44d96d84ecb9212128d8f20a"
+  },
+  "automatedSourceInspectionOnly": true,
+  "individualHumanReviewClaimed": false,
+  "runtimeAcceptance": false,
+  "publicationAcceptance": false
+}

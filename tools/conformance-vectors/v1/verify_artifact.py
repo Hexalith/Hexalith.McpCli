@@ -265,7 +265,7 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             cached = scratch / 'packages' / package_id.lower() / version.lower() / (package_id.lower() + '.' + version.lower() + '.nupkg')
             if not cached.exists() or hashlib.sha512(cached.read_bytes()).digest() != hashlib.sha512(artifact.read_bytes()).digest():
                 raise RuntimeError('Restored package bytes do not match the supplied artifact.')
-            command = ['dotnet', host / 'bin/Release/net10.0/ArtifactHost.dll']
+            command = ['dotnet', host / 'bin/Release/net11.0/ArtifactHost.dll']
             snapshot = json.loads(run([*command, '--full-catalog'], scratch, env, 'catalog'))
             if snapshot['diagnostics']:
                 raise RuntimeError('Catalog diagnostics are not empty.')

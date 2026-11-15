@@ -1000,7 +1000,7 @@ class CombinedConsumptionHashTests(unittest.TestCase):
                     patch('check_enrolled.run_catalog', return_value={'modules': ['first', 'second']}) as replay:
                 progress = check_enrolled.production_replay(repo, output, receipts)
             host = repo / 'tests/Hexalith.McpCli.ConformanceHost'
-            replay.assert_called_once_with(host / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll', selections,
+            replay.assert_called_once_with(host / 'bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll', selections,
                 assets_path=host / 'obj/project.assets.json', evidence_dir=output / 'production-observations',
                 expected_modules={'First.Contracts': 'first', 'Second.Contracts': 'second'})
             self.assertEqual('passed', progress['result'])

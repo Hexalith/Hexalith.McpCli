@@ -1,0 +1,103 @@
+{
+  "sdk": {
+    "version": "11.0.100",
+    "compilerVersion": "5.12.0-1.26529.118",
+    "change": "unchanged current stable SDK"
+  },
+  "productTargetFramework": "net10.0",
+  "analyzer": {
+    "roslyn": "5.9.0",
+    "inspectedSdk": "10.0.404",
+    "compilerVersion": "5.9.0-1.26529.119",
+    "reason": "Existing compiler API pin retained at maintenance handoff; the explicit .NET 11 migration will supersede the SDK10 compatibility assumption.",
+    "buildTimeRules": "Microsoft.CodeAnalysis.Analyzers/5.12.0",
+    "previousDocumentedMinimumSdk": "10.0.4xx",
+    "verifiedPackagedConsumerSdk": "11.0.100",
+    "sdk10FreshBytes": "fails CS8032; see sdk10-proof-correction.json"
+  },
+  "compatibilityPins": {
+    "Hexalith.EventStore.Client": "4.2.0",
+    "Hexalith.EventStore.Contracts": "4.2.0",
+    "Hexalith.Tenants.Contracts": "7.0.7",
+    "Hexalith.Parties.Contracts": "3.1.1",
+    "Hexalith.Commons.UniqueIds": "2.30.11"
+  },
+  "changedProductionVersions": {
+    "Google.Protobuf": {
+      "before": "3.35.0",
+      "after": "3.36.2"
+    },
+    "Grpc.Core.Api": {
+      "before": "2.80.0",
+      "after": "2.85.0"
+    },
+    "Grpc.Net.Client": {
+      "before": "2.80.0",
+      "after": "2.85.0"
+    },
+    "Grpc.Net.Common": {
+      "before": "2.80.0",
+      "after": "2.85.0"
+    },
+    "Grpc.Reflection": {
+      "before": "2.80.0",
+      "after": "2.85.0"
+    },
+    "Hexalith.Commons.UniqueIds": {
+      "before": "2.30.10",
+      "after": "2.30.11"
+    },
+    "Json.More.Net": {
+      "before": "3.0.1",
+      "after": "3.1.0"
+    },
+    "JsonPointer.Net": {
+      "before": "7.0.4",
+      "after": "7.1.0"
+    },
+    "JsonSchema.Net": {
+      "before": "9.6.0",
+      "after": "9.7.0"
+    },
+    "Microsoft.Extensions.AI.Abstractions": {
+      "before": "10.11.0",
+      "after": "11.0.0"
+    },
+    "Microsoft.Extensions.Caching.Abstractions": {
+      "before": "10.0.14",
+      "after": "11.0.0"
+    }
+  },
+  "testRuntimeRedis": {
+    "before": "3.4.31",
+    "after": "3.4.35"
+  },
+  "enrolledContractArtifactsChanged": false,
+  "npm": {
+    "directToolingPinsChanged": false,
+    "packageIdsChanged": false,
+    "compatibleLockRefresh": true,
+    "auditBefore": {
+      "info": 0,
+      "low": 0,
+      "moderate": 37,
+      "high": 1,
+      "critical": 0,
+      "total": 38
+    },
+    "auditAfter": {
+      "info": 0,
+      "low": 0,
+      "moderate": 36,
+      "high": 0,
+      "critical": 0,
+      "total": 36
+    },
+    "remainingRootAdvisories": [
+      "Glob: AbortSignal cancellation bypass allows post-timeout filesystem traversal",
+      "minimatch has potential denial of service via globparts amplification"
+    ],
+    "limit": "Remaining npm audit fixes propose earlier major semantic-release/plugin versions; no forced downgrade or override applied."
+  },
+  "productionPackageGraphIdsChanged": false
+}

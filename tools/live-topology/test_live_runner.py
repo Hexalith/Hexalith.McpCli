@@ -407,7 +407,7 @@ class ExecutionTests(unittest.TestCase):
 
     def test_dynamic_cursor_and_audit_windows_reach_cli_and_actual_core_validation(self):
         from live_plans import HeadProcess, ROOT, validate_call
-        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
         first = '2026-10-20T12:34:56.123456+00:00'
         last = '2026-10-20T12:35:57.654321+00:00'
         for operation in ['tenants.get-tenant-users', 'tenants.get-tenant-audit']:
@@ -444,7 +444,7 @@ class ExecutionTests(unittest.TestCase):
         action['query']['payload']['UnexpectedProperty'] = True
         rejected_index = selection['plan']['actions'].index(action)
         report = {'phases': []}
-        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
         with tempfile.TemporaryDirectory() as home:
             core = HeadProcess(host, home, 30)
             def validate(_, call):

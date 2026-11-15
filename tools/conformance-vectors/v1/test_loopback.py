@@ -33,7 +33,7 @@ HERE = Path(__file__).parent
 
 
 def runtime_package(artifact, host):
-    asset = 'lib/net10.0/Fixture.Contracts.dll'
+    asset = 'lib/net11.0/Fixture.Contracts.dll'
     with zipfile.ZipFile(artifact, 'w') as archive:
         archive.writestr(asset, b'exact selected runtime DLL bytes')
     (host.parent / Path(asset).name).write_bytes(b'exact selected runtime DLL bytes')
@@ -148,7 +148,7 @@ class LoopbackRulesTests(unittest.TestCase):
     def test_host_signed_archive_matches_restore_content_hash_independently(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            host = root / "host/bin/Release/net10.0/Host.dll"
+            host = root / "host/bin/Release/net11.0/Host.dll"
             host.parent.mkdir(parents=True)
             artifact = root / "immutable.nupkg"
             runtime = runtime_package(artifact, host)
@@ -165,10 +165,10 @@ class LoopbackRulesTests(unittest.TestCase):
                 "libraries": {"Sample.Contracts/1.0.0": {
                     "type": "package", "path": "sample.contracts/1.0.0", "sha512": content_hash}},
                 "packageFolders": {str(root / "packages"): {}},
-                "targets": {"net10.0": {"Sample.Contracts/1.0.0": {"runtime": runtime}}}}))
+                "targets": {"net11.0": {"Sample.Contracts/1.0.0": {"runtime": runtime}}}}))
             host.with_suffix(".deps.json").write_text(json.dumps({
-                "runtimeTarget": {"name": "net10.0"},
-                "targets": {"net10.0": {"Sample.Contracts/1.0.0": {"runtime": runtime}}},
+                "runtimeTarget": {"name": "net11.0"},
+                "targets": {"net11.0": {"Sample.Contracts/1.0.0": {"runtime": runtime}}},
                 "libraries": {"Sample.Contracts/1.0.0": {"type": "package", "sha512": "sha512-" + content_hash}}}))
             _verify_artifact_in_host(host, artifact, ("Sample.Contracts", "1.0.0"))
             for changed in (artifact, cached, cached.with_suffix(".nupkg.sha512"), cached.parent / ".nupkg.metadata", assets, host.with_suffix(".deps.json")):
@@ -195,12 +195,12 @@ class LoopbackRulesTests(unittest.TestCase):
                 with self.subTest(runtime_selection=mutation):
                     doc = json.loads(original)
                     if mutation == 'empty-runtime':
-                        doc['targets']['net10.0']['Sample.Contracts/1.0.0']['runtime'] = {}
+                        doc['targets']['net11.0']['Sample.Contracts/1.0.0']['runtime'] = {}
                     elif mutation == 'unknown-runtime-target':
                         doc['runtimeTarget']['name'] = 'unrestored-target'
                     else:
-                        doc['targets']['net10.0']['Sample.Contracts/1.0.0']['runtime'] = {
-                            'lib/net10.0/Unrestored.Contracts.dll': {}}
+                        doc['targets']['net11.0']['Sample.Contracts/1.0.0']['runtime'] = {
+                            'lib/net11.0/Unrestored.Contracts.dll': {}}
                     try:
                         deps.write_text(json.dumps(doc))
                         with self.assertRaisesRegex(VectorError, 'selected package runtime DLL assets differ'):
@@ -215,7 +215,7 @@ class LoopbackRulesTests(unittest.TestCase):
     def test_host_restored_artifact_hash_must_match(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
-            host = root / "host/bin/Release/net10.0/Host.dll"
+            host = root / "host/bin/Release/net11.0/Host.dll"
             host.parent.mkdir(parents=True)
             artifact = root / "sample.nupkg"
             runtime = runtime_package(artifact, host)
@@ -229,10 +229,10 @@ class LoopbackRulesTests(unittest.TestCase):
             assets.write_text(json.dumps({"libraries": {identity: {
                 "type": "package", "path": "hexalith.mcpcli.sample.contracts/1.0.0", "sha512": digest}},
                 "packageFolders": {str(root / "packages"): {}},
-                "targets": {"net10.0": {identity: {"runtime": runtime}}}}))
+                "targets": {"net11.0": {identity: {"runtime": runtime}}}}))
             deps = host.with_suffix(".deps.json")
-            deps.write_text(json.dumps({"runtimeTarget": {"name": "net10.0"},
-                                       "targets": {"net10.0": {identity: {"runtime": runtime}}},
+            deps.write_text(json.dumps({"runtimeTarget": {"name": "net11.0"},
+                                       "targets": {"net11.0": {identity: {"runtime": runtime}}},
                                        "libraries": {identity: {"type": "package", "sha512": digest}}}), encoding="utf-8")
             _verify_artifact_in_host(host, artifact, ("Hexalith.McpCli.Sample.Contracts", "1.0.0"))
             artifact.write_bytes(b"changed artifact")

@@ -118,7 +118,7 @@ public sealed class AspireHelperDependencyTests
         Directory.CreateDirectory(Path.Combine(root, "empty"));
         try
         {
-            File.WriteAllText(Path.Combine(root, "Missing.csproj"), $"<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net10.0</TargetFramework></PropertyGroup><ItemGroup><PackageReference Include=\"{Helper}\" Version=\"0.0.0-missing-fixture\" /></ItemGroup></Project>");
+            File.WriteAllText(Path.Combine(root, "Missing.csproj"), $"<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><TargetFramework>net11.0</TargetFramework></PropertyGroup><ItemGroup><PackageReference Include=\"{Helper}\" Version=\"0.0.0-missing-fixture\" /></ItemGroup></Project>");
             new XDocument(new XElement("configuration", new XElement("packageSources", new XElement("clear"),
                 new XElement("add", new XAttribute("key", "empty"), new XAttribute("value", Path.Combine(root, "empty"))))))
                 .Save(Path.Combine(root, "NuGet.Config"));

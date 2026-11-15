@@ -38,5 +38,9 @@
   {
     "path": "amendments/1.0.10.json",
     "sha256": "e1efb99e1b65a188610c86df13fb4b99a51bf2a9833c0fef4c223a62fe9a88c2"
+  },
+  {
+    "path": "amendments/1.0.11.json",
+    "sha256": "e24c1b1822d0ef27c2011808b97c7d7a6475c8b6cb9a29be0f96aa0347378995"
   }
 ]

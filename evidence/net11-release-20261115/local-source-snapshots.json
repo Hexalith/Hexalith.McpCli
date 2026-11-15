@@ -1,0 +1,61 @@
+{
+  "tree": "78791420effa0492c8936b771c7de67fb24d4e41",
+  "parent": "4ffb33e84fd12a2642deb19b3492ce67ae670cee",
+  "commit": "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1",
+  "message": "build: verify the final .NET 11 migration snapshot\n",
+  "commitlintExitCode": 0,
+  "rootIndexBeforeSha256": "b3ffc1f5a113e6045ea8af6f490f8be27a7b830025805221e873bcb9166206f0",
+  "rootIndexAfterSha256": "b3ffc1f5a113e6045ea8af6f490f8be27a7b830025805221e873bcb9166206f0",
+  "rootBranchesChanged": false,
+  "retainedVerification": {
+    "previous": {
+      "tree": "e5e648ebe7f067062cc83840852017df62dbb87a",
+      "parent": "4ffb33e84fd12a2642deb19b3492ce67ae670cee",
+      "commit": "f219966b952efb370b998399f8fb376306ca4ed3",
+      "message": "build: verify the final .NET 11 migration snapshot\n",
+      "commitlintExitCode": 0,
+      "rootIndexBeforeSha256": "b3ffc1f5a113e6045ea8af6f490f8be27a7b830025805221e873bcb9166206f0",
+      "rootIndexAfterSha256": "b3ffc1f5a113e6045ea8af6f490f8be27a7b830025805221e873bcb9166206f0",
+      "rootBranchesChanged": false,
+      "retainedSuccessfulSuites": {
+        "previous": {
+          "tree": "ffbbb21f77db9c73c70803e00b27c899e7340335",
+          "parent": "4ffb33e84fd12a2642deb19b3492ce67ae670cee",
+          "commit": "1ad3b5a7ecff4a0c4b65b04351d699c9c80cb332",
+          "message": "build: verify the final .NET 11 migration snapshot\n",
+          "commitlintExitCode": 0,
+          "rootIndexBeforeSha256": "b3ffc1f5a113e6045ea8af6f490f8be27a7b830025805221e873bcb9166206f0",
+          "rootIndexAfterSha256": "b3ffc1f5a113e6045ea8af6f490f8be27a7b830025805221e873bcb9166206f0",
+          "rootBranchesChanged": false,
+          "retainedSuccessfulSuites": {
+            "snapshot": "dde4d38a1954950285c174abfd96f8077006f260",
+            "suites": [
+              "Abstractions",
+              "Analyzers",
+              "Core"
+            ],
+            "changedFilesSinceRetainedSuites": [
+              "tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs"
+            ]
+          }
+        },
+        "changedFilesSincePreviousSnapshot": [
+          "tools/live-topology/test_live_plans.py"
+        ],
+        "suites": [
+          "Abstractions",
+          "Analyzers",
+          "Core",
+          "Cli",
+          "Mcp",
+          "Manifest",
+          "census-python"
+        ]
+      }
+    },
+    "changedFilesSincePreviousSnapshot": [
+      "tools/live-topology/test_ci.py"
+    ],
+    "note": "Two CiHooks test-only assertions now reflect removed legacy logging/pruning injections; focused cases pass. Production code and the already-passing139 topology cases are unchanged."
+  }
+}

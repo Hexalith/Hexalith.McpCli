@@ -42,6 +42,7 @@ def main() -> int:
     if actual_names != expected_names:
         raise ValueError(f"Expected {sorted(expected_names)}, found {sorted(actual_names)}")
 
+    framework = bootstrap_target_framework(version) if phase == "bootstrap" else "net11.0"
     for package_id in active_ids:
         path = staging / f"{package_id}.{version}.nupkg"
         if not path.is_file() or path.is_symlink():
@@ -51,9 +52,17 @@ def main() -> int:
             if len(names) != len(archive.namelist()):
                 raise ValueError(f"{path} contains duplicate archive entries")
             if package_id.endswith(".Abstractions") and (
-                "lib/net10.0/Hexalith.McpCli.Abstractions.dll" not in names
+                f"lib/{framework}/Hexalith.McpCli.Abstractions.dll" not in names
             ):
-                raise ValueError("Abstractions package is missing its net10.0 compile DLL")
+                raise ValueError(f"Abstractions package is missing its {framework} compile DLL")
+            if package_id.endswith(".Abstractions") and any(
+                name.lower().startswith(prefix) and name.lower() != prefix
+                and not name.lower().startswith(f"{prefix}{framework}/")
+                for prefix in ("lib/", "ref/") for name in names
+            ):
+                raise ValueError(f"Abstractions package must contain only its {framework} compile target")
+            if package_id.endswith(".Abstractions") and any(name.lower().startswith("runtimes/") for name in names):
+                raise ValueError("Abstractions package cannot contain RID-specific payload")
             if package_id.endswith(".Abstractions") and (
                 "analyzers/dotnet/cs/Hexalith.McpCli.Analyzers.dll" not in names
             ):
@@ -90,7 +99,7 @@ def main() -> int:
 
 
 def validate_tool_package(archive: ZipFile, names: set[str], metadata: ElementTree.Element) -> None:
-    prefix = "tools/net10.0/any/"
+    prefix = "tools/net11.0/any/"
     required = {
         "README.md",
         prefix + "DotnetToolSettings.xml",
@@ -109,7 +118,7 @@ def validate_tool_package(archive: ZipFile, names: set[str], metadata: ElementTr
     }:
         raise ValueError("McpCli tool command is not hexalith")
 
-    manifest = Path("src/Hexalith.McpCli/obj/Release/net10.0/ModuleAssemblyManifest.g.cs")
+    manifest = Path("src/Hexalith.McpCli/obj/Release/net11.0/ModuleAssemblyManifest.g.cs")
     if not manifest.is_file():
         raise ValueError("The generated Contracts assembly manifest is missing")
     entries = re.findall(r'\("([^"]+)", "([^"]+)"\)', manifest.read_text(encoding="utf-8"))
@@ -131,15 +140,15 @@ def validate_tool_package(archive: ZipFile, names: set[str], metadata: ElementTr
     if any(restored.get(name) != version for name, version in policy.items()):
         raise ValueError('Restored Contracts versions differ from the approved enrollment.')
     dependencies = json.loads(archive.read(prefix + 'Hexalith.McpCli.deps.json'))
-    if dependencies['runtimeTarget']['name'] != '.NETCoreApp,Version=v10.0':
-        raise ValueError('The tool must target portable .NET 10 without a runtime identifier.')
+    if dependencies['runtimeTarget']['name'] != '.NETCoreApp,Version=v11.0':
+        raise ValueError('The tool must target portable .NET 11 without a runtime identifier.')
     if any(f'{name}/{version}' not in dependencies['libraries'] for name, version in policy.items()):
         raise ValueError('Packaged Contracts versions differ from the approved enrollment.')
     runtime = json.loads(archive.read(prefix + 'Hexalith.McpCli.runtimeconfig.json'))['runtimeOptions']
     frameworks = runtime.get('frameworks', [runtime.get('framework', {})])
-    if (runtime.get('tfm') != 'net10.0' or runtime.get('includedFrameworks')
-            or not any(item.get('name') == 'Microsoft.NETCore.App' and item.get('version', '').startswith('10.') for item in frameworks)):
-        raise ValueError('The tool must be framework-dependent on .NET 10.')
+    if (runtime.get('tfm') != 'net11.0' or runtime.get('includedFrameworks')
+            or not any(item.get('name') == 'Microsoft.NETCore.App' and item.get('version', '').startswith('11.') for item in frameworks)):
+        raise ValueError('The tool must be framework-dependent on .NET 11.')
     if any(name.startswith(prefix + executable) for name in names for executable in ('hexalith.exe', 'Hexalith.McpCli.exe', 'coreclr', 'hostfxr')):
         raise ValueError('A native apphost or runtime payload is not allowed.')
     validate_tool_payload(archive, names, dependencies, prefix)
@@ -150,7 +159,7 @@ def validate_tool_payload(archive, names, dependencies, prefix):
                     b'\xcf\xfa\xed\xfe', b'\xca\xfe\xba\xbe', b'\xbe\xba\xfe\xca',
                     b'\xca\xfe\xba\xbf', b'\xbf\xba\xfe\xca', b'\0asm', b'!<arch>\n')
     for name in sorted(names):
-        if name.startswith('tools/') and not name.startswith(prefix) and name not in ('tools/', 'tools/net10.0/'):
+        if name.startswith('tools/') and not name.startswith(prefix) and name not in ('tools/', 'tools/net11.0/'):
             raise ValueError(f'Alternate tools layouts are not allowed: {name}')
         if name.endswith('/'):
             continue
@@ -236,6 +245,18 @@ def validate_managed(payload):
         raise ValueError('The tool payload is not a managed PE assembly.') from None
 
 
+def bootstrap_target_framework(version):
+    """Bind non-publishing preparation and fixed recovery to the checked-out source."""
+    project = 'src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj'
+    result = run(['dotnet', 'msbuild', project, '-nologo', '-tl:off', '-p:Configuration=Release',
+                  f'-p:Version={version}', '-getProperty:TargetFramework,TargetFrameworks'], text=True)
+    properties = json.loads(result.stdout)['Properties']
+    framework = properties['TargetFramework']
+    if framework not in ('net10.0', 'net11.0') or properties['TargetFrameworks']:
+        raise ValueError('Bootstrap source must target only net10.0 or net11.0.')
+    return framework
+
+
 def validate_effective_properties(packages, version):
     names = ['TargetFramework', 'TargetFrameworks', 'PackAsTool', 'ToolCommandName', 'UseAppHost',
              'PublishTrimmed', 'PublishAot', 'PublishReadyToRun', 'SelfContained', 'RuntimeIdentifier', 'RuntimeIdentifiers',
@@ -244,8 +265,8 @@ def validate_effective_properties(packages, version):
         result = run(['dotnet', 'msbuild', package['project'], '-nologo', '-p:Configuration=Release',
                       f'-p:Version={version}', '-getProperty:' + ','.join(names)], text=True)
         properties = json.loads(result.stdout)['Properties']
-        if properties['TargetFramework'] != 'net10.0' or properties['TargetFrameworks']:
-            raise ValueError('Release packages must target only net10.0.')
+        if properties['TargetFramework'] != 'net11.0' or properties['TargetFrameworks']:
+            raise ValueError('Release packages must target only net11.0.')
         if properties['PackageId'] != package['id'] or properties['Version'] != version:
             raise ValueError('Effective package identity/version differs from the release manifest.')
         if package['id'] == 'Hexalith.McpCli':

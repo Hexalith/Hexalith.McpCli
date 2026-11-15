@@ -1,0 +1,7 @@
+{
+  "decision": "Include the .NET 11 product migration",
+  "question": "The newest EventStore, Tenants, and Commons packages require moving the product from .NET 10 to .NET 11 and requalifying its gateway cohort. Should I retain .NET 10 and update to its latest compatible packages for this release, or include that framework migration?",
+  "originalReleaseAuthorization": "push all changes and sync all submodules and repository. update to latest .NET SDK. update to latest packages versions. fix any CI/CD failures, then create a Release (bypass any human validation) and check nuget packages have been published.",
+  "humanValidationBypass": true,
+  "individualHumanSourceReviewClaimed": false
+}

@@ -60,7 +60,7 @@ public sealed class DaprPrerequisiteTests(DaprPrerequisiteWorkspace workspace) :
         start.ArgumentList.Add(workspace.Assembly);
         start.ArgumentList.Add("-method");
         start.ArgumentList.Add("*AuthenticatedQueryReturnsSuccessfulDocument");
-        string stub = Path.Combine(root, "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net10.0");
+        string stub = Path.Combine(root, "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net11.0");
         string cliPath = Path.Combine(Path.GetTempPath(), "mcpcli-git-only-" + Guid.NewGuid().ToString("N"));
         if (missing == "cli")
         {

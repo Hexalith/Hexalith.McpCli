@@ -10,9 +10,9 @@ import subprocess
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
-COHORT = '4.2.0'
+COHORT = '5.1.0'
 # Historical and current tuples are closed independently; crossed cohorts refuse.
-TENANT_COHORTS = {'4.1.0': '7.0.5', '4.2.0': '7.0.7'}
+TENANT_COHORTS = {'4.1.0': '7.0.5', '4.2.0': '7.0.7', '5.1.0': '8.0.0'}
 MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Platform')
 REPOSITORIES = {name: f'https://github.com/Hexalith/{name}.git' for name in MODULES}
 
@@ -32,7 +32,7 @@ def manifest(path: Path) -> dict:
     if len(identities) != len(packages) or not {('Hexalith.EventStore.Gateway', cohort),
             ('Hexalith.EventStore.Aspire', cohort), ('Hexalith.Tenants.Contracts', tenant),
             ('Hexalith.Tenants.Aspire', tenant)} <= identities:
-        raise ValueError('Public Gateway, Aspire and Tenants7 archive identities are required.')
+        raise ValueError('Public Gateway, Aspire and Tenants archive identities are required.')
     for item in packages:
         module = 'Hexalith.EventStore' if item['id'].startswith('Hexalith.EventStore.') else 'Hexalith.Tenants'
         if not re.fullmatch(r'Hexalith\.(EventStore|Tenants)\.[A-Za-z.]+', item['id']) \
@@ -140,8 +140,8 @@ def verify_runtime_assets(project: Path, selection: dict, required: str) -> dict
                  if name.startswith(('Hexalith.EventStore.', 'Hexalith.Tenants.'))}
     if required not in libraries or any(item.get('type') != 'package' for item in libraries.values()):
         raise ValueError('Composition/client runtime requires its actual published package identities.')
-    target = assets['targets']['net10.0']
-    output = project.parent / 'bin/Release/net10.0'
+    target = assets['targets']['net11.0']
+    output = project.parent / 'bin/Release/net11.0'
     packages = {}
     for identity in sorted(libraries):
         name, version = identity.split('/')

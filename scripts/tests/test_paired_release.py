@@ -386,7 +386,7 @@ class PairedReleaseTests(unittest.TestCase):
     def test_effective_properties_refuse_unportable_or_mismatched_packages(self):
         validator = module('validate-release-packages')
         tool = {'id': 'Hexalith.McpCli', 'project': 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'}
-        valid = {'TargetFramework': 'net10.0', 'TargetFrameworks': '', 'PackAsTool': 'true', 'ToolCommandName': 'hexalith',
+        valid = {'TargetFramework': 'net11.0', 'TargetFrameworks': '', 'PackAsTool': 'true', 'ToolCommandName': 'hexalith',
                  'UseAppHost': 'false', 'PublishTrimmed': '', 'PublishAot': '', 'PublishReadyToRun': '', 'SelfContained': '',
                  'RuntimeIdentifier': '', 'RuntimeIdentifiers': '', 'CreateRidSpecificToolPackages': '',
                  'PackageId': 'Hexalith.McpCli', 'Version': VERSION}
@@ -397,7 +397,7 @@ class PairedReleaseTests(unittest.TestCase):
                 validator.validate_effective_properties([tool], VERSION)
 
         evaluate()
-        for changes in ({'TargetFramework': 'net9.0'}, {'TargetFrameworks': 'net10.0;net9.0'}, {'PackageId': 'Other'},
+        for changes in ({'TargetFramework': 'net9.0'}, {'TargetFramework': 'net10.0'}, {'TargetFrameworks': 'net11.0;net9.0'}, {'PackageId': 'Other'},
                         {'Version': '9.9.9'}, {'PackAsTool': 'false'}, {'ToolCommandName': 'other'},
                         {'UseAppHost': 'true'}, {'PublishTrimmed': 'true'}, {'PublishAot': 'true'},
                         {'PublishReadyToRun': 'true'}, {'SelfContained': 'true'},

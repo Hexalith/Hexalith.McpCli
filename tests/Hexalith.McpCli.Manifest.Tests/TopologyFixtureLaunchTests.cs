@@ -20,7 +20,7 @@ public sealed class TopologyFixtureLaunchTests
     {
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
         string assemblyPath = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "Hexalith.McpCli.Integration.Tests",
-            "bin", configuration, "net10.0", "Hexalith.McpCli.Integration.Tests.dll");
+            "bin", configuration, "net11.0", "Hexalith.McpCli.Integration.Tests.dll");
         var context = new AssemblyLoadContext("fixture-environment-" + Guid.NewGuid().ToString("N"), isCollectible: true);
         var resolver = new AssemblyDependencyResolver(assemblyPath);
         context.Resolving += (_, name) => resolver.ResolveAssemblyToPath(name) is { } path ? context.LoadFromAssemblyPath(path) : null;
@@ -51,7 +51,7 @@ public sealed class TopologyFixtureLaunchTests
             Delegate configure = Delegate.CreateDelegate(create.GetParameters()[1].ParameterType,
                 typeof(TopologyFixtureLaunchTests).GetMethod(nameof(PreserveBuilderOptions), BindingFlags.NonPublic | BindingFlags.Static)!);
             Assembly appHost = context.LoadFromAssemblyPath(Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests",
-                "Hexalith.McpCli.AppHost", "bin", configuration, "net10.0", "Hexalith.McpCli.AppHost.dll"));
+                "Hexalith.McpCli.AppHost", "bin", configuration, "net11.0", "Hexalith.McpCli.AppHost.dll"));
             using var reflection = context.EnterContextualReflection();
             foreach (bool explicitDevelopment in new[] { false, true })
             {
@@ -83,7 +83,7 @@ public sealed class TopologyFixtureLaunchTests
     {
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
         string path = Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests", "Hexalith.McpCli.Integration.Tests",
-            "bin", configuration, "net10.0", "Hexalith.McpCli.Integration.Tests.dll");
+            "bin", configuration, "net11.0", "Hexalith.McpCli.Integration.Tests.dll");
         var context = new AssemblyLoadContext("signed-fixture-" + Guid.NewGuid().ToString("N"), isCollectible: true);
         var resolver = new AssemblyDependencyResolver(path);
         context.Resolving += (_, name) => resolver.ResolveAssemblyToPath(name) is { } resolved ? context.LoadFromAssemblyPath(resolved) : null;
@@ -131,8 +131,8 @@ public sealed class TopologyFixtureLaunchTests
         Directory.CreateDirectory(Path.Combine(root, "src"));
         string repository = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
-        string source = Path.Combine(repository, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net10.0");
-        string target = Path.Combine(root, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net10.0");
+        string source = Path.Combine(repository, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net11.0");
+        string target = Path.Combine(root, "tests", "Hexalith.McpCli.Integration.Tests", "bin", configuration, "net11.0");
         try
         {
             foreach (string file in Directory.EnumerateFiles(source, "*", SearchOption.AllDirectories))

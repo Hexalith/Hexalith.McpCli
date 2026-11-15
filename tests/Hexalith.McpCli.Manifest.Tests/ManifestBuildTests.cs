@@ -26,10 +26,10 @@ public sealed class ManifestBuildTests
         try
         {
             string feed = Path.Combine(root, "feed");
-            CreatePackage(feed, "Manifest.Sample.Contracts", (SampleAssembly, "lib/net10.0/Hexalith.McpCli.Sample.Contracts.dll"));
-            CreatePackage(feed, "Manifest.MarkedEmpty.Contracts", (MarkedEmptyAssembly, "lib/net10.0/Manifest.MarkedEmpty.Contracts.dll"));
-            CreatePackage(feed, "Manifest.Unmarked.Contracts", (UnmarkedAssembly, "lib/net10.0/manifest.AUnmarked.Contracts.dll"));
-            CreatePackage(feed, "Manifest.Other", (UnmarkedAssembly, "lib/net10.0/Manifest.Other.dll"));
+            CreatePackage(feed, "Manifest.Sample.Contracts", (SampleAssembly, "lib/net11.0/Hexalith.McpCli.Sample.Contracts.dll"));
+            CreatePackage(feed, "Manifest.MarkedEmpty.Contracts", (MarkedEmptyAssembly, "lib/net11.0/Manifest.MarkedEmpty.Contracts.dll"));
+            CreatePackage(feed, "Manifest.Unmarked.Contracts", (UnmarkedAssembly, "lib/net11.0/manifest.AUnmarked.Contracts.dll"));
+            CreatePackage(feed, "Manifest.Other", (UnmarkedAssembly, "lib/net11.0/Manifest.Other.dll"));
             string project = WriteProject(root,
                 ("Manifest.Unmarked.Contracts", true),
                 ("Manifest.MarkedEmpty.Contracts", true),
@@ -121,8 +121,8 @@ public sealed class ManifestBuildTests
         try
         {
             string feed = Path.Combine(root, "feed");
-            CreatePackage(feed, "Manifest.MarkedEmpty.Contracts", (MarkedEmptyAssembly, "lib/net10.0/Manifest.MarkedEmpty.Contracts.dll"));
-            CreatePackage(feed, "Manifest.Zero.Contracts", (UnmarkedAssembly, "lib/net10.0/Unrelated.dll"));
+            CreatePackage(feed, "Manifest.MarkedEmpty.Contracts", (MarkedEmptyAssembly, "lib/net11.0/Manifest.MarkedEmpty.Contracts.dll"));
+            CreatePackage(feed, "Manifest.Zero.Contracts", (UnmarkedAssembly, "lib/net11.0/Unrelated.dll"));
             string project = WriteProject(root, ("Manifest.MarkedEmpty.Contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
@@ -148,10 +148,10 @@ public sealed class ManifestBuildTests
         try
         {
             string feed = Path.Combine(root, "feed");
-            CreatePackage(feed, "Manifest.MarkedEmpty.Contracts", (MarkedEmptyAssembly, "lib/net10.0/Manifest.MarkedEmpty.Contracts.dll"));
+            CreatePackage(feed, "Manifest.MarkedEmpty.Contracts", (MarkedEmptyAssembly, "lib/net11.0/Manifest.MarkedEmpty.Contracts.dll"));
             CreatePackage(feed, "Manifest.Ambiguous.Contracts",
-                (SampleAssembly, "lib/net10.0/Hexalith.McpCli.Sample.Contracts.dll"),
-                (MarkedEmptyAssembly, "lib/net10.0/Manifest.MarkedEmpty.Contracts.dll"));
+                (SampleAssembly, "lib/net11.0/Hexalith.McpCli.Sample.Contracts.dll"),
+                (MarkedEmptyAssembly, "lib/net11.0/Manifest.MarkedEmpty.Contracts.dll"));
             string project = WriteProject(root, ("Manifest.MarkedEmpty.Contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
@@ -177,7 +177,7 @@ public sealed class ManifestBuildTests
         try
         {
             string feed = Path.Combine(root, "feed");
-            CreatePackage(feed, "Manifest.Renamed.Contracts", (UnmarkedAssembly, "lib/net10.0/Manifest.Renamed.Contracts.dll"));
+            CreatePackage(feed, "Manifest.Renamed.Contracts", (UnmarkedAssembly, "lib/net11.0/Manifest.Renamed.Contracts.dll"));
             string project = WriteProject(root, ("Manifest.Renamed.Contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             string output = RunDotnet(root, false, "build", project, "--no-restore", "--configuration", "Release");
@@ -199,7 +199,7 @@ public sealed class ManifestBuildTests
         try
         {
             string feed = Path.Combine(root, "feed");
-            CreatePackage(feed, "Manifest.Unmarked.Contracts", (UnmarkedAssembly, "lib/net10.0/manifest.AUnmarked.Contracts.dll"));
+            CreatePackage(feed, "Manifest.Unmarked.Contracts", (UnmarkedAssembly, "lib/net11.0/manifest.AUnmarked.Contracts.dll"));
             string project = WriteProject(root, ("manifest.unmarked.contracts", true));
             RunDotnet(root, true, "restore", project, "--source", feed);
             RunDotnet(root, true, "build", project, "--no-restore", "--configuration", "Release");
@@ -229,7 +229,7 @@ public sealed class ManifestBuildTests
         Directory.CreateDirectory(path);
         string repositoryRoot = FindRepositoryRoot();
         File.Copy(Path.Combine(repositoryRoot, "global.json"), Path.Combine(path, "global.json"));
-        File.WriteAllText(Path.Combine(path, "Directory.Build.props"), "<Project><PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup></Project>");
+        File.WriteAllText(Path.Combine(path, "Directory.Build.props"), "<Project><PropertyGroup><TargetFramework>net11.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup></Project>");
         File.WriteAllText(Path.Combine(path, "Directory.Build.targets"), "<Project />");
         File.WriteAllText(Path.Combine(path, "nuget.config"), "<configuration><packageSources><clear /></packageSources><packageSourceMapping><clear /></packageSourceMapping><fallbackPackageFolders><clear /></fallbackPackageFolders></configuration>");
         File.WriteAllText(Path.Combine(path, "Directory.Packages.props"), "<Project><PropertyGroup><ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally></PropertyGroup><ItemGroup><PackageVersion Include=\"Manifest.Sample.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Other\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.MarkedEmpty.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Unmarked.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Zero.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Ambiguous.Contracts\" Version=\"1.0.0\" /><PackageVersion Include=\"Manifest.Renamed.Contracts\" Version=\"1.0.0\" /></ItemGroup></Project>");
@@ -256,7 +256,7 @@ public sealed class ManifestBuildTests
     {
         string targets = FindTargetsPath();
         StringBuilder project = new();
-        project.Append("<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup><ItemGroup>");
+        project.Append("<Project Sdk=\"Microsoft.NET.Sdk\"><PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net11.0</TargetFramework><TreatWarningsAsErrors>true</TreatWarningsAsErrors></PropertyGroup><ItemGroup>");
         foreach ((string id, bool? flagged) in packages)
         {
             project.Append("<PackageReference Include=\"").Append(id).Append('"');
@@ -291,7 +291,7 @@ public sealed class ManifestBuildTests
     }
 
     private static string ManifestPath(string root)
-        => Path.Combine(root, "obj", "Release", "net10.0", "ModuleAssemblyManifest.g.cs");
+        => Path.Combine(root, "obj", "Release", "net11.0", "ModuleAssemblyManifest.g.cs");
 
     private static (string PackageId, string AssemblyName)[] ReadEntries(string path)
         => Regex.Matches(File.ReadAllText(path), "\\(\"(?<id>[^\"]+)\", \"(?<name>[^\"]+)\"\\)")

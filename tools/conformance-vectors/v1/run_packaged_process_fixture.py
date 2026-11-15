@@ -253,7 +253,7 @@ def fixture(repo: Path, artifact: Path):
         print(f'PASS nonempty enrollment: exact packaged sample, {len(verified["resolvedPackages"])} resolved packages, approval input hashes, both Operation Shapes and complete replay.', flush=True)
 
         # The real Core adapter must reject every incompatible step before any Gateway exists.
-        host_dll = host / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        host_dll = host / 'bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
         sdk_response_cases(repo, root, host_dll, artifact, env)
         for group in ['prerequisites', 'invocation', 'postconditions']:
             for mutation in ['unknown-property', 'wrong-kind', 'invalid-id', 'depth64-schema', 'excess-depth']:

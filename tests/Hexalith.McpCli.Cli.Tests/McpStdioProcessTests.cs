@@ -576,7 +576,7 @@ public sealed class McpStdioProcessTests
     {
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
         string root = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "../../../../../"));
-        string fixture = Path.Combine(root, "tests", "fixtures", "StdioHost", "bin", configuration, "net10.0",
+        string fixture = Path.Combine(root, "tests", "fixtures", "StdioHost", "bin", configuration, "net11.0",
             "Hexalith.McpCli.StdioHost.dll");
         File.Exists(fixture).ShouldBeTrue($"Missing fixture at {fixture}; base {AppContext.BaseDirectory}");
         var start = new ProcessStartInfo

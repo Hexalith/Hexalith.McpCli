@@ -534,3 +534,5 @@ the user instruction and explicitly disclaims individual human source review.
 All prior lineage/evidence stays unchanged, the scanner and refusal fixtures stay
 enabled, and future source pins, neighboring files and unlisted bytes remain
 refused. Local overlay results precede the new committed-source hosted scan.
+
+Continuation 1.0.11 records the current requesting maintainer's explicit delegated dependency maintenance and CI repair, with human validation bypassed. Automated inspection renews five existing allowance closures, classifies three literal package identities in a catalog regression test, and binds seven exact captured-data or qualification-helper files. The EventStore probe and Platform Composition keep their complete current compilation closures. No scanner rule or prior authority byte changes. The receipt binds the original user instruction and exact source findings in `evidence/release-sync-current-dependencies-20261114`; it claims no individual human source review, runtime, migration or package acceptance. Fresh committed-source hosted CI and candidate-bound release acceptance remain required.

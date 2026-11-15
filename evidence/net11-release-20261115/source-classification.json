@@ -1,0 +1,26 @@
+{
+  "censusVersion": "1.0.11",
+  "censusBaselineSha256": "24f21275016798622d65b9272f95ee5f077fac060f76b278aea785d041822499",
+  "snapshotRevision": "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1",
+  "censusReportSha256": "b6707677870fa578a8b3651844cad7f36d93c51d886df47c9cf28b24f349fc05",
+  "repositoryCount": 17,
+  "surfaceCount": 444,
+  "errors": [],
+  "status": "passed",
+  "staleHistoricalAllowanceCount": 78,
+  "newAmendmentRequired": false,
+  "reason": "After preserving amendments through 1.0.11, the published Parties prerequisite changes only the exact supported SDK cohort check and its regression tests. The unchanged scanner accepts every inspected surface and source closure; no new allowance, exclusion or authority is needed.",
+  "partiesPrerequisite": {
+    "repository": "https://github.com/Hexalith/Hexalith.Parties.git",
+    "base": "0911387de9edaefbeb8a93437ce760e8e9a366f1",
+    "commit": "785f8164d51579a191405a15a917232795f93449",
+    "remoteMain": "785f8164d51579a191405a15a917232795f93449",
+    "review": "complete two-file diff inspected by parent; focused red/green and catalog checks retained",
+    "pushed": true,
+    "packagePublished": false
+  },
+  "individualHumanReviewClaimed": false,
+  "freshClientSessionsClaimed": false,
+  "hostedLiveAcceptance": false,
+  "publicationAcceptance": false
+}

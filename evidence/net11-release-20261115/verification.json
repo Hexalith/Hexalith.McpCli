@@ -1,0 +1,734 @@
+{
+  "scope": "Automated local Linux verification of the .NET11 migration; no hosted live, human/client, staging or publication acceptance.",
+  "sourceRevision": "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1",
+  "ordinarySuites": {
+    "Abstractions": {
+      "total": 20,
+      "failed": 0,
+      "succeeded": 20,
+      "skipped": 0,
+      "stdout": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-1/test-Abstractions.stdout.txt",
+        "sha256": "cbbd165b32bae3d18dbf2d5280c562aa4d9cf0425da6f966e334e06f1f7b0675"
+      },
+      "stderr": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-1/test-Abstractions.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "Analyzers": {
+      "total": 19,
+      "failed": 0,
+      "succeeded": 19,
+      "skipped": 0,
+      "stdout": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-1/test-Analyzers.stdout.txt",
+        "sha256": "ae93cfbdbfc5cb4f0daa6b983e7e36eae069b6e51d476f7988fb34292f4062f5"
+      },
+      "stderr": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-1/test-Analyzers.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "Core": {
+      "total": 916,
+      "failed": 0,
+      "succeeded": 912,
+      "skipped": 4,
+      "stdout": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-1/test-Core.stdout.txt",
+        "sha256": "73f0602f0ede390c0b1f572305c319686e3179f9178b658906ba3a5303d7e19e"
+      },
+      "stderr": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-1/test-Core.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "Manifest": {
+      "total": 372,
+      "failed": 0,
+      "succeeded": 372,
+      "skipped": 0,
+      "stdout": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-2/test-Manifest.stdout.txt",
+        "sha256": "cb1cc120ae67385d046003c1c5f1ea4b8f7bfda7cb3d6cb9aa18d669733ce22c"
+      },
+      "stderr": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-2/test-Manifest.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "Cli": {
+      "total": 625,
+      "failed": 0,
+      "succeeded": 623,
+      "skipped": 2,
+      "stdout": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-2/test-Cli.stdout.txt",
+        "sha256": "159756324e2220d8203c736451096cafaae826341259046a4a1661a5ee8f3560"
+      },
+      "stderr": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-2/test-Cli.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "Mcp": {
+      "total": 94,
+      "failed": 0,
+      "succeeded": 94,
+      "skipped": 0,
+      "stdout": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-2/test-Mcp.stdout.txt",
+        "sha256": "750aa102650e29fdef432fe4f0a8e82505b3b8c0893d36fe80ee837e8b0fe3af"
+      },
+      "stderr": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-2/test-Mcp.stderr.txt",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "retainedSourceEvidence": "local-source-snapshots.json records narrow test-only changes between successful checks. No production source changed between them.",
+  "rootOutputs": "Final proofs use disposable repository copies under run-with-temp TMPDIR. Earlier root-output observations remain external diagnostics and are superseded.",
+  "pythonSuites": {
+    "release": {
+      "passed": 200,
+      "receipt": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/portable-release/verification.json",
+        "sha256": "87804d886f3f01a865383cfc1643f914dd5117340813dbef50ffc7a99777547d"
+      }
+    },
+    "census": {
+      "passed": 222,
+      "stderr": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-2/census-python.stderr.txt",
+        "sha256": "2a0d242c9cc5d47430719e6f6df97a5da087de4e25fa4312c74fa50dffa1ce42"
+      }
+    },
+    "topologyWithoutCi": {
+      "passed": 139,
+      "stderr": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/attempt-3/topology-python.stderr.txt",
+        "sha256": "7e7b267131d66a70bf02c6a7f05d10ad5c2bcf97e3c856698f64bf2ee0fdeb5a"
+      }
+    },
+    "ciWorkflowCommittedSnapshot": {
+      "passed": 4,
+      "stderr": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/topology-workflow.stderr.txt",
+        "sha256": "db055cadda611d61f5672b4715ab52f33e3ceb9a719f633cb0041c73be99a5ed"
+      }
+    },
+    "syntheticCi": {
+      "fullRun": {
+        "total": 111,
+        "passed": 108,
+        "failed": 3,
+        "log": {
+          "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/native-runtime/ci-tests-final.log",
+          "sha256": "b6140c2317741ae2c79c4cf74b4cdbaf342e393862879db9aa0c99fe1b6da41c"
+        }
+      },
+      "correction": "Two obsolete assertions expected removed logging/pruning injections; both corrected cases pass. The remaining old-root-HEAD Builds positive passes in the four committed-snapshot workflow cases.",
+      "focusedCorrectedLog": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/native-runtime/final-expectation-corrections.log",
+        "sha256": "aa4fd6e5d5ac6276df5510f41b54507e6bbd8e8caade48fbb0ab5a7c550fa5ae"
+      },
+      "focusedSourceControls": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/native-runtime/focused-controls-final.log",
+        "sha256": "a00bea59b7a0584279d5e4a0a31bf479f2376577bd356aeebd7405fb3b89eaf5"
+      },
+      "currentProfileControls": {
+        "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/native-runtime/current-tests-final.log",
+        "sha256": "8a6974fe72eb0e0d17acc03db956493f666313f69b98b32910de2e98f54634ad"
+      },
+      "fullGreenHostedRerunStillRequired": true
+    }
+  },
+  "census": {
+    "version": "1.0.11",
+    "roots": 17,
+    "surfaces": 444,
+    "errors": 0,
+    "newAmendmentRequired": false,
+    "report": {
+      "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/census.json",
+      "sha256": "b6707677870fa578a8b3651844cad7f36d93c51d886df47c9cf28b24f349fc05"
+    }
+  },
+  "conformance": {
+    "sampleValidation": "passed",
+    "samplePackagedProcessAndCombinedReplay": "passed",
+    "productionEnrollment": "passed",
+    "fullV1ReplayAccepted": true,
+    "decoratedOperationCount": 22,
+    "reportedCount": 17,
+    "reported": [
+      "Hexalith.Tenants.Contracts: approval receipt version 7.0.7 differs from restored package version 8.0.0; reported, not failed.",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/0/add-user-to-tenant.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/1/change-user-role.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/2/create-tenant.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/3/disable-tenant.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/4/enable-tenant.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/5/get-tenant-audit.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/6/get-tenant-users.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/7/get-tenant.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/8/get-user-tenants.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/9/list-tenants.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/10/remove-tenant-configuration.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/11/remove-user-from-tenant.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/12/set-tenant-configuration.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inputs-0ply61mm/vectors/13/update-tenant.vector.json:/package/version: vector Hexalith.Tenants.Contracts@7.0.7 differs from release artifact version 8.0.0; reported, not failed",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inventory.input.json:internal operation tenants.refresh-tenant-access: reported, not failed; no inventory row mentions this cataloged operation / 'Hexalith.Tenants.Contracts.Commands.RefreshTenantAccess'.",
+      "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/Hexalith.Tenants.Contracts/inventory.input.json:public operation tenants.refresh-tenant-access: reported, not failed; no inventory row mentions this cataloged operation."
+    ],
+    "enrollmentReport": {
+      "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled/enrolled.json",
+      "sha256": "34e8b4d09c845ce1e8638b699909afc3415b695c0ea937404ef38065fe60f475"
+    },
+    "livePreflightOnly": true,
+    "discovery": "topology-discovery.json",
+    "refreshRepairSemanticsProven": false
+  },
+  "benchmark": {
+    "result": "passed",
+    "fullV1Accepted": true,
+    "elapsedMilliseconds": 130.4359,
+    "limitMilliseconds": 500,
+    "processId": 1853339,
+    "assemblies": [
+      "Hexalith.Parties.Contracts",
+      "Hexalith.Tenants.Contracts",
+      "Hexalith.McpCli.Sample.Contracts"
+    ],
+    "productionPackages": [
+      "Hexalith.Parties.Contracts",
+      "Hexalith.Tenants.Contracts"
+    ],
+    "modules": [
+      {
+        "name": "parties",
+        "identifierKind": "String",
+        "operationCount": 7
+      },
+      {
+        "name": "sample",
+        "identifierKind": "Ulid",
+        "operationCount": 3
+      },
+      {
+        "name": "tenants",
+        "identifierKind": "String",
+        "operationCount": 15
+      }
+    ],
+    "missingRequiredModules": [],
+    "diagnostics": [],
+    "failures": []
+  },
+  "freshCandidateConsumer": {
+    "sourceRevision": "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1",
+    "targetFramework": "net11.0",
+    "sdkMinimum": "11.0.100",
+    "candidateVersion": "2.0.1",
+    "candidateArchiveSha256": "e93a5756e18d7e794ed8c0ed07c20998ca864c991a935bd3ebb914e927b5b23a",
+    "privateCachedArchiveSha256": "e93a5756e18d7e794ed8c0ed07c20998ca864c991a935bd3ebb914e927b5b23a",
+    "privatePackageFolders": [
+      "/tmp/hexalith-job.PxSNO5i7/consumer/packages"
+    ],
+    "feed": "/tmp/hexalith-job.PxSNO5i7/feed",
+    "freshCandidateBytesMatched": true,
+    "warningExpected": "MCPCLI001 exactly once",
+    "publicCachedPackageUsed": false,
+    "sdk10CompatibilityClaimed": false,
+    "releaseAcceptanceClaimed": false,
+    "pathIdentityCheck": "Exactly one resolved package folder equals the explicit fresh private cache; trailing separators have no identity significance."
+  },
+  "freshCandidateConsumerCommands": [
+    {
+      "label": "consumer-clone",
+      "command": [
+        "git",
+        "-c",
+        "submodule.recurse=false",
+        "clone",
+        "--shared",
+        "--no-checkout",
+        "--quiet",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "/tmp/hexalith-job.PxSNO5i7/workspace"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "consumer-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--quiet",
+        "--detach",
+        "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "consumer-fresh-pack",
+      "command": [
+        "dotnet",
+        "pack",
+        "src/Hexalith.McpCli.Abstractions",
+        "--configuration",
+        "Release",
+        "-p:Version=2.0.1",
+        "--output",
+        "/tmp/hexalith-job.PxSNO5i7/feed"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "consumer-fresh-sdk11",
+      "command": [
+        "bash",
+        "scripts/smoke-bootstrap-consumer.sh",
+        "2.0.1",
+        "/tmp/hexalith-job.PxSNO5i7/feed",
+        "/tmp/hexalith-job.PxSNO5i7/consumer"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "instructions-sync",
+      "command": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "verificationHarnessCompletion": {
+    "sourceRevision": "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1",
+    "allCommandsPassed": true,
+    "scratchDeletedByRunWithTemp": true,
+    "hostedLiveAcceptance": false,
+    "crossPlatformPackageAcceptance": false,
+    "publicationAcceptance": false,
+    "verificationHarnessCorrection": "The earlier literal packageFolders trailing-separator assertion failed after successful package/hash/consumer checks. This fresh repeated pack/consumer proves the single normalized private path, archive equality and analyzer warning."
+  },
+  "additionalSoleFrameworkGuard": {
+    "baseRevision": "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1",
+    "sourceOverlay": {
+      "path": "tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs",
+      "sha256": "018fcdd099ac30eba270619f1c96ce20848bf71e8a2704e61bba93760a235b9c"
+    },
+    "checks": [
+      {
+        "label": "policy-clone",
+        "command": [
+          "git",
+          "-c",
+          "submodule.recurse=false",
+          "clone",
+          "--shared",
+          "--no-checkout",
+          "--quiet",
+          "/home/administrator/projects/hexalith/mcpcli",
+          "/tmp/hexalith-job.VDRSCt5r/workspace"
+        ],
+        "exitCode": 0
+      },
+      {
+        "label": "policy-checkout",
+        "command": [
+          "git",
+          "checkout",
+          "--quiet",
+          "--detach",
+          "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1"
+        ],
+        "exitCode": 0
+      },
+      {
+        "label": "policy-new-guard-restore",
+        "command": [
+          "dotnet",
+          "restore",
+          "Hexalith.McpCli.slnx"
+        ],
+        "exitCode": 0
+      },
+      {
+        "label": "policy-new-guard-build",
+        "command": [
+          "dotnet",
+          "build",
+          "tests/Hexalith.McpCli.Manifest.Tests",
+          "--no-restore",
+          "--configuration",
+          "Release",
+          "-warnaserror"
+        ],
+        "exitCode": 0
+      },
+      {
+        "label": "policy-new-guard-tests",
+        "command": [
+          "dotnet",
+          "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net11.0/Hexalith.McpCli.Manifest.Tests.dll",
+          "-class",
+          "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests"
+        ],
+        "exitCode": 0
+      }
+    ],
+    "allPassed": true,
+    "scope": "One added refusal test for ambiguous restored framework targets; production code unchanged; includes both historical net10 and current net11 loader cases."
+  },
+  "additionalSoleFrameworkGuardResult": {
+    "path": "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/policy-new-guard-tests.stdout.txt",
+    "sha256": "59c5dcf78853108435e506ebd5bb96f64d36bf1db608666cc3321f01a5128877"
+  },
+  "upstreamOwnerCiLimit": "parties-owner-ci-limit.json",
+  "correctedFindings": [
+    "The initial CLI build retained BoundaryHeads net10 path; the rebuilt private net11 production host resolves all 22 prior boundary harness failures (623 pass, 2 Windows-only skips).",
+    "Manifest expected the old Gateway source SHA; the measured 5.1 source assertion now passes with all 372 tests.",
+    "Four topology report assertions now compare complete ordered current approval/vector/inventory reports; runtime reporting is unchanged.",
+    "The census correctly refused symlink reference roots in the disposable clone; the external harness now reads the actual workspace at the same validated private Git revision.",
+    "Task-owned pre-migration raw logs were renamed to .txt with unchanged bytes and explicit hash bindings, preserving the corrected SDK10 false-positive evidence."
+  ],
+  "finalCommands": [
+    {
+      "label": "clone",
+      "command": [
+        "git",
+        "-c",
+        "submodule.recurse=false",
+        "clone",
+        "--shared",
+        "--no-checkout",
+        "--quiet",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "/tmp/hexalith-job.XllJUSBQ/workspace"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.007
+    },
+    {
+      "label": "checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--quiet",
+        "--detach",
+        "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.284
+    },
+    {
+      "label": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.905
+    },
+    {
+      "label": "build",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.256
+    },
+    {
+      "label": "python-venv",
+      "command": [
+        "python3",
+        "-m",
+        "venv",
+        "/tmp/hexalith-job.XllJUSBQ/python"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.319
+    },
+    {
+      "label": "python-install",
+      "command": [
+        "/tmp/hexalith-job.XllJUSBQ/python/bin/pip",
+        "install",
+        "-r",
+        "tools/conformance-vectors/v1/requirements.txt"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.579
+    },
+    {
+      "label": "topology-workflow",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "-v",
+        "test_ci.CiWorkflowTests"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.117
+    },
+    {
+      "label": "census",
+      "command": [
+        "python3",
+        "tools/proprietary-surfaces/v1/check.py",
+        "--workspace",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "--revision",
+        "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1",
+        "--output",
+        "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/census.json"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 16.905
+    },
+    {
+      "label": "live-preflight",
+      "command": [
+        "python3",
+        "tools/live-topology/run-vectors.py",
+        "--output",
+        "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/live-preflight",
+        "--preflight-only"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 35.758
+    },
+    {
+      "label": "topology-discovery",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Integration.Tests/bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll",
+        "-preEnumerateTheories",
+        "-list",
+        "tests"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.146
+    },
+    {
+      "label": "sample-validation",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-validation.sh",
+        "Release"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 22.922
+    },
+    {
+      "label": "sample-loopback",
+      "command": [
+        "bash",
+        "tools/conformance-vectors/v1/run-sample-loopback.sh"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 540.467
+    },
+    {
+      "label": "restore-after-loopback",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.753
+    },
+    {
+      "label": "build-after-loopback",
+      "command": [
+        "dotnet",
+        "build",
+        "Hexalith.McpCli.slnx",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 1.663
+    },
+    {
+      "label": "policy-focused",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net11.0/Hexalith.McpCli.Manifest.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 10.407
+    },
+    {
+      "label": "coverage",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net11.0/Hexalith.McpCli.Core.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Core.Tests.EnrolledModuleCoverageTests"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.448
+    },
+    {
+      "label": "enrolled",
+      "command": [
+        "python3",
+        "tools/conformance-vectors/v1/check_enrolled.py",
+        "--output",
+        "/home/administrator/mcpcli-maintenance-20261114/net11-implementation/final/enrolled"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 346.503
+    },
+    {
+      "label": "manifest-shapes",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll",
+        "--manifest-catalog"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.201
+    },
+    {
+      "label": "benchmark",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Core.Tests/bin/Release/net11.0/Hexalith.McpCli.Core.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Core.Tests.CatalogPerformanceTests"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.774
+    },
+    {
+      "label": "modules",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "modules",
+        "--strict"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.309
+    },
+    {
+      "label": "parties-operations",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "operations",
+        "parties",
+        "--strict"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.313
+    },
+    {
+      "label": "tenants-operations",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "operations",
+        "tenants",
+        "--strict"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.308
+    },
+    {
+      "label": "refresh-description",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "describe",
+        "tenants.refresh-tenant-access",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.336
+    },
+    {
+      "label": "party-description",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "describe",
+        "parties.search-parties",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.316
+    },
+    {
+      "label": "tenant-description",
+      "command": [
+        "dotnet",
+        "src/Hexalith.McpCli/bin/Release/net11.0/Hexalith.McpCli.dll",
+        "describe",
+        "tenants.get-tenant",
+        "--lint",
+        "--strict"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.315
+    },
+    {
+      "label": "pack-abstractions",
+      "command": [
+        "dotnet",
+        "pack",
+        "src/Hexalith.McpCli.Abstractions",
+        "--configuration",
+        "Release",
+        "--no-restore",
+        "-p:Version=2.0.1",
+        "--output",
+        "/tmp/hexalith-job.XllJUSBQ/consumer-feed"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.36
+    },
+    {
+      "label": "consumer-sdk11",
+      "command": [
+        "bash",
+        "scripts/smoke-bootstrap-consumer.sh",
+        "2.0.1",
+        "/tmp/hexalith-job.XllJUSBQ/consumer-feed",
+        "/tmp/hexalith-job.XllJUSBQ/consumer-sdk11"
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.892
+    }
+  ],
+  "allChildrenFinished": true,
+  "hostedLiveAcceptance": false,
+  "threePlatformStagingAcceptance": false,
+  "publicationAcceptance": false,
+  "individualHumanReviewClaimed": false,
+  "freshInteractiveClientSessionsClaimed": false,
+  "focusedReviewFixes": {
+    "path": "review-fixes.json",
+    "sha256": "9dc2c8df7f74d75929a36864bddf7d4c379d477784b2655d97f5a13c5bde62a0",
+    "fullVerificationPendingWithPrimary": true
+  }
+}

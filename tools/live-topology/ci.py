@@ -29,7 +29,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from evidence_redaction import sanitized, sanitized_xml
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
-TESTS = ROOT / PROJECT / 'bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll'
+TESTS = ROOT / PROJECT / 'bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll'
 MODULES = native_cohort.MODULES
 # Published Testing.Integration remains independent of these test-owned launched SDK hosts.
 EVENTSTORE_COHORT = native_cohort.COHORT
@@ -40,17 +40,19 @@ NAMESPACES = {'user', 'pid', 'net', 'mnt'}
 OWNER_FILE = '.mcpcli-ci-owner'
 ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v13.6.5/aspire-cli-linux-x64-13.6.5.tar.gz'
 ASPIRE_CLI_SHA256 = '6e22bd4daaa62d09320638246e57bfaf56ed147a3a87cdd5eafec277726ca978'
-SOURCE_COMPATIBILITY_VERSIONS = {
-    'Hexalith.Commons.UniqueIds': '2.30.10',
-    'Microsoft.AspNetCore.Authentication.JwtBearer': '10.0.15',
-    'Microsoft.AspNetCore.OpenApi': '10.0.15',
-    'Microsoft.AspNetCore.SignalR.StackExchangeRedis': '10.0.15',
-    'Microsoft.OpenApi': '2.13.0',
-}
-# Private selections for the archived net10 Parties host; these are not root overrides.
-PARTIES_SOURCE_COMPATIBILITY_VERSIONS = {
-    'Hexalith.Commons': '2.30.10',
-    'Hexalith.Commons.Http': '2.30.10',
+# Exact root selections are a closed policy; owner projects use their native net11 graph.
+SOURCE_PACKAGE_VERSIONS = {
+    'Google.Protobuf': ('Include', '3.36.2'),
+    'Grpc.Core.Api': ('Include', '2.85.0'),
+    'Grpc.Net.Client': ('Include', '2.85.0'),
+    'Grpc.Net.Common': ('Include', '2.85.0'),
+    'Grpc.Reflection': ('Include', '2.85.0'),
+    'Microsoft.Extensions.AI.Abstractions': ('Include', '11.0.0'),
+    'Microsoft.Extensions.Caching.Abstractions': ('Include', '11.0.0'),
+    'Microsoft.CodeAnalysis.Analyzers': ('Update', '5.12.0'),
+    'Microsoft.CodeAnalysis.Common': ('Update', '5.12.0'),
+    'Microsoft.CodeAnalysis.CSharp': ('Update', '5.12.0'),
+    'StackExchange.Redis': ('Update', '3.4.35'),
 }
 
 
@@ -59,12 +61,12 @@ def current_runtime_profile() -> dict:
     path = ROOT / 'tools/live-topology/runtime-profile-current.json'
     value = json.loads(path.read_text())
     expected = {'aspire': '13.6.5', 'dapr': '1.19.1', 'daprd': '1.19.1'}
-    if value.get('schemaVersion') != 1 or value.get('profile') != 'current-sdk42-aspire1365-dapr1191' \
+    if value.get('schemaVersion') != 1 or value.get('profile') != 'current-sdk51-aspire1365-dapr1191' \
             or set(value.get('tools', {})) != set(expected):
         raise ValueError('The exact finite current runtime profile is required.')
-    if value.get('managedTestHosts') != {'runtime': '11.0.0', 'targetFramework': 'net10.0',
+    if value.get('managedTestHosts') != {'runtime': '11.0.0', 'targetFramework': 'net11.0',
             'projects': ['Hexalith.McpCli.AppHost', 'Hexalith.McpCli.Integration.Tests'],
-            'resourceLaunch': {'rollForward': 'LatestMajor', 'highestInstalledRuntime': '11.0.0',
+            'resourceLaunch': {'rollForward': 'Disable', 'highestInstalledRuntime': '11.0.0',
                                'resources': ['eventstore', 'tenants', 'parties']}}:
         raise ValueError('The exact current owned managed test-host runtime is required.')
     for name, version in expected.items():
@@ -82,7 +84,7 @@ def current_runtime_profile() -> dict:
 
 
 def current_managed_runtime_selection(output: str) -> dict:
-    """LatestMajor is finite here: refuse any missing or newer selected shared framework."""
+    """Refuse any missing or newer framework than the exact current runtime image."""
     names = {'Microsoft.NETCore.App', 'Microsoft.AspNetCore.App'}
     found = {name: [] for name in names}
     for line in output.splitlines():
@@ -92,7 +94,7 @@ def current_managed_runtime_selection(output: str) -> dict:
                 raise ValueError('Current native resources require a stable, measured managed runtime inventory.')
             found[parts[0]].append(tuple(map(int, parts[1].split('.'))))
     if any(not versions or max(versions) != (11, 0, 0) for versions in found.values()):
-        raise ValueError('Current native resource roll-forward requires highest installed Core and ASP.NET runtime 11.0.0.')
+        raise ValueError('Current native resources require highest installed Core and ASP.NET runtime 11.0.0.')
     return {name: '11.0.0' for name in sorted(names)}
 
 
@@ -218,8 +220,8 @@ def restored_cohort(project: Path, required: str, *, deployed_required: bool = T
             not name.endswith('/' + EVENTSTORE_COHORT) or item.get('type') != 'package'
             for name, item in libraries.items()):
         raise ValueError(f'{project}: restored assets must contain only the exact published EventStore package cohort.')
-    target = assets['targets']['net10.0']
-    output = project.parent / 'bin/Release/net10.0'
+    target = assets['targets']['net11.0']
+    output = project.parent / 'bin/Release/net11.0'
     packages = {}
     for identity in sorted(libraries):
         name, version = identity.split('/')
@@ -275,9 +277,9 @@ def gateway_package_provenance() -> dict:
     adapter = restored_cohort(ROOT / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                               'Hexalith.EventStore.DomainService', deployed_required=True)
     composition = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj',
-                                                      selection, 'Hexalith.Tenants.Aspire/7.0.7')
+                                                      selection, 'Hexalith.Tenants.Aspire/8.0.0')
     client = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
-                                                 selection, 'Hexalith.Tenants.Contracts/7.0.7')
+                                                 selection, 'Hexalith.Tenants.Contracts/8.0.0')
     source = ROOT / 'references/Hexalith.EventStore'
     host = (ROOT / PACKAGE_GATEWAY).parent
     manifest = host / 'Configuration/provenance-current.json'
@@ -303,7 +305,7 @@ def gateway_package_provenance() -> dict:
         native = subprocess.check_output(['git', 'show', commit + ':' + original], cwd=source, timeout=10)
         if native != snapshot:
             raise ValueError('The package configuration snapshot differs from its exact native source blob.')
-    deployed = host / 'bin/Release/net10.0/appsettings.gateway.json'
+    deployed = host / 'bin/Release/net11.0/appsettings.gateway.json'
     if (host / 'Configuration/appsettings.gateway.json').read_bytes() != deployed.read_bytes():
         raise ValueError('The published gateway configuration differs from its source-bound snapshot.')
     paths = [manifest, *(host / relative for relative in expected_files), deployed,
@@ -312,7 +314,7 @@ def gateway_package_provenance() -> dict:
     for module in ('Hexalith.Tenants', 'Hexalith.Parties'):
         directory = ROOT / 'references' / module / 'src' / module
         paths.extend(sorted(directory.glob('appsettings*.json')))
-        paths.extend(sorted((directory / 'bin/Release/net10.0').glob('appsettings*.json')))
+        paths.extend(sorted((directory / 'bin/Release/net11.0').glob('appsettings*.json')))
     configuration = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
     return {'profile': 'published', 'version': EVENTSTORE_COHORT, 'sourceCommit': package['sourceCommit'],
             'sha256': package['sha256'], 'gatewayHost': gateway, 'domainHosts': domains, 'partiesAdapter': adapter,
@@ -320,21 +322,17 @@ def gateway_package_provenance() -> dict:
             'configurationSourceCommit': commit, 'configuration': configuration}
 
 
-def source_compatibility_versions(own_versions: ET.Element) -> dict[str, str]:
-    """Reuse only the exact reviewed, unconditional root package selections."""
-    expected = SOURCE_COMPATIBILITY_VERSIONS | {
-        'Hexalith.EventStore.Testing.Integration': EVENTSTORE_COHORT,
-        'StackExchange.Redis': '3.4.31',
-    }
+def source_package_versions(own_versions: ET.Element) -> dict[str, str]:
+    """Validate the finite unconditional current package selections without legacy injections."""
     rows = own_versions.findall('./ItemGroup/PackageVersion')
+    expected = {name: {mode: name, 'Version': version}
+                for name, (mode, version) in SOURCE_PACKAGE_VERSIONS.items()}
     if len(rows) != len(expected) or len(list(own_versions.iter('PackageVersion'))) != len(rows) \
             or any(group.attrib for group in own_versions.findall('ItemGroup') if group.findall('PackageVersion')) \
-            or any(item.attrib != {'Update': item.get('Update'), 'Version': expected.get(item.get('Update'))}
-                   or len(item) for item in rows) \
-            or {item.get('Update') for item in rows} != set(expected):
-        raise ValueError('The source compatibility selections require the exact finite unconditional root package overrides.')
-    return {item.get('Update'): item.get('Version') for item in rows
-            if item.get('Update') in SOURCE_COMPATIBILITY_VERSIONS}
+            or any(item.attrib != expected.get(item.get('Update') or item.get('Include')) or len(item) for item in rows) \
+            or {item.get('Update') or item.get('Include') for item in rows} != set(expected):
+        raise ValueError('The source package selections require the exact finite unconditional root package overrides.')
+    return {name: version for name, (_, version) in SOURCE_PACKAGE_VERSIONS.items()}
 
 
 def msbuild_path_literal(path: Path) -> str:
@@ -364,9 +362,9 @@ def require_source_catalog(prepared: dict) -> Path:
     own_versions = ET.parse(ROOT / 'Directory.Build.props').getroot()
     redis = [item.get('Version') for item in own_versions.iter('PackageVersion')
              if item.get('Update') == 'StackExchange.Redis']
-    if redis != ['3.4.31']:
+    if redis != ['3.4.35']:
         raise ValueError('The prepared source package override differs from the exact root Redis pin.')
-    source_compatibility_versions(own_versions)
+    source_package_versions(own_versions)
     return private / 'source-runtime-overrides.targets'
 
 
@@ -588,7 +586,7 @@ def prepare(evidence: Path) -> None:
                      url, '-o', str(archive)], 130, evidence / ('public-' + package['id']))
             native_cohort.verify_archive(archive, package)
         # Source checkouts do not initialize their nested Builds gitlinks. Use the pinned root
-        # catalog and the root's reviewed net10 compatibility selections for source hosts.
+        # catalog and current package policy for source hosts, retaining each owner's native net11 graph.
         builds_root = ROOT / 'references/Hexalith.Builds'
         declared_builds = bounded(['git', 'rev-parse', 'HEAD:references/Hexalith.Builds'],
                                   10, evidence / 'builds-declared', cwd=ROOT)
@@ -601,18 +599,12 @@ def prepare(evidence: Path) -> None:
         own_versions = ET.parse(ROOT / 'Directory.Build.props').getroot()
         redis = [item.get('Version') for item in own_versions.iter('PackageVersion')
                  if item.get('Update') == 'StackExchange.Redis']
-        if not catalog.is_file() or redis != ['3.4.31']:
-            raise ValueError('The qualified source catalog requires the exact root Redis 3.4.31 override.')
+        if not catalog.is_file() or redis != ['3.4.35']:
+            raise ValueError('The qualified source catalog requires the exact root Redis 3.4.35 override.')
         mcpcli = [item.text for item in own_versions.iter('HexalithMcpCliVersion')]
         if mcpcli != ['2.0.1']:
             raise ValueError('The qualified source catalog requires the exact root McpCli 2.0.1 pin.')
-        compatibility = source_compatibility_versions(own_versions)
-        # Include the selected owners' local project graphs, whose centrally pinned
-        # transitive dependencies also need net10-compatible versions. Apply these
-        # only in the post-import hook, after the owner has selected its framework.
-        source_condition = "$(MSBuildProjectFullPath.Equals('" + msbuild_path_literal(ROOT / PACKAGE_GATEWAY) + "'))"
-        for owner in ('Hexalith.Tenants', 'Hexalith.Parties'):
-            source_condition += " Or $(MSBuildProjectFullPath.StartsWith('" + msbuild_path_literal(ROOT / 'references' / owner / 'src') + "/'))"
+        source_package_versions(own_versions)
         overlay = private / 'source-runtime-packages.props'
         project_xml = ET.Element('Project')
         ET.SubElement(project_xml, 'Import', {'Project': msbuild_path_literal(catalog)})
@@ -629,34 +621,10 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(ET.SubElement(overrides_xml, 'PropertyGroup'), 'WarningsNotAsErrors')
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
                       {'Update': 'StackExchange.Redis', 'Version': redis[0]})
-        compatible_packages = ET.SubElement(overrides_xml, 'ItemGroup', {
-            'Condition': "'$(TargetFramework)' == 'net10.0' And (" + source_condition + ')'})
-        for package, version in compatibility.items():
-            ET.SubElement(compatible_packages, 'PackageVersion', {'Update': package, 'Version': version})
-        # The frozen Parties host/Security graph also directly references these two
-        # Commons packages, whose current catalog versions require net11. Keep this
-        # private compatibility selection separate from the seven root override rows.
-        parties_condition = "'$(TargetFramework)' == 'net10.0' And $(MSBuildProjectFullPath.StartsWith('" \
-            + msbuild_path_literal(ROOT / 'references/Hexalith.Parties/src') + "/'))"
-        parties_packages = ET.SubElement(overrides_xml, 'ItemGroup', {'Condition': parties_condition})
-        for package, version in PARTIES_SOURCE_COMPATIBILITY_VERSIONS.items():
-            ET.SubElement(parties_packages, 'PackageVersion', {'Update': package, 'Version': version})
         # The AppHost loads the root's Abstractions assembly. Source owners must
         # compile against that same version, including later SDK/Aspire rebuilds.
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
                       {'Update': 'Hexalith.McpCli.Abstractions', 'Version': mcpcli[0]})
-        # The published Parties Web project excludes this package for its old generator
-        # workaround. The current catalog requires the actual 11.x reference consistently
-        # across its projects instead of silently resolving the shared-framework 10.x image.
-        ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageReference',
-                      {'Update': 'Microsoft.Extensions.Logging.Abstractions', 'ExcludeAssets': ''})
-        # Only these selected net10 source hosts need the legacy pruning workaround.
-        # Applying it to the ordinary CLI changes the authenticated production closure.
-        pruning_owners = ('Hexalith.McpCli.EventStoreGateway.TestHost', 'Hexalith.Tenants',
-                          'Hexalith.Parties', 'Hexalith.Parties.EventStoreExtensions')
-        pruning_condition = ' Or '.join("'$(MSBuildProjectName)' == '" + name + "'" for name in pruning_owners)
-        ET.SubElement(ET.SubElement(overrides_xml, 'PropertyGroup', {'Condition': pruning_condition}),
-                      'RestoreEnablePackagePruning').text = 'false'
         # Telemetry 11's replacement logging generator orders two nested Log types
         # nondeterministically. Keep the actual current Tenant source/runtime packages,
         # but select the standard LoggerMessage generator consistently before sealing.
@@ -668,15 +636,18 @@ def prepare(evidence: Path) -> None:
             'Condition': tenant_condition})
         for item, filename, package in (
                 ('_McpCliTelemetryLoggingGenerator', 'Microsoft.Gen.Logging', 'Microsoft.Extensions.Telemetry.Abstractions'),
-                ('_McpCliStandardLoggingGenerator', 'Microsoft.Extensions.Logging.Generators', 'Microsoft.Extensions.Logging.Abstractions')):
+                ('_McpCliStandardLoggingGenerator', 'Microsoft.Extensions.Logging.Generators', 'Microsoft.NETCore.App.Ref')):
             ET.SubElement(ET.SubElement(logging, 'ItemGroup'), item, {
                 'Include': '@(Analyzer)', 'Condition': "'%(Analyzer.Filename)' == '" + filename + "'"})
             ET.SubElement(logging, 'Error', {'Condition': "'@(" + item + "->Count())' != '1'",
                 'Text': 'The current Tenant fixture requires exactly one ' + filename + ' generator.'})
+            identity = "'%(" + item + ".NuGetPackageId)' == '" + package \
+                + "' And '%(" + item + ".NuGetPackageVersion)' == '11.0.0'"
+            if package == 'Microsoft.NETCore.App.Ref':
+                identity += " And '%(" + item + ".FrameworkReferenceName)' == 'Microsoft.NETCore.App'" \
+                    + " And '%(" + item + ".FrameworkReferenceVersion)' == '11.0.0'"
             ET.SubElement(ET.SubElement(logging, 'ItemGroup'), item + 'Expected', {
-                'Include': '@(' + item + ')',
-                'Condition': "'%(" + item + ".NuGetPackageId)' == '" + package
-                    + "' And '%(" + item + ".NuGetPackageVersion)' == '11.0.0'"})
+                'Include': '@(' + item + ')', 'Condition': identity})
             ET.SubElement(logging, 'Error', {'Condition': "'@(" + item + "Expected->Count())' != '1'",
                 'Text': 'The current Tenant fixture requires the exact ' + package + ' 11.0.0 generator identity.'})
         ET.SubElement(ET.SubElement(logging, 'ItemGroup'), 'Analyzer', {
@@ -696,7 +667,7 @@ def prepare(evidence: Path) -> None:
             working = ROOT if module == 'Hexalith.EventStore' else ROOT / 'references' / module
             # Source owners may downgrade audit warnings; this native qualification requires every warning to fail.
             properties = ['-p:NuGetAudit=true', '-p:NuGetAuditMode=all', '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true',
-                          '-p:WarningsNotAsErrors=', '-p:RestoreEnablePackagePruning=false',
+                          '-p:WarningsNotAsErrors=',
                           '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
                           '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
             properties.append('-p:HexalithMcpCliVersion=' + mcpcli[0])
@@ -733,7 +704,7 @@ def prepare(evidence: Path) -> None:
                                      30, evidence / 'jsonschema-version')
         catalog_path = evidence / 'head-catalog.json'
         bounded([str(python), str(ROOT / 'tools/live-topology/capture_heads.py'), '--host',
-                 str(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'),
+                 str(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'),
                  '--output', str(catalog_path)], 180, evidence / 'head-catalog-capture')
         receipt['headCatalog'] = {'path': str(catalog_path.resolve()), 'sha256': hashlib.sha256(catalog_path.read_bytes()).hexdigest()}
         runtime = private / 'runtime'

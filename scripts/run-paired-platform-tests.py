@@ -69,7 +69,7 @@ def run_tests(prepared_path, output):
         report = {'suite': suite, 'exit_code': None, 'xml_status': 'missing'}
         reports.append(report)
         try:
-            result = command(name, ['dotnet', f'tests/{name}/bin/Release/net10.0/{name}.dll', '-xml', str(xml)], required=False)
+            result = command(name, ['dotnet', f'tests/{name}/bin/Release/net11.0/{name}.dll', '-xml', str(xml)], required=False)
             report['exit_code'] = result.returncode
             if result.returncode:
                 failures.append(f'{name} exited {result.returncode}')

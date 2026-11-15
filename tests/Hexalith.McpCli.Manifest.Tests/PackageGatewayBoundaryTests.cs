@@ -50,7 +50,7 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
     {
         string root = DependencyPolicyTests.FindRepositoryRoot();
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
-        string directory = Path.Combine(root, "tests", "Hexalith.McpCli.EventStoreGateway.TestHost", "bin", configuration, "net10.0");
+        string directory = Path.Combine(root, "tests", "Hexalith.McpCli.EventStoreGateway.TestHost", "bin", configuration, "net11.0");
         string assembly = Path.Combine(directory, "Hexalith.McpCli.EventStoreGateway.TestHost.dll");
         Assert.True(File.Exists(assembly), "Build the owned package gateway host before its boundary tests.");
         using var listener = new TcpListener(IPAddress.Loopback, 0);
@@ -126,9 +126,9 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
         using JsonDocument document = JsonDocument.Parse(File.ReadAllText(Path.Combine(host, "Configuration", "provenance-current.json")));
         JsonElement profile = document.RootElement;
         Assert.Equal("published", profile.GetProperty("profile").GetString());
-        Assert.Equal("4.2.0", profile.GetProperty("eventStoreVersion").GetString());
+        Assert.Equal("5.1.0", profile.GetProperty("eventStoreVersion").GetString());
         Assert.Equal("https://github.com/Hexalith/Hexalith.EventStore.git", profile.GetProperty("sourceRepository").GetString());
-        Assert.Equal("aa16227bd07f0564a3026d619a5abd973e02656f", profile.GetProperty("sourceCommit").GetString());
+        Assert.Equal("49084f66f8d6545cae442875355a7066d5f5e73d", profile.GetProperty("sourceCommit").GetString());
         foreach (JsonProperty file in profile.GetProperty("files").EnumerateObject())
         {
             string path = Path.Combine(host, file.Name);
@@ -137,7 +137,7 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
         }
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
         Assert.Equal(File.ReadAllBytes(Path.Combine(host, "Configuration", "appsettings.gateway.json")),
-            File.ReadAllBytes(Path.Combine(host, "bin", configuration, "net10.0", "appsettings.gateway.json")));
+            File.ReadAllBytes(Path.Combine(host, "bin", configuration, "net11.0", "appsettings.gateway.json")));
     }
 
     /// <summary>Requests at the configured limit succeed; Kestrel rejects a larger body without an endpoint size attribute.</summary>

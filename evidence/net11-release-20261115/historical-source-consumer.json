@@ -1,0 +1,82 @@
+{
+  "source": "d9f822d64f7afa9bd51ca1698f5051147b86b554",
+  "builds": "4f53d9f37c5b86cfd43fbcc8fa5dd4df19b84c77",
+  "checks": [
+    {
+      "label": "sdk",
+      "command": [
+        "dotnet",
+        "--version"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "build",
+      "command": [
+        "dotnet",
+        "build",
+        "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj",
+        "--no-restore",
+        "-c",
+        "Release",
+        "-warnaserror",
+        "-p:Version=1.0.0"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "pack",
+      "command": [
+        "dotnet",
+        "pack",
+        "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj",
+        "--no-build",
+        "--no-restore",
+        "-c",
+        "Release",
+        "-p:Version=1.0.0",
+        "--output",
+        "/tmp/hexalith-job.ep9eLXox/feed"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "validate",
+      "command": [
+        "python3",
+        "/tmp/hexalith-job.ep9eLXox/reviewed-scripts/validate-release-packages.py",
+        "/tmp/hexalith-job.ep9eLXox/feed",
+        "1.0.0",
+        "bootstrap"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "consumer",
+      "command": [
+        "bash",
+        "/tmp/hexalith-job.ep9eLXox/reviewed-scripts/smoke-bootstrap-consumer.sh",
+        "1.0.0",
+        "/tmp/hexalith-job.ep9eLXox/feed",
+        "/tmp/hexalith-job.ep9eLXox/consumer"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "allPassed": true,
+  "packageSha256": "eb81418c77d08673b148d02b7c481df5778839ea7b0b376551aec79168de023e",
+  "consumerCacheMatches": true,
+  "sourceFramework": "net10.0",
+  "scope": "Real v1.0.0 archived source, pinned historical Builds and SDK10, current reviewed bootstrap validator and consumer; no registry writes.",
+  "sdkVersion": "10.0.404",
+  "consumerBuildSha256": "35a8cf542b383bfb33184c1a56b48050ec9166c369df0265658d864b65c01bf1"
+}

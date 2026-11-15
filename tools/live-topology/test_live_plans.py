@@ -311,7 +311,7 @@ class PlanTests(unittest.TestCase):
     def test_actual_preflight_delegates_artifact_inventory_and_core_rejections(self):
         import live_plans
         from unittest.mock import patch
-        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
         for boundary in ['check_adapter_dependencies', 'artifact_for', '_verify_artifact_in_host', 'approved_inventory', '_preflight_vectors', 'validate_call']:
             with self.subTest(boundary=boundary), tempfile.TemporaryDirectory() as directory, \
                     patch.object(live_plans, 'check_adapter_dependencies'), \
@@ -324,7 +324,7 @@ class PlanTests(unittest.TestCase):
         import live_plans
         import subprocess
         from unittest.mock import patch
-        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
         real_run = subprocess.run
         inventory_calls = []
         def run(arguments, **kwargs):
@@ -350,7 +350,7 @@ class PlanTests(unittest.TestCase):
 
     def test_changed_companion_observations_pass_actual_core_validation(self):
         from live_plans import HeadProcess, validate_call
-        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
         with tempfile.TemporaryDirectory() as home:
             head = HeadProcess(host, home, 30)
             for name in ['parties.create-party', 'parties.list-parties', 'parties.search-parties', 'parties.update-party']:
@@ -363,7 +363,7 @@ class PlanTests(unittest.TestCase):
 
 class LiveKindCoverageTests(unittest.TestCase):
     """Per-kind live coverage, plan-backed selections, orphan plans, reports and the restored binding."""
-    HOST = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+    HOST = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
 
     def test_each_declared_kind_needs_a_plan_backed_vector(self):
         from live_plans import require_live_kinds
@@ -388,9 +388,61 @@ class LiveKindCoverageTests(unittest.TestCase):
                 (Path(directory) / name).write_text('{}')
             self.assertEqual({'module.read', 'module.write'}, plan_operations(Path(directory)))
 
-    def preflight(self, plans=None, **patches):
+    def inventory_reports(self):
+        """Read the inventory producer directly, independently of runner report forwarding."""
+        import subprocess
+        from live_plans import HeadProcess
+        policy = json.loads((ROOT / 'tools/dependency-policy.json').read_text())
+        reports = {}
+        with tempfile.TemporaryDirectory() as home:
+            head = HeadProcess(self.HOST, home, 30)
+            for package in policy['modules']:
+                receipt = json.loads((ROOT / 'tools/conformance-vectors/v1/current/modules' / package / 'approval.json').read_text())
+                inventory = ROOT / 'tools/inventory-coverage/v1' / (receipt['module'] + '-approved.json')
+                result = subprocess.run(head._base() + ['--inventory', str(inventory)], env=head.env,
+                                        capture_output=True, text=True, timeout=30)
+                self.assertEqual((0, []), (result.returncode, json.loads(result.stdout)))
+                reports[package] = (inventory, [line.removeprefix('reported: ') for line in result.stderr.splitlines()
+                                                if line.startswith('reported: ')])
+        return reports
+
+    def expected_reports(self, output, inventory_reports, approval_version=None, vector_version=None, extra_inventory_reports=()):
+        """Require every current report in its phase order, including controlled version mutations."""
+        policy = json.loads((ROOT / 'tools/dependency-policy.json').read_text())
+        assets = json.loads((ROOT / 'src/Hexalith.McpCli/obj/project.assets.json').read_text())
+        restored = {identity.rsplit('/', 1)[0].casefold(): identity.rsplit('/', 1)[1]
+                    for identity, library in assets['libraries'].items() if library['type'] == 'package'}
+        expected = []
+        for package in policy['modules']:
+            directory = ROOT / 'tools/conformance-vectors/v1/current/modules' / package
+            receipt = json.loads((directory / 'approval.json').read_text())
+            version = restored[package.casefold()]
+            approved = receipt['version'] if approval_version is None else approval_version
+            if approved != version:
+                expected.append(f'{package}: approval receipt version {approved} differs from restored package version '
+                                f'{version}; reported, not failed.')
+            for relative in sorted(receipt['vectorFilesSha256']):
+                vector = json.loads((directory / relative).read_text())
+                selected = vector['package']['version'] if vector_version is None else vector_version
+                if selected != version:
+                    frozen = output / 'inputs' / package / relative
+                    expected.append(f'{frozen}:/package/version: vector {vector["package"]["id"]}@{selected} '
+                                    f'differs from release artifact version {version}; reported, not failed')
+            inventory, producer_reports = inventory_reports[package]
+            frozen = output / 'inputs' / package / 'inventory.json'
+            for report in producer_reports:
+                self.assertTrue(report.startswith(str(inventory) + ':'), report)
+                expected.append(str(frozen) + report[len(str(inventory)):])
+            for report in extra_inventory_reports:
+                if report not in expected:
+                    expected.append(report)
+        return expected
+
+    def preflight(self, plans=None, *, expected_inventory_reports=None, expected_approval_version=None,
+                  expected_vector_version=None, expected_extra_inventory_reports=(), **patches):
         import live_plans
         from unittest.mock import patch
+        inventory_reports = self.inventory_reports() if expected_inventory_reports is None else expected_inventory_reports
         real = live_plans.plan_operations(ROOT / 'tools/live-topology/plans-current')
         with tempfile.TemporaryDirectory() as directory, patch.object(live_plans, 'check_dependencies'), \
                 patch.object(live_plans, 'plan_operations', return_value=real if plans is None else plans(real)):
@@ -398,6 +450,8 @@ class LiveKindCoverageTests(unittest.TestCase):
                 self.enterContext(patch.object(live_plans, name, value))
             reports = []
             selections = live_plans.preflight(self.HOST, Path(directory), operation='parties.list-parties', reports=reports)
+            self.expected_current_reports = self.expected_reports(Path(directory), inventory_reports, expected_approval_version,
+                                                                  expected_vector_version, expected_extra_inventory_reports)
             return selections, json.loads((Path(directory) / 'bindings.json').read_text()), reports
 
     def test_vector_without_a_plan_stays_loopback_only(self):
@@ -408,7 +462,7 @@ class LiveKindCoverageTests(unittest.TestCase):
         self.assertEqual(sorted(json.loads(path.read_text())['operation'] for path in
                                 (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json')
                                 if path.name != 'get-party.vector.json'), operations)
-        self.assertEqual([], reports)
+        self.assertEqual(self.expected_current_reports, reports)
 
     def test_missing_live_kind_fails_naming_the_module_and_kind(self):
         # Derived from the approved vectors, so a Parties amendment that adds a planned query needs no edit here.
@@ -446,11 +500,13 @@ class LiveKindCoverageTests(unittest.TestCase):
                 older.append((str(path), document['package']['id']))
             return dict(document, package=dict(document['package'], version='0.0.1'))
         self.enterContext(patch.object(validate, '_load_json', older_vectors))
-        selections, bindings, reports = self.preflight()
+        selections, bindings, reports = self.preflight(expected_vector_version='0.0.1')
         restored = {binding['packageId'].casefold(): binding['version'] for binding in bindings}
         self.assertEqual(len(list((ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json'))), len(older))
+        self.assertEqual(self.expected_current_reports, reports)
         self.assertEqual([f'{path}:/package/version: vector {package}@0.0.1 differs from release artifact version '
-                          f'{restored[package.casefold()]}; reported, not failed' for path, package in older], reports)
+                          f'{restored[package.casefold()]}; reported, not failed' for path, package in older],
+                         [report for report in reports if ':/package/version:' in report])
         self.assertEqual(['parties.list-parties'], [item['operation'] for item in selections])
 
     def test_orphan_plan_fails_preflight(self):
@@ -464,15 +520,17 @@ class LiveKindCoverageTests(unittest.TestCase):
         def older_receipt(path):
             document = real_load(path)
             return dict(document, version='0.0.1') if Path(path).name == 'approval.json' else document
-        selections, bindings, reports = self.preflight(_load_json=older_receipt)
+        selections, bindings, reports = self.preflight(expected_approval_version='0.0.1', _load_json=older_receipt)
         restored = {binding['packageId']: (binding['version'], binding['artifactHash']) for binding in bindings}
         assets = json.loads((ROOT / 'src/Hexalith.McpCli/obj/project.assets.json').read_text())
         # The expected versions come from the restored assets, so a version-only module release needs no edit here.
         restored_versions = {key.rsplit('/', 1)[0].casefold(): key.rsplit('/', 1)[1]
                              for key, library in assets['libraries'].items() if library['type'] == 'package'}
         self.assertTrue(restored)
+        self.assertEqual(self.expected_current_reports, reports)
         self.assertEqual([f'{package}: approval receipt version 0.0.1 differs from restored package version '
-                          f'{restored_versions[package.casefold()]}; reported, not failed.' for package in restored], reports)
+                          f'{restored_versions[package.casefold()]}; reported, not failed.' for package in restored],
+                         [report for report in reports if ': approval receipt version ' in report])
         for package, (version, artifact_hash) in restored.items():
             identity = f'{package}/{version}'
             self.assertIn(identity, assets['libraries'])
@@ -502,9 +560,11 @@ class LiveKindCoverageTests(unittest.TestCase):
                                                    result.stderr + 'reported: inventory.json:public operation x: reported\nother line\n')
             return result
         from unittest.mock import patch
+        expected_inventory = self.inventory_reports()
         with patch.object(live_plans.subprocess, 'run', side_effect=run):
-            _, _, reports = self.preflight()
-        self.assertEqual(['inventory.json:public operation x: reported'], reports)
+            _, _, reports = self.preflight(expected_inventory_reports=expected_inventory,
+                                           expected_extra_inventory_reports=['inventory.json:public operation x: reported'])
+        self.assertEqual(self.expected_current_reports, reports)
 
 
 class InventoryAdapterReportTests(unittest.TestCase):
@@ -556,7 +616,7 @@ class InventoryAdapterReportTests(unittest.TestCase):
 class AdapterDependencyTests(unittest.TestCase):
     def test_actual_built_adapter_matches_restored_production_closure(self):
         import live_plans
-        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        host = ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
         assets = json.loads((ROOT / 'src/Hexalith.McpCli/obj/project.assets.json').read_text())
         live_plans.check_adapter_dependencies(host, assets)
 
@@ -567,7 +627,7 @@ class AdapterDependencyTests(unittest.TestCase):
         root = Path(root)
         host = root / 'adapter.dll'
         host.write_bytes(b'fixture adapter')
-        target = '.NETCoreApp,Version=v10.0'
+        target = '.NETCoreApp,Version=v11.0'
         assets = {'libraries': {}, 'targets': {target: {}}, 'packageFolders': {str(root / 'cache'): {}}}
         deps = {'runtimeTarget': {'name': target}, 'libraries': {}, 'targets': {target: {}}}
         for name, filename in [('Gateway.Client', 'Gateway.Client.dll'), ('Example.Contracts', 'Example.Contracts.dll'),
@@ -577,7 +637,7 @@ class AdapterDependencyTests(unittest.TestCase):
             package = root / 'cache' / relative / (name.lower() + '.1.0.0.nupkg')
             package.parent.mkdir(parents=True)
             content = (name + ' approved runtime assembly').encode()
-            asset = 'lib/net10.0/' + filename
+            asset = 'lib/net11.0/' + filename
             with zipfile.ZipFile(package, 'w') as archive: archive.writestr(asset, content)
             content_hash = base64.b64encode(hashlib.sha512(package.read_bytes()).digest()).decode()
             assets['libraries'][identity] = {'type': 'package', 'path': relative, 'sha512': content_hash}
@@ -621,7 +681,7 @@ class AdapterDependencyTests(unittest.TestCase):
                 host, assets, deps = self.fixture(directory)
                 identity = 'Gateway.Client/1.0.0'
                 target = deps['runtimeTarget']['name']
-                asset = 'runtimes/win/lib/net10.0/Gateway.Client.dll'
+                asset = 'runtimes/win/lib/net11.0/Gateway.Client.dll'
                 metadata = {'rid': 'win', 'assetType': 'runtime'}
                 deps['targets'][target][identity]['runtimeTargets'] = {asset: metadata.copy()}
                 assets['targets'][target][identity]['runtimeTargets'] = {} if defect == 'unrestored-asset' else {asset: metadata}
@@ -658,7 +718,7 @@ class AdapterDependencyTests(unittest.TestCase):
         sdk_version, sdk_root = sdk.split(' ', 1)
         compiler = Path(sdk_root.strip('[]')) / sdk_version / 'Roslyn/bincore/csc.dll'
         runtime = next(line for line in subprocess.run(['dotnet', '--list-runtimes'], capture_output=True, text=True,
-                       timeout=30, check=True).stdout.splitlines() if line.startswith('Microsoft.NETCore.App 10.'))
+                       timeout=30, check=True).stdout.splitlines() if line.startswith('Microsoft.NETCore.App 11.'))
         _, runtime_version, runtime_root = runtime.split(maxsplit=2)
         corelib = Path(runtime_root.strip('[]')) / runtime_version / 'System.Private.CoreLib.dll'
         with tempfile.TemporaryDirectory() as directory:
@@ -677,7 +737,7 @@ class AdapterDependencyTests(unittest.TestCase):
             identity = 'Gateway.Client/1.0.0'
             package = root / 'cache/gateway.client/1.0.0/gateway.client.1.0.0.nupkg'
             with zipfile.ZipFile(package, 'w') as archive:
-                archive.write(binaries[0], 'lib/net10.0/Gateway.Client.dll')
+                archive.write(binaries[0], 'lib/net11.0/Gateway.Client.dll')
             content_hash = base64.b64encode(hashlib.sha512(package.read_bytes()).digest()).decode()
             assets['libraries'][identity]['sha512'] = content_hash
             deps['libraries'][identity]['sha512'] = 'sha512-' + content_hash

@@ -1,0 +1,190 @@
+{
+  "status": "failed",
+  "parentRevision": "ae4f07faa08237b8648030dccc825208b19442e4",
+  "policyVersion": "1.0.10",
+  "rootCount": 17,
+  "surfaceCount": 449,
+  "rejectedSurfaces": [
+    {
+      "classification": "unapproved",
+      "gitlink": "99f7c86072ca7b35e3fbbaee4606a559a847805a",
+      "reason": "new-proprietary-surface",
+      "surface": {
+        "identity": "Hexalith.FrontComposer.Cli",
+        "kind": "publication",
+        "path": "Tools/test-authoritative-package-catalog.ps1",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "classification": "unapproved",
+      "gitlink": "99f7c86072ca7b35e3fbbaee4606a559a847805a",
+      "reason": "new-proprietary-surface",
+      "surface": {
+        "identity": "Hexalith.FrontComposer.Mcp",
+        "kind": "publication",
+        "path": "Tools/test-authoritative-package-catalog.ps1",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "classification": "unapproved",
+      "gitlink": "99f7c86072ca7b35e3fbbaee4606a559a847805a",
+      "reason": "new-proprietary-surface",
+      "surface": {
+        "identity": "Hexalith.Parties.Mcp",
+        "kind": "publication",
+        "path": "Tools/test-authoritative-package-catalog.ps1",
+        "repository": "references/Hexalith.Builds"
+      }
+    },
+    {
+      "changedSources": [
+        ".github/workflows/ci.yml"
+      ],
+      "classification": "external-developer-tool",
+      "gitlink": "749d162538b321e80401a4b69a7f706ba656c9e0",
+      "reason": "allowance-signal-or-source-drift",
+      "row": "PE06",
+      "surface": {
+        "identity": "Microsoft.DotNet.ApiCompat.Tool",
+        "kind": "publication",
+        "path": ".github/workflows/ci.yml",
+        "repository": "references/Hexalith.EventStore"
+      },
+      "unexpectedSignals": []
+    },
+    {
+      "changedSources": [
+        "../Hexalith.Builds/Props/Directory.Packages.props",
+        "references/Hexalith.Builds/Props/Directory.Packages.props"
+      ],
+      "classification": "qualification-evidence-tooling",
+      "gitlink": "749d162538b321e80401a4b69a7f706ba656c9e0",
+      "reason": "allowance-signal-or-source-drift",
+      "row": "PE09",
+      "surface": {
+        "identity": "Hexalith.EventStore.RuntimeIdentityProbe",
+        "kind": "project",
+        "path": "tools/Hexalith.EventStore.RuntimeIdentityProbe/Hexalith.EventStore.RuntimeIdentityProbe.csproj",
+        "repository": "references/Hexalith.EventStore"
+      },
+      "unexpectedSignals": []
+    },
+    {
+      "changedSources": [
+        "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj"
+      ],
+      "classification": "existing-test-data-generator",
+      "gitlink": "2c2e9b58990638ededf22e8e67ff5c12de75b434",
+      "reason": "allowance-signal-or-source-drift",
+      "row": "PE09",
+      "surface": {
+        "identity": "package:GenerateBenchmarkVectors",
+        "kind": "publication",
+        "path": "tools/GenerateBenchmarkVectors/GenerateBenchmarkVectors.csproj",
+        "repository": "references/Hexalith.Memories"
+      },
+      "unexpectedSignals": []
+    },
+    {
+      "changedSources": [
+        "tools/release-containers.json"
+      ],
+      "classification": "retained-memories-publication",
+      "gitlink": "2c2e9b58990638ededf22e8e67ff5c12de75b434",
+      "reason": "allowance-signal-or-source-drift",
+      "row": "PS07",
+      "surface": {
+        "identity": "mcp",
+        "kind": "publication",
+        "path": "tools/release-containers.json",
+        "repository": "references/Hexalith.Memories"
+      },
+      "unexpectedSignals": []
+    },
+    {
+      "changedSources": [
+        "src/Hexalith.Platform.Composition/PlatformDeclarationSet.cs",
+        "src/Hexalith.Platform.Composition/PlatformMcpCliCatalogVersion.cs",
+        "src/Hexalith.Platform.Composition/PlatformPartiesValidationContext.cs",
+        "src/Hexalith.Platform.Composition/PlatformRunOwnedWorkloadEnrollment.cs",
+        "src/Hexalith.Platform.Composition/PlatformServerBindings.cs",
+        "src/Hexalith.Platform.Composition/PlatformWorkloadEnrollment.cs",
+        "src/Hexalith.Platform.Composition/PlatformWorkloadEnrollmentInventory.cs"
+      ],
+      "classification": "existing-platform-composition-tooling",
+      "gitlink": "9ccbd4c7f8f3b6143e7b4f7b20a0e192de932ac1",
+      "reason": "allowance-signal-or-source-drift",
+      "row": "PE03",
+      "surface": {
+        "identity": "Hexalith.Platform.Composition",
+        "kind": "project",
+        "path": "src/Hexalith.Platform.Composition/Hexalith.Platform.Composition.csproj",
+        "repository": "references/Hexalith.Platform"
+      },
+      "unexpectedSignals": []
+    }
+  ],
+  "errors": [
+    {
+      "gitlink": "99f7c86072ca7b35e3fbbaee4606a559a847805a",
+      "path": "Tools/package-version-audit.json",
+      "repository": "references/Hexalith.Builds",
+      "rule": "excluded-fixture-source-drift:Tools/package-version-audit.json"
+    },
+    {
+      "gitlink": "99f7c86072ca7b35e3fbbaee4606a559a847805a",
+      "path": "Tools/test-g4-packaged-platform-loader.ps1",
+      "repository": "references/Hexalith.Builds",
+      "rule": "excluded-source-revision-drift:Tools/test-g4-packaged-platform-loader.ps1"
+    },
+    {
+      "gitlink": "99f7c86072ca7b35e3fbbaee4606a559a847805a",
+      "path": "Tools/test-g4-tool-package-contracts.ps1",
+      "repository": "references/Hexalith.Builds",
+      "rule": "excluded-source-revision-drift:Tools/test-g4-tool-package-contracts.ps1"
+    },
+    {
+      "gitlink": "99f7c86072ca7b35e3fbbaee4606a559a847805a",
+      "path": "Tools/test-platform-version-catalog.ps1",
+      "repository": "references/Hexalith.Builds",
+      "rule": "excluded-source-revision-drift:Tools/test-platform-version-catalog.ps1"
+    },
+    {
+      "gitlink": "366de54c995cfd29b51f73e1dfafe8256753f5fe",
+      "path": ".github/workflows/quality.yml",
+      "repository": "references/Hexalith.FrontComposer",
+      "rule": "excluded-fixture-source-drift:.github/workflows/quality.yml"
+    },
+    {
+      "gitlink": "fe7a8430cb765e5f262eb74938aa032741eea0a6",
+      "path": ".github/workflows/ci.yml",
+      "repository": "references/Hexalith.Projects",
+      "rule": "excluded-fixture-source-drift:.github/workflows/ci.yml"
+    },
+    {
+      "gitlink": "fe7a8430cb765e5f262eb74938aa032741eea0a6",
+      "path": "tests/e2e/run-live-apphost.sh",
+      "repository": "references/Hexalith.Projects",
+      "rule": "unresolved-loop-redirection:tests/e2e/run-live-apphost.sh"
+    },
+    {
+      "gitlink": "fe7a8430cb765e5f262eb74938aa032741eea0a6",
+      "path": "tests/e2e/run-live-apphost.sh",
+      "repository": "references/Hexalith.Projects",
+      "rule": "unresolved-publication-directory:tests/e2e/run-live-apphost.sh"
+    },
+    {
+      "gitlink": "fe7a8430cb765e5f262eb74938aa032741eea0a6",
+      "path": "tests/e2e/run-live-apphost.sh",
+      "repository": "references/Hexalith.Projects",
+      "rule": "unresolved-publication-target:tests/e2e/run-live-apphost.sh"
+    }
+  ],
+  "fullReport": {
+    "retainedOutsideRepository": "/home/administrator/mcpcli-maintenance-20261114/census-synced-raw.json",
+    "sha256": "5a9bff34edccaae4488a95a984493d5170be8f1ae0d3468d7a340920d4aa3982"
+  },
+  "acceptanceLimit": "Initial pending-pin diagnostic only; exact mutations are in the bound proposal and approval receipt."
+}

@@ -1,0 +1,13 @@
+  Determining projects to restore...
+  Restored /tmp/hexalith-job.n2Kl4Jl9/consumer10/Bootstrap.Consumer.Contracts.csproj (in 83 ms).
+CSC : warning CS9057: Analyzer assembly '/tmp/hexalith-job.n2Kl4Jl9/consumer10/packages/hexalith.mcpcli.abstractions/2.0.1/analyzers/dotnet/cs/Hexalith.McpCli.Analyzers.dll' cannot be used because it references version '5.12.0.0' of the compiler, which is newer than the currently running version '5.9.0.0'. [/tmp/hexalith-job.n2Kl4Jl9/consumer10/Bootstrap.Consumer.Contracts.csproj]
+  Bootstrap.Consumer.Contracts -> /tmp/hexalith-job.n2Kl4Jl9/consumer10/bin/Release/net10.0/Bootstrap.Consumer.Contracts.dll
+
+Build succeeded.
+
+CSC : warning CS9057: Analyzer assembly '/tmp/hexalith-job.n2Kl4Jl9/consumer10/packages/hexalith.mcpcli.abstractions/2.0.1/analyzers/dotnet/cs/Hexalith.McpCli.Analyzers.dll' cannot be used because it references version '5.12.0.0' of the compiler, which is newer than the currently running version '5.9.0.0'. [/tmp/hexalith-job.n2Kl4Jl9/consumer10/Bootstrap.Consumer.Contracts.csproj]
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:01.19
+The packaged analyzer could not load in the consumer.

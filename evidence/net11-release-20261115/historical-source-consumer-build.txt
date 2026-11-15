@@ -1,0 +1,10 @@
+/tmp/hexalith-job.ep9eLXox/consumer/MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description [/tmp/hexalith-job.ep9eLXox/consumer/Bootstrap.Consumer.Contracts.csproj]
+  Bootstrap.Consumer.Contracts -> /tmp/hexalith-job.ep9eLXox/consumer/bin/Release/net10.0/Bootstrap.Consumer.Contracts.dll
+
+Build succeeded.
+
+/tmp/hexalith-job.ep9eLXox/consumer/MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description [/tmp/hexalith-job.ep9eLXox/consumer/Bootstrap.Consumer.Contracts.csproj]
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.49

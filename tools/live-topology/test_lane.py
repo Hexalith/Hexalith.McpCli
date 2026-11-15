@@ -174,7 +174,7 @@ lane.main(['--output',sys.argv[2],'--preflight-only'])
                                  call.args[0][call.args[0].index('-class') + 1])
                 self.assertEqual('fixture.operation-' + str(i), call.args[1]['MCPCLI_LIVE_OPERATION'])
                 self.assertIn('run-isolated.py', call.args[0][1])
-                self.assertEqual(str(lane.ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'), call.args[1]['MCPCLI_LIVE_HOST'])
+                self.assertEqual(str(lane.ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'), call.args[1]['MCPCLI_LIVE_HOST'])
                 self.assertEqual(selection_binding(selections[i]), json.loads(call.args[1]['MCPCLI_LIVE_BINDING']))
                 self.assertEqual({'MCPCLI_LIVE_OPERATION', 'MCPCLI_LIVE_OUTPUT', 'MCPCLI_LIVE_HOST', 'MCPCLI_LIVE_BINDING'},
                                  {key for key in call.args[1] if key.startswith(('MCPCLI_LIVE_', 'EVENTSTORE_'))})

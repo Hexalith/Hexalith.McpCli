@@ -62,6 +62,10 @@ public sealed class NativeCatalogEvidenceTests : IDisposable
         await NativeCatalogEvidence.RequireAsync(Receipt, TestContext.Current.CancellationToken);
         using JsonDocument evidence = JsonDocument.Parse(File.ReadAllBytes(Evidence));
         Assert.Equal("passed", evidence.RootElement.GetProperty("result").GetString());
+        using JsonDocument selection = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(
+            DependencyPolicyTests.FindRepositoryRoot(), "tools", "live-topology", "native-runtime-current.json")));
+        Assert.Equal(selection.RootElement.GetProperty("eventStoreVersion").GetString(),
+            evidence.RootElement.GetProperty("sdkVersion").GetString());
         Assert.Contains("sdk-hash", evidence.RootElement.GetProperty("inputs").GetRawText(), StringComparison.Ordinal);
     }
 

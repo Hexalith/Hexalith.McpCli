@@ -27,7 +27,7 @@ HISTORICAL_TAGS = {
 
 
 def package(path, *, identity="Hexalith.McpCli.Abstractions", version="1.0.0", missing=(), dependency=False,
-            core_properties=None):
+            core_properties=None, framework="net11.0"):
     files = {
         "Hexalith.McpCli.Abstractions.nuspec": (
             f'<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd"><metadata>'
@@ -35,7 +35,7 @@ def package(path, *, identity="Hexalith.McpCli.Abstractions", version="1.0.0", m
             + ('<dependencies><group><dependency id="Leak" version="1.0.0" /></group></dependencies>' if dependency else '')
             + '</metadata></package>'
         ),
-        "lib/net10.0/Hexalith.McpCli.Abstractions.dll": "compile fixture",
+        f"lib/{framework}/Hexalith.McpCli.Abstractions.dll": "compile fixture",
         "analyzers/dotnet/cs/Hexalith.McpCli.Analyzers.dll": "analyzer fixture",
     }
     if core_properties is not None:
@@ -131,7 +131,7 @@ safe = ["REDACTED" if i and args[i-1] == "--api-key" else arg for i, arg in enum
 with (root / "dotnet.log").open("a") as log: log.write(json.dumps(safe) + "\\n")
 if args[0] == "msbuild":
     project = args[1]
-    print(json.dumps({"Properties": {"TargetFramework": "net10.0", "TargetFrameworks": "", "PackAsTool": "true", "ToolCommandName": "hexalith", "UseAppHost": "false", "PublishTrimmed": "false", "PublishAot": "false", "PublishReadyToRun": "false", "SelfContained": "false", "RuntimeIdentifier": "", "RuntimeIdentifiers": "", "CreateRidSpecificToolPackages": "false", "PackageId": Path(project).stem, "Version": "1.0.0"}}))
+    print(json.dumps({"Properties": {"TargetFramework": os.environ.get("SOURCE_FRAMEWORK", "net11.0"), "TargetFrameworks": os.environ.get("SOURCE_FRAMEWORKS", ""), "PackAsTool": "true", "ToolCommandName": "hexalith", "UseAppHost": "false", "PublishTrimmed": "false", "PublishAot": "false", "PublishReadyToRun": "false", "SelfContained": "false", "RuntimeIdentifier": "", "RuntimeIdentifiers": "", "CreateRidSpecificToolPackages": "false", "PackageId": Path(project).stem, "Version": "1.0.0"}}))
     sys.exit(0)
 if args[0] in ("restore", "build") and args[1] == "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj":
     if os.environ.get(args[0].upper() + "_FAIL"):
@@ -144,7 +144,7 @@ if args[0] == "pack":
     dependencies = '<dependencies><dependency id="Leak" version="1.0.0" /></dependencies>' if os.environ.get("PACK_INVALID") == "dependency" else ''
     with ZipFile(directory / f"Hexalith.McpCli.Abstractions.{version}.nupkg", "w") as archive:
         archive.writestr("Abstractions.nuspec", f"<package><metadata><id>Hexalith.McpCli.Abstractions</id><version>{version}</version>{dependencies}</metadata></package>")
-        archive.writestr("lib/net10.0/Hexalith.McpCli.Abstractions.dll", "compile fixture")
+        archive.writestr("lib/" + os.environ.get("SOURCE_FRAMEWORK", "net11.0") + "/Hexalith.McpCli.Abstractions.dll", "compile fixture")
         archive.writestr("analyzers/dotnet/cs/Hexalith.McpCli.Analyzers.dll", "analyzer fixture")
     if os.environ.get("PACK_INVALID") == "symbols":
         (directory / "symbols.snupkg").write_bytes(b"unexpected symbols")
@@ -535,7 +535,7 @@ urllib.request.urlopen = paired_registry
         result = self.run_script("release-prepare.sh", "1.0.0")
         self.assertEqual(result.returncode, 0, result.stderr)
         calls = self.calls()
-        self.assertEqual([call[0] for call in calls], ["restore", "build", "pack", "restore", "build"])
+        self.assertEqual([call[0] for call in calls], ["restore", "build", "pack", "msbuild", "msbuild", "restore", "build"])
         for call in calls[:3]:
             self.assertEqual(call[1], "src/Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj")
         self.assertEqual(other.read_bytes(), b"preserve me")
@@ -546,7 +546,7 @@ urllib.request.urlopen = paired_registry
         self.assertNotEqual(retry.returncode, 0)
         self.assertIn("already exists", retry.stderr)
         self.assertEqual((self.root / "nupkgs/bootstrap" / PACKAGE).read_bytes(), prepared)
-        self.assertEqual(len(self.calls()), 5)
+        self.assertEqual(len(self.calls()), 7)
 
     def test_failed_prepare_cleans_only_its_own_staging(self):
         other = self.root / "nupkgs/other.txt"
@@ -578,7 +578,7 @@ urllib.request.urlopen = paired_registry
                 result = self.run_script("release-prepare.sh", "1.0.0")
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(message, result.stderr)
-                self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack"])
+                self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack"] + (["msbuild"] if invalid == "dependency" else []))
                 self.assertFalse((self.root / "nupkgs/bootstrap").exists())
                 self.assertFalse((self.root / "nupkgs/bootstrap.sha256").exists())
                 self.assertNotIn("Prepared Hexalith.McpCli.Abstractions", result.stdout)
@@ -645,7 +645,7 @@ urllib.request.urlopen = paired_registry
                 (self.root / "dotnet.log").unlink(missing_ok=True)
                 result = self.run_script("release-prepare.sh", version, "--verify-source")
                 self.assertEqual(result.returncode, 0, result.stderr)
-                self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "restore", "build"])
+                self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "msbuild", "msbuild", "restore", "build"])
                 for call in self.calls()[:3]:
                     self.assertEqual([arg for arg in call if arg.startswith("-p:Version=")], [f"-p:Version={version}"])
                 name = f"Hexalith.McpCli.Abstractions.{version}.nupkg"
@@ -794,7 +794,7 @@ urllib.request.urlopen = paired_registry
         cases = (
             ({"identity": "Wrong"}, "Unexpected package ID"),
             ({"version": "2.0.0"}, "Unexpected package version"),
-            ({"missing": ("lib/net10.0/Hexalith.McpCli.Abstractions.dll",)}, "compile DLL"),
+            ({"missing": ("lib/net11.0/Hexalith.McpCli.Abstractions.dll",)}, "compile DLL"),
             ({"missing": ("analyzers/dotnet/cs/Hexalith.McpCli.Analyzers.dll",)}, "analyzer DLL"),
             ({"dependency": True}, "consumer-visible package dependencies"),
             ({"missing": ("Hexalith.McpCli.Abstractions.nuspec",)}, "one nuspec"),
@@ -830,7 +830,7 @@ urllib.request.urlopen = paired_registry
         with warnings.catch_warnings():
             warnings.simplefilter("ignore", UserWarning)
             with ZipFile(path, "a") as archive:
-                archive.writestr("lib/net10.0/Hexalith.McpCli.Abstractions.dll", "duplicate")
+                archive.writestr("lib/net11.0/Hexalith.McpCli.Abstractions.dll", "duplicate")
         result = self.run_script("release-publish.sh", "1.0.0")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("duplicate archive entries", result.stderr)
@@ -891,7 +891,7 @@ urllib.request.urlopen = paired_registry
         self.assert_no_push()
 
     def paired_tool(self, *, missing=(), package_type=True, command=None, manifest='("Sample.Contracts", "Sample.Contracts")', assembly=True):
-        prefix = "tools/net10.0/any/"
+        prefix = "tools/net11.0/any/"
         managed = bytearray(640)
         managed[:2] = b'MZ'
         struct.pack_into('<I', managed, 0x3c, 64)
@@ -916,8 +916,8 @@ urllib.request.urlopen = paired_registry
                 + ('<packageTypes><packageType name="DotnetTool" /></packageTypes>' if package_type else '')
                 + '</metadata></package>',
             "README.md": "fixture", prefix + "Hexalith.McpCli.dll": bytes(managed),
-            prefix + "Hexalith.McpCli.deps.json": json.dumps({"runtimeTarget": {"name": ".NETCoreApp,Version=v10.0"}, "libraries": {"Sample.Contracts/1.0.0": {}}, "targets": {".NETCoreApp,Version=v10.0": {"Sample.Contracts/1.0.0": {}}}}),
-            prefix + "Hexalith.McpCli.runtimeconfig.json": json.dumps({"runtimeOptions": {"tfm": "net10.0", "framework": {"name": "Microsoft.NETCore.App", "version": "10.0.0"}}}),
+            prefix + "Hexalith.McpCli.deps.json": json.dumps({"runtimeTarget": {"name": ".NETCoreApp,Version=v11.0"}, "libraries": {"Sample.Contracts/1.0.0": {}}, "targets": {".NETCoreApp,Version=v11.0": {"Sample.Contracts/1.0.0": {}}}}),
+            prefix + "Hexalith.McpCli.runtimeconfig.json": json.dumps({"runtimeOptions": {"tfm": "net11.0", "framework": {"name": "Microsoft.NETCore.App", "version": "11.0.0"}}}),
             prefix + "DotnetToolSettings.xml": '<DotNetCliTool><Commands><Command '
                 + (command if command is not None else 'Name="hexalith" EntryPoint="Hexalith.McpCli.dll" Runner="dotnet"')
                 + ' /></Commands></DotNetCliTool>',
@@ -935,7 +935,7 @@ urllib.request.urlopen = paired_registry
             for name, contents in files.items():
                 if name not in missing:
                     archive.writestr(name, contents)
-        path = self.root / "src/Hexalith.McpCli/obj/Release/net10.0/ModuleAssemblyManifest.g.cs"
+        path = self.root / "src/Hexalith.McpCli/obj/Release/net11.0/ModuleAssemblyManifest.g.cs"
         path.parent.mkdir(parents=True, exist_ok=True)
         if manifest is None:
             path.unlink(missing_ok=True)
@@ -944,7 +944,7 @@ urllib.request.urlopen = paired_registry
 
     def test_paired_validation_keeps_existing_tool_structure_checks(self):
         path = self.staged()
-        prefix = "tools/net10.0/any/"
+        prefix = "tools/net11.0/any/"
         cases = [({"missing": (name,)}, "tool package is missing") for name in
                  ("README.md", prefix + "DotnetToolSettings.xml", prefix + "Hexalith.McpCli.dll",
                   prefix + "Hexalith.McpCli.deps.json", prefix + "Hexalith.McpCli.runtimeconfig.json")]
@@ -971,12 +971,12 @@ urllib.request.urlopen = paired_registry
 
     def test_paired_validator_rejects_runtime_and_enrollment_drift(self):
         self.staged()
-        prefix = 'tools/net10.0/any/'
+        prefix = 'tools/net11.0/any/'
         cases = [
             (prefix + 'Hexalith.McpCli.dll', b'native payload', 'managed PE'),
-            (prefix + 'Hexalith.McpCli.deps.json', json.dumps({'runtimeTarget': {'name': '.NETCoreApp,Version=v10.0/linux-x64'}}), 'portable .NET 10'),
-            (prefix + 'Hexalith.McpCli.deps.json', json.dumps({'runtimeTarget': {'name': '.NETCoreApp,Version=v10.0'}, 'libraries': {}}), 'Packaged Contracts versions'),
-            (prefix + 'Hexalith.McpCli.runtimeconfig.json', json.dumps({'runtimeOptions': {'tfm': 'net10.0', 'includedFrameworks': [{'name': 'Microsoft.NETCore.App'}]}}), 'framework-dependent'),
+            (prefix + 'Hexalith.McpCli.deps.json', json.dumps({'runtimeTarget': {'name': '.NETCoreApp,Version=v11.0/linux-x64'}}), 'portable .NET 11'),
+            (prefix + 'Hexalith.McpCli.deps.json', json.dumps({'runtimeTarget': {'name': '.NETCoreApp,Version=v11.0'}, 'libraries': {}}), 'Packaged Contracts versions'),
+            (prefix + 'Hexalith.McpCli.runtimeconfig.json', json.dumps({'runtimeOptions': {'tfm': 'net11.0', 'includedFrameworks': [{'name': 'Microsoft.NETCore.App'}]}}), 'framework-dependent'),
         ]
         path = self.root / 'nupkgs/bootstrap/Hexalith.McpCli.1.0.0.nupkg'
         for name, payload, message in cases:
@@ -1006,7 +1006,7 @@ urllib.request.urlopen = paired_registry
     def test_paired_validator_refuses_native_files_and_native_dependency_entries(self):
         self.staged()
         self.paired_tool()
-        prefix = 'tools/net10.0/any/'
+        prefix = 'tools/net11.0/any/'
         path = self.root / 'nupkgs/bootstrap/Hexalith.McpCli.1.0.0.nupkg'
         with ZipFile(path) as archive:
             base = {name: archive.read(name) for name in archive.namelist()}
@@ -1046,8 +1046,9 @@ urllib.request.urlopen = paired_registry
                 struct.pack_into('<II', payload, 88 + 112 + 14 * 8, 0x2000, 72)
             cases.append((prefix + label + '.dll', bytes(payload), message))
         cases.extend([
-            ('tools/net10.0/win-x64/payload.exe', b'MZnative', 'Alternate tools layouts'),
+            ('tools/net11.0/win-x64/payload.exe', b'MZnative', 'Alternate tools layouts'),
             ('tools/net9.0/any/readme.txt', b'alternate', 'Alternate tools layouts'),
+            ('tools/net10.0/any/readme.txt', b'previous framework', 'Alternate tools layouts'),
             ('content/native-host.bin', b'MZnative', 'executable payload'),
             ('content/native.exe', b'native', 'Native payload'),
             ('content/libnative.so', b'native', 'Native payload'),
@@ -1056,7 +1057,7 @@ urllib.request.urlopen = paired_registry
         for kind, assets in [('native', {'extra.so': {}}),
                              ('runtimeTargets', {'runtimes/linux-x64/native/extra.so': {'assetType': 'native', 'rid': 'linux-x64'}})]:
             deps = json.loads(base[prefix + 'Hexalith.McpCli.deps.json'])
-            deps['targets']['.NETCoreApp,Version=v10.0']['Sample.Contracts/1.0.0'][kind] = assets
+            deps['targets']['.NETCoreApp,Version=v11.0']['Sample.Contracts/1.0.0'][kind] = assets
             cases.append((prefix + 'Hexalith.McpCli.deps.json', json.dumps(deps), 'Native'))
         for name, payload, message in cases:
             with self.subTest(name=name, message=message):
@@ -1181,6 +1182,90 @@ urllib.request.urlopen = paired_registry
         self.assertEqual(self.calls(), [])
         self.assert_no_push()
 
+    def test_bootstrap_framework_and_consumer_follow_effective_source(self):
+        from xml.etree import ElementTree
+        for framework in ("net10.0", "net11.0"):
+            with self.subTest(framework=framework):
+                self.env["SOURCE_FRAMEWORK"] = framework
+                staged = self.staged(framework=framework)
+                result = self.run_script("validate-release-packages.py", str(staged.parent), "1.0.0", "bootstrap")
+                self.assertEqual(result.returncode, 0, result.stderr)
+                consumer = self.root / ("consumer-" + framework)
+                result = self.run_script("smoke-bootstrap-consumer.sh", "1.0.0", str(staged.parent), str(consumer))
+                self.assertEqual(result.returncode, 0, result.stderr)
+                project = ElementTree.parse(consumer / "Bootstrap.Consumer.Contracts.csproj")
+                self.assertEqual(project.findtext(".//TargetFramework"), framework)
+                self.assert_no_push()
+
+    def test_bootstrap_refuses_compile_framework_different_from_effective_source(self):
+        staged = self.staged(framework="net10.0")
+        result = self.run_script("validate-release-packages.py", str(staged.parent), "1.0.0", "bootstrap")
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, "")
+        self.assertTrue(result.stderr.endswith("ValueError: Abstractions package is missing its net11.0 compile DLL\n"), result.stderr)
+        self.assert_no_push()
+
+    def test_bootstrap_refuses_unsupported_or_multiple_effective_frameworks(self):
+        staged = self.staged()
+        for framework, frameworks in (("net9.0", ""), ("net11.0", "net10.0;net11.0"), ("", "")):
+            with self.subTest(framework=framework, frameworks=frameworks):
+                self.env.update(SOURCE_FRAMEWORK=framework, SOURCE_FRAMEWORKS=frameworks)
+                result = self.run_script("validate-release-packages.py", str(staged.parent), "1.0.0", "bootstrap")
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, "")
+                self.assertTrue(result.stderr.endswith("ValueError: Bootstrap source must target only net10.0 or net11.0.\n"), result.stderr)
+                consumer = self.root / ("refused-consumer-" + str(len(self.calls())))
+                result = self.run_script("smoke-bootstrap-consumer.sh", "1.0.0", str(staged.parent), str(consumer))
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, "")
+                self.assertTrue(result.stderr.endswith("ValueError: Bootstrap source must target only net10.0 or net11.0.\n"), result.stderr)
+                self.assertFalse((consumer / "Bootstrap.Consumer.Contracts.csproj").exists())
+                self.assertTrue(all(call[0] == "msbuild" for call in self.calls()))
+                self.assert_no_push()
+
+    def test_paired_abstractions_refuses_historical_or_additional_compile_framework(self):
+        staged = self.staged(framework="net10.0")
+        self.paired_tool()
+        result = self.run_script("validate-release-packages.py", str(staged.parent), "1.0.0", "paired", "--source-sha", SHA)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertEqual(result.stdout, "")
+        self.assertTrue(result.stderr.endswith("ValueError: Abstractions package is missing its net11.0 compile DLL\n"), result.stderr)
+        for asset in ("lib/net10.0/Hexalith.McpCli.Abstractions.dll", "ref/net10.0/Hexalith.McpCli.Abstractions.dll",
+                      "Ref/net10.0/Hexalith.McpCli.Abstractions.dll"):
+            with self.subTest(asset=asset):
+                self.staged()
+                with ZipFile(staged, "a") as archive:
+                    archive.writestr(asset, "historical compile bytes")
+                result = self.run_script("validate-release-packages.py", str(staged.parent), "1.0.0", "paired", "--source-sha", SHA)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, "")
+                self.assertTrue(result.stderr.endswith("ValueError: Abstractions package must contain only its net11.0 compile target\n"), result.stderr)
+                self.assert_no_push()
+
+    def test_paired_abstractions_refuses_rid_specific_payload(self):
+        for asset in ("runtimes/linux-x64/lib/net10.0/Hexalith.McpCli.Abstractions.dll",
+                      "runtimes/linux-x64/lib/net11.0/Hexalith.McpCli.Abstractions.dll",
+                      "runtimes/linux-x64/native/payload.so", "Runtimes/linux-x64/native/payload.so"):
+            with self.subTest(asset=asset):
+                staged = self.staged()
+                self.paired_tool()
+                with ZipFile(staged, "a") as archive:
+                    archive.writestr(asset, "RID-specific fixture bytes")
+                result = self.run_script("validate-release-packages.py", str(staged.parent), "1.0.0", "paired", "--source-sha", SHA)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertEqual(result.stdout, "")
+                self.assertTrue(result.stderr.endswith("ValueError: Abstractions package cannot contain RID-specific payload\n"), result.stderr)
+                self.assert_no_push()
+
+    def test_fixed_historical_recovery_retains_net10_archive_and_consumer(self):
+        staged = self.staged(framework="net10.0")
+        shutil.copy(staged, self.root / "public.nupkg")
+        self.env.update(REGISTRY_STATE="taken", SOURCE_FRAMEWORK="net10.0")
+        result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertIn("Verified public package", result.stdout)
+        self.assert_no_push()
+
     def test_consumer_uses_fresh_cache_config_and_clears_fallback_folders(self):
         self.env["NUGET_FALLBACK_PACKAGES"] = "/inherited/cache"
         result = self.run_script("smoke-bootstrap-consumer.sh", "1.0.0", "/fixture/empty-source", str(self.root / "consumer"))
@@ -1194,7 +1279,7 @@ urllib.request.urlopen = paired_registry
         environment = json.loads((self.root / "consumer-environment.json").read_text())
         self.assertEqual(environment["NUGET_FALLBACK_PACKAGES"], "")
         self.assertEqual(environment["NUGET_PACKAGES"], str(self.root / "consumer/packages"))
-        restore = self.calls()[0]
+        restore, = [call for call in self.calls() if call[0] == "restore"]
         self.assertIn("-p:RestoreFallbackFolders=", restore)
         self.assertIn("-p:RestoreAdditionalProjectFallbackFolders=", restore)
         self.assert_no_push()
@@ -1203,8 +1288,8 @@ urllib.request.urlopen = paired_registry
         self.env.update(RestoreSources="/inherited/source", RestorePackagesPath="/inherited/packages")
         result = self.run_script("smoke-bootstrap-consumer.sh", "1.0.0", "/selected/source", str(self.root / "consumer"))
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual([call[0] for call in self.calls()], ["restore", "build"])
-        for call in self.calls():
+        self.assertEqual([call[0] for call in self.calls()], ["msbuild", "restore", "build"])
+        for call in self.calls()[1:]:
             self.assertIn("-p:RestoreSources=/selected/source", call)
             self.assertIn(f"-p:RestorePackagesPath={self.root}/consumer/packages", call)
             self.assertIn("-p:RestoreAdditionalProjectSources=", call)
@@ -1217,7 +1302,7 @@ urllib.request.urlopen = paired_registry
         config = ElementTree.fromstring((self.root / "consumer-nuget.config").read_text())
         expected = str(self.root / "relative-source")
         self.assertEqual(config.find("packageSources/add").attrib["value"], expected)
-        self.assertIn(f"-p:RestoreSources={expected}", self.calls()[0])
+        self.assertIn(f"-p:RestoreSources={expected}", self.calls()[1])
         self.assert_no_push()
 
     def test_consumer_preserves_url_sources_in_config_restore_and_build(self):
@@ -1227,8 +1312,8 @@ urllib.request.urlopen = paired_registry
         from xml.etree import ElementTree
         config = ElementTree.fromstring((self.root / "consumer-nuget.config").read_text())
         self.assertEqual(config.find("packageSources/add").attrib["value"], source)
-        self.assertEqual([call[0] for call in self.calls()], ["restore", "build"])
-        for call in self.calls():
+        self.assertEqual([call[0] for call in self.calls()], ["msbuild", "restore", "build"])
+        for call in self.calls()[1:]:
             self.assertIn(f"-p:RestoreSources={source}", call)
         self.assert_no_push()
 
@@ -1249,7 +1334,7 @@ urllib.request.urlopen = paired_registry
             '<Project><PropertyGroup><TargetFramework>invalid</TargetFramework></PropertyGroup></Project>')
         result = self.run_script("smoke-bootstrap-consumer.sh", "1.0.0", "/selected/source", str(self.root / "consumer"))
         self.assertEqual(result.returncode, 0, result.stderr)
-        for call in self.calls():
+        for call in self.calls()[1:]:
             for option in ("ImportDirectoryBuildProps", "ImportDirectoryBuildTargets", "ImportDirectoryPackagesProps"):
                 self.assertIn(f"-p:{option}=false", call)
         self.assert_no_push()
@@ -1258,7 +1343,7 @@ urllib.request.urlopen = paired_registry
         self.env["MSBUILDTERMINALLOGGER"] = "on"
         result = self.run_script("smoke-bootstrap-consumer.sh", "1.0.0", "/selected/source", "consumer")
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual([call[0] for call in self.calls()], ["restore", "build"])
+        self.assertEqual([call[0] for call in self.calls()], ["msbuild", "restore", "build"])
         for call in self.calls():
             self.assertIn("-tl:off", call)
         self.assert_no_push()
@@ -1286,7 +1371,7 @@ urllib.request.urlopen = paired_registry
         result = self.run_script("release-prepare.sh", "1.0.0")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("The bootstrap package changed during the consumer build.", result.stderr)
-        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "restore", "build"])
+        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "msbuild", "msbuild", "restore", "build"])
         self.assertFalse((self.root / "nupkgs/bootstrap.sha256").exists())
         self.assertFalse((self.root / "nupkgs/bootstrap").exists())
         self.assert_no_push()
@@ -1310,7 +1395,7 @@ urllib.request.urlopen = paired_registry
         self.env["SOURCE_STATE"] = "stale"
         result = self.run_script("release-prepare.sh", "1.0.0", "--verify-source")
         self.assertNotEqual(result.returncode, 0)
-        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "restore", "build"])
+        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "msbuild", "msbuild", "restore", "build"])
         self.assertFalse((self.root / "nupkgs/bootstrap.sha256").exists())
         self.assert_no_push()
 
@@ -1343,11 +1428,12 @@ urllib.request.urlopen = paired_registry
         self.env["TOOL_REGISTRY_STATE"] = "taken"
         for ambient in ("", "1.0.0"):
             self.env["MCPCLI_RECOVERY_VERSION"] = ambient
+            (self.root / "dotnet.log").unlink(missing_ok=True)
             result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
             self.assertEqual(result.returncode, 1)
             self.assertEqual(result.stderr, "Bootstrap recovery failed: Historical bootstrap recovery requires already-public Hexalith.McpCli.Abstractions 1.0.0; publication is forbidden.\n")
             self.assertNotIn("Verified public package", result.stdout)
-            self.assertEqual(self.calls(), [])
+            self.assertEqual([call[0] for call in self.calls()], ["msbuild"])
             self.assertFalse((self.root / "downloads.log").exists())
             self.assertFalse((self.root / "sleeps.log").exists())
             self.assertEqual(self.release_calls(), [])
@@ -1377,7 +1463,7 @@ urllib.request.urlopen = paired_registry
         self.assertFalse((self.root / "tagged-helper.log").exists())
         self.assert_no_push()
         self.assertEqual(self.release_calls(), [])
-        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "restore", "build", "restore", "build"])
+        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "msbuild", "msbuild", "restore", "build", "msbuild", "msbuild", "msbuild", "restore", "build"])
 
     def test_publication_workflow_uses_nuget_login_output_instead_of_ambient_key(self):
         self.env["NUGET_API_KEY"] = "ambient-key-must-not-be-used"
@@ -1405,7 +1491,7 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         self.assertEqual((self.root / "pushed.sha256").read_text(), expected_hash)
         self.assertEqual(json.loads((self.root / "nupkgs/bootstrap.sha256").read_text()),
                          {"sha256": expected_hash, "source_sha": SHA, "source_clean": True})
-        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "restore", "build", "nuget"])
+        self.assertEqual([call[0] for call in self.calls()], ["restore", "build", "pack", "msbuild", "msbuild", "restore", "build", "msbuild", "msbuild", "nuget"])
         push, = [call for call in self.calls() if call[:2] == ["nuget", "push"]]
         self.assertEqual(Path(push[2]).name, PACKAGE)
         registry = (self.root / "registry.log").read_text().splitlines()
@@ -1469,7 +1555,7 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         self.assertEqual(result.stderr, "Bootstrap recovery failed: Could not verify the public package: uncertain registry response (HTTP 404)\n")
         self.assertEqual(len((self.root / "downloads.log").read_text().splitlines()), 1)
         self.assertFalse((self.root / "sleeps.log").exists())
-        self.assertEqual(self.calls(), [])
+        self.assertEqual([call[0] for call in self.calls()], ['msbuild'])
         self.assertEqual(self.release_calls(), [])
 
     def test_recovery_reports_local_package_write_failure_without_registry_error(self):
@@ -1481,7 +1567,7 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         self.assertNotIn("uncertain registry response", result.stderr)
         self.assertEqual(len((self.root / "downloads.log").read_text().splitlines()), 1)
         self.assertFalse((self.root / "sleeps.log").exists())
-        self.assertEqual(self.calls(), [])
+        self.assertEqual([call[0] for call in self.calls()], ['msbuild'])
         self.assert_no_push()
 
     def test_recovery_public_download_diagnostics_preserve_only_status_or_exception_type(self):
@@ -1493,11 +1579,12 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
             with self.subTest(state=state):
                 self.env["PUBLIC_STATE"] = state
                 (self.root / "downloads.log").unlink(missing_ok=True)
+                (self.root / "dotnet.log").unlink(missing_ok=True)
                 result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
                 self.assertNotEqual(result.returncode, 0)
                 self.assertIn(f"Could not verify the public package: uncertain registry response ({detail})", result.stderr)
                 self.assertEqual(len((self.root / "downloads.log").read_text().splitlines()), 1)
-                self.assertEqual(self.calls(), [])
+                self.assertEqual([call[0] for call in self.calls()], ["msbuild"])
                 self.assertFalse((self.root / "consumer-environment.json").exists())
                 self.assertNotIn("Verified public package", result.stdout)
                 self.assert_no_push()
@@ -1521,7 +1608,9 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
         self.assertNotEqual(result.returncode, 0)
         self.assertNotIn("Verified public package", result.stdout)
-        restore, = self.calls()
+        evaluations = self.calls()[:3]
+        self.assertTrue(all(call[0] == "msbuild" for call in evaluations))
+        restore, = self.calls()[3:]
         self.assertEqual(restore[0], "restore")
         source, = [option.split("=", 1)[1] for option in restore if option.startswith("-p:RestoreSources=")]
         self.assertEqual(Path(source).name, "public")
@@ -1538,7 +1627,7 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         self.assertIn("Release source has uncommitted changes.", result.stderr)
         self.assertNotIn("Verified public package", result.stdout)
         self.assertEqual(source_state.read_text(), "dirty")
-        self.assertEqual([call[0] for call in self.calls()], ["restore", "build"])
+        self.assertEqual([call[0] for call in self.calls()], ["msbuild", "msbuild", "msbuild", "restore", "build"])
         self.assert_no_push()
 
     def test_recovery_rejects_changed_compile_bytes_with_identical_entry_names(self):
@@ -1550,7 +1639,7 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         result = self.run_script("recover-bootstrap-release.py", "1.0.0", "bootstrap")
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("content does not match", result.stderr)
-        self.assertEqual(self.calls(), [])
+        self.assertEqual([call[0] for call in self.calls()], ['msbuild', 'msbuild'])
         self.assert_no_push()
 
     def test_tagged_recovery_rejects_wrong_tag_moved_main_nonancestor_and_failed_gate(self):
@@ -1577,7 +1666,7 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         self.assertEqual(result.returncode, 1)
         self.assertEqual(result.stderr, "Release source gate failed: Dispatch SHA is not the current main SHA; main may have moved during approval.\n")
         self.assertEqual(result.stdout, "Validated bootstrap packages at version 1.0.0\n" * 2)
-        self.assertEqual(self.calls(), [])
+        self.assertEqual([call[0] for call in self.calls()], ['msbuild', 'msbuild'])
         self.assertEqual(self.release_calls(), [])
 
     def test_bootstrap_closure_cannot_be_bypassed_by_marker_or_environment(self):
@@ -1675,8 +1764,8 @@ for name in ("verifyReleaseCmd", "prepareCmd", "publishCmd"):
         pushed = Path((self.root / "pushed.path").read_text())
         self.assertNotEqual(pushed.parent, path.parent)
         self.assertFalse(pushed.exists())  # Private snapshot is cleaned after push.
-        self.assertEqual(len(self.calls()), 1)
-        for call in self.calls():
+        self.assertEqual([call[0] for call in self.calls()], ["msbuild", "msbuild", "nuget"])
+        for call in self.calls()[2:]:
             self.assertEqual(call[:2], ["nuget", "push"])
             self.assertEqual(Path(call[2]).name, PACKAGE)
             self.assertNotIn("--skip-duplicate", call)

@@ -412,8 +412,8 @@ public sealed class TopologyLaunchTests : IDisposable
     {
         string repository = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
-        string output = Path.Combine(repository, "tests", "Hexalith.McpCli.AppHost", "bin", configuration, "net10.0");
-        string target = Path.Combine(_root, "tests", "Hexalith.McpCli.AppHost", "bin", configuration, "net10.0");
+        string output = Path.Combine(repository, "tests", "Hexalith.McpCli.AppHost", "bin", configuration, "net11.0");
+        string target = Path.Combine(_root, "tests", "Hexalith.McpCli.AppHost", "bin", configuration, "net11.0");
         Directory.CreateDirectory(Path.Combine(_root, "src"));
         foreach (string source in Directory.EnumerateFiles(output, "*", SearchOption.AllDirectories))
         {
@@ -452,7 +452,7 @@ public sealed class TopologyLaunchTests : IDisposable
     {
         string repository = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", ".."));
         string configuration = new DirectoryInfo(AppContext.BaseDirectory).Parent!.Name;
-        string stub = Path.Combine(repository, "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net10.0");
+        string stub = Path.Combine(repository, "tests", "fixtures", "Topology.DaprStub", "bin", configuration, "net11.0");
         using var listener = new TcpListener(IPAddress.Loopback, 0);
         listener.Start();
         int port = ((IPEndPoint)listener.LocalEndpoint).Port;

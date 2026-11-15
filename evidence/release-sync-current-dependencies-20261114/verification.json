@@ -1,0 +1,183 @@
+{
+  "schema": "mcpcli-maintenance-verification/v1",
+  "observedAtUtc": "2026-11-14T23:33:17.993148+00:00",
+  "status": "maintenance checks passed; isolated SDK10 failure corrected and handed to authorized .NET11 migration",
+  "ordinarySuites": {
+    "Abstractions": {
+      "passed": 20,
+      "skipped": 0
+    },
+    "Analyzers": {
+      "passed": 19,
+      "skipped": 0
+    },
+    "Core": {
+      "passed": 912,
+      "skipped": 4,
+      "skipScope": "Three Windows ACL cases and the separately executed opt-in benchmark."
+    },
+    "Manifest": {
+      "passed": 370,
+      "skipped": 0
+    },
+    "Cli": {
+      "passed": 623,
+      "skipped": 2,
+      "skipScope": "Windows output-permission cases; three-OS staging remains required."
+    },
+    "Mcp": {
+      "passed": 94,
+      "skipped": 0
+    }
+  },
+  "pythonAndReleaseChecks": {
+    "censusRefusalTests": 222,
+    "releaseAutomationTests": 195,
+    "selectorTests": 4,
+    "topologyFullRun": {
+      "total": 250,
+      "passed": 249,
+      "failed": 1,
+      "failure": "Old exact Builds catalog/executor constants after authorized synchronization."
+    },
+    "topologyFocusedRepair": {
+      "class": "CiWorkflowTests",
+      "passed": 4,
+      "privateSnapshotRecordedSelectedGitlink": true,
+      "allStrictRefusalGuardsRetained": true
+    }
+  },
+  "census": {
+    "status": "passed",
+    "roots": 17,
+    "surfaces": 444,
+    "errors": 0,
+    "pendingReferenceSnapshot": "d98eea8e60d072f761ab4291db8332c9018f1cab",
+    "snapshotMessageValidated": true
+  },
+  "conformance": {
+    "sampleValidation": "passed",
+    "sampleAndPackagedProcessReplay": "passed",
+    "enrolledCoverageTests": 14,
+    "productionEnrollmentResult": "passed",
+    "fullV1ReplayAccepted": true,
+    "operationCount": 21,
+    "shapeCount": 6,
+    "reportedCount": 0,
+    "liveVectorDiscovery": 21,
+    "independentDiscoveryCases": [
+      "smoke",
+      "shared-head boundary"
+    ],
+    "preflightOnly": true
+  },
+  "firstConstruction": {
+    "result": "passed",
+    "elapsedMilliseconds": 170.0612,
+    "limitMilliseconds": 500,
+    "fullV1ConstructionAccepted": true
+  },
+  "compilerBoundary": {
+    "sdk11FreshBytes": "passed",
+    "sdk10FreshBytes": "failed CS8032; System.Collections.Immutable 11 unavailable",
+    "earlierSdk10PositiveClaim": "invalidated; private cache was not preserved by the follow-up parent command",
+    "nextWork": "Explicitly authorized .NET11 product migration, owned by primary agent."
+  },
+  "logs": {
+    "test-Abstractions.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/test-Abstractions.log",
+      "sha256": "3c343f1c6f14ff68407626ea79329908c4afc86e08ec2ccf17029f365fa1074e"
+    },
+    "analyzer-tooling-tests.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/analyzer-tooling-tests.log",
+      "sha256": "b3f48aa4642dc2d76aef473afd6be10e6ec24fe1e04e3c8296ea3d08069780c1"
+    },
+    "test-python-census.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/test-python-census.log",
+      "sha256": "284ede19a67b76584f546ba0f193f20677ea6bc0ce9ff4f3ff1b7542fd367517"
+    },
+    "test-python-release.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/test-python-release.log",
+      "sha256": "a9410ae83dac37b67bc1849699912ff76805f06c01cf93272866694c4829aa19"
+    },
+    "test-node-selector.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/test-node-selector.log",
+      "sha256": "10e393fcd70098cbc8e3d516c83c727c2b846e08fa8b0899f9627562a57de53e"
+    },
+    "test-python-topology.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/test-python-topology.log",
+      "sha256": "1e0fce83e91368b3f0dc2923cdd05438f93db9533d5a214c78f57ecfe2df0ba0"
+    },
+    "test-workflow-pins-final.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/test-workflow-pins-final.log",
+      "sha256": "9b75bfb7715a0e395610d4777d649e7b01be65fd2e3a96c4e81993f499905303"
+    },
+    "private-snapshot-message-validation.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/private-snapshot-message-validation.log",
+      "sha256": "7b9b87a1211b73bb0b72308d19945f81e842eb50b43c82f11dca544235fece93"
+    },
+    "compiler-cache59-sdk10.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/compiler-cache59-sdk10.log",
+      "sha256": "7e4b08fa9302af9ae6e0dd645a819d957d553b8bf1506aba4cb58b6e4178c367"
+    },
+    "restore.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/restore.log",
+      "sha256": "af3df52798823d747b18a3981e3b86a0dbf37b2ea408145d039a04d4a35d18a4"
+    },
+    "build.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/build.log",
+      "sha256": "7db7d44b1083f059676367c16f2426d7abc08135437ccafa24fa23103a0c5753"
+    },
+    "test-Core.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/test-Core.log",
+      "sha256": "eca410ef573f1f485462d34589b9cbeeca5d5738cf2c05eb9eef5064d94f2382"
+    },
+    "test-Manifest.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/test-Manifest.log",
+      "sha256": "9cb732a50ea0ca6db7c6797eb292157cbd23e381f216ebdf4a42b1c5ffe46846"
+    },
+    "test-Cli.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/test-Cli.log",
+      "sha256": "46f83596fb731512989690502b30d5d5e3f6227097e56392e973dbd1bf9f21b1"
+    },
+    "test-Mcp.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/test-Mcp.log",
+      "sha256": "735ce49b3eb48b0f9e972101c781e551a0389515fd8683eb3e2d31ff75714f56"
+    },
+    "sample-validation.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/sample-validation.log",
+      "sha256": "b537470adc28d2fcd57556c9a86308fa46524328a224c19a715132610fa2a513"
+    },
+    "sample-loopback.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/sample-loopback.log",
+      "sha256": "3e42659eef6b1f8927cc728b5fe08b6da5b20b3d3f80f29961a31c3f4abfed25"
+    },
+    "enrolled-coverage.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/enrolled-coverage.log",
+      "sha256": "7d2c4f3362accf349af14ab28ce478d8a0a41ad7a2323bbe31258a9ad2f83ac6"
+    },
+    "enrolled.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/enrolled.log",
+      "sha256": "213bae408797c9c1add079d14f742d34e0a841ea042459d285463f00ef449451"
+    },
+    "catalog-benchmark.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/catalog-benchmark.log",
+      "sha256": "05f368c2dec9c926c30cc90e0e67fe2fe254eb06f9ae0d10dfe33971c1f7d593"
+    },
+    "consumer-sdk11.log": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/consumer-sdk11.log",
+      "sha256": "bcdce2ad605c6b1a68a563b65baffa372306677dd2d163c3882d8cc98a40ee71"
+    },
+    "outdated-production-final.json": {
+      "retainedLog": "/home/administrator/mcpcli-maintenance-20261114/final-compatible-closure/outdated-production-final.json",
+      "sha256": "36c8412fbbd6ad469212bcbf0075aedb0a1464e8dfcb61b8d98487cd7bdecfec"
+    }
+  },
+  "limits": [
+    "Full hosted exact-source CI and live semantics have not run for these pending changes.",
+    "Windows/macOS acceptance and release-candidate acceptance have not been established.",
+    "No commit, push, release or NuGet publication was performed by this implementation agent.",
+    "The current product and Abstractions still target net10.0; migration and Roslyn API 5.12 selection remain unfinished.",
+    "Thirty-six moderate npm developer-tool audit findings remain under unchanged direct tooling majors."
+  ]
+}

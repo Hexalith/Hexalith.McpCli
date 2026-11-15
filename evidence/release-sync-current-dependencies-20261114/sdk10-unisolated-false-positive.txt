@@ -1,0 +1,12 @@
+  Determining projects to restore...
+  Restored /tmp/hexalith-job.sakHDefr/consumer11/Bootstrap.Consumer.Contracts.csproj (in 74 ms).
+/tmp/hexalith-job.sakHDefr/consumer11/MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description [/tmp/hexalith-job.sakHDefr/consumer11/Bootstrap.Consumer.Contracts.csproj]
+  Bootstrap.Consumer.Contracts -> /tmp/hexalith-job.sakHDefr/consumer11/bin/Release/net10.0/Bootstrap.Consumer.Contracts.dll
+
+Build succeeded.
+
+/tmp/hexalith-job.sakHDefr/consumer11/MissingDescriptionQuery.cs(3,22): warning MCPCLI001: Operation 'MissingDescriptionQuery' needs a nonblank description [/tmp/hexalith-job.sakHDefr/consumer11/Bootstrap.Consumer.Contracts.csproj]
+    1 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:00.69

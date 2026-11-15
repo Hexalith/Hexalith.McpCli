@@ -29,12 +29,14 @@ class CurrentRuntimeProfileTests(unittest.TestCase):
 
     def test_exact_current_tuple_and_binary_manifest_are_required(self):
         self.assertEqual(self.profile, self.load())
-        for change in ['version', 'archive', 'manifest', 'unknown-tool', 'managed-runtime', 'product-retarget']:
+        for change in ['version', 'archive', 'manifest', 'unknown-tool', 'managed-runtime', 'managed-framework', 'resource-rollforward', 'product-retarget']:
             value = copy.deepcopy(self.profile)
             if change == 'version': value['tools']['dapr']['version'] = '1.20.0'
             if change == 'archive': value['tools']['aspire']['archiveSha256'] = 'a' * 64
             if change == 'manifest': value['binaries']['sha256'] = 'a' * 64
             if change == 'managed-runtime': value['managedTestHosts']['runtime'] = '10.0.15'
+            if change == 'managed-framework': value['managedTestHosts']['targetFramework'] = 'net10.0'
+            if change == 'resource-rollforward': value['managedTestHosts']['resourceLaunch']['rollForward'] = 'LatestMajor'
             if change == 'product-retarget': value['managedTestHosts']['projects'].append('Hexalith.Tenants')
             if change == 'unknown-tool': value['tools']['additional'] = value['tools']['dapr']
             self.path.write_text(json.dumps(value))
@@ -58,7 +60,7 @@ class CurrentRuntimeProfileTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'complete exact current executable set'):
             ci.verify_current_tool_bytes(self.profile, {'dapr': paths['dapr']})
 
-    def test_current_resource_rollforward_is_closed_to_measured_runtime(self):
+    def test_current_resource_runtime_inventory_is_closed_to_measured_runtime(self):
         output = 'Microsoft.NETCore.App 10.0.15 [/trusted/core]\nMicrosoft.NETCore.App 11.0.0 [/trusted/core]\nMicrosoft.AspNetCore.App 11.0.0 [/trusted/aspnet]\n'
         self.assertEqual({'Microsoft.AspNetCore.App': '11.0.0', 'Microsoft.NETCore.App': '11.0.0'},
                          ci.current_managed_runtime_selection(output))

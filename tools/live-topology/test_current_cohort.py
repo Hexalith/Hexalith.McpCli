@@ -47,12 +47,27 @@ class CurrentCohortTests(unittest.TestCase):
                 self.assertEqual(expected, json.loads((current / path.relative_to(legacy)).read_bytes()))
         self.assertTrue(changes)
 
+    def test_manifest_accepts_retained_sdk42_tenants707_tuple(self):
+        retained = json.loads((ROOT / 'tools/live-topology/native-runtime-current.json').read_text())
+        retained['eventStoreVersion'] = '4.2.0'
+        for source in retained['sources'].values():
+            source['commit'] = 'a' * 40
+        for package in retained['packages']:
+            package['version'] = '4.2.0' if package['id'].startswith('Hexalith.EventStore.') else '7.0.7'
+            package['sourceCommit'] = 'a' * 40
+            package['sha256'] = 'b' * 64
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / 'synthetic-retained-selection.json'
+            path.write_text(json.dumps(retained))
+            self.assertEqual(retained, native_cohort.manifest(path))
+
     def test_manifest_accepts_each_closed_cohort_and_refuses_crossed_or_unknown_versions(self):
         old = native_cohort.manifest(ROOT / 'tools/live-topology/native-runtime.json')
         current = native_cohort.manifest(ROOT / 'tools/live-topology/native-runtime-current.json')
         self.assertEqual('4.1.0', old['eventStoreVersion'])
-        self.assertEqual('4.2.0', current['eventStoreVersion'])
-        for version, replace_packages in [('4.1.0', False), ('4.3.0', False), ('4.2.0-local', False), ('4.3.0', True)]:
+        self.assertEqual('5.1.0', current['eventStoreVersion'])
+        for version, replace_packages in [('4.1.0', False), ('4.2.0', False), ('4.3.0', False), ('5.1.0-local', False),
+                                          ('4.3.0', True), ('4.2.0', True), ('5.2.0', True)]:
             crossed = copy.deepcopy(current)
             crossed['eventStoreVersion'] = version
             if replace_packages:

@@ -1,11 +1,11 @@
 <Project>
   <PropertyGroup>
-    <!-- Pin the gateway client and enrolled Contracts before the Builds catalog import; enrolled Contracts stay on the exact artifacts bound by the approved vectors. -->
-    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">4.2.0</HexalithEventStoreVersion>
+    <!-- Select the current public gateway and Contracts cohort before the Builds catalog import. -->
+    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">5.1.0</HexalithEventStoreVersion>
     <HexalithMcpCliVersion Condition="'$(HexalithMcpCliVersion)' == ''">2.0.1</HexalithMcpCliVersion>
     <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">3.1.1</HexalithPartiesVersion>
     <HexalithPartiesAspireVersion Condition="'$(HexalithPartiesAspireVersion)' == ''">3.1.1</HexalithPartiesAspireVersion>
-    <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">7.0.7</HexalithTenantsVersion>
+    <HexalithTenantsVersion Condition="'$(HexalithTenantsVersion)' == ''">8.0.0</HexalithTenantsVersion>
     <HexalithBuildPackageVersions1>$(MSBuildThisFileDirectory)references/Hexalith.Builds/Props/Directory.Packages.props</HexalithBuildPackageVersions1>
     <HexalithBuildPackageVersions2>$(MSBuildThisFileDirectory)../Hexalith.Builds/Props/Directory.Packages.props</HexalithBuildPackageVersions2>
     <HexalithBuildPackageVersions3>$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/Directory.Packages.props</HexalithBuildPackageVersions3>
@@ -14,21 +14,24 @@
   <Import Project="$(HexalithBuildPackageVersions2)" Condition="Exists('$(HexalithBuildPackageVersions2)') And '$(HexalithVersionsLoaded)' != 'true'" />
   <Import Project="$(HexalithBuildPackageVersions3)" Condition="Exists('$(HexalithBuildPackageVersions3)') And '$(HexalithVersionsLoaded)' != 'true'" />
   <ItemGroup>
-    <!-- Preserve the product's .NET 10 target when the shared catalog advances to .NET 11-only packages. -->
-    <PackageVersion Update="Hexalith.Commons.UniqueIds" Version="2.30.10" />
-    <PackageVersion Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.15" />
-    <PackageVersion Update="Microsoft.AspNetCore.OpenApi" Version="10.0.15" />
-    <PackageVersion Update="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="10.0.15" />
-    <!-- OpenApi 10 requires the compatible 2.x document model rather than the catalog's 3.x selection. -->
-    <PackageVersion Update="Microsoft.OpenApi" Version="2.13.0" />
-    <!-- The isolated suite owns its AppHost lifecycle through Aspire; all SDK packages use the current cohort. -->
-    <PackageVersion Update="Hexalith.EventStore.Testing.Integration" Version="4.2.0" />
-    <!-- Keep the EventStore 4.2.0 Redis floor explicit across Builds catalog revisions. -->
-    <PackageVersion Update="StackExchange.Redis" Version="3.4.31" />
+    <!-- Advance existing transitive stack packages to compatible releases without adding package references. -->
+    <PackageVersion Include="Google.Protobuf" Version="3.36.2" />
+    <PackageVersion Include="Grpc.Core.Api" Version="2.85.0" />
+    <PackageVersion Include="Grpc.Net.Client" Version="2.85.0" />
+    <PackageVersion Include="Grpc.Net.Common" Version="2.85.0" />
+    <PackageVersion Include="Grpc.Reflection" Version="2.85.0" />
+    <PackageVersion Include="Microsoft.Extensions.AI.Abstractions" Version="11.0.0" />
+    <PackageVersion Include="Microsoft.Extensions.Caching.Abstractions" Version="11.0.0" />
+    <!-- Align the bundled analyzer compiler API and build-time rules with SDK 11. -->
+    <PackageVersion Update="Microsoft.CodeAnalysis.Analyzers" Version="5.12.0" />
+    <PackageVersion Update="Microsoft.CodeAnalysis.Common" Version="5.12.0" />
+    <PackageVersion Update="Microsoft.CodeAnalysis.CSharp" Version="5.12.0" />
+    <!-- Select the current compatible Redis release across Builds catalog revisions. -->
+    <PackageVersion Update="StackExchange.Redis" Version="3.4.35" />
   </ItemGroup>
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <LangVersion>14.0</LangVersion>
+    <TargetFramework>net11.0</TargetFramework>
+    <LangVersion>15.0</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

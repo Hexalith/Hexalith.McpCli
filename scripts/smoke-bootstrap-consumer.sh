@@ -30,9 +30,16 @@ fallback = ElementTree.SubElement(configuration, "fallbackPackageFolders")
 ElementTree.SubElement(fallback, "clear")
 ElementTree.ElementTree(configuration).write(sys.argv[1], encoding="utf-8", xml_declaration=True)
 PY
+consumer_framework="$(python3 - "$script_directory" "$release_version" <<'PYTHON'
+import sys
+sys.path.insert(0, sys.argv[1])
+from paired_release import module
+print(module('validate-release-packages').bootstrap_target_framework(sys.argv[2]))
+PYTHON
+)"
 cat > "$consumer_directory/Bootstrap.Consumer.Contracts.csproj" <<EOF
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup><TargetFramework>net10.0</TargetFramework></PropertyGroup>
+  <PropertyGroup><TargetFramework>$consumer_framework</TargetFramework></PropertyGroup>
   <ItemGroup><PackageReference Include="Hexalith.McpCli.Abstractions" Version="[$release_version]" /></ItemGroup>
 </Project>
 EOF

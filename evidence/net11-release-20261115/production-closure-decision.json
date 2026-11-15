@@ -1,0 +1,101 @@
+{
+  "actualPackages": {
+    "ByteAether.Ulid": "1.4.2",
+    "Dapr.Client": "1.19.1",
+    "Dapr.Common": "1.19.1",
+    "Dapr.Protos": "1.19.1",
+    "Google.Api.CommonProtos": "2.17.0",
+    "Google.Protobuf": "3.36.2",
+    "Grpc.Core.Api": "2.85.0",
+    "Grpc.Net.Client": "2.85.0",
+    "Grpc.Net.Common": "2.85.0",
+    "Grpc.Reflection": "2.85.0",
+    "Hexalith.Commons.UniqueIds": "3.0.0",
+    "Hexalith.EventStore.Client": "5.1.0",
+    "Hexalith.EventStore.Contracts": "5.1.0",
+    "Hexalith.Parties.Contracts": "3.1.1",
+    "Hexalith.Tenants.Contracts": "8.0.0",
+    "Humanizer.Core": "3.0.10",
+    "Json.More.Net": "3.1.0",
+    "JsonPointer.Net": "7.1.0",
+    "JsonSchema.Net": "9.7.0",
+    "Microsoft.AspNetCore.DataProtection.Abstractions": "11.0.0",
+    "Microsoft.Extensions.AI.Abstractions": "11.0.0",
+    "Microsoft.Extensions.Configuration": "11.0.0",
+    "Microsoft.Extensions.Configuration.Binder": "11.0.0",
+    "Microsoft.Extensions.Configuration.CommandLine": "11.0.0",
+    "Microsoft.Extensions.Configuration.EnvironmentVariables": "11.0.0",
+    "Microsoft.Extensions.Configuration.FileExtensions": "11.0.0",
+    "Microsoft.Extensions.Configuration.Json": "11.0.0",
+    "Microsoft.Extensions.Configuration.UserSecrets": "11.0.0",
+    "Microsoft.Extensions.DependencyInjection": "11.0.0",
+    "Microsoft.Extensions.Diagnostics": "11.0.0",
+    "Microsoft.Extensions.FileProviders.Physical": "11.0.0",
+    "Microsoft.Extensions.FileSystemGlobbing": "11.0.0",
+    "Microsoft.Extensions.Hosting": "11.0.0",
+    "Microsoft.Extensions.Http": "11.0.0",
+    "Microsoft.Extensions.Logging": "11.0.0",
+    "Microsoft.Extensions.Logging.Configuration": "11.0.0",
+    "Microsoft.Extensions.Logging.Console": "11.0.0",
+    "Microsoft.Extensions.Logging.Debug": "11.0.0",
+    "Microsoft.Extensions.Logging.EventLog": "11.0.0",
+    "Microsoft.Extensions.Logging.EventSource": "11.0.0",
+    "Microsoft.Extensions.Options.ConfigurationExtensions": "11.0.0",
+    "ModelContextProtocol": "2.4.0",
+    "ModelContextProtocol.Core": "2.4.0",
+    "System.CommandLine": "3.0.0",
+    "System.Diagnostics.EventLog": "11.0.0"
+  },
+  "addedIdentities": [],
+  "removedIdentities": [
+    "Microsoft.Extensions.Caching.Abstractions",
+    "Microsoft.Extensions.Configuration.Abstractions",
+    "Microsoft.Extensions.DependencyInjection.Abstractions",
+    "Microsoft.Extensions.Diagnostics.Abstractions",
+    "Microsoft.Extensions.FileProviders.Abstractions",
+    "Microsoft.Extensions.Hosting.Abstractions",
+    "Microsoft.Extensions.Logging.Abstractions",
+    "Microsoft.Extensions.Options",
+    "Microsoft.Extensions.Primitives",
+    "System.Diagnostics.DiagnosticSource",
+    "System.IO.Pipelines",
+    "System.Text.Encodings.Web",
+    "System.Text.Json"
+  ],
+  "versionChanges": {
+    "Hexalith.Commons.UniqueIds": {
+      "before": "2.30.11",
+      "after": "3.0.0"
+    },
+    "Hexalith.EventStore.Client": {
+      "before": "4.2.0",
+      "after": "5.1.0"
+    },
+    "Hexalith.EventStore.Contracts": {
+      "before": "4.2.0",
+      "after": "5.1.0"
+    },
+    "Hexalith.Tenants.Contracts": {
+      "before": "7.0.7",
+      "after": "8.0.0"
+    }
+  },
+  "frameworkReferences": {},
+  "projectReferences": {
+    "Hexalith.McpCli.Abstractions/2.0.1": {
+      "type": "project",
+      "path": "../Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj",
+      "msbuildProject": "../Hexalith.McpCli.Abstractions/Hexalith.McpCli.Abstractions.csproj"
+    },
+    "Hexalith.McpCli.Core/2.0.1": {
+      "type": "project",
+      "path": "../Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj",
+      "msbuildProject": "../Hexalith.McpCli.Core/Hexalith.McpCli.Core.csproj"
+    },
+    "Hexalith.McpCli.Mcp/2.0.1": {
+      "type": "project",
+      "path": "../Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj",
+      "msbuildProject": "../Hexalith.McpCli.Mcp/Hexalith.McpCli.Mcp.csproj"
+    }
+  }
+}

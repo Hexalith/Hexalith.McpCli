@@ -117,7 +117,7 @@ def production_replay(repo: Path, output: Path, results: list[dict], record_prog
                 raise RuntimeError(f'{label} failed with exit {result.returncode}; see {output}: {result.stderr[-4000:]}')
         progress['phase'] = 'production-replay'
         save()
-        host = project.parent / 'bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll'
+        host = project.parent / 'bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
         selections = []
         for receipt in results:
             root = output / receipt['packageId']

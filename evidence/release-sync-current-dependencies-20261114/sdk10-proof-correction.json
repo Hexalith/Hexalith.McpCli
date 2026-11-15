@@ -1,0 +1,40 @@
+{
+  "schema": "mcpcli-compiler-proof-correction/v1",
+  "previousSdk10SuccessClaim": "invalidated",
+  "reason": "The SDK11 smoke child exported a private NUGET_PACKAGES only inside its process. The later parent SDK10 command omitted that cache setting and could reuse the global public 2.0.1 package. Its pass did not prove the freshly built bytes.",
+  "isolatedSdk10Result": {
+    "sdk": "10.0.404",
+    "selectedCompilerApi": "5.9.0",
+    "buildTimeRules": "5.12.0",
+    "privatePackageCacheExplicit": true,
+    "diagnostic": "CS8032",
+    "missingAssembly": "System.Collections.Immutable, Version=11.0.0.0",
+    "expectedMcpcliDiagnosticProduced": false,
+    "result": "packaged analyzer cannot load"
+  },
+  "sdk11Result": "Fresh isolated packaged-consumer check passes with exactly one MCPCLI001 warning.",
+  "earlierApi512Probe": "Preserved as an unisolated observation; no fresh-byte SDK10 conclusion is drawn from it.",
+  "nextDirection": "Primary agent reports explicit subsequent user authorization to include the .NET 11 product migration; stop SDK10 compatibility work and replan that migration.",
+  "productFrameworkAtHandoff": "net10.0",
+  "migrationCompleted": false,
+  "retainedRawLogs": [
+    {
+      "originalFilename": "sdk10-api512-unisolated-observation.log",
+      "path": "sdk10-api512-unisolated-observation.txt",
+      "sha256": "b0d6614ba71e4f4a97783f9759d41d83c9768790162fd31c2adaeb984fcbc774",
+      "bytesPreserved": true
+    },
+    {
+      "originalFilename": "sdk10-isolated-failure.log",
+      "path": "sdk10-isolated-failure.txt",
+      "sha256": "7e4b08fa9302af9ae6e0dd645a819d957d553b8bf1506aba4cb58b6e4178c367",
+      "bytesPreserved": true
+    },
+    {
+      "originalFilename": "sdk10-unisolated-false-positive.log",
+      "path": "sdk10-unisolated-false-positive.txt",
+      "sha256": "e17a6c97faa538507c0c6a4c4bf6d438e14c0753d80b99fe46e7a7dfc75e9204",
+      "bytesPreserved": true
+    }
+  ]
+}

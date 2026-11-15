@@ -2446,7 +2446,11 @@ public sealed class ConfigCommandTests
             Directory.Delete(hostile, recursive: true);
         }
 
-        static string Normalize(string text) => System.Text.RegularExpressions.Regex.Replace(text, @"[0-9]+(\.[0-9]+)?ms", "Nms");
+        // Independent MCP sessions may interleave request diagnostics differently; retain every complete record.
+        static string[] Normalize(string text) => System.Text.RegularExpressions.Regex.Split(
+            System.Text.RegularExpressions.Regex.Replace(text, @"[0-9]+(\.[0-9]+)?ms", "Nms"),
+            @"(?=^[a-z]+: )", System.Text.RegularExpressions.RegexOptions.Multiline)
+            .Order(StringComparer.Ordinal).ToArray();
     }
 
     /// <summary>

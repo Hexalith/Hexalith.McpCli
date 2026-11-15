@@ -1,0 +1,87 @@
+{
+  "localCompilationOnly": true,
+  "liveAcceptance": false,
+  "results": [
+    {
+      "owner": "Hexalith.Tenants",
+      "commit": "0cfe90e887e4d9d9f0168cba98fca1852cb80313",
+      "project": "Hexalith.Tenants",
+      "command": [
+        "dotnet",
+        "build",
+        "src/Hexalith.Tenants/Hexalith.Tenants.csproj",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-m:1",
+        "-p:HexalithBuildPackageVersions1=/tmp/hexalith-job.wIz3MfNu/source-runtime-packages.props",
+        "-p:HexalithEventStoreVersion=5.1.0",
+        "-p:HexalithMcpCliVersion=2.0.1",
+        "-p:UseHexalithProjectReferences=false",
+        "-p:UseNuGetDeps=true",
+        "-p:HexalithEventStoreFromSource=false",
+        "-p:NuGetAudit=true",
+        "-p:NuGetAuditMode=all",
+        "-p:NuGetAuditLevel=low",
+        "-p:TreatWarningsAsErrors=true",
+        "-p:WarningsNotAsErrors="
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.8664920250012074
+    },
+    {
+      "owner": "Hexalith.Parties",
+      "commit": "785f8164d51579a191405a15a917232795f93449",
+      "project": "Hexalith.Parties",
+      "command": [
+        "dotnet",
+        "build",
+        "src/Hexalith.Parties/Hexalith.Parties.csproj",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-m:1",
+        "-p:HexalithBuildPackageVersions1=/tmp/hexalith-job.wIz3MfNu/source-runtime-packages.props",
+        "-p:HexalithEventStoreVersion=5.1.0",
+        "-p:HexalithMcpCliVersion=2.0.1",
+        "-p:UseHexalithProjectReferences=false",
+        "-p:UseNuGetDeps=true",
+        "-p:HexalithEventStoreFromSource=false",
+        "-p:NuGetAudit=true",
+        "-p:NuGetAuditMode=all",
+        "-p:NuGetAuditLevel=low",
+        "-p:TreatWarningsAsErrors=true",
+        "-p:WarningsNotAsErrors="
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 2.600160795991542
+    },
+    {
+      "owner": "Hexalith.Parties",
+      "commit": "785f8164d51579a191405a15a917232795f93449",
+      "project": "Hexalith.Parties.EventStoreExtensions",
+      "command": [
+        "dotnet",
+        "build",
+        "src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj",
+        "--configuration",
+        "Release",
+        "-warnaserror",
+        "-m:1",
+        "-p:HexalithBuildPackageVersions1=/tmp/hexalith-job.wIz3MfNu/source-runtime-packages.props",
+        "-p:HexalithEventStoreVersion=5.1.0",
+        "-p:HexalithMcpCliVersion=2.0.1",
+        "-p:UseHexalithProjectReferences=false",
+        "-p:UseNuGetDeps=true",
+        "-p:HexalithEventStoreFromSource=false",
+        "-p:NuGetAudit=true",
+        "-p:NuGetAuditMode=all",
+        "-p:NuGetAuditLevel=low",
+        "-p:TreatWarningsAsErrors=true",
+        "-p:WarningsNotAsErrors="
+      ],
+      "exitCode": 0,
+      "elapsedSeconds": 0.5169195359922014
+    }
+  ]
+}

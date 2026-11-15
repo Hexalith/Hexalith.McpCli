@@ -1,0 +1,6 @@
+{
+  "date": "2026-11-14",
+  "instruction": "push all changes and sync all submodules and repository. update to latest .NET SDK. update to latest packages versions. fix any CI/CD failures, then create a Release (bypass any human validation) and check nuget packages have been published.",
+  "human_validation_bypass": true,
+  "automated_checks_required": true
+}

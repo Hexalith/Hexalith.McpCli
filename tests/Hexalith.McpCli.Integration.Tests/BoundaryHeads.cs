@@ -170,7 +170,7 @@ internal static class BoundaryHeads
         var start = new ProcessStartInfo("dotnet")
         { RedirectStandardInput = true, RedirectStandardOutput = true, RedirectStandardError = true, WorkingDirectory = RepositoryRoot() };
         start.ArgumentList.Add(Path.Combine(RepositoryRoot(),
-            "tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll"));
+            "tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll"));
         foreach (string argument in arguments) start.ArgumentList.Add(argument);
         foreach (string key in start.Environment.Keys.Where(key => key.StartsWith("EVENTSTORE_", StringComparison.Ordinal)
             || key.StartsWith("MCPCLI_", StringComparison.Ordinal)).ToArray()) start.Environment.Remove(key);

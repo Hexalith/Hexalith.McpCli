@@ -88,8 +88,8 @@ def bounded_child(command: list[str], environment: dict, output: Path, timeout: 
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, required=True)
-    parser.add_argument('--host', type=Path, default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll')
-    parser.add_argument('--tests', type=Path, default=ROOT / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net10.0/Hexalith.McpCli.Integration.Tests.dll')
+    parser.add_argument('--host', type=Path, default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll')
+    parser.add_argument('--tests', type=Path, default=ROOT / 'tests/Hexalith.McpCli.Integration.Tests/bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll')
     parser.add_argument('--child-timeout', type=float, default=960)
     parser.add_argument('--operation', help='Diagnostic subset; never grants full live acceptance.')
     parser.add_argument('--preflight-only', action='store_true')

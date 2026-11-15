@@ -51,7 +51,7 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
             tenantOwner = await tenants.PrepareEventStoreDevelopmentOwnerAsync("Hexalith.Tenants.Contracts.dll",
                 "Hexalith.Tenants.Server.dll", TimeSpan.FromMinutes(3), deadline.Token).ConfigureAwait(false);
             string adapter = Path.Combine(root, "references", "Hexalith.Parties", "src", "Hexalith.Parties.EventStoreExtensions",
-                "bin", "Release", "net10.0", "Hexalith.Parties.EventStoreExtensions.dll");
+                "bin", "Release", "net11.0", "Hexalith.Parties.EventStoreExtensions.dll");
             string contracts = Path.Combine(Path.GetDirectoryName(adapter)!, "Hexalith.Parties.Contracts.dll");
             // Parties deliberately supplies its adapter as a separate artifact. The Platform reader
             // validates its actual compiled factory and complete declaration/policy inventory.
@@ -59,7 +59,7 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
             await NativeCatalogTool.RunOwnedPreparationAsync(directory, owner, async () =>
             {
                 using JsonDocument receipt = await NativeCatalogTool.GenerateAsync(new DirectoryInfo(root), directory,
-                    owner, "eventstore", "4.2.0", [(contracts, adapter, "parties")], deadline.Token).ConfigureAwait(false);
+                    owner, "eventstore", "5.1.0", [(contracts, adapter, "parties")], deadline.Token).ConfigureAwait(false);
                 partyArtifacts = receipt.RootElement.GetProperty("loadedArtifacts").Clone();
                 foreach (JsonElement artifact in partyArtifacts.EnumerateArray())
                 {

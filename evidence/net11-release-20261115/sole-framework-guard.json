@@ -1,0 +1,69 @@
+{
+  "baseRevision": "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1",
+  "sourceOverlay": {
+    "path": "tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs",
+    "sha256": "018fcdd099ac30eba270619f1c96ce20848bf71e8a2704e61bba93760a235b9c"
+  },
+  "checks": [
+    {
+      "label": "policy-clone",
+      "command": [
+        "git",
+        "-c",
+        "submodule.recurse=false",
+        "clone",
+        "--shared",
+        "--no-checkout",
+        "--quiet",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "/tmp/hexalith-job.VDRSCt5r/workspace"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "policy-checkout",
+      "command": [
+        "git",
+        "checkout",
+        "--quiet",
+        "--detach",
+        "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "policy-new-guard-restore",
+      "command": [
+        "dotnet",
+        "restore",
+        "Hexalith.McpCli.slnx"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "policy-new-guard-build",
+      "command": [
+        "dotnet",
+        "build",
+        "tests/Hexalith.McpCli.Manifest.Tests",
+        "--no-restore",
+        "--configuration",
+        "Release",
+        "-warnaserror"
+      ],
+      "exitCode": 0
+    },
+    {
+      "label": "policy-new-guard-tests",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.McpCli.Manifest.Tests/bin/Release/net11.0/Hexalith.McpCli.Manifest.Tests.dll",
+        "-class",
+        "Hexalith.McpCli.Manifest.Tests.DependencyPolicyTests"
+      ],
+      "exitCode": 0
+    }
+  ],
+  "allPassed": true,
+  "scope": "One added refusal test for ambiguous restored framework targets; production code unchanged; includes both historical net10 and current net11 loader cases."
+}

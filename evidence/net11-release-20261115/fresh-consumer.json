@@ -1,0 +1,18 @@
+{
+  "sourceRevision": "f3956d58c0d5cf68b7ae446b4480ebe9d3d377c1",
+  "targetFramework": "net11.0",
+  "sdkMinimum": "11.0.100",
+  "candidateVersion": "2.0.1",
+  "candidateArchiveSha256": "e93a5756e18d7e794ed8c0ed07c20998ca864c991a935bd3ebb914e927b5b23a",
+  "privateCachedArchiveSha256": "e93a5756e18d7e794ed8c0ed07c20998ca864c991a935bd3ebb914e927b5b23a",
+  "privatePackageFolders": [
+    "/tmp/hexalith-job.PxSNO5i7/consumer/packages"
+  ],
+  "feed": "/tmp/hexalith-job.PxSNO5i7/feed",
+  "freshCandidateBytesMatched": true,
+  "warningExpected": "MCPCLI001 exactly once",
+  "publicCachedPackageUsed": false,
+  "sdk10CompatibilityClaimed": false,
+  "releaseAcceptanceClaimed": false,
+  "pathIdentityCheck": "Exactly one resolved package folder equals the explicit fresh private cache; trailing separators have no identity significance."
+}

@@ -1,0 +1,9 @@
+test_builds_reference_guard_rejects_catalog_and_executor_drift (test_ci.CiWorkflowTests.test_builds_reference_guard_rejects_catalog_and_executor_drift) ... ok
+test_catalog_and_workflow_pins_keep_their_approved_identities (test_ci.CiWorkflowTests.test_catalog_and_workflow_pins_keep_their_approved_identities) ... ok
+test_discovery_assertion_expects_only_approved_vectors_with_a_companion_plan (test_ci.CiWorkflowTests.test_discovery_assertion_expects_only_approved_vectors_with_a_companion_plan) ... ok
+test_required_inputs_and_existing_focused_lanes_remain_configured (test_ci.CiWorkflowTests.test_required_inputs_and_existing_focused_lanes_remain_configured) ... ok
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.043s
+
+OK

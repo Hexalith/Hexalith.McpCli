@@ -29,7 +29,7 @@ python3 tools/conformance-vectors/v1/validate.py \
     --expected-package-id Hexalith.McpCli.Sample.Contracts \
     --expected-package-version 1.0.0 "${vectors[@]}"
 python3 tools/conformance-vectors/v1/run_loopback.py \
-    --host tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.dll \
+    --host tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll \
     --artifact "$artifact" \
     --expected-package-id Hexalith.McpCli.Sample.Contracts \
     --expected-package-version 1.0.0 "${vectors[@]}"
