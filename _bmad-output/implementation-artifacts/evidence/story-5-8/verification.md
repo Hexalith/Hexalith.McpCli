@@ -1,4 +1,4 @@
-# Story 5.8 verification (2026-11-15)
+# Story 5.8 verification (2026-11-16)
 
 The Folders 1.1.0 inventory and exact-byte owner approval were published at
 McpCli `f3c8f5f7c37f2a03287fc41ecf2e7ca8c5f49091`. The separately authorized PS10/PS11
@@ -48,7 +48,58 @@ ancestor `2236855ee181bdeed2a103537c66316a1612c792`. The unpublished original
 `e2252f29a2dba2b64786ee483eb59fbceaadd387` is optional. The verifiers read these
 local objects and refs; they do not fetch or perform network operations.
 
-## Code-review pass 8 patch verification (2026-11-15)
+## Code-review pass 9 patch verification (2026-11-16)
+
+All four pass-9 patch entries are implemented. New exact-stream cases refuse a
+label register with two PS10 rows, a null `before` artifact item, null and
+string register rows, and an approved `rolesCovered` with a blank role or a
+role-keyed object. Each case has a control that removes only its own condition.
+Without it, the duplicate-ID register and both role cases pass, the row cases
+fall through to a generic `TypeError` `FAIL:` line, and the null item escapes as
+an uncaught `AttributeError`. Deleting each of the six conditions in memory makes
+the extended tests fail at their refusal assertions. The historical pass-8
+section below now names its commit.
+
+Parent verification passed **103 tests in both ordinary and synthetic lifecycle
+workspaces**, without skips, all ten exact gate-stream checks, all six
+symlinked-temp tests and every frozen matrix row. Both real completion entrypoints
+passed under UTF-8 and ASCII locales; AD-23 and tracked/untracked whitespace also
+passed. The [manifest](review-pass9-20261116/commands.json) and
+[audit](review-pass9-20261116/audit.json) bind eleven executable inputs and fourteen
+unchanged protected artifacts. Frozen intent and the retained packet runner are
+unchanged. No .NET build or live acceptance is claimed.
+
+All four review layers (blind, edge-case, verification-gap and acceptance)
+completed. Thirty-one findings were rejected; existing approved-byte corrections
+remain assigned to the K12 successor, and nothing new was deferred.
+
+To reproduce the current capture, run this from the repository root with a UTF-8
+locale. On the recording workstation, use `run-with-temp`; elsewhere set a private
+task-owned `TMPDIR` and remove it after all children exit. For audit-only replay,
+add `--audit-only` after the interpreter's `-` argument, retaining this `OUT`:
+
+```bash
+run-with-temp python3 -B -I - <<'PY'
+import importlib.util
+from pathlib import Path
+spec = importlib.util.spec_from_file_location('story58packet', Path('_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass4-20261114/verify_packet.py'))
+packet = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(packet)
+packet.OUT = packet.ROOT / packet.E / 'review-pass9-20261116'
+raise SystemExit(packet.main())
+PY
+```
+
+This review session began at `89f88902ae40afae1cca94b089f9c9893722ffc2` and
+performed no commit or push. Spec and sprint tracking are done. The
+[post-transition checks](review-pass9-20261116/post-transition.json) bind both
+completion entrypoints under UTF-8 and ASCII locales, AD-23, audit-only replay
+and tracked/untracked whitespace after the status update. The final
+[evidence scan](secret-scan-review-pass9-completion-20261116.json) covers the
+completed packet. The approved inventory, approval, register and delivered labels
+remain unchanged; K12 reconciliation remains an Epic 6 catalog prerequisite.
+
+## Historical code-review pass 8 patch verification (2026-11-15)
 
 All seven pass-8 patch entries are implemented. Exact-stream tests cover the
 inventory entrypoint forwarding `--approved-completion` to pending labels, every
@@ -74,8 +125,10 @@ maintenance issue is recorded in the deferred-work ledger, with a
 [static reproduction](review-pass8-20261115/ci-runtime-maintenance-deferral.json).
 No new Story 5.8 patch resulted from review.
 
-To reproduce the current capture, run this from the repository root with a UTF-8
-locale. On the recording workstation, use `run-with-temp`; elsewhere set a private
+To reproduce the pass-8 capture, run this from the repository root with a UTF-8
+locale. Its recorded executable inputs predate the pass-9 tests, so audit-only
+replay of this packet now fails and deletes its audit; `git checkout --` with the
+repository-relative `review-pass8-20261115/audit.json` path restores it. On the recording workstation, use `run-with-temp`; elsewhere set a private
 task-owned `TMPDIR` and remove it after all children exit. For audit-only replay,
 add `--audit-only` after the interpreter's `-` argument, retaining this `OUT`:
 
@@ -92,7 +145,9 @@ PY
 ```
 
 This resumed run began at `80fb9e897fb251ba8c5a215e9e82fa7439d00e57` and performed
-no commit or push. Spec is done and sprint tracking is review. The
+no commit or push. The pass-8 work was later committed as
+`89f88902ae40afae1cca94b089f9c9893722ffc2`. Spec was done and sprint tracking was
+review. The
 [post-transition checks](review-pass8-20261115/post-transition.json) bind both
 completion entrypoints under UTF-8 and ASCII locales, AD-23, audit-only replay
 and tracked/untracked whitespace after the status update. The final

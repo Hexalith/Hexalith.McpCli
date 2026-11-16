@@ -1151,6 +1151,14 @@ class AmendmentTests(PendingCase):
                 self.guard(lambda:self.approval(r),message)
         r = self.approved(); r['rolesCovered'] = ['Folders owning maintainer']
         self.guard(lambda:self.approval(r,True),'owner approval lacks required covered Folders roles')
+        # Each value still names every required role, so only its own conjunct refuses it.
+        for label,roles,condition in [('blank role',[*B.ROLES,''],'all(nonblank(r) for r in roles)'),
+                                      ('role-keyed object',{role:True for role in B.ROLES},'isinstance(roles,list)')]:
+            with self.subTest(rolesCovered=label):
+                r = self.approved(); r['rolesCovered'] = roles
+                self.reject(lambda:self.approval(r,True),'owner approval lacks required covered Folders roles')
+                with self.removed_condition(V,'check_approval',condition):
+                    self.assertEqual((0,PASS,''),self.run_check(lambda:self.approval(r,True)))
         for key in ['approver','exactApprovalInstruction','approvalSource','approvedOn']:
             with self.subTest(approved_field=key):
                 r = self.approved(); r[key] = ''
@@ -1841,6 +1849,12 @@ class LabelTests(PendingCase):
         register = copy.deepcopy(self.register); del register['repository']['before']['path']
         # Without its guard the damage is refused only by a non-actionable KeyError.
         self.guard(register,'label artifact path missing',backstop="'path'")
+        register = copy.deepcopy(self.register); register['repository']['before'] = None
+        self.reject(register,'label artifact path missing')
+        # Without the object check the damage escapes main's handled errors as a traceback.
+        with self.removed_condition(L,'checked_file','isinstance(item,dict)'):
+            with self.assertRaisesRegex(AttributeError,"'NoneType' object has no attribute 'get'"):
+                self.invoke_register(register)
         item = self.register['repository']['before']
         with tempfile.TemporaryDirectory() as temp:
             outside = Path(temp).resolve()/'README.before.section.md'
@@ -1898,6 +1912,24 @@ class LabelTests(PendingCase):
         self.reject(r,'Folders PS10/PS11 label coverage/duplicate mismatch')
         with self.removed_condition(L,'verify','len(rows) == 2'):
             self.assertEqual((0,LABEL_PASS,''),self.invoke_register(r))
+        # Two PS10 rows keep the count; without the ID-set check a missing PS11 passes.
+        r = copy.deepcopy(self.register); r['rows'][1] = copy.deepcopy(r['rows'][0])
+        self.reject(r,'Folders PS10/PS11 label coverage/duplicate mismatch')
+        with self.removed_condition(L,'verify',"{r['id'] for r in rows} == {'PS10','PS11'}"):
+            self.assertEqual((0,LABEL_PASS,''),self.invoke_register(r))
+        # Without each type check the damage escapes only as the non-actionable
+        # TypeError of the next expression the verifier evaluates on those rows.
+        for rows,condition,backstop in [
+            (None,'isinstance(rows,list)',lambda rows:len(rows)),
+            (['PS10','PS11'],'all(isinstance(r,dict) for r in rows)',lambda rows:{r['id'] for r in rows}),
+        ]:
+            with self.subTest(rows=rows):
+                with self.assertRaises(TypeError) as raised:
+                    backstop(rows)
+                r = copy.deepcopy(self.register); r['rows'] = rows
+                self.reject(r,'Folders PS10/PS11 label coverage/duplicate mismatch')
+                with self.removed_condition(L,'verify',condition):
+                    self.assertEqual((1,'','FAIL: '+str(raised.exception)+'\n'),self.invoke_register(r))
         r = copy.deepcopy(self.register); r['rows'][0]['label']['text'] = 'invented replacement'
         self.reject(r,'PS10: version/hash/anchor/citation differs from Folders 1.1.0')
         r = copy.deepcopy(self.register); r['rows'][0]['gate'] = 'retired'
