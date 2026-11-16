@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-16-2026 20:48'
+last_updated: '11-16-2026 21:20'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -100,7 +100,7 @@ development_status:
   5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: done # Delivered 2026-11-13. Code review pass 4 2026-11-13: 6 patch groups applied, 0 deferred, 8 rejected; 49 tests, both completion gates and 26/26 guard-removal controls (live globals, identity control undetected) pass; corrects pass 3, whose 18-control claim supported 11. Approved bytes unchanged; two accepted deferrals remain tracked (approved-byte pending self-description; inherited NU1202/census CI red).
   5-8-refresh-and-re-disposition-the-folders-inventory: done # Code review pass 9 2026-11-16: all four patches applied (label ID-set, artifact/row type and approved-role tests; pass-8 commit citation), 0 deferred, 31 rejected. 103 tests pass in ordinary and synthetic lifecycle workspaces, both completion gates under UTF-8/ASCII, AD-23 and closure audit pass. Approved inventory/receipt/labels unchanged; K12 successor remains an Epic 6 catalog prerequisite; one independent CI runtime-maintenance issue tracked (deferred-work.md:1166). No commit or push.
   5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent: done # Owner-approved packet published at 4fbe3e2; authorized README-only PS03/PS04/PS08/PS09 integration is on both owner main branches. Both completion gates pass; 31 tests cover the final lifecycle. K03/AD-20 and independent retirement gates remain open; no parity or retirement claim.
-  5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: review # Resumed review fixes complete 2026-11-16: 30 tests, both default verifiers, AD-23, protected hashes and whitespace pass. Six patches include the parent-symlink regression and actual guard removal. Approved packet/authorization unchanged; owner labels remain unintegrated, so both completion gates refuse. Eleven earlier groups plus two PS14 approved-byte corrections stay deferred; nine findings belong to separate Story 5.11 work. Existing required main CI 43916598661 remains red; check.py is adoption-only. No new commit, push, enrollment or retirement.
+  5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: in-progress # Code review pass 2 (2026-11-16): 11 patches left as action items (D3 section-level delivery check, enrollment-file durability, three missing-test groups, decision-read handling, stale state, four ledger corrections); 3 approved-byte deferrals; 25 rejected. Earlier: Resumed review fixes complete 2026-11-16: 30 tests, both default verifiers, AD-23, protected hashes and whitespace pass. Six patches include the parent-symlink regression and actual guard removal. Approved packet/authorization unchanged; owner labels remain unintegrated, so both completion gates refuse. Eleven earlier groups plus two PS14 approved-byte corrections stay deferred; nine findings belong to separate Story 5.11 work. Existing required main CI 43916598661 remains red; check.py is adoption-only. No new commit, push, enrollment or retirement.
   5-11-reconcile-product-claims-and-the-migration-plan: review
   5-12-gate-enrolled-modules-by-operation-shape: done # 2026-11-10 shape-coverage proposal; precedes Story 6.1.
   epic-5-retrospective: optional
