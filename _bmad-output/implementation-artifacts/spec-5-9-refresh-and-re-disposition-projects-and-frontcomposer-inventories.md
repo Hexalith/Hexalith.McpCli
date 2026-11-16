@@ -2,7 +2,7 @@
 title: '5.9 Refresh and re-disposition Projects and FrontComposer inventories'
 type: 'chore'
 created: '2026-11-16'
-status: 'in-review'
+status: 'done'
 baseline_commit: 'fbe4b6bd5502741ff8006abedac5c9bb27a4df3c'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -212,6 +212,8 @@ Derivation rules (the decisions above apply first):
 - Build review pass 1 completed: all three layers returned; 17 findings were individually triaged, 16 fixed in nine patch groups and one rejected. Full final verification passes with 29 tests, both candidate verifiers and adopted AD-23; both completion modes correctly refuse pending approval. Review added no new deferrals. Spec stays in review and sprint stays at review until exact-byte owner approval and separate delivery authorization/integration complete the acceptance gate. The workflow's automatic commit/done steps do not apply because this spec expressly forbids unauthorized commits and completion while those gates are open.
 
 ## Spec Change Log
+
+- 2026-11-16 delivery completed: approved inventories and the approval receipt were published on McpCli `main` at `4fbe3e2c356ca6911d8387218dade9a881d8c902`. Projects README-only commit `9452fcc104c3e3a41e849037c51439673cd3e209` and FrontComposer README-only commit `f26304dabf7153c7075fa8c4a82dc8fc537c5ed0` are on their owning `origin/main` branches. Both approved-completion entrypoints pass, including exact README bytes, published inventory/receipt bytes, ancestry and the separate authorization. `evidence/story-5-9/delivery.json` and the integrated `labels.json` retain the full revisions and hashes. All approved inventory bytes remain unchanged. Story completion grants no enrollment, execution, parity or retirement authority; the K03/AD-20 gap and independent retirement prerequisites remain open.
 
 - 2026-11-16 delivery authorized: the user separately replied exactly `authorize` for the approved packet and both owner README-only updates. Authorization is recorded in `evidence/story-5-9/delivery-authorization.json`. Remote McpCli commit `1ffbdd2de19532fe2aca05ecf043f7c2e9084e9c` independently corrected Projects 2.0.0 prose with no row changes; the correction is retained. Derivation reads the exact predecessor Git snapshot at the implementation baseline, leaving all approved inventory/receipt hashes unchanged. Verification still rejects uncommitted predecessor changes and committed row drift. Two added cases bring the suite to 31 passing tests. Publication and integration are being completed under the separate authorization; no module source, dependencies, enrollment or gitlinks are changed.
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "state": "candidate-pending-owner-approval-and-delivery",
+  "state": "integrated",
   "predecessor": {
     "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json",
     "sha256": "7adc8fbe4cf7ab7d37ea4746c36b0e1c99754c56bf8bc2dde7912940e83cd7a1"
@@ -13,8 +13,16 @@
     "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md": "c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af",
     "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md": "60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63"
   },
-  "inventoryRevision": null,
-  "deliveryAuthorization": null,
+  "inventoryRevision": "4fbe3e2c356ca6911d8387218dade9a881d8c902",
+  "deliveryAuthorization": {
+    "exactWords": "authorize",
+    "source": "Current conversation: after the separate exact-byte owner approval, the user replied \"authorize\" to committing/pushing the approved McpCli packet and both upstream README-only updates. Scope is Story 5.9 delivery only; no enrollment, live execution or retirement is authorized.",
+    "approvedOn": "2026-11-16",
+    "receipt": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/delivery-authorization.json",
+      "sha256": "871b0341375527346e14c7f0c2a96d68fd755f14797b706d2be1c509f1124ee5"
+    }
+  },
   "repositories": [
     {
       "name": "projects",
@@ -25,7 +33,10 @@
         "beforeSha256": "d093eb74092a75dfa6ab1d374c8a61da54533e5cce0a9855930aa6c238cb8e45",
         "afterSha256": "f809886a1b253c07b39206941ff09af18ec1be876c6812149fa1fdb6056e1da6"
       },
-      "integration": null,
+      "integration": {
+        "commit": "9452fcc104c3e3a41e849037c51439673cd3e209",
+        "commitSha256": "f25b5c7f4de3655b5efd4d8e35cbaf6db21b1c017c034047a83b38bcfb556e04"
+      },
       "before": {
         "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/projects/README.before.section.md",
         "sha256": "0ff70906dc129cc727c19831ad37bb353eba75fc9b7d45a449a18ac19ed66f30"
@@ -48,7 +59,10 @@
         "beforeSha256": "65b2be3c12f3eaeb7e039535c040d4bab4d9e06acc3301a725addb1f96c636a8",
         "afterSha256": "aeb42a8b3c3e140b1c682835f267e44c8101952d4d1d617a401a6270142ed560"
       },
-      "integration": null,
+      "integration": {
+        "commit": "f26304dabf7153c7075fa8c4a82dc8fc537c5ed0",
+        "commitSha256": "b71979d4bb067c6823d4e3750bc7ec87b9bf10afc4a78aeeb1866d82cdeb3de0"
+      },
       "before": {
         "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/frontcomposer/README.before.section.md",
         "sha256": "a7e3d0429a2d856ef36af963e0087032d6df97f09115aeff6c11035bcb4f192f"

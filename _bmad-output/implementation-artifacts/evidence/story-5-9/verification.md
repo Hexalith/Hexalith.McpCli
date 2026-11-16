@@ -1,9 +1,10 @@
 # Story 5.9 verification — owner-approved documentary successors
 
 Prepared 2026-11-16 against McpCli baseline `fbe4b6bd5502741ff8006abedac5c9bb27a4df3c`. Candidate
-checks pass; exact-byte owner approval and separate delivery authorization were recorded on 2026-11-16.
-The story remains **in review, awaiting upstream integration**. Inventory and README publication
-is authorized; no enrollment, live execution, parity or retirement is claimed.
+checks pass; exact-byte owner approval, separate delivery authorization and upstream integration
+were completed on 2026-11-16. The story is **done**. The approved inventories and both
+owner README updates are on their owning main branches. No enrollment, live execution,
+parity acceptance or retirement is claimed.
 
 ## Candidate accounting and exact bytes
 
@@ -164,11 +165,11 @@ The pre-approval scan is preserved byte for byte in
 [secret-scan-before-approval.json](secret-scan-before-approval.json); the current
 [secret scan](secret-scan.json) covers the updated approval evidence.
 
-## Remaining external gates
+## Independent retirement gates
 
-Exact-byte owner approval, named role coverage and separate delivery authorization
-are complete. Upstream README-only integration/readback on both owner origin/main
-branches remains pending until the delivery receipt is recorded.
+Exact-byte owner approval, named role coverage, separate delivery authorization
+and upstream README-only integration/readback on both owner origin/main branches
+are complete. The receipt below binds the delivered commits and exact bytes.
 K03 conformity, DW-82 publication, live acceptance, Projects 6.7 cutover,
 K12 UI evidence and release/rollback gates remain independent retirement prerequisites.
 
@@ -195,3 +196,34 @@ The expanded suite has 31 passing tests, including committed prose correction
 and row-change refusal. Pending fixtures also isolate workflow and delivery
 metadata from the real receipt, while real entrypoints validate its actual state.
 [delivery-preflight.json](delivery-preflight.json) retains the publication checks.
+
+## Delivered integration and final verification — 2026-11-16
+
+| Repository | Integrated commit | Verified scope |
+| --- | --- | --- |
+| McpCli | `4fbe3e2c356ca6911d8387218dade9a881d8c902` | Approved Projects 2.1.0 and FrontComposer 1.1.0 inventories and exact approval receipt |
+| Projects | `9452fcc104c3e3a41e849037c51439673cd3e209` | README-only PS08/PS09 successor citations and gate text |
+| FrontComposer | `f26304dabf7153c7075fa8c4a82dc8fc537c5ed0` | README-only PS03/PS04 successor citations and gate text |
+
+[delivery.json](delivery.json) records the full revisions, raw-commit hashes,
+origin/main observations, exact README hashes and successful push outputs.
+[labels.json](labels.json) now records integrated state, the separate authorization
+and the canonical publication revision. Both successor hashes and the approved
+receipt remain byte-identical to the user's approval. Neither owner commit
+contains a file other than `README.md`; concurrent Projects planning and test
+changes were preserved and excluded. All root reference checkouts and gitlinks
+remain unchanged.
+
+[completion-checks.json](completion-checks.json) retains exit codes and both
+streams for both approved-completion verifiers, both default entrypoints, all
+31 tests, adopted AD-23 verification and the whitespace check. Every command
+exited 0 with the real integrated receipts and done workflow statuses. Both
+current owner origin/main READMEs contain the exact prepared successor labels,
+and McpCli origin/main contains the exact approved inventory and receipt bytes.
+The final [secret scan](secret-scan.json) covers the completed evidence packet;
+the publication scan is retained unchanged in
+[secret-scan-publication.json](secret-scan-publication.json).
+
+The final documentation commit records these verified integrations and done
+statuses. Its canonical revision is reported at delivery rather than embedded
+in its own hash-bound files. No retirement prerequisite is closed by this delivery.
