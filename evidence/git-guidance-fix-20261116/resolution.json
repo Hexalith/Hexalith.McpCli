@@ -1,0 +1,23 @@
+{
+  "requestedActions": [
+    "push all changes",
+    "fix"
+  ],
+  "recordedAtUtc": "2026-11-16T17:06:01.083377+00:00",
+  "previousBaseline": "7ef8166ef87e1365f86d1a1b3aaf0235545177d4",
+  "correctedBaseline": "cfd1ebea92587cdea41b9aa2cff47358bf2f32f6",
+  "upstreamMainVerified": "cfd1ebea92587cdea41b9aa2cff47358bf2f32f6\trefs/heads/main",
+  "resolution": "Use the already-merged CiCd adoption condition. McpCli is not adopted: its existing required CI applies; absence of .github/hexalith-ci.json is not itself a pre-push failure. No CiCd-owned module configuration or workflow is synthesized.",
+  "guidancePath": "references/Hexalith.AI.Tools/hexalith-llm-instructions.md",
+  "instructionSyncCommand": [
+    "bash",
+    "scripts/check-agent-instructions-sync.sh"
+  ],
+  "configurationPresent": false,
+  "remainingLimitations": [
+    "Story 5.11 candidate approval and upstream integration remain separate",
+    "Existing unavailable Projects.Contracts pin is a recorded product CI issue; story remains in review"
+  ],
+  "noNestedSubmodulesInitialized": true,
+  "noBuildsGitlinkChange": true
+}

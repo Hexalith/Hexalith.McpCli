@@ -1,0 +1,135 @@
+#!/usr/bin/env python3
+"""Probe published 2.0.1 offline, without profiles, credentials or Gateway calls."""
+import hashlib
+import json
+import os
+from pathlib import Path
+import select
+import subprocess
+import sys
+import tempfile
+import time
+
+ROOT = Path(__file__).resolve().parents[4]
+E = Path(__file__).resolve().parent
+sys.path.insert(0,str(ROOT/'scripts'))
+from evidence_redaction import sanitized_xml
+
+
+def retained(data):
+    return sanitized_xml(data.decode()).encode()
+
+
+TOOLS = {'list_modules','list_operations','describe_operation','send_command','run_query'}
+OPERATIONS = {
+    'tenants': {'add-user-to-tenant':'write','change-user-role':'write','create-tenant':'write','disable-tenant':'write','enable-tenant':'write','get-tenant':'read','get-tenant-audit':'read','get-tenant-users':'read','get-user-tenants':'read','list-tenants':'read','remove-tenant-configuration':'write','remove-user-from-tenant':'write','set-tenant-configuration':'write','update-tenant':'write'},
+    'parties': {'create-party':'write','deactivate-party':'write','get-party':'read','list-parties':'read','reactivate-party':'write','search-parties':'read','update-party':'write'},
+}
+UNKNOWN = {'error':{'code':'unknown_operation','operation':'folders.unavailable','suggestions':['parties.update-party','parties.create-party','parties.get-party']}}
+
+
+def require(condition,message):
+    if not condition: raise ValueError(message)
+
+
+def validate_probe(name,result):
+    require(result.returncode == (2 if name=='unknown' else 0),name+': unexpected exit code')
+    if name == 'unknown':
+        require(result.stdout == (json.dumps(UNKNOWN,indent=2)+'\n').encode() and result.stderr == b'', 'unknown: complete error document/stdout/stderr mismatch')
+    elif name in {'modules','tenants','parties','describe'}:
+        require(result.stderr == b'',name+': unexpected discovery stderr')
+        document = json.loads(result.stdout)
+        require(isinstance(document,dict) and 'error' not in document,name+': discovery result required')
+        if name == 'modules':
+            modules=document.get('modules',[])
+            require(len(modules)==2 and {m.get('name'):m.get('operationCount') for m in modules}=={'parties':7,'tenants':14} and all(m.get('description') for m in modules),'modules: expected published cohort required')
+        elif name in OPERATIONS:
+            operations=document.get('operations',[])
+            expected={name+'.'+op:kind for op,kind in OPERATIONS[name].items()}
+            require(document.get('module')==name and len(operations)==len(expected) and {r.get('name'):r.get('kind') for r in operations}==expected and all(r.get('description') for r in operations),name+': expected operation names/kinds/descriptions required')
+        else:
+            require(document.get('name')=='tenants.list-tenants' and document.get('kind')=='read' and document.get('description') and isinstance(document.get('schema'),dict) and document['schema'].get('properties',{}).keys()=={'Cursor','PageSize'} and document.get('envelope',{}).get('platformScope')=='platform:tenants' and document.get('submittable') is False and document.get('reason')=='configuration_invalid','describe: expected typed offline discovery required')
+    else:
+        require(result.stdout and result.stderr == b'' and b'error' not in result.stdout[:20].lower(),name+': help output required')
+
+
+def validate_tools(response):
+    tools=response.get('result',{}).get('tools',[])
+    require(response.get('id')==2 and response.get('jsonrpc')=='2.0' and len(tools)==5 and {t.get('name') for t in tools}==TOOLS and all(isinstance(t.get('inputSchema'),dict) for t in tools),'stdio: exact generic tool names and schemas required')
+    return tools
+
+
+class Responses:
+    """Read chunks under one absolute deadline, including partial JSON lines."""
+    def __init__(self,stream):
+        self.stream,self.pending,self.output=stream,b'',[]
+
+    def receive(self,request_id,timeout=30):
+        deadline=time.monotonic()+timeout
+        while True:
+            while b'\n' in self.pending:
+                line,self.pending=self.pending.split(b'\n',1)
+                response=json.loads(line)
+                if response.get('id')==request_id:return response
+            remaining=deadline-time.monotonic()
+            if remaining<=0 or not select.select([self.stream],[],[],remaining)[0]:raise ValueError('stdio response deadline exceeded')
+            chunk=os.read(self.stream.fileno(),65536)
+            if not chunk:raise ValueError('stdio closed before discovery response')
+            self.output.append(chunk);self.pending+=chunk
+            require(len(self.pending)<=1024*1024,'stdio response exceeds buffer bound')
+
+
+def stop_process(process,timeout=2):
+    if process.stdin and not process.stdin.closed:process.stdin.close()
+    try: process.wait(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        process.kill();process.wait(timeout=timeout)
+    if process.stdout:process.stdout.close()
+
+
+def main():
+    records = []
+    with tempfile.TemporaryDirectory(prefix='mcpcli-offline-') as temporary:
+        scratch = Path(temporary)
+        environment = {k:v for k,v in os.environ.items() if not k.startswith(('EVENTSTORE_','MCPCLI_','NUGET_','GH_','GITHUB_'))}
+        environment.update(NUGET_PACKAGES=str(scratch/'packages'),DOTNET_CLI_HOME=str(scratch/'dotnet'),MCPCLI_HOME=str(scratch/'profile'),DOTNET_SKIP_FIRST_TIME_EXPERIENCE='1',DOTNET_CLI_TELEMETRY_OPTOUT='1',DOTNET_GENERATE_ASPNET_CERTIFICATE='false')
+        install = ['dotnet','tool','install','--tool-path',str(scratch/'tool'),'Hexalith.McpCli','--version','2.0.1']
+        result = subprocess.run(install,capture_output=True,env=environment,timeout=120)
+        (E/'offline-install.stdout.txt').write_bytes(retained(result.stdout))
+        (E/'offline-install.stderr.txt').write_bytes(retained(result.stderr))
+        if result.returncode: raise ValueError('Published CLI install failed; see offline-install streams')
+        tool = str(scratch/'tool/hexalith')
+        cases = [('modules',['modules']),('tenants',['operations','tenants']),('parties',['operations','parties']),('describe',['describe','tenants.list-tenants']),('config-help',['config','--help']),('query-help',['query','--help']),('send-help',['send','--help']),('mcp-help',['mcp','--help']),('unknown',['describe','folders.unavailable'])]
+        for name,args in cases:
+            result = subprocess.run([tool,*args],capture_output=True,env=environment,timeout=30)
+            (E/f'offline-{name}.stdout.txt').write_bytes(retained(result.stdout))
+            (E/f'offline-{name}.stderr.txt').write_bytes(retained(result.stderr))
+            records.append({'name':name,'command':['hexalith',*args],'exitCode':result.returncode,'rawStdoutSha256':hashlib.sha256(result.stdout).hexdigest(),'rawStderrSha256':hashlib.sha256(result.stderr).hexdigest(),'stdoutSha256':hashlib.sha256(retained(result.stdout)).hexdigest(),'stderrSha256':hashlib.sha256(retained(result.stderr)).hexdigest()})
+            validate_probe(name,result)
+        # Discovery over stdio only: initialize, tools/list, then end input. No tool invocation.
+        requests = [{'jsonrpc':'2.0','id':1,'method':'initialize','params':{'protocolVersion':'2025-06-18','capabilities':{},'clientInfo':{'name':'story-5-11-offline','version':'1.0.0'}}},{'jsonrpc':'2.0','method':'notifications/initialized'},{'jsonrpc':'2.0','id':2,'method':'tools/list','params':{}}]
+        with (E/'offline-stdio.stderr.txt').open('wb') as diagnostics:
+            process = subprocess.Popen([tool,'mcp','--transport','stdio'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=diagnostics,env=environment)
+            responses=Responses(process.stdout)
+            try:
+                for request in requests:
+                    process.stdin.write((json.dumps(request)+'\n').encode());process.stdin.flush()
+                    if 'id' not in request: continue
+                    response=responses.receive(request['id'])
+                    if request['id']==1:
+                        require(response.get('result',{}).get('protocolVersion')=='2025-06-18' and response['result'].get('serverInfo',{}).get('name')=='hexalith','stdio: valid initialization required')
+                    else:tools=validate_tools(response)
+            finally:
+                stop_process(process)
+        require(process.returncode==0,'stdio: clean shutdown required')
+        stdout=b''.join(responses.output)
+        (E/'offline-stdio.stdout.txt').write_bytes(retained(stdout))
+        stderr=(E/'offline-stdio.stderr.txt').read_bytes()
+        (E/'offline-stdio.stderr.txt').write_bytes(retained(stderr))
+        records.append({'name':'stdio-discovery','command':['hexalith','mcp','--transport','stdio'],'exitCode':process.returncode,'tools':[t['name'] for t in tools],'stdoutSha256':hashlib.sha256(stdout).hexdigest(),'stderrSha256':hashlib.sha256((E/'offline-stdio.stderr.txt').read_bytes()).hexdigest()})
+        packages = [{'path':str(p.relative_to(scratch)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in scratch.rglob('*.nupkg') if p.name.startswith('hexalith.mcpcli.')]
+        (E/'offline-cli.json').write_text(json.dumps({'source':'Published tool 2.0.1; source-head restore independently blocked by NU1102 Projects 2.0.0-story66.3','scope':'Offline discovery/help only; no query/command execution or tools/call, profile write or Gateway call','records':records,'packages':packages},indent=2)+'\n')
+    print('PASS: published 2.0.1 offline discovery/help, safe unknown-operation refusal and five generic stdio tools')
+
+
+if __name__ == '__main__': main()

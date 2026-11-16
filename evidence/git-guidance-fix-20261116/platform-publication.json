@@ -1,0 +1,41 @@
+{
+  "purpose": "Publish the existing pinned merge history without a new commit, force push, source edit or change to current remote main. Existing four commits have identical tree to their source base.",
+  "branch": "docs/mcpcli-preserve-platform-merges-20261116",
+  "records": [
+    {
+      "command": [
+        "git",
+        "fetch",
+        "--no-recurse-submodules",
+        "origin",
+        "main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "From https://github.com/Hexalith/Hexalith.Platform\n * branch              main       -> FETCH_HEAD\n"
+    },
+    {
+      "command": [
+        "git",
+        "push",
+        "origin",
+        "HEAD:refs/heads/docs/mcpcli-preserve-platform-merges-20261116"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "remote: \nremote: Create a pull request for 'docs/mcpcli-preserve-platform-merges-20261116' on GitHub by visiting:        \nremote:      https://github.com/Hexalith/Hexalith.Platform/pull/new/docs/mcpcli-preserve-platform-merges-20261116        \nremote: \nTo https://github.com/Hexalith/Hexalith.Platform.git\n * [new branch]        HEAD -> docs/mcpcli-preserve-platform-merges-20261116\n"
+    },
+    {
+      "command": [
+        "git",
+        "ls-remote",
+        "--exit-code",
+        "origin",
+        "refs/heads/docs/mcpcli-preserve-platform-merges-20261116"
+      ],
+      "exitCode": 0,
+      "stdout": "2dfd01d394733aeb871be56a0aab35ddb7b721c3\trefs/heads/docs/mcpcli-preserve-platform-merges-20261116\n",
+      "stderr": ""
+    }
+  ]
+}

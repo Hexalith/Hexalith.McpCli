@@ -1,0 +1,27 @@
+Description:
+  Submit a declared command
+
+Usage:
+  Hexalith.McpCli send [<operation>] [options]
+
+Arguments:
+  <operation>  Canonical write operation
+
+Options:
+  --payload <payload>                  JSON, @file, or - for stdin
+  --aggregate-id <aggregate-id>        Must equal the payload aggregate identifier; canonical uppercase ULID in ULID-kind modules
+  --correlation-id <correlation-id>    Caller-supplied canonical uppercase ULID correlation identifier
+  --idempotency-key <idempotency-key>  Caller-supplied canonical uppercase ULID idempotency key
+  --extension <extension>              Allowlisted key=value; repeatable
+  -?, -h, --help                       Show help and usage information
+  --url <url>                          EventStore gateway URL
+  --token <token>                      Gateway Bearer [REDACTED]
+  --tenant <tenant>                    Session tenant
+  --actor <actor>                      Trusted operator actor
+  --allow-tenant-override              Allow MCP per-call tenant selection
+  --profile <profile>                  Connection profile
+  --format <format>                    json or table
+  --output <output>                    Write the result to a file
+  --read-only                          Disable command submission
+  --strict                             Reject any Catalog diagnostic
+

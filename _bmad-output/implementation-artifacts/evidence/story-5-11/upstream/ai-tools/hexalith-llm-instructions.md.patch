@@ -1,0 +1,16 @@
+--- a/hexalith-llm-instructions.md
++++ b/hexalith-llm-instructions.md
+@@ -68,9 +68,10 @@
+ `Hexalith.McpCli` is the target Hexalith-owned MCP server and CLI for domain,
+ platform, and operator capabilities. Do not create a new proprietary
+ per-module MCP server, MCP plug-in, or CLI. Gateway-ready operations are
+-declared in decorated module Contracts and enrolled in McpCli. Infrastructure
+-administration, resources, and other non-gateway capabilities need an
+-approved generic McpCli contract and transport decision before migration.
++declared in decorated module Contracts and enrolled in McpCli. Adopted McpCli AD-23 assigns confidential UI, explicit withdrawal, named local
++exemptions or deferral to other capability classes. Confidential UI, withdrawal
++and those exemptions need no invented McpCli transport. Eligible business
++behavior still needs exact decorated Gateway Contracts and independent gates.
+ 
+ Existing proprietary Hexalith module MCP/CLI packages are obsolete migration
+ sources. Limit them to safety and continuity fixes, inventory every operation

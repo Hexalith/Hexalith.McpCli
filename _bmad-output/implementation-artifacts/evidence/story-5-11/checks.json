@@ -1,0 +1,92 @@
+[
+  {
+    "name": "verifier",
+    "command": [
+      "run-with-temp",
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0
+  },
+  {
+    "name": "completion",
+    "command": [
+      "run-with-temp",
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py",
+      "--approved-completion"
+    ],
+    "exitCode": 1,
+    "expectedExitCode": 1
+  },
+  {
+    "name": "release-notes-tests",
+    "command": [
+      "run-with-temp",
+      "node",
+      "--test",
+      "scripts/tests/migration-release-notes.test.mjs"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0
+  },
+  {
+    "name": "instruction-sync",
+    "command": [
+      "bash",
+      "scripts/check-agent-instructions-sync.sh"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0,
+    "expectedExitCode": 0
+  },
+  {
+    "name": "verifier-tests",
+    "command": [
+      "run-with-temp",
+      "python3",
+      "-B",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "_bmad-output/implementation-artifacts/evidence/story-5-11",
+      "-p",
+      "test_verify_reconciliation.py"
+    ],
+    "exitCode": 0,
+    "tests": 17,
+    "guardRemovalControls": 5
+  },
+  {
+    "name": "published-offline-cli",
+    "command": [
+      "run-with-temp",
+      "python3",
+      "_bmad-output/implementation-artifacts/evidence/story-5-11/check_offline_cli.py"
+    ],
+    "exitCode": 0,
+    "scope": "published 2.0.1 discovery/help and stdio tools/list only; shared-redacted captures retain raw hashes"
+  },
+  {
+    "name": "source-cli-restore",
+    "command": [
+      "dotnet",
+      "restore",
+      "src/Hexalith.McpCli/Hexalith.McpCli.csproj"
+    ],
+    "exitCode": 1,
+    "blocker": "NU1102: baseline Projects.Contracts 2.0.0-story66.3 unavailable; no source build claimed"
+  }
+]

@@ -1,0 +1,28 @@
+[
+  {
+    "name": "candidate",
+    "command": [
+      "python3",
+      "-B",
+      "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "instruction-sync",
+    "command": [
+      "bash",
+      "scripts/check-agent-instructions-sync.sh"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0
+  }
+]

@@ -1,0 +1,21 @@
+--- a/_bmad-output/planning-artifacts/epics.md
++++ b/_bmad-output/planning-artifacts/epics.md
+@@ -56,6 +56,9 @@
+ 
+ # Hexalith.Projects - Epic Breakdown
+ 
++> **Current McpCli disposition (Story 5.11 candidate):** Projects source declarations and local McpCli candidate tests establish neither published package availability nor enrollment in the shipped McpCli cohort. The four source reads projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments remain subject to publication, independent Gateway authorization and live acceptance. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.
++
++
+ **McpCli course correction (drafted 2026-09-27; approved 2026-11-15 by [sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md](sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md) §E9).** Stories 5.10, 6.6, 8.4, and 8.5 are reconciled to `Hexalith.McpCli` as the shared CLI/MCP target. Only agent-eligible Projects operations enter the shared heads; they deny Selection Evidence and human-confirmation actions under Platform AD-14. Completed proprietary adapter evidence remains historical; McpCli Epic 5 owns inventory, conformance, and retirement.
+ 
+ 
+@@ -1520,7 +1523,7 @@
+ **Acceptance Criteria:**
+ 
+ **Given** an McpCli invocation with a platform credential, **When** an enrolled Projects read runs, **Then**:
+-- Tenant and actor come from the credential, and the Gateway authorizes the call.
++- Tenant comes from the envelope: exact PlatformScope first, else exact FixedTenant, else canonical public session/per-call tenant under AD-22 override rules. Payload grants no authority. The Gateway independently authorizes credential, scope, actor, surface and operation.
+ - Output is deterministic JSON, Tenant-scoped, authorization-filtered and Safe Metadata by default. No meaning depends on color, terminal width or prose.
+ - Project name, Setup bodies, titles, paths and Preview bodies appear only under `projects:inspect_descriptive_metadata` and are recorded by the server's existing durable inspection audit. An audit write failure denies the disclosure.
+ - The Gateway rejects a call without a token with `401`, exit `2` and no payload before any Projects query executes.

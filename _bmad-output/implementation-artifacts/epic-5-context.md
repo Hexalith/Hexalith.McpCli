@@ -46,3 +46,16 @@ Migration guidance names available operations, `hexalith` stdio setup, and safe 
 ## Cross-Story Dependencies
 
 Story 5.1 supplies inventories, census and the static gate. Adopted 5.2 precedes 5.7–5.10; 5.8 also needs Hexalith.Folders Story 5.12 types at the re-pin. Parties runs 5.3 → 5.4 → 5.5. 5.6 depends on 5.1. 5.12 precedes Epic 6 Folders enrollment. 5.11 follows 5.2–5.7, 5.9 and 5.10, plus 5.8 when done, and records the Parties conflict outcome and deferrals. FrontComposer host and Projects plug-in retire together. Changes land upstream; plan updates use a new `plan_version` and moved `inventory_revision`.
+
+## Story 5.11 reconciliation state (2026-11-16)
+
+The authoritative AI.Tools plan is 1.2.0 with an obsolete inventory index. The
+Story 5.11 packet prepares 1.3.0 and receipt-based Admin 1.0.3 / technical 1.0.4
+successors; fresh approval, inventory publication, Story 5.10 delivery, owner
+patch integration and a containing AI.Tools gitlink remain completion gates.
+The original “Labels + slip” decision remains; SM-3 is pending-not-met with
+deadline 2027-02-05 and must be reassessed at completion. No retirement is
+evidenced. Folders K12, Projects Payload paging and Parties' G01–G06 plus its
+separate exposure conflict retain their existing owners and blocking successors.
+The full deferral audit is in evidence/story-5-11/deferral-dispositions.md;
+“already tracked” never closes or accepts a gate.

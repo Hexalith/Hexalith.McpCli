@@ -1,0 +1,46 @@
+{
+  "scope": "Only tests covering edited story verifier/builder/offline probes and the new release-note adapter; full verification remains with the parent reviewer.",
+  "commands": [
+    {
+      "command": [
+        "run-with-temp",
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "tests": 27,
+      "streams": [
+        "review-fix-tests.stdout.txt",
+        "review-fix-tests.stderr.txt"
+      ]
+    },
+    {
+      "command": [
+        "run-with-temp",
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "scripts/tests",
+        "-p",
+        "test_migration_release_notes.py"
+      ],
+      "exitCode": 0,
+      "tests": 2,
+      "coverage": "Executes the two pinned Node notes tests; adapter failure code/stdout/stderr propagation verified."
+    }
+  ],
+  "fullVerificationRun": false,
+  "predecessorAndAdoptedFilesChanged": false
+}

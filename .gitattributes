@@ -122,3 +122,8 @@ _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md -text
 _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md -text
 _bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md -text
 _bmad-output/implementation-artifacts/evidence/story-5-10/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+
+# Story 5.11 preserves predecessor, candidate, receipt and upstream patch bytes.
+_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md -text
+_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md -text
+_bmad-output/implementation-artifacts/evidence/story-5-11/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol

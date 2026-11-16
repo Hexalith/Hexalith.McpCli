@@ -1,0 +1,41 @@
+--- a/_bmad-output/planning-artifacts/prd.md
++++ b/_bmad-output/planning-artifacts/prd.md
+@@ -31,6 +31,9 @@
+ 
+ # Product Requirements Document - Hexalith.Memories
+ 
++> **Current McpCli disposition (Story 5.11 candidate):** The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.
++
++
+ **Approved McpCli course correction (2026-09-27):** `Hexalith.McpCli` is the target Hexalith-owned CLI/MCP presentation for eligible Memories operations. `Hexalith.Memories.Cli` and `.Mcp` are obsolete migration sources; they remain compatibility assets until search, ingest, traversal, tenant isolation, identity, output, and accessibility behavior passes approved replacement or withdrawal gates. Descriptions below of their direct HTTP/Dapr hosting and distribution are historical or migration requirements, not the target topology.
+ 
+ 
+@@ -260,7 +263,7 @@
+ |---|---|---|
+ | 1 | EventStore product integration package `Hexalith.Memories.EventStore` (DAPR pub/sub through the Memories Server sidecar, auto-discovery, dual embedding, causal chains) | Launch gates L2 + L3 |
+ | 2 | Search, ingest, traverse, and case-info with token-budget awareness through `Hexalith.McpCli`; `Hexalith.Memories.Mcp` is the obsolete compatibility server pending approved parity | Launch gate L1, re-baseline on shared-surface readiness |
+-| 3 | `Hexalith.McpCli` generic diagnostic/migration contract for approved `explore` and EventStore diagnostics; the old Phase 1.5 CLI rows remain compatibility evidence | Full developer experience after shared-surface qualification |
++| 3 | Owner-decorated Gateway diagnostics only after separate Contracts/handler/admission/enrollment evidence; no promised generic migration surface; the old Phase 1.5 CLI rows remain compatibility evidence | Full developer experience after shared-surface qualification |
+ 
+ The Memories Server is the sidecar-managed event subscriber. Hexalith modules publish CloudEvents to the configured DAPR pub/sub topic; the server sidecar delivers them to `/events/ingest`, where source-prefix routing maps events to tenant/case memory. Modules should not bypass this path with direct REST pushes for domain event streams. **[Correction note 2026-10-08: source-prefix routing describes today's code (`TenantEventRoutingOptions.SourceToTenantMap`), not the target. Adopted AD-5 forbids selecting a tenant from any publisher-set envelope field, including `source`. Story 34.10 replaces it with authenticated channel routing: the operator artifact maps the subscribing component, topic, and scoped publisher to one candidate tenant, which then passes the allowlist, grant, and `Active` checks. One subscribed topic therefore serves one tenant; per-tenant topics are the Phase 1.5 target. This paragraph changes when Story 34.10 lands.]**
+ 
+@@ -696,7 +699,7 @@
+ |---|---|---|
+ | Server runtime | .NET 10 / C# 14. SDK pin is `global.json` (repository configuration), not this PRD. | .NET plus optional architecture-owned polyglot sidecars (see addendum: Dapr Agents) |
+ | Client libraries | MVP CLI uses a minimal direct HTTP/ingress adapter inside the CLI; reusable `.NET` client packages are not MVP blockers | `.NET` (`Client` for DAPR consumers, `Client.Rest` for external consumers), Python, TypeScript clients targeting ingress REST API |
+-| CLI | .NET global tool (`dotnet tool install -g Hexalith.Memories.Cli`) | Same |
++| Retained compatibility CLI | .NET global tool (`dotnet tool install -g Hexalith.Memories.Cli`) | Same |
+ | Cross-language access | Via ingress REST API (any HTTP client) or DAPR service invocation (any DAPR SDK) | Dedicated language-specific client packages |
+ | IDE tooling | None | VS/Rider templates, analyzers (deferred) |
+ 
+@@ -737,8 +740,8 @@
+ 
+ External consumers connect through infrastructure-managed ingress (YARP, nginx, cloud API gateway — not application code). Internal services communicate via DAPR mesh.
+ 
+-- **LLM Agent** → ingress → MCP Server (DAPR sidecar) → DAPR → Memories Server
+-- **CLI / Third-party apps** → ingress → Memories Server (REST controllers)
++- **Legacy compatibility LLM Agent** → ingress → MCP Server (DAPR sidecar) → DAPR → Memories Server
++- **Legacy CLI / Third-party apps** → ingress → Memories Server (REST controllers)
+ - **Memories Server** → approved internal Redis/FalkorDB adapters → backend data-plane clients using Aspire-injected keyed connections; DAPR state remains the portable coordination path
+ - **EventStore events** → DAPR pub/sub → Memories Server
+ 

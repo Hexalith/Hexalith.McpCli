@@ -1,0 +1,10 @@
+✔ configured hook preserves the pinned generator output and appends the committed status once (41.89635ms)
+✔ missing or empty committed status fails closed before notes generation (4.840534ms)
+ℹ tests 2
+ℹ suites 0
+ℹ pass 2
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 785.67463

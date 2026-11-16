@@ -1,0 +1,484 @@
+{
+  "schemaVersion": "1.0.0",
+  "recordedOn": "2026-11-16",
+  "baselineCommit": "008d95ccc77d932a372cb6c749d9d1fb1bc1ea57",
+  "authorities": [
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md",
+      "sha256": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560"
+    },
+    {
+      "path": "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json",
+      "sha256": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json",
+      "sha256": "7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-2/main-integration.json",
+      "sha256": "be51f67f9f3036bb328ceb7c72125777964138d537e96875f4c887286432430d"
+    }
+  ],
+  "inventoryHistories": {
+    "parties": [
+      {
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.0.0/parties-migration-inventory-v1.md",
+        "sha256": "c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f",
+        "approval": {
+          "authority": "session-scope-only",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.0.0/parties-migration-inventory-v1.md",
+            "sha256": "c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f"
+          }
+        },
+        "sourceRevision": "493730941329d1bca3b4f6b2f6a67ffe305c2443",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Parties",
+        "effectiveStatus": "scope-approved-only"
+      },
+      {
+        "version": "1.1.0",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.1.0/parties-migration-inventory-v1.md",
+        "sha256": "8fc4078842d141151c521f0288f1eb7f9b984505c7b4a1458fa40de8dba4c51e",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.1.0/approval.json",
+            "sha256": "e377fee92e8016a104d9522cccc9135955eff7936e8a0df27e4ff3f7f3f2f765"
+          }
+        },
+        "sourceRevision": "493730941329d1bca3b4f6b2f6a67ffe305c2443",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Parties",
+        "effectiveStatus": "owner-approved"
+      },
+      {
+        "version": "1.2.0",
+        "path": "_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md",
+        "sha256": "2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-3/approval/amendment-1.2.0.json",
+            "sha256": "f7c123e174549272a6de162ffb7ea5100e093ddd030df1e30989c2bf8affec7a"
+          }
+        },
+        "sourceRevision": "493730941329d1bca3b4f6b2f6a67ffe305c2443",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Parties",
+        "effectiveStatus": "owner-approved"
+      }
+    ],
+    "eventstore-admin": [
+      {
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/eventstore-admin-migration-inventory-v1.md",
+        "sha256": "26ac7486cba8c52a0496147c6b90bda953dda31fd644ac199c433e49b834c90e",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+            "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+          }
+        },
+        "sourceRevision": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.EventStore",
+        "effectiveStatus": "owner-approved"
+      },
+      {
+        "version": "1.0.1",
+        "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md",
+        "sha256": "7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+            "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+          }
+        },
+        "sourceRevision": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.EventStore",
+        "effectiveStatus": "owner-approved"
+      },
+      {
+        "version": "1.0.2",
+        "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md",
+        "sha256": "ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json",
+            "sha256": "5b0044a505f6cdcb95c5ceaa087f79dd705da54de3225ea9358f2b50f48e3b90"
+          }
+        },
+        "sourceRevision": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.EventStore",
+        "effectiveStatus": "owner-approved"
+      },
+      {
+        "version": "1.0.3",
+        "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md",
+        "sha256": "8b5d941ea16a47c2a07dff9ad8e4f5ee09f2801baf90b11bf105957c0c1340c5",
+        "approval": {
+          "authority": "pending",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/approval.json"
+          }
+        },
+        "sourceRevision": "3d4ba67db99f2f0bcd64b7d353609b555870cc9b",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.EventStore",
+        "effectiveStatus": "candidate-pending"
+      }
+    ],
+    "technical-tools": [
+      {
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/technical-tools-migration-inventory-v1.md",
+        "sha256": "6a7d325f6927b8b0f6692c05b71b54728bc1281b871dc073712586d172d41f58",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+            "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+          }
+        },
+        "sourceRevision": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+        "effectiveStatus": "owner-approved"
+      },
+      {
+        "version": "1.0.1",
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.1/technical-tools-migration-inventory-v1.md",
+        "sha256": "0472f2c4ba12049c89e582ed5162279f989160d62b4499bc766efde8e85b93ca",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+            "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+          }
+        },
+        "sourceRevision": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+        "effectiveStatus": "owner-approved"
+      },
+      {
+        "version": "1.0.2",
+        "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md",
+        "sha256": "8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json",
+            "sha256": "69ef4c44e0ead760318f5366dec92fd5a4d1658fa22dd8b2b9bc961fd0d0c13e"
+          }
+        },
+        "sourceRevision": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+        "effectiveStatus": "owner-approved"
+      },
+      {
+        "version": "1.0.3",
+        "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md",
+        "sha256": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json",
+            "sha256": "5b0044a505f6cdcb95c5ceaa087f79dd705da54de3225ea9358f2b50f48e3b90"
+          }
+        },
+        "sourceRevision": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+        "effectiveStatus": "owner-approved"
+      },
+      {
+        "version": "1.0.4",
+        "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md",
+        "sha256": "fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693",
+        "approval": {
+          "authority": "pending",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/approval.json"
+          }
+        },
+        "sourceRevision": "fbb9c3822dfa407e72739238cd472567f45f1e82",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+        "effectiveStatus": "candidate-pending"
+      }
+    ],
+    "folders": [
+      {
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+        "sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b",
+        "approval": {
+          "authority": "session-scope-only",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md",
+            "sha256": "57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b"
+          }
+        },
+        "sourceRevision": "e2252f29a2dba2b64786ee483eb59fbceaadd387",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Folders",
+        "effectiveStatus": "scope-approved-only"
+      },
+      {
+        "version": "1.1.0",
+        "path": "_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md",
+        "sha256": "54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json",
+            "sha256": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e"
+          }
+        },
+        "sourceRevision": "7eab70e9332c0573b50dce5b219e425b6a2d363c",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Folders",
+        "effectiveStatus": "owner-approved"
+      }
+    ],
+    "projects": [
+      {
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+        "sha256": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+        "approval": {
+          "authority": "session-scope-only",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md",
+            "sha256": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f"
+          }
+        },
+        "sourceRevision": "3d256e632a7645bc2261e668ac7c74be81155f58",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Projects",
+        "effectiveStatus": "scope-approved-only"
+      },
+      {
+        "version": "2.0.0",
+        "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.md",
+        "sha256": "011d1d444a9f32565f397cbbdca81962529d43920ac69b7508df4224ffbf24d4",
+        "approval": {
+          "authority": "session-scope-only",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.md",
+            "sha256": "011d1d444a9f32565f397cbbdca81962529d43920ac69b7508df4224ffbf24d4"
+          }
+        },
+        "sourceRevision": "ce71717a965eb21454b3e13068b9072404dac5f5",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Projects",
+        "effectiveStatus": "scope-approved-only"
+      },
+      {
+        "version": "2.1.0",
+        "path": "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md",
+        "sha256": "c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/approval.json",
+            "sha256": "574d2c972b3421ac57cd60bec50eee97ccc6b521107218edf994f39c9207c3a1"
+          }
+        },
+        "sourceRevision": "bf9f98969efa036fd60700c627e712b4375e654a",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Projects",
+        "effectiveStatus": "owner-approved"
+      }
+    ],
+    "frontcomposer": [
+      {
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+        "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+        "approval": {
+          "authority": "session-scope-only",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+            "sha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9"
+          }
+        },
+        "sourceRevision": "81a440a8890a17edb39924bd0cf676eb6f6b5c25",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+        "effectiveStatus": "scope-approved-only"
+      },
+      {
+        "version": "1.1.0",
+        "path": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md",
+        "sha256": "60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/approval.json",
+            "sha256": "574d2c972b3421ac57cd60bec50eee97ccc6b521107218edf994f39c9207c3a1"
+          }
+        },
+        "sourceRevision": "33e71036c04f2b99955376e9c90cbb1fc3a81e64",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+        "effectiveStatus": "owner-approved"
+      }
+    ],
+    "chatbot": [
+      {
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+        "sha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+        "approval": {
+          "authority": "session-scope-only",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+            "sha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94"
+          }
+        },
+        "sourceRevision": "acc934599cf1efff36b0643eddc6a3cc4c2978d5",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.ChatBot",
+        "effectiveStatus": "scope-approved-only"
+      },
+      {
+        "version": "1.1.0",
+        "path": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md",
+        "sha256": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json",
+            "sha256": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229"
+          }
+        },
+        "sourceRevision": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.ChatBot",
+        "effectiveStatus": "owner-approved"
+      }
+    ],
+    "memories": [
+      {
+        "version": "1.0.0",
+        "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+        "sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597",
+        "approval": {
+          "authority": "session-scope-only",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+            "sha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+          }
+        },
+        "sourceRevision": "f6b60d5a2e9b81d84fddad789c7d9bed40d3a533",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Memories",
+        "effectiveStatus": "scope-approved-only"
+      },
+      {
+        "version": "1.1.0",
+        "path": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md",
+        "sha256": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1",
+        "approval": {
+          "authority": "owning-maintainer-receipt",
+          "receipt": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json",
+            "sha256": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229"
+          }
+        },
+        "sourceRevision": "9d87500eaf4c39ce0cec0cb3a03e5dd62c167106",
+        "sourceRepository": "https://github.com/Hexalith/Hexalith.Memories",
+        "effectiveStatus": "owner-approved"
+      }
+    ]
+  },
+  "priorApprovals": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json",
+      "sha256": "5b0044a505f6cdcb95c5ceaa087f79dd705da54de3225ea9358f2b50f48e3b90"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json",
+      "sha256": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/approval.json",
+      "sha256": "574d2c972b3421ac57cd60bec50eee97ccc6b521107218edf994f39c9207c3a1"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json",
+      "sha256": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229"
+    }
+  ],
+  "labelRegisters": [
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/labels.json",
+      "sha256": "06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json",
+      "sha256": "7adc8fbe4cf7ab7d37ea4746c36b0e1c99754c56bf8bc2dde7912940e83cd7a1"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/labels.json",
+      "sha256": "f53dfe3b9cfab2d831bff6c329a7d1eab179a32ccac1e0774df408257091cf40"
+    },
+    {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/labels.json",
+      "sha256": "8871047e07bf667d2612aa3ded4c23a38d3138a0a9ad3827ab6372834eda42f2"
+    }
+  ],
+  "prerequisites": {
+    "story510": {
+      "approval": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json",
+        "sha256": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229"
+      },
+      "deliveryGate": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-gate.json",
+        "sha256": "f5df1f9db7b4b69c1eaaa7bb0461ed7d288e12b503dac1fc5a6893816acb48fb"
+      },
+      "state": "approved-delivery-blocked",
+      "missingBindings": [
+        "inventoryRevision",
+        "PS06/PS07/PS12/PS13/PS14 main integration"
+      ],
+      "blocker": "python3 references/Hexalith.Builds/check.py: missing .github/hexalith-ci.json; CiCd ownership; no bypass"
+    },
+    "parties": {
+      "state": "retirement-blocked",
+      "decision": "Labels + slip",
+      "gates": [
+        "G01",
+        "G02",
+        "G03",
+        "G04",
+        "G05",
+        "G06"
+      ],
+      "separateConflict": "restricted/destructive source classifications versus existing enrollment; exact owner successor and both-head direct/chained denial with zero unauthorized effects",
+      "sm3": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-5/sm3-status.json",
+        "sha256": "8a5aff25336d56cc88f2124ccc3dedc3da66af06050b2842a6c27cb7349ae7eb"
+      },
+      "deadline": "2027-02-05",
+      "assessmentDate": "2026-11-16",
+      "deadlinePassed": false,
+      "outcome": "pending-not-met",
+      "ownerDecision": {
+        "path": "_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md",
+        "sha256": "13dcf9480b76cdc1b4af203aa46e86ea57b6affa0736703adb58fbb9443f3259",
+        "anchor": "_bmad-output/implementation-artifacts/spec-5-5-retire-legacy-packages-and-platform-routes.md:42",
+        "decision": "Split: labels + slip; retirement waits for G01–G06 and a new retirement-ready verdict"
+      }
+    }
+  },
+  "rootReferencePins": [
+    "160000 commit 7ef8166ef87e1365f86d1a1b3aaf0235545177d4\treferences/Hexalith.AI.Tools",
+    "160000 commit 9edf5240457ebd430c23592c47ddffb313c67481\treferences/Hexalith.Agents",
+    "160000 commit 65fd22f37b9fad64b595841923cdbe050563ab99\treferences/Hexalith.Builds",
+    "160000 commit 6a4ca07b18e9b58500dc79dfede1f308da36c828\treferences/Hexalith.ChatBot",
+    "160000 commit ab5e92faa3bab1fa43b8ecadd423432dfe652bb2\treferences/Hexalith.Commons",
+    "160000 commit 9dc5b2fb25d50784bb4a3f8bfa56a520d819869f\treferences/Hexalith.Conversations",
+    "160000 commit 97c02f7bf99a694528a2b15f0b3b0a6e5fb10e9d\treferences/Hexalith.EventStore",
+    "160000 commit fc302b2c81aa4e107c3ed58458f0b39d2ebe6d85\treferences/Hexalith.Folders",
+    "160000 commit 33e71036c04f2b99955376e9c90cbb1fc3a81e64\treferences/Hexalith.FrontComposer",
+    "160000 commit 9d87500eaf4c39ce0cec0cb3a03e5dd62c167106\treferences/Hexalith.Memories",
+    "160000 commit d4a71068bc1366ba67699aa9ec68cf24c0645c71\treferences/Hexalith.Parties",
+    "160000 commit 2dfd01d394733aeb871be56a0aab35ddb7b721c3\treferences/Hexalith.Platform",
+    "160000 commit 476cfccac3c5ba694a8e0ef11b1157728b9ec093\treferences/Hexalith.PolymorphicSerializations",
+    "160000 commit bf9f98969efa036fd60700c627e712b4375e654a\treferences/Hexalith.Projects",
+    "160000 commit 8aa6f169b3e27f0a831ad6425c4bc1278ca2c445\treferences/Hexalith.Tenants",
+    "160000 commit bbb91319ee209333d29f07e53bd9b5e4adc40267\treferences/Hexalith.Timesheets",
+    "160000 commit b2985d22b3bfbc6d86bcde28a5da722ae7f930c3\treferences/Hexalith.Works"
+  ]
+}

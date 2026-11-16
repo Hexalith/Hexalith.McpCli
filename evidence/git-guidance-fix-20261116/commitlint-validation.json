@@ -1,0 +1,121 @@
+[
+  {
+    "repository": "mcpcli",
+    "label": "story",
+    "message": "fix: reconcile migration claims and release notes\n",
+    "messageSha256": "be78acce9948cf99951a5658576b4bc11cd07778f22406eee1cbcbd33aa10bff",
+    "lockfileSha256": "4f7e5361965c7fea27c401ec3778cd40fb5a6cb1598f1a368d6d68893876f481",
+    "policySha256": "bcb1df5ab87bd02314bc12cf26b3963c7cc6f370d09c45ef0ae53321bef41e4f",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "stdin": "exact full message from temporary file",
+    "exitCode": 0
+  },
+  {
+    "repository": "mcpcli",
+    "label": "baseline",
+    "message": "chore: refresh shared CI adoption guidance\n",
+    "messageSha256": "9198921c45f70f7684c2dfee9dcfc2a06edda6bd5e226845215e8a0fbdccb990",
+    "lockfileSha256": "4f7e5361965c7fea27c401ec3778cd40fb5a6cb1598f1a368d6d68893876f481",
+    "policySha256": "bcb1df5ab87bd02314bc12cf26b3963c7cc6f370d09c45ef0ae53321bef41e4f",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "stdin": "exact full message from temporary file",
+    "exitCode": 0
+  },
+  {
+    "repository": "mcpcli",
+    "label": "existing",
+    "message": "fix: story 5.10\n\n",
+    "messageSha256": "2774985b72501ec5132c648c2c92b22c860f300d11408887789ec58b89234eb3",
+    "lockfileSha256": "4f7e5361965c7fea27c401ec3778cd40fb5a6cb1598f1a368d6d68893876f481",
+    "policySha256": "bcb1df5ab87bd02314bc12cf26b3963c7cc6f370d09c45ef0ae53321bef41e4f",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "stdin": "exact full message from temporary file",
+    "exitCode": 0
+  },
+  {
+    "repository": "platform",
+    "label": "2dfd01d394733aeb871be56a0aab35ddb7b721c3",
+    "message": "build: merge refs/remotes/origin/fix/tuple-pre-extension-ddb1c0b1-20261115 into main via /pushall\n\n",
+    "messageSha256": "59af8104335bc677a7e781afb33c23704ec3ba32031b844ef856f4ff4ce1adb2",
+    "lockfileSha256": "22107243bf63f7dbe71c3e42445b053cf594a85829e9d321ef6759c45086cd23",
+    "policySha256": "7d7a89db3a7e3a78567ce79408fad48f414e1d487e93a39990e82822f850666b",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "stdin": "exact full message from temporary file",
+    "exitCode": 0
+  },
+  {
+    "repository": "platform",
+    "label": "2106f5b15d11119bfabf09c81ac1fb06326a6822",
+    "message": "build: merge refs/remotes/origin/fix/tuple-pre-extension-d386e360-20261115 into main via /pushall\n\n",
+    "messageSha256": "d15a3c3008ed6d521a328543e6aad47edf0c9ef4f501c7320964f2b0fc292955",
+    "lockfileSha256": "22107243bf63f7dbe71c3e42445b053cf594a85829e9d321ef6759c45086cd23",
+    "policySha256": "7d7a89db3a7e3a78567ce79408fad48f414e1d487e93a39990e82822f850666b",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "stdin": "exact full message from temporary file",
+    "exitCode": 0
+  },
+  {
+    "repository": "platform",
+    "label": "3775df8ff7eeff21bf8347791396c89c1d8f6e69",
+    "message": "build: merge refs/remotes/origin/fix/tuple-legacy-ddb1c0b1-20261115 into main via /pushall\n\n# Conflicts:\n#\teng/tuple-ci-suites.json\n\n",
+    "messageSha256": "37ffaa744f02e069b27026bbeadf8d8412f8e898f5e0c5b309c319dfcde07345",
+    "lockfileSha256": "22107243bf63f7dbe71c3e42445b053cf594a85829e9d321ef6759c45086cd23",
+    "policySha256": "7d7a89db3a7e3a78567ce79408fad48f414e1d487e93a39990e82822f850666b",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "stdin": "exact full message from temporary file",
+    "exitCode": 0
+  },
+  {
+    "repository": "platform",
+    "label": "5c919636446102bf24bea765ec058a4de8e67491",
+    "message": "build: merge refs/remotes/origin/fix/tuple-legacy-d386e360-20261115 into main via /pushall\n\n# Conflicts:\n#\teng/tuple-ci-suites.json\n\n",
+    "messageSha256": "e8fcf7ea37aaed25817e357dd9e40f4e370420b67b2c9773436ed86f51da2ef5",
+    "lockfileSha256": "22107243bf63f7dbe71c3e42445b053cf594a85829e9d321ef6759c45086cd23",
+    "policySha256": "7d7a89db3a7e3a78567ce79408fad48f414e1d487e93a39990e82822f850666b",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "stdin": "exact full message from temporary file",
+    "exitCode": 0
+  }
+]

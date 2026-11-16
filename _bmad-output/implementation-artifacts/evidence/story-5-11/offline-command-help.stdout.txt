@@ -1,0 +1,7 @@
+{
+  "error": {
+    "code": "invalid_arguments",
+    "message": "Help must be requested without arguments or options.",
+    "argument": "arguments"
+  }
+}

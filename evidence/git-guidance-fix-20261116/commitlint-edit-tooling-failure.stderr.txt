@@ -1,0 +1,9 @@
+file:///tmp/hexalith-job.DdEOmwl3/mcpcli/node_modules/@commitlint/cli/lib/cli.js:142
+        throw err;
+        ^
+
+TypeError: Could not find git root from /tmp/hexalith-job.DdEOmwl3/mcpcli
+    at getEditCommit (file:///tmp/hexalith-job.DdEOmwl3/mcpcli/node_modules/@commitlint/read/lib/get-edit-commit.js:8:15)
+    at async main (file:///tmp/hexalith-job.DdEOmwl3/mcpcli/node_modules/@commitlint/cli/lib/cli.js:211:19)
+
+Node.js v26.4.0

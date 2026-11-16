@@ -1,0 +1,14 @@
+--- a/_bmad-output/planning-artifacts/architecture.md
++++ b/_bmad-output/planning-artifacts/architecture.md
+@@ -10,7 +10,10 @@
+ 
+ # Hexalith.FrontComposer Architecture Planning Source
+ 
+-**Approved McpCli course correction (2026-09-27):** `Hexalith.McpCli` owns the target Hexalith CLI/MCP presentation. FrontComposer retains its UI and descriptor semantics; `Hexalith.FrontComposer.Cli` and `.Mcp`, including inspect/migrate, resources, skill corpus, and lifecycle calls, are obsolete migration sources. Their replacement or approved withdrawal needs a generic McpCli contract and owner-approved parity evidence before package removal. Descriptions below of proprietary transports are compatibility and historical requirements.
++> **Current McpCli disposition (Story 5.11 candidate):** Generated command tools, projection/skill resources and lifecycle subscriptions below are historical migration sources. Eligible business data requires an owner-decorated Gateway Query; K07 documentation and K08 synthetic lifecycle are withdrawn. The K13 inspect/migrate compiler is retained local tooling under merged AI.Tools plan 1.2.0, never retired or migrated to generic diagnostics. FK01–FK04 and G4 still couple host and Projects plug-in retirement.
++
++
++**Approved McpCli course correction (2026-09-27):** `Hexalith.McpCli` owns the target Hexalith CLI/MCP presentation. FrontComposer retains its UI and descriptor semantics; `Hexalith.FrontComposer.Cli` is retained K13 local compiler tooling; `.Mcp`, including resources, skill corpus and lifecycle calls, remains a historical migration source. AD-23 disposition and independent owner evidence govern MCP package removal; the compiler stays exempt locally. Descriptions below of proprietary transports are compatibility and historical requirements.
+ 
+ 
+ This document makes the architecture discoverable to implementation-readiness workflows. The detailed brownfield architecture source remains `_bmad-output/project-docs/architecture.md`; this file is the planning artifact that readiness checks should load.

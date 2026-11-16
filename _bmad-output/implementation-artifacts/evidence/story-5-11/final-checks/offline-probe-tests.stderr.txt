@@ -1,0 +1,8 @@
+test_captured_published_discovery_and_complete_unknown_streams (test_offline_cli.OfflineCliTests.test_captured_published_discovery_and_complete_unknown_streams) ... ok
+test_exact_tool_names_are_required (test_offline_cli.OfflineCliTests.test_exact_tool_names_are_required) ... ok
+test_partial_line_obeys_absolute_deadline_and_bounded_cleanup (test_offline_cli.OfflineCliTests.test_partial_line_obeys_absolute_deadline_and_bounded_cleanup) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.410s
+
+OK

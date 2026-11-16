@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "path": "_bmad-output/planning-artifacts/architecture.md",
+  "edits": [
+    {
+      "old": "and admin operations only through Admin Server over the public AD-21 edge, in both cases",
+      "new": "while Admin remains confidential UI under adopted McpCli AD-23, always"
+    },
+    {
+      "old": "until an approved generic McpCli administration contract and transport decision preserves those checks",
+      "new": "through McpCli; confidential UI coverage and independent safety evidence preserve those checks"
+    },
+    {
+      "old": "McpCli generic administration contract and transport decision (AD-35)",
+      "new": "Adopted AD-23 confidential UI/withdrawal reconciliation (AD-35)"
+    },
+    {
+      "old": "# Architecture Spine - eventstore Phase 4 Implementation Readiness Recovery\n",
+      "new": "# Architecture Spine - eventstore Phase 4 Implementation Readiness Recovery\n\n> **Current McpCli disposition (Story 5.11 candidate):** Remote Admin A1–A4 are confidential-UI-only under adopted AD-23; local Admin A5–A8 are withdrawn from the public migration target. No generic Admin contract or transport is required or admitted. EventStore and platform/operator maintainers retain Admin G1–G6, G4 route/scope, token/URL safety fixes, human authorization, bounded behavior, audit and persisted-effect proof before removal.\n\n"
+    }
+  ]
+}

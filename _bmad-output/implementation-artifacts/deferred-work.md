@@ -142,6 +142,7 @@
   evidence: Medium; the unchanged vector schema accepts keys and sizes that ExtensionValidator rejects, including path-like keys, count, per-value, injection, and total UTF-8 limits. This behavior predates the remediation and needs a separate compatibility change.
 - source_spec: `_bmad-output/implementation-artifacts/spec-remediate-epic-1-conformance-gaps.md`
   summary: Migration planning artifacts disagree on inventory dispositions, v1 scope, retirement claims, and the no-new-proprietary-surface rule.
+  audit: Story 5.11 evidence/story-5-11/deferral-dispositions.md records the prepared reconciliation and all Epic 5 owners/gates; exact-byte owner acceptance and upstream integration remain pending. This row is not closed.
   evidence: Medium; the concurrent planning-history advance left AD-21 and Story 4.5 on include/exclude-only semantics, conflicts over EventStore Admin timing and temporary exceptions, and stale PRD wording and metrics. Reconcile the architecture, PRD, epics, and authoritative agent baseline together.
 
 ## Deferred from: code review of spec-2-1-inspect-effective-session-settings.md (2026-09-28)

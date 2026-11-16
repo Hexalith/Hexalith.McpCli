@@ -1,0 +1,27 @@
+--- a/README.md
++++ b/README.md
+@@ -4,5 +4,22 @@
+ 
+ These are versioned compatibility binaries. They are not retired and stay outside every Hexalith.Platform composition.
+ 
+-- `Hexalith.Projects.Cli` (CLI): removal gate "Projects inventory gates" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS08; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Projects successor G1–G6 retain publication, live acceptance, K03/AD-20 conformity, 6.7 cutover and K12 confidential UI evidence gates. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.
+-- `Hexalith.Projects.Mcp` (FrontComposer MCP plug-in library): removal gate "G4: retire together with the FrontComposer host" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS09; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). The Projects plug-in and the FrontComposer host (`Hexalith.FrontComposer.Mcp`) retire together. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Coupled gate: FK01–FK04 consumers move first; K12 Web/Chatbot UI evidence, Projects 6.7 cutover, DW-82 publication and live/release/rollback acceptance remain required; K13 compiler is retained independently. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.
++- `Hexalith.Projects.Cli` (CLI): removal gate "Projects inventory gates" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS08; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Projects successor G1–G6 retain publication, live acceptance, K03/AD-20 conformity, 6.7 cutover and K12 confidential UI evidence gates. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.
++- `Hexalith.Projects.Mcp` (FrontComposer MCP plug-in library): removal gate "G4: retire together with the FrontComposer host" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS09; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). The Projects plug-in and the FrontComposer host (`Hexalith.FrontComposer.Mcp`) retire together. Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Coupled gate: FK01–FK04 consumers move first; K12 Web/Chatbot UI evidence, Projects 6.7 cutover, DW-82 publication and live/release/rollback acceptance remain required; K13 compiler is retained independently. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.
++
++## Shared McpCli access (reconciliation candidate)
++
++Projects source declarations and local McpCli candidate tests establish neither published package availability nor enrollment in the shipped McpCli cohort. The four source reads projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments remain subject to publication, independent Gateway authorization and live acceptance. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.
++
++Install the published shared tool with `dotnet tool install --global Hexalith.McpCli`.
++Run `hexalith modules`, `hexalith operations tenants` or
++`hexalith operations parties`, and `hexalith describe tenants.list-tenants`
++for offline discovery of the installed cohort. Start the MCP server with
++`hexalith mcp --transport stdio`; it offers five generic tools, never a tool or
++CLI subcommand per operation. Configure a McpCli profile with the documented
++`hexalith config --help` flow before authorized `query` or `send` submission.
++Do not copy the Admin `profiles.json`. Offline Catalog discovery proves neither
++Gateway authorization, live availability nor retirement. A missing operation
++fails safely; confidential human actions hand off to the owning UI, never to
++an alternative module endpoint. No Gateway call is needed for this setup check.
++

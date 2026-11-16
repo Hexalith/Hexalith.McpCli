@@ -1,0 +1,253 @@
+--- a/hexalith-mcpcli-migration-instructions.md
++++ b/hexalith-mcpcli-migration-instructions.md
+@@ -1,137 +1,135 @@
+ ---
+-plan_version: '1.2.0'
++plan_version: '1.3.0'
+ inventory_repository: 'https://github.com/Hexalith/Hexalith.McpCli'
+-inventory_revision: 'c694bff5a29073bee6848b88c142f7da23efcf85'
++inventory_revision: null
++status: candidate-not-publishable
+ ---
+ 
+ # Hexalith MCP and CLI migration plan
+ 
+-Version **1.2.0** indexes the retained proprietary migration sources under the
+-[Hexalith MCP and CLI ownership rule](hexalith-llm-instructions.md#hexalith-mcp-and-cli-ownership).
+-`Hexalith.McpCli` owns the target Hexalith MCP server and CLI for domain,
+-platform and operator capabilities. Do not create a new proprietary per-module
+-MCP server, MCP plug-in or CLI. Declare gateway-ready operations in decorated
+-module Contracts and enroll their approved packages in McpCli. Other capability
+-classes require a separately approved generic contract and transport decision.
+-External developer CLIs such as Aspire, Dapr and `dotnet` remain outside this
+-policy, as does Hexalith.Builds build and workspace tooling that never invokes
+-module operations, currently `hexalith-module` and `hexalith-evidence`.
++Version **1.3.0 candidate**, prepared by McpCli Story 5.11. This file is not the
++authoritative plan until fresh exact-byte approval, Story 5.10 delivery, immutable
++inventory publication and authoritative AI.Tools main integration are verified.
++`inventory_revision: null` explicitly records the missing publication binding;
++replace it with the verified full McpCli commit and render immutable `/blob/<sha>/`
++links before approval of final plan bytes. Never publish this candidate as-is.
+ 
+-## Named local-tooling exemptions (1.2.0 amendment)
++## Ownership and capability outcomes
+ 
+-The ownership rule exempts these two existing, narrowly named surfaces from
+-McpCli migration. This amendment preserves `inventory_revision` and the six
+-historical inventory links below; it neither adds nor re-pins an indexed
+-inventory, changes any inventory bytes or dispositions, nor claims parity.
+-McpCli Story 5.2 records exact-byte owner approval and the upstream delivery
+-state. Until this amendment is approved and merged to authoritative AI.Tools
+-`main`, both surfaces stay frozen in the proprietary-surface census. Updating
+-that census requires its own versioned owner-approved amendment.
++McpCli owns one generic CLI and stdio MCP server for agent-eligible decorated
++Gateway Commands and Queries. Do not add proprietary module MCP servers,
++plug-ins or CLIs. Both heads are one public agent surface. Payload, task, actor,
++delegation and confirm claims cannot elevate authority. Unsupported transports
++fail safely; confidential human actions hand off to their owning UI.
+ 
+-| Exempt surface | Retained local scope | Limits and remaining owner evidence |
+-| --- | --- | --- |
+-| `Hexalith.FrontComposer.Cli` | `inspect` and `migrate`; local compiler/developer tooling (technical inventory FC01/FC02 and PS03) | Keep explicit build choice and no-build freshness limits, safe canonical target/hash checks, partial-write reporting, import-coverage warnings, parser and output privacy limits. No module operation or agent-facing server, plug-in, Gateway tool or generated McpCli subcommand is admitted. |
+-| Memories `tools/MigrateEmbeddingVectors` | Owner-held local operator tooling only: `--dry-run`, `--live`, `--rollback`, `--abort` (technical inventory PS14) | Live/rollback/abort remain tenant-scoped, consent-requiring privileged migration modes; `--yes` grants no public-agent authority. Story 5.10 still inventories every mode and its authorization, state transition, audit and rollback behavior. No mode is exposed through either McpCli head. |
++Adopted AD-23 keeps Admin A1–A4 and module K12 confidential-UI-only, Admin
++A5–A8 plus K07 documentation and K08 synthetic lifecycle withdrawn, K09
++stream/file and K10 per-user HTTP deferred. Eligible K01–K06 need exact decorated
++Contracts, handlers, admission and independent semantic proof. A business status
++Query may observe effects; acceptance never establishes completion. These
++outcomes need no invented Admin, resource, diagnostic or lifecycle transport.
+ 
+-A later inventory amendment records `withdraw` from migration scope for these
+-exempt identities; the tools remain supported locally and are never counted as
+-retired. No execution, enrollment, deletion or retirement authority follows.
+-Their exemptions are not templates or permission for new module CLIs. Existing
+-safety, continuity, custody, authorization and source/output privacy obligations
+-remain with the FrontComposer and Memories owning maintainers respectively.
+-This classification introduces no new McpCli transport or capability beyond
+-v1 decorated Commands and Queries.
++External Aspire, Dapr and dotnet CLIs and Builds hexalith-module/hexalith-evidence
++remain outside module-operation migration. K13 FrontComposer inspect/migrate and
++K14 Memories MigrateEmbeddingVectors (--dry-run, --live, --rollback, --abort)
++remain the named local exemptions adopted by plan 1.2.0. They stay supported
++locally, never agent-facing, never counted retired, and keep their independent
++freshness/path/hash/partial-write/privacy and custody/tenant/credential/consent/
++no-write dry-run/denial/rollback/abort/audit obligations. No new CLI is exempt.
+ 
+-## Frozen compatibility implementations
++## Immutable inventory histories
+ 
+-Limit every existing proprietary implementation to safety and continuity fixes.
+-They remain compatibility surfaces and migration sources, never templates for
+-new modules. Freezing development does not withdraw capabilities or authorize
+-removal. The following source-pinned inventories list operations and variants;
+-this index does not duplicate their tables or change their dispositions.
++The complete eight-family index below preserves every predecessor. Paths are
++inside the McpCli inventory repository; hashes bind the prepared bytes. Final
++publication must bind every path and its approval receipt to one full immutable
++`inventory_revision`, never a moving branch. Earlier session-scope authority and
++later owning-maintainer approval remain distinct. Receipt decisions determine
++effective approval; an approved inventory never establishes delivery or retirement.
+ 
+-| Retained implementation | Inventory 1.0.0 and recorded scope | Outstanding migration or retirement condition |
+-| --- | --- | --- |
+-| `Hexalith.Parties.Mcp` | [Parties](https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md): five MCP tools, six behavioral variants; no proprietary CLI was found at the inventory pin. | Seven intended target operations are `replace / include`; four adjacent scope families are `defer / exclude`. Scope approval alone establishes neither readiness nor retirement. Preserve privacy, identifier, authorization and behavior gates. |
+-| `Hexalith.Folders.Mcp`, `Hexalith.Folders.Cli` | [Folders](https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md): 49 tools, two MCP resources and 42 frozen CLI leaves. | All current rows remain `defer / exclude`; the 48 proposed targets are roadmap candidates. Preserve the existing file, resource, provider and authorization behavior until separately approved replacements pass. |
+-| `Hexalith.Projects.Mcp` plug-in, `Hexalith.Projects.Cli` | [Projects](https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md): 11 resources, five maintenance tools and 18 frozen CLI spellings. | All rows remain `defer / exclude`. Slim decorated Contracts, exact read routes and authorization/behavior evidence remain prerequisites. Coordinate retirement with the FrontComposer host. |
+-| `Hexalith.FrontComposer.Mcp` host (compiler CLI separately exempt above) | [FrontComposer](https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md): one configurable-name lifecycle tool, 13 framework documentation resources, two local compiler CLI leaves, plus manifest-defined families. | All rows remain `defer / exclude`. Projects operations are counted in their companion inventory. Inventory other manifest consumers and approve generic lifecycle/resource treatment before the shared host and Projects plug-in retire together. The compiler CLI remains retained local tooling under the named exemption above. |
+-| `Hexalith.ChatBot.Mcp`, `Hexalith.ChatBot.Cli` | [ChatBot](https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md): 12 MCP tools and 12 frozen CLI leaves. | All rows remain `defer / exclude`. Preserve governed workflows, admission, approval, identity and behavior; plain Commands and REST DTOs do not establish decorated Gateway readiness. |
+-| `Hexalith.Memories.Mcp`, `Hexalith.Memories.Cli` | [Memories](https://github.com/Hexalith/Hexalith.McpCli/blob/c694bff5a29073bee6848b88c142f7da23efcf85/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md): four HTTP MCP tools, 14 implemented frozen CLI leaves and four registered stubs. | All rows remain `defer / exclude`. The Legacy Server cannot retire before the later HTTP release supports forwarded per-user identity; exact tenant/user authorization, administrative scope, semantic behavior and release/rollback evidence must also pass. |
+-| `Hexalith.EventStore.Admin.Mcp`, `Hexalith.EventStore.Admin.Cli` | Successor administration inventory outstanding; no approved operation mapping or completeness claim is supplied by this index. | Retain the existing administration surfaces. The EventStore and platform/operator owners must inventory every operation and approve its replacement, withdrawal or deferral, including destructive and confirmation-required behavior, before any cutover. |
++| Family | Version | McpCli path | SHA-256 | Authority / receipt |
++| --- | --- | --- | --- | --- |
++| parties | 1.0.0 | `_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.0.0/parties-migration-inventory-v1.md` | `c4db93be3422adff86568225d3dfed129b5c546bd4306c9ff3d0bbf0d0441a8f` | scope-approved-only; session-scope-only: `_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.0.0/parties-migration-inventory-v1.md` |
++| parties | 1.1.0 | `_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.1.0/parties-migration-inventory-v1.md` | `8fc4078842d141151c521f0288f1eb7f9b984505c7b4a1458fa40de8dba4c51e` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-3/approval/1.1.0/approval.json` |
++| parties | 1.2.0 | `_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md` | `2f359904fe87fab8325b6fc759676c1fc792a27e0857d47631d8eeec8b420a28` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-3/approval/amendment-1.2.0.json` |
++| eventstore-admin | 1.0.0 | `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/eventstore-admin-migration-inventory-v1.md` | `26ac7486cba8c52a0496147c6b90bda953dda31fd644ac199c433e49b834c90e` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
++| eventstore-admin | 1.0.1 | `_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md` | `7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
++| eventstore-admin | 1.0.2 | `_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md` | `ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json` |
++| eventstore-admin | 1.0.3 | `_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md` | `8b5d941ea16a47c2a07dff9ad8e4f5ee09f2801baf90b11bf105957c0c1340c5` | candidate-pending; pending: `_bmad-output/implementation-artifacts/evidence/story-5-11/approval.json` |
++| technical-tools | 1.0.0 | `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/technical-tools-migration-inventory-v1.md` | `6a7d325f6927b8b0f6692c05b71b54728bc1281b871dc073712586d172d41f58` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
++| technical-tools | 1.0.1 | `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.1/technical-tools-migration-inventory-v1.md` | `0472f2c4ba12049c89e582ed5162279f989160d62b4499bc766efde8e85b93ca` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
++| technical-tools | 1.0.2 | `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md` | `8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
++| technical-tools | 1.0.3 | `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md` | `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json` |
++| technical-tools | 1.0.4 | `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md` | `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693` | candidate-pending; pending: `_bmad-output/implementation-artifacts/evidence/story-5-11/approval.json` |
++| folders | 1.0.0 | `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md` | `57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b` | scope-approved-only; session-scope-only: `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md` |
++| folders | 1.1.0 | `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md` | `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json` |
++| projects | 1.0.0 | `_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md` | `252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f` | scope-approved-only; session-scope-only: `_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md` |
++| projects | 2.0.0 | `_bmad-output/implementation-artifacts/projects-migration-inventory-v2.md` | `011d1d444a9f32565f397cbbdca81962529d43920ac69b7508df4224ffbf24d4` | scope-approved-only; session-scope-only: `_bmad-output/implementation-artifacts/projects-migration-inventory-v2.md` |
++| projects | 2.1.0 | `_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md` | `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-9/approval.json` |
++| frontcomposer | 1.0.0 | `_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md` | `cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9` | scope-approved-only; session-scope-only: `_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md` |
++| frontcomposer | 1.1.0 | `_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md` | `60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-9/approval.json` |
++| chatbot | 1.0.0 | `_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md` | `3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94` | scope-approved-only; session-scope-only: `_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md` |
++| chatbot | 1.1.0 | `_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md` | `3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json` |
++| memories | 1.0.0 | `_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md` | `489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597` | scope-approved-only; session-scope-only: `_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md` |
++| memories | 1.1.0 | `_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md` | `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json` |
+ 
+-The inventory links bind exact McpCli revision
+-`c694bff5a29073bee6848b88c142f7da23efcf85`. Each inventory records its own full source
+-revision, approval reference, security classes, behavior variants, unresolved
+-gaps and owning roles. These are immutable inventory snapshots rather than
+-links to a moving branch. A later source change that adds, removes or alters an
+-inventoried tool, resource, CLI operation or behavior variant, or a newly
+-discovered surface, requires a versioned inventory update; a safety or
+-continuity fix that leaves them unchanged does not. Absence from this index
+-never authorizes a new proprietary implementation or deletion of an existing
+-one. Publish every change to this plan under a new `plan_version`, and move
+-`inventory_revision` whenever an indexed inventory is re-pinned or added.
++## Ongoing change control
+ 
+-## Approval limits
++A source change that adds, removes or alters an inventoried tool, resource,
++CLI operation or behavior variant, or a newly discovered surface, requires a
++versioned inventory amendment and its owning-maintainer approval. Safety and
++continuity fixes that leave those identities and behaviors unchanged do not.
++Publish every change to this plan under a new `plan_version`. Move
++`inventory_revision` whenever an indexed inventory is added or re-pinned.
++Preserve every approved predecessor and its recorded approval limits.
+ 
+-The six inventories record the requesting user's session scope approvals. They
+-assert no separate external owning-maintainer sign-off. Preserve those limits:
+-`replace / include` records intended scope, not proof of published Contracts,
+-Gateway readiness, authorization, behavior parity or retirement. `defer / exclude`
+-retains the compatibility capability. No inventory approves withdrawal or early
+-legacy removal. Missing external owner approval remains an open gate for an
+-owner-approved completeness or retirement claim.
++## Independent delivery and removal gates
+ 
+-A future inventory revision must identify every tool, resource, CLI operation
+-and supported variant with `replace`, `withdraw` or `defer`, a rationale,
+-security class, exact replacement contract or unresolved gap, and the owning
+-maintainer's approval reference. Gateway-ready rows name the canonical
+-operation and decorated contract type; `include` requires `replace`, and
+-`exclude` requires an approved `withdraw` or `defer`. An included read needs
+-its decorated Contracts Query and exact Gateway route. Inventories remain
+-migration/test documentation, never runtime configuration or authority to
+-expose a deferred operation.
++All PS01–PS14 remain present; no evidenced retirement is claimed. PS03/PS14 are
++retained exemptions. The Admin/technical documentary successors have fresh
++receipt-based status; Story 5.7 approval of their predecessors remains factual.
++ChatBot/Memories 1.1.0 approval and incomplete Story 5.10 delivery are distinct.
++No missing version, role, hash, gate, publication or upstream binding permits a
++success claim. Preserve the proprietary-surface census and independent release gates.
+ 
+-## Successor administration and non-gateway scope
++Parties retirement remains blocked by G01–G06 and the separate restricted/
++destructive classification versus existing exposure conflict. Parties and McpCli
++owners must approve the exact successor and both-head exposure/direct/chained
++denial evidence with zero unauthorized effects; this plan changes no exposure.
++Folders owners retain the K12 restricted/mixed-operation successor and C13 hold.
++Projects owners retain Payload paging versus AD-20, publication/live acceptance
++and 6.7 cutover gates. FrontComposer host and Projects plug-in retire together
++only after FK01–FK04 and every host consumer are accounted for. Memories needs
++forwarded per-user HTTP authority plus tenant/user/administrative authorization,
++semantic, release and rollback proof. ChatBot retains governed workflow,
++approval, identity, authorization and behavior gates; human decisions stay UI.
++Admin retains G1–G6, confidential UI coverage and G4 route/scope/token/URL fixes,
++audit and persisted-effect evidence. AM01's backup backend remains deferred.
+ 
+-The EventStore Admin successor inventory must cover both administration heads
+-and identify remaining proprietary technical/domain CLI or MCP packages and
+-their owning maintainers. Account separately for infrastructure administration,
+-operator diagnostics, resource/skill-resource reads, lifecycle calls and
+-FrontComposer `inspect`/`migrate` compiler behavior. The existing FrontComposer
+-inventory remains authoritative for its recorded rows; it is not approval of
+-an administration replacement or all other host consumers.
++Every operation and variant retains replace, withdraw or defer, rationale,
++security class, exact replacement or gap, and explicit owning-role approval.
++Include requires replace; exclude requires approved withdraw or defer and never
++means deletion. Inventory is migration documentation, never runtime exposure
++configuration. Uninventoried decorated Operations and version differences are
++reported; duplicate/stale vectors and uncovered Operation Shapes fail. Retire
++only after the owner-approved disposition and selected-environment authorization,
++behavior, conformance, release and rollback evidence pass independently.
+ 
+-For each non-gateway capability, approve the generic McpCli declaration,
+-versioning, discovery, execution, errors, authorization, audit, transport and
+-conformance decision before migration. Call out destructive operations and
+-human-confirmation requirements explicitly; an inventory row alone grants no
+-execution permission. Preserve the existing public-client denial of UI-only and
+-human-confirmation-required operations. Erasure, key rotation, file/stream
+-transport and unsupported variants retain their inventory gaps and owner gates.
+-Keep the v1 gateway and dependency boundaries until a separate decision changes
+-them; do not import module implementations or add module-specific adapters.
++The owner chose “Labels + slip”; SM-3 is pending-not-met with deadline 2027-02-05,
++three months after first paired release 2.0.1 on 2026-11-05. Assessment 2026-11-16:
++deadline future, no measured miss. Reassess at completion; the product owner
++records a reason if no Legacy Server is deleted by the deadline. Every Epic 5
++deferral retains its sourced owner/gate; already tracked is never acceptance.
+ 
+-## Retirement and release prerequisites
++## Integration and release prerequisite
+ 
+-Retire a surface only after its owning maintainer approves an exact replacement
+-or explicit withdrawal and the selected-environment authorization, behavior,
+-conformance, release and rollback evidence passes. Preserve existing authority
+-and behavior while deferred operations or missing owner approvals remain.
+-FrontComposer and Projects retire together after other host consumers are
+-accounted for. Forwarded per-user identity in the later HTTP release is a
+-necessary, insufficient prerequisite for Memories retirement. EventStore Admin
+-also waits for its approved generic administration contract and destructive
+-operation safety evidence. This plan authorizes no retirement.
+-
+-The instruction prerequisite for paired McpCli publication is complete only when
+-the finished ownership rule and this plan are integrated into authoritative
+-AI.Tools `main`, the root-declared AI.Tools baseline reference contains that
+-revision, and local `AGENTS.md`, `CLAUDE.md` and `.github/copilot-instructions.md`
+-are byte-identical with a passing `scripts/check-agent-instructions-sync.sh`.
+-Record full integrated revisions, ancestry/containment, hashes and exact check
+-results in the consuming repository. A local candidate, open PR or baseline
+-missing the integrated change leaves story completion and paired-release
+-readiness blocked. This instruction prerequisite leaves dependency, inventory,
+-loopback, live, package and other release gates independent; it implements no
+-paired publication. The Abstractions-only bootstrap remains exempt.
++Publish approved inventory bytes first under an explicitly authorized McpCli
++commit; verify published bytes and all approval roles. Deliver rebased owner
++README/active-topic patches with separate authorization and mandatory owner
++commitlint/Builds checks. Missing .github/hexalith-ci.json remains a CiCd blocker,
++never a bypass. Bind final plan bytes and full inventory revision, integrate into
++authoritative AI.Tools main, verify main containment, then change only McpCli's
++AI.Tools gitlink and pass byte-identical local instruction synchronization.
++Open PRs, local candidates and missing upstream integrations leave completion
++blocked. Dependency, census, enrollment, loopback, live, package and post-2.0.1
++output-contract publication gates remain independent. No release, binary removal,
++operation execution, package publication or ecosystem completion is authorized.

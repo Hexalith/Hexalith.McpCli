@@ -1,0 +1,21 @@
+--- a/_bmad-output/planning-artifacts/architecture.md
++++ b/_bmad-output/planning-artifacts/architecture.md
+@@ -63,6 +63,9 @@
+ 
+ # Architecture Decision Document
+ 
++> **Current McpCli disposition (Story 5.11 candidate):** The FrontComposer inspect/migrate compiler is retained K13 local tooling under merged AI.Tools plan 1.2.0. It requires no generic McpCli migration/diagnostic transport and is never counted retired.
++
++
+ **Approved McpCli course correction (2026-09-27):** `Hexalith.McpCli` is the target Hexalith-owned CLI/MCP surface for Tenants operations that pass contract enrollment and authorization. Any proprietary module CLI, MCP host, plug-in, or planned adapter described below is an obsolete migration source or historical design, not a new target. The module retains its domain, UI, and security semantics; replacement or approved withdrawal and parity evidence precede retirement. External development CLIs are unaffected.
+ 
+ 
+@@ -341,7 +344,7 @@
+    and would re-implement shared shell scaffolding inside Tenants.
+ 
+ Verified ecosystem facts:
+-- `Hexalith.FrontComposer.Cli` (`frontcomposer` dotnet tool) is an obsolete compatibility **inspect/migrate** tool; `Hexalith.McpCli` is the target Hexalith-owned CLI after generic migration/diagnostic contracts are approved,
++- `Hexalith.FrontComposer.Cli` (`frontcomposer` dotnet tool) is retained K13 local compiler **inspect/migrate** tooling under merged AI.Tools plan 1.2.0; no generic migration/diagnostic transport or retirement is implied,
+   **not a project scaffolder** — the host is created manually from the reference pattern.
+ - Reference hosts `Hexalith.EventStore.Admin.UI` and `Hexalith.EventStore.Sample.BlazorUI` use
+   **Blazor Server / `InteractiveServer`** (no separate WASM `.Client` project).

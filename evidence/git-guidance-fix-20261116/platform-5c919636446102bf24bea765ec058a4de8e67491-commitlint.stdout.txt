@@ -1,0 +1,6 @@
+⧗   --- input ---
+build: merge refs/remotes/origin/fix/tuple-legacy-d386e360-20261115 into main via /pushall
+
+# Conflicts:
+#	eng/tuple-ci-suites.json
+✔   found 0 problems, 0 warnings

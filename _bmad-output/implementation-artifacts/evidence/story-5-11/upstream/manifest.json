@@ -1,0 +1,790 @@
+{
+  "schemaVersion": "1.0.0",
+  "state": "candidate",
+  "owners": [
+    {
+      "name": "eventstore",
+      "ownerCheckout": "/home/administrator/projects/hexalith/eventstore",
+      "repository": "https://github.com/Hexalith/Hexalith.EventStore.git",
+      "baseRevision": "f85419d501f279e9a813435aa73538185ad26ada",
+      "observedOriginMain": "f85419d501f279e9a813435aa73538185ad26ada",
+      "observedOwnerHead": "f85419d501f279e9a813435aa73538185ad26ada",
+      "mainVerification": "local refs only; fresh remote verification required before delivery",
+      "files": [
+        {
+          "path": "README.md",
+          "format": "unified-diff",
+          "sourceSha256": "31d1cbf7e617cdeb38dcca67eada11d5c1d592f7ede9b9813000c26a4bd5e497",
+          "beforeSha256": "31d1cbf7e617cdeb38dcca67eada11d5c1d592f7ede9b9813000c26a4bd5e497",
+          "afterSha256": "b3c8b072bdad55537b34ac0448128cc36310ac1a31b81db1185b5cceff87bcb2",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/eventstore/README-0.patch",
+            "sha256": "d1da3a4b5f2e6468716b554e0b3d33565fbedf471405be793369930add659e47"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture.md",
+          "format": "literal-replacements",
+          "sourceSha256": "c42f49555b26364177d2ac596b3c4c81a18ac16b2640a5c750424eceebbf99c0",
+          "beforeSha256": "c42f49555b26364177d2ac596b3c4c81a18ac16b2640a5c750424eceebbf99c0",
+          "afterSha256": "790538837b4a00fd1346837f8d2494d8844856e6bcda75370a9e7eee0357baa1",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/eventstore/architecture-1.patch.json",
+            "sha256": "5b491932768efccf0ded72475cdd5eb2488fa29b878ee2d475ff7607e7b63929"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/prd.md",
+          "format": "unified-diff",
+          "sourceSha256": "04965ddc3e648e41b99cf553895deb7d2eb83ac6c1057e9a7ce80987671d0a78",
+          "beforeSha256": "04965ddc3e648e41b99cf553895deb7d2eb83ac6c1057e9a7ce80987671d0a78",
+          "afterSha256": "0834f138fe5fa299bab7415a762dd185d52e29d5abf982cb264d0e8c91a2df09",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/eventstore/prd-2.patch",
+            "sha256": "0e3c8b6527b84e12a6d5d00bea1d99c71f34c27235a84e5cc380cd565ecbe538"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/ux-designs/ux-eventstore-2026-07-05/EXPERIENCE.md",
+          "format": "unified-diff",
+          "sourceSha256": "c584c954a7769bb806c59d89ae87696786cd922ebb5867541694959fa4eed5f2",
+          "beforeSha256": "c584c954a7769bb806c59d89ae87696786cd922ebb5867541694959fa4eed5f2",
+          "afterSha256": "98af78c9f26ef666cb4848df15616522bb3e58867a824619bbae176e6b07e3a2",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/eventstore/EXPERIENCE-3.patch",
+            "sha256": "762331884b58a37d42cea82ddba2e6d893552269cdbd7356774cd69957b73965"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "d46133d3b08b30a1b6b36ea4465c90e045a2a264be518a9e7fa1a73ba8afa92b"
+        },
+        {
+          "path": ".editorconfig",
+          "sha256": "c9a43ea4f0ecac612713588347871ab1d91a15c145a705f328220bdf7e1db09d"
+        },
+        {
+          "path": ".gitattributes",
+          "sha256": "21e89425541c773c841d2ff924cbf446e00844f6fc15dd55da98e0c1044b4abb"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "0010f094df7f40bf9cecaaea4d47493737f9e9409d914c206d0396a64a406b81"
+        },
+        {
+          "path": "package.json",
+          "sha256": "02cdabb684e81564eda8dfa6ea6ab9b3b8011a3ce9ecf07d793c7a5209afb84b"
+        },
+        {
+          "path": ".gitmodules",
+          "sha256": "b449c9b1f825b01d56f8273948765b20229c1faecb2f9ae358490dcf5a6828d4"
+        }
+      ],
+      "prerequisites": [],
+      "integration": null
+    },
+    {
+      "name": "frontcomposer",
+      "ownerCheckout": "/home/administrator/projects/hexalith/frontcomposer",
+      "repository": "https://github.com/Hexalith/Hexalith.FrontComposer.git",
+      "baseRevision": "bc9dbedc6141b750ca92f01b40ac840dc2066704",
+      "observedOriginMain": "bc9dbedc6141b750ca92f01b40ac840dc2066704",
+      "observedOwnerHead": "eddca353d566554af527064925798ec827e07c36",
+      "mainVerification": "local refs only; fresh remote verification required before delivery",
+      "files": [
+        {
+          "path": "README.md",
+          "format": "unified-diff",
+          "sourceSha256": "aeb42a8b3c3e140b1c682835f267e44c8101952d4d1d617a401a6270142ed560",
+          "beforeSha256": "aeb42a8b3c3e140b1c682835f267e44c8101952d4d1d617a401a6270142ed560",
+          "afterSha256": "e26b1716ec301452fbdf0117a63923f008aa41421b05d5a6ef2c8dc35bdb9009",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/README-0.patch",
+            "sha256": "3899851c52bb46b9ca1fc0e40e9f858d0f2d9e9541542f96c53f3a9d7d009268"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/prd.md",
+          "format": "unified-diff",
+          "sourceSha256": "8514d629d0e07a48a33615e355261cd2966fa3c0e666f6d296dbdaa8219dbc02",
+          "beforeSha256": "8514d629d0e07a48a33615e355261cd2966fa3c0e666f6d296dbdaa8219dbc02",
+          "afterSha256": "3678771d31ba1de96cc7480faa4b3083d21496a2c35a52be529a8478ca9f1824",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/prd-1.patch",
+            "sha256": "6c6c0b27ffad0e42620febfcc8926d86c7245b4bdc8bc569507e4a0894f68532"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture.md",
+          "format": "unified-diff",
+          "sourceSha256": "99762d05479c4883d3a56bd04b1f91220e48f4292c2ef188a7402dcecd856b4b",
+          "beforeSha256": "99762d05479c4883d3a56bd04b1f91220e48f4292c2ef188a7402dcecd856b4b",
+          "afterSha256": "a7f9bad11fec1999e26e4b81ce8ad8b92f9030319be926ab2b9ace7da5078e05",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/architecture-2.patch",
+            "sha256": "d7c03fd85c7635acab627766c5f1c967582c4cd3a0de8f1e020071ca1a45fbba"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture/architecture-gov-1-2026-07-19/ARCHITECTURE-SPINE.md",
+          "format": "unified-diff",
+          "sourceSha256": "9165dcac04b353a787659c7f1192e40b30e4b66f17e698d43c67e234f518053d",
+          "beforeSha256": "9165dcac04b353a787659c7f1192e40b30e4b66f17e698d43c67e234f518053d",
+          "afterSha256": "1361bbb7bc3cf7a5656cbd758461b2c4e2ae8f62b0d68089dba253bb528c168b",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/ARCHITECTURE-SPINE-3.patch",
+            "sha256": "ab07837f6fd7ced6eddee74ba45ea7816eeba05c9f6ff8d884474938c782e808"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/ux-designs/ux-frontcomposer-2026-09-09/EXPERIENCE.md",
+          "format": "unified-diff",
+          "sourceSha256": "ce055c48989fe8a14e97ad48401f092ffe5b4bc1e91c1f58858d4c6e01eeb105",
+          "beforeSha256": "ce055c48989fe8a14e97ad48401f092ffe5b4bc1e91c1f58858d4c6e01eeb105",
+          "afterSha256": "35743d4618cf5382d7b6da5310f46b11ffab4fef39481f1c195993f9eefc017e",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/EXPERIENCE-4.patch",
+            "sha256": "ffb188c10e9637a214892b1c9296fdc5dd8ce7458fd5011fb5aceda2e1f059cc"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "c34b9da10a18dddb93bb05aa12f992004c119572c4cf66243e2a9725baa12ede"
+        },
+        {
+          "path": ".editorconfig",
+          "sha256": "aedb746a16bb55c263c9a9d566bea46674ed229b1417280bb8634fd98236d2b6"
+        },
+        {
+          "path": ".gitattributes",
+          "sha256": "b7a400b4ad2673daabb57d31c1933c05af26c90686ab9754d87b056ca84af82e"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "1e024875dc23cc4a6a66fb253b3a2c7264c404894d9b22fab8d8be762c059e46"
+        },
+        {
+          "path": "package.json",
+          "sha256": "6a7b4e67145ea58c8dd3af5b69fd833bffd0d536598bd64a6960619f65f55a08"
+        },
+        {
+          "path": ".gitmodules",
+          "sha256": "d12ed4e0821f5cf88fee1e1e5b2da13c8292e972369fde10d8d84d5ce3fb5a7d"
+        }
+      ],
+      "prerequisites": [],
+      "integration": null
+    },
+    {
+      "name": "memories",
+      "ownerCheckout": "/home/administrator/projects/hexalith/memories",
+      "repository": "https://github.com/Hexalith/Hexalith.Memories.git",
+      "baseRevision": "c64e292a46858058f6764095c8e01c2faa0ff3e0",
+      "observedOriginMain": "c64e292a46858058f6764095c8e01c2faa0ff3e0",
+      "observedOwnerHead": "0d79ebfbd8c16b49ef551ce3194198e5d8e990c1",
+      "mainVerification": "local refs only; fresh remote verification required before delivery",
+      "files": [
+        {
+          "path": "README.md",
+          "format": "unified-diff",
+          "sourceSha256": "6e6b45a2caf2756e9db25d9f55d4d4c787a88b7af24ee725264e596758c9e835",
+          "beforeSha256": "d5a12b07d95676a554eb6fdfffb6e48fa60cbabd2b4a976885c92b1249bc0a9a",
+          "afterSha256": "d9d07dd862587de3bef9e93dc67e6c3689f32938cbda0534697b8d92517ae4e0",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/memories/README-0.patch",
+            "sha256": "06e110a7cf9ac41a004b99309333f045b6d1a6a92e994fd5cc0a0eaa336921b1"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/prd.md",
+          "format": "unified-diff",
+          "sourceSha256": "cfb798c177ab0d2dc8c0dc7b7196ced3e98a3d7abff53f388e69c0963807b50a",
+          "beforeSha256": "cfb798c177ab0d2dc8c0dc7b7196ced3e98a3d7abff53f388e69c0963807b50a",
+          "afterSha256": "53863ab18b209dba2ca4cefa4c527be8cba229deb8ca64030d09975b212284fa",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/memories/prd-1.patch",
+            "sha256": "14c2fab32be3e1aeb8a28492da076c44e326b9fb010fdd701cdf572dbe65ce4f"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture.md",
+          "format": "unified-diff",
+          "sourceSha256": "fd94633f7e0d43897b4ad3d1803ce92886f47ded2bb7cf366872b90b1be28b8b",
+          "beforeSha256": "fd94633f7e0d43897b4ad3d1803ce92886f47ded2bb7cf366872b90b1be28b8b",
+          "afterSha256": "89e4efa3fe0c3da8aaf55f14f750b73204cec9019349c30f6178ec9b5b228d9d",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/memories/architecture-2.patch",
+            "sha256": "4a53befa6c07afbebe5f3b882b6ed9e01e9c351dbac479d6bb7876a9e2b2b7af"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture/architecture-memories-2026-09-09/ARCHITECTURE-SPINE.md",
+          "format": "unified-diff",
+          "sourceSha256": "9d418ea6203cc29689d18f1f8302456bb8363ef8af639a3c7cdd738f9816d688",
+          "beforeSha256": "9d418ea6203cc29689d18f1f8302456bb8363ef8af639a3c7cdd738f9816d688",
+          "afterSha256": "5c7cd578bf223f070f72a0e567fae4b3d761eb0b2c82249eaa3c064fd0b1d35e",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/memories/ARCHITECTURE-SPINE-3.patch",
+            "sha256": "2fbdabd37aa4a24d944c87ff53fc8e29cf52141f29e78ab1b488f044cc79279c"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/ux-designs/ux-memories-2026-09-12/EXPERIENCE.md",
+          "format": "unified-diff",
+          "sourceSha256": "624cb837fdfbcc95465e6e5c733ac55a8a2d7387396216d695bb636ccc52b8f6",
+          "beforeSha256": "624cb837fdfbcc95465e6e5c733ac55a8a2d7387396216d695bb636ccc52b8f6",
+          "afterSha256": "3ca89252954351b64c5a53ad26fd7ea74aa841fb0a4da942bb7ade30f684769f",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/memories/EXPERIENCE-4.patch",
+            "sha256": "185d6a8f1614f4e41154a4c2386590e2e76ca7980dd33216b8faaad08542792e"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "e8e368646d7011a0193142cb47773c973c2d07541c6a3e6b24df9babe26ef43e"
+        },
+        {
+          "path": ".editorconfig",
+          "sha256": "42406217dcd4043a8d93345edcfc6a89df13e3923a6102c07cf6fe7602bb6e47"
+        },
+        {
+          "path": ".gitattributes",
+          "sha256": "8dccd5c083bf3951683c39bdc8adc8312967d490a3e077b33b934dbd1da448f6"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "9016a7f28265b19443424c321983bf7d58c9755c17ea219d26b6f2466e5e7925"
+        },
+        {
+          "path": "package.json",
+          "sha256": "07683dd2c5153b1172719222c5d2ad6e5e7ac66e8de59eea2dc77054b08cccd6"
+        },
+        {
+          "path": ".gitmodules",
+          "sha256": "2f2ae7aad8edc995eef00c75d9635a933a9fec4bc6708da4a6e463e832260b8c"
+        }
+      ],
+      "prerequisites": [
+        "Story 5.10 exact README section integration"
+      ],
+      "integration": null
+    },
+    {
+      "name": "chatbot",
+      "ownerCheckout": "/home/administrator/projects/hexalith/chatbot",
+      "repository": "https://github.com/Hexalith/Hexalith.ChatBot.git",
+      "baseRevision": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+      "observedOriginMain": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+      "observedOwnerHead": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "mainVerification": "local refs only; fresh remote verification required before delivery",
+      "files": [
+        {
+          "path": "README.md",
+          "format": "unified-diff",
+          "sourceSha256": "6b3874701fbb50035d7187d92e740a1cb07080eddaa2910404fe1dd7ec114c03",
+          "beforeSha256": "e6d142d116365628a5cbf9e466ea02177875168901f6ced7647994dcc339d97d",
+          "afterSha256": "b75ff7803cebda1b48d309d70481862509a1fab2cadf829f3f1b238a4baa8396",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/chatbot/README-0.patch",
+            "sha256": "7172ba1ca49bdd98e41160d469fbf83702567499f6aea21361e07b66c1567a41"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture.md",
+          "format": "unified-diff",
+          "sourceSha256": "f7d51c6ddc83e91684d6f118dd7596d212d608ccf40a512991d65a707e542b07",
+          "beforeSha256": "f7d51c6ddc83e91684d6f118dd7596d212d608ccf40a512991d65a707e542b07",
+          "afterSha256": "ac71a6aa2e398c2f5a7b57f08bfa1038ba755932e130dd9104d24ee9ffae6c70",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/chatbot/architecture-1.patch",
+            "sha256": "5438e1ad976f437094ddd71c1ce7cecdf2d74302fa9b7cf70413a6a7cc29e5b9"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture/architecture-chatbot-2026-09-14/ARCHITECTURE-SPINE.md",
+          "format": "unified-diff",
+          "sourceSha256": "16274d5f80f1cb32b31ce9c1e782d58521d67f6aa1bd4b479ba79ae00794aee3",
+          "beforeSha256": "16274d5f80f1cb32b31ce9c1e782d58521d67f6aa1bd4b479ba79ae00794aee3",
+          "afterSha256": "86066f0d78a1bcb36fa537fdf56f009fc3c89e1fa0be4f2ea31ce4f9243a1d88",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/chatbot/ARCHITECTURE-SPINE-2.patch",
+            "sha256": "8a6b6302eaac188ddf1d6a4ee05768393935f3069532cee6c545dd6b8a49b537"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/prds/prd-Hexalith.ChatBot-2026-05-28/prd.md",
+          "format": "unified-diff",
+          "sourceSha256": "223fd2cd4359d6d7c5aba5661123fd1a1345853d63b931b7bfe782246cd9c393",
+          "beforeSha256": "223fd2cd4359d6d7c5aba5661123fd1a1345853d63b931b7bfe782246cd9c393",
+          "afterSha256": "5d3fec556891ce8d10641bfff50b4cb8695474acacef2fcf5523c5c13fc628e8",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/chatbot/prd-3.patch",
+            "sha256": "efc77144201a626991634ab9f0b8955d19f3e32605f92c14bb33e919666bded1"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/ux-designs/ux-Hexalith.ChatBot-2026-05-28/EXPERIENCE.md",
+          "format": "unified-diff",
+          "sourceSha256": "7a1daf545ec3f0c79c611584d28b3a405f9298feab314ee2496867c2d1c05e8c",
+          "beforeSha256": "7a1daf545ec3f0c79c611584d28b3a405f9298feab314ee2496867c2d1c05e8c",
+          "afterSha256": "3276ea709b91d28f072dd2ab4143a176cd88c1a536f30b6f720360ba2d734a88",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/chatbot/EXPERIENCE-4.patch",
+            "sha256": "baa79a09f7722c481de0ba4a26d867b14c89b1281643fdb92c4d62354bc9bec9"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "82ec521bb89649fe4e45a3995c9de1de4f4a37434ff14d9fb2e80e703768ed48"
+        },
+        {
+          "path": ".editorconfig",
+          "sha256": "3e225994a13961391d8ca4be3c76bcdfacb2c5ad695262665a8066b42cba171b"
+        },
+        {
+          "path": ".gitattributes",
+          "sha256": "a1e2effc32d4eb9ae0d9412cca8c9358fed182491db28570ebfd03510e4337cd"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "271e92cca258c7ba9bb56bbc83819ae1fcc50cc9ccc9538b18f80205f0320458"
+        },
+        {
+          "path": "package.json",
+          "sha256": "e0ebd9f96dddac22b4214e886ab8f1d4899412ce396ba525efcdeb93246d6139"
+        },
+        {
+          "path": ".gitmodules",
+          "sha256": "aa37a80a3309238eae41a784c2028698d9f828ef6ced9885693e8496834ba959"
+        }
+      ],
+      "prerequisites": [
+        "Story 5.10 exact README section integration"
+      ],
+      "integration": null
+    },
+    {
+      "name": "folders",
+      "ownerCheckout": "/home/administrator/projects/hexalith/folders",
+      "repository": "https://github.com/Hexalith/Hexalith.Folders.git",
+      "baseRevision": "a448d20873dc9e809623f85da206e8d8a13bb9ab",
+      "observedOriginMain": "a448d20873dc9e809623f85da206e8d8a13bb9ab",
+      "observedOwnerHead": "a448d20873dc9e809623f85da206e8d8a13bb9ab",
+      "mainVerification": "local refs only; fresh remote verification required before delivery",
+      "files": [
+        {
+          "path": "README.md",
+          "format": "unified-diff",
+          "sourceSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e",
+          "beforeSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e",
+          "afterSha256": "8027af614c12c482a2a94e640b1a1f8ce31431e425744f2b1f8d8cd1ff8f4d9e",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/folders/README-0.patch",
+            "sha256": "7ebb46508120220755d56ff88d6b5924c59b0d31a317d0c996c4678f490aec87"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/prd.md",
+          "format": "unified-diff",
+          "sourceSha256": "1b422c87b889bcfa9954a360de7f11e936a0b34b569ff61e57363b8e7a03d7ac",
+          "beforeSha256": "1b422c87b889bcfa9954a360de7f11e936a0b34b569ff61e57363b8e7a03d7ac",
+          "afterSha256": "a6436ae1b55c565329d9cc2583ac639ae0e703c2a0b79a15d5156eab53320ca9",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/folders/prd-1.patch",
+            "sha256": "509fe806151641fb9755c6a8980074e6c24859ab375600e46555fc6f4c431741"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture.md",
+          "format": "unified-diff",
+          "sourceSha256": "54e18f3a6b26a43bdb84ff2720255ea604df52b375f5a406d5f26d3b727e8239",
+          "beforeSha256": "54e18f3a6b26a43bdb84ff2720255ea604df52b375f5a406d5f26d3b727e8239",
+          "afterSha256": "594dd7ad9a3f2ce06f38405e485814990bb91ae42c9bd5fe138b7e8b71f1b622",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/folders/architecture-2.patch",
+            "sha256": "8a41e753f6d9107db77df21934efeacd99efa1c936113bc84192cf894c565287"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "681aad4fdf097dd8dfd44b52e1ca23487500b398f8e866a56f9b61ef882603ff"
+        },
+        {
+          "path": ".editorconfig",
+          "sha256": "9e856d3ffe3a2e0d5f67f983c51ecf068dff11b91c0b63fa8e4cc14dd59d67f8"
+        },
+        {
+          "path": ".gitattributes",
+          "sha256": "852bc36530e96f07e2f01d1cf8a75d93849021274350de94a76b8bf26bb7246a"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "52eecf43508ec72c08411e08525c34dd2f57159c0bf1ce5ef1589791e7cce375"
+        },
+        {
+          "path": "package.json",
+          "sha256": "6b5664539a0ce0e65c6b42e2427a9a2f8b28cd3e7ced519f17c635e7cd77e44e"
+        },
+        {
+          "path": ".gitmodules",
+          "sha256": "c9daa495deb0a5903771cbbfeef10f6d376a3e521c8f6ad7447aae689c5bcf37"
+        }
+      ],
+      "prerequisites": [],
+      "integration": null
+    },
+    {
+      "name": "projects",
+      "ownerCheckout": "/home/administrator/projects/hexalith/projects",
+      "repository": "https://github.com/Hexalith/Hexalith.Projects.git",
+      "baseRevision": "981ceef13a1abc88219925e73c51a23eb9ac50c2",
+      "observedOriginMain": "981ceef13a1abc88219925e73c51a23eb9ac50c2",
+      "observedOwnerHead": "981ceef13a1abc88219925e73c51a23eb9ac50c2",
+      "mainVerification": "local refs only; fresh remote verification required before delivery",
+      "files": [
+        {
+          "path": "README.md",
+          "format": "unified-diff",
+          "sourceSha256": "f809886a1b253c07b39206941ff09af18ec1be876c6812149fa1fdb6056e1da6",
+          "beforeSha256": "f809886a1b253c07b39206941ff09af18ec1be876c6812149fa1fdb6056e1da6",
+          "afterSha256": "a2747753c6cf01583d53423e8396d72788048613daadd05ad8d488950e36d9af",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/projects/README-0.patch",
+            "sha256": "dab42c25a1501f8c8ab4c37ba7cb733c4a4bf2f496b8f0d8a7a9729a4a2f3b87"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/epics.md",
+          "format": "unified-diff",
+          "sourceSha256": "b95c38c946b267872f5b8e64e8e1fc87d952211da53b8d98c1e7cb3bf757e057",
+          "beforeSha256": "b95c38c946b267872f5b8e64e8e1fc87d952211da53b8d98c1e7cb3bf757e057",
+          "afterSha256": "626f786eb61333ab8ae03e5be7c33192269e8d074342c57bc9b6d380db4da502",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/projects/epics-1.patch",
+            "sha256": "baa458f6f08f04e39bf5d297bc83212d95234f091ddf39fac4aa8a2b80ea60ec"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/prds/prd-Hexalith.Projects-2026-05-24/prd.md",
+          "format": "unified-diff",
+          "sourceSha256": "64a562004f02c67fa726cafd6726143cc4ebf4263f9f1ae8a3d3dfb53ec41a8c",
+          "beforeSha256": "64a562004f02c67fa726cafd6726143cc4ebf4263f9f1ae8a3d3dfb53ec41a8c",
+          "afterSha256": "e86aa5705b02837119feae20c420d24377d6b01d22136c15974e39e75a150022",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/projects/prd-2.patch",
+            "sha256": "7a17114e314121a311e0463b6928d3a4f2d3ed7718d3e87d295e8fdad35607ae"
+          }
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture/architecture-projects-2026-07-15/ARCHITECTURE-SPINE.md",
+          "format": "unified-diff",
+          "sourceSha256": "4e35f75f8a84982c21b2fc663168a52706ea1bfc52a843d90cdae9bd8f0200f9",
+          "beforeSha256": "4e35f75f8a84982c21b2fc663168a52706ea1bfc52a843d90cdae9bd8f0200f9",
+          "afterSha256": "c30dcf667aa4785abb8eda77d61a0050da8932080ea6625d45229a5acc7a05b6",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/projects/ARCHITECTURE-SPINE-3.patch",
+            "sha256": "ce66774b3c6bb4a914d74ed0ece28e499ed0a30bd561cc0144cd1d42528a06bc"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "82ec521bb89649fe4e45a3995c9de1de4f4a37434ff14d9fb2e80e703768ed48"
+        },
+        {
+          "path": ".editorconfig",
+          "sha256": "e4248d6029922c2e42194e30806bab1c33c5231ab81a3c0f3a6ef34cc628ee89"
+        },
+        {
+          "path": ".gitattributes",
+          "sha256": "158620e9b45b7f4077fbf47f78a943e7134f97c56adb39b0463150b2af45077d"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "22fea9a8cfdd5ced9e340ce71eb0f7e645d444ca36e636efe518d9e51b2b6e96"
+        },
+        {
+          "path": "package.json",
+          "sha256": "c247649851bdcec441bad40d5e7d5148cdde498524c576a35fa33a56557dc300"
+        },
+        {
+          "path": ".gitmodules",
+          "sha256": "5b5054ea8ed4804a52a792e8bd0f77f8a6d6ecdd8185b58840c0fdc7da7946dc"
+        }
+      ],
+      "prerequisites": [],
+      "integration": null
+    },
+    {
+      "name": "tenants",
+      "ownerCheckout": "/home/administrator/projects/hexalith/tenants",
+      "repository": "https://github.com/Hexalith/Hexalith.Tenants.git",
+      "baseRevision": "292dbf164f26bcf376ef86d749b149b075f8b502",
+      "observedOriginMain": "292dbf164f26bcf376ef86d749b149b075f8b502",
+      "observedOwnerHead": "292dbf164f26bcf376ef86d749b149b075f8b502",
+      "mainVerification": "local refs only; fresh remote verification required before delivery",
+      "files": [
+        {
+          "path": "_bmad-output/planning-artifacts/architecture.md",
+          "format": "unified-diff",
+          "sourceSha256": "a01a1091bb62cc023081ca6fbc281369ad60619b478093e98f5045416d18a692",
+          "beforeSha256": "a01a1091bb62cc023081ca6fbc281369ad60619b478093e98f5045416d18a692",
+          "afterSha256": "4ab98f3ee50f60fa04a7842cc9d9e720845fa0102ab498a6c41e2bd8d2c55cc9",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/tenants/architecture-0.patch",
+            "sha256": "a8b9e693a844da29618cfd05dad68a9e1c05f1531fad6aadb157ae8a2ffe3ffd"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "c34b9da10a18dddb93bb05aa12f992004c119572c4cf66243e2a9725baa12ede"
+        },
+        {
+          "path": ".editorconfig",
+          "sha256": "e6abdf623931e9e74a9302f05d3dc5dc561ba94aa6168c03b68f0dc95340985f"
+        },
+        {
+          "path": ".gitattributes",
+          "sha256": "181c53348fa08c7809cd41a5740822e2a6cbcf630d1cf54db34d750b275c5373"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "f76b43facdc3aa3d3bd68de595838bd5a7e4c338c714bfe106a39a8efc91ae2d"
+        },
+        {
+          "path": "package.json",
+          "sha256": "14ac291c79617a9c09b49cdef8c0d8a371a710279d21bea13c842d1ebfc8d09e"
+        },
+        {
+          "path": ".gitmodules",
+          "sha256": "372ae4525c40a32e202a3b2bb507bd13e191b3464838c9ee715349a7356a3a22"
+        }
+      ],
+      "prerequisites": [],
+      "integration": null
+    },
+    {
+      "name": "parties",
+      "ownerCheckout": "/home/administrator/projects/hexalith/parties",
+      "repository": "https://github.com/Hexalith/Hexalith.Parties.git",
+      "baseRevision": "a575021fc97a8eda664711089270b60f5e570ded",
+      "observedOriginMain": "a575021fc97a8eda664711089270b60f5e570ded",
+      "observedOwnerHead": "a575021fc97a8eda664711089270b60f5e570ded",
+      "mainVerification": "local refs only; fresh remote verification required before delivery",
+      "files": [
+        {
+          "path": "README.md",
+          "format": "unified-diff",
+          "sourceSha256": "d14b9c166d7ed47442b3a87b88fbab792fcb013e5b896c7f1138a1abb721f704",
+          "beforeSha256": "d14b9c166d7ed47442b3a87b88fbab792fcb013e5b896c7f1138a1abb721f704",
+          "afterSha256": "3b16233773856e3cb3a61d39f2f7c86339a23a09c163095507c076cac68e2f95",
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/parties/README-0.patch",
+            "sha256": "e4ae928b309b8169f807c362c5503c3f1a1837e3dab50dea5c673de973ed3dcd"
+          }
+        }
+      ],
+      "guidance": [
+        {
+          "path": "AGENTS.md",
+          "sha256": "7730aba9b2a347d7fb2b8587495ffc45f1a485b7be6bffdc0817b416e4220455"
+        },
+        {
+          "path": ".editorconfig",
+          "sha256": "bf153a1f5c75d634a1c574864eade9a3e011cb0781dc12c7337d75db5531d53c"
+        },
+        {
+          "path": ".gitattributes",
+          "sha256": "07fbd781011c884afb939a6d0d7825f9c89dc2f57db89115f33f0498ac51b931"
+        },
+        {
+          "path": "Directory.Build.props",
+          "sha256": "37a3d0f5c1c96d70c5533902229c13a3ad66d5de09854466c983c5218c88f9d9"
+        },
+        {
+          "path": "package.json",
+          "sha256": "419d29782dd17ffe219fd9b7fec0c1cf839b25b72cf0b66a505129a8ebbc9547"
+        },
+        {
+          "path": ".gitmodules",
+          "sha256": "86d41a35fe64cf6e12e68e7ec7ee9d97081a97464c66222d342cab084550f1b6"
+        }
+      ],
+      "prerequisites": [],
+      "integration": null
+    },
+    {
+      "name": "ai-tools",
+      "ownerCheckout": "/home/administrator/projects/hexalith/aitools",
+      "repository": "https://github.com/Hexalith/Hexalith.AI.Tools.git",
+      "baseRevision": "736687b79c1e4fa8beabdab75c4675bb76c466b9",
+      "observedOriginMain": "736687b79c1e4fa8beabdab75c4675bb76c466b9",
+      "observedOwnerHead": "736687b79c1e4fa8beabdab75c4675bb76c466b9",
+      "mainVerification": "local refs only; fresh remote verification required before delivery",
+      "files": [
+        {
+          "path": "hexalith-mcpcli-migration-instructions.md",
+          "sourceSha256": "8ffbe4485aa92d13fa6cc759f28744a0243b9bec02317769164deb22386392a4",
+          "beforeSha256": "8ffbe4485aa92d13fa6cc759f28744a0243b9bec02317769164deb22386392a4",
+          "afterSha256": "181f68d8f5900b6a900baa5280af2a0d9ac27cd253d9003241f44cec31dea15e",
+          "candidate": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/ai-tools/hexalith-mcpcli-migration-instructions.md",
+            "sha256": "181f68d8f5900b6a900baa5280af2a0d9ac27cd253d9003241f44cec31dea15e"
+          },
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/ai-tools/hexalith-mcpcli-migration-instructions.md.patch",
+            "sha256": "5578047f6695b2c2084ab5bc7d390f9d337fcdb810b142637f978973230e9703"
+          }
+        },
+        {
+          "path": "hexalith-llm-instructions.md",
+          "sourceSha256": "c25effd596bc2e93a3abd1cb2d610dd96b4a92a02441b42905fd282def1bc6c1",
+          "beforeSha256": "c25effd596bc2e93a3abd1cb2d610dd96b4a92a02441b42905fd282def1bc6c1",
+          "afterSha256": "d6ce3957db9736d80760594a1e067e1b5a2011f3dab0278e879e051d0baaeeb0",
+          "candidate": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/ai-tools/hexalith-llm-instructions.md",
+            "sha256": "d6ce3957db9736d80760594a1e067e1b5a2011f3dab0278e879e051d0baaeeb0"
+          },
+          "patch": {
+            "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/ai-tools/hexalith-llm-instructions.md.patch",
+            "sha256": "8d2e561c4177f733891cde1e25c61b645ccadbee62feebaf390ab170aa20e684"
+          }
+        }
+      ],
+      "guidance": [],
+      "prerequisites": [
+        "immutable approved inventory revision",
+        "Story 5.10 delivery",
+        "fresh exact-byte final plan approval"
+      ],
+      "integration": null
+    }
+  ],
+  "noChange": [
+    {
+      "name": "platform",
+      "revision": "22730bce0f629195f0d085c258fca23a12932cc1",
+      "inspected": [
+        {
+          "path": "README.md",
+          "sha256": "fbaccffa32e96d9a007c4d2e9835092b2d23d06e3570530cbdd768e6246b3b52"
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md",
+          "sha256": "ce44f85ddc5ecb51e00d6d52c335f3d0e6febc120a9739a57581835e4208a24d"
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/prds/prd-platform-2026-09-27/prd.md",
+          "sha256": "2982afce9c48509e5e9d83890539d585b47c3f4b15f2c34b0e33cb9ba6a72135"
+        }
+      ],
+      "reason": "FR15/AD-14 already require eligibility, confidential UI and confirmation denial"
+    },
+    {
+      "name": "agents",
+      "revision": "805b35da01efe4d3ac5f1402e611950ac282d0a1",
+      "inspected": [
+        {
+          "path": "README.md",
+          "sha256": "44f7b9164641de4c6852930509572143c2d66e7d34ea25b5d77c83446c55a9b2"
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture/architecture-agents-2026-06-23-2/ARCHITECTURE-SPINE.md",
+          "sha256": "cf1f3f1fc3a486eedde90e5115c24259d9b37dbf3b03dbe83ed5afc2898c4378"
+        }
+      ],
+      "reason": "existing correction banner qualifies future shared-head access"
+    },
+    {
+      "name": "conversations",
+      "revision": "07b7bca399f3cf68dbc7eb07f2f6c29a744a4206",
+      "inspected": [
+        {
+          "path": "README.md",
+          "sha256": "d9a21fd205654c6d0b3c9b9a0f958c82a2b00c2c32f4cca5f66cb37cf2d3c587"
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture.md",
+          "sha256": "948d9c98d99d2453a1ff3904f4f05392b3a2959e379c5fd6e466dc20ed1f05be"
+        }
+      ],
+      "reason": "existing correction banner qualifies future shared-head access"
+    },
+    {
+      "name": "timesheets",
+      "revision": "bbb91319ee209333d29f07e53bd9b5e4adc40267",
+      "inspected": [
+        {
+          "path": "README.md",
+          "sha256": "da1ad2d66eb7f198175f5a9bc65f0449c0a392d3cd83a1b0c76e5c49631db372"
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture.md",
+          "sha256": "c65d0a6457b1c9f4c299f171aaa314fbecf119ff25c41767c220dc8751c0b018"
+        }
+      ],
+      "reason": "existing correction banner qualifies future shared-head access"
+    },
+    {
+      "name": "works",
+      "revision": "2e9fafba151a184eb4552796db7eecc25ffaf8c7",
+      "inspected": [
+        {
+          "path": "README.md",
+          "sha256": "7edced1677572f24b61c0618627199ac9c357f96b492a9f611defcdcd6403d7d"
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/prds/prd-works-2026-06-14/prd.md",
+          "sha256": "78c5d10e92da41be068ecc04126bf9e7c14b837267a0b0541a026f99ce6d1ee2"
+        }
+      ],
+      "reason": "existing correction banner qualifies future shared-head access"
+    },
+    {
+      "name": "builds",
+      "revision": "fdda17c0a4538b0f7c99f813c20ca24b49006530",
+      "inspected": [
+        {
+          "path": "README.md",
+          "sha256": "2b555913c6e2932a270645ee118f321059a8d99ea52d671af42179070ea45cc4"
+        }
+      ],
+      "reason": "exempt developer tooling; CiCd-owned files untouched"
+    },
+    {
+      "name": "commons",
+      "revision": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+      "inspected": [
+        {
+          "path": "README.md",
+          "sha256": "9df0af53c976fbb177855f1f059d7369ee6f3bbe83c2b987dc05d31020c4d9c1"
+        }
+      ],
+      "reason": "no proprietary product target"
+    },
+    {
+      "name": "polymorphicserializations",
+      "revision": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+      "inspected": [
+        {
+          "path": "README.md",
+          "sha256": "71339aed3300c4f7705c02e5502351013c669270c7164b910f4ca014683152e6"
+        }
+      ],
+      "reason": "no proprietary product target"
+    }
+  ]
+}
