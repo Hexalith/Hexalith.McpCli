@@ -47,6 +47,11 @@ _bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3
 _bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md -text
 _bmad-output/implementation-artifacts/evidence/story-5-8/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
 
+# Story 5.9 binds exact successor, receipt and README-only patch bytes.
+_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md -text
+_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md -text
+_bmad-output/implementation-artifacts/evidence/story-5-9/** -text whitespace=-blank-at-eol,-blank-at-eof,cr-at-eol
+
 # Preserve the census allowance chain, approvals and retained evidence hashes.
 tools/proprietary-surfaces/v1/*.json -text
 tools/proprietary-surfaces/v1/amendments/** -text

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": "1.0.0",
+  "decision": "authorized",
+  "exactWords": "authorize",
+  "source": "Current conversation: after the separate exact-byte owner approval, the user replied \"authorize\" to committing/pushing the approved McpCli packet and both upstream README-only updates. Scope is Story 5.9 delivery only; no enrollment, live execution or retirement is authorized.",
+  "approvedOn": "2026-11-16",
+  "approvalReceiptSha256": "574d2c972b3421ac57cd60bec50eee97ccc6b521107218edf994f39c9207c3a1",
+  "inventoryArtifacts": {
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md": "c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md": "60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63"
+  },
+  "readmePatches": {
+    "projects": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/projects/README.patch",
+      "sha256": "e284300061b119c6f80d659474b17f0f1864f796aaff53cb1606e4f4e959b1a7"
+    },
+    "frontcomposer": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/frontcomposer/README.patch",
+      "sha256": "e2a63b951414855dc334346de80447e3d35fe0d8cfbaba390030d7b963746564"
+    }
+  }
+}

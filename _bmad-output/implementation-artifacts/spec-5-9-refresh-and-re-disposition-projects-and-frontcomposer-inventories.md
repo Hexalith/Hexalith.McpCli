@@ -2,7 +2,8 @@
 title: '5.9 Refresh and re-disposition Projects and FrontComposer inventories'
 type: 'chore'
 created: '2026-11-16'
-status: 'ready-for-dev'
+status: 'in-review'
+baseline_commit: 'fbe4b6bd5502741ff8006abedac5c9bb27a4df3c'
 route: 'dispatch'
 review_loop_iteration: 0
 context:
@@ -149,19 +150,19 @@ story_key: '5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent'
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] Precondition: run `git pull --rebase` on `main`, confirm that HEAD contains `ab92da41` and that the Projects 2.0.0 bytes are present, and record the HEAD gitlinks as the pins. If the rebase conflicts, HALT.
-- [ ] Write `A/projects-migration-inventory-v2.1.0.md`, `A/frontcomposer-migration-inventory-v1.1.0.md` and their `.gitattributes` (`-text`) entries, following the derivation rules below. Corrected premises go in the G/V cells and source sections. The approval stays pending.
-- [ ] `E/story-5-9/build_candidate.py`: generate both successors deterministically from the predecessor bytes, the `git show <pin>:` sources and the AD-23 map. Refuse to overwrite an approved packet.
-- [ ] `E/story-5-9/{verify_amendment.py,test_verify_amendment.py}`:
+- [x] Precondition: run `git pull --rebase` on `main`, confirm that HEAD contains `ab92da41` and that the Projects 2.0.0 bytes are present, and record the HEAD gitlinks as the pins. If the rebase conflicts, HALT.
+- [x] Write `A/projects-migration-inventory-v2.1.0.md`, `A/frontcomposer-migration-inventory-v1.1.0.md` and their `.gitattributes` (`-text`) entries, following the derivation rules below. Corrected premises go in the G/V cells and source sections. The approval stays pending.
+- [x] `E/story-5-9/build_candidate.py`: generate both successors deterministically from the predecessor bytes, the `git show <pin>:` sources and the AD-23 map. Refuse to overwrite an approved packet.
+- [x] `E/story-5-9/{verify_amendment.py,test_verify_amendment.py}`:
   - candidate and approved-completion modes;
   - per-module accounting against the AD-23 map;
   - every matrix row and disposition branch;
   - guard-removal controls, exit code and both streams.
-- [ ] `E/story-5-9/{approval.json,labels.json,verify_labels.py,upstream/{projects,frontcomposer}/}`:
+- [x] `E/story-5-9/{approval.json,labels.json,verify_labels.py,upstream/{projects,frontcomposer}/}`:
   - a pending receipt bound to the predecessor and successor hashes and their authorities;
   - README-only patches for PS08/PS09 (Projects) and PS03/PS04 (FrontComposer) that cite the successors;
   - the patches change a gate's text only where an amendment changes that gate.
-- [ ] `A/deferred-work.md` (grep first), `E/story-5-9/verification.md`, the secret-scan receipt, this spec and `A/sprint-status.yaml`: record only the supported state.
+- [x] `A/deferred-work.md` (grep first), `E/story-5-9/verification.md`, the secret-scan receipt, this spec and `A/sprint-status.yaml`: record only the supported state.
 
 **Acceptance Criteria:**
 - Given the candidates, when the verifier runs, then every entry passes and all protected predecessor and authority bytes are unchanged.
@@ -198,11 +199,44 @@ Derivation rules (the decisions above apply first):
 
 ## Implementation Notes
 
+- 2026-11-16 implementation precondition completed: `git pull --rebase` exited 0 without conflicts on `main`; HEAD is `fbe4b6bd5502741ff8006abedac5c9bb27a4df3c`. `git merge-base --is-ancestor ab92da41988c4d423c05ea3f5ab401ed0db1fc32 HEAD` exited 0. HEAD gitlinks match the approval pins below. Projects 2.0.0 SHA-256 is `253ac26d474e6d126d337682c1ec4539fb34c7c7c8fb412d39878cddc6b01e3e`. Do not repeat the completed precondition.
 - 2026-11-16: The user approved this spec with "approve and stop". The frozen intent and decisions are now locked; implementation resumes in a fresh `bmad-build` session.
   - Approval-time HEAD was `4c2bbd5f444922357acbd7fe05d08e2a31b985ed`, with gitlinks Projects `bf9f98969efa036fd60700c627e712b4375e654a` and FrontComposer `33e71036c04f2b99955376e9c90cbb1fc3a81e64`. These are the pins; recheck them after the required `git pull --rebase`.
   - At approval, local `main` was 3 ahead and 2 behind `origin/main`.
   - The `references/Hexalith.Platform` checkout was modified by another session and is not part of this story.
 
+- 2026-11-16 implementation: generated additive pending Projects 2.1.0 (56 entries: 17 replace/include, 19 withdraw/exclude, 20 defer/exclude) and FrontComposer 1.1.0 (30 entries: 20 withdraw/exclude, 10 defer/exclude). Protected predecessors/authorities and enrollment/dependencies/source/gitlinks remain unchanged. Both candidate verifiers pass; 20 documentary tests pass, including exact streams and guard-removal controls. Approval and README delivery stay pending; the story remains in progress.
+- Corrected premise: Projects ListProjectsQuery declares Payload cursor/pageSize while adopted AD-23 K03 requires Envelope paging. G1/G3/V01 and the source section carry a named unresolved K03/AD-20 conformity gap. The intended Envelope-paging difference is unestablished; no conversion, conformity, readiness or parity is claimed. The frozen documentary replacement mappings remain unchanged. A new deferral records the owner handoff.
+- Consumer check: all 17 approval-time root gitlinks were inspected through Git objects; FK04 explicitly includes the Shell.Tests Counter sample fixture in addition to the three direct-reference test projects. FK01–FK04 must move before coupled host/plug-in retirement, with K12 UI evidence and Projects 6.7 cutover; K13 compiler stays retained independently.
+- Exact commands, candidate hashes, source-pin observations, scan receipt and limits are recorded in `evidence/story-5-9/verification.md`. No owner approval, delivery authorization, commit, push, live execution or retirement is inferred.
+- Build review pass 1 completed: all three layers returned; 17 findings were individually triaged, 16 fixed in nine patch groups and one rejected. Full final verification passes with 29 tests, both candidate verifiers and adopted AD-23; both completion modes correctly refuse pending approval. Review added no new deferrals. Spec stays in review and sprint stays at review until exact-byte owner approval and separate delivery authorization/integration complete the acceptance gate. The workflow's automatic commit/done steps do not apply because this spec expressly forbids unauthorized commits and completion while those gates are open.
+
 ## Spec Change Log
 
+- 2026-11-16 delivery authorized: the user separately replied exactly `authorize` for the approved packet and both owner README-only updates. Authorization is recorded in `evidence/story-5-9/delivery-authorization.json`. Remote McpCli commit `1ffbdd2de19532fe2aca05ecf043f7c2e9084e9c` independently corrected Projects 2.0.0 prose with no row changes; the correction is retained. Derivation reads the exact predecessor Git snapshot at the implementation baseline, leaving all approved inventory/receipt hashes unchanged. Verification still rejects uncommitted predecessor changes and committed row drift. Two added cases bring the suite to 31 passing tests. Publication and integration are being completed under the separate authorization; no module source, dependencies, enrollment or gitlinks are changed.
+
+- 2026-11-16 owner approval recorded: the user replied exactly `approve` to the final exact-byte candidate and covered-role request. The receipt now records all nine roles for Projects 2.1.0 SHA-256 `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af` and FrontComposer 1.1.0 SHA-256 `60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63`. The approved inventories, label register and prepared README patch bytes are unchanged. Pending test cases now use disposable receipt copies; all 29 tests pass against the real approved state. Current results are in `evidence/story-5-9/approval-checks.json`. Both completion modes refuse absent integrated labels. Delivery authorization and integration remain pending; status stays in review, with no commit, push or upstream write.
+
 ## Review Triage Log
+
+Review pass 1 (2026-11-16), all three layers completed before triage. Individual findings are recorded before grouping. `patch` entries keep the frozen intent and documentary target mapping unchanged.
+
+| Finding | Verdict | Route | Evidence |
+| --- | --- | --- | --- |
+| BH01 — spec completion fixture assumes in-progress | medium | patch | Parent and all three reviewers reproduced the exact suite failure after the required in-review transition. The literal replacement at `evidence/story-5-9/test_verify_amendment.py:222` changes no bytes; set exactly one status independently of its current value. |
+| BH02 — Projects drift follows the wrong call paths | medium | patch | Pinned `ProjectsMcpResourceReader.ReadResolutionTraceMetadata` is static, so R05 has no REST preamble drift. R04/R06/R07 load diagnostics and R08–R10 use list/diagnostic scans, so their effective paths require the preamble drift and current anchors. Correct the source-backed drift set. |
+| BH03 — FrontComposer V01 loses unchanged behavior | medium | patch | `build_candidate.py` replaces the entire Current behavior cell with a drift summary. The pin still checks canonical handle selection and current-tool admission, and its acknowledgement URI is metadata. Preserve these facts while replacing the obsolete no-ownership statement. |
+| BH04 — FrontComposer V02 loses mandatory gates | medium | patch | The pinned service registration still requires tenant tool/resource gates and the endpoint rejects sample gates outside Development. Append authenticated-user drift without erasing these current behaviors. |
+| BH05 — FrontComposer V03 loses key/claims provenance | medium | patch | Pinned context access still rejects invalid/multiple keys and returns key identity with `claimsSource: null`; authenticated claims retain source roles. Preserve header/provenance facts and record conflicting-identity refusal. |
+| BH06 — enrollment evidence omits the build pin | medium | patch | `Directory.Build.props:5` selects the actual Projects version, but only policy and versionless enrollment were checked. Bind the unchanged tracked props and verify its declared Projects pin; test a mismatched pin. |
+| BH07 — verify current rather than historical gitlinks | false | reject | The frozen pin decision is explicitly the gitlink at spec approval, and source checkouts may move. Verification checks those gitlinks in the canonical baseline and reads Git objects at those pins. Following future HEAD would change the snapshot's meaning; the task's no-gitlink-change boundary is separately confirmed by its diff. |
+| BH08 — pending labels require machine-specific sibling paths | medium | patch | `verify_labels.py:93` queries the recorded absolute ownerCheckout even in candidate mode. Root-declared reference clones already supply the same pinned source and origin. Use them for pending origin validation; keep delivered-origin checks on the registered owner checkout. |
+| BH09 — negated approve/authorize instructions pass | medium | patch | Standalone-word searches accept `do not approve` and `do not authorize`. Require the documented affirmative command tokens and test refusals and combined commands. |
+| BH10 — one combined instruction satisfies both decisions | medium | patch | Both substring guards accept the same combined sentence. Group with BH09: exact independent approve/authorize tokens reject that reuse. Separate source identifiers/timestamp machinery is unnecessary for the manual receipt shape; actual delivery still needs a later explicit user instruction. |
+| EH01 — spec completion fixture assumes in-progress | medium | patch | Same reproduced failure as BH01; grouped with BH01 after its individual verdict. |
+| EH02 — negated approval passes | medium | patch | Isolated check_approval control accepts `do not approve` with an approved receipt; grouped with BH09. |
+| EH03 — negated delivery authorization passes | medium | patch | Isolated check_delivery control passes its authorization guard on `do not authorize`; grouped with BH09. |
+| EH04 — approval can change during generation | medium | patch | Generator checks state before packet derivation, then writes without checking for changed receipt bytes. A reproduced interleaving records approval during derivation and the generator overwrites it. Recheck the original approval/label snapshots immediately before any writes and reject changes. |
+| VG01 — ancestry rejection lacks regression coverage | medium | patch | Filed verification-gap evidence is accepted: removing both owner/inventory ancestry checks left the other 19 tests passing. Add independently failing owner and inventory off-main histories and guard-removal controls. |
+| VG02 — duplicate statuses lack regression coverage | medium | patch | Filed verification-gap evidence is accepted: duplicate status guard removal lets pending packets with an ambiguous done status pass both entrypoints. Add exact-stream duplicate spec/sprint cases and a guard-removal control. |
+| VG03 — recorded suite predates review status | medium | patch | Same reproduced fixture failure as BH01. Refresh the retained checks and scan after the corrected suite runs in the current workflow state. |

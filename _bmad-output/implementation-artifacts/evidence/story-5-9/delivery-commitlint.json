@@ -1,0 +1,58 @@
+[
+  {
+    "repository": "/home/administrator/projects/hexalith/mcpcli",
+    "candidate": "docs: publish approved Projects and FrontComposer inventory amendments\n",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: publish approved Projects and FrontComposer inventory amendments\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "/home/administrator/projects/hexalith/projects",
+    "candidate": "docs: cite Projects inventory 2.1.0 in compatibility labels\n",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: cite Projects inventory 2.1.0 in compatibility labels\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "/home/administrator/projects/hexalith/frontcomposer",
+    "candidate": "docs: cite FrontComposer inventory 1.1.0 in compatibility labels\n",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: cite FrontComposer inventory 1.1.0 in compatibility labels\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  },
+  {
+    "repository": "/home/administrator/projects/hexalith/mcpcli",
+    "candidate": "docs: record Story 5.9 inventory and label integration\n",
+    "command": [
+      "npx",
+      "--no",
+      "--",
+      "commitlint",
+      "--verbose"
+    ],
+    "exitCode": 0,
+    "stdout": "\u29d7   --- input ---\ndocs: record Story 5.9 inventory and label integration\n\u2714   found 0 problems, 0 warnings\n",
+    "stderr": ""
+  }
+]

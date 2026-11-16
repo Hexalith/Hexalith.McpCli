@@ -681,6 +681,7 @@ status: open
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md`
   summary: Four of the six approved migration inventories pin source revisions that do not exist in their upstream repositories, so nobody else can check those inventories against source.
+  partial_resolution_2026_11_16: Story 5.9 adds Projects 2.1.0 and FrontComposer 1.1.0 candidates pinned to `bf9f98969efa036fd60700c627e712b4375e654a` and `33e71036c04f2b99955376e9c90cbb1fc3a81e64`. Both pins resolve from Git objects and are ancestors of the locally observed owning `origin/main` refs. This resolves the Projects/FrontComposer source-pin accessibility portion through additive successors; exact-byte owner approval and all nine covered roles were recorded on 2026-11-16, while separate authorization and README delivery remain pending. The historical inventories stay immutable, and this does not close the other modules' portion or assert publication, parity or retirement. Evidence: `projects-migration-inventory-v2.1.0.md:6`, `frontcomposer-migration-inventory-v1.1.0.md:6`, and `evidence/story-5-9/verification.md`.
   evidence: Medium; pre-existing from Stories 4.2–4.4.
     - `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md:6` (`e2252f29a2dba2b64786ee483eb59fbceaadd387`), `chatbot-migration-inventory-v1.md:6` (`acc934599cf1efff36b0643eddc6a3cc4c2978d5`), `frontcomposer-migration-inventory-v1.md:6` (`81a440a8890a17edb39924bd0cf676eb6f6b5c25`) and `projects-migration-inventory-v1.md:6` (`3d256e632a7645bc2261e668ac7c74be81155f58`) all pin unpublished revisions.
     - GitHub returns HTTP 422 "No commit found" for each one, and the sibling clones under `/home/administrator/projects/hexalith/` lack the objects.
@@ -1170,3 +1171,15 @@ status: open
   owner: McpCli CI and live-topology maintenance owners.
   status: open; independent net11 maintenance included by the preserved Story 5.8 baseline, not caused by the pass-8 patches. No CI, dependency or runtime policy is changed here.
   evidence: `.github/workflows/ci.yml:21` supplies the SDK wildcard; `tools/live-topology/ci.py:86` implements exact runtime selection and `tools/live-topology/ci.py:504` applies it to `dotnet --list-runtimes` during preparation. `_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass8-20261115/ci-runtime-maintenance-deferral.json` records the unmodified guard accepting `11.0.0` and refusing `11.0.1`. Ledger searches for `11.0.x`, `11.0.0`, `wildcard` and `highest installed` found no existing entry before append.
+
+## Deferred from: spec-5-9-refresh-and-re-disposition-projects-and-frontcomposer-inventories.md (2026-11-16)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-9-refresh-and-re-disposition-projects-and-frontcomposer-inventories.md`
+  summary: Reconcile Projects ListProjectsQuery Payload paging with adopted AD-23 K03 / AD-20 Envelope-only paging before claiming conformity, readiness or parity. The owner-approved spec's intended Envelope-paging difference has not been established by the pinned Payload-declared contract; replacement/include remains a documentary migration target only.
+  owner: Projects query/Contracts, EventStore/Gateway and McpCli product/architecture maintainers.
+  status: open; no payload-to-envelope conversion or production/enrollment change is authorized by Story 5.9.
+  evidence:
+    - `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md:127` requires Envelope paging and says Payload paging supplies no generic paging.
+    - At Projects pin `bf9f98969efa036fd60700c627e712b4375e654a`, `src/Hexalith.Projects.Contracts/Queries/ListProjectsQuery.cs:22` and `:26` declare Payload cursor/pageSize, default 50 and maximum 200.
+    - `src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:270` forwards the rebuilt Payload and `:275` constructs separate Envelope Paging from call options; `tools/conformance-vectors/v1/current/modules/Hexalith.Projects.Contracts/list.vector.json:14` supplies Payload pageSize.
+    - `_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md:51` and G1/G3/V01 record this unresolved gap. Ledger searches for `Projects.*paging`, `K03.*Projects` and `payload.*paging` found no existing equivalent entry before appending.

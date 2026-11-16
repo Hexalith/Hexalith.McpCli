@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-16-2026 08:50'
+last_updated: '11-16-2026 12:56'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -99,7 +99,7 @@ development_status:
   5-6-reject-new-proprietary-surfaces-in-ci: done # 2026-11-12: census green at b381563 (policy 1.0.6, 17/17 roots). Release chain kept; owner 1.0.5/1.0.6 not in it; Compile excuse removed per owner choice A'. Owner hash-only 1.0.7 written (20 exclusions, 1 allowance; scan green, 17/17 roots); 21 allowances and 12 exclusions remain waiver-only.
   5-7-re-disposition-eventstore-admin-and-technical-tool-inventori: done # Delivered 2026-11-13. Code review pass 4 2026-11-13: 6 patch groups applied, 0 deferred, 8 rejected; 49 tests, both completion gates and 26/26 guard-removal controls (live globals, identity control undetected) pass; corrects pass 3, whose 18-control claim supported 11. Approved bytes unchanged; two accepted deferrals remain tracked (approved-byte pending self-description; inherited NU1202/census CI red).
   5-8-refresh-and-re-disposition-the-folders-inventory: done # Code review pass 9 2026-11-16: all four patches applied (label ID-set, artifact/row type and approved-role tests; pass-8 commit citation), 0 deferred, 31 rejected. 103 tests pass in ordinary and synthetic lifecycle workspaces, both completion gates under UTF-8/ASCII, AD-23 and closure audit pass. Approved inventory/receipt/labels unchanged; K12 successor remains an Epic 6 catalog prerequisite; one independent CI runtime-maintenance issue tracked (deferred-work.md:1166). No commit or push.
-  5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent: backlog
+  5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent: review # Exact-byte owner approval and all nine roles recorded 2026-11-16; 29 tests and candidate gates pass. Separate authorization and PS03/PS04/PS08/PS09 label delivery remain pending. K03/AD-20 gap tracked; no parity or retirement claim.
   5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: backlog
   5-11-reconcile-product-claims-and-the-migration-plan: backlog
   5-12-gate-enrolled-modules-by-operation-shape: done # 2026-11-10 shape-coverage proposal; precedes Story 6.1.

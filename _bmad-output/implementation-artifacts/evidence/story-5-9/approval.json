@@ -1,0 +1,638 @@
+{
+  "schemaVersion": "1.0.0",
+  "decision": "approved",
+  "baselineCommit": "fbe4b6bd5502741ff8006abedac5c9bb27a4df3c",
+  "sourceRevisions": {
+    "projects": "bf9f98969efa036fd60700c627e712b4375e654a",
+    "frontcomposer": "33e71036c04f2b99955376e9c90cbb1fc3a81e64"
+  },
+  "supersedes": [
+    "A1",
+    "Projects 2.0.0 session decision"
+  ],
+  "requiredApprovalRoles": [
+    "Projects owning maintainer",
+    "Projects Contracts/query/security maintainer",
+    "FrontComposer owning maintainer",
+    "FrontComposer host/compiler/security maintainer",
+    "EventStore/Gateway admission maintainer",
+    "McpCli product/architecture owner",
+    "McpCli dependency/Catalog and conformance maintainer",
+    "McpCli contract/transport/security maintainer",
+    "Platform architecture/security maintainer"
+  ],
+  "rolesPolicy": "Single maintainer may cover the named roles explicitly; no role coverage is inferred from session approval.",
+  "artifacts": {
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.md": "253ac26d474e6d126d337682c1ec4539fb34c7c7c8fb412d39878cddc6b01e3e",
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md": "252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json": "7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/main-integration.json": "be51f67f9f3036bb328ceb7c72125777964138d537e96875f4c887286432430d",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c",
+    "_bmad-output/implementation-artifacts/evidence/story-5-1/verification.md": "3fa6e07b25b00f9c7db9df1a371c56145df976e369b1073349abe3d7701fbfe5",
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json": "5b0044a505f6cdcb95c5ceaa087f79dd705da54de3225ea9358f2b50f48e3b90",
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/labels.json": "06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json": "7adc8fbe4cf7ab7d37ea4746c36b0e1c99754c56bf8bc2dde7912940e83cd7a1",
+    "Directory.Build.props": "b0733d8f7d4beb1fb6284dec63d1974b40597ecf08f92f2281bf2b97cbb07837",
+    "tools/dependency-policy.json": "b9927eb571832a778c4447dd26d468f05a3ccac182501705dad86fa689548dbf",
+    "tools/inventory-coverage/v1/projects-approved.json": "18f9366ed6e9ab4c35cb1db02270ccdf1ad9e6f6a6470ecf0c3c8994e75112e8",
+    "src/Hexalith.McpCli/Hexalith.McpCli.csproj": "80cfd7f3ff23534bff30d9cb161c2968011c4f322ee7db59efbde54941e569e5",
+    "src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs": "f5c6bf6e4950bd87b6634e3dd25aac36f9bc91c2b58a12ab508b01099784af61",
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md": "c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md": "60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63"
+  },
+  "pinnedArtifacts": {
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:README.md": "65b2be3c12f3eaeb7e039535c040d4bab4d9e06acc3301a725addb1f96c636a8",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/domain/commands.md": "af0c4359498aa6cf98d9cffe80e4c7354cc55347e980175399f57b448790e73b",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/domain/projections.md": "863ea3f90473b216a3f4a926a29c62e4e717add5ab345de12983ca6739e17e8b",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/domain/validation.md": "1950b6dd0ba61f8821f49e8d3537b849fb5ced76801836af8cb8c775eb15a318",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/index.md": "048baff44a66c798b951d521f08e878ce7700e45f4c0ae15bc4982de07cd4b1f",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/mcp/projection-markdown.md": "b1eb2584211e1fc6c0cba00b2d64c564b290c0a66681d3dcc7fa23d3f45552f2",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/mcp/tools-resources-lifecycle.md": "1ae089254963db68c2f975a08d91b346822458440a703261dbbe5c2357d94b66",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/migration/versioned-corpus-rules.md": "5e48427e2874d8c1fe044d56fd66c696ae6eb4a13b3c0a10157f6bfaca63d93d",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/samples/new-bounded-context.md": "4c59822c5d5a6375148a5c663a509d545843444b4820f29418a8d6da2a3df038",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/security/tenant-and-policy-boundaries.md": "c46cdb5c5507647f46b37bc6ff52a91d4f7093476289aa5fb4ce79a6890464f5",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/setup/package-and-hosting.md": "915b97b2b9f09f598d55b657e8e6c7ddc61cec2673390ee503efac39c0d03a9b",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/team-overlays.md": "59f2f13079b04d74bd62183ab959c3e8efbd0e8cee92dd9908b9f19e59e8c7d4",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:docs/skills/frontcomposer/testing/generated-code-validator.md": "157783386bf58326dfeafdb7affbad2ee6065ca1fcc70eb0c9b606940620b559",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:samples/Counter/Counter.Web/Program.cs": "820f1e17232170662434949d8f88c8c840941443090f576506a29602ad1e20b1",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Cli/CliApplication.cs": "10b8d8d0cb0eebac74f7fa196030c6db15fb3d5a46857de9ee1ca22328de7ab1",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Cli/CommandOptions.cs": "5b15a48b14dbdf5f661857dcdec6c31d8d87f25d67c2d4da7d60b737ba7e73e8",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Cli/InspectCommand.cs": "f61e6fa5755914bfc61d11e4cb55e9eb6312b6f77788d03e7e5a2bfdf331a114",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Cli/MigrationApplier.cs": "2908fadd252c02cbc5ffef919dde4501c61a66fae559497e336cb63c5b3e1e3f",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Cli/MigrationCatalog.cs": "021f753d870b1037235ecb7aeff7fcb8d523b1d588417aaefc24e57bd7d47662",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Cli/MigrationCommand.cs": "5dce13d44203a13088f16177a9bcd70b7c21648a25620ac54e64f24a82d93f03",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Cli/PathUtilities.cs": "fc08c80822520b34052d763604975c290b62db2d54335a6a00964aff143858f0",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Cli/WriteSafetyPolicy.cs": "b7d02ec0703961ab374df2057b8cca9a1a20b20315e1e4f9a2cefd5928247132",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpEndpointRouteBuilderExtensions.cs": "67552fbbce73e69f22de84e26d880a6754747a3f863029c57ad540f108b5134c",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpServiceCollectionExtensions.cs": "e1be52c194356b417157f79425379456bf473e0bd3b6d1f126837413e13cfb2d",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/FrontComposerMcpApiKeyAuthenticationHandler.cs": "ad4eed45546c7685e09312db34dacd3230ba26b965e2de2b4f7618232f9f70b3",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/FrontComposerMcpDescriptorRegistry.cs": "e9c457699152afa8dde0018f7c4cef38c7729af0d7f30d4ddf2541bff2976aba",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/FrontComposerMcpOptions.cs": "6e4e4ca5ea4a24b0343e917dd001cf12f7050729c7c1e9ee2e3ae8cb4f34d12e",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/FrontComposerMcpResource.cs": "f578b0c664ce8acbbc9d54d976a804fe05f011fa4f5888bb163afc44cd55a95c",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/FrontComposerMcpServerOptionsConfigurator.cs": "b3b7e3892a1004e2b482744b04b256483ec58dd08809e111adc01cc2cba915a5",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/HttpFrontComposerMcpAgentContextAccessor.cs": "bc4d669b10ae4f4c1ac31ce4023defd7a565ca2b80534a7a52c0812de925a821",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpCommandInvoker.cs": "2074077602d1f5614d6e94d4d8065d8e110e81ccacb1afc807680daba22bcced",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpLifecycleStore.cs": "ea4c919428784a150009c9fc7a8b1efedee5b6f050ece49de2d37dde82fb85b8",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpLifecycleTracker.cs": "0c3ed764c7eae992737d3b6165408e6b028064ad56a13f6993f5856d25ff3a27",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpProjectionReader.cs": "5bc2ae58c98e864b875d69fab11a78621fdee63ea046ac4747e6a28ab80f705f",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpToolAdmissionService.cs": "303738e77ce237894f252a1acf5073ca053ea753c5d6d05b67241e51c86e3eac",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/McpJsonSchemaBuilder.cs": "1002a74ce59074f8ef8b75474f3e844d6aa0cf3463b3f50cec108654b4e8aabe",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/Skills/FrontComposerSkillResourceProvider.cs": "1107c6cd3fa32f48a7aa10462395380b6ecbeceffd8103ba13de310647a4ce0d",
+    "references/Hexalith.FrontComposer@33e71036c04f2b99955376e9c90cbb1fc3a81e64:src/Hexalith.FrontComposer.Mcp/Skills/SkillCorpusAggregateManifestBuilder.cs": "149b50f2fd61fe2ed3767de331fbc5823e2461b93d0d19d678dca825942d23b0",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/domain/commands.md": "af0c4359498aa6cf98d9cffe80e4c7354cc55347e980175399f57b448790e73b",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/domain/projections.md": "863ea3f90473b216a3f4a926a29c62e4e717add5ab345de12983ca6739e17e8b",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/domain/validation.md": "1950b6dd0ba61f8821f49e8d3537b849fb5ced76801836af8cb8c775eb15a318",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/index.md": "048baff44a66c798b951d521f08e878ce7700e45f4c0ae15bc4982de07cd4b1f",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/mcp/projection-markdown.md": "b1eb2584211e1fc6c0cba00b2d64c564b290c0a66681d3dcc7fa23d3f45552f2",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/mcp/tools-resources-lifecycle.md": "1ae089254963db68c2f975a08d91b346822458440a703261dbbe5c2357d94b66",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/migration/versioned-corpus-rules.md": "5e48427e2874d8c1fe044d56fd66c696ae6eb4a13b3c0a10157f6bfaca63d93d",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/samples/new-bounded-context.md": "4c59822c5d5a6375148a5c663a509d545843444b4820f29418a8d6da2a3df038",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/security/tenant-and-policy-boundaries.md": "c46cdb5c5507647f46b37bc6ff52a91d4f7093476289aa5fb4ce79a6890464f5",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/setup/package-and-hosting.md": "5dc9401bff4d39a4bceb982b4fcb37f22af09aeccdbf073661a8024e584922fe",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/team-overlays.md": "59f2f13079b04d74bd62183ab959c3e8efbd0e8cee92dd9908b9f19e59e8c7d4",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:docs/skills/frontcomposer/testing/generated-code-validator.md": "157783386bf58326dfeafdb7affbad2ee6065ca1fcc70eb0c9b606940620b559",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Cli/CliApplication.cs": "4aeb0d90f1666d48d68d5345e94dbe3666adcdebc6b1ee22801103a93dd57bd8",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Cli/CommandOptions.cs": "5b15a48b14dbdf5f661857dcdec6c31d8d87f25d67c2d4da7d60b737ba7e73e8",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Cli/InspectCommand.cs": "51a6c91050fd760dd1fdd951f9e580cfc63427870e1149589dcb4f8846a7b2d3",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Cli/MigrationApplier.cs": "2908fadd252c02cbc5ffef919dde4501c61a66fae559497e336cb63c5b3e1e3f",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Cli/MigrationCatalog.cs": "021f753d870b1037235ecb7aeff7fcb8d523b1d588417aaefc24e57bd7d47662",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Cli/MigrationCommand.cs": "9a91825381a6ccd8244497f7fb35ddf1e4c1ee2d2f686d41f1680c867d659839",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Cli/WriteSafetyPolicy.cs": "f682c238f63622d162e4bab7069519c84bc5771be489167b1bf72b3fc8672142",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpEndpointRouteBuilderExtensions.cs": "d11c32059980762fcd6fda2b731f8b88bc5bce9a5645bfbe440a60e8c77813f2",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/Extensions/FrontComposerMcpServiceCollectionExtensions.cs": "e1be52c194356b417157f79425379456bf473e0bd3b6d1f126837413e13cfb2d",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/FrontComposerMcpDescriptorRegistry.cs": "e9c457699152afa8dde0018f7c4cef38c7729af0d7f30d4ddf2541bff2976aba",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/FrontComposerMcpOptions.cs": "6e4e4ca5ea4a24b0343e917dd001cf12f7050729c7c1e9ee2e3ae8cb4f34d12e",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/FrontComposerMcpResource.cs": "f578b0c664ce8acbbc9d54d976a804fe05f011fa4f5888bb163afc44cd55a95c",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/FrontComposerMcpServerOptionsConfigurator.cs": "b3b7e3892a1004e2b482744b04b256483ec58dd08809e111adc01cc2cba915a5",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/HttpFrontComposerMcpAgentContextAccessor.cs": "cb6b19eb080c8e9172be77d51e7a858a3804b8cde93d67ab758d1f85b44fee95",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpCommandInvoker.cs": "536d3dbf34d858074bfbd9c988bd1a291e4974541ab1d769c582a9b8abe971b5",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpLifecycleStore.cs": "92dbbb053b59247f207bfed7b5048c49a4a2c688b98d17ed70f4f1b9296397b7",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpLifecycleTracker.cs": "d34d1d9c25e5684f2ea65826821fa00306d14b7cc286cca869b39831fa8df760",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpProjectionReader.cs": "5bc2ae58c98e864b875d69fab11a78621fdee63ea046ac4747e6a28ab80f705f",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/Invocation/FrontComposerMcpToolAdmissionService.cs": "a04fb5ae31718599432a0885e1e978467d3798189951e82bb4c81333ad657dd9",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/McpJsonSchemaBuilder.cs": "1002a74ce59074f8ef8b75474f3e844d6aa0cf3463b3f50cec108654b4e8aabe",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/Skills/FrontComposerSkillResourceProvider.cs": "1107c6cd3fa32f48a7aa10462395380b6ecbeceffd8103ba13de310647a4ce0d",
+    "references/Hexalith.FrontComposer@81a440a8890a17edb39924bd0cf676eb6f6b5c25:src/Hexalith.FrontComposer.Mcp/Skills/SkillCorpusAggregateManifestBuilder.cs": "149b50f2fd61fe2ed3767de331fbc5823e2461b93d0d19d678dca825942d23b0",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Cli/Program.cs": "073be3a4ae1bf599eacf919b5748e4f07290033ddf378ac88f46b4a238a576ed",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Cli/ProjectsCliApplication.cs": "451f30fba14516d731830f4a408b4624042aa71803dac0361cb6525510c3ef75",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Cli/ProjectsCliExitCodes.cs": "1ebf167223251b4f22eac966ac092c94e2d443955304a2d54d4a94879f5793f4",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Cli/ProjectsCliParser.cs": "135b01d648cb2b660291352348102657d1340f0594dcf499a75d7496d423a7af",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Client/Diagnostics/ProjectWarningScanWindow.cs": "19765822f074522d963168abd524da1c0e7e77c482f78cad48f13d71c6949262",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Mcp/ProjectsMcpCommandService.cs": "be9f9bae0385000db3a0ca681c67c3be49ca63ec918b56de2ba16cf6a21ffc88",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Mcp/ProjectsMcpDescriptors.cs": "4d24ac35730cb0bbba363b572f8b08310ffd1e1105fcba6a7c2a27b9b9daa2e1",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Mcp/ProjectsMcpResourceReader.cs": "418e97ad91e410c49744037455df48ed228a58a27ea07c14d464f07a2a5817ff",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Server/EventStoreProjectCommandSubmitter.cs": "ae534387b27aeacd370e3ddfb25bc087db8e6759a1d377d9039c2e4c3eaf0c85",
+    "references/Hexalith.Projects@3d256e632a7645bc2261e668ac7c74be81155f58:src/Hexalith.Projects.Server/ProjectsDomainProcessor.cs": "de2c38c3254509a5af6ee75ed5723c5a089d3abc22248cd9a5079b13e5d62b5f",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:README.md": "d093eb74092a75dfa6ab1d374c8a61da54533e5cce0a9855930aa6c238cb8e45",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:_bmad-output/implementation-artifacts/evidence/epic6/6.6/d9/contracts-package-closure.json": "81fe1b6c390b478bbb5efdff90d38260f05007ad685942eb046613625fd5ff8f",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:_bmad-output/implementation-artifacts/evidence/epic6/6.6/review-pass2/candidate/Hexalith.Projects.Contracts.2.0.0-story66.3.nupkg": "349f938db77dd83ff45e200997b1cba97147c46b1855ec58fd6e2a4b0572eff5",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:_bmad-output/planning-artifacts/epics.md": "cb7387b5e0ee2ae8dab2e7de95e73830bc3e4276552a54d0254b5af5dae97952",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Cli/Program.cs": "073be3a4ae1bf599eacf919b5748e4f07290033ddf378ac88f46b4a238a576ed",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Cli/ProjectsCliApplication.cs": "451f30fba14516d731830f4a408b4624042aa71803dac0361cb6525510c3ef75",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Cli/ProjectsCliExitCodes.cs": "1ebf167223251b4f22eac966ac092c94e2d443955304a2d54d4a94879f5793f4",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Cli/ProjectsCliParser.cs": "135b01d648cb2b660291352348102657d1340f0594dcf499a75d7496d423a7af",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Client/Diagnostics/ProjectWarningScanWindow.cs": "19765822f074522d963168abd524da1c0e7e77c482f78cad48f13d71c6949262",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Contracts/Hexalith.Projects.Contracts.csproj": "38bf0a5ebebd73e1c503cd2f9954f458f331db1fb7be008e007797f4c191e20c",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Contracts/Queries/GetProjectQuery.cs": "774ced2b4c6f971b9ba079b849dbc315f153830c260fb1a8142c1bd84bbebd7f",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Contracts/Queries/ListProjectsQuery.cs": "39ef2bbb7b1aa8f2856c8661c21d1eafe3e5c5a3cbbe171d557f723b10e24653",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Contracts/Queries/ResolveProjectFromAttachmentsQuery.cs": "7928eea8dcb272c87b64b53c1357bcbf42d327b2306ca11d80134b4153336c35",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Contracts/Queries/ResolveProjectFromConversationQuery.cs": "28c04a7474113094c31a23e88441d501f44c41c2fc9a0cc14c91541c633da562",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Mcp/ProjectsMcpCommandService.cs": "be9f9bae0385000db3a0ca681c67c3be49ca63ec918b56de2ba16cf6a21ffc88",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Mcp/ProjectsMcpDescriptors.cs": "4d24ac35730cb0bbba363b572f8b08310ffd1e1105fcba6a7c2a27b9b9daa2e1",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Mcp/ProjectsMcpModule.cs": "895e2cc82fc987edf45d11aec64e29831eda3282c96ebbc4100bfd16cfa570de",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Mcp/ProjectsMcpResourceReader.cs": "418e97ad91e410c49744037455df48ed228a58a27ea07c14d464f07a2a5817ff",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/Authorization/ProjectAuthorizationGate.cs": "d08493706525a4e59a2bed6e51ab6c9e986bc18e1a36c40e1da1b6d0445a342b",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/EventStoreProjectCommandSubmitter.cs": "ae534387b27aeacd370e3ddfb25bc087db8e6759a1d377d9039c2e4c3eaf0c85",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/ProjectsDomainProcessor.cs": "74977c90dad8e33687e013e371a16d9e70f2279b4aa8dfee2cdd813629c71d17",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/ProjectsDomainServiceEndpoints.cs": "1abe24488e72f452b35f4880fc15e3abc6b48cae40d0abfa64db4f7ab5629180",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/ProjectsServerServiceCollectionExtensions.cs": "8261fa7a5c840b34d1e93165664ae47a7296c933b95e0d6ac8314bffad5520be",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/Queries/ProjectQueryRequestPreamble.cs": "c0eed1f1d9c67ce5ce8d55e0ff43afd6f64b88fbb258df694612653eaf4238eb",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/Queries/ProjectReadQueryAdmission.cs": "7597cb8046886abe1f17f6b86e6843b5bdcc0e3e92d5e28db961085d035160a5",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/Queries/RefreshProjectContextEndpoint.cs": "1a1b5bb894e1540b96333ea67e1ed0d5f0fdb57cde20d781051f91270c648595",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/Queries/ResolveProjectFromAttachmentsEndpoint.cs": "044f6004c2b4b7a0a9d633d96f214c10995e45b907365331ab388b5447deeb20",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.Server/Queries/ResolveProjectFromConversationEndpoint.cs": "c7f3775ea284931e7f6bd9e59064da6b18705e5e737c96eab0af05ac1a26b4e9",
+    "references/Hexalith.Projects@bf9f98969efa036fd60700c627e712b4375e654a:src/Hexalith.Projects.UI.Contracts/Hexalith.Projects.UI.Contracts.csproj": "3c570c0aedb6a5924b34341632080fcc126a33d55e84aa22cd3ede4320808367"
+  },
+  "amendments": [
+    {
+      "module": "projects",
+      "fromPath": "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.md",
+      "fromVersion": "2.0.0",
+      "fromSha256": "253ac26d474e6d126d337682c1ec4539fb34c7c7c8fb412d39878cddc6b01e3e",
+      "toPath": "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md",
+      "toVersion": "2.1.0",
+      "toSha256": "c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af",
+      "changedRows": [
+        {
+          "id": "T01",
+          "fromSha256": "f0593175387e2f412be809c9015a1b707c3b0a1bbbb83c58b1c56f361a204161",
+          "toSha256": "21914395a1565ce47e733bf9a5e433a0fe1b0b17ef96caf02a110bb08a236353"
+        },
+        {
+          "id": "T02",
+          "fromSha256": "a5133828dcc74ab9003aa83912bee179df935882f273a41804746560d5577c42",
+          "toSha256": "ed9582941e590a8fe82fa94751f3a4c79fc9cf5275b4cc02b4c52cdfe9355490"
+        },
+        {
+          "id": "T03",
+          "fromSha256": "40fd4b039ebfdccf349bc7849f23ae4024221f149274742ba68dd7379a7ca4ee",
+          "toSha256": "af801bb1d917d9308bcf0c2526027fdc39d216bfd82f4fd45c77b716da50804e"
+        },
+        {
+          "id": "T04",
+          "fromSha256": "c5e4cf8228b17b5e4c2173bbf1c7f1ce825babc0bf69155204f5664b68f684bf",
+          "toSha256": "3c7ae755278d2b0ea504c4cce06dee595dc60a3522abad6dec01e5a46e6bd002"
+        },
+        {
+          "id": "R01",
+          "fromSha256": "4ec79f1e0558d1a988334404b0e27f0e12d57f765ffef42e14a9526c93c4b0bd",
+          "toSha256": "75d52be7f8ea55534a3d1769e6f2c16f66dfcc27af171c30bf2b760437c4a634"
+        },
+        {
+          "id": "R02",
+          "fromSha256": "ee1d0630f13a549224405bf9c726468f41d8fc95a26efe6379cfafa449b94bbd",
+          "toSha256": "8be5273c787f1ce4dfca77646b2c420160c5aa3b150cb27a52effe1458e9a545"
+        },
+        {
+          "id": "R03",
+          "fromSha256": "0d2ea5d2100320656c2bfc4396a4806115750f8f3c746f28b31ecabc390b7b3e",
+          "toSha256": "1c2d6a230a2fc1f4f71d5b2e0f7fd1ef9fe4b233c5b051b0cceeb067f5fc1e87"
+        },
+        {
+          "id": "R04",
+          "fromSha256": "e189c25cf3d01c575f3212448c7ba501ccfbf28c3fe7eef34e58d024465137f5",
+          "toSha256": "1d87aa74746ede33ee1e44a5c1232e9a891e63f299ec8c473cbae944bf824e82"
+        },
+        {
+          "id": "R05",
+          "fromSha256": "9a9e86b3160c9d34ea55c86f814b890fbfff44fd3970ebea3479f6d2e0fa679b",
+          "toSha256": "7d05b895064e4b96f71b6630b3faa7eb6044e159a2d98c52ae82cab5520e5ab5"
+        },
+        {
+          "id": "R06",
+          "fromSha256": "8e16a3f9e888e2402df70ee069128b7266ccc191964d86c086220ca58412ec50",
+          "toSha256": "733c74b77631552f12af275d2df22601bdee94f49fe97df261212400ebc957a8"
+        },
+        {
+          "id": "R07",
+          "fromSha256": "076e1be82b67c0908cefae17af36cf5dbe2f1e8be0a12d19a8593c4f822909c4",
+          "toSha256": "00c79af7d9e8952519ae765d519ddbeaf6bb68dcb30d130cb677da1d71a665e6"
+        },
+        {
+          "id": "R08",
+          "fromSha256": "8a7e06948b1c02d4b12c92832a498a810b7e1daf63c91aa8bf3e6fe2eee6d625",
+          "toSha256": "0b9480cf58256558fbd6c6fd05221a72a62de63f0a55a26444b9e712e41d60ff"
+        },
+        {
+          "id": "R09",
+          "fromSha256": "9e5e1e3b0dc711fefdeaa2d1142577c7b3993218cfaec9f4babd59eb157cf385",
+          "toSha256": "5428e103cc4ec5de9c073618f721089f03f12b8923171482dbfd50d776302a06"
+        },
+        {
+          "id": "R10",
+          "fromSha256": "19623e0a45584b428bedbbd716f3cca0ca0c53acf63009c5a1857fe3b5919e83",
+          "toSha256": "c5e707c09bbfdaaa602cc0a310b2c80d6d279b531183436be1aee49406c0c58a"
+        },
+        {
+          "id": "R11",
+          "fromSha256": "ed811c3c240ad058089fddc7178fdd58a863e70717f501e73673f7df2c87d5a1",
+          "toSha256": "cb8a53bcf9307b693a640ffbe8873090b2ba60e2e9926c13a40ad6257687a73a"
+        },
+        {
+          "id": "M01",
+          "fromSha256": "85eb0b60badd04f3d2db7d59f41b9b326b39d544c29ac3292772eefe835d7afc",
+          "toSha256": "fb51317ca1ced83327c2ddc6af158bde7c821f905f01c26500a6b50d12a2662a"
+        },
+        {
+          "id": "M02",
+          "fromSha256": "0ec0fda0095331891a099fa70cb59d72d1ba345b8f898ff9005515fcd73ea40e",
+          "toSha256": "bd0bd09417da90dc17405b61f8598c257ecd72745bca2da37136d148a003f10c"
+        },
+        {
+          "id": "M03",
+          "fromSha256": "73c252d453ab1984d7ef1310b74ec81e348222c593d87063024f99ecbfcd1933",
+          "toSha256": "933142cf2c3cd5531fb54b73a9adfd85853ab74e534aa7e0b21ed8a75da45c10"
+        },
+        {
+          "id": "M04",
+          "fromSha256": "6f9721892ae0cd83090a6c66f632b37caa050e826a5d0d37eacfd6762e8d92a7",
+          "toSha256": "8a08d59d4375b70be62801fc0db9724dd54e59b7fb14735d16f7d340cc29e7fa"
+        },
+        {
+          "id": "M05",
+          "fromSha256": "01dcea183272065a27e0c0de93a6dc474d305d49c2bf98f6d4dcc1409a630e30",
+          "toSha256": "b023cfa8b2de8b118698326c4b43fbbb2aa1e663817588ac1731348bf1ccf2e6"
+        },
+        {
+          "id": "L01",
+          "fromSha256": "ca4d3a9d167dc74b172dc2bbc9aea688e2d6d984df5c3b9281363d49562cc4f0",
+          "toSha256": "4cec3a0ead6fa262e4ef95f7556bbbfc15e77e7c5664a91630a7d89f1c6b5b2f"
+        },
+        {
+          "id": "L02",
+          "fromSha256": "5bcc7021e70b0eedaa665ab37d0ea23c7159df75a887dd4328512110603e3b9d",
+          "toSha256": "7fc3f2b65f2c6f174b86b2866d9ce3c098f54d223c7bb11d12a19d348df0a52c"
+        },
+        {
+          "id": "L03",
+          "fromSha256": "195f78ec67668234a1b3eee7c0353afa93f24b54944e19d2e9c05ae0a4bdd1fc",
+          "toSha256": "70b4875a20ed3f337e8bfb5e18c5ea2712424c475f3ba17fe1b41520d60c492d"
+        },
+        {
+          "id": "L04",
+          "fromSha256": "d71e29b28d9fe49b7d2ca39931c759489ab9e5ddb9e20e7c6e2f933f6d1e57a5",
+          "toSha256": "a383c32d6fe8229023bfe61a449063b6b52ef6fa43b267c493cb1bafc7db2967"
+        },
+        {
+          "id": "L05",
+          "fromSha256": "2e96c7632636c44f3f82b1248930155f85beec287d579f7b28f6d2fe9d279f4a",
+          "toSha256": "dde9e9e61a9f62be27bebc98210853ca0f37f5026e8e038d2bb5ec1aae71a167"
+        },
+        {
+          "id": "L06",
+          "fromSha256": "c1901761416f53fe0a6c522f7582bac70da6f524f5dfab8f5dce78e255892966",
+          "toSha256": "86201b7be4fd832a75a747b241b736a629d259221bad5808f293cbc4c4cf7e52"
+        },
+        {
+          "id": "L07",
+          "fromSha256": "cd1d784337761fade9c431806d8b10f2629eb94e4e8e9455b9c67e83a4347357",
+          "toSha256": "1c8ea92255ac00bd6c02d7b22e48ed18581016c5525fcb85e74616c3a3ef2451"
+        },
+        {
+          "id": "L08",
+          "fromSha256": "3c872881f42ccee192dedbb1e9124d66a21add6a40a3236b928d7b85c6a5b563",
+          "toSha256": "f390e9d54274f2db915dc0888cffaa848861c4c14123fb4ee9fe403913e247f4"
+        },
+        {
+          "id": "L09",
+          "fromSha256": "e3204c755085fe199d37952d9379c0b407d51419408d2a2e39a91624ca78479f",
+          "toSha256": "05277761a2ba54a37a8961db0a23d417b6ec01631fded63332530c935e3a73de"
+        },
+        {
+          "id": "L10",
+          "fromSha256": "3d192d43d05d00eefdc9897fe418ae0d109da7615cd588e192308f376707fbeb",
+          "toSha256": "d1b593323229444e9c4ccc2220bcf86d8ef21bf6b2b152946edf273d77b1516f"
+        },
+        {
+          "id": "L11",
+          "fromSha256": "2fe02666f16b4e451babe82ea1cf00b05946789d7d351a78d032b8e8a7d8d64d",
+          "toSha256": "9f7aa4248507c7b89e4bd56eed84969b709eabf9ba877649c4023a4617511e15"
+        },
+        {
+          "id": "L12",
+          "fromSha256": "55f9f85188a3fd955a1b1b4c48d716ff8d89a02b5a43a5a4c4893e50d55d3f42",
+          "toSha256": "9c4dc0d35fcad93281ad3066f982c97f236e258b384badc6aaff18506a1aaf6a"
+        },
+        {
+          "id": "L13",
+          "fromSha256": "bd3ab6b37c0d54ec585619b0c28ec2136470c8d4b0bee7d82c1c8c0280b02fdb",
+          "toSha256": "720603499868b4e3b81f5b04e608928c898cba7f786f572229303102ef22cf8a"
+        },
+        {
+          "id": "L14",
+          "fromSha256": "0fc00644e0f526b5cb8c5c019cd19ae6e93ec9ac300ff5ed99a4e203d88ec197",
+          "toSha256": "6f29008de71a7ef056f516fc237d57dfc330ac27268cb73bbc109cfef8928753"
+        },
+        {
+          "id": "L15",
+          "fromSha256": "d3b0c478d693e6aec38887adbf1a6fe9a8ebc88263d9c786499a61060f421456",
+          "toSha256": "9951f01af65dd11e072738aa70c48e6a1f9f6c41ab8bc1e64fccdf09c8363375"
+        },
+        {
+          "id": "L16",
+          "fromSha256": "4b5655edd41654081be78bf9fa80c4b124bf716fa6f1a0ed13576af228bc923b",
+          "toSha256": "70e69a32b79205ecb045d8b0719b7d66a23a2ceb5ced08d71835914dbff989ad"
+        },
+        {
+          "id": "L17",
+          "fromSha256": "dd7113ed808ff852c80f941892a65820f09a122c4863b608941391bf67ccaa6b",
+          "toSha256": "4dc6605840bdb3c444622cf94dfc2b9e5b0963bd89e45c62ae2d8a976ff673b8"
+        },
+        {
+          "id": "L18",
+          "fromSha256": "fdf67c94156bbc2234cebee05a7220eb71571f6d7bc2471d0775bb315bbe81cb",
+          "toSha256": "98522eadf56b365f37c4a035e3665e229fe7b81152efdbdec0c25124bcd71cc9"
+        },
+        {
+          "id": "V01",
+          "fromSha256": "1ec76614b7fff9566e00ef338a891830cfcac12d480b9f00c367f8213bfbdc3f",
+          "toSha256": "dd375c09af584435fdbf8b0a3b3007edae5723682cfec38bc6ed243fa6230229"
+        },
+        {
+          "id": "V02",
+          "fromSha256": "8517b7489d33ed2c408d903c9dbd4f36baa0e61c2d68232737986dd500847265",
+          "toSha256": "20568cbf6534df9209d6ea06922316b5da647279d04361b8d41b939d720ef16e"
+        },
+        {
+          "id": "V03",
+          "fromSha256": "ed190bac584ba4246f01e353ab88c275671ce8dd6ab118b06e8f460d8ba817f4",
+          "toSha256": "6d9f3ee4b7f62206096314a2844f7c6b3fb7dde9ab66aa8d31ac02b23d06cbf0"
+        },
+        {
+          "id": "V04",
+          "fromSha256": "a2fbf0cd827917901dda5da646fb65a8d09aa0b175b95e6320c3e28b2d8e1c2d",
+          "toSha256": "da712088f64c1040e7af09c758b802bea0c0aac702a7af9579e90a7229de0723"
+        },
+        {
+          "id": "V05",
+          "fromSha256": "0a84136c0571f5ee250f3d0b85568809d5f5dc14099da7200ab6d442756077a0",
+          "toSha256": "937e9add66947a1679bfe5704ed753beaa4581771feb844d3a1ebae4b48da061"
+        },
+        {
+          "id": "V06",
+          "fromSha256": "39ca35838cbda743aece61b063c4a81de5e7889689d2d694d327787558970a63",
+          "toSha256": "588914540a0db2add8af8888b933bad42cd1a63b7c621de185303ec2ec160fc7"
+        },
+        {
+          "id": "V07",
+          "fromSha256": "3e5c385960f62daf35e880f5d4805531d0b0331bb6b7ecd3f690657598d78600",
+          "toSha256": "89d966ffe54ad295c4d86f4f129328f577583e5b8f6a9f180bfac26259c4e32e"
+        },
+        {
+          "id": "V08",
+          "fromSha256": "d137c97c9f44a93b43ce4004c983a75db9552ea09fbc44926a561f4a73265ebf",
+          "toSha256": "6fb5fab8e41f9a02824578f840a4e7b8a905daa9a4f6e67a05627200d37096cb"
+        },
+        {
+          "id": "V09",
+          "fromSha256": "0d7167e5d66e17fc289e5155d5882c57c9ea1384cf21962dcca07f59f6f991f5",
+          "toSha256": "23d6f240f089181a1f7a176d3b38d161eafdc4dedf29241856d4df5fdada1832"
+        },
+        {
+          "id": "V10",
+          "fromSha256": "048b80f37c65659d8c4851d16bec93d93b80acd587c2bde24bb945db7aa682c0",
+          "toSha256": "dfb2ef650b4686ae08fc7e98159016bcbd8acb0d1218eef49c665208aa38081c"
+        },
+        {
+          "id": "V11",
+          "fromSha256": "585bf305f06a04fadb6a0b254cfb1e10d99deaa9ca4bc6f5debd0aed352af3a5",
+          "toSha256": "386ac5cc51db8e6b26366a058dbaf7402ab34fd62a8a07378281ab6150099da7"
+        },
+        {
+          "id": "V12",
+          "fromSha256": "99de7fbe4057160b58dee5746f64f618c784ad17b5f2ae08f14f10b4c6b12efd",
+          "toSha256": "d43d6f5cc1b99cacdb1b33c2d0c32274585381802136cd3bcfc08eb22f8ca115"
+        },
+        {
+          "id": "G1",
+          "fromSha256": "ca0e1c51a9b8a4dc78e83ea7cee1a19bd08dd9bd093c987a88599798ed009035",
+          "toSha256": "c318966ce8047173ce4094fe77af36c2f4e645e1736e27e789b0d4210e0664a5"
+        },
+        {
+          "id": "G2",
+          "fromSha256": "975a65ee26475d0f0972edda993829bb651f5f97a71a13eb4de08792c2593d08",
+          "toSha256": "e26389b13614cdf12deb0f838f3bfe69ef819115473465b7279e139327211b92"
+        },
+        {
+          "id": "G3",
+          "fromSha256": "9fe6f02bab08caf3ca5ced25e2bb06b3d8cf8f302add235f7799daf98756b114",
+          "toSha256": "964595e915e8f15860ad54d16a70f25cd940e331237e72fa6abd05439248e4e8"
+        },
+        {
+          "id": "G4",
+          "fromSha256": "6b003b5c279ef5c8350a68ed3278317e193720bfe8cbcfc51d511d9dc1c858ed",
+          "toSha256": "e450c31e216626cc5ba4ff4b818e1d7611a73b088adbd41d08058204958d0320"
+        },
+        {
+          "id": "G5",
+          "fromSha256": "9f10a6b902ff2dd5680b9de29fbaaf3d6b07ca50348031af7ed435ee834d6848",
+          "toSha256": "24f068e078b57abe4cd0e766d62b6022c6dd084f2b006b12fc37fd5fdd75f85e"
+        },
+        {
+          "id": "G6",
+          "fromSha256": "62059500af86ad69c268233053379a61f9280f9335e5670f29046cb1e8d3dab4",
+          "toSha256": "aa702c2bbc82f7c65454aae4bd358042b703e845c52faad32e5024dd8e8405b0"
+        }
+      ],
+      "addedRows": [],
+      "removedRows": []
+    },
+    {
+      "module": "frontcomposer",
+      "fromPath": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md",
+      "fromVersion": "1.0.0",
+      "fromSha256": "cde0f43ae82376c37411017e88a3b692d0980622833310fecb29f040eb1281a9",
+      "toPath": "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md",
+      "toVersion": "1.1.0",
+      "toSha256": "60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63",
+      "changedRows": [
+        {
+          "id": "H01",
+          "fromSha256": "5561643a79934ac74f4bed44cecd13e3962d19c5164bdb3bbb5a03a578bc30a3",
+          "toSha256": "0f3f509cd7dcd602d9c0bb360d9da5c11ba9b33381c40ce56bd13cdef53243b9"
+        },
+        {
+          "id": "H02",
+          "fromSha256": "44380e81292149bb6f27b5f1af4533aa2352db1347657fdc26b5170efd69800f",
+          "toSha256": "e82b31ec0866ddffec47c565e946d9bdbab472bebf0ff4cdd4c74db53a553aba"
+        },
+        {
+          "id": "H03",
+          "fromSha256": "94e27902ec3783f235620454ea14d567a6b621744b7498c15aa4e4a0bb69b0f2",
+          "toSha256": "8f5b03cb03c8c1c195ac308e1729de10e7671eeb9ab497246607b7c857e3d81c"
+        },
+        {
+          "id": "D01",
+          "fromSha256": "761bf53079a0baf6d4e6322582c30ec3a9ae5f9c46e953344b49e4c6e1b5ded4",
+          "toSha256": "604dc96580f552b422b77069f12c18d801690fda865a4daf8c3bdef33c098954"
+        },
+        {
+          "id": "D02",
+          "fromSha256": "1bc3cdc6dd0c8d187442ddd009a2bd676d7c73f0dc2ebf7fa1cfa77c7e962a0f",
+          "toSha256": "4f0b658da66f7e1c0c1a389d14092321ab311d3533d6df0102d06ded22b3fddf"
+        },
+        {
+          "id": "D03",
+          "fromSha256": "9a808bd8183150352a1691bf6f076e6d0b25216435095534c04645c135a8e464",
+          "toSha256": "91cd08c50376f94c4fd8fa5b567b1a8ff9f48c5996a85589298ec3b29243e26c"
+        },
+        {
+          "id": "D04",
+          "fromSha256": "7e170ef8d4f81b547331f9ee25f1b434d1de50459411ad21d0ba1451faa9e59e",
+          "toSha256": "5032f45c9bf5e4ffba80f97cf54d1e9ab7a359392d47e981087a009cacab8905"
+        },
+        {
+          "id": "D05",
+          "fromSha256": "4b4d31f9bd105747384f9798e7d58205bba8a83db388fc6ffd72740cbcdfbea6",
+          "toSha256": "e1d72fe4b0e2c28f23c38156c91f89705e5dd6abf0cc5054aac81fee7d9ea81d"
+        },
+        {
+          "id": "D06",
+          "fromSha256": "7288b26cfd7db9c1b8d976ceed67ad2b4f91aeca53225e96ad3394d32ef33adc",
+          "toSha256": "69633356282a207a6a554edea88b1cda01f86f4860f39d7eff79eadf3105fa72"
+        },
+        {
+          "id": "D07",
+          "fromSha256": "a13a3dc266eff3a4b98492e11e46db6ec811c917f59ae5ce5892fe505edb01d2",
+          "toSha256": "bcf14710ee6b76cfa4dc1490874c88ad5f1cfb28935fc8d0df4e33d28f8e9c40"
+        },
+        {
+          "id": "D08",
+          "fromSha256": "bc40e955153d1a9a8a5bf08651322f6558d58279bb7252e06189502b8d7cfb58",
+          "toSha256": "18f64d0c76bebc4c4c3054c408c72b6a21ebb05d14c0778cd5287cb84bf06345"
+        },
+        {
+          "id": "D09",
+          "fromSha256": "f618be5e8527e96714261dc4e713b09a00636e347579d2c3e174cfd6f2fc8aa8",
+          "toSha256": "359f17a2d19d98b7e429f5e66150ba8fb215189db33be0074c7bd3f3983abb24"
+        },
+        {
+          "id": "D10",
+          "fromSha256": "8d380852aa77e17f2eaa777105dabe71112ae48796018f2ac6b88ec5394417b1",
+          "toSha256": "97419b2b31f174a1b1b6db8b665d6ef17bffec3e1b3f46617a6c3736a7878b84"
+        },
+        {
+          "id": "D11",
+          "fromSha256": "666eaa202cd4ef708471c4536ee1723aedecd04fe301b631fa5d58530f8a7e50",
+          "toSha256": "e9b48e22a8e410ae86f4f2070d82c8573a6dd0589b94c36c694f4311b7445a5e"
+        },
+        {
+          "id": "D12",
+          "fromSha256": "dc36073f31ea3c2c333cfd08f1040c4ba2d59b8494b162365dff0ff4833ff8aa",
+          "toSha256": "7e89af9de1777546efb0a5b67a3276a1e0c3945881b7b58b3e065491bfdd1b10"
+        },
+        {
+          "id": "D13",
+          "fromSha256": "4f059c8056c072c6f2045ecdb3b202b1c6dcc1e33ca1fd2acabdff07371fb6d3",
+          "toSha256": "9cef760b4beb304455c3bc926f2391922df12fc09bfb7645f8d01c4c53a0607f"
+        },
+        {
+          "id": "C01",
+          "fromSha256": "b9dade6f622c3fa68b3557fda9e6b81737f7e0475d498aeb95bb5a99c646eda1",
+          "toSha256": "404ab65e193bee66a9c9d40143c34c2aaea356143ed10b2f15cb24c664e49495"
+        },
+        {
+          "id": "C02",
+          "fromSha256": "2f6ce2331437f97f08446fd8fbdefb272ea6982e71f606e9304141248d637316",
+          "toSha256": "51a0c9cb41845bbe36a31e691bd058cc49b17136ffd558b223394b39670800f0"
+        },
+        {
+          "id": "V01",
+          "fromSha256": "f689e2784ae9233d0bc4c05fdebf9d3a9983f816fd3e362ae303231e8708242f",
+          "toSha256": "af8bcfac50e4992d2b05f56b060d02c01a37567853d612fe3b32f82193321fea"
+        },
+        {
+          "id": "V02",
+          "fromSha256": "dcf6ec6c5c4a1d904b4e65c88a3eb854066eb3b8b4b7abcc0c47215db61109b6",
+          "toSha256": "cd45b15bf6ce43d66ae1c702db9bb6fcf2e8e457c059dddb78d5fd27eef3753e"
+        },
+        {
+          "id": "V03",
+          "fromSha256": "ec570d7987373f75eaaf1d57491b0158637cb2af23c3553ab2ab44383825eef0",
+          "toSha256": "f648dd626d7b380c1b077c79d11ed2464e80296aff98a96472beb2990974762d"
+        },
+        {
+          "id": "V04",
+          "fromSha256": "13b2ef5b18c039682584071ab4cd0040b96da4a06c7eaef1eff1a2102803f01a",
+          "toSha256": "c1f72f434d254185b937ebad1df78ee8e8dc7f35a4f634204f0bcc424a70d51d"
+        },
+        {
+          "id": "V05",
+          "fromSha256": "33fcb8ca1bb09418b6e44e8f6872e2029ea97e06287b02a0c7a01402f646a71b",
+          "toSha256": "dfcd2e954d007345d12e1e53dfd426e839325295ca1115feab5cc6c5fac21e84"
+        },
+        {
+          "id": "V06",
+          "fromSha256": "fed484fd88d4da32e15334c54b325e169fae8578088fc4b9666e828d6abb4150",
+          "toSha256": "e60d035fbabc602774702a6f3229a4213a824e8d374675a7654b009d85097397"
+        },
+        {
+          "id": "V07",
+          "fromSha256": "525976d2a2694daaad94046fc538f726c9f0a8330f3d21e1c14a704580356337",
+          "toSha256": "183acb384fb8098febc03af73fb0925b46247eb5aa3200d1bc248098db4666f9"
+        },
+        {
+          "id": "V08",
+          "fromSha256": "a6a6c2a786a90abd2fa82d35266051239a696f9bdb33a862249ed81e769358ff",
+          "toSha256": "8ba79b135bcbea1895b867f152986d2b434bae2967f4014814d1a9476c4d9468"
+        },
+        {
+          "id": "G1",
+          "fromSha256": "415f436da12d32cb66cc34abf43642cfabb8a7c2b3c3c2167486a7f7372bd9c8",
+          "toSha256": "0493e4e301e66fe7b72b5913886aa4077cd9fea32ea66e63aecc9ea0052eb966"
+        },
+        {
+          "id": "G2",
+          "fromSha256": "dbe06d6ddad30cdb7e3824e69cafe937e4a616a46f7854f421a0756ccfa96965",
+          "toSha256": "2c7a71bef1c2a69a22bb41f6f858296a5b7e7dd0b4a370597427f485b0e1d6ec"
+        },
+        {
+          "id": "G3",
+          "fromSha256": "d18a7102108002a26912298364550d665b987ad08f16856d309293cbada24b80",
+          "toSha256": "beafd130ca799c44d03e7deb45d33c4cd32e9bbfb3dde861a96ffddf3b724d04"
+        },
+        {
+          "id": "G4",
+          "fromSha256": "3a4c108fd014487afe4dc7a16d8b3cf00f5bbddb21dc701528be6bb5b7d96564",
+          "toSha256": "532c26ad3e08d5ba5f3f17ee494fc56a36bc64778e8b0b88b14462d035a99afd"
+        }
+      ],
+      "addedRows": [],
+      "removedRows": []
+    }
+  ],
+  "limits": [
+    "Disposition authority only; no enrollment, publication, execution, parity or retirement authority.",
+    "Exact-byte owner approval and separate explicit delivery authorization are independent gates.",
+    "No commit, push, merge or upstream checkout write is authorized by this packet."
+  ],
+  "approver": "Requesting user (single-maintainer model)",
+  "exactApprovalInstruction": "approve",
+  "approvalSource": "Current conversation: the user replied \"approve\" to the final request to accept the exact Projects 2.1.0 and FrontComposer 1.1.0 candidate bytes and all covered roles in this receipt. This instruction approves the inventory dispositions and named role coverage only; separate delivery authorization remains pending.",
+  "approvedOn": "2026-11-16",
+  "rolesCovered": [
+    "Projects owning maintainer",
+    "Projects Contracts/query/security maintainer",
+    "FrontComposer owning maintainer",
+    "FrontComposer host/compiler/security maintainer",
+    "EventStore/Gateway admission maintainer",
+    "McpCli product/architecture owner",
+    "McpCli dependency/Catalog and conformance maintainer",
+    "McpCli contract/transport/security maintainer",
+    "Platform architecture/security maintainer"
+  ]
+}

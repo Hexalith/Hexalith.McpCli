@@ -1,0 +1,116 @@
+{
+  "schemaVersion": "1.0.0",
+  "state": "candidate-pending-owner-approval-and-delivery",
+  "predecessor": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json",
+    "sha256": "7adc8fbe4cf7ab7d37ea4746c36b0e1c99754c56bf8bc2dde7912940e83cd7a1"
+  },
+  "priorRows": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/labels.json",
+    "sha256": "06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6"
+  },
+  "inventoryArtifacts": {
+    "_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md": "c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af",
+    "_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md": "60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63"
+  },
+  "inventoryRevision": null,
+  "deliveryAuthorization": null,
+  "repositories": [
+    {
+      "name": "projects",
+      "repository": "https://github.com/Hexalith/Hexalith.Projects",
+      "ownerCheckout": "/home/administrator/projects/hexalith/projects",
+      "baseRevision": "bf9f98969efa036fd60700c627e712b4375e654a",
+      "readme": {
+        "beforeSha256": "d093eb74092a75dfa6ab1d374c8a61da54533e5cce0a9855930aa6c238cb8e45",
+        "afterSha256": "f809886a1b253c07b39206941ff09af18ec1be876c6812149fa1fdb6056e1da6"
+      },
+      "integration": null,
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/projects/README.before.section.md",
+        "sha256": "0ff70906dc129cc727c19831ad37bb353eba75fc9b7d45a449a18ac19ed66f30"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/projects/README.after.section.md",
+        "sha256": "0ea7a54f59fc62424198766f735957f9427c7b59277804c7d9280c9e1963733e"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/projects/README.patch",
+        "sha256": "e284300061b119c6f80d659474b17f0f1864f796aaff53cb1606e4f4e959b1a7"
+      }
+    },
+    {
+      "name": "frontcomposer",
+      "repository": "https://github.com/Hexalith/Hexalith.FrontComposer",
+      "ownerCheckout": "/home/administrator/projects/hexalith/frontcomposer",
+      "baseRevision": "33e71036c04f2b99955376e9c90cbb1fc3a81e64",
+      "readme": {
+        "beforeSha256": "65b2be3c12f3eaeb7e039535c040d4bab4d9e06acc3301a725addb1f96c636a8",
+        "afterSha256": "aeb42a8b3c3e140b1c682835f267e44c8101952d4d1d617a401a6270142ed560"
+      },
+      "integration": null,
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/frontcomposer/README.before.section.md",
+        "sha256": "a7e3d0429a2d856ef36af963e0087032d6df97f09115aeff6c11035bcb4f192f"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/frontcomposer/README.after.section.md",
+        "sha256": "9dd27a4bb2ea6ae6626d8d05b7e877306b44c215d6ea5ba8fc529da1ed7fe97b"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/upstream/frontcomposer/README.patch",
+        "sha256": "e2a63b951414855dc334346de80447e3d35fe0d8cfbaba390030d7b963746564"
+      }
+    }
+  ],
+  "rows": [
+    {
+      "id": "PS08",
+      "repository": "projects",
+      "surface": "Hexalith.Projects.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 7,
+        "text": "- `Hexalith.Projects.Cli` (CLI): removal gate \"Projects inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS08; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Projects successor G1\u2013G6 retain publication, live acceptance, K03/AD-20 conformity, 6.7 cutover and K12 confidential UI evidence gates. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.",
+        "sha256": "dbb3f9f884a08c1ae58b18a8f5ff94a945a5eadd3ee09dce21df71fdb1700403"
+      },
+      "gate": "Projects inventory gates"
+    },
+    {
+      "id": "PS09",
+      "repository": "projects",
+      "surface": "Hexalith.Projects.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 8,
+        "text": "- `Hexalith.Projects.Mcp` (FrontComposer MCP plug-in library): removal gate \"G4: retire together with the FrontComposer host\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS09; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). The Projects plug-in and the FrontComposer host (`Hexalith.FrontComposer.Mcp`) retire together. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Coupled gate: FK01\u2013FK04 consumers move first; K12 Web/Chatbot UI evidence, Projects 6.7 cutover, DW-82 publication and live/release/rollback acceptance remain required; K13 compiler is retained independently. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.",
+        "sha256": "fb9897b8a63f77f924cb05fa9f6a3720819079fe44d9d5fbd4cbe3cfe9b804a7"
+      },
+      "gate": "G4: retire together with the FrontComposer host"
+    },
+    {
+      "id": "PS03",
+      "repository": "frontcomposer",
+      "surface": "Hexalith.FrontComposer.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 32,
+        "text": "- `Hexalith.FrontComposer.Cli` (.NET tool `frontcomposer`): removal gate \"Retained local compiler exemption under merged AI.Tools plan 1.2.0; no retirement or Gateway replacement\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS03; [FrontComposer inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md)). Retained local compiler tooling under merged AI.Tools plan 1.2.0; no agent exposure and never counted as retired. Its build/freshness, apply/drift/path, partial-write and output privacy gates remain independent. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. FrontComposer inventory SHA-256: `60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63`.",
+        "sha256": "66921c0e998a5d3a4bc42d4a419cd47fc61458da6ce68a8b7f3989bc44d6afd6"
+      },
+      "gate": "Retained local compiler exemption under merged AI.Tools plan 1.2.0; no retirement or Gateway replacement"
+    },
+    {
+      "id": "PS04",
+      "repository": "frontcomposer",
+      "surface": "Hexalith.FrontComposer.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 33,
+        "text": "- `Hexalith.FrontComposer.Mcp` (HTTP MCP host library): removal gate \"G4: retire together with the Projects plug-in after every host consumer is accounted for\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS04; [FrontComposer inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md)). The FrontComposer host and the Projects plug-in (`Hexalith.Projects.Mcp`) retire together. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Coupled gate: FK01\u2013FK04 consumers move first; K12 Web/Chatbot UI evidence, Projects 6.7 cutover, DW-82 publication and live/release/rollback acceptance remain required; K13 compiler is retained independently. FrontComposer inventory SHA-256: `60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63`.",
+        "sha256": "27e11e614569e482a2d45ce49e1aef6277a39948723c569f700f0c0e98e60fe2"
+      },
+      "gate": "G4: retire together with the Projects plug-in after every host consumer is accounted for"
+    }
+  ]
+}
