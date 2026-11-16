@@ -1,0 +1,147 @@
+{
+  "phase": "review-pass-1-state-correction",
+  "localChecks": [
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "119a4b59e5e1391ff8ddb4587e1608ad1d1e5145\n119a4b59e5e1391ff8ddb4587e1608ad1d1e5145\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "e2e3db7",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "008d95c",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "-C",
+        "references/Hexalith.AI.Tools",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "stdout": "cfd1ebea92587cdea41b9aa2cff47358bf2f32f6\n",
+      "stderr": ""
+    }
+  ],
+  "ciCdAdopted": false,
+  "approvalDecision": "approved",
+  "deliveryAuthorization": "authorized",
+  "labelState": "candidate-pending-owner-approval-and-delivery",
+  "publicationReadback": [
+    {
+      "command": [
+        "git",
+        "show",
+        "origin/main:_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "localSha256": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+      "publishedSha256": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+      "equal": true
+    },
+    {
+      "command": [
+        "git",
+        "show",
+        "origin/main:_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "localSha256": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1",
+      "publishedSha256": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1",
+      "equal": true
+    },
+    {
+      "command": [
+        "git",
+        "show",
+        "origin/main:_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "localSha256": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229",
+      "publishedSha256": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229",
+      "equal": true
+    },
+    {
+      "command": [
+        "git",
+        "show",
+        "origin/main:_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-authorization.json"
+      ],
+      "exitCode": 0,
+      "stderr": "",
+      "localSha256": "595ad2d3473ba7bda63c8d552e94a73f7bab9c5d6e452b04b3bfb1ef9c227b2b",
+      "publishedSha256": "595ad2d3473ba7bda63c8d552e94a73f7bab9c5d6e452b04b3bfb1ef9c227b2b",
+      "equal": true
+    }
+  ],
+  "observedCi": {
+    "command": [
+      "gh",
+      "run",
+      "list",
+      "--repo",
+      "Hexalith/Hexalith.McpCli",
+      "--branch",
+      "main",
+      "--limit",
+      "5",
+      "--json",
+      "databaseId,headSha,conclusion,status,workflowName,url"
+    ],
+    "observation": "Read-only API observation earlier in this implementation session; no rerun or workflow mutation.",
+    "mainRevision": "119a4b59e5e1391ff8ddb4587e1608ad1d1e5145",
+    "runs": [
+      {
+        "id": 43916598661,
+        "name": "CI",
+        "conclusion": "failure",
+        "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43916598661"
+      },
+      {
+        "id": 43916598825,
+        "name": "Commitlint",
+        "conclusion": "success"
+      },
+      {
+        "id": 43916597822,
+        "name": "Agent instructions sync",
+        "conclusion": "success"
+      },
+      {
+        "id": 43916598157,
+        "name": "Bootstrap package",
+        "conclusion": "success"
+      }
+    ]
+  },
+  "passed": true
+}

@@ -646,18 +646,18 @@ def authority_bytes(root,path):
     return (root/path).read_bytes()
 
 
-def preconditions(root):
-    """Halt on changed approved gitlinks or an unfetched main divergence."""
-    git(root,'merge-base','--is-ancestor','origin/main','HEAD')
+def preconditions(root,*,regeneration=False):
+    """Keep immutable pin checks; current checkout conditions govern regeneration only."""
+    if regeneration: git(root,'merge-base','--is-ancestor','origin/main','HEAD')
     for module,m in MODULES.items():
-        for revision in [BASELINE,'HEAD']:
+        for revision in [BASELINE,*(['HEAD'] if regeneration else [])]:
             link = git(root,'ls-tree',revision,str(repo(module))).decode().split()[2]
-            require(link == m['pin'],f'{module}: approval-time/HEAD root gitlink pin mismatch; halt')
+            require(link == m['pin'],f'{module}: {revision} root gitlink pin mismatch; halt')
         git(root/repo(module),'merge-base','--is-ancestor',m['pin'],'origin/main')
 
 
-def packet(root):
-    preconditions(root)
+def packet(root,*,regeneration=False):
+    preconditions(root,regeneration=regeneration)
     SOURCES.clear()
     writes = {m['new']:candidate(root,n) for n,m in MODULES.items()}
     artifacts = {str(p):sha(authority_bytes(root,p)) for p in AUTHORITIES}
@@ -698,7 +698,7 @@ def main(argv=None):
             require(register.get('state') == 'candidate-pending-owner-approval-and-delivery' and register.get('deliveryAuthorization') is None
                     and register.get('inventoryRevision') is None and all(r.get('integration') is None for r in register.get('repositories',[])),
                     'refusing to overwrite authorized, integrated or unknown-state labels')
-        writes = packet(ROOT)
+        writes = packet(ROOT,regeneration=True)
         for path in writes:
             destination = ROOT/path
             require(not any(p.is_symlink() for p in [destination,*destination.parents] if p.is_relative_to(ROOT)),f'refusing symlink output destination: {path}')

@@ -114,6 +114,83 @@ story_key: '5-10-refresh-and-re-disposition-chatbot-and-memories-inventories'
 - Given the candidates, when the verifier runs, then every entry passes and all protected predecessor and authority bytes are unchanged.
 - Given exact-byte owner approval and separate delivery authorization, when completion runs, then the receipts name the covered roles, both owner READMEs on `origin/main` cite the successors, and nothing is enrolled, executed or retired.
 
+### Review Findings
+
+Code review pass 1, 2026-11-16. Scope: deliverables `979e1e1..008d95c`, 17 files and 3,339 lines. The scope covers both successors, the four scripts, approval.json, labels.json, the six upstream patch files, verification.md, and the `.gitattributes` and ledger hunks. All four layers returned and none failed.
+
+The 50 raw findings resolve to 12 decision-needed entries, 4 patches, 0 deferrals and 21 rejections. Baseline at HEAD `119a4b5`: both default verifiers exit 0, both completion modes exit 1 on unintegrated labels, and all 26 tests pass in 200.6 s.
+
+D1 covers the eleven entries in approved inventory bytes, or in authorization-bound patch bytes or their generator and verifier. D2 covers verifier durability.
+
+Decisions resolved 2026-11-16. D1 ("Fold into next successor") turns D1a–D1k into one deferral at `deferred-work.md:1191`. D2 ("HEAD checks only on regen") becomes a patch. Totals now: 0 decision-needed, 5 patches, 11 deferrals, 21 rejections.
+
+- [x] [Review][Defer] D1a Successor drops predecessor obligations while claiming legacy columns are preserved — The notation (`chatbot-migration-inventory-v1.1.0.md:37`, `memories-migration-inventory-v1.1.0.md:37`) says legacy columns preserve scope, but the generator breaks that: — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+  - It overwrites the legacy G-row prerequisite cells and ChatBot V10's handoff cell.
+  - It omits ChatBot 1.0.0's "Proposed generic context handoff" section (`chatbot-migration-inventory-v1.md:129-155`).
+  - Lost from the successor:
+    - ChatBot G2's status-handle decisions.
+    - V10's rule not to use caller taskId as ownership proof or add polling/event streaming.
+    - Memories G1's payload/envelope separation and annotations.
+    - Memories G3's "do not add module-specific adapters to McpCli".
+    - Memories G4's diagnostics/streams/import-export/consent/erasure/wizard decision list.
+    - The six-row context mapping: tenant selector not forwarded, business vs submission correlation, taskIntentId not a ULID, StateOwnerAggregateId.
+  - Medium. [E2, B4, B5; B5's Envelope-correlation sub-point is rejected because CONTEXT_GATE wording is the spec's Always rule.]
+- [x] [Review][Defer] D1b Amendment owner is a generic module owner on every G row — `build_candidate.py:185` `owner()` writes "<Module> owning and Contracts/handler/admission/security maintainers" on every G row, while the legacy Owner column still names the original owners. Reassigned: — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+  - ChatBot G2 (EventStore) and G4 (McpCli closure/Catalog).
+  - Memories G2 (Platform/Gateway), G4 (architecture/product, operations/security), G5 (release + McpCli) and G6.
+  - Withdrawal rows also name Contracts/handler maintainers although they have no Contracts gap.
+  - Medium. [A5, B2]
+- [x] [Review][Defer] D1c Hand-authored drift misses observed pin changes: — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+  - T01–T04 say "source unchanged since the old pin". But `RedisNaturalLanguageNamespaceMigrator.cs` changed between `f6b60d5a` and `9d87500e` (+55/−24, fenced atomic per-unit migration). The cited `RedisEmbeddingMigrationStore.cs:172` calls it.
+  - M11/L11 omit the removal of `actorId` from `CommandOperationTransition`, which is the schema of `lastTransition` in status responses.
+  - L06 cites `IngestionEndpoints.cs:114`, but its drift names only the SDK prerequisite.
+  - Both headers say "the Contracts project is unchanged", but 7 ChatBot and 8 Memories Contracts source files changed; only the csproj files are identical.
+  - Medium. [E4, A3, A4, E13]
+- [x] [Review][Defer] D1d Predecessor anchors drop silently; Memories V08 lost `IndexGraphActivity.cs:119` — `build_candidate.py:286-298` keeps only difflib-equal lines. The statement still exists at `:146`, and no check notices the drop. Medium. [E3, V2, V-o2] — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+- [x] [Review][Defer] D1e Approved 1.1.0 bytes still describe themselves as pending — The bytes carry `status: pending` (`:3`), "It is pending." (`:22`), and ChatBot G1 (`:114`) / Memories G6 (`:115`) say "pending now" and "currently pending". `verify_amendment.py:50` requires the pending status. This is the defect at `deferred-work.md:1048`, but that entry covers only Admin 1.0.2 and technical 1.0.3. Medium. [E5, B1, V-o1] — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+- [x] [Review][Defer] D1f Verifier certifies content against the generator's own output — `verify_amendment.py:85-92` compares PS14 fields, replacement, rationale, owner and drift to `B.*()` output, and `:104` does the same for evidence. D1b–D1d therefore pass by construction, and any correct independent check would fail on the approved bytes. Medium. [B9] — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+- [x] [Review][Defer] D1g Write-execution boilerplate is applied to unrelated G rows — `WRITES` (`build_candidate.py:58`) includes G2–G5: — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+  - ChatBot G4/G5 drift reads "changed: Retained write/provider/dispatcher code is not currently executable…", and their drift cells end with "..".
+  - CONTEXT_GATE appears in G1, and the HTTP gate in Memories G1/G4/G5.
+  - Low. [A6, B3]
+- [x] [Review][Defer] D1h PS14 direct-access cells are imprecise — At the pin, `Program.cs:142` builds `DaprClient` without the `--dapr-http` value; only the actor proxy (`:146`) uses it. The silent `localhost:6379` and `http://localhost:3500` fallbacks (`:223-224`) and the SDK-default token and secret paths are not recorded. Low. [B8] — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+- [x] [Review][Defer] D1i K12/K14 prerequisites are narrower than AD-23 — K12 rows omit resumability/concurrency and the negative-proof list (AD-23 `:183-187`). T01–T04 omit K14's negative proofs (`:219-222`). AD-23 still governs. Low. [B7] — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+- [x] [Review][Defer] D1j CLI and stub rows sit under "## MCP tools" — `build_candidate.py:587-590` emits a section heading only when the headers change. ChatBot L01–L12 and Memories L01–L14/S01–S04 therefore lose their own sections. Low. [E1] — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+- [x] [Review][Defer] D1k PS14 README label repeats itself — The PS14 line in `upstream/memories/README.patch` links Memories 1.1.0 twice and states the T01–T04 modes twice. `delivery-authorization.json` binds those patch bytes. Low. [A10, B14] — deferred: user chose "Fold into next successor" (approved and authorized bytes are immutable; corrections need a successor with exact-byte approval and a relabel) — `deferred-work.md:1191`
+- [x] [Review][Patch] D2 Verifier and tests halt permanently once the ChatBot/Memories gitlinks move or local main lags origin/main — `verify_amendment.py:115-118` and `build_candidate.py:649-656` (reached through `packet()` at `verify_amendment.py:185`) require HEAD gitlinks to equal the pins and origin/main to be an ancestor of HEAD. `/pushall` routinely moves gitlinks, and label completion is still pending. Medium. [E11] Resolved: user chose "HEAD checks only on regen". The verifier keeps the BASELINE gitlink == pin and pin-ancestry checks; HEAD-gitlink equality and origin/main ⊆ HEAD run only in `build_candidate.py` regeneration. [`evidence/story-5-10/verify_amendment.py:115`]
+- [x] [Review][Patch] Delivery guards for the integrated README bytes and inventory-revision ancestry have no negative test [`evidence/story-5-10/test_verify_amendment.py:474`] — Removing `verify_labels.py:47` or `:55` leaves the suite green (pre-verified by the verification-gap layer). [V1]
+- [x] [Review][Patch] General guard-removal control is tautological [`evidence/story-5-10/test_verify_amendment.py:552`] — The test stubs a function and then calls the stub. Replace it with source-removal controls run through the entrypoints (as `:459` does), and correct the claim at `verification.md:148-150`. [A7]
+- [x] [Review][Patch] PASS messages misstate the recorded state [`evidence/story-5-10/verify_amendment.py:211`, `evidence/story-5-10/verify_labels.py:121`] — With the approved receipt, the output still says "owner approval … remain completion gates" and "approval and delivery pending". [A9]
+- [x] [Review][Patch] Recorded state is stale [`deferred-work.md:686`, `evidence/story-5-10/verification.md:176`, `:245`, `sprint-status.yaml:103`]:
+  - The ledger says delivery authorization and McpCli publication remain pending.
+  - verification.md and sprint status say there was no commit or push, but `e2e3db7` and `008d95c` are on McpCli origin/main.
+  - AI.Tools `cfd1ebe` supersedes the check.py blocker premise. The checker applies only after CiCd adoption, and McpCli has no `.github/hexalith-ci.json`, so its existing required CI gates apply; main CI is currently red.
+  - B13 part 3 is rejected: Story 5.11's technical 1.0.4 candidate already re-cites both 1.1.0 successors and T01–T04.
+  - [A2, B13]
+
+Rejected (21):
+- A1 false: completion correctly refuses; AC2 is the recorded pending gate, not a defect.
+- A8 low: the story commit changed no census, AI.Tools or production file, and adding an authority would change the approved receipt's expected artifacts.
+- A11 false: the inventory header (`memories-migration-inventory-v1.1.0.md:52-54`) records connect-before-validation, and no row claims a zero-connection refusal.
+- E6 false: neither inventory has K08, A1–A8 or K13 rows in the adopted map.
+- E7 false: prior label rows are hash-bound immutable inputs, and the generated rows cite 1.1.0.
+- E8 low: the absolute `ownerCheckout` matches completed Story 5.9; completion is a local owner-checkout gate.
+- E9 low: both owner READMEs are unchanged since the pins (ChatBot origin/main equals the pin; Memories `9d87500e..5c1c2258` has no README diff), and a mismatch would fail loudly.
+- E10 low: completion requires the authorization inside the register; the bypass is contrived.
+- E12 false: no `Hexalith(Module|Command|Query)` token exists in either Contracts tree at the pins.
+- E14 false: exact row and repository sets are required before the `next()` loops, and the class map is adopted and hash-bound.
+- E15 low: Linux C/POSIX locales coerce to UTF-8, and the evidence runs on Linux.
+- E16 false: the sources are immutable pinned blobs, and every delimiter is present.
+- E17 low: baseline AI.Tools `7ef8166` has `plan_version: '1.2.0'` (`:2`) and the MigrateEmbeddingVectors row (`:34`).
+- E18 low: statuses are tool-written lowercase keys with two-space indentation; the failure is hypothetical.
+- E19 low: the characters are hypothetical, and builder and verifier agree on the actual pins.
+- E20 low: this matches delivered Story 5.9 practice, and the SHA-256 beside each link binds the content.
+- B6 false: the spec Design Notes assign the HTTP gate, not G2, to M01–M04/V01–V03; a fix would edit the spec.
+- B10 low: duplicate of E17.
+- B11 false: duplicate of E12.
+- B12 low: the recorded instructions are exactly `approve` and `authorize`; the guard is the same generic one used in Stories 5.7–5.9.
+- B15 low/false: README drift is false (the READMEs are unchanged); the brittleness and absolute-path points are E9 and E8.
+
 ## Design Notes
 
 - **Identity-dependent Memories rows:** M01–M04 (per-user JWT security class) and K10 V01–V03; every other Memories `defer` row keeps G2.
@@ -145,6 +222,9 @@ story_key: '5-10-refresh-and-re-disposition-chatbot-and-memories-inventories'
 
 ## Spec Change Log
 
+- 2026-11-16 code review pass 1 patches: all five action items implemented. Current HEAD gitlinks and origin/main containment are checked only when regenerating; verification retains BASELINE pin equality and published-pin ancestry. Delivery tests now reject each integrated README mismatch and off-main inventory revision through both entrypoints, and removing the actual guards breaks the exact-stream assertions. The five general controls remove source statements and run the verifier entrypoint instead of invoking stubs. Pending, approved and integrated output states are checked explicitly. Ledger, sprint and verification records now reflect publication through `e2e3db7`/`008d95c`, recorded approval and authorization, unintegrated labels, adoption-only check.py guidance at AI.Tools `cfd1ebe`, and failed main CI run 43916598661. Story 5.11 already indexes both successors and T01–T04.
+  - Local validation: 29 tests pass in 148.425 seconds; both default verifiers and unchanged adopted AD-23 pass; both completion modes refuse only the missing integrated labels; the real generator refuses the approved receipt; whitespace checks pass. Protected inventory, receipt, label, authorization and patch hashes are unchanged. Evidence: `evidence/story-5-10/review-patch-checks.json`, `review-patch-state.json`, and the review-patch secret scan. No commit, push, enrollment, live execution or upstream checkout change occurred in this patch session. Workflow completion and authorized upstream delivery remain separate gates.
+
 - 2026-11-16 factual evidence correction (no frozen-intent change): `git diff --name-status 839aee31e2a9be11feab3fb726006bb4c2f890b5 acc934599cf1efff36b0643eddc6a3cc4c2978d5` reports `M .mcp.json`, not a deleted file. Both `src` trees are exactly `59158fccb3a2819816a2e13a39095b238bdf1c9b`; generation and verification use that source-tree equality and the observed single configuration-file change.
 
 ## Review Triage Log
@@ -171,3 +251,26 @@ story_key: '5-10-refresh-and-re-disposition-chatbot-and-memories-inventories'
 All 14 findings route to 12 patch groups (B8/E2 and B10/E1 share root causes). No new deferral or specification loopback is required.
 
 Resolution: all 12 groups are patched. Final checks.json records all 26 tests passing in 105.974 seconds, both default verifiers passing, both completion modes refusing pending approval, unchanged adopted AD-23 and a clean whitespace check. Source-fact and exact OpenAPI tests cover B1–B9/E2; injected write and unchanged-file tests cover B10/E1; state-aware isolated lifecycle tests cover E3; all six published-byte mismatch cases and removal of the actual comparison loop cover V1. Verification and final scan evidence are in evidence/story-5-10. The story stays in-review for owner approval and separate delivery authorization; no done claim or commit is made.
+
+### Build review of resumed patches — 2026-11-16
+
+All three independent layers returned before triage: blind hunter (10), edge cases (1), verification gaps (1). The preserved baseline diff also contains previously committed Story 5.11 work. Its findings below are recorded individually and rejected from this run because the approved intent explicitly assigns technical successors and plan reconciliation to Story 5.11; no Story 5.11 file is changed in this run.
+
+| ID | Layer | Verdict | Evidence and route |
+| --- | --- | --- | --- |
+| R-B1 | Blind hunter | medium | Story 5.11 `build_packet.py:523` still emits an absent-CiCd-config blocker after adoption-only guidance. Rejected from this run: the technical successor/plan belongs to Story 5.11 under the explicit intent decision. |
+| R-B2 | Blind hunter | medium | Story 5.11 `verify_reconciliation.py:354` rejects one candidate marker while its completion fixture removes only that marker and retains other candidate wording. Effective prior delivery is separately checked, but final prose can remain stale. Rejected from this run: final plan reconciliation is explicitly assigned to Story 5.11. |
+| R-B3 | Blind hunter | medium | Story 5.11 `verify_reconciliation.py:353` checks ancestry of the approved AI.Tools revision, then reads the earlier revision rather than the actual gitlink's documentation bytes. Rejected from this run: the AI.Tools plan/gitlink is explicitly excluded from Story 5.10. |
+| R-B4 | Blind hunter | medium | Story 5.11 `verify_reconciliation.py:163` checks owner paths and ancestry but no owner-origin identity. Rejected from this run: the nine-owner reconciliation packet belongs to Story 5.11. Story 5.10 already validates its two owning origins. |
+| R-B5 | Blind hunter | medium | Story 5.11 `verify_reconciliation.py:340` accepts literal passed check statuses without command/revision/result receipts. Rejected from this run: the technical/plan delivery packet is explicitly Story 5.11 work. |
+| R-B6 | Blind hunter | medium | Story 5.11 `build_packet.py:297` refuses only an initially approved receipt; unknown states and approval arriving during later writes are unprotected. Rejected from this run: technical-successor generation is assigned to Story 5.11. Story 5.10 retains its existing unknown-state and write-time checks. |
+| R-B7 | Blind hunter | medium | Story 5.11 `verify_reconciliation.py:29` uses ordinary JSON parsing, so conflicting duplicate members select the last value. Rejected from this run: Story 5.11 owns that packet; Story 5.10 already rejects duplicate members. |
+| R-B8 | Blind hunter | medium | Story 5.11 `verify_reconciliation.py:160` checks only the names/count of no-change owners, not their declared inspected revisions and hashes. Rejected from this run: the all-owner census/reconciliation work is explicitly outside this intent. |
+| R-B9 | Blind hunter | medium | Memories T01 promises a mapped domain-failure exit and limits unmapped failures to bootstrap; pinned service `RunAsync` catches only cancellation around dry-run reads, and Program has no encompassing exception mapper. Defer: an existing approved-byte defect, to be corrected in the next approved Memories successor; approved bytes remain unchanged. |
+| R-B10 | Blind hunter | medium | Memories T03/T04 omit partial rollback/abort effects: pinned Redis store commits aliases/marker before configuration persistence, then abort performs further cleanup/marker writes. Defer: an existing approved-byte defect, to be corrected in the next approved Memories successor with recovery obligations. |
+| R-E1 | Edge cases | medium | Pre-verified in a disposable fixture: Story 5.11 `verify_reconciliation.py:180-185` applies an additional production-file hunk while verifying only the declared documentation target. Rejected from this run: technical-successor/plan patches are explicitly Story 5.11 work; none are changed here. |
+| R-V1 | Verification gaps | medium | Pre-verified: changing Story 5.10's output symlink scan to leaf-only passes all four existing generator tests, yet a symlinked upstream/chatbot directory redirects README.patch writes outside the repository. Patch: add exact-stream, no-write parent-symlink coverage and an actual source-removal control. |
+
+Routes after individual verdicts: one test patch (R-V1), two distinct pre-existing approved-byte deferrals (R-B9/R-B10), nine findings rejected from the explicitly separate Story 5.11 work. The eleven earlier user-deferred groups remain tracked at `deferred-work.md:1191`; no approved inventory, receipt, register, authorization or patch is modified.
+
+Resolution: R-V1 is patched. The parent-symlink test checks exact streams and unchanged local/external output bytes, then removes the actual ancestor expansion and demonstrates the redirected write in disposable scratch. Final verification passes all 30 tests in 228.029 seconds, both default verifiers, adopted AD-23, approved regeneration refusal and whitespace; both completion modes still refuse the missing owner-label integration. Evidence: [final checks](evidence/story-5-10/review-final-checks.json), [verification](evidence/story-5-10/verification.md) and [secret scan](evidence/story-5-10/secret-scan-review-complete.json). One earlier harness run timed out at 360 seconds without a test result; the logged final run completed successfully. R-B9/R-B10 are tracked separately under this spec's deferred-work heading. The spec stays in-review and sprint stays review because the completion gate is unsatisfied; approved bytes and authorization remain unchanged. No commit, push or upstream integration was performed.

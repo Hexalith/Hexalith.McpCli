@@ -32,7 +32,13 @@ B = V.B
 L.V,L.B = V,B
 PASS = ('PASS: chatbot: 48 entries; memories: 55 entries (4 added PS14 modes); pinned anchors/drift, AD-23 dispositions and hash chains\n'
         'PASS: owner decision: pending; candidate only; owner approval and integrated PS06/PS07/PS12/PS13/PS14 labels remain completion gates\n')
-LABEL_PASS = 'PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two README-only patches; candidate only; approval and delivery pending\n'
+APPROVED_PASS = (PASS.splitlines(keepends=True)[0]+
+                 'PASS: owner decision: approved; candidate only; integrated PS06/PS07/PS12/PS13/PS14 labels remain a completion gate\n')
+COMPLETION_PASS = PASS.splitlines(keepends=True)[0]+'PASS: owner decision: approved; approved completion verified\n'
+LABEL_PREFIX = 'PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two README-only patches; '
+LABEL_PASS = LABEL_PREFIX+'candidate only; owner decision: pending; approval and delivery integration pending\n'
+LABEL_APPROVED_PASS = LABEL_PREFIX+'candidate only; owner decision: approved; delivery integration pending\n'
+LABEL_COMPLETION_PASS = LABEL_PREFIX+'integrated delivery verified\n'
 
 
 def invoke(module,args):
@@ -43,6 +49,22 @@ def invoke(module,args):
     with contextlib.redirect_stdout(out),contextlib.redirect_stderr(err),patch.object(V,'load',side_effect=loader):
         code = module.main(args)
     return code,out.getvalue(),err.getvalue()
+
+
+@contextlib.contextmanager
+def removed_source(module,name,snippet):
+    """Remove one actual guard from a function while retaining its live entrypoint globals."""
+    original = getattr(module,name)
+    text = inspect.getsource(original)
+    if text.count(snippet) != 1:
+        raise AssertionError('guard-removal source must match exactly once: '+name)
+    # Execute in the live module: downstream calls resolve the changed function,
+    # rather than a detached copy whose internal globals still point at the original.
+    try:
+        exec(compile(text.replace(snippet,''),'<guard-removal:'+name+'>','exec'),module.__dict__)
+        yield
+    finally:
+        setattr(module,name,original)
 
 
 def pending_receipt(receipt):
@@ -108,7 +130,7 @@ def approved(receipt):
 
 
 @contextlib.contextmanager
-def integrated_workspace(corrupt=None):
+def integrated_workspace(corrupt=None,*,delivery_fault=None):
     """Approved/delivered fixture; Git readback is synthetic, with no real receipt write."""
     with workspace(pending=True) as root:
         path=root/B.E/'approval.json';path.write_text(json.dumps(approved(V.read_json(path))))
@@ -127,12 +149,18 @@ def integrated_workspace(corrupt=None):
             owner=str(Path(checkout))
             if owner in readmes:
                 revision,after,commit=readmes[owner];observed.append((owner,args))
-                if args in [('show',revision+':README.md'),('show','origin/main:README.md')]: return after
+                if args==('show',revision+':README.md'):
+                    return b'wrong integrated README bytes' if delivery_fault==('readme',owner) else after
+                if args==('show','origin/main:README.md'): return after
                 if args==('cat-file','commit',revision): return commit
                 if args==('merge-base','--is-ancestor',revision,'origin/main'): return b''
                 if args==('diff','--name-only',revision+'^',revision): return b'README.md\n'
             if Path(checkout)==root:
-                if args==('merge-base','--is-ancestor','b'*40,'origin/main'): return b''
+                if args==('merge-base','--is-ancestor','b'*40,'origin/main'):
+                    observed.append((owner,args))
+                    if delivery_fault==('inventory-ancestry',None):
+                        raise ValueError('git merge-base --is-ancestor '+'b'*40+' origin/main failed: off-main inventory fixture')
+                    return b''
                 if len(args)==2 and args[0]=='show' and (args[1].startswith('b'*40+':') or args[1].startswith('origin/main:')):
                     observed.append((owner,args))
                     reference,path=args[1].split(':',1)
@@ -165,10 +193,9 @@ class AmendmentTests(unittest.TestCase):
                 return (1,'','FAIL: completion requires exact-byte owner approval and covered roles\n')
             if completion and labels['state']!='integrated':
                 return (1,'','FAIL: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels\n')
-            text=PASS.replace('owner decision: pending','owner decision: '+receipt['decision'])
-            if completion: text=text.replace('candidate only; owner approval and integrated PS06/PS07/PS12/PS13/PS14 labels remain completion gates','approved completion verified')
+            text = COMPLETION_PASS if completion else APPROVED_PASS if receipt['decision']=='approved' else PASS
             return (0,text,'')
-        label_expected=(0,LABEL_PASS.replace('candidate only; approval and delivery pending','integrated delivery verified') if automatic else LABEL_PASS,'')
+        label_expected=(0,LABEL_COMPLETION_PASS if automatic else LABEL_APPROVED_PASS if receipt['decision']=='approved' else LABEL_PASS,'')
         if automatic and (receipt['decision']=='pending' or labels['state']!='integrated'): label_expected=expected(True)
         for file,args,result in [('verify_amendment.py',[],expected(automatic)),
                                  ('verify_labels.py',[],label_expected),
@@ -354,7 +381,7 @@ class AmendmentTests(unittest.TestCase):
         V.check_source_drift(ROOT)
         real=B.git
         cases = [
-            ('gitlink',lambda root,args: b'160000 commit '+b'0'*40+b'\treferences/Hexalith.ChatBot\n' if args==('ls-tree','HEAD',str(B.repo('chatbot'))) else None,'chatbot: approval-time/HEAD root gitlink pin mismatch; halt'),
+            ('gitlink',lambda root,args: b'160000 commit '+b'0'*40+b'\treferences/Hexalith.ChatBot\n' if args==('ls-tree',B.BASELINE,str(B.repo('chatbot'))) else None,'chatbot: '+B.BASELINE+' root gitlink pin mismatch; halt'),
             ('decoration',lambda root,args: b'[HexalithQuery("invented")]' if args==('show',B.MODULES['chatbot']['pin']+':src/Hexalith.ChatBot.Contracts/ChatBotModuleInfo.cs') else None,'chatbot: unexpected decorated type at pin: src/Hexalith.ChatBot.Contracts/ChatBotModuleInfo.cs'),
         ]
         for name,alter,message in cases:
@@ -363,6 +390,48 @@ class AmendmentTests(unittest.TestCase):
                 return changed if changed is not None else real(root,*args)
             with self.subTest(name=name),patch.object(B,'git',side_effect=fake):
                 with self.assertRaisesRegex(ValueError,re.escape(message)): V.check_source_drift(ROOT)
+
+    def test_current_gitlink_moves_and_local_main_lag_affect_regeneration_only(self):
+        for kind in ['gitlink','lag']:
+            with self.subTest(kind=kind),workspace(pending=True) as root:
+                real=B.git;observed=[]
+                def moved(checkout,*args):
+                    if Path(checkout)==root:
+                        observed.append(args)
+                        if args==('ls-tree','HEAD',str(B.repo('chatbot'))) and kind=='gitlink':
+                            return b'160000 commit '+b'0'*40+b'\treferences/Hexalith.ChatBot\n'
+                        if args==('merge-base','--is-ancestor','origin/main','HEAD') and kind=='lag':
+                            raise ValueError('git merge-base --is-ancestor origin/main HEAD failed: local main lags fixture')
+                    return real(checkout,*args)
+                with patch.object(B,'git',side_effect=moved):
+                    self.assertEqual((0,PASS,''),invoke(V,['--root',str(root)]))
+                    self.assertEqual((0,LABEL_PASS,''),invoke(L,['--root',str(root)]))
+                    self.assertNotIn(('ls-tree','HEAD',str(B.repo('chatbot'))),observed)
+                    self.assertNotIn(('merge-base','--is-ancestor','origin/main','HEAD'),observed)
+                    for name,m in B.MODULES.items():
+                        self.assertIn(('ls-tree',B.BASELINE,str(B.repo(name))),observed)
+                    message=('chatbot: HEAD root gitlink pin mismatch; halt' if kind=='gitlink'
+                             else 'git merge-base --is-ancestor origin/main HEAD failed: local main lags fixture')
+                    before={path:(root/path).read_bytes() for path in B.packet(root)}
+                    with patch.object(B,'ROOT',root):
+                        self.assertEqual((1,'','FAIL: '+message+'\n'),invoke(B,[]))
+                    for path,data in before.items(): self.assertEqual(data,(root/path).read_bytes())
+
+    def test_baseline_gitlinks_and_published_pin_ancestry_remain_required(self):
+        for name,m in B.MODULES.items():
+            for kind in ['baseline','pin-ancestry']:
+                with self.subTest(module=name,kind=kind),workspace(pending=True) as root:
+                    real=B.git
+                    message=(f'{name}: {B.BASELINE} root gitlink pin mismatch; halt' if kind=='baseline'
+                             else f'git merge-base --is-ancestor {m["pin"]} origin/main failed: unpublished pin fixture')
+                    def invalid(checkout,*args):
+                        if kind=='baseline' and Path(checkout)==root and args==('ls-tree',B.BASELINE,str(B.repo(name))):
+                            return b'160000 commit '+b'0'*40+b'\t'+str(B.repo(name)).encode()+b'\n'
+                        if kind=='pin-ancestry' and Path(checkout)==root/B.repo(name) and args==('merge-base','--is-ancestor',m['pin'],'origin/main'):
+                            raise ValueError(message)
+                        return real(checkout,*args)
+                    with patch.object(B,'git',side_effect=invalid):
+                        self.assertEqual((1,'','FAIL: '+message+'\n'),invoke(V,['--root',str(root)]))
 
     def test_receipt_bindings_roles_exact_words_and_pending_claims(self):
         V.check_approval(self.expected,self.expected,False)
@@ -427,8 +496,8 @@ class AmendmentTests(unittest.TestCase):
 
     def test_approved_authorized_completion_exercises_actual_delivery_checks(self):
         with integrated_workspace() as (root,register,observed):
-            expected=PASS.replace('owner decision: pending; candidate only; owner approval and integrated PS06/PS07/PS12/PS13/PS14 labels remain completion gates','owner decision: approved; approved completion verified')
-            self.assertEqual((0,expected,''),invoke(V,['--root',str(root),'--approved-completion']))
+            self.assertEqual((0,COMPLETION_PASS,''),invoke(V,['--root',str(root),'--approved-completion']))
+            self.assertEqual((0,LABEL_COMPLETION_PASS,''),invoke(L,['--root',str(root),'--approved-completion']))
             self.assertEqual(2,len({owner for owner,args in observed if args==('show','origin/main:README.md')}))
             for repository in register['repositories']:
                 self.assertIn((repository['ownerCheckout'],('cat-file','commit',repository['integration']['commit'])),observed)
@@ -440,9 +509,9 @@ class AmendmentTests(unittest.TestCase):
     def test_approved_undelivered_candidate_is_valid_but_generation_and_completion_refuse(self):
         with workspace(pending=True) as root:
             path=root/B.E/'approval.json';path.write_text(json.dumps(approved(V.read_json(path))))
-            expected=PASS.replace('owner decision: pending','owner decision: approved')
             with patch.object(V,'check_source_drift',return_value=None):
-                self.assertEqual((0,expected,''),invoke(V,['--root',str(root)]))
+                self.assertEqual((0,APPROVED_PASS,''),invoke(V,['--root',str(root)]))
+                self.assertEqual((0,LABEL_APPROVED_PASS,''),invoke(L,['--root',str(root)]))
             self.assert_failure(root,'completion requires integrated PS06/PS07/PS12/PS13/PS14 labels',args=['--approved-completion'])
             before=path.read_bytes()
             with patch.object(B,'ROOT',root):
@@ -470,6 +539,29 @@ class AmendmentTests(unittest.TestCase):
             with patch.object(L,'check_delivery',namespace['check_delivery']):
                 with self.assertRaises(AssertionError):
                     self.assertEqual(expected,invoke(L,['--root',str(root),'--approved-completion']))
+
+    def test_delivery_readme_and_inventory_ancestry_guards_have_entrypoint_removal_controls(self):
+        guards=[
+            ('readme',"    require(B.git(owner,'show',revision+':README.md') == after,f'{name}: integrated README bytes mismatch')\n"),
+            ('inventory-ancestry',"    B.git(root,'merge-base','--is-ancestor',inv_revision,'origin/main')\n"),
+        ]
+        for kind,snippet in guards:
+            owners=[r['ownerCheckout'] for r in V.read_json(ROOT/B.E/'labels.json')['repositories']] if kind=='readme' else [None]
+            for owner in owners:
+                with self.subTest(guard=kind,owner=owner),integrated_workspace(delivery_fault=(kind,owner)) as (root,register,_):
+                    name=next((r['name'] for r in register['repositories'] if r['ownerCheckout']==owner),None)
+                    message=(f'{name}: integrated README bytes mismatch' if kind=='readme'
+                             else 'git merge-base --is-ancestor '+'b'*40+' origin/main failed: off-main inventory fixture')
+                    expected=(1,'','FAIL: '+message+'\n')
+                    for entrypoint in [V,L]:
+                        with self.subTest(entrypoint=entrypoint.__name__):
+                            args=['--root',str(root),'--approved-completion']
+                            self.assertEqual(expected,invoke(entrypoint,args))
+                            with removed_source(L,'check_delivery',snippet):
+                                # A surviving exact-byte/ancestry assertion must reject
+                                # its corrupted fixture; removing it makes that assertion fail.
+                                with self.assertRaises(AssertionError):
+                                    self.assertEqual(expected,invoke(entrypoint,args))
 
     def test_delivery_rejects_missing_authorization_stale_origin_non_readme_and_off_main(self):
         register,_=B.label_candidate(ROOT,{str(m['new']):B.sha((ROOT/m['new']).read_bytes()) for m in B.MODULES.values()})
@@ -505,14 +597,42 @@ class AmendmentTests(unittest.TestCase):
                 if kind=='symlink':
                     path=root/B.MODULES['chatbot']['new'];path.unlink();path.symlink_to(ROOT/B.MODULES['chatbot']['new'])
                 packet=B.packet
-                def race_packet(path):
-                    result=packet(path);approval.write_text(json.dumps(approved(V.read_json(approval))));return result
+                def race_packet(path,*,regeneration=False):
+                    result=packet(path,regeneration=regeneration);approval.write_text(json.dumps(approved(V.read_json(approval))));return result
                 before={p:(root/p).read_bytes() for p in packet(root)}
                 with patch.object(B,'ROOT',root),patch.object(B,'packet',side_effect=race_packet if kind=='race' else packet):
                     self.assertEqual((1,'','FAIL: '+message+'\n'),invoke(B,[]))
                 for path,data in before.items():
                     if kind=='race' and path==B.E/'approval.json': continue
                     self.assertEqual(data,(root/path).read_bytes(),str(path))
+
+    def test_generator_rejects_symlinked_output_parent_without_writes_and_detects_ancestor_guard_removal(self):
+        with workspace(pending=True) as root,tempfile.TemporaryDirectory() as temp:
+            generated=B.packet(root)
+            parent=root/B.E/'upstream/chatbot';external=Path(temp)
+            shutil.copytree(parent,external,dirs_exist_ok=True)
+            shutil.rmtree(parent)
+            parent.symlink_to(external,target_is_directory=True)
+            target=external/'README.patch'
+            target.write_bytes(b'external patch must stay unchanged\n')
+            (external/'unrelated.txt').write_bytes(b'external unrelated file\n')
+            def repository_outputs(): return {path:(root/path).read_bytes() for path in generated}
+            def external_files(): return {path.relative_to(external):path.read_bytes() for path in external.rglob('*') if path.is_file()}
+            before_outputs,before_external=repository_outputs(),external_files()
+            expected=(1,'','FAIL: refusing symlink output destination: '+str(B.E/'upstream/chatbot/README.before.section.md')+'\n')
+            def rejects_without_writes():
+                self.assertEqual(expected,invoke(B,[]))
+                self.assertEqual(before_outputs,repository_outputs())
+                self.assertEqual(before_external,external_files())
+            with patch.object(B,'ROOT',root):
+                rejects_without_writes()
+                self.assertTrue(parent.is_symlink())
+                self.assertEqual(external,parent.resolve())
+                # Remove the actual ancestor expansion, retaining the leaf check.
+                with removed_source(B,'main',',*destination.parents'):
+                    with self.assertRaises(AssertionError): rejects_without_writes()
+                self.assertEqual(generated[B.E/'upstream/chatbot/README.patch'],target.read_bytes())
+                self.assertNotEqual(before_external[Path('README.patch')],target.read_bytes())
 
     def test_approval_after_first_successor_write_is_preserved_and_later_writes_stop(self):
         with workspace(pending=True) as root:
@@ -550,25 +670,39 @@ class AmendmentTests(unittest.TestCase):
             self.assert_failure(root,'chatbot: metadata/pin/approval-state mismatch')
 
     def test_guard_removal_controls_detect_missing_accounting_row_anchor_approval_and_delivery_guards(self):
-        old,new,entries,outcomes=self.inputs['chatbot']
-        missing=copy.deepcopy(new);missing.pop('M01')
-        wrong=copy.deepcopy(new);wrong['M01']['cells'][wrong['M01']['headers'].index('Amendment disposition')]='replace'
-        anchor=copy.deepcopy(new);anchor['M01']['cells'][anchor['M01']['headers'].index('Pinned evidence')]='`missing:1`'
-        register=pending_labels(V.read_json(ROOT/B.E/'labels.json'));repository=register['repositories'][0]
         controls=[
-            (V,'accounting',lambda:V.accounting('chatbot',old,missing,entries),'chatbot: predecessor/AD-23 entry accounting mismatch'),
-            (V,'check_rows',lambda:V.check_rows(ROOT,'chatbot',old,wrong,entries,outcomes),'chatbot:M01 (K01): invented readiness'),
-            (V,'check_anchors',lambda:V.check_anchors(ROOT,'chatbot',old,anchor),'chatbot:M01: pinned anchor identity mismatch'),
-            (V,'check_approval',lambda:V.check_approval(self.expected,self.expected,True),'completion requires exact-byte owner approval'),
-            (L,'check_delivery',lambda:L.check_delivery(ROOT,register,repository,b'',b''),'completion requires integrated'),
+            (V,'accounting',
+             "    require(set(new) == set(entries) == expected and set(old) == expected-{f'T{i:02d}' for i in range(1,5)},\n"
+             "            f'{module}: predecessor/AD-23 entry accounting mismatch (missing={sorted(expected-set(new))}, extra={sorted(set(new)-expected)})')\n",
+             "chatbot: predecessor/AD-23 entry accounting mismatch (missing=['M01'], extra=[])"),
+            (V,'check_rows',
+             "        require(d != 'replace' and coverage != 'include',prefix+': invented readiness; no decorated Gateway replacement at pin')\n",
+             'chatbot:M01 (K01): invented readiness; no decorated Gateway replacement at pin'),
+            (V,'check_anchors',
+             "        require(cell == '`'+'`; `'.join(expected)+'`',f'{module}:{key}: pinned anchor identity mismatch')\n",
+             'chatbot:M01: pinned anchor identity mismatch'),
+            (V,'check_approval',
+             "    if completion:\n        require(receipt['decision'] == 'approved','completion requires exact-byte owner approval and covered roles')\n",
+             'completion requires exact-byte owner approval and covered roles'),
+            (L,'check_delivery',
+             "    require(register.get('state') == 'integrated','completion requires integrated PS06/PS07/PS12/PS13/PS14 labels')\n",
+             'completion requires integrated PS06/PS07/PS12/PS13/PS14 labels'),
         ]
-        def rejects(call,message):
-            with self.assertRaisesRegex(ValueError,re.escape(message)): call()
-        for module,name,call,message in controls:
-            with self.subTest(guard=name):
-                rejects(call,message)
-                with patch.object(module,name,return_value=None):
-                    with self.assertRaises(AssertionError): rejects(call,message)
+        for module,name,snippet,message in controls:
+            with self.subTest(guard=name),workspace(pending=True) as root:
+                args=[]
+                if name=='accounting':
+                    path=root/B.MODULES['chatbot']['new'];row=B.parse(path.read_text(),'chatbot')['M01']['text']
+                    path.write_text(path.read_text().replace(row+'\n',''))
+                elif name=='check_rows': replace_cell(root,'chatbot','M01','Amendment disposition','replace')
+                elif name=='check_anchors': replace_cell(root,'chatbot','M01','Pinned evidence','`README.md:1`')
+                else:
+                    args=['--approved-completion']
+                    if name=='check_delivery':
+                        path=root/B.E/'approval.json';path.write_text(json.dumps(approved(V.read_json(path))))
+                self.assert_failure(root,message,args=args)
+                with removed_source(module,name,snippet):
+                    with self.assertRaises(AssertionError): self.assert_failure(root,message,args=args)
 
 
 if __name__ == '__main__':

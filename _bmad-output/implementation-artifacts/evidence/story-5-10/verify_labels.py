@@ -118,7 +118,9 @@ def main(argv=None):
     except (ValueError,KeyError,TypeError,OSError,IndexError,UnicodeError) as error:
         print(f'FAIL: {error}',file=sys.stderr)
         return 1
-    print('PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two README-only patches; '+('integrated delivery verified' if completed else 'candidate only; approval and delivery pending'))
+    decision = read_json(args.root/E/'approval.json')['decision']
+    remaining = 'delivery integration pending' if decision == 'approved' else 'approval and delivery integration pending'
+    print('PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two README-only patches; '+('integrated delivery verified' if completed else 'candidate only; owner decision: '+decision+'; '+remaining))
     return 0
 
 

@@ -111,11 +111,8 @@ def check_anchors(root,module,old,new):
 
 
 def check_source_drift(root):
+    B.preconditions(root)
     for module,m in B.MODULES.items():
-        for revision in [B.BASELINE,'HEAD']:
-            link = B.git(root,'ls-tree',revision,str(B.repo(module))).decode().split()[2]
-            require(link == m['pin'],f'{module}: approval-time/HEAD root gitlink pin mismatch; halt')
-        B.git(root/B.repo(module),'merge-base','--is-ancestor',m['pin'],'origin/main')
         project = f'src/Hexalith.{m["title"]}.Contracts/Hexalith.{m["title"]}.Contracts.csproj'
         require(B.blob(root,module,project) == B.blob(root,module,project,m['oldpin']),f'{module}: Contracts project unexpectedly changed')
         files = B.git(root/B.repo(module),'ls-tree','-r','--name-only',m['pin'],f'src/Hexalith.{m["title"]}.Contracts').decode().splitlines()
@@ -208,7 +205,9 @@ def main(argv=None):
         print(f'FAIL: {error}',file=sys.stderr)
         return 1
     print('PASS: chatbot: 48 entries; memories: 55 entries (4 added PS14 modes); pinned anchors/drift, AD-23 dispositions and hash chains')
-    print(f'PASS: owner decision: {decision}; '+('approved completion verified' if completed else 'candidate only; owner approval and integrated PS06/PS07/PS12/PS13/PS14 labels remain completion gates'))
+    remaining = ('integrated PS06/PS07/PS12/PS13/PS14 labels remain a completion gate' if decision == 'approved'
+                 else 'owner approval and integrated PS06/PS07/PS12/PS13/PS14 labels remain completion gates')
+    print(f'PASS: owner decision: {decision}; '+('approved completion verified' if completed else 'candidate only; '+remaining))
     return 0
 
 
