@@ -337,17 +337,19 @@ class RecordedAuthorityAndLifecycleTests(unittest.TestCase):
         prior=importlib.util.module_from_spec(spec);spec.loader.exec_module(prior)
         register=json.loads((ROOT/E.parent/'story-5-10/labels.json').read_text())
         register.update(state='integrated',inventoryRevision='f'*40,deliveryAuthorization={'exactWords':'authorize','source':'Synthetic historical delivery','approvedOn':'2026-11-16'})
-        afters,commits={},{}
+        befores,afters,commits={},{},{}
         for index,owner in enumerate(register['repositories'],1):
             commit=str(index)*40;raw=('fixture historical commit '+str(index)).encode()
             owner['integration']={'commit':commit,'commitSha256':B.sha(raw)}
             before=prior.B.blob(ROOT,owner['name'],'README.md')
             after=before.replace((ROOT/owner['before']['path']).read_bytes(),(ROOT/owner['after']['path']).read_bytes())
+            befores[(str(Path(owner['ownerCheckout'])),commit)]=before
             afters[(str(Path(owner['ownerCheckout'])),commit)]=after;commits[commit]=raw
         original=prior.B.git
         def historical_objects(repo,*args):
             if args[0]=='show':
                 revision,path=args[1].split(':',1)
+                if revision.endswith('^') and revision[:-1] in commits and path=='README.md':return befores[(str(Path(repo)),revision[:-1])]
                 if revision in commits and path=='README.md':return afters[(str(Path(repo)),revision)]
                 if revision=='f'*40:return (ROOT/path).read_bytes()
                 if revision=='origin/main' and path=='README.md':return b'current approved technical-tools 1.0.4 supersession'

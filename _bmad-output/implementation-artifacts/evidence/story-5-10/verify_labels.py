@@ -44,7 +44,12 @@ def check_delivery(root,register,repository,before,after):
     require(isinstance(integration,dict) and re.fullmatch('[0-9a-f]{40}',integration.get('commit','')) is not None,
             f'{name}: completion requires canonical integrated label commit')
     revision = integration['commit']
-    require(B.git(owner,'show',revision+':README.md') == after,f'{name}: integrated README bytes mismatch')
+    parent = B.git(owner,'show',revision+'^:README.md')
+    delivered = B.git(owner,'show',revision+':README.md')
+    before_section,after_section = B.compatibility_section(before),B.compatibility_section(after)
+    require(B.compatibility_section(parent) == before_section,f'{name}: parent compatibility section differs from authorized before bytes')
+    require(B.compatibility_section(delivered) == after_section and delivered == parent.replace(before_section,after_section,1),
+            f'{name}: integrated README bytes mismatch; expected only the authorized section swap')
     B.git(owner,'merge-base','--is-ancestor',revision,'origin/main')
     require(B.git(owner,'diff','--name-only',revision+'^',revision).decode().splitlines() == ['README.md'],f'{name}: delivered commit is not README-only')
     require(integration.get('commitSha256') == B.sha(B.git(owner,'cat-file','commit',revision)),f'{name}: integrated commit hash mismatch')
@@ -115,10 +120,10 @@ def main(argv=None):
     args = parser.parse_args(argv)
     try:
         completed = verify(args.root,args.approved_completion)
+        decision = read_json(args.root/E/'approval.json')['decision']
     except (ValueError,KeyError,TypeError,OSError,IndexError,UnicodeError) as error:
         print(f'FAIL: {error}',file=sys.stderr)
         return 1
-    decision = read_json(args.root/E/'approval.json')['decision']
     remaining = 'delivery integration pending' if decision == 'approved' else 'approval and delivery integration pending'
     print('PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two README-only patches; '+('integrated delivery verified' if completed else 'candidate only; owner decision: '+decision+'; '+remaining))
     return 0

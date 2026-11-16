@@ -4,8 +4,12 @@ Prepared 2026-11-16 at McpCli HEAD `e2e3db7ba2d45d61feacc39c41b3051310fbc57f`,
 using approved baseline `979e1e126c6d7010997f4f20b2bb3defae81333e`.
 The user approved both exact inventories and all ten named roles on 2026-11-16.
 Separate delivery authorization is recorded in delivery-authorization.json.
-The McpCli packet was published in `e2e3db7` and `008d95c`, both ancestors of
-locally observed origin/main `119a4b59e5e1391ff8ddb4587e1608ad1d1e5145`.
+The McpCli packet was published in `e2e3db7` and `008d95c`, and its resumed
+review patches were published in `5008de388c5e37257ca78e48d8afe899cf7aaa2a`,
+the locally observed origin/main. Its CI run
+[43943458640](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43943458640)
+fails in the same five pre-existing jobs as run 43916598661; these failures are
+tracked at `deferred-work.md:1043`.
 PS06/PS07/PS12/PS13/PS14 upstream label integration remains pending.
 No operation was enrolled, executed, accepted as parity or retired, and this
 patch session changes no upstream checkout.
@@ -43,7 +47,10 @@ patch session changes no upstream checkout.
 HEAD gitlinks equal the approval pins. Regeneration halts when current HEAD
 gitlinks move or local HEAD lacks origin/main. Verification retains the immutable
 BASELINE gitlink and pin-ancestry checks, so later HEAD changes do not invalidate
-the approved packet. Only immutable `git show <pin>:<path>` module source
+the approved packet. Verification also reads the baseline Git objects for
+`Directory.Build.props`, `tools/dependency-policy.json` and the CLI project;
+regeneration still requires their working-tree bytes to equal the baseline.
+Only immutable `git show <pin>:<path>` module source
 supplies row evidence; no source checkout or nested submodule is updated.
 
 | Module | Approval-time source pin | Locally observed owner origin/main | Ancestry check |
@@ -277,7 +284,7 @@ entrypoints therefore still refuse that missing gate. The default verifiers
 now report the approved decision and pending integration without treating
 approval or authorization as missing.
 
-The observed CI run for current main `119a4b59e5e1391ff8ddb4587e1608ad1d1e5145`
+The historical CI run for main `119a4b59e5e1391ff8ddb4587e1608ad1d1e5145`
 is [43916598661](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43916598661),
 completed with failure. The same revision's Commitlint, agent-instruction sync
 and bootstrap-package runs succeeded. No CI gate was rerun, weakened or bypassed
@@ -340,9 +347,89 @@ this source spec; the eleven earlier approved-byte groups remain open.
 Nine findings about the already-committed Story 5.11 packet are individually
 recorded in the spec and excluded from this explicitly separate intent.
 
-The spec remains in-review and the sprint remains review. Marking either done
-would violate the still-failing integrated-label completion gate. The active
-build phase permits no push or remote operations; delivery authorization stays
-recorded, and no new approval request is implied. No commit, push, upstream
-integration, production change, enrollment, parity acceptance or retirement
-occurred in this resumed run.
+Those resumed patches were subsequently published on origin/main in `5008de3`.
+Its CI run 43943458640 remains red in the same five pre-existing jobs as
+43916598661 (`deferred-work.md:1043`). The current pass-2 build keeps the story
+in progress while its local checks run. Marking it done would violate the
+still-failing integrated-label completion gate. Delivery authorization stays
+recorded; upstream integration, production changes, enrollment, parity acceptance
+and retirement remain unevidenced by this documentary packet.
+
+## Code review pass 2 patches — 2026-11-16
+
+The user chose section-level delivery verification for D3. Each integrated
+commit must change README.md only, start with the exact authorized compatibility
+section in its own parent, and replace that section with the authorized after
+bytes while preserving every other byte. Current origin/main must still carry
+the exact successor section. The original patches, section snapshots and
+register stay unchanged; the register's whole-README after hash remains
+historical evidence. Tests cover moved-main acceptance and extra edits outside
+the section for both modules, plus the parent-section prerequisite.
+
+The three mutable enrollment/dependency authorities are read from BASELINE Git
+objects during verification; regeneration still refuses changed working-tree
+bytes. New exact-stream cases cover authorization words, full commit/revision
+IDs, raw commit hashes, pending authorization/revision/integration claims and
+wrong owner origins. Thirteen fake-Git source-premise cases cover both Contracts
+projects, old-source equality and published ancestry, the historical config-only
+diff, tool/leaf declarations and registrations, resource/prompt absence, JWT
+algorithms and PS14 source premises. Each case removes its actual source guard
+and checks that the exact diagnostic assertion detects the omission. Missing,
+malformed and incomplete approval documents now return handled FAIL diagnostics.
+
+[Local state and patch readback](review-pass2-state.json) records McpCli
+publication through `5008de3`, approval and authorization, pending integration
+and README-only application to isolated copies of locally available owner refs.
+The local ChatBot owner ref still names the approval pin; this readback does not
+claim a fresh remote fetch. Moved-main behavior is separately exercised by the
+isolated delivery fixtures. Existing main CI run 43943458640 has the five
+pre-existing failures recorded in the spec and `deferred-work.md:1043`.
+
+[Final pass-2 checks](review-pass2-checks.json) bind the exact source/test bytes
+and protected approved/authorized hashes before and after verification. The
+[interrupted attempt](review-pass2-interrupted-attempt.json) was deliberately
+stopped after adding the published-comparison ancestry case, so the complete
+suite could restart against final source and test bytes. It is superseded by
+the final run, with no gate weakened. The approved inventory/receipt/register,
+authorization and prepared patches remain unchanged. Label integration is still
+required for completion; no production, enrollment or upstream checkout changes
+are part of these patches.
+
+Final pass-2 validation passes all 36 tests in 323.163 seconds and all eight
+recorded checks. Both default verifiers, adopted AD-23 and whitespace pass;
+both completion entrypoints return the exact missing-integrated-label refusal,
+and regeneration refuses the approved packet. The four final source/test
+hashes and all protected hashes remain identical across the run. The spec is
+in-review and sprint is review pending label integration and workflow review.
+The [pass-2 secret scan](secret-scan-review-pass2-final.json) binds the updated packet.
+No commit, push or upstream integration occurred in this pass.
+The first pass-2 scan found no secrets but refused the generated test bytecode
+cache; its [scan-error receipt](secret-scan-review-pass2.json) is retained.
+After all child tests exited, only that ignored task-generated cache was removed.
+The final scan uses a new receipt destination and preserves all earlier evidence.
+
+## Independent review and parent verification
+
+All three review layers returned thirteen findings before triage. One regression
+caused by the new parent-README read was fixed in Story 5.11's existing historical
+delivery fixture: both modules now supply their historical parent README blobs,
+while the real parent, section and delivery checks remain enabled. The other
+twelve findings concern the explicitly separate Story 5.11 reconciliation work,
+including carried prior dispositions. Its 56-versus-62 audit mismatch already
+exists when deriving the ledger from this run's starting HEAD. No new deferral
+was added here.
+
+[Parent verification after review](review-pass2-after-review-checks.json) records
+all 36 Story 5.10 tests and all three affected Story 5.11 lifecycle tests passing,
+with all nine checks passing. It binds the final five source/test files and all
+twelve protected files before and after the run. Both default verifiers and
+adopted AD-23 pass; both completion entrypoints retain the exact missing-label
+refusal and regeneration refuses the approved receipt. Every frozen matrix case
+has a covering test recorded as passed, with no skips. The
+[final reviewed-packet scan](secret-scan-build-pass2-reviewed.json) binds these
+updated notes and receipts.
+
+The story remains in-review and sprint remains review pending upstream label
+integration. Existing CI failures and previously accepted successor deferrals
+remain open. No commit, push, upstream checkout write, enrollment, parity
+acceptance or retirement occurred in this run.

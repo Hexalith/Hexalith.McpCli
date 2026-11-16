@@ -37,13 +37,14 @@ ROLES = ['ChatBot owning maintainer', 'ChatBot Contracts/handler/admission/secur
 LIMITS = ['Disposition authority only; no enrollment, publication, execution, parity or retirement authority.',
           'Exact-byte owner approval and separate explicit delivery authorization are independent gates.',
           'No commit, push, merge or upstream checkout write is authorized by this packet.']
+MUTABLE_AUTHORITIES = [Path('Directory.Build.props'), Path('tools/dependency-policy.json'),
+                       Path('src/Hexalith.McpCli/Hexalith.McpCli.csproj')]
 AUTHORITIES = [m['old'] for m in MODULES.values()] + [
     AD/'AD-23-non-gateway-capability-classes.md', AD/'AD-23-capability-class-map.json',
     ART/'evidence/story-5-2/approval.json', ART/'evidence/story-5-2/main-integration.json',
     ART/'technical-tools-migration-inventory-v1.0.3.md',
     *[ART/f'evidence/story-5-{story}/{name}.json' for story in [7,8,9] for name in ['approval','labels']],
-    Path('Directory.Build.props'), Path('tools/dependency-policy.json'),
-    Path('src/Hexalith.McpCli/Hexalith.McpCli.csproj')]
+    *MUTABLE_AUTHORITIES]
 IDENTITY = {'M01','M02','M03','M04','V01','V02','V03'}
 HTTP_GATE = ('The HTTP release with forwarded per-user identity is necessary but insufficient: '
              'prove authenticated tenant and user authorization, administrative scope, semantic behavior, '
@@ -642,7 +643,12 @@ def label_candidate(root,inventories):
                 inventoryArtifacts=inventories,inventoryRevision=None,deliveryAuthorization=None,repositories=repositories,rows=rows),writes
 
 
-def authority_bytes(root,path):
+def authority_bytes(root,path,*,regeneration=False):
+    if path in MUTABLE_AUTHORITIES:
+        baseline = git(root,'show',f'{BASELINE}:{path}')
+        if not regeneration: return baseline
+        require((root/path).read_bytes() == baseline,f'preserved authority changed: {path}')
+        return baseline
     return (root/path).read_bytes()
 
 
@@ -660,7 +666,7 @@ def packet(root,*,regeneration=False):
     preconditions(root,regeneration=regeneration)
     SOURCES.clear()
     writes = {m['new']:candidate(root,n) for n,m in MODULES.items()}
-    artifacts = {str(p):sha(authority_bytes(root,p)) for p in AUTHORITIES}
+    artifacts = {str(p):sha(authority_bytes(root,p,regeneration=regeneration)) for p in AUTHORITIES}
     artifacts.update({str(p):sha(data) for p,data in writes.items()})
     amendments = []
     for module,m in MODULES.items():

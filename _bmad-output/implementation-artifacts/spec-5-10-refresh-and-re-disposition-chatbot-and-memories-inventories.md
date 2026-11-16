@@ -2,7 +2,7 @@
 title: '5.10 Refresh and re-disposition ChatBot and Memories inventories'
 type: 'chore'
 created: '2026-11-16'
-status: 'in-progress'
+status: 'in-review'
 baseline_commit: '979e1e126c6d7010997f4f20b2bb3defae81333e'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -204,7 +204,7 @@ The 44 raw findings resolve to 1 decision-needed, 10 patches, 3 deferrals and 25
 
 Decision resolved 2026-11-16: D3 ("Section-level check") becomes a patch. Totals are now 0 decision-needed, 11 patches, 3 deferrals and 25 rejections.
 
-- [ ] [Review][Patch] D3 ChatBot main README moved after the pin, so a README-only delivery onto current main cannot pass completion [`evidence/story-5-10/verify_labels.py:47`] — `verify_labels.py:47` requires the integrated commit's whole README to equal `after`, which is the pin README with the section swapped.
+- [x] [Review][Patch] D3 ChatBot main README moved after the pin, so a README-only delivery onto current main cannot pass completion [`evidence/story-5-10/verify_labels.py:47`] — `verify_labels.py:47` requires the integrated commit's whole README to equal `after`, which is the pin README with the section swapped.
   - Resolved: the user chose "Section-level check". `check_delivery` will require each integrated commit to be README-only, with its diff exactly the authorized section swap applied to its own parent: the parent section equals `before`, the commit section equals `after`, and all other bytes are unchanged.
   - The patch file and the approved bytes stay unchanged, and no new approval is needed. The register's whole-README `afterSha256` becomes historical evidence.
   - Add exact-stream tests for both modules: moved-main acceptance, and a commit with an extra change outside the section.
@@ -215,21 +215,21 @@ Decision resolved 2026-11-16: D3 ("Section-level check") becomes a patch. Totals
   - Pass-1 E9 was rejected because both READMEs were unchanged; that premise no longer holds for ChatBot.
   - Options: (a) verify at section level; (b) deliver byte-exact on the pin, then merge; (c) regenerate the ChatBot label with new approval and authorization.
   - Medium. [2E6]
-- [ ] [Review][Patch] Three mutable enrollment/dependency files are bound to the baseline working tree, so the next routine bump breaks both verifiers [`evidence/story-5-10/verify_amendment.py:166`]
+- [x] [Review][Patch] Three mutable enrollment/dependency files are bound to the baseline working tree, so the next routine bump breaks both verifiers [`evidence/story-5-10/verify_amendment.py:166`]
   - `B.AUTHORITIES` (`build_candidate.py:45-46`) includes `Directory.Build.props`, `tools/dependency-policy.json` and `src/Hexalith.McpCli/Hexalith.McpCli.csproj`. They changed 18, 25 and 3 times since 2026-10-15.
   - `verify_owner_packet` requires their working-tree bytes to equal `979e1e1`. `packet()` (`build_candidate.py:663`) re-hashes them into the receipt `artifacts` that `check_approval` compares (`verify_amendment.py:142-143`).
   - Apply the pass-1 D2 rule ("HEAD checks only on regen"): verification reads these three from `BASELINE` Git objects, and regeneration keeps the working-tree equality.
   - Add a test that changes the fixture's `Directory.Build.props`: the default verifier still passes and regeneration refuses.
   - Medium. [2V-o1, 2E4, 2A2]
-- [ ] [Review][Patch] Completion delivery guards have no negative tests [`evidence/story-5-10/test_verify_amendment.py:566`]
+- [x] [Review][Patch] Completion delivery guards have no negative tests [`evidence/story-5-10/test_verify_amendment.py:566`]
   - Pre-verified: each of these removals leaves all 30 tests green: the exact `authorize` word check (`verify_labels.py:40`), either 40-hex SHA check (`:44`, `:54`), or the `commitSha256` comparison (`:50`).
   - Add exact-stream subtests for: wrong words (as in Story 5.9 `test_verify_amendment.py:261-271`); a symbolic or short commit or inventory revision; a mismatched commit hash.
   - [2V1]
-- [ ] [Review][Patch] Owner-checkout origin and pending-claim guards have no tests [`evidence/story-5-10/verify_labels.py:98`]
+- [x] [Review][Patch] Owner-checkout origin and pending-claim guards have no tests [`evidence/story-5-10/verify_labels.py:98`]
   - Pre-verified: removing `:97-98` or `:106-107` leaves the suite green.
   - Add, each with exact streams: a pending register that claims authorization, a revision or an integration; a completion fixture whose checkout origin is another repository.
   - [2V2]
-- [ ] [Review][Patch] Source-premise guards in `check_source_drift` have no failing controls [`evidence/story-5-10/verify_amendment.py:117`]
+- [x] [Review][Patch] Source-premise guards in `check_source_drift` have no failing controls [`evidence/story-5-10/verify_amendment.py:117`]
   - Pre-verified: `:117` and `:123-137` can be weakened with all 30 tests green. They cover:
     - the Contracts csproj and the old `src` tree / `.mcp.json` premise;
     - the fixed tools/leaves, the 12 tools and the host resources/prompts;
@@ -238,30 +238,30 @@ Decision resolved 2026-11-16: D3 ("Section-level check") becomes a patch. Totals
   - Only the gitlink and decoration guards have controls (`test_verify_amendment.py:380-392`).
   - Add one fake-git case per guard, asserting its exact message.
   - [2V3]
-- [ ] [Review][Patch] `verify_labels.py` reads the approval decision outside its error handler [`evidence/story-5-10/verify_labels.py:121`]
+- [x] [Review][Patch] `verify_labels.py` reads the approval decision outside its error handler [`evidence/story-5-10/verify_labels.py:121`]
   - The pass-1 PASS-message patch added this read. A missing or malformed `approval.json` now produces a traceback instead of `FAIL:`.
   - Move the read into the `try`.
   - Low. [2B5, 2E3]
-- [ ] [Review][Patch] Recorded state is stale again after `5008de3` [`evidence/story-5-10/verification.md:7`]
+- [x] [Review][Patch] Recorded state is stale again after `5008de3` [`evidence/story-5-10/verification.md:7`]
   - The verification.md summary names only `e2e3db7`/`008d95c` and origin/main `119a4b5`.
   - `verification.md:346-348` and `sprint-status.yaml:103` say no commit or push happened, yet the resumed patches are origin/main as `5008de3`.
   - `deferred-work.md:686` lists the same two commits and the `119a4b5` run.
   - `deferred-work.md:1192` says the labels "are delivered unchanged", though integration is pending.
   - Fix: record `5008de3` and CI run 43943458640 (same pre-existing failures as `deferred-work.md:1043`), and change the wording to "will be delivered unchanged".
   - Low. [2A4, 2B12, 2B14]
-- [ ] [Review][Patch] Ledger D1g misstates the doubled-period scope and cause [`_bmad-output/implementation-artifacts/deferred-work.md:1211`]
+- [x] [Review][Patch] Ledger D1g misstates the doubled-period scope and cause [`_bmad-output/implementation-artifacts/deferred-work.md:1211`]
   - `drift()` (`build_candidate.py:452`) appends `.` after notes that already end in one. As a result, 22 rows end in `..`:
     - ChatBot: M08, L02–L05, L08–L11, V01, V03, G2–G5;
     - Memories: M01, M03, L03, V04, V05, V07, G3.
   - The ledger attributes the doubled periods only to G2–G5 via `WRITES` (`:58`).
   - Low. [2B7]
-- [ ] [Review][Patch] Ledger D1a omits the dropped withdrawal/inclusion precondition [`_bmad-output/implementation-artifacts/deferred-work.md:1196`]
+- [x] [Review][Patch] Ledger D1a omits the dropped withdrawal/inclusion precondition [`_bmad-output/implementation-artifacts/deferred-work.md:1196`]
   - ChatBot 1.0.0 "Approval limits and retirement gate" (`chatbot-migration-inventory-v1.md:157-161`) requires the following before any included operation or legacy withdrawal: equivalent safe output and error behavior, build/release compatibility, and differential behavior evidence.
   - Neither successor carries this precondition, although they add 5 + 20 withdrawals.
   - Also record two replacements: `build_candidate.py:571` replaces every legacy "Source evidence" cell, and `:573` replaces V10's "Current behavior" cell.
   - Low. [2B8]
-- [ ] [Review][Patch] Ledger R-B9 anchor points at the output-format branch [`_bmad-output/implementation-artifacts/deferred-work.md:1221`] — At Memories pin `9d87500e`, `tools/MigrateEmbeddingVectors/Program.cs:79` is the json-format check. The `await service.RunAsync` without an outer mapper is at `:77`. Low. [2E14]
-- [ ] [Review][Patch] Ledger self-anchors drifted past this story's insertion [`_bmad-output/implementation-artifacts/deferred-work.md:846`]
+- [x] [Review][Patch] Ledger R-B9 anchor points at the output-format branch [`_bmad-output/implementation-artifacts/deferred-work.md:1221`] — At Memories pin `9d87500e`, `tools/MigrateEmbeddingVectors/Program.cs:79` is the json-format check. The `await service.RunAsync` without an outer mapper is at `:77`. Low. [2E14]
+- [x] [Review][Patch] Ledger self-anchors drifted past this story's insertion [`_bmad-output/implementation-artifacts/deferred-work.md:846`]
   - `008d95c` inserted `:686`, and Story 5.11's `3511afd` inserted `:145`. Anchors that were correct at baseline now miss.
   - Remap (citing line in parentheses):
     - `:697` → `:699` (`:754`);
@@ -339,6 +339,9 @@ Rejected (25):
 
 - 2026-11-16 factual evidence correction (no frozen-intent change): `git diff --name-status 839aee31e2a9be11feab3fb726006bb4c2f890b5 acc934599cf1efff36b0643eddc6a3cc4c2978d5` reports `M .mcp.json`, not a deleted file. Both `src` trees are exactly `59158fccb3a2819816a2e13a39095b238bdf1c9b`; generation and verification use that source-tree equality and the observed single configuration-file change.
 
+- 2026-11-16 code review pass 2 patches: all eleven action items are implemented. Delivery validates the authorized compatibility-section swap against each integrated commit's own parent, retains README-only/current-main/ancestry/hash checks, and accepts unrelated parent README changes. Verification reads the three mutable enrollment/dependency authorities from BASELINE Git objects; regeneration still refuses changed working bytes. Exact-stream tests cover delivery authorization words, canonical revisions and commit hashes, pending claims and owner origins, thirteen source-premise faults with actual guard removal, and handled missing/malformed approval documents. Ledger/status corrections record publication through `5008de3`, CI run 43943458640, all 22 doubled-period rows, dropped predecessor obligations and current source/self-anchors.
+  - Final validation: all 36 tests pass in 323.163 seconds; all eight checks pass, including both default verifiers, adopted AD-23 and whitespace. Both completion entrypoints return the exact missing-integrated-label refusal, and regeneration refuses the approved packet. Before/after hashes bind the same four final source/test scripts and unchanged protected approved/authorized bytes. Evidence: `evidence/story-5-10/review-pass2-checks.json`, `review-pass2-state.json` and `secret-scan-review-pass2-final.json`. The deliberately interrupted earlier run is separately retained and superseded. The spec stays in-review and sprint stays review pending label integration; no commit, push, enrollment, execution, retirement or upstream checkout change occurred in this pass.
+
 ## Review Triage Log
 
 2026-11-16 build review: all three independent layers returned before triage. Every finding is recorded below before grouping. These are direct source-description corrections or narrow tests/guards for demonstrated states; no intent or authority change is required.
@@ -386,3 +389,27 @@ All three independent layers returned before triage: blind hunter (10), edge cas
 Routes after individual verdicts: one test patch (R-V1), two distinct pre-existing approved-byte deferrals (R-B9/R-B10), nine findings rejected from the explicitly separate Story 5.11 work. The eleven earlier user-deferred groups remain tracked at `deferred-work.md:1191`; no approved inventory, receipt, register, authorization or patch is modified.
 
 Resolution: R-V1 is patched. The parent-symlink test checks exact streams and unchanged local/external output bytes, then removes the actual ancestor expansion and demonstrates the redirected write in disposable scratch. Final verification passes all 30 tests in 228.029 seconds, both default verifiers, adopted AD-23, approved regeneration refusal and whitespace; both completion modes still refuse the missing owner-label integration. Evidence: [final checks](evidence/story-5-10/review-final-checks.json), [verification](evidence/story-5-10/verification.md) and [secret scan](evidence/story-5-10/secret-scan-review-complete.json). One earlier harness run timed out at 360 seconds without a test result; the logged final run completed successfully. R-B9/R-B10 are tracked separately under this spec's deferred-work heading. The spec stays in-review and sprint stays review because the completion gate is unsatisfied; approved bytes and authorization remain unchanged. No commit, push or upstream integration was performed.
+
+### Build review of pass-2 patches — 2026-11-16
+
+All three independent layers returned before triage: blind hunter (10), edge cases (2), verification gaps (1). The cumulative baseline diff includes previously committed Story 5.11 and release-tooling work. Each finding receives its own verdict below before grouping; the approved intent explicitly assigns technical successors and final product/plan reconciliation to Story 5.11. A consumer fixture broken by this run's parent-README read is part of this run's responsibility.
+
+| ID | Layer | Verdict | Evidence and route |
+| --- | --- | --- | --- |
+| P2-B1 | Blind hunter | medium | The Story 5.11 audit records 56 entries against 62 scoped ledger entries. Read-only derivation from both HEAD and the current ledger returns 62, proving the mismatch predates this run. Rejected from this run: refreshing that technical-successor/plan audit and its approval bindings belongs to the explicitly separate Story 5.11. |
+| P2-B2 | Blind hunter | medium | `evidence/story-5-11/test_verify_reconciliation.py:test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels` supplies integrated README blobs but no parent blobs. The new real Story 5.10 check consequently falls through to Git for synthetic revisions. Patch: retain both historical before blobs and serve each commit's parent README, keeping the actual delivery checks enabled. |
+| P2-B3 | Blind hunter | medium | PRD Vision/admin-boundary text and epics FR21 still require generic administration/resource decisions despite adopted AD-23. Rejected from this run: the intent explicitly assigns final product claims and plan reconciliation to Story 5.11, and excludes changing that plan here. |
+| P2-B4 | Blind hunter | medium | Carried R-B1/R-B5: Story 5.11 generation retains the obsolete absent-CiCd-config blocker and its completion check requires a Builds-check status. Same unchanged delivery-policy problem; retain the prior rejection from this run because technical-successor/plan delivery belongs to Story 5.11. |
+| P2-B5 | Blind hunter | medium | Story 5.11 `check_assessments` requires only a nonblank retirement surface, so an exempt PS14 receipt can satisfy its SM-3 loop. Rejected from this run: validating the final plan's Legacy Server retirement assessment belongs to the explicitly separate Story 5.11; this story makes no retirement claim. |
+| P2-B6 | Blind hunter | medium | Carried R-B8: Story 5.11 `check_patches` checks no-change owner names/count but not their inspected revisions/hashes. Retain the prior rejection from this run: all-owner reconciliation is explicitly assigned to Story 5.11. |
+| P2-B7 | Blind hunter | medium | Carried R-B6: Story 5.11 generation checks approval only at entry and later writes its receipt without a snapshot recheck. Retain the prior rejection from this run: technical-successor generation is explicitly assigned to Story 5.11. Story 5.10 retains its mutation-time receipt checks. |
+| P2-B8 | Blind hunter | medium | Carried R-B7 for duplicate JSON members. Additionally, Story 5.11's ordinary JSON reader admits null/array roots whose `.get()` raises an uncaught AttributeError. Rejected from this run: this is the separately assigned technical/plan packet reader; no such reader is changed here. |
+| P2-B9 | Blind hunter | medium | Story 5.11's offline proof retains every complete input chunk in `Responses.output` while bounding only `pending`, allowing unrelated complete frames to grow the transcript until the deadline. Rejected from this run: the published offline proof supports Story 5.11's product-claim reconciliation, explicitly separate from these inventory amendments. |
+| P2-B10 | Blind hunter | medium | Carried R-B3: Story 5.11 checks the approved AI.Tools revision's ancestry but reads that revision's document bytes rather than the actual descendant gitlink's bytes. Retain the prior rejection from this run: the intent excludes the AI.Tools plan/gitlink and assigns reconciliation to Story 5.11. |
+| P2-E1 | Edge cases | medium | Carried R-B6, same root cause as P2-B7: approval arriving during Story 5.11 generation can be overwritten. Retain the prior Story 5.11 rejection without duplicating its disposition. |
+| P2-E2 | Edge cases | medium | Story 5.11's incremental writes follow linked output files/parents and have no destination-symlink check; the reviewer reproduced an external overwrite. Rejected from this run: technical-successor generation is explicitly assigned to Story 5.11. Story 5.10's existing parent-symlink refusal remains tested. |
+| P2-V1 | Verification gaps | medium | Pre-verified: removing Story 5.11's populated SM-3 receipt state/authority/date checks leaves all seven CompletionBindingTests passing; its only met case has no receipt. Rejected from this run: tests for the final plan's retirement assessment belong to the explicitly separate Story 5.11, and this story asserts no retirement. |
+
+After individual verdicts: one patch (P2-B2), twelve findings rejected from the explicitly separate Story 5.11 work, including carried prior dispositions. No new deferral or intent/specification loopback is needed. Approved inventories, receipts, register, authorization and patches remain unchanged.
+
+Resolution: P2-B2 is patched by supplying both historical parent README blobs in the existing consumer fixture, without stubbing the real delivery checks. Parent verification passes all 36 Story 5.10 tests and all three affected Story 5.11 lifecycle tests; all nine recorded checks pass, including both default verifiers, unchanged adopted AD-23, exact completion/regeneration refusals and whitespace. The final five source/test hashes and all twelve protected hashes are unchanged across verification. Every frozen matrix case has a covering test recorded as passed. Evidence: [parent verification](evidence/story-5-10/review-pass2-after-review-checks.json), [verification notes](evidence/story-5-10/verification.md) and [final scan](evidence/story-5-10/secret-scan-build-pass2-reviewed.json). The story remains in-review and sprint remains review because upstream labels are unintegrated; existing CI failures and earlier approved-byte deferrals remain open. No commit, push, upstream checkout change, enrollment or retirement occurred in this run.

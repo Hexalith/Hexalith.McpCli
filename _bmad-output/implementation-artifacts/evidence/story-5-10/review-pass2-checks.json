@@ -1,0 +1,167 @@
+{
+  "phase": "code-review-pass-2-patches",
+  "head": "89bf87b97b7a349a94c67904647f28a18f070372",
+  "supersedes": "review-pass2-interrupted-attempt.json",
+  "checks": [
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10",
+        "-p",
+        "test_*.py"
+      ],
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "elapsedSeconds": 323.395,
+      "stdout": "",
+      "stderr": "test_anchor_identity_unresolvable_and_prose_checks (test_verify_amendment.AmendmentTests.test_anchor_identity_unresolvable_and_prose_checks) ... ok\ntest_approval_after_first_successor_write_is_preserved_and_later_writes_stop (test_verify_amendment.AmendmentTests.test_approval_after_first_successor_write_is_preserved_and_later_writes_stop) ... ok\ntest_approved_authorized_completion_exercises_actual_delivery_checks (test_verify_amendment.AmendmentTests.test_approved_authorized_completion_exercises_actual_delivery_checks) ... ok\ntest_approved_undelivered_candidate_is_valid_but_generation_and_completion_refuse (test_verify_amendment.AmendmentTests.test_approved_undelivered_candidate_is_valid_but_generation_and_completion_refuse) ... ok\ntest_baseline_gitlinks_and_published_pin_ancestry_remain_required (test_verify_amendment.AmendmentTests.test_baseline_gitlinks_and_published_pin_ancestry_remain_required) ... ok\ntest_class_drift_missing_loss_gap_owner_drift_and_ui_gate (test_verify_amendment.AmendmentTests.test_class_drift_missing_loss_gap_owner_drift_and_ui_gate) ... ok\ntest_completion_from_flag_spec_sprint_and_integrated_label_requires_approval (test_verify_amendment.AmendmentTests.test_completion_from_flag_spec_sprint_and_integrated_label_requires_approval) ... ok\ntest_context_k05_status_and_admin_scope_guards (test_verify_amendment.AmendmentTests.test_context_k05_status_and_admin_scope_guards) ... ok\ntest_corrected_source_facts_and_specific_openapi_semantics_are_retained (test_verify_amendment.AmendmentTests.test_corrected_source_facts_and_specific_openapi_semantics_are_retained) ... ok\ntest_current_gitlink_moves_and_local_main_lag_affect_regeneration_only (test_verify_amendment.AmendmentTests.test_current_gitlink_moves_and_local_main_lag_affect_regeneration_only) ... ok\ntest_delivery_accepts_moved_owner_readmes_and_rejects_extra_changes_for_both_modules (test_verify_amendment.AmendmentTests.test_delivery_accepts_moved_owner_readmes_and_rejects_extra_changes_for_both_modules) ... ok\ntest_delivery_readme_and_inventory_ancestry_guards_have_entrypoint_removal_controls (test_verify_amendment.AmendmentTests.test_delivery_readme_and_inventory_ancestry_guards_have_entrypoint_removal_controls) ... ok\ntest_delivery_rejects_missing_authorization_stale_origin_non_readme_and_off_main (test_verify_amendment.AmendmentTests.test_delivery_rejects_missing_authorization_stale_origin_non_readme_and_off_main) ... ok\ntest_delivery_words_revisions_and_commit_hash_have_exact_stream_guard_controls (test_verify_amendment.AmendmentTests.test_delivery_words_revisions_and_commit_hash_have_exact_stream_guard_controls) ... ok\ntest_duplicate_json_unknown_state_and_missing_metadata (test_verify_amendment.AmendmentTests.test_duplicate_json_unknown_state_and_missing_metadata) ... ok\ntest_each_published_inventory_and_approval_copy_is_required_with_exact_streams (test_verify_amendment.AmendmentTests.test_each_published_inventory_and_approval_copy_is_required_with_exact_streams) ... ok\ntest_every_identity_dependent_row_and_other_deferred_rows_retain_http_and_g2 (test_verify_amendment.AmendmentTests.test_every_identity_dependent_row_and_other_deferred_rows_retain_http_and_g2) ... ok\ntest_every_ps14_mode_field_and_noninteractive_rule (test_verify_amendment.AmendmentTests.test_every_ps14_mode_field_and_noninteractive_rule) ... ok\ntest_every_source_premise_has_an_exact_stream_fake_git_and_guard_removal_control (test_verify_amendment.AmendmentTests.test_every_source_premise_has_an_exact_stream_fake_git_and_guard_removal_control) ... ok\ntest_generator_is_deterministic_and_pending (test_verify_amendment.AmendmentTests.test_generator_is_deterministic_and_pending) ... ok\ntest_generator_refuses_approved_authorized_symlink_and_approval_race (test_verify_amendment.AmendmentTests.test_generator_refuses_approved_authorized_symlink_and_approval_race) ... ok\ntest_generator_rejects_symlinked_output_parent_without_writes_and_detects_ancestor_guard_removal (test_verify_amendment.AmendmentTests.test_generator_rejects_symlinked_output_parent_without_writes_and_detects_ancestor_guard_removal) ... ok\ntest_guard_removal_controls_detect_missing_accounting_row_anchor_approval_and_delivery_guards (test_verify_amendment.AmendmentTests.test_guard_removal_controls_detect_missing_accounting_row_anchor_approval_and_delivery_guards) ... ok\ntest_guard_removal_of_published_byte_comparisons_is_detected (test_verify_amendment.AmendmentTests.test_guard_removal_of_published_byte_comparisons_is_detected) ... ok\ntest_label_chain_rows_hash_path_and_readme_only_patch (test_verify_amendment.AmendmentTests.test_label_chain_rows_hash_path_and_readme_only_patch) ... ok\ntest_label_entrypoint_handles_missing_and_malformed_approval_without_traceback (test_verify_amendment.AmendmentTests.test_label_entrypoint_handles_missing_and_malformed_approval_without_traceback) ... ok\ntest_missing_duplicate_and_added_rows_include_governance_and_stubs (test_verify_amendment.AmendmentTests.test_missing_duplicate_and_added_rows_include_governance_and_stubs) ... ok\ntest_mutable_authority_changes_affect_regeneration_only (test_verify_amendment.AmendmentTests.test_mutable_authority_changes_affect_regeneration_only) ... ok\ntest_pending_label_claims_and_wrong_owner_origin_have_exact_stream_controls (test_verify_amendment.AmendmentTests.test_pending_label_claims_and_wrong_owner_origin_have_exact_stream_controls) ... ok\ntest_protected_predecessors_and_authorities (test_verify_amendment.AmendmentTests.test_protected_predecessors_and_authorities) ... ok\ntest_readme_only_patches_apply_to_pinned_bytes_exactly (test_verify_amendment.AmendmentTests.test_readme_only_patches_apply_to_pinned_bytes_exactly) ... ok\ntest_real_candidate_commands_have_exact_success_streams_and_completion_refusal (test_verify_amendment.AmendmentTests.test_real_candidate_commands_have_exact_success_streams_and_completion_refusal) ... ok\ntest_receipt_bindings_roles_exact_words_and_pending_claims (test_verify_amendment.AmendmentTests.test_receipt_bindings_roles_exact_words_and_pending_claims) ... ok\ntest_replace_include_and_plain_command_rest_openapi_readiness_are_rejected (test_verify_amendment.AmendmentTests.test_replace_include_and_plain_command_rest_openapi_readiness_are_rejected) ... ok\ntest_source_gitlink_decoration_and_registration_controls (test_verify_amendment.AmendmentTests.test_source_gitlink_decoration_and_registration_controls) ... ok\ntest_unchanged_pending_destinations_are_not_rewritten (test_verify_amendment.AmendmentTests.test_unchanged_pending_destinations_are_not_rewritten) ... ok\n\n----------------------------------------------------------------------\nRan 36 tests in 323.163s\n\nOK\n",
+      "passed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py"
+      ],
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "elapsedSeconds": 3.404,
+      "stdout": "PASS: chatbot: 48 entries; memories: 55 entries (4 added PS14 modes); pinned anchors/drift, AD-23 dispositions and hash chains\nPASS: owner decision: approved; candidate only; integrated PS06/PS07/PS12/PS13/PS14 labels remain a completion gate\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py"
+      ],
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "elapsedSeconds": 0.074,
+      "stdout": "PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two README-only patches; candidate only; owner decision: approved; delivery integration pending\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py",
+        "--approved-completion"
+      ],
+      "expectedExitCode": 1,
+      "exitCode": 1,
+      "elapsedSeconds": 3.59,
+      "stdout": "",
+      "stderr": "FAIL: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels\n",
+      "expectedStreams": true,
+      "passed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py",
+        "--approved-completion"
+      ],
+      "expectedExitCode": 1,
+      "exitCode": 1,
+      "elapsedSeconds": 4.102,
+      "stdout": "",
+      "stderr": "FAIL: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels\n",
+      "expectedStreams": true,
+      "passed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/build_candidate.py"
+      ],
+      "expectedExitCode": 1,
+      "exitCode": 1,
+      "elapsedSeconds": 0.033,
+      "stdout": "",
+      "stderr": "FAIL: refusing to overwrite approved or unknown-state packet\n",
+      "expectedStreams": true,
+      "passed": true
+    },
+    {
+      "command": [
+        "/usr/bin/python3",
+        "-I",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "elapsedSeconds": 0.06,
+      "stdout": "PASS: _bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md: 71 classified rows + 20 non-operation records = 91\nPASS: _bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md: 28 classified rows + 40 non-operation records = 68\nPASS: _bmad-output/implementation-artifacts/folders-migration-inventory-v1.md: 103 classified rows + 58 non-operation records = 161\nPASS: _bmad-output/implementation-artifacts/projects-migration-inventory-v1.md: 46 classified rows + 6 non-operation records = 52\nPASS: _bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md: 26 classified rows + 4 non-operation records = 30\nPASS: _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md: 39 classified rows + 9 non-operation records = 48\nPASS: _bmad-output/implementation-artifacts/memories-migration-inventory-v1.md: 39 classified rows + 12 non-operation records = 51\nPASS: _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md: 20 classified rows + 4 non-operation records = 24\nPASS: exact-byte partition verified; effective decision status: adopted; parity remains a separate gate\n",
+      "stderr": "",
+      "passed": true
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "expectedExitCode": 0,
+      "exitCode": 0,
+      "elapsedSeconds": 0.214,
+      "stdout": "",
+      "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n",
+      "passed": true
+    }
+  ],
+  "sourceHashesBefore": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/build_candidate.py": "26ccc551bfaee629a962f0408a22db0d843dd0814a3f9ab99cb79284e758516e",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py": "91778a758cd6b053185373659ce0982b43a1ada232d5a87665b081650cf7b969",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py": "dc8d696095086bddd997af7e682b543b313f4a7b8e749bb83f2fda54392eaa37",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/test_verify_amendment.py": "6e32feb66744c0209e69e4e709c4b6539a4254e0ce50af296a469c11f0fda1de"
+  },
+  "sourceHashesAfter": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/build_candidate.py": "26ccc551bfaee629a962f0408a22db0d843dd0814a3f9ab99cb79284e758516e",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py": "91778a758cd6b053185373659ce0982b43a1ada232d5a87665b081650cf7b969",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py": "dc8d696095086bddd997af7e682b543b313f4a7b8e749bb83f2fda54392eaa37",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/test_verify_amendment.py": "6e32feb66744c0209e69e4e709c4b6539a4254e0ce50af296a469c11f0fda1de"
+  },
+  "sourceBytesUnchanged": true,
+  "protectedBefore": {
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/labels.json": "8871047e07bf667d2612aa3ded4c23a38d3138a0a9ad3827ab6372834eda42f2",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-authorization.json": "595ad2d3473ba7bda63c8d552e94a73f7bab9c5d6e452b04b3bfb1ef9c227b2b",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-gate.json": "f5df1f9db7b4b69c1eaaa7bb0461ed7d288e12b503dac1fc5a6893816acb48fb",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.after.section.md": "62628cc010c0a8ee362abb8a669a32424329b10cef3b7438b356f59be5576866",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.before.section.md": "09b051b0d61c95335554686c59b24512f1ca55b19d02b0b89cd6b16bef9649b2",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.patch": "12ba84ff82f69f66a61109272569670671b5a8046ad33a9432f883dad4702f8f",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.after.section.md": "8ed5e3575388ce8bfa894b8ebf20dc96bb4f4fefa0849d769e48143566be3b4a",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.before.section.md": "5f8138b02abf322d66fa30d6cce91b1a38e76e7c6b140ec6d33e2ba4c0d18a61",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.patch": "b20c1ef3233a663f03807f70196b6d765a820b8dac9d817ca574d79a7435e1dd"
+  },
+  "protectedAfter": {
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/labels.json": "8871047e07bf667d2612aa3ded4c23a38d3138a0a9ad3827ab6372834eda42f2",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-authorization.json": "595ad2d3473ba7bda63c8d552e94a73f7bab9c5d6e452b04b3bfb1ef9c227b2b",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-gate.json": "f5df1f9db7b4b69c1eaaa7bb0461ed7d288e12b503dac1fc5a6893816acb48fb",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.after.section.md": "62628cc010c0a8ee362abb8a669a32424329b10cef3b7438b356f59be5576866",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.before.section.md": "09b051b0d61c95335554686c59b24512f1ca55b19d02b0b89cd6b16bef9649b2",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.patch": "12ba84ff82f69f66a61109272569670671b5a8046ad33a9432f883dad4702f8f",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.after.section.md": "8ed5e3575388ce8bfa894b8ebf20dc96bb4f4fefa0849d769e48143566be3b4a",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.before.section.md": "5f8138b02abf322d66fa30d6cce91b1a38e76e7c6b140ec6d33e2ba4c0d18a61",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.patch": "b20c1ef3233a663f03807f70196b6d765a820b8dac9d817ca574d79a7435e1dd"
+  },
+  "protectedUnchanged": true,
+  "passed": true
+}

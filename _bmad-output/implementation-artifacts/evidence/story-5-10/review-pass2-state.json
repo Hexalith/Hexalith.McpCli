@@ -1,0 +1,134 @@
+{
+  "phase": "code-review-pass-2-state-correction",
+  "localChecks": [
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "89bf87b97b7a349a94c67904647f28a18f070372\n5008de388c5e37257ca78e48d8afe899cf7aaa2a\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "e2e3db7",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "008d95c",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "merge-base",
+        "--is-ancestor",
+        "5008de3",
+        "origin/main"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "approvalDecision": "approved",
+  "deliveryAuthorization": "authorized",
+  "labelState": "candidate-pending-owner-approval-and-delivery",
+  "ownerReadback": [
+    {
+      "module": "chatbot",
+      "observedOriginMain": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+      "parentReadmeSha256": "6b3874701fbb50035d7187d92e740a1cb07080eddaa2910404fe1dd7ec114c03",
+      "candidateReadmeSha256": "e6d142d116365628a5cbf9e466ea02177875168901f6ced7647994dcc339d97d",
+      "historicalAfterSha256": "e6d142d116365628a5cbf9e466ea02177875168901f6ced7647994dcc339d97d",
+      "historicalWholeReadmeHashMatches": true,
+      "parentSectionMatches": true,
+      "candidateSectionMatches": true,
+      "outsideSectionUnchanged": true,
+      "patchChecks": [
+        {
+          "command": [
+            "git",
+            "apply",
+            "--check",
+            "-"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "apply",
+            "-"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    },
+    {
+      "module": "memories",
+      "observedOriginMain": "d2a39a84ccf2bcc1f89c428b50591c3c462aaedf",
+      "parentReadmeSha256": "6e6b45a2caf2756e9db25d9f55d4d4c787a88b7af24ee725264e596758c9e835",
+      "candidateReadmeSha256": "d5a12b07d95676a554eb6fdfffb6e48fa60cbabd2b4a976885c92b1249bc0a9a",
+      "historicalAfterSha256": "d5a12b07d95676a554eb6fdfffb6e48fa60cbabd2b4a976885c92b1249bc0a9a",
+      "historicalWholeReadmeHashMatches": true,
+      "parentSectionMatches": true,
+      "candidateSectionMatches": true,
+      "outsideSectionUnchanged": true,
+      "patchChecks": [
+        {
+          "command": [
+            "git",
+            "apply",
+            "--check",
+            "-"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        },
+        {
+          "command": [
+            "git",
+            "apply",
+            "-"
+          ],
+          "exitCode": 0,
+          "stdout": "",
+          "stderr": ""
+        }
+      ]
+    }
+  ],
+  "observedCi": {
+    "revision": "5008de388c5e37257ca78e48d8afe899cf7aaa2a",
+    "runId": 43943458640,
+    "url": "https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43943458640",
+    "result": "failure",
+    "source": "spec Code review pass 2 baseline; same five pre-existing jobs as run 43916598661, tracked at deferred-work.md:1043"
+  },
+  "scope": "Read-only local refs and isolated README copies; no fetch, integration, commit or push.",
+  "passed": true
+}

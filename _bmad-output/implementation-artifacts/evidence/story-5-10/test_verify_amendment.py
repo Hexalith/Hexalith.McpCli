@@ -130,7 +130,7 @@ def approved(receipt):
 
 
 @contextlib.contextmanager
-def integrated_workspace(corrupt=None,*,delivery_fault=None):
+def integrated_workspace(corrupt=None,*,delivery_fault=None,moved_main=False):
     """Approved/delivered fixture; Git readback is synthetic, with no real receipt write."""
     with workspace(pending=True) as root:
         path=root/B.E/'approval.json';path.write_text(json.dumps(approved(V.read_json(path))))
@@ -142,19 +142,26 @@ def integrated_workspace(corrupt=None,*,delivery_fault=None):
             revision=('a' if i==0 else 'c')*40;commit=('commit-'+str(i)).encode()
             r['integration']=dict(commit=revision,commitSha256=B.sha(commit))
             before=B.blob(root,r['name'],'README.md')
-            after=before.replace((root/r['before']['path']).read_bytes(),(root/r['after']['path']).read_bytes())
-            readmes[r['ownerCheckout']]=(revision,after,commit)
+            parent=(b'Current owner build/test guidance.\n\n'+before) if moved_main else before
+            after=parent.replace((root/r['before']['path']).read_bytes(),(root/r['after']['path']).read_bytes())
+            readmes[r['ownerCheckout']]=(revision,parent,after,commit)
         path.write_text(json.dumps(register));real=B.git;observed=[]
         def integrated(checkout,*args):
             owner=str(Path(checkout))
             if owner in readmes:
-                revision,after,commit=readmes[owner];observed.append((owner,args))
+                revision,parent,after,commit=readmes[owner];observed.append((owner,args))
+                if args==('show',revision+'^:README.md'):
+                    return parent.replace(b'## Legacy compatibility surfaces',b'## Legacy compatibility surfaces\nWrong parent section',1) if delivery_fault==('parent-section',owner) else parent
                 if args==('show',revision+':README.md'):
-                    return b'wrong integrated README bytes' if delivery_fault==('readme',owner) else after
+                    if delivery_fault==('readme',owner): return after.replace(b'## Legacy compatibility surfaces',b'## Legacy compatibility surfaces\nWrong section bytes',1)
+                    if delivery_fault==('outside-section',owner): return b'Unauthorized outside-section change\n'+after
+                    return after
                 if args==('show','origin/main:README.md'): return after
                 if args==('cat-file','commit',revision): return commit
                 if args==('merge-base','--is-ancestor',revision,'origin/main'): return b''
                 if args==('diff','--name-only',revision+'^',revision): return b'README.md\n'
+                if args==('remote','get-url','origin') and delivery_fault==('origin',owner):
+                    return b'https://github.com/Hexalith/AnotherRepository.git\n'
             if Path(checkout)==root:
                 if args==('merge-base','--is-ancestor','b'*40,'origin/main'):
                     observed.append((owner,args))
@@ -377,6 +384,18 @@ class AmendmentTests(unittest.TestCase):
                 item=root/path;item.write_bytes(item.read_bytes()+b'\n')
                 self.assert_failure(root,'preserved authority changed: '+str(path))
 
+    def test_mutable_authority_changes_affect_regeneration_only(self):
+        with workspace(pending=True) as root:
+            path=root/'Directory.Build.props'
+            path.write_bytes(path.read_bytes()+b'\n<!-- later dependency update -->\n')
+            before={path:(root/path).read_bytes() for path in B.packet(root)}
+            with patch.object(V,'check_source_drift',return_value=None):
+                self.assertEqual((0,PASS,''),invoke(V,['--root',str(root)]))
+                self.assertEqual((0,LABEL_PASS,''),invoke(L,['--root',str(root)]))
+            with patch.object(B,'ROOT',root):
+                self.assertEqual((1,'','FAIL: preserved authority changed: Directory.Build.props\n'),invoke(B,[]))
+            for path,data in before.items(): self.assertEqual(data,(root/path).read_bytes())
+
     def test_source_gitlink_decoration_and_registration_controls(self):
         V.check_source_drift(ROOT)
         real=B.git
@@ -390,6 +409,49 @@ class AmendmentTests(unittest.TestCase):
                 return changed if changed is not None else real(root,*args)
             with self.subTest(name=name),patch.object(B,'git',side_effect=fake):
                 with self.assertRaisesRegex(ValueError,re.escape(message)): V.check_source_drift(ROOT)
+
+    def test_every_source_premise_has_an_exact_stream_fake_git_and_guard_removal_control(self):
+        c,m=B.MODULES['chatbot'],B.MODULES['memories']
+        cp='src/Hexalith.ChatBot.Contracts/Hexalith.ChatBot.Contracts.csproj'
+        mp='src/Hexalith.Memories.Contracts/Hexalith.Memories.Contracts.csproj'
+        tools='src/Hexalith.ChatBot.Mcp/ChatBotMcpTools.cs'
+        leaves='src/Hexalith.ChatBot.Cli/ChatBotCliCommands.cs'
+        chost='src/Hexalith.ChatBot.Mcp/Program.cs'
+        mhost='src/Hexalith.Memories.Mcp/McpCompositionRoot.cs'
+        cases=[
+            ('chatbot',('show',c['oldpin']+':'+cp),b'changed Contracts project','chatbot: Contracts project unexpectedly changed'),
+            ('memories',('show',m['oldpin']+':'+mp),b'changed Contracts project','memories: Contracts project unexpectedly changed'),
+            ('chatbot',('rev-parse',c['oldpin']+':'+B.OLD_SOURCE_TREE),b'0'*40+b'\n','chatbot: unpublished old src tree differs from published comparison'),
+            ('chatbot',('merge-base','--is-ancestor',B.OLD_SOURCE_PIN,c['pin']),ValueError('git merge-base --is-ancestor '+B.OLD_SOURCE_PIN+' '+c['pin']+' failed: published comparison ancestry fixture'),'git merge-base --is-ancestor '+B.OLD_SOURCE_PIN+' '+c['pin']+' failed: published comparison ancestry fixture'),
+            ('chatbot',('diff','--name-status',B.OLD_SOURCE_PIN,c['oldpin']),b'M\tsrc/other.cs\n','chatbot: historical source-only comparison premise changed'),
+            ('chatbot',('diff','--name-only',c['oldpin'],c['pin'],'--',tools,leaves),b'changed.cs\n','chatbot: fixed tool/leaf declarations changed'),
+            ('chatbot',('show',c['pin']+':'+tools),B.blob(ROOT,'chatbot',tools).replace(b'[McpServerTool(',b'[DifferentTool(',1),'chatbot: expected twelve registered tools'),
+            ('chatbot',('show',c['pin']+':'+chost),B.blob(ROOT,'chatbot',chost)+b'\n// WithResources\n','chatbot: host tool/resource/prompt premise changed'),
+            ('memories',('diff','--name-only',m['oldpin'],m['pin'],'--','src/Hexalith.Memories.Mcp/Tools','src/Hexalith.Memories.Cli/Commands','tools/MigrateEmbeddingVectors',B.SERVICE,B.EXITS),b'changed.cs\n','memories: fixed tools/leaves/stubs/operator source changed'),
+            ('memories',('show',m['pin']+':'+mhost),B.blob(ROOT,'memories',mhost).replace(b'.WithTools<',b'.DifferentTools<',1),'memories: expected four registered tools and no resources/prompts'),
+            ('memories',('show',m['pin']+':'+mhost),B.blob(ROOT,'memories',mhost).replace(b'ValidAlgorithms',b'OtherAlgorithms'),'memories: JWT algorithm drift missing'),
+            ('memories',('show',m['pin']+':'+B.TOOL),B.blob(ROOT,'memories',B.TOOL).replace(b'selectedModes != 1',b'selectedModes != 2'),'memories: PS14 mode/confirmation/direct-access premise changed'),
+            ('memories',('show',m['pin']+':'+B.SERVICE),B.blob(ROOT,'memories',B.SERVICE).replace(b'requires --tenant',b'requires another selector'),'memories: PS14 tenant/confirmation/effect premise changed'),
+        ]
+        source=inspect.getsource(V.check_source_drift)
+        for module,args,value,message in cases:
+            # Match the actual statement, including its indentation, rather than
+            # replacing the checker with a stub that could never test a guard.
+            snippet=("    B.git(root/B.repo('chatbot'),'merge-base','--is-ancestor',B.OLD_SOURCE_PIN,c['pin'])\n" if isinstance(value,ValueError)
+                     else next(line for line in source.splitlines(keepends=True) if message.split(': ',1)[1] in line))
+            with self.subTest(premise=message),workspace(pending=True) as root:
+                real=B.git
+                def fake(checkout,*actual):
+                    if Path(checkout)==root/B.repo(module) and actual==args:
+                        if isinstance(value,ValueError): raise value
+                        return value
+                    return real(checkout,*actual)
+                expected=(1,'','FAIL: '+message+'\n')
+                with patch.object(B,'git',side_effect=fake),patch.dict(B.RAW,{},clear=True):
+                    self.assertEqual(expected,invoke(V,['--root',str(root)]))
+                    with removed_source(V,'check_source_drift',snippet):
+                        with self.assertRaises(AssertionError):
+                            self.assertEqual(expected,invoke(V,['--root',str(root)]))
 
     def test_current_gitlink_moves_and_local_main_lag_affect_regeneration_only(self):
         for kind in ['gitlink','lag']:
@@ -506,6 +568,22 @@ class AmendmentTests(unittest.TestCase):
                 for revision in ['b'*40,'origin/main']:
                     self.assertIn((str(root),('show',f'{revision}:{path}')),observed)
 
+    def test_delivery_accepts_moved_owner_readmes_and_rejects_extra_changes_for_both_modules(self):
+        with integrated_workspace(moved_main=True) as (root,register,_):
+            for entrypoint,output in [(V,COMPLETION_PASS),(L,LABEL_COMPLETION_PASS)]:
+                self.assertEqual((0,output,''),invoke(entrypoint,['--root',str(root),'--approved-completion']))
+            for repository in register['repositories']:
+                delivered=B.git(Path(repository['ownerCheckout']),'show',repository['integration']['commit']+':README.md')
+                self.assertNotEqual(repository['readme']['afterSha256'],B.sha(delivered))
+        for repository in V.read_json(ROOT/B.E/'labels.json')['repositories']:
+            for kind,message in [
+                ('outside-section',repository['name']+': integrated README bytes mismatch; expected only the authorized section swap'),
+                ('parent-section',repository['name']+': parent compatibility section differs from authorized before bytes'),
+            ]:
+                with self.subTest(module=repository['name'],kind=kind),integrated_workspace(moved_main=True,delivery_fault=(kind,repository['ownerCheckout'])) as (root,_,_):
+                    for entrypoint in [V,L]:
+                        self.assertEqual((1,'','FAIL: '+message+'\n'),invoke(entrypoint,['--root',str(root),'--approved-completion']))
+
     def test_approved_undelivered_candidate_is_valid_but_generation_and_completion_refuse(self):
         with workspace(pending=True) as root:
             path=root/B.E/'approval.json';path.write_text(json.dumps(approved(V.read_json(path))))
@@ -542,7 +620,8 @@ class AmendmentTests(unittest.TestCase):
 
     def test_delivery_readme_and_inventory_ancestry_guards_have_entrypoint_removal_controls(self):
         guards=[
-            ('readme',"    require(B.git(owner,'show',revision+':README.md') == after,f'{name}: integrated README bytes mismatch')\n"),
+            ('readme',"    require(B.compatibility_section(delivered) == after_section and delivered == parent.replace(before_section,after_section,1),\n"
+             "            f'{name}: integrated README bytes mismatch; expected only the authorized section swap')\n"),
             ('inventory-ancestry',"    B.git(root,'merge-base','--is-ancestor',inv_revision,'origin/main')\n"),
         ]
         for kind,snippet in guards:
@@ -550,7 +629,7 @@ class AmendmentTests(unittest.TestCase):
             for owner in owners:
                 with self.subTest(guard=kind,owner=owner),integrated_workspace(delivery_fault=(kind,owner)) as (root,register,_):
                     name=next((r['name'] for r in register['repositories'] if r['ownerCheckout']==owner),None)
-                    message=(f'{name}: integrated README bytes mismatch' if kind=='readme'
+                    message=(f'{name}: integrated README bytes mismatch; expected only the authorized section swap' if kind=='readme'
                              else 'git merge-base --is-ancestor '+'b'*40+' origin/main failed: off-main inventory fixture')
                     expected=(1,'','FAIL: '+message+'\n')
                     for entrypoint in [V,L]:
@@ -563,6 +642,71 @@ class AmendmentTests(unittest.TestCase):
                                 with self.assertRaises(AssertionError):
                                     self.assertEqual(expected,invoke(entrypoint,args))
 
+    def test_delivery_words_revisions_and_commit_hash_have_exact_stream_guard_controls(self):
+        source=inspect.getsource(L.check_delivery)
+        cases=[]
+        for words in ['approve','authorized','authorize and stop','authorize later']:
+            cases.append(('authorization',words,'completion requires separate explicit authorize instruction for label delivery'))
+        for key in ['commit','inventoryRevision']:
+            for value in ['main','a'*7]:
+                cases.append((key,value,'chatbot: completion requires canonical integrated label commit' if key=='commit' else 'completion requires canonical integrated inventory revision'))
+        cases.append(('commitSha256','0'*64,'chatbot: integrated commit hash mismatch'))
+        for key,value,message in cases:
+            if key=='authorization':
+                snippet="    require(isinstance(auth,dict) and all(V.nonblank(auth.get(k)) for k in ['exactWords','source','approvedOn'])\n"+\
+                        "            and auth['exactWords'].strip().casefold() == 'authorize',\n"+\
+                        "            'completion requires separate explicit authorize instruction for label delivery')\n"
+            elif key=='commit':
+                snippet="    require(isinstance(integration,dict) and re.fullmatch('[0-9a-f]{40}',integration.get('commit','')) is not None,\n"+\
+                        "            f'{name}: completion requires canonical integrated label commit')\n"
+            else:
+                snippet=next(line for line in source.splitlines(keepends=True) if message.split(': ',1)[-1] in line)
+            with self.subTest(field=key,value=value),integrated_workspace() as (root,register,_):
+                if key=='authorization': register['deliveryAuthorization']['exactWords']=value
+                elif key=='inventoryRevision': register[key]=value
+                else: register['repositories'][0]['integration'][key]=value
+                (root/B.E/'labels.json').write_text(json.dumps(register))
+                expected=(1,'','FAIL: '+message+'\n')
+                for entrypoint in [V,L]:
+                    args=['--root',str(root),'--approved-completion']
+                    self.assertEqual(expected,invoke(entrypoint,args))
+                    with removed_source(L,'check_delivery',snippet):
+                        with self.assertRaises(AssertionError): self.assertEqual(expected,invoke(entrypoint,args))
+
+    def test_pending_label_claims_and_wrong_owner_origin_have_exact_stream_controls(self):
+        pending_guard="        else:\n            require(register.get('deliveryAuthorization') is None and register.get('inventoryRevision') is None and repository.get('integration') is None,'pending labels must not claim authorization or integration')\n"
+        for field,value in [('deliveryAuthorization',dict(exactWords='authorize')),('inventoryRevision','b'*40),('integration',dict(commit='a'*40))]:
+            with self.subTest(field=field),workspace(pending=True) as root:
+                path=root/B.E/'labels.json';register=V.read_json(path)
+                if field=='integration': register['repositories'][0][field]=value
+                else: register[field]=value
+                path.write_text(json.dumps(register))
+                expected=(1,'','FAIL: pending labels must not claim authorization or integration\n')
+                self.assertEqual(expected,invoke(L,['--root',str(root)]))
+                with removed_source(L,'verify',pending_guard):
+                    with self.assertRaises(AssertionError): self.assertEqual(expected,invoke(L,['--root',str(root)]))
+        origin_guard="        require(L57.github_repository(origin) == L57.github_repository(repository['repository']),f'{name}: checkout origin differs from owning repository')\n"
+        for repository in V.read_json(ROOT/B.E/'labels.json')['repositories']:
+            with self.subTest(module=repository['name']),integrated_workspace(delivery_fault=('origin',repository['ownerCheckout'])) as (root,_,_):
+                expected=(1,'','FAIL: '+repository['name']+': checkout origin differs from owning repository\n')
+                for entrypoint in [V,L]:
+                    args=['--root',str(root),'--approved-completion']
+                    self.assertEqual(expected,invoke(entrypoint,args))
+                    with removed_source(L,'verify',origin_guard):
+                        with self.assertRaises(AssertionError): self.assertEqual(expected,invoke(entrypoint,args))
+
+    def test_label_entrypoint_handles_missing_and_malformed_approval_without_traceback(self):
+        for kind in ['missing','malformed','missing-decision']:
+            with self.subTest(kind=kind),workspace(pending=True) as root:
+                path=root/B.E/'approval.json'
+                if kind=='missing':
+                    path.unlink();message=f"[Errno 2] No such file or directory: '{path}'"
+                elif kind=='malformed':
+                    path.write_text('{"decision":');message='Expecting value: line 1 column 13 (char 12)'
+                else:
+                    path.write_text('{}');message="'decision'"
+                self.assertEqual((1,'','FAIL: '+message+'\n'),invoke(L,['--root',str(root)]))
+
     def test_delivery_rejects_missing_authorization_stale_origin_non_readme_and_off_main(self):
         register,_=B.label_candidate(ROOT,{str(m['new']):B.sha((ROOT/m['new']).read_bytes()) for m in B.MODULES.values()})
         r=register['repositories'][0];before=B.blob(ROOT,r['name'],'README.md')
@@ -573,6 +717,7 @@ class AmendmentTests(unittest.TestCase):
         r['integration']=dict(commit='a'*40,commitSha256=B.sha(b'commit'));register['inventoryRevision']='b'*40
         for kind,message in [('stale','current origin/main does not cite exact successor labels'),('otherfile','delivered commit is not README-only'),('offmain','git merge-base --is-ancestor')]:
             def fake(root,*args):
+                if args==('show','a'*40+'^:README.md'): return before
                 if args==('show','a'*40+':README.md'): return after
                 if args==('merge-base','--is-ancestor','a'*40,'origin/main'):
                     if kind=='offmain': raise ValueError('git merge-base --is-ancestor failed: off-main fixture')
