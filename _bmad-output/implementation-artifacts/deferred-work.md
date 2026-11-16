@@ -1242,3 +1242,20 @@ status: open
   owner: Memories operator-tooling/custody maintainer and McpCli migration-inventory owner; next exact-byte-approved Memories successor.
   status: open; found in 5.10 code review pass 2 (2026-11-16). The approved bytes stay unchanged.
   evidence: Low. `_bmad-output/implementation-artifacts/evidence/story-5-10/build_candidate.py:412` uses the fixed needle `'--dry-run'` for every mode, so `memories-migration-inventory-v1.1.0.md:132-135` all cite `docs/operations/embedding-providers.md:214`. At pin `9d87500eaf4c39ce0cec0cb3a03e5dd62c167106`, the `--live`, `--rollback` and `--abort` commands are at `:226`, `:289` and `:300`. Ledger greps for "embedding-providers" and the dry-run needle found no existing entry.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-10-refresh-and-re-disposition-chatbot-and-memories-inventories.md`
+  summary: Story 5.10's later ledger, fixture and delivery changes invalidate Story 5.11's bound evidence. Regenerate Story 5.11's deferral audit, secret-scan receipts and Story 5.10 bindings after 5.10's last ledger edit and its label delivery.
+  owner: Story 5.11 (McpCli product/architecture owner with the migration-inventory owner). Story 5.11 owns its packet and its pending explicit owner decision; Story 5.10 does not edit Story 5.11 evidence.
+  status: open; found in 5.10 code review pass 3 (2026-11-16). The pass-2 build review routed the mismatch to Story 5.11 (P2-B1) without a ledger entry. `python3 -I _bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py` exits 1 at `ccbdd3e` with `deferral accounting/source/owner/gate mismatch`.
+  evidence: Medium.
+    - `_bmad-output/implementation-artifacts/evidence/story-5-11/build_packet.py:242-267` binds each spec-5-* entry's ledger line, block hash and text. `evidence/story-5-11/deferral-dispositions.json` holds 56 entries, but the ledger at `ccbdd3e` scopes 62.
+    - Missing: the six Story 5.10 entries at `deferred-work.md:1191`, `:1218`, `:1223`, `:1228`, `:1234` and `:1240`. The re-anchored spec-5-4 and spec-5-8 entries also changed bytes; this pass-3 entry and later 5.10 anchor fixes change them again.
+    - `ccbdd3e` changed `evidence/story-5-11/test_verify_reconciliation.py` from SHA-256 `a90f02d1…` to `7bac50fa…`. `evidence/story-5-11/secret-scan-final.json`, `secret-scan-final-reviewed.json` and `secret-scan-guidance-update.json` still bind the old hash.
+    - `evidence/story-5-11/inputs.json` and `evidence/story-5-11/labels.json` bind the current hash of `evidence/story-5-10/labels.json`, which changes when Story 5.10 records its integrated delivery.
+    - Ledger greps for "deferral-dispositions", "deferral audit" and "56-versus" found only the original migration-drift entry's audit note (`deferred-work.md:145`), which does not track this mismatch.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-10-refresh-and-re-disposition-chatbot-and-memories-inventories.md`
+  summary: ChatBot 1.1.0 V14 shows `withdraw / exclude` but keeps its legacy text that unsupported erasure/key-rotation variants "remain defer/exclude". Correct it in the next ChatBot successor.
+  owner: McpCli migration-inventory owner with the ChatBot owning maintainer; next exact-byte-approved ChatBot successor under the pass-1 "Fold into next successor" decision.
+  status: open; found in 5.10 code review pass 3 (2026-11-16). The approved bytes stay unchanged.
+  evidence: Low. `_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md:98` carries the predecessor rationale from `chatbot-migration-inventory-v1.md:126` next to the rewritten legacy Disposition cell. `evidence/story-5-10/verify_amendment.py:95-96` requires that cell to equal the amendment disposition. V14 is the only withdrawal row in either successor whose legacy text says defer. The frozen decision says V14's unsupported variants "stay absent". Ledger greps for "V14" and "key-rotation" found no existing entry.

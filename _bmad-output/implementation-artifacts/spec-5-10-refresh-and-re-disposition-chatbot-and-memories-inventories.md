@@ -2,7 +2,7 @@
 title: '5.10 Refresh and re-disposition ChatBot and Memories inventories'
 type: 'chore'
 created: '2026-11-16'
-status: 'in-review'
+status: 'in-progress'
 baseline_commit: '979e1e126c6d7010997f4f20b2bb3defae81333e'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -302,6 +302,114 @@ Rejected (25):
 - 2A9 low: the packet has exactly the four required scripts; the extra receipts are preserved history.
 - 2B12 command-table part, false: `verification.md:106` heads that table "Preparation", and `:126` marks the result superseded. The stale summary part is a patch above.
 - 2B14 parts 1–2, low: other modules' source-pin portions belong to their own stories. The red CI note already records its run ID.
+
+#### Code review pass 3 — 2026-11-16
+
+Scope: deliverables `979e1e1..ccbdd3e`, 18 files and 4,286 lines. This is the pass-2 set plus `ccbdd3e`'s Story 5.11 fixture hunk (P2-B2). Story 5.11's interleaved `3511afd` `.gitattributes` and ledger hunks are removed through a synthetic `--no-index` diff. All four layers returned and none failed.
+
+Baseline at HEAD `ccbdd3e` (= origin/main):
+- Both default verifiers exit 0. Both completion modes exit 1 with "completion requires integrated PS06/PS07/PS12/PS13/PS14 labels".
+- AD-23 is still adopted, all 36 tests pass in 298.9 s, and `git diff --check 979e1e1 ccbdd3e` is clean.
+- Main CI 43957388915 for `ccbdd3e` fails in the same five jobs as 43943458640 (`deferred-work.md:1043`).
+- Story 5.11's `verify_reconciliation.py` exits 1 with `deferral accounting/source/owner/gate mismatch` (3W1).
+- ChatBot owner main is still `e2727327`. Memories owner main moved to `d2a39a84`, with no README change since pin `9d87500e`.
+
+The 57 raw findings resolve to 1 decision-needed, 7 patches, 2 deferrals and 38 rejections. IDs are prefixed `3`; a re-raised finding cites its earlier verdict ID.
+
+Decision resolved 2026-11-16: 3D1 ("Check at inventoryRevision") becomes a patch. Totals are now 0 decision-needed, 8 patches, 2 deferrals and 38 rejections. The user left all eight patches as action items.
+
+- [ ] [Review][Patch] 3D1 Verification no longer detects ChatBot/Memories enrollment, so completion cannot show "nothing is enrolled" [`evidence/story-5-10/verify_labels.py:58`] — the pass-2 mutable-authority patch removed the only enrollment check.
+  - Resolved: the user chose (a). In completion, read `src/Hexalith.McpCli/Hexalith.McpCli.csproj` and `tools/dependency-policy.json` at the recorded canonical `inventoryRevision`. Refuse with exact streams if either enrolls `Hexalith.ChatBot.Contracts` or `Hexalith.Memories.Contracts`: a `HexalithContracts="true"` `PackageReference`, or a policy `modules` key. Default mode keeps the BASELINE-object reads. Add exact-stream tests for each file and module, plus a guard-removal control.
+  - `authority_bytes()` (`evidence/story-5-10/build_candidate.py:646-652`) returns BASELINE objects for `Directory.Build.props`, `tools/dependency-policy.json` and `src/Hexalith.McpCli/Hexalith.McpCli.csproj` unless regenerating. `verify_amendment.py:166-167` then compares that value with itself.
+  - Completion never regenerates, and no other script reads the csproj or the policy `modules`. A working-tree `HexalithContracts="true"` ChatBot or Memories reference therefore passes both modes, including `--approved-completion`.
+  - AC2 requires completion to show nothing is enrolled, and the Never list forbids changing enrollment.
+  - Options:
+    - (a) Completion checks the recorded `inventoryRevision` csproj and policy `modules` for no `Hexalith.ChatBot.Contracts` or `Hexalith.Memories.Contracts` enrollment. This survives later bumps and later legitimate enrollment. Recommended.
+    - (b) Both modes check the working tree. This catches drift now, but 5.10's verifier goes red when a later story enrolls either module.
+    - (c) Accept the gap and rely on the enrollment gates (inventory coverage, vectors, `DependencyPolicyTests`), recording that the verifier does not check enrollment.
+  - Medium. [3A1]
+- [ ] [Review][Patch] Regeneration-path tests read the real HEAD gitlinks, origin/main and live mutable files [`evidence/story-5-10/test_verify_amendment.py:90`]
+  - `workspace()` symlinks `.git`, `src` and `tools` and copies the live `Directory.Build.props` (`:90-92`).
+  - Generator and regeneration tests therefore check the real HEAD gitlinks, `origin/main` ancestry and live mutable bytes. These are `:387`, `:732`, `:754`, `:782` and `:798`.
+  - The auditor's probe moved the ChatBot gitlink. `:387` then failed with `chatbot: HEAD root gitlink pin mismatch; halt`, and `:798` exited 1 instead of 0. `/pushall` routinely moves every gitlink, and a routine `dependency-policy.json` bump has the same effect. This contradicts the pass-1 D2 rule.
+  - Fake HEAD `ls-tree` and `merge-base origin/main HEAD` as `:456-479` does, and write the BASELINE bytes of the three mutable files into the workspace.
+  - Medium. [3A2, 3E22]
+- [ ] [Review][Patch] Only `Directory.Build.props` exercises the mutable-authority rule [`evidence/story-5-10/test_verify_amendment.py:387`]
+  - Pre-verified: with `tools/dependency-policy.json` removed from `B.MUTABLE_AUTHORITIES`, the test stays green, but an edited policy makes the verifier fail.
+  - Run the test once per `MUTABLE_AUTHORITIES` entry, with that file as a real copy in the workspace. Expect PASS from both verifiers and the exact generator refusal.
+  - Medium. [3V1]
+- [ ] [Review][Patch] Four guards can be removed without a failing test [`evidence/story-5-10/verify_amendment.py:144`]
+  - Pre-verified removals and what then gets through:
+    - `unknown approval decision` (`verify_amendment.py:144`): a `revoked` decision passes.
+    - `duplicate workflow status` (`:160`): a duplicate spec status passes.
+    - `unsupported label register schema` (`verify_labels.py:70`): schema `9.9.9` passes.
+    - The missing-receipt refusal (`build_candidate.py:699-700`): deleted receipts beside existing successors are regenerated as pending.
+  - Add exact-stream refusal cases with `removed_source` controls to `test_duplicate_json_unknown_state_and_missing_metadata` (`:806`) and `test_generator_refuses_approved_authorized_symlink_and_approval_race` (`:732`).
+  - Medium. [3V2]
+- [ ] [Review][Patch] The label verifier's own completion triggers are untested [`evidence/story-5-10/verify_labels.py:72`]
+  - Pre-verified: removing `register['state'] == 'integrated' or V.completion_requested(root,False)` keeps the suite green. Spec `done` and `state: integrated` then pass as candidates.
+  - Add standalone label-verifier runs without the flag for spec `done`, sprint `done` and `state: integrated`. Each needs the exact refusal and a removal control.
+  - Medium. [3V3]
+- [ ] [Review][Patch] 5.10's recorded checks omit Story 5.11's verifier and suite, although both read the ledger 5.10 edits [`evidence/story-5-10/verification.md:422`]
+  - `review-pass2-after-review-checks.json` ran only `RecordedAuthorityAndLifecycleTests` (3 tests). `verify_reconciliation.py` and the full 5.11 suite would have shown the break from `5008de3` onwards (59 vs 56 entries).
+  - Add both to 5.10's recorded checks whenever 5.10 changes the shared ledger. Record the current exit 1 and its routed cause (3W1) rather than claiming green.
+  - Medium. [3V4]
+- [ ] [Review][Patch] Ledger anchors remapped in pass 2 still miss their entries [`_bmad-output/implementation-artifacts/deferred-work.md:754`]
+  - They were already wrong at `979e1e1`, and the pass-2 +2 remap (2E13) kept them wrong:
+    - `:754` cites `:699`, inside the AI.Tools commitlint entry. The relative-link entry starts at `:705`.
+    - `:846` cites `:793` and `:797`. The truncated-PEM and malformed-XML entries start at `:795` and `:801`; `:789` is correct.
+    - `:853` cites `:833`, the Platform reference-check owner line. The mixed profile-identity entry starts at `:836`.
+    - `:1104` cites `:1047`. The Admin/technical entry starts at `:1048`.
+  - Low. [3B1, 3A3, 3E27, 3E28, 3E29]
+- [ ] [Review][Patch] Recorded state is stale a third time, and verification.md has no current-state summary [`evidence/story-5-10/verification.md:7`]
+  - `verification.md:7-12`, `deferred-work.md:686` and `sprint-status.yaml:103` say publication runs "through `5008de3`", citing CI 43943458640. origin/main is now `ccbdd3e`, and its CI 43957388915 fails in the same five jobs.
+  - `deferred-work.md:686` says the ChatBot pin was "observed equal to its owning `origin/main`". Since pass 2, ChatBot main has been `e2727327`, two commits past the pin.
+  - The append-only log says both "in progress" (`:353`) and "in-review" (`:403`, `:432`), with no current summary.
+  - Fix: replace the opening paragraph with a dated current-state summary that names no moving tip SHA, and date the ChatBot equality observation. The summary covers approval, authorization, pending labels, the test count, CI by reference to the tracked failures, and spec and sprint state. The preparation table is covered by pass-2 2B12.
+  - Low. [3A4, 3B17]
+- [x] [Review][Defer] 3W1 Story 5.10's later edits invalidated Story 5.11's bound evidence, and 5.10's delivery will invalidate more [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:196`] — deferred: Story 5.11 owns its packet and its pending owner decision. The pass-2 build review routed the mismatch there (P2-B1), but no ledger entry tracked it. Now tracked at `deferred-work.md:1246`.
+  - `scoped_deferrals` (`evidence/story-5-11/build_packet.py:242-267`) binds each spec-5-* entry's ledger line, hash and text. `deferral-dispositions.json` holds 56 entries, the HEAD ledger has 62, and `verify_reconciliation.py` exits 1 at HEAD.
+  - 5.10's six new entries (`deferred-work.md:1191`, `:1218`, `:1223`, `:1228`, `:1234`, `:1240`) are missing, and re-anchored spec-5-4/5-8 entries changed bytes.
+  - `ccbdd3e` changed `evidence/story-5-11/test_verify_reconciliation.py` (`a90f02d1…` → `7bac50fa…`). 5.11's `secret-scan-final.json`, `secret-scan-final-reviewed.json` and `secret-scan-guidance-update.json` still bind the old hash.
+  - 5.11's `inputs.json` and `labels.json` bind 5.10's candidate `labels.json` hash, which changes when 5.10 records its delivery.
+  - Medium. [3B8, 3V5, 3A5, 3E25]
+- [x] [Review][Defer] ChatBot V14 keeps legacy text saying unsupported variants "remain defer/exclude" beside `withdraw / exclude` [`_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md:98`] — deferred: approved bytes; fold into the next ChatBot successor under the pass-1 D1 rule (`deferred-work.md:1257`). The generator rewrites the legacy Disposition cell, as `verify_amendment.py:95-96` requires, but keeps the predecessor rationale. V14 is the only withdrawal row whose legacy text says defer. Low. [3B11]
+
+Rejected (38):
+- 3B2 false: `blob/main` label links are pass-1 E20 / 2B9. They target versioned successor files that are never edited, and every label carries the inventory SHA-256, as in the 5.7–5.9 labels. Story 5.11's immutable-link rule (`test_verify_reconciliation.py:290`) covers its plan links, not README labels.
+- 3B3 low: an unread `delivery-authorization.json` is pass-1 E10 / 2B2. Completed Story 5.9's verifier never reads its authorization file either.
+- 3B4 low: the register goes straight from candidate to `integrated`. Approval and authorization live in `approval.json` and `delivery-authorization.json`, and the PASS line reports both. A new state would rewrite authorization-bound bytes.
+- 3B5 low: commitlint and the repository checks are delivery-session procedure recorded as evidence (as in Story 5.9's `delivery-commitlint.json`), and owner CI enforces commitlint. The fix adds a cross-file guard.
+- 3B6 low: absolute `ownerCheckout` paths are pass-1 E8 / 2B15. They are copied from the Story 5.7 register, as in 5.8 and 5.9, and completion is a local delivery gate.
+- 3B7 low: this is 2E5. Story 5.11's `check_prior_delivery` already verifies 5.10's historical delivery against superseding current labels, and 5.11 completion waits for 5.10 delivery.
+- 3B9 false: this is pass-1 B12 / 2B3. No other word passes; only case and whitespace variants of the same word do.
+- 3B10 low: D1b (`deferred-work.md:1191`) already tracks the generic `owner()` strings. The receipt covers all ten roles explicitly, so no row lacks a covering role, and the fix needs a successor.
+- 3B12 false: this is 2A5. "G2 remains open" in G2 is accurate, and the HTTP gate on every Memories `defer` row is a frozen Always rule.
+- 3B13, 3E16 false: the narrow regex is pass-1 E12 / 2B11. `git grep -E 'Hexalith(Module|Command|Query)(Attribute)?\b'` finds nothing in any `.cs` file at either pin, so no attribute form can slip past the regex.
+- 3B14 low: this is 2B13. No packet `.py` or `.md` file has trailing whitespace, and the comment wording is cosmetic.
+- 3B15 low: the approval covers the exact inventory bytes. Script changes go through review, and each run's checks JSON binds the script hashes.
+- 3B16 false: codes 0, 1, 2 and 130 match `EmbeddingMigrationExitCodes.cs:12-21` at the pin. The file is anchored, and `verify_amendment.py:131` refuses any change to it since the old pin. Missing-tenant exit behavior belongs to R-B9.
+- 3E1, 3E2 false: this is pass-1 E14 / 2E2. The adopted AD-23 map and the approved 5.7 register are immutable and contain both entries, and the generator refuses the approved packet first.
+- 3E3, 3E11 low: tracebacks need hand-damaged registers or README shapes that do not occur, and they still fail loudly.
+- 3E4 low: the approved receipt makes `build_candidate.py` refuse before any write. An argument parser would add surface with no reachable harm.
+- 3E5 low: the approved receipt closes generation, and atomic writes would add complexity.
+- 3E6 false: rows in both modules map only to K01, K03–K07, K09, K10, K12, K14, K15 and governance. No K08, K13 or A-class row exists.
+- 3E7 false: all nine non-unique needles resolve first to the intended statement: `epics.md` "McpCli", both formatters' `response.OperationId`, `.RecordAdmissionAsync(context`, `--dry-run`, `11.0.100`, `ValidAlgorithms`, and `SOURCE_PUBLICATION_CHANGED` twice. The T02–T04 `--dry-run` documentation issue is already deferred in pass 2.
+- 3E8 false: each block terminator exists exactly once at the pin, and each OpenAPI block holds one operation.
+- 3E9 false: none of the 230 pinned sources contains a form feed, vertical tab, U+0085, U+2028/2029 or lone CR.
+- 3E10 false: all five label rows carry the 1.1.0 citation and their gate text, and none keeps a 1.0.0 citation.
+- 3E12 false: both pinned READMEs end with a newline.
+- 3E13 false: no predecessor row cites the same `path:line` twice.
+- 3E14 false: neither predecessor contains a range anchor token.
+- 3E15 false: neither pin has a non-ASCII path.
+- 3E17 low: both status files carry exactly one status, a removed line would be a hand edit, and the fix adds a guard.
+- 3E18 low: this is 2E12. Loading the root's own verifier is the test seam that `--root` provides.
+- 3E19 low: the standalone label verifier only echoes the decision. `verify_amendment.py`, the documented command, validates it, so the fix adds a guard.
+- 3E20 low: the approving session records the dates, and the fix adds guards.
+- 3E21 false: the ChatBot labels are at lines 181-182 on both the pin and owner main `e2727327`, and the Memories README is unchanged since its pin.
+- 3E23, 3E24 low: this local evidence suite needs the root-declared and owner checkouts, as in Stories 5.7–5.9, and CI does not run it.
+- 3E26 low: Story 5.11's tests read 5.11's own live lifecycle; that is 5.11 test design, outside this change.
+- 3E30 false: `deferred-work.md:686` is `partial_chatbot_resolution_2026_11_16`.
 
 ## Design Notes
 
