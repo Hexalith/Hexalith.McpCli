@@ -2,7 +2,7 @@
 title: '5.10 Refresh and re-disposition ChatBot and Memories inventories'
 type: 'chore'
 created: '2026-11-16'
-status: 'ready-for-dev'
+status: 'in-review'
 baseline_commit: '979e1e126c6d7010997f4f20b2bb3defae81333e'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -103,12 +103,12 @@ story_key: '5-10-refresh-and-re-disposition-chatbot-and-memories-inventories'
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] Precondition: `git fetch`; confirm `main` contains `origin/main` and the HEAD gitlinks equal the approval pins. If the gitlinks moved or a rebase conflicts, HALT.
-- [ ] `A/chatbot-migration-inventory-v1.1.0.md`, `A/memories-migration-inventory-v1.1.0.md`, `.gitattributes` (`-text`): write successors following Design Notes; approval pending.
-- [ ] `E/story-5-10/build_candidate.py`: generate both deterministically from predecessor bytes, `git show <pin>:` sources and the AD-23 map; refuse to overwrite an approved packet.
-- [ ] `E/story-5-10/{verify_amendment.py,test_verify_amendment.py}`: candidate and approved-completion modes, every matrix row, guard-removal controls, exit code and both streams.
-- [ ] `E/story-5-10/{approval.json,labels.json,verify_labels.py,upstream/{chatbot,memories}/}`: pending receipt bound to predecessor/successor hashes and authorities; README-only label patches citing the successors, changing gate text only where an amendment changes the gate (PS14's four-mode inventory obligation).
-- [ ] `A/deferred-work.md` (grep first: `:682` ChatBot partial resolution; `:1048`/`:1147` re-routed to Story 5.11), `E/story-5-10/verification.md`, secret-scan receipt, this spec, `A/sprint-status.yaml`: record only the supported state.
+- [x] Precondition: `git fetch`; confirm `main` contains `origin/main` and the HEAD gitlinks equal the approval pins. If the gitlinks moved or a rebase conflicts, HALT.
+- [x] `A/chatbot-migration-inventory-v1.1.0.md`, `A/memories-migration-inventory-v1.1.0.md`, `.gitattributes` (`-text`): write successors following Design Notes; approval pending.
+- [x] `E/story-5-10/build_candidate.py`: generate both deterministically from predecessor bytes, `git show <pin>:` sources and the AD-23 map; refuse to overwrite an approved packet.
+- [x] `E/story-5-10/{verify_amendment.py,test_verify_amendment.py}`: candidate and approved-completion modes, every matrix row, guard-removal controls, exit code and both streams.
+- [x] `E/story-5-10/{approval.json,labels.json,verify_labels.py,upstream/{chatbot,memories}/}`: pending receipt bound to predecessor/successor hashes and authorities; README-only label patches citing the successors, changing gate text only where an amendment changes the gate (PS14's four-mode inventory obligation).
+- [x] `A/deferred-work.md` (grep first: `:682` ChatBot partial resolution; `:1048`/`:1147` re-routed to Story 5.11), `E/story-5-10/verification.md`, secret-scan receipt, this spec, `A/sprint-status.yaml`: record only the supported state.
 
 **Acceptance Criteria:**
 - Given the candidates, when the verifier runs, then every entry passes and all protected predecessor and authority bytes are unchanged.
@@ -137,6 +137,37 @@ story_key: '5-10-refresh-and-re-disposition-chatbot-and-memories-inventories'
   - Approval-time HEAD and `origin/main` were both `979e1e126c6d7010997f4f20b2bb3defae81333e`, with gitlinks ChatBot `6a4ca07b18e9b58500dc79dfede1f308da36c828` and Memories `9d87500eaf4c39ce0cec0cb3a03e5dd62c167106`. These are the pins; recheck them in the precondition task.
   - At approval, the working tree was clean apart from this untracked spec. Nothing was committed or pushed.
 
+- 2026-11-16 implementation: Prepared pending ChatBot 1.1.0 (48 predecessor entries) and Memories 1.1.0 (51 predecessor entries plus four PS14 modes), one deterministic generator, one candidate verifier, one label verifier and 26 tests. Final candidate and label checks, all 26 tests, unchanged adopted AD-23 and diff whitespace pass; both completion entrypoints refuse pending approval. Exact-byte inventory approval and separate label-delivery authorization remain pending. Nothing is enrolled, executed or retired, and no upstream files were changed.
+- Precondition evidence: `git fetch` succeeded; HEAD `e2e3db7ba2d45d61feacc39c41b3051310fbc57f` contains fetched `origin/main` `979e1e126c6d7010997f4f20b2bb3defae81333e`; both HEAD gitlinks equal the approved pins. Existing user edits to spec status and sprint status were preserved.
+- 2026-11-16 owner approval: The user replied exactly `approve` to acceptance of both reviewed inventory files and all ten roles in approval.json. Recorded the decision and explicit role coverage without changing either inventory, any label/README patch or any earlier receipt. Separate delivery authorization and upstream integration remain pending; the story stays in-review and no commit or push is authorized.
+- Approval-state verification: all 26 tests pass in 105.872 seconds; both default verifiers, adopted AD-23 and whitespace checks pass. Both completion modes refuse only for unintegrated PS06/PS07/PS12/PS13/PS14 labels, and real regeneration refuses the approved receipt. Read-only isolated-copy checks confirm both prepared patches match the locally observed owner origin/main README bytes; unrelated owner work remains untouched. Evidence: evidence/story-5-10/approval-checks.json and the approval-state secret scan.
+- 2026-11-16 delivery authorization: The user replied exactly `authorize` to committing/pushing the approved packet and both README-only updates. Recorded the hash-bound authorization in evidence/story-5-10/delivery-authorization.json and freshly fetched all three owner main branches. The mandatory pre-push command `python3 references/Hexalith.Builds/check.py` failed in a clean temporary McpCli checkout at exact HEAD with exit 1 because `.github/hexalith-ci.json` is absent; evidence/story-5-10/delivery-gate.json retains the exact result. Active shared guidance requires this gate to pass before every push and assigns CI configuration to Hexalith.CiCd. No commit or push was attempted, no gate was bypassed, and authorization remains valid for resumption after that repository configuration blocker is resolved. The story stays in-review; approved bytes, root gitlinks and owner local work remain unchanged.
+
 ## Spec Change Log
 
+- 2026-11-16 factual evidence correction (no frozen-intent change): `git diff --name-status 839aee31e2a9be11feab3fb726006bb4c2f890b5 acc934599cf1efff36b0643eddc6a3cc4c2978d5` reports `M .mcp.json`, not a deleted file. Both `src` trees are exactly `59158fccb3a2819816a2e13a39095b238bdf1c9b`; generation and verification use that source-tree equality and the observed single configuration-file change.
+
 ## Review Triage Log
+
+2026-11-16 build review: all three independent layers returned before triage. Every finding is recorded below before grouping. These are direct source-description corrections or narrow tests/guards for demonstrated states; no intent or authority change is required.
+
+| ID | Layer | Verdict | Evidence and route |
+| --- | --- | --- | --- |
+| B1 | Blind hunter | medium | The pinned admission validator always returns CanonicalExecutionUnavailable at its atomic-participation check; the pipeline rejects it before reservation/dispatch and the problem factory returns nonretryable 503. The candidate's write/provider descriptions omit this effective refusal. Patch the current-behavior/drift descriptions and anchors. |
+| B2 | Blind hunter | medium | Pinned ChatBotApplicationBoundaryPolicy uses CreateHumanPolicy; JWT setup installs a denying bearer scheme when configuration is absent. V01/V03 currently report unchanged. Patch the authentication drift and pinned evidence. |
+| B3 | Blind hunter | medium | OperationStatusHttpResults validates canonical metadata and requires CanonicalRevision to be null before public retry eligibility. V10/M11/L11 omit those changed semantics. Patch the status descriptions and anchors. |
+| B4 | Blind hunter | medium | IngestionWorkflowConfigurationCapture.NewUnitId calls UnitOwnershipAuthority.Qualify, which prefixes configured-generation IDs with owned-. Memories V06 still describes only GUID identity. Patch both configured and historical forms without conversion. |
+| B5 | Blind hunter | medium | Pinned search services call SourcePublicationVisibility.FilterQueryAsync; graph traversal uses the publication read gate and publication filtering. Recording only SOURCE_PUBLICATION_CHANGED misses successful read visibility changes. Patch affected read/variant descriptions and anchors. |
+| B6 | Blind hunter | medium | SyntacticSearchService orders raw windows before hydration, validates complete windows/keys, and leaves invalid documents consuming raw positions. V04/V05 say unchanged. Patch ranking/paging/count/error drift and evidence. |
+| B7 | Blind hunter | medium | Hosting has conditional fixed-domain versus multi-domain workload transport; EventStoreMemoriesCommandStore's multi-domain branch refuses absent exact bound-command proof. The candidate omits those conditions. Patch V08/G3 and current source observations. |
+| B8 | Blind hunter | medium | RedisEmbeddingMigrationStore commits alias cutover before SetEmbeddingConfigAsync; the service subsequently heartbeats/completes the marker. Failure can therefore follow active-alias changes. Patch T02's blanket failure guarantee and bind the concrete source evidence. |
+| B9 | Blind hunter | medium | The OpenAPI evidence needle is the first operationId (SubmitCommand at line 31), which does not establish the status/audit CommandId restriction or transition actor removal. Patch these anchors to their specific statements. |
+| B10 | Blind hunter | medium | Receipt comparisons finish before the output loop; an approval injected during the first successor write is later overwritten by pending receipt bytes. Patch mutation-time rechecks, avoid unchanged writes, and test that demonstrated schedule. Do not claim atomic publication across arbitrary external writers. |
+| E1 | Edge case | medium | Independently reproduces B10's receipt overwrite after the final preflight comparison. Same root cause and patch group as B10. |
+| E2 | Edge case | medium | Independently verifies B8's post-cutover failure state in the Redis store and marker completion path. Same root cause and patch group as B8. |
+| E3 | Edge case | medium | Real command and deterministic-packet tests hard-code pending receipt data; fixture copies also inherit real approval state. Valid approval/integration would fail the documented suite. Patch isolated pending fixtures and state-aware real expectations; exercise the approved lifecycle. |
+| V1 | Verification gap | medium | Pre-verified: removing the publication-byte comparison loop still passes all 20 tests. The success fixture returns matching local bytes and negative cases fail earlier. Patch exact-stream rejection cases for each successor and approval receipt at both inventoryRevision and current origin/main, with a guard-removal control. |
+
+All 14 findings route to 12 patch groups (B8/E2 and B10/E1 share root causes). No new deferral or specification loopback is required.
+
+Resolution: all 12 groups are patched. Final checks.json records all 26 tests passing in 105.974 seconds, both default verifiers passing, both completion modes refusing pending approval, unchanged adopted AD-23 and a clean whitespace check. Source-fact and exact OpenAPI tests cover B1–B9/E2; injected write and unchanged-file tests cover B10/E1; state-aware isolated lifecycle tests cover E3; all six published-byte mismatch cases and removal of the actual comparison loop cover V1. Verification and final scan evidence are in evidence/story-5-10. The story stays in-review for owner approval and separate delivery authorization; no done claim or commit is made.

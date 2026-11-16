@@ -1,0 +1,118 @@
+{
+  "schemaVersion": "1.0.0",
+  "phase": "mandatory-pre-push-baseline-check",
+  "sourceHead": "e2e3db7ba2d45d61feacc39c41b3051310fbc57f",
+  "buildsPin": "65fd22f37b9fad64b595841923cdbe050563ab99",
+  "preparation": [
+    {
+      "command": [
+        "git",
+        "clone",
+        "--shared",
+        "--no-checkout",
+        "/home/administrator/projects/hexalith/mcpcli",
+        "/tmp/hexalith-job.0Y9NctNk/mcpcli-check"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Cloning into '/tmp/hexalith-job.0Y9NctNk/mcpcli-check'...\ndone.\n"
+    },
+    {
+      "command": [
+        "git",
+        "remote",
+        "set-url",
+        "origin",
+        "https://github.com/Hexalith/Hexalith.McpCli.git"
+      ],
+      "workingDirectory": "/tmp/hexalith-job.0Y9NctNk/mcpcli-check",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": "e2e3db7ba2d45d61feacc39c41b3051310fbc57f\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "e2e3db7ba2d45d61feacc39c41b3051310fbc57f"
+      ],
+      "workingDirectory": "/tmp/hexalith-job.0Y9NctNk/mcpcli-check",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "HEAD is now at e2e3db7 fix: story 5.10\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD:references/Hexalith.Builds"
+      ],
+      "workingDirectory": "/tmp/hexalith-job.0Y9NctNk/mcpcli-check",
+      "exitCode": 0,
+      "stdout": "65fd22f37b9fad64b595841923cdbe050563ab99\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "clone",
+        "--shared",
+        "--no-checkout",
+        "/home/administrator/projects/hexalith/mcpcli/references/Hexalith.Builds",
+        "/tmp/hexalith-job.0Y9NctNk/mcpcli-check/references/Hexalith.Builds"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "Cloning into '/tmp/hexalith-job.0Y9NctNk/mcpcli-check/references/Hexalith.Builds'...\ndone.\nwarning: unable to find all commit-graph files\n"
+    },
+    {
+      "command": [
+        "git",
+        "checkout",
+        "--detach",
+        "65fd22f37b9fad64b595841923cdbe050563ab99"
+      ],
+      "workingDirectory": "/tmp/hexalith-job.0Y9NctNk/mcpcli-check/references/Hexalith.Builds",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "warning: unable to find all commit-graph files\nHEAD is now at 65fd22f3 fix(release): verify published packages before finalization\n"
+    },
+    {
+      "command": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "workingDirectory": "/home/administrator/projects/hexalith/mcpcli",
+      "exitCode": 0,
+      "stdout": "e2e3db7ba2d45d61feacc39c41b3051310fbc57f\n",
+      "stderr": ""
+    }
+  ],
+  "check": {
+    "command": [
+      "python3",
+      "references/Hexalith.Builds/check.py"
+    ],
+    "workingDirectory": "/tmp/hexalith-job.0Y9NctNk/mcpcli-check",
+    "scratch": "run-with-temp private TMPDIR; clean clone at root HEAD with its exact direct Builds pin",
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "/tmp/hexalith-job.0Y9NctNk/mcpcli-check/.github/hexalith-ci.json: [Errno 2] No such file or directory: '/tmp/hexalith-job.0Y9NctNk/mcpcli-check/.github/hexalith-ci.json'\n"
+  },
+  "pushAttempted": false
+}

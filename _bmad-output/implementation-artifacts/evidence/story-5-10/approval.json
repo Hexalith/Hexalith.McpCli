@@ -1,0 +1,839 @@
+{
+  "schemaVersion": "1.0.0",
+  "decision": "approved",
+  "baselineCommit": "979e1e126c6d7010997f4f20b2bb3defae81333e",
+  "sourceRevisions": {
+    "chatbot": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+    "memories": "9d87500eaf4c39ce0cec0cb3a03e5dd62c167106"
+  },
+  "supersedes": [
+    "ChatBot 1.0.0 A1 session approval",
+    "Memories 1.0.0 A1 session approval"
+  ],
+  "requiredApprovalRoles": [
+    "ChatBot owning maintainer",
+    "ChatBot Contracts/handler/admission/security maintainer",
+    "Memories owning maintainer",
+    "Memories Contracts/handler/identity/security maintainer",
+    "Memories operator-tooling/custody maintainer",
+    "EventStore/Gateway admission maintainer",
+    "McpCli product/architecture owner",
+    "McpCli contract/transport/security maintainer",
+    "McpCli dependency/Catalog and conformance maintainer",
+    "Platform architecture/security maintainer"
+  ],
+  "rolesPolicy": "Single maintainer may cover the named roles explicitly; no role coverage is inferred from session approval.",
+  "artifacts": {
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md": "f47b64c7772ed9d9763e4438a176cb7bea01e8e0793f7217c6bd1f3274545560",
+    "_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-capability-class-map.json": "21cb3643ef3e652031bf13f02e237b2cfadb2be24bcbf2d02e879a584ac8a4c3",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/approval.json": "7c43dbec5b09e231852f2bb6410cf70846ce440ac06265e8faa8ddd2ef8aa498",
+    "_bmad-output/implementation-artifacts/evidence/story-5-2/main-integration.json": "be51f67f9f3036bb328ceb7c72125777964138d537e96875f4c887286432430d",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md": "7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c",
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json": "5b0044a505f6cdcb95c5ceaa087f79dd705da54de3225ea9358f2b50f48e3b90",
+    "_bmad-output/implementation-artifacts/evidence/story-5-7/labels.json": "06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json": "5abdbfeeedcabde4e34606702358f0e821413c71230056fa4bc7ca54a043c88e",
+    "_bmad-output/implementation-artifacts/evidence/story-5-8/labels.json": "7adc8fbe4cf7ab7d37ea4746c36b0e1c99754c56bf8bc2dde7912940e83cd7a1",
+    "_bmad-output/implementation-artifacts/evidence/story-5-9/approval.json": "574d2c972b3421ac57cd60bec50eee97ccc6b521107218edf994f39c9207c3a1",
+    "_bmad-output/implementation-artifacts/evidence/story-5-9/labels.json": "f53dfe3b9cfab2d831bff6c329a7d1eab179a32ccac1e0774df408257091cf40",
+    "Directory.Build.props": "b0733d8f7d4beb1fb6284dec63d1974b40597ecf08f92f2281bf2b97cbb07837",
+    "tools/dependency-policy.json": "b9927eb571832a778c4447dd26d468f05a3ccac182501705dad86fa689548dbf",
+    "src/Hexalith.McpCli/Hexalith.McpCli.csproj": "80cfd7f3ff23534bff30d9cb161c2968011c4f322ee7db59efbde54941e569e5",
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1"
+  },
+  "pinnedArtifacts": {
+    "references/Hexalith.AI.Tools@7ef8166ef87e1365f86d1a1b3aaf0235545177d4:hexalith-llm-instructions.md": "fe5f1cbc9e7549711522a34749cecfbfa6d927d10253227d868c79b3dc19b0d1",
+    "references/Hexalith.AI.Tools@7ef8166ef87e1365f86d1a1b3aaf0235545177d4:hexalith-mcpcli-migration-instructions.md": "8ffbe4485aa92d13fa6cc759f28744a0243b9bec02317769164deb22386392a4",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:README.md": "6b3874701fbb50035d7187d92e740a1cb07080eddaa2910404fe1dd7ec114c03",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:_bmad-output/planning-artifacts/epics.md": "3ea1c16886130981e0a47c848d262683f6bf2c321986fec9c34adf7982690955",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Cli/ChatBotCliCommands.cs": "d219ddbb31bee851273449d3705da6caaf777100566d090b9fa47fc253b71184",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Cli/ChatBotCliOutputFormatter.cs": "d00e7d63ce0565d58cbe8ba8e9ab624f52eb1c65b4907e9a7055052496bf45ab",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Cli/ChatBotCliService.cs": "1ae4884d483682e2b3f6658d9e373ed86aefa658a89252a4b9950446f79883f4",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Cli/Program.cs": "1309679fcdedbb2ce6ce23236cc40437892824346464ff1c4f7c6bfaafdac074",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Client/ChatBotClient.cs": "9d46e32220ed27f8539f31946d1908f840ab9a4ca7aeef10ea6d363cee460c04",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Commands/AssociateEmailToProject.cs": "1f1b4c5d8ef0a4aa9e36b407b601ff1879e1634aea1d37bb7e557cc17ee35baa",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Commands/CorrectEmailProjectAssociation.cs": "9c44eb3cf170da929f21ba1b5c5be2b6e7af5e4073ecaf88e6738c8f40d2d83c",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Commands/DecideAiActionApproval.cs": "87d23120cc7d43019424fbc90263daa7c4391ee9a63aa9f9a456ee0ff5ecfe4b",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Commands/DeferEmailProjectAssociation.cs": "daddcd23ceed9181f2e1bba41e845559568f8c9787ad9a02f62d3828aa2586db",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Commands/ExecuteApprovedAIAction.cs": "5c943379410490e1f43cf4d2db1ee9980ae90a74be926a902680377847078fe9",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Commands/RejectEmailProjectAssociation.cs": "807e8d3ba9477c794873766e8db5db9bdfc661ba6d8bfa3b02974ed8de8f1006",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Commands/RequestFailedWorkflowRetry.cs": "b771ab4c8724a0abe7e7bbb4e12543eb1e3bfc4c2a114151b59aad75cb955876",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Commands/SubmitDeletionErasureRequest.cs": "a7b6f76186391271fb4defcffb733712dd54b04bc70a1ce3d4ed78af2fac76c8",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Hexalith.ChatBot.Contracts.csproj": "8b79b4fc137b8bfd647cc16572510d5a5a354d3ca7d130d0f5dacec7dfe7bdbb",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Identities/ChatBotIdentity.cs": "e1f1909218a8043eab66cb74c39b139b7c1a7466f65c209761767e2c8beeee99",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Messages/ChatBotMessageCodes.cs": "baeffc6c462a60992d263f118a12ca145612e1d22450a5d416bef79761c6b971",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Queries/GetOperationStatus.cs": "c130242986b7e0414cb00361440da7b4829c3b81b1304cc7464572d9f84d9ab9",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/Serialization/CommandOperationConcurrencyJsonConverter.cs": "c526e31aafd1dffa8f73fce6e150092a4dc929d32ff0c50374038c8cf3cef061",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Contracts/openapi/hexalith.chatbot.v1.yaml": "9708ae14f21eacde8be99b4f9a11ff4f9aa0905630ec1415b3deca64e25ad864",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Mcp/ChatBotMcpResultFormatter.cs": "22eeb34307acbec8cd39ae9f2c50a28bb67fe7e5955b212a00fc07bebe9b7af0",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Mcp/ChatBotMcpService.cs": "24e867c093d78250bec58741a1a9b11561730ea9497d760c593431256b09c995",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Mcp/ChatBotMcpToolCatalog.cs": "ddd4a4e3cfe34006434b9c04b815724f263d015a7104bb04aa7714dd0eb20161",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Mcp/ChatBotMcpTools.cs": "e1963e20f77f21ea38d9f14bf86db942d8bbf22cbddcb5864871e7e2c6ece395",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Mcp/Program.cs": "363e986ceb3a10ca827f89cdb0daba7dc6f51e2c5c624322b91d0c6ce2162c82",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Authentication/ChatBotApplicationBoundaryPolicy.cs": "296c8ccdb7340dae28ea55264c9f956ea2cab7477b7c744eec380d8f56604e82",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Authentication/ChatBotJwtAuthentication.cs": "c2510eeee5ff8745168bcdfd4c142132fe50e1be28db5027debfa9e739977c68",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Authentication/ChatBotRequestContextResolver.cs": "99ac210805737838fe23a970fe7788d456ff3601562749209d29c4b51b752da6",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Authorization/ChatBotAuthorityCatalog.cs": "3bc48f1c515d9c40d4ddbc764c6039c5511c086e8f90a22999ef209185517b54",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Authorization/ChatBotRequestAuthorizer.cs": "2b5ea0fd776c21d567747a4b68863f115812126f4905994ff0c2c4f2e17c346d",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/Admission/ChatBotAdmissionEvidenceValidator.cs": "0c5b3945388b22dcea92b83a586e2e433f9f2ea097a8b865730c1835ab8d3528",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/ChatBotCanonicalDispatchTarget.cs": "86739691a9e8701f29123931ea42bcef2d79bc9427bdcfc08a694050c9a9317f",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/ChatBotCommandAdmissionPipeline.cs": "c37aa2ea445a94afdba84ed26682ad14ef7696169d75fe54a9ec884ade8eb2be",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/ChatBotCompatibilityEndpointExtensions.cs": "b9965a6ddfac0ae9503a6b63f744921f384bfafe502b46866b45759536f2d61d",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/ChatBotProblemDetailsFactory.cs": "17610c3a110f00a5da7f9ae0a24a3fc15425f39c4b20ec7a3e8e5408147ff8ec",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/ChatBotSpineCommandAllowlist.cs": "7329272e7064349090ea125654b931bcde4b312d4f8106aa4c8eb8ab5d1ad64e",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/CommandGateway.cs": "08c5b7449812d3c196885c97cc991ca9b90e36e70cd2b72c20b3c81275d78ebc",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/Stages/AcceptedCommandDispatcher.cs": "eaf73c41b35948f543d874491e67c151b03c1a51868057481e9030675dfd0287",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/Stages/ClaimsTenantBindingStage.cs": "9db3b38f96fc6ea4b91b8f5bb99ff9b9e196506ccc59f44bfdb4f1ba94897657",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Gateway/Status/OperationStatusHttpResults.cs": "f54f592ee7721c83ddce69449e9848e8b604e3e2e81ba80411744be5b4e215be",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Queries/AssociationRoutingStatusQueryHandler.cs": "33246ac4eb3b29ee48f32e8f3fb4cadb70b37a7ea97951e3d5d1940ccffac0b8",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Queries/ChatBotReadQueryHandler.cs": "602a8df0193c1df82c6b27586bfbdcdbf224dd0b138f3e86f9072925fad39358",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Queries/OperationAuditHistoryQueryHandler.cs": "3ff2b9554d05fa904a4ae5b02738d0069b1e73a0c2516c92c1484191bbd9f298",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Queries/OperationStatusQueryHandler.cs": "9e54702aac2d733f825ec7c858a558e01c218262f1dd96ef8c76eb207a5f73e3",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Queries/ProjectConversationQuery.cs": "11154e492ad1e39982124f5c1536dfcf183af02034c6e6aa4186b8414f430fb6",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Queries/ProjectConversationQueryHandler.cs": "f496de9d74ba1d8001ee5245810304a46245847e863879d8d4e428d873b3dd62",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Queries/TaskIntentReviewQuery.cs": "ff8360769d5b2e08325a44c97260ee152c95f47680e1278fcc8821a7dc3ecdb2",
+    "references/Hexalith.ChatBot@6a4ca07b18e9b58500dc79dfede1f308da36c828:src/Hexalith.ChatBot.Server/Queries/TaskIntentReviewQueryHandler.cs": "af5a2f56b7a02e1bd042f00f2ba736d3b2f77dbd869ea86d96fc522c4d1f1673",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:README.md": "a4d1eb27318f981b5f08f5ebe4bbcadbad3a5eba586c324f113cbe6cb7ff77c0",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Cli/ChatBotCliCommands.cs": "d219ddbb31bee851273449d3705da6caaf777100566d090b9fa47fc253b71184",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Cli/ChatBotCliOutputFormatter.cs": "ed7be2709f7adfa4ef65a86ffb62f9a9793acceb33b79533422a272e4a0ddbce",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Cli/ChatBotCliService.cs": "1ae4884d483682e2b3f6658d9e373ed86aefa658a89252a4b9950446f79883f4",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Cli/Program.cs": "1309679fcdedbb2ce6ce23236cc40437892824346464ff1c4f7c6bfaafdac074",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Client/ChatBotClient.cs": "9d46e32220ed27f8539f31946d1908f840ab9a4ca7aeef10ea6d363cee460c04",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Commands/AssociateEmailToProject.cs": "1f1b4c5d8ef0a4aa9e36b407b601ff1879e1634aea1d37bb7e557cc17ee35baa",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Commands/CorrectEmailProjectAssociation.cs": "9c44eb3cf170da929f21ba1b5c5be2b6e7af5e4073ecaf88e6738c8f40d2d83c",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Commands/DecideAiActionApproval.cs": "87d23120cc7d43019424fbc90263daa7c4391ee9a63aa9f9a456ee0ff5ecfe4b",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Commands/DeferEmailProjectAssociation.cs": "daddcd23ceed9181f2e1bba41e845559568f8c9787ad9a02f62d3828aa2586db",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Commands/ExecuteApprovedAIAction.cs": "5c943379410490e1f43cf4d2db1ee9980ae90a74be926a902680377847078fe9",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Commands/RejectEmailProjectAssociation.cs": "807e8d3ba9477c794873766e8db5db9bdfc661ba6d8bfa3b02974ed8de8f1006",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Commands/RequestFailedWorkflowRetry.cs": "b771ab4c8724a0abe7e7bbb4e12543eb1e3bfc4c2a114151b59aad75cb955876",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Commands/SubmitDeletionErasureRequest.cs": "a7b6f76186391271fb4defcffb733712dd54b04bc70a1ce3d4ed78af2fac76c8",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Identities/ChatBotIdentity.cs": "e1f1909218a8043eab66cb74c39b139b7c1a7466f65c209761767e2c8beeee99",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Contracts/Queries/GetOperationStatus.cs": "c130242986b7e0414cb00361440da7b4829c3b81b1304cc7464572d9f84d9ab9",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Mcp/ChatBotMcpResultFormatter.cs": "a0ea23a2ec654d206ef6661b7f02ce2390e5d07a68369728291fac32f9421af2",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Mcp/ChatBotMcpService.cs": "24e867c093d78250bec58741a1a9b11561730ea9497d760c593431256b09c995",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Mcp/ChatBotMcpToolCatalog.cs": "ddd4a4e3cfe34006434b9c04b815724f263d015a7104bb04aa7714dd0eb20161",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Mcp/ChatBotMcpTools.cs": "e1963e20f77f21ea38d9f14bf86db942d8bbf22cbddcb5864871e7e2c6ece395",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Mcp/Program.cs": "363e986ceb3a10ca827f89cdb0daba7dc6f51e2c5c624322b91d0c6ce2162c82",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Authentication/ChatBotRequestContextResolver.cs": "99ac210805737838fe23a970fe7788d456ff3601562749209d29c4b51b752da6",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Authorization/ChatBotAuthorityCatalog.cs": "3bc48f1c515d9c40d4ddbc764c6039c5511c086e8f90a22999ef209185517b54",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Authorization/ChatBotRequestAuthorizer.cs": "2b5ea0fd776c21d567747a4b68863f115812126f4905994ff0c2c4f2e17c346d",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Gateway/ChatBotCanonicalDispatchTarget.cs": "86739691a9e8701f29123931ea42bcef2d79bc9427bdcfc08a694050c9a9317f",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Gateway/ChatBotCompatibilityEndpointExtensions.cs": "de97083bb57e53b83ef3c8fe09907c06de9f6815704ce8c5dcbeb106a3e5b52f",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Gateway/ChatBotSpineCommandAllowlist.cs": "7329272e7064349090ea125654b931bcde4b312d4f8106aa4c8eb8ab5d1ad64e",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Gateway/CommandGateway.cs": "c88fa47e763f5b0ac4c1463c46d2a80a8621369eebb0445ce763ed33c4a02afb",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Gateway/Stages/AcceptedCommandDispatcher.cs": "e7c770dc4f5a7df56314ac0eae4a8f55fbc906f96cebcbffddea88f0a9bda6f6",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Gateway/Stages/ClaimsTenantBindingStage.cs": "9db3b38f96fc6ea4b91b8f5bb99ff9b9e196506ccc59f44bfdb4f1ba94897657",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Queries/AssociationRoutingStatusQueryHandler.cs": "e8e172288ec855f3b7ba105acd4ad7d07c6fde37b9dfdf12731d17e888e82d10",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Queries/ChatBotReadQueryHandler.cs": "602a8df0193c1df82c6b27586bfbdcdbf224dd0b138f3e86f9072925fad39358",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Queries/OperationAuditHistoryQueryHandler.cs": "17bcf5105e9ea0093d2074def5355cab77e406c7ef53206c5eaaf2208a206880",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Queries/OperationStatusQueryHandler.cs": "fde5c2a1cbb4c255ff73e1f98e1d086dcf82890c12e4830d9531ca67377d6740",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Queries/ProjectConversationQuery.cs": "11154e492ad1e39982124f5c1536dfcf183af02034c6e6aa4186b8414f430fb6",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Queries/ProjectConversationQueryHandler.cs": "5969657c787b40811e8c985b02b4400f3ffab7a9e0b95730db90174dd83b5366",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Queries/TaskIntentReviewQuery.cs": "ff8360769d5b2e08325a44c97260ee152c95f47680e1278fcc8821a7dc3ecdb2",
+    "references/Hexalith.ChatBot@acc934599cf1efff36b0643eddc6a3cc4c2978d5:src/Hexalith.ChatBot.Server/Queries/TaskIntentReviewQueryHandler.cs": "b696037dedd8be542894f5e7166c37d85c36e141838a1c9309b81d4a143c3686",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:README.md": "6e6b45a2caf2756e9db25d9f55d4d4c787a88b7af24ee725264e596758c9e835",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:_bmad-output/planning-artifacts/epics.md": "0dc020f811fe4f7913a187f4c0d2e76870426d29901e0c2819f741f862bde3e6",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:docs/operations/embedding-providers.md": "c264b6d65b3b860b33ceb6b6aaaf1a547f11f213bcf481cdd42b00858edfe56a",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/CliServices.cs": "3c8b43c7f5aa25c55f3f8f98df5514afced2dfc6d8897b394cd1cbb5f7225503",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/ConfigShowCommand.cs": "bdbc9b6d40b777f112f0c02e4c3b6531180af37b934f759cc4d95507a9617578",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/ConsistencyInspectCommand.cs": "d2f0afbccf8fa9bf667d6aeb0676fddb1168b82afdfe07816899581bb79efd41",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/ConsistencyRepairCommand.cs": "dcce221f58ce274adc4477100f1a5b00e4085a3947116782113ef7ab30bbeeaf",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/ConsistencyVerifyCommand.cs": "7c5677f460630c9dc6aa004141fc7b35a1a8f4b87c9485a5460129eca0ea07ea",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/ExportCaseCommand.cs": "2371ab948a31d79f4c072646217f0524ae1d878b61fdc2d004638cd5bbb59d5e",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/ExportTenantCommand.cs": "b046f7a88da6e21503ce828353e14f6d3e3d19342b86504a855ed7d98e4369e6",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/HandlersListCommand.cs": "ff8f83fc64b36787344ea0a1b8eeac536cfcb4d1fea54976da91c5aff3f833c3",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/HandlersMismatchesCommand.cs": "945294b32690c3ff5501191aafaf95764a16bab0194a6874a8d0d3794d2c4b0f",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/NotImplementedCommand.cs": "ec9f9c075078b129de83bd90646ed24e54a6f1205e00b25112a4d7190e59e425",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/QuickstartCommand.cs": "c67b9922b1b68847646a56186d1af820eb1c4c0507c872918de271d2a587c710",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/RootCommandFactory.cs": "b178232ca1fbe6ddaf5faf584951b052b167bb37bcf6e5f229b7acf6515eb922",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/SearchInspectCommand.cs": "bb074155fbe05171d60549a40fee9cb04f07fc353123963157a93ce8979cd383",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/SearchLookupCommand.cs": "811d02f1b865b4adcded15d2ffbc9bd1c4fd308d096810258d07adc20cf643a8",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/SearchQueryCommand.cs": "5604a138d4fba67bf8488c3fa2336d781d6abb99b9cb100a8070b46f131556d0",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/StatusTelemetryCommand.cs": "4c868c9be7dd81da0bd0edfed9926a372eed90f6b16d9ae5c08b47fa2e062559",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Commands/TenantListCommand.cs": "f9e5fe05503e7f013919c4e14cb685c4c5a19466e899eb8f30db5bfd5d9a360e",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Configuration/FileConfigurationSource.cs": "24adbe75a19da31cf605383b582c0bc7b1a0461c30e4ba3c23e2dc563f8123c5",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Configuration/ResolvedConfigPipeline.cs": "030899933915d5e81ba9765678f6fdc5e56ef1730bbb706e014551ca496bba83",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Errors/ErrorMessageCatalog.cs": "9b54da12110c06d05920fee559e5cbb6af5e22abaa7664a707c8aeb1045759da",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Execution/CliExitCodes.cs": "399d02cdac9cb4018894f25abd7116691bd2e94427f988ca2c0cf7b1f47a34c7",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Export/ExportCliHelpers.cs": "fa84e81a800a1cbe8036a8f4aeae8b893d9eea29da7ccd287c15b7a46a2357dd",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Export/ExportOutputSink.cs": "8e45f7c9bdebc6b2942b472f31b4df59ff495124c7904af6df6bd87778dfc4c6",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Output/Formatters/CliErrorWriter.cs": "9d37bd35ff38397a19d14bbc43d14fcaf8bc6a614e8b864bc2958d84527bb442",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Output/Formatters/ConfigShowHumanFormatter.cs": "a91a084e1d44d05a0a90be6ae9d132c8e5b026c128db329c2884bf055bb9d92b",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Output/Formatters/JsonEnvelopeWriter.cs": "17971ce199b50b721d4156c934ea8d1a7b5c1a6dc3a2ab68601618ed20f57f34",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Quickstart/PrerequisiteChecks.cs": "3dab3cab96ec7557a25e082871a3a9a22670c63f04916d158c160848bb374831",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Cli/Quickstart/QuickstartSampleFlow.cs": "d5b3d2c0d43c86a2d7d127425675517f7c33a0f4fd9142119c6104b0a27ea6c4",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Client.Rest/MemoriesAuthHandler.cs": "beed2f3050b5c4bfae25ec92fcd16fa8011ab4b5dc4436ed77c6f9a91ed47fa1",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Client.Rest/MemoriesClient.cs": "397cddc4594a528c6f89ba1a24e204978412e07da4963ffa9d01b90e8c87ce27",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Client.Rest/SearchRequest.cs": "b15cb72c3ccebab44ab86a498163e1dec0f7159ad18df1388bf029e9e1b4dcd3",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Contracts/Hexalith.Memories.Contracts.csproj": "82207bd901dcc37776aa85d9b184a8ea016051672c86417d0d77dc568cced15a",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Contracts/V1/Case.cs": "6e6eb57772df862e72d6c8c2e051ecaa26bfba2b2591852237ff455f75353ae7",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Contracts/V1/SearchQuery.cs": "acbcfba60365d901e4e171ac310b230e5173c06177e221c7ada30ec369bca5f0",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Contracts/V1/TenantDeletionResult.cs": "f1b439310eed289ac67421ba3307cd4573c32cc195f91e9ce7259959851a83fe",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/Authentication/ConfigureJwtBearerOptions.cs": "98e5b430acb1336f4e59afdc61b09024743089b631b86193fe03075b00e2ee68",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/Authentication/MemoriesMcpClaimsTransformation.cs": "7e3790ddd4b4e221f887e8edb45e343f974d9fc68a1c13640984c747c4b45c75",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/Authentication/TenantClaimAuthorizationFilter.cs": "b0abdcd3531aa935600697cc48810b426b3934bf218db692d3e808cf7c431db6",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/Authentication/ValidateMcpAuthenticationOptions.cs": "ba2f472cd40b2547c3bfd115db297e89b5214571bca7e4bb92bfe9a24df2a008",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/McpCompositionRoot.cs": "b34b07b176b328ece62fe14eed3defadfa2d1252bc449d0678e5d6ccc2c6ebd8",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/McpErrorMapper.cs": "6fbb2d2a74229f699667aea54c3fa13567e1efa85cc0984452defd3607037187",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/McpToolExecutor.cs": "0688e4df974e398398ce897561027d41e2af35b437b7cbc19bd3ff9ab78255e4",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/McpToolResultSerializer.cs": "cbaeb64442d946028d8cbc6d2a2e1b505f206a75369f060b5773044c9ec944a0",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/MemoriesMcpDaprInvocationHandler.cs": "ec7c802fbb08988b4b046f8d4dcbf48fc4e03a50a902729a05a95c494fcf636f",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/Program.cs": "1b7aff62b04ca01e2810ba361e4990dd19892dc551f624eb5bc739f7cf873035",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/Tools/GetCaseInfoTool.cs": "47fa04ad47349249fc282f1c4d91ff6ca77dae0fe4eb5e0e44699c8fae0d57b2",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/Tools/IngestContentTool.cs": "abf8babdc7e43125cb4bae93065c1db4d416a0e342a16d1e5e53c794ae3dc754",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/Tools/SearchMemoryTool.cs": "c30da250600d9748a322c32557017b679277f7c1ccf41f6058d2fc88e2574ff0",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Mcp/Tools/TraverseRelationsTool.cs": "78e4d0f07f0c6c81ebf2534f053d92e795d49ae93eab1018b2248f31369595ee",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Activities/Indexing/IndexGraphActivity.cs": "0d0274c7ed15ecc800e77b51d79ab1c14afcb127862f4688b4fcc38a2026f8d3",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Authentication/TenantAuthorizationEndpointFilter.cs": "f5da77ff0252854c1f89f898b94d31ba781d86b3ee234dc51c10abe7ef5c9539",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Authentication/TenantAuthorizationMiddleware.cs": "142ba6e84cfb643b234b4ad7d19a1479d3711cae74f5631195f36dcad0449128",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Cases/CaseService.cs": "66e4820003ec458dcb9f4985905fe4325bed1abc279e3801b15f139894c54a37",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Endpoints/CasesEndpoints.cs": "a0e155e597e10ff99cdb7bb455957c19ccc30ef46e5f5623d912a38e4570a03f",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Endpoints/ConsistencyEndpoints.cs": "f431452d4d82ab9775143387f14af9129095bf27301eff5f740cd3cc14bfdfe4",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Endpoints/ExportEndpoints.cs": "e4b1b2e8731b2f8ef52b548600dc9d13a74378b2302e47ebe1abaaa92486f99f",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Endpoints/GraphEndpoints.cs": "1ba912c7c5b8a21a5b689d241f1a54147d48e915f412adb7636d33b780ce012d",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Endpoints/ImportEndpoints.cs": "1622ebe2fffe1e3b534c32d5c9f7902a5bda1d81c198199ce8d73196b3c5e7ba",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Endpoints/IngestionEndpoints.cs": "26b33f201d7aa4514432da4e04e0491f05a9b46bbade2f3657d6bb4fb43209bd",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Endpoints/SearchEndpoints.cs": "c5a792431820eb323e8bef8ac25fb11719ca6494abc1fe236cb35987b9c2ab94",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Endpoints/TenantLifecycleEndpoints.cs": "2ce2120e006a4178bfc361cd783f61696d585b4aa5e077870152f7b3901efba6",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/EventStoreIntegration/EventStoreMemoriesCommandStore.cs": "533102df060186c5a8ab7590327c5781b18708f0eee425c8d6685a59e96d5c30",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Graph/GraphQueryBuilder.cs": "682bb73d9efd7e7fac92e083ea2cd869b0a07f2bf73184b39ff0f093ea97f41d",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Hosting/MemoriesServerServiceCollectionExtensions.cs": "52c061b782c679957a78df09b24e32de96fcfa99a8c4ffa96fd48cd7faf9632d",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Ingestion/GraphPublicationReadGate.cs": "0284b97d8347fe6347808d42ac0494ea841a6c229b42e6de2439cbdc55e11b2d",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Ingestion/GraphSourcePublication.cs": "ca9383e57a7bd1be7925d01dbf96b5daddb0000dbb82a5401908f29da2e20670",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Ingestion/IngestionWorkflowConfigurationCapture.cs": "543dac69b7c5ab432605f96dbbd376156c3db4a90549e23a7e0b0874c28955cd",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Ingestion/RefreshPublicationStore.cs": "2916513d1b37f8c817c71f6af21754a3420e0b032e0c929f467e2c20b864af1a",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Ingestion/SourcePublicationVisibility.cs": "17877540f5791c11907647650f6ad503c1b05ab75d9d3b407c3f6e6e767ff5d7",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Ingestion/UnitOwnershipAuthority.cs": "b8f31da4149954b50a29e8f5da8aa06118ebef1d06d5deb870f3e0a294cd386b",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Migration/EmbeddingMigrationExitCodes.cs": "ea2189db4ff433bf24d4226af9e71a429ca2cfcca6dc63adafa1a811ddd85ebd",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Migration/EmbeddingVectorMigrationService.cs": "c74a87a724041e8f920da6f1dcd100ca9f87b55c3798965a1a963aa9ff8ca220",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Migration/RedisEmbeddingMigrationStore.cs": "e3e0f64b714a885e1f2032dd106e392b8ab0adf6005ba55d21fbe88569df6a20",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Program.cs": "e3548f82096d52cdd3a5baf83ab1db3d154a71400a2cf45d172fa88cd1f2669b",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Search/SyntacticSearchService.cs": "b98a7dc0ef306d159427ec71545eceae8659a67243cf02b7c6eb2787cc78e6e6",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Telemetry/AuditPrincipalResolver.cs": "3c2c4e2b257fcd0aa37d5a7ce020a05555fbe992913d63e46e8b1b8747f8f765",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:src/Hexalith.Memories.Server/Tenants/TenantRegistryService.cs": "55d236802633f48cc8767549df65b9962eb13b9814b1d99706a82812f8a39895",
+    "references/Hexalith.Memories@9d87500eaf4c39ce0cec0cb3a03e5dd62c167106:tools/MigrateEmbeddingVectors/Program.cs": "d6e77173f7b7806e8b4d813f2f58e785a35dcd98d1f47d7012b1a4ea17dbb6e4",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/CliServices.cs": "3c8b43c7f5aa25c55f3f8f98df5514afced2dfc6d8897b394cd1cbb5f7225503",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/ConfigShowCommand.cs": "bdbc9b6d40b777f112f0c02e4c3b6531180af37b934f759cc4d95507a9617578",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/ConsistencyInspectCommand.cs": "d2f0afbccf8fa9bf667d6aeb0676fddb1168b82afdfe07816899581bb79efd41",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/ConsistencyRepairCommand.cs": "dcce221f58ce274adc4477100f1a5b00e4085a3947116782113ef7ab30bbeeaf",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/ConsistencyVerifyCommand.cs": "7c5677f460630c9dc6aa004141fc7b35a1a8f4b87c9485a5460129eca0ea07ea",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/ExportCaseCommand.cs": "2371ab948a31d79f4c072646217f0524ae1d878b61fdc2d004638cd5bbb59d5e",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/ExportTenantCommand.cs": "b046f7a88da6e21503ce828353e14f6d3e3d19342b86504a855ed7d98e4369e6",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/HandlersListCommand.cs": "ff8f83fc64b36787344ea0a1b8eeac536cfcb4d1fea54976da91c5aff3f833c3",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/HandlersMismatchesCommand.cs": "945294b32690c3ff5501191aafaf95764a16bab0194a6874a8d0d3794d2c4b0f",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/NotImplementedCommand.cs": "ec9f9c075078b129de83bd90646ed24e54a6f1205e00b25112a4d7190e59e425",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/QuickstartCommand.cs": "c67b9922b1b68847646a56186d1af820eb1c4c0507c872918de271d2a587c710",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/RootCommandFactory.cs": "b178232ca1fbe6ddaf5faf584951b052b167bb37bcf6e5f229b7acf6515eb922",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/SearchInspectCommand.cs": "bb074155fbe05171d60549a40fee9cb04f07fc353123963157a93ce8979cd383",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/SearchLookupCommand.cs": "811d02f1b865b4adcded15d2ffbc9bd1c4fd308d096810258d07adc20cf643a8",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/SearchQueryCommand.cs": "5604a138d4fba67bf8488c3fa2336d781d6abb99b9cb100a8070b46f131556d0",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/StatusTelemetryCommand.cs": "4c868c9be7dd81da0bd0edfed9926a372eed90f6b16d9ae5c08b47fa2e062559",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Commands/TenantListCommand.cs": "f9e5fe05503e7f013919c4e14cb685c4c5a19466e899eb8f30db5bfd5d9a360e",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Configuration/FileConfigurationSource.cs": "24adbe75a19da31cf605383b582c0bc7b1a0461c30e4ba3c23e2dc563f8123c5",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Configuration/ResolvedConfigPipeline.cs": "030899933915d5e81ba9765678f6fdc5e56ef1730bbb706e014551ca496bba83",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Execution/CliExitCodes.cs": "399d02cdac9cb4018894f25abd7116691bd2e94427f988ca2c0cf7b1f47a34c7",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Export/ExportCliHelpers.cs": "fa84e81a800a1cbe8036a8f4aeae8b893d9eea29da7ccd287c15b7a46a2357dd",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Export/ExportOutputSink.cs": "8e45f7c9bdebc6b2942b472f31b4df59ff495124c7904af6df6bd87778dfc4c6",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Output/Formatters/CliErrorWriter.cs": "9d37bd35ff38397a19d14bbc43d14fcaf8bc6a614e8b864bc2958d84527bb442",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Output/Formatters/ConfigShowHumanFormatter.cs": "a91a084e1d44d05a0a90be6ae9d132c8e5b026c128db329c2884bf055bb9d92b",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Output/Formatters/JsonEnvelopeWriter.cs": "17971ce199b50b721d4156c934ea8d1a7b5c1a6dc3a2ab68601618ed20f57f34",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Cli/Quickstart/QuickstartSampleFlow.cs": "d5b3d2c0d43c86a2d7d127425675517f7c33a0f4fd9142119c6104b0a27ea6c4",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Client.Rest/MemoriesAuthHandler.cs": "beed2f3050b5c4bfae25ec92fcd16fa8011ab4b5dc4436ed77c6f9a91ed47fa1",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Client.Rest/MemoriesClient.cs": "3b362f754d0b4d69fa1442d706350d9aab09023ad09e9a0e82b0f05ab6af2216",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Client.Rest/SearchRequest.cs": "b15cb72c3ccebab44ab86a498163e1dec0f7159ad18df1388bf029e9e1b4dcd3",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Contracts/V1/Case.cs": "6e6eb57772df862e72d6c8c2e051ecaa26bfba2b2591852237ff455f75353ae7",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Contracts/V1/SearchQuery.cs": "acbcfba60365d901e4e171ac310b230e5173c06177e221c7ada30ec369bca5f0",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Contracts/V1/TenantDeletionResult.cs": "f1b439310eed289ac67421ba3307cd4573c32cc195f91e9ce7259959851a83fe",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/Authentication/ConfigureJwtBearerOptions.cs": "98e5b430acb1336f4e59afdc61b09024743089b631b86193fe03075b00e2ee68",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/Authentication/MemoriesMcpClaimsTransformation.cs": "7e3790ddd4b4e221f887e8edb45e343f974d9fc68a1c13640984c747c4b45c75",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/Authentication/TenantClaimAuthorizationFilter.cs": "b0abdcd3531aa935600697cc48810b426b3934bf218db692d3e808cf7c431db6",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/Authentication/ValidateMcpAuthenticationOptions.cs": "485549446f5cb57b83ceaf14e7009293b0e501b59297b3d2354edc5ddf084d73",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/McpCompositionRoot.cs": "145b61a06ac1c6de4bbf71b6338b8ff5cec0bacca0447d307f20635afd37ce04",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/McpErrorMapper.cs": "6fbb2d2a74229f699667aea54c3fa13567e1efa85cc0984452defd3607037187",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/McpToolExecutor.cs": "0688e4df974e398398ce897561027d41e2af35b437b7cbc19bd3ff9ab78255e4",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/McpToolResultSerializer.cs": "cbaeb64442d946028d8cbc6d2a2e1b505f206a75369f060b5773044c9ec944a0",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/MemoriesMcpDaprInvocationHandler.cs": "ec7c802fbb08988b4b046f8d4dcbf48fc4e03a50a902729a05a95c494fcf636f",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/Program.cs": "1b7aff62b04ca01e2810ba361e4990dd19892dc551f624eb5bc739f7cf873035",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/Tools/GetCaseInfoTool.cs": "47fa04ad47349249fc282f1c4d91ff6ca77dae0fe4eb5e0e44699c8fae0d57b2",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/Tools/IngestContentTool.cs": "abf8babdc7e43125cb4bae93065c1db4d416a0e342a16d1e5e53c794ae3dc754",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/Tools/SearchMemoryTool.cs": "c30da250600d9748a322c32557017b679277f7c1ccf41f6058d2fc88e2574ff0",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Mcp/Tools/TraverseRelationsTool.cs": "78e4d0f07f0c6c81ebf2534f053d92e795d49ae93eab1018b2248f31369595ee",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Activities/Indexing/IndexGraphActivity.cs": "cb0d2581d5e55121ae4b20d84f3c4a24ceb75c58b8afddc52a39cd6859c97f92",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Authentication/TenantAuthorizationEndpointFilter.cs": "f5da77ff0252854c1f89f898b94d31ba781d86b3ee234dc51c10abe7ef5c9539",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Authentication/TenantAuthorizationMiddleware.cs": "142ba6e84cfb643b234b4ad7d19a1479d3711cae74f5631195f36dcad0449128",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Cases/CaseService.cs": "ae9b6ab3fda2c0d8e12fa08232cfd2443714e21da05742cf5d2f9725f2a65234",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Endpoints/CasesEndpoints.cs": "a0e155e597e10ff99cdb7bb455957c19ccc30ef46e5f5623d912a38e4570a03f",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Endpoints/ConsistencyEndpoints.cs": "f431452d4d82ab9775143387f14af9129095bf27301eff5f740cd3cc14bfdfe4",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Endpoints/ExportEndpoints.cs": "e4b1b2e8731b2f8ef52b548600dc9d13a74378b2302e47ebe1abaaa92486f99f",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Endpoints/ImportEndpoints.cs": "1622ebe2fffe1e3b534c32d5c9f7902a5bda1d81c198199ce8d73196b3c5e7ba",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Endpoints/IngestionEndpoints.cs": "28fca261ec5dea03c6c7f56ec1474738c9ab29521f9818f5d2143340f70faad3",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Endpoints/TenantLifecycleEndpoints.cs": "38ce2a8afbabde14c8227dbe6670b931b5b1dfb20a7f18e8341149c446deea2e",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/EventStoreIntegration/EventStoreMemoriesCommandStore.cs": "786a8d53abc1d7a0405538ee7275b54650cb4d024f25314deaf0a6e96a3c00f8",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Program.cs": "9394972eedfc990092fe7fa18efb02304891e0388b8634b47a845aabce19d75d",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Telemetry/AuditPrincipalResolver.cs": "3c2c4e2b257fcd0aa37d5a7ce020a05555fbe992913d63e46e8b1b8747f8f765",
+    "references/Hexalith.Memories@f6b60d5a2e9b81d84fddad789c7d9bed40d3a533:src/Hexalith.Memories.Server/Tenants/TenantRegistryService.cs": "55d236802633f48cc8767549df65b9962eb13b9814b1d99706a82812f8a39895"
+  },
+  "amendments": [
+    {
+      "module": "chatbot",
+      "fromPath": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md",
+      "fromVersion": "1.0.0",
+      "fromSha256": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+      "toPath": "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md",
+      "toVersion": "1.1.0",
+      "toSha256": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+      "changedRows": [
+        {
+          "id": "M01",
+          "fromSha256": "5ea0bd5035fa11bfe2422c5c465a28f32b8f8307797e9134010f2e3d444f74c6",
+          "toSha256": "34bf1a158d3d7e07a07391457dd5f88158738b4108d8f852d346dd88fc97ad73"
+        },
+        {
+          "id": "M02",
+          "fromSha256": "80d7a9fbc88fe68989cff43e13fbb5e82c6a9cf451e01a11ae2efa473fd9983d",
+          "toSha256": "3c1b76bf61971f5d15a2ce4cc6f4d885f4fc37f8d06408ccb61fc782e68149f4"
+        },
+        {
+          "id": "M03",
+          "fromSha256": "e884ce6fae3b6a9381d874d4e35ae7775190d9e78edd6052957354786a5421be",
+          "toSha256": "82648dff160ece541204a824ee2d74af6f76ba0cf34f4153743ef600660ff0be"
+        },
+        {
+          "id": "M04",
+          "fromSha256": "a7cf84772d16c40951b025ed72e1d04423457579c6d5ecf544b4c99d6dc5041e",
+          "toSha256": "78f6acf694bebb2b1d53f11e6bb07cad32a077f733ec3a4ee1674f74009b5707"
+        },
+        {
+          "id": "M05",
+          "fromSha256": "84e803ebb2fe25b24e70b1700b97b84041cd481a2ff0c05869223b6fb1b52d94",
+          "toSha256": "f8d9c4795e813ac49f0084026328da56967748b8a42d9cd52c1d1fdee8beef0c"
+        },
+        {
+          "id": "M06",
+          "fromSha256": "f86416c013cd7b978ee8ab65ceec19e61019a8c7208fc9819db3cfbc9e426e54",
+          "toSha256": "57035ad3bf7ae957e72a53ac99aab03a0ba011f75eddd955c5dd486827147752"
+        },
+        {
+          "id": "M07",
+          "fromSha256": "76df053f924439cc458b836731a334bcb6e107dff47af946d245b79f54f6f5ce",
+          "toSha256": "ce30b4864e0bb314aa82036fb2a4125fe103e95269fdf47f1ef53d6cad7b016e"
+        },
+        {
+          "id": "M08",
+          "fromSha256": "6e1813129601ea138c0874f3aea2a8621b5d43f03160e53bd9eb382d14dcdfab",
+          "toSha256": "2e49596fc7979ce6743d8b6719b8898a8839a60eb87079d651f223aaf16c8cb2"
+        },
+        {
+          "id": "M09",
+          "fromSha256": "8c07780575eafd830e48342b5eef580a7e4359f2253bfc906fae6abfcdb8e9bc",
+          "toSha256": "6467ccb6cbe60583565359fe0c12bcb015cc1ae5dcb7338a8ce01bfecab92a44"
+        },
+        {
+          "id": "M10",
+          "fromSha256": "1870f0fc9056faf3702be984e5c925bffe7e91a3991dfa4c48acb0a67550bdff",
+          "toSha256": "74fc92315a235b3ef42ceb83bda94b62a839018c999244188efbd1261254bef8"
+        },
+        {
+          "id": "M11",
+          "fromSha256": "ccf5624f17d17c0b035ad230a2387649d7a4b824c1e7487b7424b537c6b1d347",
+          "toSha256": "8dc556a43981d4c97586d8777cc63e781d3add6ce0a00536084a1b688b47a998"
+        },
+        {
+          "id": "M12",
+          "fromSha256": "0e1bf35ffc62da001f5c2d98f506f7ef7500e55e31f6fb94f8b246bcc74d9ef4",
+          "toSha256": "d010e58ee642eb842e788a7811ee49d415ec4ecb870bcd8614489d42972528cd"
+        },
+        {
+          "id": "L01",
+          "fromSha256": "3e52ad9ca2aa6ebd88e90ca3729a620e1e5460f808a9f617576f72089289cacc",
+          "toSha256": "a15b641b1a39541e86bdfe4bf6debc77e1712a76a6b88431697f67efbbc76642"
+        },
+        {
+          "id": "L02",
+          "fromSha256": "425784493ba6f7cd674aab20feb8d2bee6055daa9d228a56b7762e55a0dd1433",
+          "toSha256": "0c0ece0f3e332a5701ef678975853948955ea26605a63550bbaf679b9ea0047a"
+        },
+        {
+          "id": "L03",
+          "fromSha256": "db9be7ae406332f58e481fb9d74a457e341543dde9dec9f7396dba1a43bdeb4d",
+          "toSha256": "ee6ec5c681338077069b53c9ff6f2f1974281d4c52cedde94bea191857bdd417"
+        },
+        {
+          "id": "L04",
+          "fromSha256": "848f0bbab6115aedc4463cf236bb7918c767bf98ead71f1ef003d147aae71fd5",
+          "toSha256": "68164642ddb7011f79105f5778a20b8a716f2f9dedf2e2f528ecb513506a4d35"
+        },
+        {
+          "id": "L05",
+          "fromSha256": "65ac3c22d3310946c6dab15055cb9ef4bd6c78e2ae41041146719929b3a38f02",
+          "toSha256": "de4c5afbf67ed64ac9fb4d9e4142e5aa9ec9056696d89bc443b6b869a3128739"
+        },
+        {
+          "id": "L06",
+          "fromSha256": "3c1b45ecd04a4424a8de2482953e8fb916f491c58587aed638f8831bd065ab16",
+          "toSha256": "18ffdf724869d78e67a0c7583b9a803679de5fd5476e3c8879845bf1dbeeb036"
+        },
+        {
+          "id": "L07",
+          "fromSha256": "f1e03274a5d44738067c28c88b9a48c71c033e0e743ff880d93171f5b2417131",
+          "toSha256": "67a9fd95210979b6b537e890383f496ab47a8ff2a6bab3436f666ec3f98c797d"
+        },
+        {
+          "id": "L08",
+          "fromSha256": "8eee2c7808b144be90d36ee5a254fd4d9485de5ea6463bee731d8550f3aea950",
+          "toSha256": "98cfa46c964ede6fd22d70feb108eb06dff5eb3de2f2c5276c9b9f22d2dc6863"
+        },
+        {
+          "id": "L09",
+          "fromSha256": "2099fcd315ec09e2ab83abf6ab6d45885884d8a39673e4aebadfa4c2c8a9f07c",
+          "toSha256": "6f6e764ef910b3c0447a5f37fa2e29c4569eca8b0b25f29ebe14815cd6724921"
+        },
+        {
+          "id": "L10",
+          "fromSha256": "2ba4523d8f6f9554d1baaffc263bd9e3d40ae042e8fb9130e08b695331a94f18",
+          "toSha256": "3e3b74cdbd66ccd00faee9130f635027a19d3eea7cf027d07447d7c2fe090b1a"
+        },
+        {
+          "id": "L11",
+          "fromSha256": "618107d54cb62fb62bae301441c9269782060571ac32c9d8555b5a0cb5090968",
+          "toSha256": "1c4c74d8e98750fb3cecb32def08da5184d156a0cc448ce168b8bde934d72d0e"
+        },
+        {
+          "id": "L12",
+          "fromSha256": "7b71f1b2da85fff8be8d44d959a4df6a1a01b35a1c84a02bc2dc4b41e8384dc1",
+          "toSha256": "021fc18072c3a9ff9f01809890bed2a27abfb1f738d244633e00e774b94caf6d"
+        },
+        {
+          "id": "V01",
+          "fromSha256": "558ec9bce490544edb52e953d14b9f55fd67b1342eba0f2d40fdbddd7679306c",
+          "toSha256": "74b0f9619e079e40ec6b2e6da8499480da74e80a3367010e233353d0b9655c52"
+        },
+        {
+          "id": "V02",
+          "fromSha256": "a6e3c507a65f1a39b66f0e70ff284d3ef5dd4fd57397af692d6b042252005cc4",
+          "toSha256": "ec22af18583d0a02a03a8fdf8dabda1836f49d5613cd1dff1e50cffd7773be0d"
+        },
+        {
+          "id": "V03",
+          "fromSha256": "c61b7ac09426fc79444af37887dca8674c4424e6910bd3ff706f5274e63e2c22",
+          "toSha256": "b884e25535ca0029be1672419ce1f9473470bd21fdc9e57975d342c2a75ed0aa"
+        },
+        {
+          "id": "V04",
+          "fromSha256": "e2f2373337693281b28460e2216139206dad031a25b3b866285ba552b40a43c6",
+          "toSha256": "c95b29d8912ee0286fb3b3556b3346dfb87aa9c92d60d56e1b2f475f8e20dd8f"
+        },
+        {
+          "id": "V05",
+          "fromSha256": "cc83d0628c41b848031e4e81931f1543c9943fbe0d0e30f54a4c2c7ee4d250ba",
+          "toSha256": "72ea28e7a27cea9f8e6146a93b3f2d57f1c052f279b046e36c101df16098ea9c"
+        },
+        {
+          "id": "V06",
+          "fromSha256": "2cbb0aed5c2083541289d099ff85f2658fe24f18f4ddcfbd430133d077e8e6ae",
+          "toSha256": "14848e820fce1fcddccefdea1987ae4aefcbf6bef52dde5356e0d7d4831dfc58"
+        },
+        {
+          "id": "V07",
+          "fromSha256": "6b22775b36c3c67ab5c46cf817553642c687dec935bd1a81e20230c58666cce5",
+          "toSha256": "eba0bc2006cdfb6b809b8fc1fa3d418a37b67ffbaec14f9daa142856c2b52317"
+        },
+        {
+          "id": "V08",
+          "fromSha256": "0de7f2c81460d7a81015ebad9b4e9d6841cfe520bd6631f4c5a6b83928313cee",
+          "toSha256": "5c1cb09b97902a3b7449ed3580cc05657f7918a777b6390ced70afde88b99331"
+        },
+        {
+          "id": "V09",
+          "fromSha256": "f0ec977004398f1a2a9c8bc4819d350c118c18bc3872c0a14cfacebab6569e01",
+          "toSha256": "70f146dbc85ab17250419df4e7551ce40a5dc719d124083fbe7fa625f4fa370e"
+        },
+        {
+          "id": "V10",
+          "fromSha256": "8f0f3606ca2c7b385a22ec64a626eaee3d2ffd9905e0ce319285b31063dcdc2b",
+          "toSha256": "8f3fa17d63e095f87cb31e809017987e62dc14f5730972d2ec950d1baee68721"
+        },
+        {
+          "id": "V11",
+          "fromSha256": "65046930b140c2a759e3d335c09adb51b7a1566394db2cbc992c7590935e115a",
+          "toSha256": "aad385631fc247242ba87e1fbada37430c77eb3c1e06f0efc9dea7182f7f55b0"
+        },
+        {
+          "id": "V12",
+          "fromSha256": "35a626e2053bdf6b36a04fc6f67493da2e762731ae0f73e58d962c638ac0775b",
+          "toSha256": "342a6cef32e2fbd1af47ca77dcc844088cd04e6aef215bbb5edf3356a68986ae"
+        },
+        {
+          "id": "V13",
+          "fromSha256": "9f5a2e333a7d89c5fc4177a41f80bd7b84cb8ea1f9e3ded3b66b86e8664bc093",
+          "toSha256": "adef22b567436d678fdc58713bc58abb0cd72ab8ff3cd5bcb16c7916eb41c827"
+        },
+        {
+          "id": "V14",
+          "fromSha256": "067dd517a86821775c0d0784cfc9e60ef9d36b205c314a273f0f4c6b6e933dde",
+          "toSha256": "004ed5c9e56f5aa5861e8d8962eb80669e5dd8a1e114ecc4d3e9e511a1fb2d4c"
+        },
+        {
+          "id": "V15",
+          "fromSha256": "faf5fc770c7417b703a2945f895678de0b390e4d06b81c4661d3e8e9d6ec4e3e",
+          "toSha256": "960fa18845d9b75fe48bc3bbdbf5ab25848d96da9444c8c6536df44707810382"
+        },
+        {
+          "id": "X01",
+          "fromSha256": "9744cbfd69fe5b51aa80ca94a6fc053cf68a2e37ab8d6b6a6223231c6ad2d4cd",
+          "toSha256": "3c1a320eb144b7518eeed6a9420f2787e23f00581dab24e91db4c8393df44c51"
+        },
+        {
+          "id": "X02",
+          "fromSha256": "bc651e7352de2c8b66b5befaf3bd3cc91d23abff99e1fa8d38cc975d1e1371dc",
+          "toSha256": "8cac9588ba19264616e22c61dda7fdd01c838cda8389d05f34849fa8d318bf85"
+        },
+        {
+          "id": "X03",
+          "fromSha256": "f26893d532df24833c642bb7924c217914797360c43c482b18328f42cdb2ee9b",
+          "toSha256": "6d76a1274cbfa0f0c8016a7e2ff5c5cd4c76ea08db04f66a7de03d8d8c3fb896"
+        },
+        {
+          "id": "X04",
+          "fromSha256": "5b3b3e143c8937f3a86bf2749ddc3d00453cb7cf8e6b87b736d7874ef99e2777",
+          "toSha256": "34df5574c1635bd2bf18eb9364350d4ef39a8032686ac58f128f30ddb47b3a4f"
+        },
+        {
+          "id": "G1",
+          "fromSha256": "bf1c342fe58b3637fd278f403aca3f9569341d911d89828db4232be785b9f812",
+          "toSha256": "c23e88386440e9f0d87fa3270b26b3d9414e59b89a828dd81b659c24926fa7ab"
+        },
+        {
+          "id": "G2",
+          "fromSha256": "307b5e153fa130e717f119d92ad30b70b12a9f709da61efcaba08ed637ddcb60",
+          "toSha256": "e5889c63d3100b46fb83c4c4a31ebc87c4f2209c3eaf1c0e59410aa3c766985b"
+        },
+        {
+          "id": "G3",
+          "fromSha256": "e978dbbf67591dbff5441f39b6faa291666a564195d78bc9f067078712516d14",
+          "toSha256": "1cd8d73b348613fce973c14eb66df62636edc5546a3769648c8f5df62a64f61c"
+        },
+        {
+          "id": "G4",
+          "fromSha256": "058695729c52dd496c4888bc2a5c8084f1ca39041fc6ef0a2d3cf4ee3d8e6412",
+          "toSha256": "bc60f81851f1af609c851647e84349ebb50f967deb59a7f4ab476868e1dc2990"
+        },
+        {
+          "id": "G5",
+          "fromSha256": "b095c34d1711ed875c97cd82b9a123384983135b72b192732e8c3d57bf55e985",
+          "toSha256": "9f2c509e63a1d6b517e9f23b733dac97d01ca1d4b11f452c48835ee6282c3fe9"
+        }
+      ],
+      "addedRows": [],
+      "removedRows": []
+    },
+    {
+      "module": "memories",
+      "fromPath": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md",
+      "fromVersion": "1.0.0",
+      "fromSha256": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597",
+      "toPath": "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md",
+      "toVersion": "1.1.0",
+      "toSha256": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1",
+      "changedRows": [
+        {
+          "id": "M01",
+          "fromSha256": "2b48d1e6a7f468cf593dc5d8fc4f34b74da9579668838d08140973da749c5622",
+          "toSha256": "434c799d4cc862a4773e200bada68ae81fc60913c7d5d6bf0992735db0c44091"
+        },
+        {
+          "id": "M02",
+          "fromSha256": "4794f5f3d02fbd470fa7660db415494c2b7beac01876b6f9fb1c8f1364f50545",
+          "toSha256": "bbd5552fe8360fd7c9b3d9670cd264573c1b7cde1c170d39296adf769d4ed7e1"
+        },
+        {
+          "id": "M03",
+          "fromSha256": "c00d3393245b98bad18345ac41f0f83e4359750f7cc2803b52a4d737a5e12c8f",
+          "toSha256": "0678c65e895e7610c98a50a9e222549855e20cff86db1d78f29b55db283e2b84"
+        },
+        {
+          "id": "M04",
+          "fromSha256": "2bbdf713ca929304b1211ec46adead6e44b8788391b9e120cb431dabe3e7e9f2",
+          "toSha256": "f083798a5b36210dea541f71e1a4057a62190afe6dcdc613b772d125624aeef2"
+        },
+        {
+          "id": "L01",
+          "fromSha256": "9308cc11441b9ba8c38d8f455abb9963e77b876fccaeb12d61dd3fd3d0142715",
+          "toSha256": "34c08a3313512754681e552fb184d4d58e58d9044295f5378420f52c0cc1508f"
+        },
+        {
+          "id": "L02",
+          "fromSha256": "65c1fbdb0ec0158c393caa8bc003c1b6dc7568e8158b42ab5f0aca9e774ea80c",
+          "toSha256": "f250b7d0814db30ee668f11733aadc34adb70615f37244d63de4127de76d0b30"
+        },
+        {
+          "id": "L03",
+          "fromSha256": "447b8314fd82f918d6d5a1d3029ff34af0476438534fbe91da8875df6df37a45",
+          "toSha256": "f29b7cc0e48f27fb34dad01e5ccacd660e3a9284d2fcfe9fd862d6f80a0e0dd7"
+        },
+        {
+          "id": "L04",
+          "fromSha256": "8175a7ead006bf0b037ef52af765e576b85f6d1d993475399ee6804116bb3052",
+          "toSha256": "373f776444652b13ba38e2af2b3e455c69c8129704d6688dc9b1703024b0c3d7"
+        },
+        {
+          "id": "L05",
+          "fromSha256": "b3769cb9a0b219c9e9e43776473c2b13eae2cb92e58cc5438167fd8ec8f768ee",
+          "toSha256": "4d226701e60913a5914ae11e2daa5623db184d1bcf3c918dca4fd7674cf647b2"
+        },
+        {
+          "id": "L06",
+          "fromSha256": "a0f2f70675cde28b977c49c08a997119c248fd7017c74d384e5cf5227997c253",
+          "toSha256": "19277e547704912962256a375e3afc393436407b94531315bfb30109b86fa629"
+        },
+        {
+          "id": "L07",
+          "fromSha256": "9644e832f7763b51893604ef6f80130a5f70ed28bffe20152b0843f3bb66ecd4",
+          "toSha256": "d70b9f4dee7ce5c80d280b8300c4bc72e1d2e2edf938985b7200a7c347177b09"
+        },
+        {
+          "id": "L08",
+          "fromSha256": "ce315c60cafb825a6a31dae5c98e52f520a2c070bb75d08700cf900ebfcd4ae4",
+          "toSha256": "fb142a56faae5b81fab1bf37d6c1dafc82ebeda537b125ed9329f4cc2a4af245"
+        },
+        {
+          "id": "L09",
+          "fromSha256": "f39715feaaa392e244627bd2a7bd89e7365c5dd6bebcfdebe1173aec60c1860d",
+          "toSha256": "171864c7478d60333fba0f76a5ba3261e98a7b1e9798a537c4e6a136e2b10f85"
+        },
+        {
+          "id": "L10",
+          "fromSha256": "c4583bd6d2020c71c921b8208543b1c099f2dc4b96a79ae3f817110e16710340",
+          "toSha256": "423230329e476aa7110a8b2a23cc59859371028a593cb196fd12e87abd02584b"
+        },
+        {
+          "id": "L11",
+          "fromSha256": "6cda4755b116bf53069f5cd8ba8e667a0af7815c225f10c9eda348e991c51548",
+          "toSha256": "f5485753b5628eed570406061e21a1a66b80959c125eb165a318fdd215b12569"
+        },
+        {
+          "id": "L12",
+          "fromSha256": "8b004733ffda3484ae83801709d26e2b0c0fad04a89d0d65809b456d8647b99c",
+          "toSha256": "d714532d146f3d238bdfc1e90a0d21fb064cf5feed4196738072ad41d8fa7715"
+        },
+        {
+          "id": "L13",
+          "fromSha256": "0832c45d17e809d5e549cb5edb59475beb35e28dae5650f272e3cb77ce69175f",
+          "toSha256": "01a4f0c14e771a25e9972988f78c35e1259fdcc9e48bffd8192127b536f01c9b"
+        },
+        {
+          "id": "L14",
+          "fromSha256": "67d1ebd89241d081923c625677e0833fe05ee409454aedbfd4d7e7e2a1f6be65",
+          "toSha256": "79a3d511a3c76908aef0dd36b86cb3ef6f57cf64efaf6fc05b4d93068ff34942"
+        },
+        {
+          "id": "S01",
+          "fromSha256": "5dd95ca528afc53179594dfadd17435404ec981227893ed51deba550ae68ca71",
+          "toSha256": "064539937e7f04b8e871826f5a3c6ff42141c9161cf959123780605ad4864f88"
+        },
+        {
+          "id": "S02",
+          "fromSha256": "ec5fcd3973b2ce9710ac5a5ca4465ed9ee8cb958771defce986a129f5b27dd0e",
+          "toSha256": "f705c9b5d3c559463efd55ffb7419612fc17cf1ceb8146efcf33b8f0354d2e0f"
+        },
+        {
+          "id": "S03",
+          "fromSha256": "73cc7fe5700d645c83e1f17d3745f5e5253accbbcfba5a260a657269985d0f2a",
+          "toSha256": "80c83e48edf8e0a86713fb9da16e11cd0c101afe6784dbef6e72ddc2e8f001e8"
+        },
+        {
+          "id": "S04",
+          "fromSha256": "ee1c723c43f75e5d737c08e2fac5b7bb3fa6d51310583a189eb6884798be1540",
+          "toSha256": "c1376cd82b8805295683bda66e42f3fb16f9d2e51bb411495ee7e6a2c1a64047"
+        },
+        {
+          "id": "V01",
+          "fromSha256": "dd4200afd8e0c8f0a09a1f70c9b464c840f175539c56703b55c5ed9e927e99ca",
+          "toSha256": "521875c0f728f4a01ebca715447edd320a1a71de8e0f8c56d83c904f0b6e5217"
+        },
+        {
+          "id": "V02",
+          "fromSha256": "01d252eb1fe77f57c7db6c169e10bf2435a925d4568832d2b7cc1aaf729beda7",
+          "toSha256": "193e441ecdd2696a2312c38d0f354d289579e2d3ff323fc7fb372154a6b1d206"
+        },
+        {
+          "id": "V03",
+          "fromSha256": "33ac53bd55e7a6c98a4d42133aadac3bbd47f64c8563d8648b7c299eedb6c7b9",
+          "toSha256": "2acf90819ddbfec3530213096482f1d23636c7834b1f896c661018813475915b"
+        },
+        {
+          "id": "V04",
+          "fromSha256": "140fb6d95ffebf7680abb6a3837a93a6303901d64238dfac60d79e94c9baf5ba",
+          "toSha256": "e5dde44018b2004571002775b25a2326f9c77ddd72d3fbd5e728391ed49a0c19"
+        },
+        {
+          "id": "V05",
+          "fromSha256": "dd4cc69ee6530f8010b07a5364a8ff605d80b5085ae02770eb8c44a0db9ad39e",
+          "toSha256": "b09eea848034e6f33b4098fee9e01fc8397c73c45c101bd4b7b9e097664ea5e5"
+        },
+        {
+          "id": "V06",
+          "fromSha256": "7a7add539f2ec28b6078712d72d9ff0a7be82a53feb95fd589e6280c21fa0c16",
+          "toSha256": "ed5aafb2e33db7c7edc19bf1d2feba8011d08972e41c7a674d617e7ac5c9e842"
+        },
+        {
+          "id": "V07",
+          "fromSha256": "c282278203fe32f5848e4e5d29546156573e76c16a2a7afae392e98a00cd2c9e",
+          "toSha256": "c49f18a571379215e6ba5c0e998354d48480e5a98dc690f9af48cbe0ba963969"
+        },
+        {
+          "id": "V08",
+          "fromSha256": "202d342829db618ff8596cbf666108f639c226dfb6acf9c285d6a05f810ec8b7",
+          "toSha256": "cc20bd00133b73ee9eb886c8a709038b42ab307101acbb00275488a534fc6c70"
+        },
+        {
+          "id": "V09",
+          "fromSha256": "bb325803abbb417e56e7b0c0775687163406cc0bc401af7519fea4c1868513eb",
+          "toSha256": "75de29ade3d969f6c0570724092273650bd6e541c86f99755da27365f3287a4d"
+        },
+        {
+          "id": "V10",
+          "fromSha256": "3a10736e7e96c2beaa874169a882463b2602a383f7b7dd340d6085828c0c377a",
+          "toSha256": "8f78102bce6629bd517c692389efb4e3c7d75ca5c864d8c9b2c6f1116794f377"
+        },
+        {
+          "id": "V11",
+          "fromSha256": "d2a928817b5515d87034dfb5fe8fbf6be8f40da51d5703401b7e652fbcf73e4b",
+          "toSha256": "0064fc72cf567e4d21afc687aaa76778da393cc588ce8445fc765c4aed3227ff"
+        },
+        {
+          "id": "V12",
+          "fromSha256": "98234e72bf45f80946c708bf5e942ccc977767a741b2cc8de615c483a03c7809",
+          "toSha256": "ef4f8720c1a0a87e8a3aea9b7213dd1b47c1fc6d72b4895f0c7f5421cdc925e9"
+        },
+        {
+          "id": "V13",
+          "fromSha256": "f01587504c11bb716afbd1b4c33d95ce4e6d37504c413886213db65d15935054",
+          "toSha256": "be290707e4a634f44a696064d1514bf5ac1b92bb00e1558adafb36f449260274"
+        },
+        {
+          "id": "V14",
+          "fromSha256": "bfc73072937eda79d652bc58e7c2f0fa40c175411537f8d3461b44fdb6c6eae3",
+          "toSha256": "be2262a547d3bdfd1805e377bab72b9c73b35a96386934b84e31b502a6a2bbe7"
+        },
+        {
+          "id": "V15",
+          "fromSha256": "8d6013624f2f50981718c6ba932371137e3bf3605c505bbf373cdf107b2d2872",
+          "toSha256": "3e4dc9772c5c10f87746baa6b3a4af1b6d764d11b7eb745046be4860f608565c"
+        },
+        {
+          "id": "V16",
+          "fromSha256": "1d782e1c1081a6197acddf00868df9f75c3b696403353a75edc9fb204ea6176b",
+          "toSha256": "dd76c3d95e1bee2089df33779e4cbc61a22f1b2d02f7d06fbbad1c7eb3d4ae01"
+        },
+        {
+          "id": "V17",
+          "fromSha256": "f111e81e1b84f5fdbb38b0867c5e0efb082862fe2a5cd0ce61ff1ba563512a82",
+          "toSha256": "a7fa2c741a132db5d150c3296da03d11e1f309055ed9450a4f6ab4a758c08607"
+        },
+        {
+          "id": "G1",
+          "fromSha256": "a12fb2af3eda219c2e665b4a4c0125f9dec702115ac143c4427ddd07027f4235",
+          "toSha256": "d17b0e1b6fafa74f49d67280f0b51fa2abb47128e153177655dc4f53ba9996bb"
+        },
+        {
+          "id": "G2",
+          "fromSha256": "597d2e478c709bf1a0e6dd24410e1a715f7f8d041585bc8a49ce0adb112a2741",
+          "toSha256": "409b3813fd098ffdd38a093053a1bce03d6eab9e6cd6c1c3952d882dbc13ff75"
+        },
+        {
+          "id": "G3",
+          "fromSha256": "3939a33c34984d065948078022f4f22b93f528ffa0730fd1c36e30baa537d2d1",
+          "toSha256": "0cdf3784db80ed752234248b4e65e0acf6e3327d83c45a1ab36fcb37a8127dc2"
+        },
+        {
+          "id": "G4",
+          "fromSha256": "5e80f0c68d5a65ce9df620fd5aa1fbb16798f958ab8f76ecc10cc60b262055e8",
+          "toSha256": "8f9c6bd88fbd814de17c0973b3ccef96bcfa04a5b404b10d7786502546bba3fe"
+        },
+        {
+          "id": "G5",
+          "fromSha256": "53038181c1e4050da744bed9a434520ba40ad93d10a6a3dc24497d385184e765",
+          "toSha256": "325a992ba1ac8bc4f62b098707d4c32ff4877c75f7b14e7ab9dc5fe680f98d7a"
+        },
+        {
+          "id": "G6",
+          "fromSha256": "e888a9d641abe9d998436bcdca001f398af72c9f4191de8473445f33bb5ef780",
+          "toSha256": "4261d13090636d6286d7502f0ef949272d96d50c6f3ac1edca89b67c37fde0ad"
+        },
+        {
+          "id": "X01",
+          "fromSha256": "8f6646b12e491c1e84e1ca41eb84001532d5350eeebe61f169a4f1138b7ad420",
+          "toSha256": "56001d7e24f5f9a0dbfe5b0565add63c0f8ecab1df397891db1779096c7d44a6"
+        },
+        {
+          "id": "X02",
+          "fromSha256": "28e9dd5e247a951e069210cf7c4a9a41f5703b29cf99b7244441b68020ed1bd1",
+          "toSha256": "7e27e2d7bbf801e91861af4d388ffca4a03eb0b2001ddeae22e83d29f1610746"
+        },
+        {
+          "id": "X03",
+          "fromSha256": "a543a98bb1a277ba38c88b08c1931c52d6e715cc0f8bbed068d3050a75ed28c0",
+          "toSha256": "4154cbd29696a9e029239b13c4c335941bf7739f3b42d3c3f683615dcc1ae9ec"
+        },
+        {
+          "id": "X04",
+          "fromSha256": "bf246ded28ae46a0a026ca70393d7918ca6dbf9e325fd57e3ebd23aeb795d469",
+          "toSha256": "4434d55b64c3f6394ccd29814a2f3e6fab97a53c3b7517ff81e6defaf5553da7"
+        },
+        {
+          "id": "X05",
+          "fromSha256": "8a2f29e3226beb6b76137afcf4f04864d59cd3c39ed95c4734ea80bd605f3154",
+          "toSha256": "17a42b56dd1fdf9efe7d794f77faab8dadae1a87bd6aaf178e2673579d6ae26f"
+        },
+        {
+          "id": "X06",
+          "fromSha256": "d736a3dba4ee1ddf085e5256a26b0c2137fecc7e0a2644e362319fdbb905d429",
+          "toSha256": "3237424e942adedd096e385ffc330d009cc520fa1904b0d1f0cf547f49ceb984"
+        }
+      ],
+      "addedRows": [
+        {
+          "id": "T01",
+          "toSha256": "fb95568842784bda8c46916d0ee750668a39a67a958cb38bb235e1804a5fb3e8"
+        },
+        {
+          "id": "T02",
+          "toSha256": "85f16ed6e47f14466f849befcc120e96aa633ff712ab517282005f6330c6b9a9"
+        },
+        {
+          "id": "T03",
+          "toSha256": "0067ed1a9aee1415136b383d1c65c6858751dbcdb34402cc9fb9edca23e3b1b6"
+        },
+        {
+          "id": "T04",
+          "toSha256": "be94f53eb409bdd7cbee293b15427078de94a0bf2f101b718b6df1eada758f3b"
+        }
+      ],
+      "removedRows": []
+    }
+  ],
+  "limits": [
+    "Disposition authority only; no enrollment, publication, execution, parity or retirement authority.",
+    "Exact-byte owner approval and separate explicit delivery authorization are independent gates.",
+    "No commit, push, merge or upstream checkout write is authorized by this packet."
+  ],
+  "approver": "Requesting user (single-maintainer model)",
+  "exactApprovalInstruction": "approve",
+  "approvalSource": "Current conversation: the user replied \"approve\" to the final request to accept the exact ChatBot 1.1.0 and Memories 1.1.0 inventory bytes and cover all ten roles in this receipt. This approves inventory dispositions and named role coverage only; separate delivery authorization remains pending.",
+  "approvedOn": "2026-11-16",
+  "rolesCovered": [
+    "ChatBot owning maintainer",
+    "ChatBot Contracts/handler/admission/security maintainer",
+    "Memories owning maintainer",
+    "Memories Contracts/handler/identity/security maintainer",
+    "Memories operator-tooling/custody maintainer",
+    "EventStore/Gateway admission maintainer",
+    "McpCli product/architecture owner",
+    "McpCli contract/transport/security maintainer",
+    "McpCli dependency/Catalog and conformance maintainer",
+    "Platform architecture/security maintainer"
+  ]
+}

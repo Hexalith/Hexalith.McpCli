@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "1.0.0",
+  "state": "delivery-authorized-blocked-by-mandatory-repository-check",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py"
+      ],
+      "expectedExit": 0,
+      "exitCode": 0,
+      "stdout": "PASS: chatbot: 48 entries; memories: 55 entries (4 added PS14 modes); pinned anchors/drift, AD-23 dispositions and hash chains\nPASS: owner decision: approved; candidate only; owner approval and integrated PS06/PS07/PS12/PS13/PS14 labels remain completion gates\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py"
+      ],
+      "expectedExit": 0,
+      "exitCode": 0,
+      "stdout": "PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two README-only patches; candidate only; approval and delivery pending\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py",
+        "--approved-completion"
+      ],
+      "expectedExit": 1,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-I",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py",
+        "--approved-completion"
+      ],
+      "expectedExit": 1,
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels\n"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "expectedExit": 0,
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": "warning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\nwarning: unable to find all commit-graph files\n"
+    }
+  ],
+  "authorizationReceiptSha256": "595ad2d3473ba7bda63c8d552e94a73f7bab9c5d6e452b04b3bfb1ef9c227b2b",
+  "gateReceiptSha256": "f5df1f9db7b4b69c1eaaa7bb0461ed7d288e12b503dac1fc5a6893816acb48fb",
+  "commitAttempted": false,
+  "pushAttempted": false
+}

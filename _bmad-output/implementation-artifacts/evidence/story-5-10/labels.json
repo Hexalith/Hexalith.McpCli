@@ -1,0 +1,128 @@
+{
+  "schemaVersion": "1.0.0",
+  "state": "candidate-pending-owner-approval-and-delivery",
+  "predecessor": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/labels.json",
+    "sha256": "f53dfe3b9cfab2d831bff6c329a7d1eab179a32ccac1e0774df408257091cf40"
+  },
+  "priorRows": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-7/labels.json",
+    "sha256": "06d018c0c1aac60b4b19fcafd4fabfa23bd274c1433089311513320343ec10e6"
+  },
+  "inventoryArtifacts": {
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1"
+  },
+  "inventoryRevision": null,
+  "deliveryAuthorization": null,
+  "repositories": [
+    {
+      "name": "chatbot",
+      "repository": "https://github.com/Hexalith/Hexalith.ChatBot",
+      "ownerCheckout": "/home/administrator/projects/hexalith/chatbot",
+      "baseRevision": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
+      "readme": {
+        "beforeSha256": "6b3874701fbb50035d7187d92e740a1cb07080eddaa2910404fe1dd7ec114c03",
+        "afterSha256": "e6d142d116365628a5cbf9e466ea02177875168901f6ced7647994dcc339d97d"
+      },
+      "integration": null,
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.before.section.md",
+        "sha256": "09b051b0d61c95335554686c59b24512f1ca55b19d02b0b89cd6b16bef9649b2"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.after.section.md",
+        "sha256": "62628cc010c0a8ee362abb8a669a32424329b10cef3b7438b356f59be5576866"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.patch",
+        "sha256": "12ba84ff82f69f66a61109272569670671b5a8046ad33a9432f883dad4702f8f"
+      }
+    },
+    {
+      "name": "memories",
+      "repository": "https://github.com/Hexalith/Hexalith.Memories",
+      "ownerCheckout": "/home/administrator/projects/hexalith/memories",
+      "baseRevision": "9d87500eaf4c39ce0cec0cb3a03e5dd62c167106",
+      "readme": {
+        "beforeSha256": "6e6b45a2caf2756e9db25d9f55d4d4c787a88b7af24ee725264e596758c9e835",
+        "afterSha256": "d5a12b07d95676a554eb6fdfffb6e48fa60cbabd2b4a976885c92b1249bc0a9a"
+      },
+      "integration": null,
+      "before": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.before.section.md",
+        "sha256": "5f8138b02abf322d66fa30d6cce91b1a38e76e7c6b140ec6d33e2ba4c0d18a61"
+      },
+      "after": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.after.section.md",
+        "sha256": "8ed5e3575388ce8bfa894b8ebf20dc96bb4f4fefa0849d769e48143566be3b4a"
+      },
+      "patch": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.patch",
+        "sha256": "b20c1ef3233a663f03807f70196b6d765a820b8dac9d817ca574d79a7435e1dd"
+      }
+    }
+  ],
+  "rows": [
+    {
+      "id": "PS12",
+      "repository": "chatbot",
+      "surface": "Hexalith.ChatBot.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 181,
+        "text": "- `Hexalith.ChatBot.Cli` (CLI): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS12; [ChatBot inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. ChatBot inventory SHA-256: `3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c`.",
+        "sha256": "73e70610362032df533fb8a160fff4df1040f9db089e739c06e0f1c3e51a464d"
+      },
+      "gate": "ChatBot inventory gates"
+    },
+    {
+      "id": "PS13",
+      "repository": "chatbot",
+      "surface": "Hexalith.ChatBot.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 182,
+        "text": "- `Hexalith.ChatBot.Mcp` (stdio MCP server): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS13; [ChatBot inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. ChatBot inventory SHA-256: `3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c`.",
+        "sha256": "1386628dd21cff31c9efd5606b50a51f7e4252f448c02ff6d1599e7225ce6efd"
+      },
+      "gate": "ChatBot inventory gates"
+    },
+    {
+      "id": "PS06",
+      "repository": "memories",
+      "surface": "Hexalith.Memories.Cli",
+      "label": {
+        "file": "README.md",
+        "line": 134,
+        "text": "- `Hexalith.Memories.Cli` (.NET tool `memories`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS06; [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md)). Forwarded per-user identity is necessary but not sufficient for retirement. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Memories inventory SHA-256: `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1`.",
+        "sha256": "aa6a5f5e52d9069633dcb9f4883c632ab8f82cd64968e820dbf6af9a15a3d4b6"
+      },
+      "gate": "Memories gates, including forwarded per-user identity in the HTTP release"
+    },
+    {
+      "id": "PS07",
+      "repository": "memories",
+      "surface": "Hexalith.Memories.Mcp",
+      "label": {
+        "file": "README.md",
+        "line": 135,
+        "text": "- `Hexalith.Memories.Mcp` (container `memories-mcp`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS07; [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md)). Forwarded per-user identity is necessary but not sufficient for retirement. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. Memories inventory SHA-256: `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1`.",
+        "sha256": "3ba5480f1183a1d49d5fb48c29ae9986cc7d064bf26cf2d1eb795872c1d3434f"
+      },
+      "gate": "Memories gates, including forwarded per-user identity in the HTTP release"
+    },
+    {
+      "id": "PS14",
+      "repository": "memories",
+      "surface": "tools/MigrateEmbeddingVectors",
+      "label": {
+        "file": "README.md",
+        "line": 136,
+        "text": "- `tools/MigrateEmbeddingVectors` (operator CLI): removal gate \"Retained owner-held vector-migration exemption under merged AI.Tools plan 1.2.0; T01\u2013T04 four-mode inventory recorded; independent safety gates remain\" ([technical-tools inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md) PS14; [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md)). Forwarded per-user identity does not make this owner-held tool agent-safe. Retained owner-held local exemption under merged AI.Tools plan 1.2.0; --dry-run, --live, --rollback and --abort are recorded in T01\u2013T04 and still require independent tenant/credential/custody, consent, no-write dry-run, denial, rollback/abort and audit evidence. Never counted as retired. Technical inventory SHA-256: `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c`. [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md) T01\u2013T04 records --dry-run, --live, --rollback and --abort; no mode is retired. Memories inventory SHA-256: `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1`.",
+        "sha256": "a701255b6ddafdc273cb0d17cef09b0d07b9ddb64256ae73ecae0a99615ae0a2"
+      },
+      "gate": "Retained owner-held vector-migration exemption under merged AI.Tools plan 1.2.0; T01\u2013T04 four-mode inventory recorded; independent safety gates remain"
+    }
+  ]
+}

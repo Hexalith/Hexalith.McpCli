@@ -1,0 +1,23 @@
+{
+  "schemaVersion": "1.0.0",
+  "decision": "authorized",
+  "exactWords": "authorize",
+  "source": "Current conversation: after separate exact-byte owner approval, the user replied \"authorize\" to committing and pushing the approved Story 5.10 McpCli packet and both prepared upstream README-only updates. This authorization excludes unrelated local owner work, enrollment, live execution, parity acceptance and retirement.",
+  "approvedOn": "2026-11-16",
+  "approvalReceiptSha256": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229",
+  "inventoryArtifacts": {
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1"
+  },
+  "readmePatches": {
+    "chatbot": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.patch",
+      "sha256": "12ba84ff82f69f66a61109272569670671b5a8046ad33a9432f883dad4702f8f"
+    },
+    "memories": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.patch",
+      "sha256": "b20c1ef3233a663f03807f70196b6d765a820b8dac9d817ca574d79a7435e1dd"
+    }
+  },
+  "deliveryStrategy": "Use isolated owner origin/main checkouts, preserve unrelated local work and all root reference gitlinks/checkouts, require pinned commitlint validation and mandatory repository checks before pushing."
+}
