@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "package": {
     "id": "Hexalith.Projects.Contracts",
-    "version": "2.0.0-story66.2"
+    "version": "2.0.0-story66.3"
   },
   "operation": "projects.list",
   "kind": "query",

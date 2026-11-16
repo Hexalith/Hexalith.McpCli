@@ -8,6 +8,9 @@ source_spec: '_bmad-output/implementation-artifacts/spec-4-3-approve-projects-an
 approval_status: session-approved
 approval_authority: requesting-user-session
 approval_ref: '#a1-session-approval-2026-10-16'
+amendment_ref: '#story-66-successor-decision-2026-11-15'
+amendment_source_spec: '_bmad-output/implementation-artifacts/spec-6-6-inspect-projects-through-an-authenticated-cli-read-surface.md'
+amendment_approval_source: '_bmad-output/planning-artifacts/sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md#e8-mcpcli-sibling-repository-authorization-story-66-only'
 external_maintainer_approval: unasserted
 ---
 
@@ -30,7 +33,7 @@ Jerome approved the four supported read queries under Projects `_bmad-output/pla
 
 Every wire type is prefixed `Hexalith.Projects.Queries.`; all four omit both projection selectors for their committed computed routes (Story 6.6 D9) and use String identifiers. T01–T04 are new supported-target decisions, approved replace / include for supported reads only; their release-artifact decision-row IDs are also T01–T04 and do not reuse any legacy R/M/L/V row identity. They are transcribed into `tools/inventory-coverage/v1/projects-approved.json`. Identity and Tenant come from the platform credential; the Gateway authorizes each call. Safe Metadata is default; descriptive fields require `projects:inspect_descriptive_metadata` and durable server audit. Denied, foreign and absent targets share safe 404. Gateway 401/403 and safe target 404 exit 2 without payload; 200 Partial/Unavailable exits 0. No audit, write, preview, maintenance, Diagnostic Export, setup or context query is enrolled. Confirmation-required actions remain denied.
 
-The local candidate `2.0.0-story66.2` has no Conversations, Commons.Serialization or UI dependency. Byte-identical `conv:<id>` JSON survives the permitted CLR string change. The four approved vectors cover both Operation Shapes, and the query kind has a hash-bound list plan. Package publication and landing McpCli enrollment on main remain DW-82; no production enrollment, routing cutover, live-topology acceptance or retirement is claimed.
+The local candidate `2.0.0-story66.3` has no Conversations, Commons.Serialization or UI dependency. Byte-identical `conv:<id>` JSON survives the permitted CLR string change. The four approved vectors cover both Operation Shapes, and the query kind has a hash-bound list plan. Package publication and landing McpCli enrollment on main remain DW-82; no production enrollment, routing cutover, live-topology acceptance or retirement is claimed.
 
 The historical R/L/V rows and G1–G6 gates below retain their dispositions and owner obligations. The legacy parser's aliases, ignored options, differing exit codes and diagnostic audit behavior are migration evidence only; they are not recreated by these four supported reads.
 

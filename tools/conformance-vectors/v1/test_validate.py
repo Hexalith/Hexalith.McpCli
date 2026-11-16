@@ -324,13 +324,19 @@ class VectorContractTests(unittest.TestCase):
 
     def test_computed_query_can_omit_projection_selectors_at_every_call_position(self) -> None:
         for position in POSITIONS:
-            for actor in (None, "ItemProjectionActor"):
-                with self.subTest(position=position, actor=actor):
-                    document, step, _ = self._step_at(self.query, position)
-                    del step["expectedGateway"]["body"]["projectionType"]
-                    if actor is not None:
-                        step["expectedGateway"]["body"]["projectionActorType"] = actor
-                    self.assertEqual([], self._validate(document))
+            with self.subTest(position=position):
+                document, step, _ = self._step_at(self.query, position)
+                del step["expectedGateway"]["body"]["projectionType"]
+                step["expectedGateway"]["body"].pop("projectionActorType", None)
+                self.assertEqual([], self._validate(document))
+
+    def test_query_actor_requires_projection_type_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            with self.subTest(position=position):
+                document, step, pointer = self._step_at(self.query, position)
+                del step["expectedGateway"]["body"]["projectionType"]
+                step["expectedGateway"]["body"]["projectionActorType"] = "ItemProjectionActor"
+                self._assert_rejected(document, f"{pointer}/expectedGateway/body/projectionType")
 
     def test_gateway_request_bodies_reject_unknown_and_mistyped_fields_at_every_call_position(self) -> None:
         mistyped = (

@@ -167,7 +167,7 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
         findings.append(f"{pointer}/expectedGateway/body/tenant: must equal envelope tenant")
     routing_fields = ("domain", "aggregateId", "commandType") if kind == "command" else (
         "domain", "aggregateId", "queryType")
-    if kind == "query" and "projectionType" in body:
+    if kind == "query" and ("projectionType" in body or "projectionActorType" in body):
         routing_fields += ("projectionType",)
     for field in routing_fields:
         if not isinstance(body.get(field), str) or not body[field].strip():

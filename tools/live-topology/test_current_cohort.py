@@ -25,8 +25,11 @@ class CurrentCohortTests(unittest.TestCase):
     def test_current_vectors_only_change_package_versions_and_exact_deprecated_party_hints(self):
         legacy = ROOT / 'tools/conformance-vectors/v1/modules'
         current = ROOT / 'tools/conformance-vectors/v1/current/modules'
-        self.assertEqual({p.relative_to(legacy) for p in legacy.rglob('*.vector.json')},
-                         {p.relative_to(current) for p in current.rglob('*.vector.json')})
+        legacy_vectors = {p.relative_to(legacy) for p in legacy.rglob('*.vector.json')}
+        legacy_packages = {p.parts[0] for p in legacy_vectors}
+        current_legacy_vectors = {p.relative_to(current) for p in current.rglob('*.vector.json')
+                                  if p.relative_to(current).parts[0] in legacy_packages}
+        self.assertEqual(legacy_vectors, current_legacy_vectors)
         changes = []
         def transform(value, package):
             if isinstance(value, dict):

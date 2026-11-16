@@ -259,6 +259,7 @@ public sealed class CatalogTests
     [InlineData(typeof(Invalid.InvalidConstantQuery), "invalid_routing_value", "AggregateId 'bad id'")]
     [InlineData(typeof(Invalid.InvalidExampleQuery), "invalid_example", "Example violates the payload schema at /ItemId")]
     [InlineData(typeof(Invalid.InvalidIdentifierCommand), "invalid_identifier_type", "Declared identifier ItemId")]
+    [InlineData(typeof(Invalid.ActorOnlyProjectionQuery), "missing_routing_values", "ProjectionType")]
     [InlineData(typeof(Invalid.InvalidProjectionQuery), "invalid_routing_value", "ProjectionType 'Invalid Items'")]
     [InlineData(typeof(Invalid.InvalidRoleCommand), "invalid_property_reference", "names Missing, which is not a public instance property")]
     [InlineData(typeof(Invalid.InvalidRoutingQuery), "invalid_routing_value", "Domain 'Bad Domain'")]
@@ -333,7 +334,7 @@ public sealed class CatalogTests
         CatalogSnapshot catalog = CatalogBuilder.Build([typeof(Invalid.Module).Assembly]);
         catalog.Modules.Single().Operations.Select(operation => operation.ContractType)
             .ShouldBe([typeof(Invalid.DuplicateFirstQuery), typeof(Invalid.MissingProjectionQuery)]);
-        catalog.Diagnostics.Count.ShouldBe(35);
+        catalog.Diagnostics.Count.ShouldBe(36);
     }
 
     /// <summary>A Contracts assembly whose types cannot be loaded is excluded with the loader's cause.</summary>

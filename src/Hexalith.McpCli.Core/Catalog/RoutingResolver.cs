@@ -52,6 +52,7 @@ internal static partial class RoutingResolver
         {
             string.IsNullOrWhiteSpace(domain) ? DomainField : null,
             string.IsNullOrWhiteSpace(wireType) ? WireTypeField : null,
+            projectionType is null && projectionActorType is not null ? ProjectionTypeField : null,
         }.OfType<string>().ToArray();
         if (missing.Length > 0)
         {

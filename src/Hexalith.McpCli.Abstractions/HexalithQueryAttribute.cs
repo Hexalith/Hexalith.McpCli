@@ -43,7 +43,7 @@ public sealed class HexalithQueryAttribute(string description) : Attribute
     /// to select its committed route; explicit values must match that route and retain their normal validation.</remarks>
     public string? ProjectionType { get; set; }
 
-    /// <summary>Gets or sets the named projection actor type, when used.</summary>
+    /// <summary>Gets or sets the named projection actor type, when used with a projection type.</summary>
     public string? ProjectionActorType { get; set; }
 
     /// <summary>Gets or sets the exact CLR property filled from the envelope tenant.</summary>

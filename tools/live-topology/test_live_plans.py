@@ -408,12 +408,18 @@ class LiveKindCoverageTests(unittest.TestCase):
 
     def expected_reports(self, output, inventory_reports, approval_version=None, vector_version=None, extra_inventory_reports=()):
         """Require every current report in its phase order, including controlled version mutations."""
-        policy = json.loads((ROOT / 'tools/dependency-policy.json').read_text())
-        assets = json.loads((ROOT / 'src/Hexalith.McpCli/obj/project.assets.json').read_text())
+        import subprocess
+        project = ROOT / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
+        evaluation = subprocess.run(['dotnet', 'msbuild', str(project), '-p:Configuration=Release', '-getItem:PackageReference'],
+                                    cwd=ROOT, capture_output=True, text=True, check=True)
+        packages = [item['Identity'] for item in json.loads(evaluation.stdout)['Items']['PackageReference']
+                    if any(key.casefold() == 'hexalithcontracts' and value.casefold() == 'true'
+                           for key, value in item.items())]
+        assets = json.loads((project.parent / 'obj/project.assets.json').read_text())
         restored = {identity.rsplit('/', 1)[0].casefold(): identity.rsplit('/', 1)[1]
                     for identity, library in assets['libraries'].items() if library['type'] == 'package'}
         expected = []
-        for package in policy['modules']:
+        for package in packages:
             directory = ROOT / 'tools/conformance-vectors/v1/current/modules' / package
             receipt = json.loads((directory / 'approval.json').read_text())
             version = restored[package.casefold()]
@@ -459,9 +465,11 @@ class LiveKindCoverageTests(unittest.TestCase):
         self.assertEqual(['parties.list-parties'], [item['operation'] for item in selections])
         operations = sorted(item['operation'] for item in bindings)
         self.assertNotIn('parties.get-party', operations)
-        self.assertEqual(sorted(json.loads(path.read_text())['operation'] for path in
-                                (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json')
-                                if path.name != 'get-party.vector.json'), operations)
+        planned = {path.stem for path in (ROOT / 'tools/live-topology/plans-current').glob('*.json')} - {'parties.get-party'}
+        self.assertEqual(sorted(vector['operation'] for vector in
+                                (json.loads(path.read_text()) for path in
+                                 (ROOT / 'tools/conformance-vectors/v1/current/modules').rglob('*.vector.json'))
+                                if vector['operation'] in planned), operations)
         self.assertEqual(self.expected_current_reports, reports)
 
     def test_missing_live_kind_fails_naming_the_module_and_kind(self):
