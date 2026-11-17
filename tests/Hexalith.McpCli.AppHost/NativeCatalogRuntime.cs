@@ -50,7 +50,7 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
             using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(4));
             tenantOwner = await tenants.PrepareEventStoreDevelopmentOwnerAsync("Hexalith.Tenants.Contracts.dll",
                 "Hexalith.Tenants.Server.dll", TimeSpan.FromMinutes(3), deadline.Token).ConfigureAwait(false);
-            string adapter = Path.Combine(root, "references", "Hexalith.Parties", "src", "Hexalith.Parties.EventStoreExtensions",
+            string adapter = Path.Combine(NativeSourceFixtures.ModuleRoot(root, "Hexalith.Parties"), "src", "Hexalith.Parties.EventStoreExtensions",
                 "bin", "Release", "net11.0", "Hexalith.Parties.EventStoreExtensions.dll");
             string contracts = Path.Combine(Path.GetDirectoryName(adapter)!, "Hexalith.Parties.Contracts.dll");
             // Parties deliberately supplies its adapter as a separate artifact. The Platform reader

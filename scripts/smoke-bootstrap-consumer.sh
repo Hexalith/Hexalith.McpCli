@@ -1,12 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
+consumer_python="${MCPCLI_PRODUCT_PYTHON:-python3}"
 script_directory="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
 
 release_version="${1:?Release version is required}"
 package_source="${2:?Package source is required}"
 consumer_directory="${3:?Fresh consumer directory is required}"
-python3 "$script_directory/release-request.py" -- "$release_version" bootstrap
-package_source="$(python3 - "$package_source" <<'PY'
+"$consumer_python" - "$script_directory" "$release_version" <<'PYTHON'
+import sys
+sys.path.insert(0, sys.argv[1])
+from product_packages import validate_version
+validate_version(sys.argv[2])
+PYTHON
+package_source="$("$consumer_python" - "$package_source" <<'PY'
 from pathlib import Path
 import sys
 from urllib.parse import urlsplit
@@ -15,10 +21,15 @@ source = sys.argv[1]
 print(source if urlsplit(source).scheme in ('http', 'https') else Path(source).resolve())
 PY
 )"
-consumer_directory="$(realpath -m "$consumer_directory")"
+consumer_directory="$("$consumer_python" - "$consumer_directory" <<'PYTHON'
+from pathlib import Path
+import sys
+print(Path(sys.argv[1]).resolve())
+PYTHON
+)"
 mkdir "$consumer_directory"
 cp global.json "$consumer_directory/global.json"
-python3 - "$consumer_directory/NuGet.Config" "$package_source" <<'PY'
+"$consumer_python" - "$consumer_directory/NuGet.Config" "$package_source" <<'PY'
 import sys
 from xml.etree import ElementTree
 
@@ -30,10 +41,10 @@ fallback = ElementTree.SubElement(configuration, "fallbackPackageFolders")
 ElementTree.SubElement(fallback, "clear")
 ElementTree.ElementTree(configuration).write(sys.argv[1], encoding="utf-8", xml_declaration=True)
 PY
-consumer_framework="$(python3 - "$script_directory" "$release_version" <<'PYTHON'
+consumer_framework="$("$consumer_python" - "$script_directory" "$release_version" <<'PYTHON'
 import sys
 sys.path.insert(0, sys.argv[1])
-from paired_release import module
+from product_packages import module
 print(module('validate-release-packages').bootstrap_target_framework(sys.argv[2]))
 PYTHON
 )"

@@ -50,13 +50,17 @@ def manifest_shapes(manifest: list, package_id: str) -> dict[str, str]:
 
 
 def resolve_builds_props(repo: Path) -> Path:
-    """Use only a declared Builds checkout, including the enclosing umbrella workspace."""
+    """Use declared Builds props or the supported sibling import tree for private fixtures."""
     local = repo / 'references/Hexalith.Builds/Props'
     if local.is_dir():
         return local
     result = subprocess.run(['git', '-C', str(repo), 'rev-parse', '--show-superproject-working-tree'],
                             capture_output=True, text=True, check=False)
     if result.returncode != 0 or not result.stdout.strip():
+        for parent in (repo.parent, repo.parent.parent):
+            sibling = parent / 'Hexalith.Builds/Props'
+            if sibling.is_dir():
+                return sibling
         raise FileNotFoundError(f'Root-declared Builds props are unavailable for {repo}.')
     workspace = Path(result.stdout.strip())
     modules = configparser.ConfigParser()
@@ -207,12 +211,14 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
         if expected_inventory_hash is not None and receipt['approvalInputs']['inventory']['sha256'] != expected_inventory_hash:
             raise RuntimeError('Inventory bytes differ from the approved inventorySha256 during snapshot capture.')
         with tempfile.TemporaryDirectory(prefix='mcpcli-artifact-') as temporary:
-            scratch = Path(temporary)
+            scratch = Path(temporary) / 'module'
+            scratch.mkdir()
             env = {k: v for k, v in os.environ.items() if not k.startswith(('MCPCLI_', 'EVENTSTORE_'))}
             env['MCPCLI_CONFORMANCE_PROFILE_PATH'] = str(scratch / 'profile.json')
             env['NUGET_PACKAGES'] = str(scratch / 'packages')
+            env['NUGET_HTTP_CACHE_PATH'] = str(scratch / 'http-cache')
             shutil.copytree(repo / 'src', scratch / 'src', ignore=shutil.ignore_patterns('bin', 'obj', '.git'))
-            shutil.copytree(resolve_builds_props(repo), scratch / 'references/Hexalith.Builds/Props')
+            shutil.copytree(resolve_builds_props(repo), scratch.parent / 'Hexalith.Builds/Props')
             for name in ['Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'global.json', '.editorconfig']:
                 if (repo / name).exists():
                     shutil.copy2(repo / name, scratch / name)

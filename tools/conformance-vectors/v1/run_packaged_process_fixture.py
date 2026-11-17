@@ -166,11 +166,12 @@ def fixture(repo: Path, artifact: Path):
     artifact = artifact.resolve(strict=True)
     package_id, version = 'Hexalith.McpCli.Sample.Contracts', '1.0.0'
     with tempfile.TemporaryDirectory(prefix='mcpcli-packaged-process-') as temporary:
-        root = Path(temporary).resolve()
+        root = Path(temporary).resolve() / 'sample-only'
+        root.mkdir()
         # The synthetic receipt, inventory and flagged project exist only in this temporary repository.
         for name in ['src', 'tools/conformance-vectors/v1', 'tools/inventory-coverage/v1']:
             shutil.copytree(repo / name, root / name, ignore=shutil.ignore_patterns('bin', 'obj', '.git', '__pycache__'))
-        shutil.copytree(resolve_builds_props(repo), root / 'references/Hexalith.Builds/Props')
+        shutil.copytree(resolve_builds_props(repo), root.parent / 'Hexalith.Builds/Props')
         for name in ['Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'global.json', '.editorconfig']:
             if (repo / name).exists():
                 shutil.copy2(repo / name, root / name)
@@ -195,7 +196,10 @@ def fixture(repo: Path, artifact: Path):
         tree.write(props, encoding='unicode')
         env = {key: value for key, value in os.environ.items() if not key.startswith(('MCPCLI_', 'EVENTSTORE_'))}
         env['NUGET_PACKAGES'] = str(root / 'packages')
-        run(['dotnet', 'restore', project, '-p:Configuration=Release', f'-p:RestoreAdditionalProjectSources={artifact.parent}'], root, env)
+        env['NUGET_HTTP_CACHE_PATH'] = str(root / 'http-cache')
+        host_project = host / 'Hexalith.McpCli.ConformanceHost.csproj'
+        run(['dotnet', 'restore', host_project, '-p:Configuration=Release', f'-p:RestoreAdditionalProjectSources={artifact.parent}'], root, env)
+        run(['dotnet', 'build', host_project, '--no-restore', '--configuration', 'Release', '-warnaserror', '-m:1'], root, env)
         directory = root / 'tools/conformance-vectors/v1/current/modules' / package_id
         directory.mkdir(parents=True)
         vectors = []
@@ -286,16 +290,22 @@ def fixture(repo: Path, artifact: Path):
                         raise RuntimeError('Core depth 64/65 boundary differs from parser/schema rules: ' + failed.stdout)
         print('PASS all prerequisite/invocation/postcondition kinds, schemas, identifiers and excessive depth fail offline with located Core diagnostics.', flush=True)
 
-        # Preserve the real enrolled packages and add the synthetic fixture only in this temporary repository.
+        # The combined population is a distinct fixture with independent outputs and caches.
+        combined_root = root.parent / 'combined-module'
+        shutil.copytree(root, combined_root, ignore=shutil.ignore_patterns('bin', 'obj', 'packages', 'http-cache', 'positive', 'sdk-response-cases'))
+        combined_env = {**env, 'NUGET_PACKAGES': str(combined_root / 'packages'), 'NUGET_HTTP_CACHE_PATH': str(combined_root / 'http-cache')}
+        combined_tool = combined_root / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
+        combined_host = combined_root / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj'
         combined_project = ET.parse(repo / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj')
         enroll_fixture(combined_project.getroot(), package_id, preserve_existing=True)
-        combined_project.write(project, encoding='unicode')
-        run(['dotnet', 'restore', project, '-p:Configuration=Release', f'-p:RestoreAdditionalProjectSources={artifact.parent}'], root, env)
-        combined_output = root / 'combined'
-        run([sys.executable, root / 'tools/conformance-vectors/v1/check_enrolled.py', '--output', combined_output], root, env)
+        combined_project.write(combined_tool, encoding='unicode')
+        run(['dotnet', 'restore', combined_host, '-p:Configuration=Release', f'-p:RestoreAdditionalProjectSources={artifact.parent}'], combined_root, combined_env)
+        run(['dotnet', 'build', combined_host, '--no-restore', '--configuration', 'Release', '-warnaserror', '-m:1'], combined_root, combined_env)
+        combined_output = combined_root / 'combined'
+        run([sys.executable, combined_root / 'tools/conformance-vectors/v1/check_enrolled.py', '--output', combined_output], combined_root, combined_env)
         combined = json.loads((combined_output / 'enrolled.json').read_text())
-        expected_packages = [p['Identity'] for p in json.loads(run(['dotnet', 'msbuild', project,
-            '-getItem:PackageReference'], root, env).stdout)['Items']['PackageReference']
+        expected_packages = [p['Identity'] for p in json.loads(run(['dotnet', 'msbuild', combined_tool,
+            '-getItem:PackageReference'], combined_root, combined_env).stdout)['Items']['PackageReference']
             if p.get('HexalithContracts', '').lower() == 'true']
         if combined['result'] != 'passed' or set(combined['packages']) != set(expected_packages) \
                 or len(expected_packages) < 2 or combined['productionReplay']['packageCount'] != len(expected_packages):

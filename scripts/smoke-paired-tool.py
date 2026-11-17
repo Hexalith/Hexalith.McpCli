@@ -11,7 +11,7 @@ import subprocess
 import sys
 import threading
 import time
-from paired_release import check_prepared, digest, module, packages, write_new
+from product_packages import failure_detail, check_prepared, digest, module, packages, write_new
 
 
 def require(condition, message):
@@ -52,7 +52,7 @@ def smoke(staging, prepared_path, output):
                         '--configfile', config, '--no-cache'])
     tool = tools / ('hexalith.exe' if os.name == 'nt' else 'hexalith')
     result = execute('version', [tool, '--version'])
-    require(result.stdout.decode('utf-8').strip() == prepared['version'] and not result.stderr, 'Installed tool version/channel mismatch.')
+    require(result.stdout.decode('utf-8').strip() == prepared.get('tool_version', prepared['version']) and not result.stderr, 'Installed tool version/channel mismatch.')
 
     def discovery(name, *arguments):
         result = execute(name, [tool, *arguments])
@@ -250,7 +250,7 @@ def main():
         smoke(args.staging, args.prepared, args.output)
         return 0
     except (ValueError, KeyError, OSError, subprocess.SubprocessError, queue.Empty) as error:
-        print(f'Paired tool smoke failed: {module("verify-release-source").failure_detail(error)}', file=sys.stderr)
+        print(f'Paired tool smoke failed: {failure_detail(error)}', file=sys.stderr)
         return 1
 
 

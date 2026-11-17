@@ -2,6 +2,7 @@
   <PropertyGroup>
     <Description>Canonical serialization, schemas, and validation for Hexalith MCP operations.</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
   <ItemGroup>
     <InternalsVisibleTo Include="Hexalith.McpCli" />

@@ -93,31 +93,25 @@ def required_scope(path: Path, modules: set[str]) -> list[str]:
 def production_replay(repo: Path, output: Path, results: list[dict], record_progress=None) -> dict:
     """Exercise the real combined manifest; independent artifact hosts remain a separate gate."""
     project = repo / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj'
-    progress = {'result': 'pending', 'checks': []}
+    progress = {'result': 'pending', 'phase': 'production-inputs', 'checks': []}
 
     def save():
         if record_progress is not None:
             record_progress(progress)
 
     try:
-        for command, label in [
-            (['dotnet', 'restore', str(project), '-p:ConformanceProduction=true'], 'production-restore'),
-            (['dotnet', 'build', str(project), '--no-restore', '-c', 'Release', '-m:1', '-warnaserror',
-              '-p:ConformanceProduction=true'], 'production-build')]:
-            progress['phase'] = label
-            check = {'command': command, 'result': 'running'}
-            progress['checks'].append(check)
-            save()
-            result = subprocess.run(command, cwd=repo, capture_output=True, text=True)
-            (output / (label + '.stdout.txt')).write_text(result.stdout)
-            (output / (label + '.stderr.txt')).write_text(result.stderr)
-            check.update(exitCode=result.returncode, result='passed' if result.returncode == 0 else 'failed')
-            save()
-            if result.returncode != 0:
-                raise RuntimeError(f'{label} failed with exit {result.returncode}; see {output}: {result.stderr[-4000:]}')
+        # The caller supplies the ordinary production Release build. Replay
+        # must never change its restore graph, package cache or output bytes.
+        host = project.parent / 'bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
+        if not host.is_file():
+            raise RuntimeError('The already built production ConformanceHost is required.')
+        built = [project.parent / 'obj/project.assets.json',
+                 *(path for path in host.parent.iterdir() if path.suffix in ('.dll', '.json'))]
+        if any(not path.is_file() or path.is_symlink() for path in built):
+            raise RuntimeError('Production replay requires regular built outputs and restored assets.')
+        before = {path: hashlib.sha256(path.read_bytes()).hexdigest() for path in built}
         progress['phase'] = 'production-replay'
         save()
-        host = project.parent / 'bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
         selections = []
         for receipt in results:
             root = output / receipt['packageId']
@@ -139,6 +133,9 @@ def production_replay(repo: Path, output: Path, results: list[dict], record_prog
             except Exception as error:
                 stderr.write(str(error) + '\n')
                 raise
+        if any(not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != digest
+               for path, digest in before.items()):
+            raise RuntimeError('Production replay changed the shared build outputs or restored assets.')
         progress.update(result='passed', packageCount=len(selections),
                         operationCount=sum(len(result['operations']) for result in results), **discovered)
         save()

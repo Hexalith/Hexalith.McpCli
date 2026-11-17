@@ -6,7 +6,7 @@ import json
 import re
 import importlib.util
 import struct
-from paired_release import digest, run, write_new
+from product_packages import digest, run, write_new
 from pathlib import Path
 from xml.etree import ElementTree
 from zipfile import ZipFile
@@ -21,10 +21,8 @@ def main() -> int:
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     staging, version, phase = args.staging, args.version, args.phase
-    request_spec = importlib.util.spec_from_file_location("release_request", Path(__file__).with_name("release-request.py"))
-    request_module = importlib.util.module_from_spec(request_spec)
-    request_spec.loader.exec_module(request_module)
-    request_module.validate_version(version)
+    from product_packages import validate_version
+    validate_version(version)
     packages = json.loads(Path("tools/release-packages.json").read_text())["packages"]
     expected_ids = [package["id"] for package in packages]
     if expected_ids != ["Hexalith.McpCli.Abstractions", "Hexalith.McpCli"]:

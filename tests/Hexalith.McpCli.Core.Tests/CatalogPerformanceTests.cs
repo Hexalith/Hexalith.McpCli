@@ -52,7 +52,7 @@ public sealed class CatalogPerformanceTests
             Task<string> stderr = process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
             await process.WaitForExitAsync(TestContext.Current.CancellationToken);
             process.ExitCode.ShouldBe(0, await stdout + await stderr + (File.Exists(output) ? File.ReadAllText(output) : "Missing benchmark evidence."));
-            AssertCompletedEvidence(File.ReadAllText(output), Environment.GetEnvironmentVariable("MCPCLI_BENCHMARK_REQUIRE_V1") == "true", Environment.ProcessId);
+            AssertCompletedEvidence(File.ReadAllText(output), true, Environment.ProcessId);
         }
         catch (Exception exception)
         {
@@ -90,7 +90,7 @@ public sealed class CatalogPerformanceTests
             sample.GetCustomAttribute<HexalithModuleAttribute>()!.IdentifierKind.ShouldBe(IdentifierKind.Ulid);
             using JsonDocument scope = JsonDocument.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "conformance", "v1-scope.json")));
             string[] required = scope.RootElement.GetProperty("requiredModules").EnumerateArray().Select(value => value.GetString()!).ToArray();
-            bool requireV1 = Environment.GetEnvironmentVariable("MCPCLI_BENCHMARK_REQUIRE_V1") == "true";
+            bool requireV1 = true;
             var outcome = ConstructionOutcome(catalog.Diagnostics.Select(diagnostic => diagnostic.Message), clock.Elapsed.TotalMilliseconds,
                 required, catalog.Modules.Select(module => module.Name), requireV1);
             string evidence = JsonSerializer.Serialize(new

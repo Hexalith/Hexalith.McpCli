@@ -9,7 +9,7 @@ import platform
 import subprocess
 import sys
 from xml.etree import ElementTree
-from paired_release import digest, git, module, write_new
+from product_packages import failure_detail, digest, git, module, write_new
 
 WINDOWS_REQUIRED = [
     'Hexalith.McpCli.Core.Tests.ProfileStoreTests.WindowsProfileFilesHavePrivateAcls',
@@ -40,7 +40,9 @@ def run_tests(prepared_path, output):
     output = Path(output).resolve()
     output.mkdir(parents=True, exist_ok=False)
     system = platform.system()
-    suites = ['Core', 'Cli'] if system == 'Windows' else ['Cli'] if system == 'Darwin' else []
+    if system not in ('Windows', 'Darwin'):
+        raise ValueError('Platform suites require actual Windows or macOS execution.')
+    suites = ['Core', 'Cli'] if system == 'Windows' else ['Cli']
     env = {key: value for key, value in os.environ.items() if not key.startswith(('EVENTSTORE_', 'MCPCLI_'))}
     env['MCPCLI_HOME'] = str(output / 'home')
     def command(name, arguments, required=True):
@@ -57,9 +59,6 @@ def run_tests(prepared_path, output):
         if required:
             result.check_returncode()
         return result
-    if suites:
-        command('restore', ['dotnet', 'restore', 'Hexalith.McpCli.slnx', '-p:Version=' + prepared['version']])
-        command('build', ['dotnet', 'build', 'Hexalith.McpCli.slnx', '--no-restore', '--configuration', 'Release', '-warnaserror', '-p:Version=' + prepared['version']])
     outcomes = {}
     failures = []
     reports = []
@@ -107,7 +106,7 @@ def main():
         run_tests(args.prepared, args.output)
         return 0
     except (ValueError, KeyError, OSError, subprocess.SubprocessError) as error:
-        print(f'Platform validation failed: {module("verify-release-source").failure_detail(error)}', file=sys.stderr)
+        print(f'Platform validation failed: {failure_detail(error)}', file=sys.stderr)
         return 1
 
 

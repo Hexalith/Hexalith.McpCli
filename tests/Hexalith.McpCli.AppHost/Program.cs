@@ -77,7 +77,9 @@ string? scheduler = builder.Configuration["Dapr:SchedulerHostAddress"];
 IResourceBuilder<ParameterResource> key = builder.AddParameter("live-test-signing-key", () => signingKey!, secret: true);
 
 // Load the test-owned settings instead of the source host's sample Development registrations.
-IResourceBuilder<ProjectResource> gateway = builder.AddProject("eventstore", gatewayProject)
+IResourceBuilder<ProjectResource> gateway = (NativeSourceFixtures.Enabled && usePackagedGateway
+    ? builder.AddProject<PreparedGatewayProject>("eventstore")
+    : builder.AddProject("eventstore", gatewayProject))
     .WithEnvironment("ASPNETCORE_CONTENTROOT", builder.AppHostDirectory);
 foreach ((string name, string value) in routes.Concat(topicOverrides))
     gateway.WithEnvironment(name, value);
@@ -91,17 +93,21 @@ HexalithEventStoreResources topology = builder.AddHexalithEventStore(gateway, ad
 // Apply explicit token wiring only when the helper has not provisioned it.
 if (!builder.Resources.OfType<ParameterResource>().Any(parameter => parameter.Name == gateway.Resource.Name + "-app-api-token"))
     gateway.WithGeneratedEventStoreAppChannelToken();
-// Native SDK preparation builds this exact, validated source project using its ordinary launch metadata.
-// The cross-repository convenience helper suppresses builds, so retain its Dapr wiring on this unsuppressed resource.
-IResourceBuilder<ProjectResource> tenants = builder.AddProject("tenants", Path.Combine(sourceRoot, "references",
-    "Hexalith.Tenants", "src", "Hexalith.Tenants", "Hexalith.Tenants.csproj"))
+// The native lane uses separately built, byte-sealed source fixtures with the same Dapr resource graph.
+IResourceBuilder<ProjectResource> tenants = (NativeSourceFixtures.Enabled
+    ? builder.AddProject<PreparedTenantsProject>("tenants")
+    : builder.AddProject("tenants", Path.Combine(sourceRoot, "references",
+        "Hexalith.Tenants", "src", "Hexalith.Tenants", "Hexalith.Tenants.csproj")))
     .AddEventStoreDomainModule(topology, "tenants", access,
         daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
     .WithGeneratedEventStoreAppChannelToken()
     .WithEnvironment("Tenants__BootstrapGlobalAdminEnabled", builder.Configuration["Tenants:BootstrapGlobalAdminEnabled"])
     .WithEnvironment("Tenants__BootstrapGlobalAdminUserId", builder.Configuration["Tenants:BootstrapGlobalAdminUserId"]);
-IResourceBuilder<ProjectResource> parties = builder.AddHexalithPartiesServer(topology, access,
-    daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
+IResourceBuilder<ProjectResource> parties = (NativeSourceFixtures.Enabled
+    ? builder.AddProject<PreparedPartiesProject>("parties").AddEventStoreDomainModule(topology, "parties", access,
+        daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler)
+    : builder.AddHexalithPartiesServer(topology, access,
+        daprPlacementHostAddress: placement, daprSchedulerHostAddress: scheduler))
     .WithGeneratedEventStoreAppChannelToken();
 
 // Current qualification uses one managed runtime for metadata and its isolated resource processes.

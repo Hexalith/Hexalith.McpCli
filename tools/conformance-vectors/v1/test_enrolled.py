@@ -35,6 +35,17 @@ class BuildsPropsResolutionTests(unittest.TestCase):
                 self.assertEqual(props, resolve_builds_props(repo))
             self.assertFalse((repo / 'references/Hexalith.Builds').exists())
 
+    def test_private_fixture_uses_supported_sibling_import_tree_without_nested_catalog(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root = Path(temporary)
+            repo = root / 'module'
+            repo.mkdir()
+            props = root / 'Hexalith.Builds/Props'
+            props.mkdir(parents=True)
+            with patch('verify_artifact.subprocess.run', return_value=subprocess.CompletedProcess([], 1, '', '')):
+                self.assertEqual(props, resolve_builds_props(repo))
+            self.assertFalse((repo / 'references/Hexalith.Builds').exists())
+
     def test_refuses_undeclared_workspace_checkout(self):
         with tempfile.TemporaryDirectory() as temporary:
             workspace = Path(temporary)
@@ -977,9 +988,20 @@ class FullV1ScopeTests(unittest.TestCase):
 
 
 class CombinedConsumptionHashTests(unittest.TestCase):
+    def built_host(self, repo):
+        host = repo / 'tests/Hexalith.McpCli.ConformanceHost'
+        binary = host / 'bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll'
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b'already built production host')
+        assets = host / 'obj/project.assets.json'
+        assets.parent.mkdir()
+        assets.write_text('{}')
+        return binary
+
     def test_combined_replay_uses_retained_inputs_host_assets_and_every_approved_module(self):
         with tempfile.TemporaryDirectory() as directory:
             repo = Path(directory)
+            self.built_host(repo)
             output = repo / 'evidence'
             receipts, selections = [], []
             for module in ['first', 'second']:
@@ -1006,9 +1028,10 @@ class CombinedConsumptionHashTests(unittest.TestCase):
             self.assertEqual('passed', progress['result'])
             self.assertEqual(2, progress['operationCount'])
 
-    def test_retained_vector_mutation_during_production_build_blocks_replay(self):
+    def test_retained_vector_mutation_before_production_replay_is_refused(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
+            self.built_host(root)
             output = root / 'evidence'
             package = output / 'Module.Contracts'
             package.mkdir(parents=True)
@@ -1018,20 +1041,18 @@ class CombinedConsumptionHashTests(unittest.TestCase):
                        'operations': ['module.read'],
                        'retainedInputs': {'artifact': 'module.nupkg', 'vectors': {'original.json': vector.name}},
                        'vectors': {'original.json': hashlib.sha256(vector.read_bytes()).hexdigest()}}
-            def build(command, **kwargs):
-                if command[1] == 'build':
-                    vector.write_text('{"operation":"module.read","changed":true}')
-                return subprocess.CompletedProcess(command, 0, '', '')
-            with patch('check_enrolled.subprocess.run', side_effect=build), \
+            vector.write_text('{"operation":"module.read","changed":true}')
+            with patch('check_enrolled.subprocess.run') as commands, \
                     patch('check_enrolled.run_catalog') as replay:
                 with self.assertRaisesRegex(RuntimeError, 'retained vector bytes differ from recorded verification hash'):
                     check_enrolled.production_replay(root, output, [receipt])
             replay.assert_not_called()
+            commands.assert_not_called()
 
 
 class ProductionProgressTests(unittest.TestCase):
-    def test_restore_build_and_replay_failures_retain_structured_progress_in_enrolled_json(self):
-        for failed_phase in ['production-restore', 'production-build', 'production-replay']:
+    def test_missing_built_host_and_replay_failures_retain_structured_progress(self):
+        for failed_phase in ['production-inputs', 'production-replay']:
             with self.subTest(phase=failed_phase), tempfile.TemporaryDirectory() as directory:
                 root = Path(directory)
                 output = root / 'evidence'
@@ -1046,27 +1067,15 @@ class ProductionProgressTests(unittest.TestCase):
                 source = root / 'src/Hexalith.McpCli/obj/project.assets.json'
                 source.parent.mkdir(parents=True)
                 source.write_text('{}')
-                report_path = output / 'enrolled.json'
-                observed = []
-
+                if failed_phase == 'production-replay':
+                    CombinedConsumptionHashTests().built_host(root)
+                commands = []
                 def execute(command, **kwargs):
-                    if command[1] == 'msbuild':
-                        return subprocess.CompletedProcess(command, 0, json.dumps({'Items': {'PackageReference': [
-                            {'Identity': 'Module.Contracts', 'HexalithContracts': 'true'}]}}), '')
-                    phase = 'production-' + command[1]
-                    current = json.loads(report_path.read_text())['productionReplay']
-                    observed.append(copy.deepcopy(current))
-                    self.assertEqual(phase, current['phase'])
-                    self.assertEqual('running', current['checks'][-1]['result'])
-                    return subprocess.CompletedProcess(command, 9 if phase == failed_phase else 0,
-                                                       phase + ' output', phase + ' diagnostic')
-
-                def replay(*args, **kwargs):
-                    current = json.loads(report_path.read_text())['productionReplay']
-                    observed.append(copy.deepcopy(current))
-                    self.assertEqual('production-replay', current['phase'])
-                    raise RuntimeError('specific replay failure')
-
+                    commands.append(command)
+                    if command[1] != 'msbuild':
+                        raise AssertionError('Production replay repeated restore/build.')
+                    return subprocess.CompletedProcess(command, 0, json.dumps({'Items': {'PackageReference': [
+                        {'Identity': 'Module.Contracts', 'HexalithContracts': 'true'}]}}), '')
                 with patch.object(check_enrolled, '__file__', str(root / 'tools/conformance-vectors/v1/check_enrolled.py')), \
                         patch.object(sys, 'argv', ['check_enrolled.py', '--output', str(output)]), \
                         patch('check_enrolled.required_scope', return_value=[]), \
@@ -1077,25 +1086,20 @@ class ProductionProgressTests(unittest.TestCase):
                         patch('check_enrolled.approved_inventory', return_value='0' * 64), \
                         patch('check_enrolled.verify', return_value=receipt), \
                         patch('check_enrolled.subprocess.run', side_effect=execute), \
-                        patch('check_enrolled.run_catalog', side_effect=replay) as catalog, \
+                        patch('check_enrolled.run_catalog', side_effect=RuntimeError('specific replay failure')) as catalog, \
                         redirect_stdout(io.StringIO()), redirect_stderr(io.StringIO()):
                     self.assertEqual(1, check_enrolled.main())
-                result = json.loads(report_path.read_text())
+                result = json.loads((output / 'enrolled.json').read_text())
                 progress = result['productionReplay']
                 self.assertEqual('failed', result['result'])
                 self.assertFalse(result['fullV1Accepted'])
                 self.assertEqual('failed', progress['result'])
                 self.assertEqual(failed_phase, progress['phase'])
-                expected_codes = [9] if failed_phase == 'production-restore' else [0, 9] if failed_phase == 'production-build' else [0, 0]
-                self.assertEqual(expected_codes, [row['exitCode'] for row in progress['checks']])
-                for check in progress['checks']:
-                    self.assertEqual('dotnet', check['command'][0])
-                    self.assertEqual('failed' if check['exitCode'] else 'passed', check['result'])
-                self.assertIn('specific replay failure' if failed_phase == 'production-replay' else failed_phase + ' failed with exit 9', progress['error'])
-                self.assertEqual(len(expected_codes) + (failed_phase == 'production-replay'), len(observed))
+                self.assertEqual([], progress['checks'])
+                self.assertEqual(1, len(commands))
                 if failed_phase == 'production-replay':
+                    self.assertIn('specific replay failure', progress['error'])
                     self.assertIn('specific replay failure', (output / 'production-replay.stderr.txt').read_text())
                 else:
                     catalog.assert_not_called()
-                    self.assertEqual(failed_phase + ' output', (output / (failed_phase + '.stdout.txt')).read_text())
-                    self.assertEqual(failed_phase + ' diagnostic', (output / (failed_phase + '.stderr.txt')).read_text())
+                    self.assertIn('already built production ConformanceHost', progress['error'])
