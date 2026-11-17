@@ -1,217 +1,66 @@
 name: CI
-
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-
+  workflow_dispatch:
+permissions: {}
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
-
-permissions:
-  contents: read
-
+  group: ci-${{ github.event_name }}-${{ github.event_name == 'pull_request' && github.ref || github.sha }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 jobs:
   ci:
-    uses: Hexalith/Hexalith.Builds/.github/workflows/domain-ci.yml@99f7c86072ca7b35e3fbbaee4606a559a847805a
+    uses: "Hexalith/Hexalith.Builds/.github/workflows/ci.yml@v6.2.0"
+    permissions: {"actions": "write", "contents": "write"}
     with:
-      solution: Hexalith.McpCli.slnx
-      additional-sdk-version: '11.0.x'
-      test-platform: microsoft-testing-platform
-      unit-test-projects: |
-        tests/Hexalith.McpCli.Abstractions.Tests
-        tests/Hexalith.McpCli.Analyzers.Tests
-        tests/Hexalith.McpCli.Core.Tests
-        tests/Hexalith.McpCli.Manifest.Tests
-        tests/Hexalith.McpCli.Cli.Tests
-        tests/Hexalith.McpCli.Mcp.Tests
-      build-timeout-minutes: 60
-      aspire-test-project: tests/Hexalith.McpCli.Integration.Tests
-      aspire-continue-on-error: false
-      aspire-prepare-script: tools/live-topology/prepare-ci.sh
-      aspire-runner-script: tools/live-topology/run-ci.sh
-      aspire-prepare-timeout-minutes: 40
-      aspire-runner-timeout-minutes: 300
-      aspire-timeout-minutes: 360
-      aspire-evidence-path: TestResults/live-ci
-      dapr-version: '1.19.1'
-      dapr-runtime-version: '1.19.1'
-
-  release-automation:
-    runs-on: ubuntu-latest
+      job-timeout-minutes: 360
+    secrets:
+      registry-pull-username: ${{ secrets.HEXALITH_REGISTRY_PULL_USERNAME }}
+      registry-pull-password: ${{ secrets.HEXALITH_REGISTRY_PULL_PASSWORD }}
+  "windows-macos-product":
+    needs:
+    - ci
+    permissions:
+      contents: read
+    runs-on: macos-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        with:
-          node-version: '24'
-      - run: npm ci
-      - name: Verify pinned release automation and refusal guards
-        run: PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s scripts/tests -p 'test_*.py'
-      - name: Verify detached-source semantic-release version selection
-        run: node --test scripts/tests/select-release-version.test.mjs
-
-  proprietary-surface-census:
-    runs-on: ubuntu-latest
+    - uses: Hexalith/Hexalith.Builds/Github/prepare@v6.2.0
+      with:
+        global-json: ${{ needs.ci.outputs.global-json }}
+        module-authority: ${{ needs.ci.outputs.module-authority }}
+        module-manifest: ${{ needs.ci.outputs.module-manifest }}
+        solution: ${{ needs.ci.outputs.solution }}
+        source-revision: ${{ needs.ci.outputs.source-revision }}
+        submodules: ${{ needs.ci.outputs.submodules }}
+        windows-checkout: ${{ needs.ci.outputs.windows-checkout }}
+    - env:
+        HEXALITH_JOB_NAME: macos-product
+        HEXALITH_JOB_NEEDS: ${{ toJSON(needs) }}
+        HEXALITH_JOB_PARAMETERS: '{}'
+        HEXALITH_QUALIFICATION_PARAMETERS: '{}'
+      uses: ./.github/actions/macos-product
+    timeout-minutes: 60
+  "windows-windows-product":
+    needs:
+    - ci
+    permissions:
+      contents: read
+    runs-on: windows-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: false
-      - name: Initialize committed root-declared references without recursion
-        run: |
-          python3 - <<'PYTHON'
-          import importlib.util, pathlib, subprocess
-          path = pathlib.Path('tools/proprietary-surfaces/v1/check.py')
-          spec = importlib.util.spec_from_file_location('census', path)
-          census = importlib.util.module_from_spec(spec)
-          spec.loader.exec_module(census)
-          revision = census.git('.', 'rev-parse', '--verify', 'HEAD^{commit}')
-          roots = census.declarations(census.Tree('.', revision))
-          subprocess.run(['git', '-c', 'submodule.recurse=false', 'submodule', 'update',
-                          '--init', '--checkout', '--', *roots], check=True)
-          PYTHON
-      - name: Verify proprietary surface census refusal fixtures
-        run: python3 -m unittest discover -v -s tools/proprietary-surfaces/v1 -p 'test_*.py'
-      - name: Scan committed root reference pins for proprietary surfaces
-        if: ${{ always() }}
-        run: python3 tools/proprietary-surfaces/v1/check.py --output "$RUNNER_TEMP/proprietary-surface-census/census.json"
-      - name: Retain sanitized proprietary surface census report
-        if: ${{ always() }}
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: proprietary-surface-census
-          path: ${{ runner.temp }}/proprietary-surface-census/
-          if-no-files-found: warn
-
-  conformance-vector-contract:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: false
-      - name: Initialize root-declared Builds submodule
-        run: git submodule update --init -- references/Hexalith.Builds
-      - name: Set up .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
-        with:
-          global-json-file: global.json
-          dotnet-version: '11.0.x'
-      - name: Pack and validate the shared vector contract without a Head or Gateway
-        run: |
-          python3 -m venv "$RUNNER_TEMP/mcpcli-vector-venv"
-          source "$RUNNER_TEMP/mcpcli-vector-venv/bin/activate"
-          python3 -m pip install -r tools/conformance-vectors/v1/requirements.txt
-          bash tools/conformance-vectors/v1/run-sample-validation.sh Release
-
-  conformance-vector-loopback:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: false
-      - name: Initialize root-declared Builds submodule
-        run: git submodule update --init -- references/Hexalith.Builds
-      - name: Set up .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
-        with:
-          global-json-file: global.json
-          dotnet-version: '11.0.x'
-      - name: Install vector runner test tooling
-        run: |
-          python3 -m venv "$RUNNER_TEMP/mcpcli-vector-venv"
-          "$RUNNER_TEMP/mcpcli-vector-venv/bin/python" -m pip install -r tools/conformance-vectors/v1/requirements.txt
-      - name: Run packaged Contracts through CLI and MCP against reset Gateway replay
-        run: |
-          source "$RUNNER_TEMP/mcpcli-vector-venv/bin/activate"
-          bash tools/conformance-vectors/v1/run-sample-loopback.sh
-
-  enrolled-module-conformance:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: false
-      - name: Initialize root-declared Builds submodule
-        run: git submodule update --init -- references/Hexalith.Builds
-      - name: Set up .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
-        with:
-          global-json-file: global.json
-          dotnet-version: '11.0.x'
-      - name: Restore and build exact production catalog
-        run: |
-          dotnet restore Hexalith.McpCli.slnx
-          dotnet build Hexalith.McpCli.slnx --no-restore --configuration Release -warnaserror
-          dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net11.0/Hexalith.McpCli.Core.Tests.dll -class Hexalith.McpCli.Core.Tests.EnrolledModuleCoverageTests
-      - name: Benchmark first v1 Catalog construction in a fresh process
-        env:
-          MCPCLI_BENCHMARK_REQUIRE_V1: 'true'
-          MCPCLI_BENCHMARK_OUTPUT: ${{ runner.temp }}/enrolled-evidence/catalog-benchmark.json
-        run: dotnet tests/Hexalith.McpCli.Core.Tests/bin/Release/net11.0/Hexalith.McpCli.Core.Tests.dll -class Hexalith.McpCli.Core.Tests.CatalogPerformanceTests
-      - name: Validate restored-package integrity, Operation Shape coverage and both heads
-        if: ${{ !cancelled() }}
-        run: |
-          python3 -m venv "$RUNNER_TEMP/mcpcli-enrolled-venv"
-          source "$RUNNER_TEMP/mcpcli-enrolled-venv/bin/activate"
-          python3 -m pip install -r tools/conformance-vectors/v1/requirements.txt
-          python3 -m unittest discover -v -s tools/conformance-vectors/v1 -p 'test_*.py'
-          python3 tools/conformance-vectors/v1/check_enrolled.py --output "$RUNNER_TEMP/enrolled-evidence"
-      - name: Retain enrolled-module receipts, inputs and diagnostics
-        if: ${{ always() }}
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: enrolled-module-evidence
-          path: ${{ runner.temp }}/enrolled-evidence/
-          if-no-files-found: warn
-
-  topology-vector-discovery:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          submodules: false
-      - name: Initialize root-declared Builds submodule
-        run: git submodule update --init -- references/Hexalith.Builds
-      - name: Set up .NET
-        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
-        with:
-          global-json-file: global.json
-          dotnet-version: '11.0.x'
-      - name: Install pinned non-live plan validator
-        run: |
-          python3 -m venv "$RUNNER_TEMP/mcpcli-live-venv"
-          "$RUNNER_TEMP/mcpcli-live-venv/bin/python" -m pip install -r tools/conformance-vectors/v1/requirements.txt
-      - name: Build and discover every live vector plus the independent cases without starting source services
-        run: |
-          source "$RUNNER_TEMP/mcpcli-live-venv/bin/activate"
-          dotnet restore tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj
-          dotnet build tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj --no-restore --configuration Release -warnaserror
-          python3 tools/live-topology/run-vectors.py --output "$RUNNER_TEMP/live-preflight" --preflight-only
-          python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'
-          dotnet tests/Hexalith.McpCli.Integration.Tests/bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll -preEnumerateTheories -list tests > "$RUNNER_TEMP/topology-smoke-discovery.txt"
-          python3 - "$RUNNER_TEMP/topology-smoke-discovery.txt" <<'PYTHON'
-          import json, pathlib, sys
-          discovered = [line for line in pathlib.Path(sys.argv[1]).read_text().splitlines()
-                        if line.startswith("Hexalith.McpCli.Integration.Tests.")]
-          # The expected live set is every approved vector that has a companion plan.
-          operations = sorted(operation for operation in (json.loads(path.read_text())["operation"] for path in
-                              pathlib.Path("tools/conformance-vectors/v1/current/modules").rglob("*.vector.json"))
-                              if pathlib.Path("tools/live-topology/plans-current", operation + ".json").is_file())
-          expected = ["Hexalith.McpCli.Integration.Tests.GatewaySmokeTests.AuthenticatedQueryReturnsSuccessfulDocument"]
-          expected += ["Hexalith.McpCli.Integration.Tests.SharedHeadBoundaryTests.SharedHeadsPreserveAuthorizationAndDeactivationSafety"]
-          expected += ['Hexalith.McpCli.Integration.Tests.LiveVectorTests.ApprovedVectorHasPersistentSemantics(operation: "' + operation + '")'
-                       for operation in operations]
-          if not operations or len(set(operations)) != len(operations) or sorted(discovered) != sorted(expected):
-              raise SystemExit(f"Expected every approved live vector plus independent smoke and boundary; discovered {discovered!r}")
-          print(f"Discovered {len(operations)} live vectors and the independent Gateway smoke and shared-head boundary.")
-          PYTHON
-      - name: Retain complete live preflight receipts and diagnostics
-        if: ${{ always() }}
-        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
-        with:
-          name: live-preflight-evidence
-          path: ${{ runner.temp }}/live-preflight/
-          if-no-files-found: warn
+    - uses: Hexalith/Hexalith.Builds/Github/prepare@v6.2.0
+      with:
+        global-json: ${{ needs.ci.outputs.global-json }}
+        module-authority: ${{ needs.ci.outputs.module-authority }}
+        module-manifest: ${{ needs.ci.outputs.module-manifest }}
+        solution: ${{ needs.ci.outputs.solution }}
+        source-revision: ${{ needs.ci.outputs.source-revision }}
+        submodules: ${{ needs.ci.outputs.submodules }}
+        windows-checkout: ${{ needs.ci.outputs.windows-checkout }}
+    - env:
+        HEXALITH_JOB_NAME: windows-product
+        HEXALITH_JOB_NEEDS: ${{ toJSON(needs) }}
+        HEXALITH_JOB_PARAMETERS: '{}'
+        HEXALITH_QUALIFICATION_PARAMETERS: '{}'
+      uses: ./.github/actions/windows-product
+    timeout-minutes: 60
