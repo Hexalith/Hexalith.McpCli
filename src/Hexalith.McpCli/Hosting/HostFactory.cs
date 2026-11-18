@@ -6,6 +6,7 @@ using Hexalith.McpCli.Mcp;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace Hexalith.McpCli.Hosting;
 
@@ -45,7 +46,13 @@ internal static class HostFactory
     {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder();
         builder.Logging.ClearProviders();
-        builder.Logging.AddConsole(options => options.LogToStandardErrorThreshold = LogLevel.Trace);
+        builder.Logging.AddConsole(options =>
+        {
+            options.LogToStandardErrorThreshold = LogLevel.Trace;
+            options.FormatterName = ConsoleFormatterNames.Simple;
+        });
+        // Stderr is the diagnostic channel; ANSI colors break the parsed console-log contract.
+        builder.Logging.AddSimpleConsole(options => options.ColorBehavior = LoggerColorBehavior.Disabled);
         _ = builder.Services.AddMcpCliCore(settings, manifest ?? ManifestLoader.Load, gateway =>
         {
             // The default client loggers write failure exceptions, which can quote downstream response content, to stderr.
