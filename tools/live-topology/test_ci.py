@@ -147,7 +147,7 @@ elif name == 'aspire':
             wrong = mode == 'bundle-home-mismatch' and relative == 'managed/aspire-managed' and file.parents[2] == pathlib.Path.home() / '.aspire'
             file.write_text('corrupted managed bundle' if wrong else 'qualified bundle')
     else:
-        print('13.6.2+unqualified' if mode == 'wrong-aspire' else '17.0.0+qualified')
+        print('16.0.0+unqualified' if mode == 'wrong-aspire' else '17.0.0+qualified')
 elif name == 'curl':
     import shutil
     destination = pathlib.Path(args[args.index('-o') + 1])
