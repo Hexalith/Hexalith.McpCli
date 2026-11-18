@@ -147,7 +147,7 @@ elif name == 'aspire':
             wrong = mode == 'bundle-home-mismatch' and relative == 'managed/aspire-managed' and file.parents[2] == pathlib.Path.home() / '.aspire'
             file.write_text('corrupted managed bundle' if wrong else 'qualified bundle')
     else:
-        print('13.6.2+unqualified' if mode == 'wrong-aspire' else '13.6.5+qualified')
+        print('13.6.2+unqualified' if mode == 'wrong-aspire' else '17.0.0+qualified')
 elif name == 'curl':
     import shutil
     destination = pathlib.Path(args[args.index('-o') + 1])
@@ -573,7 +573,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         (self.tools / 'runtime-profile-current.json').write_text(json.dumps(profile))
         ci = self.tools / 'ci.py'
         ci.write_text(ci.read_text().replace(
-            "ASPIRE_CLI_SHA256 = '6e22bd4daaa62d09320638246e57bfaf56ed147a3a87cdd5eafec277726ca978'",
+            "ASPIRE_CLI_SHA256 = '74a6d6418fcddb117770ccd235e2de4a96a02e36ebcfd0b0e2a0e69d6e85fc18'",
             'ASPIRE_CLI_SHA256 = ' + repr(hashlib.sha256(archive.read_bytes()).hexdigest())))
         fixture_home = self.root / 'home'
         self.fixture_home = fixture_home
@@ -2153,7 +2153,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
     def test_wrong_aspire_version_refuses_source_builds(self):
         result = self.invoke('prepare-ci.sh', 'wrong-aspire')
         self.assertNotEqual(0, result.returncode)
-        self.assertIn('Aspire CLI 13.6.5 is required.', result.stderr)
+        self.assertIn('Aspire CLI 17.0.0 is required.', result.stderr)
         self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
 
     def test_bootstrapped_binary_hash_mismatch_refuses_preparation(self):

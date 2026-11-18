@@ -10,8 +10,8 @@ non-launching AppHost preflight and composition inspection remain available.
 Requirements: Linux amd64, Python 3.11.4 or later,
 GNU or uutils coreutils `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and `libcrypto.so.3`),
 zlib (`libz.so.1`) and zstd (`libzstd.so.1`) shared libraries,
-Docker with a successful `docker info`, Aspire CLI 13.6.5 with its DCP and dashboard
-bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 13.6.5),
+Docker with a successful `docker info`, Aspire CLI 17.0.0 with its DCP and dashboard
+bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 17.0.0),
 Dapr CLI 1.19.1 and runtime 1.19.1 at
 `~/.dapr/bin/daprd`. User namespaces and network namespace creation must be
 permitted. For direct wrapper runs, install Dapr independently without
@@ -300,7 +300,7 @@ keys, RDB bytes and raw operational state remain outside uploaded evidence.
 This is infrastructure for native acceptance; public artifact approval and a
 complete successful remote vector and independent-case lane remain separate requirements.
 
-Aspire CLI 13.6.5 is installed from its official Linux x64 release archive when
+Aspire CLI 17.0.0 is installed from its official Linux x64 release archive when
 absent, with a pinned SHA-256 verified before extraction; bounded
 `aspire setup` extracts its embedded DCP/dashboard bundle when missing. An
 existing incompatible CLI or Dapr version is refused. Python requirements are

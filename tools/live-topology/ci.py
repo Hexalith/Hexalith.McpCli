@@ -44,8 +44,8 @@ MODULE_AUDIT_PROJECTS = (PACKAGE_GATEWAY,
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
 NAMESPACES = {'user', 'pid', 'net', 'mnt'}
 OWNER_FILE = '.mcpcli-ci-owner'
-ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v13.6.5/aspire-cli-linux-x64-13.6.5.tar.gz'
-ASPIRE_CLI_SHA256 = '6e22bd4daaa62d09320638246e57bfaf56ed147a3a87cdd5eafec277726ca978'
+ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v17.0.0/aspire-cli-linux-x64-17.0.0.tar.gz'
+ASPIRE_CLI_SHA256 = '74a6d6418fcddb117770ccd235e2de4a96a02e36ebcfd0b0e2a0e69d6e85fc18'
 # Exact root selections are a closed policy; owner projects use their native net11 graph.
 SOURCE_PACKAGE_VERSIONS = {
     'Google.Protobuf': ('Include', '3.36.2'),
@@ -66,8 +66,8 @@ def current_runtime_profile() -> dict:
     """Load only the finite current toolchain and its exact pinned native binary map."""
     path = ROOT / 'tools/live-topology/runtime-profile-current.json'
     value = json.loads(path.read_text())
-    expected = {'aspire': '13.6.5', 'dapr': '1.19.1', 'daprd': '1.19.1'}
-    if value.get('schemaVersion') != 1 or value.get('profile') != 'current-sdk51-aspire1365-dapr1191' \
+    expected = {'aspire': '17.0.0', 'dapr': '1.19.1', 'daprd': '1.19.1'}
+    if value.get('schemaVersion') != 1 or value.get('profile') != 'current-sdk51-aspire1700-dapr1191' \
             or set(value.get('tools', {})) != set(expected):
         raise ValueError('The exact finite current runtime profile is required.')
     if value.get('managedTestHosts') != {'runtime': '11.0.0', 'targetFramework': 'net11.0',
@@ -580,8 +580,8 @@ def prepare(evidence: Path) -> None:
         receipt['privateDirectory'] = str(private)
         save(evidence / 'preparation.json', receipt)
         tools['aspire'] = bounded(['aspire', '--version'], 30, evidence / 'aspire-version')
-        if tools['aspire'].split('+')[0] != '13.6.5':
-            raise RuntimeError('Aspire CLI 13.6.5 is required.')
+        if tools['aspire'].split('+')[0] != '17.0.0':
+            raise RuntimeError('Aspire CLI 17.0.0 is required.')
         tools['hostPython'] = sys.version
         tools['executables'] = {name: {'path': shutil.which(name), 'sha256': hashlib.sha256(Path(shutil.which(name)).read_bytes()).hexdigest()}
                                 for name in ('aspire', 'dapr', 'dotnet')}
