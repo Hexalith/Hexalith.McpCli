@@ -631,7 +631,8 @@ def prepare(evidence: Path) -> None:
                      url, '-o', str(archive)], 130, evidence / ('public-' + package['id']))
             native_cohort.verify_archive(archive, package)
         # Source checkouts do not initialize their nested Builds gitlinks. Use the pinned root
-        # catalog and current package policy for source hosts, retaining each owner's native net11 graph.
+        # catalog, container provenance targets, and current package policy for source hosts,
+        # retaining each owner's native net11 graph.
         builds_root = ROOT / 'references/Hexalith.Builds'
         declared_builds = bounded(['git', 'rev-parse', 'HEAD:references/Hexalith.Builds'],
                                   10, evidence / 'builds-declared', cwd=ROOT)
@@ -641,6 +642,9 @@ def prepare(evidence: Path) -> None:
         if actual_builds != declared_builds or builds_status or builds_root.is_symlink():
             raise ValueError('The root-declared Builds catalog must match its pinned clean direct checkout.')
         catalog = builds_root / 'Props/Directory.Packages.props'
+        provenance = builds_root / 'Props/ContainerProvenance.targets'
+        if not provenance.is_file():
+            raise ValueError('The qualified source catalog requires the pinned Builds ContainerProvenance.targets.')
         own_versions = ET.parse(ROOT / 'Directory.Build.props').getroot()
         redis = [item.get('Version') for item in own_versions.iter('PackageVersion')
                  if item.get('Update') == 'StackExchange.Redis']
@@ -728,6 +732,7 @@ def prepare(evidence: Path) -> None:
             properties.append('-p:HexalithMcpCliVersion=' + mcpcli[0])
             if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
                 properties.append('-p:HexalithBuildPackageVersions1=' + str(overlay))
+                properties.append('-p:HexalithContainerProvenanceTargets=' + str(provenance))
             source['HexalithEventStoreVersion'] = bounded(
                 ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion', *properties],
                 30, evidence / (module + '-eventstore-version'), cwd=working, environment=source_environment)

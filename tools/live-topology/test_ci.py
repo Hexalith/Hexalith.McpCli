@@ -419,6 +419,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         builds = self.root / 'references/Hexalith.Builds'
         (builds / 'Props').mkdir(parents=True)
         (builds / 'Props/Directory.Packages.props').write_text('<Project><ItemGroup /></Project>')
+        (builds / 'Props/ContainerProvenance.targets').write_text('<Project />')
         for module in ('EventStore', 'Tenants', 'Parties', 'Platform'):
             checkout = self.root / 'references' / ('Hexalith.' + module)
             project = checkout / 'src' / checkout.name / (checkout.name + '.csproj')
@@ -684,8 +685,10 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                          [row.attrib for row in overrides_xml.iter('PackageVersion')])
         for call in source_builds:
             self.assertFalse(any(argument.startswith('-p:RestoreEnablePackagePruning=') for argument in call))
+        provenance = self.root / 'references/Hexalith.Builds/Props/ContainerProvenance.targets'
         for call in source_builds:
             self.assertIn('-p:HexalithBuildPackageVersions1=' + str(overlay), call)
+            self.assertIn('-p:HexalithContainerProvenanceTargets=' + str(provenance), call)
         for call in source_builds:
             self.assertFalse(any(argument.startswith(('-p:HexalithMemoriesVersion=', '-p:HexalithTenantsVersion=')) for argument in call))
         deadlines = [call[4] for call in calls if call[0] == 'timeout' and call[5:7] == ['dotnet', 'build']]
@@ -725,12 +728,14 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual({'Hexalith.Tenants', 'Hexalith.Parties'}, set(prepared['gateway']['domainHosts']))
         property_calls = [call for call in calls if call[0] == 'dotnet' and call[2] == 'msbuild']
         self.assertEqual(2, len(property_calls))
+        provenance = self.root / 'references/Hexalith.Builds/Props/ContainerProvenance.targets'
         for call in property_calls:
             self.assertIn('-getProperty:HexalithEventStoreVersion', call)
             self.assertIn('-p:UseHexalithProjectReferences=false', call)
             self.assertIn('-p:UseNuGetDeps=true', call)
             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
             self.assertIn('-p:HexalithEventStoreVersion=5.4.0', call)
+            self.assertIn('-p:HexalithContainerProvenanceTargets=' + str(provenance), call)
         self.assertEqual(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '2280',
                           'python3', 'tools/live-topology/ci.py', 'prepare'], calls[0])
         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())
@@ -1197,6 +1202,13 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                 self.assertIn('pinned clean direct checkout', result.stderr)
                 self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
                 self.assertFalse(any(call[0] == 'git' and call[2] in ('fetch', 'checkout') for call in self.calls()))
+
+    def test_missing_container_provenance_targets_refuses_source_prepare(self):
+        (self.root / 'references/Hexalith.Builds/Props/ContainerProvenance.targets').unlink()
+        result = self.invoke('prepare-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('ContainerProvenance.targets', result.stderr)
+        self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
 
     def test_after_preparation_source_and_selection_drift_refuse_before_vectors(self):
         selection_path = self.tools / 'native-runtime-current.json'
@@ -1689,12 +1701,14 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual(1, result.returncode)
         receipt = json.loads((self.evidence / 'preparation.json').read_text())
         overlay = Path(receipt['privateDirectory']) / 'source-runtime-packages.props'
+        provenance = self.root / 'references/Hexalith.Builds/Props/ContainerProvenance.targets'
         command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
                    '-warnaserror -m:1 -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low '
                    '-p:TreatWarningsAsErrors=true -p:WarningsNotAsErrors= -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
                    '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=5.4.0 '
                    '-p:HexalithMcpCliVersion=3.0.0 '
-                   f'-p:HexalithBuildPackageVersions1={overlay}')
+                   f'-p:HexalithBuildPackageVersions1={overlay} '
+                   f'-p:HexalithContainerProvenanceTargets={provenance}')
         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
         stderr = self.evidence / 'Hexalith.Tenants-build.stderr.txt'
         error = f'{command} exited 23; stdout: {stdout}; stderr: {stderr}'
