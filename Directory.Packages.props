@@ -24,6 +24,6 @@
     <PackageVersion Update="Aspire.Hosting.Redis" Version="17.0.0" />
     <PackageVersion Update="Aspire.Hosting.Testing" Version="17.0.0" />
     <PackageVersion Update="Aspire.Microsoft.Azure.Cosmos" Version="17.0.0" />
-    <PackageVersion Update="CommunityToolkit.Aspire.Hosting.Dapr" Version="17.0.0-beta.1052" />
+    <PackageVersion Update="CommunityToolkit.Aspire.Hosting.Dapr" Version="17.0.0-beta.1078" />
   </ItemGroup>
 </Project>
