@@ -283,10 +283,11 @@ def gateway_package_provenance(source_root: Path | None = None) -> dict:
                for module in ('Hexalith.Tenants', 'Hexalith.Parties')}
     adapter = restored_cohort(source_root / 'Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                               'Hexalith.EventStore.DomainService', deployed_required=True)
+    tenant = native_cohort.TENANT_COHORTS[EVENTSTORE_COHORT]
     composition = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj',
-                                                      selection, 'Hexalith.Tenants.Aspire/8.0.0')
+                                                      selection, 'Hexalith.Tenants.Aspire/' + tenant)
     client = native_cohort.verify_runtime_assets(ROOT / 'tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj',
-                                                 selection, 'Hexalith.Tenants.Contracts/8.0.0')
+                                                 selection, 'Hexalith.Tenants.Contracts/' + tenant)
     source = ROOT / 'references/Hexalith.EventStore'
     host = (ROOT / PACKAGE_GATEWAY).parent
     manifest = host / 'Configuration/provenance-current.json'
@@ -646,8 +647,8 @@ def prepare(evidence: Path) -> None:
         if not catalog.is_file() or redis != ['3.4.35']:
             raise ValueError('The qualified source catalog requires the exact root Redis 3.4.35 override.')
         mcpcli = [item.text for item in own_versions.iter('HexalithMcpCliVersion')]
-        if mcpcli != ['2.0.1']:
-            raise ValueError('The qualified source catalog requires the exact root McpCli 2.0.1 pin.')
+        if mcpcli != ['3.0.0']:
+            raise ValueError('The qualified source catalog requires the exact root McpCli 3.0.0 pin.')
         selections = source_package_versions(own_versions)
         overlay = private / 'source-runtime-packages.props'
         project_xml = ET.Element('Project')

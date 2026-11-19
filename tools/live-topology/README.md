@@ -176,13 +176,13 @@ Every live child still proves all four private namespaces; setup or probe failur
 fails preparation.
 
 `prepare-ci.sh` authenticates the complete native runtime selection in
-`native-runtime-current.json`: exact public EventStore **5.1.0** archives, public Tenants
-**8.0.0** archives and their embedded repository commits, plus the separately
+`native-runtime-current.json`: exact public EventStore **5.4.0** archives, public Tenants
+**8.0.2** archives and their embedded repository commits, plus the separately
 qualified Parties and Platform source revisions. Parties source commit
-`785f8164d51579a191405a15a917232795f93449` explicitly admits SDK 5.1.0;
-its public Contracts and Aspire helpers remain 3.1.1. Tenants 8.0.0 binds
-`0cfe90e887e4d9d9f0168cba98fca1852cb80313`. The current
-Testing.Integration **5.1.0** package consumes Platform descriptors. This isolated
+`7639a5d20c36ce3e2ec5139685f3b08dbf2ab1f9` matches public Contracts and Aspire
+helpers **4.0.0**. Tenants 8.0.2 binds
+`30b233026648488ca71fe5904fd218b7af934aed`. The current
+Testing.Integration **5.4.0** package consumes Platform descriptors. This isolated
 suite retains ownership of its AppHost through Aspire’s public testing API,
 with bounded startup, named endpoint discovery, liveness and independent cleanup.
 The product, current fixture hosts and selected owner exports target `net11.0`.
@@ -198,13 +198,13 @@ required. This configuration grants no acceptance before the full live lane.
 
 The historical `native-runtime.json`, approved current vectors and plans, and prior receipts remain unchanged.
 Current vectors retain their bound Tenants 7.0.7 version; the ordinary conformance gate reports
-the restored 8.0.0 difference. The newly decorated RefreshTenantAccess operation shares an approved
+the restored 8.0.2 difference. The newly decorated RefreshTenantAccess operation shares an approved
 Operation Shape; its omitted inventory row is reported, and no live repair-semantics proof is claimed.
 
 Generic CLI and MCP query requests preserve every descriptor-declared
 `projectionActorType`, when the current owner declares one. The current Parties annotations omit the
 deprecated compatibility hint and retain the same domain-service projection target. SDK
-5.1.0 supplies the exact owner-enrolled selector policy. The immutable Parties
+5.4.0 supplies the exact owner-enrolled selector policy. The immutable Parties
 source selection includes its three digest-bound compatibility bindings; foreign
 selectors remain refused. The committed catalog chooses the actual receiver.
 Fresh complete native CI remains required for this selected cohort; offline
@@ -218,7 +218,7 @@ qualified commit; local revisions and nested dependencies are never updated.
 All builds and nested preparation processes inherit a fresh task-owned
 `NUGET_PACKAGES`. The actual gateway, domain hosts, separate Parties adapter and
 Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the current root catalog’s published dependency selections. Source hosts and
-the separate adapter use the root McpCli 2.0.1 pin so their Abstractions identity
+the separate adapter use the root McpCli 3.0.0 pin so their Abstractions identity
 matches the AppHost, including later SDK/Aspire rebuilds. The current Tenant
 source build uses the standard `LoggerMessage` generator from the exact
 `Microsoft.NETCore.App.Ref` 11.0.0 targeting pack. The telemetry replacement generator emits its two nested
@@ -255,7 +255,7 @@ catalog files and the pinned catalog; execution rejects source or file drift
 before vectors and again before smoke. Server build commands retain their
 separate 300-second bounds. The owned gateway's mandatory
 configuration snapshot is verified against native source commit
-`49084f66f8d6545cae442875355a7066d5f5e73d`, matching the public 5.1.0 archive
+`2ec21f631a2e292fba8c5537fe665ab275ed1081`, matching the public 5.4.0 archive
 metadata; normal overrides, real JWT validation and sidecar tokens remain active.
 
 Before creating any digest material or catalog authority, the AppHost verifies

@@ -129,7 +129,7 @@ if name == 'dotnet':
             warnings['warnNotAsError'] = [] if '-p:WarningsNotAsErrors=' in args else ['NU1901', 'NU1902', 'NU1903', 'NU1904']
             assets.write_text(json.dumps(document))
     elif args[0] == 'msbuild':
-        print('4.0.3' if mode == 'wrong-package-cohort' else '5.1.0')
+        print('4.0.3' if mode == 'wrong-package-cohort' else '5.4.0')
     sys.exit(0)
 if name == 'dapr':
     print('CLI version: ' + ('1.18.0' if mode == 'wrong-dapr-cli' else '1.19.1') + '\nRuntime version: ' + ('1.18.0' if mode == 'wrong-dapr' else '1.19.1'))
@@ -413,7 +413,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         (self.root / 'global.json').write_text('{"sdk":{"version":"11.0.100","rollForward":"latestPatch"}}')
         (self.root / '.gitmodules').touch()
         (self.root / 'Directory.Build.props').write_text(
-            '<Project><PropertyGroup><HexalithMcpCliVersion>2.0.1</HexalithMcpCliVersion></PropertyGroup>'
+            '<Project><PropertyGroup><HexalithMcpCliVersion>3.0.0</HexalithMcpCliVersion></PropertyGroup>'
             '<ItemGroup>' + ''.join('<PackageVersion ' + mode + '="' + package + '" Version="' + version + '" />'
                                    for package, (mode, version) in SOURCE_PACKAGE_VERSIONS.items()) + '</ItemGroup></Project>')
         builds = self.root / 'references/Hexalith.Builds'
@@ -435,16 +435,16 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         assemblies = ('Gateway', 'Server', 'DomainService', 'Contracts')
         for suffix in assemblies:
             name = 'Hexalith.EventStore.' + suffix
-            package = cache / name.lower() / '5.1.0'
+            package = cache / name.lower() / '5.4.0'
             package.mkdir(parents=True)
-            nuspec = ('<package><metadata><id>' + name + '</id><version>5.1.0</version><repository commit="'
+            nuspec = ('<package><metadata><id>' + name + '</id><version>5.4.0</version><repository commit="'
                       + 'a' * 40 + '" url="https://github.com/Hexalith/Hexalith.EventStore.git" /></metadata></package>').encode()
             payload = (name + '-qualified-fixture').encode()
             (package / (name.lower() + '.nuspec')).write_bytes(nuspec)
             extracted = package / ('lib/net11.0/' + name + '.dll')
             extracted.parent.mkdir(parents=True)
             extracted.write_bytes(payload)
-            with ZipFile(package / (name.lower() + '.5.1.0.nupkg'), 'w') as archive:
+            with ZipFile(package / (name.lower() + '.5.4.0.nupkg'), 'w') as archive:
                 archive.writestr(name + '.nuspec', nuspec)
                 archive.writestr('lib/net11.0/' + name + '.dll', payload)
         projects = [gateway, *(self.root / 'references' / ('Hexalith.' + module) / 'src' / ('Hexalith.' + module)
@@ -457,7 +457,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             (project / 'obj').mkdir(exist_ok=True)
             output = project / 'bin/Release/net11.0'
             output.mkdir(parents=True)
-            libraries = {'Hexalith.EventStore.' + suffix + '/5.1.0': {'type': 'package'} for suffix in assemblies}
+            libraries = {'Hexalith.EventStore.' + suffix + '/5.4.0': {'type': 'package'} for suffix in assemblies}
             target = {name: {'type': 'package', 'runtime': {'lib/net11.0/' + name.split('/')[0] + '.dll': {}}}
                       for name in libraries}
             (project / 'obj/project.assets.json').write_text(json.dumps({
@@ -471,11 +471,11 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         (platform / 'Program.cs').touch()
         (platform / 'PublishedCatalogArtifactCohort.cs').write_text('// inert cohort fixture')
         (self.root / 'Directory.Packages.props').write_text('<Project />')
-        tenants_package = cache / 'hexalith.tenants.contracts/8.0.0'
+        tenants_package = cache / 'hexalith.tenants.contracts/8.0.2'
         tenants_package.mkdir(parents=True)
-        with ZipFile(tenants_package / 'hexalith.tenants.contracts.8.0.0.nupkg', 'w') as archive:
-            archive.writestr('Hexalith.Tenants.Contracts.nuspec', '<package><metadata><id>Hexalith.Tenants.Contracts</id><version>8.0.0</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>')
-        selection = {'eventStoreVersion': '5.1.0', 'sources': {
+        with ZipFile(tenants_package / 'hexalith.tenants.contracts.8.0.2.nupkg', 'w') as archive:
+            archive.writestr('Hexalith.Tenants.Contracts.nuspec', '<package><metadata><id>Hexalith.Tenants.Contracts</id><version>8.0.2</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>')
+        selection = {'eventStoreVersion': '5.4.0', 'sources': {
             'Hexalith.' + module: {'repository': 'https://github.com/Hexalith/Hexalith.' + module + '.git', 'commit': 'a' * 40}
             for module in ('EventStore', 'Tenants', 'Parties', 'Platform')}, 'packages': []}
         for archive in cache.rglob('*.nupkg'):
@@ -486,21 +486,21 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                                           'sha256': hashlib.sha256(archive.read_bytes()).hexdigest()})
         # Aspire is represented by the same synthetic archive machinery as the runtime SDK.
         aspire = dict(selection['packages'][0], id='Hexalith.EventStore.Aspire')
-        folder = cache / 'hexalith.eventstore.aspire/5.1.0'
+        folder = cache / 'hexalith.eventstore.aspire/5.4.0'
         folder.mkdir(parents=True)
-        with ZipFile(folder / 'hexalith.eventstore.aspire.5.1.0.nupkg', 'w') as archive:
-            archive.writestr('Hexalith.EventStore.Aspire.nuspec', '<package><metadata><id>Hexalith.EventStore.Aspire</id><version>5.1.0</version><repository url="https://github.com/Hexalith/Hexalith.EventStore.git" commit="' + 'a' * 40 + '" /></metadata></package>')
-        aspire['sha256'] = hashlib.sha256((folder / 'hexalith.eventstore.aspire.5.1.0.nupkg').read_bytes()).hexdigest()
+        with ZipFile(folder / 'hexalith.eventstore.aspire.5.4.0.nupkg', 'w') as archive:
+            archive.writestr('Hexalith.EventStore.Aspire.nuspec', '<package><metadata><id>Hexalith.EventStore.Aspire</id><version>5.4.0</version><repository url="https://github.com/Hexalith/Hexalith.EventStore.git" commit="' + 'a' * 40 + '" /></metadata></package>')
+        aspire['sha256'] = hashlib.sha256((folder / 'hexalith.eventstore.aspire.5.4.0.nupkg').read_bytes()).hexdigest()
         selection['packages'].append(aspire)
         (self.tools / 'native-runtime-current.json').write_text(json.dumps(selection))
         for project_name, package_name in [('AppHost', 'Aspire'), ('ConformanceHost', 'Contracts')]:
             package_id = 'Hexalith.Tenants.' + package_name
-            folder = cache / package_id.lower() / '8.0.0'
+            folder = cache / package_id.lower() / '8.0.2'
             folder.mkdir(parents=True, exist_ok=True)
-            nuspec = ('<package><metadata><id>' + package_id + '</id><version>8.0.0</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>').encode()
+            nuspec = ('<package><metadata><id>' + package_id + '</id><version>8.0.2</version><repository url="https://github.com/Hexalith/Hexalith.Tenants.git" commit="' + 'a' * 40 + '" /></metadata></package>').encode()
             payload = (package_id + '-public-fixture').encode()
             asset = 'lib/net11.0/' + package_id + '.dll'
-            archive = folder / (package_id.lower() + '.8.0.0.nupkg')
+            archive = folder / (package_id.lower() + '.8.0.2.nupkg')
             with ZipFile(archive, 'w') as content:
                 content.writestr(package_id + '.nuspec', nuspec)
                 content.writestr(asset, payload)
@@ -509,14 +509,14 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             (folder / asset).write_bytes(payload)
             previous = next((item for item in selection['packages'] if item['id'] == package_id), None)
             if previous is not None: selection['packages'].remove(previous)
-            selection['packages'].append({'id': package_id, 'version': '8.0.0', 'sourceCommit': 'a' * 40,
+            selection['packages'].append({'id': package_id, 'version': '8.0.2', 'sourceCommit': 'a' * 40,
                                           'sha256': hashlib.sha256(archive.read_bytes()).hexdigest()})
             project = self.root / 'tests' / ('Hexalith.McpCli.' + project_name)
             (project / 'obj').mkdir(parents=True, exist_ok=True)
             output = project / 'bin/Release/net11.0'
             output.mkdir(parents=True, exist_ok=True)
             (output / (package_id + '.dll')).write_bytes(payload)
-            identity = package_id + '/8.0.0'
+            identity = package_id + '/8.0.2'
             (project / 'obj/project.assets.json').write_text(json.dumps({'libraries': {identity: {'type': 'package'}},
                 'targets': {'net11.0': {identity: {'runtime': {asset: {}}}}}, 'packageFolders': {str(cache): {}}}))
         (self.tools / 'native-runtime-current.json').write_text(json.dumps(selection))
@@ -545,7 +545,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             'Properties/launchSettings.json': 'src/Hexalith.EventStore/Properties/launchSettings.json',
         }
         (gateway / 'Configuration/provenance-current.json').write_text(json.dumps({
-            'profile': 'published', 'eventStoreVersion': '5.1.0',
+            'profile': 'published', 'eventStoreVersion': '5.4.0',
             'sourceRepository': 'https://github.com/Hexalith/Hexalith.EventStore.git', 'sourceCommit': 'a' * 40,
             'files': {relative: {'sourcePath': original, 'sha256': hashlib.sha256((gateway / relative).read_bytes()).hexdigest()}
                       for relative, original in files.items()}}))
@@ -653,8 +653,8 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             self.assertIn('-p:UseNuGetDeps=true', call)
             self.assertIn('Release', call)
             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
-            self.assertIn('-p:HexalithEventStoreVersion=5.1.0', call)
-            self.assertIn('-p:HexalithMcpCliVersion=2.0.1', call)
+            self.assertIn('-p:HexalithEventStoreVersion=5.4.0', call)
+            self.assertIn('-p:HexalithMcpCliVersion=3.0.0', call)
             self.assertNotIn('-p:HexalithEventStoreFromSource=true', call)
             self.assertNotIn('-p:McpCliCurrentNativeProfile=true', call)
             self.assertFalse(any(argument.startswith(('-p:TargetFramework=', '-p:RuntimeFrameworkVersion=')) for argument in call))
@@ -672,7 +672,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual([{mode: package, 'Version': version} for package, (mode, version) in SOURCE_PACKAGE_VERSIONS.items()],
                          [row.attrib for row in ET.parse(overlay).getroot().iter('PackageVersion')])
         overrides = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
-        self.assertIn('Update="Hexalith.McpCli.Abstractions" Version="2.0.1"', overrides.read_text())
+        self.assertIn('Update="Hexalith.McpCli.Abstractions" Version="3.0.0"', overrides.read_text())
         overrides_xml = ET.parse(overrides).getroot()
         self.assertEqual([], overrides_xml.findall('.//PackageReference'))
         self.assertEqual([], overrides_xml.findall('.//RestoreEnablePackagePruning'))
@@ -680,7 +680,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         for package, (_, version) in SOURCE_PACKAGE_VERSIONS.items():
             expected_overrides.extend([{'Include': package, 'Exclude': '@(PackageVersion)', 'Version': version},
                                        {'Update': package, 'Version': version}])
-        self.assertEqual([*expected_overrides, {'Update': 'Hexalith.McpCli.Abstractions', 'Version': '2.0.1'}],
+        self.assertEqual([*expected_overrides, {'Update': 'Hexalith.McpCli.Abstractions', 'Version': '3.0.0'}],
                          [row.attrib for row in overrides_xml.iter('PackageVersion')])
         for call in source_builds:
             self.assertFalse(any(argument.startswith('-p:RestoreEnablePackagePruning=') for argument in call))
@@ -718,9 +718,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         for relative in ('dcp/dcp', 'dashboard/Aspire.Dashboard'):
             self.assertEqual(str(self.fixture_home / '.aspire/bundle' / relative), tools[relative]['path'])
             self.assertEqual(bundle_hashes[relative], tools[relative]['sha256'])
-        self.assertEqual(['5.1.0'] * 2,
+        self.assertEqual(['5.4.0'] * 2,
                          [source['HexalithEventStoreVersion'] for source in prepared['sources'] if source['module'] in ('Hexalith.Tenants', 'Hexalith.Parties')])
-        self.assertEqual({'profile': 'published', 'version': '5.1.0', 'sourceCommit': 'a' * 40},
+        self.assertEqual({'profile': 'published', 'version': '5.4.0', 'sourceCommit': 'a' * 40},
                          {key: prepared['gateway'][key] for key in ('profile', 'version', 'sourceCommit')})
         self.assertEqual({'Hexalith.Tenants', 'Hexalith.Parties'}, set(prepared['gateway']['domainHosts']))
         property_calls = [call for call in calls if call[0] == 'dotnet' and call[2] == 'msbuild']
@@ -730,7 +730,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             self.assertIn('-p:UseHexalithProjectReferences=false', call)
             self.assertIn('-p:UseNuGetDeps=true', call)
             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
-            self.assertIn('-p:HexalithEventStoreVersion=5.1.0', call)
+            self.assertIn('-p:HexalithEventStoreVersion=5.4.0', call)
         self.assertEqual(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '2280',
                           'python3', 'tools/live-topology/ci.py', 'prepare'], calls[0])
         self.assertEqual(['MCPCLI_CI_PREPARATION=' + str(self.evidence / 'preparation.json')], (self.root / 'github-env').read_text().splitlines())
@@ -807,7 +807,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual('src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj', selected[0][3])
         self.assertEqual(str(Path(prepared['sourceFixtureRoot']) / 'Hexalith.Parties'), selected[0][1])
         self.assertIn('-p:HexalithEventStoreFromSource=false', selected[0])
-        self.assertIn('-p:HexalithEventStoreVersion=5.1.0', selected[0])
+        self.assertIn('-p:HexalithEventStoreVersion=5.4.0', selected[0])
 
     def test_competing_nested_catalog_is_rechecked_before_either_live_runner(self):
         prepared = self.prepare()
@@ -987,7 +987,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                                 cwd=self.root, env=environment, capture_output=True, text=True, timeout=30)
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         packages = json.loads(result.stdout)['Items']['PackageVersion']
-        self.assertEqual(['2.0.1'], [item['Version'] for item in packages
+        self.assertEqual(['3.0.0'], [item['Version'] for item in packages
                                    if item['Identity'] == 'Hexalith.McpCli.Abstractions'])
         effective = json.loads(result.stdout)
         logging = next(item for item in effective['Items']['PackageReference'] if item['Identity'] == 'Microsoft.Extensions.Logging.Abstractions')
@@ -1133,10 +1133,10 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
 
     def test_mismatched_root_mcpcli_pin_refuses_before_source_builds(self):
         path = self.root / 'Directory.Build.props'
-        path.write_text(path.read_text().replace('>2.0.1<', '>9.9.9<'))
+        path.write_text(path.read_text().replace('>3.0.0<', '>9.9.9<'))
         result = self.invoke('prepare-ci.sh')
         self.assertNotEqual(0, result.returncode)
-        self.assertIn('exact root McpCli 2.0.1 pin', result.stderr)
+        self.assertIn('exact root McpCli 3.0.0 pin', result.stderr)
         self.assertFalse(any(call[0] == 'dotnet' and call[2] == 'build' for call in self.calls()))
 
     def test_reader_requires_complete_successful_online_graph_audits(self):
@@ -1266,7 +1266,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
 
     def test_changed_gateway_package_bytes_refuse_before_any_live_runner(self):
         self.prepare()
-        with ZipFile(self.root / 'package-cache/hexalith.eventstore.gateway/5.1.0/hexalith.eventstore.gateway.5.1.0.nupkg', 'a') as archive:
+        with ZipFile(self.root / 'package-cache/hexalith.eventstore.gateway/5.4.0/hexalith.eventstore.gateway.5.4.0.nupkg', 'a') as archive:
             archive.writestr('changed.txt', b'changed')
         result = self.invoke('run-ci.sh')
         self.assertNotEqual(0, result.returncode)
@@ -1309,7 +1309,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                             selected_asset = Path(prepared['sourceFixtureRoot']) / f'Hexalith.{module}/src/Hexalith.{module}/obj/project.assets.json'
                         (self.root / 'runner-gateway-environment.jsonl').unlink(missing_ok=True)
                         changed = json.loads(original)
-                        identity = 'Hexalith.EventStore.Contracts/5.1.0'
+                        identity = 'Hexalith.EventStore.Contracts/5.4.0'
                         if defect == 'transitive-version':
                             changed['libraries']['Hexalith.EventStore.Contracts/4.0.3'] = changed['libraries'].pop(identity)
                         else:
@@ -1324,7 +1324,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                             selected_asset.write_text(original)
 
     def test_archive_extracted_deployed_and_configuration_mutations_refuse_before_runners(self):
-        package = self.root / 'package-cache/hexalith.eventstore.gateway/5.1.0'
+        package = self.root / 'package-cache/hexalith.eventstore.gateway/5.4.0'
         deployed = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net11.0'
         source = self.root / 'references/Hexalith.EventStore/src/Hexalith.EventStore/appsettings.json'
         cases = [package / 'hexalith.eventstore.gateway.nuspec',
@@ -1370,12 +1370,12 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
 
 
     def test_embedded_archive_identity_and_source_are_validated_before_preparation(self):
-        folder = self.root / 'package-cache/hexalith.eventstore.gateway/5.1.0'
-        archive = folder / 'hexalith.eventstore.gateway.5.1.0.nupkg'
+        folder = self.root / 'package-cache/hexalith.eventstore.gateway/5.4.0'
+        archive = folder / 'hexalith.eventstore.gateway.5.4.0.nupkg'
         nuspec = folder / 'hexalith.eventstore.gateway.nuspec'
         original_archive, original_nuspec = archive.read_bytes(), nuspec.read_bytes()
         for before, after in ((b'<id>Hexalith.EventStore.Gateway</id>', b'<id>Wrong.Package</id>'),
-                              (b'<version>5.1.0</version>', b'<version>4.0.3</version>'),
+                              (b'<version>5.4.0</version>', b'<version>4.0.3</version>'),
                               (b'a' * 40, b'not-a-source-commit')):
             with self.subTest(replacement=after):
                 self.fresh_evidence()
@@ -1692,8 +1692,8 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
                    '-warnaserror -m:1 -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low '
                    '-p:TreatWarningsAsErrors=true -p:WarningsNotAsErrors= -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
-                   '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=5.1.0 '
-                   '-p:HexalithMcpCliVersion=2.0.1 '
+                   '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=5.4.0 '
+                   '-p:HexalithMcpCliVersion=3.0.0 '
                    f'-p:HexalithBuildPackageVersions1={overlay}')
         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
         stderr = self.evidence / 'Hexalith.Tenants-build.stderr.txt'

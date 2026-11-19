@@ -10,9 +10,9 @@ import subprocess
 import xml.etree.ElementTree as ET
 from zipfile import ZipFile
 
-COHORT = '5.1.0'
+COHORT = '5.4.0'
 # Historical and current tuples are closed independently; crossed cohorts refuse.
-TENANT_COHORTS = {'4.1.0': '7.0.5', '4.2.0': '7.0.7', '5.1.0': '8.0.0'}
+TENANT_COHORTS = {'4.1.0': '7.0.5', '4.2.0': '7.0.7', '5.1.0': '8.0.0', '5.4.0': '8.0.2'}
 MODULES = ('Hexalith.EventStore', 'Hexalith.Tenants', 'Hexalith.Parties', 'Hexalith.Platform')
 REPOSITORIES = {name: f'https://github.com/Hexalith/{name}.git' for name in MODULES}
 

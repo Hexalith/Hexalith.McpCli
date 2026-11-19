@@ -47,7 +47,7 @@ public sealed class DependencyPolicyTests
         string[] helpers = ["Hexalith.EventStore.Aspire", "Hexalith.Parties.Aspire", "Hexalith.Tenants.Aspire"];
         Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckAspireHelperClosure(policy, graph, helpers));
         Assert.Equal(graph.RootId, Assert.Single(graph.Nodes.Values, node => node.Type == "project").Id);
-        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/3.0.0", "Hexalith.EventStore.Aspire/5.1.0", "Hexalith.EventStore.Client/5.1.0", "Hexalith.EventStore.Contracts/5.1.0", "Hexalith.EventStore.ServiceDefaults/5.1.0", "Hexalith.Parties.Aspire/3.1.1", "Hexalith.Tenants.Aspire/8.0.0" },
+        Assert.Equal(new[] { "Hexalith.Commons.UniqueIds/3.0.1", "Hexalith.EventStore.Aspire/5.4.0", "Hexalith.EventStore.Client/5.4.0", "Hexalith.EventStore.Contracts/5.4.0", "Hexalith.EventStore.ServiceDefaults/5.4.0", "Hexalith.Parties.Aspire/4.0.0", "Hexalith.Tenants.Aspire/8.0.2" },
             graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase))
                 .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }
@@ -1072,19 +1072,19 @@ public sealed class DependencyPolicyTests
         Assert.Empty(graph.LoadFailures);
         Assert.Equal(new[]
         {
-            "Hexalith.Commons.UniqueIds/3.0.0",
-            "Hexalith.EventStore.Aspire/5.1.0",
-            "Hexalith.EventStore.Client/5.1.0",
-            "Hexalith.EventStore.Contracts/5.1.0",
-            "Hexalith.EventStore.DomainService/5.1.0",
-            "Hexalith.EventStore.Server/5.1.0",
-            "Hexalith.EventStore.ServiceDefaults/5.1.0",
-            "Hexalith.EventStore.Testing/5.1.0",
-            "Hexalith.EventStore.Testing.Integration/5.1.0",
-            "Hexalith.McpCli.Abstractions/2.0.1",
-            "Hexalith.Parties.Aspire/3.1.1",
-            "Hexalith.Tenants.Aspire/8.0.0",
-            "Hexalith.Tenants.Contracts/8.0.0",
+            "Hexalith.Commons.UniqueIds/3.0.1",
+            "Hexalith.EventStore.Aspire/5.4.0",
+            "Hexalith.EventStore.Client/5.4.0",
+            "Hexalith.EventStore.Contracts/5.4.0",
+            "Hexalith.EventStore.DomainService/5.4.0",
+            "Hexalith.EventStore.Server/5.4.0",
+            "Hexalith.EventStore.ServiceDefaults/5.4.0",
+            "Hexalith.EventStore.Testing/5.4.0",
+            "Hexalith.EventStore.Testing.Integration/5.4.0",
+            "Hexalith.McpCli.Abstractions/3.0.0",
+            "Hexalith.Parties.Aspire/4.0.0",
+            "Hexalith.Tenants.Aspire/8.0.2",
+            "Hexalith.Tenants.Contracts/8.0.2",
         }, graph.Nodes.Values.Where(node => node.Type == "package" && node.Id.StartsWith("Hexalith.", StringComparison.OrdinalIgnoreCase))
             .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }
