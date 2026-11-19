@@ -128,7 +128,7 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
         Assert.Equal("published", profile.GetProperty("profile").GetString());
         Assert.Equal("5.4.0", profile.GetProperty("eventStoreVersion").GetString());
         Assert.Equal("https://github.com/Hexalith/Hexalith.EventStore.git", profile.GetProperty("sourceRepository").GetString());
-        Assert.Equal("49084f66f8d6545cae442875355a7066d5f5e73d", profile.GetProperty("sourceCommit").GetString());
+        Assert.Equal("2ec21f631a2e292fba8c5537fe665ab275ed1081", profile.GetProperty("sourceCommit").GetString());
         foreach (JsonProperty file in profile.GetProperty("files").EnumerateObject())
         {
             string path = Path.Combine(host, file.Name);

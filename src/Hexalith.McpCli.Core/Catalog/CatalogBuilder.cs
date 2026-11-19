@@ -14,6 +14,7 @@ public static class CatalogBuilder
     /// <returns>An immutable catalog and its declaration diagnostics.</returns>
     public static CatalogSnapshot Build(IReadOnlyList<Assembly> assemblies)
     {
+        CatalogAbstractionsResolver.Register();
         ArgumentNullException.ThrowIfNull(assemblies);
         if (assemblies.Any(assembly => assembly is null))
         {

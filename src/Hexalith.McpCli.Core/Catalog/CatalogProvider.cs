@@ -18,6 +18,7 @@ public sealed partial class CatalogProvider
     {
         ArgumentNullException.ThrowIfNull(manifest);
         ArgumentNullException.ThrowIfNull(logger);
+        CatalogAbstractionsResolver.Register();
         _catalog = new Lazy<CatalogSnapshot>(() => BuildAndLog(manifest, logger), LazyThreadSafetyMode.ExecutionAndPublication);
     }
 
@@ -43,6 +44,7 @@ public sealed partial class CatalogProvider
 
     private static CatalogSnapshot BuildAndLog(Func<IReadOnlyList<Assembly>> manifest, ILogger logger)
     {
+        CatalogAbstractionsResolver.Register();
         CatalogSnapshot catalog = CatalogBuilder.Build(manifest());
         foreach (CatalogDiagnostic diagnostic in catalog.Diagnostics)
         {
