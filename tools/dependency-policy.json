@@ -62,7 +62,7 @@
   "modules": {
     "Hexalith.Parties.Contracts": "4.0.0",
     "Hexalith.Tenants.Contracts": "8.0.2",
-    "Hexalith.Projects.Contracts": "2.0.0-story66.3"
+    "Hexalith.Projects.Contracts": "2.0.0"
   },
   "aspireHelperSupportPackages": {
     "Hexalith.Commons.UniqueIds": "3.0.1",
