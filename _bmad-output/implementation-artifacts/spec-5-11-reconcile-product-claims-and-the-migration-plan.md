@@ -2,9 +2,9 @@
 title: '5.11 Reconcile product claims and the migration plan'
 type: 'chore'
 created: '2026-11-16'
-status: 'in-review'
+status: 'in-progress'
 route: 'dispatch'
-review_loop_iteration: 0
+review_loop_iteration: 1
 baseline_commit: '008d95ccc77d932a372cb6c749d9d1fb1bc1ea57'
 story_key: '5-11-reconcile-product-claims-and-the-migration-plan'
 ---
