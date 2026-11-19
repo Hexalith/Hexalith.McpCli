@@ -1259,3 +1259,17 @@ status: open
   owner: McpCli migration-inventory owner with the ChatBot owning maintainer; next exact-byte-approved ChatBot successor under the pass-1 "Fold into next successor" decision.
   status: open; found in 5.10 code review pass 3 (2026-11-16). The approved bytes stay unchanged.
   evidence: Low. `_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md:98` carries the predecessor rationale from `chatbot-migration-inventory-v1.md:126` next to the rewritten legacy Disposition cell. `evidence/story-5-10/verify_amendment.py:95-96` requires that cell to equal the amendment disposition. V14 is the only withdrawal row in either successor whose legacy text says defer. The frozen decision says V14's unsupported variants "stay absent". Ledger greps for "V14" and "key-rotation" found no existing entry.
+
+## Deferred from: code review of spec-5-11-reconcile-product-claims-and-the-migration-plan.md (2026-11-19)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-11-reconcile-product-claims-and-the-migration-plan.md`
+  summary: Epic 5 GitHub release notes do not include the committed migration status. Hexalith.CiCd owns notes generation; a module `.releaserc.json` hook is forbidden. Keep `docs/release/migration-status.md` as the status document. Append happens only if Builds `invoke_plugins.mjs` is changed upstream.
+  owner: Hexalith.CiCd / Hexalith.Builds for GitHub notes composition; McpCli product owner for the committed status file and honest README claims.
+  status: open; deferred by user decision (2026-11-19) as review option 3. Do not restore `.releaserc.json` or `scripts/migration-release-notes.mjs`. Story 5.11 AC3 stays unmet for generated notes until that CiCd change.
+  evidence:
+    - Spec AC3 and task at `spec-5-11-reconcile-product-claims-and-the-migration-plan.md:57` and `:64`.
+    - `3511afd` added the hook; `aad8894` deleted it with `.releaserc.json`.
+    - `references/Hexalith.CiCd/rendered/Hexalith.McpCli.perimeter.json:13` `absent-glob` `.releaserc*`.
+    - `references/Hexalith.Builds/Github/release-version/invoke_plugins.mjs` runs pinned `generateNotes` only.
+    - README.md:85 still says "release notes append that committed status".
+    - Ledger greps for "migration-status", "releaserc" and "notes append" found no existing equivalent entry.

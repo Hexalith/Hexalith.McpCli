@@ -121,3 +121,38 @@ All 18 findings survive as 14 patch groups. No new deferral or frozen-intent cha
 Resolution: all fourteen patch groups were corrected. Final parent verification passes 27 story tests, two Python release-note adapter tests (which execute the two pinned Node tests), candidate validation, expected completion refusal, published 2.0.1 offline/stdio probes, adopted AD-23, instruction sync and diff checks. No new work was deferred. The exact audit is prepared but not owner-accepted; upstream integration remains incomplete, so the spec stays in-review and sprint stays review. No commit or push is authorized or created. Fresh packet approval follows prerequisite delivery/rebinding: Story 5.10's mutable delivery register will change when delivered, so refresh its pending 5.11 bindings before requesting final exact-byte approval. Evidence: evidence/story-5-11/final-checks/checks.json.
 
 - 2026-11-16 delivery continuation: the user requested “push all changes”, then “fix” for the missing-configuration refusal. Git delivery is now authorized; candidate inventory approval remains pending. The merged AI.Tools correction cfd1ebea92587cdea41b9aa2cff47358bf2f32f6 limits the shared checker to adopted modules. The containing baseline is updated; McpCli keeps its existing CI and no CI migration/configuration is invented. The earlier missing-file result remains historical evidence, not a current adoption requirement.
+
+### Review Findings
+
+2026-11-19 code review (scope 1a+1b+1c vs `008d95c`). Four layers returned. Decision resolved to defer (option 3). Twelve patch groups remain.
+
+- [x] [Review][Defer] GitHub release notes do not append committed migration status [README.md:85] — deferred: CiCd perimeter forbids `.releaserc*`; Builds `invoke_plugins.mjs` emits conventional notes only. Keep `docs/release/migration-status.md`. Do not restore a module hook. Stop claiming generated notes append the status. already tracked (`deferred-work.md:1265`).
+
+- [ ] [Review][Patch] Stop claiming generated notes append the committed migration status [`README.md:85`]
+- [ ] [Review][Patch] Regenerate the Epic 5 deferral audit against the live ledger [`_bmad-output/implementation-artifacts/evidence/story-5-11/deferral-dispositions.json`]
+- [ ] [Review][Patch] Stop attaching predecessor source pins and “omits T01–T04” prose to current companion versions [`_bmad-output/implementation-artifacts/evidence/story-5-11/build_packet.py:101`]
+- [ ] [Review][Patch] Finish AD-23 alignment in PRD vision/admin-boundary and epics FR21 [`_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:21`]
+- [ ] [Review][Patch] Rebase AI.Tools patches onto the revision README cites, or stop claiming that revision already follows AD-23 [`README.md:46`]
+- [ ] [Review][Patch] Report one current state for the missing `.github/hexalith-ci.json` blocker [`_bmad-output/implementation-artifacts/evidence/story-5-11/inputs.json:435`]
+- [ ] [Review][Patch] Isolate `git apply` from a parent work tree [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:180`]
+- [ ] [Review][Patch] Save install streams on timeout and refuse non-object stdio JSON [`_bmad-output/implementation-artifacts/evidence/story-5-11/check_offline_cli.py:97`]
+- [ ] [Review][Patch] Require Admin 1.0.3 citations in successor labels [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:123`]
+- [ ] [Review][Patch] Inspect no-change owners at `origin/main`, not HEAD [`_bmad-output/implementation-artifacts/evidence/story-5-11/build_packet.py:555`]
+- [ ] [Review][Patch] Re-derive owner-topic `correct()` bytes in `check_patches` [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:184`]
+- [ ] [Review][Patch] Record the actual focused-test count [`_bmad-output/implementation-artifacts/evidence/story-5-11/checks.json:69`]
+
+Rejected:
+
+- blob/main successor label URLs (`blind-hunter`) — `false`: unpublished candidates cannot use a commit SHA yet; each label already binds inventory SHA-256, same pattern as 5.7–5.9; Parties SHA links are for already-published files.
+- Receipts omitted from this review diff (`blind-hunter`) — `false`: chunk 1d was excluded on purpose; `secret-scan-*.json` and `offline-*.txt` exist in the tree.
+- AD-21 vs FR-21 “same gate” (`blind-hunter`) — `false`: AD-21 still fails a `withdraw`/`defer` row that names a cataloged contract; FR-21 reports cataloged operations no row mentions. Those are different cases.
+- Machine-local `ownerCheckout` paths (`blind-hunter`) — `low`: verifier requires sibling checkouts; `mainVerification` already says local refs only.
+- Offline tests never invoke 2.0.1 (`blind-hunter`) — `false`: `check_offline_cli.py` installs and runs 2.0.1; `test_offline_cli.py` replays committed captures by design.
+- Child ignores SIGKILL (`edge-case-hunter`) — `false`: SIGKILL cannot be ignored on this Linux runner.
+- JSON-RPC id type coercion (`edge-case-hunter`) — `false`: published 2.0.1 and `validate_tools` use integer ids; no mismatch demonstrated.
+- Stdio capture hash vs `stdoutSha256` (`edge-case-hunter`) — `false`: CLI records keep raw and retained hashes; stdio records the raw hash while writing a redacted file on purpose.
+- Empty `packages` if nupkg prefix is not lowercase (`edge-case-hunter`) — `low`: NuGet cache names on this runner are already `hexalith.mcpcli.*`.
+- Label text with fewer than two backticks (`edge-case-hunter`) — `low`: predecessor labels always carry that form; not an everyday path.
+- Inventory frontmatter `IndexError` (`edge-case-hunter`) — `low`: every bound inventory has YAML frontmatter; not reached in this packet.
+- Duplicate Story 5.10 README section (`edge-case-hunter`) — `low`: `replace` of a unique composed section; no duplicate demonstrated.
+- `done`-prefix auto-completion (`edge-case-hunter`) — `low`: completion already refuses this candidate; a `done-…` status is not in use.
