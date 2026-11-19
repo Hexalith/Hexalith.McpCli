@@ -129,7 +129,8 @@ def audit_project(project: Path, private: Path, evidence: Path, sdk_policy: dict
                      + '"/></packageSources><auditSources><clear/><add key="nuget.org" value="' + SOURCE
                      + '"/></auditSources></configuration>\n')
     environment = dict(os.environ, NUGET_PACKAGES=str(private / 'packages'), NUGET_HTTP_CACHE_PATH=str(private / 'http'))
-    for key in ('CustomAfterMicrosoftCommonTargets', 'CustomBeforeMicrosoftCommonTargets', 'DirectoryBuildPropsPath',
+    for key in ('CustomAfterMicrosoftCommonTargets', 'CustomBeforeMicrosoftCommonTargets',
+                'CustomAfterDirectoryBuildTargets', 'DirectoryBuildPropsPath',
                 'DirectoryBuildTargetsPath', 'NuGetAuditSuppress', 'RestoreIgnoreFailedSources'):
         environment.pop(key, None)
     try:

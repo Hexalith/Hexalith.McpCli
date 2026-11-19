@@ -219,7 +219,12 @@ All builds and nested preparation processes inherit a fresh task-owned
 `NUGET_PACKAGES`. The actual gateway, domain hosts, separate Parties adapter and
 Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the current root catalog’s published dependency selections. Source hosts and
 the separate adapter use the root McpCli 3.0.0 pin so their Abstractions identity
-matches the AppHost, including later SDK/Aspire rebuilds. The current Tenant
+matches the AppHost, including later SDK/Aspire rebuilds. The published Tenants **8.0.2** source qualifies EventStore only through **5.3.1**.
+`Microsoft.Common.targets` imports `CustomAfterMicrosoftCommonTargets` before
+that frozen `Directory.Build.targets`, so preparation also sets
+`CustomAfterDirectoryBuildTargets` to a private late import that enables the
+5.4.0 catalog constants and replaces the owner's catalog-SDK and canonical-boundary
+Error targets. The current Tenant
 source build uses the standard `LoggerMessage` generator from the exact
 `Microsoft.NETCore.App.Ref` 11.0.0 targeting pack. The telemetry replacement generator emits its two nested
 `Log` types in an unstable order, changing DLL/PDB hashes on an unchanged rebuild.

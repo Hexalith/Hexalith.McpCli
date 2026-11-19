@@ -363,7 +363,8 @@ def require_source_catalog(prepared: dict) -> Path:
     if actual != declared or actual != expected.get('buildsCommit') or status or checkout.is_symlink() \
             or hashlib.sha256(catalog.read_bytes()).hexdigest() != expected.get('catalogSha256'):
         raise ValueError('The prepared root-declared source package catalog identity or bytes changed.')
-    files = {'source-runtime-packages.props': 'overlaySha256', 'source-runtime-overrides.targets': 'overridesSha256'}
+    files = {'source-runtime-packages.props': 'overlaySha256', 'source-runtime-overrides.targets': 'overridesSha256',
+             'source-runtime-after-directory.targets': 'afterDirectorySha256'}
     for name, key in files.items():
         path = private / name
         if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected.get(key):
@@ -708,12 +709,32 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(ET.SubElement(logging, 'ItemGroup'), 'Analyzer', {
             'Remove': '@(_McpCliTelemetryLoggingGenerator)'})
         ET.ElementTree(overrides_xml).write(overrides, encoding='utf-8', xml_declaration=True)
+        # Microsoft.Common.targets imports CustomAfterMicrosoftCommonTargets inside
+        # CurrentVersion.targets, then Directory.Build.targets. The published Tenants
+        # 8.0.2 source qualifies EventStore only through 5.3.1; this late import
+        # replaces those Error targets after the owner file and enables the 5.4.0
+        # catalog constants without rewriting the frozen checkout.
+        after_directory = private / 'source-runtime-after-directory.targets'
+        after_xml = ET.Element('Project')
+        tenants_projects = ("'$(MSBuildProjectName)' == 'Hexalith.Tenants' or "
+                            "$(MSBuildProjectName.StartsWith('Hexalith.Tenants.'))")
+        catalog_properties = ET.SubElement(after_xml, 'PropertyGroup', {'Condition': tenants_projects})
+        ET.SubElement(catalog_properties, 'HexalithTenantsCatalogArtifactsAvailable').text = 'true'
+        ET.SubElement(catalog_properties, 'DefineConstants').text = (
+            '$(DefineConstants);HEXALITH_DEVELOPMENT_CATALOG_COHORT;HEXALITH_DEVELOPMENT_CATALOG_SOURCE;'
+            'HEXALITH_TECHNICAL_HTTP_CATALOG_BINDING;HEXALITH_CHECKPOINTED_TENANT_PROJECTION')
+        ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCatalogSdkSelection'})
+        ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCanonicalBoundaryPackageCohort'})
+        ET.ElementTree(after_xml).write(after_directory, encoding='utf-8', xml_declaration=True)
         source_environment = dict(os.environ, NUGET_PACKAGES=str(package_cache),
-                                  NUGET_HTTP_CACHE_PATH=str(private / 'source-http'), CustomAfterMicrosoftCommonTargets=str(overrides))
+                                  NUGET_HTTP_CACHE_PATH=str(private / 'source-http'),
+                                  CustomAfterMicrosoftCommonTargets=str(overrides),
+                                  CustomAfterDirectoryBuildTargets=str(after_directory))
         receipt['sourcePackageCatalog'] = {'buildsCommit': actual_builds,
                                            'catalogSha256': hashlib.sha256(catalog.read_bytes()).hexdigest(),
                                            'overlaySha256': hashlib.sha256(overlay.read_bytes()).hexdigest(),
-                                           'overridesSha256': hashlib.sha256(overrides.read_bytes()).hexdigest()}
+                                           'overridesSha256': hashlib.sha256(overrides.read_bytes()).hexdigest(),
+                                           'afterDirectorySha256': hashlib.sha256(after_directory.read_bytes()).hexdigest()}
         receipt['sources'] = native_cohort.select_sources(ROOT, selection, evidence, bounded)
         fixture_root = private / 'source-fixtures'
         source_proof = native_sources.create(ROOT, fixture_root, selection, evidence, bounded)
@@ -901,6 +922,7 @@ def run(evidence: Path) -> None:
                            MCPCLI_NATIVE_SOURCE_FIXTURES=prepared['sourceFixtures']['path'],
                            MCPCLI_NATIVE_SOURCE_FIXTURES_SHA256=prepared['sourceFixtures']['sha256'],
                            CustomAfterMicrosoftCommonTargets=str(source_overrides),
+                           CustomAfterDirectoryBuildTargets=str(source_overrides.with_name('source-runtime-after-directory.targets')),
                            UseHexalithProjectReferences='false', UseNuGetDeps='true',
                            HexalithEventStoreFromSource='false', HexalithEventStoreVersion=EVENTSTORE_COHORT,
                            Topology__UsePackagedGateway='true',
