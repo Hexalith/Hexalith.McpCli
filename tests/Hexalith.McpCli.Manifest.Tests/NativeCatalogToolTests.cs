@@ -77,6 +77,8 @@ public sealed class NativeCatalogToolTests : IDisposable
     [InlineData("matching")]
     [InlineData("cohort-source-missing")]
     [InlineData("cohort-source-changed")]
+    [InlineData("lock-source-missing")]
+    [InlineData("lock-source-changed")]
     [InlineData("copy-cohort-before-build")]
     [InlineData("source-cohort-after-generation")]
     [InlineData("copy-cohort-after-generation")]
@@ -87,6 +89,7 @@ public sealed class NativeCatalogToolTests : IDisposable
     [InlineData("copy-before-seal-frozen-source")]
     [InlineData("copy-before-seal-program")]
     [InlineData("copy-before-seal-cohort")]
+    [InlineData("copy-before-seal-lock")]
     [InlineData("copy-before-seal-project")]
     [InlineData("copy-before-seal-bindings")]
     [InlineData("copy-before-seal-global")]
@@ -101,6 +104,8 @@ public sealed class NativeCatalogToolTests : IDisposable
         Directory.CreateDirectory(template);
         File.WriteAllText(Path.Combine(template, "Hexalith.Platform.CatalogBuilder.csproj"), "<Project />");
         File.WriteAllText(Path.Combine(template, "Program.cs"), "// inert managed reader template");
+        string lockSource = Path.Combine(template, "OwnerPackageLock.cs");
+        File.WriteAllText(lockSource, "namespace Hexalith.Platform.CatalogArtifacts;");
         string cohort = Path.Combine(template, "PublishedCatalogArtifactCohort.cs");
         File.WriteAllText(cohort, "// inert managed cohort source");
         if (kind.Contains("frozen", StringComparison.Ordinal)) File.Delete(cohort);
@@ -127,6 +132,7 @@ public sealed class NativeCatalogToolTests : IDisposable
             "references/Hexalith.Builds/Props/Directory.Packages.props",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs",
+            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/OwnerPackageLock.cs",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs" }
             .Where(name => File.Exists(Path.Combine(_root, name))).ToDictionary(name => name,
                 name => Convert.ToHexStringLower(SHA256.HashData(File.ReadAllBytes(Path.Combine(_root, name)))));
@@ -147,6 +153,8 @@ public sealed class NativeCatalogToolTests : IDisposable
         if (kind == "asset") File.AppendAllText(asset, "changed consumed assembly");
         if (kind == "cohort-source-missing") File.Delete(cohort);
         if (kind == "cohort-source-changed") File.AppendAllText(cohort, "changed source");
+        if (kind == "lock-source-missing") File.Delete(lockSource);
+        if (kind == "lock-source-changed") File.AppendAllText(lockSource, "changed source");
         if (kind == "catalog-source-missing") File.Delete(catalog);
         if (kind == "catalog-source-changed") File.AppendAllText(catalog, "changed source");
         string bin = Path.Combine(_root, "controlled-dotnet");
@@ -182,6 +190,7 @@ public sealed class NativeCatalogToolTests : IDisposable
             {
                 "copy-before-seal-program" => "Program.cs",
                 "copy-before-seal-cohort" or "copy-before-seal-frozen-cohort" => "PublishedCatalogArtifactCohort.cs",
+                "copy-before-seal-lock" => "OwnerPackageLock.cs",
                 "copy-before-seal-project" => "Hexalith.Platform.CatalogBuilder.csproj",
                 "copy-before-seal-bindings" => "bindings.props",
                 "copy-before-seal-global" => "global.json",
@@ -212,6 +221,7 @@ public sealed class NativeCatalogToolTests : IDisposable
                     Assert.Contains("-p:ImportDirectoryBuildTargets=false", command);
                     Assert.Contains("-p:ImportDirectoryPackagesProps=false", command);
                     Assert.Contains("-p:CustomAfterMicrosoftCommonTargets=", command);
+                    Assert.Contains("-p:CustomAfterDirectoryBuildTargets=", command);
                 }
                 string reader = Path.Combine(directory, "reader");
                 using JsonDocument prepared = JsonDocument.Parse(File.ReadAllBytes(Path.Combine(reader, "preparation.json")));
@@ -219,6 +229,7 @@ public sealed class NativeCatalogToolTests : IDisposable
                 {
                     ("Program", Path.Combine(template, "Program.cs"), Path.Combine(reader, "Program.cs")),
                     ("Cohort", cohort, Path.Combine(reader, "PublishedCatalogArtifactCohort.cs")),
+                    ("Lock", lockSource, Path.Combine(reader, "OwnerPackageLock.cs")),
                 })
                 {
                     if (name == "Cohort" && kind == "matching-frozen-generated")
@@ -241,7 +252,8 @@ public sealed class NativeCatalogToolTests : IDisposable
                 Assert.False(request.RootElement.TryGetProperty("currentOwnerArtifacts", out _));
                 return; // Controlled process proof only; no live catalog or qualification credit.
             }
-            bool beforeProcess = kind is "cohort-source-missing" or "cohort-source-changed" or "catalog-source-missing" or "catalog-source-changed"
+            bool beforeProcess = kind is "cohort-source-missing" or "cohort-source-changed" or "lock-source-missing" or "lock-source-changed"
+                or "catalog-source-missing" or "catalog-source-changed"
                 || kind.StartsWith("copy-before-seal-", StringComparison.Ordinal);
             if (kind == "catalog-source-missing") Assert.IsType<FileNotFoundException>(failure);
             else Assert.IsType<InvalidDataException>(failure);

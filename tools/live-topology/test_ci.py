@@ -474,6 +474,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         platform.mkdir(parents=True)
         (platform / 'Hexalith.Platform.CatalogBuilder.csproj').touch()
         (platform / 'Program.cs').touch()
+        (platform / 'OwnerPackageLock.cs').write_text('namespace Hexalith.Platform.CatalogArtifacts;')
         (platform / 'PublishedCatalogArtifactCohort.cs').write_text('// inert cohort fixture')
         (self.root / 'Directory.Packages.props').write_text('<Project />')
         tenants_package = cache / 'hexalith.tenants.contracts/8.0.2'
@@ -1013,6 +1014,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
     def test_reader_audit_seals_complete_catalog_template_sources(self):
         module = self.ci_module()
         for relative in ("references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs",
+                         "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/OwnerPackageLock.cs",
                          "references/Hexalith.Builds/Props/Directory.Packages.props"):
             with self.subTest(relative=relative):
                 path = self.root / relative
@@ -1024,7 +1026,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                     second = module.reader_audit_provenance()
                     self.assertNotEqual(first['inputs'][relative], second['inputs'][relative])
                     path.unlink()
-                    if path.name == 'PublishedCatalogArtifactCohort.cs':
+                    if path.suffix == '.cs' and path.name != 'Program.cs':
                         self.assertNotIn(relative, module.reader_audit_provenance()['inputs'])
                     else:
                         with self.assertRaises(FileNotFoundError):
@@ -1039,6 +1041,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         audit = json.loads(Path(prepared['readerAudit']['path']).read_text())
         self.assertNotIn(relative, audit['inputs'])
         self.assertIn(relative.replace('PublishedCatalogArtifactCohort.cs', 'Program.cs'), audit['inputs'])
+        self.assertIn(relative.replace('PublishedCatalogArtifactCohort.cs', 'OwnerPackageLock.cs'), audit['inputs'])
         self.ci_module().require_reader_audit(prepared)
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)

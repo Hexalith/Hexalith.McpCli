@@ -20,12 +20,7 @@ internal static class NativeCatalogAudit
             if (audit.GetProperty("schemaVersion").GetInt32() != 1 || audit.GetProperty("result").GetString() != "audited"
                 || audit.GetProperty("sdkVersion").GetString() != sdkVersion || !audit.GetProperty("packages").EnumerateObject().Any())
                 throw new InvalidDataException("A complete matching online reader audit is required.");
-            string[] inputs = ["global.json", "Directory.Build.props", "Directory.Packages.props",
-                "references/Hexalith.Builds/Props/Directory.Packages.props",
-                "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj",
-                "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs"];
-            const string cohort = "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs";
-            if (File.Exists(Path.Combine(root, cohort))) inputs = [.. inputs, cohort];
+            string[] inputs = ReaderInputs(root);
             if (audit.GetProperty("packages").EnumerateObject().Any(package =>
                 !audit.GetProperty("archives").TryGetProperty(package.Name, out JsonElement archive) || string.IsNullOrEmpty(archive.GetString())))
                 throw new InvalidDataException("The online audit must retain actual archive hashes.");
@@ -57,6 +52,29 @@ internal static class NativeCatalogAudit
         if (graph.Count == 0) throw new InvalidDataException("The isolated reader has no audited package graph.");
         return graph;
     }
+
+    /// <summary>Program.cs plus every other CatalogBuilder compile source present in the frozen Platform revision.</summary>
+    internal static string[] CompileSources(string root)
+    {
+        string builder = Path.Combine(root, "references", "Hexalith.Platform", "src", "Hexalith.Platform.CatalogBuilder");
+        string program = Path.Combine(builder, "Program.cs");
+        string[] extra = Directory.Exists(builder)
+            ? Directory.EnumerateFiles(builder, "*.cs", SearchOption.TopDirectoryOnly)
+                .Where(path => !Path.GetFileName(path).Equals("Program.cs", StringComparison.Ordinal))
+                .Order(StringComparer.Ordinal)
+                .ToArray()
+            : [];
+        return [program, .. extra];
+    }
+
+    /// <summary>Exact reader SDK, project and CatalogBuilder source names sealed by the online audit receipt.</summary>
+    internal static string[] ReaderInputs(string root) =>
+    [
+        "global.json", "Directory.Build.props", "Directory.Packages.props",
+        "references/Hexalith.Builds/Props/Directory.Packages.props",
+        "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj",
+        .. CompileSources(root).Select(path => Path.GetRelativePath(root, path).Replace(Path.DirectorySeparatorChar, '/')),
+    ];
 
     private static void VerifyPackageBytes(JsonElement assets, JsonElement audit, string identity, JsonElement library)
     {

@@ -19,6 +19,7 @@ public sealed class NativeCatalogAuditTests : IDisposable
                 "references/Hexalith.Builds/Props/Directory.Packages.props",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs",
+            "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/OwnerPackageLock.cs",
             "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs"];
         var hashes = new Dictionary<string, string>();
         foreach (string input in inputs)
@@ -113,8 +114,10 @@ public sealed class NativeCatalogAuditTests : IDisposable
     [InlineData("sdk")]
     [InlineData("input")]
     [InlineData("cohort-source")]
+    [InlineData("lock-source")]
     [InlineData("catalog-source")]
     [InlineData("cohort-input-missing")]
+    [InlineData("lock-input-missing")]
     public void ChangedAuditInputsRefuseBeforeOfflineBuild(string kind)
     {
         string proof = Path.Combine(_root, "audit.json");
@@ -122,12 +125,14 @@ public sealed class NativeCatalogAuditTests : IDisposable
         if (kind == "receipt") File.AppendAllText(proof, " ");
         if (kind == "input") File.AppendAllText(Path.Combine(_root, "global.json"), "changed");
         const string cohortSource = "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs";
+        const string lockSource = "references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/OwnerPackageLock.cs";
         if (kind == "cohort-source") File.AppendAllText(Path.Combine(_root, cohortSource), "changed");
+        if (kind == "lock-source") File.AppendAllText(Path.Combine(_root, lockSource), "changed");
         if (kind == "catalog-source") File.AppendAllText(Path.Combine(_root, "references/Hexalith.Builds/Props/Directory.Packages.props"), "changed");
-        if (kind == "cohort-input-missing")
+        if (kind is "cohort-input-missing" or "lock-input-missing")
         {
             var receipt = System.Text.Json.Nodes.JsonNode.Parse(File.ReadAllBytes(proof))!.AsObject();
-            receipt["inputs"]!.AsObject().Remove(cohortSource);
+            receipt["inputs"]!.AsObject().Remove(kind == "lock-input-missing" ? lockSource : cohortSource);
             File.WriteAllText(proof, receipt.ToJsonString());
             hash = Digest(proof);
         }

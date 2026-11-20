@@ -439,13 +439,15 @@ def reader_audit_provenance(prepared: dict | None = None) -> dict:
             raise ValueError('The online audited package graph is empty.')
         sources[relative] = {'packages': graph, 'policy': {'audit': audit, 'warnings': warning_policy,
                                                          'dependencyNoWarn': dependency_warnings}}
+    builder = ROOT / 'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder'
+    program = 'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs'
+    extras = sorted(path.relative_to(ROOT).as_posix() for path in builder.glob('*.cs')
+                    if path.is_file() and not path.is_symlink()
+                    and path.name != 'Program.cs')
     inputs = ['global.json', 'Directory.Build.props', 'Directory.Packages.props',
               'references/Hexalith.Builds/Props/Directory.Packages.props',
               'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Hexalith.Platform.CatalogBuilder.csproj',
-              'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/Program.cs']
-    cohort_source = 'references/Hexalith.Platform/src/Hexalith.Platform.CatalogBuilder/PublishedCatalogArtifactCohort.cs'
-    if (ROOT / cohort_source).is_file():
-        inputs.append(cohort_source)
+              program, *extras]
     return {'schemaVersion': 1, 'result': 'audited', 'sdkVersion': EVENTSTORE_COHORT,
             'sources': sources, 'packages': packages, 'archives': archives,
             'inputs': {name: hashlib.sha256((ROOT / name).read_bytes()).hexdigest() for name in inputs},
