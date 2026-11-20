@@ -1000,6 +1000,16 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual(3, len([call for call in self.calls() if call[0] == 'curl'
                                  and any('vulnerabilities/' in str(value) for value in call)]))
         self.assertEqual(4, len(prepared['nativeAudits']))
+        curl = next(index for index, call in enumerate(self.calls())
+                    if call[0] == 'curl' and any('vulnerabilities/index.json' in str(value) for value in call))
+        tenants = next(index for index, call in enumerate(self.calls())
+                       if call[0] == 'dotnet' and call[2] == 'build'
+                       and call[3] == 'src/Hexalith.Tenants/Hexalith.Tenants.csproj')
+        parties = next(index for index, call in enumerate(self.calls())
+                       if call[0] == 'dotnet' and call[2] == 'build'
+                       and call[3] == 'src/Hexalith.Parties/Hexalith.Parties.csproj')
+        self.assertLess(tenants, curl)
+        self.assertLess(curl, parties)
         self.assertTrue(all(source['policy']['warnings']['allWarningsAsErrors'] for source in document['sources'].values()))
         tenants = 'references/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj'
         self.assertEqual([], document['sources'][tenants]['policy']['warnings']['warnNotAsError'])

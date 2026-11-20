@@ -454,6 +454,47 @@ def reader_audit_provenance(prepared: dict | None = None) -> dict:
             **({'nativeAudits': prepared['nativeAudits'], 'sourceAdvisories': prepared['sourceAdvisories']} if prepared is not None else {})}
 
 
+def prove_source_advisories(private: Path, package_cache: Path, tools: dict, bounded, evidence: Path,
+                            receipt: dict, *, required: bool = False) -> None:
+    """Prove restore advisories as soon as the HTTP cache exists; reuse that snapshot for module audits."""
+    source_http = private / 'source-http'
+    snapshot = private / 'source-advisories'
+    try:
+        native_audit.advisory_cache_index(source_http)
+    except ValueError:
+        if required:
+            raise
+        return
+    if 'sourceAdvisories' not in receipt:
+        receipt['sourceAdvisories'] = native_audit.online_advisories(source_http, snapshot, bounded)
+    elif not native_audit.snapshot_matches_cache(source_http, snapshot):
+        shutil.rmtree(snapshot)
+        receipt['sourceAdvisories'] = native_audit.online_advisories(source_http, snapshot, bounded)
+    if 'nativeAudits' in receipt:
+        return
+    receipt['nativeAudits'] = {}
+    for index, relative in enumerate(MODULE_AUDIT_PROJECTS):
+        audit = native_audit.audit_project(ROOT / relative, private / ('module-audit-' + str(index)),
+                                           evidence / ('module-audit-' + str(index)), tools['sdkPolicy'], bounded,
+                                           proven_advisories=snapshot)
+        receipt['nativeAudits'][relative] = audit
+        # The isolated metadata reader has no external network. Seed its private cache
+        # only from these freshly audited package bytes; never change the module cache.
+        for package in (Path(audit['privateDirectory']) / 'packages').iterdir():
+            if not package.is_dir():
+                continue
+            for version in package.iterdir():
+                if not version.is_dir():
+                    continue
+                target = package_cache / package.name / version.name
+                if target.exists():
+                    for archive in version.glob('*.nupkg'):
+                        if (target / archive.name).read_bytes() != archive.read_bytes():
+                            raise ValueError('Private source/reader caches disagree on audited archive bytes.')
+                else:
+                    shutil.copytree(version, target)
+
+
 def require_reader_audit(prepared: dict) -> Path:
     """Refuse drift in the retained audit proof or its current online audited graphs."""
     expected = prepared.get('readerAudit', {})
@@ -793,29 +834,8 @@ def prepare(evidence: Path) -> None:
                 bounded(['dotnet', 'build', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                          '--configuration', 'Release', '-warnaserror', '-m:1', '-p:CopyLocalLockFileAssemblies=true', *properties],
                         300, evidence / 'parties-adapter-build', cwd=working, environment=source_environment)
-        receipt['sourceAdvisories'] = native_audit.online_advisories(private / 'source-http', private / 'source-advisories', bounded)
-        # Audit the exact already-restored module graphs through distinct package-only fixtures.
-        receipt['nativeAudits'] = {}
-        for index, relative in enumerate(MODULE_AUDIT_PROJECTS):
-            audit = native_audit.audit_project(ROOT / relative, private / ('module-audit-' + str(index)),
-                                               evidence / ('module-audit-' + str(index)), tools['sdkPolicy'], bounded,
-                                               proven_advisories=private / 'source-advisories')
-            receipt['nativeAudits'][relative] = audit
-            # The isolated metadata reader has no external network. Seed its private cache
-            # only from these freshly audited package bytes; never change the module cache.
-            for package in (Path(audit['privateDirectory']) / 'packages').iterdir():
-                if not package.is_dir():
-                    continue
-                for version in package.iterdir():
-                    if not version.is_dir():
-                        continue
-                    target = package_cache / package.name / version.name
-                    if target.exists():
-                        for archive in version.glob('*.nupkg'):
-                            if (target / archive.name).read_bytes() != archive.read_bytes():
-                                raise ValueError('Private source/reader caches disagree on audited archive bytes.')
-                    else:
-                        shutil.copytree(version, target)
+            prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt)
+        prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt, required=True)
         source_path = evidence / 'native-source-fixtures.json'
         save(source_path, native_sources.seal(source_proof))
         receipt['sourceFixtures'] = {'path': str(source_path.resolve()), 'sha256': hashlib.sha256(source_path.read_bytes()).hexdigest()}

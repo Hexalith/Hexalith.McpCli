@@ -165,6 +165,17 @@ class NativeAuditTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, 'cache='):
             native_audit.online_advisories(cache, self.root / 'drifted', forbidden, proven=proven)
 
+    def test_snapshot_matches_cache_until_restore_rewrites_advisory_bytes(self):
+        cache = self.advisory_fixture()
+        snapshot = self.root / 'snapshot'
+        snapshot.mkdir()
+        (snapshot / 'index.json').write_bytes((cache / 'vuln_index.dat').read_bytes())
+        for name in ('base', 'update'):
+            (snapshot / (name + '.json')).write_bytes((cache / ('vuln_data_' + name + '.dat')).read_bytes())
+        self.assertTrue(native_audit.snapshot_matches_cache(cache, snapshot))
+        (cache / 'vuln_index.dat').write_text('[]')
+        self.assertFalse(native_audit.snapshot_matches_cache(cache, snapshot))
+
     def test_reuse_rechecks_module_outputs_fixture_graph_and_advisory_bytes(self):
         private = self.root / 'audited'
         (private / 'obj').mkdir(parents=True)

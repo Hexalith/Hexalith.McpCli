@@ -78,12 +78,40 @@ def refuse_advisory_mismatch(name: str, cached: bytes | None, online: bytes | No
                      + ' (cache=' + meta(cached) + ' online=' + meta(online) + ' status=' + status + ')')
 
 
-def online_advisories(cache: Path, output: Path, bounded, proven: Path | None = None) -> dict:
-    """Reject cache-only/stale local data by comparing every page to a live or already-proven snapshot."""
+def advisory_cache_index(cache: Path) -> Path:
+    """Require the restore HTTP cache to contain exactly one NuGet advisory index."""
     indexes = list(cache.rglob('vuln_index.dat'))
     if len(indexes) != 1:
         raise ValueError('The native audit requires one complete freshly populated advisory cache.')
-    index = indexes[0]
+    return indexes[0]
+
+
+def snapshot_matches_cache(cache: Path, snapshot: Path) -> bool:
+    """True when the restore cache still equals an already-proven live advisory snapshot."""
+    try:
+        index = advisory_cache_index(cache)
+    except ValueError:
+        return False
+    try:
+        pages = json.loads(index.read_text())
+    except (json.JSONDecodeError, OSError):
+        return False
+    files = {'index': index}
+    if not isinstance(pages, list):
+        return False
+    for page in pages:
+        name = page.get('@name') if isinstance(page, dict) else None
+        if not isinstance(name, str):
+            return False
+        files[name] = index.with_name('vuln_data_' + name + '.dat')
+    return all((snapshot / (name + '.json')).is_file() and path.is_file()
+               and advisory_bytes_match(path.read_bytes(), (snapshot / (name + '.json')).read_bytes())
+               for name, path in files.items())
+
+
+def online_advisories(cache: Path, output: Path, bounded, proven: Path | None = None) -> dict:
+    """Reject cache-only/stale local data by comparing every page to a live or already-proven snapshot."""
+    index = advisory_cache_index(cache)
     pages = json.loads(index.read_text())
     if not isinstance(pages, list) or not pages or len(pages) > 16:
         raise ValueError('The native audit advisory index is incomplete.')
