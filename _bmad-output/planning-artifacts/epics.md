@@ -60,6 +60,7 @@ changeProposals:
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-08.md
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10.md
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10-shape-coverage.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-20.md
 inputDocuments:
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md
   - _bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md
@@ -2152,6 +2153,75 @@ So that a module can add or release decorated operations without a lockstep McpC
 **When** the change lands,
 **Then** they describe shape coverage, reported uninventoried operations and informational vector versions, and `CLAUDE.md` and `.github/copilot-instructions.md` stay byte-identical to `AGENTS.md` with `scripts/check-agent-instructions-sync.sh` passing,
 **And** the Release build, the Core and Manifest tests, the conformance-vector and live-topology Python suites, `check_enrolled.py`, the live preflight and CI's `topology-vector-discovery` job pass.
+
+### Story 5.13: Restore the native dependency audit and live CI
+
+As a maintainer, I need the native restore to use verifiable, current advisory data so a green run qualifies the release candidate. McpCli owns the fixture audit. Hexalith.CiCd owns any required shared pipeline change.
+
+- Capture the advisory page identity, retrieval time and semantic difference for the restored cache and official feed. Distinguish confirmed feed rotation from unavailable data, a persistent mismatch or a real advisory affecting the restored graph.
+- If rotation is confirmed, restore into a fresh isolated cache and audit that restore and its artifacts against the new snapshot. Bound recovery to one new attempt. Test a stable feed, rotation, persistent mismatch, unavailable feed and a policy-violating dependency. Only a fully verified restore passes.
+- Run the full Linux lane on the candidate SHA and record the actual outcomes of the approved live vectors and independent cases (22 plus two at the audit baseline). Require passing Windows and macOS product jobs on that SHA. A discovery or preflight receipt alone cannot satisfy this story.
+
+### Story 5.14: Restore the proprietary surface census gate
+
+As a migration owner, I need CI to detect new proprietary CLI and MCP surfaces across the committed direct references. This follows Story 5.6. McpCli owns the checker, each reference owner owns its classifications, and Hexalith.CiCd owns shared gate policy.
+
+- Triage each rejected surface, stale entry and scanner error at the candidate gitlinks, including the new CiCd root. Correct scanner errors and classify real changes with the affected owners. Bind each amendment to the reviewed evidence and retain the existing approval chain.
+- Run the census unit tests and the committed-tree checker over all direct roots with nested checkout disabled. The reviewed revision must pass. A fixture introducing an unapproved proprietary surface and a fixture with stale evidence must still fail.
+- Verify the checker actually executes in the product gate on a hosted candidate. Use the supported custom action and obtain a CiCd decision if central policy or delivery must change. Capture the check outcome on the candidate SHA.
+
+### Story 5.15: Bind paired release acceptance to the published candidates
+
+As a release operator, I need one current procedure that identifies the pair the central release will publish and the evidence that qualifies it. McpCli and Hexalith.CiCd share this follow-up to Stories 4.16–4.18 and retrospective item 6.
+
+- Trace the central nightly or authorized delivered-SHA route from exact-commit CI through packaging, approval and publication. Correct the README's operator path and clearly label historical staging and recovery material. Check the documented dispatch parameters against the delivered workflow.
+- With the release owners, decide where the final archives receive platform checks and how operator acceptance binds to their version, source SHA and hashes. Record any decision that supersedes a historical requirement and its owner. Separate CI fixture hashes from final package hashes.
+- Rehearse the selected path without publishing. Verify both final archives against the manifest, Windows and macOS checks, and the agreed acceptance record. A changed package digest, wrong source or missing required acceptance must stop promotion. Record the result against retrospective item 6.
+
+### Story 5.16: Protect profile credential entry and transport
+
+As an operator, I need to enter or rotate a token privately through the CLI and send it only to an appropriate Gateway. McpCli owns the CLI, shared settings and operator guide. This follows the Story 2.3 credential deferral.
+
+- Provide an explicit token-input mode for profile creation and rotation, with a non-echoing terminal prompt and an opt-in stdin path for automation. Keep token bytes out of arguments, stdout, stderr and diagnostics on this path. Use the existing locked private-file transaction, preserve unrelated settings on rotation, and prevent conflicting token sources. Ordinary commands and MCP stdio must keep control of their input.
+- Require HTTPS for a bearer token sent to a non-loopback Gateway. Validate the effective URL/token pair for both heads before transport and reject unsafe stored combinations on profile mutation. Cover HTTPS, remote HTTP rejection with zero requests, and the documented private loopback port-forward. Preserve the existing URL/token source-pairing rule.
+- Replace the README procedures that put the token in a process argument or edit the private file externally. Exercise both new entry paths with a synthetic token, including cancellation or empty input, and verify the original profile and its permissions survive a failed rotation.
+
+### Story 5.17: Validate Gateway command acknowledgments
+
+As a caller, I need a trackable identifier when either head reports an accepted Command. McpCli Core owns the mapping. This follows FR-17 and the Story 2.7 deferred acknowledgment decision.
+
+- Retain the submitted canonical identifier when the Gateway omits its message ID or returns null. Return a valid canonical Gateway ID when supplied, including a valid ID different from the submitted one.
+- Treat a present empty, whitespace or noncanonical ID on HTTP success as a malformed acknowledgment. Return a stable `gateway_error` with the submitted correlation ID and communicate that submission may have succeeded. Preserve the actual HTTP status if the client exposes it.
+- Exercise all cases through CLI and MCP against a loopback Gateway. Check result schema, CLI exit and MCP error status, correlation and exactly one submission in every case.
+
+### Story 5.18: Reject non-ASCII public tenant input before normalization
+
+As an operator, I need my public tenant selection to have the same meaning in McpCli and EventStore. The EventStore owner leads, followed by McpCli, under `epic-4-retro-item-9-ascii-tenant-input`.
+
+- Land and identify the upstream canonicalizer change, then mirror the check before invariant lowercasing of public tenant input used for selection or comparison. Preserve valid uppercase ASCII, reserved-tenant refusal, declared platform and fixed scopes, and the existing per-call override rules.
+- Update the F7 compatibility test with the upstream revision recorded. Exercise session and per-call inputs through both heads as applicable. A non-ASCII alias must fail at `/tenant` with zero Gateway calls. Exercise ordinary uppercase ASCII and the declared-scope and override controls as positive regressions.
+
+### Story 5.19: Enforce the profile size limit before replacement
+
+As an operator, I need every successful profile change to leave a file that the next CLI invocation can read. McpCli owns the store and the shared private-file transaction.
+
+- Apply the reader's 1,048,576-byte limit to the actual serialized UTF-8 bytes before atomic replacement. Report an actionable configuration error on overflow and keep the original bytes, active profile and private permissions intact. Clean up the temporary file.
+- With synthetic profiles, test a final size exactly at the limit and one byte over it, including escaped or multibyte values. Reopen the file after success and refusal. Cover initial creation and updates, with the transaction checks on Linux and Windows.
+
+### Story 5.20: Detect unsupported Linux process supervision
+
+As a maintainer, I need a timed-out product check to reap its own descendants or report that safe supervision is unavailable. McpCli owns the product-check supervisor.
+
+- Before launching a check, establish that descendant ownership can be observed in the current Linux environment. If those facilities are unavailable, refuse before launch with an actionable diagnostic unless a tested ownership-preserving fallback is available. Report loss of ownership visibility during cleanup as a failure.
+- Exercise the ordinary Linux case with an inert detached grandchild and an unrelated process. Check that the descendant is reaped and the unrelated process survives. Exercise the unavailable-child-list case deterministically and verify no child was launched or orphaned. Retain the normal timeout and exit-status tests.
+
+### Story 5.21: Qualify populated Projects reads and access denial
+
+As the Projects owner, I need evidence for the data and access behavior of the enrolled read surface. Track native host qualification through DW-82. The Projects and environment owners supply a suitable host and controlled seed data. McpCli supplies the two heads and generic harness.
+
+- Record the host revision, enrolled Contracts version (2.0.0 at baseline), test identity roles and synthetic seed IDs. Resolve the Payload versus Envelope paging contract with Projects and EventStore under AD-20 and the Story 5.9 deferral. Test against the agreed contract.
+- Prove a populated list and a subsequent cursor page through CLI and MCP, checking expected IDs, order and page boundaries. Exercise an authorized populated detail read, the insufficient-permission response with no protected data, and the existing empty or Unavailable case.
+- Record live evidence and the owners' verdict under DW-82. Keep qualification and any later decision to retire a legacy Projects surface distinct. Use the existing generic execution path.
 
 ## Epic 6: Replace and Retire the Folders CLI and MCP Server
 
