@@ -6,6 +6,7 @@ review_mode: batch
 scope: sprint plan
 baseline: 53205cdbd4226667f0237c68b4379a6f2e54c7aa
 source_action: 'User selected “Apply the recommendations to the sprint plan”.'
+approval: 'On 2026-11-20 the user approved the sprint change proposal for stories 5.13–5.21 as recorded in c1001cae (“approve proposal”).'
 ---
 
 # Sprint change proposal · 20 November 2026
