@@ -369,6 +369,15 @@ def require_source_catalog(prepared: dict) -> Path:
         path = private / name
         if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected.get(key):
             raise ValueError('The prepared private source package override changed or is missing.')
+    nested_catalog = private / 'Hexalith.Builds' / 'Props' / 'Directory.Packages.props'
+    nested_provenance = private / 'Hexalith.Builds' / 'Props' / 'ContainerProvenance.targets'
+    provenance = ROOT / 'references/Hexalith.Builds/Props/ContainerProvenance.targets'
+    if (private / 'Hexalith.Builds' / '.git').exists() or nested_catalog.is_symlink() or nested_provenance.is_symlink() \
+            or not nested_catalog.is_file() or not nested_provenance.is_file() \
+            or hashlib.sha256(nested_catalog.read_bytes()).hexdigest() != expected.get('overlaySha256') \
+            or hashlib.sha256(nested_provenance.read_bytes()).hexdigest() != expected.get('nestedProvenanceSha256') \
+            or not provenance.is_file() or hashlib.sha256(provenance.read_bytes()).hexdigest() != expected.get('nestedProvenanceSha256'):
+        raise ValueError('The prepared private source package override changed or is missing.')
     own_versions = ET.parse(ROOT / 'Directory.Build.props').getroot()
     redis = [item.get('Version') for item in own_versions.iter('PackageVersion')
              if item.get('Update') == 'StackExchange.Redis']
@@ -726,6 +735,16 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCatalogSdkSelection'})
         ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCanonicalBoundaryPackageCohort'})
         ET.ElementTree(after_xml).write(after_directory, encoding='utf-8', xml_declaration=True)
+        # SDK PrepareEventStoreDevelopmentOwnerAsync runs `dotnet build` without -p: overlays.
+        # Tenants/Parties Directory.Packages.props import Hexalith3 from
+        # ../../Hexalith.Builds (two levels above the fixture root). Place the
+        # overlay catalog and provenance there, outside the sealed Git copy.
+        nested_props = private / 'Hexalith.Builds' / 'Props'
+        if nested_props.exists() or (private / 'Hexalith.Builds').is_symlink():
+            raise ValueError('The private Hexalith.Builds overlay path is occupied.')
+        nested_props.mkdir(parents=True)
+        shutil.copyfile(overlay, nested_props / 'Directory.Packages.props')
+        shutil.copyfile(provenance, nested_props / 'ContainerProvenance.targets')
         source_environment = dict(os.environ, NUGET_PACKAGES=str(package_cache),
                                   NUGET_HTTP_CACHE_PATH=str(private / 'source-http'),
                                   CustomAfterMicrosoftCommonTargets=str(overrides),
@@ -734,7 +753,8 @@ def prepare(evidence: Path) -> None:
                                            'catalogSha256': hashlib.sha256(catalog.read_bytes()).hexdigest(),
                                            'overlaySha256': hashlib.sha256(overlay.read_bytes()).hexdigest(),
                                            'overridesSha256': hashlib.sha256(overrides.read_bytes()).hexdigest(),
-                                           'afterDirectorySha256': hashlib.sha256(after_directory.read_bytes()).hexdigest()}
+                                           'afterDirectorySha256': hashlib.sha256(after_directory.read_bytes()).hexdigest(),
+                                           'nestedProvenanceSha256': hashlib.sha256(provenance.read_bytes()).hexdigest()}
         receipt['sources'] = native_cohort.select_sources(ROOT, selection, evidence, bounded)
         fixture_root = private / 'source-fixtures'
         source_proof = native_sources.create(ROOT, fixture_root, selection, evidence, bounded)

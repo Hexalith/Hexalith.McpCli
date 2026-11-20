@@ -672,6 +672,14 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual('b' * 40, prepared['sourcePackageCatalog']['buildsCommit'])
         self.assertEqual(hashlib.sha256(overlay.read_bytes()).hexdigest(),
                          prepared['sourcePackageCatalog']['overlaySha256'])
+        nested_catalog = Path(prepared['privateDirectory']) / 'Hexalith.Builds' / 'Props' / 'Directory.Packages.props'
+        nested_provenance = Path(prepared['privateDirectory']) / 'Hexalith.Builds' / 'Props' / 'ContainerProvenance.targets'
+        self.assertEqual(overlay.read_bytes(), nested_catalog.read_bytes())
+        self.assertEqual((self.root / 'references/Hexalith.Builds/Props/ContainerProvenance.targets').read_bytes(),
+                         nested_provenance.read_bytes())
+        self.assertEqual(hashlib.sha256(nested_provenance.read_bytes()).hexdigest(),
+                         prepared['sourcePackageCatalog']['nestedProvenanceSha256'])
+        self.assertFalse((Path(prepared['privateDirectory']) / 'Hexalith.Builds' / '.git').exists())
         self.assertIn(str(self.root / 'references/Hexalith.Builds/Props/Directory.Packages.props'),
                       overlay.read_text())
         self.assertEqual([{mode: package, 'Version': version} for package, (mode, version) in SOURCE_PACKAGE_VERSIONS.items()],
@@ -945,6 +953,37 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             cwd=probe, env=os.environ.copy(), capture_output=True, text=True, timeout=30)
         self.assertEqual(0, qualified.returncode, qualified.stdout + qualified.stderr)
         self.assertEqual('net11.0', qualified.stdout.strip())
+
+    def test_unparameterized_sdk_prepare_resolves_private_builds_layout(self):
+        prepared = self.prepare()
+        private = Path(prepared['privateDirectory'])
+        probe = private / 'source-fixtures' / 'Hexalith.Tenants-probe'
+        probe.mkdir(parents=True)
+        (probe / 'Directory.Packages.props').write_text(
+            '<Project><PropertyGroup>'
+            '<Hexalith3BuildPackageProps>$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/Directory.Packages.props'
+            '</Hexalith3BuildPackageProps></PropertyGroup>'
+            '<Import Project="$(Hexalith3BuildPackageProps)" Condition="\'$(HexalithVersionsLoaded)\' != \'true\'" />'
+            '</Project>')
+        (probe / 'Hexalith.Tenants.csproj').write_text(
+            '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net11.0</TargetFramework>'
+            '<EnableDefaultItems>false</EnableDefaultItems>'
+            '<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally></PropertyGroup></Project>')
+        project = str(probe / 'Hexalith.Tenants.csproj')
+        dotnet = shutil.which('dotnet')
+        evaluate = [dotnet, 'msbuild', project, '-nologo', '-restore:false', '-getProperty:TargetFramework']
+        qualified = subprocess.run(evaluate, cwd=probe, env=os.environ.copy(), capture_output=True, text=True, timeout=30)
+        self.assertEqual(0, qualified.returncode, qualified.stdout + qualified.stderr)
+        self.assertEqual('net11.0', qualified.stdout.strip())
+        nested = private / 'Hexalith.Builds' / 'Props' / 'Directory.Packages.props'
+        original = nested.read_bytes()
+        try:
+            nested.unlink()
+            refused = subprocess.run(evaluate, cwd=probe, env=os.environ.copy(), capture_output=True, text=True, timeout=30)
+            self.assertNotEqual(0, refused.returncode)
+            self.assertIn('MSB4019', refused.stdout + refused.stderr)
+        finally:
+            nested.write_bytes(original)
 
     def test_online_audit_receipt_reaches_both_runners_and_refuses_drift(self):
         prepared = self.prepare()
@@ -1273,7 +1312,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         private = Path(prepared['privateDirectory'])
         paths = [self.root / 'references/Hexalith.Builds/Props/Directory.Packages.props',
                  private / 'source-runtime-packages.props', private / 'source-runtime-overrides.targets',
-                 private / 'source-runtime-after-directory.targets']
+                 private / 'source-runtime-after-directory.targets',
+                 private / 'Hexalith.Builds' / 'Props' / 'Directory.Packages.props',
+                 private / 'Hexalith.Builds' / 'Props' / 'ContainerProvenance.targets']
         for path in paths:
             with self.subTest(path=path.name):
                 original = path.read_bytes()

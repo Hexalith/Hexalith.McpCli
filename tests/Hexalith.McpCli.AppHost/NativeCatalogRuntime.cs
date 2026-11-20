@@ -48,8 +48,10 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
         try
         {
             using var deadline = new CancellationTokenSource(TimeSpan.FromMinutes(4));
-            tenantOwner = await tenants.PrepareEventStoreDevelopmentOwnerAsync("Hexalith.Tenants.Contracts.dll",
+            IResourceBuilder<ProjectResource> catalogSource = PreparationSource(builder, tenants);
+            tenantOwner = await catalogSource.PrepareEventStoreDevelopmentOwnerAsync("Hexalith.Tenants.Contracts.dll",
                 "Hexalith.Tenants.Server.dll", TimeSpan.FromMinutes(3), deadline.Token).ConfigureAwait(false);
+            DevelopmentRouteCatalogOwner tenantCatalog = BindOwner(tenantOwner.Owner, tenants);
             string adapter = Path.Combine(NativeSourceFixtures.ModuleRoot(root, "Hexalith.Parties"), "src", "Hexalith.Parties.EventStoreExtensions",
                 "bin", "Release", "net11.0", "Hexalith.Parties.EventStoreExtensions.dll");
             string contracts = Path.Combine(Path.GetDirectoryName(adapter)!, "Hexalith.Parties.Contracts.dll");
@@ -92,7 +94,7 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
             DevelopmentRouteCatalogInvocation[] domainCalls = operational.Cast<object>()
                 .Select(route => new DevelopmentRouteCatalogInvocation(gateway, (string)route.GetType().GetProperty("Route")!.GetValue(route)!, ["POST"])).ToArray();
             catalog = builder.AddEventStoreDevelopmentRouteCatalog(gateway,
-                [tenantOwner.Owner, new(parties, declarationAssembly, adapterAssembly)],
+                [tenantCatalog, new(parties, declarationAssembly, adapterAssembly)],
                 [new(gateway, [new(tenants, "/api/v1/commands/bound/workload", ["POST"]),
                     new(tenants, "/api/v1/streams/read/workload", ["POST"]), new(tenants, "/api/v1/queries", ["POST"]),
                     new(parties, "/api/v1/queries", ["POST"])]) { TechnicalHttp = true },
@@ -151,6 +153,37 @@ internal sealed class NativeCatalogRuntime : IAsyncDisposable
             () => { if (!unconfirmed) NativeCatalogTool.DeleteOwnedDirectory(_reader, _owner); return ValueTask.CompletedTask; },
             () => { if (!unconfirmed) NativeCatalogTool.DeleteOwnedDirectory(_custody, _owner); return ValueTask.CompletedTask; }).ConfigureAwait(false);
     }
+
+    /// <summary>SDK owner preparation refuses suppressed or argument-overridden launches; compose against the launched resource.</summary>
+    internal static IResourceBuilder<ProjectResource> PreparationSource(
+        IDistributedApplicationBuilder builder, IResourceBuilder<ProjectResource> launched)
+    {
+        ArgumentNullException.ThrowIfNull(builder);
+        ArgumentNullException.ThrowIfNull(launched);
+        IProjectMetadata metadata = launched.Resource.GetProjectMetadata();
+        if (!PreparationBlocked(launched.Resource)) return launched;
+#pragma warning disable CS0618
+        return builder.AddProject(launched.Resource.Name + "-catalog-source", metadata.ProjectPath)
+            .WithExplicitStart();
+#pragma warning restore CS0618
+    }
+
+    /// <summary>Catalog owners must be the launched receiver; preparation may have used a build-capable clone.</summary>
+    internal static DevelopmentRouteCatalogOwner BindOwner(
+        DevelopmentRouteCatalogOwner prepared, IResourceBuilder<ProjectResource> launched)
+    {
+        ArgumentNullException.ThrowIfNull(prepared);
+        ArgumentNullException.ThrowIfNull(launched);
+        return ReferenceEquals(prepared.Project.Resource, launched.Resource)
+            ? prepared
+            : prepared with { Project = launched };
+    }
+
+    /// <summary>True when the SDK would refuse selected-child metadata preparation.</summary>
+    internal static bool PreparationBlocked(ProjectResource resource) =>
+        resource.GetProjectMetadata().SuppressBuild
+        || resource.Annotations.Any(annotation =>
+            annotation.GetType().Name is "LaunchToolArgsCallbackAnnotation" or "ProjectLaunchArgsOverrideAnnotation");
 
     private static string Digest(byte[] bytes) => Convert.ToHexStringLower(SHA256.HashData(bytes));
 }

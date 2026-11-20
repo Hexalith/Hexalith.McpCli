@@ -227,7 +227,14 @@ that frozen `Directory.Build.targets`, so preparation also sets
 Error targets. Isolated Parties still imports `Hexalith3BuildPackageProps`
 without `Exists()`; preparation points that property, plus Hexalith1/2 and
 `HexalithBuildPackageVersions1`, at the same overlay so the missing nested
-Builds path is never evaluated. The current Tenant
+Builds path is never evaluated. The same overlay catalog and
+`ContainerProvenance.targets` are also copied to
+`<private>/Hexalith.Builds/Props/`, two levels above each source fixture root,
+so the SDK's unparameterized `dotnet build` during owner preparation resolves
+that relative Hexalith3 path without rewriting the sealed Git copy. The native
+AppHost keeps launched Tenants `SuppressBuild` and prepares catalog metadata
+from an explicit-start clone of the same `.csproj`, then binds the catalog owner
+back to the launched receiver. The current Tenant
 source build uses the standard `LoggerMessage` generator from the exact
 `Microsoft.NETCore.App.Ref` 11.0.0 targeting pack. The telemetry replacement generator emits its two nested
 `Log` types in an unstable order, changing DLL/PDB hashes on an unchanged rebuild.
