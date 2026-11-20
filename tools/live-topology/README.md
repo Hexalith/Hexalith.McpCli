@@ -224,7 +224,10 @@ matches the AppHost, including later SDK/Aspire rebuilds. The published Tenants 
 that frozen `Directory.Build.targets`, so preparation also sets
 `CustomAfterDirectoryBuildTargets` to a private late import that enables the
 5.4.0 catalog constants and replaces the owner's catalog-SDK and canonical-boundary
-Error targets. The current Tenant
+Error targets. Isolated Parties still imports `Hexalith3BuildPackageProps`
+without `Exists()`; preparation points that property, plus Hexalith1/2 and
+`HexalithBuildPackageVersions1`, at the same overlay so the missing nested
+Builds path is never evaluated. The current Tenant
 source build uses the standard `LoggerMessage` generator from the exact
 `Microsoft.NETCore.App.Ref` 11.0.0 targeting pack. The telemetry replacement generator emits its two nested
 `Log` types in an unstable order, changing DLL/PDB hashes on an unchanged rebuild.

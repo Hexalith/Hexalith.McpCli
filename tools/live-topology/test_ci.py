@@ -701,6 +701,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         provenance = self.root / 'references/Hexalith.Builds/Props/ContainerProvenance.targets'
         for call in source_builds:
             self.assertIn('-p:HexalithBuildPackageVersions1=' + str(overlay), call)
+            self.assertIn('-p:Hexalith1BuildPackageProps=' + str(overlay), call)
+            self.assertIn('-p:Hexalith2BuildPackageProps=' + str(overlay), call)
+            self.assertIn('-p:Hexalith3BuildPackageProps=' + str(overlay), call)
             self.assertIn('-p:HexalithContainerProvenanceTargets=' + str(provenance), call)
         for call in source_builds:
             self.assertFalse(any(argument.startswith(('-p:HexalithMemoriesVersion=', '-p:HexalithTenantsVersion=')) for argument in call))
@@ -748,6 +751,10 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             self.assertIn('-p:UseNuGetDeps=true', call)
             self.assertIn('-p:HexalithEventStoreFromSource=false', call)
             self.assertIn('-p:HexalithEventStoreVersion=5.4.0', call)
+            self.assertIn('-p:HexalithBuildPackageVersions1=' + str(overlay), call)
+            self.assertIn('-p:Hexalith1BuildPackageProps=' + str(overlay), call)
+            self.assertIn('-p:Hexalith2BuildPackageProps=' + str(overlay), call)
+            self.assertIn('-p:Hexalith3BuildPackageProps=' + str(overlay), call)
             self.assertIn('-p:HexalithContainerProvenanceTargets=' + str(provenance), call)
         self.assertEqual(['timeout', str(self.root), '--signal=TERM', '--kill-after=30s', '2280',
                           'python3', 'tools/live-topology/ci.py', 'prepare'], calls[0])
@@ -910,6 +917,34 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual('true', values['HexalithTenantsCatalogArtifactsAvailable'])
         self.assertIn('HEXALITH_DEVELOPMENT_CATALOG_SOURCE', values['DefineConstants'])
         self.assertIn('HEXALITH_CHECKPOINTED_TENANT_PROJECTION', values['DefineConstants'])
+
+    def test_parties_hexalith3_import_uses_overlay_instead_of_nested_builds(self):
+        prepared = self.prepare()
+        overlay = Path(prepared['privateDirectory']) / 'source-runtime-packages.props'
+        probe = self.root / 'parties-hexalith3-probe'
+        probe.mkdir()
+        (probe / 'Directory.Packages.props').write_text(
+            '<Project><PropertyGroup>'
+            '<Hexalith3BuildPackageProps>$(MSBuildThisFileDirectory)../../Hexalith.Builds/Props/Directory.Packages.props'
+            '</Hexalith3BuildPackageProps></PropertyGroup>'
+            '<Import Project="$(Hexalith3BuildPackageProps)" Condition="\'$(HexalithVersionsLoaded)\' != \'true\'" />'
+            '</Project>')
+        (probe / 'Hexalith.Parties.csproj').write_text(
+            '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net11.0</TargetFramework>'
+            '<EnableDefaultItems>false</EnableDefaultItems>'
+            '<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally></PropertyGroup></Project>')
+        project = str(probe / 'Hexalith.Parties.csproj')
+        dotnet = shutil.which('dotnet')
+        evaluate = [dotnet, 'msbuild', project, '-nologo', '-restore:false', '-getProperty:TargetFramework']
+        refused = subprocess.run(evaluate, cwd=probe, env=os.environ.copy(), capture_output=True, text=True, timeout=30)
+        self.assertNotEqual(0, refused.returncode)
+        self.assertIn('MSB4019', refused.stdout + refused.stderr)
+        self.assertIn('Hexalith3BuildPackageProps', refused.stdout + refused.stderr)
+        qualified = subprocess.run(
+            evaluate + ['-p:Hexalith3BuildPackageProps=' + str(overlay)],
+            cwd=probe, env=os.environ.copy(), capture_output=True, text=True, timeout=30)
+        self.assertEqual(0, qualified.returncode, qualified.stdout + qualified.stderr)
+        self.assertEqual('net11.0', qualified.stdout.strip())
 
     def test_online_audit_receipt_reaches_both_runners_and_refuses_drift(self):
         prepared = self.prepare()
@@ -1765,6 +1800,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                    '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=5.4.0 '
                    '-p:HexalithMcpCliVersion=3.0.0 '
                    f'-p:HexalithBuildPackageVersions1={overlay} '
+                   f'-p:Hexalith1BuildPackageProps={overlay} '
+                   f'-p:Hexalith2BuildPackageProps={overlay} '
+                   f'-p:Hexalith3BuildPackageProps={overlay} '
                    f'-p:HexalithContainerProvenanceTargets={provenance}')
         stdout = self.evidence / 'Hexalith.Tenants-build.stdout.txt'
         stderr = self.evidence / 'Hexalith.Tenants-build.stderr.txt'

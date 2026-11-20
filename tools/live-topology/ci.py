@@ -753,6 +753,11 @@ def prepare(evidence: Path) -> None:
             properties.append('-p:HexalithMcpCliVersion=' + mcpcli[0])
             if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
                 properties.append('-p:HexalithBuildPackageVersions1=' + str(overlay))
+                # Parties Directory.Packages.props imports Hexalith3BuildPackageProps
+                # without Exists(); the isolated fixture has no nested Builds checkout.
+                properties.append('-p:Hexalith1BuildPackageProps=' + str(overlay))
+                properties.append('-p:Hexalith2BuildPackageProps=' + str(overlay))
+                properties.append('-p:Hexalith3BuildPackageProps=' + str(overlay))
                 properties.append('-p:HexalithContainerProvenanceTargets=' + str(provenance))
             source['HexalithEventStoreVersion'] = bounded(
                 ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion', *properties],
