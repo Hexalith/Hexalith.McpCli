@@ -220,10 +220,12 @@ All builds and nested preparation processes inherit a fresh task-owned
 Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the current root catalog’s published dependency selections. Source hosts and
 the separate adapter use the root McpCli 3.0.0 pin so their Abstractions identity
 matches the AppHost, including later SDK/Aspire rebuilds. The published Tenants **8.0.2** source qualifies EventStore only through **5.3.1**.
-`Microsoft.Common.targets` imports `CustomAfterMicrosoftCommonTargets` before
+Published Parties **4.0.0** likewise gates `HEXALITH_EVENTSTORE_CATALOG_API` on that
+same 5.3.1 list, so a 5.4.0 fixture compile would omit the compiled declaration
+source attribute. `Microsoft.Common.targets` imports `CustomAfterMicrosoftCommonTargets` before
 that frozen `Directory.Build.targets`, so preparation also sets
 `CustomAfterDirectoryBuildTargets` to a private late import that enables the
-5.4.0 catalog constants and replaces the owner's catalog-SDK and canonical-boundary
+5.4.0 catalog constants for Tenants and Parties and replaces the owner's catalog-SDK and canonical-boundary
 Error targets. Isolated Parties still imports `Hexalith3BuildPackageProps`
 without `Exists()`; preparation points that property, plus Hexalith1/2 and
 `HexalithBuildPackageVersions1`, at the same overlay so the missing nested

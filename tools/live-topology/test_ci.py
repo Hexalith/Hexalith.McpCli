@@ -703,6 +703,10 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual('true', after_xml.find('./PropertyGroup/HexalithTenantsCatalogArtifactsAvailable').text)
         self.assertIn('HEXALITH_DEVELOPMENT_CATALOG_SOURCE', after_xml.find('./PropertyGroup/DefineConstants').text)
         self.assertIn('HEXALITH_CHECKPOINTED_TENANT_PROJECTION', after_xml.find('./PropertyGroup/DefineConstants').text)
+        parties_constants = [row.find('DefineConstants').text for row in after_xml.findall('./PropertyGroup')
+                             if 'Parties' in (row.get('Condition') or '')]
+        self.assertEqual(1, len(parties_constants))
+        self.assertIn('HEXALITH_EVENTSTORE_CATALOG_API', parties_constants[0])
         self.assertEqual(['ValidateCatalogSdkSelection', 'ValidateCanonicalBoundaryPackageCohort'],
                          [row.get('Name') for row in after_xml.findall('./Target')])
         for call in source_builds:
@@ -926,6 +930,25 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual('true', values['HexalithTenantsCatalogArtifactsAvailable'])
         self.assertIn('HEXALITH_DEVELOPMENT_CATALOG_SOURCE', values['DefineConstants'])
         self.assertIn('HEXALITH_CHECKPOINTED_TENANT_PROJECTION', values['DefineConstants'])
+
+    def test_after_directory_enables_parties_catalog_api_for_eventstore_540(self):
+        prepared = self.prepare()
+        after_directory = Path(prepared['privateDirectory']) / 'source-runtime-after-directory.targets'
+        probe = self.root / 'parties-catalog-api-probe'
+        probe.mkdir()
+        (probe / 'Hexalith.Parties.Contracts.csproj').write_text(
+            '<Project Sdk="Microsoft.NET.Sdk"><PropertyGroup><TargetFramework>net11.0</TargetFramework>'
+            '<EnableDefaultItems>false</EnableDefaultItems></PropertyGroup></Project>')
+        project = str(probe / 'Hexalith.Parties.Contracts.csproj')
+        dotnet = shutil.which('dotnet')
+        evaluate = [dotnet, 'msbuild', project, '-nologo', '-restore:false', '-getProperty:DefineConstants']
+        refused = subprocess.run(evaluate, cwd=probe, env=os.environ.copy(), capture_output=True, text=True, timeout=30)
+        self.assertEqual(0, refused.returncode, refused.stdout + refused.stderr)
+        self.assertNotIn('HEXALITH_EVENTSTORE_CATALOG_API', refused.stdout)
+        environment = dict(os.environ, CustomAfterDirectoryBuildTargets=str(after_directory))
+        qualified = subprocess.run(evaluate, cwd=probe, env=environment, capture_output=True, text=True, timeout=30)
+        self.assertEqual(0, qualified.returncode, qualified.stdout + qualified.stderr)
+        self.assertIn('HEXALITH_EVENTSTORE_CATALOG_API', qualified.stdout)
 
     def test_parties_hexalith3_import_uses_overlay_instead_of_nested_builds(self):
         prepared = self.prepare()

@@ -775,6 +775,13 @@ def prepare(evidence: Path) -> None:
         ET.SubElement(catalog_properties, 'DefineConstants').text = (
             '$(DefineConstants);HEXALITH_DEVELOPMENT_CATALOG_COHORT;HEXALITH_DEVELOPMENT_CATALOG_SOURCE;'
             'HEXALITH_TECHNICAL_HTTP_CATALOG_BINDING;HEXALITH_CHECKPOINTED_TENANT_PROJECTION')
+        # Published Parties 4.0.0 source qualifies the catalog API only through EventStore 5.3.1.
+        parties_projects = ("'$(MSBuildProjectName)' == 'Hexalith.Parties' or "
+                            "$(MSBuildProjectName.StartsWith('Hexalith.Parties.'))")
+        parties_properties = ET.SubElement(after_xml, 'PropertyGroup', {'Condition': parties_projects})
+        ET.SubElement(parties_properties, 'DefineConstants').text = (
+            '$(DefineConstants);HEXALITH_EVENTSTORE_CATALOG_API;HEXALITH_EVENTSTORE_CATALOG_HOSTS;'
+            'HEXALITH_EVENTSTORE_QUERY_SELECTOR_BINDINGS;HES_CANCELLABLE_PROJECTIONS')
         ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCatalogSdkSelection'})
         ET.SubElement(after_xml, 'Target', {'Name': 'ValidateCanonicalBoundaryPackageCohort'})
         ET.ElementTree(after_xml).write(after_directory, encoding='utf-8', xml_declaration=True)
