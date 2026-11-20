@@ -108,14 +108,20 @@ if name == 'dotnet':
         import xml.etree.ElementTree as ET, shutil
         project = pathlib.Path(args[1]); private = project.parent
         libraries = {}
-        for package in ET.parse(project).getroot().iter('PackageReference'):
-            identity = package.get('Include') + '/' + package.get('Version').strip('[]')
-            libraries[identity] = {'type':'package','sha512': __import__('base64').b64encode(hashlib.sha512(identity.encode()).digest()).decode()}
+        try:
+            for package in ET.parse(project).getroot().iter('PackageReference'):
+                include, version = package.get('Include'), package.get('Version')
+                if include and version:
+                    identity = include + '/' + version.strip('[]')
+                    libraries[identity] = {'type':'package','sha512': __import__('base64').b64encode(hashlib.sha512(identity.encode()).digest()).decode()}
+        except ET.ParseError:
+            pass
         cache = pathlib.Path(os.environ['NUGET_PACKAGES'])
-        shutil.copytree(root / 'package-cache',cache)
+        if not cache.exists():
+            shutil.copytree(root / 'package-cache',cache)
         assets = {'libraries':libraries,'packageFolders':{str(cache):{}},'project':{'frameworks':{'net11.0':{}},'restore':{
             'restoreAuditProperties':{'enableAudit':'true','auditLevel':'low','auditMode':'all'},'warningProperties':{'allWarningsAsErrors':True}}}}
-        (private/'obj').mkdir();(private/'obj/project.assets.json').write_text(json.dumps(assets))
+        (private/'obj').mkdir(exist_ok=True);(private/'obj/project.assets.json').write_text(json.dumps(assets))
         http = pathlib.Path(os.environ['NUGET_HTTP_CACHE_PATH']) / 'fixture'; http.mkdir(parents=True,exist_ok=True)
         pages = [{'@name':name,'@id':'https://api.nuget.org/v3-vulnerabilities/revision/'+name+'.json','@updated':'2026-11-16T00:00:00Z'} for name in ('base','update')]
         (http/'vuln_index.dat').write_text(json.dumps(pages))
@@ -655,6 +661,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                          [call[3] for call in source_builds])
         self.assertEqual(str(Path(prepared['sourceFixtureRoot']) / 'Hexalith.Tenants'), source_builds[0][1])
         for call in source_builds:
+            self.assertIn('--no-restore', call)
             self.assertIn('-p:UseHexalithProjectReferences=false', call)
             self.assertIn('-p:UseNuGetDeps=true', call)
             self.assertIn('Release', call)
@@ -667,7 +674,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         test_builds = [call for call in calls if call[0] == 'dotnet' and call[2] == 'build' and call[3] == 'tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj']
         self.assertEqual([], test_builds)
         restores = [call for call in calls if call[0] == 'dotnet' and call[2] == 'restore']
-        self.assertEqual(4, len(restores))
+        self.assertEqual(7, len(restores))
         self.assertTrue(all(Path(call[3]).is_relative_to(Path(prepared['privateDirectory'])) for call in restores))
         overlay = Path(prepared['privateDirectory']) / 'source-runtime-packages.props'
         self.assertEqual('b' * 40, prepared['sourcePackageCatalog']['buildsCommit'])
@@ -1031,7 +1038,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         parties = next(index for index, call in enumerate(self.calls())
                        if call[0] == 'dotnet' and call[2] == 'build'
                        and call[3] == 'src/Hexalith.Parties/Hexalith.Parties.csproj')
-        self.assertLess(tenants, curl)
+        self.assertLess(curl, tenants)
         self.assertLess(curl, parties)
         self.assertTrue(all(source['policy']['warnings']['allWarningsAsErrors'] for source in document['sources'].values()))
         tenants = 'references/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj'

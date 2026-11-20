@@ -809,18 +809,13 @@ def prepare(evidence: Path) -> None:
         fixture_root = private / 'source-fixtures'
         source_proof = native_sources.create(ROOT, fixture_root, selection, evidence, bounded)
         receipt['sourceFixtureRoot'] = str(fixture_root)
-        for source in receipt['sources']:
-            module = source['module']
-            if module not in native_sources.MODULES:
-                continue
-            project = f'src/{module}/{module}.csproj'
-            working = fixture_root / module
-            # Source owners may downgrade audit warnings; this native qualification requires every warning to fail.
+
+        def source_properties(module: str) -> list[str]:
             properties = ['-p:NuGetAudit=true', '-p:NuGetAuditMode=all', '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true',
                           '-p:WarningsNotAsErrors=',
                           '-p:UseHexalithProjectReferences=false', '-p:UseNuGetDeps=true',
-                          '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT]
-            properties.append('-p:HexalithMcpCliVersion=' + mcpcli[0])
+                          '-p:HexalithEventStoreFromSource=false', '-p:HexalithEventStoreVersion=' + EVENTSTORE_COHORT,
+                          '-p:HexalithMcpCliVersion=' + mcpcli[0]]
             if module in ('Hexalith.Tenants', 'Hexalith.Parties'):
                 properties.append('-p:HexalithBuildPackageVersions1=' + str(overlay))
                 # Parties Directory.Packages.props imports Hexalith3BuildPackageProps
@@ -829,20 +824,43 @@ def prepare(evidence: Path) -> None:
                 properties.append('-p:Hexalith2BuildPackageProps=' + str(overlay))
                 properties.append('-p:Hexalith3BuildPackageProps=' + str(overlay))
                 properties.append('-p:HexalithContainerProvenanceTargets=' + str(provenance))
+            return properties
+
+        # Restore every source owner first, then prove the advisory HTTP cache before the long
+        # compiles. Later builds use --no-restore so nuget.org cannot rotate that snapshot.
+        for source in receipt['sources']:
+            module = source['module']
+            if module not in native_sources.MODULES:
+                continue
+            properties = source_properties(module)
+            working = fixture_root / module
+            project = f'src/{module}/{module}.csproj'
+            bounded(['dotnet', 'restore', project, '--configuration', 'Release', '-warnaserror', *properties],
+                    300, evidence / (module + '-restore'), cwd=working, environment=source_environment)
+            if module == 'Hexalith.Parties':
+                bounded(['dotnet', 'restore', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
+                         '--configuration', 'Release', '-warnaserror', '-p:CopyLocalLockFileAssemblies=true', *properties],
+                        300, evidence / 'parties-adapter-restore', cwd=working, environment=source_environment)
+        prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt, required=True)
+        for source in receipt['sources']:
+            module = source['module']
+            if module not in native_sources.MODULES:
+                continue
+            properties = source_properties(module)
+            working = fixture_root / module
+            project = f'src/{module}/{module}.csproj'
             source['HexalithEventStoreVersion'] = bounded(
-                ['dotnet', 'msbuild', project, '-getProperty:HexalithEventStoreVersion', *properties],
+                ['dotnet', 'msbuild', project, '-restore:false', '-getProperty:HexalithEventStoreVersion', *properties],
                 30, evidence / (module + '-eventstore-version'), cwd=working, environment=source_environment)
             if source['HexalithEventStoreVersion'] != EVENTSTORE_COHORT:
                 raise ValueError(f'{module} did not select the exact published EventStore cohort.')
-            command = ['dotnet', 'build', project, '--configuration', 'Release', '-warnaserror', '-m:1',
-                       *properties]
-            bounded(command, 300, evidence / (module + '-build'), cwd=working, environment=source_environment)
+            bounded(['dotnet', 'build', project, '--no-restore', '--configuration', 'Release', '-warnaserror', '-m:1',
+                     *properties], 300, evidence / (module + '-build'), cwd=working, environment=source_environment)
             if module == 'Hexalith.Parties':
                 bounded(['dotnet', 'build', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
-                         '--configuration', 'Release', '-warnaserror', '-m:1', '-p:CopyLocalLockFileAssemblies=true', *properties],
+                         '--no-restore', '--configuration', 'Release', '-warnaserror', '-m:1', '-p:CopyLocalLockFileAssemblies=true', *properties],
                         300, evidence / 'parties-adapter-build', cwd=working, environment=source_environment)
             prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt)
-        prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt, required=True)
         source_path = evidence / 'native-source-fixtures.json'
         save(source_path, native_sources.seal(source_proof))
         receipt['sourceFixtures'] = {'path': str(source_path.resolve()), 'sha256': hashlib.sha256(source_path.read_bytes()).hexdigest()}
