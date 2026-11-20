@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hexalith.McpCli PRD validation</title>
+<style>
+  :root {
+    --bg: #fafaf9;
+    --surface: #ffffff;
+    --border: #e7e5e4;
+    --text: #1c1917;
+    --muted: #78716c;
+
+    --verdict-strong: #16a34a;
+    --verdict-adequate: #65a30d;
+    --verdict-thin: #d97706;
+    --verdict-broken: #dc2626;
+
+    --sev-low: #64748b;
+    --sev-medium: #ca8a04;
+    --sev-high: #ea580c;
+    --sev-critical: #dc2626;
+
+    --grade-exc: #16a34a;
+    --grade-good: #65a30d;
+    --grade-fair: #d97706;
+    --grade-poor: #dc2626;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    font-size: 15px;
+  }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 64px; }
+
+  header.report-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+  }
+  .title h1 { margin: 0; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  .title .subtitle { color: var(--muted); font-size: 13px; margin-top: 4px; font-family: ui-monospace, "SF Mono", Menlo, monospace; }
+  .grade {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: white;
+    font-size: 15px;
+    white-space: nowrap;
+  }
+  .grade-excellent { background: var(--grade-exc); }
+  .grade-good { background: var(--grade-good); }
+  .grade-fair { background: var(--grade-fair); }
+  .grade-poor { background: var(--grade-poor); }
+
+  .synthesis {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--muted);
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-bottom: 24px;
+    font-size: 15.5px;
+  }
+  .synthesis p { margin: 0 0 10px; }
+  .synthesis p:last-child { margin-bottom: 0; }
+
+  .dimension-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .dim-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 12px 14px;
+  }
+  .dim-card .dim-name { font-size: 13px; color: var(--muted); margin-bottom: 6px; }
+  .dim-card .dim-verdict { font-size: 14px; font-weight: 600; }
+
+  section.dimension, section.reviewer-section { margin-bottom: 14px; }
+  section.dimension details, section.reviewer-section details {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  section summary {
+    padding: 14px 20px;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  section summary::-webkit-details-marker { display: none; }
+  section summary::before {
+    content: "▸";
+    display: inline-block;
+    color: var(--muted);
+    transition: transform 0.15s ease;
+  }
+  section details[open] summary::before { transform: rotate(90deg); }
+  section summary h2 {
+    display: inline;
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.005em;
+    flex: 1;
+  }
+  .verdict-pill {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: white;
+  }
+  .verdict-strong { background: var(--verdict-strong); }
+  .verdict-adequate { background: var(--verdict-adequate); }
+  .verdict-thin { background: var(--verdict-thin); }
+  .verdict-broken { background: var(--verdict-broken); }
+
+  .dim-body { padding: 4px 20px 18px; }
+  .dim-judgment { color: var(--text); font-size: 14.5px; }
+  .dim-judgment p { margin: 0 0 10px; }
+
+  .findings-list { padding: 0 20px 4px; }
+  article.finding {
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+  }
+  article.finding:first-child { border-top: none; }
+  article.finding header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .badge {
+    font-size: 10.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+  }
+  .badge-sev-low { background: rgba(100, 116, 139, 0.12); color: var(--sev-low); }
+  .badge-sev-medium { background: rgba(202, 138, 4, 0.14); color: var(--sev-medium); }
+  .badge-sev-high { background: rgba(234, 88, 12, 0.14); color: var(--sev-high); }
+  .badge-sev-critical { background: rgba(220, 38, 38, 0.14); color: var(--sev-critical); }
+  .finding-title { margin: 0; font-size: 15px; font-weight: 500; flex: 1; min-width: 200px; }
+  .finding-location { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; color: var(--muted); }
+  .finding-note, .finding-fix { margin-top: 6px; font-size: 14px; }
+  .finding-fix strong { color: var(--muted); font-weight: 500; }
+
+  .reviewer-source {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+
+  .mechanical {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-top: 24px;
+    font-size: 14px;
+  }
+  .mechanical h3 { margin: 0 0 10px; font-size: 14px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+  .mechanical ul { margin: 0; padding-left: 20px; }
+  .mechanical li { margin-bottom: 4px; color: var(--text); }
+
+  footer.report-footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--muted);
+    font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  }
+  footer .meta { display: flex; gap: 24px; flex-wrap: wrap; }
+</style>
+</head><body><main class="container">
+<header class="report-header"><div class="title"><h1>Hexalith.McpCli PRD validation</h1><div class="subtitle">_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md</div></div><div class="grade grade-fair">Fair</div></header>
+<p><strong>Follow-up on 2026-11-20.</strong> The Fair grade below describes the documents before the update. The independent follow-up review records how the PRD and addendum addressed all 13 findings. <a href="review-validation-followup-2026-11-20.md">Review of the corrections</a>.</p>
+<div class="synthesis"><p><strong>0 critical · 4 high · 7 medium · 2 low</strong></p>
+<p>The PRD is usable for sprint planning. The manifest, release history and open qualification work are traceable. Four high-priority corrections are needed before teams use it to implement HTTP identity, approve a public-agent write, infer a command outcome from CLI exit 2, or choose routing fields for a computed query.</p>
+<p>The rubric grade is Fair. Thirteen distinct findings remain after consolidating the three reviews. This assessment covers the working-tree PRD and addendum on McpCli commit 6993abfe. The documented CI failure and the pending Projects, Folders and retirement gates are delivery status, separate from the findings below.</p>
+</div>
+<div class="dimension-summary">
+<div class="dim-card"><div class="dim-name">Decision-readiness</div><div class="dim-verdict" style="color:var(--verdict-adequate)">Adequate</div></div>
+<div class="dim-card"><div class="dim-name">Substance over theater</div><div class="dim-verdict" style="color:var(--verdict-strong)">Strong</div></div>
+<div class="dim-card"><div class="dim-name">Strategic coherence</div><div class="dim-verdict" style="color:var(--verdict-adequate)">Adequate</div></div>
+<div class="dim-card"><div class="dim-name">Done-ness clarity</div><div class="dim-verdict" style="color:var(--verdict-adequate)">Adequate</div></div>
+<div class="dim-card"><div class="dim-name">Scope honesty</div><div class="dim-verdict" style="color:var(--verdict-strong)">Strong</div></div>
+<div class="dim-card"><div class="dim-name">Downstream usability</div><div class="dim-verdict" style="color:var(--verdict-thin)">Thin</div></div>
+<div class="dim-card"><div class="dim-name">Shape fit</div><div class="dim-verdict" style="color:var(--verdict-strong)">Strong</div></div>
+</div>
+<section class="dimension"><details><summary><h2>Decision-readiness</h2><span class="verdict-pill verdict-adequate">Adequate</span></summary><div class="dim-body"><div class="dim-judgment"><p>The PRD names owners for final archive acceptance and Projects paging. The release section omits the recorded closure of an earlier prerequisite.</p></div></div><div class="findings-list">
+<article class="finding"><header><span class="badge badge-sev-medium">Medium</span><h3 class="finding-title">The release summary omits a prerequisite’s completion</h3><span class="finding-location">PRD §7, line 475</span></header><p class="finding-note">The text says publication after 2.0.1 requires resolution of the Epic 3 output-contract item. The sprint tracker records it as done and the retrospective documents the two-protocol checks.</p><p class="finding-fix"><strong>Correction.</strong> Date the historical condition and record its satisfaction. Retain the candidate-specific CI, platform, final-archive and operator acceptance requirements. <a href="../../../../_bmad-output/implementation-artifacts/epic-3-retro-2026-10-16.md#L137">epic-3-retro-2026-10-16.md, line 137</a></p></article>
+<article class="finding"><header><span class="badge badge-sev-medium">Medium</span><h3 class="finding-title">The migration parity exclusion is broader than the approved decision</h3><span class="finding-location">Addendum §F, lines 318–322 and PRD FR-21, line 446</span></header><p class="finding-note">Section F can be read as waiving search, filtering, ordering and freshness during parity checks. K03 still requires proof for approved module-specific behavior, including filtering before paging.</p><p class="finding-fix"><strong>Correction.</strong> Limit the exclusion to generic query arguments and HTTP features. Preserve the evidence required for each approved replacement’s payload and handler semantics. <a href="../../../../_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md#L127">AD-23-non-gateway-capability-classes.md, line 127</a></p></article>
+</div></details></section>
+<section class="dimension"><details><summary><h2>Substance over theater</h2><span class="verdict-pill verdict-strong">Strong</span></summary><div class="dim-body"><div class="dim-judgment"><p>The profile size boundary, preservation of state on failure and required contents of two populated Projects pages give maintainers observable acceptance criteria.</p></div></div><div class="findings-list">
+</div></details></section>
+<section class="dimension"><details><summary><h2>Strategic coherence</h2><span class="verdict-pill verdict-adequate">Adequate</span></summary><div class="dim-body"><div class="dim-judgment"><p>Both interfaces serve the same catalog and Gateway. The featured cross-module journey depends on a write whose public-agent eligibility remains disputed.</p></div></div><div class="findings-list">
+<article class="finding"><header><span class="badge badge-sev-high">High</span><h3 class="finding-title">The main agent journey uses a write with disputed eligibility</h3><span class="finding-location">PRD UJ-1, line 56 and FR-21, line 447</span></header><p class="finding-note">UJ-1 treats a successful parties.create-party call as the normal outcome. It is target T04, one of three enrolled Parties commands whose public-agent exposure conflicts with the inventory’s restricted classification. Discovery or a successful test invocation cannot settle that decision.</p><p class="finding-fix"><strong>Correction.</strong> Use an operation cleared for the intended surface in SM-2, or mark the write scenario as conditional on the Parties and McpCli owners resolving the restriction. Keep the separate authorization and effects checks. <a href="../../../../_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md#L178">AD-23-non-gateway-capability-classes.md, line 178</a></p></article>
+</div></details></section>
+<section class="dimension"><details><summary><h2>Done-ness clarity</h2><span class="verdict-pill verdict-adequate">Adequate</span></summary><div class="dim-body"><div class="dim-judgment"><p>Parity and live semantic coverage have separate criteria. Several command and error outcomes still admit incompatible acceptance tests.</p></div></div><div class="findings-list">
+<article class="finding"><header><span class="badge badge-sev-high">High</span><h3 class="finding-title">A CLI command can exit 2 after the Gateway accepts it</h3><span class="finding-location">PRD FR-14, lines 338–346 and addendum §E, output setting</span></header><p class="finding-note">Two regression tests return exit 2. An unwritable destination detected before submission sends zero requests. A late result-write failure follows one accepted command. Treating either error as evidence that nothing happened can duplicate the write.</p><p class="finding-fix"><strong>Correction.</strong> Document both outcomes, the success destination selected by --output, and interruption exits separately. Direct callers with an uncertain outcome to check state before considering another submission. <a href="../../../../tests/Hexalith.McpCli.Cli.Tests/ExecutionFailureCommandTests.cs#L137">ExecutionFailureCommandTests.cs, line 137</a></p></article>
+<article class="finding"><header><span class="badge badge-sev-medium">Medium</span><h3 class="finding-title">Successful commands return the submitted correlation ID</h3><span class="finding-location">PRD FR-16, line 371 and FR-17, line 394</span></header><p class="finding-note">FR-17 attributes both identifiers to the Gateway. The executor returns the resolved submission correlation ID even when the Gateway acknowledges a different one. Clients need to know which trace identifier they can rely on.</p><p class="finding-fix"><strong>Correction.</strong> State the correlation and message ID rules separately. Cover a deliberately different acknowledgment correlation ID in the example or acceptance criterion. <a href="../../../../tests/Hexalith.McpCli.Core.Tests/OperationExecutorTests.cs#L154">OperationExecutorTests.cs, line 154</a></p></article>
+<article class="finding"><header><span class="badge badge-sev-medium">Medium</span><h3 class="finding-title">The malformed-acknowledgment story lacks a source for HTTP status</h3><span class="finding-location">PRD FR-17, line 395 and addendum §G, lines 433–439 and 466</span></header><p class="finding-note">Story 5.17 requires a gateway_error for a malformed ID in a successful response. Its schema requires an integer status, but the success DTO reaching Core carries no HTTP status. “When exposed” leaves the acceptance fixture undefined.</p><p class="finding-fix"><strong>Correction.</strong> Identify which boundary retains the actual status, or secure a public-contract decision for an unavailable status. The test must still establish one submission and the submitted correlation ID. <a href="../../../../src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs#L254">OperationExecutor.cs, line 254</a></p></article>
+<article class="finding"><header><span class="badge badge-sev-low">Low</span><h3 class="finding-title">NFR-1 leaves the benchmark cohort and boundary ambiguous</h3><span class="finding-location">PRD NFR-1, line 461</span></header><p class="finding-note">“The v1 Modules” and “under 500 ms” suggest the original pair and a strict inequality. The benchmark exercises the entire enrolled manifest plus its sample, and exactly 500 ms passes.</p><p class="finding-fix"><strong>Correction.</strong> Specify the full enrolled manifest plus one sample, the first construction measurement, and the inclusive 500 ms boundary. <a href="../../../../tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs#L116">CatalogPerformanceTests.cs, line 116</a></p></article>
+</div></details></section>
+<section class="dimension"><details><summary><h2>Scope honesty</h2><span class="verdict-pill verdict-strong">Strong</span></summary><div class="dim-body"><div class="dim-judgment"><p>The document distinguishes the two original v1 modules, the three enrolled packages, and the remaining qualification and retirement work.</p></div></div><div class="findings-list">
+</div></details></section>
+<section class="dimension"><details open><summary><h2>Downstream usability</h2><span class="verdict-pill verdict-thin">Thin</span></summary><div class="dim-body"><div class="dim-judgment"><p>Stable requirement IDs and field tables aid implementation. The HTTP handoff, query declaration table and portions of the public protocol contract would send implementers in the wrong direction.</p></div></div><div class="findings-list">
+<article class="finding"><header><span class="badge badge-sev-high">High</span><h3 class="finding-title">The planned HTTP transport would forward the wrong credential</h3><span class="finding-location">PRD §8.2, line 526 and addendum §B, lines 90–92</span></header><p class="finding-note">The addendum directs implementers to reuse the Parties handler, which copies the incoming bearer token. Adopted decision K10 requires token exchange and attestation of the actor and effective origin for a shared HTTP service. The issue concerns the proposed HTTP design. The shipped service uses stdio.</p><p class="finding-fix"><strong>Correction.</strong> Revise OQ-1 and the transport handoff to require token exchange, issuer and audience checks, attestation, and denial evidence. Identify the Parties handler as historical context. <a href="../../../../_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md#L233">AD-23-non-gateway-capability-classes.md, line 233</a></p></article>
+<article class="finding"><header><span class="badge badge-sev-high">High</span><h3 class="finding-title">The projection rule would exclude an enrolled Projects query</h3><span class="finding-location">PRD §5.1, lines 147–148 and FR-20, line 430</span></header><p class="finding-note">The declaration table requires projectionType for a query without IQueryContract. The approved projects.list request has neither projection selector. Enforcing the table could exclude the query or change its Gateway route.</p><p class="finding-fix"><strong>Correction.</strong> Allow computed queries to omit both selectors. Require a resolved projectionType when projectionActorType is supplied, matching the routing resolver and the approved vector. <a href="../../../../tools/conformance-vectors/v1/current/modules/Hexalith.Projects.Contracts/list.vector.json#L22">list.vector.json, line 22</a></p></article>
+<article class="finding"><header><span class="badge badge-sev-medium">Medium</span><h3 class="finding-title">The MCP payload row omits its outer wire type</h3><span class="finding-location">Addendum §E, lines 203–212</span></header><p class="finding-note">The operation schema describes the decoded payload. Both execution tools advertise their outer payload argument as a string containing JSON text. A caller sending an object directly fails at protocol binding.</p><p class="finding-fix"><strong>Correction.</strong> Declare the required string type and show a complete tool call with serialized JSON. Keep CLI file and stdin syntax in the CLI column. <a href="../../../../src/Hexalith.McpCli.Mcp/McpToolHandlers.cs#L49">McpToolHandlers.cs, line 49</a></p></article>
+<article class="finding"><header><span class="badge badge-sev-medium">Medium</span><h3 class="finding-title">A bound MCP value can still fail as a structured tool error</h3><span class="finding-location">Addendum §G, lines 465–486</span></header><p class="finding-note">The addendum assigns invalid_arguments to CLI binding. An MCP argument that passes type binding can still produce a structured invalid_arguments result, for example the unsupported case-sensitive kind value Read. CLI parser argument names can also fall outside the §E table.</p><p class="finding-fix"><strong>Correction.</strong> Distinguish JSON-RPC binding errors from structured errors after binding. Align the permitted argument names with the public result schema. <a href="../../../../tests/Hexalith.McpCli.Mcp.Tests/McpProtocolTests.cs#L134">McpProtocolTests.cs, line 134</a></p></article>
+<article class="finding"><header><span class="badge badge-sev-medium">Medium</span><h3 class="finding-title">The serializer provider declaration omits its type and failure mode</h3><span class="finding-location">PRD §5.1, line 166 and FR-6, lines 227–247</span></header><p class="finding-note">The attribute expects a provider Type from the Contracts assembly with a public static JsonSerializerOptions Options getter. Passing a static member as the table suggests does not express that contract. Invalid providers exclude the whole module and produce a specific diagnostic.</p><p class="finding-fix"><strong>Correction.</strong> Specify the attribute type and getter signature, and add invalid_serializer_options_provider with its module-wide effect to FR-6. <a href="../../../../src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs#L38">McpCliJson.cs, line 38</a></p></article>
+<article class="finding"><header><span class="badge badge-sev-low">Low</span><h3 class="finding-title">Two normative JSON examples use abbreviated ULIDs</h3><span class="finding-location">Addendum §G, lines 374, 430 and 514</span></header><p class="finding-note">The command success and Gateway error examples use 01J9… in four identifier fields. They parse as JSON, but the identifiers fail the canonical ULID grammar. The advertised send_command output schema rejected the sample in the local check.</p><p class="finding-fix"><strong>Correction.</strong> Use complete synthetic uppercase ULIDs in both examples so they can be reused as schema fixtures. <a href="../../../../src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs#L18">SchemaDeriver.cs, line 18</a></p></article>
+</div></details></section>
+<section class="dimension"><details><summary><h2>Shape fit</h2><span class="verdict-pill verdict-strong">Strong</span></summary><div class="dim-body"><div class="dim-judgment"><p>The product journeys explain who uses the two interfaces. The addendum gives maintainers a single place to look for field-level contracts.</p></div></div><div class="findings-list">
+</div></details></section>
+<section class="reviewer-section"><details><summary><h2>Public contract</h2><span class="reviewer-source">review-validation-contract-20261120.md</span></summary><div class="dim-body"><p><a href="review-validation-contract-20261120.md">Full reviewer notes</a></p><ul>
+<li>High · A CLI command can exit 2 after the Gateway accepts it</li>
+<li>High · The projection rule would exclude an enrolled Projects query</li>
+<li>Medium · Successful commands return the submitted correlation ID</li>
+<li>Medium · The MCP payload row omits its outer wire type</li>
+<li>Medium · A bound MCP value can still fail as a structured tool error</li>
+<li>Medium · The malformed-acknowledgment story lacks a source for HTTP status</li>
+<li>Medium · The serializer provider declaration omits its type and failure mode</li>
+<li>Low · Two normative JSON examples use abbreviated ULIDs</li>
+</ul></div></details></section>
+<section class="reviewer-section"><details><summary><h2>Migration and release</h2><span class="reviewer-source">review-validation-migration-20261120.md</span></summary><div class="dim-body"><p><a href="review-validation-migration-20261120.md">Full reviewer notes</a></p><ul>
+<li>High · The planned HTTP transport would forward the wrong credential</li>
+<li>High · The main agent journey uses a write with disputed eligibility</li>
+<li>Medium · The release summary omits a prerequisite’s completion</li>
+<li>Medium · The migration parity exclusion is broader than the approved decision</li>
+<li>Low · NFR-1 leaves the benchmark cohort and boundary ambiguous</li>
+</ul></div></details></section>
+<section class="mechanical"><h3>Checks and scope</h3><ul>
+<li>All 22 functional requirement IDs are unique. The eight NFRs, seven primary/secondary success metrics, four counter-metrics and eight indexed assumptions were accounted for. Document metadata, proposal paths, ten local links and anchors, and JSON syntax checks passed.</li>
+<li>The dependency policy and the local Release CLI both gave Parties 7, Projects 4 and Tenants 15 operations. Offline stdio discovery returned the five generic tools. Under MCP 2025-11-25, four of the five full success examples passed their advertised output schema. The send_command example failed the ULID constraints. No Gateway execution was needed for these checks.</li>
+<li>This validates the working-tree documents. The offline probe used the available Release binary. The hosted CI result in §0 and the open qualification stories remain separate evidence. Reviewer severities were consolidated by distinct issue and consequence.</li>
+</ul></section>
+<footer class="report-footer"><div class="meta"><span><a href="validation-report-2026-11-20-before-update.md">Markdown report</a> · <a href="review-validation-rubric-20261120.md">Rubric review</a> · <a href="../../../../.agents/skills/bmad-prd/assets/prd-validation-checklist.md">Quality rubric</a></span><span>2026-11-20T15:25+01:00</span></div></footer></main></body></html>

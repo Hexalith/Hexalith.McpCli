@@ -1,184 +1,178 @@
-# Validation Report — Hexalith.McpCli PRD
+# Hexalith.McpCli PRD validation
 
-- **PRD:** `_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md` (with `addendum.md`)
-- **Rubric:** `.claude/skills/bmad-prd/assets/prd-validation-checklist.md`
-- **Run at:** 2026-09-22T09:08:01+02:00
-- **Grade:** Poor (blocker-driven: every rubric dimension is strong or adequate, but four source-verified critical findings stand)
+**Grade Fair.** 0 critical · 2 high · 9 medium · 5 low.
+
+Reviewed 2026-11-20T16:00+01:00 against the working tree at `6993abfe`. [PRD](prd.md) · [Normative addendum](addendum.md) · [Quality rubric](../../../../.agents/skills/bmad-prd/assets/prd-validation-checklist.md)
 
 ## Overall verdict
 
-The amended PRD is a sound spine: the thesis (CQRS uniformity through one Gateway makes one generic agent surface possible, and the Decoration Attribute turns that into a platform policy) still drives every feature, the four contradictions the 2026-09-21 review found are gone, and nearly every FR carries a consequence a story can test. What is at risk is one open question the PRD treats as safely deferred but is not: the Gateway's query validator rejects an empty `AggregateId`, so FR-16's interim rule for list-style Queries fails against the referenced code on the first Tenants query story; and one brownfield claim (`projectionActorType` for Tenants) is stale.
+The PRD supports enrollment and migration planning, and all 13 findings from the previous validation remain closed. This full review found two high-priority issues. The release authorities disagree about who may publish the next stable tool, and the profile contract omits a supported operation that can erase saved settings.
 
-The adversarial and spine-alignment reviewers materially shift the picture, and their critical findings were spot-checked against the source under `references/` by the validating session. Three brownfield facts contradict the PRD as written: Tenants runs every Command and Query under the fixed Envelope tenant `system` (`TenantIdentity.ForTenant` puts the managed tenant in the aggregate id), so the one-default-tenant-per-Profile model and FR-13's "tenant-less global-administrator Queries" claim are wrong for the flagship Module; `Hexalith.EventStore.Contracts` package-references `Hexalith.Commons.UniqueIds`, so the §4 closure rule and its CI test reject both v1 Contracts Libraries on day one; and `SubmitQueryRequest` carries neither a correlation identifier nor extensions, so FR-16 and addendum §E promise a `run_query` pass-through the pinned client cannot make. A fourth critical is a design gap rather than a brownfield error: the LLM-controlled per-call `tenant` argument, identity-bearing Payload properties such as Projects' `ActorPrincipalId`, and unrestricted `extensions` are three caller-controlled identity paths the §4 tenant guardrail does not cover. The grade is Poor because of these blockers, not because of the document's craft; the PRD is usable now for the Decoration Package, Catalog, MCP head, CLI head, and Profile epics, and becomes usable for the executor and coverage epics once the four criticals and the OQ-3 decision land.
+The public 3.0.0 tool contains Parties and Tenants. The additional Projects Operations belong to the source checkout. The hosted HTTP decision, Projects live qualification, Folders enrollment and legacy retirement remain open delivery work.
+
+[Prior validation](validation-report-2026-11-20-before-update.md) · [Review of all 13 corrections](review-validation-followup-2026-11-20.md)
 
 ## Dimension verdicts
-- Decision-readiness — strong
-- Substance over theater — strong
-- Strategic coherence — strong
-- Done-ness clarity — adequate
-- Scope honesty — strong
-- Downstream usability — strong
-- Shape fit — strong
+
+| Dimension | Verdict | Assessment |
+|---|---|---|
+| Decision-readiness | Adequate | McpCli identifies candidate evidence and owners. The cross-project review found that Platform AD-11 and McpCli AD-17 assign different stable publishers, leaving the next promotion without an agreed decision. |
+| Substance over theater | Strong | The startup benchmark names its cohort and limit. Parity and live semantic checks specify separate observable outcomes. |
+| Strategic coherence | Adequate | The shared catalog supports the two-module journey. The README-only timing measure still depends on a write whose public-agent eligibility is disputed. |
+| Done-ness clarity | Adequate | Both Heads have explicit failure and result requirements. Profile replacement and a catalog-admissible Query example still allow materially different implementations or results. |
+| Scope honesty | Adequate | The PRD distinguishes enrolled modules from live qualification and retirement. Publication state and the Platform deployment boundary need more precise scope. |
+| Downstream usability | Adequate | The stable requirement IDs and two contract tables support implementation. Several input boundaries and the modern MCP wire example still require an additional source. |
+| Shape fit | Strong | The main document explains product and release decisions. The addendum provides field-level contracts for the shared CLI and MCP surfaces. |
 
 ## Findings by severity
 
-Findings raised by more than one reviewer are merged and carry the highest severity assigned. Reviewer tags: R = rubric, A = adversarial, S = spine alignment.
+### Critical (0)
 
-### Critical (4)
+None.
 
-**[Done-ness · R, A, S]** — Aggregate-less Queries cannot reach the Gateway as specified; OQ-3 is a v1 blocker, not a deferral (FR-16 c2 `[ASSUMPTION]`, §10 OQ-3, §5.1 `aggregateIdProperty`, §8.1 Tenants)
-`SubmitQueryRequestValidator.cs` requires a non-empty `AggregateId`, so the FR-16 fallback "sends an empty aggregate identifier pending OQ-3" is a guaranteed 400 for `tenants.list-tenants`, `tenants.get-user-tenants`, and every Parties list read. No Tenants code constructs a `SubmitQueryRequest`, so "Tenants covered end to end" rests on a read path nothing exercises. Sibling clients send a per-operation constant (Parties `"parties"`, Rest `RestQueryBindingSource.Constant`) and the Decoration Attribute has no member for one.
-Fix: Close OQ-3 from source now. Add a Query-only `aggregateId` constant member to §5.1 and FR-2 (mutually exclusive with `aggregateIdProperty`); make the FR-16 rule "explicit argument, else accessor value, else the attribute constant; a Query resolving to nothing is `validation_failed`, never empty". Add a spike deliverable before the Executor epic: `tenants.list-tenants` returns a page through `IEventStoreGatewayClient.SubmitQueryAsync` from a throwaway harness.
+### High (2)
 
-**[Adversarial · A]** — Tenants runs under the fixed Envelope tenant `system`; the PRD's tenant model cannot drive it (§3 Tenant, §4 Tenant, FR-3 c3, FR-13 c4, FR-18, UJ-1, UJ-2)
-`TenantIdentity.ForTenant(managedTenantId)` yields Envelope tenant `system` with the managed tenant as aggregate id; `TenantsSystemTenantValidator` and `GetGlobalAdministratorsQueryHandler` reject anything else. So FR-13's "tenant-less" claim is false, FR-3's rationale for `String` conflates Envelope tenant with Identifier Kind, UJ-1 and UJ-2 cannot share one Profile default tenant, and `describe_operation` never tells the agent to pass `tenant: "system"`.
-Fix: Add a Module marker member `fixedTenant` (or an Operation member `tenant`) surfaced by `describe_operation` as the Envelope default and used by the executor when no per-call tenant is given; a differing per-call tenant is `validation_failed`. Rewrite FR-3 c3 to cite a real non-ULID aggregate id and fix FR-13 c4 and the two journeys.
+#### Two projects assign stable tool publication to different workflows
 
-**[Adversarial · A, S]** — The closure rule as written excludes Tenants and Parties themselves (§4 Dependency policy, FR-20, §3 Contracts Library, §8.1 Projects; spine AD-15)
-`Hexalith.EventStore.Contracts.csproj` package-references `Hexalith.Commons.UniqueIds`, which references `ByteAether.Ulid`. "No other Hexalith package" therefore fails for every Contracts Library, the mandated CI test blocks the first v1 pin, and the first story will loosen the rule ad hoc.
-Fix: State the rule once in §4 as an allowlist: `*.Contracts` packages, `Hexalith.EventStore.Contracts` and its own transitive closure at the pinned version (today `Hexalith.Commons.UniqueIds`, `ByteAether.Ulid`), no framework reference beyond `Microsoft.NETCore.App`; additions are a PRD change. Point §3 and FR-20 at §4; ask the spine owner to align AD-15.
+*PRD §7 and Story 5.15 · Decision-readiness*
 
-**[Adversarial · A]** — Identity can be set by the caller three ways; the tenant guardrail covers none of them (§4 Tenant, FR-9 argument table `tenant` and `extensions`, FR-16, FR-21 c2, §8.1 Projects)
-(1) The per-call `tenant` argument is chosen by the LLM; a token with several tenant claims lets the agent hop tenants with no operator consent, a fourth tenant source the repository policy does not list. (2) Projects' `IProjectCommand.ActorPrincipalId` is an ordinary Schema property, so `send_command` lets the agent name any principal as the actor. (3) `--extension key=value` passes through with no allowlist against a Gateway that stores unclaimed extension keys as trusted.
-Fix: Honor per-call `tenant` only when the Profile has no default or the operator sets `--allow-tenant-override`, else `validation_failed`. Add an `actorProperty` attribute member the executor fills from session identity and marks `readOnly`. Add an extension-key allowlist per Profile, default empty.
+McpCli AD-17 and §7 specify a shared-version package pair. Platform AD-11 reserves stable tool publication for the Platform staging workflow and assigns McpCli the stable Abstractions package and prerelease tool. Story 5.15 names McpCli and CiCd owners, but a rehearsal on their workflow alone cannot settle who may publish the next stable tool.
 
-### High (14)
+**Correction.** Have Platform, McpCli and CiCd release owners record the applicable release track, publisher, version rule and source of final archive digests before accepting the rehearsal. Preserve the recorded release history. [McpCli AD-17, line 163](../../architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md#L163) · [Platform AD-11, line 190](../../../../references/Hexalith.Platform/_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md#L190)
 
-**[Spine · S]** — `run_query` cannot pass a correlation identifier or extensions through the pinned client (FR-16 sentence 1, FR-17, addendum §E rows `correlationId` and `extensions`; spine AD-9)
-`SubmitQueryRequest` has no such members and the validator rejects `AdditionalProperties`; query correlation comes from an `X-Correlation-ID` header the client never sets.
-Fix: Make `correlationId` and `extensions` `send_command`-only rows in §E; in FR-16 say Queries get the Gateway's correlation identifier in the result (FR-17); move query correlation and extensions to §8.2.
+#### Profile replacement can clear saved connection and operator settings
 
-**[Shape fit · R, A, S]** — Tenants no longer has a projection actor; `projectionActorType` "required for Tenants" is stale in three places (§5.1 table, FR-2 c1, §8.1 Tenants)
-`TenantQueryHandlerBase.cs` describes the retired `TenantsProjectionActor`; reads go through `IReadModelStore` via handler routing; the string `ProjectionActorType` appears nowhere in Tenants.
-Fix: Make the member "optional; only for a Module whose projection is served by a named actor"; rewrite FR-2 c1 and the Tenants prerequisite accordingly, after confirming with the Tenants owner.
+*PRD FR-18 and addendum §E · Done-ness clarity*
 
-**[Adversarial · A]** — Sharing `~/.eventstore/profiles.json` with the admin CLI makes one profile name unusable by both tools (FR-18, §5.6, addendum §B and §E)
-Admin `url` and token target the admin API, not the Gateway; `csv` format is unsupported here.
-Fix: Make `~/.eventstore/mcpcli.json` the sole store (`url`, `token`, `format`, `tenant` per profile), or keep `profiles.json` read-only for the active profile name only. State what happens with an unknown `format`.
+`config profile add` with an existing name replaces the whole record. It requires an explicit URL, stores only the supplied connection fields, and clears omitted credentials and saved operator settings. “Behave as in the admin CLI” gives an implementer no acceptance rule for that state change.
 
-**[Adversarial · A; Done-ness · R]** — FR-14 exit code 1 fires for reasons unrelated to the invocation, and the migration period makes that the normal state (FR-14 row 1, FR-6, FR-7 c4, UJ-3)
-Tenants and Parties Contracts carry zero `[Description]` attributes today, so every discovery verb exits 1 under `set -e` until the last property is described, while FR-7's unmarked-`Id` case is lint-only.
-Fix: Property-level findings are lint-only, surfaced by `describe --lint`; Catalog diagnostics are stderr-only unless `--strict` (then exit 2 before any result). Say so in FR-6 and FR-14.
+**Correction.** Specify create versus replace, fields retained and cleared, and the operator flags rejected before writing. Distinguish whole-record replacement from single-field `config set` and from the proposed private rotation flow. [Profile add implementation, line 615](../../../../src/Hexalith.McpCli/Cli/CliRunner.cs#L615) · [Whole-record test, line 1814](../../../../tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs#L1814)
 
-**[Adversarial · A]** — The Schema is derived with the tool's serializer options, but Parties and Tenants ship their own converters (FR-5 c3, FR-7, FR-16 accessor, FR-1 c3)
-Fix: Require attribute-complete decorated types in the Gateway-ready checklist and add a Catalog diagnostic when a property's converter comes from options; or add a marker member naming a static `JsonSerializerOptions` provider.
+### Medium (9)
 
-**[Adversarial · A]** — Nothing stops `tenantProperty` from naming the aggregate identifier, and on Tenants that is the natural mistake (§5.1 `tenantProperty`, FR-16 c3)
-Fix: Add an FR-6 error category for `tenantProperty` naming the aggregate identifier source; note that Tenants' `TenantId` is an aggregate id, not a tenant.
+#### The README-only timing metric still uses a disputed write
 
-**[Adversarial · A]** — SM-4 cannot pass as written, and several acceptance statements are unobservable (SM-4, FR-9 c4, FR-11 c3, NFR-1, NFR-8, SM-5, SM-6)
-Fix: SM-4 compares Catalog data and error documents for identical inputs, with volatile Command result fields masked. Name the three FR-9 labels, the FR-11 distance metric, and the NFR-1 runner (`ubuntu-latest` per the spine).
+*PRD SM-6, FR-21 and README operator checklist · Strategic coherence*
 
-**[Adversarial · A]** — The result document shapes are not specified anywhere, yet both Heads must agree on them (FR-11, FR-17, FR-9 c2, SM-4)
-Fix: Add addendum §G with one JSON example per tool result and per error document; both Heads serialize the same record types.
+UJ-1 now uses two authorized reads. SM-6 separately times the first successful `send_command` using the README, whose procedure directs the operator to `parties.create-party` (T04). Per-run operator approval does not resolve the separate K12 owner decision on agent eligibility.
 
-**[Adversarial · A]** — `--format table` is required for every verb but undefined for nested JSON documents (FR-13, FR-12, addendum §E)
-Fix: `table` applies to `modules`, `operations`, `config`; on `describe`, `send`, `query` it either falls back to `json` with a stderr note or is rejected with exit 2. Pick one.
+**Correction.** Choose a preauthorized, agent-eligible Command for the timed exercise, or defer that measurement until the Parties and McpCli owners resolve T04. [Operator procedure, line 453](../../../../README.md#L453) · [Parties restriction, line 178](../../architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md#L178)
 
-**[Adversarial · A; Spine · S]** — FR-20 and FR-3 disagree on what a referenced-but-undecorated Module looks like (FR-3 c1, FR-20 c2, FR-6 categories)
-Fix: Define two states: unmarked assembly (invisible, no diagnostic) and marked assembly with zero exposed Operations (listed, warning `empty_module`/`no_operations`). Amend FR-6 and FR-20.
+#### A valid Query example can invalidate the describe result
 
-**[Adversarial · A]** — The build-time assembly list generator has no rule for which package references are Contracts Libraries (FR-5, addendum §B)
-Fix: `HexalithContracts="true"` metadata on the `PackageReference` item, read by an MSBuild target; a test that the list equals the flagged set.
+*PRD §5.1, FR-1 and FR-7, addendum §G · Done-ness clarity*
 
-**[Adversarial · A]** — Upstream decoration work has no owner, date, or gate, and it is on the v1 critical path (§8.1 checklist, Tenants and Parties prerequisites, §7, SM-1, SM-3)
-Fix: Per-Module table with owner, target version, and earliest pinnable tool release; a fallback in §8 if Parties Queries are not published by a date.
+A synthetic collection Query with `example` set to `[]` passed Catalog admission. Its `describe_operation` result then failed the advertised output schema, which requires an object for a present `example`. The production examples passed.
 
-**[Adversarial · A]** — The `Ulid` CLR-type rule and the Decoration Package's zero-dependency rule conflict (FR-7 c2, FR-1 c4, §3)
-Fix: Name the recognized type by full name (`ByteAether.Ulid.Ulid`); reword FR-1 so the analyzer's dependencies are private assets.
+**Correction.** Specify the object-root rule for a declared example and require the `invalid_example` diagnostic on violation. Keep support for permitted Query payload roots and add the collection Query as a contract test. [Catalog example validation, line 225](../../../../src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs#L225) · [Discovery result schema, line 158](../../../../src/Hexalith.McpCli.Core/Serialization/ResultDocumentSchema.cs#L158)
 
-**[Adversarial · A]** — The Tenants Module is the admin plane the PRD says it excludes (§2.2 Non-Users, §8.3 Non-Goals, FR-20)
-Every Tenants operation requires the `system` tenant claim, a platform-administrator token.
-Fix: Either narrow the decorated Tenants subset (and pick a different second v1 Module) or amend §2.2 to say the exclusion covers EventStore infrastructure only and accept the admin-CLI overlap.
+#### The query paging arguments omit accepted limits and error behavior
 
-### Medium (17)
+*Addendum §E call arguments and PRD FR-15/16 · Downstream usability*
 
-**[Decision-readiness · R; A; S]** — Tenants paging decision is still shown as open although spine AD-20 decided it; two paging channels are visible to the agent (§8.1 Tenants, FR-7, FR-17, FR-4, addendum §E)
-Fix: Record AD-20 in FR-16 or FR-17 (paging travels only as `run_query` arguments; Payload paging members are ordinary Payload or lint-flagged); extend the FR-4 lint list; turn the §8.1 bullet into a prerequisite.
+The generic arguments table names `pageSize`, `offset` and `cursor` but omits their bounds and combinations. In both MCP revisions a `pageSize` token of `25.0` failed integer binding with `-32602`, while `201` reached the tool and returned `validation_failed` at `/pageSize`.
 
-**[Substance · R]** — Overlength persists; §0's "stated once" promise is not quite met (6,284 words vs 2,500–4,000 target)
-Fix: Keep §5.1 as the only description of attribute members; reduce FR-2 and FR-16 c2 to a precedence sentence and pointer; drop the §8.3 dependency bullet. Target a 600–900 word cut without cutting testable consequences.
+**Correction.** Specify page size 1–200, offset 0–2,147,483,647, cursor length up to 4,096 UTF-16 units and the nonblank-cursor/offset exclusion. Distinguish CLI parsing, MCP binding and executor validation. [Published paging rules, line 591](../../../../README.md#L591) · [Paging arguments, line 234](addendum.md#L234)
 
-**[Spine · S]** — FR-7 "includes every declared property" contradicts the spine's removal of computed get-only members (FR-7 lead; spine AD-7)
-Fix: "Get-only members with neither a setter nor a constructor parameter are not Schema properties; the executor reads them through the accessor."
+#### Profile management has different selection rules from inspection
 
-**[Spine · S]** — Both v1 Modules are `String`-kind; Parties is never told, and the `Ulid` kind has no v1 consumer (FR-3 c3, §8.1 Parties, UJ-1)
-Fix: FR-3 "today both v1 Modules declare `String`"; §8.1 Parties adds "declare `IdentifierKind = String`".
+*PRD FR-13/18 and addendum §E · Downstream usability*
 
-**[Spine · S]** — §8.1 Tenants prerequisite still requires `aggregateIdProperty` on Query attributes after FR-2 made it optional
-Fix: Rewrite once the OQ-3 fix lands.
+FR-13 applies flag, environment and saved-profile selection to every verb. `config current` honors that order. The named management verbs ignore `--profile` and `EVENTSTORE_PROFILE`, even if they name a missing profile. A conforming implementation could incorrectly block a repair or select the wrong profile.
 
-**[Spine · S]** — Addendum §E is normative for FR-9 and FR-12 but the addendum disclaims requirement status (FR-9, FR-12, addendum preamble)
-Fix: One preamble line: "§E is normative; FR-9 and FR-12 are accepted against it."
+**Correction.** Limit session precedence to the applicable commands. Identify the management verbs and test `config current` and a named management command with the same missing selector. [Selection rules, line 370](../../../../README.md#L370) · [Management tests, line 1268](../../../../tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs#L1268)
 
-**[Spine · S]** — UJ-1 and NFR-1 still assume Projects is in v1 (UJ-1, NFR-1, SM-2)
-Fix: Rewrite UJ-1 over Tenants and Parties; state NFR-1 as the v1 Modules plus the two sample Modules.
+#### The onboarding checklist makes an enrollment inventory look optional
 
-**[Spine · S]** — FR-20 "covered end to end" has no observable definition (FR-20, §8 lead)
-Fix: "For every Operation in `list_operations`, both Heads submit it against a running EventStore in the harness, the Gateway accepts it, and the two documents are equal (NFR-7, SM-4)."
+*PRD §8.1, checklist item 8 · Downstream usability*
 
-**[Adversarial · A]** — Parties Wire Types as full CLR type names are 24 hand-typed strings with no drift test (§3 Wire Type, FR-2, §8.1 Parties)
-Fix: Marker member `wireTypeConvention = FullTypeName | KebabCase | Explicit`; Catalog warning on a redundant explicit literal.
+The checklist requires an approved inventory only for Modules replacing a legacy surface. The release gate also requires an approved and hash-bound inventory for a newly enrolled Module with no predecessor.
 
-**[Adversarial · A]** — `EVENTSTORE_READ_ONLY` with ".NET boolean parsing" rejects `1` and `0` (FR-19)
-Fix: Accept `true`, `false`, `1`, `0`; anything else is `configuration_invalid`, exit 2.
+**Correction.** Require the approved release inventory for every enrollment. Apply the legacy-operation mapping only to Modules replacing a legacy surface. [Conformance gate, line 137](../../../../tools/conformance-vectors/v1/README.md#L137) · [Onboarding checklist, line 505](prd.md#L505)
 
-**[Adversarial · A]** — Read-only refusal of a "hand-crafted `send_command`" is untestable where the PRD puts it (FR-19)
-Fix: Split into "the MCP head does not register `send_command`" and "the executor called directly returns `read_only`".
+#### Platform admission rules are missing from the migration and HTTP handoffs
 
-**[Adversarial · A]** — NFR-2's 8,000-character budget probably excludes the output schemas FR-11 requires (NFR-2, FR-11)
-Fix: State whether `outputSchema` counts; add a snapshot test that measures.
+*PRD FR-22, §8.2 and OQ-1 · Scope honesty*
 
-**[Adversarial · A]** — CLAUDE.md still says "Identifiers are ULIDs"; the PRD has moved to Identifier Kind (§4 Identifiers, FR-3)
-Fix: Update the line in `AGENTS.md` via the sync script: Envelope identifiers are ULIDs; payload identifiers follow the Module's Identifier Kind.
+Platform AD-11 restricts legacy compatibility to named migrations outside every Platform composition. A new hosted transport also requires a Platform architecture decision covering its surface class, Keycloak client, exposure and realm entries. The PRD specifies owner review for K10 but omits those deployment rules.
 
-**[Adversarial · A]** — UJ-1's retry story asserts Gateway deduplication that the PRD does not verify (UJ-1, FR-16, FR-17, §4 Idempotency)
-Fix: Assumption tag plus an OQ item for the EventStore owner; the result document states whether the Gateway reported a duplicate.
+**Correction.** Add the legacy composition limit to FR-22 and the Platform admission decision to the hosted HTTP acceptance criteria. Keep K10 token exchange, denial evidence and independent retirement gates. [Platform legacy-surface rule, line 194](../../../../references/Hexalith.Platform/_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md#L194) · [Compatibility rule, line 459](prd.md#L459)
 
-**[Adversarial · A]** — Addendum §E resolution order omits `--profile` selection and per-call precedence for `tenant` only (FR-13, addendum §E)
-Fix: "`--profile` resolves first; the remaining options resolve per the chain against the selected Profile. Only `tenant` has a per-call source."
+#### The raw MCP example needs a protocol-version label
 
-**[Adversarial · A]** — Gateway input constraints are not pre-validated, so tool-side mistakes surface as Gateway 400s (§4 Identifiers, FR-15, FR-16)
-Fix: FR-15 pre-validates Tenant, aggregate identifier, correlation identifier, and extensions against the Gateway's published patterns as `validation_failed`.
+*Addendum §E, complete tools/call example · Downstream usability*
 
-**[Adversarial · A]** — FR-22's deliverable is a pull request in another repository with no fallback; §8.2 pre-commits to "typed tools" while SM-C2 forbids chasing them (FR-22, §8.1 item 6, §8.2, SM-C2)
-Fix: Close FR-22 on the pull request being opened and linked; list typed tools under parked and keep the HTTP transport as the only committed next release.
+The documented tool arguments bind under both supported revisions. After 2026-07-28 discovery, sending the literal frame without per-request `_meta` produced a legacy-shaped reply. The modern envelope produced the typed response with `resultType`.
 
-### Low (12)
+**Correction.** Label the displayed frame for the 2025-06-18 initialized session. Show the required per-request protocol-version and client-capabilities metadata for 2026-07-28, or point to a complete modern frame. [Request example, line 249](addendum.md#L249) · [Two supported flows, line 630](../../../../README.md#L630) · [Version-specific client fixture, line 81](../../../../tests/Hexalith.McpCli.Mcp.Tests/McpTestSession.cs#L81)
 
-**[Done-ness · R]** — A Query with no Tenant has no stated outcome (FR-13 c4). Fix: "A Command or Query with no Tenant from any source is a validation failure."
-**[Done-ness · R, A, S]** — Duplicate Module Name is a "startup error" in FR-3 and an excluded type in FR-6; which assembly survives is unstated. Fix: one clause in FR-6 naming the survivor rule.
-**[Downstream · R, A, S]** — Addendum cross-references point at PRD sections that no longer exist (§D "§4.8 and §9.1"; §F "§9.2", "§6"). Fix: §D → "§4 and §8.1"; §F → "§8.2" and "§4 Idempotency".
-**[Mechanical · R, A, S]** — Addendum §C repeats three paragraphs verbatim (lines 88–107 and 108–125). Fix: delete the prose duplicate.
-**[Adversarial · A]** — Legacy Server counts disagree: "six" in §1, four plus the FrontComposer host in §3, six named in addendum §D. Fix: one count, one list.
-**[Adversarial · A; Spine · S]** — `mcp --transport http` "names the release in which it arrives" (FR-12); FR-6 lists `mcp` among Catalog-needing verbs but the spine exempts the HTTP transport. Fix: exit 2 with `code: unsupported_transport` before building the Catalog.
-**[Adversarial · A]** — §7 versioning cannot signal Module-driven breaking changes. Fix: Operation Name stability is a Module obligation in the Gateway-ready checklist.
-**[Adversarial · A]** — NFR-6 "no native dependencies" is true, but the tool carries the Dapr SDK. Fix: note the size cost or request a gateway-only client package.
-**[Adversarial · A]** — Glossary "Wire Type" example does not say Parties Queries do not exist. Fix: one clause.
-**[Spine · S]** — NFR-7's `[ASSUMPTION]` is resolved by the spine (AD-16, Aspire harness) but still tagged and indexed in §11. Fix: replace the tag with a pointer and remove from §11.
-**[Spine · S]** — Addendum §B tells the reader to copy the admin MCP's static tool classes, which spine AD-12 forbids. Fix: "logging pattern to copy; tool registration is runtime `McpServerTool.Create`."
-**[Spine · S]** — Glossary "Routing Values" still names an aggregate identifier property only; FR-11 lacks the nearest-name metric. Fix: "a Payload property, the contract getter, or a constant"; "nearest by case-insensitive edit distance".
+#### An invalid module fixed tenant excludes the entire assembly
 
-## Open questions assessment (spine reviewer)
-- OQ-1 HTTP authentication: does not block architecture or v1 epics; seam and error code are decided, issuer and header forwarding correctly left open.
-- OQ-3 aggregate-less Queries: blocks architecture (AD-19 rests on a falsified assumption) and the executor epic; answerable from source now.
-- OQ-5 Parties routing: blocks only the upstream Parties decoration epic; today's values `PartyDomain = "party"` match the PRD.
-- OQ-6 deletion order: blocks only the FR-21 plan content.
+*PRD FR-6, diagnostic table · Done-ness clarity*
 
-## Mechanical notes
-- Word counts: `prd.md` 6,284 (previous 6,037; target 2,500–4,000); `addendum.md` 1,521.
-- `[ASSUMPTION]` tags: 10 inline, §11 roundtrip clean both ways; FR-13 c4 and SM-6 carry bare tags with no rationale; NFR-7's tag is already resolved by the spine.
-- `[NOTE FOR PM]`: 2 (§8.1 Folders, §8.2 HTTP transport).
-- Open Questions: 7 numbered, 4 open (OQ-1, OQ-3, OQ-5, OQ-6), 3 resolved with source and date.
-- IDs: FR-1..22, NFR-1..8, SM-1..7, SM-C1..4, UJ-1..3 contiguous; FR-19 precedes FR-18 by design. Every in-PRD cross-reference resolves.
-- Dangling cross-references: four in `addendum.md` into stale PRD section numbers (§4.8, §9.1, §9.2, §6).
-- Addendum §C duplicated block; Legacy Server count (six vs four plus host) reconciles only if the Projects plug-in counts as a server.
-- FR-22's rule is not yet in `hexalith-llm-instructions.md`; expected, since FR-22 adds it.
-- Brownfield claims checked: rubric found all spot-checks accurate except the Tenants projection actor; spine reviewer checked 32 claims, 27 accurate, 5 inaccurate (table in `review-spine-alignment.md`).
-- Prior review (2026-09-21): 4 of 5 high findings resolved; overlength persists at medium; the Query aggregate-id item became this run's critical.
+The `invalid_routing_value` row gives a type-level exclusion for an invalid Module `FixedTenant`. The Catalog emits one assembly-level diagnostic and skips the Module before scanning its types. An invalid Operation routing field has a narrower effect.
+
+**Correction.** Give `FixedTenant` its own trigger and assembly-wide consequence under the same diagnostic code. Retain type exclusion for invalid Operation routing. [Catalog marker check, line 45](../../../../src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs#L45) · [Diagnostic table, line 232](prd.md#L232)
+
+#### The status section skips the latest public tool package
+
+*PRD §0 and §8.1 · Scope honesty*
+
+The PRD reports the first release, 2.0.1, and the current source manifest. The latest public pair is 3.0.0, released on 15 November. Its tool contains Parties and Tenants. Projects is present on the reviewed main checkout. A default package installation and a build from that checkout therefore offer different catalogs.
+
+**Correction.** Date the latest public pair, identify its shipped Modules, and retain the separate counts and qualification status for the working tree. [Public 3.0.0 release](https://github.com/Hexalith/Hexalith.McpCli/releases/tag/v3.0.0) · [Published tool archive](https://api.nuget.org/v3-flatcontainer/hexalith.mcpcli/3.0.0/hexalith.mcpcli.3.0.0.nupkg) · [Projects on main, line 531](../../../../README.md#L531)
+
+### Low (5)
+
+#### Post-start request errors and host faults need distinct outcomes
+
+*PRD FR-6/10 and addendum §G · Done-ness clarity*
+
+FR-6 and FR-10 send all post-start failures through the protocol. Section G and the CLI tests also cover a host fault with no request to answer. It emits a stderr diagnostic and exits 2.
+
+**Correction.** Limit the protocol-only rule to request-scoped failures. Reference §G for normal shutdown and host termination. [Host fault test, line 758](../../../../tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs#L758) · [Error documents, line 521](addendum.md#L521)
+
+#### Whitespace-only operation and module names fail before lookup
+
+*PRD FR-11 and addendum §E · Downstream usability*
+
+The lookup rule treats a nonempty name as eligible for catalog lookup. A string containing only spaces fails earlier. MCP returns invalid parameters, and the CLI returns `invalid_arguments`.
+
+**Correction.** Use “nonblank” for required operation and module names. Preserve the input spelling for genuine lookup misses. [MCP name checks, line 67](../../../../src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs#L67) · [CLI name checks, line 344](../../../../src/Hexalith.McpCli/Cli/CliRunner.cs#L344)
+
+#### Rendered lists change the open-question numbers
+
+*PRD §10.2–10.3 · Downstream usability*
+
+Markdown renumbers the lists consecutively. The deletion-order item labeled 6 in the source appears as 2 in the rendered Open list, making an OQ reference point to a different item.
+
+**Correction.** Write the identifiers as literal labels such as `OQ-6` in bullets or a table so they survive rendering. [Open and resolved lists, line 580](prd.md#L580)
+
+#### The declaration table makes a Query aggregate constant compulsory
+
+*PRD §5.1 and FR-2 · Downstream usability*
+
+The table requires an `aggregateId` constant for a list-style Query without an aggregate property. FR-2 and the Catalog allow both declarations to be absent and then require the caller’s explicit aggregate ID.
+
+**Correction.** Mark the constant optional and retain its mutual exclusion with the property. Refer to the per-call requirement when both are absent. [Declaration table, line 146](prd.md#L146) · [Catalog regression, line 139](../../../../tests/Hexalith.McpCli.Core.Tests/CatalogTests.cs#L139)
+
+#### The generic-runner constraint is written as a repository-wide rule
+
+*PRD §4 and FR-20 · Scope honesty*
+
+FR-20 says the whole repository contains no Module-specific setup code. The adopted decision restricts the generic runner, while §4 permits named test fixtures and the test AppHost contains approved Module-specific setup.
+
+**Correction.** Apply the setup restriction to the generic runner. Keep the production dependency rule and permitted integration-test composition distinct. [Approved runner wording, line 249](../../sprint-change-proposal-2026-11-10-shape-coverage.md#L249) · [Test AppHost, line 59](../../../../tests/Hexalith.McpCli.AppHost/Program.cs#L59)
+
+## Checks and scope
+
+- The seven-dimension review, public-contract review and migration review reported 17 items. The duplicate paging finding was counted once. The earlier 13 corrections were checked against the final PRD and addendum.
+- All 22 FRs, eight NFRs, three journeys, seven success metrics and four counter-metrics have unique identifiers within their groups. Eight inline assumptions have eight index entries. Fourteen local document links and anchors resolved, and all 13 JSON examples parsed.
+- The 36 focused local Linux Release tests passed with zero failures or skips (13 Core, 7 CLI, 16 MCP). On both supported MCP revisions, all five documented successes and five errors passed their advertised output schemas. A separate synthetic Query exposed the non-object example issue. The raw modern MCP frame was tested separately from its tool arguments.
+- The public release and NuGet archives identify 3.0.0 at commit `63df6d2b`. The source manifest at `6993abfe` exposes 26 Operations across three Modules. The checks used local Release executables and loopback responses. Live Gateway, cross-platform and release acceptance require their own evidence.
 
 ## Reviewer files
-- `review-rubric.md`
-- `review-adversarial-general.md`
-- `review-spine-alignment.md`
-- `review-downstream.md` (2026-09-21 run, kept for history)
+
+- [Quality rubric](review-revalidation-rubric-2026-11-20.md)
+- [Public contract](review-revalidation-contract-2026-11-20.md)
+- [Migration and release](review-revalidation-migration-2026-11-20.md)

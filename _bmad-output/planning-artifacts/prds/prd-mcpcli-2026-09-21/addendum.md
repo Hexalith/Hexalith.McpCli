@@ -2,9 +2,13 @@
 title: "PRD Addendum: Hexalith.McpCli"
 status: final
 created: 2026-09-21
-updated: 2026-11-06
+updated: 2026-11-20
 changeProposals:
   - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-06.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-08.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-10-shape-coverage.md
+  - _bmad-output/planning-artifacts/sprint-change-proposal-2026-11-20.md
 ---
 
 # PRD Addendum: Hexalith.McpCli
@@ -31,8 +35,8 @@ alternatives were rejected:
 - **D3 tool shape** — one MCP tool per operation parked: ten modules produce
   hundreds of tools, past the tool-count guidance (see §C). "Both, behind a module
   filter" is parked (PRD §8.2).
-- **D4 transport** — any authentication server rejected. Hosted HTTP is the
-  next release, not v1, because the hard part is operations, not code.
+- **D4 transport** — v1 uses stdio. Shared HTTP and per-user authority remain
+  deferred under AD-23 K10 and PRD §8.2.
 - **D5 CLI depth** — generated per-Operation subcommands were deferred
   because typing options for nested Payloads becomes complex.
 - **D6 legacy servers** — indefinite coexistence was rejected because it
@@ -66,13 +70,16 @@ alternatives were rejected:
 - `SubmitQueryRequest` has no correlation identifier or extensions member and
   its validator rejects additional properties, which is why PRD FR-16 sends
   neither on Queries.
+- A computed Query such as `projects.list` can omit both projection selectors.
+  An explicit `projectionActorType` requires a resolved `projectionType` (FR-2).
 - Gateway validator rules: `AggregateId` is required and nonempty on every
   Query (hence the `aggregateId` constant member); ordinary tenants, domain, and
   projection type are lowercase ASCII alphanumeric plus hyphens, at most 64
   characters. Declared platform request scopes use the separate `platform:`
   grammar and exact matching in PRD FR-15/16; public variable-scope tenant inputs
   are lowercased without trimming before selection and override comparison, and
-  public `system` is reserved; aggregate and entity identifiers are alphanumeric plus dots,
+  public `system` is reserved. Story 5.18 requires rejection of non-ASCII public input
+  before lowercasing once the upstream EventStore change lands (FR-16). Aggregate and entity identifiers are alphanumeric plus dots,
   hyphens, and underscores, at most 256 characters, no colon.
 - Profile storage: default `~/.eventstore/mcpcli.json`, relocated through an
   absolute `MCPCLI_HOME` under PRD FR-18 (§E), this tool only; why the
@@ -82,9 +89,16 @@ alternatives were rejected:
 
 **Transport and host**
 
-- Transport switch is `hexalith mcp --transport stdio|http`; v1 ships stdio
-  only. HTTP reuses the Parties `McpContextForwardingHandler` pattern
-  (bearer token, `X-Tenant-Id`, `X-User-Id`).
+- `hexalith mcp --transport stdio` runs the shipped host. Selecting `http`
+  returns `unsupported_transport`. The legacy Parties
+  `McpContextForwardingHandler` forwarded the incoming bearer token and
+  identity headers. AD-23 K10 keeps shared HTTP deferred pending product-owner
+  approval of an AD-14 token exchange. The service must validate issuer and
+  audience, map the client, and attest the authenticated actor and effective
+  origin. Forwarding the raw incoming bearer token is prohibited. The Gateway
+  receives the exchanged credential. Approval requires
+  denial evidence from the selected environment for invalid credentials or
+  spoofed identity. [AD-23 K10](../../architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md#deferrals-and-disposition-rules)
 - Copy the logging setup from `Hexalith.EventStore.Admin.Mcp`; it sends all
   providers to stderr. Do not copy its tool registration. Build the Generic
   Tools at runtime with `McpServerTool.Create`; after settings resolution,
@@ -102,7 +116,7 @@ alternatives were rejected:
 
 **Toolchain and layout**
 
-- Current packages: ModelContextProtocol 2.3.1 and System.CommandLine 2.0.14.
+- Current packages: ModelContextProtocol 2.4.0 and System.CommandLine 3.0.0.
   ModelContextProtocol.AspNetCore remains reserved for the future HTTP release.
   No Spectre.Console. Effective versions come from the root-declared
   Hexalith.Builds catalog, root build overrides and dependency policy; this
@@ -111,7 +125,7 @@ alternatives were rejected:
   matching sibling modules rather than the nested layout documented in
   `hexalith-llm-instructions.md` (PRD Open Question 2, resolved by the
   architecture spine on 2026-09-22).
-- Runtime targets: .NET 10, C# 14, `.slnx` only, xUnit v3 with Shouldly and
+- Runtime targets: .NET 11, C# 15, `.slnx` only, xUnit v3 with Shouldly and
   NSubstitute, `TreatWarningsAsErrors`. The EventStore client package pulls
   the Dapr SDK into the global tool (PRD NFR-6).
 
@@ -120,6 +134,14 @@ alternatives were rejected:
 - Assembly enumeration for FR-5: an MSBuild target collects `PackageReference`
   items carrying `HexalithContracts="true"` metadata into the scan list at
   build time; the tool is published untrimmed.
+- A Module may set `SerializerOptionsProvider` to a type in its marked
+  Contracts assembly. That type must directly declare a public static,
+  non-indexed `JsonSerializerOptions Options { get; }` returning a non-null
+  value. The tool copies its converters in order into the Module's cached
+  Payload options and retains the canonical resolver and other settings.
+  Omitting the provider uses canonical defaults. A foreign type, invalid
+  getter, thrown exception or null return excludes the Module with the
+  assembly diagnostic `invalid_serializer_options_provider` (PRD §5.1, FR-6).
 
 ## C. Research and comparables
 
@@ -157,18 +179,16 @@ alternatives were rejected:
   are deleted together (FR-21).
 - **Successor migration targets:** `Hexalith.EventStore.Admin.Mcp` and
   `.Admin.Cli` are obsolete proprietary surfaces. Their infrastructure
-  operations need an approved generic administration contract, transport,
-  authorization, and destructive-action design before retirement. They are
-  outside the first gateway-only McpCli increment, not permanent exclusions.
+  operations have owner-approved dispositions under AD-23. The confidential UI,
+  withdrawal and authorization/effect gates in the Admin inventory govern removal.
 - **Parity bar:** `ChatBotMcpToolCatalog.cs` (read/write kind, correlation,
   task and tenant arguments).
-- **Frozen CLIs** (PRD FR-22, retirement candidates on the FR-21 parity bar):
-  Folders, Projects, ChatBot, FrontComposer, Memories, and, in the successor
-  administration inventory, EventStore Admin. Their global options
-  (`--base-address`, `--correlation-id`) and exit-code enums need explicit
-  replacement or approved withdrawal dispositions.
+- **Local-tooling exemptions.** AD-23 K13 retains FrontComposer’s local
+  `inspect` and `migrate` commands. K14 retains the owner-held Memories
+  `MigrateEmbeddingVectors` tool. Both are excluded from the retirement count.
+  Other inventoried CLI and MCP surfaces keep their FR-21 owner and evidence gates.
 
-Survey facts that shaped the PRD (full detail in `extract-references.md`):
+Survey findings from 2026-09-21 (full detail in `extract-references.md`):
 
 - Only `Hexalith.Parties.Mcp` reaches the EventStore Gateway, and it
   hand-rolls the HTTP call instead of using `IEventStoreGatewayClient`.
@@ -191,7 +211,7 @@ Survey facts that shaped the PRD (full detail in `extract-references.md`):
   actor routing remains optional and follows the owning contract.
 - At the 2026-09-21 survey, none of the four candidate Contracts libraries
   carried a `[Description]` attribute. The accepted v1 scope later narrowed to
-  Tenants and Parties; Projects and Folders follow after v1 (PRD FR-20).
+  Tenants and Parties. PRD §8.1 records the current cohort.
 
 ## E. Generic Tool and CLI argument table
 
@@ -204,8 +224,8 @@ spelling shown. Positional CLI arguments are shown in angle brackets.
 |---|---|---|---|
 | module | `list_operations` | `operations <module>` | Module Name |
 | kind | `list_operations` (optional) | `--kind read\|write` | filter |
-| operation | `describe_operation`, `send_command`, `run_query` | `describe <op>`, `send <op>`, `query <op>` | Operation Name |
-| payload | `send_command`, `run_query` | `--payload <json>` / `@file` / stdin | validated against the Schema |
+| operation | `describe_operation`, `send_command`, `run_query` (required string) | `describe <op>`, `send <op>`, `query <op>` | Non-empty Operation Name |
+| payload | `send_command`, `run_query` (required string containing JSON text) | `--payload <json>`, `--payload @file`, or `--payload -` for stdin | The Operation Schema describes the decoded JSON value. |
 | tenant | `send_command`, `run_query` (optional) | none per call; `--tenant` is a session setting (global) | the only per-call identity value, MCP only; honored per PRD FR-16 (declared platform scope, else fixed tenant, else canonical public tenant under the operator gate) |
 | aggregateId | `send_command`, `run_query` (optional) | `--aggregate-id` | explicit value wins over the constant; disagreement with the accessor value is a validation failure; required when a Query has no property and no constant |
 | correlationId | `send_command` (optional) | `--correlation-id` | caller-supplied ULID is passed through; when omitted, the generated message identifier is used as command correlation; no second identifier is generated (§B) |
@@ -220,6 +240,35 @@ empty argument fails input binding before Catalog dispatch: the MCP SDK returns
 a JSON-RPC invalid-parameters error before tool invocation, while the CLI
 returns the §G `invalid_arguments` document at exit 2 with `argument: module`.
 `unknown_module` applies to a non-empty name that is absent from the Catalog.
+
+For a session configured for tenant `vector-users` and an actor authorized
+to read that tenant, the shipped `tenants.get-tenant-users` Query accepts
+this MCP request. Its `TenantId` supplies the aggregate. Paging belongs in
+the tool arguments.
+
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/call",
+  "params": {
+    "name": "run_query",
+    "arguments": {
+      "operation": "tenants.get-tenant-users",
+      "payload": "{\"TenantId\":\"vector-users\"}",
+      "tenant": "vector-users",
+      "pageSize": 2
+    }
+  }
+}
+```
+
+In either MCP revision, a missing required argument or an object passed
+directly as `payload` fails input binding with JSON-RPC `InvalidParams`
+(`-32602`) before tool invocation. Once an available Operation of the
+matching kind is resolved, malformed JSON inside a bound string produces
+the §G `validation_failed` tool result at `/`. Both failures send zero
+Gateway requests.
 
 After Core resolves an Operation Name, `send_command`/`send` requires kind
 `write` and `run_query`/`query` requires kind `read`. A mismatch returns
@@ -249,6 +298,14 @@ gated by PRD FR-16.
 | strict | `--strict` | `EVENTSTORE_STRICT` | none | `false` |
 | profile | `--profile` | `EVENTSTORE_PROFILE` | `activeProfile` | none |
 
+With `--output`, ordinary CLI results go to the selected file and stdout stays
+empty, including when `describe --lint` exits 1. Errors at exit 2 go to stdout
+as §G JSON regardless of `--output` or `--format`. If the destination check
+fails before a Gateway call or Profile change, the error message is
+`The result destination cannot be written; no request was sent.` A later write
+failure can follow either action. Inspect the target state before retrying.
+FR-14 gives the full exit-code contract, including interruption.
+
 For `mcp --transport stdio`, valid inherited
 `format` is ignored for protocol output; explicit `--format json` is accepted.
 Explicit `--format table` and any `--output` fail before Catalog or transport
@@ -256,6 +313,20 @@ startup with one §G `invalid_arguments` object on stderr (`argument: format` or
 `output`, format first if both), zero stdout bytes, exit 2, and no output file
 opened. Malformed inherited settings still fail ordinary validation. These
 options never reformat or redirect the protocol stream.
+
+When a URL and token both resolve, both must come from flags, from the environment
+or from the selected Profile. A mixed pair is `configuration_invalid`.
+A URL may be used without a token.
+
+**Private credential entry (Story 5.16, backlog).** Profile creation and
+rotation must support a non-echoing terminal prompt and explicitly selected
+stdin for automation. Reject conflicting inputs. Keep the token out of process
+arguments, stdout, stderr and diagnostics on these paths. Ordinary commands
+and MCP stdio retain their input streams. Use the locked private-file
+transaction so cancellation or invalid input preserves the original settings
+and permissions. Both Heads must require HTTPS for a bearer token sent to a non-loopback
+Gateway. Profile mutations must also reject unsafe stored combinations.
+Operators may use HTTPS or the documented private loopback port-forward.
 
 Boolean environment variables accept `true`, `false`, `1`, `0`.
 
@@ -267,6 +338,9 @@ control-character-containing or existing-file overrides fail safely as
 `configuration_invalid` without exposing the path or falling back to the real
 home. This is a store-location selector outside the session-setting table, not
 an identity or per-call override. Existing atomicity and file protections apply.
+Under Story 5.19, measure the completed UTF-8 serialization before replacement.
+Exactly 1,048,576 bytes is valid. One byte over must leave the prior file,
+permissions and active Profile intact and remove the temporary file (FR-18).
 
 Profile document:
 
@@ -280,7 +354,7 @@ Profile document:
       "token": "…",
       "format": "json",
       "tenant": "acme",
-      "actor": "01J9…",
+      "actor": "01J9MZHXT3RKM0VWXRXGSJDATK",
       "allowTenantOverride": false,
       "allowedExtensions": ["task-id"]
     }
@@ -295,11 +369,15 @@ list).
 
 ## F. Deferred capabilities
 
-- Query search, filters, order-by, freshness: `SubmitQueryRequest` carries
-  `Search`, `Filters`, `OrderBy`, `Freshness`; `EventStoreQueryResult`
-  carries `ETag` and `IsNotModified`; `SubmitQueryAsync` accepts
-  `ifNoneMatch`. Not exposed in v1 (PRD FR-9); excluded from parity
-  (FR-21).
+- The generic Heads defer the Gateway's `Search`, `Filters`, `OrderBy`
+  and `Freshness` arguments and HTTP conditional requests and responses
+  (`ifNoneMatch`, `ETag`, `IsNotModified`). The parity exclusion applies
+  only to those generic features. For each approved replacement, FR-21 and
+  AD-23 K03 still require evidence for its Payload and handler semantics.
+  Where applicable, prove the fixed or explicit freshness value, defaults,
+  supported inputs, filtering before Envelope paging, totals and continuation
+  contents. Verify rejection of conflicting, unsupported and out-of-bounds
+  inputs. [AD-23 K03](../../architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md)
 - Query correlation identifier and extensions: not carried by the pinned
   client's query request (§B). Deferred until the client carries them (PRD
   §8.2).
@@ -351,19 +429,21 @@ Public member types and constraints:
 | `envelope` | JSON object; `fixedTenant` is an exact Gateway-valid ordinary Tenant string; `platformScope` is an exact declared `platform:` scope under PRD §5.1; the two optional members are mutually exclusive; `aggregateIdRequired` and `idempotencyKeyRequired` are booleans; `idempotencyKeyRequired` is true exactly when the Operation names a non-nullable or serializer-required `idempotencyKeyProperty` (effective `JsonPropertyInfo.IsRequired` under its Payload options); `arguments` is a duplicate-free array of applicable §E argument-name strings |
 | `lintFindings` | array of objects defined below; empty when no finding exists |
 | `submittable` | boolean describing head-level surface availability from Read-only Mode and resolved Gateway URL only; Tenant, actor, Payload, and per-call Envelope requirements are evaluated on execution; `reason` is `read_only` or `configuration_invalid` when false |
-| `messageId`, `correlationId`, `idempotencyKey` | ULID string; `messageId` is the Gateway's canonical execution identifier |
+| `messageId`, `correlationId`, `idempotencyKey` | canonical uppercase ULID string (FR-17 governs acknowledgment and fallback) |
 | `tenant` | non-empty resolved ordinary/fixed Tenant satisfying FR-15, or the exact declared platform scope under FR-16; a public variable-scope `system` value is refused |
 | `aggregateId` | non-empty string satisfying the FR-15 Gateway aggregate-identifier pattern and the Module's Identifier Kind |
-| `status` | string constant `accepted`, representing the successful Gateway `202 Accepted` response; later values require a public-contract change |
+| `status` | string constant `accepted` in a successful Command result. The HTTP response code appears as an integer only on `gateway_error`. |
 | `result` | any JSON value returned as `SubmitCommandResponse.ResultPayload`; omitted when the Gateway returns no payload |
-| `document` | any JSON value returned as `EventStoreQueryResult.Payload` |
+| `document` | any JSON value returned as `EventStoreQueryResult.Payload`, including a required `document: null` when the Payload is null |
 | `paging.nextCursor` | non-empty string when present |
 | `paging.hasMore` | boolean |
+
+The following JSON documents illustrate the result shapes with synthetic data.
 
 `list_modules`:
 
 ```json
-{ "modules": [ { "name": "tenants", "description": "Tenant lifecycle and membership.", "operationCount": 6 } ] }
+{ "modules": [ { "name": "tenants", "description": "Tenant lifecycle and membership.", "operationCount": 15 } ] }
 ```
 
 `list_operations`:
@@ -404,11 +484,18 @@ constant `warning`. For the first three codes, `property` is an RFC 6901 JSON
 Pointer to the recursively inspected property, using Module-serialized casing.
 The operation-level `hollow_description` finding omits `property`.
 
-`send_command` (example with a caller-supplied idempotency key):
+`send_command` for an authorized `parties.reactivate-party` call with a
+caller-supplied idempotency key (Parties inventory T06, AD-23 K01):
 
 ```json
-{ "operation": "parties.create-party", "messageId": "01J9…", "idempotencyKey": "01J9…", "correlationId": "01J9…", "tenant": "acme", "aggregateId": "party-42", "status": "accepted", "result": { } }
+{ "operation": "parties.reactivate-party", "messageId": "01J9MZHXT3RKM0VWXRXGSJDATM", "idempotencyKey": "01J9MZHXT3RKM0VWXRXGSJDATN", "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK", "tenant": "acme", "aggregateId": "party-42", "status": "accepted" }
 ```
+
+An accepted result always uses the correlation ID submitted with the Command,
+whether caller-supplied or generated, including when the Gateway echoes a
+different valid correlation ID. If the acknowledgment omits `messageId` or
+sets it to null, use the submitted message ID. If the Gateway supplies a canonical
+message ID, return it even when it differs from the submitted one.
 
 The tool does not infer replay when the returned `messageId` differs from the
 identifier generated for the attempt. The Gateway uses the canonical execution
@@ -425,12 +512,14 @@ confirmed a trusted idempotency adapter for that Command type.
 
 ### Error documents
 
-The CLI writes an error document to stdout with exit 2; the MCP Server
-returns it as `structuredContent.error` with `isError: true`. For any `mcp`
-failure before the server starts serving MCP requests, the CLI instead writes
-the structured error to stderr and leaves stdout empty. Once requests can be
-served, failures travel only as JSON-RPC/MCP errors under both supported
-protocol revisions.
+At exit 2 an ordinary CLI action writes one error document to stdout. An
+`mcp` startup failure writes the structured error to stderr and leaves stdout
+empty. Once serving, a bound tool's failure sets `isError: true`, places the
+error in `structuredContent.error`, and includes the same document as JSON in
+the first text content block. JSON-RPC input-binding failures precede tool
+invocation (§E). These rules apply to both supported protocol revisions.
+Normal MCP shutdown exits 0. A faulted hosting service writes
+`MCP server stopped unexpectedly.` to stderr and exits 2.
 
 | Error code | Required members under `error` | Optional members under `error` |
 |---|---|---|
@@ -452,44 +541,62 @@ Error member types and constraints:
   requested Module Name and `suggestions` is an array of at most three declared
   canonical Module Name strings. Both suggestion lists are ordered by
   case-insensitive edit distance, with ordinal name order breaking ties.
-- `invalid_arguments` is emitted by CLI Head input binding before a Core call;
-  `argument` is the non-empty canonical §E argument name and `message` explains
-  the missing or invalid value. MCP input-schema binding failures use JSON-RPC
-  invalid parameters before tool invocation, outside these tool documents.
+- `invalid_arguments` can arise during CLI input binding or during semantic
+  checks on a bound tool call. For example, `list_operations` with
+  `{"module":"tenants","kind":"Read"}` passes MCP string binding and returns
+  a structured tool error with `argument` equal to `kind`. The two accepted
+  values are `read` and `write`. A wrong JSON type fails earlier with
+  JSON-RPC `InvalidParams`. `message` explains the missing or invalid value.
+- The published `invalid_arguments.argument` values are `module`, `kind`,
+  `operation`, `payload`, `tenant`, `aggregateId`, `correlationId`,
+  `idempotencyKey`, `extensions`, `entityId`, `pageSize`, `offset`, `cursor`,
+  `lint`, `url`, `token`, `actor`, `allowTenantOverride`, `profile`, `format`,
+  `output`, `readOnly`, `strict`, `name`, `set`, `arguments`, `clear`,
+  `transport`, and `extension`. CLI syntax errors can name a recognized option
+  such as `extension`, or use `arguments` for general command syntax.
 - `violations` is a non-empty array; each `path` is an RFC 6901 JSON Pointer and
   each `message` is a non-empty string.
 - A call-kind mismatch uses `validation_failed` at `/operation`; a JSON null
   or non-object Command Payload uses `validation_failed` at `/`.
-- Gateway `status` is the integer `EventStoreGatewayException.StatusCode`
-  copied without reclassification. It may therefore be `2xx` when the pinned
-  client reports an HTTP-success response that is malformed or fails semantic
-  validation. `detail` is the first non-empty value of
-  `EventStoreGatewayException.Detail` and `.Title`, so it is always present.
-  `reason` is the first non-empty value of `.ReasonCode`,
-  `.Code`, and `.Reason`; it is omitted when all are absent. `clientAction` is
-  a non-empty forward-compatible Gateway string when supplied; `retryable` is
-  boolean when supplied; `retryAfter` is the non-empty Gateway header or
-  extension string; and `correlationId` is a ULID string. No optional value is
-  synthesized. Fixtures cover complete Gateway Problem Details, malformed
-  `202` command and `200` query responses, a semantic query failure, and a
-  locally created client exception with optional metadata absent.
+- For a Gateway client exception, copy its integer `StatusCode` to `status`.
+  A malformed or semantically invalid HTTP-success response can therefore
+  produce a 2xx error status. Use the first nonblank exception `Detail` or
+  `Title` for `detail`, falling back to `Gateway request failed.` when both
+  are blank. Use the first nonblank `ReasonCode`, `Code` or `Reason` for
+  `reason`. Copy `retryable` when supplied, and the nonblank Gateway strings
+  `clientAction` and `retryAfter` when supplied. Include an exception's
+  `correlationId` only when it is a canonical ULID. Omit other absent optional
+  values. Fixtures cover Gateway Problem Details, malformed HTTP 202 Command
+  and HTTP 200 Query responses, semantic Query failure and missing metadata.
+
+**Malformed message ID (Story 5.17, backlog).** The pinned EventStore client
+5.4.0 returns a successful acknowledgment DTO without an HTTP status. For
+a present empty, whitespace-only or noncanonical message ID in an otherwise
+valid success acknowledgment, retain the actual status for this call at the
+HTTP response boundary. Core must return `gateway_error` with that integer
+`status`, the submitted `correlationId`, and stable `detail` explaining that
+the Command may have succeeded. The CLI exits 2 and MCP sets `isError: true`
+after exactly one submission. Test both HTTP 200 and 202, including a valid
+echoed correlation ID different from the submitted one. The exception
+mapping also covers unparseable JSON and a missing or blank acknowledgment
+correlation ID.
 
 `validation_failed`:
 
 ```json
-{ "error": { "code": "validation_failed", "operation": "parties.create-party", "violations": [ { "path": "/PartyId", "message": "must match the aggregate identifier pattern" } ] } }
+{ "error": { "code": "validation_failed", "operation": "parties.reactivate-party", "violations": [ { "path": "/PartyId", "message": "must match the aggregate identifier pattern" } ] } }
 ```
 
 `gateway_error`:
 
 ```json
-{ "error": { "code": "gateway_error", "status": 409, "reason": "conflict", "detail": "…", "retryable": false, "clientAction": "inspect", "correlationId": "01J9…" } }
+{ "error": { "code": "gateway_error", "status": 409, "reason": "conflict", "detail": "The aggregate version has changed.", "retryable": false, "clientAction": "inspect", "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK" } }
 ```
 
 `unknown_operation`:
 
 ```json
-{ "error": { "code": "unknown_operation", "operation": "parties.crate-party", "suggestions": ["parties.create-party"] } }
+{ "error": { "code": "unknown_operation", "operation": "parties.reactvate-party", "suggestions": ["parties.reactivate-party"] } }
 ```
 
 `unknown_module`:
@@ -518,24 +625,19 @@ precedence as `reason: read_only`.
 
 Expanded from PRD §8.1 for the Module maintainers.
 
-- **Projects.** **Today:** `Hexalith.Projects.Contracts` carries ASP.NET
-  Core, Fluxor, FluentUI, and FrontComposer.Shell, so it fails the PRD §4
--  allowlist and the tool cannot reference it (FR-20). **Becomes:** Slim the
-  Contracts Library. Add Query types for the 11 resources the Legacy Server
-  exposes. Configure attribute routing with `wireType` from the instance
-  `CommandType` property and `aggregateIdProperty = ProjectId`. Name the
-  existing members through `tenantProperty`, `correlationProperty`,
-  `idempotencyKeyProperty`, and `actorProperty = ActorPrincipalId`, so the
-  records remain unchanged. Decide whether the server-side tenant guard in the
-  Projects command submitter moves into the aggregate because direct Gateway
-  submission bypasses it. **Owner:** the Projects maintainer. **Acceptance:**
-  `list_operations projects` shows the agreed subset and each Operation is
-  accepted by the Gateway.
-- **Folders.** **Today:** `Hexalith.Folders.Contracts` holds read models and
-  OpenAPI only, and the Legacy Server exposes 49 tools over REST with
-  dry-run, redaction, and freshness semantics. **Becomes:** Add decorated
-  Command and Query types for the agent-facing subset, handled by a Folders
-  domain service. Move dry-run, redaction, and freshness into handlers or drop
-  them and list them in the migration plan. **Owner:** the Folders
-  maintainer. **Acceptance:** `list_operations folders` shows the agreed
-  subset and each Operation is accepted by the Gateway.
+- **Projects.** Public `Hexalith.Projects.Contracts` 2.0.0 passes the dependency
+  allowlist. Its four reads are `projects.list`, `projects.describe`,
+  `projects.trace-conversation` and `projects.trace-attachments`. The enrolled
+  list contract carries `pageSize` and `cursor` in the Payload. Generic paging
+  arguments populate the Envelope (AD-20). Projects and EventStore must agree
+  how these contracts apply before the native paging test. For Story 5.21,
+  the Projects and environment owners supply a native host, identity roles and
+  synthetic records. FR-20 defines the populated-page, detail and denial checks.
+  Record the live verdict under DW-82. The CLI and plug-in retain separate
+  migration gates. [Enrolled Contracts and reads](../../../../README.md#gateway-boundary)
+- **Folders.** Epic 6 gates enrollment on published eligible Contracts and a
+  server-free composition helper. The Folders inventory governs the agent-facing
+  subset and the dry-run, redaction and freshness obligations. A separate K12
+  decision covers restricted and mixed operations. The Folders owner must
+  approve each replacement or withdrawal and its supporting evidence before
+  legacy retirement. [Epic 6](../../epics.md#epic-6-replace-and-retire-the-folders-cli-and-mcp-server)
