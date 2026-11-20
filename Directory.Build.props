@@ -1,7 +1,5 @@
 <Project>
   <PropertyGroup>
-    <!-- Select the current public gateway and Contracts cohort before the Builds catalog import. -->
-    <HexalithEventStoreVersion Condition="'$(HexalithEventStoreVersion)' == ''">5.4.0</HexalithEventStoreVersion>
     <HexalithProjectsVersion Condition="'$(HexalithProjectsVersion)' == ''">2.0.0</HexalithProjectsVersion>
     <HexalithMcpCliVersion Condition="'$(HexalithMcpCliVersion)' == ''">3.0.0</HexalithMcpCliVersion>
     <HexalithPartiesVersion Condition="'$(HexalithPartiesVersion)' == ''">4.0.0</HexalithPartiesVersion>
