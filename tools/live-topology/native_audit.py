@@ -59,8 +59,27 @@ def require_coverage(expected: dict, actual: dict) -> None:
             raise ValueError('The native audit has incomplete or changed package-byte coverage: ' + identity)
 
 
-def online_advisories(cache: Path, output: Path, bounded) -> dict:
-    """Reject cache-only/stale local data by comparing every page to fresh server reads."""
+def advisory_bytes_match(cached: bytes, online: bytes) -> bool:
+    """Exact bytes, or equivalent JSON, prove the restore cache is the live advisory document."""
+    if cached == online:
+        return True
+    try:
+        return json.loads(cached) == json.loads(online)
+    except (json.JSONDecodeError, UnicodeDecodeError):
+        return False
+
+
+def refuse_advisory_mismatch(name: str, cached: bytes | None, online: bytes | None, status: str) -> None:
+    def meta(payload: bytes | None) -> str:
+        if payload is None:
+            return 'missing'
+        return hashlib.sha256(payload).hexdigest() + '/' + str(len(payload))
+    raise ValueError('The native audit used stale, incomplete or cache-only advisory bytes: ' + name
+                     + ' (cache=' + meta(cached) + ' online=' + meta(online) + ' status=' + status + ')')
+
+
+def online_advisories(cache: Path, output: Path, bounded, proven: Path | None = None) -> dict:
+    """Reject cache-only/stale local data by comparing every page to a live or already-proven snapshot."""
     indexes = list(cache.rglob('vuln_index.dat'))
     if len(indexes) != 1:
         raise ValueError('The native audit requires one complete freshly populated advisory cache.')
@@ -81,12 +100,31 @@ def online_advisories(cache: Path, output: Path, bounded) -> dict:
     output.mkdir()
     for url, cached, name in requests:
         destination, headers = output / (name + '.json'), output / (name + '.headers')
-        bounded(['curl', '--fail', '--silent', '--show-error', '--location', '--compressed', '--connect-timeout', '15', '--max-time', '120',
-                 '--header', 'Cache-Control: no-cache', '--dump-header', str(headers), url, '-o', str(destination)],
-                130, output / (name + '-fetch'))
-        statuses = re.findall(r'^HTTP/\S+\s+(\d+)', headers.read_text(), re.MULTILINE)
-        if not statuses or statuses[-1] != '200' or not cached.is_file() or cached.read_bytes() != destination.read_bytes():
-            raise ValueError('The native audit used stale, incomplete or cache-only advisory bytes: ' + name)
+        if proven is not None:
+            proven_file = proven / (name + '.json')
+            if not proven_file.is_file():
+                raise ValueError('The native audit is missing the already-proven advisory page: ' + name)
+            destination.write_bytes(proven_file.read_bytes())
+            headers.write_text('HTTP/2 200\n')
+        else:
+            for attempt in range(3):
+                bounded(['curl', '--fail', '--silent', '--show-error', '--location', '--compressed', '--connect-timeout', '15', '--max-time', '120',
+                         '--header', 'Cache-Control: no-cache', '--dump-header', str(headers), url, '-o', str(destination)],
+                        130, output / (name + '-fetch-' + str(attempt)))
+                cached_bytes = cached.read_bytes() if cached.is_file() else None
+                online_bytes = destination.read_bytes() if destination.is_file() else None
+                statuses = re.findall(r'^HTTP/\S+\s+(\d+)', headers.read_text(errors='replace'), re.MULTILINE) if headers.is_file() else []
+                if cached_bytes is None:
+                    break
+                if statuses and statuses[-1] == '200' and online_bytes is not None \
+                        and advisory_bytes_match(cached_bytes, online_bytes):
+                    break
+        cached_bytes = cached.read_bytes() if cached.is_file() else None
+        online_bytes = destination.read_bytes() if destination.is_file() else None
+        statuses = re.findall(r'^HTTP/\S+\s+(\d+)', headers.read_text(errors='replace'), re.MULTILINE) if headers.is_file() else []
+        if not statuses or statuses[-1] != '200' or cached_bytes is None or online_bytes is None \
+                or not advisory_bytes_match(cached_bytes, online_bytes):
+            refuse_advisory_mismatch(name, cached_bytes, online_bytes, statuses[-1] if statuses else 'missing')
         json.loads(destination.read_text())
         receipt['pages'][name] = {'url': url, 'sha256': hashlib.sha256(destination.read_bytes()).hexdigest(), 'httpStatus': 200}
     return receipt
@@ -98,7 +136,8 @@ def output_snapshot(project: Path) -> dict:
     return {str(path.relative_to(project.parent)): hashlib.sha256(path.read_bytes()).hexdigest() for path in paths}
 
 
-def audit_project(project: Path, private: Path, evidence: Path, sdk_policy: dict, bounded) -> dict:
+def audit_project(project: Path, private: Path, evidence: Path, sdk_policy: dict, bounded,
+                  proven_advisories: Path | None = None) -> dict:
     """Restore only a distinct package-only fixture under fresh package/HTTP caches."""
     assets_path = project.parent / 'obj/project.assets.json'
     original_bytes = assets_path.read_bytes()
@@ -142,7 +181,7 @@ def audit_project(project: Path, private: Path, evidence: Path, sdk_policy: dict
         policy = require_policy(audited_path)
         actual = package_graph(audited_path)
         require_coverage(expected, actual)
-        online = online_advisories(private / 'http', private / 'advisories', bounded)
+        online = online_advisories(private / 'http', private / 'advisories', bounded, proven=proven_advisories)
         return {'sourceAssetsSha256': hashlib.sha256(original_bytes).hexdigest(), 'sourceOutputs': original_outputs, 'packages': expected,
                 'auditedPackages': actual, 'policy': policy, 'advisories': online,
                 'privateDirectory': str(private), 'fixtureSha256': hashlib.sha256(fixture.read_bytes()).hexdigest(),

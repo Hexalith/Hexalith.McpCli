@@ -776,7 +776,8 @@ def prepare(evidence: Path) -> None:
         receipt['nativeAudits'] = {}
         for index, relative in enumerate(MODULE_AUDIT_PROJECTS):
             audit = native_audit.audit_project(ROOT / relative, private / ('module-audit-' + str(index)),
-                                               evidence / ('module-audit-' + str(index)), tools['sdkPolicy'], bounded)
+                                               evidence / ('module-audit-' + str(index)), tools['sdkPolicy'], bounded,
+                                               proven_advisories=private / 'source-advisories')
             receipt['nativeAudits'][relative] = audit
             # The isolated metadata reader has no external network. Seed its private cache
             # only from these freshly audited package bytes; never change the module cache.

@@ -105,6 +105,66 @@ class NativeAuditTests(unittest.TestCase):
             with self.subTest(defect=defect), self.assertRaises((RuntimeError, ValueError)):
                 native_audit.online_advisories(cache, self.root / defect, defective)
 
+    def test_transient_online_mismatch_is_retried_then_accepted(self):
+        cache = self.advisory_fixture()
+        attempts = {'index': 0}
+
+        def fetch(command, *_args, **_kwargs):
+            name = Path(command[-1]).stem
+            cached = cache / ('vuln_index.dat' if name == 'index' else 'vuln_data_' + name + '.dat')
+            Path(command[command.index('--dump-header') + 1]).write_text('HTTP/2 200\n')
+            destination = Path(command[-1])
+            if name == 'index':
+                attempts['index'] += 1
+                if attempts['index'] == 1:
+                    destination.write_text('[]')
+                    return
+            destination.write_bytes(cached.read_bytes())
+
+        receipt = native_audit.online_advisories(cache, self.root / 'retried', fetch)
+        self.assertEqual(2, attempts['index'])
+        self.assertEqual(hashlib.sha256((cache / 'vuln_index.dat').read_bytes()).hexdigest(),
+                         receipt['pages']['index']['sha256'])
+
+    def test_equivalent_advisory_json_is_accepted(self):
+        cache = self.advisory_fixture()
+        pages = json.loads((cache / 'vuln_index.dat').read_text())
+
+        def fetch(command, *_args, **_kwargs):
+            name = Path(command[-1]).stem
+            Path(command[command.index('--dump-header') + 1]).write_text('HTTP/2 200\n')
+            destination = Path(command[-1])
+            if name == 'index':
+                destination.write_text(json.dumps(pages, indent=2))
+            else:
+                destination.write_bytes((cache / ('vuln_data_' + name + '.dat')).read_bytes())
+
+        receipt = native_audit.online_advisories(cache, self.root / 'pretty', fetch)
+        self.assertEqual(hashlib.sha256(json.dumps(pages, indent=2).encode()).hexdigest(),
+                         receipt['pages']['index']['sha256'])
+
+    def test_proven_advisory_snapshot_skips_live_fetch_and_refuses_drift(self):
+        cache = self.advisory_fixture()
+
+        def fetch(command, *_args, **_kwargs):
+            name = Path(command[-1]).stem
+            cached = cache / ('vuln_index.dat' if name == 'index' else 'vuln_data_' + name + '.dat')
+            Path(command[-1]).write_bytes(cached.read_bytes())
+            Path(command[command.index('--dump-header') + 1]).write_text('HTTP/2 200\n')
+
+        proven = self.root / 'proven'
+        native_audit.online_advisories(cache, proven, fetch)
+
+        def forbidden(*_args, **_kwargs):
+            raise AssertionError('already-proven advisory pages must not be fetched again')
+
+        receipt = native_audit.online_advisories(cache, self.root / 'reused', forbidden, proven=proven)
+        self.assertEqual(hashlib.sha256((proven / 'index.json').read_bytes()).hexdigest(),
+                         receipt['pages']['index']['sha256'])
+        (cache / 'vuln_data_update.dat').write_text('{"changed": []}')
+        with self.assertRaisesRegex(ValueError, 'cache='):
+            native_audit.online_advisories(cache, self.root / 'drifted', forbidden, proven=proven)
+
     def test_reuse_rechecks_module_outputs_fixture_graph_and_advisory_bytes(self):
         private = self.root / 'audited'
         (private / 'obj').mkdir(parents=True)
