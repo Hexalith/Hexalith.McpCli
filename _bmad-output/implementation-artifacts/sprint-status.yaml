@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-20-2026 11:39'
+last_updated: '11-21-2026 17:10'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -112,6 +112,9 @@ development_status:
   5-19-enforce-the-profile-size-limit-before-replacement: backlog
   5-20-detect-unsupported-linux-process-supervision: backlog
   5-21-qualify-populated-projects-reads-and-access-denial: backlog
+  5-22-validate-gateway-query-paging-in-both-heads: backlog
+  5-23-protect-profile-files-from-cli-result-output: backlog
+  5-24-reject-invalid-default-query-ids-at-catalog-admission: backlog
   epic-5-retrospective: optional
 
   epic-6: backlog

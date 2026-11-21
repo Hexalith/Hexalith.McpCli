@@ -2223,6 +2223,30 @@ As the Projects owner, I need evidence for the data and access behavior of the e
 - Prove a populated list and a subsequent cursor page through CLI and MCP, checking expected IDs, order and page boundaries. Exercise an authorized populated detail read, the insufficient-permission response with no protected data, and the existing empty or Unavailable case.
 - Record live evidence and the owners' verdict under DW-82. Keep qualification and any later decision to retire a legacy Projects surface distinct. Use the existing generic execution path.
 
+### Story 5.22: Validate Gateway query paging in both heads
+
+As a caller, I need a successful Query to return paging that matches the advertised schema, so I can use the result from either head. McpCli owns Core, the CLI and MCP fixtures. McpCli and EventStore own the response boundary that retains the HTTP status. [AD-5, AD-12 and AD-20](architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md)
+
+- Omit `paging` when metadata or paging is absent or null. For a present object, require a positive decoded integer `pageSize`, including valid values above the request limit of 200. Accept the Gateway client's supported signed and zero-padded numeric strings. Omit null optional members, preserve zero offsets and counts and preserve `hasMore: false`. Check that counts and offsets are nonnegative, a supplied `nextCursor` is nonempty and a supplied `hasMore` is boolean.
+- Return one §G `gateway_error` with the actual HTTP status and bounded detail if decoding fails or the decoded object is invalid. Exercise an empty object and missing, zero and negative page sizes on a 2xx response. Each invocation sends one Query. The CLI exits 2 and MCP sets `isError: true`.
+- Correct the packaged loopback fixture. For each success and refusal, compare actual CLI JSON with MCP structured content and validate both against the output schema advertised by that MCP session. [Normative result fields](prds/prd-mcpcli-2026-09-21/addendum.md)
+
+### Story 5.23: Protect profile files from CLI result output
+
+As an operator, I need a mistaken `--output` destination to leave my profiles readable and my selection intact. McpCli owns the CLI result writer and profile store. This addresses the profile overwrite recorded during Story 2.11. [AD-14](architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md) · [Deferred-work ledger](../implementation-artifacts/deferred-work.md)
+
+- For every CLI verb that writes results to a file, reserve the selected profile path, its lock and its transaction temporary paths. Compare resolved paths for missing destinations and filesystem identities for existing files, including hard links.
+- Refuse a collision before a profile mutation, Gateway submission or result write. Verify the actual write still targets an allowed file if the destination changes after preflight. A collision produces the ordinary `internal_error` document on stdout and exit code 2.
+- Reproduce the collision with an isolated profile store. Exercise direct paths, aliases and a destination changed after preflight. Verify preflight refusals cause zero Gateway submissions and no profile mutation. Reopen the store and confirm its bytes, selected profile and permissions survived. An ordinary output destination must still receive the result.
+
+### Story 5.24: Reject invalid default query IDs at catalog admission
+
+As a module author, I need discovery to advertise only Query defaults the executor can use, so a caller can safely omit an optional aggregate ID. McpCli Core owns Catalog admission and the execution checks. [AD-8 and AD-19](architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md)
+
+- Check for conflicting declarations first. A Query with both `aggregateIdProperty` and an `aggregateId` constant is excluded with `ambiguous_aggregate_id`, even if its constant is malformed.
+- For a sole constant, apply both the Gateway syntax and the Module's Identifier Kind using the same rules as execution. Exclude an invalid default with `invalid_routing_value`. Cover a Gateway-valid string such as `routing-list` in a Module with `IdentifierKind.Ulid`, an invalid Gateway identifier in a Module with `IdentifierKind.String`, and valid defaults for both kinds.
+- Through CLI and stdio MCP, verify discovery marks the aggregate ID optional for an admitted default and a Query that omits it sends that default to the Gateway. Verify a valid explicit ID overrides the constant. A Query with neither declaration remains discoverable with `aggregateIdRequired: true`.
+
 ## Epic 6: Replace and Retire the Folders CLI and MCP Server
 
 Operators and agents reach owner-approved eligible Folders operations through McpCli's two heads; restricted K12 behavior remains confidential UI and deferred behavior retains its gates. The frozen `Hexalith.Folders.Cli` and `Hexalith.Folders.Mcp` retire with verified replacement evidence. McpCli enrolls the exact decorated Folders Contracts release, proves shared-head parity and safety on a selected environment, verifies the deletion that Folders performs, and records it in the migration plan.
