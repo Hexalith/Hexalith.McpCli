@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>McpCli architecture validation · 21 November 2026</title><style>
+*{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;background:#faf9f5;color:#222d33;font:17px/1.57 system-ui,sans-serif}
+.container{width:min(1040px,94%);margin:auto} header{background:#153d45;color:#fff;padding:42px 0 34px}
+h1{font-family:Georgia,serif;margin:5px 0 0;font-weight:500;line-height:1.1;font-size:clamp(34px,6vw,57px);letter-spacing:-.03em}
+header p{margin:0;color:#d6e5e5;font-size:15px} nav{padding:13px 0;border-bottom:1px solid #c9d1cd}
+nav .container{display:flex;flex-wrap:wrap;gap:9px 26px;align-items:baseline} nav a{font-size:15px;font-weight:600} a{color:#146271;text-underline-offset:3px;overflow-wrap:anywhere}
+main{max-width:900px;width:94%;margin:28px auto 70px} article p{margin:.65em 0 1em} p.verdict{font-size:1.13em;border-left:5px solid #a45a36;padding:14px 21px;background:#f4eadc}
+h2{color:#173f46;font-size:1.65em;border-bottom:2px solid #37676b;padding-bottom:5px;margin:2.1em 0 .85em}
+h3{font-size:1.18em;font-weight:700;line-height:1.35;margin:1.55em 0 .1em}.scope{color:#476069;font-size:.88em;margin-top:.25em}
+code{font: .91em ui-monospace,monospace;overflow-wrap:anywhere;background:#e9eeeb;padding:.05em .22em;border-radius:3px}
+table{border-collapse:collapse;table-layout:auto;width:100%;margin:1.2em 0}td,th{text-align:left;vertical-align:top;padding:.6em;border-bottom:1px solid #c9d1cd}th{background:#e7eeeb}
+td:first-child{width:38%}@media(max-width:620px){body{font-size:15px} main,.container{width:90%} header{padding:30px 0 25px} nav .container{gap:6px 15px} td,th{padding:.45em} p.verdict{padding:12px}}
+@media print{body{background:#fff;color:#111;font-size:10pt}header{background:none;color:#111;padding:0}header p{color:#333}nav{display:none}main,.container{width:100%;max-width:none}h2,h3,.scope{break-after:avoid}a{color:#233e45}h2{margin-top:1.4em}html{scroll-behavior:auto}}
+</style></head><body><header><div class="container"><p>21 November 2026 · Standalone BMAD review</p><h1>McpCli architecture validation</h1></div></header><nav aria-label="Report sections"><div class="container"><a href="#high">High priority</a><a href="#medium">Medium priority</a><a href="#low">Low priority</a><a href="#checks">Verification and scope</a><a href="VALIDATION-REPORT-2026-11-21.md" download>Download Markdown</a></div></nav><main><article><p class="verdict"><strong>Verdict: revise the spine before relying on its query paging contract or accepting Platform-connected integration.</strong> A loopback check confirmed a public result that both heads emit and the advertised MCP schema rejects. Three additional high-priority findings concern Platform integration. Seven medium findings and one low finding complete the review.</p>
+<p>The review covers the working-tree <a href="ARCHITECTURE-SPINE.md">architecture spine</a> at McpCli <code>e79b7f8b</code>. All 23 decision IDs and 30 requirement bindings were present. Reviewed spine SHA-256: <code>1b9d55aa46f338978208824857317eb376ff2939d7112ce15f35b7eac5646e68</code>.</p>
+<h2 id="high">High priority</h2>
+<h3 id="finding-01">01. A successful Query can fail its advertised output schema</h3>
+<p class="scope">AD-5, AD-12, AD-20 · spine lines 109, 159, 228, 276</p>
+<p>A loopback Gateway returned a successful Projects query with a present, empty paging object. The Release CLI exited 0 and stdio MCP reported success. Both returned <code>paging.pageSize: 0</code>. The same MCP session’s advertised <code>run_query</code> output schema rejected that result and accepted the identical result with a page size of 1. The packaged fixture and the schema test encode the two different expectations.</p>
+<p><strong>Recommended action.</strong> Core and both adapter owners should apply one response rule. Omit paging when absent or null. Treat a present paging object that breaks the public contract as a malformed Gateway response, using an agreed error mapping. Preserve valid zero offsets and counts and <code>hasMore: false</code>. Check the actual returned document against the session’s schema in the same test. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md#L424">Normative result fields</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs#L279">Gateway response mapping</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/tools/conformance-vectors/v1/run_packaged_process_fixture.py#L59">Packaged fixture</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/tests/Hexalith.McpCli.Mcp.Tests/McpOutputSchemaTests.cs#L305">Advertised-schema test</a></p>
+<h3 id="finding-02">02. Platform source builds need a Contracts manifest input</h3>
+<p class="scope">AD-4, AD-17 · spine lines 103, 206</p>
+<p>The local build enumerates flagged NuGet package references and matches their package IDs to copy-local assemblies. Platform also requires its run-scoped McpCli to consume source-mapped Contracts by assembly identity. AD-17 names the common mapping, but AD-4 gives the implementer only the package path.</p>
+<p><strong>Recommended action.</strong> McpCli and Platform should define how their build passes the mapped identities to the manifest generator, rejects duplicate or missing assemblies, and proves the host, tool and tests loaded the same candidate. Keep the released tool’s package enrollment rule explicit. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli/Build/ModuleAssemblyManifest.targets#L28">Manifest inputs</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli/Build/ModuleAssemblyManifest.targets#L88">MSBuild invocation</a> · <a href="https://github.com/Hexalith/Hexalith.Platform/blob/25887836c2c7a63edbff7a4e0426e078a188b98c/_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md#L383">Platform override</a></p>
+<h3 id="finding-03">03. Connected CLI and stdio need the staging identity rules</h3>
+<p class="scope">AD-10, AD-13, AD-14 · spine lines 146–147, 168, 174, 406–407</p>
+<p>The local stdio tool uses an operator-configured actor and credential. The spine places the explicit actor-override refusal under future HTTP. Platform already requires that refusal for its connected CLI and stdio. Its staging contract also calls for short-lived environment-bound OIDC credentials, OS credential storage for refresh material, and renewal evidence.</p>
+<p><strong>Recommended action.</strong> McpCli and Platform should name the local and connected modes explicitly. For connected staging, specify the trusted actor source, refused overrides, credential storage and renewal checks, including the prohibition on <code>offline_access</code>. Qualify those rules for both existing heads before accepting connected execution. <a href="https://github.com/Hexalith/Hexalith.Platform/blob/25887836c2c7a63edbff7a4e0426e078a188b98c/_bmad-output/planning-artifacts/epics.md#L1960">Connected actor criteria</a> · <a href="https://github.com/Hexalith/Hexalith.Platform/blob/25887836c2c7a63edbff7a4e0426e078a188b98c/_bmad-output/planning-artifacts/epics.md#L2811">Staging credentials</a> · <a href="https://github.com/Hexalith/Hexalith.Platform/blob/25887836c2c7a63edbff7a4e0426e078a188b98c/_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md#L526">Renewal evidence</a></p>
+<h3 id="finding-04">04. Connected discovery needs a shared way to report executability</h3>
+<p class="scope">AD-3, AD-13 · spine lines 95–97, 168, 406</p>
+<p>The spine correctly limits the current <code>submittable</code> field to local read-only mode and Gateway configuration. Platform requires discovery to show when an operation is non-executable because the selected Gateway does not serve it, its digest differs, or it is disabled. Two heads can agree to block the call and still give incompatible discovery results.</p>
+<p><strong>Recommended action.</strong> McpCli, EventStore and Platform should agree on one Core-owned connected discovery contract, how it differs from offline inspection, and how stale or missing metadata is handled. Check the same positive and refusal cases through CLI and stdio against a single environment. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/addendum.md#L431">Current public meaning</a> · <a href="https://github.com/Hexalith/Hexalith.Platform/blob/25887836c2c7a63edbff7a4e0426e078a188b98c/_bmad-output/planning-artifacts/epics.md#L1928">Platform discovery criteria</a> · <a href="https://github.com/Hexalith/Hexalith.Platform/blob/25887836c2c7a63edbff7a4e0426e078a188b98c/_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md#L526">Platform adoption requirements</a></p>
+<h2 id="medium">Medium priority</h2>
+<h3 id="finding-05">05. Profile ownership and CLI output can conflict</h3>
+<p class="scope">AD-14 · spine lines 174, 277</p>
+<p>The spine assigns profile writes exclusively to the profile store. The existing CLI output writer can also replace that state, outside the profile transaction. The implementation ledger records a resulting unreadable profile.</p>
+<p><strong>Recommended action.</strong> Track this as an explicit implementation gap. The CLI and settings owners should define protected profile destinations and check them before any state change or result write. Verify the prior file survives refusal. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/_bmad-output/implementation-artifacts/deferred-work.md#L400">Existing ledger entry</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli/Cli/CliOutput.cs#L192">Result writer</a></p>
+<h3 id="finding-06">06. A Query can advertise an unusable default aggregate ID</h3>
+<p class="scope">AD-8, AD-19 · spine lines 127, 222</p>
+<p>A synthetic Ulid-module fixture advertises an optional aggregate ID with the default <code>routing-list</code>. Catalog admission accepts its Gateway syntax. The executor also applies the module’s ULID rule, so the advertised default fails at execution. Impact on enrolled production operations was not established.</p>
+<p><strong>Recommended action.</strong> Apply the module’s identifier kind and Gateway syntax to constants at Catalog admission. Specify the diagnostic and test the descriptor and a call that omits the argument together. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs#L194">Catalog check</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/tests/Hexalith.McpCli.Core.Tests/CatalogTests.cs#L139">Fixture descriptor</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs#L229">Executor check</a></p>
+<h3 id="finding-07">07. Schema derivation omits two supported input forms</h3>
+<p class="scope">AD-7 · spine line 121</p>
+<p>The spine removes getter-only, non-constructor members and closes object schemas. The serializer retains getter-only collections populated in place. Typed dictionaries accept dynamic keys and constrain each value. Following the wording literally would reject input that Core accepts.</p>
+<p><strong>Recommended action.</strong> Describe effective serializer input metadata, including in-place population. Close fixed-shape object records and preserve the value schema for typed dictionaries. Align FR-7 and keep the existing fixtures as acceptance examples. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli.Core/Serialization/McpCliJson.cs#L131">Resolver</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/tests/Hexalith.McpCli.Core.Tests/SchemaTests.cs#L508">Populated members</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/tests/Hexalith.McpCli.Core.Tests/SchemaTests.cs#L372">Dictionary values</a></p>
+<h3 id="finding-08">08. Aggregate validation can point to the wrong input</h3>
+<p class="scope">AD-3, AD-9, AD-19 · spine lines 95, 133, 222</p>
+<p>AD-9 assigns aggregate syntax errors to <code>/aggregateId</code>. Core reports the escaped JSON Pointer of a mapped payload member when that member supplied the invalid value. It uses <code>/aggregateId</code> for the explicit argument or a conflict. The distinction tells the caller which field to correct.</p>
+<p><strong>Recommended action.</strong> Specify the error pointer by value source. Preserve JSON Pointer escaping and pin the same error object for both heads. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs#L224">Pointer selection</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/tests/Hexalith.McpCli.Core.Tests/ExecutionFailureTests.cs#L93">Escaped-member fixture</a></p>
+<h3 id="finding-09">09. An all-empty Catalog has ambiguous startup behavior</h3>
+<p class="scope">AD-3, AD-4 · spine lines 95, 103, 268</p>
+<p>Marked empty Modules are visible in a usable Catalog. The spine leaves room for a reader to treat their mere presence as sufficient for discovery. Core requires at least one valid Operation and checks strict diagnostics first.</p>
+<p><strong>Recommended action.</strong> State the two conditions in order. Strict mode with diagnostics returns <code>catalog_invalid</code>. Otherwise, zero valid Operations returns <code>catalog_empty</code>. An individual empty Module can be listed alongside a usable one. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli.Core/Catalog/CatalogProvider.cs#L31">Catalog access</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/tests/Hexalith.McpCli.Core.Tests/CatalogProviderTests.cs#L101">Strict and empty cases</a></p>
+<h3 id="finding-10">10. Enrollment omits recorded approval of descriptions</h3>
+<p class="scope">AD-16, AD-21, NFR-8 · spine lines 192, 234–237, 391</p>
+<p>The spine calls for lint and review of the Catalog dump. The PRD also requires a recorded owning-maintainer approval after review by someone unfamiliar with the code. Inventory and vector hashes do not record that review.</p>
+<p><strong>Recommended action.</strong> Add the approval location to the enrollment handoff. Use the module pull request or a versioned McpCli evidence record permitted by the PRD, including the accepted single-maintainer arrangement. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md#L503">Enrollment checklist</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md#L553">Success measure</a></p>
+<h3 id="finding-11">11. Platform candidate identity is described as delivered</h3>
+<p class="scope">AD-17 · spine line 206</p>
+<p>The spine says the Platform run records expected and loaded artifact identities. Platform defines that evidence in Story 3.9 and lists the story in backlog. This checkout establishes the requirement. A qualifying run still needs its own receipt.</p>
+<p><strong>Recommended action.</strong> Use requirement language for the run descriptor and loaded identities. Identify the evidence that will support a delivery claim, while preserving the separate publisher decision. <a href="https://github.com/Hexalith/Hexalith.Platform/blob/25887836c2c7a63edbff7a4e0426e078a188b98c/_bmad-output/planning-artifacts/epics.md#L1979">Required evidence</a> · <a href="https://github.com/Hexalith/Hexalith.Platform/blob/25887836c2c7a63edbff7a4e0426e078a188b98c/_bmad-output/implementation-artifacts/sprint-status.yaml#L147">Producer sprint status</a></p>
+<h2 id="low">Low priority</h2>
+<h3 id="finding-12">12. Duplicate Operation Names need a deterministic tie-break</h3>
+<p class="scope">AD-3 · spine lines 95, 266–268</p>
+<p>The PRD and current implementation scan types within each assembly by ordinal full CLR type name and retain the first declaration of a duplicate. The spine names the diagnostic and the final sort order but omits this earlier selection rule.</p>
+<p><strong>Recommended action.</strong> Add the within-assembly scan order to the Catalog rule so a replacement implementation selects the same declaration. <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md#L251">FR-6 scan order</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs#L85">Type order</a> · <a href="https://github.com/Hexalith/Hexalith.McpCli/blob/e79b7f8b64303397ce9dfd856ed2111b513ade88/src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs#L123">Duplicate handling</a></p>
+<h2 id="checks">Verification and scope</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Check</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>BMAD architecture lint</td>
+<td>Zero findings</td>
+</tr>
+<tr class="even">
+<td>CLI and MCP discovery, command and query parity</td>
+<td>24 tests passed</td>
+</tr>
+<tr class="odd">
+<td>Core schema and enrollment tests</td>
+<td>182 tests passed</td>
+</tr>
+<tr class="even">
+<td>MCP adapter suite</td>
+<td>94 tests passed</td>
+</tr>
+<tr class="odd">
+<td>Production dependency closure</td>
+<td>1 test passed</td>
+</tr>
+<tr class="even">
+<td>Additional two-head paging check</td>
+<td>One loopback query per head. Both emitted the same invalid success. Changing only the returned page size from 0 to 1 made the document pass the advertised schema.</td>
+</tr>
+</tbody>
+</table>
+<p>All 301 automated tests passed with zero skips. The additional paging check used the Release executable, a synthetic Projects response and the output schema fetched from that stdio session (protocol 2025-06-18). The tests verify local behavior. Native Gateway delivery, staging authorization, credential renewal and exact-archive release qualification require their own environment evidence.</p>
+<p>The review confirmed 26 operations in offline discovery across Parties (7), Projects (4) and Tenants (15). McpCli’s committed workflows use Builds v6.4.4. The reviewed Platform checkout specifies v6.5.0. The stable publisher decision, Projects live read qualification, Folders eligibility and the previously recorded acknowledgment and tenant-normalization work remain open under their existing owners. These items are outside the twelve findings above.</p>
+<p>The independent reviews cover <a href="reviews/review-validation-20261121-rubric.md">requirements and inherited decisions</a>, <a href="reviews/review-validation-20261121-technology.md">technology and implementation</a> and <a href="reviews/review-validation-20261121-adversarial.md">cross-component consistency</a>. The report consolidates overlapping findings about schemas and aggregate error locations.</p>
+<p><strong>Decision requested.</strong> Use a BMAD architecture update to reconcile the public paging behavior and record the three Platform contracts with their owners. Product changes and qualification runs can then be tracked against those decisions.</p>
+</article></main></body></html>
