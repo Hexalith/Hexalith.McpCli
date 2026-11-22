@@ -494,6 +494,43 @@ class VectorContractTests(unittest.TestCase):
                         step["envelope"][field] = value
                         self._assert_rejected(document, f"{pointer}/envelope/{field}")
 
+    def test_cursor_limit_counts_utf16_units_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            for suffix in ("", "x"):
+                with self.subTest(position=position, suffix=suffix):
+                    document, step, pointer = self._step_at(self.query, position)
+                    cursor = "😀" * 2048 + suffix
+                    step["envelope"]["cursor"] = cursor
+                    step["expectedGateway"]["body"]["paging"]["cursor"] = cursor
+                    if suffix:
+                        self._assert_rejected(document, f"{pointer}/envelope/cursor: exceeds 4096 UTF-16")
+                    else:
+                        self.assertEqual([], self._validate(document))
+
+    def test_cursor_must_be_representable_in_both_heads(self) -> None:
+        for position in POSITIONS:
+            for cursor in ("a\0b", "\ud800", "\udc00"):
+                with self.subTest(position=position, cursor=cursor):
+                    document, step, pointer = self._step_at(self.query, position)
+                    step["envelope"]["cursor"] = cursor
+                    step["expectedGateway"]["body"]["paging"]["cursor"] = cursor
+                    self._assert_rejected(document, f"{pointer}/envelope/cursor: must be valid Unicode text without NUL")
+
+    def test_query_array_payload_depth_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            for depth in (64, 65):
+                with self.subTest(position=position, depth=depth):
+                    document, step, pointer = self._step_at(self.query, position)
+                    payload = 1
+                    for _ in range(depth):
+                        payload = [payload]
+                    step["payload"] = payload
+                    step["expectedGateway"]["body"]["payload"] = payload
+                    findings = self._validate(document)
+                    expected = [] if depth == 64 else [
+                        f"{self.directory / 'vector.json'}:{pointer}/payload: exceeds Core JSON maximum depth 64"]
+                    self.assertEqual(expected, findings)
+
     def test_contract_integer_fields_reject_floats_and_booleans_at_every_call_position(self) -> None:
         for position in POSITIONS:
             for area, field, integer in (("envelope", "pageSize", 1), ("envelope", "offset", 0),
@@ -568,12 +605,60 @@ class VectorContractTests(unittest.TestCase):
                 with self.subTest(position=position, expected=expected):
                     document, step, pointer = self._step_at(self.command, position)
                     step["envelope"]["extensions"] = {"custom": "value"}
-                    if expected is not None:
+                    if expected is None:
+                        step["expectedGateway"]["body"].pop("extensions", None)
+                    else:
                         step["expectedGateway"]["body"]["extensions"] = expected
                     if expected == {"custom": "value"}:
                         self.assertEqual([], self._validate(document))
                     else:
                         self._assert_rejected(document, f"{pointer}/expectedGateway/body/extensions")
+
+    def test_fixed_extension_rules_apply_at_every_call_position(self) -> None:
+        cases = (
+            ({f"k{i}": "" for i in range(33)}, ": at most 32"),
+            ({"Trace-Id": "a", "trace-id": "b"}, "/trace-id: extension keys must be unique"),
+            ({"Actor:GlobalAdmin": ""}, "/Actor:GlobalAdmin: extension key is reserved"),
+            ({"IDENTITY:scope": ""}, "/IDENTITY:scope: extension key is reserved"),
+            ({"a/b~c": ""}, "/a~1b~0c: extension key is invalid"),
+            ({"a\\b": ""}, r"/a\b: extension key is invalid"),
+            ({"a" * 101: ""}, f"/{'a' * 101}: extension key is invalid"),
+            ({"valid\n": ""}, r"/valid\n: extension key is invalid"),
+            ({"javascript:custom": ""}, "/javascript:custom: extension key is invalid"),
+            ({"trace-id": "😀" * 500 + "x"}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "\ud800"}, "/trace-id: extension key and value must be valid UTF-8"),
+            ({"trace-id": "abc\x00"}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "abc<def"}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "JavaScript :"}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "onx\u0301="}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "on\u1c89="}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "onx\u0897="}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "UNION\u00a0SELECT"}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "abc--\t"}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "a)(b"}, "/trace-id: extension value is invalid"),
+            ({"trace-id": "a..\\b"}, "/trace-id: extension value is invalid"),
+            ({"a": "😀" * 500, "b": "é" * 1000, "c": "x" * 94}, ": combined extension size exceeds 4096"),
+        )
+        for position in POSITIONS:
+            for index, (extensions, finding) in enumerate(cases):
+                with self.subTest(position=position, case=index):
+                    document, step, pointer = self._step_at(self.command, position)
+                    step["envelope"]["extensions"] = extensions
+                    step["expectedGateway"]["body"]["extensions"] = extensions
+                    self._assert_rejected(document, f"{pointer}/envelope/extensions{finding}")
+
+    def test_extensions_accept_exact_runtime_limits_and_preserve_spelling(self) -> None:
+        cases = (
+            {f"k{i}": "" for i in range(32)},
+            {"A" * 100: "a\tb\nc\r", "Trace-Id": "on²=plain"},
+            {"trace-id": "on\u1734=plain", "task-id": "on\u1ae0=plain"},
+            {"a": "😀" * 500, "b": "é" * 1000, "c": "x" * 93},
+        )
+        for extensions in cases:
+            document, step, _ = self._step_at(self.command, "invocation")
+            step["envelope"]["extensions"] = extensions
+            step["expectedGateway"]["body"]["extensions"] = extensions
+            self.assertEqual([], self._validate(document))
 
     def test_absent_optional_inputs_cannot_have_expected_request_values(self) -> None:
         for template, field, values in ((self.command, "extensions", (None, {}, {"custom": "value"})),

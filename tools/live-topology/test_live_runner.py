@@ -426,7 +426,7 @@ class ExecutionTests(unittest.TestCase):
                 head, report = self.execute(selection, documents, validation=validate)
                 indices = {action.get('step', action.get('label')): index for index, action in enumerate(actions)}
                 continuation = head.calls[indices['/postconditions/0']][0][0]
-                self.assertEqual('signed-cursor-from-live-result', continuation[continuation.index('--cursor') + 1])
+                self.assertIn('--cursor=signed-cursor-from-live-result', continuation)
                 if operation == 'tenants.get-tenant-audit':
                     expected = {'time-upper-inclusive': ('To', first), 'time-lower-inclusive': ('From', last),
                                 'time-before-first': ('To', '2026-10-20T12:34:56.122456+00:00'),

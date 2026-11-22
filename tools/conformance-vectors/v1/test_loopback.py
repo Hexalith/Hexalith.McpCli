@@ -20,6 +20,7 @@ from run_loopback import (
     _assert_error_parity,
     _assert_request_parity,
     _assert_result,
+    _call_args,
     _expect_fields,
     _json_equal,
     _mask,
@@ -44,6 +45,17 @@ class LoopbackRulesTests(unittest.TestCase):
     def setUp(self) -> None:
         self.command = json.loads((HERE / "sample-command.json").read_text(encoding="utf-8"))["invocation"]
         self.rename = json.loads((HERE / "sample-rename.json").read_text(encoding="utf-8"))["invocation"]
+
+    def test_cursor_values_that_look_like_options_are_bound_as_values(self) -> None:
+        step = json.loads((HERE / "sample-query.json").read_text(encoding="utf-8"))["invocation"]
+        for cursor in ("--help", "-h", "--"):
+            with self.subTest(cursor=cursor):
+                step["envelope"]["cursor"] = cursor
+                cli, tool, mcp = _call_args(step)
+                self.assertIn(f"--cursor={cursor}", cli)
+                self.assertNotIn(cursor, cli)
+                self.assertEqual("run_query", tool)
+                self.assertEqual(cursor, mcp["cursor"])
 
     def test_generated_ids_are_masked_but_supplied_correlation_and_key_remain_exact(self) -> None:
         body = {"messageId": "01J9MZHXT3RKM0VWXRXGSJDATP", "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
@@ -365,7 +377,7 @@ class Story411CompatibilityTests(unittest.TestCase):
         import os
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ, {'EVENTSTORE_TENANT': 'outside'}):
             head = HeadProcess(Path('Host.dll'), directory, 15)
-            head.allow_extensions({'trace-id', 'task-id'})
+            head.allow_extensions({'Trace-Id', 'trace-id', 'task-id'})
             self.assertNotIn('EVENTSTORE_TENANT', head.env)
             profile = json.loads((Path(directory) / 'mcpcli.json').read_text())
             self.assertEqual(['task-id', 'trace-id'], profile['profiles']['conformance']['allowedExtensions'])

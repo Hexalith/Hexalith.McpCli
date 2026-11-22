@@ -254,8 +254,10 @@ class HeadProcess:
         self.env["MCPCLI_CONFORMANCE_PROFILE_PATH"] = str(self.profile)
 
     def allow_extensions(self, keys: set[str]) -> None:
+        # Profile allowlists compare valid ASCII keys without regard to case.
+        allowed_extensions = sorted({key.lower() for key in keys})
         self.profile.write_text(json.dumps({"version": 1, "activeProfile": "conformance", "profiles": {
-            "conformance": {"allowedExtensions": sorted(keys)}}}))
+            "conformance": {"allowedExtensions": allowed_extensions}}}))
 
     def _base(self) -> list[str]:
         return ["dotnet", str(self.host)]
@@ -392,6 +394,8 @@ def _call_args(step: dict[str, Any], payload_override: str | None = None) -> tup
         if option == "extensions":
             for key, value in envelope[option].items():
                 cli += ["--extension", f"{key}={value}"]
+        elif option == "cursor":
+            cli.append(f"--cursor={envelope[option]}")
         else:
             cli += ["--" + re.sub(r"[A-Z]", lambda match: "-" + match.group().lower(), option), str(envelope[option])]
     return cli, "send_command" if step["kind"] == "command" else "run_query", mcp

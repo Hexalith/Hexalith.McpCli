@@ -8,7 +8,7 @@
     "operation": "sample.rename-item",
     "kind": "command",
     "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV", "Title": "Renamed item" },
-    "envelope": { "tenant": "sample-tenant" },
+    "envelope": { "tenant": "sample-tenant", "extensions": { "trace-id": "rename sample" } },
     "expectedGateway": {
       "method": "POST",
       "path": "/api/v1/commands",
@@ -19,7 +19,8 @@
         "domain": "sample",
         "aggregateId": "01ARZ3NDEKTSV4RRFFQ69G5FAV",
         "commandType": "rename-item-wire",
-        "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV", "Title": "Renamed item" }
+        "payload": { "ItemId": "01ARZ3NDEKTSV4RRFFQ69G5FAV", "Title": "Renamed item" },
+        "extensions": { "trace-id": "rename sample" }
       },
       "maskGenerated": ["/messageId", "/correlationId"]
     },

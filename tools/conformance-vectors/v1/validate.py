@@ -8,6 +8,7 @@ import json
 import math
 import re
 import sys
+import unicodedata
 import zipfile
 from pathlib import Path
 from typing import Any
@@ -21,6 +22,22 @@ except ImportError as exc:
 
 SCHEMA_PATH = Path(__file__).with_name("schema.json")
 SUPPORTED_FORMAT_VERSIONS = (1,)
+EXTENSION_KEY = re.compile(r"[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?(?::[A-Za-z0-9](?:[A-Za-z0-9._-]*[A-Za-z0-9])?)*")
+EXTENSION_FORBIDDEN = re.compile(r"""[<>&'"\x00-\x08\x0b\x0c\x0e-\x1f]""")
+# Other script, SQL and LDAP branches in Core require characters already rejected above.
+EXTENSION_INJECTION = re.compile(r"(?ai:javascript)\s*:|(?ai:union)\s+(?ai:select)|--\s*\Z|\)\(|\|\(|\.\.[/\\]")
+EXTENSION_EVENT_HANDLER = re.compile(r"(?ai:on)(?=([^\s=]+)\s*=)")
+CURSOR_UNREPRESENTABLE = re.compile(r"[\x00\ud800-\udfff]")
+# .NET \w matches combining marks and connector punctuation, but excludes
+# other numbers and matches UTF-16 code units rather than supplementary letters.
+DOTNET_WORD_CATEGORIES = frozenset(("Ll", "Lu", "Lt", "Lo", "Lm", "Mn", "Nd", "Pc"))
+# Correct BMP word-category differences between Python Unicode 13–17 and .NET 11's Unicode 16.
+DOTNET_WORD_ADDITIONS = re.compile(
+    r"[\u0870-\u0887\u0889-\u088e\u0897-\u089f\u08b5\u08c8-\u08d2\u0c3c\u0c5d\u0cdd\u0ece"
+    r"\u170d\u171f\u180f\u1ac1-\u1ace\u1b4c\u1c89-\u1c8a\u1dfa\u2c2f\u2c5f\u9ffd-\u9fff"
+    r"\ua7c0-\ua7c1\ua7cb-\ua7cd\ua7d0-\ua7d1\ua7d3\ua7d5-\ua7dc\ua7f2-\ua7f4]"
+)
+DOTNET_WORD_REMOVALS = re.compile(r"[\u088f\u0c5c\u0cdc\u1734\u1acf-\u1add\u1ae0-\u1aeb\ua7ce-\ua7cf\ua7d2\ua7d4\ua7f1]")
 # CLI integer arguments require integer JSON tokens, not integral floats or booleans.
 VectorValidator = validators.extend(
     Draft202012Validator,
@@ -138,6 +155,55 @@ def _payload_depth(value: Any, depth: int = 0) -> int:
     return deepest
 
 
+def _utf16_length(value: str) -> int:
+    return len(value.encode("utf-16-le", errors="surrogatepass")) // 2
+
+
+def _is_dotnet_word(character: str) -> bool:
+    return (ord(character) <= 0xFFFF
+            and not DOTNET_WORD_REMOVALS.fullmatch(character)
+            and (unicodedata.category(character) in DOTNET_WORD_CATEGORIES
+                 or DOTNET_WORD_ADDITIONS.fullmatch(character) is not None))
+
+
+def _has_extension_injection(value: str) -> bool:
+    return EXTENSION_INJECTION.search(value) is not None or any(
+        all(_is_dotnet_word(character) for character in match[1])
+        for match in EXTENSION_EVENT_HANDLER.finditer(value)
+    )
+
+
+def _check_extensions(extensions: dict[str, str], pointer: str, findings: list[str]) -> None:
+    if len(extensions) > 32:
+        findings.append(f"{pointer}: at most 32 extensions are allowed")
+
+    seen_keys: set[str] = set()
+    total_size = 0
+    for key, value in extensions.items():
+        escaped_key = "".join(character if character.isprintable() else json.dumps(character)[1:-1]
+                              for character in _pointer((key,)))
+        location = pointer + escaped_key
+        canonical_key = key.lower()
+        if canonical_key in seen_keys:
+            findings.append(f"{location}: extension keys must be unique regardless of case")
+        seen_keys.add(canonical_key)
+        if canonical_key == "actor:globaladmin" or canonical_key.startswith("identity:"):
+            findings.append(f"{location}: extension key is reserved")
+        elif len(key) > 100 or not EXTENSION_KEY.fullmatch(key) or _has_extension_injection(key):
+            findings.append(f"{location}: extension key is invalid")
+
+        if _utf16_length(value) > 1000 or EXTENSION_FORBIDDEN.search(value) or _has_extension_injection(value):
+            findings.append(f"{location}: extension value is invalid")
+            continue
+        try:
+            total_size += len(key.encode("utf-8")) + len(value.encode("utf-8"))
+        except UnicodeEncodeError:
+            findings.append(f"{location}: extension key and value must be valid UTF-8")
+
+    if total_size > 4096:
+        findings.append(f"{pointer}: combined extension size exceeds 4096 UTF-8 bytes")
+
+
 def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None:
     if _payload_depth(step["payload"]) > 64:
         findings.append(f"{pointer}/payload: exceeds Core JSON maximum depth 64")
@@ -152,13 +218,21 @@ def _check_step(step: dict[str, Any], pointer: str, findings: list[str]) -> None
         for field in ("entityId", "pageSize", "offset", "cursor"):
             if field in envelope:
                 findings.append(f"{pointer}/envelope/{field}: query-only input is invalid for a command")
+        if "extensions" in envelope:
+            _check_extensions(envelope["extensions"], f"{pointer}/envelope/extensions", findings)
         wrong_kind_fields = ("queryType", "projectionType", "projectionActorType", "entityId", "paging")
     else:
         for field in ("correlationId", "idempotencyKey", "extensions"):
             if field in envelope:
                 findings.append(f"{pointer}/envelope/{field}: command-only input is invalid for a query")
-        if "cursor" in envelope and "offset" in envelope:
-            findings.append(f"{pointer}/envelope/cursor: cursor cannot be combined with offset")
+        if (cursor := envelope.get("cursor")) is not None:
+            location = f"{pointer}/envelope/cursor"
+            if "offset" in envelope:
+                findings.append(f"{location}: cursor cannot be combined with offset")
+            if CURSOR_UNREPRESENTABLE.search(cursor):
+                findings.append(f"{location}: must be valid Unicode text without NUL")
+            elif _utf16_length(cursor) > 4096:
+                findings.append(f"{location}: exceeds 4096 UTF-16 code units")
         wrong_kind_fields = ("commandType", "messageId", "correlationId", "idempotencyKey", "extensions")
     for field in wrong_kind_fields:
         if field in body:

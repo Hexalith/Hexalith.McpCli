@@ -17,7 +17,8 @@
     "envelope": {
       "tenant": "sample-tenant",
       "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
-      "idempotencyKey": "01J9MZHXT3RKM0VWXRXGSJDATM"
+      "idempotencyKey": "01J9MZHXT3RKM0VWXRXGSJDATM",
+      "extensions": { "Trace-Id": "sample value=preserved" }
     },
     "expectedGateway": {
       "method": "POST",
@@ -33,7 +34,8 @@
           "Title": "Conformance item"
         },
         "correlationId": "01J9MZHXT3RKM0VWXRXGSJDATK",
-        "idempotencyKey": "01J9MZHXT3RKM0VWXRXGSJDATM"
+        "idempotencyKey": "01J9MZHXT3RKM0VWXRXGSJDATM",
+        "extensions": { "Trace-Id": "sample value=preserved" }
       },
       "maskGenerated": ["/messageId"]
     },

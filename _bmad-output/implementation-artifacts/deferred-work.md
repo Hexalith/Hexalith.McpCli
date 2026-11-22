@@ -108,9 +108,11 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Conformance cursor limits count Unicode code points while Core counts UTF-16 units.
   evidence: Medium; both validator versions accept 3000 emoji, while OperationExecutor.ValidateQueryArguments rejects their 6000 UTF-16 units. Align the pre-existing schema/runtime limit before downstream compatibility acceptance.
+  status: resolved (2026-11-22). Offline validation counts UTF-16 units at every call position and tests the 4096/4097 boundary with supplementary characters. Replay preserves cursor strings that look like CLI options.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Conformance extension inputs omit fixed runtime restrictions.
   evidence: Medium; both validator versions accept 33 matching extensions. ExtensionValidator also checks key grammar, 100-character keys, 1000-character values, forbidden content and 4096 total UTF-8 bytes; these restrictions are absent from the existing contract tooling independently of the deployment allowlist.
+  status: resolved (2026-11-22). The shared offline validator now checks the fixed Core rules at every call position, including exact count, length and UTF-8 byte boundaries.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Expected Gateway fields can contradict absent optional envelope inputs.
   evidence: Medium; both validator versions accept invented expected extensions with no supplied extensions and expected paging with no supplied paging. Core maps these fields directly from the missing inputs; extend the existing presence-only consistency checks before downstream acceptance.
@@ -122,6 +124,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Conformance routing inputs omit unconditional Gateway identifier syntax and length restrictions.
   evidence: Medium; both validator versions accept entityId / in the envelope and expected request, while RoutingResolver.IsAggregateId rejects it. Apply common routing constraints independently of Module payload identifier kinds before downstream compatibility acceptance.
+  status: resolved (2026-11-22). `schema.json` applies the Gateway identifier definition to aggregate and entity identifiers in both the envelope and expected request. The all-position grammar regression passed.
 
 ## Deferred from: Story 1.8 follow-up review (2026-09-27)
 
@@ -134,12 +137,14 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Offline vector validation accepts Payload nesting deeper than the execution parser supports.
   evidence: Medium; baseline and current validator accept 65 nested arrays, while OperationExecutor uses JsonDocument.Parse with the default depth limit. The review reproduced the runtime rejection; add Payload depth compatibility to Story 4.11 acceptance.
+  status: resolved (2026-11-22). `validate.py` measures Payload depth independently of vector framing. Array depths 64 and 65 are tested at every call position, with a separate 500-level object case.
 - source_spec: `_bmad-output/implementation-artifacts/spec-remediate-epic-1-conformance-gaps.md`
   summary: Conformance Number comparison may lose distinctions beyond binary floating-point precision.
   evidence: Unverified medium; Python rounds some finite decimal/exponent tokens before comparison and execution, but the approved intent does not define arbitrary-precision Number semantics. An explicit representation and precision decision would settle whether lossless parsing is required.
 - source_spec: `_bmad-output/implementation-artifacts/spec-remediate-epic-1-conformance-gaps.md`
   summary: Conformance extension inputs do not mirror all fixed runtime extension restrictions.
   evidence: Medium; the unchanged vector schema accepts keys and sizes that ExtensionValidator rejects, including path-like keys, count, per-value, injection, and total UTF-8 limits. This behavior predates the remediation and needs a separate compatibility change.
+  status: duplicate of the resolved fixed-runtime-extension entry under the resumed review of Story 1.8 (2026-09-27).
 - source_spec: `_bmad-output/implementation-artifacts/spec-remediate-epic-1-conformance-gaps.md`
   summary: Migration planning artifacts disagree on inventory dispositions, v1 scope, retirement claims, and the no-new-proprietary-surface rule.
   audit: Story 5.11 evidence/story-5-11/deferral-dispositions.md records the prepared reconciliation and all Epic 5 owners/gates; exact-byte owner acceptance and upstream integration remain pending. This row is not closed.
@@ -348,6 +353,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
   summary: Conformance vectors cannot express a successful command call with extensions, because the loopback runner never supplies an extension allowlist.
   evidence: `tools/conformance-vectors/v1/schema.json:64` accepts `envelope.extensions`, and `tools/conformance-vectors/v1/run_loopback.py:345-347` forwards them to both heads. But `run_loopback.py:222` points each head at an empty `MCPCLI_CONFORMANCE_PROFILE_PATH` profile and never writes one, the vector schema has no allowlist input, and the allowlist comes only from the selected Profile (`src/Hexalith.McpCli.Core/Settings/SettingsResolver.cs:103`). Every vector that supplies extensions is therefore refused by both heads with `validation_failed` at `/extensions/<key>` ("The extension key is not allowlisted.", `src/Hexalith.McpCli.Core/Execution/ExtensionValidator.cs:39`), although `tools/conformance-vectors/v1/README.md:15` says supplied extensions must match the expected request exactly. No sample vector uses extensions. Pre-existing: the runner and schema predate baseline `1554a84`, and allowlist enforcement predates Story 2.8. Add an allowlist input that the runner writes into the temporary Profile, plus a sample vector that sends a mixed-case approved key through both heads, before Epic 4 modules write extension vectors.
+  status: resolved (2026-11-22). The loopback runner writes a temporary profile and deduplicates its allowlist without regard to case. Both heads replayed create-item and rename-item and preserved the original `Trace-Id` and `trace-id` spellings and values at the Gateway.
 
 ## Deferred from: review of spec-2-9-explain-execution-failures-with-stable-documents.md (2026-10-05)
 
