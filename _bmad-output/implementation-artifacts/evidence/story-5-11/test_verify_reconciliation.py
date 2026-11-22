@@ -240,7 +240,16 @@ class ReconciliationTests(unittest.TestCase):
         read=Path.read_text
         def pending_receipt(path,*args,**kwargs):
             return pending_text if path==receipt_path else read(path,*args,**kwargs)
-        with mock.patch.object(Path,'read_text',pending_receipt), mock.patch.object(B,'inspect_unchanged',side_effect=ValueError('missing owner main')), \
+        # Replay the incoming owner files even after their main branches publish the packet.
+        bases = {(ROOT / owner['ownerCheckout']).resolve(): owner['baseRevision']
+                 for owner in data('upstream/manifest.json')['owners']}
+        git = B.git
+        def before_publication(repo, *args):
+            if repo in bases and args in [('rev-parse', 'origin/main'), ('rev-parse', 'HEAD')]:
+                return bases[repo].encode()
+            return git(repo, *args)
+        with mock.patch.object(Path,'read_text',pending_receipt), mock.patch.object(B,'git',side_effect=before_publication), \
+             mock.patch.object(B,'inspect_unchanged',side_effect=ValueError('missing owner main')), \
              mock.patch.object(Path,'write_bytes',side_effect=AssertionError('early packet write')), \
              mock.patch.object(Path,'write_text',side_effect=AssertionError('early packet write')):
             self.assertEqual(streams(B.cli),(1,'','FAIL: missing owner main\n'))

@@ -2,9 +2,9 @@
   "schemaVersion": "1.0.0",
   "state": "blocked",
   "assessedOn": "2026-11-22",
-  "inventoryRevision": null,
+  "inventoryRevision": "c6a40c10fd6db19cfce4cb0592f3b82bbb853729",
   "planVersion": "1.3.0",
-  "planSha256": null,
+  "planSha256": "6f9fd0d22976161a9ed17e704506dff1d39649b2b350d852ddb528e10875627c",
   "aiToolsCommit": null,
   "aiToolsGitlink": null,
   "deliveryAuthorization": {
@@ -92,9 +92,7 @@
     ]
   },
   "blockers": [
-    "Published full McpCli inventory revision containing exact approved bytes and receipts",
-    "Integrate all seven owner READMEs, mapped active topics and the AI.Tools amendments on owner main after rechecking the prepared bases.",
-    "Final plan 1.3.0 bytes with the immutable inventory revision and links; fresh exact-byte final-plan approval and AI.Tools main integration",
+    "Final plan 1.3.0 bound to the published inventories awaits exact-byte owner approval and AI.Tools main integration.",
     "Verified containing AI.Tools gitlink and instruction-sync evidence",
     "At completion, record completedOn and the SM-3 assessment, including an owner reason if overdue.",
     "AC3 generated release notes: CiCd/Builds must append the committed migration status; deferred by owner on 2026-11-19 (deferred-work.md:1265)."
@@ -104,7 +102,110 @@
   "rootIntegrationRevision": null,
   "sm3Assessment": null,
   "finalPlanApproval": null,
-  "ownerIntegrations": [],
+  "ownerIntegrations": [
+    {
+      "name": "eventstore",
+      "commit": "8319318850530d756db5b8b7555d0b9f804361e9",
+      "verifiedOn": "2026-11-22",
+      "verifiedFileCount": 4,
+      "checks": {
+        "commitlint": "passed",
+        "builds": "not applicable; owning repository has not adopted Hexalith.CiCd"
+      },
+      "githubRuleBypass": {
+        "pullRequestRequired": true,
+        "expectedStatusChecks": 8,
+        "message": "Bypassed rule violations for refs/heads/main"
+      }
+    },
+    {
+      "name": "frontcomposer",
+      "commit": "8199bcf7def7d9ddb39b1704429ba611d59fc08e",
+      "verifiedOn": "2026-11-22",
+      "verifiedFileCount": 5,
+      "checks": {
+        "commitlint": "passed",
+        "builds": "not applicable; owning repository has not adopted Hexalith.CiCd"
+      }
+    },
+    {
+      "name": "memories",
+      "commit": "7f8da6e31fa23d1302972ea98f5c283eb3edc9c0",
+      "verifiedOn": "2026-11-22",
+      "verifiedFileCount": 5,
+      "checks": {
+        "commitlint": "passed",
+        "builds": "not applicable; owning repository has not adopted Hexalith.CiCd"
+      },
+      "githubRuleBypass": {
+        "pullRequestRequired": true,
+        "expectedStatusChecks": 3,
+        "message": "Bypassed rule violations for refs/heads/main"
+      }
+    },
+    {
+      "name": "chatbot",
+      "commit": "555183e984db2adca2175aa214f43d8cab53692e",
+      "verifiedOn": "2026-11-22",
+      "verifiedFileCount": 5,
+      "checks": {
+        "commitlint": "passed",
+        "builds": "not applicable; owning repository has not adopted Hexalith.CiCd"
+      }
+    },
+    {
+      "name": "folders",
+      "commit": "1c8da626f05b25b36dbc5813d68bc44da09a27f4",
+      "verifiedOn": "2026-11-22",
+      "verifiedFileCount": 3,
+      "checks": {
+        "commitlint": "passed",
+        "builds": "not applicable; owning repository has not adopted Hexalith.CiCd"
+      }
+    },
+    {
+      "name": "projects",
+      "commit": "8d6b11b12e60762f9bf2c1e7acd8d2d997a94e6d",
+      "verifiedOn": "2026-11-22",
+      "verifiedFileCount": 4,
+      "checks": {
+        "commitlint": "passed",
+        "builds": "not applicable; owning repository has not adopted Hexalith.CiCd"
+      },
+      "rebasedFiles": [
+        {
+          "path": "_bmad-output/planning-artifacts/epics.md",
+          "base": "95f2984cef0fe01bbde3ffe0921bae5f0b62a985",
+          "beforeSha256": "81dc62c524b7f121651e1139136f7939fcd6cc9e7f3d48ee1925a974fb431011",
+          "afterSha256": "e736c23859b754020eca75101db40ca52d05e579750a288be0b950f3ec09d0e3",
+          "patchSha256": "bba73269728132c18a8a315035617559df3fd243081113d35a579ce01a178717",
+          "reviewedAfterSha256": "366d1dfe228ab24d2427eaab2fe1bb3e051634a85bf9c74e604442aab3a5b4bf",
+          "reason": "Preserve the Story 8.1 scheduling note in current Projects main. The reviewed patch applies unchanged and reversing it reproduces that base file byte for byte.",
+          "publicationInstruction": "The owner instructed “bypass” then “merge” after being shown the updated SHA-256."
+        }
+      ]
+    },
+    {
+      "name": "tenants",
+      "commit": "1161d9f356f62c9f7044d4c536a4653a37898212",
+      "verifiedOn": "2026-11-22",
+      "verifiedFileCount": 1,
+      "checks": {
+        "commitlint": "passed",
+        "builds": "not applicable; owning repository has not adopted Hexalith.CiCd"
+      }
+    },
+    {
+      "name": "parties",
+      "commit": "cc691319b8ee622198f7d8d93a87f85a86b9fd8a",
+      "verifiedOn": "2026-11-22",
+      "verifiedFileCount": 1,
+      "checks": {
+        "commitlint": "passed",
+        "builds": "not applicable; owning repository has not adopted Hexalith.CiCd"
+      }
+    }
+  ],
   "resolvedBlockers": [
     {
       "previous": "Mandatory Builds check fails because .github/hexalith-ci.json is absent; CiCd owns remediation; no bypass",
@@ -129,5 +230,24 @@
       "previous": "Separate explicit authorization for the final Git delivery footprint",
       "resolution": "The requesting user explicitly authorized pushing all changes in all repositories to main on 2026-11-22."
     }
-  ]
+  ],
+  "inventoryPublication": {
+    "verifiedOn": "2026-11-22",
+    "approvedArtifactsVerified": 39,
+    "approvalSha256": "d979f741a74f7a8d2e1ac1e35b9665ca22e7041f764c5d19ebda67c679bb49c9",
+    "checks": {
+      "commitlint": "passed",
+      "storyTestsPassed": 45,
+      "builds": "failed before build during anonymous clone of Hexalith.CiCd on github.com:443"
+    },
+    "exception": {
+      "scope": "Publish the Story 5.11 changes after the local Builds check failed to reach GitHub.",
+      "source": "The requesting user replied “bypass” and then “merge” after receiving the local pre-push failure and the exact revised Projects file."
+    }
+  },
+  "finalPlanReview": {
+    "pullRequest": "https://github.com/Hexalith/Hexalith.AI.Tools/pull/3",
+    "reviewCommit": "e089f5da4db128a63bc631e1eb3f99e5c82e60a0",
+    "verifiedInventoryAndReceiptLinks": 31
+  }
 }
