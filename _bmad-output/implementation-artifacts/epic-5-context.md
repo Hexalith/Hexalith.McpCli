@@ -41,18 +41,20 @@ Replace proprietary Hexalith MCP servers, plug-ins and CLIs with McpCli without 
 
 ## UX & Interaction Patterns
 
-Migration guidance names available operations, `hexalith` stdio setup, and safe refusal or confidential UI handoff. Withdrawals list accepted losses. Release notes separate the gateway increment from completed retirements and list remaining compatibility binaries.
+Migration guidance names available operations, `hexalith` stdio setup, and safe refusal or confidential UI handoff. Withdrawals list accepted losses. The committed migration status separates the gateway increment from evidenced retirements and lists remaining binaries. Appending it to GitHub release notes remains an upstream CiCd/Builds deferral.
 
 ## Cross-Story Dependencies
 
 Story 5.1 supplies inventories, census and the static gate. Adopted 5.2 precedes 5.7–5.10; 5.8 also needs Hexalith.Folders Story 5.12 types at the re-pin. Parties runs 5.3 → 5.4 → 5.5. 5.6 depends on 5.1. 5.12 precedes Epic 6 Folders enrollment. 5.11 follows 5.2–5.7, 5.9 and 5.10, plus 5.8 when done, and records the Parties conflict outcome and deferrals. FrontComposer host and Projects plug-in retire together. Changes land upstream; plan updates use a new `plan_version` and moved `inventory_revision`.
 
-## Story 5.11 reconciliation state (2026-11-16)
+## Story 5.11 reconciliation state (2026-11-22)
 
 The authoritative AI.Tools plan is 1.2.0 with an obsolete inventory index. The
 Story 5.11 packet prepares 1.3.0 and receipt-based Admin 1.0.3 / technical 1.0.4
-successors; fresh approval, inventory publication, Story 5.10 delivery, owner
-patch integration and a containing AI.Tools gitlink remain completion gates.
+successors. On 22 November 2026 the owner approved these successors and accepted
+the 65-entry deferral audit with all existing gates. Story 5.10 delivered its two
+approved inventories and all five labels. Inventory publication, final plan approval,
+owner patch integration and a containing AI.Tools gitlink remain completion gates.
 The original “Labels + slip” decision remains; SM-3 is pending-not-met with
 deadline 2027-02-05 and must be reassessed at completion. No retirement is
 evidenced. Folders K12, Projects Payload paging and Parties' G01–G06 plus its

@@ -16,12 +16,12 @@
     },
     {
       "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/labels.json",
-      "sha256": "8871047e07bf667d2612aa3ded4c23a38d3138a0a9ad3827ab6372834eda42f2"
+      "sha256": "343b0feb997b651949fcd3c0abb091c80de2248e3320e619b9dcc5589cd7d926"
     }
   ],
   "inventoryArtifacts": {
-    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md": "8b5d941ea16a47c2a07dff9ad8e4f5ee09f2801baf90b11bf105957c0c1340c5",
-    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md": "fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693"
+    "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md": "6ddf91de9f48b52a5bfe1cae666c704a732c88334e9268a8dd528b64cfc8aa1c",
+    "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md": "94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8"
   },
   "rows": [
     {
@@ -31,8 +31,8 @@
       "label": {
         "file": "README.md",
         "line": 164,
-        "text": "- `Hexalith.EventStore.Admin.Cli` (.NET tool `eventstore-admin`): removal gate \"Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS01; [EventStore Admin inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md)). Remote Admin capabilities are withdrawn from the public agent target; confidential UI coverage and retained G4 safety fixes precede retirement. No Admin Gateway replacement is admitted. Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Admin inventory SHA-256: `8b5d941ea16a47c2a07dff9ad8e4f5ee09f2801baf90b11bf105957c0c1340c5`.",
-        "sha256": "bbfa71807425c602cf9de7b0a1e005a905f5638244ee9b9a3b256afd6ca38b51"
+        "text": "- `Hexalith.EventStore.Admin.Cli` (.NET tool `eventstore-admin`): removal gate \"Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS01; [EventStore Admin inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md)). Remote Admin capabilities are withdrawn from the public agent target; confidential UI coverage and retained G4 safety fixes precede retirement. No Admin Gateway replacement is admitted. Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. Admin inventory SHA-256: `6ddf91de9f48b52a5bfe1cae666c704a732c88334e9268a8dd528b64cfc8aa1c`.",
+        "sha256": "b035e055c354e87d2852f6ac57895a20312dcc875b29fe7db1700e8e19454d1d"
       },
       "gate": "Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement"
     },
@@ -43,8 +43,8 @@
       "label": {
         "file": "README.md",
         "line": 165,
-        "text": "- `Hexalith.EventStore.Admin.Mcp` (stdio MCP server): removal gate \"Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS02; [EventStore Admin inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md)). Remote Admin capabilities are withdrawn from the public agent target; confidential UI coverage and retained G4 safety fixes precede retirement. No Admin Gateway replacement is admitted. Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Admin inventory SHA-256: `8b5d941ea16a47c2a07dff9ad8e4f5ee09f2801baf90b11bf105957c0c1340c5`.",
-        "sha256": "a01d9f69fe45486331565290ea790e84b2b6791eefeb25464373de6b0b132490"
+        "text": "- `Hexalith.EventStore.Admin.Mcp` (stdio MCP server): removal gate \"Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS02; [EventStore Admin inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md)). Remote Admin capabilities are withdrawn from the public agent target; confidential UI coverage and retained G4 safety fixes precede retirement. No Admin Gateway replacement is admitted. Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. Admin inventory SHA-256: `6ddf91de9f48b52a5bfe1cae666c704a732c88334e9268a8dd528b64cfc8aa1c`.",
+        "sha256": "69506c557d4b223957a08f005db5be488a35c65106bea90c26b22afea47d7fa4"
       },
       "gate": "Admin 1.0.2 G1–G6: confidential UI coverage and authorization/effect proof; retained G4 safety fixes before retirement"
     },
@@ -55,8 +55,8 @@
       "label": {
         "file": "README.md",
         "line": 32,
-        "text": "- `Hexalith.FrontComposer.Cli` (.NET tool `frontcomposer`): removal gate \"Retained local compiler exemption under merged AI.Tools plan 1.2.0; no retirement or Gateway replacement\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS03; [FrontComposer inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md)). Retained local compiler tooling under merged AI.Tools plan 1.2.0; no agent exposure and never counted as retired. Its build/freshness, apply/drift/path, partial-write and output privacy gates remain independent. Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. FrontComposer inventory SHA-256: `60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63`.",
-        "sha256": "63e60fae8ab097784de58c29c0fc77f80de9f7b42d72cd1e2060a2b33d7bd283"
+        "text": "- `Hexalith.FrontComposer.Cli` (.NET tool `frontcomposer`): removal gate \"Retained local compiler exemption under merged AI.Tools plan 1.2.0; no retirement or Gateway replacement\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS03; [FrontComposer inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md)). Retained local compiler tooling under merged AI.Tools plan 1.2.0; no agent exposure and never counted as retired. Its build/freshness, apply/drift/path, partial-write and output privacy gates remain independent. Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. FrontComposer inventory SHA-256: `60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63`.",
+        "sha256": "6637535e4c9beeb21f1f15b0ddbd5e952ea4626ff2bfda3fb285b0647e401e7e"
       },
       "gate": "Retained local compiler exemption under merged AI.Tools plan 1.2.0; no retirement or Gateway replacement"
     },
@@ -67,8 +67,8 @@
       "label": {
         "file": "README.md",
         "line": 33,
-        "text": "- `Hexalith.FrontComposer.Mcp` (HTTP MCP host library): removal gate \"G4: retire together with the Projects plug-in after every host consumer is accounted for\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS04; [FrontComposer inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md)). The FrontComposer host and the Projects plug-in (`Hexalith.Projects.Mcp`) retire together. Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Coupled gate: FK01–FK04 consumers move first; K12 Web/Chatbot UI evidence, Projects 6.7 cutover, DW-82 publication and live/release/rollback acceptance remain required; K13 compiler is retained independently. FrontComposer inventory SHA-256: `60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63`.",
-        "sha256": "051343209ccb8c97124cac6eb9d88645e33317f412ab7c7cf0ec70296ee68c0d"
+        "text": "- `Hexalith.FrontComposer.Mcp` (HTTP MCP host library): removal gate \"G4: retire together with the Projects plug-in after every host consumer is accounted for\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS04; [FrontComposer inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.1.0.md)). The FrontComposer host and the Projects plug-in (`Hexalith.Projects.Mcp`) retire together. Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. Coupled gate: FK01–FK04 consumers move first; K12 Web/Chatbot UI evidence, Projects 6.7 cutover, DW-82 publication and live/release/rollback acceptance remain required; K13 compiler is retained independently. FrontComposer inventory SHA-256: `60c44b5c7c67ca315bfe4f7582ea7e50526dc2cfeebbf12838f4b0c71543ff63`.",
+        "sha256": "53b36ff69af0bd5d4c50f4dde75391e242141ba38f34c8e8b5f6168f79f7b6db"
       },
       "gate": "G4: retire together with the Projects plug-in after every host consumer is accounted for"
     },
@@ -79,8 +79,8 @@
       "label": {
         "file": "README.md",
         "line": 164,
-        "text": "- `Hexalith.Parties.Mcp` (container `parties-mcp`): removal gate \"Parties inventory gates; replacement evidence and approved withdrawal for every row\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS05; [Parties inventory 1.2.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md)). Retirement is blocked: the McpCli Story 5.4 verdict is `retirement-blocked`, with G01–G06 open ([owner approval](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json)). Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`.",
-        "sha256": "6d20736ed3777ebc84dc717864dfe15c5fc857e6c54bd142345791c33ea8e6f1"
+        "text": "- `Hexalith.Parties.Mcp` (container `parties-mcp`): removal gate \"Parties inventory gates; replacement evidence and approved withdrawal for every row\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS05; [Parties inventory 1.2.0](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/parties-migration-inventory-v1.md)). Retirement is blocked: the McpCli Story 5.4 verdict is `retirement-blocked`, with G01–G06 open ([owner approval](https://github.com/Hexalith/Hexalith.McpCli/blob/c70ca9784da393cb1929741c6a6c9564717eace5/_bmad-output/implementation-artifacts/evidence/story-5-4-owner-approval/owner-approval.json)). Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`.",
+        "sha256": "851182abf7a056bd5a2620e960f37f9cbc03c8baced94d9fdb6bd9d770d9b4ea"
       },
       "gate": "Parties inventory gates; replacement evidence and approved withdrawal for every row"
     },
@@ -91,8 +91,8 @@
       "label": {
         "file": "README.md",
         "line": 134,
-        "text": "- `Hexalith.Memories.Cli` (.NET tool `memories`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS06; [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md)). Forwarded per-user identity is necessary but not sufficient for retirement. Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Memories inventory SHA-256: `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1`.",
-        "sha256": "da41aeaf1ac84ebdd7ea0fdaf91fa0ef5dbff0d4507cb15d916b5fa607baac8e"
+        "text": "- `Hexalith.Memories.Cli` (.NET tool `memories`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS06; [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md)). Forwarded per-user identity is necessary but not sufficient for retirement. Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. Memories inventory SHA-256: `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1`.",
+        "sha256": "c81eef942884cfddc025f2991690dfd6e62b874b4c63424c5b160049e5f5c97a"
       },
       "gate": "Memories gates, including forwarded per-user identity in the HTTP release"
     },
@@ -103,8 +103,8 @@
       "label": {
         "file": "README.md",
         "line": 135,
-        "text": "- `Hexalith.Memories.Mcp` (container `memories-mcp`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS07; [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md)). Forwarded per-user identity is necessary but not sufficient for retirement. Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Memories inventory SHA-256: `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1`.",
-        "sha256": "53074fe8f834e0dd1a413c021606a52c4cf6722638c9a0deb89b0f03dd6637b9"
+        "text": "- `Hexalith.Memories.Mcp` (container `memories-mcp`): removal gate \"Memories gates, including forwarded per-user identity in the HTTP release\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS07; [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md)). Forwarded per-user identity is necessary but not sufficient for retirement. Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. Memories inventory SHA-256: `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1`.",
+        "sha256": "38decf12e12b1151b9a2177c88624cf6b3f70b9bb949c778b97d21bae5803c93"
       },
       "gate": "Memories gates, including forwarded per-user identity in the HTTP release"
     },
@@ -115,8 +115,8 @@
       "label": {
         "file": "README.md",
         "line": 7,
-        "text": "- `Hexalith.Projects.Cli` (CLI): removal gate \"Projects inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS08; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Projects successor G1–G6 retain publication, live acceptance, K03/AD-20 conformity, 6.7 cutover and K12 confidential UI evidence gates. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.",
-        "sha256": "a48cab67607180fed6fb4402e673f984afeef3c769849d6ffecd8b1058c8b7d3"
+        "text": "- `Hexalith.Projects.Cli` (CLI): removal gate \"Projects inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS08; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. Projects successor G1–G6 retain publication, live acceptance, K03/AD-20 conformity, 6.7 cutover and K12 confidential UI evidence gates. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.",
+        "sha256": "8b3048bf312ce03d484ffcbc71850cbece6bb506f5e83d5c9b1fea5652f857fd"
       },
       "gate": "Projects inventory gates"
     },
@@ -127,8 +127,8 @@
       "label": {
         "file": "README.md",
         "line": 8,
-        "text": "- `Hexalith.Projects.Mcp` (FrontComposer MCP plug-in library): removal gate \"G4: retire together with the FrontComposer host\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS09; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). The Projects plug-in and the FrontComposer host (`Hexalith.FrontComposer.Mcp`) retire together. Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Coupled gate: FK01–FK04 consumers move first; K12 Web/Chatbot UI evidence, Projects 6.7 cutover, DW-82 publication and live/release/rollback acceptance remain required; K13 compiler is retained independently. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.",
-        "sha256": "30efc160da86d9f9b501424e82544bf246266b8572527dd25a37d6d7815ad3f4"
+        "text": "- `Hexalith.Projects.Mcp` (FrontComposer MCP plug-in library): removal gate \"G4: retire together with the FrontComposer host\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS09; [Projects inventory 2.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/projects-migration-inventory-v2.1.0.md)). The Projects plug-in and the FrontComposer host (`Hexalith.FrontComposer.Mcp`) retire together. Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. Coupled gate: FK01–FK04 consumers move first; K12 Web/Chatbot UI evidence, Projects 6.7 cutover, DW-82 publication and live/release/rollback acceptance remain required; K13 compiler is retained independently. Projects inventory SHA-256: `c4667069ab37cc495fc49a07ae2fdececd75a8c0e9201f3e6cdf6b562aa7d1af`.",
+        "sha256": "3d8eebaef6671163b573231498b8ec30c045bbe4c12b1a89208023853f85db80"
       },
       "gate": "G4: retire together with the FrontComposer host"
     },
@@ -139,8 +139,8 @@
       "label": {
         "file": "README.md",
         "line": 60,
-        "text": "- `Hexalith.Folders.Cli` (.NET tool `folders`): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS10; [Folders inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Folders inventory SHA-256: `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.",
-        "sha256": "98434cf89d0f12463257f6f57c247cafd5355a3647869aac43394dec63d3e22c"
+        "text": "- `Hexalith.Folders.Cli` (.NET tool `folders`): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS10; [Folders inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. Folders inventory SHA-256: `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.",
+        "sha256": "54ce4c395ccbb7e580f05e8f1bf1edb3627ab839ad0c54e7b62559f1541a051f"
       },
       "gate": "Folders inventory gates"
     },
@@ -151,8 +151,8 @@
       "label": {
         "file": "README.md",
         "line": 61,
-        "text": "- `Hexalith.Folders.Mcp` (stdio MCP server): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS11; [Folders inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. Folders inventory SHA-256: `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.",
-        "sha256": "195730d68e95927bb1a88c6527977c1a42c4a661f968193afa67f3148af99293"
+        "text": "- `Hexalith.Folders.Mcp` (stdio MCP server): removal gate \"Folders inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS11; [Folders inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. Folders inventory SHA-256: `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407`.",
+        "sha256": "79a0d3bc9c23210faaccf3cc7086bb3c5281a134518a33101efa9a90c2b0cdea"
       },
       "gate": "Folders inventory gates"
     },
@@ -163,8 +163,8 @@
       "label": {
         "file": "README.md",
         "line": 181,
-        "text": "- `Hexalith.ChatBot.Cli` (CLI): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS12; [ChatBot inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. ChatBot inventory SHA-256: `3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c`.",
-        "sha256": "f6790c9935116b73755411a6d80c0fa3228867f99a0f4b5bdc8cfdb830a62d41"
+        "text": "- `Hexalith.ChatBot.Cli` (CLI): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS12; [ChatBot inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. ChatBot inventory SHA-256: `3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c`.",
+        "sha256": "4c1d91b8ec68b7f19c7526e7e877ed769964d262cbb5bf26680ab8f6ca0ceb47"
       },
       "gate": "ChatBot inventory gates"
     },
@@ -175,8 +175,8 @@
       "label": {
         "file": "README.md",
         "line": 182,
-        "text": "- `Hexalith.ChatBot.Mcp` (stdio MCP server): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS13; [ChatBot inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. ChatBot inventory SHA-256: `3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c`.",
-        "sha256": "12786db62ced658e50fd399583b0a0c4996b49b5d888dee07b7c9f24186a9b2e"
+        "text": "- `Hexalith.ChatBot.Mcp` (stdio MCP server): removal gate \"ChatBot inventory gates\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS13; [ChatBot inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md)). Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. ChatBot inventory SHA-256: `3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c`.",
+        "sha256": "19bb02f05cd18a8a2b2840c1d64a7a1b52836d90b92589a540918f5f2377b8f1"
       },
       "gate": "ChatBot inventory gates"
     },
@@ -187,8 +187,8 @@
       "label": {
         "file": "README.md",
         "line": 136,
-        "text": "- `tools/MigrateEmbeddingVectors` (operator CLI): removal gate \"Retained owner-held vector-migration exemption under merged AI.Tools plan 1.2.0; T01–T04 four-mode inventory recorded; independent safety gates remain\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS14; [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md)). Forwarded per-user identity does not make this owner-held tool agent-safe. Retained owner-held local exemption under merged AI.Tools plan 1.2.0; --dry-run, --live, --rollback and --abort are recorded in T01–T04 and still require independent tenant/credential/custody, consent, no-write dry-run, denial, rollback/abort and audit evidence. Never counted as retired. Technical inventory SHA-256: `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693`. [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md) T01–T04 records --dry-run, --live, --rollback and --abort; no mode is retired. Memories inventory SHA-256: `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1`.",
-        "sha256": "c1d623ef4af45e77050208eb3417a6e554415910ffe9f75b4c1cf8907eacee45"
+        "text": "- `tools/MigrateEmbeddingVectors` (operator CLI): removal gate \"Retained owner-held vector-migration exemption under merged AI.Tools plan 1.2.0; T01–T04 four-mode inventory recorded; independent safety gates remain\" ([technical-tools inventory 1.0.4](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md) PS14; [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md)). Forwarded per-user identity does not make this owner-held tool agent-safe. Retained owner-held local exemption under merged AI.Tools plan 1.2.0; --dry-run, --live, --rollback and --abort are recorded in T01–T04 and still require independent tenant/credential/custody, consent, no-write dry-run, denial, rollback/abort and audit evidence. Never counted as retired. Technical inventory SHA-256: `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8`. [Memories inventory 1.1.0](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md) T01–T04 records --dry-run, --live, --rollback and --abort; no mode is retired. Memories inventory SHA-256: `fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1`.",
+        "sha256": "d7ec09e062aa5a1b01bbd12b15ac7899a172ebcef2ba6fd27c63b5a4138522e0"
       },
       "gate": "Retained owner-held vector-migration exemption under merged AI.Tools plan 1.2.0; T01–T04 four-mode inventory recorded; independent safety gates remain"
     }

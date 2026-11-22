@@ -1,4 +1,53 @@
-# Story 5.11 verification — preparation, not integrated completion
+# Story 5.11 verification
+
+## Current assessment on 22 November 2026
+
+McpCli main `0db47f2c` records completed Story 5.10 delivery. Its published
+inventory revision is `008d95ccc77d932a372cb6c749d9d1fb1bc1ea57`. The
+receipt, published bytes and five README labels were verified at the recorded
+ChatBot commit `523dae0f44fded0738d68f019cc5ddedfb8f0456` and Memories
+commit `719820dbca5fb95e2f16f796b8a1124b2194d210`, including their parents
+and containment on owner main. The separate historical ChatBot source audit
+depends on an unpublished old source revision, as recorded in Story 5.10.
+McpCli has adopted CiCd and its committed configuration requires the shared
+Builds pre-push check. The earlier missing-configuration report is historical.
+
+The prepared packet binds 23 inventory versions, 14 labels, 30 documentation
+patches across nine owners and all 65 scoped ledger entries. Each of the eight
+unchanged owners was inspected at its fetched main. The AI.Tools amendment
+is based on `87a738ceeba8975c0b087bc5ecee7dfbc14bf73c`, which still carries
+plan 1.2.0 and the older non-gateway rule. All 30 patches apply in isolated
+repositories. Successor citations distinguish their own source revisions from
+the predecessor census. The audit retains the CiCd/Builds release-note deferral
+and its evidence. AC3 remains unmet for generated GitHub notes.
+
+All 45 focused tests passed, including 39 reconciliation tests and six offline
+probe tests before owner approval. The candidate verifier passed and approved completion then refused with
+`completion requires fresh exact-byte successor approval`. Adopted AD-23,
+instruction synchronization and whitespace checks passed. The freshly installed
+published 2.0.1 passed offline discovery, refusal and stdio tools/list. Its dated probe record is bound by SHA-256 in the current checks. Current
+source restored and built in Release with zero warnings or errors and exposed
+seven Parties, four Projects and fifteen Tenants operations. No command, query
+or MCP tool was submitted to a Gateway. The Parties candidate README passed its
+documentation checks. Nine of ten fitness tests passed. The technology-table
+test stopped before checking any tables because the test supervisor requires a
+procfs children file unavailable on this kernel. See [current checks](checks.json)
+and [focused test output](review-20261122-tests.txt).
+
+The owner approved the 39-artifact packet, explicitly covered all 13 listed roles
+and accepted the 65-entry audit. The audit decision retains the gates for all 63
+unresolved entries. The packet verifier recognized the approval and the builder
+refused regeneration. [Owner receipt](approval.json) · [Approval checks](approval-checks.json).
+
+The story remains in review. Git delivery authorization, inventory publication,
+final-plan approval, integration of the owner patches and the containing AI.Tools
+gitlink are outstanding. The generated release notes deferral remains open.
+SM-3 is due for reassessment at completion. [Integration record](integration.json).
+
+The [review scan](secret-scan-20261122.json) covers the evidence before approval.
+The [approval scan](secret-scan-20261122-approval.json) covers the updated evidence.
+
+## Historical assessment on 16 November 2026
 
 Assessed 2026-11-16 from full McpCli baseline
 `008d95ccc77d932a372cb6c749d9d1fb1bc1ea57`. The spec and sprint remain

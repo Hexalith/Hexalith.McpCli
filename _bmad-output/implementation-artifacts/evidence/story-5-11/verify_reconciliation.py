@@ -4,6 +4,7 @@ import argparse
 from datetime import date
 import importlib.util
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -121,6 +122,11 @@ def check_labels(root, labels):
         require(all(row.get(k) == prior[k] for k in ['repository','surface','gate']), row['id']+': owner/surface/removal gate changed')
         text = row.get('label',{}).get('text','')
         require(row['label'].get('sha256') == B.sha(text.encode()) and 'technical-tools inventory 1.0.4' in text and inventory[str(B.A/'technical-tools-migration-inventory-v1.0.4.md')] in text, row['id']+': label text/hash/citation mismatch')
+        if row['id'] in {'PS01','PS02'}:
+            admin = str(B.A/'eventstore-admin-migration-inventory-v1.0.3.md')
+            citation = f'[EventStore Admin inventory 1.0.3](https://github.com/Hexalith/Hexalith.McpCli/blob/main/{admin})'
+            require(citation in text and f"Admin inventory SHA-256: `{inventory[admin]}`" in text,
+                    row['id']+': Admin 1.0.3 label citation/hash missing')
         require(row['gate'] in text, row['id']+': removal gate lost')
         for token in ['necessary but not sufficient','Never counted as retired','never counted as retired','G01–G06','retirement-blocked','FK01–FK04','T01–T04','independent safety gates']:
             if token in prior['label']['text']: require(token in text,row['id']+': retained gate/exemption lost: '+token)
@@ -128,7 +134,7 @@ def check_labels(root, labels):
 
 
 def prepared_before(root, owner, file):
-    repo = Path(owner['ownerCheckout'])
+    repo = (root/owner['ownerCheckout']).resolve()
     data = B.git(repo,'show',owner['baseRevision']+':'+file['path'])
     require(B.sha(data) == file['sourceSha256'], owner['name']+': source snapshot changed')
     if owner['name'] in {'chatbot','memories'} and file['path'] == 'README.md':
@@ -158,31 +164,56 @@ def check_patches(root, manifest, labels):
     owners = manifest.get('owners',[])
     require(len(owners) == 9 and {o.get('name') for o in owners} == set(B.PATHS)|{'ai-tools'}, 'active owner patch accounting mismatch')
     require(len(manifest.get('noChange',[])) == 8 and {o.get('name') for o in manifest['noChange']} == {'platform','agents','conversations','timesheets','works','builds','commons','polymorphicserializations'}, 'inspected no-change owner accounting mismatch')
+    for audit in manifest['noChange']:
+        name,revision = audit['name'],audit.get('revision','')
+        require(isinstance(revision,str) and re.fullmatch('[0-9a-f]{40}',revision),name+': invalid inspection revision')
+        repo = root.parent/name
+        if not (repo/'.git').exists():
+            title = 'PolymorphicSerializations' if name=='polymorphicserializations' else name.capitalize()
+            repo = root/'references'/('Hexalith.'+title)
+        B.git(repo,'merge-base','--is-ancestor',revision,'origin/main')
+        expected = B.inspect_unchanged(repo,name,B.NO_CHANGE[name],revision)
+        require(audit == expected,name+': inspected main paths, hashes or rationale differ')
     for owner in owners:
         name = owner['name']
         expected_repo = root.parent/('aitools' if name=='ai-tools' else name)
-        require(Path(owner.get('ownerCheckout','')) == expected_repo, name+': wrong owning checkout')
+        require((root/owner.get('ownerCheckout','')).resolve() == expected_repo, name+': wrong owning checkout')
         require(re.fullmatch('[0-9a-f]{40}',owner.get('baseRevision','')) is not None and owner['baseRevision'] == owner.get('observedOriginMain'), name+': canonical main base missing')
         expected_paths = {'hexalith-llm-instructions.md','hexalith-mcpcli-migration-instructions.md'} if name == 'ai-tools' else {'_bmad-output/planning-artifacts/'+p for p in B.PATHS[name]}|({'README.md'} if name!='tenants' else set())
         require(len(owner.get('files',[])) == len(expected_paths) and {f.get('path') for f in owner['files']} == expected_paths,name+': active-topic file accounting mismatch')
         with tempfile.TemporaryDirectory(prefix='reconciliation-patch-') as temporary:
-            scratch = Path(temporary)
+            scratch = Path(temporary).resolve()
+            # A TMPDIR inside a checkout otherwise makes git apply inherit the
+            # parent repository and silently skip paths outside its prefix.
+            env = {k:v for k,v in os.environ.items() if not k.startswith('GIT_')}
+            git = ['git', '-C', str(scratch)]
+            initialized = subprocess.run([*git,'init','--quiet'],env=env,capture_output=True)
+            require(initialized.returncode == 0, name+': cannot initialize isolated patch repository')
             for file in owner['files']:
                 path = scratch/file['path']
                 require(path.resolve().is_relative_to(scratch),name+': patch target escapes repository')
                 path.parent.mkdir(parents=True,exist_ok=True)
-                path.write_bytes(prepared_before(root,owner,file))
+                before = prepared_before(root,owner,file)
+                path.write_bytes(before)
                 patch = checked(root,file['patch'])
                 require(patch and file['afterSha256'] != file['beforeSha256'], name+': empty correction patch')
                 if file.get('format') == 'literal-replacements':
                     path.write_bytes(literal_patch(path.read_bytes(),patch,file['path']))
                 else:
-                    result = subprocess.run(['git','-C',str(scratch),'apply','--check','-'],input=patch,capture_output=True)
+                    stats = subprocess.run([*git,'apply','--numstat','-z','-'],input=patch,capture_output=True,env=env)
+                    names = [entry.split(b'\t',2)[-1] for entry in stats.stdout.split(b'\0') if entry]
+                    require(stats.returncode == 0 and names == [file['path'].encode()] and
+                            not re.search(rb'^(?:rename|copy) (?:from|to) ',patch,re.M),
+                            name+': patch must affect only '+file['path'])
+                    result = subprocess.run([*git,'apply','--check','-'],input=patch,capture_output=True,env=env)
                     require(result.returncode == 0,name+': patch does not apply: '+result.stderr.decode().strip())
-                    result = subprocess.run(['git','-C',str(scratch),'apply','-'],input=patch,capture_output=True)
+                    result = subprocess.run([*git,'apply','-'],input=patch,capture_output=True,env=env)
                     require(result.returncode == 0,name+': patch application failed')
                 after = path.read_bytes()
                 require(B.sha(after) == file['afterSha256'],name+': applied patch bytes differ')
+                if name != 'ai-tools':
+                    expected = B.corrected_document(name,file['path'],before,labels['rows'])
+                    require(after == expected,name+': applied document differs from required corrections: '+file['path'])
                 if file['path'] == 'README.md':
                     text = after.decode().replace('\r\n','\n')
                     require(B.setup(name) in text,name+': setup/refusal/discovery or retained-gate guidance lost')
@@ -236,9 +267,19 @@ def check_prior_delivery(root,prior_module=None,register=None):
         module_spec.loader.exec_module(prior_module)
     prior = prior_module
     try:
-        prior.V.verify_owner_packet(root,True)
         register = read(root,E.parent/'story-5-10/labels.json') if register is None else register
         require(register.get('state') == 'integrated','completion requires integrated PS06/PS07/PS12/PS13/PS14 labels')
+        # The receipt was already approved and published. Verify those bytes at
+        # publication; regenerating its source audit needs an unpublished old
+        # ChatBot object and is not evidence of label delivery.
+        receipt_path = E.parent/'story-5-10/approval.json'
+        receipt_bytes = B.git(root,'show',B.BASELINE+':'+str(receipt_path))
+        require(receipt_bytes == (root/receipt_path).read_bytes(),'historical Story 5.10 owner receipt differs')
+        receipt = json.loads(receipt_bytes)
+        prior.V.check_approval(receipt,json.loads(receipt_bytes),True)
+        for path,digest in receipt['artifacts'].items():
+            published = prior.B.git(root,'show',register['inventoryRevision']+':'+path)
+            require(B.sha(published) == digest,'historical Story 5.10 published artifact mismatch: '+path)
         inventory = {str(m['new']):B.sha((root/m['new']).read_bytes()) for m in prior.B.MODULES.values()}
         expected,_ = prior.B.label_candidate(root,inventory)
         for key in ['predecessor','priorRows','inventoryArtifacts','rows']:
@@ -246,7 +287,7 @@ def check_prior_delivery(root,prior_module=None,register=None):
         repositories = register.get('repositories',[])
         require(len(repositories) == 2 and {r.get('name') for r in repositories} == {'chatbot','memories'},'historical Story 5.10 owner accounting mismatch')
         original_git = prior.B.git
-        revisions = {str(Path(r['ownerCheckout'])):(r.get('integration') or {}).get('commit') for r in repositories}
+        revisions = {str(root.parent/r['name']):(r.get('integration') or {}).get('commit') for r in repositories}
         revisions[str(root)] = register.get('inventoryRevision')
         def historical_git(repo,*args):
             if args[0] == 'show' and args[1].startswith('origin/main:'):
@@ -265,7 +306,11 @@ def check_prior_delivery(root,prior_module=None,register=None):
                 checked(root,repository['patch'])
                 after = before.replace(before_section,after_section)
                 require(B.sha(after) == repository['readme']['afterSha256'],'historical Story 5.10 README reconstruction mismatch')
-                prior.check_delivery(root,register,repository,before,after)
+                local_repo = root.parent/repository['name']
+                actual_origin = B.git(local_repo,'remote','get-url','origin').decode().strip()
+                require(prior.L57.github_repository(actual_origin) == prior.L57.github_repository(repository['repository']),
+                        repository['name']+': historical owner repository mismatch')
+                prior.check_delivery(root,register,dict(repository,ownerCheckout=str(local_repo)),before,after)
         finally:
             prior.B.git = original_git
         check_labels(root,read(root,E/'labels.json'))
@@ -293,9 +338,15 @@ def check_assessments(root,integration):
     require(outcome in {'met','pending-not-met','slip'} and isinstance(retirements,list),'SM-3 outcome/retirement accounting missing')
     if outcome == 'met':
         require(bool(retirements),'SM-3 met requires evidenced retirement')
+        # PRD §3 includes proprietary MCP servers and plug-ins, including
+        # EventStore Admin MCP. The census records the kind for every PS row.
+        census = B.rows((root/B.A/'technical-tools-migration-inventory-v1.0.4.md').read_text())
+        servers = {r['surface'] for r in read(root,E/'labels.json')['rows']
+                   if 'MCP' in census[r['id']]['Kind and transport'].split()}
         for binding in retirements:
             retirement = json.loads(checked(root,binding))
             require(retirement.get('state') == 'retired' and all(nonblank(retirement.get(k)) for k in ['surface','owner','source']),'SM-3 retirement receipt lacks retired state or authority')
+            require(retirement['surface'] in servers,'SM-3 requires an inventoried Legacy Server')
             require(recorded_date(retirement.get('retiredOn'),'retirement date missing') <= min(completed,date(2027,2,5)),'SM-3 retirement must occur by its deadline and assessment')
     else:
         require(not retirements,'SM-3 pending/slip must not claim retirement')
@@ -313,13 +364,55 @@ def check_assessments(root,integration):
     retained = decision.get('retainedUnresolvedEntryIds')
     require(decision.get('preserveUnresolvedGates') is True and isinstance(retained,list) and len(retained)==len(unresolved) and set(retained)==unresolved,'deferral decision must preserve every unresolved owner/gate')
 
+    notes = [entry for entry in audit['entries'] if entry['id']=='77748cf5a6cb9421']
+    require(len(notes)==1,'AC3 release-note disposition missing')
+    changed = decision.get('acceptCompletionWithDeferredReleaseNotes') is True
+    require(notes[0]['sourceStatus'].startswith('resolved') or changed,
+            'AC3 generated release notes remain deferred by the owner')
+
+
+def check_published_index(root, plan, inputs, revision):
+    check_immutable_links(plan,inputs,revision)
+    receipts = {}
+    table = [line.strip('|').split('|') for line in plan.splitlines() if line.startswith('|')]
+    for family,chain in inputs['inventoryHistories'].items():
+        for item in chain:
+            path,digest = item['path'],item['sha256']
+            require(B.sha(B.git(root,'show',revision+':'+path)) == digest,
+                    'linked inventory bytes differ: '+path)
+            authority = item['approval']
+            ref = authority['receipt']
+            receipt_path = ref['path']
+            if receipt_path not in receipts:
+                raw = B.git(root,'show',revision+':'+receipt_path)
+                expected = ref.get('sha256') or B.sha((root/receipt_path).read_bytes())
+                require(B.sha(raw)==expected,'linked receipt bytes differ: '+receipt_path)
+                receipts[receipt_path] = raw
+            if authority['authority']=='session-scope-only':
+                status = 'scope-approved-only; session-scope-only'
+            else:
+                raw = receipts[receipt_path]
+                approved = json.loads(raw)
+                require(approved.get('decision')=='approved' and digest.encode() in raw,
+                        'published receipt lacks approval for '+path)
+                status = 'owner-approved; owning-maintainer-receipt'
+            entries = [cells for cells in table if len(cells)==5 and cells[0].strip()==family and cells[1].strip()==item['version']]
+            require(len(entries)==1 and path in entries[0][2] and digest in entries[0][3] and
+                    entries[0][4].strip().startswith(status+':') and receipt_path in entries[0][4],
+                    family+' '+item['version']+': final inventory row authority/path/hash mismatch')
+
 
 def check_completion(root, receipt, labels, manifest, integration):
     require(receipt.get('decision') == 'approved', 'completion requires fresh exact-byte successor approval')
     check_prior_delivery(root)
     require(integration.get('state') == 'integrated','completion requires integrated plan and all fourteen labels')
     authorization = integration.get('deliveryAuthorization')
-    require(isinstance(authorization,dict) and authorization.get('exactWords','').strip().casefold() == 'authorize' and all(nonblank(authorization.get(k)) for k in ['source','approvedOn']), 'completion requires separate explicit Git delivery authorization')
+    require(isinstance(authorization,dict) and all(nonblank(authorization.get(k)) for k in ['source','approvedOn','exactWords']),
+            'completion requires separate explicit Git delivery authorization')
+    words = authorization['exactWords'].strip().casefold().rstrip('.\\')
+    push_requests = {'push all changes', 'push all changes of all repositories to main'}
+    require(words == 'authorize' or (words in push_requests and nonblank(authorization.get('footprint'))),
+            'completion requires separate explicit Git delivery authorization')
     inventory_revision = integration.get('inventoryRevision')
     require(isinstance(inventory_revision,str) and re.fullmatch('[0-9a-f]{40}',inventory_revision), 'completion requires full published inventory revision')
     B.git(root,'merge-base','--is-ancestor',inventory_revision,'origin/main')
@@ -331,7 +424,7 @@ def check_completion(root, receipt, labels, manifest, integration):
     for owner in manifest['owners']:
         delivered = next(d for d in deliveries if d['name'] == owner['name'])
         require(isinstance(delivered,dict) and isinstance(delivered.get('commit'),str) and re.fullmatch('[0-9a-f]{40}',delivered['commit']),owner['name']+': upstream integration missing')
-        repo,commit = Path(owner['ownerCheckout']),delivered['commit']
+        repo,commit = (root/owner['ownerCheckout']).resolve(),delivered['commit']
         B.git(repo,'merge-base','--is-ancestor',commit,'origin/main')
         for file in owner['files']:
             target_hash = integration.get('planSha256') if file['path']=='hexalith-mcpcli-migration-instructions.md' else file['afterSha256']
@@ -352,19 +445,32 @@ def check_completion(root, receipt, labels, manifest, integration):
     require(gitlink == integration.get('aiToolsGitlink'), 'containing AI.Tools gitlink missing')
     B.git(root.parent/'aitools','merge-base','--is-ancestor',ai,gitlink)
     plan = B.git(root.parent/'aitools','show',ai+':hexalith-mcpcli-migration-instructions.md')
-    require(B.sha(plan) == integration.get('planSha256') and f"inventory_revision: '{inventory_revision}'" in plan.decode(), 'exact plan bytes/publication binding missing')
-    require(b'candidate-not-publishable' not in plan and b'plan_version: \'1.3.0\'' in plan,'completion requires final plan 1.3.0 bytes')
+    for file in ['hexalith-mcpcli-migration-instructions.md','hexalith-llm-instructions.md']:
+        merged = plan if file.startswith('hexalith-mcpcli') else B.git(root.parent/'aitools','show',ai+':'+file)
+        require(B.git(root.parent/'aitools','show',gitlink+':'+file)==merged,'committed AI.Tools gitlink differs: '+file)
+    frontmatter = plan.decode().split('---',2)
+    require(len(frontmatter)==3 and not frontmatter[0] and B.sha(plan)==integration.get('planSha256'),
+            'exact plan bytes/publication binding missing')
+    metadata = frontmatter[1].splitlines()
+    require([line for line in metadata if line.startswith('inventory_revision:')] == [f"inventory_revision: '{inventory_revision}'"],
+            'exact plan bytes/publication binding missing')
+    wording = ' '.join(plan.decode().lower().split())
+    candidate_markers = ['candidate-not-publishable','1.3.0 candidate','inventory_revision: null','never publish this candidate',
+                         'not the authoritative plan until','before approval of final plan bytes','missing publication binding',
+                         'bind final plan bytes','/blob/<sha>/']
+    require([line for line in metadata if line.startswith('plan_version:')] == ["plan_version: '1.3.0'"] and
+            not any(marker in wording for marker in candidate_markers),'completion requires final plan 1.3.0 bytes')
     check_plan_semantics(plan.decode(),'final approved')
     final_approval = json.loads(checked(root,integration.get('finalPlanApproval')))
     require(final_approval.get('decision') == 'approved' and final_approval.get('planSha256') == B.sha(plan) and final_approval.get('inventoryRevision') == inventory_revision, 'final plan exact-byte approval/hash/revision binding missing')
     require(all(nonblank(final_approval.get(k)) for k in ['approver','exactApprovalInstruction','approvalSource','approvedOn']) and final_approval['exactApprovalInstruction'].strip().casefold() == 'approve', 'final plan approval lacks explicit owner instruction')
     require(set(receipt['requiredApprovalRoles']) <= set(final_approval.get('rolesCovered',[])), 'final plan approval lacks covered roles')
     inputs = read(root,E/'inputs.json')
-    for family,chain in inputs['inventoryHistories'].items():
-        for item in chain:
-            require(item['path'].encode() in plan and item['sha256'].encode() in plan, family+': final plan omits historical path/hash')
-    check_immutable_links(plan.decode(),inputs,inventory_revision)
-    entries = [(root/p).read_bytes() for p in ['AGENTS.md','CLAUDE.md','.github/copilot-instructions.md']]
+    check_published_index(root,plan.decode(),inputs,inventory_revision)
+    paths = ['AGENTS.md','CLAUDE.md','.github/copilot-instructions.md']
+    committed = [B.git(root,'show',containing+':'+path) for path in paths]
+    require(committed[0] == committed[1] == committed[2], 'committed root agent instructions differ')
+    entries = [(root/p).read_bytes() for p in paths]
     require(entries[0] == entries[1] == entries[2], 'agent instructions differ')
     result = subprocess.run(['bash','scripts/check-agent-instructions-sync.sh'],cwd=root,capture_output=True)
     require(result.returncode == 0 and integration.get('instructionSync') == 'passed','passing instruction synchronization binding missing')
@@ -389,6 +495,16 @@ def verify(root=ROOT, completion=False):
         require(data == B.git(root,'show',B.BASELINE+':'+binding['path']), 'prior approval bytes changed')
         prior = json.loads(data)
         require(prior.get('decision') == 'approved' and set(prior['requiredApprovalRoles']) <= set(prior.get('rolesCovered',[])), 'prior approval lacks decision or covered roles')
+    prior_register = read(root,E.parent/'story-5-10/labels.json')
+    bound = inputs.get('prerequisites',{}).get('story510',{})
+    for key in ('labels','approval'):
+        path = E.parent/'story-5-10'/(key+'.json')
+        require(bound.get(key) == {'path':str(path),'sha256':B.sha((root/path).read_bytes())},
+                'Story 5.10 '+key+' binding mismatch')
+    require(bound.get('state') == 'approved-and-delivered' and prior_register.get('state') == 'integrated' and
+            bound.get('inventoryRevision') == prior_register['inventoryRevision'] and
+            bound.get('ownerIntegrations') == {r['name']:r['integration']['commit'] for r in prior_register['repositories']},
+            'Story 5.10 delivery binding mismatch')
     check_histories(root,inputs)
     check_successors(root,receipt)
     check_labels(root,labels)
@@ -421,7 +537,13 @@ def main(argv=None):
         print('FAIL: '+str(error),file=sys.stderr)
         return 1
     print('PASS: eight inventory histories; preserved AD-23/predecessors; fourteen labels; nine owner patch sets; scoped deferral accounting')
-    print('PASS: decision: '+decision+'; '+('approved integration verified' if completed else 'candidate only; approval, prerequisite delivery, publication and upstream integration remain gates'))
+    if completed:
+        status = 'approved integration verified'
+    elif decision == 'approved':
+        status = 'packet approved; publication and upstream integration pending'
+    else:
+        status = 'candidate only; approval, publication and upstream integration remain gates'
+    print('PASS: decision: '+decision+'; '+status)
     return 0
 
 

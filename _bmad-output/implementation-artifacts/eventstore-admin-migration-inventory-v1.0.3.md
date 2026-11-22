@@ -49,8 +49,8 @@ are explicit per row; Gateway acceptance never proves completion.
 Compiler and PS14 exemptions rely on merged AI.Tools plan 1.2.0, main commit
 10b709b86f9c9148e5a18177e8d11fad79ae2c0b, bound by Story 5.2 main-integration.json.
 They remain local, retained and outside agent discovery/submission. PS14's four
-modes are recorded in the approved Memories 1.1.0 T01–T04 inventory; Story
-5.10 delivery and independent safety evidence remain incomplete.
+modes are recorded in the delivered Memories 1.1.0 T01–T04 inventory. Its
+independent safety gates remain open.
 Companion inventory updates, forwarded authority, release/rollback, selected
 environment authorization, audit, output/exit, freshness/redaction/context/paging,
 idempotency and independent module gates remain open. FrontComposer host and

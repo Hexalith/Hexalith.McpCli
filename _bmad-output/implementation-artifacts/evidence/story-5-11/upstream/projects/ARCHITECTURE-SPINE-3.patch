@@ -1,12 +1,12 @@
 --- a/_bmad-output/planning-artifacts/architecture/architecture-projects-2026-07-15/ARCHITECTURE-SPINE.md
 +++ b/_bmad-output/planning-artifacts/architecture/architecture-projects-2026-07-15/ARCHITECTURE-SPINE.md
-@@ -29,6 +29,9 @@
+@@ -37,6 +37,9 @@
  
  # Architecture Spine — Hexalith.Projects
  
-+> **Current McpCli disposition (Story 5.11 candidate):** Projects source declarations and local McpCli candidate tests establish neither published package availability nor enrollment in the shipped McpCli cohort. The four source reads projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments remain subject to publication, independent Gateway authorization and live acceptance. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.
++> **Current McpCli disposition (Story 5.11 candidate):** Current McpCli source enrolls published Projects.Contracts 2.0.0 and discovers four reads: projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments. The published McpCli 2.0.1 tool predates Projects enrollment. Independent Gateway authorization, native live qualification and release evidence remain required. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.
 +
 +
- **McpCli course correction (drafted 2026-09-27; approved 2026-11-15 by [sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md](../../sprint-change-proposal-2026-11-15-schedule-stories-6-8-and-6-6.md) §E9):** `Hexalith.McpCli` is the target for Hexalith-owned CLI/MCP access to eligible Projects operations. Projects owns the domain contracts and behavior; its FrontComposer-hosted MCP plug-in and module CLI are obsolete migration sources. UI-only and human-confirmation actions remain on confidential interactive UI under Platform AD-14; McpCli must refuse them. Existing machine-adapter descriptions below are compatibility and historical requirements until owner-approved inventory and parity gates pass.
+ ## Implementation boundaries on November 20, 2026
  
- 
+ | Boundary | What implementers can rely on |

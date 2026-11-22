@@ -1,0 +1,80 @@
+{
+  "assessedOn": "2026-11-22",
+  "reviewedReceiptSha256": "00bc7dc3cc8c2c4194b90a7cb11fb97b2b24baa31deeb8301cc55ed5083455a8",
+  "approvedReceiptSha256": "d979f741a74f7a8d2e1ac1e35b9665ca22e7041f764c5d19ebda67c679bb49c9",
+  "approvedArtifactCount": 39,
+  "coveredRoleCount": 13,
+  "auditEntries": 65,
+  "unresolvedGatesRetained": 63,
+  "integrationRecordSha256": "acf6f7997f4fea826d224ab3ed599fb57bcd0306d37fe50859a59e0fe333f6ff",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: eight inventory histories; preserved AD-23/predecessors; fourteen labels; nine owner patch sets; scoped deferral accounting\nPASS: decision: approved; packet approved; publication and upstream integration pending",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: completion requires integrated plan and all fourteen labels"
+    },
+    {
+      "command": [
+        "python3",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/build_packet.py"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: Approved packet is immutable; prepare an explicitly authorized successor instead"
+    },
+    {
+      "command": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "bash",
+        "references/Hexalith.EventStore/scripts/run-with-temp.sh",
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "passed": 45
+    }
+  ]
+}

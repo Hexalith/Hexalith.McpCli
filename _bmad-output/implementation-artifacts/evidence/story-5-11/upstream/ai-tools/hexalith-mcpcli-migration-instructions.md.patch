@@ -1,6 +1,6 @@
 --- a/hexalith-mcpcli-migration-instructions.md
 +++ b/hexalith-mcpcli-migration-instructions.md
-@@ -1,137 +1,135 @@
+@@ -1,137 +1,137 @@
  ---
 -plan_version: '1.2.0'
 +plan_version: '1.3.0'
@@ -23,7 +23,7 @@
 -policy, as does Hexalith.Builds build and workspace tooling that never invokes
 -module operations, currently `hexalith-module` and `hexalith-evidence`.
 +Version **1.3.0 candidate**, prepared by McpCli Story 5.11. This file is not the
-+authoritative plan until fresh exact-byte approval, Story 5.10 delivery, immutable
++authoritative plan until fresh exact-byte approval, verified Story 5.10 delivery, immutable
 +inventory publication and authoritative AI.Tools main integration are verified.
 +`inventory_revision: null` explicitly records the missing publication binding;
 +replace it with the verified full McpCli commit and render immutable `/blob/<sha>/`
@@ -105,12 +105,12 @@
 +| eventstore-admin | 1.0.0 | `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/eventstore-admin-migration-inventory-v1.md` | `26ac7486cba8c52a0496147c6b90bda953dda31fd644ac199c433e49b834c90e` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
 +| eventstore-admin | 1.0.1 | `_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md` | `7e1beb2fd2c030ca04dbc8d718c0324c7f7f5b66a077f6ef672312d6196fec18` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
 +| eventstore-admin | 1.0.2 | `_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.2.md` | `ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json` |
-+| eventstore-admin | 1.0.3 | `_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md` | `8b5d941ea16a47c2a07dff9ad8e4f5ee09f2801baf90b11bf105957c0c1340c5` | candidate-pending; pending: `_bmad-output/implementation-artifacts/evidence/story-5-11/approval.json` |
++| eventstore-admin | 1.0.3 | `_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md` | `6ddf91de9f48b52a5bfe1cae666c704a732c88334e9268a8dd528b64cfc8aa1c` | candidate-pending; pending: `_bmad-output/implementation-artifacts/evidence/story-5-11/approval.json` |
 +| technical-tools | 1.0.0 | `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.0/technical-tools-migration-inventory-v1.md` | `6a7d325f6927b8b0f6692c05b71b54728bc1281b871dc073712586d172d41f58` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
 +| technical-tools | 1.0.1 | `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/1.0.1/technical-tools-migration-inventory-v1.md` | `0472f2c4ba12049c89e582ed5162279f989160d62b4499bc766efde8e85b93ca` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
 +| technical-tools | 1.0.2 | `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md` | `8cca31f2a9fb646566a2cdba3a377af58685d99e4a53ec8e9243135613c1a2f6` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-1/approval/approval.json` |
 +| technical-tools | 1.0.3 | `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.3.md` | `7f2810174ae929e569d9affaccabe745565dcfe4f0487b71847806f3eda1ef8c` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-7/approval.json` |
-+| technical-tools | 1.0.4 | `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md` | `fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693` | candidate-pending; pending: `_bmad-output/implementation-artifacts/evidence/story-5-11/approval.json` |
++| technical-tools | 1.0.4 | `_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md` | `94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8` | candidate-pending; pending: `_bmad-output/implementation-artifacts/evidence/story-5-11/approval.json` |
 +| folders | 1.0.0 | `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md` | `57cf556b8051921bf2bf8a17abe3b82b7d0a3ba8ba5593072f52c12f85650e0b` | scope-approved-only; session-scope-only: `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.md` |
 +| folders | 1.1.0 | `_bmad-output/implementation-artifacts/folders-migration-inventory-v1.1.0.md` | `54a6f61d4f0d83876d8113c7c9d8775dc73190ecdbd8a3beb34cda10946d6407` | owner-approved; owning-maintainer-receipt: `_bmad-output/implementation-artifacts/evidence/story-5-8/approval.json` |
 +| projects | 1.0.0 | `_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md` | `252af571ee3b52163a2f0637a1dff4f0c6f2802ebfa985c51562466fa759ad5f` | scope-approved-only; session-scope-only: `_bmad-output/implementation-artifacts/projects-migration-inventory-v1.md` |
@@ -166,7 +166,8 @@
 +All PS01–PS14 remain present; no evidenced retirement is claimed. PS03/PS14 are
 +retained exemptions. The Admin/technical documentary successors have fresh
 +receipt-based status; Story 5.7 approval of their predecessors remains factual.
-+ChatBot/Memories 1.1.0 approval and incomplete Story 5.10 delivery are distinct.
++Story 5.10 records separate owner approval and delivery of ChatBot/Memories 1.1.0
++and five labels. See its integrated register and the recorded owner commits.
 +No missing version, role, hash, gate, publication or upstream binding permits a
 +success claim. Preserve the proprietary-surface census and independent release gates.
  
@@ -211,7 +212,7 @@
 -Keep the v1 gateway and dependency boundaries until a separate decision changes
 -them; do not import module implementations or add module-specific adapters.
 +The owner chose “Labels + slip”; SM-3 is pending-not-met with deadline 2027-02-05,
-+three months after first paired release 2.0.1 on 2026-11-05. Assessment 2026-11-16:
++three months after first paired release 2.0.1 on 2026-11-05. Assessment 2026-11-22:
 +deadline future, no measured miss. Reassess at completion; the product owner
 +records a reason if no Legacy Server is deleted by the deadline. Every Epic 5
 +deferral retains its sourced owner/gate; already tracked is never acceptance.
@@ -243,8 +244,9 @@
 +Publish approved inventory bytes first under an explicitly authorized McpCli
 +commit; verify published bytes and all approval roles. Deliver rebased owner
 +README/active-topic patches with separate authorization and mandatory owner
-+commitlint/Builds checks. Missing .github/hexalith-ci.json remains a CiCd blocker,
-+never a bypass. Bind final plan bytes and full inventory revision, integrate into
++commitlint and applicable Builds checks. McpCli has adopted CiCd and its
++committed .github/hexalith-ci.json requires the shared pre-push check.
++Bind final plan bytes and full inventory revision, integrate into
 +authoritative AI.Tools main, verify main containment, then change only McpCli's
 +AI.Tools gitlink and pass byte-identical local instruction synchronization.
 +Open PRs, local candidates and missing upstream integrations leave completion

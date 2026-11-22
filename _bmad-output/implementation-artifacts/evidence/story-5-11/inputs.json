@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "recordedOn": "2026-11-16",
+  "recordedOn": "2026-11-22",
   "baselineCommit": "008d95ccc77d932a372cb6c749d9d1fb1bc1ea57",
   "authorities": [
     {
@@ -117,7 +117,7 @@
       {
         "version": "1.0.3",
         "path": "_bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.0.3.md",
-        "sha256": "8b5d941ea16a47c2a07dff9ad8e4f5ee09f2801baf90b11bf105957c0c1340c5",
+        "sha256": "6ddf91de9f48b52a5bfe1cae666c704a732c88334e9268a8dd528b64cfc8aa1c",
         "approval": {
           "authority": "pending",
           "receipt": {
@@ -193,7 +193,7 @@
       {
         "version": "1.0.4",
         "path": "_bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.0.4.md",
-        "sha256": "fb9a4d9e62b6080eeedd9910d47fbbd74dafe9c2ca00154e7b6da213088f0693",
+        "sha256": "94985d72232864ab8f40ba212cd0fc73dbd0c5497856073cfd19c2972b89e8b8",
         "approval": {
           "authority": "pending",
           "receipt": {
@@ -414,7 +414,7 @@
     },
     {
       "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/labels.json",
-      "sha256": "8871047e07bf667d2612aa3ded4c23a38d3138a0a9ad3827ab6372834eda42f2"
+      "sha256": "343b0feb997b651949fcd3c0abb091c80de2248e3320e619b9dcc5589cd7d926"
     }
   ],
   "prerequisites": {
@@ -423,16 +423,16 @@
         "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json",
         "sha256": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229"
       },
-      "deliveryGate": {
-        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-gate.json",
-        "sha256": "f5df1f9db7b4b69c1eaaa7bb0461ed7d288e12b503dac1fc5a6893816acb48fb"
+      "labels": {
+        "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/labels.json",
+        "sha256": "343b0feb997b651949fcd3c0abb091c80de2248e3320e619b9dcc5589cd7d926"
       },
-      "state": "approved-delivery-blocked",
-      "missingBindings": [
-        "inventoryRevision",
-        "PS06/PS07/PS12/PS13/PS14 main integration"
-      ],
-      "blocker": "python3 references/Hexalith.Builds/check.py: missing .github/hexalith-ci.json; CiCd ownership; no bypass"
+      "state": "approved-and-delivered",
+      "inventoryRevision": "008d95ccc77d932a372cb6c749d9d1fb1bc1ea57",
+      "ownerIntegrations": {
+        "chatbot": "523dae0f44fded0738d68f019cc5ddedfb8f0456",
+        "memories": "719820dbca5fb95e2f16f796b8a1124b2194d210"
+      }
     },
     "parties": {
       "state": "retirement-blocked",
@@ -451,7 +451,7 @@
         "sha256": "8a5aff25336d56cc88f2124ccc3dedc3da66af06050b2842a6c27cb7349ae7eb"
       },
       "deadline": "2027-02-05",
-      "assessmentDate": "2026-11-16",
+      "assessmentDate": "2026-11-22",
       "deadlinePassed": false,
       "outcome": "pending-not-met",
       "ownerDecision": {
@@ -463,22 +463,23 @@
     }
   },
   "rootReferencePins": [
-    "160000 commit 7ef8166ef87e1365f86d1a1b3aaf0235545177d4\treferences/Hexalith.AI.Tools",
-    "160000 commit 9edf5240457ebd430c23592c47ddffb313c67481\treferences/Hexalith.Agents",
-    "160000 commit 65fd22f37b9fad64b595841923cdbe050563ab99\treferences/Hexalith.Builds",
-    "160000 commit 6a4ca07b18e9b58500dc79dfede1f308da36c828\treferences/Hexalith.ChatBot",
-    "160000 commit ab5e92faa3bab1fa43b8ecadd423432dfe652bb2\treferences/Hexalith.Commons",
-    "160000 commit 9dc5b2fb25d50784bb4a3f8bfa56a520d819869f\treferences/Hexalith.Conversations",
-    "160000 commit 97c02f7bf99a694528a2b15f0b3b0a6e5fb10e9d\treferences/Hexalith.EventStore",
-    "160000 commit fc302b2c81aa4e107c3ed58458f0b39d2ebe6d85\treferences/Hexalith.Folders",
-    "160000 commit 33e71036c04f2b99955376e9c90cbb1fc3a81e64\treferences/Hexalith.FrontComposer",
-    "160000 commit 9d87500eaf4c39ce0cec0cb3a03e5dd62c167106\treferences/Hexalith.Memories",
-    "160000 commit d4a71068bc1366ba67699aa9ec68cf24c0645c71\treferences/Hexalith.Parties",
-    "160000 commit 2dfd01d394733aeb871be56a0aab35ddb7b721c3\treferences/Hexalith.Platform",
-    "160000 commit 476cfccac3c5ba694a8e0ef11b1157728b9ec093\treferences/Hexalith.PolymorphicSerializations",
-    "160000 commit bf9f98969efa036fd60700c627e712b4375e654a\treferences/Hexalith.Projects",
-    "160000 commit 8aa6f169b3e27f0a831ad6425c4bc1278ca2c445\treferences/Hexalith.Tenants",
-    "160000 commit bbb91319ee209333d29f07e53bd9b5e4adc40267\treferences/Hexalith.Timesheets",
-    "160000 commit b2985d22b3bfbc6d86bcde28a5da722ae7f930c3\treferences/Hexalith.Works"
+    "160000 commit 87a738ceeba8975c0b087bc5ecee7dfbc14bf73c\treferences/Hexalith.AI.Tools",
+    "160000 commit 412528ed47dfa9bd33453784e70aaedc6dc2214d\treferences/Hexalith.Agents",
+    "160000 commit fe68718b6c074a6b500a7191e3554a1d39e17688\treferences/Hexalith.Builds",
+    "160000 commit 3df76f6ac5603e1ab3aa83cfd08b82382f40c651\treferences/Hexalith.ChatBot",
+    "160000 commit b7102103ebbe2d3644f9c080834306d890ccbc3d\treferences/Hexalith.CiCd",
+    "160000 commit 258f9d20e33bd0ae411cf8b3836a26a131f5b9ae\treferences/Hexalith.Commons",
+    "160000 commit a252b7f6cc7f758a7d10bdc745caade0c77cabe1\treferences/Hexalith.Conversations",
+    "160000 commit 147159db98074b7769645ccc4aaaf0099df03326\treferences/Hexalith.EventStore",
+    "160000 commit 73ca79b4fbc09d233cbab5f836507c88894f0420\treferences/Hexalith.Folders",
+    "160000 commit a9e755da2c060f4bf49e0cc2df094bd8a4940df6\treferences/Hexalith.FrontComposer",
+    "160000 commit 45fb2308eb11cf5072c6330a9f6bdad3fbf30cd5\treferences/Hexalith.Memories",
+    "160000 commit 1ee5b49a416c2325bac3e6050bc088abaa74cab4\treferences/Hexalith.Parties",
+    "160000 commit 5e225536e4ae578c24a58beabfdf46bc5f158875\treferences/Hexalith.Platform",
+    "160000 commit c6d0dfce6dc4f9a0699a51f80baf021ba5ef5d60\treferences/Hexalith.PolymorphicSerializations",
+    "160000 commit 31835eb8e3826ecd799321e00c7203ff0bb27f88\treferences/Hexalith.Projects",
+    "160000 commit c1387ebb8cf3c3b4cf93d0876dd0461bac8a96f5\treferences/Hexalith.Tenants",
+    "160000 commit 88363d539e22858d64af18aad4cfe9d731ca0f63\treferences/Hexalith.Timesheets",
+    "160000 commit cd617eb1edc6c51a1459eaa8967e8a5acde4745a\treferences/Hexalith.Works"
   ]
 }

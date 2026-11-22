@@ -4,11 +4,11 @@
   "owners": [
     {
       "name": "eventstore",
-      "ownerCheckout": "/home/administrator/projects/hexalith/eventstore",
+      "ownerCheckout": "../eventstore",
       "repository": "https://github.com/Hexalith/Hexalith.EventStore.git",
-      "baseRevision": "f85419d501f279e9a813435aa73538185ad26ada",
-      "observedOriginMain": "f85419d501f279e9a813435aa73538185ad26ada",
-      "observedOwnerHead": "f85419d501f279e9a813435aa73538185ad26ada",
+      "baseRevision": "10c716a4fa885a0c2a30574373e44944788560c8",
+      "observedOriginMain": "10c716a4fa885a0c2a30574373e44944788560c8",
+      "observedOwnerHead": "10c716a4fa885a0c2a30574373e44944788560c8",
       "mainVerification": "local refs only; fresh remote verification required before delivery",
       "files": [
         {
@@ -16,18 +16,18 @@
           "format": "unified-diff",
           "sourceSha256": "31d1cbf7e617cdeb38dcca67eada11d5c1d592f7ede9b9813000c26a4bd5e497",
           "beforeSha256": "31d1cbf7e617cdeb38dcca67eada11d5c1d592f7ede9b9813000c26a4bd5e497",
-          "afterSha256": "b3c8b072bdad55537b34ac0448128cc36310ac1a31b81db1185b5cceff87bcb2",
+          "afterSha256": "3672121562494d95d1bf092965d8c46efe3d51c2227c775aa4b95bb31325ac8c",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/eventstore/README-0.patch",
-            "sha256": "d1da3a4b5f2e6468716b554e0b3d33565fbedf471405be793369930add659e47"
+            "sha256": "34a58832fb038a6c0261ee0f103f03e3cba876a3d1740d3c488e7c238ceaa307"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture.md",
           "format": "literal-replacements",
-          "sourceSha256": "c42f49555b26364177d2ac596b3c4c81a18ac16b2640a5c750424eceebbf99c0",
-          "beforeSha256": "c42f49555b26364177d2ac596b3c4c81a18ac16b2640a5c750424eceebbf99c0",
-          "afterSha256": "790538837b4a00fd1346837f8d2494d8844856e6bcda75370a9e7eee0357baa1",
+          "sourceSha256": "bb2c8d20efe7819fdf2935762960884d654b154f35632d97c7c9c69a5fb8c0d7",
+          "beforeSha256": "bb2c8d20efe7819fdf2935762960884d654b154f35632d97c7c9c69a5fb8c0d7",
+          "afterSha256": "caa4d4c23064f2df4e3d5d8f9fd0dd21fbe88944d34f3776aa67e6defb2c53b7",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/eventstore/architecture-1.patch.json",
             "sha256": "5b491932768efccf0ded72475cdd5eb2488fa29b878ee2d475ff7607e7b63929"
@@ -36,12 +36,12 @@
         {
           "path": "_bmad-output/planning-artifacts/prd.md",
           "format": "unified-diff",
-          "sourceSha256": "04965ddc3e648e41b99cf553895deb7d2eb83ac6c1057e9a7ce80987671d0a78",
-          "beforeSha256": "04965ddc3e648e41b99cf553895deb7d2eb83ac6c1057e9a7ce80987671d0a78",
-          "afterSha256": "0834f138fe5fa299bab7415a762dd185d52e29d5abf982cb264d0e8c91a2df09",
+          "sourceSha256": "3806aff36c5880c3b15400efa3f634905b37c72a52cfb86a851cfe0a8fa04807",
+          "beforeSha256": "3806aff36c5880c3b15400efa3f634905b37c72a52cfb86a851cfe0a8fa04807",
+          "afterSha256": "8280436c5bbba45442b923409f1f729acab2e3712507ea4c7889acd3026ae0f3",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/eventstore/prd-2.patch",
-            "sha256": "0e3c8b6527b84e12a6d5d00bea1d99c71f34c27235a84e5cc380cd565ecbe538"
+            "sha256": "43bfcc51ecb83681876c41552ae578f121a692082ce014c256e77fc5f21c84e8"
           }
         },
         {
@@ -71,7 +71,7 @@
         },
         {
           "path": "Directory.Build.props",
-          "sha256": "0010f094df7f40bf9cecaaea4d47493737f9e9409d914c206d0396a64a406b81"
+          "sha256": "16cc5ef0edf1039f8f929a4a4ac813e12555e8f0a3617af5d35f02c9758502d5"
         },
         {
           "path": "package.json",
@@ -79,7 +79,7 @@
         },
         {
           "path": ".gitmodules",
-          "sha256": "b449c9b1f825b01d56f8273948765b20229c1faecb2f9ae358490dcf5a6828d4"
+          "sha256": "525f42108d15e83a41e6c52b3cdfef6c812642fa62fa314986818663db26f2ea"
         }
       ],
       "prerequisites": [],
@@ -87,66 +87,66 @@
     },
     {
       "name": "frontcomposer",
-      "ownerCheckout": "/home/administrator/projects/hexalith/frontcomposer",
+      "ownerCheckout": "../frontcomposer",
       "repository": "https://github.com/Hexalith/Hexalith.FrontComposer.git",
-      "baseRevision": "bc9dbedc6141b750ca92f01b40ac840dc2066704",
-      "observedOriginMain": "bc9dbedc6141b750ca92f01b40ac840dc2066704",
-      "observedOwnerHead": "eddca353d566554af527064925798ec827e07c36",
+      "baseRevision": "4cecae4e44a98ccd379c0327f258217c010046da",
+      "observedOriginMain": "4cecae4e44a98ccd379c0327f258217c010046da",
+      "observedOwnerHead": "4cecae4e44a98ccd379c0327f258217c010046da",
       "mainVerification": "local refs only; fresh remote verification required before delivery",
       "files": [
         {
           "path": "README.md",
           "format": "unified-diff",
-          "sourceSha256": "aeb42a8b3c3e140b1c682835f267e44c8101952d4d1d617a401a6270142ed560",
-          "beforeSha256": "aeb42a8b3c3e140b1c682835f267e44c8101952d4d1d617a401a6270142ed560",
-          "afterSha256": "e26b1716ec301452fbdf0117a63923f008aa41421b05d5a6ef2c8dc35bdb9009",
+          "sourceSha256": "bb5a605993350f80ff5525e9971d1a7ea134189a510afe879740912ce676c861",
+          "beforeSha256": "bb5a605993350f80ff5525e9971d1a7ea134189a510afe879740912ce676c861",
+          "afterSha256": "37feeeb82b4139ac5d2bebc30f132239e03505dfbcbb373a97465ce9ec71c5aa",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/README-0.patch",
-            "sha256": "3899851c52bb46b9ca1fc0e40e9f858d0f2d9e9541542f96c53f3a9d7d009268"
+            "sha256": "77d0f975442b298a21754fa49b85592e2b506bce6a9e961d76b33de2d6e947d3"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/prd.md",
           "format": "unified-diff",
-          "sourceSha256": "8514d629d0e07a48a33615e355261cd2966fa3c0e666f6d296dbdaa8219dbc02",
-          "beforeSha256": "8514d629d0e07a48a33615e355261cd2966fa3c0e666f6d296dbdaa8219dbc02",
-          "afterSha256": "3678771d31ba1de96cc7480faa4b3083d21496a2c35a52be529a8478ca9f1824",
+          "sourceSha256": "16441d68271633b24dd6444cefc4dbccff3a1d7c2d246e70736afac4093f8683",
+          "beforeSha256": "16441d68271633b24dd6444cefc4dbccff3a1d7c2d246e70736afac4093f8683",
+          "afterSha256": "119ad1c8865f50bd5c01092100c8651e370763444ffa57c4eaab4fc0bc3bda98",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/prd-1.patch",
-            "sha256": "6c6c0b27ffad0e42620febfcc8926d86c7245b4bdc8bc569507e4a0894f68532"
+            "sha256": "b4534a42a8dc19d3e675e80901cc3181d7711f6f2f8d9f4ca5e9fb929be2998b"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture.md",
           "format": "unified-diff",
-          "sourceSha256": "99762d05479c4883d3a56bd04b1f91220e48f4292c2ef188a7402dcecd856b4b",
-          "beforeSha256": "99762d05479c4883d3a56bd04b1f91220e48f4292c2ef188a7402dcecd856b4b",
-          "afterSha256": "a7f9bad11fec1999e26e4b81ce8ad8b92f9030319be926ab2b9ace7da5078e05",
+          "sourceSha256": "5e3e6c592276b96e82a55a8932756a8ebe2d6c62672abd5d065e989a3afb9631",
+          "beforeSha256": "5e3e6c592276b96e82a55a8932756a8ebe2d6c62672abd5d065e989a3afb9631",
+          "afterSha256": "54b595be6650c70337ce7bee51ece9a9f200c2b9f690405cfbfa29688b482ed0",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/architecture-2.patch",
-            "sha256": "d7c03fd85c7635acab627766c5f1c967582c4cd3a0de8f1e020071ca1a45fbba"
+            "sha256": "b176ac233e7f348d93e59102333f8833771daf8aac4bfed0937ac0bbac842ef6"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture/architecture-gov-1-2026-07-19/ARCHITECTURE-SPINE.md",
           "format": "unified-diff",
-          "sourceSha256": "9165dcac04b353a787659c7f1192e40b30e4b66f17e698d43c67e234f518053d",
-          "beforeSha256": "9165dcac04b353a787659c7f1192e40b30e4b66f17e698d43c67e234f518053d",
-          "afterSha256": "1361bbb7bc3cf7a5656cbd758461b2c4e2ae8f62b0d68089dba253bb528c168b",
+          "sourceSha256": "3d65dea8fe1e5ab0bb38c1dabb7819090aba24ca7a412166de8c10a8284f97f0",
+          "beforeSha256": "3d65dea8fe1e5ab0bb38c1dabb7819090aba24ca7a412166de8c10a8284f97f0",
+          "afterSha256": "e8f9f474b7047a8fb5b5650449ed1065e65dca28f1840782e1cc7432cc03b357",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/ARCHITECTURE-SPINE-3.patch",
-            "sha256": "ab07837f6fd7ced6eddee74ba45ea7816eeba05c9f6ff8d884474938c782e808"
+            "sha256": "2f3a7646e40810bd7878e4550605da391a804cfa7978a35953de8f59dd393b16"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/ux-designs/ux-frontcomposer-2026-09-09/EXPERIENCE.md",
           "format": "unified-diff",
-          "sourceSha256": "ce055c48989fe8a14e97ad48401f092ffe5b4bc1e91c1f58858d4c6e01eeb105",
-          "beforeSha256": "ce055c48989fe8a14e97ad48401f092ffe5b4bc1e91c1f58858d4c6e01eeb105",
-          "afterSha256": "35743d4618cf5382d7b6da5310f46b11ffab4fef39481f1c195993f9eefc017e",
+          "sourceSha256": "4c9d9d0fd6292e18bed669578abe0f353309cde81d30a5cd8f299a366734b155",
+          "beforeSha256": "4c9d9d0fd6292e18bed669578abe0f353309cde81d30a5cd8f299a366734b155",
+          "afterSha256": "93a2c690e6facc88491533be343cee1ef89f4713ebe061c5379def8868f61e1e",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/frontcomposer/EXPERIENCE-4.patch",
-            "sha256": "ffb188c10e9637a214892b1c9296fdc5dd8ce7458fd5011fb5aceda2e1f059cc"
+            "sha256": "363eec661a26ea6c2c3fe434f842bfb202bab940ebea332cf780786ce717052d"
           }
         }
       ],
@@ -165,7 +165,7 @@
         },
         {
           "path": "Directory.Build.props",
-          "sha256": "1e024875dc23cc4a6a66fb253b3a2c7264c404894d9b22fab8d8be762c059e46"
+          "sha256": "a0d3d75df5c22de3495429ce53b1df1701b95d92d120f79079b1ec16434b74eb"
         },
         {
           "path": "package.json",
@@ -173,7 +173,7 @@
         },
         {
           "path": ".gitmodules",
-          "sha256": "d12ed4e0821f5cf88fee1e1e5b2da13c8292e972369fde10d8d84d5ce3fb5a7d"
+          "sha256": "bd0c09b15d1501f5d609671cdd6d5506a0eef6224df1e95523ff69d6be74a9b7"
         }
       ],
       "prerequisites": [],
@@ -181,33 +181,33 @@
     },
     {
       "name": "memories",
-      "ownerCheckout": "/home/administrator/projects/hexalith/memories",
+      "ownerCheckout": "../memories",
       "repository": "https://github.com/Hexalith/Hexalith.Memories.git",
-      "baseRevision": "c64e292a46858058f6764095c8e01c2faa0ff3e0",
-      "observedOriginMain": "c64e292a46858058f6764095c8e01c2faa0ff3e0",
-      "observedOwnerHead": "0d79ebfbd8c16b49ef551ce3194198e5d8e990c1",
+      "baseRevision": "719820dbca5fb95e2f16f796b8a1124b2194d210",
+      "observedOriginMain": "719820dbca5fb95e2f16f796b8a1124b2194d210",
+      "observedOwnerHead": "719820dbca5fb95e2f16f796b8a1124b2194d210",
       "mainVerification": "local refs only; fresh remote verification required before delivery",
       "files": [
         {
           "path": "README.md",
           "format": "unified-diff",
-          "sourceSha256": "6e6b45a2caf2756e9db25d9f55d4d4c787a88b7af24ee725264e596758c9e835",
-          "beforeSha256": "d5a12b07d95676a554eb6fdfffb6e48fa60cbabd2b4a976885c92b1249bc0a9a",
-          "afterSha256": "d9d07dd862587de3bef9e93dc67e6c3689f32938cbda0534697b8d92517ae4e0",
+          "sourceSha256": "f7682d46f1354e437de45ff17955804c3ce33f7bae41b6a036e031aa7bc6664f",
+          "beforeSha256": "f7682d46f1354e437de45ff17955804c3ce33f7bae41b6a036e031aa7bc6664f",
+          "afterSha256": "ec5c5a411a47f17eb41d6c846f844024325a77fd60705089da842167bcf9e69c",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/memories/README-0.patch",
-            "sha256": "06e110a7cf9ac41a004b99309333f045b6d1a6a92e994fd5cc0a0eaa336921b1"
+            "sha256": "09628c9ed683a6657ae69204cdc105d1b9d7549a55a4c0aec20089dcee9fce66"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/prd.md",
           "format": "unified-diff",
-          "sourceSha256": "cfb798c177ab0d2dc8c0dc7b7196ced3e98a3d7abff53f388e69c0963807b50a",
-          "beforeSha256": "cfb798c177ab0d2dc8c0dc7b7196ced3e98a3d7abff53f388e69c0963807b50a",
-          "afterSha256": "53863ab18b209dba2ca4cefa4c527be8cba229deb8ca64030d09975b212284fa",
+          "sourceSha256": "7a6047735b70f3c463fb9fa3936a2c92eeb609d8d7669ef20b5e928787ac9d74",
+          "beforeSha256": "7a6047735b70f3c463fb9fa3936a2c92eeb609d8d7669ef20b5e928787ac9d74",
+          "afterSha256": "63551b676c336ab6ec4a3772a28bd779485f8614a51ba8968dc77b5e534ad92b",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/memories/prd-1.patch",
-            "sha256": "14c2fab32be3e1aeb8a28492da076c44e326b9fb010fdd701cdf572dbe65ce4f"
+            "sha256": "2d5192f72bbeb1c9cafa1ba6ebb3ec7ec9e92d6384c46221bab07766c1eed9b5"
           }
         },
         {
@@ -224,20 +224,20 @@
         {
           "path": "_bmad-output/planning-artifacts/architecture/architecture-memories-2026-09-09/ARCHITECTURE-SPINE.md",
           "format": "unified-diff",
-          "sourceSha256": "9d418ea6203cc29689d18f1f8302456bb8363ef8af639a3c7cdd738f9816d688",
-          "beforeSha256": "9d418ea6203cc29689d18f1f8302456bb8363ef8af639a3c7cdd738f9816d688",
-          "afterSha256": "5c7cd578bf223f070f72a0e567fae4b3d761eb0b2c82249eaa3c064fd0b1d35e",
+          "sourceSha256": "58d3567b0f61459406527642981da80d360b79cbfcf5d358ee1798f92d81aa49",
+          "beforeSha256": "58d3567b0f61459406527642981da80d360b79cbfcf5d358ee1798f92d81aa49",
+          "afterSha256": "7b79d6ec5680ae6d16fa3e7b409995da75932158aafc8006fcff23c882c3ca4f",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/memories/ARCHITECTURE-SPINE-3.patch",
-            "sha256": "2fbdabd37aa4a24d944c87ff53fc8e29cf52141f29e78ab1b488f044cc79279c"
+            "sha256": "a49f52735d2f5900665ffe46cf41cc1f5c6af2bc325d6ee0c0fe8006ced71397"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/ux-designs/ux-memories-2026-09-12/EXPERIENCE.md",
           "format": "unified-diff",
-          "sourceSha256": "624cb837fdfbcc95465e6e5c733ac55a8a2d7387396216d695bb636ccc52b8f6",
-          "beforeSha256": "624cb837fdfbcc95465e6e5c733ac55a8a2d7387396216d695bb636ccc52b8f6",
-          "afterSha256": "3ca89252954351b64c5a53ad26fd7ea74aa841fb0a4da942bb7ade30f684769f",
+          "sourceSha256": "8ba52815287b0a8a06b77a123e8a9690dbdbb16c1b19f778e86069b79fd4172f",
+          "beforeSha256": "8ba52815287b0a8a06b77a123e8a9690dbdbb16c1b19f778e86069b79fd4172f",
+          "afterSha256": "d415f8ed5d5c71cd241dd5c0142d57e3a54fb38fd6dc0d8482c4350108fe5492",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/memories/EXPERIENCE-4.patch",
             "sha256": "185d6a8f1614f4e41154a4c2386590e2e76ca7980dd33216b8faaad08542792e"
@@ -259,48 +259,46 @@
         },
         {
           "path": "Directory.Build.props",
-          "sha256": "9016a7f28265b19443424c321983bf7d58c9755c17ea219d26b6f2466e5e7925"
+          "sha256": "a9cca7b52951be0ba6144228c3128728d40144a23b7d307eeb0a798eccade67f"
         },
         {
           "path": "package.json",
-          "sha256": "07683dd2c5153b1172719222c5d2ad6e5e7ac66e8de59eea2dc77054b08cccd6"
+          "sha256": "35b50170e5def8c7e96a773806c87833970d35f5865bba9f5aa42d49f87f8d7d"
         },
         {
           "path": ".gitmodules",
-          "sha256": "2f2ae7aad8edc995eef00c75d9635a933a9fec4bc6708da4a6e463e832260b8c"
+          "sha256": "5db89a9cecf82dc51d5baa1e410a4187cdf7e65bbbc24cf27519f4d3812dd91f"
         }
       ],
-      "prerequisites": [
-        "Story 5.10 exact README section integration"
-      ],
+      "prerequisites": [],
       "integration": null
     },
     {
       "name": "chatbot",
-      "ownerCheckout": "/home/administrator/projects/hexalith/chatbot",
+      "ownerCheckout": "../chatbot",
       "repository": "https://github.com/Hexalith/Hexalith.ChatBot.git",
-      "baseRevision": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
-      "observedOriginMain": "6a4ca07b18e9b58500dc79dfede1f308da36c828",
-      "observedOwnerHead": "82f20d5ecca74993f93e73151a6ae3766d3d6a1d",
+      "baseRevision": "523dae0f44fded0738d68f019cc5ddedfb8f0456",
+      "observedOriginMain": "523dae0f44fded0738d68f019cc5ddedfb8f0456",
+      "observedOwnerHead": "523dae0f44fded0738d68f019cc5ddedfb8f0456",
       "mainVerification": "local refs only; fresh remote verification required before delivery",
       "files": [
         {
           "path": "README.md",
           "format": "unified-diff",
-          "sourceSha256": "6b3874701fbb50035d7187d92e740a1cb07080eddaa2910404fe1dd7ec114c03",
-          "beforeSha256": "e6d142d116365628a5cbf9e466ea02177875168901f6ced7647994dcc339d97d",
-          "afterSha256": "b75ff7803cebda1b48d309d70481862509a1fab2cadf829f3f1b238a4baa8396",
+          "sourceSha256": "2cace945d1b946450727bb21d89447f14b20652a1c862d50123ea1245ddb7070",
+          "beforeSha256": "2cace945d1b946450727bb21d89447f14b20652a1c862d50123ea1245ddb7070",
+          "afterSha256": "01a8db02b23f708b7b597cbd09bd757e26a2faf710791c0e30bfd24f5505bbd3",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/chatbot/README-0.patch",
-            "sha256": "7172ba1ca49bdd98e41160d469fbf83702567499f6aea21361e07b66c1567a41"
+            "sha256": "652501223087b68d9e36a3c1652a50a9807ae65f5558e7031ec46ed15f2abf9a"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture.md",
           "format": "unified-diff",
-          "sourceSha256": "f7d51c6ddc83e91684d6f118dd7596d212d608ccf40a512991d65a707e542b07",
-          "beforeSha256": "f7d51c6ddc83e91684d6f118dd7596d212d608ccf40a512991d65a707e542b07",
-          "afterSha256": "ac71a6aa2e398c2f5a7b57f08bfa1038ba755932e130dd9104d24ee9ffae6c70",
+          "sourceSha256": "4f2b4460dacead4bdaf6e8675485951e57ab2c32c34e82bd3d7947281a2027ca",
+          "beforeSha256": "4f2b4460dacead4bdaf6e8675485951e57ab2c32c34e82bd3d7947281a2027ca",
+          "afterSha256": "428f0f0e9944a64187fe8f7505c7e2887b7bcaf7481bb8ea1a90adf3368615fd",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/chatbot/architecture-1.patch",
             "sha256": "5438e1ad976f437094ddd71c1ce7cecdf2d74302fa9b7cf70413a6a7cc29e5b9"
@@ -355,62 +353,56 @@
         },
         {
           "path": "Directory.Build.props",
-          "sha256": "271e92cca258c7ba9bb56bbc83819ae1fcc50cc9ccc9538b18f80205f0320458"
-        },
-        {
-          "path": "package.json",
-          "sha256": "e0ebd9f96dddac22b4214e886ab8f1d4899412ce396ba525efcdeb93246d6139"
+          "sha256": "65871206537250574d994e9ab8e097a9802352a9fa613ae645dde6295e0bed4b"
         },
         {
           "path": ".gitmodules",
           "sha256": "aa37a80a3309238eae41a784c2028698d9f828ef6ced9885693e8496834ba959"
         }
       ],
-      "prerequisites": [
-        "Story 5.10 exact README section integration"
-      ],
+      "prerequisites": [],
       "integration": null
     },
     {
       "name": "folders",
-      "ownerCheckout": "/home/administrator/projects/hexalith/folders",
+      "ownerCheckout": "../folders",
       "repository": "https://github.com/Hexalith/Hexalith.Folders.git",
-      "baseRevision": "a448d20873dc9e809623f85da206e8d8a13bb9ab",
-      "observedOriginMain": "a448d20873dc9e809623f85da206e8d8a13bb9ab",
-      "observedOwnerHead": "a448d20873dc9e809623f85da206e8d8a13bb9ab",
+      "baseRevision": "d58d5d7a54f63f7223b972f22f11c58510a94119",
+      "observedOriginMain": "d58d5d7a54f63f7223b972f22f11c58510a94119",
+      "observedOwnerHead": "d58d5d7a54f63f7223b972f22f11c58510a94119",
       "mainVerification": "local refs only; fresh remote verification required before delivery",
       "files": [
         {
           "path": "README.md",
           "format": "unified-diff",
-          "sourceSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e",
-          "beforeSha256": "228aac2064479d11841b99c58d35224ef2540cbea73a19fd388211c448013e8e",
-          "afterSha256": "8027af614c12c482a2a94e640b1a1f8ce31431e425744f2b1f8d8cd1ff8f4d9e",
+          "sourceSha256": "1de0b2883c444f377ead31b5029e4680759595fb0ec99602fb66d8d4c35d5438",
+          "beforeSha256": "1de0b2883c444f377ead31b5029e4680759595fb0ec99602fb66d8d4c35d5438",
+          "afterSha256": "5fcae5d85cb3615d730d0317a15e0124ab15caca2739b6a012f1a667f6308ac0",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/folders/README-0.patch",
-            "sha256": "7ebb46508120220755d56ff88d6b5924c59b0d31a317d0c996c4678f490aec87"
+            "sha256": "3bcfc40adec39081155636688fcf106eb02271bf1a30f1f3257f11dfa25c4dee"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/prd.md",
           "format": "unified-diff",
-          "sourceSha256": "1b422c87b889bcfa9954a360de7f11e936a0b34b569ff61e57363b8e7a03d7ac",
-          "beforeSha256": "1b422c87b889bcfa9954a360de7f11e936a0b34b569ff61e57363b8e7a03d7ac",
-          "afterSha256": "a6436ae1b55c565329d9cc2583ac639ae0e703c2a0b79a15d5156eab53320ca9",
+          "sourceSha256": "b7b456d5ec056b7e857d2aa538b958171d10553ca31e3e483fdbf4f2f42fa8f1",
+          "beforeSha256": "b7b456d5ec056b7e857d2aa538b958171d10553ca31e3e483fdbf4f2f42fa8f1",
+          "afterSha256": "506608442370f0676fb137ff6132de5e7f786b83598b32c5d2e42cfd64e5769c",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/folders/prd-1.patch",
-            "sha256": "509fe806151641fb9755c6a8980074e6c24859ab375600e46555fc6f4c431741"
+            "sha256": "2894ee6e76e22a8fe7f1e0e0d80d331ff0673bac5f55e9fda8cf3e53b6b03ea7"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture.md",
           "format": "unified-diff",
-          "sourceSha256": "54e18f3a6b26a43bdb84ff2720255ea604df52b375f5a406d5f26d3b727e8239",
-          "beforeSha256": "54e18f3a6b26a43bdb84ff2720255ea604df52b375f5a406d5f26d3b727e8239",
-          "afterSha256": "594dd7ad9a3f2ce06f38405e485814990bb91ae42c9bd5fe138b7e8b71f1b622",
+          "sourceSha256": "e20fc3b513fd98db6618955ab3f5b40edc5190771a7a75dfd2c1da2a1d8659a2",
+          "beforeSha256": "e20fc3b513fd98db6618955ab3f5b40edc5190771a7a75dfd2c1da2a1d8659a2",
+          "afterSha256": "f00e5fad54bd8fc732673c93d194978d05513a526adc7708ad5e89e37742ea27",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/folders/architecture-2.patch",
-            "sha256": "8a41e753f6d9107db77df21934efeacd99efa1c936113bc84192cf894c565287"
+            "sha256": "a28db7fb5a797b80d1971810a44992f1149fcfcc8447ae8fcdd910f9d41fb070"
           }
         }
       ],
@@ -429,15 +421,15 @@
         },
         {
           "path": "Directory.Build.props",
-          "sha256": "52eecf43508ec72c08411e08525c34dd2f57159c0bf1ce5ef1589791e7cce375"
+          "sha256": "e11099a7b8d705ffa12c1d9d5adf17fb8b34717d5b79b7fd1e0c0e1c2c36f32c"
         },
         {
           "path": "package.json",
-          "sha256": "6b5664539a0ce0e65c6b42e2427a9a2f8b28cd3e7ced519f17c635e7cd77e44e"
+          "sha256": "b00cc1a19ed9fbe6f3c1ad93d02ae159dbc3a7a1c38fd119f1cfd216a9e43e31"
         },
         {
           "path": ".gitmodules",
-          "sha256": "c9daa495deb0a5903771cbbfeef10f6d376a3e521c8f6ad7447aae689c5bcf37"
+          "sha256": "79da3f30d3fed045bd35121a66867c15aac071ce4dae56023d7b0ff8be2d2470"
         }
       ],
       "prerequisites": [],
@@ -445,11 +437,11 @@
     },
     {
       "name": "projects",
-      "ownerCheckout": "/home/administrator/projects/hexalith/projects",
+      "ownerCheckout": "../projects",
       "repository": "https://github.com/Hexalith/Hexalith.Projects.git",
-      "baseRevision": "981ceef13a1abc88219925e73c51a23eb9ac50c2",
-      "observedOriginMain": "981ceef13a1abc88219925e73c51a23eb9ac50c2",
-      "observedOwnerHead": "981ceef13a1abc88219925e73c51a23eb9ac50c2",
+      "baseRevision": "baf6fa066d973eb50bfbb2d53168146da01968d6",
+      "observedOriginMain": "baf6fa066d973eb50bfbb2d53168146da01968d6",
+      "observedOwnerHead": "baf6fa066d973eb50bfbb2d53168146da01968d6",
       "mainVerification": "local refs only; fresh remote verification required before delivery",
       "files": [
         {
@@ -457,43 +449,43 @@
           "format": "unified-diff",
           "sourceSha256": "f809886a1b253c07b39206941ff09af18ec1be876c6812149fa1fdb6056e1da6",
           "beforeSha256": "f809886a1b253c07b39206941ff09af18ec1be876c6812149fa1fdb6056e1da6",
-          "afterSha256": "a2747753c6cf01583d53423e8396d72788048613daadd05ad8d488950e36d9af",
+          "afterSha256": "bb726f9bea1f84dac78ed5cfed6c700251427a155c39d882d64571284ec922dc",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/projects/README-0.patch",
-            "sha256": "dab42c25a1501f8c8ab4c37ba7cb733c4a4bf2f496b8f0d8a7a9729a4a2f3b87"
+            "sha256": "5d76bfc0848707526db950607ad07ffb8170f47a9fd7c18cb8b6064c8557bacc"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/epics.md",
           "format": "unified-diff",
-          "sourceSha256": "b95c38c946b267872f5b8e64e8e1fc87d952211da53b8d98c1e7cb3bf757e057",
-          "beforeSha256": "b95c38c946b267872f5b8e64e8e1fc87d952211da53b8d98c1e7cb3bf757e057",
-          "afterSha256": "626f786eb61333ab8ae03e5be7c33192269e8d074342c57bc9b6d380db4da502",
+          "sourceSha256": "6b61a4053fd3cd48ebba245ab321ed2f1dba740b584fa5d74b50c80f371be67c",
+          "beforeSha256": "6b61a4053fd3cd48ebba245ab321ed2f1dba740b584fa5d74b50c80f371be67c",
+          "afterSha256": "366d1dfe228ab24d2427eaab2fe1bb3e051634a85bf9c74e604442aab3a5b4bf",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/projects/epics-1.patch",
-            "sha256": "baa458f6f08f04e39bf5d297bc83212d95234f091ddf39fac4aa8a2b80ea60ec"
+            "sha256": "bba73269728132c18a8a315035617559df3fd243081113d35a579ce01a178717"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/prds/prd-Hexalith.Projects-2026-05-24/prd.md",
           "format": "unified-diff",
-          "sourceSha256": "64a562004f02c67fa726cafd6726143cc4ebf4263f9f1ae8a3d3dfb53ec41a8c",
-          "beforeSha256": "64a562004f02c67fa726cafd6726143cc4ebf4263f9f1ae8a3d3dfb53ec41a8c",
-          "afterSha256": "e86aa5705b02837119feae20c420d24377d6b01d22136c15974e39e75a150022",
+          "sourceSha256": "57400fe8889deb38b47b6e9fb080a0dee2fcbb544772bbe6dcb1d5fe69ae8e34",
+          "beforeSha256": "57400fe8889deb38b47b6e9fb080a0dee2fcbb544772bbe6dcb1d5fe69ae8e34",
+          "afterSha256": "573b924eca9d62feb1836635320f34cc8308750ecda283695de8a1f9a5b41135",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/projects/prd-2.patch",
-            "sha256": "7a17114e314121a311e0463b6928d3a4f2d3ed7718d3e87d295e8fdad35607ae"
+            "sha256": "424d61c37e602daac33b87dbf5cb4b2e198728b362c6f7d3268e3855c640b55d"
           }
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture/architecture-projects-2026-07-15/ARCHITECTURE-SPINE.md",
           "format": "unified-diff",
-          "sourceSha256": "4e35f75f8a84982c21b2fc663168a52706ea1bfc52a843d90cdae9bd8f0200f9",
-          "beforeSha256": "4e35f75f8a84982c21b2fc663168a52706ea1bfc52a843d90cdae9bd8f0200f9",
-          "afterSha256": "c30dcf667aa4785abb8eda77d61a0050da8932080ea6625d45229a5acc7a05b6",
+          "sourceSha256": "4c38ce600e5e306b401962974595c3487a56114b54584a91614c0551d6622b8f",
+          "beforeSha256": "4c38ce600e5e306b401962974595c3487a56114b54584a91614c0551d6622b8f",
+          "afterSha256": "80378a8e184fa4534fae0c044abaab0f0fdfda5dd808e263ad9b979928f84e23",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/projects/ARCHITECTURE-SPINE-3.patch",
-            "sha256": "ce66774b3c6bb4a914d74ed0ece28e499ed0a30bd561cc0144cd1d42528a06bc"
+            "sha256": "936bc6ad9d9427a153df5372ec8182fea6bc0150f5675d92b9617e52453932a4"
           }
         }
       ],
@@ -508,19 +500,19 @@
         },
         {
           "path": ".gitattributes",
-          "sha256": "158620e9b45b7f4077fbf47f78a943e7134f97c56adb39b0463150b2af45077d"
+          "sha256": "3ed5785e8db27d64f07d895049651cca04f495351010e1f894d6fe0d7c21bc2b"
         },
         {
           "path": "Directory.Build.props",
-          "sha256": "22fea9a8cfdd5ced9e340ce71eb0f7e645d444ca36e636efe518d9e51b2b6e96"
+          "sha256": "d553a1624a824f0a6b954aa5b596fe698b8aef87c0e288fa028571061e1e634a"
         },
         {
           "path": "package.json",
-          "sha256": "c247649851bdcec441bad40d5e7d5148cdde498524c576a35fa33a56557dc300"
+          "sha256": "ed9b300a55615d6d949217e1b0f5a039522ff80625d098001fe9536c8a6515ec"
         },
         {
           "path": ".gitmodules",
-          "sha256": "5b5054ea8ed4804a52a792e8bd0f77f8a6d6ecdd8185b58840c0fdc7da7946dc"
+          "sha256": "47375377cce70c97ad6db57163190a36d43eac121f5e73f0b232e7ded7bb86a2"
         }
       ],
       "prerequisites": [],
@@ -528,22 +520,22 @@
     },
     {
       "name": "tenants",
-      "ownerCheckout": "/home/administrator/projects/hexalith/tenants",
+      "ownerCheckout": "../tenants",
       "repository": "https://github.com/Hexalith/Hexalith.Tenants.git",
-      "baseRevision": "292dbf164f26bcf376ef86d749b149b075f8b502",
-      "observedOriginMain": "292dbf164f26bcf376ef86d749b149b075f8b502",
-      "observedOwnerHead": "292dbf164f26bcf376ef86d749b149b075f8b502",
+      "baseRevision": "1e6d2aa2be64771a96b0dbe84289e0bf88611311",
+      "observedOriginMain": "1e6d2aa2be64771a96b0dbe84289e0bf88611311",
+      "observedOwnerHead": "1e6d2aa2be64771a96b0dbe84289e0bf88611311",
       "mainVerification": "local refs only; fresh remote verification required before delivery",
       "files": [
         {
           "path": "_bmad-output/planning-artifacts/architecture.md",
           "format": "unified-diff",
-          "sourceSha256": "a01a1091bb62cc023081ca6fbc281369ad60619b478093e98f5045416d18a692",
-          "beforeSha256": "a01a1091bb62cc023081ca6fbc281369ad60619b478093e98f5045416d18a692",
-          "afterSha256": "4ab98f3ee50f60fa04a7842cc9d9e720845fa0102ab498a6c41e2bd8d2c55cc9",
+          "sourceSha256": "303016b064725c17e3379754ffcc28f6417eca044a03f1f4c2014db1b298b1fa",
+          "beforeSha256": "303016b064725c17e3379754ffcc28f6417eca044a03f1f4c2014db1b298b1fa",
+          "afterSha256": "faf7cb6262e9392246f1218a64984b9827ba867b155fd234731d33d20b52e715",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/tenants/architecture-0.patch",
-            "sha256": "a8b9e693a844da29618cfd05dad68a9e1c05f1531fad6aadb157ae8a2ffe3ffd"
+            "sha256": "df6df28da442537a0bb10b4b7eb8e765adb28be452fc5d7a3705f07bdfc906fd"
           }
         }
       ],
@@ -562,15 +554,15 @@
         },
         {
           "path": "Directory.Build.props",
-          "sha256": "f76b43facdc3aa3d3bd68de595838bd5a7e4c338c714bfe106a39a8efc91ae2d"
+          "sha256": "3518b22383c392d9a8a962688ba3e66de0405837965db888e854d6a2a13c97b2"
         },
         {
           "path": "package.json",
-          "sha256": "14ac291c79617a9c09b49cdef8c0d8a371a710279d21bea13c842d1ebfc8d09e"
+          "sha256": "49c9263c86443cc33c56ae430de8826633091ccff13cfd13abfb7ba86bb1b8e2"
         },
         {
           "path": ".gitmodules",
-          "sha256": "372ae4525c40a32e202a3b2bb507bd13e191b3464838c9ee715349a7356a3a22"
+          "sha256": "df3136fe2ed2a4414b2028e3bc444852936e801cd8a7f94e7e01e04f96112da7"
         }
       ],
       "prerequisites": [],
@@ -578,22 +570,22 @@
     },
     {
       "name": "parties",
-      "ownerCheckout": "/home/administrator/projects/hexalith/parties",
+      "ownerCheckout": "../parties",
       "repository": "https://github.com/Hexalith/Hexalith.Parties.git",
-      "baseRevision": "a575021fc97a8eda664711089270b60f5e570ded",
-      "observedOriginMain": "a575021fc97a8eda664711089270b60f5e570ded",
-      "observedOwnerHead": "a575021fc97a8eda664711089270b60f5e570ded",
+      "baseRevision": "382407df93d1b7da40cd624f9fe6c46e53f7ec06",
+      "observedOriginMain": "382407df93d1b7da40cd624f9fe6c46e53f7ec06",
+      "observedOwnerHead": "382407df93d1b7da40cd624f9fe6c46e53f7ec06",
       "mainVerification": "local refs only; fresh remote verification required before delivery",
       "files": [
         {
           "path": "README.md",
           "format": "unified-diff",
-          "sourceSha256": "d14b9c166d7ed47442b3a87b88fbab792fcb013e5b896c7f1138a1abb721f704",
-          "beforeSha256": "d14b9c166d7ed47442b3a87b88fbab792fcb013e5b896c7f1138a1abb721f704",
-          "afterSha256": "3b16233773856e3cb3a61d39f2f7c86339a23a09c163095507c076cac68e2f95",
+          "sourceSha256": "0671f283f7ec66468604eadb8dde202012d2a0c9f9502c0c2bf8909957376f66",
+          "beforeSha256": "0671f283f7ec66468604eadb8dde202012d2a0c9f9502c0c2bf8909957376f66",
+          "afterSha256": "6b88f63d6badb1c6449d91ff41b399376549b21d61eae2d19dd962dcaa1ebc52",
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/parties/README-0.patch",
-            "sha256": "e4ae928b309b8169f807c362c5503c3f1a1837e3dab50dea5c673de973ed3dcd"
+            "sha256": "f5c7dd4832615f119e9462d8ced60dee4011cf63f87f17ba5e4dbf9b616de11c"
           }
         }
       ],
@@ -608,19 +600,19 @@
         },
         {
           "path": ".gitattributes",
-          "sha256": "07fbd781011c884afb939a6d0d7825f9c89dc2f57db89115f33f0498ac51b931"
+          "sha256": "ca3a529f479171d1f1c9fdb7b19480d555d2b95fae2d64d4bf2a20f43cf7a529"
         },
         {
           "path": "Directory.Build.props",
-          "sha256": "37a3d0f5c1c96d70c5533902229c13a3ad66d5de09854466c983c5218c88f9d9"
+          "sha256": "1806626b806e4b6c77fca3b151e5944a71dcaa548fcb81af625151fd42af8e48"
         },
         {
           "path": "package.json",
-          "sha256": "419d29782dd17ffe219fd9b7fec0c1cf839b25b72cf0b66a505129a8ebbc9547"
+          "sha256": "2e4dd174de02b3df1d30d8b0ed9a8e7a8f98a9c8005c4ad0842fe00815d1015c"
         },
         {
           "path": ".gitmodules",
-          "sha256": "86d41a35fe64cf6e12e68e7ec7ee9d97081a97464c66222d342cab084550f1b6"
+          "sha256": "0bf3d30ed42f5ada3ba6a604eb7cb60ea7a836feb50ec3db57a53df1ffd8fc3c"
         }
       ],
       "prerequisites": [],
@@ -628,35 +620,35 @@
     },
     {
       "name": "ai-tools",
-      "ownerCheckout": "/home/administrator/projects/hexalith/aitools",
+      "ownerCheckout": "../aitools",
       "repository": "https://github.com/Hexalith/Hexalith.AI.Tools.git",
-      "baseRevision": "736687b79c1e4fa8beabdab75c4675bb76c466b9",
-      "observedOriginMain": "736687b79c1e4fa8beabdab75c4675bb76c466b9",
-      "observedOwnerHead": "736687b79c1e4fa8beabdab75c4675bb76c466b9",
+      "baseRevision": "87a738ceeba8975c0b087bc5ecee7dfbc14bf73c",
+      "observedOriginMain": "87a738ceeba8975c0b087bc5ecee7dfbc14bf73c",
+      "observedOwnerHead": "87a738ceeba8975c0b087bc5ecee7dfbc14bf73c",
       "mainVerification": "local refs only; fresh remote verification required before delivery",
       "files": [
         {
           "path": "hexalith-mcpcli-migration-instructions.md",
           "sourceSha256": "8ffbe4485aa92d13fa6cc759f28744a0243b9bec02317769164deb22386392a4",
           "beforeSha256": "8ffbe4485aa92d13fa6cc759f28744a0243b9bec02317769164deb22386392a4",
-          "afterSha256": "181f68d8f5900b6a900baa5280af2a0d9ac27cd253d9003241f44cec31dea15e",
+          "afterSha256": "d6c7d5cc14ba585d8270586b24478ba9a666ba5a65074cc1cf3f2ef308ee9ee0",
           "candidate": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/ai-tools/hexalith-mcpcli-migration-instructions.md",
-            "sha256": "181f68d8f5900b6a900baa5280af2a0d9ac27cd253d9003241f44cec31dea15e"
+            "sha256": "d6c7d5cc14ba585d8270586b24478ba9a666ba5a65074cc1cf3f2ef308ee9ee0"
           },
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/ai-tools/hexalith-mcpcli-migration-instructions.md.patch",
-            "sha256": "5578047f6695b2c2084ab5bc7d390f9d337fcdb810b142637f978973230e9703"
+            "sha256": "ce8887a41622c5bccc1cbbc9af51c5e276879cda581a39c596d9cdc3285cc8cf"
           }
         },
         {
           "path": "hexalith-llm-instructions.md",
-          "sourceSha256": "c25effd596bc2e93a3abd1cb2d610dd96b4a92a02441b42905fd282def1bc6c1",
-          "beforeSha256": "c25effd596bc2e93a3abd1cb2d610dd96b4a92a02441b42905fd282def1bc6c1",
-          "afterSha256": "d6ce3957db9736d80760594a1e067e1b5a2011f3dab0278e879e051d0baaeeb0",
+          "sourceSha256": "9ffc563ed0b82a8191ca8162f5b451a54ac98d17dbe4216d05c2bc65251fb8ae",
+          "beforeSha256": "9ffc563ed0b82a8191ca8162f5b451a54ac98d17dbe4216d05c2bc65251fb8ae",
+          "afterSha256": "9a3f0bcb83560b6144bb18062b82f5e607abf1e093703fae03bbc91b97f38e6b",
           "candidate": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/ai-tools/hexalith-llm-instructions.md",
-            "sha256": "d6ce3957db9736d80760594a1e067e1b5a2011f3dab0278e879e051d0baaeeb0"
+            "sha256": "9a3f0bcb83560b6144bb18062b82f5e607abf1e093703fae03bbc91b97f38e6b"
           },
           "patch": {
             "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/upstream/ai-tools/hexalith-llm-instructions.md.patch",
@@ -676,26 +668,26 @@
   "noChange": [
     {
       "name": "platform",
-      "revision": "22730bce0f629195f0d085c258fca23a12932cc1",
+      "revision": "0f6468edbb8efd4e47fb272286cb1bfd5baa3255",
       "inspected": [
         {
           "path": "README.md",
-          "sha256": "fbaccffa32e96d9a007c4d2e9835092b2d23d06e3570530cbdd768e6246b3b52"
+          "sha256": "8fdc255ee71a73e1a96427ccfbd472c86256d2ec0a6b4b3b8a8c80e9fe9ea7fb"
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture/architecture-platform-2026-09-27/ARCHITECTURE-SPINE.md",
-          "sha256": "ce44f85ddc5ecb51e00d6d52c335f3d0e6febc120a9739a57581835e4208a24d"
+          "sha256": "bfd139e9a910f909fd959b6f08fbc3d96f15581a74039c2c0e3ef17fedacb884"
         },
         {
           "path": "_bmad-output/planning-artifacts/prds/prd-platform-2026-09-27/prd.md",
-          "sha256": "2982afce9c48509e5e9d83890539d585b47c3f4b15f2c34b0e33cb9ba6a72135"
+          "sha256": "cef2244b27f44a15a2e884cee4f0bc18ea2476407c8d5dcfa9e494097ce7670c"
         }
       ],
       "reason": "FR15/AD-14 already require eligibility, confidential UI and confirmation denial"
     },
     {
       "name": "agents",
-      "revision": "805b35da01efe4d3ac5f1402e611950ac282d0a1",
+      "revision": "0d98305f91899a088ddad0b0a23a596453913274",
       "inspected": [
         {
           "path": "README.md",
@@ -703,14 +695,14 @@
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture/architecture-agents-2026-06-23-2/ARCHITECTURE-SPINE.md",
-          "sha256": "cf1f3f1fc3a486eedde90e5115c24259d9b37dbf3b03dbe83ed5afc2898c4378"
+          "sha256": "f50e1b6eddf7f3b7b0affb7a453ddadd3b02ec000ec487dec7d817b4222c7bb5"
         }
       ],
       "reason": "existing correction banner qualifies future shared-head access"
     },
     {
       "name": "conversations",
-      "revision": "07b7bca399f3cf68dbc7eb07f2f6c29a744a4206",
+      "revision": "a252b7f6cc7f758a7d10bdc745caade0c77cabe1",
       "inspected": [
         {
           "path": "README.md",
@@ -718,70 +710,74 @@
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture.md",
-          "sha256": "948d9c98d99d2453a1ff3904f4f05392b3a2959e379c5fd6e466dc20ed1f05be"
+          "sha256": "a5072bb2611865c9a28fe51feb8ae1f8d377c2c79c9b8469a83b581441a4185a"
         }
       ],
       "reason": "existing correction banner qualifies future shared-head access"
     },
     {
       "name": "timesheets",
-      "revision": "bbb91319ee209333d29f07e53bd9b5e4adc40267",
+      "revision": "151fd37308eb08f942040c283209e7886ad954a6",
       "inspected": [
         {
           "path": "README.md",
-          "sha256": "da1ad2d66eb7f198175f5a9bc65f0449c0a392d3cd83a1b0c76e5c49631db372"
+          "sha256": "4bad0edb65934bdfe1fbc73b7240c24b83dd4da6c68b6c8d33f8c0f513a0380a"
         },
         {
           "path": "_bmad-output/planning-artifacts/architecture.md",
-          "sha256": "c65d0a6457b1c9f4c299f171aaa314fbecf119ff25c41767c220dc8751c0b018"
+          "sha256": "0ed2658143af694e8f6069ac2a55716701e2fdba879f46813f06a495e61eb5e4"
         }
       ],
       "reason": "existing correction banner qualifies future shared-head access"
     },
     {
       "name": "works",
-      "revision": "2e9fafba151a184eb4552796db7eecc25ffaf8c7",
+      "revision": "cd617eb1edc6c51a1459eaa8967e8a5acde4745a",
       "inspected": [
         {
           "path": "README.md",
-          "sha256": "7edced1677572f24b61c0618627199ac9c357f96b492a9f611defcdcd6403d7d"
+          "sha256": "1aa7c028bd015612eb5fad0cbae1c5c533880da687799990ce7543fe312b52cd"
+        },
+        {
+          "path": "_bmad-output/planning-artifacts/architecture.md",
+          "sha256": "7f22b4508478ca860375027382751f4c21ff4077ac0376e6899d573d957055c0"
         },
         {
           "path": "_bmad-output/planning-artifacts/prds/prd-works-2026-06-14/prd.md",
-          "sha256": "78c5d10e92da41be068ecc04126bf9e7c14b837267a0b0541a026f99ce6d1ee2"
+          "sha256": "4e3d80cdc1a69d6547d0c4ca50fe19ee72b0b9fc42be9ca89f4ee9e27ae5ba12"
         }
       ],
       "reason": "existing correction banner qualifies future shared-head access"
     },
     {
       "name": "builds",
-      "revision": "fdda17c0a4538b0f7c99f813c20ca24b49006530",
+      "revision": "27fe4d62ca1f3cce07a9f19e1e30b02cbaa51357",
       "inspected": [
         {
           "path": "README.md",
-          "sha256": "2b555913c6e2932a270645ee118f321059a8d99ea52d671af42179070ea45cc4"
+          "sha256": "920f683c71351205c0863d4da96056b32cd08daed3681e041f5cf5614dfffe45"
         }
       ],
       "reason": "exempt developer tooling; CiCd-owned files untouched"
     },
     {
       "name": "commons",
-      "revision": "11555ace9efcae2928a00122dcba91243e5a8a1a",
+      "revision": "258f9d20e33bd0ae411cf8b3836a26a131f5b9ae",
       "inspected": [
         {
           "path": "README.md",
-          "sha256": "9df0af53c976fbb177855f1f059d7369ee6f3bbe83c2b987dc05d31020c4d9c1"
+          "sha256": "64d6a8ca0e61a8eceef2875b1b37da87a340ff6f84f3878ec871e2835960c028"
         }
       ],
       "reason": "no proprietary product target"
     },
     {
       "name": "polymorphicserializations",
-      "revision": "bce4eb9f45c6b131b960ab4fa39e50ff01e51960",
+      "revision": "c6d0dfce6dc4f9a0699a51f80baf021ba5ef5d60",
       "inspected": [
         {
           "path": "README.md",
-          "sha256": "71339aed3300c4f7705c02e5502351013c669270c7164b910f4ca014683152e6"
+          "sha256": "fb3087bda83831af2bd1ddef77f8fb91c1d93fdf8921570c343df3238111cdde"
         }
       ],
       "reason": "no proprietary product target"

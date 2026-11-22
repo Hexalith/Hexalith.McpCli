@@ -36,7 +36,7 @@ and follow it (essentials in [Git](#git) below).
 - **.NET 10+** — latest .NET framework (SDK version pinned per repo in `global.json`)
 - **C# 14+** — latest language features
 - **DAPR 1.18+** — Distributed Application Runtime for microservices
-- **.NET Aspire 13.x** — local orchestration of the distributed topology
+- **.NET Aspire 17.x** — local orchestration of the distributed topology
 - **Microsoft Fluent UI Blazor V5** — UI component library V5 for Blazor apps
 - **xUnit v3 + Shouldly + NSubstitute** — testing, assertions, mocking
 
@@ -353,14 +353,17 @@ preserve foreign instructions and settings when applying the policy.
 - **Release scope** — freeze dependency revisions when a release starts; later
   upstream advances go to the next release unless they fix a release blocker.
 - Test the affected behavior and run each repository's required CI once on the
-  exact release source. Re-run only after a source change.
+  exact release source. Re-run only after a source change. Outside release CI,
+  one re-run of a failure that does not reproduce is allowed; record the flaky
+  test as a bug instead of adding gates.
 - Run full mutation testing on its schedule or after substantial changes to the
   code it targets; it is not a per-release gate unless a release workflow
   requires it.
 - Keep pipeline modernization (CiCd adoption, new CI steps) out of product
   releases.
 - Produce one concise release report per release; do not commit bulk diagnostic
-  evidence.
+  evidence. Keep story specs short: record decisions and current state, and
+  leave run-by-run history to commits and CI run links.
 - Fix product failures; report pipeline defects with the failure and run link.
   In a module that has adopted Hexalith.CiCd (it commits
   `.github/hexalith-ci.json`), require a successful
@@ -371,9 +374,11 @@ preserve foreign instructions and settings when applying the policy.
   audits or tests or add CI skip markers (including `[skip ci]` variants) or
   `skip-checks` commit trailers.
 - Start product branches from `origin/main` immediately after fetching current
-  `origin main`. Do not use PR Update branch until the CiCd pilot verifies its
-  permission behavior. Report refusals without switching credentials or
-  broadening access.
+  `origin main`. GitHub permits PR Update branch with the restricted module
+  credential even when it imports changed workflows. Do not use it to import
+  owned CI/CD changes. Fetch current `main`, create a new product branch, and
+  reapply only product changes instead. Report refusals without switching
+  credentials or broadening access.
 - Launch Claude Code from the module root so the project-local `Edit` denies
   protect whole-owned files and the Builds subtree. Reads remain available.
   Keep denies out of machine-wide settings. File rules cannot target JSON keys,

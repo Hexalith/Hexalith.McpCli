@@ -1,5 +1,7 @@
 # Story 5.11 planning investigation
 
+The dated investigation below records the 16 November baseline. On 22 November, main included CiCd adoption and completed Story 5.10 delivery. See [current verification](verification.md) and [integration bindings](integration.json). The 19 November owner decision defers generated notes to CiCd/Builds.
+
 Planning baseline: `008d95ccc77d932a372cb6c749d9d1fb1bc1ea57`, clean `main`, observed 2026-11-16. No product implementation or upstream edits were made during investigation. `epic-5-context.md` passed the workflow's freshness check. Story 5.9 is the latest lower-numbered completed story; its Code Map, tasks, Design Notes and Spec Change Log supplied continuity. Story 5.10 is context for a prerequisite, not a completed dependency.
 
 ## Authority and delivery

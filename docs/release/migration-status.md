@@ -7,11 +7,13 @@ Confidential UI operations, MCP resources/prompts, streams, proprietary plug-ins
 and executor retries are outside this increment. No ecosystem completion or
 legacy retirement is evidenced by this release status.
 
-As assessed on 2026-11-16, **no PS01–PS14 surface has an evidenced retirement**.
+As assessed on 2026-11-22, **no PS01–PS14 surface has an evidenced retirement**.
 The [approved inventory and delivery chain](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/evidence/story-5-11/inputs.json)
 distinguishes inventory authority from delivery. The authoritative AI.Tools plan
-remains 1.2.0; the prepared 1.3.0 reconciliation is pending fresh exact-byte
-approval, Story 5.10 delivery, inventory publication and upstream integration.
+remains 1.2.0. The owner approved the reconciliation packet and its audit on
+22 November 2026. Plan 1.3.0 still requires inventory publication, approval of
+the final plan bytes and upstream integration. Story 5.10 delivered its approved
+inventories and the five ChatBot/Memories labels.
 
 | ID | Remaining binary or surface | State and removal gate |
 | --- | --- | --- |
@@ -26,7 +28,7 @@ approval, Story 5.10 delivery, inventory publication and upstream integration.
 | PS09 | `Hexalith.Projects.Mcp` | Retained plug-in. G4 couples removal to the FrontComposer host; Projects gates remain independent. |
 | PS10 | `Hexalith.Folders.Cli` / `folders` | Retained compatibility. Folders 1.1.0 inventory gates and separate K12 restricted/mixed-operation successor; no blanket public-agent eligibility. |
 | PS11 | `Hexalith.Folders.Mcp` / `folders-mcp` | Retained compatibility, same independent Folders gates as PS10. |
-| PS12 | `Hexalith.ChatBot.Cli` | Retained compatibility. ChatBot 1.1.0 inventory and label delivery, governed workflow, identity, approval, authorization and behavior gates. Confidential human decisions stay in the UI. |
+| PS12 | `Hexalith.ChatBot.Cli` | Retained compatibility. ChatBot 1.1.0 inventory and labels delivered. Governed workflow, identity, approval, authorization and behavior gates remain open. Confidential human decisions stay in the UI. |
 | PS13 | `Hexalith.ChatBot.Mcp` | Retained compatibility, same independent ChatBot gates as PS12. |
 | PS14 | Memories `tools/MigrateEmbeddingVectors` | Retained K14 owner-held local exemption: `--dry-run`, `--live`, `--rollback`, `--abort`. T01–T04 inventory does not establish independent custody/tenant/credential, consent, no-write, denial, rollback/abort or audit proof. Never counted retired. |
 

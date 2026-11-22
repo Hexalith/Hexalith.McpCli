@@ -1,5 +1,8 @@
 import importlib.util
 import json
+import os
+import tempfile
+from unittest import mock
 from pathlib import Path
 import subprocess
 import sys
@@ -35,3 +38,35 @@ class OfflineCliTests(unittest.TestCase):
         finally:C.stop_process(process,timeout=0.2)
         self.assertLess(time.monotonic()-started,2)
         self.assertIsNotNone(process.returncode)
+
+    def test_stdio_rejects_nonobject_responses(self):
+        for line in (b'null\n',b'[]\n',b'"message"\n',b'1\n'):
+            read,write = os.pipe()
+            with self.subTest(line=line),os.fdopen(read,'rb') as reader,os.fdopen(write,'wb',buffering=0) as writer:
+                writer.write(line)
+                with self.assertRaisesRegex(ValueError,'^stdio response must be a JSON object$'):
+                    C.Responses(reader).receive(1,timeout=1)
+
+    def test_install_timeout_retains_both_partial_streams(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            for stdout,stderr in [(b'install started\n',b'partial diagnostic\n'),(b'partial \xc2',None),(None,None)]:
+                timeout = subprocess.TimeoutExpired(['dotnet'],120,output=stdout,stderr=stderr)
+                with mock.patch.object(subprocess,'run',side_effect=timeout):
+                    with self.assertRaisesRegex(ValueError,'^Published CLI install timed out; see offline-install streams$'):
+                        C.install_tool(['dotnet'],{},root)
+                self.assertEqual((root/'offline-install.stdout.txt').read_bytes(),C.retained(stdout or b''))
+                self.assertEqual((root/'offline-install.stderr.txt').read_bytes(),C.retained(stderr or b''))
+
+    def test_malformed_stdio_retains_only_sanitized_private_diagnostics(self):
+        sensitive=b'Bear'+b'er '+b'x'*40
+        child='import os;os.write(2,'+repr(sensitive)+');os.write(1,b"null\\n")'
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            evidence = root/'evidence'
+            evidence.mkdir()
+            with self.assertRaisesRegex(ValueError,'JSON object'):
+                C.discover_stdio([sys.executable,'-c',child],None,root,evidence)
+            diagnostic=(evidence/'offline-stdio.stderr.txt').read_bytes()
+            self.assertEqual(diagnostic,C.retained(sensitive))
+            self.assertNotIn(sensitive,diagnostic)

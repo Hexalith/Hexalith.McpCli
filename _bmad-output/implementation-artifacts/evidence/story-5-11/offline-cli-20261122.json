@@ -1,0 +1,148 @@
+{
+  "source": "Published tool 2.0.1",
+  "scope": "Offline discovery/help only; no query/command execution or tools/call, profile write or Gateway call",
+  "records": [
+    {
+      "name": "modules",
+      "command": [
+        "hexalith",
+        "modules"
+      ],
+      "exitCode": 0,
+      "rawStdoutSha256": "cbc49ed92071df7a1cc01ad941079f566802f3565925da9d2ac25ec79e23f49c",
+      "rawStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "cbc49ed92071df7a1cc01ad941079f566802f3565925da9d2ac25ec79e23f49c",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "tenants",
+      "command": [
+        "hexalith",
+        "operations",
+        "tenants"
+      ],
+      "exitCode": 0,
+      "rawStdoutSha256": "330f7c3f313acfaea63b37ccf3fec3a71d371df7d7581dd5a3c70cd81dabbaa8",
+      "rawStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "330f7c3f313acfaea63b37ccf3fec3a71d371df7d7581dd5a3c70cd81dabbaa8",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "parties",
+      "command": [
+        "hexalith",
+        "operations",
+        "parties"
+      ],
+      "exitCode": 0,
+      "rawStdoutSha256": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475",
+      "rawStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "12be80d5b569348a9092f1d69ff33883096c227af1640aeb55addbc3261ac475",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "describe",
+      "command": [
+        "hexalith",
+        "describe",
+        "tenants.list-tenants"
+      ],
+      "exitCode": 0,
+      "rawStdoutSha256": "75963b8d97adc731fd6bde828ed2df70ebeac4b43670482d5638f600db0eecbf",
+      "rawStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "75963b8d97adc731fd6bde828ed2df70ebeac4b43670482d5638f600db0eecbf",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "config-help",
+      "command": [
+        "hexalith",
+        "config",
+        "--help"
+      ],
+      "exitCode": 0,
+      "rawStdoutSha256": "6d5f0f46fca3858036f2969c91e29077adc4acb64a138e07f985eb490d7f018e",
+      "rawStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "99a1f808955f337ad307a2cf76e64f3be6c16117dea8e61a748da1210d4667e5",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "query-help",
+      "command": [
+        "hexalith",
+        "query",
+        "--help"
+      ],
+      "exitCode": 0,
+      "rawStdoutSha256": "07dc3d7fa78ba780cb5191fb0713a19e13d9669cebe095ff867b5d66ba58adeb",
+      "rawStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "9e33ea087f9a508e66564c01fcdac98498485bf108b0251cbe70e6c8ce71a273",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "send-help",
+      "command": [
+        "hexalith",
+        "send",
+        "--help"
+      ],
+      "exitCode": 0,
+      "rawStdoutSha256": "1838d318877106331c830f2312be6c72f56fca870454cf97cfede16e02791b5b",
+      "rawStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "f4422eae410eb4769964593941389bebb0b814347dd6b30661103ee3e0261a48",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "mcp-help",
+      "command": [
+        "hexalith",
+        "mcp",
+        "--help"
+      ],
+      "exitCode": 0,
+      "rawStdoutSha256": "6dccfebf892c2aca364330d68f65edc5c86984cc4efdeaf06f50b7cd46bad6b3",
+      "rawStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "cea4500effc286440f0eb90dcc5dae927364107b9776bcae4d1368a3bf5eac8f",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "unknown",
+      "command": [
+        "hexalith",
+        "describe",
+        "folders.unavailable"
+      ],
+      "exitCode": 2,
+      "rawStdoutSha256": "e35deab30af8161ecb8e91effdee782b31fb106c03ccd4f6fcc3336f5395a091",
+      "rawStderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdoutSha256": "e35deab30af8161ecb8e91effdee782b31fb106c03ccd4f6fcc3336f5395a091",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "stdio-discovery",
+      "command": [
+        "hexalith",
+        "mcp",
+        "--transport",
+        "stdio"
+      ],
+      "exitCode": 0,
+      "tools": [
+        "list_modules",
+        "list_operations",
+        "describe_operation",
+        "send_command",
+        "run_query"
+      ],
+      "stdoutSha256": "0f98ecf4337b3cbec1f4b1fb9273f6accf4e8418202af2e2bd9777da902be8c5",
+      "stderrSha256": "8c77b406576bbe9b4bc23c816ab663e3c9fdf3b89b8f330baf49011806b3550f"
+    }
+  ],
+  "packages": [
+    {
+      "path": "tool/.store/hexalith.mcpcli/2.0.1/hexalith.mcpcli/2.0.1/hexalith.mcpcli.2.0.1.nupkg",
+      "sha256": "305938d63bc47fd45090976ac1b1626a1ec69edfcaa525f6b728654cb1ab3876"
+    }
+  ],
+  "assessedOn": "2026-11-22"
+}

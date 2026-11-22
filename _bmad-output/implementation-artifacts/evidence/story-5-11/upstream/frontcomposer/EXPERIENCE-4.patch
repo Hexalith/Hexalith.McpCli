@@ -1,14 +1,12 @@
 --- a/_bmad-output/planning-artifacts/ux-designs/ux-frontcomposer-2026-09-09/EXPERIENCE.md
 +++ b/_bmad-output/planning-artifacts/ux-designs/ux-frontcomposer-2026-09-09/EXPERIENCE.md
-@@ -15,7 +15,10 @@
+@@ -16,6 +16,9 @@
+ ---
  
  # Hexalith Common Application Experience
- 
--**Approved McpCli experience correction (2026-09-27):** `Hexalith.McpCli` is the target Hexalith-owned CLI and MCP entry point. The FrontComposer MCP endpoint, projection/skill resources, lifecycle tool, and `frontcomposer inspect/migrate` CLI flows below describe legacy compatibility behavior. Each requires an owner-approved generic McpCli replacement or explicit withdrawal before retirement; do not claim that the five v1 generic tools already implement these flows.
++
 +> **Current McpCli disposition (Story 5.11 candidate):** Generated command tools, projection/skill resources and lifecycle subscriptions below are historical migration sources. Eligible business data requires an owner-decorated Gateway Query; K07 documentation and K08 synthetic lifecycle are withdrawn. The K13 inspect/migrate compiler is retained local tooling under merged AI.Tools plan 1.2.0, never retired or migrated to generic diagnostics. FK01–FK04 and G4 still couple host and Projects plug-in retirement.
 +
-+
-+**Approved McpCli experience correction (2026-09-27):** `Hexalith.McpCli` is the target Hexalith-owned CLI and MCP entry point. The FrontComposer MCP endpoint, projection/skill resources, lifecycle tool, and `frontcomposer inspect/migrate` CLI flows below describe legacy compatibility behavior. AD-23 governs MCP replacement or withdrawal, while inspect/migrate stays exempt locally; do not claim that the five v1 generic tools already implement these flows.
  
+ This working pair supports the D-8 UX contract. The [canonical UX matrices](../../ux-design.md), [behavior and journey supplement](../../ux-experience-2026-07-05.md), and [visual supplement](../../ux-design-detailed-2026-07-05.md) take precedence over this pair and any visual references.
  
- This file owns **how FrontComposer works**: information architecture, behavior, state, interaction, accessibility, and journeys. `DESIGN.md` is its peer and owns appearance. `ux-design.md` is canonical; this file is a supplement to it and loses on any conflict. It may add behavioral detail but never overrides a canonical matrix row. Within its domain, this file still wins over mockups, wireframes, imports, historical supplements, and implementation examples.

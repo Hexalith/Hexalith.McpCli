@@ -17,7 +17,7 @@ from evidence_redaction import sanitized_xml
 
 
 def retained(data):
-    return sanitized_xml(data.decode()).encode()
+    return sanitized_xml(data.decode(errors='replace')).encode()
 
 
 TOOLS = {'list_modules','list_operations','describe_operation','send_command','run_query'}
@@ -70,6 +70,7 @@ class Responses:
             while b'\n' in self.pending:
                 line,self.pending=self.pending.split(b'\n',1)
                 response=json.loads(line)
+                require(isinstance(response,dict),'stdio response must be a JSON object')
                 if response.get('id')==request_id:return response
             remaining=deadline-time.monotonic()
             if remaining<=0 or not select.select([self.stream],[],[],remaining)[0]:raise ValueError('stdio response deadline exceeded')
@@ -87,29 +88,24 @@ def stop_process(process,timeout=2):
     if process.stdout:process.stdout.close()
 
 
-def main():
-    records = []
-    with tempfile.TemporaryDirectory(prefix='mcpcli-offline-') as temporary:
-        scratch = Path(temporary)
-        environment = {k:v for k,v in os.environ.items() if not k.startswith(('EVENTSTORE_','MCPCLI_','NUGET_','GH_','GITHUB_'))}
-        environment.update(NUGET_PACKAGES=str(scratch/'packages'),DOTNET_CLI_HOME=str(scratch/'dotnet'),MCPCLI_HOME=str(scratch/'profile'),DOTNET_SKIP_FIRST_TIME_EXPERIENCE='1',DOTNET_CLI_TELEMETRY_OPTOUT='1',DOTNET_GENERATE_ASPNET_CERTIFICATE='false')
-        install = ['dotnet','tool','install','--tool-path',str(scratch/'tool'),'Hexalith.McpCli','--version','2.0.1']
-        result = subprocess.run(install,capture_output=True,env=environment,timeout=120)
-        (E/'offline-install.stdout.txt').write_bytes(retained(result.stdout))
-        (E/'offline-install.stderr.txt').write_bytes(retained(result.stderr))
-        if result.returncode: raise ValueError('Published CLI install failed; see offline-install streams')
-        tool = str(scratch/'tool/hexalith')
-        cases = [('modules',['modules']),('tenants',['operations','tenants']),('parties',['operations','parties']),('describe',['describe','tenants.list-tenants']),('config-help',['config','--help']),('query-help',['query','--help']),('send-help',['send','--help']),('mcp-help',['mcp','--help']),('unknown',['describe','folders.unavailable'])]
-        for name,args in cases:
-            result = subprocess.run([tool,*args],capture_output=True,env=environment,timeout=30)
-            (E/f'offline-{name}.stdout.txt').write_bytes(retained(result.stdout))
-            (E/f'offline-{name}.stderr.txt').write_bytes(retained(result.stderr))
-            records.append({'name':name,'command':['hexalith',*args],'exitCode':result.returncode,'rawStdoutSha256':hashlib.sha256(result.stdout).hexdigest(),'rawStderrSha256':hashlib.sha256(result.stderr).hexdigest(),'stdoutSha256':hashlib.sha256(retained(result.stdout)).hexdigest(),'stderrSha256':hashlib.sha256(retained(result.stderr)).hexdigest()})
-            validate_probe(name,result)
-        # Discovery over stdio only: initialize, tools/list, then end input. No tool invocation.
-        requests = [{'jsonrpc':'2.0','id':1,'method':'initialize','params':{'protocolVersion':'2025-06-18','capabilities':{},'clientInfo':{'name':'story-5-11-offline','version':'1.0.0'}}},{'jsonrpc':'2.0','method':'notifications/initialized'},{'jsonrpc':'2.0','id':2,'method':'tools/list','params':{}}]
-        with (E/'offline-stdio.stderr.txt').open('wb') as diagnostics:
-            process = subprocess.Popen([tool,'mcp','--transport','stdio'],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=diagnostics,env=environment)
+def install_tool(command, environment, evidence):
+    try:
+        result = subprocess.run(command,capture_output=True,env=environment,timeout=120)
+    except subprocess.TimeoutExpired as error:
+        (evidence/'offline-install.stdout.txt').write_bytes(retained(error.stdout or b''))
+        (evidence/'offline-install.stderr.txt').write_bytes(retained(error.stderr or b''))
+        raise ValueError('Published CLI install timed out; see offline-install streams') from error
+    (evidence/'offline-install.stdout.txt').write_bytes(retained(result.stdout))
+    (evidence/'offline-install.stderr.txt').write_bytes(retained(result.stderr))
+    require(result.returncode == 0,'Published CLI install failed; see offline-install streams')
+
+
+def discover_stdio(command, environment, scratch, evidence):
+    # Discovery over stdio only: initialize, tools/list, then end input. No tool invocation.
+    requests = [{'jsonrpc':'2.0','id':1,'method':'initialize','params':{'protocolVersion':'2025-06-18','capabilities':{},'clientInfo':{'name':'story-5-11-offline','version':'1.0.0'}}},{'jsonrpc':'2.0','method':'notifications/initialized'},{'jsonrpc':'2.0','id':2,'method':'tools/list','params':{}}]
+    with tempfile.TemporaryFile(dir=scratch) as diagnostics:
+        try:
+            process = subprocess.Popen(command,stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=diagnostics,env=environment)
             responses=Responses(process.stdout)
             try:
                 for request in requests:
@@ -121,14 +117,37 @@ def main():
                     else:tools=validate_tools(response)
             finally:
                 stop_process(process)
-        require(process.returncode==0,'stdio: clean shutdown required')
-        stdout=b''.join(responses.output)
-        (E/'offline-stdio.stdout.txt').write_bytes(retained(stdout))
-        stderr=(E/'offline-stdio.stderr.txt').read_bytes()
-        (E/'offline-stdio.stderr.txt').write_bytes(retained(stderr))
-        records.append({'name':'stdio-discovery','command':['hexalith','mcp','--transport','stdio'],'exitCode':process.returncode,'tools':[t['name'] for t in tools],'stdoutSha256':hashlib.sha256(stdout).hexdigest(),'stderrSha256':hashlib.sha256((E/'offline-stdio.stderr.txt').read_bytes()).hexdigest()})
+        finally:
+            diagnostics.seek(0)
+            (evidence/'offline-stdio.stderr.txt').write_bytes(retained(diagnostics.read()))
+    require(process.returncode==0,'stdio: clean shutdown required')
+    stdout = b''.join(responses.output)
+    (evidence/'offline-stdio.stdout.txt').write_bytes(retained(stdout))
+    return {'name':'stdio-discovery','command':['hexalith','mcp','--transport','stdio'],
+            'exitCode':process.returncode,'tools':[t['name'] for t in tools],
+            'stdoutSha256':hashlib.sha256(stdout).hexdigest(),
+            'stderrSha256':hashlib.sha256((evidence/'offline-stdio.stderr.txt').read_bytes()).hexdigest()}
+
+
+def main():
+    records = []
+    with tempfile.TemporaryDirectory(prefix='mcpcli-offline-') as temporary:
+        scratch = Path(temporary)
+        environment = {k:v for k,v in os.environ.items() if not k.startswith(('EVENTSTORE_','MCPCLI_','NUGET_','GH_','GITHUB_'))}
+        environment.update(NUGET_PACKAGES=str(scratch/'packages'),DOTNET_CLI_HOME=str(scratch/'dotnet'),MCPCLI_HOME=str(scratch/'profile'),DOTNET_SKIP_FIRST_TIME_EXPERIENCE='1',DOTNET_CLI_TELEMETRY_OPTOUT='1',DOTNET_GENERATE_ASPNET_CERTIFICATE='false')
+        install = ['dotnet','tool','install','--tool-path',str(scratch/'tool'),'Hexalith.McpCli','--version','2.0.1']
+        install_tool(install,environment,E)
+        tool = str(scratch/'tool/hexalith')
+        cases = [('modules',['modules']),('tenants',['operations','tenants']),('parties',['operations','parties']),('describe',['describe','tenants.list-tenants']),('config-help',['config','--help']),('query-help',['query','--help']),('send-help',['send','--help']),('mcp-help',['mcp','--help']),('unknown',['describe','folders.unavailable'])]
+        for name,args in cases:
+            result = subprocess.run([tool,*args],capture_output=True,env=environment,timeout=30)
+            (E/f'offline-{name}.stdout.txt').write_bytes(retained(result.stdout))
+            (E/f'offline-{name}.stderr.txt').write_bytes(retained(result.stderr))
+            records.append({'name':name,'command':['hexalith',*args],'exitCode':result.returncode,'rawStdoutSha256':hashlib.sha256(result.stdout).hexdigest(),'rawStderrSha256':hashlib.sha256(result.stderr).hexdigest(),'stdoutSha256':hashlib.sha256(retained(result.stdout)).hexdigest(),'stderrSha256':hashlib.sha256(retained(result.stderr)).hexdigest()})
+            validate_probe(name,result)
+        records.append(discover_stdio([tool,'mcp','--transport','stdio'],environment,scratch,E))
         packages = [{'path':str(p.relative_to(scratch)),'sha256':hashlib.sha256(p.read_bytes()).hexdigest()} for p in scratch.rglob('*.nupkg') if p.name.startswith('hexalith.mcpcli.')]
-        (E/'offline-cli.json').write_text(json.dumps({'source':'Published tool 2.0.1; source-head restore independently blocked by NU1102 Projects 2.0.0-story66.3','scope':'Offline discovery/help only; no query/command execution or tools/call, profile write or Gateway call','records':records,'packages':packages},indent=2)+'\n')
+        (E/'offline-cli.json').write_text(json.dumps({'source':'Published tool 2.0.1','scope':'Offline discovery/help only; no query/command execution or tools/call, profile write or Gateway call','records':records,'packages':packages},indent=2)+'\n')
     print('PASS: published 2.0.1 offline discovery/help, safe unknown-operation refusal and five generic stdio tools')
 
 

@@ -2,7 +2,7 @@
 title: '5.11 Reconcile product claims and the migration plan'
 type: 'chore'
 created: '2026-11-16'
-status: 'in-progress'
+status: 'in-review'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: '008d95ccc77d932a372cb6c749d9d1fb1bc1ea57'
@@ -54,7 +54,7 @@ Align MR1/MR6 and FR-21 with adopted AD-23: confidential UI, explicit withdrawal
 - [x] `E/{approval.json,labels.json,verify_reconciliation.py,test_verify_reconciliation.py,upstream/}`: prepare hash-bound amendments and seven owner README patches. Check complete accounting, preserved bytes, class/gate semantics, approval roles, published inventory bytes and label integration; test the matrix and guard removals with exact streams.
 - [x] `E/upstream/`: prepare the AI.Tools plan/rule amendment and the active module PRD, architecture, flow and README corrections mapped in `investigation.md`. Name actually available operations, `hexalith` setup and stdio discovery, safe refusal and confidential UI handoff. Preserve historical names as migration sources. No speculative operation availability.
 - [x] Local planning files above, `README.md`, `A/epic-5-context.md`: align current claims, MR1/MR6, disposition semantics and inventory/plan citations without rewriting historical snapshots.
-- [x] `docs/release/migration-status.md`, `scripts/migration-release-notes.mjs`, `scripts/tests/migration-release-notes.test.mjs`, `.releaserc.json`: append gateway-only scope, evidenced retirements and all remaining binaries/removal gates to generated notes. Exercise the pinned generator without publishing; fail on absent status input. No workflow edits.
+- [ ] `docs/release/migration-status.md` records gateway-only scope, evidenced retirements, remaining binaries and gates. Appending this file to generated notes is deferred to CiCd/Builds by the 19 November decision below. AC3 remains open.
 - [x] `E/deferral-dispositions.md`, `A/deferred-work.md`: audit the original migration-drift entry and every Epic 5 deferral, recording resolved evidence or an existing owner/gate as already tracked. Acceptance needs an explicit owner decision. Grep before adding; preserve unresolved gates.
 - [x] `E/{verification.md,integration.json}`, AI.Tools gitlink, this spec and `A/sprint-status.yaml`: after authorized integration, bind published inventory revision, upstream main containment, exact plan bytes and passing instruction sync. Otherwise retain in-review with the exact blockers.
 
@@ -128,18 +128,18 @@ Resolution: all fourteen patch groups were corrected. Final parent verification 
 
 - [x] [Review][Defer] GitHub release notes do not append committed migration status [README.md:85] — deferred: CiCd perimeter forbids `.releaserc*`; Builds `invoke_plugins.mjs` emits conventional notes only. Keep `docs/release/migration-status.md`. Do not restore a module hook. Stop claiming generated notes append the status. already tracked (`deferred-work.md:1265`).
 
-- [ ] [Review][Patch] Stop claiming generated notes append the committed migration status [`README.md:85`]
-- [ ] [Review][Patch] Regenerate the Epic 5 deferral audit against the live ledger [`_bmad-output/implementation-artifacts/evidence/story-5-11/deferral-dispositions.json`]
-- [ ] [Review][Patch] Stop attaching predecessor source pins and “omits T01–T04” prose to current companion versions [`_bmad-output/implementation-artifacts/evidence/story-5-11/build_packet.py:101`]
-- [ ] [Review][Patch] Finish AD-23 alignment in PRD vision/admin-boundary and epics FR21 [`_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:21`]
-- [ ] [Review][Patch] Rebase AI.Tools patches onto the revision README cites, or stop claiming that revision already follows AD-23 [`README.md:46`]
-- [ ] [Review][Patch] Report one current state for the missing `.github/hexalith-ci.json` blocker [`_bmad-output/implementation-artifacts/evidence/story-5-11/inputs.json:435`]
-- [ ] [Review][Patch] Isolate `git apply` from a parent work tree [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:180`]
-- [ ] [Review][Patch] Save install streams on timeout and refuse non-object stdio JSON [`_bmad-output/implementation-artifacts/evidence/story-5-11/check_offline_cli.py:97`]
-- [ ] [Review][Patch] Require Admin 1.0.3 citations in successor labels [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:123`]
-- [ ] [Review][Patch] Inspect no-change owners at `origin/main`, not HEAD [`_bmad-output/implementation-artifacts/evidence/story-5-11/build_packet.py:555`]
-- [ ] [Review][Patch] Re-derive owner-topic `correct()` bytes in `check_patches` [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:184`]
-- [ ] [Review][Patch] Record the actual focused-test count [`_bmad-output/implementation-artifacts/evidence/story-5-11/checks.json:69`]
+- [x] [Review][Patch] Stop claiming generated notes append the committed migration status [`README.md:85`]
+- [x] [Review][Patch] Regenerate the Epic 5 deferral audit against the live ledger [`_bmad-output/implementation-artifacts/evidence/story-5-11/deferral-dispositions.json`]
+- [x] [Review][Patch] Stop attaching predecessor source pins and “omits T01–T04” prose to current companion versions [`_bmad-output/implementation-artifacts/evidence/story-5-11/build_packet.py:101`]
+- [x] [Review][Patch] Finish AD-23 alignment in PRD vision/admin-boundary and epics FR21 [`_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:21`]
+- [x] [Review][Patch] Rebase AI.Tools patches onto the revision README cites, or stop claiming that revision already follows AD-23 [`README.md:46`]
+- [x] [Review][Patch] Report one current state for the missing `.github/hexalith-ci.json` blocker [`_bmad-output/implementation-artifacts/evidence/story-5-11/inputs.json:435`]
+- [x] [Review][Patch] Isolate `git apply` from a parent work tree [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:180`]
+- [x] [Review][Patch] Save install streams on timeout and refuse non-object stdio JSON [`_bmad-output/implementation-artifacts/evidence/story-5-11/check_offline_cli.py:97`]
+- [x] [Review][Patch] Require Admin 1.0.3 citations in successor labels [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:123`]
+- [x] [Review][Patch] Inspect no-change owners at `origin/main`, not HEAD [`_bmad-output/implementation-artifacts/evidence/story-5-11/build_packet.py:555`]
+- [x] [Review][Patch] Re-derive owner-topic `correct()` bytes in `check_patches` [`_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py:184`]
+- [x] [Review][Patch] Record the actual focused-test count [`_bmad-output/implementation-artifacts/evidence/story-5-11/checks.json:69`]
 
 Rejected:
 
@@ -156,3 +156,49 @@ Rejected:
 - Inventory frontmatter `IndexError` (`edge-case-hunter`) — `low`: every bound inventory has YAML frontmatter; not reached in this packet.
 - Duplicate Story 5.10 README section (`edge-case-hunter`) — `low`: `replace` of a unique composed section; no duplicate demonstrated.
 - `done`-prefix auto-completion (`edge-case-hunter`) — `low`: completion already refuses this candidate; a `done-…` status is not in use.
+
+### Review correction and prerequisite recheck, 2026-11-22
+
+All twelve patch items are prepared against current main. The refreshed packet
+binds 65 ledger entries and all 30 owner patches. Story 5.10 delivery is verified
+separately from its owner approval. McpCli has adopted CiCd and now has its
+required configuration. All 45 focused tests passed; approved completion refuses
+pending fresh exact-byte approval. The separate central release-notes deferral
+keeps AC3 open. The audit decision, owner integrations, inventory publication,
+final plan and containing gitlink remain outstanding. See
+[evidence](evidence/story-5-11/verification.md) and [bindings](evidence/story-5-11/integration.json).
+
+### BMAD review on 2026-11-22
+
+The reviewers checked the refreshed packet against the original story baseline. The release-note implementation stays with CiCd/Builds under the existing deferral. These findings concern the accuracy of the packet and the evidence needed to report completion.
+
+| Finding | Verdict | Evidence and disposition |
+| --- | --- | --- |
+| Blind 1 | Medium | The synthetic completion fixture passes with the live AC3 ledger entry open. Enforce the recorded deferral in completion. |
+| Blind 2 | Medium | The success fixture carries candidate publication instructions and pending successor authority into its final plan. Check published authority and final wording. |
+| Blind 3 | High | An ancestor check permits a later gitlink to revert the approved plan or rule. Check both blobs at the gitlink. |
+| Blind 4 | Medium | The published artifact loop omits historical inventory and receipt blobs referenced by immutable links. Verify their contents at publication. |
+| Blind 5 | Medium | The verifier accepts eight owner names with no inspection details. Recompute each recorded inspection at its revision. |
+| Blind 6 | Medium | A second file can be added during patch application without affecting the declared target's hash. Check the patch's complete footprint. |
+| Blind 7 | Medium | Comparing URL strings rejects an SSH checkout of the same GitHub repository. Reuse the repository identity comparison. |
+| Blind 8 | Medium | The final-delivery verifier accepts one literal instruction even though the story recognizes an explicit push request. Preserve the instruction, its source and its scope. |
+| Blind 9 | Medium | The builder starts replacing evidence before checking prerequisites and writes a provisional receipt twice. Validate the prepared outputs before replacing the pending packet. |
+| Blind 10 | Low | The new offline probe passed in scratch. The committed run summary lacks a binding to that run's machine-readable result. Record it separately from the historical capture. |
+| Edge 1 | Medium | The checked-in deferral explicitly leaves AC3 unmet. Same completion correction as Blind 1. |
+| Edge 2 | Medium | The audit omits the ledger's resolution field, including the implemented scanner and its regression tests. Carry resolved evidence into the audit. |
+| Edge 3 | Medium | The original migration-drift row has no recorded owner. The audit presents its fallback as a recorded assignment. Identify its source or mark the assignment as proposed. |
+| Edge 4 | High | A reverted descendant remains an ancestor-check success. Same pinned-blob correction as Blind 3. |
+| Edge 5 | Medium | The synchronization check reads the working directory. A local edit can hide a mismatch at the published root revision. Check its committed entries too. |
+| Edge 6 | Medium | The final fixture can still describe both approved successors as pending. Same final-plan correction as Blind 2. |
+| Edge 7 | Medium | Removing inspected paths and source revisions leaves all eight expected names. Same inspection correction as Blind 5. |
+| Edge 8 | Medium | A stdio parsing failure bypasses redaction after the child has written its diagnostics. Keep raw capture in private scratch and sanitize on failure. |
+| Verification 1 | Medium | Replacing the enumeration revision with HEAD leaves the original test green. Exercise divergent file listings at the two revisions. |
+| Verification 2 | Medium | The published-completion fixture succeeds with no change to the recorded open AC3. Same completion correction as Blind 1. |
+| Verification 3 | Medium | A retired-state receipt for exempt PS03 passes the SM-3 test. Count only eligible legacy servers. |
+
+The review corrections passed all 45 focused tests. The completion verifier still requires exact-byte owner approval. The current evidence scan is recorded in the [verification report](evidence/story-5-11/verification.md).
+
+### Owner decision on 22 November 2026
+
+The requesting user replied “approve” to the exact reconciliation packet and its 65-entry audit. The reviewed receipt SHA-256 is `00bc7dc3cc8c2c4194b90a7cb11fb97b2b24baa31deeb8301cc55ed5083455a8`. The [audit decision](evidence/story-5-11/integration.json) binds both audit files and retains all 63 unresolved entries with their existing gates.
+The user confirmed “Yes, I cover all 13 listed roles”. The [owner receipt](evidence/story-5-11/approval.json) records exact-byte approval of Admin 1.0.3, technical 1.0.4 and all 39 artifacts. The user separately authorized delivery to main across all repositories. Plan 1.3.0 remains a draft pending inventory publication and final-plan approval.

@@ -2,6 +2,8 @@
 import ast
 import contextlib
 import copy
+import difflib
+import tempfile
 import importlib.util
 import io
 import json
@@ -21,6 +23,15 @@ PASS = 'PASS: eight inventory histories; preserved AD-23/predecessors; fourteen 
 
 def data(name):
     return json.loads((ROOT/E/name).read_text())
+
+
+def pending():
+    receipt = data('approval.json')
+    receipt['decision'] = 'pending'
+    for key in ['approver','exactApprovalInstruction','approvalSource','approvedOn','rolesCovered',
+                'exactRoleConfirmation','reviewedReceiptSha256']:
+        receipt.pop(key, None)
+    return receipt
 
 
 def approved():
@@ -63,13 +74,17 @@ class ReconciliationTests(unittest.TestCase):
     def refusal(self,overrides,message,completion=False):
         self.assertEqual(self.main(overrides,completion),(1,'','FAIL: '+message+'\n'))
 
-    def test_real_candidate_exact_streams_and_pending_completion_refusal(self):
-        self.assertEqual(self.main(),(0,PASS+'PASS: decision: pending; candidate only; approval, prerequisite delivery, publication and upstream integration remain gates\n',''))
-        self.refusal({},'completion requires fresh exact-byte successor approval',True)
+    def test_pending_candidate_exact_streams_and_completion_refusal(self):
+        overrides = {str(E/'approval.json'):pending()}
+        self.assertEqual(self.main(overrides),(0,PASS+'PASS: decision: pending; candidate only; approval, publication and upstream integration remain gates\n',''))
+        self.refusal(overrides,'completion requires fresh exact-byte successor approval',True)
 
     def test_approved_inventory_is_distinct_from_incomplete_delivery(self):
-        self.assertEqual(self.main({str(E/'approval.json'):approved()})[0],0)
-        self.refusal({str(E/'approval.json'):approved()},'Story 5.10 prerequisite delivery incomplete: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels',True)
+        self.assertEqual(self.main({str(E/'approval.json'):approved()}),
+                         (0,PASS+'PASS: decision: approved; packet approved; publication and upstream integration pending\n',''))
+        self.refusal({str(E/'approval.json'):approved()},'completion requires integrated plan and all fourteen labels',True)
+        with mock.patch.object(V,'check_prior_delivery',side_effect=ValueError('historical delivery missing')):
+            self.refusal({str(E/'approval.json'):approved()},'historical delivery missing',True)
 
     def test_history_missing_duplicate_version_and_hash(self):
         for mutate,message in [
@@ -101,7 +116,7 @@ class ReconciliationTests(unittest.TestCase):
                 self.refusal({str(E/'approval.json'):receipt},'approval lacks explicitly covered roles')
         receipt=approved();receipt['exactApprovalInstruction']='approve and continue'
         self.refusal({str(E/'approval.json'):receipt},'approval requires explicit exact-byte approve instruction')
-        receipt=data('approval.json');receipt['approver']='Invented approval'
+        receipt=pending();receipt['approver']='Invented approval'
         self.refusal({str(E/'approval.json'):receipt},'pending receipt must not claim fresh approval')
         receipt=data('approval.json');receipt['amendments'][0]['rows'].pop()
         self.refusal({str(E/'approval.json'):receipt},'amendment predecessor/row/approval bindings mismatch')
@@ -134,9 +149,108 @@ class ReconciliationTests(unittest.TestCase):
         manifest=data('upstream/manifest.json');manifest['owners'][0]['files'].pop()
         self.refusal({str(E/'upstream/manifest.json'):manifest},'eventstore: active-topic file accounting mismatch')
 
+    def test_admin_labels_bind_exact_successor_link_and_hash(self):
+        labels = data('labels.json')
+        admin = str(B.A/'eventstore-admin-migration-inventory-v1.0.3.md')
+        for old in ('Admin inventory 1.0.3',admin,labels['inventoryArtifacts'][admin]):
+            with self.subTest(old=old):
+                changed = copy.deepcopy(labels)
+                row = next(r for r in changed['rows'] if r['id']=='PS02')
+                row['label']['text'] = row['label']['text'].replace(old,'stale')
+                row['label']['sha256'] = B.sha(row['label']['text'].encode())
+                self.refusal({str(E/'labels.json'):changed},'PS02: Admin 1.0.3 label citation/hash missing')
+
+    def test_nested_tempdir_applies_patches_locally(self):
+        with tempfile.TemporaryDirectory() as parent:
+            B.git(parent,'init','--quiet')
+            with mock.patch.object(tempfile,'tempdir',parent):
+                V.check_patches(ROOT,data('upstream/manifest.json'),data('labels.json'))
+            self.assertEqual(B.git(parent,'status','--porcelain'),b'')
+
+    def test_notice_with_missing_in_place_edit_refuses_even_when_rehashed(self):
+        manifest,labels = data('upstream/manifest.json'),data('labels.json')
+        owner = manifest['owners'][0]
+        file = next(f for f in owner['files'] if f['path'].endswith('/prd.md'))
+        before = V.prepared_before(ROOT,owner,file)
+        with mock.patch.object(B,'correct',side_effect=lambda name,text:text):
+            incomplete = B.corrected_document(owner['name'],file['path'],before,labels['rows'])
+        target=file['path']
+        patch = ''.join(difflib.unified_diff(before.decode().splitlines(True),incomplete.decode().splitlines(True),
+                                             fromfile='a/'+target,tofile='b/'+target)).encode()
+        file.update(afterSha256=B.sha(incomplete))
+        file['patch']['sha256'] = B.sha(patch)
+        check = V.checked
+        with mock.patch.object(V,'checked',side_effect=lambda root,item: patch if item==file['patch'] else check(root,item)):
+            self.refusal({str(E/'upstream/manifest.json'):manifest},owner['name']+': applied document differs from required corrections: '+target)
+
+    def test_unchanged_owner_audit_reads_main_when_head_differs(self):
+        def snapshot(repo,*args):
+            if args[0]=='rev-parse':return b'main-revision' if args[1]=='origin/main' else b'local-head'
+            if args[0]=='ls-tree':
+                return b'README.md\n_bmad-output/planning-artifacts/prd.md\n' if args[3]=='main-revision' else b'README.md\n'
+            if args[0]=='show':return ('McpCli '+args[1]).encode()
+            self.fail(args)
+        with mock.patch.object(B,'git',side_effect=snapshot):
+            audit=B.inspect_unchanged(ROOT,'commons','no proprietary product target')
+        self.assertEqual(audit['revision'],'main-revision')
+        self.assertEqual(audit['inspected'],[{'path':p,'sha256':B.sha(('McpCli main-revision:'+p).encode())}
+                                             for p in ['README.md','_bmad-output/planning-artifacts/prd.md']])
+
+    def test_technical_companions_separate_current_authority_from_historical_pins(self):
+        rows=B.rows(B.successor('technical-tools').decode())
+        for key, family in [('PS05','parties'),('PS06','memories'),('PS08','projects'),('PS10','folders'),('PS12','chatbot'),('PS14','memories')]:
+            cell=next(v for v in rows[key].values() if v.startswith('Current:'))
+            current,historical=cell.split('Historical census observation:',1)
+            binding=data('inputs.json')['inventoryHistories'][family][-1]
+            self.assertIn(binding['sourceRevision'],current)
+            self.assertIn(Path(binding['path']).name,current)
+            if key=='PS14':
+                self.assertIn('T01–T04 account for all four modes',current)
+                self.assertIn('Memories inventory 1.0.0',historical)
+
+    def test_unlisted_secondary_patch_target_refused(self):
+        manifest = data('upstream/manifest.json')
+        file = manifest['owners'][0]['files'][0]
+        patch = V.checked(ROOT,file['patch']) + b'--- /dev/null\n+++ b/other.md\n@@ -0,0 +1 @@\n+unrequested\n'
+        file['patch']['sha256'] = B.sha(patch)
+        checked = V.checked
+        with mock.patch.object(V,'checked',side_effect=lambda root,item: patch if item==file['patch'] else checked(root,item)):
+            self.refusal({str(E/'upstream/manifest.json'):manifest},'eventstore: patch must affect only README.md')
+
+    def test_unchanged_inspections_bind_reason_and_source_files(self):
+        for field in ['reason','inspected']:
+            manifest = data('upstream/manifest.json')
+            entry = manifest['noChange'][0]
+            entry[field] = 'unjustified' if field=='reason' else []
+            self.refusal({str(E/'upstream/manifest.json'):manifest},entry['name']+': inspected main paths, hashes or rationale differ')
+
+    def test_audit_includes_resolution_and_identifies_unsourced_owner(self):
+        entries=data('deferral-dispositions.json')['entries']
+        drift=next(e for e in entries if e['summary'].startswith('Migration planning artifacts disagree'))
+        self.assertIn('Unrecorded; proposed',drift['owner'])
+        self.assertIn('exact-byte owner acceptance',drift['audit'])
+        resolved=next(e for e in entries if 'delivery-outcomes.json' in e.get('resolution',''))
+        self.assertTrue(resolved['sourceStatus'].startswith('resolved'))
+        self.assertIn(resolved['resolution'],(ROOT/E/'deferral-dispositions.md').read_text())
+
+    def test_failed_regeneration_does_not_mutate_existing_packet(self):
+        receipt_path=ROOT/E/'approval.json'
+        initial=receipt_path.read_bytes()
+        pending_text=json.dumps(pending())
+        read=Path.read_text
+        def pending_receipt(path,*args,**kwargs):
+            return pending_text if path==receipt_path else read(path,*args,**kwargs)
+        with mock.patch.object(Path,'read_text',pending_receipt), mock.patch.object(B,'inspect_unchanged',side_effect=ValueError('missing owner main')), \
+             mock.patch.object(Path,'write_bytes',side_effect=AssertionError('early packet write')), \
+             mock.patch.object(Path,'write_text',side_effect=AssertionError('early packet write')):
+            self.assertEqual(streams(B.cli),(1,'','FAIL: missing owner main\n'))
+        self.assertEqual((ROOT/E/'approval.json').read_bytes(),initial)
+
     def test_all_deferrals_retain_source_owner_gate_and_acceptance_boundary(self):
         audit=data('deferral-dispositions.json')
-        self.assertEqual(len(audit['entries']),56)
+        expected = B.scoped_deferrals((ROOT/B.A/'deferred-work.md').read_text())
+        self.assertEqual(audit['entries'],expected)
+        self.assertTrue(any('invoke_plugins.mjs' in row['evidence'] and 'AC3' in row['sourceStatus'] for row in expected))
         for field,value in [('entries',audit['entries'][1:]),('state','accepted')]:
             changed=copy.deepcopy(audit);changed[field]=value
             message='deferral accounting/source/owner/gate mismatch' if field=='entries' else 'deferral audit must retain explicit owner-decision gate'
@@ -162,7 +276,7 @@ class ReconciliationTests(unittest.TestCase):
                 text=original(p,*args,**kwargs)
                 return text.replace(old,new) if p==path else text
             with self.subTest(path=path),mock.patch.object(Path,'read_text',read_text):
-                self.refusal({},'completion requires fresh exact-byte successor approval')
+                self.refusal({str(E/'approval.json'):pending()},'completion requires fresh exact-byte successor approval')
 
     def test_guard_removals_are_detected_for_hash_roles_history_labels_and_gates(self):
         cases=[]
@@ -186,7 +300,7 @@ class ReconciliationTests(unittest.TestCase):
         approved_text=json.dumps(approved())
         def read_text(path,*args,**kwargs):
             return approved_text if path==ROOT/E/'approval.json' else original(path,*args,**kwargs)
-        with mock.patch.object(Path,'read_text',read_text),mock.patch.object(B,'write_deferrals') as writes:
+        with mock.patch.object(Path,'read_text',read_text),mock.patch.object(B,'deferral_documents') as writes:
             self.assertEqual(streams(B.cli),(1,'','FAIL: Approved packet is immutable; prepare an explicitly authorized successor instead\n'))
             writes.assert_not_called()
 
@@ -202,26 +316,35 @@ class CompletionBindingTests(unittest.TestCase):
     """Synthetic authorized delivery exercises every integration boundary without remote effects."""
     def fixture(self,plan_transform=None):
         revision,ai,gitlink,owner_commit = ['a'*40,'b'*40,'c'*40,'d'*40]
-        plan=(ROOT/E/'upstream/ai-tools/hexalith-mcpcli-migration-instructions.md').read_text().replace('inventory_revision: null',f"inventory_revision: '{revision}'").replace('status: candidate-not-publishable\n','')
+        plan = (ROOT/E/'upstream/ai-tools/hexalith-mcpcli-migration-instructions.md').read_text()
+        plan = plan.replace('inventory_revision: null',f"inventory_revision: '{revision}'").replace('status: candidate-not-publishable','status: approved')
+        start,end = plan.index('Version **1.3.0'),plan.index('## Ownership')
+        plan = plan[:start]+'Version **1.3.0** indexes the published inventories.\n\n'+plan[end:]
+        plan = plan.replace('candidate-pending; pending:', 'owner-approved; owning-maintainer-receipt:')
+        plan = plan[:plan.index('## Integration and release prerequisite')]
         for chain in data('inputs.json')['inventoryHistories'].values():
             for item in chain:
                 for path in [item['path'],item['approval']['receipt']['path']]:
                     plan += f'[{path}](https://github.com/Hexalith/Hexalith.McpCli/blob/{revision}/{path})\n'
         if plan_transform:plan=plan_transform(plan)
         plan=plan.encode()
-        receipt={'decision':'approved','requiredApprovalRoles':['required owner'],'artifacts':{'artifact.md':B.sha(b'published bytes')}}
+        receipt=approved()
+        receipt['artifacts']['artifact.md']=B.sha(b'published bytes')
         owner={'name':'eventstore','ownerCheckout':str(ROOT.parent/'eventstore'),'files':[{'path':'README.md','afterSha256':B.sha(b'documented bytes')}]}
         manifest={'owners':[owner,{'name':'ai-tools','ownerCheckout':str(ROOT.parent/'aitools'),'files':[{'path':'hexalith-mcpcli-migration-instructions.md','afterSha256':B.sha(plan)}]}]}
         integration={'state':'integrated','inventoryRevision':revision,'aiToolsCommit':ai,'aiToolsGitlink':gitlink,'planSha256':B.sha(plan),'deliveryAuthorization':{'exactWords':'authorize','source':'Synthetic fixture only','approvedOn':'2026-11-16'},'ownerIntegrations':[{'name':'eventstore','commit':owner_commit,'checks':{'commitlint':'passed','builds':'passed'}},{'name':'ai-tools','commit':ai,'checks':{'commitlint':'passed','builds':'passed'}}],'instructionSync':'passed','completedOn':'2026-11-16','rootIntegrationRevision':'e'*40,'sm3Assessment':{'assessedOn':'2026-11-16','deadline':'2027-02-05','outcome':'pending-not-met','retirements':[],'owner':'Fixture owner','source':'Explicit fixture decision'},'deferralOwnerDecision':{'decision':'accept-audit-preserve-open-gates','owner':'Fixture owner','source':'Explicit fixture decision','decidedOn':'2026-11-16','auditSha256':B.sha((ROOT/E/'deferral-dispositions.json').read_bytes()),'auditMarkdownSha256':B.sha((ROOT/E/'deferral-dispositions.md').read_bytes()),'preserveUnresolvedGates':True,'retainedUnresolvedEntryIds':[entry['id'] for entry in data('deferral-dispositions.json')['entries'] if not entry['disposition'].startswith('existing resolution')]},'finalPlanApproval':{'path':'fixture-plan-approval.json','sha256':'fixture'}}
-        final={'decision':'approved','planSha256':B.sha(plan),'inventoryRevision':revision,'rolesCovered':['required owner'],'approver':'Fixture owner','exactApprovalInstruction':'approve','approvalSource':'Synthetic fixture only','approvedOn':'2026-11-16'}
+        integration['deferralOwnerDecision']['acceptCompletionWithDeferredReleaseNotes'] = True
+        final={'decision':'approved','planSha256':B.sha(plan),'inventoryRevision':revision,'rolesCovered':receipt['requiredApprovalRoles'],'approver':'Fixture owner','exactApprovalInstruction':'approve','approvalSource':'Synthetic fixture only','approvedOn':'2026-11-16'}
         def git(repo,*args):
             if args[0]=='merge-base': return b''
             if args[0]=='ls-tree': return f'160000 commit {gitlink}\treferences/Hexalith.AI.Tools\n'.encode()
             path=args[1].split(':',1)[1]
             if path=='artifact.md':return b'published bytes'
-            if path==str(E/'approval.json'):return (ROOT/E/'approval.json').read_bytes()
+            if path==str(E/'approval.json'):return B.serialized(receipt)
             if path=='README.md':return b'documented bytes'
             if path=='hexalith-mcpcli-migration-instructions.md':return plan
+            if path=='hexalith-llm-instructions.md':return b'approved rule'
+            if (ROOT/path).is_file():return (ROOT/path).read_bytes()
             raise AssertionError(args)
         return receipt,manifest,integration,final,git
 
@@ -231,7 +354,10 @@ class CompletionBindingTests(unittest.TestCase):
         def verified(*args):
             V.check_completion(ROOT,receipt,{},manifest,integration)
             return 'approved',True
-        with mock.patch.object(V,'check_prior_delivery'),mock.patch.object(B,'git',side_effect=git_override or git),mock.patch.object(V,'checked',return_value=B.serialized(final)),mock.patch.object(V,'verify',side_effect=verified):
+        read_bytes = Path.read_bytes
+        def working_bytes(path):
+            return B.serialized(receipt) if path==ROOT/E/'approval.json' else read_bytes(path)
+        with mock.patch.object(Path,'read_bytes',working_bytes),mock.patch.object(V,'check_prior_delivery'),mock.patch.object(B,'git',side_effect=git_override or git),mock.patch.object(V,'checked',return_value=B.serialized(final)),mock.patch.object(V,'verify',side_effect=verified):
             return streams(lambda:V.main(['--approved-completion']))
 
     def test_complete_synthetic_binding_succeeds_with_exact_streams(self):
@@ -291,6 +417,70 @@ class CompletionBindingTests(unittest.TestCase):
                 with self.subTest(path=path,replacement=replacement):
                     self.assertEqual(self.run_binding(plan_transform=lambda p:p.replace(target,replacement)),(1,'','FAIL: final plan lacks immutable inventory/approval link: '+path+'\n'))
 
+    def test_open_ac3_requires_an_explicit_changed_owner_decision(self):
+        self.assertEqual(self.run_binding(lambda r,m,i,f:i['deferralOwnerDecision'].pop('acceptCompletionWithDeferredReleaseNotes')),
+                         (1,'','FAIL: AC3 generated release notes remain deferred by the owner\n'))
+        self.assertEqual(self.run_binding()[0],0)
+
+    def test_resolved_ac3_audit_allows_completion_without_new_release_receipt(self):
+        _,_,integration,_,_=self.fixture()
+        decision=integration['deferralOwnerDecision']
+        del decision['acceptCompletionWithDeferredReleaseNotes']
+        audit=data('deferral-dispositions.json')
+        notes=next(e for e in audit['entries'] if e['id']=='77748cf5a6cb9421')
+        notes.update(sourceStatus='resolved by the owning release team',disposition='existing resolution recorded')
+        updated=B.serialized(audit)
+        decision['auditSha256']=B.sha(updated)
+        decision['retainedUnresolvedEntryIds'].remove(notes['id'])
+        read_bytes=Path.read_bytes
+        with mock.patch.object(Path,'read_bytes',lambda p: updated if p==ROOT/E/'deferral-dispositions.json' else read_bytes(p)):
+            V.check_assessments(ROOT,integration)
+
+    def test_only_inventory_legacy_servers_can_meet_sm3(self):
+        binding={'path':'synthetic-retirement.json','sha256':'fixture'}
+        _,_,i,_,_=self.fixture()
+        i['sm3Assessment'].update(outcome='met',retirements=[binding])
+        for surface in ['Hexalith.FrontComposer.Cli','tools/MigrateEmbeddingVectors','Hexalith.ChatBot.Cli','unknown','Hexalith.Parties.Mcp','Hexalith.EventStore.Admin.Mcp','Hexalith.Projects.Mcp']:
+            receipt={'state':'retired','owner':'Fixture owner','source':'Fixture','surface':surface,'retiredOn':'2026-11-16'}
+            with self.subTest(surface=surface),mock.patch.object(V,'checked',return_value=B.serialized(receipt)):
+                if surface.endswith('.Mcp'): V.check_assessments(ROOT,i)
+                else:
+                    with self.assertRaisesRegex(ValueError,'inventoried Legacy Server'):V.check_assessments(ROOT,i)
+
+    def test_final_wording_authority_and_every_published_blob(self):
+        for before,after,message in [
+            ('Version **1.3.0**','Version **1.3.0 candidate**','completion requires final plan 1.3.0 bytes'),
+            ('scope-approved-only; session-scope-only:', 'owner-approved; owning-maintainer-receipt:', 'parties 1.0.0: final inventory row authority/path/hash mismatch'),
+            ('owner-approved; owning-maintainer-receipt: `'+str(E/'approval.json'), 'candidate-pending; pending: `'+str(E/'approval.json'), 'eventstore-admin 1.0.3: final inventory row authority/path/hash mismatch')]:
+            with self.subTest(message=message):
+                self.assertEqual(self.run_binding(plan_transform=lambda p:p.replace(before,after)),(1,'','FAIL: '+message+'\n'))
+        history=data('inputs.json')['inventoryHistories']['parties']
+        _,_,_,_,git=self.fixture()
+        for path,kind in [(history[0]['path'],'inventory'),(history[1]['approval']['receipt']['path'],'receipt')]:
+            def changed(repo,*args):
+                return b'changed' if args==('show','a'*40+':'+path) else git(repo,*args)
+            self.assertEqual(self.run_binding(git_override=changed),(1,'',f'FAIL: linked {kind} bytes differ: {path}\n'))
+
+    def test_descendant_cannot_revert_rule_or_plan_or_mismatch_commit_instructions(self):
+        _,_,_,_,git=self.fixture()
+        for path in ['hexalith-mcpcli-migration-instructions.md','hexalith-llm-instructions.md','CLAUDE.md']:
+            def changed(repo,*args):
+                revision='e'*40 if path=='CLAUDE.md' else 'c'*40
+                return b'changed' if args==('show',revision+':'+path) else git(repo,*args)
+            message='committed root agent instructions differ' if path=='CLAUDE.md' else 'committed AI.Tools gitlink differs: '+path
+            self.assertEqual(self.run_binding(git_override=changed),(1,'','FAIL: '+message+'\n'))
+
+    def test_push_all_changes_requires_scoped_final_delivery(self):
+        def scoped(r,m,i,f):
+            i['deliveryAuthorization'].update(exactWords='push all changes',footprint='All final Story 5.11 owner patches and published packet')
+        self.assertEqual(self.run_binding(scoped)[0],0)
+        def all_main(r,m,i,f):
+            scoped(r,m,i,f)
+            i['deliveryAuthorization']['exactWords'] = 'push all changes of all repositories to main.\\'
+        self.assertEqual(self.run_binding(all_main)[0],0)
+        self.assertEqual(self.run_binding(lambda r,m,i,f:i['deliveryAuthorization'].update(exactWords='push all changes')),
+                         (1,'','FAIL: completion requires separate explicit Git delivery authorization\n'))
+
     def test_structured_deferral_decision_binds_audit_and_retains_all_unresolved_gates(self):
         cases=[
             (lambda i:i.update(deferralOwnerDecision='undecided'),'completion requires explicit structured deferral owner decision'),
@@ -343,12 +533,12 @@ class RecordedAuthorityAndLifecycleTests(unittest.TestCase):
             owner['integration']={'commit':commit,'commitSha256':B.sha(raw)}
             before=prior.B.blob(ROOT,owner['name'],'README.md')
             after=before.replace((ROOT/owner['before']['path']).read_bytes(),(ROOT/owner['after']['path']).read_bytes())
-            befores[(str(Path(owner['ownerCheckout'])),commit)]=before
-            afters[(str(Path(owner['ownerCheckout'])),commit)]=after;commits[commit]=raw
+            befores[(str(ROOT.parent/owner['name']),commit)]=before
+            afters[(str(ROOT.parent/owner['name']),commit)]=after;commits[commit]=raw
         original=prior.B.git
         project='src/Hexalith.McpCli/Hexalith.McpCli.csproj'
         policy='tools/dependency-policy.json'
-        historical={project:b'<Project><ItemGroup/></Project>',policy:b'{"modules":{}}'}
+        historical={path:original(ROOT,'show',B.BASELINE+':'+path) for path in (project,policy)}
         current={
             ROOT/project:b'<Project><ItemGroup><PackageReference Include="Hexalith.ChatBot.Contracts" HexalithContracts="true"/></ItemGroup></Project>',
             ROOT/policy:b'{"modules":{"Hexalith.Memories.Contracts":"2.0.0"}}',
@@ -365,14 +555,18 @@ class RecordedAuthorityAndLifecycleTests(unittest.TestCase):
                 if revision=='f'*40 and path in historical:
                     historical_reads.add(path)
                     return historical[path]
-                if revision=='f'*40:return (ROOT/path).read_bytes()
+                if revision=='f'*40:return original(ROOT,'show',B.BASELINE+':'+path)
                 if revision=='origin/main' and ROOT/path in current:return current[ROOT/path]
                 if revision=='origin/main' and path=='README.md':return b'current approved technical-tools 1.0.4 supersession'
             if args[0]=='cat-file' and args[-1] in commits:return commits[args[-1]]
             if args[0]=='diff' and args[3] in commits:return b'README.md\n'
             if args[0]=='merge-base' and args[2] in {*commits,'f'*40}:return b''
             return original(repo,*args)
-        with mock.patch.object(prior.B,'git',side_effect=historical_objects),mock.patch.object(Path,'read_bytes',working_bytes):
+        root_git=B.git
+        def ssh_origin(repo,*args):
+            if args==('remote','get-url','origin'):return f'git@github.com:Hexalith/Hexalith.{Path(repo).name}.git'.encode()
+            return root_git(repo,*args)
+        with mock.patch.object(B,'git',side_effect=ssh_origin),mock.patch.object(prior.B,'git',side_effect=historical_objects),mock.patch.object(Path,'read_bytes',working_bytes):
             V.check_prior_delivery(ROOT,prior_module=prior,register=register)
         self.assertEqual(set(historical),historical_reads)
         self.assertTrue(all('technical-tools inventory 1.0.4' in row['label']['text'] for row in data('labels.json')['rows']))

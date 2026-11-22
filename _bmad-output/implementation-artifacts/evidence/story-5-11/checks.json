@@ -1,9 +1,11 @@
 [
   {
-    "name": "verifier",
+    "name": "candidate",
     "command": [
-      "run-with-temp",
-      "python3",
+      "bash",
+      "references/Hexalith.EventStore/scripts/run-with-temp.sh",
+      "python",
+      "-B",
       "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
     ],
     "exitCode": 0,
@@ -12,49 +14,23 @@
   {
     "name": "completion",
     "command": [
-      "run-with-temp",
-      "python3",
+      "bash",
+      "references/Hexalith.EventStore/scripts/run-with-temp.sh",
+      "python",
+      "-B",
       "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py",
       "--approved-completion"
     ],
     "exitCode": 1,
-    "expectedExitCode": 1
-  },
-  {
-    "name": "release-notes-tests",
-    "command": [
-      "run-with-temp",
-      "node",
-      "--test",
-      "scripts/tests/migration-release-notes.test.mjs"
-    ],
-    "exitCode": 0,
-    "expectedExitCode": 0
-  },
-  {
-    "name": "instruction-sync",
-    "command": [
-      "bash",
-      "scripts/check-agent-instructions-sync.sh"
-    ],
-    "exitCode": 0,
-    "expectedExitCode": 0
-  },
-  {
-    "name": "diff-check",
-    "command": [
-      "git",
-      "diff",
-      "--check"
-    ],
-    "exitCode": 0,
-    "expectedExitCode": 0
+    "expectedExitCode": 1,
+    "stderr": "FAIL: completion requires fresh exact-byte successor approval\n"
   },
   {
     "name": "verifier-tests",
     "command": [
-      "run-with-temp",
-      "python3",
+      "bash",
+      "references/Hexalith.EventStore/scripts/run-with-temp.sh",
+      "python",
       "-B",
       "-m",
       "unittest",
@@ -63,30 +39,83 @@
       "-s",
       "_bmad-output/implementation-artifacts/evidence/story-5-11",
       "-p",
-      "test_verify_reconciliation.py"
+      "test_*.py"
     ],
     "exitCode": 0,
-    "tests": 17,
-    "guardRemovalControls": 5
+    "tests": 45,
+    "reconciliationTests": 39,
+    "offlineProbeTests": 6,
+    "log": "review-20261122-tests.txt"
+  },
+  {
+    "name": "adopted-ad23",
+    "command": [
+      "python",
+      "-B",
+      "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "instruction-sync",
+    "command": [
+      "bash",
+      "scripts/check-agent-instructions-sync.sh"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "diff-check",
+    "command": [
+      "git",
+      "diff",
+      "--check"
+    ],
+    "exitCode": 0
+  },
+  {
+    "name": "prior-delivery",
+    "function": "verify_reconciliation.check_prior_delivery(ROOT)",
+    "exitCode": 0,
+    "inventoryRevision": "008d95ccc77d932a372cb6c749d9d1fb1bc1ea57",
+    "verifiedOwnerLabels": [
+      "PS06",
+      "PS07",
+      "PS12",
+      "PS13",
+      "PS14"
+    ]
   },
   {
     "name": "published-offline-cli",
-    "command": [
-      "run-with-temp",
-      "python3",
-      "_bmad-output/implementation-artifacts/evidence/story-5-11/check_offline_cli.py"
-    ],
+    "toolVersion": "2.0.1",
     "exitCode": 0,
-    "scope": "published 2.0.1 discovery/help and stdio tools/list only; shared-redacted captures retain raw hashes"
+    "scope": "Offline help, discovery, complete unknown-operation refusal and stdio initialization/tools/list with the five generic tool names.",
+    "record": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/offline-cli-20261122.json",
+      "sha256": "c6af8ee3fca76c4e18cc46b8056ecd704cae4ade7285401ea99ee49c78578510"
+    }
   },
   {
-    "name": "source-cli-restore",
-    "command": [
-      "dotnet",
-      "restore",
-      "src/Hexalith.McpCli/Hexalith.McpCli.csproj"
-    ],
-    "exitCode": 1,
-    "blocker": "NU1102: baseline Projects.Contracts 2.0.0-story66.3 unavailable; no source build claimed"
+    "name": "source-cli",
+    "sourceRevision": "0db47f2c8ab497695a20cc789856b31f988a58bd",
+    "restore": "passed",
+    "build": "Release, zero warnings/errors",
+    "scope": "Offline discovery: Parties 7, Projects 4, Tenants 15. tenants.list-tenants is a read; submittable false without configuration. folders.unavailable returns unknown_operation and exit 2."
+  },
+  {
+    "name": "parties-documentation-fitness",
+    "candidateBase": "382407df93d1b7da40cd624f9fe6c46e53f7ec06",
+    "passed": 9,
+    "total": 10,
+    "blockedCase": "MaintainedTechnologyTablesMatchCentralPackageCatalog",
+    "reason": "The process supervisor requires /proc/self/task/<pid>/children, which is unavailable on this kernel. It stopped before checking technology tables. All README checks passed."
+  },
+  {
+    "name": "generated-release-notes",
+    "state": "deferred",
+    "owner": "Hexalith.CiCd / Hexalith.Builds",
+    "ledger": "_bmad-output/implementation-artifacts/deferred-work.md:1265",
+    "result": "AC3 remains unmet. The central release generator emits conventional notes."
   }
 ]
