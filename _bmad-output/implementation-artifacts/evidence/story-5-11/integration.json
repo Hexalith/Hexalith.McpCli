@@ -1,12 +1,12 @@
 {
   "schemaVersion": "1.0.0",
-  "state": "blocked",
+  "state": "delivered",
   "assessedOn": "2026-11-22",
   "inventoryRevision": "c6a40c10fd6db19cfce4cb0592f3b82bbb853729",
   "planVersion": "1.3.0",
   "planSha256": "6f9fd0d22976161a9ed17e704506dff1d39649b2b350d852ddb528e10875627c",
-  "aiToolsCommit": null,
-  "aiToolsGitlink": null,
+  "aiToolsCommit": "2e591bddc6c951ee8a2018c2bac05755f2f5af00",
+  "aiToolsGitlink": "2e591bddc6c951ee8a2018c2bac05755f2f5af00",
   "deliveryAuthorization": {
     "exactWords": "push all changes of all repositories to main.\\",
     "source": "Story 5.11 build conversation, following approval of all 39 packet artifacts and confirmation of all 13 roles.",
@@ -14,7 +14,7 @@
     "footprint": "Publish the approved McpCli inventories and receipt to main, integrate the reviewed documentation in the owning repositories and publish the final AI.Tools plan and containing gitlink after its exact-byte approval.",
     "approvalSha256": "d979f741a74f7a8d2e1ac1e35b9665ca22e7041f764c5d19ebda67c679bb49c9"
   },
-  "instructionSync": null,
+  "instructionSync": "passed",
   "deferralOwnerDecision": {
     "decision": "accept-audit-preserve-open-gates",
     "owner": "Requesting user",
@@ -92,16 +92,23 @@
     ]
   },
   "blockers": [
-    "Final plan 1.3.0 bound to the published inventories awaits exact-byte owner approval and AI.Tools main integration.",
-    "Verified containing AI.Tools gitlink and instruction-sync evidence",
-    "At completion, record completedOn and the SM-3 assessment, including an owner reason if overdue.",
     "AC3 generated release notes: CiCd/Builds must append the committed migration status; deferred by owner on 2026-11-19 (deferred-work.md:1265)."
   ],
   "limits": "Authorized documentation and evidence delivery. Preserve the existing runtime, exposure, production dependency, census, CI ownership, historical releases, frozen evidence, AD-23 and retirement gates.",
   "completedOn": null,
-  "rootIntegrationRevision": null,
-  "sm3Assessment": null,
-  "finalPlanApproval": null,
+  "rootIntegrationRevision": "eed86f296244454c9c8c27f7c8a55eb308026224",
+  "sm3Assessment": {
+    "assessedOn": "2026-11-22",
+    "deadline": "2027-02-05",
+    "outcome": "pending-not-met",
+    "retirements": [],
+    "owner": "McpCli product/architecture owner",
+    "source": "The approved inventories retain the legacy servers. The existing owner decision is “Labels + slip”. Reassess on story completion."
+  },
+  "finalPlanApproval": {
+    "path": "_bmad-output/implementation-artifacts/evidence/story-5-11/final-plan-approval.json",
+    "sha256": "2087ce4f643a32060ff244ba2d69b519f3919b1a5c65d5dab31a23c9a9d7ca81"
+  },
   "ownerIntegrations": [
     {
       "name": "eventstore",
@@ -204,6 +211,20 @@
         "commitlint": "passed",
         "builds": "not applicable; owning repository has not adopted Hexalith.CiCd"
       }
+    },
+    {
+      "name": "ai-tools",
+      "commit": "2e591bddc6c951ee8a2018c2bac05755f2f5af00",
+      "verifiedOn": "2026-11-22",
+      "verifiedFileCount": 2,
+      "checks": {
+        "commitlint": "passed",
+        "builds": "passed",
+        "buildsSource": "GitHub Actions PR build and tests",
+        "run": "https://github.com/Hexalith/Hexalith.AI.Tools/actions/runs/45020606039",
+        "testedHead": "e089f5da4db128a63bc631e1eb3f99e5c82e60a0",
+        "localBuilds": "The anonymous CiCd clone timed out before the local build. The user authorized proceeding. The reviewed and merged plan and rule bytes match."
+      }
     }
   ],
   "resolvedBlockers": [
@@ -248,6 +269,9 @@
   "finalPlanReview": {
     "pullRequest": "https://github.com/Hexalith/Hexalith.AI.Tools/pull/3",
     "reviewCommit": "e089f5da4db128a63bc631e1eb3f99e5c82e60a0",
-    "verifiedInventoryAndReceiptLinks": 31
-  }
+    "verifiedInventoryAndReceiptLinks": 31,
+    "state": "merged",
+    "mergeCommit": "2e591bddc6c951ee8a2018c2bac05755f2f5af00"
+  },
+  "integratedOn": "2026-11-22"
 }

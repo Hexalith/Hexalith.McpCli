@@ -249,3 +249,9 @@ See evidence/git-guidance-fix-20261116/resolution.json from the repository root.
 Candidate approval, Story 5.10 delivery and final plan integration remain distinct.
 The old scan receipts describe their captured states; a delivery scan supersedes
 them for the updated verification/integration metadata.
+
+## Final plan integration on 22 November 2026
+
+The owner approved plan 1.3.0 with SHA-256 `6f9fd0d22976161a9ed17e704506dff1d39649b2b350d852ddb528e10875627c`. GitHub Actions passed on the reviewed AI.Tools head. Its merged plan and instruction rule match the reviewed bytes. McpCli pins AI.Tools `2e591bddc6c951ee8a2018c2bac05755f2f5af00` at `eed86f296244454c9c8c27f7c8a55eb308026224`. The three root instruction files match byte for byte. The [integration record](integration.json) binds the published inventories and all nine owner commits. Generated release notes remain with CiCd/Builds under AC3.
+
+All 47 focused tests passed after integration. The default reconciliation check verified the published inventory, owner files, final plan, approval receipt and containing AI.Tools reference. The full story-completion check still reports the deferred AC3 release-note requirement.

@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "decision": "approved",
+  "approver": "Requesting user",
+  "exactApprovalInstruction": "approve",
+  "approvedOn": "2026-11-22",
+  "approvalSource": "The user replied “approve” after the final plan SHA-256 and AI.Tools PR #3 were presented. The user previously confirmed all 13 owner roles.",
+  "rolesCovered": [
+    "McpCli product/architecture owner",
+    "McpCli maintainer",
+    "McpCli security and contract/transport maintainer",
+    "Platform architecture/security and platform/operator maintainer",
+    "EventStore owning maintainer",
+    "FrontComposer owning maintainer",
+    "Projects owning maintainer",
+    "Folders owning maintainer",
+    "ChatBot owning maintainer",
+    "Memories owning maintainer",
+    "Parties owning maintainer",
+    "AI.Tools owning maintainer",
+    "Tenants owning maintainer"
+  ],
+  "planVersion": "1.3.0",
+  "planSha256": "6f9fd0d22976161a9ed17e704506dff1d39649b2b350d852ddb528e10875627c",
+  "inventoryRevision": "c6a40c10fd6db19cfce4cb0592f3b82bbb853729",
+  "reviewCommit": "e089f5da4db128a63bc631e1eb3f99e5c82e60a0",
+  "pullRequest": "https://github.com/Hexalith/Hexalith.AI.Tools/pull/3"
+}

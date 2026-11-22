@@ -328,8 +328,24 @@ def recorded_date(value,message):
 
 
 def check_assessments(root,integration):
+    decision = integration.get('deferralOwnerDecision')
+    require(isinstance(decision,dict) and decision.get('decision') == 'accept-audit-preserve-open-gates' and all(nonblank(decision.get(k)) for k in ['owner','source']),'completion requires explicit structured deferral owner decision')
+    audit_data = (root/E/'deferral-dispositions.json').read_bytes()
+    require(decision.get('auditSha256') == B.sha(audit_data) and decision.get('auditMarkdownSha256') == B.sha((root/E/'deferral-dispositions.md').read_bytes()),'deferral decision must bind exact audit bytes')
+    audit = json.loads(audit_data)
+    unresolved = {entry['id'] for entry in audit['entries'] if not entry['disposition'].startswith('existing resolution')}
+    retained = decision.get('retainedUnresolvedEntryIds')
+    require(decision.get('preserveUnresolvedGates') is True and isinstance(retained,list) and len(retained)==len(unresolved) and set(retained)==unresolved,'deferral decision must preserve every unresolved owner/gate')
+
+    notes = [entry for entry in audit['entries'] if entry['id']=='77748cf5a6cb9421']
+    require(len(notes)==1,'AC3 release-note disposition missing')
+    changed = decision.get('acceptCompletionWithDeferredReleaseNotes') is True
+    require(notes[0]['sourceStatus'].startswith('resolved') or changed,
+            'AC3 generated release notes remain deferred by the owner')
+
     completed = recorded_date(integration.get('completedOn'),'recorded completion date missing or invalid')
     require(completed <= date.today(),'recorded completion date is in the future')
+    require(recorded_date(decision.get('decidedOn'),'deferral decision date missing') <= completed,'deferral decision occurs after completion')
     assessment = integration.get('sm3Assessment')
     require(isinstance(assessment,dict),'structured SM-3 assessment missing')
     require(recorded_date(assessment.get('assessedOn'),'SM-3 assessment date missing') == completed,'SM-3 assessment must bind recorded completion date')
@@ -354,21 +370,6 @@ def check_assessments(root,integration):
             require(outcome == 'slip' and nonblank(assessment.get('ownerReason')),'overdue SM-3 requires explicit owner slip reason')
         else:
             require(outcome == 'pending-not-met','pre-deadline unmet SM-3 remains pending')
-    decision = integration.get('deferralOwnerDecision')
-    require(isinstance(decision,dict) and decision.get('decision') == 'accept-audit-preserve-open-gates' and all(nonblank(decision.get(k)) for k in ['owner','source']),'completion requires explicit structured deferral owner decision')
-    require(recorded_date(decision.get('decidedOn'),'deferral decision date missing') <= completed,'deferral decision occurs after completion')
-    audit_data = (root/E/'deferral-dispositions.json').read_bytes()
-    require(decision.get('auditSha256') == B.sha(audit_data) and decision.get('auditMarkdownSha256') == B.sha((root/E/'deferral-dispositions.md').read_bytes()),'deferral decision must bind exact audit bytes')
-    audit = json.loads(audit_data)
-    unresolved = {entry['id'] for entry in audit['entries'] if not entry['disposition'].startswith('existing resolution')}
-    retained = decision.get('retainedUnresolvedEntryIds')
-    require(decision.get('preserveUnresolvedGates') is True and isinstance(retained,list) and len(retained)==len(unresolved) and set(retained)==unresolved,'deferral decision must preserve every unresolved owner/gate')
-
-    notes = [entry for entry in audit['entries'] if entry['id']=='77748cf5a6cb9421']
-    require(len(notes)==1,'AC3 release-note disposition missing')
-    changed = decision.get('acceptCompletionWithDeferredReleaseNotes') is True
-    require(notes[0]['sourceStatus'].startswith('resolved') or changed,
-            'AC3 generated release notes remain deferred by the owner')
 
 
 def check_published_index(root, plan, inputs, revision):
@@ -402,10 +403,24 @@ def check_published_index(root, plan, inputs, revision):
                     family+' '+item['version']+': final inventory row authority/path/hash mismatch')
 
 
-def check_completion(root, receipt, labels, manifest, integration):
+def rebased_document_hash(repo, commit, owner, file, rebase, labels):
+    path = file['path']
+    parent = B.git(repo, 'rev-parse', commit+'^').decode().strip()
+    require(rebase.get('base') == parent and nonblank(rebase.get('publicationInstruction')) and
+            rebase.get('reviewedAfterSha256') == file['afterSha256'] and
+            rebase.get('patchSha256') == file['patch']['sha256'], 'rebased document approval or patch binding differs: '+path)
+    before = B.git(repo, 'show', parent+':'+path)
+    require(B.sha(before) == rebase.get('beforeSha256'), 'rebased document base differs: '+path)
+    # Replay the reviewed corrections on the actual parent so unrelated upstream edits survive.
+    after = B.corrected_document(owner, path, before, labels['rows'])
+    require(B.sha(after) == rebase.get('afterSha256'), 'rebased document differs from reviewed corrections: '+path)
+    return B.sha(after)
+
+
+def check_delivery(root, receipt, labels, manifest, integration):
     require(receipt.get('decision') == 'approved', 'completion requires fresh exact-byte successor approval')
     check_prior_delivery(root)
-    require(integration.get('state') == 'integrated','completion requires integrated plan and all fourteen labels')
+    require(integration.get('state') in {'delivered','integrated'},'completion requires integrated plan and all fourteen labels')
     authorization = integration.get('deliveryAuthorization')
     require(isinstance(authorization,dict) and all(nonblank(authorization.get(k)) for k in ['source','approvedOn','exactWords']),
             'completion requires separate explicit Git delivery authorization')
@@ -428,10 +443,16 @@ def check_completion(root, receipt, labels, manifest, integration):
         B.git(repo,'merge-base','--is-ancestor',commit,'origin/main')
         for file in owner['files']:
             target_hash = integration.get('planSha256') if file['path']=='hexalith-mcpcli-migration-instructions.md' else file['afterSha256']
+            for rebase in delivered.get('rebasedFiles', []):
+                if rebase['path'] == file['path'] and owner['name'] != 'ai-tools':
+                    target_hash = rebased_document_hash(repo, commit, owner['name'], file, rebase, labels)
             require(B.sha(B.git(repo,'show',commit+':'+file['path'])) == target_hash,owner['name']+': integrated documentation bytes mismatch')
             require(B.sha(B.git(repo,'show','origin/main:'+file['path'])) == target_hash,owner['name']+': current main documentation drift')
         checks = delivered.get('checks',{})
-        require(checks.get('commitlint') == checks.get('builds') == 'passed',owner['name']+': mandatory commitlint/Builds checks missing')
+        builds_ok = checks.get('builds') == 'passed'
+        if checks.get('builds') == 'not applicable; owning repository has not adopted Hexalith.CiCd':
+            builds_ok = not B.git(repo,'ls-tree','--name-only',commit,'--','.github/hexalith-ci.json').strip()
+        require(checks.get('commitlint') == 'passed' and builds_ok,owner['name']+': mandatory commitlint/Builds checks missing')
     ai = integration.get('aiToolsCommit')
     require(isinstance(ai,str) and re.fullmatch('[0-9a-f]{40}',ai),'completion requires full AI.Tools integration revision')
     ai_delivery = next((d for d in deliveries if d['name']=='ai-tools'),None)
@@ -474,6 +495,10 @@ def check_completion(root, receipt, labels, manifest, integration):
     require(entries[0] == entries[1] == entries[2], 'agent instructions differ')
     result = subprocess.run(['bash','scripts/check-agent-instructions-sync.sh'],cwd=root,capture_output=True)
     require(result.returncode == 0 and integration.get('instructionSync') == 'passed','passing instruction synchronization binding missing')
+
+
+def check_completion(root, receipt, labels, manifest, integration):
+    check_delivery(root,receipt,labels,manifest,integration)
     check_assessments(root,integration)
 
 
@@ -520,11 +545,13 @@ def verify(root=ROOT, completion=False):
                 if key in file: artifacts[file[key]['path']] = file[key]['sha256']
     roles = read(root,B.A/'evidence/story-5-7/approval.json')['requiredApprovalRoles']+['Tenants owning maintainer']
     check_approval(receipt,artifacts,roles,completion)
-    require(integration.get('state') in {'blocked','integrated'}, 'unknown integration state')
+    require(integration.get('state') in {'blocked','delivered','integrated'}, 'unknown integration state')
     if completion: check_completion(root,receipt,labels,manifest,integration)
     else:
         require(labels.get('inventoryRevision') is None and labels.get('deliveryAuthorization') is None and all(o.get('integration') is None for o in manifest['owners']), 'candidate must not claim delivered publication or labels')
-    return receipt['decision'], completion
+        if integration['state'] == 'delivered':
+            check_delivery(root,receipt,labels,manifest,integration)
+    return receipt['decision'], integration['state'] in {'delivered','integrated'}
 
 
 def main(argv=None):
@@ -532,12 +559,12 @@ def main(argv=None):
     parser.add_argument('--root',type=Path,default=ROOT)
     parser.add_argument('--approved-completion',action='store_true')
     args = parser.parse_args(argv)
-    try: decision,completed = verify(args.root,args.approved_completion)
+    try: decision,delivery_verified = verify(args.root,args.approved_completion)
     except (ValueError,KeyError,TypeError,OSError,IndexError,UnicodeError) as error:
         print('FAIL: '+str(error),file=sys.stderr)
         return 1
     print('PASS: eight inventory histories; preserved AD-23/predecessors; fourteen labels; nine owner patch sets; scoped deferral accounting')
-    if completed:
+    if delivery_verified:
         status = 'approved integration verified'
     elif decision == 'approved':
         status = 'packet approved; publication and upstream integration pending'

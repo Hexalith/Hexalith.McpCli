@@ -65,6 +65,8 @@ def without_guard(token):
 
 class ReconciliationTests(unittest.TestCase):
     def main(self,overrides=None,completion=False):
+        candidate = dict(data('integration.json'), state='blocked')
+        overrides = {str(E/'integration.json'):candidate, **(overrides or {})}
         original = V.read
         def read(root,path):
             return copy.deepcopy((overrides or {}).get(str(path),original(root,path)))
@@ -404,6 +406,29 @@ class CompletionBindingTests(unittest.TestCase):
             if Path(repo)==ROOT.parent/'eventstore' and args[0]=='merge-base':raise ValueError('upstream main excludes integrated commit')
             return git(repo,*args)
         self.assertEqual(self.run_binding(git_override=off_main),(1,'','FAIL: upstream main excludes integrated commit\n'))
+
+    def test_builds_exemption_requires_absent_adoption_config_at_delivered_commit(self):
+        _,_,_,_,git = self.fixture()
+        def exempt(r,m,i,f):
+            i['ownerIntegrations'][0]['checks']['builds'] = 'not applicable; owning repository has not adopted Hexalith.CiCd'
+        for config in [b'', b'.github/hexalith-ci.json']:
+            def at_commit(repo,*args):
+                if args == ('ls-tree','--name-only','d'*40,'--','.github/hexalith-ci.json'):
+                    return config
+                return git(repo,*args)
+            with self.subTest(config=config):
+                self.assertEqual(self.run_binding(exempt,git_override=at_commit)[0], int(bool(config)))
+
+    def test_rebased_owner_file_replays_reviewed_corrections_on_actual_parent(self):
+        owner = next(o for o in data('upstream/manifest.json')['owners'] if o['name']=='projects')
+        delivery = next(d for d in data('integration.json')['ownerIntegrations'] if d['name']=='projects')
+        rebase = delivery['rebasedFiles'][0]
+        file = next(f for f in owner['files'] if f['path'] == rebase['path'])
+        args = (ROOT/owner['ownerCheckout'], delivery['commit'], owner['name'], file)
+        self.assertEqual(V.rebased_document_hash(*args,rebase,data('labels.json')),rebase['afterSha256'])
+        for field in ['base','beforeSha256','afterSha256','reviewedAfterSha256','patchSha256']:
+            with self.subTest(field=field), self.assertRaises(ValueError):
+                V.rebased_document_hash(*args,dict(rebase, **{field:'0'*64}),data('labels.json'))
 
     def test_new_checkout_cannot_hide_older_committed_gitlink(self):
         _,_,_,_,git=self.fixture()
