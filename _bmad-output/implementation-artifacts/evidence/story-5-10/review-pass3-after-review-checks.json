@@ -1,0 +1,403 @@
+{
+  "date": "2026-11-22",
+  "startingMain": "fac167e6cf1703badf17d2f66780ffa0677d91f9",
+  "sourceSha256": {
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py": "91778a758cd6b053185373659ce0982b43a1ada232d5a87665b081650cf7b969",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py": "69463c9ab05c405c6ff10d37ad179b69d93c6b2e7789d16728a3dfd45764be4a",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/test_verify_amendment.py": "d59350e62af2815917298288a3fbd2b07bc3ecfd9eb48252098e66c3af634421",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/build_candidate.py": "e2e3dc854fbc7cb7a66ecf74612a2a9130905fdc23cc401fc9df6b69074d73e6",
+    "_bmad-output/implementation-artifacts/evidence/story-5-11/test_verify_reconciliation.py": "7a4d5ee03da48f0e416a4e574633e45c561041339ba7fd54db8b8f3969b7009d"
+  },
+  "protectedSha256": {
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/labels.json": "8871047e07bf667d2612aa3ded4c23a38d3138a0a9ad3827ab6372834eda42f2",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-authorization.json": "595ad2d3473ba7bda63c8d552e94a73f7bab9c5d6e452b04b3bfb1ef9c227b2b",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-gate.json": "f5df1f9db7b4b69c1eaaa7bb0461ed7d288e12b503dac1fc5a6893816acb48fb",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.after.section.md": "62628cc010c0a8ee362abb8a669a32424329b10cef3b7438b356f59be5576866",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.before.section.md": "09b051b0d61c95335554686c59b24512f1ca55b19d02b0b89cd6b16bef9649b2",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.patch": "12ba84ff82f69f66a61109272569670671b5a8046ad33a9432f883dad4702f8f",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.after.section.md": "8ed5e3575388ce8bfa894b8ebf20dc96bb4f4fefa0849d769e48143566be3b4a",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.before.section.md": "5f8138b02abf322d66fa30d6cce91b1a38e76e7c6b140ec6d33e2ba4c0d18a61",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.patch": "b20c1ef3233a663f03807f70196b6d765a820b8dac9d817ca574d79a7435e1dd",
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+  },
+  "checks": [
+    {
+      "check": "amendment",
+      "argv": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: chatbot: 48 entries; memories: 55 entries (4 added PS14 modes); pinned anchors/drift, AD-23 dispositions and hash chains\nPASS: owner decision: approved; candidate only; integrated PS06/PS07/PS12/PS13/PS14 labels remain a completion gate\n",
+      "stderr": ""
+    },
+    {
+      "check": "labels",
+      "argv": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two README-only patches; candidate only; owner decision: approved; delivery integration pending\n",
+      "stderr": ""
+    },
+    {
+      "check": "completion-amendment",
+      "argv": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels\n"
+    },
+    {
+      "check": "completion-labels",
+      "argv": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels\n"
+    },
+    {
+      "check": "approved-regeneration",
+      "argv": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/build_candidate.py"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: refusing to overwrite approved or unknown-state packet\n"
+    },
+    {
+      "check": "ad23",
+      "argv": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: _bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md: 71 classified rows + 20 non-operation records = 91\nPASS: _bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md: 28 classified rows + 40 non-operation records = 68\nPASS: _bmad-output/implementation-artifacts/folders-migration-inventory-v1.md: 103 classified rows + 58 non-operation records = 161\nPASS: _bmad-output/implementation-artifacts/projects-migration-inventory-v1.md: 46 classified rows + 6 non-operation records = 52\nPASS: _bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md: 26 classified rows + 4 non-operation records = 30\nPASS: _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md: 39 classified rows + 9 non-operation records = 48\nPASS: _bmad-output/implementation-artifacts/memories-migration-inventory-v1.md: 39 classified rows + 12 non-operation records = 51\nPASS: _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md: 20 classified rows + 4 non-operation records = 24\nPASS: exact-byte partition verified; effective decision status: adopted; parity remains a separate gate\n",
+      "stderr": ""
+    },
+    {
+      "check": "final-suite",
+      "argv": [
+        "python3",
+        "-BI",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "testsRun": 39,
+      "seconds": 602.209,
+      "assertionFailures": [],
+      "passedCases": [
+        "test_anchor_identity_unresolvable_and_prose_checks",
+        "test_approval_after_first_successor_write_is_preserved_and_later_writes_stop",
+        "test_approved_authorized_completion_exercises_actual_delivery_checks",
+        "test_approved_undelivered_candidate_is_valid_but_generation_and_completion_refuse",
+        "test_baseline_gitlinks_and_published_pin_ancestry_remain_required",
+        "test_class_drift_missing_loss_gap_owner_drift_and_ui_gate",
+        "test_completion_from_flag_spec_sprint_and_integrated_label_requires_approval",
+        "test_completion_refuses_unreadable_enrollment_declarations",
+        "test_completion_rejects_enrollment_at_the_inventory_revision",
+        "test_context_k05_status_and_admin_scope_guards",
+        "test_corrected_source_facts_and_specific_openapi_semantics_are_retained",
+        "test_current_gitlink_moves_and_local_main_lag_affect_regeneration_only",
+        "test_delivery_accepts_moved_owner_readmes_and_rejects_extra_changes_for_both_modules",
+        "test_delivery_readme_and_inventory_ancestry_guards_have_entrypoint_removal_controls",
+        "test_delivery_rejects_missing_authorization_stale_origin_non_readme_and_off_main",
+        "test_delivery_words_revisions_and_commit_hash_have_exact_stream_guard_controls",
+        "test_duplicate_json_unknown_state_and_missing_metadata",
+        "test_each_published_inventory_and_approval_copy_is_required_with_exact_streams",
+        "test_every_identity_dependent_row_and_other_deferred_rows_retain_http_and_g2",
+        "test_every_ps14_mode_field_and_noninteractive_rule",
+        "test_every_source_premise_has_an_exact_stream_fake_git_and_guard_removal_control",
+        "test_generator_is_deterministic_and_pending",
+        "test_generator_refuses_approved_authorized_symlink_and_approval_race",
+        "test_generator_rejects_symlinked_output_parent_without_writes_and_detects_ancestor_guard_removal",
+        "test_guard_removal_controls_detect_missing_accounting_row_anchor_approval_and_delivery_guards",
+        "test_guard_removal_of_published_byte_comparisons_is_detected",
+        "test_label_chain_rows_hash_path_and_readme_only_patch",
+        "test_label_entrypoint_handles_missing_and_malformed_approval_without_traceback",
+        "test_later_enrollment_does_not_change_historical_completion",
+        "test_missing_duplicate_and_added_rows_include_governance_and_stubs",
+        "test_mutable_authority_changes_affect_regeneration_only",
+        "test_pending_label_claims_and_wrong_owner_origin_have_exact_stream_controls",
+        "test_protected_predecessors_and_authorities",
+        "test_readme_only_patches_apply_to_pinned_bytes_exactly",
+        "test_real_candidate_commands_have_exact_success_streams_and_completion_refusal",
+        "test_receipt_bindings_roles_exact_words_and_pending_claims",
+        "test_replace_include_and_plain_command_rest_openapi_readiness_are_rejected",
+        "test_source_gitlink_decoration_and_registration_controls",
+        "test_unchanged_pending_destinations_are_not_rewritten"
+      ],
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "8324519d82a7d163eaf98a0dbf600a17b6261a53ebe11137cf6e9e3b11d2bc80"
+    },
+    {
+      "check": "final-511-verifier",
+      "argv": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: deferral accounting/source/owner/gate mismatch\n"
+    },
+    {
+      "check": "final-511-suite",
+      "argv": [
+        "python3",
+        "-BI",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 1,
+      "testsRun": 27,
+      "seconds": 71.237,
+      "assertionFailures": [
+        {
+          "case": "test_all_deferrals_retain_source_owner_gate_and_acceptance_boundary (test_verify_reconciliation.ReconciliationTests.test_all_deferrals_retain_source_owner_gate_and_acceptance_boundary)",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: deferral audit must retain explicit owner-decision gate\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: deferral audit must retain explicit owner-decision gate\\n')"
+        },
+        {
+          "case": "test_approved_inventory_is_distinct_from_incomplete_delivery (test_verify_reconciliation.ReconciliationTests.test_approved_inventory_is_distinct_from_incomplete_delivery)",
+          "assertion": "1 != 0"
+        },
+        {
+          "case": "test_completion_automatically_triggers_for_done_spec_and_sprint (test_verify_reconciliation.ReconciliationTests.test_completion_automatically_triggers_for_done_spec_and_sprint) (path=PosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/spec-5-11-reconcile-product-claims-and-the-migration-plan.md'))",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: completion requires fresh exact-byte successor approval\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: completion requires fresh exact-byte successor approval\\n')"
+        },
+        {
+          "case": "test_completion_automatically_triggers_for_done_spec_and_sprint (test_verify_reconciliation.ReconciliationTests.test_completion_automatically_triggers_for_done_spec_and_sprint) (path=PosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/sprint-status.yaml'))",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: completion requires fresh exact-byte successor approval\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: completion requires fresh exact-byte successor approval\\n')"
+        },
+        {
+          "case": "test_every_label_and_gate_is_required (test_verify_reconciliation.ReconciliationTests.test_every_label_and_gate_is_required)",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: candidate must not claim delivered publication or labels\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: candidate must not claim delivered publication or labels\\n')"
+        },
+        {
+          "case": "test_fresh_approval_needs_hashes_roles_words_and_no_pending_claim (test_verify_reconciliation.ReconciliationTests.test_fresh_approval_needs_hashes_roles_words_and_no_pending_claim)",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: approval artifact accounting/hash mismatch\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: approval artifact accounting/hash mismatch\\n')"
+        },
+        {
+          "case": "test_real_candidate_exact_streams_and_pending_completion_refusal (test_verify_reconciliation.ReconciliationTests.test_real_candidate_exact_streams_and_pending_completion_refusal)",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/[18 chars]h\\n') != (0, 'PASS: eight inventory histories; pres[220 chars], '')",
+          "observed": "- (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='G01–G06')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemption: G01–G06\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemption: G01–G06\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='Folders owners retain the K12')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[34 chars]2\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[34 chars]2\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='Payload paging versus AD-20')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[32 chars]0\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[32 chars]0\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='2027-02-05')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemption: 2027-02-05\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemption: 2027-02-05\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='never counted retired')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[26 chars]d\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[26 chars]d\\n')"
+        }
+      ],
+      "passedCases": [
+        "test_captured_published_discovery_and_complete_unknown_streams",
+        "test_exact_tool_names_are_required",
+        "test_complete_synthetic_binding_succeeds_with_exact_streams",
+        "test_final_plan_requires_gates_change_control_and_every_exact_immutable_link",
+        "test_missing_authorization_revision_owner_hash_gate_role_and_sync_refuse",
+        "test_new_checkout_cannot_hide_older_committed_gitlink",
+        "test_published_and_upstream_bytes_and_main_containment_are_checked",
+        "test_recorded_sm3_assessment_survives_later_verification_and_overdue_needs_owner_reason",
+        "test_structured_deferral_decision_binds_audit_and_retains_all_unresolved_gates",
+        "test_builder_refuses_approved_packet_without_writing",
+        "test_compiler_and_vector_exemptions_remain_retained_never_retired",
+        "test_every_active_file_and_no_change_owner_is_accounted",
+        "test_guard_removals_are_detected_for_hash_roles_history_labels_and_gates",
+        "test_history_missing_duplicate_version_and_hash",
+        "test_literal_patch_preserves_source_and_refuses_missing_or_duplicate_targets",
+        "test_prior_authority_and_own_receipt_are_required",
+        "test_independent_deferrals_use_their_own_recorded_obligations",
+        "test_parties_original_scope_and_later_owner_authority_are_distinct",
+        "test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels"
+      ],
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "3c454c1259e322a9638bda2a77f925aa9e95b2e080088115c350124a8b987762"
+    },
+    {
+      "check": "whitespace",
+      "argv": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "matrixCoverage": {
+    "Complete candidates": "test_generator_is_deterministic_and_pending",
+    "Invented readiness": "test_replace_include_and_plain_command_rest_openapi_readiness_are_rejected",
+    "Class drift": "test_class_drift_missing_loss_gap_owner_drift_and_ui_gate",
+    "Damaged accounting": "test_missing_duplicate_and_added_rows_include_governance_and_stubs",
+    "Completion without approval or labels": "test_completion_from_flag_spec_sprint_and_integrated_label_requires_approval"
+  },
+  "story511Baseline": {
+    "revision": "fac167e6cf1703badf17d2f66780ffa0677d91f9",
+    "archiveLayout": "The unchanged starting checkout and the patched checkout used the same verified owner repositories at the original absolute paths.",
+    "verifyCommand": [
+      "python3",
+      "-BI",
+      "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
+    ],
+    "verifyExitCode": 1,
+    "verifyStderr": "FAIL: deferral accounting/source/owner/gate mismatch\n",
+    "suiteCommand": [
+      "python3",
+      "-BI",
+      "-m",
+      "unittest",
+      "discover",
+      "-v",
+      "-s",
+      "_bmad-output/implementation-artifacts/evidence/story-5-11",
+      "-p",
+      "test_*.py"
+    ],
+    "suiteExitCode": 1,
+    "suite": {
+      "testsRun": 27,
+      "seconds": 76.561,
+      "assertionFailures": [
+        {
+          "case": "test_all_deferrals_retain_source_owner_gate_and_acceptance_boundary (test_verify_reconciliation.ReconciliationTests.test_all_deferrals_retain_source_owner_gate_and_acceptance_boundary)",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: deferral audit must retain explicit owner-decision gate\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: deferral audit must retain explicit owner-decision gate\\n')"
+        },
+        {
+          "case": "test_approved_inventory_is_distinct_from_incomplete_delivery (test_verify_reconciliation.ReconciliationTests.test_approved_inventory_is_distinct_from_incomplete_delivery)",
+          "assertion": "1 != 0"
+        },
+        {
+          "case": "test_completion_automatically_triggers_for_done_spec_and_sprint (test_verify_reconciliation.ReconciliationTests.test_completion_automatically_triggers_for_done_spec_and_sprint) (path=PosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/spec-5-11-reconcile-product-claims-and-the-migration-plan.md'))",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: completion requires fresh exact-byte successor approval\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: completion requires fresh exact-byte successor approval\\n')"
+        },
+        {
+          "case": "test_completion_automatically_triggers_for_done_spec_and_sprint (test_verify_reconciliation.ReconciliationTests.test_completion_automatically_triggers_for_done_spec_and_sprint) (path=PosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/sprint-status.yaml'))",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: completion requires fresh exact-byte successor approval\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: completion requires fresh exact-byte successor approval\\n')"
+        },
+        {
+          "case": "test_every_label_and_gate_is_required (test_verify_reconciliation.ReconciliationTests.test_every_label_and_gate_is_required)",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: candidate must not claim delivered publication or labels\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: candidate must not claim delivered publication or labels\\n')"
+        },
+        {
+          "case": "test_fresh_approval_needs_hashes_roles_words_and_no_pending_claim (test_verify_reconciliation.ReconciliationTests.test_fresh_approval_needs_hashes_roles_words_and_no_pending_claim)",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: approval artifact accounting/hash mismatch\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: approval artifact accounting/hash mismatch\\n')"
+        },
+        {
+          "case": "test_real_candidate_exact_streams_and_pending_completion_refusal (test_verify_reconciliation.ReconciliationTests.test_real_candidate_exact_streams_and_pending_completion_refusal)",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/[18 chars]h\\n') != (0, 'PASS: eight inventory histories; pres[220 chars], '')",
+          "observed": "- (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='G01–G06')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemption: G01–G06\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemption: G01–G06\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='Folders owners retain the K12')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[34 chars]2\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[34 chars]2\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='Payload paging versus AD-20')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[32 chars]0\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[32 chars]0\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='2027-02-05')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemption: 2027-02-05\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemption: 2027-02-05\\n')"
+        },
+        {
+          "case": "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='never counted retired')",
+          "assertion": "Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[26 chars]d\\n')",
+          "observed": "AssertionError: Tuples differ: (1, '', 'FAIL: deferral accounting/source/owner/gate mismatch\\n') != (1, '', 'FAIL: prepared plan lost independent gate/exemp[26 chars]d\\n')"
+        }
+      ],
+      "passedCases": [
+        "test_captured_published_discovery_and_complete_unknown_streams",
+        "test_exact_tool_names_are_required",
+        "test_complete_synthetic_binding_succeeds_with_exact_streams",
+        "test_final_plan_requires_gates_change_control_and_every_exact_immutable_link",
+        "test_missing_authorization_revision_owner_hash_gate_role_and_sync_refuse",
+        "test_new_checkout_cannot_hide_older_committed_gitlink",
+        "test_published_and_upstream_bytes_and_main_containment_are_checked",
+        "test_recorded_sm3_assessment_survives_later_verification_and_overdue_needs_owner_reason",
+        "test_structured_deferral_decision_binds_audit_and_retains_all_unresolved_gates",
+        "test_builder_refuses_approved_packet_without_writing",
+        "test_compiler_and_vector_exemptions_remain_retained_never_retired",
+        "test_every_active_file_and_no_change_owner_is_accounted",
+        "test_guard_removals_are_detected_for_hash_roles_history_labels_and_gates",
+        "test_history_missing_duplicate_version_and_hash",
+        "test_literal_patch_preserves_source_and_refuses_missing_or_duplicate_targets",
+        "test_prior_authority_and_own_receipt_are_required",
+        "test_independent_deferrals_use_their_own_recorded_obligations",
+        "test_parties_original_scope_and_later_owner_authority_are_distinct",
+        "test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels"
+      ],
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "7d18ac7aa39a39166a614f461313bca89887acdea505564dbd4a84c8a67b2e6b"
+    },
+    "comparison": "The same 12 assertions in seven methods failed on each checkout."
+  }
+}

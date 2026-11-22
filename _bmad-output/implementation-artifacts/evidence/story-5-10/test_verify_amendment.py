@@ -39,6 +39,9 @@ LABEL_PREFIX = 'PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two 
 LABEL_PASS = LABEL_PREFIX+'candidate only; owner decision: pending; approval and delivery integration pending\n'
 LABEL_APPROVED_PASS = LABEL_PREFIX+'candidate only; owner decision: approved; delivery integration pending\n'
 LABEL_COMPLETION_PASS = LABEL_PREFIX+'integrated delivery verified\n'
+PROJECT = Path('src/Hexalith.McpCli/Hexalith.McpCli.csproj')
+POLICY = Path('tools/dependency-policy.json')
+MUTABLE_INPUTS = (Path('Directory.Build.props'), PROJECT, POLICY)
 
 
 def invoke(module,args):
@@ -87,9 +90,12 @@ def workspace(*, pending=True):
     # TemporaryDirectory reliably cleans its scratch tree, including on test failure.
     with tempfile.TemporaryDirectory() as temp:
         root = Path(temp)
-        for name in ['.git','.gitmodules','references','src','tools','scripts']:
+        for name in ['.git','.gitmodules','references','scripts']:
             (root/name).symlink_to(ROOT/name,target_is_directory=(ROOT/name).is_dir())
-        shutil.copyfile(ROOT/'Directory.Build.props',root/'Directory.Build.props')
+        for relative in MUTABLE_INPUTS:
+            path = root/relative
+            path.parent.mkdir(parents=True,exist_ok=True)
+            path.write_bytes(B.git(ROOT,'show',f'{B.BASELINE}:{relative}'))
         art = root/B.ART
         art.mkdir(parents=True)
         for path in (ROOT/B.ART).iterdir():
@@ -110,7 +116,16 @@ def workspace(*, pending=True):
             text,count = re.subn('^'+re.escape(key)+r':[^\n]*',key+': '+value,path.read_text(),flags=re.M)
             if count != 1: raise AssertionError('fixture requires exactly one '+key.strip())
             path.write_text(text)
-        yield root
+        real_git = B.git
+        def snapshot_git(checkout,*args):
+            if checkout == root:
+                if args == ('merge-base','--is-ancestor','origin/main','HEAD'):
+                    return b''
+                if len(args) == 3 and args[:2] == ('ls-tree','HEAD'):
+                    return real_git(root,'ls-tree',B.BASELINE,args[2])
+            return real_git(checkout,*args)
+        with patch.object(B,'git',new=snapshot_git):
+            yield root
 
 
 def replace_cell(root,module,key,column,value):
@@ -130,7 +145,7 @@ def approved(receipt):
 
 
 @contextlib.contextmanager
-def integrated_workspace(corrupt=None,*,delivery_fault=None,moved_main=False):
+def integrated_workspace(corrupt=None,*,delivery_fault=None,moved_main=False,inventory_blobs=None):
     """Approved/delivered fixture; Git readback is synthetic, with no real receipt write."""
     with workspace(pending=True) as root:
         path=root/B.E/'approval.json';path.write_text(json.dumps(approved(V.read_json(path))))
@@ -138,6 +153,7 @@ def integrated_workspace(corrupt=None,*,delivery_fault=None,moved_main=False):
         register.update(state='integrated',inventoryRevision='b'*40,
                         deliveryAuthorization=dict(exactWords='authorize',source='unit-test fixture only',approvedOn='2026-11-16'))
         readmes={}
+        owner_origins={}
         for i,r in enumerate(register['repositories']):
             revision=('a' if i==0 else 'c')*40;commit=('commit-'+str(i)).encode()
             r['integration']=dict(commit=revision,commitSha256=B.sha(commit))
@@ -145,6 +161,7 @@ def integrated_workspace(corrupt=None,*,delivery_fault=None,moved_main=False):
             parent=(b'Current owner build/test guidance.\n\n'+before) if moved_main else before
             after=parent.replace((root/r['before']['path']).read_bytes(),(root/r['after']['path']).read_bytes())
             readmes[r['ownerCheckout']]=(revision,parent,after,commit)
+            owner_origins[r['ownerCheckout']]=r['repository'].encode()
         path.write_text(json.dumps(register));real=B.git;observed=[]
         def integrated(checkout,*args):
             owner=str(Path(checkout))
@@ -160,8 +177,8 @@ def integrated_workspace(corrupt=None,*,delivery_fault=None,moved_main=False):
                 if args==('cat-file','commit',revision): return commit
                 if args==('merge-base','--is-ancestor',revision,'origin/main'): return b''
                 if args==('diff','--name-only',revision+'^',revision): return b'README.md\n'
-                if args==('remote','get-url','origin') and delivery_fault==('origin',owner):
-                    return b'https://github.com/Hexalith/AnotherRepository.git\n'
+                if args==('remote','get-url','origin'):
+                    return b'https://github.com/Hexalith/AnotherRepository.git\n' if delivery_fault==('origin',owner) else owner_origins[owner]
             if Path(checkout)==root:
                 if args==('merge-base','--is-ancestor','b'*40,'origin/main'):
                     observed.append((owner,args))
@@ -171,6 +188,8 @@ def integrated_workspace(corrupt=None,*,delivery_fault=None,moved_main=False):
                 if len(args)==2 and args[0]=='show' and (args[1].startswith('b'*40+':') or args[1].startswith('origin/main:')):
                     observed.append((owner,args))
                     reference,path=args[1].split(':',1)
+                    if inventory_blobs and reference=='b'*40 and Path(path) in inventory_blobs:
+                        return inventory_blobs[Path(path)]
                     return b'corrupt published bytes' if corrupt==(reference,Path(path)) else (root/path).read_bytes()
             return real(checkout,*args)
         with patch.object(B,'git',side_effect=integrated),patch.object(V,'check_source_drift',return_value=None):
@@ -385,16 +404,18 @@ class AmendmentTests(unittest.TestCase):
                 self.assert_failure(root,'preserved authority changed: '+str(path))
 
     def test_mutable_authority_changes_affect_regeneration_only(self):
-        with workspace(pending=True) as root:
-            path=root/'Directory.Build.props'
-            path.write_bytes(path.read_bytes()+b'\n<!-- later dependency update -->\n')
-            before={path:(root/path).read_bytes() for path in B.packet(root)}
-            with patch.object(V,'check_source_drift',return_value=None):
-                self.assertEqual((0,PASS,''),invoke(V,['--root',str(root)]))
-                self.assertEqual((0,LABEL_PASS,''),invoke(L,['--root',str(root)]))
-            with patch.object(B,'ROOT',root):
-                self.assertEqual((1,'','FAIL: preserved authority changed: Directory.Build.props\n'),invoke(B,[]))
-            for path,data in before.items(): self.assertEqual(data,(root/path).read_bytes())
+        self.assertEqual(set(MUTABLE_INPUTS),set(B.MUTABLE_AUTHORITIES))
+        for relative in MUTABLE_INPUTS:
+            with self.subTest(path=relative),workspace() as root:
+                before={path:(root/path).read_bytes() for path in B.packet(root)}
+                path=root/relative
+                path.write_bytes(path.read_bytes()+b'\n')
+                with patch.object(V,'check_source_drift',return_value=None):
+                    self.assertEqual((0,PASS,''),invoke(V,['--root',str(root)]))
+                    self.assertEqual((0,LABEL_PASS,''),invoke(L,['--root',str(root)]))
+                with patch.object(B,'ROOT',root):
+                    self.assertEqual((1,'',f'FAIL: preserved authority changed: {relative}\n'),invoke(B,[]))
+                for path,data in before.items(): self.assertEqual(data,(root/path).read_bytes())
 
     def test_source_gitlink_decoration_and_registration_controls(self):
         V.check_source_drift(ROOT)
@@ -528,6 +549,13 @@ class AmendmentTests(unittest.TestCase):
                 if kind=='labels':
                     path=root/B.E/'labels.json';value=V.read_json(path);value['state']='integrated';path.write_text(json.dumps(value))
                 self.assert_failure(root,'completion requires exact-byte owner approval and covered roles',args=['--approved-completion'] if kind=='flag' else [])
+                if kind != 'flag':
+                    guard = " or register['state'] == 'integrated'" if kind=='labels' else " or V.completion_requested(root,False)"
+                    args=['--root',str(root)]
+                    with patch.object(V,'check_source_drift',return_value=None):
+                        self.assertEqual((1,'','FAIL: completion requires exact-byte owner approval and covered roles\n'),invoke(L,args))
+                        with removed_source(L,'verify',guard):
+                            self.assertEqual((0,LABEL_PASS,''),invoke(L,args))
         with workspace(pending=True) as root:
             path=root/B.E/'approval.json';path.write_text(json.dumps(approved(V.read_json(path))))
             self.assert_failure(root,'completion requires integrated PS06/PS07/PS12/PS13/PS14 labels',args=['--approved-completion'])
@@ -602,6 +630,54 @@ class AmendmentTests(unittest.TestCase):
                 with self.subTest(path=str(relative),revision=revision),integrated_workspace((revision,relative)) as (root,_,_):
                     expected=(1,'',f'FAIL: {relative}: published bytes differ from approved candidate\n')
                     self.assertEqual(expected,invoke(L,['--root',str(root),'--approved-completion']))
+
+    def test_completion_rejects_enrollment_at_the_inventory_revision(self):
+        for module in ['ChatBot','Memories']:
+            package=f'Hexalith.{module}.Contracts'
+            fixtures = [
+                (PROJECT,f'<Project><ItemGroup><PackageReference Include="{package}" HexalithContracts="true"/></ItemGroup></Project>'.encode()),
+                (PROJECT,f'<Project><ItemGroup><PackageReference Include="Other.Contracts; {package}" hexalithcontracts="TRUE"/></ItemGroup></Project>'.encode()),
+                (PROJECT,f'<Project><ItemGroup><PackageReference Include="{package}"><HEXALITHCONTRACTS>TRUE</HEXALITHCONTRACTS></PackageReference></ItemGroup></Project>'.encode()),
+                (PROJECT,f'<Project><ItemGroup><PackageReference Include="Other.Contracts;{package}"/><PackageReference Update="{package}" HexalithContracts="true"/></ItemGroup></Project>'.encode()),
+                (POLICY,json.dumps({'modules':{package:'1.0.0'}}).encode()),
+            ]
+            for path,data in fixtures:
+                with self.subTest(module=module,source=path,data=data),integrated_workspace(inventory_blobs={path:data}) as (root,_,_):
+                    args=['--root',str(root),'--approved-completion']
+                    for entrypoint,success in [(V,COMPLETION_PASS),(L,LABEL_COMPLETION_PASS)]:
+                        self.assertEqual((1,'',f'FAIL: {path} at inventoryRevision enrolls {package}\n'),invoke(entrypoint,args))
+                        with removed_source(L,'check_delivery','    check_inventory_enrollment(root,inv_revision)\n'):
+                            self.assertEqual((0,success,''),invoke(entrypoint,args))
+
+    def test_later_enrollment_does_not_change_historical_completion(self):
+        unmarked = (b'<Project><ItemGroup><PackageReference Update="Hexalith.ChatBot.Contracts" HexalithContracts="true"/>'
+                    b'<PackageReference Include="Hexalith.ChatBot.Contracts" HexalithContracts="false"/>'
+                    b'<PackageReference Update="Hexalith.Memories.Contracts" HexalithContracts="true"/></ItemGroup></Project>')
+        with integrated_workspace(inventory_blobs={PROJECT:unmarked,POLICY:b'{"modules":{}}'}) as (root,_,observed):
+            (root/PROJECT).write_text('<Project><ItemGroup><PackageReference Include="Hexalith.ChatBot.Contracts" HexalithContracts="true"/></ItemGroup></Project>')
+            (root/POLICY).write_text('{"modules":{"Hexalith.Memories.Contracts":"9.0"}}')
+            self.assertEqual((0,LABEL_COMPLETION_PASS,''),invoke(L,['--root',str(root)]))
+            for path in [PROJECT,POLICY]:
+                self.assertIn((str(root),('show','b'*40+':'+str(path))),observed)
+                self.assertNotIn((str(root),('show','origin/main:'+str(path))),observed)
+
+    def test_completion_refuses_unreadable_enrollment_declarations(self):
+        guard = ("    require(isinstance(policy.get('modules'),dict),\n"
+                 "            f'{policy_path} at inventoryRevision: expected a modules object')\n")
+        for path,data,message in [
+            (PROJECT,b'<Project>',f'{PROJECT} at inventoryRevision: no element found: line 1, column 9'),
+            (PROJECT,b'<Broken/>',f'{PROJECT} at inventoryRevision: expected a Project root'),
+            (PROJECT,b'<?xml version="1.0" encoding="X-UNKNOWN"?><Project/>',f'{PROJECT} at inventoryRevision: unknown encoding: X-UNKNOWN'),
+            (POLICY,b'{"modules":{"Hexalith.ChatBot.Contracts":"1.0"},"modules":{}}','duplicate JSON member modules'),
+            (POLICY,b'{"modules":[]}',f'{POLICY} at inventoryRevision: expected a modules object'),
+        ]:
+            with self.subTest(source=path,data=data),integrated_workspace(inventory_blobs={path:data}) as (root,_,_):
+                args=['--root',str(root),'--approved-completion']
+                for entrypoint in [L,V]:
+                    self.assertEqual((1,'','FAIL: '+message+'\n'),invoke(entrypoint,args))
+                if data==b'{"modules":[]}':
+                    with removed_source(L,'check_inventory_enrollment',guard):
+                        self.assertEqual((0,LABEL_COMPLETION_PASS,''),invoke(L,args))
 
     def test_guard_removal_of_published_byte_comparisons_is_detected(self):
         # Remove only the publication-byte loop from a copy of the actual function;
@@ -730,6 +806,20 @@ class AmendmentTests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError,message): L.check_delivery(ROOT,register,r,before,after)
 
     def test_generator_refuses_approved_authorized_symlink_and_approval_race(self):
+        missing_guard = ("        require(not any((ROOT/m['new']).exists() for m in MODULES.values()) or approval.exists() and labels.exists(),\n"
+                         "                'refusing to overwrite existing successor without approval and label receipts')\n")
+        for receipt in ['approval.json','labels.json']:
+            with self.subTest(missing=receipt),workspace() as root,patch.object(B,'ROOT',root):
+                path=root/B.E/receipt
+                expected=B.packet(root)
+                path.unlink()
+                snapshot={p:(root/p).read_bytes() for p in expected if root/p != path}
+                self.assertEqual((1,'','FAIL: refusing to overwrite existing successor without approval and label receipts\n'),invoke(B,[]))
+                self.assertFalse(path.exists())
+                self.assertEqual(snapshot,{p:(root/p).read_bytes() for p in snapshot})
+                with removed_source(B,'main',missing_guard):
+                    self.assertEqual((0,'Prepared ChatBot 1.1.0 and Memories 1.1.0 pending candidates; PS06/PS07/PS12/PS13/PS14 README-only patches; approval and delivery pending.\n',''),invoke(B,[]))
+                    self.assertEqual(expected[B.E/receipt],path.read_bytes())
         for kind,message in [('approval','refusing to overwrite approved or unknown-state packet'),
                              ('authorization','refusing to overwrite authorized, integrated or unknown-state labels'),
                              ('symlink','refusing symlink output destination: '+str(B.MODULES['chatbot']['new'])),
@@ -804,6 +894,29 @@ class AmendmentTests(unittest.TestCase):
             self.assertEqual(0,result[0]);self.assertEqual('',result[2])
 
     def test_duplicate_json_unknown_state_and_missing_metadata(self):
+        for relative,key,value,entrypoint,function,guard,message,success in [
+            (B.E/'approval.json','decision','revoked',V,'check_approval',
+             "    require(receipt.get('decision') in {'pending','approved'},'unknown approval decision')\n",
+             'unknown approval decision',PASS.replace('owner decision: pending','owner decision: revoked')),
+            (B.E/'labels.json','schemaVersion','9.9.9',L,'verify',
+             "    require(register.get('schemaVersion') == '1.0.0','unsupported label register schema')\n",
+             'unsupported label register schema',LABEL_PASS),
+            (B.SPEC,'status','in-progress',V,'completion_requested',
+             "        require(len(found) <= 1,'duplicate workflow status '+key.strip())\n",
+             'duplicate workflow status status',PASS),
+        ]:
+            with self.subTest(field=key),workspace() as root,patch.object(V,'check_source_drift',return_value=None):
+                path=root/relative
+                if relative==B.SPEC:
+                    path.write_text(path.read_text()+'\nstatus: in-progress\n')
+                else:
+                    document=V.read_json(path)
+                    document[key]=value
+                    path.write_text(json.dumps(document))
+                args=['--root',str(root)]
+                self.assertEqual((1,'','FAIL: '+message+'\n'),invoke(entrypoint,args))
+                with removed_source(entrypoint,function,guard):
+                    self.assertEqual((0,success,''),invoke(entrypoint,args))
         with workspace(pending=True) as root:
             (root/B.E/'approval.json').write_text('{"decision":"pending","decision":"approved"}')
             self.assert_failure(root,'duplicate JSON member decision')

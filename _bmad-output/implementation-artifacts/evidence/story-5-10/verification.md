@@ -1,18 +1,16 @@
 # Story 5.10 verification — owner-approved documentary successors
 
-Prepared 2026-11-16 at McpCli HEAD `e2e3db7ba2d45d61feacc39c41b3051310fbc57f`,
-using approved baseline `979e1e126c6d7010997f4f20b2bb3defae81333e`.
-The user approved both exact inventories and all ten named roles on 2026-11-16.
-Separate delivery authorization is recorded in delivery-authorization.json.
-The McpCli packet was published in `e2e3db7` and `008d95c`, and its resumed
-review patches were published in `5008de388c5e37257ca78e48d8afe899cf7aaa2a`,
-the locally observed origin/main. Its CI run
-[43943458640](https://github.com/Hexalith/Hexalith.McpCli/actions/runs/43943458640)
-fails in the same five pre-existing jobs as run 43916598661; these failures are
-tracked at `deferred-work.md:1043`.
-PS06/PS07/PS12/PS13/PS14 upstream label integration remains pending.
-No operation was enrolled, executed, accepted as parity or retired, and this
-patch session changes no upstream checkout.
+## Current state on 2026-11-22
+
+The owner approved the exact ChatBot and Memories 1.1.0 inventories, covered all
+ten roles and separately authorized label delivery on 2026-11-16. The inventories
+are published. The five owner README labels (PS06, PS07, PS12, PS13 and PS14)
+await integration. Both completion commands stop at that gate.
+
+All 39 Story 5.10 tests pass. The spec is in review and the sprint status is
+`review`. Historical main CI run 43957388915 reproduced the failures tracked
+at `deferred-work.md:1043`. The Story 5.11 verifier still fails its ledger
+check. [Final verification](review-pass3-after-review-checks.json)
 
 ## Exact candidate scope
 
@@ -37,12 +35,12 @@ patch session changes no upstream checkout.
   gates. PS14 changes only its fulfilled four-mode inventory obligation while
   retaining every independent tenant/credential/custody, consent, no-write
   dry-run, denial, rollback/abort and audit evidence gate. Delivery is authorized
-  and remains unintegrated. The historical check.py refusal below no longer
-  applies to this repository; its existing required CI gates govern delivery.
+  and remains unintegrated. The November 16 log records the pre-adoption
+  check.py refusal. The repository now has its CiCd adoption configuration.
 
 ## Source observations
 
-`git fetch` succeeded. Fetched McpCli `origin/main`
+At preparation on 2026-11-16, `git fetch` succeeded. Fetched McpCli `origin/main`
 `979e1e126c6d7010997f4f20b2bb3defae81333e` is an ancestor of HEAD; both
 HEAD gitlinks equal the approval pins. Regeneration halts when current HEAD
 gitlinks move or local HEAD lacks origin/main. Verification retains the immutable
@@ -53,7 +51,7 @@ regeneration still requires their working-tree bytes to equal the baseline.
 Only immutable `git show <pin>:<path>` module source
 supplies row evidence; no source checkout or nested submodule is updated.
 
-| Module | Approval-time source pin | Locally observed owner origin/main | Ancestry check |
+| Module | Approval-time source pin | Owner origin/main observed at approval on 2026-11-16 | Ancestry check |
 | --- | --- | --- | --- |
 | ChatBot | `6a4ca07b18e9b58500dc79dfede1f308da36c828` | `6a4ca07b18e9b58500dc79dfede1f308da36c828` | exit 0 |
 | Memories | `9d87500eaf4c39ce0cec0cb3a03e5dd62c167106` | `e4b2b08edacf1d10337258ffb6949711cc5987ca` | exit 0 |
@@ -191,9 +189,8 @@ the wording was corrected without changing the shared redaction policy.
 
 The review patch returns the spec and sprint state to implementation while its
 local checks run. Exact-byte approval, all covered roles and separate delivery
-authorization are recorded. The published McpCli commits above do not establish
-upstream label integration or a done state. Current required CI is red, as
-recorded in the review-patch state correction below.
+authorization are recorded. The review recorded the published McpCli commits,
+pending upstream label integration and failing required CI. [Review patch state](review-patch-state.json)
 
 ## Owner approval transition — 2026-11-16
 
@@ -433,3 +430,33 @@ The story remains in-review and sprint remains review pending upstream label
 integration. Existing CI failures and previously accepted successor deferrals
 remain open. No commit, push, upstream checkout write, enrollment, parity
 acceptance or retirement occurred in this run.
+
+## Pass-3 verification on 2026-11-22
+
+Completion reads both enrollment declarations from the published inventory
+revision. The tests cover each module in the dependency policy and both
+supported forms of Contracts metadata in the CLI project. An enrollment
+introduced later leaves historical verification valid. Regeneration fixtures
+use the baseline versions of all three mutable inputs and isolate the two
+current-ref checks. The real approved receipt continues to refuse regeneration.
+
+The four approval, workflow, schema and missing-receipt guards and the three
+automatic label-completion triggers have exact-stream tests with source-removal
+controls. All protected files matched their committed hashes. The adopted AD-23
+verifier and the whitespace check passed. [Check results](review-pass3-checks.json)
+
+When Story 5.10 edits the shared ledger, its recorded checks must include both
+the Story 5.11 reconciliation verifier and the full Story 5.11 suite. For this
+run, the verifier exited 1 with `deferral accounting/source/owner/gate mismatch`.
+Both the starting commit and the edited ledger have 65 scoped entries. The
+Story 5.11 audit binds 56. Across 27 tests, unittest reported 12 failures
+(including subtests) in seven methods that reached the stale audit. The three
+authority and historical-delivery tests passed. Story 5.11 owns the audit
+refresh and decision under 3W1 at `deferred-work.md:1246`. [Deferred work](../../deferred-work.md)
+
+
+### Verification after build review
+
+Both candidate checks and all 39 Story 5.10 tests passed on the final files. The enrollment fixtures include marked package lists, later updates to an existing reference, and mixed-case metadata. The fixtures also exercise invalid project roots and unsupported XML encodings. Both completion commands report the five pending labels. The original main revisions for ChatBot and Memories each still carried the predecessor labels when the repositories were refreshed, and both authorized patches applied cleanly in a read-only patch check.
+
+The full Story 5.11 suite and its reconciliation verifier ran against the unmodified starting McpCli commit and again against the final changes, using the same owner repositories at the checkout paths recorded in its evidence. Both runs reported the same audit diagnostic and the same 12 failed assertions across seven methods out of 27 tests. The final receipt records each failed assertion, the 39 passing Story 5.10 test names, the five matrix scenarios and the 14 protected file hashes. [Final check record](review-pass3-after-review-checks.json) · [Evidence scan](secret-scan-build-pass3-reviewed.json)

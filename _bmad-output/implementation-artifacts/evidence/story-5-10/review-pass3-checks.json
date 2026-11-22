@@ -1,0 +1,171 @@
+{
+  "date": "2026-11-22",
+  "head": "fac167e6cf1703badf17d2f66780ffa0677d91f9",
+  "sourceSha256": {
+    "build_candidate.py": "e2e3dc854fbc7cb7a66ecf74612a2a9130905fdc23cc401fc9df6b69074d73e6",
+    "test_verify_amendment.py": "3e5cbf84113777c9ec6c9164a91b283dd4d4846a0dbd418b693e73917bd60743",
+    "verify_amendment.py": "91778a758cd6b053185373659ce0982b43a1ada232d5a87665b081650cf7b969",
+    "verify_labels.py": "60cb78be91b4758c9066ee79c91665b760ef4bca11f596ea33df65f9c981c395"
+  },
+  "protectedFilesVerifiedAgainstHeadAndPriorReceipts": {
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/approval.json": "942aabbc5d337eca9ea7b5395b54d27d737cdfdf3a2991a066c73aee8a444229",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/labels.json": "8871047e07bf667d2612aa3ded4c23a38d3138a0a9ad3827ab6372834eda42f2",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-authorization.json": "595ad2d3473ba7bda63c8d552e94a73f7bab9c5d6e452b04b3bfb1ef9c227b2b",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-gate.json": "f5df1f9db7b4b69c1eaaa7bb0461ed7d288e12b503dac1fc5a6893816acb48fb",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.after.section.md": "62628cc010c0a8ee362abb8a669a32424329b10cef3b7438b356f59be5576866",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.before.section.md": "09b051b0d61c95335554686c59b24512f1ca55b19d02b0b89cd6b16bef9649b2",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.patch": "12ba84ff82f69f66a61109272569670671b5a8046ad33a9432f883dad4702f8f",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.after.section.md": "8ed5e3575388ce8bfa894b8ebf20dc96bb4f4fefa0849d769e48143566be3b4a",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.before.section.md": "5f8138b02abf322d66fa30d6cce91b1a38e76e7c6b140ec6d33e2ba4c0d18a61",
+    "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.patch": "b20c1ef3233a663f03807f70196b6d765a820b8dac9d817ca574d79a7435e1dd",
+    "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md": "3dccbe0fb56fe1facb05156d2648d0696d87dfd3a60fe25aacf4969b899ecd94",
+    "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.md": "489af91ed49804172e8bd32f3efd98cf1d78fc8a109f23675c67b5ac23f19597"
+  },
+  "sharedLedgerSha256": "e8cd961ee9ac60c7c0edd908818dfc452e61fe02d6eaf78dd3080c4625e3ce00",
+  "checks": [
+    {
+      "command": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: chatbot: 48 entries; memories: 55 entries (4 added PS14 modes); pinned anchors/drift, AD-23 dispositions and hash chains\nPASS: owner decision: approved; candidate only; integrated PS06/PS07/PS12/PS13/PS14 labels remain a completion gate\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_amendment.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: Story 5.9 register chain; PS06/PS07/PS12/PS13/PS14 in two README-only patches; candidate only; owner decision: approved; delivery integration pending\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/verify_labels.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: completion requires integrated PS06/PS07/PS12/PS13/PS14 labels\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10/build_candidate.py"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: refusing to overwrite approved or unknown-state packet\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "stdout": "PASS: _bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md: 71 classified rows + 20 non-operation records = 91\nPASS: _bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md: 28 classified rows + 40 non-operation records = 68\nPASS: _bmad-output/implementation-artifacts/folders-migration-inventory-v1.md: 103 classified rows + 58 non-operation records = 161\nPASS: _bmad-output/implementation-artifacts/projects-migration-inventory-v1.md: 46 classified rows + 6 non-operation records = 52\nPASS: _bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md: 26 classified rows + 4 non-operation records = 30\nPASS: _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md: 39 classified rows + 9 non-operation records = 48\nPASS: _bmad-output/implementation-artifacts/memories-migration-inventory-v1.md: 39 classified rows + 12 non-operation records = 51\nPASS: _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md: 20 classified rows + 4 non-operation records = 24\nPASS: exact-byte partition verified; effective decision status: adopted; parity remains a separate gate\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python3",
+        "-BI",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-10",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 0,
+      "testsRun": 39,
+      "elapsedSeconds": 533.323,
+      "failedAssertions": [],
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "5c0ce2900fadc47cba0dc7d743570d3e1de55cd9dfc848804eb8c3075054798f"
+    },
+    {
+      "command": [
+        "python3",
+        "-BI",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
+      ],
+      "exitCode": 1,
+      "stdout": "",
+      "stderr": "FAIL: deferral accounting/source/owner/gate mismatch\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-BI",
+        "-m",
+        "unittest",
+        "discover",
+        "-v",
+        "-s",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11",
+        "-p",
+        "test_*.py"
+      ],
+      "exitCode": 1,
+      "testsRun": 27,
+      "elapsedSeconds": 66.76,
+      "failedAssertions": [
+        "test_all_deferrals_retain_source_owner_gate_and_acceptance_boundary (test_verify_reconciliation.ReconciliationTests.test_all_deferrals_retain_source_owner_gate_and_acceptance_boundary)",
+        "test_approved_inventory_is_distinct_from_incomplete_delivery (test_verify_reconciliation.ReconciliationTests.test_approved_inventory_is_distinct_from_incomplete_delivery)",
+        "test_completion_automatically_triggers_for_done_spec_and_sprint (test_verify_reconciliation.ReconciliationTests.test_completion_automatically_triggers_for_done_spec_and_sprint) (path=PosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/spec-5-11-reconcile-product-claims-and-the-migration-plan.md'))",
+        "test_completion_automatically_triggers_for_done_spec_and_sprint (test_verify_reconciliation.ReconciliationTests.test_completion_automatically_triggers_for_done_spec_and_sprint) (path=PosixPath('/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/sprint-status.yaml'))",
+        "test_every_label_and_gate_is_required (test_verify_reconciliation.ReconciliationTests.test_every_label_and_gate_is_required)",
+        "test_fresh_approval_needs_hashes_roles_words_and_no_pending_claim (test_verify_reconciliation.ReconciliationTests.test_fresh_approval_needs_hashes_roles_words_and_no_pending_claim)",
+        "test_real_candidate_exact_streams_and_pending_completion_refusal (test_verify_reconciliation.ReconciliationTests.test_real_candidate_exact_streams_and_pending_completion_refusal)",
+        "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='G01–G06')",
+        "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='Folders owners retain the K12')",
+        "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='Payload paging versus AD-20')",
+        "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='2027-02-05')",
+        "test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan) (token='never counted retired')"
+      ],
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "acb3e4cd242816206ad9c4223d0070a95a232ec2e381a4ad1226a2b2b5a8fae2"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "story511": {
+    "layout": "The recorded absolute owner checkout paths were bound to local owner repositories for both commands.",
+    "ledgerEntriesAtHead": 65,
+    "ledgerEntriesInWorkingTree": 65,
+    "auditEntries": 56,
+    "routedCause": "3W1, tracked at deferred-work.md:1246. The stale audit blocks 7 test methods (12 assertion failures, including subtests). All three RecordedAuthorityAndLifecycleTests pass."
+  }
+}

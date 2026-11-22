@@ -100,14 +100,17 @@ def sha(data):
     return hashlib.sha256(data).hexdigest()
 
 def read_json(path):
+    return decode_json(path.read_bytes(),path.name)
+
+def decode_json(data,name):
     def unique(pairs):
         value = {}
         for key, item in pairs:
             require(key not in value, f'duplicate JSON member {key}')
             value[key] = item
         return value
-    value = json.loads(path.read_bytes(), object_pairs_hook=unique)
-    require(isinstance(value, dict), f'JSON document must be an object: {path.name}')
+    value = json.loads(data, object_pairs_hook=unique)
+    require(isinstance(value, dict), f'JSON document must be an object: {name}')
     return value
 
 def load(root, name, path):

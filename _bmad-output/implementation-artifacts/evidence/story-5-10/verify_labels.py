@@ -5,6 +5,7 @@ import importlib.util
 from pathlib import Path
 import re
 import sys
+from xml.etree import ElementTree
 
 sys.dont_write_bytecode = True
 ROOT = Path(__file__).resolve().parents[4]
@@ -33,6 +34,44 @@ def checked_file(root,item):
     return data
 
 
+def check_inventory_enrollment(root,revision):
+    """Check the two enrollment declarations as they stood at publication."""
+    project_path = 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
+    policy_path = 'tools/dependency-policy.json'
+    try:
+        project = ElementTree.fromstring(B.git(root,'show',f'{revision}:{project_path}'))
+    except (ElementTree.ParseError,LookupError) as error:
+        raise ValueError(f'{project_path} at inventoryRevision: {error}') from error
+    require(project.tag.rsplit('}',1)[-1] == 'Project',f'{project_path} at inventoryRevision: expected a Project root')
+    declared = set()
+    project_packages = set()
+    for group in project.iterfind('.//{*}ItemGroup'):
+        for reference in group:
+            if reference.tag.rsplit('}',1)[-1].casefold() != 'packagereference':
+                continue
+            attributes = {key.casefold():value for key,value in reference.attrib.items()}
+            names = attributes.get('include',attributes.get('update',''))
+            ids = {name.strip().casefold() for name in names.split(';') if name.strip()}
+            if 'include' in attributes:
+                declared.update(ids)
+            else:
+                ids.intersection_update(declared)
+            marker = attributes.get('hexalithcontracts','')
+            for child in reference:
+                if child.tag.rsplit('}',1)[-1].casefold() == 'hexalithcontracts':
+                    marker = child.text or ''
+            if marker.strip().casefold() == 'true':
+                project_packages.update(ids)
+    policy = B.decode_json(B.git(root,'show',f'{revision}:{policy_path}'),policy_path)
+    require(isinstance(policy.get('modules'),dict),
+            f'{policy_path} at inventoryRevision: expected a modules object')
+    policy_packages = {name.casefold() for name in policy['modules']}
+    for module in B.MODULES.values():
+        package = f'Hexalith.{module["title"]}.Contracts'
+        for path,packages in [(project_path,project_packages),(policy_path,policy_packages)]:
+            require(package.casefold() not in packages,f'{path} at inventoryRevision enrolls {package}')
+
+
 def check_delivery(root,register,repository,before,after):
     require(register.get('state') == 'integrated','completion requires integrated PS06/PS07/PS12/PS13/PS14 labels')
     auth = register.get('deliveryAuthorization')
@@ -58,6 +97,7 @@ def check_delivery(root,register,repository,before,after):
     inv_revision = register.get('inventoryRevision')
     require(isinstance(inv_revision,str) and re.fullmatch('[0-9a-f]{40}',inv_revision) is not None,'completion requires canonical integrated inventory revision')
     B.git(root,'merge-base','--is-ancestor',inv_revision,'origin/main')
+    check_inventory_enrollment(root,inv_revision)
     for path in [*[m['new'] for m in B.MODULES.values()],E/'approval.json']:
         digest = B.sha((root/path).read_bytes())
         require(B.sha(B.git(root,'show',f'{inv_revision}:{path}')) == digest and B.sha(B.git(root,'show',f'origin/main:{path}')) == digest,
@@ -95,7 +135,7 @@ def verify(root,completion=False,owner_checked=False):
         name = repository['name']
         target = next(r for r in expected['repositories'] if r['name'] == name)
         require({k:v for k,v in repository.items() if k != 'integration'} == {k:v for k,v in target.items() if k != 'integration'},f'{name}: owner/base/README patch register mismatch')
-        ownership_checkout = Path(repository['ownerCheckout']) if completion else root/B.repo(name)
+        ownership_checkout = Path(repository['ownerCheckout']) if completion and register['state'] == 'integrated' else root/B.repo(name)
         if not completion:
             declared = B.git(root,'config','--file',str(root/'.gitmodules'),'--get',f'submodule.{B.repo(name)}.path').decode().strip()
             require(declared == str(B.repo(name)),f'{name}: ownership reference is not root-declared')

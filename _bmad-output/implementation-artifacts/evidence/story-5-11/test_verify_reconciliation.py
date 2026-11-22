@@ -346,19 +346,35 @@ class RecordedAuthorityAndLifecycleTests(unittest.TestCase):
             befores[(str(Path(owner['ownerCheckout'])),commit)]=before
             afters[(str(Path(owner['ownerCheckout'])),commit)]=after;commits[commit]=raw
         original=prior.B.git
+        project='src/Hexalith.McpCli/Hexalith.McpCli.csproj'
+        policy='tools/dependency-policy.json'
+        historical={project:b'<Project><ItemGroup/></Project>',policy:b'{"modules":{}}'}
+        current={
+            ROOT/project:b'<Project><ItemGroup><PackageReference Include="Hexalith.ChatBot.Contracts" HexalithContracts="true"/></ItemGroup></Project>',
+            ROOT/policy:b'{"modules":{"Hexalith.Memories.Contracts":"2.0.0"}}',
+        }
+        historical_reads=set()
+        read_bytes=Path.read_bytes
+        def working_bytes(path):
+            return current[path] if path in current else read_bytes(path)
         def historical_objects(repo,*args):
             if args[0]=='show':
                 revision,path=args[1].split(':',1)
                 if revision.endswith('^') and revision[:-1] in commits and path=='README.md':return befores[(str(Path(repo)),revision[:-1])]
                 if revision in commits and path=='README.md':return afters[(str(Path(repo)),revision)]
+                if revision=='f'*40 and path in historical:
+                    historical_reads.add(path)
+                    return historical[path]
                 if revision=='f'*40:return (ROOT/path).read_bytes()
+                if revision=='origin/main' and ROOT/path in current:return current[ROOT/path]
                 if revision=='origin/main' and path=='README.md':return b'current approved technical-tools 1.0.4 supersession'
             if args[0]=='cat-file' and args[-1] in commits:return commits[args[-1]]
             if args[0]=='diff' and args[3] in commits:return b'README.md\n'
             if args[0]=='merge-base' and args[2] in {*commits,'f'*40}:return b''
             return original(repo,*args)
-        with mock.patch.object(prior.B,'git',side_effect=historical_objects):
+        with mock.patch.object(prior.B,'git',side_effect=historical_objects),mock.patch.object(Path,'read_bytes',working_bytes):
             V.check_prior_delivery(ROOT,prior_module=prior,register=register)
+        self.assertEqual(set(historical),historical_reads)
         self.assertTrue(all('technical-tools inventory 1.0.4' in row['label']['text'] for row in data('labels.json')['rows']))
 
 
