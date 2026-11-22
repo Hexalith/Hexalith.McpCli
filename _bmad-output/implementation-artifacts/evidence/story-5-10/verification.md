@@ -2,15 +2,9 @@
 
 ## Current state on 2026-11-22
 
-The owner approved the exact ChatBot and Memories 1.1.0 inventories, covered all
-ten roles and separately authorized label delivery on 2026-11-16. The inventories
-are published. The five owner README labels (PS06, PS07, PS12, PS13 and PS14)
-await integration. Both completion commands stop at that gate.
+The owner approved the ChatBot and Memories 1.1.0 inventories, covered all ten roles and separately authorized their README labels. ChatBot published PS12 and PS13 in `523dae0f`. Memories published PS06, PS07 and PS14 in `719820db`. Git readback confirmed each README-only commit on its owning main branch and matched the authorized section bytes. The register records the full revisions and raw commit hashes. [Integrated label register](labels.json)
 
-All 39 Story 5.10 tests pass. The spec is in review and the sprint status is
-`review`. Historical main CI run 43957388915 reproduced the failures tracked
-at `deferred-work.md:1043`. The Story 5.11 verifier still fails its ledger
-check. [Final verification](review-pass3-after-review-checks.json)
+The story and sprint entry are done. All 39 Story 5.10 tests passed during the preceding build. Publication used commit-message validation and Git readback. The Story 5.11 ledger discrepancy remains tracked at `deferred-work.md:1246`. [Build verification](review-pass3-after-review-checks.json)
 
 ## Exact candidate scope
 
@@ -28,14 +22,13 @@ check. [Final verification](review-pass3-after-review-checks.json)
   covers those roles and supersedes each module's A1 for these successors.
   The receipt determines effective approval status; the approved inventory bytes
   retain their original proposal headings.
-- [Prepared label register](labels.json) chains to Story 5.9 and binds prior
+- [Integrated label register](labels.json) chains to Story 5.9 and binds prior
   PS06/PS07/PS12/PS13/PS14 rows from Story 5.7. The two README-only patches include
   ordinary context lines, apply with standard `git apply --check`, and cite
   these successors and their hashes. PS06/PS07/PS12/PS13 retain their removal
   gates. PS14 changes only its fulfilled four-mode inventory obligation while
   retaining every independent tenant/credential/custody, consent, no-write
-  dry-run, denial, rollback/abort and audit evidence gate. Delivery is authorized
-  and remains unintegrated. The November 16 log records the pre-adoption
+  dry-run, denial, rollback/abort and audit evidence gate. The authorized sections are on both owner main branches. The November 16 log records the pre-adoption
   check.py refusal. The repository now has its CiCd adoption configuration.
 
 ## Source observations

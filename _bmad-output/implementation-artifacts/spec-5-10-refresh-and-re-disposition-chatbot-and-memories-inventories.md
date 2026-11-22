@@ -2,7 +2,7 @@
 title: '5.10 Refresh and re-disposition ChatBot and Memories inventories'
 type: 'chore'
 created: '2026-11-16'
-status: 'in-review'
+status: 'done'
 baseline_commit: '979e1e126c6d7010997f4f20b2bb3defae81333e'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -551,3 +551,7 @@ The three reviewers examined the eight reopened items against the freshly pulled
 | Verification 3 | Medium | The reviewer reproduced the unknown-encoding traceback through the integrated fixture. Cover it with Blind 4. |
 
 All eight pass-3 action items are checked. The final full Story 5.10 suite passed all 39 tests, including the five frozen matrix scenarios. Both candidate verifiers passed. Both completion commands returned the outstanding label-integration diagnostic. All 14 protected file hashes matched. Story 5.11 ran 27 tests on the untouched starting commit and the final build. The same 12 assertions failed across the same seven methods on both checkouts. The Story 5.10 historical-delivery consumer passed with its fixed historical inputs. Story 5.10 remains in review pending the five owner README labels. [Final check record](evidence/story-5-10/review-pass3-after-review-checks.json) · [Evidence scan](evidence/story-5-10/secret-scan-build-pass3-reviewed.json)
+
+### Owner README delivery on 2026-11-22
+
+ChatBot published PS12 and PS13 in `523dae0f44fded0738d68f019cc5ddedfb8f0456`. Memories published PS06, PS07 and PS14 in `719820dbca5fb95e2f16f796b8a1124b2194d210`. Git readback from both owner main branches confirmed that each commit changed only the authorized README section. The label register binds the commit objects to the approved inventories at McpCli `008d95ccc77d932a372cb6c749d9d1fb1bc1ea57`. This closes Story 5.10's delivery gate. The 39-test result above is from the build preceding delivery. [Integrated label register](evidence/story-5-10/labels.json)

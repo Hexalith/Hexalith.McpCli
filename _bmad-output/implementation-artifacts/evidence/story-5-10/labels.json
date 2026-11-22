@@ -1,6 +1,6 @@
 {
   "schemaVersion": "1.0.0",
-  "state": "candidate-pending-owner-approval-and-delivery",
+  "state": "integrated",
   "predecessor": {
     "path": "_bmad-output/implementation-artifacts/evidence/story-5-9/labels.json",
     "sha256": "f53dfe3b9cfab2d831bff6c329a7d1eab179a32ccac1e0774df408257091cf40"
@@ -13,8 +13,16 @@
     "_bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.1.0.md": "3d801aed7bd80a9a6f3ec225a694ed1aa9e9a9ce7fa263745d90184af5ced49c",
     "_bmad-output/implementation-artifacts/memories-migration-inventory-v1.1.0.md": "fc3baee0f766f95db32df5fd226825b144927c2ad1bc60f867341d32b517bca1"
   },
-  "inventoryRevision": null,
-  "deliveryAuthorization": null,
+  "inventoryRevision": "008d95ccc77d932a372cb6c749d9d1fb1bc1ea57",
+  "deliveryAuthorization": {
+    "exactWords": "authorize",
+    "source": "Current conversation: after separate exact-byte owner approval, the user replied \"authorize\" to committing and pushing the approved Story 5.10 McpCli packet and both prepared upstream README-only updates. This authorization excludes unrelated local owner work, enrollment, live execution, parity acceptance and retirement.",
+    "approvedOn": "2026-11-16",
+    "receipt": {
+      "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/delivery-authorization.json",
+      "sha256": "595ad2d3473ba7bda63c8d552e94a73f7bab9c5d6e452b04b3bfb1ef9c227b2b"
+    }
+  },
   "repositories": [
     {
       "name": "chatbot",
@@ -25,7 +33,10 @@
         "beforeSha256": "6b3874701fbb50035d7187d92e740a1cb07080eddaa2910404fe1dd7ec114c03",
         "afterSha256": "e6d142d116365628a5cbf9e466ea02177875168901f6ced7647994dcc339d97d"
       },
-      "integration": null,
+      "integration": {
+        "commit": "523dae0f44fded0738d68f019cc5ddedfb8f0456",
+        "commitSha256": "1c25f42cc8e773cf2d56b3794da3cc00e26a0537474b38309eb1e558251ac901"
+      },
       "before": {
         "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/chatbot/README.before.section.md",
         "sha256": "09b051b0d61c95335554686c59b24512f1ca55b19d02b0b89cd6b16bef9649b2"
@@ -48,7 +59,10 @@
         "beforeSha256": "6e6b45a2caf2756e9db25d9f55d4d4c787a88b7af24ee725264e596758c9e835",
         "afterSha256": "d5a12b07d95676a554eb6fdfffb6e48fa60cbabd2b4a976885c92b1249bc0a9a"
       },
-      "integration": null,
+      "integration": {
+        "commit": "719820dbca5fb95e2f16f796b8a1124b2194d210",
+        "commitSha256": "15efece58a286065eb2da49bd45f9160ec7b0311ee6d20e1957c42bb98632add"
+      },
       "before": {
         "path": "_bmad-output/implementation-artifacts/evidence/story-5-10/upstream/memories/README.before.section.md",
         "sha256": "5f8138b02abf322d66fa30d6cce91b1a38e76e7c6b140ec6d33e2ba4c0d18a61"
