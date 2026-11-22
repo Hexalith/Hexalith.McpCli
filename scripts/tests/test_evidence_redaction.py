@@ -111,6 +111,108 @@ class EvidenceRedactionTests(unittest.TestCase):
                 self.assertEqual(result, sanitized(result, environment={}))
         self.assertEqual({'PrivateKey': '[REDACTED]'}, sanitized_values({'PrivateKey': {'d': 'synthetic-private-material'}}, environment={}))
 
+    def test_truncated_escaped_private_fragments_preserve_json_wrappers(self):
+        for escapes in ('\\', '\\\\\\'):
+            quote = escapes + '"'
+            prefix = 'diagnostic {' + quote + 'PrivateKey' + quote + ':' + quote
+            for suffix in ('', quote + '} retained suffix'):
+                original = prefix + 'synthetic-secret' + suffix
+                expected = prefix + '[REDACTED]' + suffix
+                with self.subTest(escapes=escapes, suffix=suffix):
+                    self.assertEqual(expected, sanitized(original, environment={}))
+                    wrapped = json.dumps({'out': original, 'safe': 'retained'})
+                    result = sanitized(wrapped, environment={})
+                    self.assertEqual({'out': expected, 'safe': 'retained'}, json.loads(result))
+                    self.assertEqual(result, sanitized(result, environment={}))
+
+    def test_escaped_private_json_preserves_safe_fields_after_strings_and_containers(self):
+        for private in ('"synthetic-secret\\\\"', '"first\\"synthetic-secret"', '{"d":["synthetic-secret","]"]}'):
+            for layers in (1, 2):
+                fragment = r'{"\u0050rivateKey":' + private + ',"safe":"kept"}'
+                for _ in range(layers):
+                    fragment = json.dumps(fragment)[1:-1]
+                with self.subTest(private=private, layers=layers):
+                    result = sanitized('log: ' + fragment, environment={}).removeprefix('log: ')
+                    for _ in range(layers):
+                        result = json.loads('"' + result + '"')
+                    self.assertEqual({'PrivateKey': '[REDACTED]', 'safe': 'kept'}, json.loads(result))
+
+    def test_malformed_xml_uses_decoded_selectors_and_quote_aware_tags(self):
+        for opening, ending in (
+            ('<setting name="Private&#75;ey">', '</setting>'),
+            ("<setting other='safe > detail' ns:key='Priv&#97;teKey'>", '</setting>'),
+            ('<PrivateKey label="safe > detail">', '</PrivateKey>'),
+        ):
+            original = '<root name="ordinary">' + opening + 'synthetic-secret' + ending + '<safe/> <unfinished'
+            expected = original.replace('synthetic-secret', '[REDACTED]')
+            with self.subTest(opening=opening):
+                self.assertEqual(expected, sanitized_xml(original, environment={}))
+                self.assertEqual(expected, sanitized_xml(expected, environment={}))
+
+        for opaque in ('<![CDATA[</setting>]]>', '<!-- </setting> -->'):
+            prefix = '<root><setting name="Private&#75;ey">'
+            suffix = '</setting><safe>kept</safe><unfinished'
+            original = prefix + opaque + 'synthetic-secret' + suffix
+            self.assertEqual(prefix + '[REDACTED]' + suffix, sanitized_xml(original, environment={}))
+
+        for selector, name in (('', 'PrivateKey'), (' name="Private&#75;ey"', 'value')):
+            for quote in ('"', "'"):
+                prefix = '<root><setting' + selector + ' safe="kept > detail" ' + name + ' = ' + quote
+                for suffix in (quote + '/><safe>kept</safe><unfinished', ''):
+                    original = prefix + 'first>synthetic-secret' + suffix
+                    expected = prefix + '[REDACTED]' + suffix
+                    with self.subTest(selector=selector, quote=quote, suffix=suffix):
+                        self.assertEqual(expected, sanitized_xml(original, environment={}))
+                        self.assertEqual(expected, sanitized_xml(expected, environment={}))
+
+    def test_private_arguments_accept_whitespace_and_escaped_quotes(self):
+        cases = (
+            ('--Authentication:JwtBearer:SigningKey ', 'synthetic-secret', ' --other kept'),
+            ('--PrivateKey = "', 'synthetic-secret', '" kept'),
+            ('--SigningKey : ', 'synthetic-secret', ' kept'),
+            ('--PrivateKey\t"', 'synthetic\\"-secret', '" kept'),
+            ("--PrivateKey='", "synthetic\\'-secret", "' kept"),
+            ('--PrivateKey="', 'synthetic\\"-secret', ''),
+            ('--PrivateKey="', 'synthetic-secret\\\\', '" kept'),
+            ('--PrivateKey ', r'synthetic\ secret', ' kept'),
+            ('--PrivateKey ', 'synthetic" secret"suffix', ' kept'),
+        )
+        for prefix, value, suffix in cases:
+            with self.subTest(prefix=prefix, suffix=suffix):
+                original = prefix + value + suffix
+                expected = prefix + '[REDACTED]' + suffix
+                self.assertEqual(expected, sanitized(original, environment={}))
+                self.assertEqual(expected, sanitized(expected, environment={}))
+                wrapped = json.dumps({'out': original, 'safe': 'retained'})
+                self.assertEqual({'out': expected, 'safe': 'retained'},
+                                 json.loads(sanitized(wrapped, environment={})))
+        ordinary = 'PrivateKey is configured and ordinary --OtherPrivateKeys stay visible'
+        self.assertEqual(ordinary, sanitized(ordinary, environment={}))
+        self.assertEqual('--PrivateKey "[REDACTED]" kept',
+                         sanitized('''--PrivateKey "synthetic"' secret'suffix kept''', environment={}))
+        self.assertEqual("'--PrivateKey=[REDACTED]' kept",
+                         sanitized("'--PrivateKey=synthetic secret' kept", environment={}))
+
+    def test_private_argument_match_does_not_cross_protected_json_strings(self):
+        diagnostic = json.dumps({'out': "--PrivateKey='synthetic-secret"})
+        trailing = ' --PrivateKey="second-secret" kept'
+        result = sanitized(diagnostic + trailing, environment={})
+        expected = json.dumps({'out': "--PrivateKey='[REDACTED]"}) + ' --PrivateKey="[REDACTED]" kept'
+        self.assertEqual(expected, result)
+        self.assertEqual(result, sanitized(result, environment={}))
+
+    def test_adjacent_private_argv_values_are_redacted(self):
+        argv = ['fixture', '--Auth:PrivateKey', 'synthetic-secret', '--SigningKey', 'second-secret', 'kept']
+        expected = ['fixture', '--Auth:PrivateKey', '[REDACTED]', '--SigningKey', '[REDACTED]', 'kept']
+        self.assertEqual(expected, sanitized_values(argv, environment={}))
+        wrapped = json.dumps({'argv': argv, 'out': '--PrivateKey', 'safe': 'kept'})
+        result = sanitized(wrapped, environment={})
+        self.assertEqual({'argv': expected, 'out': '--PrivateKey', 'safe': 'kept'}, json.loads(result))
+        self.assertEqual(result, sanitized(result, environment={}))
+        for trailing in ('', '"'):
+            truncated = '["--PrivateKey", "synthetic-secret' + trailing
+            self.assertEqual('["--PrivateKey", "[REDACTED]"', sanitized(truncated, environment={}))
+
     def test_marker_like_private_values_are_still_redacted(self):
         for value in ('[REDACTEDbutsecret', '[REDACTED]trailing-secret'):
             result = sanitized('PrivateKey=' + value, environment={})

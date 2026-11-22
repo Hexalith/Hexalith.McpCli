@@ -29,7 +29,7 @@ import native_sources
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from evidence_redaction import sanitized, sanitized_xml
+from evidence_redaction import sanitized, sanitized_values, sanitized_xml
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
 TESTS = ROOT / PROJECT / 'bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll'
 MODULES = native_cohort.MODULES
@@ -135,8 +135,10 @@ def save(path: Path, value, *, environment=None) -> None:
 def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environment=None) -> str:
     """Enforce a process bound, retain both sanitized channels, and propagate failures."""
     output.parent.mkdir(parents=True, exist_ok=True)
-    actual = ['timeout', '--signal=TERM', '--kill-after=30s', str(seconds), *map(str, command)]
-    print(sanitized(f'Running ({seconds}s): {" ".join(map(str, command))}', environment=environment), flush=True)
+    argv = list(map(str, command))
+    actual = ['timeout', '--signal=TERM', '--kill-after=30s', str(seconds), *argv]
+    display = ' '.join(sanitized_values(argv, environment=environment))
+    print(sanitized(f'Running ({seconds}s): {display}', environment=environment), flush=True)
     with tempfile.TemporaryFile() as stdout, tempfile.TemporaryFile() as stderr:
         child = subprocess.Popen(actual, cwd=cwd, env=environment, stdout=stdout, stderr=stderr, start_new_session=True)
         interrupted = False
@@ -183,10 +185,10 @@ def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environ
             error = sanitized(stderr.read().decode(errors='replace'), environment=environment)
             output.parent.joinpath(output.name + '.stdout.txt').write_text(content)
             output.parent.joinpath(output.name + '.stderr.txt').write_text(error)
-            save(output.parent / (output.name + '.command.json'), {'command': list(map(str, command)), 'cwd': str(cwd),
+            save(output.parent / (output.name + '.command.json'), {'command': argv, 'cwd': str(cwd),
                  'timeoutSeconds': seconds, 'exitCode': child.returncode}, environment=environment)
     if code != 0:
-        raise RuntimeError(sanitized(f'{" ".join(map(str, command))} exited {code}; '
+        raise RuntimeError(sanitized(f'{display} exited {code}; '
                            f'stdout: {output.parent / (output.name + ".stdout.txt")}; '
                            f'stderr: {output.parent / (output.name + ".stderr.txt")}', environment=environment))
     return content.strip()

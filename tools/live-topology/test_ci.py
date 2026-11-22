@@ -2412,6 +2412,19 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual('retained child\n', output.with_suffix('.stdout.txt').read_text())
         self.assertEqual('', output.with_suffix('.stderr.txt').read_text())
 
+    def test_bounded_redacts_adjacent_argv_before_formatting_console_and_failure(self):
+        module = self.ci_module()
+        output = self.root / 'bounded-private-argv'
+        stdout = io.StringIO()
+        with contextlib.redirect_stdout(stdout), self.assertRaises(RuntimeError) as failure:
+            module.bounded([sys.executable, '-c', 'raise SystemExit(7)', '--PrivateKey',
+                            'first synthetic-canary', '--safe', 'kept'], 5, output)
+        receipt = json.loads(output.with_suffix('.command.json').read_text())
+        self.assertEqual(['--PrivateKey', '[REDACTED]', '--safe', 'kept'], receipt['command'][-4:])
+        for diagnostic in (stdout.getvalue(), str(failure.exception)):
+            self.assertIn('--PrivateKey [REDACTED] --safe kept', diagnostic)
+            self.assertNotIn('synthetic-canary', diagnostic)
+
     def test_child_only_environment_secrets_are_redacted_on_success_failure_and_cancellation(self):
         module = self.ci_module()
         secret = 'child-only-opaque-credential'

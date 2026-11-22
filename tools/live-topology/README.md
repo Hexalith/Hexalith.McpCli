@@ -400,9 +400,10 @@ generation-specific vector receipts and smoke XML, and allowlisted runtime logs
 under `<generation>/runtime-diagnostics/`. Runtime keys, certificate material,
 Redis RDB files and scheduler data are excluded; JWTs, opaque Bearer credentials,
 complete or truncated PEM material and known credential values are redacted from
-diagnostic text by `scripts/evidence_redaction.py`. Named private-key JSON and XML
-values are redacted even in nested escaped diagnostics or malformed XML. Raw private runtime state
-stays outside uploaded evidence. Keep its location from `preparation.json` until
+diagnostic text by `scripts/evidence_redaction.py`. Private settings are redacted
+in escaped JSON, malformed XML, and command arguments. Live command diagnostics
+redact separate argument values before joining them for display. Raw private runtime
+state stays outside uploaded evidence. Keep its location from `preparation.json` until
 diagnostics are complete, then remove only that task-owned directory.
 
 ## Scanning an evidence packet

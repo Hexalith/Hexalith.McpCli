@@ -1279,3 +1279,15 @@ status: open
     - `references/Hexalith.Builds/Github/release-version/invoke_plugins.mjs` runs pinned `generateNotes` only.
     - README.md:85 still says "release notes append that committed status".
     - Ledger greps for "migration-status", "releaserc" and "notes append" found no existing equivalent entry.
+
+## Resolved in the private evidence redaction follow-up (2026-11-22)
+
+These resolutions supersede the corresponding open statuses in the Story 5.4 review entries. See `spec-harden-private-evidence-redaction.md` for validation and review findings.
+
+| Finding | Resolution |
+| --- | --- |
+| R54-D1 | Escaped JSON redaction covers unfinished private values through the fragment boundary and preserves enclosing JSON strings. |
+| R54-D2 | Malformed XML selects private body text after decoding selector values. |
+| R54-D3 | XML attribute parsing honors quoted tag delimiters and preserves following diagnostics. |
+| R54-D4 | Whitespace-separated and adjacent private argument values are redacted in diagnostic text, structured argv, and live command logs. |
+| R54-D6 | Argument parsing respects escaped quotes and consumes the complete private value. |
