@@ -42,7 +42,7 @@ public static class McpCliMcpServiceCollectionExtensions
 
         collection.Add(Create((Func<string, string, IServiceProvider, CancellationToken, string?, string?, string?, int?, int?,
             string?, Task<ModelContextProtocol.Protocol.CallToolResult>>)McpToolHandlers.RunQuery,
-            "run_query", "Purpose: Read through EventStore and return a document with optional paging. Use when: describe_operation shows a submittable read and the payload and envelope are ready. Next: Inspect the document and use the returned cursor for another page when present.",
+            "run_query", "Purpose: Read through EventStore and return a document with optional paging. Use when: describe_operation shows a submittable read and the payload and envelope are ready. Next: Inspect the document and use the returned cursor for another page when present. The paging argument names pageSize, offset and cursor are case-sensitive.",
             typeof(QueryResult), readOnly: true));
 
         var inputSchemas = collection.ToDictionary(tool => tool.ProtocolTool.Name,
@@ -86,9 +86,15 @@ public static class McpCliMcpServiceCollectionExtensions
 
                     if (toolName == "run_query" && parameters["arguments"] is JsonObject queryArguments)
                     {
-                        foreach (string name in new[] { "pageSize", "offset" })
+                        foreach (string name in new[] { "pageSize", "offset", "cursor" })
                         {
-                            if (queryArguments[name] is not JsonNode number)
+                            if (queryArguments.Any(argument => string.Equals(argument.Key, name, StringComparison.OrdinalIgnoreCase)
+                                && !string.Equals(argument.Key, name, StringComparison.Ordinal)))
+                            {
+                                throw new McpProtocolException($"Use the exact paging argument name '{name}'.", McpErrorCode.InvalidParams);
+                            }
+
+                            if (name == "cursor" || queryArguments[name] is not JsonNode number)
                             {
                                 continue;
                             }

@@ -122,7 +122,7 @@ public sealed class McpExecutionTests
         await using McpTestSession session = await CreateAsync(version);
         foreach ((int? pageSize, int? offset, string? cursor) in new (int?, int?, string?)[]
         {
-            (null, null, null), (25, 0, null), (null, null, ""), (null, null, " "),
+            (null, null, null), (25, 0, null), (null, null, ""), (null, null, " "), (null, 0, ""), (25, 0, " "),
         })
         {
             JsonElement result = await session.AssertParityAsync(new RunQueryArguments("sample.get-item", QueryPayload,
@@ -234,6 +234,38 @@ public sealed class McpExecutionTests
                 session.Gateway.ReceivedCalls().ShouldBeEmpty();
             }
         }
+    }
+
+    /// <summary>Paging arguments use the advertised property names, preventing casing aliases from bypassing validation.</summary>
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task PagingArgumentAliasesUseInvalidParametersAsync(string version)
+    {
+        await using McpTestSession session = await CreateAsync(version);
+        foreach (string field in new[] { "PageSize", "OFFSET" })
+        {
+            foreach (long number in new[] { 1L, (long)int.MaxValue + 1 })
+            {
+                var arguments = new Dictionary<string, object?>
+                {
+                    ["operation"] = "sample.get-item", ["payload"] = QueryPayload, [field] = number,
+                };
+                McpProtocolException exception = await Should.ThrowAsync<McpProtocolException>(
+                    () => session.CallAsync("run_query", arguments));
+                exception.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+                session.Gateway.ReceivedCalls().ShouldBeEmpty();
+            }
+        }
+
+        McpProtocolException cursor = await Should.ThrowAsync<McpProtocolException>(() => session.CallAsync("run_query",
+            new Dictionary<string, object?>
+            {
+                ["operation"] = "sample.get-item", ["payload"] = QueryPayload, ["Cursor"] = "next", ["offset"] = 0,
+            }));
+        cursor.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+        cursor.Message.ShouldBe("Request failed (remote): Use the exact paging argument name 'cursor'.");
+        session.Gateway.ReceivedCalls().ShouldBeEmpty();
     }
 
     /// <summary>Wrong kinds, payloads, envelope arguments, offline calls and Gateway failures match Core documents.</summary>

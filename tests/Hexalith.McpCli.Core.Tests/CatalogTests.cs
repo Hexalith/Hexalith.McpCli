@@ -138,7 +138,7 @@ public sealed class CatalogTests
         interfaceQuery.Routing.ProjectionActorType.ShouldBe("RoutingProjectionActor");
         OperationDescriptor constant = Find(routing, "routing-fixture.items-list");
         constant.Routing.WireType.ShouldBe("list-items-wire");
-        constant.AggregateIdConstant.ShouldBe("routing-list");
+        constant.AggregateIdConstant.ShouldBe("01ARZ3NDEKTSV4RRFFQ69G5FAV");
         constant.AggregateIdAccessor.ShouldBeNull();
         constant.AggregateIdRequired.ShouldBeFalse();
         OperationDescriptor sourceFree = Find(routing, "routing-fixture.get-http2-status");
@@ -147,6 +147,32 @@ public sealed class CatalogTests
         OperationDescriptor computed = Find(routing, "routing-fixture.computed-status");
         computed.Routing.ProjectionType.ShouldBeNull();
         computed.Routing.ProjectionActorType.ShouldBeNull();
+    }
+
+    /// <summary>An invalid query default is excluded for either module identifier kind.</summary>
+    [Theory]
+    [InlineData(IdentifierKind.Ulid, "routing-list", "a canonical uppercase ULID")]
+    [InlineData(IdentifierKind.Ulid, "01arz3ndektsv4rrffq69g5fav", "a canonical uppercase ULID")]
+    [InlineData(IdentifierKind.String, "bad id", "1 to 256 ASCII letters")]
+    public void InvalidQueryAggregateDefaultIsExcluded(IdentifierKind kind, string aggregateId, string rule)
+    {
+        AssemblyBuilder assembly = AssemblyBuilder.DefineDynamicAssembly(
+            new AssemblyName("InvalidQueryDefault.Contracts"), AssemblyBuilderAccess.Run);
+        ConstructorInfo marker = typeof(HexalithModuleAttribute).GetConstructor([typeof(string), typeof(string), typeof(IdentifierKind)])!;
+        assembly.SetCustomAttribute(new CustomAttributeBuilder(marker, ["invalid-default", "Query default fixture.", kind]));
+        TypeBuilder type = assembly.DefineDynamicModule("Fixture").DefineType("ListItemsQuery", TypeAttributes.Public);
+        ConstructorInfo query = typeof(HexalithQueryAttribute).GetConstructor([typeof(string)])!;
+        type.SetCustomAttribute(new CustomAttributeBuilder(query, ["List synthetic items."],
+            [typeof(HexalithQueryAttribute).GetProperty(nameof(HexalithQueryAttribute.Domain))!,
+                typeof(HexalithQueryAttribute).GetProperty(nameof(HexalithQueryAttribute.AggregateId))!],
+            ["fixture", aggregateId]));
+        _ = type.CreateType();
+
+        CatalogSnapshot catalog = CatalogBuilder.Build([assembly]);
+        catalog.Modules.Single().Operations.ShouldBeEmpty();
+        CatalogDiagnostic diagnostic = catalog.Diagnostics.Single(item => item.TypeName == "ListItemsQuery");
+        (diagnostic.Category, diagnostic.Severity).ShouldBe(("invalid_routing_value", "error"));
+        diagnostic.Message.ShouldStartWith($"HexalithQuery.AggregateId '{aggregateId}' must be {rule}");
     }
 
     /// <summary>Computed queries preserve omitted selectors without a declaration diagnostic.</summary>

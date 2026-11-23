@@ -227,9 +227,7 @@ public sealed class OperationExecutor(
         }
 
         string? aggregateId = call.AggregateId ?? accessorId ?? operation.AggregateIdConstant;
-        if (string.IsNullOrWhiteSpace(aggregateId)
-            || module.IdentifierKind == IdentifierKind.Ulid && !IsCanonicalUlid(aggregateId)
-            || !RoutingResolver.IsAggregateId(aggregateId))
+        if (!IsAggregateIdForModule(aggregateId, module.IdentifierKind))
         {
             string path = call.AggregateId is null && accessorId is not null
                 && operation.PropertyBindings.TryGetValue(PropertyRole.AggregateId, out PropertyBinding? binding)
@@ -378,6 +376,11 @@ public sealed class OperationExecutor(
         using JsonDocument document = JsonDocument.Parse(node?.ToJsonString() ?? "null");
         return document.RootElement.Clone();
     }
+
+    /// <summary>Checks the aggregate identifier against the Gateway grammar and declared module identifier kind.</summary>
+    internal static bool IsAggregateIdForModule(string? value, IdentifierKind identifierKind)
+        => value is not null && RoutingResolver.IsAggregateId(value)
+            && (identifierKind != IdentifierKind.Ulid || IsCanonicalUlid(value));
 
     internal static bool IsCanonicalUlid(string value)
         => Ulid.TryParse(value, provider: null, out Ulid parsed)

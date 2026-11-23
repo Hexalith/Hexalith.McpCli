@@ -65,9 +65,11 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: An explicit Query aggregate ID can override the Operation's declared constant.
   evidence: `call.AggregateId ?? accessorId ?? operation.AggregateIdConstant` prefers the caller value without checking conflict; this belongs to concurrent executor work.
+  status: resolved (2026-11-23). See [the query follow-up](#resolved-in-the-query-contract-follow-up-2026-11-23).
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: A whitespace query cursor can be sent with an offset.
   evidence: `ValidateQueryArguments` checks cursor length and a nonblank cursor with offset, but does not reject a supplied blank cursor; this belongs to executor work.
+  status: resolved (2026-11-23). See [the query follow-up](#resolved-in-the-query-contract-follow-up-2026-11-23).
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Config output reveals the full value of tokens four characters or shorter.
   evidence: `ProfileStore.MaskToken` preserves the first four characters regardless of token length; this belongs to profile work.
@@ -332,6 +334,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
   summary: A ULID-kind query whose declared aggregate constant is not canonical ULID text is advertised as callable without `--aggregate-id`, but calls using that noncanonical constant fail.
   evidence: `CatalogBuilder` checks a query's `AggregateId` constant only with `RoutingResolver.IsAggregateId` (`src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:193`), never against the module's Identifier Kind. `tests/fixtures/Catalog.Routing.Contracts/ListItemsQuery.cs:7` declares `AggregateId = "routing-list"` in the ULID-kind routing fixture, and `tests/Hexalith.McpCli.Core.Tests/CatalogTests.cs:143` pins `AggregateIdRequired` false, yet `OperationExecutor` rejects that constant at `/aggregateId` (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:216-220`). Passing the same noncanonical constant explicitly also fails; a canonical explicit aggregate overrides the constant at `OperationExecutor.cs:215` and succeeds when the remaining inputs are valid. This behavior predates Story 2.8, which also makes lowercase ULID constants fail. Decide whether Identifier Kind governs query constants (exempt them, or refuse them at catalog build) before Epic 4 declares module queries.
+  status: resolved (2026-11-23). See [the query follow-up](#resolved-in-the-query-contract-follow-up-2026-11-23).
 
 ## Deferred from: post-completion build review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03)
 
@@ -360,6 +363,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
   summary: MCP protocol coverage does not exercise a Gateway failure, including a 2xx client exception status.
   evidence: `McpProtocolTests` covers unknown operation errors but no Gateway rejection; review loop 1 deferred this pre-existing protocol test gap to MCP execution work.
+  status: resolved (2026-11-23). See [the query follow-up](#resolved-in-the-query-contract-follow-up-2026-11-23).
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
   summary: Unknown CLI verbs use parser help and exit 1 instead of a stable error document.
   evidence: System.CommandLine rejects unknown verbs before a verb action; review loop 1 deferred this pre-existing parser behavior to Story 2.11.
@@ -475,6 +479,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md`
   summary: The Int32 paging check reads `pageSize` and `offset` by exact name, so a differently cased key may still reach the SDK's case-insensitive binding.
   evidence: Unverified Medium. `src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:89` loops over the two exact names. Settle it by sending `{"PageSize": 2147483648}` through the stdio fixture and checking stderr for a `JsonException`.
+  status: resolved (2026-11-23). See [the query follow-up](#resolved-in-the-query-contract-follow-up-2026-11-23).
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md`
   summary: An existing `QueryCommandTests` HTTP-listener cleanup race failed the first CLI test run.
   evidence: Low. `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md:106` records it; the affected method passed in isolation and no ledger entry tracked it.
@@ -1339,3 +1344,15 @@ These resolutions supersede the original findings, whose text is retained for th
 | Story 2.11, regex anchors (line 427) | Whole-string .NET validation and the ECMA-262 pattern exported in ULID schemas have separate rules. |
 | Story 4.18, AppHost project launches (line 792) | The test AppHost may launch a source project or a prepared host. Its build-time dependency rules still require repository-owned project references. |
 | Story 5.12, live vector selection (line 993) | The full live run selects approved vectors with companion plans. The remaining approved vectors run in loopback. |
+
+## Resolved in the query contract follow-up (2026-11-23)
+
+See [the implementation and verification](spec-reconcile-deferred-query-contract.md).
+
+| Original finding | Resolution |
+| --- | --- |
+| Story 1.7, explicit aggregate ID overrides a Query constant | AD-19 defines the constant as a default. Both heads now test that omitting the ID uses the default and a valid explicit ID overrides it. The existing payload-accessor agreement check still applies. |
+| Story 1.7, whitespace Query cursor with an offset | The documented paging contract preserves empty or whitespace cursors with offsets. Core, CLI and MCP tests check the forwarded values and keep the refusal for a nonblank cursor with an offset. |
+| Story 2.8, unusable ULID query defaults | Catalog admission and execution share the aggregate identifier rule. An invalid default is excluded with `invalid_routing_value`. The dual-source declaration still reports `ambiguous_aggregate_id` first. |
+| Story 2.9, MCP protocol coverage for Gateway failures | SDK session tests verify the structured and text error documents for a Gateway rejection and a 2xx client exception. The child-process test also checks that a Gateway 409 leaves the stdio session usable. |
+| Story 3.3, differently cased MCP paging keys | Both supported session revisions report JSON-RPC `InvalidParams` for case variants of `pageSize`, `offset`, and `cursor`. The SDK previously dropped those keys and could run the query without the requested paging. |

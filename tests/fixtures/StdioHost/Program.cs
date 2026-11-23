@@ -15,6 +15,7 @@ internal static class Program
         {
             "empty" => [typeof(Manifest.MarkedEmpty.Contracts.Module).Assembly],
             "diagnostic" => [typeof(Catalog.InvalidProvider.Contracts.Module).Assembly],
+            "routing" => [typeof(Catalog.Routing.Contracts.Module).Assembly],
             _ => [typeof(CreateItemCommand).Assembly],
         };
         Type runnerType = Assembly.Load(new AssemblyName("Hexalith.McpCli"))

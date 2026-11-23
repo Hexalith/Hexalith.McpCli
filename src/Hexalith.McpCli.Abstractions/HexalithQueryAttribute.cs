@@ -36,6 +36,9 @@ public sealed class HexalithQueryAttribute(string description) : Attribute
     public string? AggregateIdProperty { get; set; }
 
     /// <summary>Gets or sets a constant aggregate identifier for a list query; mutually exclusive with <see cref="AggregateIdProperty"/>.</summary>
+    /// <remarks>The default must match the Gateway identifier syntax and the module's declared identifier kind.
+    /// A module with <see cref="IdentifierKind.Ulid"/> requires canonical uppercase ULID text.
+    /// A valid caller-supplied aggregate identifier overrides this default.</remarks>
     public string? AggregateId { get; set; }
 
     /// <summary>Gets or sets the optional gateway projection type when no contract interface supplies it.</summary>

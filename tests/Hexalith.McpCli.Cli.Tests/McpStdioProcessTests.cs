@@ -116,6 +116,71 @@ public sealed class McpStdioProcessTests
         }
     }
 
+    /// <summary>Describe and query agree on the aggregate default through the child process and real Gateway client.</summary>
+    [Theory]
+    [InlineData("2025-06-18", null, "01ARZ3NDEKTSV4RRFFQ69G5FAV")]
+    [InlineData("2025-06-18", "01ARZ3NDEKTSV4RRFFQ69G5FAW", "01ARZ3NDEKTSV4RRFFQ69G5FAW")]
+    [InlineData("2026-07-28", null, "01ARZ3NDEKTSV4RRFFQ69G5FAV")]
+    [InlineData("2026-07-28", "01ARZ3NDEKTSV4RRFFQ69G5FAW", "01ARZ3NDEKTSV4RRFFQ69G5FAW")]
+    public async Task QueryAggregateDefaultAndOverrideWorkOverStdioAsync(string version, string? explicitId, string expectedId)
+    {
+        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+        await using var gateway = new QueryCliHarness();
+        string directory = TemporaryDirectory();
+        Process? child = null;
+        try
+        {
+            Process process = child = Start(directory, new Dictionary<string, string>
+            {
+                ["MCPCLI_STDIO_CATALOG"] = "routing",
+                ["EVENTSTORE_URL"] = gateway.Url,
+            }, "mcp", "--transport", "stdio");
+            Task<string> standardError = process.StandardError.ReadToEndAsync(timeout.Token);
+            var transport = new StreamClientTransport(process.StandardInput.BaseStream, process.StandardOutput.BaseStream);
+            await using (McpClient client = await McpClient.CreateAsync(transport,
+                new McpClientOptions { ProtocolVersion = version }, cancellationToken: timeout.Token))
+            {
+                client.NegotiatedProtocolVersion.ShouldBe(version);
+                const string operation = "routing-fixture.items-list";
+                foreach ((string name, bool required) in new[] { (operation, false), ("routing-fixture.get-http2-status", true) })
+                {
+                    CallToolResult description = await client.CallToolAsync("describe_operation",
+                        new Dictionary<string, object?> { ["operation"] = name }, cancellationToken: timeout.Token);
+                    description.IsError.ShouldBe(false);
+                    description.StructuredContent.ShouldNotBeNull().GetProperty("envelope")
+                        .GetProperty("aggregateIdRequired").GetBoolean().ShouldBe(required);
+                }
+
+                var arguments = new Dictionary<string, object?> { ["operation"] = operation, ["payload"] = "{}" };
+                if (explicitId is not null)
+                {
+                    arguments["aggregateId"] = explicitId;
+                }
+
+                CallToolResult result = await client.CallToolAsync("run_query", arguments, cancellationToken: timeout.Token);
+                AssertToolDocument(result, new QueryResult(operation, "platform:routing", JsonSerializer.SerializeToElement(new { items = Array.Empty<string>() })));
+                gateway.AssertRequest(JsonSerializer.Serialize(new
+                {
+                    tenant = "platform:routing",
+                    domain = "routing",
+                    aggregateId = expectedId,
+                    queryType = "list-items-wire",
+                    projectionType = "routing-items",
+                    payload = new { },
+                }));
+            }
+
+            process.StandardInput.Close();
+            await process.WaitForExitAsync(timeout.Token);
+            process.ExitCode.ShouldBe(0, await standardError);
+        }
+        finally
+        {
+            await StopAsync(child);
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Each advertised tool runs through the actual CLI host and both SDK flows with a substituted Gateway.</summary>
     [Theory]
     [InlineData("2025-06-18", "initialize", false)]
@@ -209,6 +274,18 @@ public sealed class McpStdioProcessTests
                         invalid.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
                         invalid.Message.ShouldBe($"Request failed (remote): {field} must be representable as an Int32 integer.");
                     }
+                }
+
+                foreach ((string field, string expectedName) in new[] { ("PageSize", "pageSize"), ("OFFSET", "offset") })
+                {
+                    McpProtocolException invalid = await Should.ThrowAsync<McpProtocolException>(() => client.CallToolAsync("run_query",
+                        new Dictionary<string, object?>
+                        {
+                            ["operation"] = "sample.get-item", ["payload"] = $$"""{"ItemId":"{{itemId}}"}""",
+                            [field] = (long)int.MaxValue + 1,
+                        }, cancellationToken: timeout.Token).AsTask());
+                    invalid.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+                    invalid.Message.ShouldBe($"Request failed (remote): Use the exact paging argument name '{expectedName}'.");
                 }
 
                 (await client.CallToolAsync("list_modules", new Dictionary<string, object?>(), cancellationToken: timeout.Token))

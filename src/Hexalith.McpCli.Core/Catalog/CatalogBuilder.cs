@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Text.Json;
 using Hexalith.McpCli.Abstractions;
+using Hexalith.McpCli.Core.Execution;
 using Hexalith.McpCli.Core.Schema;
 using Hexalith.McpCli.Core.Serialization;
 
@@ -191,10 +192,12 @@ public static class CatalogBuilder
                 $"HexalithQuery sets both AggregateIdProperty '{aggregateProperty}' and AggregateId '{aggregateConstant}'; keep one.");
         }
 
-        if (aggregateConstant is not null && !RoutingResolver.IsAggregateId(aggregateConstant))
+        if (aggregateConstant is not null && !OperationExecutor.IsAggregateIdForModule(aggregateConstant, module.IdentifierKind))
         {
-            throw new ContractDeclarationException("invalid_routing_value",
-                $"HexalithQuery.AggregateId '{aggregateConstant}' must be 1 to 256 ASCII letters, digits, '.', '_', or '-', starting and ending with a letter or digit.");
+            string rule = module.IdentifierKind == IdentifierKind.Ulid
+                ? "a canonical uppercase ULID"
+                : "1 to 256 ASCII letters, digits, '.', '_', or '-', starting and ending with a letter or digit";
+            throw new ContractDeclarationException("invalid_routing_value", $"HexalithQuery.AggregateId '{aggregateConstant}' must be {rule}.");
         }
 
         string? platformScope = command?.PlatformScope ?? query?.PlatformScope;
