@@ -1303,3 +1303,15 @@ These resolutions supersede the five Story 5.4 entries below their original revi
 | R54-D10 | Scanner CLI tests cover credentials in filenames with clean file content and check the redacted paths in findings, manifest and output. |
 | R54-D11 | A scanner CLI test verifies exit 2, empty stdout and the receipt-write diagnostic when a regular file blocks the destination. |
 | R54-D12 | The paired-publication verifier drops its three unused redaction wrappers and their unused imports. |
+
+## Resolved in the operator help follow-up (2026-11-23)
+
+See `spec-clarify-operator-help.md` for the review and verification of these five entries.
+
+| Original entry | Resolution |
+| --- | --- |
+| Story 1.7, unsupported HTTP transport (line 81) | MCP help and the README now match the existing `unsupported_transport` diagnostic about the next release. |
+| Story 2.3, profile update and removal rules (line 243) | Profile help and the README explain field values, clearing the extension list and the effect of removing the active profile. |
+| Story 2.8, query option help (line 348) | Query help gives entity identifier syntax, paging limits and the nonblank cursor/offset rule. |
+| Story 2.10, global option help (line 387) | Global help names the nine supported settings environment variables, shows false overrides and identifies the flag-only output path. |
+| Story 3.1, MCP failure delivery (line 461) | The README names the discovery arguments that produce JSON-RPC `InvalidParams` and the tool error codes returned for unknown catalog names. |

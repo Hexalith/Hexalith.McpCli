@@ -459,10 +459,10 @@ internal sealed class CliRunner
         Argument<string?> operation = new("operation") { Description = "Canonical read operation", Arity = ArgumentArity.ZeroOrOne };
         Option<string?> payload = new("--payload") { Description = "JSON, @file, or - for stdin" };
         Option<string?> aggregateId = new("--aggregate-id") { Description = "Explicit aggregate identifier; canonical uppercase ULID in ULID-kind modules" };
-        Option<string?> entityId = new("--entity-id");
-        Option<int?> pageSize = new("--page-size");
-        Option<int?> offset = new("--offset");
-        Option<string?> cursor = new("--cursor");
+        Option<string?> entityId = new("--entity-id") { Description = "Gateway entity identifier (1-256 ASCII characters). Start and end with a letter or digit. Inside, dots, underscores and hyphens are also allowed." };
+        Option<int?> pageSize = new("--page-size") { Description = "Requested number of items per page, 1 to 200." };
+        Option<int?> offset = new("--offset") { Description = "Number of items to skip, 0 to 2147483647. Omit when using a nonblank cursor." };
+        Option<string?> cursor = new("--cursor") { Description = "Continuation cursor, up to 4096 UTF-16 code units. A nonblank cursor excludes --offset, even 0." };
         Command command = new("query", "Run a declared query");
         command.Arguments.Add(operation);
         command.Options.Add(payload);
@@ -566,8 +566,8 @@ internal sealed class CliRunner
             return CliOutput.WriteAsync(document, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
 
-        Argument<string?> addName = new("name") { Arity = ArgumentArity.ZeroOrOne };
-        Command add = new("add", "Add or replace a connection profile from --url, --token, and --format; set operator fields with config set");
+        Argument<string?> addName = new("name") { Description = "Case-sensitive profile name (1-64 ASCII letters, digits, underscores or hyphens). For a leading hyphen, put options first and the name after --.", Arity = ArgumentArity.ZeroOrOne };
+        Command add = new("add", "Add or replace a connection profile from --url, --token, and --format; set operator fields with config set. Pass --url explicitly. Only supplied connection flags are stored.");
         add.Arguments.Add(addName);
         add.SetAction((parsed, token) =>
         {
@@ -579,7 +579,7 @@ internal sealed class CliRunner
                     (_, settings, cancellationToken) => AddProfileAsync(parsed, addName, settings, cancellationToken), token);
         });
 
-        Argument<string?> removeName = new("name") { Arity = ArgumentArity.ZeroOrOne };
+        Argument<string?> removeName = new("name") { Description = "Name of the profile to remove. Removing the active profile clears the selection.", Arity = ArgumentArity.ZeroOrOne };
         Command remove = new("remove", "Remove a connection profile");
         remove.Arguments.Add(removeName);
         remove.SetAction((parsed, token) => RunManagementAsync(parsed, (_, settings, cancellationToken) =>
@@ -661,9 +661,9 @@ internal sealed class CliRunner
 
     private Command CreateConfigSet()
     {
-        Argument<string?> name = new("profile") { Arity = ArgumentArity.ZeroOrOne };
-        Argument<string?> field = new("field") { Arity = ArgumentArity.ZeroOrOne };
-        Argument<string?> value = new("value") { Arity = ArgumentArity.ZeroOrOne };
+        Argument<string?> name = new("profile") { Description = "Existing case-sensitive profile name.", Arity = ArgumentArity.ZeroOrOne };
+        Argument<string?> field = new("field") { Description = "One of tenant, actor, allowTenantOverride or allowedExtensions.", Arity = ArgumentArity.ZeroOrOne };
+        Argument<string?> value = new("value") { Description = "Supply nonblank text for tenant or actor. For allowTenantOverride use true, false, 1 or 0. For allowedExtensions use comma-separated keys without spaces, or an empty string to clear.", Arity = ArgumentArity.ZeroOrOne };
         Command set = new("set", "Set tenant, actor, allowTenantOverride, or allowedExtensions");
         set.Arguments.Add(name);
         set.Arguments.Add(field);
@@ -689,8 +689,8 @@ internal sealed class CliRunner
 
     private Command CreateMcp()
     {
-        Option<string?> transport = new("--transport") { Description = "stdio or http" };
-        Command command = new("mcp", "Serve the generic MCP tools over stdio");
+        Option<string?> transport = new("--transport") { Description = "stdio (default). HTTP transport is planned for the next release." };
+        Command command = new("mcp", "Serve the generic MCP tools over stdio. Explicit --format table and --output are rejected.");
         command.Options.Add(transport);
         command.SetAction((parsed, cancellationToken) => RunMcpAsync(parsed, parsed.GetValue(transport), cancellationToken));
         return command;

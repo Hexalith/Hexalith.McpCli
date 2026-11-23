@@ -270,6 +270,49 @@ public sealed class CliOutputContractTests
         }
     }
 
+    /// <summary>Help exposes settings sources, profile edits, query constraints and the available transport.</summary>
+    [Fact]
+    public async Task HelpExplainsOperatorInputsAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            (string[] arguments, string[] details)[] cases =
+            [
+                (["--help"], ["--url <url> Gateway URL (EVENTSTORE_URL)", "--token <token> Gateway bearer token (EVENTSTORE_TOKEN)",
+                    "--tenant <tenant> Session tenant (EVENTSTORE_TENANT)", "--actor <actor> Trusted operator actor (EVENTSTORE_ACTOR)",
+                    "--allow-tenant-override Allow MCP per-call tenant overrides (EVENTSTORE_ALLOW_TENANT_OVERRIDE)",
+                    "--profile <profile> Connection profile (EVENTSTORE_PROFILE)", "--format <format> Result format, json or table (EVENTSTORE_FORMAT)",
+                    "--read-only Disable command submission (EVENTSTORE_READ_ONLY)", "--strict Reject any Catalog diagnostic (EVENTSTORE_STRICT)",
+                    "--output <output> Write the result to a file (flag only)", "--read-only false", "--strict false", "--allow-tenant-override false"]),
+                (["query", "--help"], ["1-256 ASCII", "letter or digit", "dots, underscores and hyphens",
+                    "1 to 200", "0 to 2147483647", "4096 UTF-16 code units", "nonblank cursor excludes --offset, even 0"]),
+                (["config", "profile", "add", "--help"], ["Case-sensitive profile name", "1-64 ASCII", "name after --", "Pass --url explicitly"]),
+                (["config", "profile", "remove", "--help"], ["Removing the active profile clears the selection"]),
+                (["config", "set", "--help"], ["Existing case-sensitive profile", "Profile management uses its own arguments", "nonblank text for tenant or actor",
+                    "true, false, 1 or 0", "comma-separated keys without spaces", "empty string to clear"]),
+                (["mcp", "--help"], ["stdio (default)", "HTTP transport is planned for the next release", "Explicit --format table and --output are rejected"]),
+            ];
+
+            foreach ((string[] arguments, string[] details) in cases)
+            {
+                (int exit, string output, string error) = await InvokeAsync(store, arguments);
+                exit.ShouldBe(0, string.Join(' ', arguments));
+                error.ShouldBeEmpty();
+                string help = string.Join(' ', output.Split((char[]?)null, StringSplitOptions.RemoveEmptyEntries));
+                foreach (string detail in details)
+                {
+                    help.ShouldContain(detail);
+                }
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>HTTP transport is refused before the Catalog manifest is read.</summary>
     [Fact]
     public async Task PlainHttpTransportUsesStderrWithoutCatalogAsync()
