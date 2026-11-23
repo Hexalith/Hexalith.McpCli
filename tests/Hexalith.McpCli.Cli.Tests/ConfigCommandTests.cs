@@ -1171,6 +1171,7 @@ public sealed class ConfigCommandTests
         startInfo.ArgumentList.Add("--version");
         startInfo.Environment["EVENTSTORE_READ_ONLY"] = "yes";
         startInfo.Environment["EVENTSTORE_URL"] = "not-a-url";
+        startInfo.Environment["MCPCLI_HOME"] = "relative-secret-home";
 
         using Process process = Process.Start(startInfo).ShouldNotBeNull();
         Task<string> output = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
@@ -1178,15 +1179,17 @@ public sealed class ConfigCommandTests
         await process.WaitForExitAsync(TestContext.Current.CancellationToken);
 
         process.ExitCode.ShouldBe(0);
-        (await output).Trim().ShouldNotBeEmpty();
+        string version = typeof(CliRunner).Assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()
+            .ShouldNotBeNull().InformationalVersion;
+        (await output).ShouldBe(version + Environment.NewLine);
         (await error).ShouldBeEmpty();
     }
 
-    /// <summary>Long and short tokens never appear raw on either CLI channel.</summary>
+    /// <summary>Long and short tokens stay masked in both current and profile list output.</summary>
     [Theory]
     [InlineData("secret-value", "secr***")]
     [InlineData("tiny", "***")]
-    public async Task CurrentNeverExposesRawTokenAsync(string token, string masked)
+    public async Task ConfigDisplayMasksTokensAsync(string token, string masked)
     {
         string directory = TemporaryDirectory();
         try
@@ -1198,9 +1201,18 @@ public sealed class ConfigCommandTests
                 "config", "current");
 
             exit.ShouldBe(0);
-            output.ShouldContain(masked);
+            using JsonDocument current = JsonDocument.Parse(output);
+            current.RootElement.GetProperty("token").GetString().ShouldBe(masked);
             output.ShouldNotContain(token);
-            error.ShouldNotContain(token);
+            error.ShouldBeEmpty();
+
+            store.Add("dev", new ConnectionProfile(Token: token));
+            (exit, output, error) = await InvokeAsync(store, "config", "profile", "list");
+            exit.ShouldBe(0);
+            using JsonDocument listing = JsonDocument.Parse(output);
+            listing.RootElement.GetProperty("profiles")[0].GetProperty("token").GetString().ShouldBe(masked);
+            output.ShouldNotContain(token);
+            error.ShouldBeEmpty();
         }
         finally
         {
@@ -1782,9 +1794,44 @@ public sealed class ConfigCommandTests
         }
     }
 
-    /// <summary>Allowed extensions are stored as a list, and an empty argument stores an empty list.</summary>
+    /// <summary>An invalid tenant returns a stable error before changing the profile.</summary>
     [Fact]
-    public async Task SetStoresAllowedExtensionsListAsync()
+    public async Task SetRejectsInvalidTenantWithoutWritingAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile(Tenant: "acme"));
+            store.Use("dev");
+            byte[] previous = File.ReadAllBytes(store.ProfilePath);
+
+            (int exit, string output, string error) = await InvokeAsync(store,
+                "config", "set", "dev", "tenant", "invalid tenant");
+            string expected = JsonSerializer.Serialize(new
+            {
+                error = new
+                {
+                    code = "configuration_invalid",
+                    message = "A lowercased profile tenant must contain 1 to 64 ASCII letters, digits, or hyphens and start and end with a letter or digit.",
+                },
+            }, McpCliJson.Result) + "\n";
+            exit.ShouldBe(2);
+            output.ShouldBe(expected);
+            error.ShouldBeEmpty();
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Allowed extensions are stored as a list, and an empty argument stores an empty list.</summary>
+    [Theory]
+    [InlineData(2)]
+    [InlineData(40)]
+    public async Task SetStoresAllowedExtensionsListAsync(int count)
     {
         string directory = TemporaryDirectory();
         try
@@ -1792,15 +1839,16 @@ public sealed class ConfigCommandTests
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             store.Add("dev", new ConnectionProfile("https://gateway.example/", StoredToken));
 
+            string[] keys = [.. Enumerable.Range(0, count).Select(index => "task-" + index)];
             (int listExit, string listOutput, string listError) = await InvokeAsync(store,
-                "config", "set", "dev", "allowedExtensions", "task-id,trace-id");
+                "config", "set", "dev", "allowedExtensions", string.Join(',', keys));
             listExit.ShouldBe(0, listOutput);
             listError.ShouldBeEmpty();
             AssertNoSecret(listOutput, listError, StoredToken);
             JsonElement listDocument = JsonDocument.Parse(listOutput).RootElement;
             listDocument.GetProperty("profile").GetString().ShouldBe("dev");
             listDocument.GetProperty("field").GetString().ShouldBe("allowedExtensions");
-            store.Read().Profiles["dev"].AllowedExtensions.ShouldBe(["task-id", "trace-id"]);
+            store.Read().Profiles["dev"].AllowedExtensions.ShouldBe(keys);
 
             (int emptyExit, string emptyOutput, string emptyError) = await InvokeAsync(store,
                 "config", "set", "dev", "allowedExtensions", string.Empty);
@@ -2704,6 +2752,7 @@ public sealed class ConfigCommandTests
             RedirectStandardError = true,
             RedirectStandardOutput = true,
             UseShellExecute = false,
+            WorkingDirectory = home,
         };
         foreach (string name in startInfo.Environment.Keys
             .Where(name => name.StartsWith("EVENTSTORE_", StringComparison.Ordinal)).ToArray())
@@ -2751,22 +2800,38 @@ public sealed class ConfigCommandTests
     /// <summary>Invalid home overrides produce one safe error document on the correct channel without writing a profile.</summary>
     [Theory]
     [InlineData("config", "current")]
-    [InlineData("modules", "")]
-    [InlineData("mcp", "")]
-    public async Task InvalidHomeIsAConfigurationErrorAsync(string verb, string subcommand)
+    [InlineData("modules")]
+    [InlineData("operations", "sample")]
+    [InlineData("describe", "sample.create-item")]
+    [InlineData("send", "sample.create-item", "--payload", SampleCommand)]
+    [InlineData("query", "sample.get-item", "--payload", SampleQuery)]
+    [InlineData("config", "set", "dev", "tenant", "acme")]
+    [InlineData("mcp")]
+    public async Task InvalidHomeIsAConfigurationErrorAsync(params string[] arguments)
     {
         string directory = TemporaryDirectory();
         try
         {
-            string[] arguments = string.IsNullOrEmpty(subcommand) ? [verb] : [verb, subcommand];
+            const string relativeHome = "relative-secret-home";
+            string profileName = Path.GetFileName(directory);
+            var fallback = new ProfileStore(Path.Combine(directory, ".eventstore", "mcpcli.json"));
+            fallback.Add(profileName, new ConnectionProfile(Tenant: "original"));
+            fallback.Use(profileName);
+            byte[] previous = File.ReadAllBytes(fallback.ProfilePath);
+
+            bool settingTenant = arguments is ["config", "set", ..];
+            string[] command = settingTenant ? ["config", "set", profileName, .. arguments[3..]] : arguments;
             (int exit, string output, string error) = await RunExecutableAsync(directory,
-                new Dictionary<string, string> { ["MCPCLI_HOME"] = "relative-secret-home" }, arguments);
+                new Dictionary<string, string> { ["HOME"] = directory, ["MCPCLI_HOME"] = relativeHome }, command);
+
+            const string invalidHome = "MCPCLI_HOME must be an absolute directory path.";
+            string message = settingTenant ? invalidHome : $"Invalid mcpcli profile file: {invalidHome}";
             string expected = JsonSerializer.Serialize(new
             {
-                error = new { code = "configuration_invalid", message = "Invalid mcpcli profile file: MCPCLI_HOME must be an absolute directory path." },
+                error = new { code = "configuration_invalid", message },
             }, McpCliJson.Result) + "\n";
             exit.ShouldBe(2);
-            if (verb == "mcp")
+            if (arguments[0] == "mcp")
             {
                 output.ShouldBeEmpty();
                 error.ShouldBe(expected);
@@ -2777,7 +2842,8 @@ public sealed class ConfigCommandTests
                 error.ShouldBeEmpty();
             }
 
-            File.Exists(Path.Combine(directory, ".eventstore", "mcpcli.json")).ShouldBeFalse();
+            File.ReadAllBytes(fallback.ProfilePath).ShouldBe(previous);
+            Directory.Exists(Path.Combine(directory, relativeHome)).ShouldBeFalse();
         }
         finally
         {

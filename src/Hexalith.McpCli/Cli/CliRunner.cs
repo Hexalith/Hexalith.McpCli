@@ -664,7 +664,7 @@ internal sealed class CliRunner
     {
         Argument<string?> name = new("profile") { Description = "Existing case-sensitive profile name.", Arity = ArgumentArity.ZeroOrOne };
         Argument<string?> field = new("field") { Description = "One of tenant, actor, allowTenantOverride or allowedExtensions.", Arity = ArgumentArity.ZeroOrOne };
-        Argument<string?> value = new("value") { Description = "Supply nonblank text for tenant or actor. For allowTenantOverride use true, false, 1 or 0. For allowedExtensions use comma-separated keys without spaces, or an empty string to clear.", Arity = ArgumentArity.ZeroOrOne };
+        Argument<string?> value = new("value") { Description = "A lowercased tenant must be 1–64 ASCII letters, digits, or hyphens and start and end with a letter or digit. Supply nonblank text for actor. For allowTenantOverride use true, false, 1 or 0. For allowedExtensions use comma-separated keys without spaces, or an empty string to clear.", Arity = ArgumentArity.ZeroOrOne };
         Command set = new("set", "Set tenant, actor, allowTenantOverride, or allowedExtensions");
         set.Arguments.Add(name);
         set.Arguments.Add(field);

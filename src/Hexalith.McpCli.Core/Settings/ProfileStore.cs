@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
+using Hexalith.McpCli.Core.Catalog;
 using Hexalith.McpCli.Core.Execution;
 
 namespace Hexalith.McpCli.Core.Settings;
@@ -114,6 +115,7 @@ public sealed partial class ProfileStore
     {
         ValidateName(name);
         ValidateProfile(profile);
+        ValidateTenant(profile.Tenant);
         return Mutate(snapshot =>
         {
             var profiles = new Dictionary<string, ConnectionProfile>(snapshot.Profiles, StringComparer.Ordinal)
@@ -180,18 +182,7 @@ public sealed partial class ProfileStore
                 throw new InvalidDataException("The named mcpcli profile does not exist.");
             }
 
-            ConnectionProfile updated = field switch
-            {
-                "tenant" => existing with { Tenant = value },
-                "actor" => existing with { Actor = value },
-                "allowTenantOverride" => existing with { AllowTenantOverride = ParseBoolean(value) },
-                "allowedExtensions" => existing with
-                {
-                    AllowedExtensions = value.Length == 0 ? [] : value.Split(',', StringSplitOptions.None),
-                },
-                _ => throw new InvalidDataException("Unsupported profile field."),
-            };
-            ValidateProfile(updated);
+            ConnectionProfile updated = UpdateProfile(existing, field, value);
             var profiles = new Dictionary<string, ConnectionProfile>(snapshot.Profiles, StringComparer.Ordinal)
             {
                 [name] = updated,
@@ -205,6 +196,7 @@ public sealed partial class ProfileStore
     {
         ValidateName(name);
         ValidateProfile(profile);
+        ValidateTenant(profile.Tenant);
         _ = Read();
     }
 
@@ -252,18 +244,7 @@ public sealed partial class ProfileStore
             throw new InvalidDataException("The named mcpcli profile does not exist.");
         }
 
-        ConnectionProfile updated = field switch
-        {
-            "tenant" => existing with { Tenant = value },
-            "actor" => existing with { Actor = value },
-            "allowTenantOverride" => existing with { AllowTenantOverride = ParseBoolean(value) },
-            "allowedExtensions" => existing with
-            {
-                AllowedExtensions = value.Length == 0 ? [] : value.Split(',', StringSplitOptions.None),
-            },
-            _ => throw new InvalidDataException("Unsupported profile field."),
-        };
-        ValidateProfile(updated);
+        _ = UpdateProfile(existing, field, value);
     }
 
     /// <summary>Masks a token for a display document.</summary>
@@ -334,6 +315,37 @@ public sealed partial class ProfileStore
             "false" or "0" => false,
             _ => throw new InvalidDataException("allowTenantOverride must be true, false, 1, or 0."),
         };
+
+    private static ConnectionProfile UpdateProfile(ConnectionProfile profile, string field, string value)
+    {
+        ConnectionProfile updated = field switch
+        {
+            "tenant" => profile with { Tenant = value },
+            "actor" => profile with { Actor = value },
+            "allowTenantOverride" => profile with { AllowTenantOverride = ParseBoolean(value) },
+            "allowedExtensions" => profile with
+            {
+                AllowedExtensions = value.Length == 0 ? [] : value.Split(',', StringSplitOptions.None),
+            },
+            _ => throw new InvalidDataException("Unsupported profile field."),
+        };
+        ValidateProfile(updated);
+        if (field == "tenant")
+        {
+            ValidateTenant(updated.Tenant);
+        }
+
+        return updated;
+    }
+
+    private static void ValidateTenant(string? tenant)
+    {
+        // The executor lowercases session tenants before applying the Gateway grammar.
+        if (tenant is not null && !RoutingResolver.IsTenantDomain(tenant.ToLowerInvariant()))
+        {
+            throw new InvalidDataException("A lowercased profile tenant must contain 1 to 64 ASCII letters, digits, or hyphens and start and end with a letter or digit.");
+        }
+    }
 
     private static void ValidateName(string name)
     {

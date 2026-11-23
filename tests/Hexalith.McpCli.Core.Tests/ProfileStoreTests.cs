@@ -368,6 +368,68 @@ public sealed class ProfileStoreTests
         }
     }
 
+    /// <summary>Tenant writes reject values the executor cannot route and preserve the existing profile.</summary>
+    [Theory]
+    [InlineData("acme corp")]
+    [InlineData("acme_1")]
+    [InlineData("-acme")]
+    [InlineData("acme-")]
+    [InlineData("acme\n")]
+    [InlineData("tenant-123456789012345678901234567890123456789012345678901234567890")]
+    public void InvalidTenantWritesPreserveProfile(string tenant)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile(Tenant: "acme"));
+            store.Use("dev");
+            byte[] previous = File.ReadAllBytes(store.ProfilePath);
+
+            var invalid = new ConnectionProfile(Tenant: tenant);
+            Should.Throw<InvalidDataException>(() => store.ValidateAdd("dev", invalid));
+            Should.Throw<InvalidDataException>(() => store.Add("dev", invalid));
+            Should.Throw<InvalidDataException>(() => store.ValidateSet("dev", "tenant", tenant));
+            Should.Throw<InvalidDataException>(() => store.Set("dev", "tenant", tenant));
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Legacy tenant values can be read, preserved during unrelated edits, and repaired in place.</summary>
+    [Fact]
+    public void LegacyTenantRemainsEditable()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile(Tenant: "old-tenant"));
+            store.Use("dev");
+            string profile = File.ReadAllText(store.ProfilePath);
+            File.WriteAllText(store.ProfilePath, profile.Replace("old-tenant", "old tenant", StringComparison.Ordinal));
+
+            store.Read().Profiles["dev"].Tenant.ShouldBe("old tenant");
+            store.Set("dev", "actor", "operator");
+            store.Read().Profiles["dev"].Tenant.ShouldBe("old tenant");
+
+            string tenant = new string('A', 63) + "1";
+            store.ValidateSet("dev", "tenant", tenant);
+            store.Set("dev", "tenant", tenant);
+            ProfileSnapshot updated = store.Read();
+            updated.ActiveProfile.ShouldBe("dev");
+            updated.Profiles["dev"].Tenant.ShouldBe(tenant);
+            updated.Profiles["dev"].Actor.ShouldBe("operator");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Unknown or case-mismatched fields, invalid values, bad keys, and bad names fail without changing bytes.</summary>
     /// <param name="name">The profile name.</param>
     /// <param name="field">The field name.</param>

@@ -445,7 +445,7 @@ origin: bmad-project-context refresh of the agent instructions, 2026-10-10
 location: src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:364
 severity: medium
 reason: Add a Core.Tests test that reflects over `[GeneratedRegex]` patterns in `src` and fails when a `^`-anchored pattern ends in `$` instead of `\z`, because .NET `$` also matches before a trailing newline and reviews reported this defect class about eight times. Fix the remaining `ProfileStore.ProfileNamePattern` instance first (the open spec-2-3 ninth-pass entry); once the test lands, a refresh deletes the `\z` pitfall line from the AGENTS.md managed block.
-status: open
+status: resolved (2026-11-23). The CLI test suite reflects over generated regexes in the product runtime assemblies and rejects an unescaped terminal dollar anchor on caret-anchored patterns. See [verification](spec-close-profile-settings-deferrals.md).
 
 ### DW-2: Fail tests when a CLI option or argument has no Description
 
@@ -1375,3 +1375,15 @@ See [the implementation and verification](spec-reconcile-deferred-query-contract
   summary: Reject duplicate JSON property names in loopback Gateway request bodies before comparing their fields.
   evidence: `tools/conformance-vectors/v1/run_loopback.py:196` parses request bytes with `json.loads`. A duplicate property is collapsed before `_expect_fields` can compare it against the approved request body. The offline vector loader has a duplicate-key guard at `tools/conformance-vectors/v1/validate.py:56`.
   status: resolved (2026-11-23). The Gateway reuses the offline decoder and rejects duplicate members, including escaped spellings of nested members, before consuming the response script. See [verification](spec-preserve-conformance-replay-evidence.md).
+
+## Resolved in the profile and settings follow-up (2026-11-23)
+
+These resolutions supersede the original ledger findings. See [verification](spec-close-profile-settings-deferrals.md).
+
+| Original finding | Resolution |
+| --- | --- |
+| Story 1.7, profile allowlists above 32 entries | A profile can store and resolve 40 valid keys. The 32-entry limit applies to extensions sent on a single command. |
+| Story 1.7, short tokens in configuration output | Short tokens are fully masked. CLI tests cover current settings and profile listings. |
+| Story 2.3, invalid profile tenants | New tenant values must satisfy Gateway grammar after invariant lowercasing. Older values remain readable and can be repaired in place. |
+| DW-1, dollar-anchored validation regexes | The CLI test suite checks generated regexes in the product runtime assemblies for an unescaped terminal dollar anchor on caret-anchored patterns. |
+| Story 4.16, invalid profile home | Process tests cover the error document and output channel across discovery, execution, profile management, and MCP. Version reporting succeeds independently of the profile store. |
