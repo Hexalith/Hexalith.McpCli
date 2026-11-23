@@ -141,18 +141,29 @@ internal static class CliOutput
         Func<FileStream, CancellationToken, Task>? afterDestinationTruncated)
     {
         path = ResolveFinalSymlink(path);
-        bool existing = File.Exists(path);
-        if (existing)
+        cancellationToken.ThrowIfCancellationRequested();
+        OutputTargetKind kind = OutputFileType.Inspect(path);
+        if (kind == OutputTargetKind.Pipe)
+        {
+            OutputFileType.WritePipe(path, Encoding.UTF8.GetBytes(output), cancellationToken);
+            return;
+        }
+
+        if (kind == OutputTargetKind.Device)
         {
             await using FileStream target = new(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite,
                 bufferSize: 0, useAsync: true);
-            if (!target.CanSeek || IsSpecialDevicePath(path))
-            {
-                await target.WriteAsync(Encoding.UTF8.GetBytes(output), cancellationToken).ConfigureAwait(false);
-                await target.FlushAsync(cancellationToken).ConfigureAwait(false);
-                return;
-            }
+            await target.WriteAsync(Encoding.UTF8.GetBytes(output), cancellationToken).ConfigureAwait(false);
+            await target.FlushAsync(cancellationToken).ConfigureAwait(false);
+            return;
         }
+
+        if (kind == OutputTargetKind.Unsupported)
+        {
+            throw new IOException("The result target is not a supported file type.");
+        }
+
+        bool existing = kind == OutputTargetKind.Regular;
 
         string stagingDirectory = existing ? Path.GetTempPath() : Path.GetDirectoryName(Path.GetFullPath(path))!;
         string stagedPath = Path.Combine(stagingDirectory, ".mcpcli-result-" + Guid.NewGuid().ToString("N"));
@@ -238,10 +249,6 @@ internal static class CliOutput
         }
     }
 
-    private static bool IsSpecialDevicePath(string path)
-        => !OperatingSystem.IsWindows() && path.StartsWith("/dev/", StringComparison.Ordinal)
-            && !path.StartsWith("/dev/shm/", StringComparison.Ordinal);
-
     private static string ResolveFinalSymlink(string path)
     {
         if (Path.EndsInDirectorySeparator(path))
@@ -294,11 +301,10 @@ internal static class CliOutput
             }
 
             // Proc fd links may name a pipe, socket, or unlinked file. Keep the fd path so
-            // the open handle remains the destination even when its old name is gone. A
-            // device such as /dev/null keeps its own path so it is written directly.
+            // the open handle remains the destination even when its old name is gone.
             if (remaining.Count == 0 && IsProcFdPath(candidate))
             {
-                return Path.IsPathRooted(target) && IsSpecialDevicePath(target) ? target : candidate;
+                return candidate;
             }
 
             bool directoryRequired = Path.EndsInDirectorySeparator(target);

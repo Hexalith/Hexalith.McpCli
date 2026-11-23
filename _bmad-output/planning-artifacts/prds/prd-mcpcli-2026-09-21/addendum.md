@@ -397,7 +397,7 @@ serializer options. The MCP Server declares each record type as the output
 schema for the tool that returns it (PRD FR-11). This section is exhaustive:
 fields listed as required are always
 present, arrays use `[]` when empty, and optional members are omitted rather than serialized as
-`null`. Outer result fields use the canonical camel-case spelling below. Embedded `schema` and
+`null`. CLI profile-management documents explicitly report `"activeProfile": null` when their result includes the active selection and no profile is active. Outer result fields use the canonical camel-case spelling below. Embedded `schema` and
 `example` documents preserve the Module's serializer contract, including property casing.
 Decoration property-reference strings use exact top-level CLR names; the Catalog
 resolves `[JsonPropertyName]` and caches serialized names and escaped pointers for

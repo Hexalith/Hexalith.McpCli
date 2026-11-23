@@ -140,7 +140,7 @@ FR9: Expose exactly five generic MCP tools (`list_modules`, `list_operations`, `
 
 FR10: Run the MCP Server over stdio with JSON-RPC alone on stdout, logging on stderr, no interactive startup, SDK-driven legacy initialization or 2026-07-28 discovery and list/call behavior, and structured stderr-only failure before request serving versus MCP errors afterward.
 
-FR11: Return the exact addendum §G structured success and error documents from both Heads, including output schemas, validation violations, Gateway status and supplied metadata, unknown Operation or Module suggestions, and no stack traces; preserve required fields and omit absent optional fields.
+FR11: Return the exact addendum §G structured success and error documents from both Heads, including output schemas, validation violations, Gateway status and supplied metadata, unknown Operation or Module suggestions, and no stack traces; preserve required fields and omit absent optional fields. CLI profile-management results include an explicit null when reporting an empty active selection.
 
 FR12: Offer CLI verbs `modules`, `operations`, `describe`, `send`, `query`, `mcp`, and `config` with the addendum §E arguments; accept JSON Payload inline, from a file, or stdin; render supported table views; and reject `mcp --transport http` as unsupported in v1.
 

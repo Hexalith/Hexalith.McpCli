@@ -1392,3 +1392,21 @@ These resolutions supersede the original ledger findings. See [verification](spe
 | Story 2.3, invalid profile tenants | New tenant values must satisfy Gateway grammar after invariant lowercasing. Older values remain readable and can be repaired in place. |
 | DW-1, dollar-anchored validation regexes | The CLI test suite checks generated regexes in the product runtime assemblies for an unescaped terminal dollar anchor on caret-anchored patterns. |
 | Story 4.16, invalid profile home | Process tests cover the error document and output channel across discovery, execution, profile management, and MCP. Version reporting succeeds independently of the profile store. |
+
+## CLI result output follow-up (2026-11-23)
+
+See [implementation and verification](spec-close-cli-result-output-deferrals.md).
+
+| Original finding | Resolution |
+| --- | --- |
+| Story 2.3, null active profile in management documents | The planning criteria now distinguish the explicit empty selection from an absent optional field. |
+| Story 2.9, FIFO without a reader | FIFO writes use nonblocking open and write. Tests cover a draining reader, a missing reader, and a pipe that fills. |
+| Story 2.11, seekable character devices outside `/dev` | Native file type selects direct output. The Linux proc-fd device test exercises a seekable device, and a separate device-node test runs where `CAP_MKNOD` is available. |
+| Story 2.11, lost command identifiers after output failure | The CLI error reports the accepted message ID and submitted correlation ID when a command result cannot be written. |
+| Story 2.11, mode-bit preflight test skipped as root | The existing-file test runs independently of whether the test process can bypass the new-file parent permissions. |
+
+## Deferred from: review of spec-close-cli-result-output-deferrals.md (2026-11-23)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-close-cli-result-output-deferrals.md`
+  summary: Recheck result-target identity at open time if another process replaces the destination between inspection and opening.
+  evidence: `src/Hexalith.McpCli/Cli/CliOutput.cs` still opens devices and existing regular files by path after inspecting the path. A concurrent replacement with a FIFO can affect those branches. FIFO writes themselves open nonblocking.

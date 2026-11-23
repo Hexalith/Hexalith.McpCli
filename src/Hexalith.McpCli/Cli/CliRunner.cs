@@ -450,7 +450,16 @@ internal sealed class CliRunner
                 OperationOutcome result = await services.GetRequiredService<IOperationExecutor>()
                     .ExecuteAsync(call, services.GetRequiredService<EnvelopeContext>(), token,
                         _ => Task.FromResult(PreflightError(settings.Output))).ConfigureAwait(false);
-                return await CliOutput.WriteAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
+                try
+                {
+                    return await CliOutput.WriteAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
+                }
+                catch (Exception) when (settings.Output is not null && result.Document is Core.Execution.CommandResult accepted)
+                {
+                    return await CliOutput.WriteErrorAsync(new OperationError("internal_error",
+                        Message: $"The Gateway accepted command {accepted.MessageId}, but the result could not be written.",
+                        CorrelationId: accepted.CorrelationId), token).ConfigureAwait(false);
+                }
             }, cancellationToken));
         return command;
     }

@@ -162,10 +162,22 @@ public sealed class ExecutionFailureCommandTests
     public async Task AcceptedCommandDeviceWriteFailureReportsAfterOneRequestAsync()
     {
         Assert.SkipWhen(!OperatingSystem.IsLinux(), "The full-device fixture requires Linux.");
+        string? submittedCorrelationId = null;
         (int exit, string output, string error, int calls) = await InvokeGatewayAsync(
-            true, 202, "", "/dev/full", acceptedCommand: true);
+            true, 202, "", "/dev/full", acceptedCommand: true,
+            acceptedMessageId: Id, captureCorrelationId: value => submittedCorrelationId = value);
         exit.ShouldBe(2, output);
-        AssertJson(output, """{"error":{"code":"internal_error","message":"The CLI action failed."}}""");
+        submittedCorrelationId.ShouldNotBeNullOrEmpty();
+        submittedCorrelationId.ShouldNotBe(Id);
+        AssertJson(output, JsonSerializer.Serialize(new
+        {
+            error = new
+            {
+                code = "internal_error",
+                message = $"The Gateway accepted command {Id}, but the result could not be written.",
+                correlationId = submittedCorrelationId,
+            },
+        }));
         calls.ShouldBe(1);
         AssertGatewayDiagnostics(error, true);
     }
@@ -774,18 +786,77 @@ public sealed class ExecutionFailureCommandTests
         try
         {
             Mkfifo(path, 0x180).ShouldBe(0);
+            // Hold a temporary reader/writer open so the nonblocking writer always sees a reader.
+            using FileStream connection = new(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            var readerOpened = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
             Task<string> reader = Task.Run(async () =>
             {
                 await using FileStream stream = new(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite,
                     bufferSize: 0, useAsync: true);
+                readerOpened.SetResult();
                 using var textReader = new StreamReader(stream);
                 return await textReader.ReadToEndAsync(timeout.Token);
             }, timeout.Token);
+            await readerOpened.Task.WaitAsync(timeout.Token);
             int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(path), timeout.Token)
                 .WaitAsync(timeout.Token);
+            connection.Dispose();
             exit.ShouldBe(0);
             AssertJson(await reader.WaitAsync(timeout.Token), """{"updated":true}""");
             File.GetUnixFileMode(path).ShouldBe(UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A FIFO without a reader fails instead of blocking the caller.</summary>
+    [Fact]
+    public async Task FifoWithoutReaderFailsPromptlyAsync()
+    {
+        Assert.SkipWhen(!OperatingSystem.IsLinux(), "The FIFO fixture requires Linux.");
+        string directory = NewDirectory();
+        string path = Path.Combine(directory, "result.fifo");
+        try
+        {
+            Mkfifo(path, 0x180).ShouldBe(0);
+            var token = TestContext.Current.CancellationToken;
+            Task<int> writer = Task.Run(() => CliOutput.WriteAsync(new { updated = true }, null, Settings(path), token), token);
+            try
+            {
+                await Should.ThrowAsync<IOException>(() => writer.WaitAsync(TimeSpan.FromSeconds(3), token));
+            }
+            finally
+            {
+                if (!writer.IsCompleted)
+                {
+                    using FileStream connection = new(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+                    await writer.WaitAsync(TimeSpan.FromSeconds(3), token);
+                }
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A connected FIFO fails promptly when its reader stops draining it.</summary>
+    [Fact]
+    public async Task FullFifoFailsPromptlyAsync()
+    {
+        Assert.SkipWhen(!OperatingSystem.IsLinux(), "The FIFO fixture requires Linux.");
+        string directory = NewDirectory();
+        string path = Path.Combine(directory, "result.fifo");
+        try
+        {
+            Mkfifo(path, 0x180).ShouldBe(0);
+            using FileStream connection = new(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite);
+            var token = TestContext.Current.CancellationToken;
+            var document = new { value = new string('x', 2 * 1024 * 1024) };
+            Task<int> writer = Task.Run(() => CliOutput.WriteAsync(document, null, Settings(path), token), token);
+            await Should.ThrowAsync<IOException>(() => writer.WaitAsync(TimeSpan.FromSeconds(3), token));
         }
         finally
         {
@@ -847,11 +918,40 @@ public sealed class ExecutionFailureCommandTests
         }
 
         using FileStream device = new("/dev/null", FileMode.Open, FileAccess.Write);
+        device.CanSeek.ShouldBeTrue();
         string path = "/proc/self/fd/" + device.SafeFileHandle.DangerousGetHandle().ToInt64();
 
         int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(path),
             TestContext.Current.CancellationToken);
         exit.ShouldBe(0);
+    }
+
+    /// <summary>A seekable character device outside /dev still receives direct output.</summary>
+    [Fact]
+    public async Task SeekableCharacterDeviceOutsideDevWritesDirectlyAsync()
+    {
+        Assert.SkipWhen(!OperatingSystem.IsLinux(), "The character-device fixture requires Linux.");
+        string directory = NewDirectory();
+        string path = Path.Combine(directory, "character-device");
+        try
+        {
+            int result = Mknod(path, 0x2180, 0x103); // Character device, owner read/write, /dev/null (1, 3).
+            int error = Marshal.GetLastPInvokeError();
+            Assert.SkipWhen(result != 0 && error is 1 or 13, "Creating a character device requires CAP_MKNOD.");
+            result.ShouldBe(0);
+            using (FileStream device = new(path, FileMode.Open, FileAccess.Write))
+            {
+                device.CanSeek.ShouldBeTrue();
+            }
+
+            int exit = await CliOutput.WriteAsync(new { updated = true }, null, Settings(path),
+                TestContext.Current.CancellationToken);
+            exit.ShouldBe(0);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
     }
 
     /// <summary>A regular tmpfs file under /dev/shm is truncated like any other existing result.</summary>
@@ -978,7 +1078,8 @@ public sealed class ExecutionFailureCommandTests
     }
 
     private static async Task<(int Exit, string Output, string Error, int Calls)> InvokeGatewayAsync(bool command, int status, string body,
-        string? outputPath = null, bool acceptedCommand = false, bool table = false)
+        string? outputPath = null, bool acceptedCommand = false, bool table = false,
+        string? acceptedMessageId = null, Action<string>? captureCorrelationId = null)
     {
         string directory = NewDirectory();
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
@@ -1008,10 +1109,12 @@ public sealed class ExecutionFailureCommandTests
                     if (acceptedCommand)
                     {
                         using JsonDocument request = JsonDocument.Parse(requestBody);
+                        string correlationId = request.RootElement.GetProperty("correlationId").GetString()!;
+                        captureCorrelationId?.Invoke(correlationId);
                         responseBody = JsonSerializer.Serialize(new
                         {
-                            correlationId = request.RootElement.GetProperty("correlationId").GetString(),
-                            messageId = request.RootElement.GetProperty("messageId").GetString(),
+                            correlationId,
+                            messageId = acceptedMessageId ?? request.RootElement.GetProperty("messageId").GetString(),
                         });
                     }
 
@@ -1150,6 +1253,9 @@ public sealed class ExecutionFailureCommandTests
 
     [DllImport("libc", EntryPoint = "umask")]
     private static extern uint Umask(uint mask);
+
+    [DllImport("libc", EntryPoint = "mknod", SetLastError = true)]
+    private static extern int Mknod(string path, uint mode, ulong device);
 
     [DllImport("libc", EntryPoint = "mkfifo", SetLastError = true)]
     private static extern int Mkfifo(string path, uint mode);

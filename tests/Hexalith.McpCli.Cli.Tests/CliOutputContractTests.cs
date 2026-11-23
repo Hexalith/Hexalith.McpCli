@@ -1012,8 +1012,6 @@ public sealed class CliOutputContractTests
             return;
         }
 
-        Assert.SkipWhen(Environment.IsPrivilegedProcess,
-            "Root can create the staging probe in a read-only parent.");
         string directory = NewDirectory();
         string parent = Path.Combine(directory, "no-write-parent");
         Directory.CreateDirectory(parent);
@@ -1024,7 +1022,10 @@ public sealed class CliOutputContractTests
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             File.SetUnixFileMode(existing, UnixFileMode.UserRead);
             File.SetUnixFileMode(parent, UnixFileMode.UserRead | UnixFileMode.UserExecute);
-            foreach (string target in new[] { existing, Path.Combine(parent, "new-result.json") })
+            string[] targets = Environment.IsPrivilegedProcess
+                ? [existing]
+                : [existing, Path.Combine(parent, "new-result.json")];
+            foreach (string target in targets)
             {
                 (int exit, string output, string error) = await InvokeAsync(store,
                     ["config", "profile", "add", "dev", "--url", "https://gateway.example/", "--output", target]);

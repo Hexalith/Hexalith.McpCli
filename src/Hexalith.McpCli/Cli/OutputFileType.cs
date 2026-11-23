@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using Microsoft.Win32.SafeHandles;
 
 namespace Hexalith.McpCli.Cli;
 
@@ -74,6 +75,45 @@ internal static class OutputFileType
             _ => OutputTargetKind.Unsupported,
         };
     }
+
+    /// <summary>Writes to a Unix pipe without waiting for a reader or available capacity.</summary>
+    internal static void WritePipe(string path, byte[] bytes, CancellationToken cancellationToken)
+    {
+        // This method is reached only for a native Unix FIFO classification.
+        int nonBlocking = OperatingSystem.IsLinux() ? 0x800 : 0x4;
+        int closeOnExec = OperatingSystem.IsLinux() ? 0x80000 : OperatingSystem.IsMacOS() ? 0x1000000 : 0x100000;
+        int descriptor = Open(path, 1 | nonBlocking | closeOnExec);
+        if (descriptor < 0)
+        {
+            throw new IOException("The result pipe could not be opened without blocking.");
+        }
+
+        using var handle = new SafeFileHandle((nint)descriptor, ownsHandle: true);
+        int offset = 0;
+        while (offset < bytes.Length)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            // FileStream waits for readiness after EAGAIN, even on a nonblocking descriptor.
+            nint written = Write(handle, ref bytes[offset], (nuint)(bytes.Length - offset));
+            if (written < 0 && Marshal.GetLastPInvokeError() == 4) // EINTR
+            {
+                continue;
+            }
+
+            if (written <= 0)
+            {
+                throw new IOException("The result pipe could not accept the output without blocking.");
+            }
+
+            offset += (int)written;
+        }
+    }
+
+    [DllImport("libc", EntryPoint = "open", SetLastError = true, CharSet = CharSet.Ansi)]
+    private static extern int Open(string path, int flags);
+
+    [DllImport("libc", EntryPoint = "write", SetLastError = true)]
+    private static extern nint Write(SafeFileHandle descriptor, ref byte buffer, nuint count);
 
     internal static void RequireAccess(string path, bool read)
     {
