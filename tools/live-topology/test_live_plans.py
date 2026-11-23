@@ -6,7 +6,7 @@ import tempfile
 import unittest
 
 from live_plans import ROOT, check_dependencies, digest, execution_selection, freeze_input, load_plan, resolve, typed
-from validate import VectorError
+from validate import VectorError, _decode_json
 
 
 class PlanTests(unittest.TestCase):
@@ -204,9 +204,10 @@ class PlanTests(unittest.TestCase):
 
     def test_real_typed_values_bind_existing_targets(self):
         call = {'envelope': {'cursor': 'scripted-cursor'}, 'payload': {'From': 'old'}}
-        actual = resolve(call, [{'path': '/envelope/cursor', 'capture': 'cursor'},
-                                {'path': '/payload/From', 'capture': 'time', 'offsetSeconds': -.001}],
-                         {'cursor': 'real-cursor', 'time': '2026-01-01T00:00:00Z'})
+        bindings = _decode_json('['
+            '{"path":"/envelope/cursor","capture":"cursor"},'
+            '{"path":"/payload/From","capture":"time","offsetSeconds":-0.001}]')
+        actual = resolve(call, bindings, {'cursor': 'real-cursor', 'time': '2026-01-01T00:00:00Z'})
         self.assertEqual('real-cursor', actual['envelope']['cursor'])
         self.assertEqual('2025-12-31T23:59:59.999000+00:00', actual['payload']['From'])
         self.assertEqual('scripted-cursor', call['envelope']['cursor'])

@@ -136,9 +136,11 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Conformance envelope ULIDs require uppercase while the pinned runtime parser also accepts lowercase.
   evidence: Medium; both baseline 9b3b099bf117eac880b9b6e12422990a168519eb and current schema reject 01j9mzhxt3rkm0vwxrxgsjdatk; the review's ByteAether.Ulid 1.4.1 probe accepts it. Resolve the existing v1 representation rule during downstream compatibility work.
+  status: resolved (2026-11-23). Core compares the supplied value with the parsed identifier’s canonical uppercase form. Offline tests reject lowercase and mixed-case correlation and idempotency IDs at every call position. See [verification](spec-preserve-conformance-replay-evidence.md).
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Python parsing can silently underflow Module-owned numeric tokens before conformance execution.
   evidence: Medium; baseline and current validator accept raw 1e-400 as 0.0. The unchanged runner also uses json.loads and json.dumps, losing the original value; settle supported numeric representation or precision preservation in runner work.
+  status: resolved (2026-11-23). Validation, replay and retained observations preserve `1e-400` as a nonzero JSON Number. See [verification](spec-preserve-conformance-replay-evidence.md).
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-8-define-and-validate-the-conformance-vector-contract.md`
   summary: Offline vector validation accepts Payload nesting deeper than the execution parser supports.
   evidence: Medium; baseline and current validator accept 65 nested arrays, while OperationExecutor uses JsonDocument.Parse with the default depth limit. The review reproduced the runtime rejection; add Payload depth compatibility to Story 4.11 acceptance.
@@ -146,6 +148,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-remediate-epic-1-conformance-gaps.md`
   summary: Conformance Number comparison may lose distinctions beyond binary floating-point precision.
   evidence: Unverified medium; Python rounds some finite decimal/exponent tokens before comparison and execution, but the approved intent does not define arbitrary-precision Number semantics. An explicit representation and precision decision would settle whether lossless parsing is required.
+  status: resolved (2026-11-23). Assertions and request comparisons distinguish accepted decimal values at full precision and accept equivalent numeric encodings. See [verification](spec-preserve-conformance-replay-evidence.md).
 - source_spec: `_bmad-output/implementation-artifacts/spec-remediate-epic-1-conformance-gaps.md`
   summary: Conformance extension inputs do not mirror all fixed runtime extension restrictions.
   evidence: Medium; the unchanged vector schema accepts keys and sizes that ExtensionValidator rejects, including path-like keys, count, per-value, injection, and total UTF-8 limits. This behavior predates the remediation and needs a separate compatibility change.
@@ -1367,6 +1370,8 @@ See [the implementation and verification](spec-reconcile-deferred-query-contract
 - source_spec: `_bmad-output/implementation-artifacts/spec-close-loopback-evidence-deferrals.md`
   summary: Bound loopback diagnostic capture while draining child stderr and retain diagnostics for discovery and malformed-Payload probes.
   evidence: `tools/conformance-vectors/v1/run_loopback.py:276` collects child output through `subprocess.run` and `:300` writes MCP stderr to a temporary file before applying the retention cap. `:820` retains operation and scripted Gateway-error observations. Discovery and the malformed-Payload probes at `:928` do not use those observation paths.
+  status: resolved (2026-11-23). Both heads drain stderr with a 64 KiB retention limit and write redacted diagnostics for discovery and malformed-Payload probes. See [verification](spec-preserve-conformance-replay-evidence.md).
 - source_spec: `_bmad-output/implementation-artifacts/spec-close-loopback-evidence-deferrals.md`
   summary: Reject duplicate JSON property names in loopback Gateway request bodies before comparing their fields.
   evidence: `tools/conformance-vectors/v1/run_loopback.py:196` parses request bytes with `json.loads`. A duplicate property is collapsed before `_expect_fields` can compare it against the approved request body. The offline vector loader has a duplicate-key guard at `tools/conformance-vectors/v1/validate.py:56`.
+  status: resolved (2026-11-23). The Gateway reuses the offline decoder and rejects duplicate members, including escaped spellings of nested members, before consuming the response script. See [verification](spec-preserve-conformance-replay-evidence.md).

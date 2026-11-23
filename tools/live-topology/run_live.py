@@ -13,7 +13,7 @@ import time
 
 from live_plans import ROOT, preflight, require_phases, resolve, selection_binding, typed, validate_call
 from run_loopback import HeadProcess, _assert_result, _call_args, _pointer, _steps
-from validate import VectorError, _load_json
+from validate import VectorError, _encode_json, _load_json
 
 
 def observe(head: HeadProcess, call: dict, url: str | None, action: dict, values: dict, plan: dict,
@@ -21,7 +21,7 @@ def observe(head: HeadProcess, call: dict, url: str | None, action: dict, values
     """Submit writes once. Only reads may converge, within an independent hard deadline."""
     if transport not in ('cli', 'mcp') or (transport == 'mcp' and call['kind'] != 'query'):
         raise VectorError('Live MCP execution is restricted to Query reads.')
-    deadline = clock() + plan['deadlineSeconds']
+    deadline = clock() + float(plan['deadlineSeconds'])
     last_failure = None
     assertion_paths = json.dumps([assertion['path'] for assertion in call['assertions']])
     while True:
@@ -108,7 +108,7 @@ def observe(head: HeadProcess, call: dict, url: str | None, action: dict, values
             remaining = deadline - clock()
             if remaining <= 0:
                 raise VectorError(f"{record['phase']} {call['operation']}: read deadline: {last_failure}; declared assertion paths: {assertion_paths}") from error
-            pause(min(plan['pollSeconds'], remaining))
+            pause(min(float(plan['pollSeconds']), remaining))
         finally:
             head.timeout = original_timeout
 
@@ -172,7 +172,7 @@ def main(argv=None) -> int:
     receipt = args.output / 'live-result.json'
     token = os.environ.get('MCPCLI_LIVE_TOKEN', '')
     def save():
-        content = json.dumps(report, indent=2)
+        content = _encode_json(report, indent=2)
         temporary = receipt.with_suffix('.tmp')
         temporary.write_text((content.replace(token, '<redacted>') if token else content) + '\n')
         temporary.replace(receipt)

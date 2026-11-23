@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import base64
 import copy
+from contextlib import contextmanager
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -21,9 +22,9 @@ import zipfile
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
-from typing import Any
+from typing import Any, Iterator
 
-from validate import VectorError, _json_equal, _load_json, validate_vectors
+from validate import VectorError, _decode_json, _encode_json, _json_equal, _load_json, validate_vectors
 from verify_artifact import restored_package
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
@@ -39,7 +40,7 @@ def _fail(message: str) -> None:
 
 
 def _canonical(value: Any) -> str:
-    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return _encode_json(value, sort_keys=True, ensure_ascii=False)
 
 
 def _stderr_diagnostic(value: str | bytes) -> str:
@@ -47,6 +48,19 @@ def _stderr_diagnostic(value: str | bytes) -> str:
     if len(raw) > STDERR_LIMIT:
         return "[stderr omitted: exceeds 64 KiB]"
     return sanitized_xml(raw.decode("utf-8", errors="replace")) if raw else ""
+
+
+@contextmanager
+def _probe_stderr(directory: Path | None, name: str, probe: str) -> Iterator[dict[str, list[str]]]:
+    if directory is None:
+        yield {}
+        return
+    diagnostics: list[str] = []
+    try:
+        yield {"diagnostics": diagnostics}
+    finally:
+        directory.mkdir(parents=True, exist_ok=True)
+        (directory / f"{name}.json").write_text(json.dumps({"probe": probe, "stderr": diagnostics}, indent=2) + "\n")
 
 
 def _escape_pointer_token(value: str) -> str:
@@ -209,7 +223,7 @@ class ReplayGateway:
                     else:
                         length = int(self.headers.get("Content-Length", "0"))
                         raw = self.rfile.read(length)
-                    body = json.loads(raw)
+                    body = _decode_json(raw)
                     with gateway.lock:
                         index = len(gateway.captured)
                         gateway.captured.append({"method": "POST", "path": self.path, "body": body})
@@ -220,7 +234,7 @@ class ReplayGateway:
                         status, response = script["statusCode"], copy.deepcopy(script["body"])
                         for field in script["echoRequestFields"]:
                             response[field] = body[field]
-                    encoded = json.dumps(response).encode("utf-8")
+                    encoded = _encode_json(response).encode("utf-8")
                     self.send_response(status)
                     self.send_header("Content-Type", "application/json")
                     self.send_header("Content-Length", str(len(encoded)))
@@ -255,6 +269,52 @@ class ReplayGateway:
             _fail(f"{location}: Gateway replay consumed {len(self.captured)}/{len(self.steps)} requests; {self.failure or ''}")
 
 
+class _BoundedStderr:
+    """Drain the child pipe even after reaching the diagnostic retention limit."""
+
+    def __init__(self, diagnostics: list[str] | None) -> None:
+        self.diagnostics = diagnostics
+        self.retained = bytearray()
+        self.stop = threading.Event()
+
+    def __enter__(self) -> _BoundedStderr:
+        reader, writer = os.pipe()
+        self.writer = os.fdopen(writer, "wb", buffering=0)
+        self.thread = threading.Thread(target=self._drain, args=(reader,))
+        self.thread.start()
+        return self
+
+    def _drain(self, reader: int) -> None:
+        try:
+            poller = select.poll()
+            poller.register(reader, select.POLLIN)
+            while not self.stop.is_set():
+                if not poller.poll(100):
+                    continue
+                chunk = os.read(reader, 8192)
+                if not chunk:
+                    return
+                remaining = STDERR_LIMIT + 1 - len(self.retained)
+                self.retained.extend(chunk[:remaining])
+        finally:
+            os.close(reader)
+
+    def __exit__(self, *_: Any) -> None:
+        self.writer.close()
+        self.thread.join(timeout=1)
+        if self.thread.is_alive():
+            # A descendant may have inherited the pipe. Do not retain a partial secret.
+            self.stop.set()
+            self.thread.join()
+        if self.diagnostics is not None:
+            self.diagnostics.append(self.diagnostic())
+
+    def diagnostic(self) -> str:
+        if self.stop.is_set():
+            return "[stderr omitted: stream did not close]"
+        return _stderr_diagnostic(bytes(self.retained))
+
+
 class HeadProcess:
     def __init__(self, host: Path, home: str, timeout: float) -> None:
         self.host = host
@@ -282,19 +342,14 @@ class HeadProcess:
             command += ["--tenant", tenant]
         if actor is not None:
             command += ["--actor", actor]
+        with _BoundedStderr(diagnostics) as stderr:
+            result = subprocess.run(command, stdout=subprocess.PIPE, stderr=stderr.writer,
+                                    timeout=self.timeout, env=self.env, check=False)
         try:
-            result = subprocess.run(command, capture_output=True, timeout=self.timeout, env=self.env, check=False)
-        except subprocess.TimeoutExpired as exc:
-            if diagnostics is not None:
-                diagnostics.append(_stderr_diagnostic(exc.stderr or b""))
-            raise
-        if diagnostics is not None:
-            diagnostics.append(_stderr_diagnostic(result.stderr))
-        try:
-            document = json.loads(result.stdout.decode("utf-8"))
-        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
-            stderr = diagnostics[-1] if diagnostics is not None else _stderr_diagnostic(result.stderr)
-            _fail(f"CLI {args}: exit {result.returncode}; invalid JSON stdout {result.stdout!r}; stderr {stderr!r}: {exc}")
+            document = _decode_json(result.stdout.decode("utf-8"))
+        except ValueError as exc:
+            diagnostic = diagnostics[-1] if diagnostics is not None else stderr.diagnostic()
+            _fail(f"CLI {args}: exit {result.returncode}; invalid JSON stdout {result.stdout!r}; stderr {diagnostic!r}: {exc}")
         return result.returncode, document
 
     def mcp(self, tool: str, arguments: dict[str, Any], url: str | None = None,
@@ -308,23 +363,17 @@ class HeadProcess:
         if actor is not None:
             command += ["--actor", actor]
         deadline = time.monotonic() + self.timeout
-        # A child can write diagnostics before its first reply. A file lets it
-        # finish that write while stdout remains a dedicated protocol pipe.
-        with tempfile.TemporaryFile() as stderr:
-            process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                       stderr=stderr, env=self.env, bufsize=0)
-            diagnostic = ""
-            try:
+        stderr = _BoundedStderr(diagnostics)
+        try:
+            with stderr:
+                process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                           stderr=stderr.writer, env=self.env, bufsize=0)
                 try:
                     return self._mcp_call(process, deadline, tool, arguments)
                 finally:
                     _stop_mcp_process(process)
-                    stderr.seek(0)
-                    diagnostic = _stderr_diagnostic(stderr.read(STDERR_LIMIT + 1))
-                    if diagnostics is not None:
-                        diagnostics.append(diagnostic)
-            except (KeyError, ValueError, OSError) as exc:
-                _fail(f"MCP {tool}: {exc}; stderr {diagnostic!r}")
+        except (KeyError, ValueError, OSError) as exc:
+            _fail(f"MCP {tool}: {exc}; stderr {stderr.diagnostic()!r}")
 
     def _mcp_call(self, process: subprocess.Popen[bytes], deadline: float, tool: str,
                   arguments: dict[str, Any]) -> tuple[bool, dict[str, Any]]:
@@ -341,7 +390,7 @@ class HeadProcess:
         if not isinstance(structured, dict):
             _fail(f"missing structuredContent: {reply!r}")
         content = result.get("content", [])
-        if len(content) != 1 or not _json_equal(json.loads(content[0]["text"]), structured):
+        if len(content) != 1 or not _json_equal(_decode_json(content[0]["text"]), structured):
             _fail("text and structuredContent differ")
         return bool(result.get("isError", False)), structured
 
@@ -408,7 +457,7 @@ class _JsonRpcClient:
                 _fail(f"MCP stdio closed before response; process exit {self.process.poll()}")
             self.pending += chunk
         line, self.pending = self.pending.split(b"\n", 1)
-        reply = json.loads(line)
+        reply = _decode_json(line)
         if time.monotonic() >= deadline:
             _fail("MCP stdio response timed out")
         return reply
@@ -702,6 +751,13 @@ def _steps(vector: dict[str, Any]):
                 yield f"/{group}/{index}", step
 
 
+def _run_adapter(head: HeadProcess, args: list[str]) -> tuple[subprocess.CompletedProcess[str], str]:
+    with _BoundedStderr(None) as stderr:
+        result = subprocess.run(head._base() + args, stdout=subprocess.PIPE, stderr=stderr.writer,
+                                text=True, timeout=head.timeout, env=head.env, check=False)
+    return result, stderr.diagnostic()
+
+
 def _preflight_vectors(head: HeadProcess, vectors: list[Path], catalog: dict[str, str], evidence_file: Path | None = None) -> None:
     documents = {str(source): _load_json(source) for source in vectors}
     for source, vector in documents.items():
@@ -709,17 +765,16 @@ def _preflight_vectors(head: HeadProcess, vectors: list[Path], catalog: dict[str
             expected_kind = "write" if step["kind"] == "command" else "read"
             if catalog.get(step["operation"]) != expected_kind:
                 _fail(f"{source}:{pointer}/operation: step kind/operation differs from the complete Catalog")
-    result = subprocess.run(head._base() + ["--validate-vectors", *map(str, vectors)],
-                            capture_output=True, text=True, timeout=head.timeout, env=head.env, check=False)
+    result, diagnostic = _run_adapter(head, ["--validate-vectors", *map(str, vectors)])
     try:
-        compatibility = json.loads(result.stdout)
-    except json.JSONDecodeError:
-        _fail(f"Core vector compatibility adapter failed: {result.stdout!r}; {_stderr_diagnostic(result.stderr)!r}")
+        compatibility = _decode_json(result.stdout)
+    except ValueError as exc:
+        _fail(f"Core vector compatibility adapter failed: {exc}; {result.stdout!r}; {diagnostic!r}")
     if evidence_file is not None:
         evidence_file.parent.mkdir(parents=True, exist_ok=True)
-        evidence_file.write_text(json.dumps(compatibility, indent=2) + "\n")
+        evidence_file.write_text(_encode_json(compatibility, indent=2) + "\n")
     if result.returncode != 0 or compatibility["findings"]:
-        _fail("\n".join(compatibility["findings"]) or f"Core vector compatibility failed: {_stderr_diagnostic(result.stderr)}")
+        _fail("\n".join(compatibility["findings"]) or f"Core vector compatibility failed: {diagnostic}")
     expected_steps = {(source, pointer): step for source, vector in documents.items() for pointer, step in _steps(vector)}
     captured = set()
     for request in compatibility["requests"]:
@@ -781,10 +836,9 @@ def _verify_artifact_in_host(host: Path, artifact: Path, package: tuple[str, str
 
 
 def _manifest_entry(head: HeadProcess, package_id: str) -> list[dict[str, Any]]:
-    process = subprocess.run(head._base() + ["--manifest-catalog"], capture_output=True, text=True,
-                             timeout=head.timeout, env=head.env, check=False)
+    process, diagnostic = _run_adapter(head, ["--manifest-catalog"])
     if process.returncode != 0:
-        _fail(f"test host manifest inspection failed: {process.stderr!r}")
+        _fail(f"test host manifest inspection failed: {diagnostic!r}")
     packages = json.loads(process.stdout)
     matching = [item for item in packages if item["packageId"].casefold() == package_id.casefold()]
     if len(matching) != 1:
@@ -832,23 +886,26 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
     vectors = [source for _, _, sources in selections for source in sources]
     with tempfile.TemporaryDirectory(prefix="mcpcli-conformance-home-") as home:
         head = HeadProcess(host, home, timeout)
-        malformed = subprocess.run(head._base() + ["modules", "--bogus-secret"],
-                                   capture_output=True, text=True, timeout=timeout, env=head.env, check=False)
+        malformed, diagnostic = _run_adapter(head, ["modules", "--bogus-secret"])
         try:
             malformed_document = json.loads(malformed.stdout)
         except json.JSONDecodeError as exc:
             _fail(f"test host malformed-command stdout is not JSON: {exc}")
-        if malformed.returncode != 2 or malformed.stderr or malformed_document.get("error", {}).get("code") != "invalid_arguments":
+        if malformed.returncode != 2 or diagnostic or malformed_document.get("error", {}).get("code") != "invalid_arguments":
             _fail(f"test host bypasses checked CLI parsing: exit {malformed.returncode}, "
-                  f"stdout {malformed.stdout!r}, stderr {_stderr_diagnostic(malformed.stderr)!r}")
-        exit_code, modules = head.cli(["modules", "--strict"])
-        mcp_error, mcp_modules = head.mcp("list_modules", {})
+                  f"stdout {malformed.stdout!r}, stderr {diagnostic!r}")
+        with _probe_stderr(evidence_dir, "discovery.modules.CLI", "list_modules") as options:
+            exit_code, modules = head.cli(["modules", "--strict"], **options)
+        with _probe_stderr(evidence_dir, "discovery.modules.MCP", "list_modules") as options:
+            mcp_error, mcp_modules = head.mcp("list_modules", {}, **options)
         _assert_discovery_parity(exit_code, mcp_error, modules, mcp_modules, "list_modules")
         catalog: dict[str, str] = {}
-        for module in modules["modules"]:
+        for index, module in enumerate(modules["modules"]):
             name = module["name"]
-            exit_code, listed = head.cli(["operations", name, "--strict"])
-            mcp_error, mcp_listed = head.mcp("list_operations", {"module": name})
+            with _probe_stderr(evidence_dir, f"discovery.operations.{index}.CLI", f"list_operations {name}") as options:
+                exit_code, listed = head.cli(["operations", name, "--strict"], **options)
+            with _probe_stderr(evidence_dir, f"discovery.operations.{index}.MCP", f"list_operations {name}") as options:
+                mcp_error, mcp_listed = head.mcp("list_operations", {"module": name}, **options)
             _assert_discovery_parity(exit_code, mcp_error, listed, mcp_listed, f"list_operations {name}")
             for operation in listed["operations"]:
                 if operation["name"] in catalog:
@@ -881,8 +938,10 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
             operation = vector["operation"]
             if owned[operation] != vector["kind"]:
                 _fail(f"{source}:/kind: differs from owning flagged package kind {owned[operation]}")
-            exit_code, described = head.cli(["describe", operation, "--strict"])
-            mcp_error, mcp_described = head.mcp("describe_operation", {"operation": operation})
+            with _probe_stderr(evidence_dir, f"{operation}.CLI.describe", "describe_operation") as options:
+                exit_code, described = head.cli(["describe", operation, "--strict"], **options)
+            with _probe_stderr(evidence_dir, f"{operation}.MCP.describe", "describe_operation") as options:
+                mcp_error, mcp_described = head.mcp("describe_operation", {"operation": operation}, **options)
             _assert_discovery_parity(
                 exit_code, mcp_error, described, mcp_described, f"{source}: describe_operation")
             steps = vector["prerequisites"] + [vector["invocation"]] + vector["postconditions"]
@@ -901,7 +960,7 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
                     finally:
                         if evidence_dir is not None:
                             evidence_dir.mkdir(parents=True, exist_ok=True)
-                            (evidence_dir / f"{operation}.{label}.json").write_text(json.dumps(
+                            (evidence_dir / f"{operation}.{label}.json").write_text(_encode_json(
                                 {"source": str(source), "documents": documents, "requests": gateway.captured,
                                  "stderr": diagnostics}, indent=2) + "\n")
                     observations[label] = (documents, gateway.captured)
@@ -930,9 +989,11 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
             cli_args, tool, mcp_args = _call_args(invalid, "{invalid")
             envelope = invalid["envelope"]
             with ReplayGateway([]) as gateway:
-                cli_exit, cli_error = head.cli(cli_args, gateway.url, envelope["tenant"], envelope.get("actor"))
-                mcp_error, mcp_document = head.mcp(tool, mcp_args, gateway.url,
-                                                    envelope["tenant"], envelope.get("actor"))
+                with _probe_stderr(evidence_dir, f"{operation}.CLI.malformed-payload", "malformed Payload") as options:
+                    cli_exit, cli_error = head.cli(cli_args, gateway.url, envelope["tenant"], envelope.get("actor"), **options)
+                with _probe_stderr(evidence_dir, f"{operation}.MCP.malformed-payload", "malformed Payload") as options:
+                    mcp_error, mcp_document = head.mcp(tool, mcp_args, gateway.url,
+                                                       envelope["tenant"], envelope.get("actor"), **options)
                 gateway.assert_consumed(f"{source}:malformed-Payload")
             expected_validation = {"error": {"code": "validation_failed", "operation": invalid["operation"], "violations": [
                 {"path": "/", "message": "The payload must be valid JSON without duplicate properties."}]}}
@@ -962,7 +1023,7 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
                         failed[label] = (document, gateway.captured[0])
                     finally:
                         if evidence_dir is not None:
-                            (evidence_dir / f"{operation}.{label}.gateway-error.json").write_text(json.dumps(
+                            (evidence_dir / f"{operation}.{label}.gateway-error.json").write_text(_encode_json(
                                 {"source": str(source), "documents": documents, "requests": gateway.captured,
                                  "stderr": diagnostics}, indent=2) + "\n")
             cli_error_document, cli_error_request = failed["CLI"]

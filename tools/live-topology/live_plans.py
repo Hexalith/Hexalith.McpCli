@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import copy
 from datetime import datetime, timedelta, timezone
+from decimal import Decimal
 import hashlib
 import json
 from pathlib import Path
@@ -19,12 +20,17 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
 from evidence_redaction import sanitized
 sys.path.insert(0, str(ROOT / 'tools/conformance-vectors/v1'))
-from validate import VectorError, _load_json, validate_vectors
+from validate import VectorError, _encode_json, _load_json, validate_vectors
 from check_enrolled import approved_inventory, approved_vectors, approval_directory, artifact_for, required_scope
 from run_loopback import HeadProcess, _manifest_operations, _manifest_shapes, _pointer, _preflight_vectors, _steps, _verify_artifact_in_host
 from verify_artifact import restored_package
 
 BINDING_KEYS = ('packageId', 'version', 'artifactHash', 'vectorSha256', 'planSha256', 'approvalSha256', 'inventorySha256')
+PLAN_TYPES = jsonschema.Draft202012Validator.TYPE_CHECKER
+# Let integral numeric values reach the plan's existing located token checks.
+PlanValidator = jsonschema.validators.extend(jsonschema.Draft202012Validator, type_checker=PLAN_TYPES.redefine(
+    'integer', lambda checker, value: (isinstance(value, Decimal) and value == value.to_integral_value())
+    or PLAN_TYPES.is_type(value, 'integer')))
 
 
 def selection_binding(selection: dict) -> dict:
@@ -99,7 +105,7 @@ def resolve(call: dict, bindings: list[dict], values: dict) -> dict:
             raise VectorError(f"Unresolved capture {binding['capture']!r} at {binding['path']}")
         value = values[binding['capture']]
         if 'offsetSeconds' in binding:
-            value = (timestamp(value) + timedelta(seconds=binding['offsetSeconds'])).isoformat()
+            value = (timestamp(value) + timedelta(seconds=float(binding['offsetSeconds']))).isoformat()
         replace(result, binding['path'], value)
     return result
 
@@ -107,7 +113,7 @@ def resolve(call: dict, bindings: list[dict], values: dict) -> dict:
 def load_plan(path: Path, vector_path: Path) -> dict:
     plan = _load_json(path)
     schema = _load_json(Path(__file__).with_name('live-plan.schema.json'))
-    errors = sorted(jsonschema.Draft202012Validator(schema).iter_errors(plan), key=lambda e: str(e.path))
+    errors = sorted(PlanValidator(schema).iter_errors(plan), key=lambda e: str(e.path))
     if errors:
         raise VectorError(f'{path}: /' + '/'.join(map(str, errors[0].path)) + ': ' + errors[0].message)
     vector = _load_json(vector_path)
@@ -184,7 +190,7 @@ def validate_call(head: HeadProcess, call: dict) -> None:
     """Run resolved calls through the production Core without contacting a Gateway."""
     with tempfile.TemporaryDirectory(prefix='mcpcli-live-core-') as directory:
         path = Path(directory) / 'call.json'
-        path.write_text(json.dumps({'prerequisites': [], 'invocation': call, 'postconditions': []}))
+        path.write_text(_encode_json({'prerequisites': [], 'invocation': call, 'postconditions': []}))
         command = head._base() + ['--validate-vectors', str(path)]
         process = subprocess.run(command, env=head.env,
                                  capture_output=True, text=True, timeout=head.timeout, check=False)

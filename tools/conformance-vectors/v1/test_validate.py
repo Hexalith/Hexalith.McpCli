@@ -188,6 +188,33 @@ class VectorContractTests(unittest.TestCase):
                     step["expectedGateway"]["body"]["payload"] = expected
                     self.assertEqual([], self._validate(document))
 
+    def test_non_object_query_payload_keeps_distinct_decimal_values_at_every_call_position(self) -> None:
+        for position in POSITIONS:
+            for payload, expected, matches in (("1e-400", "0", False),
+                                               ("1.0000000000000000001", "1.0000000000000000002", False),
+                                               ("1e-400", "10e-401", True)):
+                with self.subTest(position=position, payload=payload, expected=expected):
+                    document, step, pointer = self._step_at(self.query, position)
+                    step["payload"] = "INPUT_NUMBER"
+                    step["expectedGateway"]["body"]["payload"] = "WIRE_NUMBER"
+                    source = self._write(document)
+                    raw = source.read_text(encoding="utf-8")
+                    source.write_text(raw.replace('"INPUT_NUMBER"', payload).replace('"WIRE_NUMBER"', expected),
+                                      encoding="utf-8")
+                    findings = validate_vectors([source], self.artifact, PACKAGE)
+                    if matches:
+                        self.assertEqual([], findings)
+                    else:
+                        self.assertEqual([f"{source}:{pointer}/expectedGateway/body/payload: "
+                                          "non-object Query payload must equal the input Payload"], findings)
+
+    def test_decimal_exponent_limits_preserve_zero_and_the_noninteger_token_kind(self) -> None:
+        from validate import VectorError, _decode_json, _encode_json
+
+        self.assertEqual('[-0.0,1.0]', _encode_json(_decode_json('[-0e999999999999999999999,1e0]')))
+        with self.assertRaisesRegex(VectorError, 'nonzero JSON decimal exceeds the supported exponent range'):
+            _decode_json('1e-999999999999999999999')
+
     def test_caller_correlation_id_cannot_be_masked(self) -> None:
         self.command["invocation"]["expectedGateway"]["maskGenerated"].append("/correlationId")
         self._assert_rejected(self.command, "caller-supplied correlationId cannot be masked")
@@ -459,10 +486,11 @@ class VectorContractTests(unittest.TestCase):
                     document["invocation"]["expectedGateway"]["body"]["tenant"] = value
                     self.assertEqual([], self._validate(document))
 
-    def test_ulids_reject_invalid_alphabet_overflow_and_trailing_newlines(self) -> None:
+    def test_ulids_reject_lowercase_invalid_alphabet_overflow_and_trailing_newlines(self) -> None:
         for position in POSITIONS:
             for field in ("correlationId", "idempotencyKey"):
-                for value in ("", "01J9MZHXT3RKM0VWXRXGSJDATK\n", "8" + "0" * 25,
+                for value in ("", "01j9mzhxt3rkm0vwxrxgsjdatk", "01J9MZHXT3RKM0VWXRXGSJDATk",
+                              "01J9MZHXT3RKM0VWXRXGSJDATK\n", "8" + "0" * 25,
                               "0" * 25, "0" * 27, "0" * 25 + "I", "0" * 25 + "O", "0" * 25 + "U"):
                     with self.subTest(position=position, field=field, value=value):
                         document, step, pointer = self._step_at(self.command, position)

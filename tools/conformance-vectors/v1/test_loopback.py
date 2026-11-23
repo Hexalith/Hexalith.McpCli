@@ -96,6 +96,48 @@ class LoopbackRulesTests(unittest.TestCase):
         self.assertFalse(_json_equal({"value": False}, {"value": 0.0}))
         self.assertFalse(_json_equal([1], {"0": 1}))
 
+    def test_gateway_rejects_duplicate_wire_fields_before_consuming_a_step(self):
+        from urllib.error import HTTPError
+        from urllib.request import Request, urlopen
+        from run_loopback import ReplayGateway
+
+        payloads = (br'{"tenant":"sample","tenant":"other"}',
+                    br'{"payload":{"value":0,"\u0076alue":1}}')
+        for payload in payloads:
+            with self.subTest(payload=payload), ReplayGateway([self.command]) as gateway:
+                request = Request(gateway.url + 'api/v1/commands', data=payload, method='POST')
+                with self.assertRaises(HTTPError) as response:
+                    urlopen(request, timeout=5)
+                self.assertEqual(500, response.exception.code)
+                response.exception.close()
+                self.assertEqual([], gateway.captured)
+                with self.assertRaisesRegex(VectorError, 'consumed 0/1 requests; /: duplicate JSON field'):
+                    gateway.assert_consumed('request')
+
+    def test_replay_keeps_exact_numbers_in_payloads_requests_responses_and_assertions(self):
+        from urllib.request import Request, urlopen
+        from run_loopback import ReplayGateway
+        from validate import _decode_json
+
+        raw = '[1e-400,1.0000000000000000001]'
+        step = copy.deepcopy(self.command)
+        step['payload']['numbers'] = _decode_json(raw)
+        step['scriptedResponse'] = {'statusCode': 202, 'body': {'numbers': _decode_json(raw)}, 'echoRequestFields': []}
+        cli, _, mcp = _call_args(step)
+        cli_payload = cli[cli.index('--payload') + 1]
+        self.assertEqual(cli_payload, mcp['payload'])
+        self.assertIn('[1E-400,1.0000000000000000001]', cli_payload)
+        with ReplayGateway([step]) as gateway:
+            request = Request(gateway.url + 'api/v1/commands', data=cli_payload.encode(), method='POST')
+            with urlopen(request, timeout=5) as response:
+                self.assertIn(b'[1E-400,1.0000000000000000001]', response.read())
+            gateway.assert_consumed('request')
+            captured = gateway.captured[0]['body']
+        _assert_result(captured, {'operator': 'equals', 'path': '/numbers', 'value': _decode_json(raw)}, 'result')
+        with self.assertRaisesRegex(VectorError, 'assertion equals at /numbers'):
+            _assert_result(captured, {'operator': 'equals', 'path': '/numbers',
+                                      'value': _decode_json('[1e-400,1.0000000000000000002]')}, 'result')
+
     def test_gateway_expectations_use_recursive_json_equality(self) -> None:
         _expect_fields({"body": {"payload": {"items": [1, 2.0]}}},
                        {"body": {"payload": {"items": [1.0, 2]}}}, "request")
@@ -630,6 +672,33 @@ class SdkErrorOutcomeTests(unittest.TestCase):
 
 
 class RetainedFailureEvidenceTests(unittest.TestCase):
+    def test_discovery_retains_diagnostics_before_a_head_fails(self):
+        import subprocess
+        from unittest.mock import Mock
+        from run_loopback import run_catalog
+
+        def cli(args, *, diagnostics):
+            self.assertEqual(['modules', '--strict'], args)
+            diagnostics.append('CLI discovery diagnostic')
+            return 0, {'modules': []}
+
+        def mcp(tool, arguments, *, diagnostics):
+            self.assertEqual(('list_modules', {}), (tool, arguments))
+            diagnostics.append('MCP discovery diagnostic')
+            raise VectorError('MCP discovery failed')
+
+        head = Mock(_base=Mock(return_value=[]), env={}, timeout=15, cli=cli, mcp=mcp)
+        malformed = subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}')
+        with tempfile.TemporaryDirectory() as directory, \
+                patch('run_loopback.HeadProcess', return_value=head), \
+                patch('run_loopback.subprocess.run', return_value=malformed):
+            output = Path(directory)
+            with self.assertRaisesRegex(VectorError, 'MCP discovery failed'):
+                run_catalog(Path('Host.dll'), [], evidence_dir=output)
+            for label in ('CLI', 'MCP'):
+                receipt = json.loads((output / f'discovery.modules.{label}.json').read_text())
+                self.assertEqual({'probe': 'list_modules', 'stderr': [f'{label} discovery diagnostic']}, receipt)
+
     def test_failing_head_retains_full_document_and_captured_request(self):
         import copy
         import subprocess
@@ -677,8 +746,8 @@ class RetainedFailureEvidenceTests(unittest.TestCase):
                 self.assertEqual({'source': str(source), 'documents': [broken], 'requests': [request],
                                   'stderr': [f'{failing} diagnostic\n']}, retained)
 
-    def test_process_diagnostics_are_redacted_and_large_mcp_stderr_does_not_block_replies(self):
-        from run_loopback import HeadProcess
+    def test_process_diagnostics_are_redacted_and_large_stderr_is_drained_and_bounded(self):
+        from run_loopback import HeadProcess, STDERR_LIMIT, _stderr_diagnostic
 
         program = '''
 import json
@@ -707,12 +776,16 @@ else:
                 cli_diagnostics, mcp_diagnostics = [], []
                 self.assertEqual((0, {'ok': True}), head.cli(['query'], diagnostics=cli_diagnostics))
                 self.assertEqual((False, {'ok': True}), head.mcp('run_query', {}, diagnostics=mcp_diagnostics))
-            with patch.object(head, '_base', return_value=[sys.executable, str(source), 'mcp', '--large']):
-                self.assertEqual((False, {'ok': True}), head.mcp('run_query', {}, diagnostics=mcp_diagnostics))
+            with patch('run_loopback._stderr_diagnostic', wraps=_stderr_diagnostic) as retained:
+                with patch.object(head, '_base', return_value=[sys.executable, str(source), 'query', '--large']):
+                    self.assertEqual((0, {'ok': True}), head.cli(['query'], diagnostics=cli_diagnostics))
+                with patch.object(head, '_base', return_value=[sys.executable, str(source), 'mcp', '--large']):
+                    self.assertEqual((False, {'ok': True}), head.mcp('run_query', {}, diagnostics=mcp_diagnostics))
+            self.assertEqual([STDERR_LIMIT + 1, STDERR_LIMIT + 1], [len(call.args[0]) for call in retained.call_args_list])
 
         expected = 'startup\nAuthorization: Bearer [REDACTED]\n'
-        self.assertEqual([expected], cli_diagnostics)
-        self.assertEqual([expected, '[stderr omitted: exceeds 64 KiB]'], mcp_diagnostics)
+        self.assertEqual([expected, '[stderr omitted: exceeds 64 KiB]'], cli_diagnostics)
+        self.assertEqual(cli_diagnostics, mcp_diagnostics)
 
     def test_cli_retains_invalid_stderr_bytes_and_partial_timeout_diagnostics(self):
         import subprocess
@@ -721,11 +794,17 @@ else:
         with tempfile.TemporaryDirectory() as directory:
             diagnostics = []
             head = HeadProcess(Path('unused.dll'), directory, 5)
-            output = subprocess.CompletedProcess([], 0, b'{"ok":true}', b'capture \xff\n')
-            with patch('run_loopback.subprocess.run', return_value=output):
+            def output(command, *, stderr, **_):
+                stderr.write(b'capture \xff\n')
+                return subprocess.CompletedProcess(command, 0, b'{"ok":true}')
+
+            def expires(command, *, stderr, **_):
+                stderr.write(b'Authorization: Bearer timeout-value\n')
+                raise subprocess.TimeoutExpired(command, 5)
+
+            with patch('run_loopback.subprocess.run', side_effect=output):
                 self.assertEqual((0, {'ok': True}), head.cli(['query'], diagnostics=diagnostics))
-            timeout = subprocess.TimeoutExpired(['query'], 5, stderr=b'Authorization: Bearer timeout-value\n')
-            with patch('run_loopback.subprocess.run', side_effect=timeout), self.assertRaises(subprocess.TimeoutExpired):
+            with patch('run_loopback.subprocess.run', side_effect=expires), self.assertRaises(subprocess.TimeoutExpired):
                 head.cli(['query'], diagnostics=diagnostics)
         self.assertEqual(['capture \ufffd\n', 'Authorization: Bearer [REDACTED]\n'], diagnostics)
 
@@ -996,13 +1075,17 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
                 return 2, {'error': {'code': 'gateway_error', 'status': status, 'detail':
                                     'Command response body could not be parsed.' if status == 204 else 'scripted Gateway failure'}}
 
-            def cli(args, *unused):
+            def cli(args, *unused, diagnostics=None):
+                if diagnostics is not None:
+                    diagnostics.append(f'CLI {args[0]} diagnostic')
                 if args[0] == 'modules': return 0, modules
                 if args[0] == 'operations': return 0, listed
                 if args[0] == 'describe': return 0, {'name': step['operation']}
                 return execute(args[args.index('--payload') + 1])
 
-            def mcp(tool, args, *unused):
+            def mcp(tool, args, *unused, diagnostics=None):
+                if diagnostics is not None:
+                    diagnostics.append(f'MCP {tool} diagnostic')
                 if tool == 'list_modules': return False, modules
                 if tool == 'list_operations': return False, listed
                 if tool == 'describe_operation': return False, {'name': step['operation']}
@@ -1018,6 +1101,7 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
                 return []
             with tempfile.TemporaryDirectory() as directory:
                 source = Path(directory) / 'command-204.vector.json'
+                evidence = Path(directory) / 'observations'
                 source.write_text(json.dumps(vector))
                 with self.subTest(supplied=supplied, reuse_503=reuse_503), patch('run_loopback._verify_artifact_in_host'), \
                         patch('run_loopback.validate_vectors', side_effect=validate), redirect_stderr(io.StringIO()) as stderr, \
@@ -1028,12 +1112,20 @@ class GeneratedErrorCorrelationTests(unittest.TestCase):
                         patch('run_loopback.subprocess.run', return_value=subprocess.CompletedProcess([], 2, '{"error":{"code":"invalid_arguments"}}', '')):
                     if reuse_503:
                         with self.assertRaisesRegex(VectorError, 'gateway-error/messageId:.*reused across distinct calls'):
-                            run_catalog(Path('Host.dll'), [(Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])])
+                            run_catalog(Path('Host.dll'), [(Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])],
+                                        evidence_dir=evidence)
                     else:
                         self.assertEqual({'modules': ['sample'], 'packageModules': {'Sample.Contracts': ['sample']},
                                           'reported': ['vector version report']}, run_catalog(Path('Host.dll'), [
-                            (Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])]))
+                            (Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [source])], evidence_dir=evidence))
                     self.assertEqual('reported: vector version report\n', stderr.getvalue())
+                for label, calls in [('CLI', ('modules', 'operations', 'describe', 'send')),
+                                     ('MCP', ('list_modules', 'list_operations', 'describe_operation', 'send_command'))]:
+                    receipts = [f'discovery.modules.{label}', f'discovery.operations.0.{label}',
+                                f'{step["operation"]}.{label}.describe', f'{step["operation"]}.{label}.malformed-payload']
+                    for name, call in zip(receipts, calls, strict=True):
+                        observed = json.loads((evidence / f'{name}.json').read_text())
+                        self.assertEqual([f'{label} {call} diagnostic'], observed['stderr'])
 
     def test_error_masks_only_a_generated_echo_and_preserves_a_supplied_correlation(self):
         from run_loopback import _assert_result_contract, _assert_result_request_binding

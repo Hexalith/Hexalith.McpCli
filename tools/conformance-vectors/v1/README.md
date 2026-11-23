@@ -28,7 +28,7 @@ Create a vector using `schema.json` and the synthetic examples. `prerequisites` 
 
 The root, package, call, Envelope, Gateway expectation, scripted response, assertion, and Gateway request-body objects reject unknown fields. Call `payload`, the nested Gateway `payload`, and `scriptedResponse.body` remain Module-owned JSON data, as do assertion values. Arbitrary fields and nested JSON are allowed there; duplicate JSON keys and nonfinite numbers (`NaN`, `Infinity`, or numeric overflow) are rejected. Tenants use the runtime Gateway grammar: 1–64 lowercase ASCII letters, digits, or hyphens, starting and ending with a letter or digit. Required routing strings and supplied actor, aggregate ID, entity ID, and cursor strings cannot be blank. Caller-supplied correlation and idempotency identifiers use the v1 ULID pattern. Envelope identifiers are independent of the Module's payload Identifier Kind.
 
-Contract integer fields (`formatVersion`, `pageSize`, `offset`, `statusCode`, and `arrayLength` values) require integer JSON tokens: `1.0`, `1e0`, and booleans are invalid even when Python would compare them equal to integers. Query offsets range from 0 through 2147483647. Module-owned JSON numbers retain their normal finite numeric representation.
+Contract integer fields (`formatVersion`, `pageSize`, `offset`, `statusCode`, and `arrayLength` values) require integer JSON tokens: `1.0`, `1e0`, and booleans are invalid even when Python would compare them equal to integers. Query offsets range from 0 through 2147483647. Validation and replay preserve the numeric value of accepted Module-owned JSON, including decimal digits and exponents that would round or underflow in binary floating point. Nonzero values whose exponents exceed the Python decimal representation fail validation.
 
 Query cursors may contain at most 4096 UTF-16 code units. A character outside the Basic Multilingual Plane counts as two units. Every cursor must be valid Unicode text without a NUL character so both heads can replay it.
 
@@ -38,7 +38,7 @@ Command extensions follow Core's fixed restrictions, including the key grammar, 
 
 `maskGenerated` may name only a generated Command `/messageId` or `/correlationId`, with `<generated>` at that location in the expected body. Caller-supplied identifiers, especially an idempotency key, remain exact. `echoRequestFields` tells the loopback script to copy selected request identifiers into its response: a Command response must echo correlation ID and may echo message ID. A Query has no request identifiers to mask or echo; its response may still contain a scripted correlation ID supplied by the Module.
 
-Assertion paths are RFC 6901 JSON Pointers into the canonical result document; the empty pointer addresses the whole result. The operators are `equals` (JSON structural equality), `exists` (boolean value), `arrayLength` (nonnegative integer value), and `contains` (array member, object field subset, or string fragment). JSON equality is recursive and type-preserving: integers and floats are Numbers and compare by numeric value, while booleans never equal numbers. Every assertion requires a value and every call needs at least one assertion. A Command can assert `/status` and a postcondition Query can assert actual `/document` content. Paging cases should request a non-default page size and subsequent cursor and assert contents, not just a successful status.
+Assertion paths are RFC 6901 JSON Pointers into the canonical result document; the empty pointer addresses the whole result. The operators are `equals` (JSON structural equality), `exists` (boolean value), `arrayLength` (nonnegative integer value), and `contains` (array member, object field subset, or string fragment). JSON equality compares integer, decimal and exponent encodings by numeric value and distinguishes booleans from numbers. Every assertion requires a value and every call needs at least one assertion. A Command can assert `/status` and a postcondition Query can assert actual `/document` content. Paging cases should request a non-default page size and subsequent cursor and assert contents, not just a successful status.
 
 ## Offline sample gate
 
@@ -241,8 +241,11 @@ identity and bytes against the production host restore, and records complete
 success documents and captured requests under `production-observations/`, including
 partial observations when an assertion fails. Each head's `stderr` array preserves
 redacted diagnostics in call order, including MCP startup messages from the process
-that ran the call. A quiet call has an empty string. Streams over 64 KiB are omitted
-with a diagnostic marker. Stdout is checked as JSON or JSON-RPC as before.
+that ran the call. Discovery and malformed-Payload probes also retain per-head
+diagnostics, including when replay stops at a failed probe. A quiet call has an empty
+string. The runner drains stderr and uses an omission marker for streams over 64 KiB.
+It rejects duplicate object members at any depth in a captured Gateway request
+before the request can consume a scripted response.
 Standalone `run_loopback.py --evidence-dir <directory>` produces the same observations
 in a new or empty directory.
 Independent artifact verification records its observation directory as

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import argparse
 import hashlib
-import json
 from pathlib import Path
 import re
 import subprocess
@@ -14,11 +13,12 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools/conformance-vectors/v1'))
 from run_loopback import HeadProcess, _assert_discovery_parity
+from validate import _encode_json
 
 
 def digest(value) -> str:
     """Hash sorted-key compact UTF-8 JSON, preserving Unicode characters."""
-    return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), ensure_ascii=False).encode('utf-8')).hexdigest()
+    return hashlib.sha256(_encode_json(value, sort_keys=True, ensure_ascii=False).encode('utf-8')).hexdigest()
 
 
 def capture(host: Path) -> dict:
@@ -63,7 +63,7 @@ def main() -> None:
     args = parser.parse_args()
     receipt = capture(args.host.resolve())
     with args.output.open('x', encoding='utf-8') as output:
-        output.write(json.dumps(receipt, indent=2, ensure_ascii=False) + '\n')
+        output.write(_encode_json(receipt, indent=2, ensure_ascii=False) + '\n')
 
 
 if __name__ == '__main__':

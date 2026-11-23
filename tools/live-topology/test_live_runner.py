@@ -9,7 +9,7 @@ import unittest
 from unittest.mock import patch
 
 import run_live
-from validate import VectorError
+from validate import VectorError, _decode_json
 
 
 class Head:
@@ -50,9 +50,19 @@ class RunnerTests(unittest.TestCase):
 
     def test_only_queries_poll_for_persisted_convergence(self):
         head = Head([{'document': {'value': 0}}, {'document': {'value': 7}}])
-        self.assertEqual(7, self.observe(head, self.call())['document']['value'])
+        plan = _decode_json('{"deadlineSeconds":1.25,"pollSeconds":0.5}')
+        tick = 0.0
+
+        def pause(seconds):
+            nonlocal tick
+            self.assertIsInstance(seconds, float)
+            tick += seconds
+
+        observed = run_live.observe(head, self.call(), None, {}, {}, plan,
+                                    {'phase': '/invocation', 'attempts': []}, clock=lambda: tick, pause=pause)
+        self.assertEqual(7, observed['document']['value'])
         self.assertEqual(2, len(head.calls))
-        self.assertLessEqual(head.calls[-1][1], .5)
+        self.assertEqual(.75, head.calls[-1][1])
         self.assertEqual(30, head.timeout)
 
     def test_mcp_query_uses_tool_arguments_and_cannot_submit_commands(self):

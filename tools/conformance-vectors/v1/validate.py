@@ -10,6 +10,7 @@ import re
 import sys
 import unicodedata
 import zipfile
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 from xml.etree import ElementTree
@@ -63,7 +64,8 @@ def _no_duplicate_keys(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
 
 
 def _check_finite_json(value: Any, parts: tuple[str | int, ...] = ()) -> None:
-    if isinstance(value, float) and not math.isfinite(value):
+    # Preserve the v1 overflow limit without converting retained numbers to floats.
+    if isinstance(value, (float, Decimal)) and not math.isfinite(value):
         raise VectorError(f"{_pointer(parts)}: nonfinite JSON number {value!r} is not supported")
     if isinstance(value, dict):
         for key, item in value.items():
@@ -74,7 +76,11 @@ def _check_finite_json(value: Any, parts: tuple[str | int, ...] = ()) -> None:
 
 
 def _json_equal(actual: Any, expected: Any) -> bool:
-    if type(actual) in (int, float) and type(expected) in (int, float):
+    if isinstance(actual, float):
+        actual = Decimal(str(actual))
+    if isinstance(expected, float):
+        expected = Decimal(str(expected))
+    if type(actual) in (int, Decimal) and type(expected) in (int, Decimal):
         return actual == expected
     if type(actual) is not type(expected):
         return False
@@ -87,11 +93,57 @@ def _json_equal(actual: Any, expected: Any) -> bool:
     return actual == expected
 
 
+def _parse_decimal(token: str) -> Decimal:
+    try:
+        return Decimal(token)
+    except InvalidOperation as exc:
+        coefficient = token.lower().split("e", 1)[0]
+        if not coefficient.strip("-.0"):
+            return Decimal(coefficient)
+        raise VectorError("/: nonzero JSON decimal exceeds the supported exponent range") from exc
+
+
+def _decode_json(source: str | bytes) -> Any:
+    try:
+        document = json.loads(source, parse_float=_parse_decimal, object_pairs_hook=_no_duplicate_keys)
+    except RecursionError as exc:
+        raise VectorError("/: JSON nesting exceeds the decoder limit") from exc
+    _check_finite_json(document)
+    return document
+
+
+def _encode_json(value: Any, *, sort_keys: bool = False, ensure_ascii: bool = True,
+                 indent: int | None = None) -> str:
+    """Encode parsed JSON values without rounding decimals or quoting them as strings."""
+    def scalar(item: Any) -> str:
+        if isinstance(item, Decimal):
+            if not item.is_finite():
+                raise ValueError("Cannot encode a nonfinite JSON number")
+            number = str(item)
+            return number if "." in number or "E" in number else number + ".0"
+        return json.dumps(item, ensure_ascii=ensure_ascii, allow_nan=False)
+
+    def collection(opening: str, closing: str, entries: list[str], depth: int) -> str:
+        if not entries or indent is None:
+            return opening + ",".join(entries) + closing
+        padding = " " * (indent * (depth + 1))
+        return opening + "\n" + padding + (",\n" + padding).join(entries) + "\n" + " " * (indent * depth) + closing
+
+    def encode(item: Any, depth: int) -> str:
+        if isinstance(item, dict):
+            keys = sorted(item) if sort_keys else item
+            separator = ": " if indent is not None else ":"
+            return collection("{", "}", [scalar(key) + separator + encode(item[key], depth + 1) for key in keys], depth)
+        if isinstance(item, list):
+            return collection("[", "]", [encode(child, depth + 1) for child in item], depth)
+        return scalar(item)
+
+    return encode(value, 0)
+
+
 def _load_json(path: Path) -> Any:
     try:
-        document = json.loads(path.read_text(encoding="utf-8"), object_pairs_hook=_no_duplicate_keys)
-        _check_finite_json(document)
-        return document
+        return _decode_json(path.read_text(encoding="utf-8"))
     except VectorError as exc:
         raise VectorError(f"{path}:{exc}") from exc
     except (OSError, ValueError, RecursionError) as exc:
