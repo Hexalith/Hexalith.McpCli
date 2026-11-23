@@ -1,3 +1,4 @@
+using System.CommandLine;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
@@ -29,6 +30,26 @@ public sealed class DiscoveryCommandTests
         typeof(Lint.Module).Assembly,
         typeof(Explicit.Module).Assembly,
     ];
+
+    /// <summary>Checks the argument and option descriptions on every command, including nested profile commands.</summary>
+    [Fact]
+    public void EveryCommandArgumentAndOptionHasHelp()
+    {
+        CheckDescriptions(new CliRunner().CreateRoot(), "hexalith");
+
+        static void CheckDescriptions(Command command, string path)
+        {
+            foreach (Symbol input in command.Arguments.Cast<Symbol>().Concat(command.Options))
+            {
+                input.Description.ShouldNotBeNullOrWhiteSpace($"{path} {input.Name}");
+            }
+
+            foreach (Command child in command.Subcommands)
+            {
+                CheckDescriptions(child, $"{path} {child.Name}");
+            }
+        }
+    }
 
     /// <summary>All discovery verbs produce their complete documents without a Gateway URL.</summary>
     [Fact]

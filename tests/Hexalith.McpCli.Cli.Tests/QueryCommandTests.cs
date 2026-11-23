@@ -1,7 +1,4 @@
-using System.Net;
-using System.Net.Sockets;
 using System.Reflection;
-using System.Text;
 using System.Text.Json;
 using Hexalith.McpCli.Cli;
 using Hexalith.McpCli.Core.Settings;
@@ -47,41 +44,9 @@ public sealed class QueryCommandTests
         try
         {
             Directory.CreateDirectory(directory);
-            using var portProbe = new TcpListener(IPAddress.Loopback, 0);
-            portProbe.Start();
-            int port = ((IPEndPoint)portProbe.LocalEndpoint).Port;
-            portProbe.Stop();
-            string url = $"http://127.0.0.1:{port}/";
-            using var gateway = new HttpListener();
-            gateway.Prefixes.Add(url);
-            gateway.Start();
-            int calls = 0;
-            string? method = null;
-            string? path = null;
-            string? authorization = null;
-            JsonElement? requestDocument = null;
-            string document = nullPayload ? "null" : "{\"items\":[{\"key\":\"item-42\"}]}";
-            Task responses = Task.Run(async () =>
-            {
-                while (!timeout.IsCancellationRequested)
-                {
-                    HttpListenerContext context = await gateway.GetContextAsync().WaitAsync(timeout.Token);
-                    Interlocked.Increment(ref calls);
-                    method = context.Request.HttpMethod;
-                    path = context.Request.Url!.AbsolutePath;
-                    authorization = context.Request.Headers["Authorization"];
-                    using var reader = new StreamReader(context.Request.InputStream);
-                    string body = await reader.ReadToEndAsync(timeout.Token);
-                    using JsonDocument request = JsonDocument.Parse(body);
-                    requestDocument = request.RootElement.Clone();
-                    byte[] response = Encoding.UTF8.GetBytes(
-                        $$"""{"correlationId":"01J9MZHXT3RKM0VWXRXGSJDATK","payload":{{document}},"success":true}""");
-                    context.Response.ContentType = "application/json";
-                    context.Response.ContentLength64 = response.Length;
-                    await context.Response.OutputStream.WriteAsync(response, timeout.Token);
-                    context.Response.Close();
-                }
-            }, timeout.Token);
+            string document = nullPayload ? "null" : """{"items":[{"key":"item-42"}]}""";
+            await using var gateway = new ScriptedGateway(_ => ScriptedGateway.Response(200, "OK", "application/json",
+                $$"""{"correlationId":"01J9MZHXT3RKM0VWXRXGSJDATK","payload":{{document}},"success":true}"""));
 
             TextReader originalIn = Console.In;
             TextWriter originalOut = Console.Out;
@@ -90,7 +55,6 @@ public sealed class QueryCommandTests
             using var error = new StringWriter();
             string payload = aggregateSource == "accessor" ? $$"""{"ItemId":"{{ItemId}}"}""" : "{}";
             using var input = new StringReader(source == "stdin" ? payload : "stdin must not be read");
-            bool testFailed = false;
             try
             {
                 string payloadArgument = payload;
@@ -112,7 +76,7 @@ public sealed class QueryCommandTests
                     _ => "routing-fixture.interface-item",
                 };
                 var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
-                store.Add("query-profile", new ConnectionProfile(url, Token: ProfileToken, Tenant: "profile-tenant"));
+                store.Add("query-profile", new ConnectionProfile(gateway.Url, Token: ProfileToken, Tenant: "profile-tenant"));
                 store.Use("query-profile");
                 Func<IReadOnlyList<Assembly>> manifest = () => [typeof(Routing.Module).Assembly, typeof(StringContracts.Module).Assembly];
                 List<string> arguments = ["query", operation, "--payload", payloadArgument];
@@ -131,10 +95,10 @@ public sealed class QueryCommandTests
                 int exit = await new CliRunner(store, manifest, _ => null).InvokeAsync(arguments, timeout.Token);
 
                 exit.ShouldBe(0, output.ToString() + error.ToString());
-                calls.ShouldBe(1);
-                method.ShouldBe("POST");
-                path.ShouldBe("/api/v1/queries");
-                authorization.ShouldBe("Bearer " + ProfileToken);
+                GatewayRequest request = gateway.Requests.ShouldHaveSingleItem();
+                request.Method.ShouldBe("POST");
+                request.Path.ShouldBe("/api/v1/queries");
+                request.Headers["Authorization"].ShouldBe("Bearer " + ProfileToken);
                 string tenant = aggregateSource == "constant" ? "fixed-tenant"
                     : tenantFlag ? "session-tenant" : "profile-tenant";
                 string expectedRequest = aggregateSource switch
@@ -154,35 +118,18 @@ public sealed class QueryCommandTests
                         """,
                 };
                 using JsonDocument expected = JsonDocument.Parse(expectedRequest);
-                JsonElement.DeepEquals(requestDocument.ShouldNotBeNull(), expected.RootElement).ShouldBeTrue();
+                using JsonDocument actualRequest = JsonDocument.Parse(request.Body);
+                JsonElement.DeepEquals(actualRequest.RootElement, expected.RootElement).ShouldBeTrue();
                 using JsonDocument actualResult = JsonDocument.Parse(output.ToString());
                 using JsonDocument expectedResult = JsonDocument.Parse(
                     $$"""{"operation":"{{operation}}","tenant":"{{tenant}}","document":{{document}}}""");
                 JsonElement.DeepEquals(actualResult.RootElement, expectedResult.RootElement).ShouldBeTrue();
-            }
-            catch
-            {
-                testFailed = true;
-                throw;
             }
             finally
             {
                 Console.SetIn(originalIn);
                 Console.SetOut(originalOut);
                 Console.SetError(originalError);
-                timeout.Cancel();
-                gateway.Stop();
-                try
-                {
-                    await responses;
-                }
-                catch (Exception exception) when (exception is OperationCanceledException or HttpListenerException or ObjectDisposedException)
-                {
-                }
-                catch when (testFailed)
-                {
-                    // Observe the response task without replacing the original assertion failure.
-                }
             }
         }
         finally

@@ -306,7 +306,8 @@ internal sealed class CliRunner
         return parts.ToArray();
     }
 
-    private RootCommand CreateRoot()
+    /// <summary>Builds the command tree used by the invocation parser.</summary>
+    internal RootCommand CreateRoot()
     {
         RootCommand root = new("Hexalith MCP and CLI gateway tool");
         root.Directives.Remove(root.Directives.OfType<SuggestDirective>().Single());
@@ -637,7 +638,7 @@ internal sealed class CliRunner
 
     private Command CreateConfigUse()
     {
-        Argument<string?> name = new("name") { Arity = ArgumentArity.ZeroOrOne };
+        Argument<string?> name = new("name") { Description = "Existing case-sensitive profile name to activate. Omit with --clear.", Arity = ArgumentArity.ZeroOrOne };
         Option<bool> clear = new("--clear") { Description = "Clear the active profile" };
         Command use = new("use", "Select or clear the active profile");
         use.Arguments.Add(name);
@@ -738,13 +739,21 @@ internal sealed class CliRunner
                     Message: catalog.Message), cancellationToken).ConfigureAwait(false);
             }
 
-            if (_startMcp is not null)
+            try
             {
-                await _startMcp(invocationHost, cancellationToken).ConfigureAwait(false);
+                if (_startMcp is not null)
+                {
+                    await _startMcp(invocationHost, cancellationToken).ConfigureAwait(false);
+                }
+                else if (_runMcp is null)
+                {
+                    await invocationHost.StartAsync(cancellationToken).ConfigureAwait(false);
+                }
             }
-            else if (_runMcp is null)
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
-                await invocationHost.StartAsync(cancellationToken).ConfigureAwait(false);
+                invocationHost.Dispose();
+                return 0;
             }
         }
         catch (Exception)

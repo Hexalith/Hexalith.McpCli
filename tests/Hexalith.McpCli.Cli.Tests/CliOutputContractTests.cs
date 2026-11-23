@@ -290,6 +290,7 @@ public sealed class CliOutputContractTests
                     "1 to 200", "0 to 2147483647", "4096 UTF-16 code units", "nonblank cursor excludes --offset, even 0"]),
                 (["config", "profile", "add", "--help"], ["Case-sensitive profile name", "1-64 ASCII", "name after --", "Pass --url explicitly"]),
                 (["config", "profile", "remove", "--help"], ["Removing the active profile clears the selection"]),
+                (["config", "use", "--help"], ["Existing case-sensitive profile name to activate", "Omit with --clear"]),
                 (["config", "set", "--help"], ["Existing case-sensitive profile", "Profile management uses its own arguments", "nonblank text for tenant or actor",
                     "true, false, 1 or 0", "comma-separated keys without spaces", "empty string to clear"]),
                 (["mcp", "--help"], ["stdio (default)", "HTTP transport is planned for the next release", "Explicit --format table and --output are rejected"]),

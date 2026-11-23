@@ -15,6 +15,7 @@ internal sealed class ScriptedGateway : IAsyncDisposable
     private readonly CancellationTokenSource _stop = new();
     private readonly ConcurrentQueue<GatewayRequest> _requests = new();
     private readonly Func<GatewayRequest, Task<byte[]>> _respond;
+    private readonly List<Task> _connections = [];
     private readonly Task _accepting;
 
     /// <summary>Starts a gateway that answers every request with the bytes chosen by <paramref name="respond" />.</summary>
@@ -92,7 +93,14 @@ internal sealed class ScriptedGateway : IAsyncDisposable
         {
         }
 
-        _stop.Dispose();
+        try
+        {
+            await Task.WhenAll(_connections);
+        }
+        finally
+        {
+            _stop.Dispose();
+        }
     }
 
     private async Task AcceptAsync()
@@ -100,7 +108,7 @@ internal sealed class ScriptedGateway : IAsyncDisposable
         while (!_stop.IsCancellationRequested)
         {
             TcpClient client = await _listener.AcceptTcpClientAsync(_stop.Token);
-            _ = Task.Run(() => ServeAsync(client));
+            _connections.Add(Task.Run(() => ServeAsync(client)));
         }
     }
 

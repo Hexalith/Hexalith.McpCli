@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using ModelContextProtocol.Server;
+using NSubstitute;
 using Shouldly;
 
 namespace Hexalith.McpCli.Cli.Tests;
@@ -764,6 +765,49 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>A fault in the session run by the SDK's registered hosted service produces the serving diagnostic.</summary>
+    [Fact]
+    public async Task SdkHostedSessionFaultExitsTwoAsync()
+    {
+        string directory = TemporaryDirectory();
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        timeout.CancelAfter(TimeSpan.FromSeconds(15));
+        var session = Substitute.For<McpServer>();
+        var serving = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        session.RunAsync(Arg.Any<CancellationToken>()).Returns(serving.Task);
+        TextWriter originalOut = Console.Out;
+        TextWriter originalError = Console.Error;
+        using var output = new StringWriter();
+        using var error = new StringWriter();
+        try
+        {
+            Console.SetOut(output);
+            Console.SetError(error);
+            var runner = new CliRunner(new ProfileStore(Path.Combine(directory, "mcpcli.json")),
+                () => [typeof(CreateItemCommand).Assembly], _ => null, runMcp: null,
+                startMcp: async (host, token) =>
+                {
+                    await host.StartAsync(token);
+                    serving.SetException(new IOException("test session fault"));
+                },
+                configureMcpServices: services => services.AddSingleton(session));
+            int exit = await runner.InvokeAsync(["mcp"], timeout.Token);
+
+            exit.ShouldBe(2);
+            timeout.IsCancellationRequested.ShouldBeFalse();
+            output.ToString().ShouldBeEmpty();
+            string[] lines = error.ToString().Split(Environment.NewLine, StringSplitOptions.RemoveEmptyEntries);
+            lines.Count(line => line == "MCP server stopped unexpectedly.").ShouldBe(1);
+            error.ToString().ShouldNotContain("\"error\"");
+        }
+        finally
+        {
+            Console.SetOut(originalOut);
+            Console.SetError(originalError);
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>A serving failure does not get misreported as a second startup error document.</summary>
     [Fact]
     public async Task McpHostIoFailureDoesNotWriteStartupErrorAsync()
@@ -801,20 +845,34 @@ public sealed class ConfigCommandTests
         }
     }
 
-    /// <summary>A host startup failure uses the canonical pre-serving error document.</summary>
-    [Fact]
-    public async Task McpHostStartupFailureUsesStructuredErrorAsync()
+    /// <summary>Only caller cancellation exits cleanly when startup is interrupted.</summary>
+    [Theory]
+    [InlineData("io")]
+    [InlineData("caller-cancellation")]
+    [InlineData("unrelated-cancellation")]
+    public async Task McpStartupDistinguishesCancellationFromFailureAsync(string cause)
     {
         string directory = TemporaryDirectory();
         TextWriter originalOut = Console.Out;
         TextWriter originalError = Console.Error;
         using var output = new StringWriter();
         using var error = new StringWriter();
+        using var stop = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
         try
         {
             int servingRuns = 0;
-            Task FailStartAsync(IHost _, CancellationToken __)
-                => Task.FromException(new IOException("secret startup path"));
+            Task FailStartAsync(IHost _, CancellationToken token)
+            {
+                if (cause == "caller-cancellation")
+                {
+                    stop.Cancel();
+                    token.ThrowIfCancellationRequested();
+                }
+
+                return cause == "unrelated-cancellation"
+                    ? Task.FromCanceled(new CancellationToken(canceled: true))
+                    : Task.FromException(new IOException("secret startup path"));
+            }
             Task<int> FailIfServingAsync(IHost _, CancellationToken __)
             {
                 servingRuns++;
@@ -825,11 +883,12 @@ public sealed class ConfigCommandTests
             Console.SetError(error);
             int exit = await new CliRunner(new ProfileStore(Path.Combine(directory, "mcpcli.json")),
                 () => [typeof(CreateItemCommand).Assembly], _ => null, FailIfServingAsync, FailStartAsync)
-                .InvokeAsync(["mcp"], TestContext.Current.CancellationToken);
-            exit.ShouldBe(2);
+                .InvokeAsync(["mcp"], stop.Token);
+            bool canceled = cause == "caller-cancellation";
+            exit.ShouldBe(canceled ? 0 : 2);
             output.ToString().ShouldBeEmpty();
             servingRuns.ShouldBe(0);
-            error.ToString().ShouldBe(JsonSerializer.Serialize(new
+            error.ToString().ShouldBe(canceled ? string.Empty : JsonSerializer.Serialize(new
             {
                 error = new OperationError("internal_error", Message: "MCP server failed."),
             }, McpCliJson.Result) + "\n");

@@ -443,7 +443,7 @@ origin: bmad-project-context refresh of the agent instructions, 2026-10-10
 location: src/Hexalith.McpCli/Cli/CliRunner.cs
 severity: medium
 reason: Add a Cli.Tests test that walks the command tree and fails on any option or argument without a `Description`; reviews flagged missing descriptions eight times (specs 2.3, 2.8, 2.10) and about ten still lack one, overlapping the open spec-2-3 eleventh-pass and spec-2-8 follow-up-pass entries. The user chose this check over an AGENTS.md line, so no instruction covers the rule until it lands.
-status: open
+status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 
 ## Deferred from: review of spec-3-1-discover-operations-through-a-fixed-mcp-surface.md (2026-10-10)
 
@@ -1315,3 +1315,15 @@ See `spec-clarify-operator-help.md` for the review and verification of these fiv
 | Story 2.8, query option help (line 348) | Query help gives entity identifier syntax, paging limits and the nonblank cursor/offset rule. |
 | Story 2.10, global option help (line 387) | Global help names the nine supported settings environment variables, shows false overrides and identifies the flag-only output path. |
 | Story 3.1, MCP failure delivery (line 461) | The README names the discovery arguments that produce JSON-RPC `InvalidParams` and the tool error codes returned for unknown catalog names. |
+
+## Resolved in the CLI and MCP execution follow-up (2026-11-23)
+
+These five resolutions supersede the original entries. See `spec-close-cli-mcp-execution-deferrals.md` for the verification results.
+
+| Original entry | Resolution |
+| --- | --- |
+| Story 1.7, returned query cursors (line 87) | A loopback Gateway returns an opaque continuation cursor. The CLI result and both MCP result representations preserve it and omit paging when the response contains none. |
+| Story 2.1, MCP startup cancellation (line 169) | Caller cancellation during host startup exits 0. An unrelated cancellation exception still produces the structured startup error at exit 2. |
+| DW-2, CLI descriptions (line 440) | The profile selection argument has help text, and a regression checks each argument and option in the production command tree. |
+| Story 3.2, SDK hosted-service faults (line 470) | The CLI test faults the session run by the registered MCP hosted service and checks the serving diagnostic and exit 2. |
+| Story 3.3, query listener cleanup (line 479) | All 19 query payload and routing cases use the shared disposable loopback Gateway, which binds its port once and cancels its accept loop on disposal. |
