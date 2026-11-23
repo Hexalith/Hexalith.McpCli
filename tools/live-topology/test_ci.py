@@ -107,21 +107,26 @@ if name == 'dotnet':
     elif args[0] == 'restore':
         import xml.etree.ElementTree as ET, shutil
         project = pathlib.Path(args[1]); private = project.parent
-        libraries = {}
-        try:
+        cache = pathlib.Path(os.environ['NUGET_PACKAGES'])
+        if not cache.is_dir() or not any(cache.iterdir()):
+            shutil.copytree(root / 'package-cache', cache, dirs_exist_ok=True)
+        assets_path = private / 'obj/project.assets.json'
+        if project.name == 'audit.csproj':
+            libraries = {}
             for package in ET.parse(project).getroot().iter('PackageReference'):
                 include, version = package.get('Include'), package.get('Version')
                 if include and version:
                     identity = include + '/' + version.strip('[]')
                     libraries[identity] = {'type':'package','sha512': __import__('base64').b64encode(hashlib.sha512(identity.encode()).digest()).decode()}
-        except ET.ParseError:
-            pass
-        cache = pathlib.Path(os.environ['NUGET_PACKAGES'])
-        if not cache.exists():
-            shutil.copytree(root / 'package-cache',cache)
-        assets = {'libraries':libraries,'packageFolders':{str(cache):{}},'project':{'frameworks':{'net11.0':{}},'restore':{
-            'restoreAuditProperties':{'enableAudit':'true','auditLevel':'low','auditMode':'all'},'warningProperties':{'allWarningsAsErrors':True}}}}
-        (private/'obj').mkdir(exist_ok=True);(private/'obj/project.assets.json').write_text(json.dumps(assets))
+            assets = {'libraries': libraries, 'project': {'frameworks': {'net11.0': {}}, 'restore': {
+                'restoreAuditProperties': {'enableAudit': 'true', 'auditLevel': 'low', 'auditMode': 'all'},
+                'warningProperties': {'allWarningsAsErrors': True}}}}
+        else:
+            # Source fixtures model the full restored graph, including transitive runtime assets.
+            assets = json.loads(assets_path.read_text())
+        assets['packageFolders'] = {str(cache): {}}
+        assets_path.parent.mkdir(exist_ok=True)
+        assets_path.write_text(json.dumps(assets))
         http = pathlib.Path(os.environ['NUGET_HTTP_CACHE_PATH']) / 'fixture'; http.mkdir(parents=True,exist_ok=True)
         pages = [{'@name':name,'@id':'https://api.nuget.org/v3-vulnerabilities/revision/'+name+'.json','@updated':'2026-11-16T00:00:00Z'} for name in ('base','update')]
         (http/'vuln_index.dat').write_text(json.dumps(pages))
@@ -674,8 +679,18 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         test_builds = [call for call in calls if call[0] == 'dotnet' and call[2] == 'build' and call[3] == 'tests/Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj']
         self.assertEqual([], test_builds)
         restores = [call for call in calls if call[0] == 'dotnet' and call[2] == 'restore']
-        self.assertEqual(7, len(restores))
-        self.assertTrue(all(Path(call[3]).is_relative_to(Path(prepared['privateDirectory'])) for call in restores))
+        for call in restores:
+            if call[3].startswith('src/'):
+                self.assertIn('-p:Configuration=Release', call)
+                self.assertNotIn('--configuration', call)
+        restore_projects = [(Path(call[1]) / call[3]).relative_to(prepared['privateDirectory']).as_posix()
+                            for call in restores]
+        self.assertCountEqual([
+            'source-fixtures/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj',
+            'source-fixtures/Hexalith.Parties/src/Hexalith.Parties/Hexalith.Parties.csproj',
+            'source-fixtures/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
+            *(f'module-audit-{index}/audit.csproj' for index in range(4)),
+        ], restore_projects)
         overlay = Path(prepared['privateDirectory']) / 'source-runtime-packages.props'
         self.assertEqual('b' * 40, prepared['sourcePackageCatalog']['buildsCommit'])
         self.assertEqual(hashlib.sha256(overlay.read_bytes()).hexdigest(),
@@ -1881,7 +1896,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         receipt = json.loads((self.evidence / 'preparation.json').read_text())
         overlay = Path(receipt['privateDirectory']) / 'source-runtime-packages.props'
         provenance = self.root / 'references/Hexalith.Builds/Props/ContainerProvenance.targets'
-        command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --configuration Release '
+        command = ('dotnet build src/Hexalith.Tenants/Hexalith.Tenants.csproj --no-restore --configuration Release '
                    '-warnaserror -m:1 -p:NuGetAudit=true -p:NuGetAuditMode=all -p:NuGetAuditLevel=low '
                    '-p:TreatWarningsAsErrors=true -p:WarningsNotAsErrors= -p:UseHexalithProjectReferences=false -p:UseNuGetDeps=true '
                    '-p:HexalithEventStoreFromSource=false -p:HexalithEventStoreVersion=5.4.0 '

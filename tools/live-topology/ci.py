@@ -837,11 +837,11 @@ def prepare(evidence: Path) -> None:
             properties = source_properties(module)
             working = fixture_root / module
             project = f'src/{module}/{module}.csproj'
-            bounded(['dotnet', 'restore', project, '--configuration', 'Release', '-warnaserror', *properties],
+            bounded(['dotnet', 'restore', project, '-p:Configuration=Release', '-warnaserror', *properties],
                     300, evidence / (module + '-restore'), cwd=working, environment=source_environment)
             if module == 'Hexalith.Parties':
                 bounded(['dotnet', 'restore', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
-                         '--configuration', 'Release', '-warnaserror', '-p:CopyLocalLockFileAssemblies=true', *properties],
+                         '-p:Configuration=Release', '-warnaserror', '-p:CopyLocalLockFileAssemblies=true', *properties],
                         300, evidence / 'parties-adapter-restore', cwd=working, environment=source_environment)
         prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt, required=True)
         for source in receipt['sources']:
