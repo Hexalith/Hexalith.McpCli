@@ -171,6 +171,8 @@ def fixture(repo: Path, artifact: Path):
         # The synthetic receipt, inventory and flagged project exist only in this temporary repository.
         for name in ['src', 'tools/conformance-vectors/v1', 'tools/inventory-coverage/v1']:
             shutil.copytree(repo / name, root / name, ignore=shutil.ignore_patterns('bin', 'obj', '.git', '__pycache__'))
+        (root / 'scripts').mkdir()
+        shutil.copy2(repo / 'scripts/evidence_redaction.py', root / 'scripts/evidence_redaction.py')
         shutil.copytree(resolve_builds_props(repo), root.parent / 'Hexalith.Builds/Props')
         for name in ['Directory.Build.props', 'Directory.Build.targets', 'Directory.Packages.props', 'global.json', '.editorconfig']:
             if (repo / name).exists():
@@ -242,6 +244,13 @@ def fixture(repo: Path, artifact: Path):
                 raise RuntimeError(f'{kind} input bytes were not bound to the verification receipt.')
         if not any(check['label'] == 'replay' and check['exitCode'] == 0 for check in verified['checks']):
             raise RuntimeError('Nonempty orchestration did not execute complete replay.')
+        observations = output / package_id / verified['replayObservations']
+        for label in ['CLI', 'MCP']:
+            for suffix in ['', '.gateway-error']:
+                evidence = json.loads((observations / f'sample.get-item.{label}{suffix}.json').read_text())
+                if len(evidence['documents']) != 1 or len(evidence['requests']) != 1 \
+                        or len(evidence['stderr']) != 1 or not isinstance(evidence['stderr'][0], str):
+                    raise RuntimeError(f'Package replay did not retain both channels for {label}{suffix}.')
         # The real built host derives these keys through the C# OperationShape (pinned in EnrolledModuleCoverageTests).
         command_shape = ('kind=command;identifierKind=ulid;wireTypeConvention=kebabCase;tenantSource=fixedTenant;'
                          'aggregateIdSource=property;projectionSelector=none;idempotencyKey=optional')
@@ -355,6 +364,10 @@ def fixture(repo: Path, artifact: Path):
             raise RuntimeError('Failed semantic replay did not expose useful captured diagnostics: ' + result.stderr)
         if not any(check['label'] == 'replay' and check['exitCode'] == 1 for check in failed['checks']):
             raise RuntimeError('The negative vector failed before reaching semantic replay.')
+        observations = failed_output / failed['replayObservations']
+        partial = json.loads((observations / 'sample.get-item.CLI.json').read_text())
+        if len(partial['documents']) != 1 or len(partial['requests']) != 1 or len(partial['stderr']) != 1:
+            raise RuntimeError('Failed replay did not retain the observed CLI result and diagnostic channel.')
         print('PASS false semantic assertion: replay failed with useful diagnostics; stale success/hash invalidated.', flush=True)
 
 

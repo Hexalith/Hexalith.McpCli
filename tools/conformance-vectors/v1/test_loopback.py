@@ -7,6 +7,7 @@ import copy
 import hashlib
 import io
 import json
+import sys
 import tempfile
 import unittest
 import zipfile
@@ -644,8 +645,20 @@ class RetainedFailureEvidenceTests(unittest.TestCase):
         described = {'name': step['operation']}
         for failing, inconsistent in [('CLI', False), ('MCP', False), ('CLI', True), ('MCP', True)]:
             head = Mock(_base=Mock(return_value=[]), env={}, timeout=15)
-            head.cli.side_effect = [(0, modules), (0, listed), (0, described), (2 if failing == 'CLI' and inconsistent else 0, broken if failing == 'CLI' else healthy)]
-            head.mcp.side_effect = [(False, modules), (False, listed), (False, described), (inconsistent, broken)]
+
+            def replies(label, values):
+                remaining = iter(values)
+
+                def reply(*args, diagnostics=None):
+                    if diagnostics is not None:
+                        diagnostics.append(f'{label} diagnostic\n')
+                    return next(remaining)
+
+                return reply
+
+            head.cli.side_effect = replies('CLI', [(0, modules), (0, listed), (0, described),
+                (2 if failing == 'CLI' and inconsistent else 0, broken if failing == 'CLI' else healthy)])
+            head.mcp.side_effect = replies('MCP', [(False, modules), (False, listed), (False, described), (inconsistent, broken)])
             gateway = MagicMock()
             gateway.__enter__.return_value = gateway
             gateway.captured = [request]
@@ -661,7 +674,72 @@ class RetainedFailureEvidenceTests(unittest.TestCase):
                 with self.subTest(head=failing, inconsistent=inconsistent), self.assertRaisesRegex(VectorError, 'inconsistent' if inconsistent else '/document: required result'):
                     run_catalog(Path('Host.dll'), [(Path('module.nupkg'), ('Sample.Contracts', '1.0.0'), [source])], evidence_dir=output)
                 retained = json.loads((output / f"{step['operation']}.{failing}.json").read_text())
-                self.assertEqual({'source': str(source), 'documents': [broken], 'requests': [request]}, retained)
+                self.assertEqual({'source': str(source), 'documents': [broken], 'requests': [request],
+                                  'stderr': [f'{failing} diagnostic\n']}, retained)
+
+    def test_process_diagnostics_are_redacted_and_large_mcp_stderr_does_not_block_replies(self):
+        from run_loopback import HeadProcess
+
+        program = '''
+import json
+import sys
+
+diagnostic = 'startup\\nAuthorization: Bearer synthetic-replay-value\\n'
+if '--large' in sys.argv:
+    diagnostic += 'x' * (128 * 1024)
+sys.stderr.write(diagnostic)
+sys.stderr.flush()
+if sys.argv[1] != 'mcp':
+    print(json.dumps({'ok': True}))
+else:
+    for line in sys.stdin:
+        request = json.loads(line)
+        if 'id' not in request:
+            continue
+        result = {'structuredContent': {'ok': True}, 'content': [{'text': '{"ok":true}'}]}
+        print(json.dumps({'jsonrpc': '2.0', 'id': request['id'], 'result': result}), flush=True)
+'''
+        with tempfile.TemporaryDirectory() as directory:
+            source = Path(directory) / 'head.py'
+            source.write_text(program)
+            head = HeadProcess(Path('unused.dll'), directory, 5)
+            with patch.object(head, '_base', return_value=[sys.executable, str(source)]):
+                cli_diagnostics, mcp_diagnostics = [], []
+                self.assertEqual((0, {'ok': True}), head.cli(['query'], diagnostics=cli_diagnostics))
+                self.assertEqual((False, {'ok': True}), head.mcp('run_query', {}, diagnostics=mcp_diagnostics))
+            with patch.object(head, '_base', return_value=[sys.executable, str(source), 'mcp', '--large']):
+                self.assertEqual((False, {'ok': True}), head.mcp('run_query', {}, diagnostics=mcp_diagnostics))
+
+        expected = 'startup\nAuthorization: Bearer [REDACTED]\n'
+        self.assertEqual([expected], cli_diagnostics)
+        self.assertEqual([expected, '[stderr omitted: exceeds 64 KiB]'], mcp_diagnostics)
+
+    def test_cli_retains_invalid_stderr_bytes_and_partial_timeout_diagnostics(self):
+        import subprocess
+        from run_loopback import HeadProcess
+
+        with tempfile.TemporaryDirectory() as directory:
+            diagnostics = []
+            head = HeadProcess(Path('unused.dll'), directory, 5)
+            output = subprocess.CompletedProcess([], 0, b'{"ok":true}', b'capture \xff\n')
+            with patch('run_loopback.subprocess.run', return_value=output):
+                self.assertEqual((0, {'ok': True}), head.cli(['query'], diagnostics=diagnostics))
+            timeout = subprocess.TimeoutExpired(['query'], 5, stderr=b'Authorization: Bearer timeout-value\n')
+            with patch('run_loopback.subprocess.run', side_effect=timeout), self.assertRaises(subprocess.TimeoutExpired):
+                head.cli(['query'], diagnostics=diagnostics)
+        self.assertEqual(['capture \ufffd\n', 'Authorization: Bearer [REDACTED]\n'], diagnostics)
+
+    def test_standalone_replay_refuses_an_evidence_directory_with_existing_observations(self):
+        from run_loopback import run
+
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            existing = output / 'sample.get-item.CLI.json'
+            existing.write_text('prior observation')
+            with patch('run_loopback.run_catalog') as catalog, self.assertRaisesRegex(VectorError, 'empty evidence directory'):
+                run(Path('Host.dll'), Path('sample.nupkg'), ('Sample.Contracts', '1.0.0'), [], evidence_dir=output)
+            catalog.assert_not_called()
+            self.assertEqual('prior observation', existing.read_text())
 
     def test_reused_generated_request_ids_fail_before_masking_can_hide_them(self):
         from run_loopback import _assert_fresh_message

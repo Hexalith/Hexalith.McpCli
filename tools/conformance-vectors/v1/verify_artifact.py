@@ -297,9 +297,12 @@ def verify(repo: Path, artifact: Path, vectors: list[Path], output: Path,
             if inventory is not None:
                 run([*command, '--inventory', frozen_inputs['inventory']], scratch, env, 'inventory')
                 report(stderr_reports((output / 'inventory.stderr.txt').read_text()))
+            observations = input_root / 'replay-observations'
+            receipt['replayObservations'] = observations.relative_to(output).as_posix()
             run([sys.executable, repo / 'tools/conformance-vectors/v1/run_loopback.py', '--host', command[1],
                  '--assets', host / 'obj/project.assets.json', '--artifact', artifact,
-                 '--expected-package-id', package_id, '--expected-package-version', version, *vectors], repo, env, 'replay')
+                 '--expected-package-id', package_id, '--expected-package-version', version,
+                 '--evidence-dir', observations, *vectors], repo, env, 'replay')
         receipt['result'] = 'passed'
         save()
         (output / 'artifact.sha512').write_text(digest + '  ' + artifact.name + '\n')

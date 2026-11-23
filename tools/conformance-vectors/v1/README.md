@@ -239,8 +239,15 @@ Only the sample script explicitly builds it with `ConformanceProduction=false`.
 Production replay consumes retained artifact/vector snapshots, rechecks their
 identity and bytes against the production host restore, and records complete
 success documents and captured requests under `production-observations/`, including
-partial observations when an assertion fails. The enclosing `enrolled.json`, build
-logs and replay diagnostics remain available on failures.
+partial observations when an assertion fails. Each head's `stderr` array preserves
+redacted diagnostics in call order, including MCP startup messages from the process
+that ran the call. A quiet call has an empty string. Streams over 64 KiB are omitted
+with a diagnostic marker. Stdout is checked as JSON or JSON-RPC as before.
+Standalone `run_loopback.py --evidence-dir <directory>` produces the same observations
+in a new or empty directory.
+Independent artifact verification records its observation directory as
+`replayObservations` in `verification.json`. The root `enrolled.json` retains each
+completed package result and its shapes if a later package fails.
 
 `v1-scope.json` requires `parties` and `tenants`. A missing required module fails
 the default production replay command and the strict benchmark even if all

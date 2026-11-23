@@ -76,15 +76,18 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: The conformance runner accepts unexpected fields in captured Gateway requests.
   evidence: `run_loopback.py:_expect_fields` checks only expected dictionary keys, leaving extra envelope or routing fields unchecked; this belongs to conformance work.
+  status: resolved (2026-11-23). `_expect_fields` now rejects unexpected keys recursively for each head. The loopback tests cover extra envelope and Payload fields, wrong paging types and escaped error pointers. See [the loopback evidence follow-up](spec-close-loopback-evidence-deferrals.md).
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Conformance vectors can pass when both Heads omit a required public result field.
   evidence: The runner compares CLI and MCP documents and executes vector-specific assertions without an unconditional check of the command and query result shape; this belongs to conformance work.
+  status: resolved (2026-11-23). `_run_step` now checks the required result contract independently for each head before vector assertions. Existing tests remove each required Command and Query field and verify that matching incomplete results still fail. See [the loopback evidence follow-up](spec-close-loopback-evidence-deferrals.md).
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: The unsupported HTTP transport error omits the promised release timing.
   evidence: `CliRunner.RunMcpAsync` says only that stdio is available, while the PRD requires a message naming the next release; this belongs to CLI work.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Bearer authentication is not checked at the Gateway request boundary.
   evidence: The CLI command parity test uses a null token and has no Authorization header assertion; removing `StaticBearerTokenHandler` would leave it passing. This belongs to hosting and CLI work.
+  status: resolved (2026-11-23). `ConfigCommandTests.OneSourceGatewayUrlAndTokenReachOnlyThatGatewayAsync` checks the exact Bearer header at the loopback Gateway for CLI send/query and MCP. It also covers the no-token case and ensures only the selected Gateway receives the request. See [the loopback evidence follow-up](spec-close-loopback-evidence-deferrals.md).
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Returned paging cursors are not verified in CLI and MCP query documents.
   evidence: Query parity uses a Gateway response without paging, while the Core test inspects only the in-memory result; this belongs to query work.
@@ -592,6 +595,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md`
   summary: The established replay helper discards successful-process stderr instead of retaining it with operation observations.
   evidence: Low; pre-existing in baseline `fce41d05e25b8c2076cc02266608460ec86ed635`. `tools/conformance-vectors/v1/run_loopback.py:277` returns parsed CLI stdout without retaining stderr, and `:322` closes the normal MCP stderr pipe. Existing product channel-contract tests remain in place, and no current incorrect product output was demonstrated; replay receipts themselves cannot supply those channel diagnostics. A future harness improvement should retain both channels and define expected MCP startup logging separately from CLI diagnostics. Parent searched the ledger before appending and found no equivalent open entry.
+  status: resolved (2026-11-23). Loopback observations include each head's redacted stderr in call order. MCP collects startup diagnostics separately from JSON-RPC stdout. See [the loopback evidence follow-up](spec-close-loopback-evidence-deferrals.md).
 
 ## Deferred from: code review of spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md (2026-10-22)
 
@@ -609,6 +613,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md`
   summary: Preserve completed package results in the root enrollment receipt when a later package fails.
   evidence: Low; inherited from baseline `fce41d05e25b8c2076cc02266608460ec86ed635`. `tools/conformance-vectors/v1/check_enrolled.py:182-190` accumulates successful child results locally and assigns root `results` only after the complete package loop. A later verification failure leaves root results empty, although the completed package's separate verification receipt remains available. Persist each completed result as progress without changing overall acceptance.
+  status: resolved (2026-11-23). `check_enrolled.py` persists completed package results and shapes before starting the next package. The failure regression checks the in-progress and failed root receipts and confirms that full-v1 acceptance stays false. See [the loopback evidence follow-up](spec-close-loopback-evidence-deferrals.md).
 
 ## Deferred from: code review of spec-4-12-compose-the-v1-live-test-topology.md (2026-10-23)
 
@@ -1356,3 +1361,12 @@ See [the implementation and verification](spec-reconcile-deferred-query-contract
 | Story 2.8, unusable ULID query defaults | Catalog admission and execution share the aggregate identifier rule. An invalid default is excluded with `invalid_routing_value`. The dual-source declaration still reports `ambiguous_aggregate_id` first. |
 | Story 2.9, MCP protocol coverage for Gateway failures | SDK session tests verify the structured and text error documents for a Gateway rejection and a 2xx client exception. The child-process test also checks that a Gateway 409 leaves the stdio session usable. |
 | Story 3.3, differently cased MCP paging keys | Both supported session revisions report JSON-RPC `InvalidParams` for case variants of `pageSize`, `offset`, and `cursor`. The SDK previously dropped those keys and could run the query without the requested paging. |
+
+## Deferred from: spec-close-loopback-evidence-deferrals.md (2026-11-23)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-close-loopback-evidence-deferrals.md`
+  summary: Bound loopback diagnostic capture while draining child stderr and retain diagnostics for discovery and malformed-Payload probes.
+  evidence: `tools/conformance-vectors/v1/run_loopback.py:276` collects child output through `subprocess.run` and `:300` writes MCP stderr to a temporary file before applying the retention cap. `:820` retains operation and scripted Gateway-error observations. Discovery and the malformed-Payload probes at `:928` do not use those observation paths.
+- source_spec: `_bmad-output/implementation-artifacts/spec-close-loopback-evidence-deferrals.md`
+  summary: Reject duplicate JSON property names in loopback Gateway request bodies before comparing their fields.
+  evidence: `tools/conformance-vectors/v1/run_loopback.py:196` parses request bytes with `json.loads`. A duplicate property is collapsed before `_expect_fields` can compare it against the approved request body. The offline vector loader has a duplicate-key guard at `tools/conformance-vectors/v1/validate.py:56`.

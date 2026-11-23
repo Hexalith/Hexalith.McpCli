@@ -10,6 +10,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import tempfile
 
 from verify_artifact import restored_package, verify
 from validate import _load_json
@@ -155,7 +156,19 @@ def main():
     args.output.mkdir(parents=True, exist_ok=True)
     status = {'result': 'pending', 'fullV1Accepted': False, 'packages': [], 'results': [], 'shapes': [], 'reported': []}
     report = args.output / 'enrolled.json'
-    report.write_text(json.dumps(status, indent=2) + '\n')
+
+    def save():
+        temporary = tempfile.NamedTemporaryFile(mode='w', encoding='utf-8', dir=report.parent,
+                                                prefix=f'.{report.name}.', delete=False)
+        staged = Path(temporary.name)
+        try:
+            with temporary:
+                temporary.write(json.dumps(status, indent=2) + '\n')
+            staged.replace(report)
+        finally:
+            staged.unlink(missing_ok=True)
+
+    save()
 
     def collect(items, echo):
         """Reports never change the exit code; each appears once in enrolled.json and as a stderr line."""
@@ -180,9 +193,9 @@ def main():
                     if any(name.casefold() == 'hexalithcontracts' and value.casefold() == 'true'
                            for name, value in p.items())]
         status['packages'] = packages
-        report.write_text(json.dumps(status, indent=2) + '\n')
+        save()
         assets = json.loads((project.parent / 'obj/project.assets.json').read_text())
-        results = []
+        results = status['results']
         for package_id in packages:
             directory = approval_directory(repo / 'tools/conformance-vectors/v1/current/modules', package_id)
             receipt = _load_json(directory / 'approval.json')
@@ -197,21 +210,22 @@ def main():
             inventory_hash = approved_inventory(inventory, receipt)
             vector_hashes = {str((directory / name).resolve()): digest for name, digest in receipt['vectorFilesSha256'].items()}
             accepted = repo / 'tools/inventory-coverage/v1' / (module + '-accepted-lint.json')
-            results.append(verify(repo, artifact, vectors, args.output.resolve() / package_id,
-                                  inventory, accepted_lint=accepted if accepted.exists() else None,
-                                  align_candidate_dependencies=False, expected_inventory_hash=inventory_hash,
-                                  expected_vector_hashes=vector_hashes))
-            results[-1]['approvedModule'] = module
+            result = verify(repo, artifact, vectors, args.output.resolve() / package_id,
+                            inventory, accepted_lint=accepted if accepted.exists() else None,
+                            align_candidate_dependencies=False, expected_inventory_hash=inventory_hash,
+                            expected_vector_hashes=vector_hashes)
+            result['approvedModule'] = module
+            results.append(result)
+            status['shapes'].extend(result.get('shapes', []))
             # The verifier already printed its own reports.
-            collect(results[-1].get('reported', []), echo=False)
-        args.output.mkdir(parents=True, exist_ok=True)
+            collect(result.get('reported', []), echo=False)
+            save()
         if not packages:
             raise RuntimeError('Production manifest has no enrolled Contracts packages.')
-        status.update(results=results, shapes=[shape for result in results for shape in result.get('shapes', [])])
-        report.write_text(json.dumps(status, indent=2) + '\n')
+
         def record_production(progress):
             status['productionReplay'] = progress
-            report.write_text(json.dumps(status, indent=2) + '\n')
+            save()
 
         status['productionReplay'] = production_replay(repo, args.output.resolve(), results, record_production)
         collect(status['productionReplay'].get('reported', []), echo=True)
@@ -219,13 +233,13 @@ def main():
         status.update(missingRequiredModules=missing, fullV1Accepted=not missing and not args.local)
         if missing and not args.local:
             raise RuntimeError('Full-v1 gate: missing required production module(s): ' + ', '.join(missing))
-        status.update(result='local-only' if args.local else 'passed', packages=packages, results=results)
-        report.write_text(json.dumps(status, indent=2) + '\n')
+        status['result'] = 'local-only' if args.local else 'passed'
+        save()
         print(f'Validated {len(packages)} enrolled production package(s) covering {len(status["shapes"])} Operation Shape(s); '
               f'{len(status["reported"])} reported; full-v1 acceptance: {status["fullV1Accepted"]}.')
     except (RuntimeError, OSError, ValueError, KeyError, subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
         status.update(result='failed', error=str(error))
-        report.write_text(json.dumps(status, indent=2) + '\n')
+        save()
         if isinstance(error, subprocess.CalledProcessError):
             for captured in [error.stdout, error.stderr]:
                 if captured:

@@ -26,8 +26,12 @@ from typing import Any
 from validate import VectorError, _json_equal, _load_json, validate_vectors
 from verify_artifact import restored_package
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "scripts"))
+from evidence_redaction import sanitized_xml
+
 
 ULID = re.compile(r"^[0-7][0-9A-HJKMNP-TV-Z]{25}$")
+STDERR_LIMIT = 64 * 1024
 
 
 def _fail(message: str) -> None:
@@ -36,6 +40,13 @@ def _fail(message: str) -> None:
 
 def _canonical(value: Any) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+
+
+def _stderr_diagnostic(value: str | bytes) -> str:
+    raw = value.encode("utf-8") if isinstance(value, str) else value
+    if len(raw) > STDERR_LIMIT:
+        return "[stderr omitted: exceeds 64 KiB]"
+    return sanitized_xml(raw.decode("utf-8", errors="replace")) if raw else ""
 
 
 def _escape_pointer_token(value: str) -> str:
@@ -263,7 +274,7 @@ class HeadProcess:
         return ["dotnet", str(self.host)]
 
     def cli(self, args: list[str], url: str | None = None, tenant: str | None = None,
-            actor: str | None = None) -> tuple[int, dict[str, Any]]:
+            actor: str | None = None, *, diagnostics: list[str] | None = None) -> tuple[int, dict[str, Any]]:
         command = self._base() + args + ["--format", "json"]
         if url is not None:
             command += ["--url", url]
@@ -271,15 +282,24 @@ class HeadProcess:
             command += ["--tenant", tenant]
         if actor is not None:
             command += ["--actor", actor]
-        result = subprocess.run(command, capture_output=True, text=True, timeout=self.timeout, env=self.env, check=False)
         try:
-            document = json.loads(result.stdout)
-        except json.JSONDecodeError as exc:
-            _fail(f"CLI {args}: exit {result.returncode}; invalid JSON stdout {result.stdout!r}; stderr {result.stderr!r}: {exc}")
+            result = subprocess.run(command, capture_output=True, timeout=self.timeout, env=self.env, check=False)
+        except subprocess.TimeoutExpired as exc:
+            if diagnostics is not None:
+                diagnostics.append(_stderr_diagnostic(exc.stderr or b""))
+            raise
+        if diagnostics is not None:
+            diagnostics.append(_stderr_diagnostic(result.stderr))
+        try:
+            document = json.loads(result.stdout.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+            stderr = diagnostics[-1] if diagnostics is not None else _stderr_diagnostic(result.stderr)
+            _fail(f"CLI {args}: exit {result.returncode}; invalid JSON stdout {result.stdout!r}; stderr {stderr!r}: {exc}")
         return result.returncode, document
 
     def mcp(self, tool: str, arguments: dict[str, Any], url: str | None = None,
-            tenant: str | None = None, actor: str | None = None) -> tuple[bool, dict[str, Any]]:
+            tenant: str | None = None, actor: str | None = None, *,
+            diagnostics: list[str] | None = None) -> tuple[bool, dict[str, Any]]:
         command = self._base() + ["mcp", "--transport", "stdio", "--strict"]
         if url is not None:
             command += ["--url", url]
@@ -288,45 +308,59 @@ class HeadProcess:
         if actor is not None:
             command += ["--actor", actor]
         deadline = time.monotonic() + self.timeout
-        process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE, env=self.env, bufsize=0)
-        try:
-            client = _JsonRpcClient(process, self.timeout, deadline=deadline)
-            client.request("initialize", {"protocolVersion": "2025-06-18", "capabilities": {},
-                                          "clientInfo": {"name": "mcpcli-conformance", "version": "1"}})
-            client.notify("notifications/initialized", {})
-            reply = client.request("tools/call", {"name": tool, "arguments": arguments})
-            # Bound the response, not host shutdown: cleanup below has its own bounded waits.
-            if time.monotonic() >= deadline:
-                _fail("MCP stdio response timed out")
-            result = reply["result"]
-            structured = result.get("structuredContent")
-            if not isinstance(structured, dict):
-                _fail(f"MCP {tool}: missing structuredContent: {reply!r}")
-            content = result.get("content", [])
-            if len(content) != 1 or not _json_equal(json.loads(content[0]["text"]), structured):
-                _fail(f"MCP {tool}: text and structuredContent differ")
-            outcome = bool(result.get("isError", False)), structured
-        except (KeyError, ValueError, OSError) as exc:
-            stderr = process.stderr.read(4096).decode("utf-8", errors="replace") if process.poll() is not None else ""
-            _fail(f"MCP {tool}: {exc}; stderr {stderr!r}")
-        finally:
-            if process.stdin is not None:
-                process.stdin.close()
+        # A child can write diagnostics before its first reply. A file lets it
+        # finish that write while stdout remains a dedicated protocol pipe.
+        with tempfile.TemporaryFile() as stderr:
+            process = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                       stderr=stderr, env=self.env, bufsize=0)
+            diagnostic = ""
             try:
-                process.wait(timeout=2)
-            except subprocess.TimeoutExpired:
-                process.terminate()
                 try:
-                    process.wait(timeout=2)
-                except subprocess.TimeoutExpired:
-                    process.kill()
-                    process.wait(timeout=2)
-            if process.stdout is not None:
-                process.stdout.close()
-            if process.stderr is not None:
-                process.stderr.close()
-        return outcome
+                    return self._mcp_call(process, deadline, tool, arguments)
+                finally:
+                    _stop_mcp_process(process)
+                    stderr.seek(0)
+                    diagnostic = _stderr_diagnostic(stderr.read(STDERR_LIMIT + 1))
+                    if diagnostics is not None:
+                        diagnostics.append(diagnostic)
+            except (KeyError, ValueError, OSError) as exc:
+                _fail(f"MCP {tool}: {exc}; stderr {diagnostic!r}")
+
+    def _mcp_call(self, process: subprocess.Popen[bytes], deadline: float, tool: str,
+                  arguments: dict[str, Any]) -> tuple[bool, dict[str, Any]]:
+        client = _JsonRpcClient(process, self.timeout, deadline=deadline)
+        client.request("initialize", {"protocolVersion": "2025-06-18", "capabilities": {},
+                                      "clientInfo": {"name": "mcpcli-conformance", "version": "1"}})
+        client.notify("notifications/initialized", {})
+        reply = client.request("tools/call", {"name": tool, "arguments": arguments})
+        # Cleanup has its own bounded waits after the response deadline.
+        if time.monotonic() >= deadline:
+            _fail("MCP stdio response timed out")
+        result = reply["result"]
+        structured = result.get("structuredContent")
+        if not isinstance(structured, dict):
+            _fail(f"missing structuredContent: {reply!r}")
+        content = result.get("content", [])
+        if len(content) != 1 or not _json_equal(json.loads(content[0]["text"]), structured):
+            _fail("text and structuredContent differ")
+        return bool(result.get("isError", False)), structured
+
+
+def _stop_mcp_process(process: subprocess.Popen[bytes]) -> None:
+    if process.stdin is not None:
+        process.stdin.close()
+    try:
+        process.wait(timeout=2)
+    except subprocess.TimeoutExpired:
+        process.terminate()
+        try:
+            process.wait(timeout=2)
+        except subprocess.TimeoutExpired:
+            process.kill()
+            process.wait(timeout=2)
+    finally:
+        if process.stdout is not None:
+            process.stdout.close()
 
 
 class _JsonRpcClient:
@@ -402,17 +436,19 @@ def _call_args(step: dict[str, Any], payload_override: str | None = None) -> tup
 
 
 def _run_step(head: HeadProcess, step: dict[str, Any], url: str, label: str,
-              verify_assertions: bool = True, evidence: list | None = None) -> tuple[dict[str, Any], dict[str, Any]]:
+              verify_assertions: bool = True, evidence: list | None = None,
+              diagnostics: list[str] | None = None) -> tuple[dict[str, Any], dict[str, Any]]:
     cli_args, tool, mcp_args = _call_args(step)
     envelope = step["envelope"]
+    capture = {} if diagnostics is None else {"diagnostics": diagnostics}
     if label == "CLI":
-        exit_code, document = head.cli(cli_args, url, envelope["tenant"], envelope.get("actor"))
+        exit_code, document = head.cli(cli_args, url, envelope["tenant"], envelope.get("actor"), **capture)
         if evidence is not None:
             evidence.append(document)
         if exit_code not in (0, 2) or (exit_code == 0) == ("error" in document):
             _fail(f"{label} {step['operation']}: inconsistent exit {exit_code} and result {document!r}")
     else:
-        is_error, document = head.mcp(tool, mcp_args, url, envelope["tenant"], envelope.get("actor"))
+        is_error, document = head.mcp(tool, mcp_args, url, envelope["tenant"], envelope.get("actor"), **capture)
         if evidence is not None:
             evidence.append(document)
         if is_error != ("error" in document):
@@ -678,12 +714,12 @@ def _preflight_vectors(head: HeadProcess, vectors: list[Path], catalog: dict[str
     try:
         compatibility = json.loads(result.stdout)
     except json.JSONDecodeError:
-        _fail(f"Core vector compatibility adapter failed: {result.stdout!r}; {result.stderr!r}")
+        _fail(f"Core vector compatibility adapter failed: {result.stdout!r}; {_stderr_diagnostic(result.stderr)!r}")
     if evidence_file is not None:
         evidence_file.parent.mkdir(parents=True, exist_ok=True)
         evidence_file.write_text(json.dumps(compatibility, indent=2) + "\n")
     if result.returncode != 0 or compatibility["findings"]:
-        _fail("\n".join(compatibility["findings"]) or f"Core vector compatibility failed: {result.stderr}")
+        _fail("\n".join(compatibility["findings"]) or f"Core vector compatibility failed: {_stderr_diagnostic(result.stderr)}")
     expected_steps = {(source, pointer): step for source, vector in documents.items() for pointer, step in _steps(vector)}
     captured = set()
     for request in compatibility["requests"]:
@@ -773,8 +809,12 @@ def _manifest_shapes(head: HeadProcess, package_id: str) -> dict[str, str]:
 
 
 def run(host: Path, artifact: Path, package: tuple[str, str], vectors: list[Path], timeout: float = 15,
-        assets_path: Path | None = None) -> None:
-    run_catalog(host, [(artifact, package, vectors)], timeout, assets_path, complete=False)
+        assets_path: Path | None = None, *, evidence_dir: Path | None = None) -> None:
+    if evidence_dir is not None:
+        evidence_dir.mkdir(parents=True, exist_ok=True)
+        if any(evidence_dir.iterdir()):
+            _fail("Standalone replay requires an empty evidence directory.")
+    run_catalog(host, [(artifact, package, vectors)], timeout, assets_path, complete=False, evidence_dir=evidence_dir)
 
 
 def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[Path]]], timeout: float = 15,
@@ -800,7 +840,7 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
             _fail(f"test host malformed-command stdout is not JSON: {exc}")
         if malformed.returncode != 2 or malformed.stderr or malformed_document.get("error", {}).get("code") != "invalid_arguments":
             _fail(f"test host bypasses checked CLI parsing: exit {malformed.returncode}, "
-                  f"stdout {malformed.stdout!r}, stderr {malformed.stderr!r}")
+                  f"stdout {malformed.stdout!r}, stderr {_stderr_diagnostic(malformed.stderr)!r}")
         exit_code, modules = head.cli(["modules", "--strict"])
         mcp_error, mcp_modules = head.mcp("list_modules", {})
         _assert_discovery_parity(exit_code, mcp_error, modules, mcp_modules, "list_modules")
@@ -850,9 +890,10 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
             for label in ("CLI", "MCP"):
                 with ReplayGateway(steps) as gateway:
                     documents = []
+                    diagnostics = [] if evidence_dir is not None else None
                     try:
                         for index, step in enumerate(steps):
-                            _run_step(head, step, gateway.url, label, evidence=documents)
+                            _run_step(head, step, gateway.url, label, evidence=documents, diagnostics=diagnostics)
                             if len(gateway.captured) != index + 1:
                                 _fail(f"{source}:{label}/steps/{index}: expected exactly one Gateway request")
                             _assert_fresh_message(gateway.captured[index], step, seen_messages, f"{source}:{label}/steps/{index}")
@@ -861,7 +902,8 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
                         if evidence_dir is not None:
                             evidence_dir.mkdir(parents=True, exist_ok=True)
                             (evidence_dir / f"{operation}.{label}.json").write_text(json.dumps(
-                                {"source": str(source), "documents": documents, "requests": gateway.captured}, indent=2) + "\n")
+                                {"source": str(source), "documents": documents, "requests": gateway.captured,
+                                 "stderr": diagnostics}, indent=2) + "\n")
                     observations[label] = (documents, gateway.captured)
             cli_docs, cli_requests = observations["CLI"]
             mcp_docs, mcp_requests = observations["MCP"]
@@ -911,15 +953,18 @@ def run_catalog(host: Path, selections: list[tuple[Path, tuple[str, str], list[P
             for label in ("CLI", "MCP"):
                 with ReplayGateway([failure]) as gateway:
                     documents = []
+                    diagnostics = [] if evidence_dir is not None else None
                     try:
-                        document, _ = _run_step(head, failure, gateway.url, label, verify_assertions=False, evidence=documents)
+                        document, _ = _run_step(head, failure, gateway.url, label, verify_assertions=False,
+                                                evidence=documents, diagnostics=diagnostics)
                         gateway.assert_consumed(f"{source}:{label}/gateway-error")
                         _assert_fresh_message(gateway.captured[0], failure, seen_messages, f"{source}:{label}/gateway-error")
                         failed[label] = (document, gateway.captured[0])
                     finally:
                         if evidence_dir is not None:
                             (evidence_dir / f"{operation}.{label}.gateway-error.json").write_text(json.dumps(
-                                {"source": str(source), "documents": documents, "requests": gateway.captured}, indent=2) + "\n")
+                                {"source": str(source), "documents": documents, "requests": gateway.captured,
+                                 "stderr": diagnostics}, indent=2) + "\n")
             cli_error_document, cli_error_request = failed["CLI"]
             mcp_error_document, mcp_error_request = failed["MCP"]
             _assert_error_parity(cli_error_document, mcp_error_document, f"{source}: Gateway error")
@@ -949,11 +994,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--expected-package-id", required=True)
     parser.add_argument("--expected-package-version", required=True)
     parser.add_argument("--timeout", type=float, default=15)
+    parser.add_argument("--evidence-dir", type=Path, help="directory for per-head replay observations")
     parser.add_argument("vectors", nargs="+", type=Path)
     args = parser.parse_args(argv)
     try:
         run(args.host.resolve(), args.artifact.resolve(),
-            (args.expected_package_id, args.expected_package_version), args.vectors, args.timeout, args.assets)
+            (args.expected_package_id, args.expected_package_version), args.vectors, args.timeout, args.assets,
+            evidence_dir=args.evidence_dir)
     except (VectorError, OSError, subprocess.TimeoutExpired, json.JSONDecodeError) as exc:
         print(exc, file=sys.stderr)
         return 1

@@ -462,10 +462,10 @@ class EnrolledPreflightTests(unittest.TestCase):
         (self.child / 'artifact.sha512').write_text('previous successful artifact')
 
     def invoke(self, verifier=None, evaluation_error=None, contracts_metadata='HexalithContracts', local=False, missing=None, required=None,
-               production_error=None, verified=None, production=None):
+               production_error=None, verified=None, production=None, packages=None):
         (self.directory / 'approval.json').write_text(json.dumps(self.receipt))
         evaluation = subprocess.CompletedProcess([], 0, json.dumps({'Items': {'PackageReference': [
-            {'Identity': self.package_id, contracts_metadata: 'true'}]}}), '')
+            {'Identity': package, contracts_metadata: 'true'} for package in (packages or [self.package_id])]}}), '')
         captured = io.StringIO()
         with patch.object(check_enrolled, '__file__', str(self.repo / 'tools/conformance-vectors/v1/check_enrolled.py')), \
              patch.object(sys, 'argv', ['check_enrolled.py', '--output', str(self.output)] + (['--local'] if local else [])), \
@@ -527,6 +527,36 @@ class EnrolledPreflightTests(unittest.TestCase):
         self.assertEqual(['inventory report', 'vector version report', 'replay-only report'], report['reported'])
         # The verifier prints its own reports; the enrollment gate echoes only the reports it adds.
         self.assertEqual('reported: replay-only report\n', diagnostic)
+
+    def test_first_package_progress_is_written_before_a_later_package_fails(self):
+        shape = {'module': 'module', 'shape': 'opaque-shape', 'operations': ['module.read'], 'vectors': ['module.read']}
+        verified = {'result': 'passed', 'shapes': [shape], 'reported': ['inventory report']}
+        expected_result = dict(verified, approvedModule='module')
+        package_ids = [self.package_id, 'Later.Contracts']
+        locate = check_enrolled.approval_directory
+
+        def fail_later(modules, package):
+            if package == package_ids[1]:
+                partial = json.loads((self.output / 'enrolled.json').read_text())
+                self.assertEqual('pending', partial['result'])
+                self.assertEqual([expected_result], partial['results'])
+                self.assertEqual([shape], partial['shapes'])
+                self.assertFalse(partial['fullV1Accepted'])
+                raise RuntimeError('later package failed')
+            return locate(modules, package)
+
+        with patch('check_enrolled.approval_directory', side_effect=fail_later):
+            code, report, diagnostic, verifier = self.invoke(verified=verified, packages=package_ids)
+        self.assertEqual(1, code)
+        self.assertEqual('failed', report['result'])
+        self.assertFalse(report['fullV1Accepted'])
+        self.assertEqual('later package failed\n', diagnostic)
+        self.assertEqual(package_ids, report['packages'])
+        self.assertEqual([expected_result], report['results'])
+        self.assertEqual([shape], report['shapes'])
+        self.assertEqual(['inventory report'], report['reported'])
+        self.assertNotIn('productionReplay', report)
+        verifier.assert_called_once()
 
     def test_empty_production_manifest_fails_even_in_local_mode(self):
         code, report, diagnostic, verifier = self.invoke(contracts_metadata='Unmarked', local=True)
