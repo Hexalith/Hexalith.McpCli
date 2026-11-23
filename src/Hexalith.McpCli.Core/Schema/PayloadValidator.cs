@@ -67,6 +67,11 @@ public static class PayloadValidator
 
         var violations = new List<PayloadViolation>();
         Collect(results, violations);
+        if (violations.Count == 0)
+        {
+            violations.Add(new PayloadViolation("/", "The payload does not match the operation schema."));
+        }
+
         return new PayloadValidationResult(violations);
     }
 

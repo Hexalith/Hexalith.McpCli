@@ -183,7 +183,10 @@ public sealed class OperationExecutor(
                 return Fail(call, "/idempotencyKey", "A payload idempotency key requires a caller-supplied key.");
             }
 
-            extensions = command.Extensions is null ? null : new Dictionary<string, string>(command.Extensions, StringComparer.Ordinal);
+            // One extra entry proves the map exceeds the limit without copying the rest of it.
+            extensions = command.Extensions is null
+                ? null
+                : new Dictionary<string, string>(command.Extensions.Take(ExtensionValidator.MaxEntries + 1), StringComparer.Ordinal);
             if (extensions is { Count: 0 })
             {
                 extensions = null;

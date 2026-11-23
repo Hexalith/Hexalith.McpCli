@@ -9,6 +9,9 @@ internal static partial class ExtensionValidator
 {
     private const string ReservedActorAdminKey = "actor:globalAdmin";
 
+    /// <summary>The maximum number of extensions in one command.</summary>
+    internal const int MaxEntries = 32;
+
     internal static IReadOnlyList<PayloadViolation> Validate(
         IReadOnlyDictionary<string, string>? extensions,
         IReadOnlySet<string> allowedExtensions)
@@ -18,12 +21,12 @@ internal static partial class ExtensionValidator
             return [];
         }
 
-        var violations = new List<PayloadViolation>();
-        if (extensions.Count > 32)
+        if (extensions.Count > MaxEntries)
         {
-            violations.Add(new PayloadViolation("/extensions", "At most 32 extensions are allowed."));
+            return [new PayloadViolation("/extensions", "At most 32 extensions are allowed.")];
         }
 
+        var violations = new List<PayloadViolation>();
         int totalSize = 0;
         var seenKeys = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
         foreach ((string key, string value) in extensions.OrderBy(item => item.Key, StringComparer.Ordinal))

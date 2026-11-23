@@ -564,6 +564,11 @@ public sealed class OperationExecutorTests
     [InlineData("a\"b")]
     [InlineData("\u0001")]
     [InlineData("javascript:alert(1)")]
+    [InlineData("onclick=value")]
+    [InlineData("UNION SELECT")]
+    [InlineData("value-- ")]
+    [InlineData(")(")]
+    [InlineData("|(")]
     public async Task DangerousExtensionValuesMakeZeroCallsAsync(string value)
     {
         IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
@@ -573,8 +578,13 @@ public sealed class OperationExecutorTests
             "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
             Extensions: new Dictionary<string, string> { ["task-id"] = value }), context, TestContext.Current.CancellationToken);
 
-        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
-        outcome.Error.Violations!.ShouldContain(violation => violation.Path == "/extensions/task-id");
+        outcome.Document.ShouldBeNull();
+        using JsonDocument expected = JsonDocument.Parse("""
+            {"error":{"code":"validation_failed","operation":"sample.create-item",
+            "violations":[{"path":"/extensions/task-id","message":"The extension value is invalid."}]}}
+            """);
+        JsonElement actual = JsonSerializer.SerializeToElement(new { error = outcome.Error }, McpCliJson.Result);
+        JsonElement.DeepEquals(actual, expected.RootElement).ShouldBeTrue(actual.GetRawText());
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
@@ -712,6 +722,44 @@ public sealed class OperationExecutorTests
             }
 
             await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+        }
+    }
+
+    /// <summary>An oversized extension map reports only the count error, even with an invalid member.</summary>
+    [Fact]
+    public async Task OversizedExtensionMapStopsBeforeMemberValidationAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        Dictionary<string, string> values = Enumerable.Range(0, 40).ToDictionary(index => "k" + index, _ => "safe");
+        values["k0"] = new string('x', 1_001);
+        int entriesRead = 0;
+        var extensions = Substitute.For<IReadOnlyDictionary<string, string>>();
+        extensions.Count.Returns(values.Count);
+        extensions.GetEnumerator().Returns(_ => CountedEntries().GetEnumerator());
+        var context = new EnvelopeContext(null, null, false, values.Keys.ToHashSet(StringComparer.OrdinalIgnoreCase));
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""", Extensions: extensions),
+            context, TestContext.Current.CancellationToken);
+
+        outcome.Document.ShouldBeNull();
+        using JsonDocument expected = JsonDocument.Parse("""
+            {"error":{"code":"validation_failed","operation":"sample.create-item",
+            "violations":[{"path":"/extensions","message":"At most 32 extensions are allowed."}]}}
+            """);
+        JsonElement actual = JsonSerializer.SerializeToElement(new { error = outcome.Error }, McpCliJson.Result);
+        JsonElement.DeepEquals(actual, expected.RootElement).ShouldBeTrue(actual.GetRawText());
+        entriesRead.ShouldBeLessThanOrEqualTo(33);
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+
+        IEnumerable<KeyValuePair<string, string>> CountedEntries()
+        {
+            foreach (KeyValuePair<string, string> entry in values)
+            {
+                entriesRead++;
+                yield return entry;
+            }
         }
     }
 

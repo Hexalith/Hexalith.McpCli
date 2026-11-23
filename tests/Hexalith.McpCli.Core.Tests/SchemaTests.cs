@@ -5,6 +5,7 @@ using Hexalith.McpCli.Core.Catalog;
 using Hexalith.McpCli.Core.Schema;
 using Hexalith.McpCli.Core.Serialization;
 using Hexalith.McpCli.Sample.Contracts;
+using Json.Schema;
 using Shouldly;
 
 namespace Hexalith.McpCli.Core.Tests;
@@ -682,6 +683,29 @@ public sealed class SchemaTests
         PayloadValidator.Validate(schema, "{\"ItemId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"}", true)
             .Violations.ShouldContain(violation => violation.Path == "/" && violation.Message.Contains("Title", StringComparison.Ordinal));
         PayloadValidator.Validate(schema, default(JsonElement), false).Violations.Single().Path.ShouldBe("/");
+    }
+
+    /// <summary>An invalid schema evaluation without keyword errors still refuses the payload.</summary>
+    [Fact]
+    public void InvalidSchemaEvaluationWithoutErrorsReportsRootViolation()
+    {
+        var dialect = new Uri("https://example.test/mcpcli/diagnostic-free");
+        var keyword = new SilentFailureKeyword();
+        DialectRegistry.Global.Register(Dialect.Draft202012.With([keyword], id: dialect));
+        try
+        {
+            var schema = new DerivedSchema(new JsonObject { ["$schema"] = dialect.AbsoluteUri, [keyword.Name] = true },
+                new Dictionary<PropertyRole, PropertyBinding>());
+
+            PayloadValidationResult result = PayloadValidator.Validate(schema, "{}", isCommand: true);
+
+            result.IsValid.ShouldBeFalse();
+            result.Violations.Single().ShouldBe(new PayloadViolation("/", "The payload does not match the operation schema."));
+        }
+        finally
+        {
+            DialectRegistry.Global.Unregister(dialect);
+        }
     }
 
     private static JsonSerializerOptions TestOptions() => McpCliJson.ForModule(
