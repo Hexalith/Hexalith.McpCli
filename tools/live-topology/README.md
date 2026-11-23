@@ -12,7 +12,7 @@ GNU or uutils coreutils `timeout`, `unshare`, `ip`, OpenSSL 3 (`libssl.so.3` and
 zlib (`libz.so.1`) and zstd (`libzstd.so.1`) shared libraries,
 Docker with a successful `docker info`, Aspire CLI 17.0.0 with its DCP and dashboard
 bundle in `~/.aspire/bundle` (`AspireUseCliBundle=true`; SDK/hosting 17.0.0),
-Dapr CLI 1.19.1 and runtime 1.19.1 at
+Dapr CLI 1.19.1 and runtime 1.19.2 at
 `~/.dapr/bin/daprd`. User namespaces and network namespace creation must be
 permitted. For direct wrapper runs, install Dapr independently without
 initializing or changing a user environment. The canonical lane uses the exact public packages and qualified source selection
@@ -24,7 +24,7 @@ SHA-256 in `binaries-current.json`, refuses existing destination directories, an
 only its own never-started extraction containers by exact ID. Docker pulls have
 a 300-second bound; create, copy and removal commands have separate bounds.
 Both pulled images remain in the host Docker store; remove them when no longer
-needed with `docker image rm daprio/dapr@sha256:801b920e02867addcd64f9a5792b8aadf015d6fc365f8b26a72415e2e01bcf98 redis@sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf`.
+needed with `docker image rm daprio/dapr@sha256:16ca01236a97825e30b19ef9c89c7c9006fabdd9036a6d7e8947662371418851 redis@sha256:c35b83ce044bb6d148c484d36e059ad28e02d5714ba6731fb55b6421e2ed0ccf`.
 
 If bootstrap fails, choose a fresh task-owned directory before retrying, for
 example by rerunning `private_runtime="$(mktemp -d)/runtime"`. A failed destination
@@ -158,7 +158,7 @@ The caller pins the qualified Builds workflow and supplies the Integration.Tests
 project, `microsoft-testing-platform` and `aspire-continue-on-error: false`.
 Builds keeps the six non-live Release test projects ahead of its Aspire tier,
 builds the Release solution again in that fresh job and initializes Dapr CLI
-1.19.1/runtime 1.19.1 before invoking preparation. Linux amd64, Python 3.11.4+
+1.19.1/runtime 1.19.2 before invoking preparation. Linux amd64, Python 3.11.4+
 with `venv` and `ensurepip` support, OpenSSL 3, zlib/zstd, Docker,
 GNU or uutils coreutils `timeout`, Git, curl, `unshare`, `ip` and working
 user/PID/network/mount namespaces are required. The hooks name missing tools,
@@ -341,7 +341,7 @@ disposable GitHub-hosted CI selects them automatically. Keep nested submodules
 uninitialized.
 
 From the repository root, after the focused Release checks and the workflow's
-full `dapr init --runtime-version 1.19.1`, run the same preparation and execution
+full `dapr init --runtime-version 1.19.2`, run the same preparation and execution
 path:
 
 ```sh

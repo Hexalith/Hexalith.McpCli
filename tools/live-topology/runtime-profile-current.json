@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "profile": "current-sdk51-aspire1700-dapr1191",
+  "profile": "current-sdk51-aspire1700-dapr1192",
   "tools": {
     "aspire": {
       "version": "17.0.0",
@@ -15,15 +15,15 @@
       "binarySha256": "b651f5fcfe0b261ca6b26058dde31927efc8e17b12267d6743bdbeddca09bafd"
     },
     "daprd": {
-      "version": "1.19.1",
-      "url": "https://github.com/dapr/dapr/releases/download/v1.19.1/daprd_linux_amd64.tar.gz",
-      "archiveSha256": "93217800d5072cf1735ed89ec8a9cdeedfb9d235895fb9e0d864088bc5d9466c",
-      "binarySha256": "b1ece5da76674bf6e15126aeb019fa58e444b5b8edf4d0ac59e32df895ae8fd2"
+      "version": "1.19.2",
+      "url": "https://github.com/dapr/dapr/releases/download/v1.19.2/daprd_linux_amd64.tar.gz",
+      "archiveSha256": "a5ab822a607f158666c214b918785698883202278312d931da63a6c24d61c8e4",
+      "binarySha256": "96d2a0aeaafc8993ed41151e184e2b1c67dc03fc21c9ba561c92e34cb5696596"
     }
   },
   "binaries": {
     "file": "binaries-current.json",
-    "sha256": "c8c5f621ff4a5d2afc80daf1158c7455fdaccfad44d96d84ecb9212128d8f20a"
+    "sha256": "a0cd442f1e4ad0a3acbedbf811c9cd4b2e17fc210988fdc2d1487a2603530fb8"
   },
   "managedTestHosts": {
     "runtime": "11.0.0",

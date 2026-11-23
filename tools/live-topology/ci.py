@@ -66,8 +66,8 @@ def current_runtime_profile() -> dict:
     """Load only the finite current toolchain and its exact pinned native binary map."""
     path = ROOT / 'tools/live-topology/runtime-profile-current.json'
     value = json.loads(path.read_text())
-    expected = {'aspire': '17.0.0', 'dapr': '1.19.1', 'daprd': '1.19.1'}
-    if value.get('schemaVersion') != 1 or value.get('profile') != 'current-sdk51-aspire1700-dapr1191' \
+    expected = {'aspire': '17.0.0', 'dapr': '1.19.1', 'daprd': '1.19.2'}
+    if value.get('schemaVersion') != 1 or value.get('profile') != 'current-sdk51-aspire1700-dapr1192' \
             or set(value.get('tools', {})) != set(expected):
         raise ValueError('The exact finite current runtime profile is required.')
     if value.get('managedTestHosts') != {'runtime': '11.0.0', 'targetFramework': 'net11.0',
@@ -620,9 +620,14 @@ def prepare(evidence: Path) -> None:
         tools['dotnet'] = bounded(['dotnet', '--version'], 30, evidence / 'dotnet-version')
         tools['managedResourceRuntimes'] = current_managed_runtime_selection(
             bounded(['dotnet', '--list-runtimes'], 30, evidence / 'dotnet-shared-runtimes'))
+        profile = current_runtime_profile()
+        cli_version = profile['tools']['dapr']['version']
+        runtime_version = profile['tools']['daprd']['version']
         tools['dapr'] = bounded(['dapr', '--version'], 30, evidence / 'dapr-version')
-        if not re.search(r'CLI version: 1\.19\.1\s', tools['dapr'] + '\n') or not re.search(r'Runtime version: 1\.19\.1\s', tools['dapr'] + '\n'):
-            raise RuntimeError('Dapr CLI 1.19.1 and initialized runtime 1.19.1 are required; initialize Dapr in the reusable workflow.')
+        versions = {line.strip() for line in tools['dapr'].splitlines()}
+        if not {f'CLI version: {cli_version}', f'Runtime version: {runtime_version}'} <= versions:
+            raise RuntimeError(f'Dapr CLI {cli_version} and initialized runtime {runtime_version} are required; '
+                               'initialize Dapr in the reusable workflow.')
         daprd = Path.home() / '.dapr/bin/daprd'
         if not daprd.is_file():
             raise RuntimeError(f'Missing initialized Dapr runtime: {daprd}')
@@ -642,7 +647,6 @@ def prepare(evidence: Path) -> None:
         tools['executables'] = {name: {'path': shutil.which(name), 'sha256': hashlib.sha256(Path(shutil.which(name)).read_bytes()).hexdigest()}
                                 for name in ('aspire', 'dapr', 'dotnet')}
         tools['daprdSha256'] = hashlib.sha256(daprd.read_bytes()).hexdigest()
-        profile = current_runtime_profile()
         verify_current_tool_bytes(profile, {name: tools['executables'][name]['path'] for name in ('aspire', 'dapr')} | {'daprd': str(daprd)})
         receipt['runtimeProfile'] = {'sha256': hashlib.sha256((ROOT / 'tools/live-topology/runtime-profile-current.json').read_bytes()).hexdigest(),
                                      'binariesSha256': profile['binaries']['sha256']}

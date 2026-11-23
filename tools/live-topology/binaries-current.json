@@ -1,15 +1,15 @@
 [
   {
-    "image": "daprio/dapr:1.19.1",
-    "imageId": "sha256:801b920e02867addcd64f9a5792b8aadf015d6fc365f8b26a72415e2e01bcf98",
+    "image": "daprio/dapr:1.19.2",
+    "imageId": "sha256:16ca01236a97825e30b19ef9c89c7c9006fabdd9036a6d7e8947662371418851",
     "source": "/placement",
-    "sha256": "09dacec2acfdc6c41ab08e05032c619f6500199f8687b54bb54c22b1ce9734c4"
+    "sha256": "c675d7bcc0ff548dee8e16ccd2e0da88bbbce967d489011578a3e799041d6862"
   },
   {
-    "image": "daprio/dapr:1.19.1",
-    "imageId": "sha256:801b920e02867addcd64f9a5792b8aadf015d6fc365f8b26a72415e2e01bcf98",
+    "image": "daprio/dapr:1.19.2",
+    "imageId": "sha256:16ca01236a97825e30b19ef9c89c7c9006fabdd9036a6d7e8947662371418851",
     "source": "/scheduler",
-    "sha256": "f67e6948556e40ef6cf816296a24ad0608d22863d578987643d697ce3ff11944"
+    "sha256": "c3745c440bbe6676f1dd6a22558d139793c9cacfe2b0d97736e6d90c6567a2e6"
   },
   {
     "image": "redis:6",
@@ -18,9 +18,9 @@
     "sha256": "0211f2f28f138d2d4253b7c2eaadb57e7371c047f4bc6e0a8a78d2221506befd"
   },
   {
-    "image": "daprio/dapr:1.19.1",
-    "imageId": "sha256:801b920e02867addcd64f9a5792b8aadf015d6fc365f8b26a72415e2e01bcf98",
+    "image": "daprio/dapr:1.19.2",
+    "imageId": "sha256:16ca01236a97825e30b19ef9c89c7c9006fabdd9036a6d7e8947662371418851",
     "source": "/sentry",
-    "sha256": "223c5fdac5a5c99304bd79d3dea9d474bc71931c32710f1a471eb30b765e7eb1"
+    "sha256": "d9516ea33f13e55c2e8b7d2f40a605cd4ea02595d32bb6d1ce940295ad11279d"
   }
 ]

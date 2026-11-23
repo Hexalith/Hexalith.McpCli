@@ -145,11 +145,11 @@ if name == 'dotnet':
         print('4.0.3' if mode == 'wrong-package-cohort' else '5.4.0')
     sys.exit(0)
 if name == 'dapr':
-    print('CLI version: ' + ('1.18.0' if mode == 'wrong-dapr-cli' else '1.19.1') + '\nRuntime version: ' + ('1.18.0' if mode == 'wrong-dapr' else '1.19.1'))
+    print('CLI version: ' + ('1.18.0' if mode == 'wrong-dapr-cli' else '1.19.1') + '\nRuntime version: ' + ('1.19.1' if mode == 'wrong-dapr' else '1.19.2'))
 elif name == 'docker' and mode == 'docker-unavailable':
     print('Cannot connect to the Docker daemon', file=sys.stderr); sys.exit(1)
 elif name == 'daprd':
-    print('1.19.1')
+    print('1.19.2')
 elif name == 'aspire':
     if args and args[0] == 'setup':
         if mode == 'bundle-setup-failure': sys.exit(18)
@@ -502,13 +502,12 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             selection['packages'].append({'id': package_id, 'version': parts[1], 'sourceCommit': 'a' * 40,
                                           'sha256': hashlib.sha256(archive.read_bytes()).hexdigest()})
         # Aspire is represented by the same synthetic archive machinery as the runtime SDK.
-        aspire = dict(selection['packages'][0], id='Hexalith.EventStore.Aspire')
         folder = cache / 'hexalith.eventstore.aspire/5.4.0'
         folder.mkdir(parents=True)
         with ZipFile(folder / 'hexalith.eventstore.aspire.5.4.0.nupkg', 'w') as archive:
             archive.writestr('Hexalith.EventStore.Aspire.nuspec', '<package><metadata><id>Hexalith.EventStore.Aspire</id><version>5.4.0</version><repository url="https://github.com/Hexalith/Hexalith.EventStore.git" commit="' + 'a' * 40 + '" /></metadata></package>')
-        aspire['sha256'] = hashlib.sha256((folder / 'hexalith.eventstore.aspire.5.4.0.nupkg').read_bytes()).hexdigest()
-        selection['packages'].append(aspire)
+        selection['packages'].append({'id': 'Hexalith.EventStore.Aspire', 'version': '5.4.0', 'sourceCommit': 'a' * 40,
+                                      'sha256': hashlib.sha256((folder / 'hexalith.eventstore.aspire.5.4.0.nupkg').read_bytes()).hexdigest()})
         (self.tools / 'native-runtime-current.json').write_text(json.dumps(selection))
         for project_name, package_name in [('AppHost', 'Aspire'), ('ConformanceHost', 'Contracts')]:
             package_id = 'Hexalith.Tenants.' + package_name
@@ -1721,7 +1720,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
     def test_prerequisite_failures_precede_source_builds(self):
         for mode, message in [('namespace-denied', 'unshare --user'),
                               ('docker-unavailable', 'docker info'),
-                              ('wrong-dapr', 'Dapr CLI 1.19.1 and initialized runtime 1.19.1 are required'),
+                              ('wrong-dapr', 'Dapr CLI 1.19.1 and initialized runtime 1.19.2 are required'),
                               ('undeclared-source', 'Missing declared direct root source prerequisite'),
                               ('copied-source', 'is not its own Git working tree')]:
             with self.subTest(mode=mode):
@@ -1772,7 +1771,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
     def test_dapr_cli_and_initialized_runtime_are_independently_required(self):
         result = self.invoke('prepare-ci.sh', 'wrong-dapr-cli')
         self.assertNotEqual(0, result.returncode)
-        self.assertIn('Dapr CLI 1.19.1 and initialized runtime 1.19.1 are required', result.stderr)
+        self.assertIn('Dapr CLI 1.19.1 and initialized runtime 1.19.2 are required', result.stderr)
         self.assert_no_build_or_live()
         self.fresh_evidence()
         (self.fixture_home / '.dapr/bin/daprd').unlink()
@@ -1945,7 +1944,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.fresh_evidence()
         failed_preparation = self.invoke('prepare-ci.sh', 'wrong-dapr')
         self.assertNotEqual(0, failed_preparation.returncode)
-        self.assertIn('Dapr CLI 1.19.1 and initialized runtime 1.19.1 are required', failed_preparation.stderr)
+        self.assertIn('Dapr CLI 1.19.1 and initialized runtime 1.19.2 are required', failed_preparation.stderr)
         self.assertIs(False, json.loads((self.evidence / 'ci-live.json').read_text())['fullLiveAccepted'])
 
     def test_boundary_skip_or_wrong_case_cannot_grant_live_acceptance(self):
