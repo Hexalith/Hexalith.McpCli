@@ -1291,3 +1291,15 @@ These resolutions supersede the corresponding open statuses in the Story 5.4 rev
 | R54-D3 | XML attribute parsing honors quoted tag delimiters and preserves following diagnostics. |
 | R54-D4 | Whitespace-separated and adjacent private argument values are redacted in diagnostic text, structured argv, and live command logs. |
 | R54-D6 | Argument parsing respects escaped quotes and consumes the complete private value. |
+
+## Resolved in the quoted evidence and scanner receipt follow-up (2026-11-23)
+
+These resolutions supersede the five Story 5.4 entries below their original review heading. See `spec-harden-quoted-evidence-and-scan-receipts.md` for verification.
+
+| Finding | Resolution |
+| --- | --- |
+| R54-D7 | The redactor handles raw control characters and literal backslashes in malformed quoted diagnostics. The scanner flags the original synthetic JWT, Bearer and PEM fixtures. |
+| R54-D8 | The XML search advances past each quoted span once and still detects raw XML following JSON-lines diagnostics. |
+| R54-D10 | Scanner CLI tests cover credentials in filenames with clean file content and check the redacted paths in findings, manifest and output. |
+| R54-D11 | A scanner CLI test verifies exit 2, empty stdout and the receipt-write diagnostic when a regular file blocks the destination. |
+| R54-D12 | The paired-publication verifier drops its three unused redaction wrappers and their unused imports. |

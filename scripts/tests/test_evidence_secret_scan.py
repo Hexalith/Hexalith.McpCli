@@ -82,19 +82,24 @@ class EvidenceSecretScanTests(unittest.TestCase):
             '{"PrivateKey":{"d":"private-component-canary"},"PrivateKey":"[REDACTED]"}',
             '{"\\u0050rivateKey":"private-component-canary"}',
             'eyJcanary.payload.signature',
+            'log "raw\ttab eyJcanary.payload.signature" kept',
+            r'log "C:\Users\log Bearer\u0020opaque-canary-credential" kept',
+            'log "details\n-----BEGIN PRIVATE KEY-----\nprivate-component-canary" kept',
         ]
         for index, text in enumerate(cases):
             with self.subTest(index=index):
                 source = self.packet / 'child.log'
                 source.write_text(text)
-                result = self.invoke(f'scan-{index}.json')
+                receipt = f'scan-{index}.json'
+                result = self.invoke(receipt)
                 self.assertEqual((1, ''), (result.returncode, result.stderr), result.stdout)
                 report = json.loads(result.stdout)
                 self.assertEqual('secrets-detected', report['result'])
                 self.assertEqual([{'path': 'child.log', 'rule': 'redaction-required'}], report['findings'])
                 self.assertEqual([], report['errors'])
-                self.assertNotIn('opaque-canary', result.stdout + result.stderr)
-                self.assertNotIn('private-component-canary', result.stdout + result.stderr)
+                retained = result.stdout + result.stderr + (self.root / receipt).read_text()
+                for canary in ('opaque-canary', 'private-component-canary', 'eyJcanary.payload.signature'):
+                    self.assertNotIn(canary, retained)
                 self.assertEqual(text, source.read_text())
 
     def test_known_environment_secret_is_checked_without_repeating_its_value(self):
@@ -111,6 +116,21 @@ class EvidenceSecretScanTests(unittest.TestCase):
         result = self.invoke()
         self.assertEqual(1, result.returncode, result.stdout)
         self.assertEqual('.capture', json.loads(result.stdout)['findings'][0]['path'])
+
+    def test_clean_content_with_credentials_in_filenames_reports_only_redacted_paths(self):
+        names = {'eyJcanary.payload.signature': '[REDACTED JWT]', 'synthetic-path-canary': '[REDACTED]'}
+        for name in names:
+            (self.packet / (name + '.log')).write_text('ordinary diagnostic')
+        result = self.invoke(environment={'MCPCLI_TEST_SECRET': 'synthetic-path-canary'})
+        receipt = (self.root / 'scan.json').read_text()
+        for name in names:
+            self.assertNotIn(name, result.stdout + result.stderr + receipt)
+        self.assertEqual((1, '', receipt), (result.returncode, result.stderr, result.stdout))
+        report = json.loads(receipt)
+        paths = sorted(label + '.log' for label in names.values())
+        self.assertEqual(('secrets-detected', 1, []), (report['result'], report['exitCode'], report['errors']))
+        self.assertEqual([{'path': path, 'rule': 'sensitive-path'} for path in paths], report['findings'])
+        self.assertEqual(paths, [entry['path'] for entry in report['files']])
 
     def test_all_findings_are_sorted_and_receipt_contains_no_source_snippets(self):
         for name in ('z.log', 'a.log'):
@@ -194,6 +214,15 @@ class EvidenceSecretScanTests(unittest.TestCase):
             report = SCANNER.scan(self.packet, environment={})
         self.assertEqual(2, report['exitCode'])
         self.assertEqual([{'path': 'capture', 'rule': 'redaction-failed'}], report['errors'])
+
+    def test_receipt_write_failure_has_distinct_exit_and_diagnostic(self):
+        (self.packet / 'capture').write_text('safe')
+        parent = self.root / 'regular-file'
+        parent.write_text('keep')
+        result = self.invoke('regular-file/scan.json')
+        self.assertEqual((2, '', 'Secret scan failed: receipt could not be written.\n'),
+                         (result.returncode, result.stdout, result.stderr))
+        self.assertEqual('keep', parent.read_text())
 
 
 if __name__ == '__main__':

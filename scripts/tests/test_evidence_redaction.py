@@ -1,5 +1,6 @@
 """Synthetic regressions shared by CI retention, publication and evidence scans."""
 
+import cProfile
 import json
 import os
 from pathlib import Path
@@ -12,6 +13,45 @@ from evidence_redaction import known_credentials, sanitized, sanitized_values, s
 
 
 class EvidenceRedactionTests(unittest.TestCase):
+    def test_malformed_quoted_diagnostics_redact_credentials_and_preserve_safe_text(self):
+        cases = (
+            ('raw\ttab eyJcanary.payload.signature', 'raw\ttab [REDACTED JWT]'),
+            (r'C:\Users\temp\new.log Bearer synthetic-canary', r'C:\Users\temp\new.log Bearer [REDACTED]'),
+            (r'C:\Users\log Bearer\u0020synthetic-canary', '[REDACTED]'),
+            (r'C:\Users\log Bearer synthetic\u002dcanary', '[REDACTED]'),
+            (r'C:\Users\log \ud800 Bearer synthetic-canary', r'C:\Users\log \ud800 Bearer [REDACTED]'),
+            ('details\n-----BEGIN PRIVATE KEY-----\nsynthetic-canary', 'details\n[REDACTED PEM]'),
+        )
+        for original, expected in cases:
+            with self.subTest(original=original):
+                prefix, suffix = 'log ', ' "safe sibling"'
+                source = prefix + '"' + original + '"' + suffix
+                result = sanitized(source, environment={})
+                self.assertEqual((prefix + '"' + expected + '"' + suffix).encode(), result.encode())
+                self.assertEqual(result, sanitized(result, environment={}))
+                wrapped = json.dumps({'message': source, 'count': 2})
+                self.assertEqual({'message': result, 'count': 2}, json.loads(sanitized(wrapped, environment={})))
+
+        safe = 'log "raw\ttab and invalid escape \\q" kept'
+        self.assertEqual(safe, sanitized(safe, environment={}))
+
+    def test_quoted_angle_brackets_before_raw_xml(self):
+        prefix = '{"comparison":"a < b << c", "empty":""}\n' * 256
+        self.assertEqual(prefix, sanitized(prefix, environment={}))
+        fragment = '<setting name="PrivateKey">synthetic-canary</setting><safe/>'
+        self.assertEqual(prefix + fragment.replace('synthetic-canary', '[REDACTED]'),
+                         sanitized(prefix + fragment, environment={}))
+
+    def test_angle_bracket_scan_work_scales_with_the_number_of_records(self):
+        def call_count(records):
+            text = '{"msg":"a < b"}\n' * records
+            profile = cProfile.Profile()
+            self.assertEqual(text, profile.runcall(sanitized, text, environment={}))
+            return sum(entry.callcount for entry in profile.getstats())
+
+        # Count calls instead of wall time so runner load does not affect the bound.
+        self.assertLess(call_count(1024), 10 * call_count(128))
+
     def test_opaque_bearer_direct_json_and_repeated_escapes(self):
         for separator in (' ', '\t', '\n', '\r\n'):
             original = 'retained Authorization: bEaReR' + separator + 'opaque+/_~.credential== retained'

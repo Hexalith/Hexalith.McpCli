@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 
 REDACTION_POLICY = 'mcpcli-evidence-redaction/v1'
 _STRINGS = re.compile(r'(?<!\\)"(?:[^"\\]|\\.)*"')
+_JSON_ESCAPE = re.compile(r'\\(?:["\\/bfnrt]|u[0-9a-fA-F]{4})|(?P<invalid>\\)')
 _PRIVATE = re.compile(r'(?:SigningKey|PrivateKey)\Z', re.I)
 _PRIVATE_OPTION = re.compile(r'--[\w:.-]*(?:SigningKey|PrivateKey)', re.I)
 _ARGUMENT_PREFIX = re.compile(
@@ -227,6 +228,13 @@ def _xml_fallback(text, secrets, marker):
     return ''.join(parts)
 
 
+def _diagnostic_string_value(token):
+    # Accept literal backslashes and control characters while still interpreting
+    # valid JSON escapes that can spell part of a credential.
+    repaired = _JSON_ESCAPE.sub(lambda escape: r'\\' if escape['invalid'] else escape[0], token)
+    return json.loads(repaired, strict=False)
+
+
 def _text(text, secrets, marker, depth=0):
     if depth > 40:
         # Deeply nested diagnostics are not useful enough to retain ambiguously.
@@ -235,13 +243,19 @@ def _text(text, secrets, marker, depth=0):
     pem_marker = '[REDACTED PEM]' if marker == '[REDACTED]' else marker
     text = _PEM.sub(lambda match: match[0] if any(start <= match.start() < end for start, end in strings)
                     else pem_marker, text)
-    strings = [(match.start(), match.end()) for match in _STRINGS.finditer(text)]
     # XML fragments can follow quoted log prefixes. Protect only '<' signs
     # contained inside JSON tokens; those are handled after string decoding.
-    for match in re.finditer('<', text):
-        if not any(start <= match.start() < end for start, end in strings):
-            text = text[:match.start()] + _xml_fallback(text[match.start():], secrets, marker)
-            break
+    angle = text.find('<')
+    if angle != -1:
+        for quoted in _STRINGS.finditer(text):
+            if angle < quoted.start():
+                break
+            if angle < quoted.end():
+                angle = text.find('<', quoted.end())
+                if angle == -1:
+                    break
+        if angle != -1:
+            text = text[:angle] + _xml_fallback(text[angle:], secrets, marker)
     text = _arguments(text, marker, protect_json=True)
     decoder = json.JSONDecoder()
     parts, cursor = [], 0
@@ -278,12 +292,26 @@ def _text(text, secrets, marker, depth=0):
         cursor = end
     text = ''.join([*parts, text[cursor:]])
     def string(match):
+        token = match[0]
         try:
-            decoded = json.loads(match[0])
-        except ValueError:
-            return match[0]
+            decoded = json.loads(token)
+        except json.JSONDecodeError:
+            literal = token[1:-1]
+            retained = '"' + _text(literal, secrets, marker, depth + 1) + '"'
+            decoded = _diagnostic_string_value(token)
+            if literal == decoded:
+                return retained
+            redacted = _text(decoded, secrets, marker, depth + 1)
+            try:
+                if _diagnostic_string_value(retained) == redacted:
+                    return retained
+            except json.JSONDecodeError:
+                pass
+            # The literal and decoded readings disagree. Mask this token
+            # rather than publish a partial credential or reinterpret a path.
+            return json.dumps(marker)
         redacted = _text(decoded, secrets, marker, depth + 1)
-        return json.dumps(redacted, ensure_ascii=False) if redacted != decoded else match[0]
+        return json.dumps(redacted, ensure_ascii=False) if redacted != decoded else token
     text = _STRINGS.sub(string, text)
 
     def raw_span(raw):

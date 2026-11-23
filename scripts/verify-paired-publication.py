@@ -15,7 +15,7 @@ import tempfile
 from zipfile import BadZipFile, ZipFile
 from xml.etree import ElementTree
 
-from evidence_redaction import known_credentials, private_key, sanitized, sanitized_values
+from evidence_redaction import sanitized, sanitized_values
 
 from paired_release import ROOT, digest, module, packages, read_json, validate_source_evidence, write_new
 
@@ -115,24 +115,12 @@ def timestamp(value):
     return parsed.astimezone(timezone.utc)
 
 
-def credentials():
-    return known_credentials()
-
-
-def redact_operator(text):
-    return sanitized(text)
-
-
 def redact_operator_values(value):
     return sanitized_values(value)
 
 
 def redact_operator_text(text):
     return sanitized(text)
-
-
-def private_operator_key(key):
-    return private_key(key)
 
 
 def unique_operator_keys(pairs):
