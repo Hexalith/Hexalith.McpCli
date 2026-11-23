@@ -1327,3 +1327,15 @@ These five resolutions supersede the original entries. See `spec-close-cli-mcp-e
 | DW-2, CLI descriptions (line 440) | The profile selection argument has help text, and a regression checks each argument and option in the production command tree. |
 | Story 3.2, SDK hosted-service faults (line 470) | The CLI test faults the session run by the registered MCP hosted service and checks the serving diagnostic and exit 2. |
 | Story 3.3, query listener cleanup (line 479) | All 19 query payload and routing cases use the shared disposable loopback Gateway, which binds its port once and cancels its accept loop on disposal. |
+
+## Resolved in the contributor guidance follow-up (2026-11-23)
+
+These resolutions supersede the original findings, whose text is retained for the story evidence. See [the verification and review](spec-align-cli-and-live-test-guidance.md).
+
+| Original finding | Correction in the synchronized instructions |
+| --- | --- |
+| Story 2.11, CLI results and errors (line 419) | The output rules now cover tables, result files, error documents and the MCP protocol channel. |
+| Story 2.11, v1 scope (line 423) | The guidance identifies deferred Query arguments and Command status lookup in PRD §8.2 and the identity-server and direct Module API exclusions in §8.3. |
+| Story 2.11, regex anchors (line 427) | Whole-string .NET validation and the ECMA-262 pattern exported in ULID schemas have separate rules. |
+| Story 4.18, AppHost project launches (line 792) | The test AppHost may launch a source project or a prepared host. Its build-time dependency rules still require repository-owned project references. |
+| Story 5.12, live vector selection (line 993) | The full live run selects approved vectors with companion plans. The remaining approved vectors run in loopback. |
