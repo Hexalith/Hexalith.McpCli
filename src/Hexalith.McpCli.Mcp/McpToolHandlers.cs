@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Text.Json;
 using Hexalith.McpCli.Core.Catalog;
 using Hexalith.McpCli.Core.Execution;
@@ -17,7 +18,10 @@ internal static class McpToolHandlers
         return Convert(result.Document, result.Error);
         });
 
-    internal static CallToolResult ListOperations(string module, IServiceProvider services, string? kind = null)
+    internal static CallToolResult ListOperations(
+        [Description("Canonical module name from list_modules.")] string module,
+        IServiceProvider services,
+        [Description("Filter by operation kind. Omit to list both read and write operations.")] string? kind = null)
         => Guard(() =>
         {
         if (string.IsNullOrWhiteSpace(module))
@@ -34,7 +38,8 @@ internal static class McpToolHandlers
         return Convert(result.Document, result.Error);
         });
 
-    internal static CallToolResult DescribeOperation(string operation, IServiceProvider services)
+    internal static CallToolResult DescribeOperation(
+        [Description("Canonical module.operation name from list_operations.")] string operation, IServiceProvider services)
         => Guard(() =>
         {
         if (string.IsNullOrWhiteSpace(operation))
@@ -46,10 +51,15 @@ internal static class McpToolHandlers
         return Convert(result.Document, result.Error);
         });
 
-    internal static async Task<CallToolResult> SendCommand(string operation, string payload,
-        IServiceProvider services, CancellationToken cancellationToken, string? tenant = null,
-        string? aggregateId = null, string? correlationId = null, string? idempotencyKey = null,
-        IReadOnlyDictionary<string, string>? extensions = null)
+    internal static async Task<CallToolResult> SendCommand(
+        [Description("Canonical write operation name from list_operations.")] string operation,
+        [Description("JSON text matching the payload schema returned by describe_operation.")] string payload,
+        IServiceProvider services, CancellationToken cancellationToken,
+        [Description("Per-call tenant. Use the exact declared scope or the session's tenant policy.")] string? tenant = null,
+        [Description("Aggregate identifier matching the payload. Use canonical uppercase text for ULID-kind modules.")] string? aggregateId = null,
+        [Description("Caller-provided canonical uppercase ULID for command correlation.")] string? correlationId = null,
+        [Description("Caller-provided canonical uppercase ULID for command idempotency.")] string? idempotencyKey = null,
+        [Description("String-valued command extensions permitted by the selected profile.")] IReadOnlyDictionary<string, string>? extensions = null)
         => await GuardAsync(async () =>
         {
         OperationOutcome result = await services.GetRequiredService<IOperationExecutor>()
@@ -59,10 +69,16 @@ internal static class McpToolHandlers
         return Convert(result.Document, result.Error);
         }).ConfigureAwait(false);
 
-    internal static async Task<CallToolResult> RunQuery(string operation, string payload,
-        IServiceProvider services, CancellationToken cancellationToken, string? tenant = null,
-        string? aggregateId = null, string? entityId = null, int? pageSize = null, int? offset = null,
-        string? cursor = null)
+    internal static async Task<CallToolResult> RunQuery(
+        [Description("Canonical read operation name from list_operations.")] string operation,
+        [Description("JSON text matching the payload schema returned by describe_operation.")] string payload,
+        IServiceProvider services, CancellationToken cancellationToken,
+        [Description("Per-call tenant. Use the exact declared scope or the session's tenant policy.")] string? tenant = null,
+        [Description("Query aggregate identifier. Use canonical uppercase text for ULID-kind modules.")] string? aggregateId = null,
+        [Description("Entity identifier when the query supports entity selection.")] string? entityId = null,
+        [Description("Requested page size from 1 to 200.")] int? pageSize = null,
+        [Description("Nonnegative row offset. Omit when supplying a nonblank cursor.")] int? offset = null,
+        [Description("Opaque paging cursor returned in paging.nextCursor.")] string? cursor = null)
         => await GuardAsync(async () =>
         {
         OperationOutcome result = await services.GetRequiredService<IOperationExecutor>()

@@ -103,6 +103,48 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
         }
     }
 
+    /// <summary>Both protocol revisions advertise the argument descriptions and supported list filters.</summary>
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task InputAdvertisementsDescribeEveryArgumentAndKindAsync(string version)
+    {
+        await using McpTestSession session = await CreateAsync(version);
+        IList<McpClientTool> tools = await session.Client.ListToolsAsync(cancellationToken: session.Token);
+        int length = 0;
+        foreach (McpClientTool tool in tools)
+        {
+            JsonElement schema = tool.ProtocolTool.InputSchema;
+            length += tool.Name.Length + (tool.Description?.Length ?? 0) + schema.GetRawText().Length;
+            string[] expected = tool.Name switch
+            {
+                "list_modules" => [],
+                "list_operations" => ["kind", "module"],
+                "describe_operation" => ["operation"],
+                "send_command" => ["aggregateId", "correlationId", "extensions", "idempotencyKey", "operation", "payload", "tenant"],
+                "run_query" => ["aggregateId", "cursor", "entityId", "offset", "operation", "pageSize", "payload", "tenant"],
+                _ => throw new InvalidOperationException($"Unexpected tool '{tool.Name}'."),
+            };
+            JsonProperty[] arguments = schema.TryGetProperty("properties", out JsonElement properties)
+                ? properties.EnumerateObject().ToArray() : [];
+            arguments.Select(argument => argument.Name).Order(StringComparer.Ordinal).ShouldBe(expected);
+            foreach (JsonProperty argument in arguments)
+            {
+                string? description = argument.Value.GetProperty("description").GetString();
+                description.ShouldNotBeNullOrWhiteSpace();
+                if (argument.Name == "payload")
+                {
+                    description!.ShouldContain("JSON text");
+                }
+            }
+        }
+
+        JsonElement kind = tools.Single(tool => tool.Name == "list_operations").ProtocolTool.InputSchema
+            .GetProperty("properties").GetProperty("kind");
+        kind.GetProperty("enum").EnumerateArray().Select(value => value.GetString()).ShouldBe(["read", "write", null]);
+        length.ShouldBeLessThan(8000);
+    }
+
     /// <summary>Arbitrary returned JSON remains open and paging and command optional fields follow actual Gateway responses.</summary>
     [Theory]
     [InlineData("2025-06-18")]

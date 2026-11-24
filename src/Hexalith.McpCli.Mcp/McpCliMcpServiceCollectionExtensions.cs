@@ -122,6 +122,13 @@ public static class McpCliMcpServiceCollectionExtensions
                     throw new InvalidOperationException("MCP tool advertisement differs from the permitted collection.");
                 }
 
+                // Advertise the accepted kind values while retaining the existing structured
+                // invalid_arguments response for an unsupported string sent by a client.
+                var operations = toolsByName["list_operations"];
+                JsonNode operationsSchema = JsonNode.Parse(operations.InputSchema.GetRawText())!;
+                operationsSchema["properties"]!["kind"]!["enum"] = new JsonArray("read", "write", null);
+                operations.InputSchema = JsonSerializer.SerializeToElement(operationsSchema);
+
                 result.Tools = permitted.Select(name => toolsByName[name]).ToArray();
                 return result;
             });

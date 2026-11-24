@@ -484,6 +484,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
   summary: MCP input schemas carry no parameter descriptions or `kind` enum.
   evidence: Medium. The `McpToolHandlers` parameters (`src/Hexalith.McpCli.Mcp/McpToolHandlers.cs:20`, `:49-52`, `:62-65`) have no description attributes, so `McpServerTool.Create` advertises `kind` without its allowed values and `payload` as a bare string with no hint that it is JSON text. An agent learns either rule only from a failed call. Pre-existing at baseline `12b54bd`. Story 3.3 binds the §E arguments; add descriptions there and keep the input budget below 8,000 characters.
+  status: done 2026-11-24
+  resolution: All public tool arguments have SDK schema descriptions. Both protocol revisions advertise read, write or null for kind, and unsupported strings still receive the existing structured error. The input advertisement stays below the character budget.
 
 ## Deferred from: code review of spec-3-2-run-the-mcp-server-over-clean-stdio.md (2026-10-16)
 
