@@ -482,6 +482,49 @@ public sealed class OperationExecutorTests
         await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
     }
 
+    /// <summary>Envelope identifier and extension violations are reported before the aggregate check (AD-9 order).</summary>
+    [Theory]
+    [InlineData(null, "/aggregateId")]
+    [InlineData("correlation", "/correlationId")]
+    [InlineData("idempotency", "/idempotencyKey")]
+    [InlineData("extension", "/extensions/task-id")]
+    public async Task EnvelopeViolationsPrecedeAggregateViolationsAsync(string? fault, string path)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+
+        // The explicit aggregate identifier disagrees with the payload, which alone fails at /aggregateId.
+        OperationOutcome outcome = await executor.ExecuteAsync(new SendCommandArguments(
+            "sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""",
+            AggregateId: "01ARZ3NDEKTSV4RRFFQ69G5FAW",
+            CorrelationId: fault == "correlation" ? "bad" : null,
+            IdempotencyKey: fault == "idempotency" ? "bad" : null,
+            Extensions: fault == "extension" ? new Dictionary<string, string> { ["task-id"] = "abc" } : null),
+            Context(), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.Single().Path.ShouldBe(path);
+        await gateway.DidNotReceive().SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
+    /// <summary>A Query paging violation is reported before the aggregate check (AD-9 order).</summary>
+    [Theory]
+    [InlineData(null, "/aggregateId")]
+    [InlineData(0, "/pageSize")]
+    public async Task QueryPagingViolationPrecedesAggregateViolationAsync(int? pageSize, string path)
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        IOperationExecutor executor = Create(gateway, typeof(GetItemQuery), hasGatewayUrl: true);
+
+        OperationOutcome outcome = await executor.ExecuteAsync(new RunQueryArguments(
+            "sample.get-item", $$"""{"ItemId":"{{ItemId}}"}""", AggregateId: "01ARZ3NDEKTSV4RRFFQ69G5FAW", PageSize: pageSize),
+            Context(), TestContext.Current.CancellationToken);
+
+        outcome.Error.ShouldNotBeNull().Code.ShouldBe("validation_failed");
+        outcome.Error.Violations!.Single().Path.ShouldBe(path);
+        await gateway.DidNotReceive().SubmitQueryAsync(Arg.Any<SubmitQueryRequest>(), Arg.Any<string?>(), Arg.Any<CancellationToken>());
+    }
+
     /// <summary>Non-allowlisted extensions cannot cross the gateway boundary.</summary>
     [Fact]
     public async Task DisallowedExtensionFailsBeforeGatewayAsync()
