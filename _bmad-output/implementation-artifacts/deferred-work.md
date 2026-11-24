@@ -66,6 +66,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: A profile with more than 32 valid allowed extension keys is rejected.
   evidence: `SettingsResolver` passes the allowlist to `ExtensionValidator.Validate`, whose 32-entry limit is for one submitted command; this belongs to concurrent settings work.
+  status: resolved before this batch. A profile can store and resolve 40 valid keys; the 32-entry limit applies to one command. See the "Resolved in the profile and settings follow-up (2026-11-23)" table.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Executor cancellation is reported as an internal error.
   evidence: `OperationExecutor.ExecuteAsync` catches `OperationCanceledException` in its blanket catch; this belongs to concurrent executor work.
@@ -84,6 +85,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Concurrent CLI and settings paths lack focused behavior tests.
   evidence: No current test covers settings precedence, bare boolean switches, boolean environment values, or the format behavior described in PRD FR-12.
+  status: resolved before this batch. `SettingsAndRegistrationTests` covers settings precedence and the documented boolean environment values, `ConfigCommandTests.CurrentBindsBareFlagsAndEmitsAllValuesAndSourcesAsync` covers bare switches, and `CliOutputContractTests` covers the FR-12 format rules.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: A null or blank executor operation can become an internal error instead of input validation.
   evidence: Executor lookup calls `CatalogService.Describe`, which throws for a blank operation and is caught as `internal_error`; this belongs to concurrent executor work.
@@ -99,6 +101,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Config output reveals the full value of tokens four characters or shorter.
   evidence: `ProfileStore.MaskToken` preserves the first four characters regardless of token length; this belongs to profile work.
+  status: resolved (2026-11-23). See the "Resolved in the profile and settings follow-up (2026-11-23)" table.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: The conformance runner accepts unexpected fields in captured Gateway requests.
   evidence: `run_loopback.py:_expect_fields` checks only expected dictionary keys, leaving extra envelope or routing fields unchecked; this belongs to conformance work.
@@ -110,6 +113,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: The unsupported HTTP transport error omits the promised release timing.
   evidence: `CliRunner.RunMcpAsync` says only that stdio is available, while the PRD requires a message naming the next release; this belongs to CLI work.
+  status: resolved (2026-11-23). See the "Resolved in the operator help follow-up (2026-11-23)" table.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Bearer authentication is not checked at the Gateway request boundary.
   evidence: The CLI command parity test uses a null token and has no Authorization header assertion; removing `StaticBearerTokenHandler` would leave it passing. This belongs to hosting and CLI work.
@@ -117,6 +121,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Returned paging cursors are not verified in CLI and MCP query documents.
   evidence: Query parity uses a Gateway response without paging, while the Core test inspects only the in-memory result; this belongs to query work.
+  status: resolved (2026-11-23). See the "Resolved in the CLI and MCP execution follow-up (2026-11-23)" table.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: MCP operation-kind filtering is not verified through the handler.
   evidence: Core filtering is tested, but MCP parity calls `list_operations` without `kind`; this belongs to MCP work.
@@ -191,10 +196,12 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Profile-management verbs can read or mutate a second profile snapshot after invocation settings were resolved.
   evidence: This predates Story 2.1: `config profile list|add|remove`, `config use`, and `config set` operate on `ProfileStore` inside the action after `RunAsync` resolved format/output from an earlier snapshot, so a concurrent writer can make the displayed or mutated state inconsistent with those invocation settings; profile-management transaction and snapshot semantics belong to Stories 2.2 and 2.3.
+  status: resolved before this batch. `config profile`, `config use` and `config set` resolve only presentation settings, never read the profile store before their action, and read or mutate one snapshot inside it.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Profile-management verbs cannot repair the configuration that blocks them.
   evidence: Pre-existing: `config profile add/remove/use/set` run through `CliRunner.RunAsync` settings resolution, so a missing `EVENTSTORE_PROFILE` or a corrupt `mcpcli.json` blocks the very verbs that would repair it; address with Stories 2.2/2.3.
+  status: resolved before this batch. Profile-management verbs ignore `--profile` and `EVENTSTORE_PROFILE`, so a missing selected profile no longer blocks them. A malformed, unsupported or linked store is still refused without rewriting, by design.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: A nonblank output path can fail only after a Gateway action has completed.
@@ -204,6 +211,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Cancellation during MCP host startup is mapped through the generic startup-error path.
   evidence: Pre-existing: cancellation while `host.RunAsync` is starting in `RunMcpHostAsync` falls into the generic catch and reports `internal_error` exit 2 instead of a clean exit; clean stdio lifecycle cancellation belongs to Epic 3.
+  status: resolved (2026-11-23). See the "Resolved in the CLI and MCP execution follow-up (2026-11-23)" table.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Offline CLI actions can still depend on unrelated application configuration loaded by the default Host builder.
@@ -254,7 +262,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: Profile-management success documents serialize `"activeProfile": null`, although addendum §G and the Epic 2 output rule require absent optional members to be omitted.
   evidence: `McpCliJson.Result` has no `WhenWritingNull`. Story 2.2's matrix specifies `use --clear → null`, and `ConfigCommandTests.ListUseAndClearMaskEveryTokenAsync`, `RemoveClearsOnlyItsOwnSelectionAsync`, and `AddAcceptsOtherGlobalOptionsAsync` assert `JsonValueKind.Null`; the last test also pins the exact result members `name` and `activeProfile`. The planning artifacts need to agree on null or omission before any code changes; Story 2.11 (predictable output) is the natural owner.
-  status: preserved by Story 2.11 (2026-10-10); its frozen Never rule keeps Story 2.2's explicit `activeProfile: null` clear result. Planning reconciliation remains open.
+  status: resolved (2026-11-23). See the "CLI result output follow-up (2026-11-23)" table.
+  prior_status: preserved by Story 2.11 (2026-10-10); its frozen Never rule keeps Story 2.2's explicit `activeProfile: null` clear result. Planning reconciliation remains open.
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, sixth pass (2026-09-29)
 
@@ -274,12 +283,14 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: `config set` stores invalid nonblank profile tenants that cause `send`/`query` to fail when they become the resolved tenant.
   evidence: `ProfileStore.ValidateProfile` (`src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:263`) rejects only blank tenant values. `OperationExecutor` (l.118) checks the resolved tenant with `RoutingResolver.IsTenantDomain`: lowercase ASCII, digits and `-`, 1–64 characters. So `config set dev tenant ACME` or `tenant 'acme corp'` exits 0, and execution fails with "The tenant does not match the Gateway tenant pattern" when that profile tenant becomes the resolved tenant. Fixed-tenant modules use their declared tenant instead of the profile tenant, and this grammar check does not apply to actor values. This is pre-existing Story 2.2 validation. Moving the tenant rule into the store also means deciding whether `--tenant` and `EVENTSTORE_TENANT` are checked at resolution time, so it needs an owning settings or execution story.
+  status: resolved (2026-11-23). See the "Resolved in the profile and settings follow-up (2026-11-23)" table.
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, eleventh pass (2026-09-30)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: The rules for `config set` values and `config profile remove` are documented nowhere a user looks: neither `--help` nor the README gives them.
   evidence: `config set --help` shows bare `<profile> <field> <value>`: the `profile`, `field` and `value` arguments (`src/Hexalith.McpCli/Cli/CliRunner.cs:393-395`) and the `add`/`remove` `name` arguments (l.305, l.318) have no `Description`, unlike the `module` argument of `operations` (l.97). `README.md` never gives the `allowedExtensions` syntax (comma-separated, not trimmed, `""` stores `[]`) or the accepted `allowTenantOverride` values (`true`, `false`, `1`, `0`). It also never says that `tenant` and `actor` cannot be cleared, or that `remove` clears the active selection only when it names the removed profile. Pre-existing: the argument definitions and README coverage predate baseline `6fe785e`. Found by the eleventh-pass blind-hunter; no owning story yet.
+  status: resolved (2026-11-23). See the "Resolved in the operator help follow-up (2026-11-23)" table.
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, thirteenth pass (2026-09-30)
 
@@ -399,6 +410,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
   summary: `query --help` describes `--aggregate-id` but not `--entity-id`, `--page-size`, `--offset`, or `--cursor`.
   evidence: `src/Hexalith.McpCli/Cli/CliRunner.cs:205-208` creates those options without a `Description`, and `RunQueryArguments.EntityId` (`src/Hexalith.McpCli.Core/Execution/RunQueryArguments.cs:8`) says only "The optional entity identifier." Since Story 2.8 the aggregate help states the canonical uppercase ULID rule, but nothing tells a caller that entity identifiers follow Gateway syntax and accept lowercase, or gives the paging ranges and the cursor/offset exclusion that README documents. Pre-existing since Stories 2.5 and 2.6.
+  status: resolved (2026-11-23). See the "Resolved in the operator help follow-up (2026-11-23)" table.
 
 ## Deferred from: code review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-04, boundary-closure pass)
 
@@ -420,6 +432,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
   summary: Writing CLI output to a FIFO with no reader can block before cancellation takes effect.
   evidence: `CliOutput.WriteResultFileAsync` opens an existing FIFO synchronously before checking `CanSeek`; the baseline `File.WriteAllTextAsync` likewise opened the FIFO before a reader arrived. A nonblocking FIFO open and error policy are needed to bound this pre-existing behavior.
+  status: resolved (2026-11-23). See the "CLI result output follow-up (2026-11-23)" table.
 
 ## Deferred from: code review of spec-2-9-explain-execution-failures-with-stable-documents.md (2026-10-05, pass 2)
 
@@ -441,6 +454,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-10-refuse-writes-in-read-only-mode.md`
   summary: Global option help does not name environment variables or explicit boolean values; `--read-only` says only "Disable command submission".
   evidence: Pre-existing since `de67938`. `src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:10-19` descriptions omit every `EVENTSTORE_*` variable, so `--help` does not reveal `EVENTSTORE_READ_ONLY` or that `--read-only false` overrides it. This is a CLI-wide help convention; settle it once for all global options rather than for `--read-only` alone.
+  status: resolved (2026-11-23). See the "Resolved in the operator help follow-up (2026-11-23)" table.
 
 ## Deferred from: code review of spec-2-11-keep-cli-output-and-exit-codes-predictable.md (2026-10-09)
 
@@ -452,12 +466,14 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: Verify output to a seekable character device located outside `/dev` before relying on preflight to protect mutations.
   evidence: `CliOutput.Preflight` (`src/Hexalith.McpCli/Cli/CliOutput.cs:17`) accepts a writable device at `:54` by native file type, while `WriteResultFileAsync` (`src/Hexalith.McpCli/Cli/CliOutput.cs:147`) writes directly only when the handle is nonseekable or the resolved path begins under `/dev/`. A privileged fixture that creates or mounts a character device outside `/dev` and confirms `FileStream.CanSeek` is true would show whether a later staged write can fail after a Gateway call or profile mutation. Such a target was not reachable in the current nonprivileged Linux test environment.
+  status: resolved (2026-11-23). See the "CLI result output follow-up (2026-11-23)" table.
 
 ## Deferred from: code review of spec-2-11-keep-cli-output-and-exit-codes-predictable.md (2026-10-10)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: An accepted `send` whose runtime `--output` write fails reports only "The CLI action failed.", losing the message and generated correlation identifiers.
   evidence: Medium. `CliRunner.RunAsync`'s catch-all (`src/Hexalith.McpCli/Cli/CliRunner.cs:794`) discards the `CommandResult` when `CliOutput.WriteAsync` throws after the Gateway accepted the command; `ExecutionFailureCommandTests.AcceptedCommandDeviceWriteFailureReportsAfterOneRequestAsync` pins `internal_error` after one request via `/dev/full`. The README says not to retry, but without `messageId` or a generated `correlationId` the caller cannot check the outcome. Pre-existing: the baseline `AcceptedCommandOutputFailureReportsErrorAfterOneRequestAsync` asserted the same document. Returning the identifiers needs a new error member or a stderr channel, so it needs a contract decision.
+  status: resolved (2026-11-23). See the "CLI result output follow-up (2026-11-23)" table.
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: `--output` naming the profile file overwrites the profile store with the result document.
   evidence: Medium. Reproduced 2026-10-10 on the HEAD Debug build with an isolated `HOME`: `config profile add dev --url https://gw.example`, then `config use dev --output ~/.eventstore/mcpcli.json` exits 0 and leaves `{"activeProfile":"dev"}`; the next `config current` returns `configuration_invalid`, and every stored profile and token is lost. Preflight accepts the existing regular file (`src/Hexalith.McpCli/Cli/CliRunner.cs:645`) and the writer replaces it after `ProfileStore.Use`. Pre-existing writer behavior: Story 2.11 review loops 1–7 deferred it (B1 and carried items) without a ledger entry. A guard that compares the resolved output with `ProfileStore.ProfilePath`, its lock and temporary files, including hard links, needs an owning settings story.
@@ -471,18 +487,22 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: No running test reaches the existing-file mode-bit preflight guard, the only preflight refusal a root process gets for a read-only or write-only result file.
   evidence: Medium. For root, `faccessat(..., AT_EACCESS)` in `OutputFileType.RequireAccess` succeeds whatever the mode bits are. That leaves the read/write mode-bit check in `CliOutput.PreflightCore` (`src/Hexalith.McpCli/Cli/CliOutput.cs:67-72`) as the only refusal of a 0400 or 0200 existing target before a Gateway request or profile mutation. As non-root, which is how CI runs, `RequireAccess` rejects such a file first. As root, `DeniedRegularAndNewFileParentPreventMutationAsync` is skipped entirely (`tests/Hexalith.McpCli.Cli.Tests/CliOutputContractTests.cs:969`), so deleting the guard keeps every run green. Without it, a root send or config mutation would complete and then fail in the writer's own mode check with "The CLI action failed." Settle with a privileged CI run that asserts the preflight document, an unchanged profile and zero Gateway calls for a 0400 target. As a cheaper partial step, split the existing-file case out of the root skip so root developer runs exercise it.
+  status: resolved (2026-11-23). See the "CLI result output follow-up (2026-11-23)" table.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: The agent-instruction channel summary says CLI results and errors both go to stdout as JSON, which misstates table, file and MCP output.
   evidence: Low. `AGENTS.md:110` (synced to `CLAUDE.md:110` and `.github/copilot-instructions.md:110`): with `--format table`, `modules`, `operations` and `config` results are tab-separated tables (`src/Hexalith.McpCli/Cli/CliOutput.cs:110`); with `--output`, results go to the file and stdout stays empty; `mcp` failures use stderr. An agent following the line could "fix" table or file output. The line sits in the bmad-project-context managed block, so correct it in the next refresh.
+  status: resolved (2026-11-23). See the "Resolved in the contributor guidance follow-up (2026-11-23)" table.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: The agent instructions' "Out of version one (PRD §8.2)" refusal list mixes PRD sections and omits scoped-out items.
   evidence: Low. `AGENTS.md:86` (and its synced copies) lists "any OAuth or identity server", which is a §8.3 non-goal (`_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:513`). It omits §8.2's query correlation and extensions, search, filter, order-by and freshness Query arguments, and command status lookup (`prd.md:506-507`), plus §8.3's rule that the tool never calls a Module's REST or Dapr API (`prd.md:514`). Correct it in the next bmad-project-context refresh.
+  status: resolved (2026-11-23). See the "Resolved in the contributor guidance follow-up (2026-11-23)" table.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: The `\z` regex pitfall in the agent instructions has no scope and could be applied to JSON Schema patterns.
   evidence: Low. `AGENTS.md:120` (and its synced copies) says to anchor validation regexes with `\z`, while `AGENTS.md:85` names `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`, emitted at `:303` and `:390`) as the schema check. That pattern is an ECMA-262 JSON Schema `pattern`, where `\z` is not an end anchor, so applying the pitfall there would break client-side ULID validation; DW-1's planned `[GeneratedRegex]` scan would not catch it. Limit the line to .NET `Regex` and `[GeneratedRegex]` in the next bmad-project-context refresh.
+  status: resolved (2026-11-23). See the "Resolved in the contributor guidance follow-up (2026-11-23)" table.
 
 ## Deferred from: bmad-project-context refresh of the agent instructions (2026-10-10)
 
@@ -519,6 +539,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
   summary: The README does not say how MCP failures reach the client.
   evidence: Low. `README.md:124` documents discovery only. Error delivery as `isError: true` with `{"error": …}` in `structuredContent` and the first text item (`src/Hexalith.McpCli.Mcp/McpToolHandlers.cs:99-109`), and protocol InvalidParams for a missing or blank `module` or `operation` (`src/Hexalith.McpCli.Mcp/McpCliMcpServiceCollectionExtensions.cs:70-76`), predate baseline `12b54bd`. Story 3.3's acceptance criteria pin the MCP error contract; document both channels in the README in that change.
+  status: resolved (2026-11-23). See the "Resolved in the operator help follow-up (2026-11-23)" table.
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
   summary: MCP input schemas carry no parameter descriptions or `kind` enum.
   evidence: Medium. The `McpToolHandlers` parameters (`src/Hexalith.McpCli.Mcp/McpToolHandlers.cs:20`, `:49-52`, `:62-65`) have no description attributes, so `McpServerTool.Create` advertises `kind` without its allowed values and `payload` as a bare string with no hint that it is JSON text. An agent learns either rule only from a failed call. Pre-existing at baseline `12b54bd`. Story 3.3 binds the §E arguments; add descriptions there and keep the input budget below 8,000 characters.
@@ -530,6 +551,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-2-run-the-mcp-server-over-clean-stdio.md`
   summary: The real SDK hosted service is never faulted, so the fault detection in `RunMcpHostAsync` is pinned only by a synthetic `BackgroundService`.
   evidence: Unverified Medium. `src/Hexalith.McpCli/Cli/CliRunner.cs:787-788` filters `OfType<BackgroundService>()`; `tests/Hexalith.McpCli.Cli.Tests/ConfigCommandTests.cs:732` uses its own `FaultingService`, and the process tests assert only exit 0. If an SDK upgrade registers the stdio server as a plain `IHostedService`, a serving fault exits 0 again. Assert that the hosted service from `HostFactory.Create(mcp: true)` is a `BackgroundService` to settle it.
+  status: resolved (2026-11-23). See the "Resolved in the CLI and MCP execution follow-up (2026-11-23)" table.
 
 ## Deferred from: code review of spec-3-3-execute-calls-with-structured-mcp-results.md (2026-10-16)
 
@@ -540,6 +562,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md`
   summary: An existing `QueryCommandTests` HTTP-listener cleanup race failed the first CLI test run.
   evidence: Low. `_bmad-output/implementation-artifacts/spec-3-3-execute-calls-with-structured-mcp-results.md:106` records it; the affected method passed in isolation and no ledger entry tracked it.
+  status: resolved (2026-11-23). See the "Resolved in the CLI and MCP execution follow-up (2026-11-23)" table.
 
 ## Deferred from: code review of spec-4-1-approve-the-parties-migration-inventory.md (2026-10-16)
 
@@ -596,6 +619,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md`
   summary: Release the decorated `Hexalith.Tenants.Contracts`, bump `HexalithTenantsVersion` in Hexalith.Builds, move McpCli's Builds gitlink, and enroll Tenants by flagged reference and `modules` pin.
   evidence: Split from Story 4.8 at the scope gate on 2026-10-19 (user chose "Split"). Publication is irreversible and needs an explicit go-ahead; it covers the epic AC "Given the first approved decorated Tenants Contracts release" (`_bmad-output/planning-artifacts/epics.md:1311-1314`). Today `references/Hexalith.Builds/Props/Directory.Packages.props:14` pins 5.8.0 (undecorated) and `tools/dependency-policy.json` has `modules: {}`. Re-validate the vectors against the immutable release artifact with its final version, record the description review in the Tenants pull request, then run a fresh restore and Manifest.Tests with every changed policy version updated.
+  status: resolved before this batch. Tenants Contracts 8.0.2 is enrolled by a flagged reference and a `modules` pin with its approved inventory and vectors.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md`
   summary: Live vectors cannot feed a returned continuation cursor or run-generated audit times into a later step, so the Tenants live paging and filter proof cannot run under vector contract v1.
   status: resolved in Story 4.13 (2026-10-25); strict hash-bound companion plans capture actual cursors/timestamps and bind later Query calls without changing v1 vector bytes. `tools/live-topology/live_plans.py:90` resolves typed bindings, `tools/live-topology/run_live.py:19` checks live documents, and `_bmad-output/implementation-artifacts/evidence/story-4-13/parent-audit/live-acceptance-audit.json:1` records all 21 passing cases, including Tenants continuation and audit category/time inclusion/exclusion, with all 53 declared Command steps submitted once.
@@ -671,6 +695,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md`
   summary: The 500 ms first-construction limit also runs in the ordinary parallel unit tier and may flake under CI CPU contention.
   evidence: Unverified (`maybe-false`); medium if true. `tests/Hexalith.McpCli.Core.Tests/CatalogPerformanceTests.cs:15` is a plain `[Fact]`. Core.Tests is in the `ci` job's unit list (`.github/workflows/ci.yml:25`). `LimitViolation` applies without `MCPCLI_BENCHMARK_REQUIRE_V1` (`CatalogPerformanceTests.cs:76`). The child therefore competes with Core.Tests' parallel classes for ubuntu-latest CPU. Two local 14-core parallel runs measured 146.3 and 124.9 ms; the dedicated Ubuntu step measured 194.5 and 242.6 ms. To settle it, record the unit-tier child's `elapsedMilliseconds` across several ubuntu-latest `ci` runs. If the margin is thin, enforce the limit only in the dedicated `enrolled-module-conformance` step, or put the class in a non-parallel collection.
+  status: resolved before this batch. `CatalogPerformanceTests` measures in a fresh child process inside a collection with parallelization disabled.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-11-prove-both-heads-agree-against-a-loopback-gateway.md`
   summary: The agent instructions still present the ConformanceHost as the way to reproduce isolated-module or empty-catalog behavior.
   evidence: Low. `AGENTS.md:119` is byte-identical in `CLAUDE.md` and `.github/copilot-instructions.md`. `tests/Hexalith.McpCli.ConformanceHost/Hexalith.McpCli.ConformanceHost.csproj:6` now defaults to `ConformanceProduction=true`, which loads the production manifest without the sample. Only `-p:ConformanceProduction=false` restores the isolated sample host (`tools/conformance-vectors/v1/run-sample-loopback.sh:18-20`). An agent that follows the line reproduces against Parties and Tenants instead of an isolated module. Correct this in the next bmad-project-context refresh, together with the open enrollment-wording entry under the Story 4.10 heading. Then copy `AGENTS.md` to the other two entry points and run `scripts/check-agent-instructions-sync.sh`.
@@ -828,6 +853,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
   evidence: Medium, unverified.
     - `src/Hexalith.McpCli.Core/Settings/ProfileStore.cs:31` resolves the path on first access; tests cover only `config current`, `modules` and `mcp`.
     - To settle it: run `send`, `query`, `describe`, `operations`, `config set` and `--version` with an invalid override and compare the output.
+  status: resolved (2026-11-23). See the "Resolved in the profile and settings follow-up (2026-11-23)" table.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md`
   summary: The `.eventstore` directory ACL now carries `ContainerInherit|ObjectInherit`, so sibling files created later inherit user and SYSTEM full control.
   evidence: Medium, unverified.
@@ -896,6 +922,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
   summary: The synchronized agent entry points still describe a published-helper-only live topology.
   evidence: Medium (code review pass 3, 2026-11-06); deferred because the fix edits the three agent-instruction files, which must stay byte-identical. `CLAUDE.md:82` (with `AGENTS.md` and `.github/copilot-instructions.md`) says the topology "uses published server-free Aspire helpers … never sibling source project references". After native source preparation, `tests/Hexalith.McpCli.AppHost/Program.cs:95` launches Tenants through `AddProject` from `references/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj`. An agent following the entry points could revert that launch or refuse topology changes. To fix, edit `AGENTS.md`, copy it to the other two files, and run `scripts/check-agent-instructions-sync.sh`.
+  status: resolved (2026-11-23). See the "Resolved in the contributor guidance follow-up (2026-11-23)" table.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
   summary: Python CI diagnostics preserve opaque bearer credentials from child output.
@@ -986,25 +1013,29 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D1 — Redact unfinished nested escaped JSON private values through the input boundary.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the private evidence redaction follow-up (2026-11-22)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/evidence_redaction.py:172; A synthetic truncated nested output string containing an escaped PrivateKey value retains opaque-private-canary and scans clean. Reproduced during Story 5.4 review. The relevant implementation is byte-identical to the separately landed prerequisite at `296617072ab3fb632d2bddb9189b52fd94286f83`; the frozen intent explicitly excludes fixing redactor item 5 here. This is a new specific counterexample, not a reconfirmation of the older resolved generic redactor rows.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D2 — Decode malformed-XML private setting selectors before selecting their body text.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the private evidence redaction follow-up (2026-11-22)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/evidence_redaction.py:102; Both name="Private&#75;ey" and name="Priv&#97;teKey" bodies retain the synthetic canary when a later unfinished tag forces fallback. Reproduced during Story 5.4 review. The relevant implementation is byte-identical to the separately landed prerequisite at `296617072ab3fb632d2bddb9189b52fd94286f83`; the frozen intent explicitly excludes fixing redactor item 5 here. This is a new specific counterexample, not a reconfirmation of the older resolved generic redactor rows.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D3 — Use quote-aware malformed-XML tag boundaries for private attribute values containing >.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the private evidence redaction follow-up (2026-11-22)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/evidence_redaction.py:91; A private value first>opaque-private-canary is only partly replaced; the suffix survives and scans clean. Reproduced during Story 5.4 review. The relevant implementation is byte-identical to the separately landed prerequisite at `296617072ab3fb632d2bddb9189b52fd94286f83`; the frozen intent explicitly excludes fixing redactor item 5 here. This is a new specific counterexample, not a reconfirmation of the older resolved generic redactor rows.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D4 — Restore whitespace-separated and adjacent-argv private-argument redaction.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the private evidence redaction follow-up (2026-11-22)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/evidence_redaction.py:34; --SigningKey opaque-private-canary and --PrivateKey opaque-private-canary remain unchanged; this support existed in the pre-consolidation CI sanitizer. Reproduced during Story 5.4 review. The relevant implementation is byte-identical to the separately landed prerequisite at `296617072ab3fb632d2bddb9189b52fd94286f83`; the frozen intent explicitly excludes fixing redactor item 5 here. This is a new specific counterexample, not a reconfirmation of the older resolved generic redactor rows.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
@@ -1017,19 +1048,22 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D6 — Consume backslash-escaped quotes inside quoted private arguments before recognizing their terminator.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the private evidence redaction follow-up (2026-11-22)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/evidence_redaction.py:34; A quoted --PrivateKey containing an escaped quote retains its synthetic canary suffix after sanitization and scans clean. Reproduced during Story 5.4 review. The relevant implementation is byte-identical to the separately landed prerequisite at `296617072ab3fb632d2bddb9189b52fd94286f83`; the frozen intent explicitly excludes fixing redactor item 5 here. This is a new specific counterexample, not a reconfirmation of the older resolved generic redactor rows.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D7 — Sanitize quoted spans that fail JSON decoding instead of passing them through unchanged.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the quoted evidence and scanner receipt follow-up (2026-11-23)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/evidence_redaction.py:163; `string()` returns a `_STRINGS` match unchanged when `json.loads` fails, and the raw-span pass at `:178-183` appends every match without `_scalar`. A quoted span containing a raw tab or newline, or an invalid escape such as `"C:\Users\x"`, therefore keeps JWT, Bearer and PEM values; `sanitized('msg "token eyJabc.def.ghi\tfoo"', environment={})` returns its input. Reproduced during Story 5.4 review pass 2. Prerequisite code from `296617072ab3fb632d2bddb9189b52fd94286f83`; the frozen intent excludes fixing redactor item 5 here.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D8 — Make the redactor's protected-`<` scan linear in the number of JSON string spans.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the quoted evidence and scanner receipt follow-up (2026-11-23)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/evidence_redaction.py:131; for each `<`, `any(start <= match.start() < end ...)` scans every string span until one `<` lies outside a string. JSON-lines logs with `<` only inside strings took 0.39 s at 74 KB, 1.39 s at 148 KB and 5.15 s at 296 KB (about 4x per doubling), so multi-megabyte runtime diagnostics sanitized by `tools/live-topology/ci.py:631` can exhaust the 600-second cleanup reserve. Reproduced during Story 5.4 review pass 2. Prerequisite code from `296617072ab3fb632d2bddb9189b52fd94286f83`.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
@@ -1041,19 +1075,22 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D10 — Test the evidence scanner's `sensitive-path` finding for credential-bearing file names.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the quoted evidence and scanner receipt follow-up (2026-11-23)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/scan-evidence-secrets.py:70; no test in `scripts/tests/test_evidence_secret_scan.py` uses a credential-bearing file name. A clean file named `eyJabc.payload.sig.log` returns `secrets-detected`, exit 1, with `[REDACTED JWT].log`; with `:70-71` deleted it would return `clean`, exit 0, and a silently rewritten manifest path. Pre-verified gap from Story 5.4 review pass 2; add a JWT-name case and a known-environment-value case, both asserting no raw-name echo on stdout or stderr.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D11 — Test the evidence scanner's receipt-write failure exit 2.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the quoted evidence and scanner receipt follow-up (2026-11-23)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/scan-evidence-secrets.py:125; only an existing destination is tested (`scripts/tests/test_evidence_secret_scan.py:172`). Without the `OSError` handler, an unwritable receipt raises a traceback with exit 1, the secrets-detected code, contradicting `tools/live-topology/README.md:360-362`. Pre-verified gap from Story 5.4 review pass 2; use a receipt whose parent is a regular file and assert `(2, '', 'Secret scan failed: receipt could not be written.\n')`.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D12 — Remove the unused redaction wrappers from the paired-publication verifier.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: resolved. See the "Resolved in the quoted evidence and scanner receipt follow-up (2026-11-23)" table.
+  prior_status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
   evidence: scripts/verify-paired-publication.py:118; `redact_operator` (`:122`) and `private_operator_key` (`:134`) have no callers, and `credentials()` (`:118`) is used only by `scripts/tests/test_paired_publication.py:621-622`. Found during Story 5.4 review pass 2; delete them, or have the tests import `known_credentials` directly.
 
 ## Deferred from: planning of spec-5-5-retire-legacy-packages-and-platform-routes.md (2026-11-10)
@@ -1100,13 +1137,15 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-12-gate-enrolled-modules-by-operation-shape.md`
   summary: `AGENTS.md` (and its byte-identical copies `CLAUDE.md` and `.github/copilot-instructions.md`) still says "`run-vectors.py` invokes that wrapper for every vector". After Story 5.12 the live lane runs only approved vectors that have a companion plan; a vector without one is loopback-only.
   owner: McpCli maintainer (agent-instruction entry points).
-  status: open; deferred by the Story 5.12 code review pass 2 (D1, A3), because the fix edits the agent-context files.
+  status: resolved (2026-11-23). See the "Resolved in the contributor guidance follow-up (2026-11-23)" table.
+  prior_status: open; deferred by the Story 5.12 code review pass 2 (D1, A3), because the fix edits the agent-context files.
   evidence: `AGENTS.md:102`. The README and `tools/live-topology/README.md` already say "every approved live vector". Edit `AGENTS.md`, copy it to the other two entry points, and run `scripts/check-agent-instructions-sync.sh`.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-12-gate-enrolled-modules-by-operation-shape.md`
   summary: No test checks that the `enrolled-module-conformance` step names in `STAGING_JOBS` match the job's `- name:` lines in `.github/workflows/ci.yml`. A rename in only one file passes every test and first fails when `verify-release-source.py` runs during a paired release, at `validate_jobs` ("Required step … was missing").
   owner: McpCli maintainer (paired-release source gate).
-  status: open; pre-existing gap, deferred by the Story 5.12 code review pass 2 (D2, V2). Story 5.12 renamed the step correctly in both files. Generalize the check after the concurrent Story 5.6 edits to `scripts/tests/test_paired_publication.py` land, so the two changes do not collide.
+  status: obsolete (2026-11-24). Module tests must not assert workflow YAML text; Hexalith.CiCd owns the workflows.
+  prior_status: open; pre-existing gap, deferred by the Story 5.12 code review pass 2 (D2, V2). Story 5.12 renamed the step correctly in both files. Generalize the check after the concurrent Story 5.6 edits to `scripts/tests/test_paired_publication.py` land, so the two changes do not collide.
   evidence: `scripts/verify-release-source.py:38` (`STAGING_JOBS['enrolled-module-conformance']`) and the `ci.yml` step "Validate restored-package integrity, Operation Shape coverage and both heads". Only `test_topology_discovery_required_step_matches_the_current_workflow` (`scripts/tests/test_paired_publication.py:971` at `c9a46a1`) and the `release-automation` assertions compare `STAGING_JOBS` with `ci.yml`. Extending that parser to every `STAGING_JOBS` job defined in `ci.yml` closes the gap.
 
 ## Deferred from: review of spec-5-6-reject-new-proprietary-surfaces-in-ci.md (2026-11-11)
@@ -1158,7 +1197,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md`
   summary: McpCli `main` CI is red for reasons outside Story 5.7. Restore fails NU1202 because Hexalith.Commons.UniqueIds 3.0.0 supports only net11.0 while targets remain net10.0, and the proprietary-surface census fails on Builds-pin source drift.
   owner: McpCli maintainer with the Commons and Builds owning maintainers.
-  status: open; pre-existing and not caused by Story 5.7, which changed no dependency, census input or gitlink; still failing on `36a2d51`.
+  status: resolved before this batch. The repository targets net11.0, so UniqueIds 3.0.0 restores, and the proprietary-surface census is no longer a module CI job.
+  prior_status: open; pre-existing and not caused by Story 5.7, which changed no dependency, census input or gitlink; still failing on `36a2d51`.
   evidence: `Directory.Build.props:23` sets `net10.0`; `references/Hexalith.Builds/Props/Directory.Packages.props:64` maps UniqueIds to `$(HexalithCommonsVersion)`; `.github/workflows/ci.yml:80` runs the census check, which reports drift in `Tools/package-version-audit.json` and three PowerShell qualification scripts. Failing runs and job details are in `_bmad-output/implementation-artifacts/evidence/story-5-7/delivery/verification.md:33` and `delivery/mcpcli-ci-jobs.json`. A grep of this ledger for NU1202, UniqueIds and package-version-audit found no earlier entry.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md`
   summary: The owner-approved Admin 1.0.2 (`ec388eae…`) and technical 1.0.3 (`7f281017…`) bytes still say `status: pending`, "A2 Amendment approval pending", "pending exact-byte owner approval" and "Candidate label patches remain undelivered". All 14 integrated README labels link to these pages, and unlike AD-23 the bytes never say that `approval.json` sets the effective status.
@@ -1547,3 +1587,32 @@ fixes, obsolete items and blocked findings did not count toward those ten.
 | Memories and ChatBot inventory corrections | These require approved versioned successors. |
 | Story 5.11 evidence refresh | The approved evidence is a historical snapshot. Regenerating the bound audit for the current ledger requires approval of new bytes. |
 | Existing MCP fault coverage, CLI/profile checks, Catalog checks and source guidance | The current code, regression tests, and earlier ledger tables already cover the findings. Original entries carry the verified resolutions where they were missing. |
+
+## Deferred from: review of spec-close-next-seven-deferred-work.md (2026-11-24)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-close-next-seven-deferred-work.md`
+  summary: The evidence scanner checks its root path once and then walks and opens packet files by path, so a directory replaced by a link after the check can still redirect the scan.
+  evidence: Medium if exploited, unverified. `scripts/scan-evidence-secrets.py` calls `reached_through_link_or_parent` before `os.walk`, and `os.open(..., O_NOFOLLOW)` guards only each file's final component. Opening the root with `O_DIRECTORY|O_NOFOLLOW` and walking with `os.fwalk` or `dir_fd`-relative opens would close the race. The race predates R54-D5, whose closure refuses static linked ancestors and parent steps.
+- source_spec: `_bmad-output/implementation-artifacts/spec-close-next-seven-deferred-work.md`
+  summary: The census refuses a local or substituted glob whenever an unopened gitlink lies below its literal directory, even when the glob's single-segment wildcards cannot reach that gitlink.
+  evidence: Low; a fresh committed-pin scan shows no affected root. `gitlink_below` in `tools/proprietary-surfaces/v1/check.py` ignores pattern depth, so `eng/*.props` with a gitlink at `eng/tools/vendor`, or a root-level `*.props` beside `references/*` gitlinks, fails closed. Refuse only when the pattern has `**` or its segments can match the gitlink path or one of its parent directories.
+
+## Next seven follow-up dispositions (2026-11-24)
+
+Seven implementations carry dated closures at their original entries: Story 2.1 host configuration, Story 2.3 HTML-safe escaping, Story 2.5 live Query proof criteria, the Story 2.8 canonical ULID text and executor order, Story 5.4 R54-D5 and the Story 5.6 local gitlink globs. The selection used explicit severity, then original ledger order. Already resolved, blocked and decision-dependent findings did not count toward those seven.
+
+| Skipped finding | Disposition |
+| --- | --- |
+| High, Medium and Low findings named in the two earlier disposition tables | Unchanged. They still need an independent operator, an owning team, a qualifying runtime or deployment, an approved successor or a decision. |
+| Tenants default user for `get-user-tenants`, audit stream selection and empty configuration keys (Low) | Open upstream. The Tenants maintainers own these handler and validator behaviors. |
+| Story 2.3, clearing a stored tenant or actor | Needs a decision. Empty tenant and actor values are refused deliberately and tested, and the entry records the gap as by design for v1. |
+| Story 2.3, token input without command-line exposure | Needs a decision on a new secret-input surface. The README's private profile script already keeps the token out of command arguments. |
+| Story 2.7, identifiers for uncertain command failures | Needs a decision. Story 2.9 froze generated tracking fields out of errors, and PRD §8.2 defers Gateway Command status lookup. |
+| Story 2.8, Identifier Kind in discovery | Needs a decision on the public discovery document and MCP output schema shape. |
+| Story 2.11, Linux ARM output inspection in CI | Hexalith.CiCd owns the workflow matrix. |
+| Story 5.4, F7 Kelvin alias acceptance | An acceptance record rather than work. Retro item 9 and Story 5.18 own the canonicalizer fix. |
+| Story 5.4, C05 evidence, actor attribution and raw-string bounds | Need owner-approved inventory dispositions or new execution evidence. |
+| Story 5.4, R54-D9 short known credentials | Needs a decision. A minimum length reverses the retro item 5 review's High-severity choice to redact every nonblank known value, and failing closed keeps scan verdicts dependent on ambient variables. |
+| Story 5.5 retirement, upstream README, Folders gate and FrontComposer labels; Parties and Tenants keyed vectors | Owner releases, owner gates or user-deferred label work. |
+| Story 5.12, STAGING_JOBS and workflow step names | Obsolete. Module tests must not assert workflow YAML text. |
+| Already resolved: Story 1.7 profile allowlists, settings tests and blank operations; Story 2.1 profile snapshots and repair; Tenants enrollment; Catalog timing isolation; the net10 restore failure | The original entries now carry the verified resolutions, together with the entries earlier follow-up tables had closed. |
