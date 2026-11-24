@@ -1113,7 +1113,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`
   summary: A local MSBuild import or Compile glob in the inspected root, such as `dependencies/*/eng/*.props`, that spans a nested gitlink expands silently without that gitlink's contents. Cross-tree globs through a substituted tree already refuse that case.
   owner: McpCli maintainer (proprietary-surface census).
-  status: open; pre-existing gap, deferred by the Story 5.6 cross-tree resolution review (BH14, EC9). The reviewed change kept the existing local-glob behavior; the README describes the gitlink-glob refusal only for substituted trees.
+  status: done 2026-11-24
+  resolution: Local import and Compile globs share the substituted branch's `gitlink_below` refusal: an unopened nested gitlink below a glob's literal directory fails as `unavailable-local-import` or `unsafe-or-nested-compile-source` with the glob label as `target`. A census regression covers both refusals and a glob beside a gitlink that still expands. A fresh committed-pin scan before and after the change reported the same 17 pre-existing errors and 494 surfaces.
   evidence: `tools/proprietary-surfaces/v1/check.py:841` (local branch) matches `metadata_paths` with `msbuild_glob` at line 844 and no gitlink check, while the substituted branch in `Resolver.matches` refuses a glob when a gitlink lies below its directory. The fix mirrors that refusal in the local import and Compile branches (`check.py:940`). Run a fresh committed-pin scan first, because the refusal can surface new coverage errors in root references.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`

@@ -115,7 +115,10 @@ relative to their declaring file.
   variant or a path through a committed link is refused, a parent-tree glob
   outside every root is never listed, and a directory, a tree root or the parent
   workspace root is never a file. A local import through a committed link is
-  refused as `unavailable-local-import` with its label as `target`.
+  refused as `unavailable-local-import` with its label as `target`. A local
+  import or Compile glob is also refused when an unopened nested gitlink lies
+  below its directory: an import as `unavailable-local-import` and a Compile
+  item as `unsafe-or-nested-compile-source`, each with its label as `target`.
 - **One hop.** A substituted file's imports must stay inside that same
   substituted tree. A further escape, including one back into the inspected
   root, or a gitlink inside the substituted tree fails. A Compile item declared

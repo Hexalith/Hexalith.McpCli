@@ -1360,6 +1360,31 @@ done
                 self.assert_source_errors(report, PROJECT, [rule], [label])
                 self.assertEqual(report['surfaces'], [])
 
+    def test_local_globs_refuse_an_unopened_nested_gitlink_below_their_directory(self):
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        self.write(self.repo, 'dependencies/tool/eng/Runner.props',
+                   '<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        # A local glob beside, not above, a nested gitlink still expands over committed metadata.
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../dependencies/*/eng/*.props"/></Project>')
+        self.commit_with_gitlinks({'vendor/producer': pin}); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertEqual([(s['surface'], s['signals']) for s in report['surfaces']],
+                         [(self.binding(), ['executable-project'])])
+        # A glob cannot prove what an unopened gitlink below its directory contains.
+        for project, rule, label in (
+                ('<Project><Import Project="../../../dependencies/*/eng/*.props"/></Project>',
+                 'unavailable-local-import', 'dependencies/*/eng/*.props'),
+                ('<Project><ItemGroup><Compile Include="../../../dependencies/**/*.cs"/></ItemGroup></Project>',
+                 'unsafe-or-nested-compile-source', 'dependencies/**/*.cs')):
+            with self.subTest(rule=rule):
+                self.write(self.repo, PROJECT, project)
+                self.commit_with_gitlinks({'vendor/producer': pin, 'dependencies/producer': pin}); self.pin()
+                report = self.run_cli(1)
+                self.assert_source_errors(report, PROJECT, [rule], [label])
+                # The refused project yields no surface; unimported metadata is still classified on its own.
+                self.assertEqual([s['surface']['kind'] for s in report['surfaces']], ['source'])
+
     def test_partial_root_keeps_other_projects_sources_and_publication_observations(self):
         self.write(self.repo, 'broken/Broken.csproj', '<Project>')
         self.write(self.repo, 'broken/Program.cs', 'builder.Services.AddMcpServer();')
