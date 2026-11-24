@@ -49,6 +49,48 @@ public sealed class ExecutionFailureCommandTests
         }
     }
 
+    [Fact]
+    public async Task CancellationWhileWaitingForGatewayExitsWithoutRetryAsync()
+    {
+        using var caller = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        using var deadline = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+        var received = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var release = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        string directory = NewDirectory();
+        try
+        {
+            await using var gateway = new ScriptedGateway(async request =>
+            {
+                received.TrySetResult();
+                await release.Task.WaitAsync(deadline.Token);
+                return ScriptedGateway.AcceptCommand(request);
+            });
+            Task<(int Exit, string Output, string Error)> invocation = InvokeCliAsync(
+                ["send", "sample.create-item", "--payload", $$"""{"ItemId":"{{Id}}","Title":"Hello"}""", "--url", gateway.Url],
+                directory, caller.Token);
+            try
+            {
+                await received.Task.WaitAsync(deadline.Token);
+                await caller.CancelAsync();
+                (int exit, string output, string error) = await invocation.WaitAsync(deadline.Token);
+                exit.ShouldBe(130);
+                output.ShouldBeEmpty();
+                error.ShouldNotContain("internal_error");
+                gateway.Requests.ShouldHaveSingleItem();
+            }
+            finally
+            {
+                release.TrySetResult();
+                await caller.CancelAsync();
+                await invocation;
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Problem Details status and supplied metadata survive one command submission.</summary>
     [Fact]
     public async Task CompleteProblemDetailsKeepsExceptionStatusAsync()

@@ -52,6 +52,41 @@ public sealed class McpExecutionTests
         await session.Gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), caller.Token);
     }
 
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task ClientCancellationReachesTheGatewayAndKeepsTheSessionOpenAsync(string version)
+    {
+        var dispatched = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        var stopped = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        using var caller = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+        await using McpTestSession session = await CreateAsync(version, configure: (_, gateway) =>
+            gateway.SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>())
+                .Returns(async call =>
+                {
+                    dispatched.TrySetResult();
+                    try
+                    {
+                        await Task.Delay(Timeout.InfiniteTimeSpan, call.Arg<CancellationToken>());
+                        return new SubmitCommandResponse(CorrelationId, MessageId: MessageId);
+                    }
+                    finally
+                    {
+                        stopped.TrySetResult();
+                    }
+                }));
+
+        Task<CallToolResult> invocation = session.Client.CallToolAsync("send_command",
+            new Dictionary<string, object?> { ["operation"] = "sample.create-item", ["payload"] = CommandPayload },
+            cancellationToken: caller.Token).AsTask();
+        await dispatched.Task.WaitAsync(session.Token);
+        await caller.CancelAsync();
+        _ = await Should.ThrowAsync<OperationCanceledException>(() => invocation);
+        await stopped.Task.WaitAsync(session.Token);
+        (await session.CallAsync("list_modules")).IsError.ShouldBe(false);
+        await session.Gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
     /// <summary>All command envelope fields reach one Gateway call and both heads serialize the same result.</summary>
     [Theory]
     [InlineData("2025-06-18", false)]
