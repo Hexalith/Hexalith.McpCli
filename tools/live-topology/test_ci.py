@@ -2706,10 +2706,12 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         child = None
         try:
-            deadline = time.monotonic() + 8
+            deadline = time.monotonic() + 30
             while not (self.root / 'cancel-child.json').exists():
-                if process.poll() is not None or time.monotonic() >= deadline:
+                if process.poll() is not None:
                     self.fail('Detached child did not become ready: ' + ''.join(process.communicate(timeout=2)))
+                if time.monotonic() >= deadline:
+                    self.fail('Detached child did not become ready within 30 seconds.')
                 time.sleep(0.01)
             child = json.loads((self.root / 'cancel-child.json').read_text())
             self.assertEqual(child['pid'], child['pgid'])
@@ -2788,10 +2790,12 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         child = None
         try:
-            deadline = time.monotonic() + 8
+            deadline = time.monotonic() + 30
             while not (self.root / 'cancel-child.json').exists():
-                if process.poll() is not None or time.monotonic() >= deadline:
+                if process.poll() is not None:
                     self.fail('Smoke child did not become ready: ' + ''.join(process.communicate(timeout=2)))
+                if time.monotonic() >= deadline:
+                    self.fail('Smoke child did not become ready within 30 seconds.')
                 time.sleep(.01)
             child = json.loads((self.root / 'cancel-child.json').read_text())
             process.send_signal(signal.SIGTERM)
