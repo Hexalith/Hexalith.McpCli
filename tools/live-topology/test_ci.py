@@ -94,7 +94,7 @@ if name == 'dotnet':
         print('\n'.join(cases));sys.exit(0)
     if args[0] in ('restore','build') and os.environ.get('NUGET_HTTP_CACHE_PATH'):
         http = pathlib.Path(os.environ['NUGET_HTTP_CACHE_PATH']) / 'fixture';http.mkdir(parents=True,exist_ok=True)
-        pages = [{'@name': name, '@id': 'https://api.nuget.org/v3-vulnerabilities/revision/'+name+'.json', '@updated': '2026-11-16T00:00:00Z'} for name in ('base','update')]
+        pages = [{'@name': name, '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/'+name+'.json', '@updated': '2026-11-16T00:00:00Z'} for name in ('base','update')]
         (http/'vuln_index.dat').write_text(json.dumps(pages))
         for page in ('base','update'):(http/('vuln_data_'+page+'.dat')).write_text('{}')
     if args == ['--version']:
@@ -129,7 +129,7 @@ if name == 'dotnet':
         assets_path.parent.mkdir(exist_ok=True)
         assets_path.write_text(json.dumps(assets))
         http = pathlib.Path(os.environ['NUGET_HTTP_CACHE_PATH']) / 'fixture'; http.mkdir(parents=True,exist_ok=True)
-        pages = [{'@name':name,'@id':'https://api.nuget.org/v3-vulnerabilities/revision/'+name+'.json','@updated':'2026-11-16T00:00:00Z'} for name in ('base','update')]
+        pages = [{'@name':name,'@id':'https://data.nuget.org/v3-vulnerabilities/revision/'+name+'.json','@updated':'2026-11-16T00:00:00Z'} for name in ('base','update')]
         (http/'vuln_index.dat').write_text(json.dumps(pages))
         for name in ('base','update'): (http/('vuln_data_'+name+'.dat')).write_text('{}')
     elif args[0] == 'build':
@@ -684,6 +684,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual([], test_builds)
         restores = [call for call in calls if call[0] == 'dotnet' and call[2] == 'restore']
         for call in restores:
+            config = ET.parse(call[call.index('--configfile') + 1])
+            self.assertEqual('https://api.nuget.org/v3/index.json', config.find('./packageSources/add').get('value'))
+            self.assertEqual('https://data.nuget.org/v3/index.json', config.find('./auditSources/add').get('value'))
             if call[3].startswith('src/'):
                 self.assertIn('-p:Configuration=Release', call)
                 self.assertNotIn('--configuration', call)

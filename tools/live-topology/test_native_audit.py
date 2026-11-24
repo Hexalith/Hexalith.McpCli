@@ -77,7 +77,7 @@ class NativeAuditTests(unittest.TestCase):
     def advisory_fixture(self):
         cache = self.root / 'cache'
         cache.mkdir()
-        pages = [{'@name': name, '@id': 'https://api.nuget.org/v3-vulnerabilities/revision/' + name + '.json',
+        pages = [{'@name': name, '@id': 'https://data.nuget.org/v3-vulnerabilities/revision/' + name + '.json',
                   '@updated': '2026-11-16T00:00:00Z'} for name in ('base', 'update')]
         (cache / 'vuln_index.dat').write_text(json.dumps(pages))
         for name in ('base', 'update'):
@@ -93,6 +93,8 @@ class NativeAuditTests(unittest.TestCase):
             Path(command[command.index('--dump-header') + 1]).write_text('HTTP/2 200\n')
         receipt = native_audit.online_advisories(cache, self.root / 'proof', fetch)
         self.assertEqual({'index', 'base', 'update'}, set(receipt['pages']))
+        self.assertEqual('https://data.nuget.org/v3/vulnerabilities/index.json', receipt['pages']['index']['url'])
+        self.assertEqual('https://data.nuget.org/v3-vulnerabilities/revision/update.json', receipt['pages']['update']['url'])
         for defect in ('outage', 'stale-index', 'stale-page', 'cache-only', 'missing-page'):
             def defective(command, *_args, **_kwargs):
                 if defect == 'outage': raise RuntimeError('offline')
@@ -104,6 +106,13 @@ class NativeAuditTests(unittest.TestCase):
                 if defect == 'missing-page' and path.stem == 'base': (cache / 'vuln_data_base.dat').unlink()
             with self.subTest(defect=defect), self.assertRaises((RuntimeError, ValueError)):
                 native_audit.online_advisories(cache, self.root / defect, defective)
+
+    def test_rejects_advisory_pages_outside_the_configured_audit_source(self):
+        cache = self.advisory_fixture()
+        index = cache / 'vuln_index.dat'
+        index.write_text(index.read_text().replace('data.nuget.org', 'api.nuget.org'))
+        with self.assertRaisesRegex(ValueError, 'not bound to its official source'):
+            native_audit.online_advisories(cache, self.root / 'foreign', lambda *_: self.fail('unexpected fetch'))
 
     def test_transient_online_mismatch_is_retried_then_accepted(self):
         cache = self.advisory_fixture()

@@ -840,6 +840,8 @@ def prepare(evidence: Path) -> None:
         fixture_root = private / 'source-fixtures'
         source_proof = native_sources.create(ROOT, fixture_root, selection, evidence, bounded)
         receipt['sourceFixtureRoot'] = str(fixture_root)
+        source_restore_config = private / 'source-restore.config'
+        native_audit.write_restore_config(source_restore_config)
 
         def source_properties(module: str) -> list[str]:
             properties = ['-p:NuGetAudit=true', '-p:NuGetAuditMode=all', '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true',
@@ -858,7 +860,7 @@ def prepare(evidence: Path) -> None:
             return properties
 
         # Restore every source owner first, then prove the advisory HTTP cache before the long
-        # compiles. Later builds use --no-restore so nuget.org cannot rotate that snapshot.
+        # compiles. Later builds use --no-restore so the audit source cannot rotate that snapshot.
         for source in receipt['sources']:
             module = source['module']
             if module not in native_sources.MODULES:
@@ -866,12 +868,14 @@ def prepare(evidence: Path) -> None:
             properties = source_properties(module)
             working = fixture_root / module
             project = f'src/{module}/{module}.csproj'
-            bounded(['dotnet', 'restore', project, '-p:Configuration=Release', '-warnaserror', *properties],
+            bounded(['dotnet', 'restore', project, '--configfile', str(source_restore_config),
+                     '-p:Configuration=Release', '-warnaserror', *properties],
                     300, evidence / (module + '-restore'), cwd=working, environment=source_environment,
                     require_complete_stdout=False)
             if module == 'Hexalith.Parties':
                 bounded(['dotnet', 'restore', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
-                         '-p:Configuration=Release', '-warnaserror', '-p:CopyLocalLockFileAssemblies=true', *properties],
+                         '--configfile', str(source_restore_config), '-p:Configuration=Release', '-warnaserror',
+                         '-p:CopyLocalLockFileAssemblies=true', *properties],
                         300, evidence / 'parties-adapter-restore', cwd=working, environment=source_environment,
                         require_complete_stdout=False)
         prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt, required=True)

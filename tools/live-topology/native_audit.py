@@ -10,8 +10,18 @@ from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
 
-INDEX = 'https://api.nuget.org/v3/vulnerabilities/index.json'
-SOURCE = 'https://api.nuget.org/v3/index.json'
+PACKAGE_SOURCE = 'https://api.nuget.org/v3/index.json'
+ADVISORY_ORIGIN = 'https://data.nuget.org'
+AUDIT_SOURCE = ADVISORY_ORIGIN + '/v3/index.json'
+INDEX = ADVISORY_ORIGIN + '/v3/vulnerabilities/index.json'
+PAGE_PREFIX = ADVISORY_ORIGIN + '/v3-vulnerabilities/'
+
+
+def write_restore_config(config: Path) -> None:
+    """Use the official audit-only endpoint for both restores and advisory proof."""
+    config.write_text('<configuration><packageSources><clear/><add key="nuget.org" value="' + PACKAGE_SOURCE
+                      + '"/></packageSources><auditSources><clear/><add key="nuget.org" value="' + AUDIT_SOURCE
+                      + '"/></auditSources></configuration>\n')
 
 
 def package_graph(assets_path: Path) -> dict:
@@ -121,7 +131,7 @@ def online_advisories(cache: Path, output: Path, bounded, proven: Path | None = 
     requests = [(INDEX, index, 'index')]
     for page in pages:
         url = page.get('@id', '')
-        if not url.startswith('https://api.nuget.org/v3-vulnerabilities/') or not isinstance(page.get('@updated'), str):
+        if not url.startswith(PAGE_PREFIX) or not isinstance(page.get('@updated'), str):
             raise ValueError('The native audit advisory page is not bound to its official source.')
         requests.append((url, index.with_name('vuln_data_' + page['@name'] + '.dat'), page['@name']))
     receipt = {'retrievedAtUtc': datetime.now(timezone.utc).isoformat(), 'pages': {}, 'index': pages}
@@ -192,9 +202,7 @@ def audit_project(project: Path, private: Path, evidence: Path, sdk_policy: dict
     fixture = private / 'audit.csproj'
     ET.ElementTree(xml).write(fixture, encoding='utf-8', xml_declaration=True)
     config = private / 'NuGet.Config'
-    config.write_text('<configuration><packageSources><clear/><add key="nuget.org" value="' + SOURCE
-                     + '"/></packageSources><auditSources><clear/><add key="nuget.org" value="' + SOURCE
-                     + '"/></auditSources></configuration>\n')
+    write_restore_config(config)
     environment = dict(os.environ, NUGET_PACKAGES=str(private / 'packages'), NUGET_HTTP_CACHE_PATH=str(private / 'http'))
     for key in ('CustomAfterMicrosoftCommonTargets', 'CustomBeforeMicrosoftCommonTargets',
                 'CustomAfterDirectoryBuildTargets', 'DirectoryBuildPropsPath',
