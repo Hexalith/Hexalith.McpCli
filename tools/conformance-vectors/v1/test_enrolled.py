@@ -35,6 +35,29 @@ class BuildsPropsResolutionTests(unittest.TestCase):
                 self.assertEqual(props, resolve_builds_props(repo))
             self.assertFalse((repo / 'references/Hexalith.Builds').exists())
 
+    def test_enclosing_catalog_wins_over_an_existing_nested_tree(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            workspace = Path(temporary)
+            repo = workspace / 'references/Hexalith.McpCli'
+            nested = repo / 'references/Hexalith.Builds/Props'
+            nested.mkdir(parents=True)
+            props = workspace / 'references/Hexalith.Builds/Props'
+            props.mkdir(parents=True)
+            (workspace / '.gitmodules').write_text('[submodule "Hexalith.Builds"]\n\tpath = references/Hexalith.Builds\n')
+            with patch('verify_artifact.subprocess.run', return_value=subprocess.CompletedProcess([], 0, str(workspace) + '\n', '')):
+                self.assertEqual(props, resolve_builds_props(repo))
+
+    def test_standalone_catalog_requires_its_own_declaration(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            repo = Path(temporary)
+            props = repo / 'references/Hexalith.Builds/Props'
+            props.mkdir(parents=True)
+            with patch('verify_artifact.subprocess.run', return_value=subprocess.CompletedProcess([], 0, '', '')):
+                with self.assertRaisesRegex(FileNotFoundError, 'does not declare references/Hexalith.Builds'):
+                    resolve_builds_props(repo)
+                (repo / '.gitmodules').write_text('[submodule "Hexalith.Builds"]\n\tpath = references/Hexalith.Builds\n')
+                self.assertEqual(props, resolve_builds_props(repo))
+
     def test_private_fixture_uses_supported_sibling_import_tree_without_nested_catalog(self):
         with tempfile.TemporaryDirectory() as temporary:
             root = Path(temporary)
@@ -239,6 +262,8 @@ class VerifierFailureTests(unittest.TestCase):
         self.repo = self.root / 'repo'
         for name in ['src', 'references/Hexalith.Builds/Props', 'tests/Hexalith.McpCli.ConformanceHost', 'tests/Hexalith.McpCli.Core.Tests']:
             (self.repo / name).mkdir(parents=True, exist_ok=True)
+        self.enterContext(patch('verify_artifact.resolve_builds_props',
+                                return_value=self.repo / 'references/Hexalith.Builds/Props'))
         (self.repo / 'Directory.Packages.props').write_text('<Project />')
         project = self.repo / 'src/Hexalith.McpCli/Hexalith.McpCli.csproj'
         project.parent.mkdir(parents=True)

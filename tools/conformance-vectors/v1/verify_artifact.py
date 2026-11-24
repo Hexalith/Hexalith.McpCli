@@ -50,28 +50,27 @@ def manifest_shapes(manifest: list, package_id: str) -> dict[str, str]:
 
 
 def resolve_builds_props(repo: Path) -> Path:
-    """Use declared Builds props or the supported sibling import tree for private fixtures."""
-    local = repo / 'references/Hexalith.Builds/Props'
-    if local.is_dir():
-        return local
+    """Use the declared owning catalog, with a sibling fallback for private fixtures."""
     result = subprocess.run(['git', '-C', str(repo), 'rev-parse', '--show-superproject-working-tree'],
                             capture_output=True, text=True, check=False)
-    if result.returncode != 0 or not result.stdout.strip():
-        for parent in (repo.parent, repo.parent.parent):
-            sibling = parent / 'Hexalith.Builds/Props'
-            if sibling.is_dir():
-                return sibling
-        raise FileNotFoundError(f'Root-declared Builds props are unavailable for {repo}.')
-    workspace = Path(result.stdout.strip())
-    modules = configparser.ConfigParser()
-    if not modules.read(workspace / '.gitmodules') or not any(
-            section.startswith('submodule ') and modules[section].get('path') == 'references/Hexalith.Builds'
-            for section in modules.sections()):
-        raise FileNotFoundError(f'{workspace}/.gitmodules does not declare references/Hexalith.Builds.')
+    enclosing = result.stdout.strip() if result.returncode == 0 else ''
+    workspace = Path(enclosing) if enclosing else repo
     source = workspace / 'references/Hexalith.Builds/Props'
-    if not source.is_dir():
-        raise FileNotFoundError(f'Root-declared Builds props are unavailable at {source}.')
-    return source
+    if enclosing or source.is_dir():
+        modules = configparser.ConfigParser()
+        if not modules.read(workspace / '.gitmodules') or not any(
+                section.startswith('submodule ') and modules[section].get('path') == 'references/Hexalith.Builds'
+                for section in modules.sections()):
+            raise FileNotFoundError(f'{workspace}/.gitmodules does not declare references/Hexalith.Builds.')
+        if not source.is_dir():
+            raise FileNotFoundError(f'Root-declared Builds props are unavailable at {source}.')
+        return source
+
+    for parent in (repo.parent, repo.parent.parent):
+        sibling = parent / 'Hexalith.Builds/Props'
+        if sibling.is_dir():
+            return sibling
+    raise FileNotFoundError(f'Root-declared Builds props are unavailable for {repo}.')
 
 
 def check_lint(findings: list[dict], accepted: list[dict]) -> None:

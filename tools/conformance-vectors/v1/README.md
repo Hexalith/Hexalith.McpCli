@@ -113,6 +113,8 @@ The existing sample parity gate remains available independently as `bash tools/c
 [--inventory <approved-inventory.json>] [--expected-hash <sha512-of-a-candidate>]
 [--accepted-lint <module>-accepted-lint.json]
 <vector.json>...` creates an isolated generic host around that exact package.
+The verifier uses the Builds catalog declared by the owning root. In a
+superproject, its root-declared catalog takes precedence over a nested tree.
 It verifies restored bytes, Operation Shape coverage from the host's
 `--manifest-catalog`, strict discovery, every operation's description lint, and
 complete CLI/MCP replay without removing Query postconditions. The optional

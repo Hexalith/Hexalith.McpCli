@@ -471,6 +471,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
   summary: Validate each MCP output schema against actual success and error structured documents.
   evidence: Medium. `tests/Hexalith.McpCli.Mcp.Tests/McpToolRegistrationTests.cs:34` checks only the `oneOf` branch count. Story 3.3 explicitly requires closed success and error branches validated under both protocol revisions.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. Existing McpOutputSchemaTests validate both advertised protocol revisions against successful and failed tool responses.
 - source_spec: `_bmad-output/implementation-artifacts/spec-3-1-discover-operations-through-a-fixed-mcp-surface.md`
   summary: Verify distinct version-appropriate MCP session flows rather than varying only the requested protocol version.
   evidence: Medium. `tests/Hexalith.McpCli.Mcp.Tests/McpProtocolTests.cs:65` asserts each requested revision is negotiated, but both revisions run over in-process streams and never check handshake-free discovery. Story 3.2 owns the stdio exchange through each version-appropriate flow.
@@ -516,6 +518,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-3-approve-projects-and-frontcomposer-migration-inventories.md`
   summary: Reconcile the exact production dependency policy after the separately committed Builds bump, then verify it against a fresh restore.
   evidence: Medium; pre-existing before the approved Story 4.3 implementation. Commit `1a6d725fb89545bce56b7be1e16683461cf9cfe7` advances `references/Hexalith.Builds`; its `Props/Directory.Packages.props:242` and `:244` require Microsoft.Extensions.Hosting/Http 10.0.13, while `tools/dependency-policy.json:51` and `:53` require 10.0.12. Current `src/Hexalith.McpCli/obj/project.assets.json` still contains 10.0.12 and is stale for those pins. `tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:137` rejects restored versions outside the exact policy. The McpCli dependency maintainer should run `dotnet restore Hexalith.McpCli.slnx`, align every changed version in the policy, build and run Manifest.Tests; this documentation-only story neither changes those dependencies nor claims that broad gate passed.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. The obsolete Builds bump is superseded by the current exact package closure. The normal Release restore and Manifest policy test cover it.
 
 
 ## Deferred from: code review of spec-4-5-gate-module-coverage-against-the-approved-inventory.md (2026-10-17)
@@ -523,6 +527,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-5-gate-module-coverage-against-the-approved-inventory.md`
   summary: Nothing ties an enrolled module to a required coverage inventory, so a module can be enrolled without the gate ever running for it.
   evidence: Medium. The gate runs only where a test calls `InventoryCoverageGate.CheckFile` with a hand-copied artifact (`tests/Hexalith.McpCli.Core.Tests/Hexalith.McpCli.Core.Tests.csproj:15`); `tools/inventory-coverage/v1/README.md:92` hands off per-module test wiring, while enrollment is meant to be configuration only. No module is enrolled yet (`tools/dependency-policy.json` `modules: {}`). The first enrolling story (4.9/4.10) should fail CI when a `modules` entry has no approved inventory, without module-specific code.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. EnrolledModuleCoverageTests requires coverage for every enrolled package and rejects a missing inventory.
 
 ## Deferred from: code review of spec-4-6-publish-the-bootstrap-decoration-package.md (2026-10-18)
 
@@ -570,9 +576,13 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md`
   summary: Enrolling the decorated Tenants Contracts forces McpCli onto EventStore 3.125.1 or later and Commons 2.30.3, which changes the tool's own gateway client and needs the conformance gates.
   evidence: Medium. The decorated Contracts depends on EventStore.Contracts 3.125.1 or later, and the Story 4.8 scratch host built only with `-p:HexalithEventStoreVersion=3.125.1 -p:HexalithCommonsVersion=2.30.3` (`_bmad-output/implementation-artifacts/evidence/story-4-8/verification.md`). Meanwhile `references/Hexalith.Builds/Props/Directory.Packages.props:6,9` and `tools/dependency-policy.json:26-27` pin 2.30.1 and 3.124.0. The enrolling story must move these pins with the Builds gitlink and update every policy version. It must also run `bash tools/conformance-vectors/v1/run-sample-validation.sh Release` and `bash tools/conformance-vectors/v1/run-sample-loopback.sh` (then `dotnet restore Hexalith.McpCli.slnx`), plus Manifest.Tests, because the gateway client changes.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. The current Tenants enrollment has superseded the original 3.125.1 floor and uses the normal package and conformance gates.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md`
   summary: A Tenants release could ship from pushed commit `6b62b6b3`, whose decorated descriptions promise filtering and paging that its handlers ignore; the vector approval is bound to no vector revision.
   evidence: Medium. `6b62b6b3` on Tenants `origin/main` carries only the decoration snapshot, and `/home/administrator/projects/hexalith/tenants/.github/workflows/release.yml:8` can run from any `main` commit by manual dispatch. `_bmad-output/implementation-artifacts/evidence/story-4-8/approvals.md:37` records the vector revision as "Not yet committed". Release only from a commit that contains Story 4.8's handler migration, vectors and description fixes. Record that commit and the immutable release artifact's sha512 in the vector approval before enrollment.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. Current release artifacts and approved live plans supersede the old unqualified decoration-only candidate.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md`
   summary: `tenants.set-tenant-configuration` accepts an empty `Key` through the gateway, because the Tenants `SubmitCommand` payload validators do not run for gateway submissions.
   evidence: Low; pre-existing, now reachable through McpCli (Story 4.8 code review, 2026-10-20). `/home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants.Server/Aggregates/TenantAggregate.cs:155` rejects only keys longer than 256 characters. The `MinimumLength(1)` rule in `SetTenantConfigurationValidator` is reached only through `TenantSubmitCommandValidator`, which switches on CLR names such as `nameof(SetTenantConfiguration)` (`/home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants/Validation/TenantSubmitCommandValidator.cs:20-27`). Gateway submissions carry wire types such as `set-tenant-configuration`, the validator tests build commands with `typeof(T).Name`, and the validator is registered (`Program.cs:70`) in a host that is domain-service only (`Program.cs:40`). The same mismatch skips the `AddUserToTenant`, `ChangeUserRole` and `RemoveTenantConfiguration` payload validators. REST cannot send an empty key because it is a route segment. Deferred because changing domain behavior is outside Story 4.8's boundary. The Tenants maintainer should choose: reject empty keys in the aggregate, or rewire or remove the validators that never run. The Story 4.8 code review changed the `Key` description to "at most 256 characters" (uncommitted in the Tenants working tree on 2026-10-20).
@@ -640,6 +650,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-12-compose-the-v1-live-test-topology.md`
   summary: The published platform topology fixture can wait indefinitely for its cross-process lock before starting its startup timeout.
   evidence: Medium; pre-existing in EventStore.Testing.Integration 3.126.1. `references/Hexalith.EventStore/src/Hexalith.EventStore.Testing.Integration/AspireTopologyFixtureBase.cs:113` calls `AcquireDaprFixtureLock` before constructing its startup CTS; `:203` retries the exclusive file open indefinitely. The platform owner should add cancellation and a finite acquisition deadline. McpCli must retain the published lifecycle rather than copy it; its supported command uses a separate outer process deadline. No equivalent ledger entry existed when checked.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. The owned IsolatedTopologyLifecycle applies one six-minute startup budget starting before lock acquisition.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-12-compose-the-v1-live-test-topology.md`
   summary: The agent instructions do not describe the Story 4.12 live-topology test project and tools.
   evidence: Low. `AGENTS.md:100`, which is byte-identical in `CLAUDE.md` and `.github/copilot-instructions.md`, says a test project absent from the CI test list is silently skipped. `tests/Hexalith.McpCli.Integration.Tests` is deliberately absent from `unit-test-projects` (`.github/workflows/ci.yml:22-28`), because its fixture refuses to run outside `tools/live-topology/run-isolated.py` (`tests/Hexalith.McpCli.Integration.Tests/AspireTopologyFixture.cs:35-36`). The `dotnet test tests/<Project>` command prescribed at `AGENTS.md:99` therefore fails for that project. The instructions also omit CI's `python3 -m unittest discover -v -s tools/live-topology -p 'test_*.py'` check (`.github/workflows/ci.yml:123`). `AGENTS.md:99` says Manifest.Tests takes about 35 s, but it took 47.2 s in CI run `40000531511`. An agent that follows the rule could add the project to the unit list and turn CI red. Correct this in the next bmad-project-context refresh, aligned with Story 4.14's live lane, then copy `AGENTS.md` to the other two entry points and run `scripts/check-agent-instructions-sync.sh`. The parent searched the ledger before appending and found no equivalent entry.
@@ -730,6 +742,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
     - Story 4.15's published plan (`Hexalith.AI.Tools/hexalith-mcpcli-migration-instructions.md:24`, `:38-42`) calls these "source-pinned" immutable snapshots.
     - Fix, for the inventory owners: either push the four objects to a preserved upstream ref, or publish versioned inventory revisions re-pinned to published source.
     - The ledger had no equivalent entry.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. The approved migration-plan successors replaced the original unavailable inventory bindings.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-15-publish-the-no-new-server-rule.md`
   summary: Hexalith.AI.Tools now pins a commitlint policy, but no CI job or commit hook enforces it.
   evidence: Medium; pre-existing gap in the owning repository.
@@ -759,6 +773,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
     - `.github/workflows/ci.yml` has no Windows or macOS job; `WINDOWS_REQUIRED` in `scripts/run-paired-platform-tests.py:14` is enforced only by `stage-pair` in `release.yml`.
     - A Windows ACL regression in `src/Hexalith.McpCli.Core/Settings/ProfileFileTransaction.cs:171` would merge with green Linux CI.
     - Fix: add a Windows lane for those tests to routine CI.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. The delivered Windows product job now runs the Windows CLI and Core suites, including the profile process and ACL cases.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md`
   summary: Acceptance may not compare its re-verified source evidence with the preparation-time evidence.
   evidence: Medium, unverified.
@@ -775,6 +791,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
   evidence: Medium, unverified.
     - `src/Hexalith.McpCli.Core/Settings/ProfileFileTransaction.cs:171-177`; tests cover only the profile, lock and temporary files.
     - To settle it: on Windows, create a sibling file after a profile write and inspect its ACL.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. The Windows inheritance contract is documented and ProfileStoreTests covers both new children and preservation of existing children.
 
 ## Deferred from: implementation of spec-4-17-verify-the-operator-setup-experience.md (2026-10-31)
 
@@ -804,6 +822,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: Frozen Memories/Tenants peers are selected by build properties without independent restored-graph assertions.
   evidence: Medium; pre-existing peer-cohort work. `tools/live-topology/ci.py:185-193` checks only EventStore identities, while `tools/live-topology/ci.py:405` passes Memories 3.0.11 and Tenants 5.11.2 properties. Verify the actual required peer identities in project.assets.json and add mutation coverage for ignored/overridden properties.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. The current 5.5.1 live preparation no longer sets the historical build-time peer overrides.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: Package Gateway socket tests do not independently reject missing or invalid app-channel/workload credentials.
   evidence: Medium verification gap, not a demonstrated authentication bypass; pre-existing package-host work. `tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:183-184` sets a valid dapr-api-token and workload assertion for every proof-defect case. Add missing/wrong app-channel and missing/invalid workload-assertion probes against the actual package host.
@@ -821,9 +841,13 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
   summary: An existing local Builds Props tree can shadow a declared enclosing workspace catalog without proving local ownership.
   evidence: Medium; inherited local-copy trust. `tools/conformance-vectors/v1/verify_artifact.py:25` returns the local directory before declaration checks; the baseline already copied that local path directly. Validate the standalone-versus-superproject ownership rule and add an undeclared-local-tree regression before changing resolution. Current publication used the checked, root-declared catalog.
+  status: done 2026-11-24
+  resolution: The artifact gate verifies the owning root declaration and prefers the enclosing catalog over any nested tree. Standalone and private-fixture resolution have independent regression coverage.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
   summary: Tenants `GetTenantUsers` still treats a rejection-only tenant checkpoint as an existing tenant.
   evidence: Medium; pre-existing in the owning Tenants repository (code review pass 2, 2026-11-05). Story 4.18 guarded only `/home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants/Queries/Handlers/GetTenantQueryHandler.cs:50` with `model is null || string.IsNullOrEmpty(model.TenantId)`. `/home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants/Queries/Handlers/GetTenantUsersQueryHandler.cs:55` still checks only `model is null`. After a projected `InsufficientPermissionsRejection` for a tenant that was never created, a global administrator therefore gets success with an empty member list, while `get-tenant` returns "Tenant not found". Fix in Tenants: apply the same guard to every `TenantReadModel` reader and add a users-handler case to `GetTenantCreationEvidenceTests`. Picking up the fix needs a new Tenants release and the usual McpCli artifact/vector rebind.
+  status: done 2026-11-24
+  resolution: Verified existing resolution. The pinned Tenants GetTenantUsersQueryHandler already refuses read models without a tenant ID.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
   summary: The synchronized agent entry points still describe a published-helper-only live topology.
   evidence: Medium (code review pass 3, 2026-11-06); deferred because the fix edits the three agent-instruction files, which must stay byte-identical. `CLAUDE.md:82` (with `AGENTS.md` and `.github/copilot-instructions.md`) says the topology "uses published server-free Aspire helpers … never sibling source project references". After native source preparation, `tests/Hexalith.McpCli.AppHost/Program.cs:95` launches Tenants through `AddProject` from `references/Hexalith.Tenants/src/Hexalith.Tenants/Hexalith.Tenants.csproj`. An agent following the entry points could revert that launch or refuse topology changes. To fix, edit `AGENTS.md`, copy it to the other two files, and run `scripts/check-agent-instructions-sync.sh`.
@@ -1428,3 +1452,32 @@ See [implementation and verification](spec-close-cli-result-output-deferrals.md)
 - source_spec: `_bmad-output/implementation-artifacts/spec-close-cli-result-output-deferrals.md`
   summary: Recheck result-target identity at open time if another process replaces the destination between inspection and opening.
   evidence: `src/Hexalith.McpCli/Cli/CliOutput.cs` still opens devices and existing regular files by path after inspecting the path. A concurrent replacement with a FIFO can affect those branches. FIFO writes themselves open nonblocking.
+
+
+## Priority follow-up dispositions (2026-11-24)
+
+The ten implementation entries above carry dated closures. The selection used
+explicit severity followed by original ledger order within each severity.
+
+| Skipped finding | Disposition |
+| --- | --- |
+| First-time operator quick-start timing | Open. A new operator must independently run and time the approved procedure. |
+| Tenants bootstrap HTTP 500 and persisted administrator authority | Open. Tenants and EventStore own the startup behavior. Closure requires an approved owner cohort and live proof. |
+| Platform reference runner mixes flag URL and environment token | Open. The Platform owner must update its runner. McpCli retains the approved one-source rule. |
+| FreeBSD x64 output inspection | Open. This host has Linux and Windows. An actual FreeBSD x64 runtime is needed to qualify the ABI. |
+| Story 3.1 MCP output schema coverage | Already implemented. Both revisions exercise structured success and error documents in `McpOutputSchemaTests`. |
+| Story 4.3 exact closure after the old Builds bump | Superseded. The current package cohort has its own exact restored policy and Manifest gate. |
+| Story 4.5 enrollment could omit the inventory | Already implemented. `EnrolledModuleCoverageTests` derives the check from every enrolled package. |
+| Tenants first-member policy and Tenants structural test | Open upstream. The Tenants maintainers own authorization and the failing source check. |
+| Old Tenants dependency floor and decorated release candidate | Superseded. The current public Tenants Contracts, published vectors, and live plans replace the original candidate. |
+| Parties contact preference, validation rejection size and absent-party mutation | Open upstream. The Parties maintainers own these domain behaviors and their regression suites. |
+| Parties producer-side Catalog check | Open upstream. McpCli tests the enrolled artifact. A producer-side gate requires a Parties change. |
+| Published topology fixture cross-process lock | Superseded locally. The current owned lifecycle applies its startup cancellation budget to lock acquisition. |
+| RID assets flattened beside the ConformanceHost | Open pending a deployment exhibiting that layout. The current Release host has its selected RID assets at their declared paths. |
+| Four inaccessible migration source pins | Superseded by the approved published inventory successors. |
+| AI.Tools commitlint enforcement | Open upstream. AI.Tools owns its hooks and delivered workflow. |
+| Routine Windows profile tests | Already implemented. The Windows product job runs the Windows CLI and Core suites. |
+| Old paired acceptance source comparison and bootstrap signature checks | The triggering module release workflow was replaced by central Builds publication. Kept open for the owners of historical recovery and the successor release workflow. |
+| Windows profile directory ACL inheritance | Already specified and tested. `ProfileStoreTests` covers inheritance for new files and preservation of existing children. |
+| Frozen Memories and Tenants peer build properties | Superseded. The current EventStore 5.5.1 preparation does not use the historical build-time overrides. |
+| Tenants query treats a rejection-only checkpoint as existing | Already implemented upstream. The current handler also checks the stored tenant identity. |
