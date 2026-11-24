@@ -44,6 +44,7 @@ MODULE_AUDIT_PROJECTS = (PACKAGE_GATEWAY,
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
 NAMESPACES = {'user', 'pid', 'net', 'mnt'}
 OWNER_FILE = '.mcpcli-ci-owner'
+COMMAND_CHANNEL_LIMIT = 4 * 1024 * 1024
 ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v17.0.0/aspire-cli-linux-x64-17.0.0.tar.gz'
 ASPIRE_CLI_SHA256 = '74a6d6418fcddb117770ccd235e2de4a96a02e36ebcfd0b0e2a0e69d6e85fc18'
 # Exact root selections are a closed policy; owner projects use their native net11 graph.
@@ -133,7 +134,20 @@ def save(path: Path, value, *, environment=None) -> None:
     path.write_text(sanitized(json.dumps(value, indent=2), environment=environment) + '\n')
 
 
-def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environment=None) -> str:
+def read_command_channel(stream, environment) -> tuple[str, int]:
+    size = os.fstat(stream.fileno()).st_size
+    if size <= COMMAND_CHANNEL_LIMIT:
+        stream.seek(0)
+        content = stream.read(COMMAND_CHANNEL_LIMIT + 1)
+        if len(content) <= COMMAND_CHANNEL_LIMIT:
+            return sanitized(content.decode(errors='replace'), environment=environment), 0
+        size = max(len(content), os.fstat(stream.fileno()).st_size)
+    # Redaction needs the complete channel. A retained fragment could split a credential.
+    return f'[Output omitted: {size} bytes exceed the {COMMAND_CHANNEL_LIMIT}-byte limit.]\n', size
+
+
+def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environment=None,
+            require_complete_stdout: bool = True) -> str:
     """Enforce a process bound, retain both sanitized channels, and propagate failures."""
     output.parent.mkdir(parents=True, exist_ok=True)
     argv = list(map(str, command))
@@ -180,19 +194,22 @@ def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environ
                 os.killpg(child.pid, signal.SIGKILL)
             except ProcessLookupError:
                 pass
-            stdout.seek(0)
-            stderr.seek(0)
-            content = sanitized(stdout.read().decode(errors='replace'), environment=environment)
-            error = sanitized(stderr.read().decode(errors='replace'), environment=environment)
+            content, omitted_stdout = read_command_channel(stdout, environment)
+            error, omitted_stderr = read_command_channel(stderr, environment)
             output.parent.joinpath(output.name + '.stdout.txt').write_text(content)
             output.parent.joinpath(output.name + '.stderr.txt').write_text(error)
-            save(output.parent / (output.name + '.command.json'), {'command': argv, 'cwd': str(cwd),
-                 'timeoutSeconds': seconds, 'exitCode': child.returncode}, environment=environment)
+            receipt = {'command': argv, 'cwd': str(cwd), 'timeoutSeconds': seconds, 'exitCode': child.returncode}
+            omitted = {channel: size for channel, size in (('stdout', omitted_stdout), ('stderr', omitted_stderr)) if size}
+            if omitted:
+                receipt['omittedOutputBytes'] = omitted
+            save(output.parent / (output.name + '.command.json'), receipt, environment=environment)
     if code != 0:
         raise RuntimeError(sanitized(f'{display} exited {code}; '
                            f'stdout: {output.parent / (output.name + ".stdout.txt")}; '
                            f'stderr: {output.parent / (output.name + ".stderr.txt")}', environment=environment))
-    return content.strip()
+    if omitted_stdout and require_complete_stdout:
+        raise RuntimeError('Command stdout exceeded the evidence capture limit.')
+    return '' if omitted_stdout else content.strip()
 
 
 def evidence_directory(*, preparing: bool) -> Path:
@@ -1063,7 +1080,7 @@ def run(evidence: Path) -> None:
         try:
             bounded([str(python), str(ROOT / 'tools/live-topology/run-vectors.py'), '--output', str(vectors)],
                     RUN_TIMEOUT_SECONDS - len(INDEPENDENT_CASES) * INDEPENDENT_CASE_TIMEOUT - CLEANUP_HEADROOM_SECONDS,
-                    generation / 'vectors-process', environment=environment)
+                    generation / 'vectors-process', environment=environment, require_complete_stdout=False)
             lane = json.loads((vectors / 'live-lane.json').read_text())
             # The live set is every approved vector with a companion plan; a vector without one is loopback-only.
             expected = sorted(operation for operation in (json.loads(path.read_text())['operation'] for path in

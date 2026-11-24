@@ -2463,6 +2463,31 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             self.assertIn('--PrivateKey [REDACTED] --safe kept', diagnostic)
             self.assertNotIn('synthetic-canary', diagnostic)
 
+    def test_bounded_omits_oversized_channels_and_requires_complete_machine_output(self):
+        module = self.ci_module()
+        secret = 'boundary-private-value'
+        environment = {**os.environ, 'REVIEW_SECRET': secret}
+        command = [sys.executable, '-c',
+                   'import os, sys; secret = os.environ["REVIEW_SECRET"]; '
+                   'sys.stdout.write("x" * 120 + secret); sys.stderr.write("y" * 120 + secret)']
+        with patch.object(module, 'COMMAND_CHANNEL_LIMIT', 128), contextlib.redirect_stdout(io.StringIO()):
+            for required in (True, False):
+                with self.subTest(required=required):
+                    output = self.root / f'large-{required}'
+                    if required:
+                        with self.assertRaisesRegex(RuntimeError, 'stdout exceeded the evidence capture limit'):
+                            module.bounded(command, 5, output, environment=environment)
+                    else:
+                        self.assertEqual('', module.bounded(command, 5, output, environment=environment,
+                                                            require_complete_stdout=False))
+                    size = 120 + len(secret)
+                    marker = f'[Output omitted: {size} bytes exceed the 128-byte limit.]\n'
+                    self.assertEqual(marker, output.with_suffix('.stdout.txt').read_text())
+                    self.assertEqual(marker, output.with_suffix('.stderr.txt').read_text())
+                    receipt = json.loads(output.with_suffix('.command.json').read_text())
+                    self.assertEqual({'stdout': size, 'stderr': size}, receipt['omittedOutputBytes'])
+                    self.assertEqual(0, receipt['exitCode'])
+
     def test_child_only_environment_secrets_are_redacted_on_success_failure_and_cancellation(self):
         module = self.ci_module()
         secret = 'child-only-opaque-credential'

@@ -406,8 +406,11 @@ under `<generation>/runtime-diagnostics/`. Runtime keys, certificate material,
 Redis RDB files and scheduler data are excluded; JWTs, opaque Bearer credentials,
 complete or truncated PEM material and known credential values are redacted from
 diagnostic text by `scripts/evidence_redaction.py`. Private settings are redacted
-in escaped JSON, malformed XML, and command arguments. Live command diagnostics
-redact separate argument values before joining them for display. Raw private runtime
+in escaped JSON, malformed XML, and command arguments. The hook redacts separate
+argument values before joining them for display. It omits an entire stdout or
+stderr channel above 4 MiB and records its byte count in the command receipt.
+Commands whose stdout supplies machine input fail if that channel exceeds the
+limit. Vector execution uses its separate lane receipt. Raw private runtime
 state stays outside uploaded evidence. Keep its location from `preparation.json` until
 diagnostics are complete, then remove only that task-owned directory.
 

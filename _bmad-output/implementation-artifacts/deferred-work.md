@@ -873,6 +873,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-18-publish-the-validated-package-pair.md`
   summary: CI capture may exhaust memory when a bounded command emits very large output.
   evidence: Medium, unverified; inherited at the original 4.18 baseline. `tools/live-topology/ci.py:148` reads each complete temporary channel into memory before sanitization, while vectors can run for 270 minutes. A controlled large-output invocation measuring peak memory would establish the practical limit; if needed, design bounded or streaming capture with explicit truncation evidence and credential-safe boundary handling.
+  status: done 2026-11-24
+  resolution: The live hook omits channels larger than 4 MiB before decoding, records their sizes, and refuses incomplete machine output. Regression tests cover both channels and preserve the real process exit code.
 
 ## Deferred from: implementation of spec-epic-4-retro-item-2-close-bootstrap-line.md (2026-11-06)
 
