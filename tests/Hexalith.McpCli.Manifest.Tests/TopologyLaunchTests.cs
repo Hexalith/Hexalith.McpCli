@@ -12,6 +12,34 @@ public sealed class TopologyLaunchTests : IDisposable
 {
     private readonly string _root = Path.Combine(Path.GetTempPath(), "mcpcli-launch-" + Guid.NewGuid().ToString("N"));
 
+    /// <summary>The AppHost refuses an HTTP port reserved for another sidecar listener.</summary>
+    [Fact]
+    public async Task GatewayHttpPortCannotOverlapReservedSidecarPorts()
+    {
+        string assembly = PrepareHost();
+        PrepareSources();
+        var result = await InvokeAsync(assembly, new string('k', 32), "[]", requestedPort: "3511");
+        Assert.Equal(2, result.ExitCode);
+        Assert.Equal(string.Empty, result.Stdout);
+        Assert.Equal("Dapr:GatewayHttpPort conflicts with a reserved test sidecar port." + Environment.NewLine, result.Stderr);
+    }
+
+    /// <summary>Readiness uses the actual sidecar ports and requires every expected registration.</summary>
+    [Fact]
+    public void SidecarReadinessUsesRegisteredPorts()
+    {
+        Directory.CreateDirectory(_root);
+        string snapshot = """
+            [{"appId":"parties","httpPort":43113},{"appId":"tenants","httpPort":43112},{"appId":"eventstore","httpPort":43111}]
+            """;
+        string[] applications = ["eventstore", "tenants", "parties"];
+        Uri[] endpoints = Hexalith.McpCli.Integration.Tests.GatewaySidecarEndpoint.FromSnapshot(snapshot, applications);
+        Assert.Equal([43111, 43112, 43113], endpoints.Select(endpoint => endpoint.Port));
+        var failure = Assert.Throws<InvalidDataException>(() => Hexalith.McpCli.Integration.Tests.GatewaySidecarEndpoint.FromSnapshot(
+            """[{"appId":"eventstore","httpPort":43111},{"appId":"tenants","httpPort":43112}]""", applications));
+        Assert.Equal("Expected exactly one parties sidecar with a valid HTTP port.", failure.Message);
+    }
+
     /// <summary>Root membership is enforced by the executable entry point.</summary>
     [Fact]
     public async Task MissingDeclaredRootStopsLaunch()
@@ -317,6 +345,14 @@ public sealed class TopologyLaunchTests : IDisposable
         foreach (JsonElement resource in resources)
         {
             Assert.Equal(64, resource.GetProperty("appTokenLength").GetInt32());
+            int internalGrpc = resource.GetProperty("name").GetString() switch
+            {
+                "eventstore" => 3511,
+                "tenants" => 3512,
+                "parties" => 3513,
+                _ => throw new InvalidOperationException("Unexpected resource."),
+            };
+            Assert.Equal(internalGrpc, resource.GetProperty("daprInternalGrpcPort").GetInt32());
             Assert.Equal(64, resource.GetProperty("sidecarTokenLength").GetInt32());
             Assert.True(resource.GetProperty("tokensMatch").GetBoolean());
             Assert.Equal(Path.Combine(host, "DaprComponents", usePackagedGateway ? "accesscontrol.published.yaml" : "accesscontrol.yaml"), resource.GetProperty("configuration").GetString());

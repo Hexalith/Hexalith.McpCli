@@ -672,6 +672,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
       - assign fixed ports inside each private namespace.
     - Settle the rate by running the hosted lane repeatedly and grepping each artifact for `address already in use`.
     - The ledger had no equivalent entry.
+  status: done 2026-11-24
+  resolution: The isolated AppHost assigns distinct internal gRPC ports below Aspire’s target-port pool. The fixture requires every sidecar’s health endpoint at its actual registered HTTP port before dispatch. Composition tests cover the effective configuration and a conflicting Gateway port.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
   summary: The agent instructions still say `HexalithEventStoreVersion` comes from the Builds props, but McpCli now pins it in `Directory.Build.props`.
   evidence: Low to medium.

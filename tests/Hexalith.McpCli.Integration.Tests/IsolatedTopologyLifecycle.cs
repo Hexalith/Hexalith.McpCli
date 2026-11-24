@@ -25,6 +25,9 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
     /// <summary>Arguments selected by the owning fixture before AppHost evaluation.</summary>
     protected abstract IReadOnlyList<string> ExtraAppArgs { get; }
 
+    /// <summary>Checks fixture-specific readiness within the same startup and cleanup boundary.</summary>
+    protected virtual Task WaitForReadinessAsync(CancellationToken cancellationToken) => Task.CompletedTask;
+
     /// <summary>Gets only an initialized, declared Aspire discovery client.</summary>
     protected HttpClient Client(string resourceName) => _clients.TryGetValue(resourceName, out HttpClient? client)
         ? client : throw new InvalidOperationException("The declared isolated topology client is unavailable.");
@@ -72,6 +75,8 @@ public abstract class IsolatedTopologyLifecycle<TAppHost> : IAsyncLifetime where
             {
                 await WaitForAlivenessAsync(Client(resource.Name), resource.AlivenessTimeout, startup.Token).ConfigureAwait(false);
             }
+
+            await WaitForReadinessAsync(startup.Token).ConfigureAwait(false);
         }
         catch (Exception failure)
         {

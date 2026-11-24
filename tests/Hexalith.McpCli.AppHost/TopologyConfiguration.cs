@@ -10,6 +10,19 @@ namespace Hexalith.McpCli.AppHost;
 /// <summary>Validates the source and local runtime boundary before starting the test topology.</summary>
 internal static class TopologyConfiguration
 {
+    /// <summary>The Gateway sidecar HTTP port used by the isolated fixture.</summary>
+    internal const int GatewaySidecarHttpPort = 3501;
+
+    /// <summary>Allocates internal gRPC ports below Aspire's executable target-port pool.</summary>
+    internal static int SidecarInternalGrpcPort(string name)
+        => name switch
+        {
+            "eventstore" => 3511,
+            "tenants" => 3512,
+            "parties" => 3513,
+            _ => throw new ArgumentOutOfRangeException(nameof(name)),
+        };
+
     /// <summary>Requires current fixture JSON to come from the trusted .NET 11 shared runtime.</summary>
     internal static void RequireCurrentManagedRuntime()
     {
@@ -212,6 +225,11 @@ internal static class TopologyConfiguration
         if (port is < 1024 or > 65535)
         {
             throw new InvalidOperationException("Dapr:GatewayHttpPort must be between 1024 and 65535.");
+        }
+
+        if (port is >= 3511 and <= 3513)
+        {
+            throw new InvalidOperationException("Dapr:GatewayHttpPort conflicts with a reserved test sidecar port.");
         }
 
         using var listener = new TcpListener(IPAddress.Loopback, port);

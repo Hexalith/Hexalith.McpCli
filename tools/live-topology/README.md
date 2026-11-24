@@ -87,7 +87,11 @@ Development bootstrap, using the same fresh signing key as the Gateway. Before
 executing any vector, a bounded privileged `get-global-administrators` Query must
 return that persisted administrator. The independent smoke uses this same read barrier
 before its single final usability Query, because resource liveness can precede
-handler capability readiness. The same smoke case also sends one valid signed nonmember
+handler capability readiness. Aspire allocates the proxied sidecar targets below the default Linux ephemeral
+range. The AppHost assigns each internal gRPC listener a different fixed port
+below Aspire's target-port pool. Before smoke or vector traffic, the fixture
+checks every sidecar's HTTP health at its actual Dapr-registered port.
+The same smoke case also sends one valid signed nonmember
 administrator hint through the real owner command boundary. It requires the exact
 permission rejection and independently reads the target tenant as the persisted
 administrator before and after to prove it remains absent. Anonymous and forged

@@ -31,6 +31,7 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
     [
         // The published SDK prepares child metadata only for an explicit Development AppHost.
         "--environment=Development",
+        $"--Dapr:GatewayHttpPort={TopologyConfiguration.GatewaySidecarHttpPort}",
         $"--Authentication:JwtBearer:SigningKey={_signingKey}",
     ];
 
@@ -49,7 +50,7 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
             _additionalPrerequisiteFailure = "Basic platform Redis, placement or scheduler prerequisites are unavailable.";
             return;
         }
-        TopologyConfiguration.EnsureNoConflictingTopology(3501);
+        TopologyConfiguration.EnsureNoConflictingTopology(TopologyConfiguration.GatewaySidecarHttpPort);
         if (!await TopologyPrerequisites.IsDockerHealthyAsync().ConfigureAwait(false))
         {
             _additionalPrerequisiteFailure = "Docker is not running or is not healthy enough for Aspire container orchestration.";
@@ -57,6 +58,18 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
         }
 
         await base.InitializeAsync().ConfigureAwait(false);
+    }
+
+    /// <inheritdoc/>
+    protected override async Task WaitForReadinessAsync(CancellationToken cancellationToken)
+    {
+        using var client = new HttpClient(new SocketsHttpHandler { UseProxy = false });
+        string[] applications = Resources.Select(resource => resource.Name).ToArray();
+        Uri[] sidecars = await GatewaySidecarEndpoint.DiscoverAsync(applications, cancellationToken).ConfigureAwait(false);
+        await Task.WhenAll(sidecars.Select((endpoint, index) => DaprDiagnostics.WaitForAppHostEndpointAsync(
+            client, new Uri(endpoint, "/v1.0/healthz").AbsoluteUri,
+            $"{applications[index]} Dapr sidecar", TimeSpan.FromSeconds(30), TimeSpan.FromMilliseconds(250), cancellationToken)))
+            .ConfigureAwait(false);
     }
 
     /// <summary>Reports missing topology-specific prerequisites using the standard skip diagnostic.</summary>
@@ -80,8 +93,8 @@ public sealed class AspireTopologyFixture : IsolatedTopologyLifecycle<Projects.H
     internal Uri GatewayEndpoint => Client("eventstore").BaseAddress!;
 
     /// <summary>Discovers the Gateway sidecar inside this fixture's isolated Dapr process registry.</summary>
-    internal Task<Uri> DiscoverGatewaySidecarEndpointAsync(CancellationToken cancellationToken)
-        => GatewaySidecarEndpoint.DiscoverAsync(cancellationToken);
+    internal async Task<Uri> DiscoverGatewaySidecarEndpointAsync(CancellationToken cancellationToken)
+        => (await GatewaySidecarEndpoint.DiscoverAsync(["eventstore"], cancellationToken).ConfigureAwait(false))[0];
 
     /// <summary>Creates the short-lived delegated identity shared privately with one runner.</summary>
     internal string CreateLiveIdentity() => CreateIdentity(invalidSignature: false, live: true);

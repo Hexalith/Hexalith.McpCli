@@ -28,7 +28,7 @@ var topicOverrides = new Dictionary<string, string>();
 try
 {
     TopologyConfiguration.RequireCurrentManagedRuntime();
-    gatewayPort = builder.Configuration.GetValue("Dapr:GatewayHttpPort", 3501);
+    gatewayPort = builder.Configuration.GetValue("Dapr:GatewayHttpPort", TopologyConfiguration.GatewaySidecarHttpPort);
     preflightOnly = builder.Configuration.GetValue<bool>("Topology:PreflightOnly");
     inspectComposition = builder.Configuration.GetValue<bool>("Topology:InspectComposition");
     usePackagedGateway = builder.Configuration.GetValue<bool>("Topology:UsePackagedGateway") && !builder.ExecutionContext.IsPublishMode;
@@ -134,6 +134,14 @@ if (usePackagedGateway)
 
 foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants, parties })
 {
+    DaprSidecarAnnotation sidecar = resource.Resource.Annotations.OfType<DaprSidecarAnnotation>().Single();
+    DaprSidecarOptionsAnnotation settings = sidecar.Sidecar.Annotations.OfType<DaprSidecarOptionsAnnotation>().Last();
+    sidecar.Sidecar.Annotations[sidecar.Sidecar.Annotations.IndexOf(settings)] =
+        new DaprSidecarOptionsAnnotation(settings.Options with
+        {
+            DaprInternalGrpcPort = TopologyConfiguration.SidecarInternalGrpcPort(resource.Resource.Name),
+        });
+
     resource.WithEnvironment("UseHexalithProjectReferences", "false")
         .WithEnvironment("UseNuGetDeps", "true")
         .WithEnvironment("HexalithEventStoreFromSource", "false")
@@ -209,6 +217,7 @@ if (inspectComposition)
                 signingKeyHash = Hash(await ValueAsync(appEnvironment.GetValueOrDefault("Authentication__JwtBearer__SigningKey"))),
             },
             daprHttpPort = options.DaprHttpPort,
+            daprInternalGrpcPort = options.DaprInternalGrpcPort,
             placementHostAddress = options.PlacementHostAddress,
             schedulerHostAddress = options.SchedulerHostAddress,
             components = sidecar.Sidecar.Annotations.OfType<DaprComponentReferenceAnnotation>()
