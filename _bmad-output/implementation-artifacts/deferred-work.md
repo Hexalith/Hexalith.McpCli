@@ -357,6 +357,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
   summary: Planning documents and architecture decisions still prescribe acceptance when `Ulid.TryParse` succeeds, but Story 2.8 renegotiated the rule (Spec Change Log 2026-10-03). Core now also requires canonical uppercase text for ULID aggregates, marked identifiers, CLR `Ulid` properties, and caller correlation and idempotency keys.
   evidence: `_bmad-output/planning-artifacts/prds/prd-mcpcli-2026-09-21/prd.md:103` and `:348`, `_bmad-output/planning-artifacts/epics.md:711`, `_bmad-output/implementation-artifacts/epic-2-context.md:32` and `:34`, and `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/ARCHITECTURE-SPINE.md:106` (AD-8 aggregate validation) and `:200` (identifier convention) prescribe ULID parsing without the canonical-text requirement enforced by `OperationExecutor.IsCanonicalUlid` (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:361`) and `SchemaDeriver.UlidPattern` (`src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:18`). Reconcile the planning and architecture documents through a correct-course note or epic-context regeneration.
+  status: done 2026-11-24
+  resolution: `epics.md`, the epic 2 context, the PRD command-identity consequences and spine AD-9 now require canonical uppercase ULID text for `Ulid`-kind identifiers and caller correlation and idempotency keys, matching `OperationExecutor.IsCanonicalUlid` and `SchemaDeriver.UlidPattern`. The PRD Identifiers rule and the spine identifier convention already stated it.
 
 ## Deferred from: final build review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03)
 

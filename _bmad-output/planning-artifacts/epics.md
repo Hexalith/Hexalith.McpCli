@@ -826,7 +826,7 @@ So that a failed call is actionable and a successful read preserves Gateway pagi
 
 **Given** a Query aggregate identifier in an `Ulid`-kind or `String`-kind Module, plus Tenant and entity identifiers,
 **When** execution validates the resolved Envelope,
-**Then** it uses `Ulid.TryParse` for `Ulid`, nonempty validation for `String`, and the Gateway's published patterns and lengths for Tenant, aggregate, and entity identifiers,
+**Then** it requires canonical uppercase ULID text for `Ulid` (a successful parse whose canonical form equals the input, so lowercase and Crockford aliases such as O, I, L and U fail), nonempty validation for `String`, and the Gateway's published patterns and lengths for Tenant, aggregate, and entity identifiers,
 **And** each invalid value produces a violation at `/tenant`, `/aggregateId`, or `/entityId` before submission.
 
 **Given** `--page-size`, `--offset`, or `--cursor`,
@@ -885,7 +885,7 @@ So that I can perform a business action and inspect its accepted result.
 **And** separate calls generate different message identifiers without generating an idempotency key.
 
 **Given** caller-supplied correlation and idempotency identifiers,
-**When** they are valid ULIDs,
+**When** they are canonical uppercase ULIDs,
 **Then** the executor passes them through unchanged and echoes the idempotency key only when supplied,
 **And** invalid values return `validation_failed` without a Gateway call.
 
