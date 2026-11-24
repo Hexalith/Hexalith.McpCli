@@ -613,8 +613,47 @@ class OptionalResultContractTests(unittest.TestCase):
         with self.assertRaisesRegex(VectorError, 'unexpected result field'):
             _assert_result_contract(dict(document, unexpected=True), step, 'result')
 
+    def test_invalid_returned_paging_requires_the_actual_http_status(self):
+        from run_loopback import _assert_result_contract
+        step = json.loads((HERE / 'sample-query.json').read_text())['invocation']
+        script = step['scriptedResponse']
+        script['statusCode'] = 202
+        expected = {'code': 'gateway_error', 'status': 202, 'detail': 'The Gateway returned invalid query paging metadata.'}
+        for paging in ({}, {'pageSize': -1}, {'pageSize': 1, 'offset': -1},
+                       {'pageSize': 1, 'totalCount': -1}, {'pageSize': 1, 'nextCursor': ''}):
+            script['body']['metadata'] = {'paging': paging}
+            with self.subTest(paging=paging):
+                _assert_result_contract({'error': expected}, step, 'result')
+                with self.assertRaisesRegex(VectorError, 'required Gateway error document differs'):
+                    _assert_result_contract({'error': dict(expected, status=200)}, step, 'result')
+
 
 class SdkErrorOutcomeTests(unittest.TestCase):
+    def test_invalid_command_acknowledgment_binds_and_masks_the_submitted_correlation(self):
+        from run_loopback import _assert_result_contract, _assert_result_request_binding
+        step = json.loads((HERE / 'sample-rename.json').read_text())['invocation']
+        submitted = '01J9MZHXT3RKM0VWXRXGSJDATP'
+        returned = '01J9MZHXT3RKM0VWXRXGSJDATK'
+        step['scriptedResponse'] = {'statusCode': 202, 'echoRequestFields': [], 'body': {
+            'messageId': returned.lower(), 'correlationId': returned}}
+        expected = {'code': 'gateway_error', 'status': 202, 'correlationId': submitted,
+                    'detail': 'The Gateway returned an invalid command message ID. The command may have succeeded.'}
+        document = {'error': expected}
+        _assert_result_contract(document, step, 'result')
+        _assert_result_request_binding(document, {'correlationId': submitted}, step, 'result')
+        self.assertEqual('<generated>', _mask_result(document, step, 'result')['error']['correlationId'])
+        wrong = {'error': dict(expected, correlationId=returned)}
+        with self.assertRaisesRegex(VectorError, 'does not preserve the submitted identifier'):
+            _assert_result_request_binding(wrong, {'correlationId': submitted}, step, 'result')
+        without_correlation = {key: value for key, value in expected.items() if key != 'correlationId'}
+        with self.assertRaisesRegex(VectorError, 'must preserve the generated command correlationId'):
+            _assert_result_contract({'error': without_correlation}, step, 'result')
+        step['envelope']['correlationId'] = submitted
+        _assert_result_contract(document, step, 'result')
+        with self.assertRaisesRegex(VectorError, 'required Gateway error document differs'):
+            _assert_result_contract(wrong, step, 'result')
+        self.assertEqual(submitted, _mask_result(document, step, 'result')['error']['correlationId'])
+
     def test_supported_sdk_errors_are_exact_and_cannot_lose_or_invent_metadata(self):
         from run_loopback import _run_step
         from unittest.mock import Mock
@@ -1238,7 +1277,7 @@ class SdkTypedResponseTests(unittest.TestCase):
         cases = [
             ({'correlationId': correlation, 'payload': opaque}, None),
             ({'CORRELATIONID': correlation, 'PAYLOAD': opaque, 'SUCCESS': True,
-              'METADATA': {'PAGING': {'OFFSET': None, 'unknown': True}}}, {'pageSize': 0}),
+              'METADATA': {'PAGING': {'PAGESIZE': 7, 'OFFSET': None, 'unknown': True}}}, {'pageSize': 7}),
             ({'correlationId': correlation, 'payload': opaque, 'metadata': {'paging': {
                 'pageSize': '7', 'offset': '2', 'totalCount': '3', 'hasMore': False,
                 'nextCursor': None, 'unknown': 99}}}, {'pageSize': 7, 'offset': 2, 'totalCount': 3, 'hasMore': False}),

@@ -57,7 +57,9 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
     cases = [
         ('omitted-success', base, None),
         ('typed-property-casing', {'CORRELATIONID': correlation, 'PAYLOAD': opaque, 'SUCCESS': True,
-                                  'METADATA': {'PAGING': {'OFFSET': None, 'unknown': 7}}}, {'pageSize': 0}),
+                                  'METADATA': {'PAGING': {'PAGESIZE': 7, 'OFFSET': None, 'unknown': 7}}}, {'pageSize': 7}),
+        ('missing-page-size', dict(base, metadata={'paging': {'offset': None}}), 'invalid-paging'),
+        ('negative-page-size', dict(base, metadata={'paging': {'pageSize': '-1'}}), 'invalid-paging'),
         ('typed-paging', dict(base, metadata={'paging': {'pageSize': '7', 'offset': '2',
              'totalCount': '3', 'hasMore': False, 'nextCursor': None, 'unknown': True}}),
              {'pageSize': 7, 'offset': 2, 'totalCount': 3, 'hasMore': False}),
@@ -92,6 +94,10 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
         if paging == 'parse-error':
             step['assertions'] = [{'path': '/error', 'operator': 'equals', 'value': {
                 'code': 'gateway_error', 'status': 200, 'detail': 'Query response body could not be parsed.'}}]
+        elif paging == 'invalid-paging':
+            step['scriptedResponse']['statusCode'] = 202
+            step['assertions'] = [{'path': '/error', 'operator': 'equals', 'value': {
+                'code': 'gateway_error', 'status': 202, 'detail': 'The Gateway returned invalid query paging metadata.'}}]
         else:
             step['assertions'] = [{'path': '/document', 'operator': 'equals', 'value': body.get('payload', body.get('PAYLOAD', opaque))},
                                   {'path': '/paging', 'operator': 'exists', 'value': paging is not None}]
@@ -125,7 +131,16 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
     supplied['scriptedResponse']['statusCode'] = 204
     expected_error = {'code': 'gateway_error', 'status': 204, 'detail': 'Command response body could not be parsed.'}
     supplied['assertions'] = [{'path': '/error', 'operator': 'equals', 'value': expected_error}]
-    rename['prerequisites'] = [supplied]
+    detail = 'The Gateway returned an invalid command message ID. The command may have succeeded.'
+    for vector in (command, rename):
+        invalid = copy.deepcopy(vector['invocation'])
+        invalid['scriptedResponse'] = {
+            'statusCode': 202, 'body': {'messageId': message.lower(), 'correlationId': message},
+            'echoRequestFields': []}
+        invalid['assertions'] = [{'path': '/error/detail', 'operator': 'equals', 'value': detail},
+                                 {'path': '/error/status', 'operator': 'equals', 'value': 202}]
+        vector['prerequisites'].append(invalid)
+    rename['prerequisites'].append(supplied)
     rename['invocation']['scriptedResponse']['statusCode'] = 204
     rename['invocation']['assertions'] = copy.deepcopy(supplied['assertions'])
     vectors = []
@@ -159,7 +174,7 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
         pass
     else:
         raise RuntimeError('Missing-payload head-specific internal errors falsely passed parity.')
-    print('PASS real SDK signed paging, timestamp grammar, ordered ASCII property matching, explicit-null/missing payload, internal errors, 304/semantic/status-override outcomes and command204 replay; missing-payload head differences refuse parity.', flush=True)
+    print('PASS real SDK paging, timestamp grammar, ordered ASCII property matching, explicit-null/missing payload, internal errors, 304/semantic/status-override outcomes, command acknowledgment and HTTP 204 replay; missing-payload head differences refuse parity.', flush=True)
 
 
 def fixture(repo: Path, artifact: Path):

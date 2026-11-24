@@ -134,7 +134,7 @@ def _mask_result(document: dict[str, Any], step: dict[str, Any], location: str) 
         expected = _expected_gateway_error(step, document)
         if expected is not None and "correlationId" in expected \
                 and "correlationId" not in step["envelope"] \
-                and "correlationId" in step["scriptedResponse"]["echoRequestFields"]:
+                and _error_uses_submitted_correlation(step):
             value = normalized["error"].get("correlationId")
             if not isinstance(value, str) or ULID.fullmatch(value) is None:
                 _fail(f"{location}/error/correlationId: generated identifier is not a ULID: {value!r}")
@@ -627,29 +627,52 @@ def _sdk_response(step: dict) -> dict | None:
         return None
 
 
+def _error_uses_submitted_correlation(step: dict) -> bool:
+    script = step["scriptedResponse"]
+    return "correlationId" in script["echoRequestFields"] or (
+        step["kind"] == "command" and 200 <= script["statusCode"] < 300)
+
+
 def _expected_gateway_error(step: dict, document: dict, head: str = "CLI") -> dict | None:
-    """Model the pinned SDK error mapping, including its typed Query response outcomes."""
+    """Model pinned SDK errors and the validation of a successfully decoded reply."""
     script = step["scriptedResponse"]
     status, body = script["statusCode"], _response_body(step)
     special_detail = None
     problem = not 200 <= status < 300
+    response = None if problem else _sdk_response(step)
     if step["kind"] == "query" and status == 304:
         status, special_detail = 502, "Not-modified query response requires projection-backed provenance and a strong ETag."
-    elif not problem and (status == 204 or _sdk_response(step) is None):
+    elif not problem and (status == 204 or response is None):
         special_detail = ("Query" if step["kind"] == "query" else "Command") + " response body could not be parsed."
-    elif not problem and not _nonblank(_sdk_response(step)["correlationId"]):
+    elif response is not None and not _nonblank(response["correlationId"]):
         special_detail = ("Query" if step["kind"] == "query" else "Command") + " response did not contain a valid correlationId."
-    elif not problem and step["kind"] == "query" and not _sdk_response(step)["success"]:
-        body = _sdk_response(step)
-        status, special_detail = 200, _nonblank(body["errorMessage"], "Query semantic failure")
+    elif response is not None and step["kind"] == "command":
+        message_id = response["messageId"]
+        if message_id is None or ULID.fullmatch(message_id) is not None:
+            return None
+        correlation = step["envelope"].get("correlationId")
+        if correlation is None:
+            error = document.get("error")
+            correlation = error.get("correlationId") if isinstance(error, dict) else None
+            if not isinstance(correlation, str) or ULID.fullmatch(correlation) is None:
+                _fail("invalid acknowledgment must preserve the generated command correlationId")
+        return {"code": "gateway_error", "status": status,
+                "detail": "The Gateway returned an invalid command message ID. The command may have succeeded.",
+                "correlationId": correlation}
+    elif response is not None and not response["success"]:
+        status, special_detail = 200, _nonblank(response["errorMessage"], "Query semantic failure")
         error = {"code": "gateway_error", "status": status, "detail": special_detail}
-        correlation = body.get("correlationId")
+        correlation = response["correlationId"]
         if isinstance(correlation, str) and ULID.fullmatch(correlation) is not None:
             error["correlationId"] = correlation
         return error
-    elif not problem and step["kind"] == "query" and not _sdk_response(step)["payloadPresent"]:
-        return {"code": "internal_error", "message": "The CLI action failed." if head == "CLI" else "MCP tool invocation failed."}
-    elif not problem:
+    elif response is not None:
+        paging = response["paging"]
+        if paging is not None and (paging["pageSize"] <= 0 or paging.get("offset", 0) < 0
+                                   or paging.get("totalCount", 0) < 0 or paging.get("nextCursor") == ""):
+            return {"code": "gateway_error", "status": status, "detail": "The Gateway returned invalid query paging metadata."}
+        if not response["payloadPresent"]:
+            return {"code": "internal_error", "message": "The CLI action failed." if head == "CLI" else "MCP tool invocation failed."}
         return None
     if special_detail is not None:
         return {"code": "gateway_error", "status": status, "detail": special_detail}
@@ -728,7 +751,7 @@ def _assert_result_request_binding(document: dict, request: dict, step: dict, lo
     if "error" in document:
         expected = _expected_gateway_error(step, document)
         if expected is not None and "correlationId" in expected \
-                and "correlationId" in step["scriptedResponse"]["echoRequestFields"] \
+                and _error_uses_submitted_correlation(step) \
                 and document["error"].get("correlationId") != request.get("correlationId"):
             _fail(f"{location}/error/correlationId: result does not preserve the submitted identifier")
         return
