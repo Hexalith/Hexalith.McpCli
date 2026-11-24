@@ -137,7 +137,7 @@ foreach (IResourceBuilder<ProjectResource> resource in new[] { gateway, tenants,
     resource.WithEnvironment("UseHexalithProjectReferences", "false")
         .WithEnvironment("UseNuGetDeps", "true")
         .WithEnvironment("HexalithEventStoreFromSource", "false")
-        .WithEnvironment("HexalithEventStoreVersion", "5.4.0")
+        .WithEnvironment("HexalithEventStoreVersion", "5.5.1")
         .WithEnvironment("ASPNETCORE_ENVIRONMENT", "Development")
         .WithEnvironment("DOTNET_ENVIRONMENT", "Development")
         .WithEnvironment("Authentication__JwtBearer__Authority", string.Empty)

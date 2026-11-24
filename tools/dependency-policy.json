@@ -21,9 +21,9 @@
     "Grpc.Net.Client": "2.85.0",
     "Grpc.Net.Common": "2.85.0",
     "Grpc.Reflection": "2.85.0",
-    "Hexalith.Commons.UniqueIds": "3.0.1",
-    "Hexalith.EventStore.Client": "5.4.0",
-    "Hexalith.EventStore.Contracts": "5.4.0",
+    "Hexalith.Commons.UniqueIds": "3.0.2",
+    "Hexalith.EventStore.Client": "5.5.1",
+    "Hexalith.EventStore.Contracts": "5.5.1",
     "Humanizer.Core": "3.0.10",
     "Json.More.Net": "3.1.0",
     "JsonPointer.Net": "7.1.0",
@@ -65,10 +65,10 @@
     "Hexalith.Projects.Contracts": "2.0.0"
   },
   "aspireHelperSupportPackages": {
-    "Hexalith.Commons.UniqueIds": "3.0.1",
-    "Hexalith.EventStore.Client": "5.4.0",
-    "Hexalith.EventStore.Contracts": "5.4.0",
-    "Hexalith.EventStore.ServiceDefaults": "5.4.0"
+    "Hexalith.Commons.UniqueIds": "3.0.2",
+    "Hexalith.EventStore.Client": "5.5.1",
+    "Hexalith.EventStore.Contracts": "5.5.1",
+    "Hexalith.EventStore.ServiceDefaults": "5.5.1"
   },
   "testPackages": [
     "Hexalith.EventStore.Gateway",

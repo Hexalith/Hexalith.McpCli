@@ -55,6 +55,7 @@ SOURCE_PACKAGE_VERSIONS = {
     'Grpc.Reflection': ('Include', '2.85.0'),
     'Microsoft.Extensions.AI.Abstractions': ('Include', '11.0.0'),
     'Microsoft.Extensions.Caching.Abstractions': ('Include', '11.0.0'),
+    'Hexalith.Commons.UniqueIds': ('Update', '3.0.2'),
     'Microsoft.CodeAnalysis.Analyzers': ('Update', '5.12.0'),
     'Microsoft.CodeAnalysis.Common': ('Update', '5.12.0'),
     'Microsoft.CodeAnalysis.CSharp': ('Update', '5.12.0'),
@@ -770,7 +771,7 @@ def prepare(evidence: Path) -> None:
         # Microsoft.Common.targets imports CustomAfterMicrosoftCommonTargets inside
         # CurrentVersion.targets, then Directory.Build.targets. The published Tenants
         # 8.0.2 source qualifies EventStore only through 5.3.1; this late import
-        # replaces those Error targets after the owner file and enables the 5.4.0
+        # replaces those Error targets after the owner file and enables the 5.5.1
         # catalog constants without rewriting the frozen checkout.
         after_directory = private / 'source-runtime-after-directory.targets'
         after_xml = ET.Element('Project')
