@@ -40,9 +40,11 @@ def scan(root, *, environment=None, receipt=None):
     def error(path, rule):
         errors.append({'path': label(path), 'rule': rule})
 
-    # O_NOFOLLOW protects only each opened file, so the root must also be reached without links or '..' steps.
-    if root.is_symlink() or reached_through_link_or_parent(root) or not root.is_dir():
+    if root.is_symlink() or not root.is_dir():
         errors.append({'path': '.', 'rule': 'directory-required-no-links'})
+    elif reached_through_link_or_parent(root):
+        # O_NOFOLLOW protects only each opened file, so the root must also be reached without links or '..' steps.
+        errors.append({'path': '.', 'rule': 'root-path-not-canonical'})
     else:
         paths = []
         def walk_error(failure):

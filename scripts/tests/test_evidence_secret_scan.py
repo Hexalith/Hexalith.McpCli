@@ -183,7 +183,7 @@ class EvidenceSecretScanTests(unittest.TestCase):
                 result = self.invoke(f'linked-{index}.json', evidence=evidence)
                 self.assertEqual((2, ''), (result.returncode, result.stderr), result.stdout)
                 report = json.loads(result.stdout)
-                self.assertEqual(('scan-error', [{'path': '.', 'rule': 'directory-required-no-links'}], [], []),
+                self.assertEqual(('scan-error', [{'path': '.', 'rule': 'root-path-not-canonical'}], [], []),
                                  (report['result'], report['errors'], report['files'], report['findings']))
         clean = self.invoke('real.json', evidence=real)
         self.assertEqual(0, clean.returncode, clean.stdout)

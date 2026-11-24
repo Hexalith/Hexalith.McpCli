@@ -1010,7 +1010,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
   summary: R54-D5 — Refuse evidence-root symlink ancestors and parent-directory traversal substitutions.
   owner: McpCli maintainer / CI redaction maintainer.
   status: done 2026-11-24
-  resolution: The scanner refuses a packet root whose absolute, unnormalized path contains a `..` step or passes through a symbolic-link ancestor, with the same `directory-required-no-links` scan error as a linked root. A regression test covers a linked ancestor, a parent-step substitution and an ordinary relative root. The live-topology scanning guide states the rule.
+  resolution: The scanner refuses a packet root whose absolute, unnormalized path contains a `..` step or passes through a symbolic-link ancestor with the `root-path-not-canonical` scan error. A regression test covers a linked ancestor, a parent-step substitution and an ordinary relative root. The live-topology scanning guide states the rule.
   evidence: scripts/scan-evidence-secrets.py:38; A task-owned link/packet path whose link ancestor targets real/ scans clean; O_NOFOLLOW protects only the final opened file component. Reproduced during Story 5.4 review. The relevant implementation is byte-identical to the separately landed prerequisite at `296617072ab3fb632d2bddb9189b52fd94286f83`; the frozen intent explicitly excludes fixing redactor item 5 here. This is a new specific counterexample, not a reconfirmation of the older resolved generic redactor rows.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
