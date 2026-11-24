@@ -729,6 +729,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
     - An agent or reviewer following the rule will flag or "fix" this required code, as pass-4 BH1 did.
     - Fix: state in `AGENTS.md` that the CI hook's root source-build list and its approved Tenants exception are test-only composition. Copy it to `CLAUDE.md` and `.github/copilot-instructions.md`, then run `scripts/check-agent-instructions-sync.sh`.
     - The ledger had no equivalent entry.
+  status: done 2026-11-24
+  resolution: The synchronized instructions distinguish owner-specific test fixture preparation from generic vector selection and invocation. The retired SOURCE_EVENTSTORE exception is absent from the current cohort.
 
 ## Deferred from: code review of spec-4-15-publish-the-no-new-server-rule.md (2026-10-28)
 
