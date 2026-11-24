@@ -87,6 +87,7 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: A null or blank executor operation can become an internal error instead of input validation.
   evidence: Executor lookup calls `CatalogService.Describe`, which throws for a blank operation and is caught as `internal_error`; this belongs to concurrent executor work.
+  status: resolved before this batch. Both heads refuse a missing or blank operation before the executor: the MCP request filter returns JSON-RPC `InvalidParams` for `send_command` and `run_query`, and the CLI returns `invalid_arguments`. `McpExecutionTests.BlankExecutionOperationsUseInvalidParametersAsync` (added 2026-11-24) covers both tools and protocol revisions with zero Gateway calls.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: An explicit Query aggregate ID can override the Operation's declared constant.
   evidence: `call.AggregateId ?? accessorId ?? operation.AggregateIdConstant` prefers the caller value without checking conflict; this belongs to concurrent executor work.

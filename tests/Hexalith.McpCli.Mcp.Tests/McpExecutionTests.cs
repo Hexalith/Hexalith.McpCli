@@ -281,6 +281,31 @@ public sealed class McpExecutionTests
         }
     }
 
+    /// <summary>A missing or blank execution operation is a protocol argument error, never an executor internal error.</summary>
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task BlankExecutionOperationsUseInvalidParametersAsync(string version)
+    {
+        await using McpTestSession session = await CreateAsync(version);
+        foreach (string tool in new[] { "send_command", "run_query" })
+        {
+            foreach (Dictionary<string, object?> arguments in new[]
+            {
+                new Dictionary<string, object?> { ["payload"] = QueryPayload },
+                new Dictionary<string, object?> { ["operation"] = "", ["payload"] = QueryPayload },
+                new Dictionary<string, object?> { ["operation"] = " \t", ["payload"] = QueryPayload },
+            })
+            {
+                McpProtocolException exception = await Should.ThrowAsync<McpProtocolException>(() => session.CallAsync(tool, arguments));
+                exception.ErrorCode.ShouldBe(McpErrorCode.InvalidParams);
+                exception.Message.ShouldBe("Request failed (remote): operation is required and must be non-empty.");
+            }
+        }
+
+        session.Gateway.ReceivedCalls().ShouldBeEmpty();
+    }
+
     /// <summary>JSON integer spellings that the SDK cannot bind to Int32 fail as protocol errors before execution.</summary>
     [Theory]
     [InlineData("2025-06-18")]
