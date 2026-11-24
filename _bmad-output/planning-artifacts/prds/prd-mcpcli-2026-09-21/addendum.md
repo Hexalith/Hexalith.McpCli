@@ -569,8 +569,8 @@ Error member types and constraints:
   values. Fixtures cover Gateway Problem Details, malformed HTTP 202 Command
   and HTTP 200 Query responses, semantic Query failure and missing metadata.
 
-**Malformed message ID (Story 5.17, backlog).** The pinned EventStore client
-5.4.0 returns a successful acknowledgment DTO without an HTTP status. For
+**Malformed message ID.** McpCli retains the HTTP status separately from the
+EventStore client acknowledgment DTO. For
 a present empty, whitespace-only or noncanonical message ID in an otherwise
 valid success acknowledgment, retain the actual status for this call at the
 HTTP response boundary. Core must return `gateway_error` with that integer
