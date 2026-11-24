@@ -50,8 +50,7 @@ public sealed class TopologyFixtureLaunchTests
                     && method.GetParameters()[2].ParameterType == typeof(Assembly));
             Delegate configure = Delegate.CreateDelegate(create.GetParameters()[1].ParameterType,
                 typeof(TopologyFixtureLaunchTests).GetMethod(nameof(PreserveBuilderOptions), BindingFlags.NonPublic | BindingFlags.Static)!);
-            Assembly appHost = context.LoadFromAssemblyPath(Path.Combine(DependencyPolicyTests.FindRepositoryRoot(), "tests",
-                "Hexalith.McpCli.AppHost", "bin", configuration, "net11.0", "Hexalith.McpCli.AppHost.dll"));
+            Assembly appHost = context.LoadFromAssemblyName(new AssemblyName("Hexalith.McpCli.AppHost"));
             using var reflection = context.EnterContextualReflection();
             foreach (bool explicitDevelopment in new[] { false, true })
             {
