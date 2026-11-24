@@ -3,12 +3,16 @@
 ## Deferred from: code review of spec-1-1-declare-a-module-and-its-operations.md (2026-09-23)
 
 - **The `KebabCase` helper cannot be shared with the `netstandard2.0` analyzer.** `src/Hexalith.McpCli.Abstractions/KebabCase.cs:17` uses `ArgumentException.ThrowIfNullOrWhiteSpace` and range slicing (`[..^n]`). The architecture requires one helper shared by the Catalog and the analyzer. The analyzer is `netstandard2.0`, and the Abstractions package is `net10.0` only. Story 1.7 must choose between linked source and multi-targeting, and add a `netstandard2.0` compile check so the naming rule cannot fork.
+  status: resolved before this batch. The analyzer links the catalog’s KebabCase source and compiles it under netstandard2.0.
 - **Bootstrap releases remain possible after paired releases start.** `scripts/release-request.py:12` (`validate_request`) and `scripts/verify-release-source.py:39` accept `bootstrap` without checking whether `Hexalith.McpCli` has already been published. That cannot happen yet because `paired` always fails. The paired-release story must make bootstrap fail once the tool package exists, or it could split the AD-17 single version line.
+  status: resolved before this batch. Central publication superseded the former module bootstrap and paired release scripts.
 - **StyleCop header rule vs practice.** The Code style row in the architecture spine requires a StyleCop header. No new `.cs` file has one, and sibling Tenants does not use them either. Either amend the spine or adopt headers (with `StyleCop.Analyzers`) across the repo.
   status: done 2026-11-24
   resolution: The architecture spine records the conventions enforced in this repository and drops the unused StyleCop header requirement.
 - **No rule for non-canonical names.** `HexalithModuleAttribute.Name` and the `Name` override on `HexalithCommand` and `HexalithQuery` are taken as written. A value such as `Inventory`, `tls_config` or `a.b` would break the `<module>.<operation>` split or produce non-canonical Operation Names. The PRD and architecture define no diagnostic category for this. Stories 1.4 and 1.5 should add one, possibly with an `IsCanonical` helper next to `KebabCase`.
+  status: resolved before this batch. CatalogTests covers invalid module and operation names.
 - **No diagnostic for a type with both operation attributes.** A type can carry both `[HexalithCommand]` and `[HexalithQuery]`, which makes its kind (write or read) ambiguous and would defeat the read-only filter. No Catalog diagnostic category covers this case. Stories 1.4 and 1.5 should add one.
+  status: resolved before this batch. The Catalog rejects the declaration with conflicting_operation_kinds, covered by CatalogTests.
 
 ## Deferred from: code review of spec-1-3-derive-the-operation-s-json-schema.md (2026-09-25)
 
@@ -30,27 +34,35 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-3-derive-the-operation-s-json-schema.md`
   summary: Story 1.5 must report free-form Payload members (`object`, `JsonElement`, `JsonNode`, and collections of them) as a "free-form member" declaration diagnostic rather than the generic "opaque" wording; the resolved review decision keeps rejecting them so every Payload has a closed Schema.
   evidence: `SchemaDeriver.Transform` throws `NotSupportedException` ("Opaque serialized member Data…" / "Opaque element type System.Object…") for these types at src/Hexalith.McpCli.Core/Schema/SchemaDeriver.cs:182 and :308.
+  status: resolved before this batch. CatalogTests exercises the free-form member wording directly.
 
 ## Deferred from: code review of spec-1-4-discover-valid-operations-in-one-catalog.md (2026-09-26)
 
 - **Diagnostic categories are chosen by matching exception message text.** `CatalogBuilder.Classify` (`src/Hexalith.McpCli.Core/Catalog/CatalogBuilder.cs:234`) substring-matches `SchemaDeriver` and `RoutingResolver` messages, so the interface-routing read failure is reported as `invalid_schema`. `IsDeclarationFailure` catches broad BCL exceptions, which can hide internal McpCli bugs as operation exclusions. Several emitted categories (`invalid_module_declaration`, `conflicting_operation_kinds`, `invalid_operation_declaration`, `invalid_operation_name`, `invalid_schema`) are outside the spine taxonomy. Story 1.5 should throw and catch a coded declaration-failure exception and align the categories with the spine.
+  status: resolved before this batch. CatalogBuilder and the declaration validators use coded ContractDeclarationException failures.
 - **Catalog diagnostic messages drop the failure detail.** `CatalogBuilder.cs:229` and similar sites emit generic messages and discard `exception.Message`, so authors cannot see which member or value failed. Story 1.5's "actionable message" AC should carry the detail.
+  status: resolved before this batch. CatalogTests checks the failure detail for rejected declarations.
 - **Routing resolution discards which source won.** `RoutingResolver.Resolve` (`src/Hexalith.McpCli.Core/Catalog/RoutingResolver.cs:21`) overwrites attribute values with interface values, so `redundant_value` and `conflicting_value` (a Story 1.5 AC and the spine's "Routing per field" convention) cannot be emitted. `CompetingRouteCommand` and `InterfaceItemQuery` already conflict silently.
+  status: resolved before this batch. RoutingResolver returns the selected route and per-field conflicting_value and redundant_value warnings.
 
 ## Deferred from: review of story 1.7 while concurrent CLI, settings, and executor work was present (2026-09-27)
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Bare boolean CLI switches can be ignored, including the read-only safety flag.
   evidence: `GlobalOptionsBinding.ExplicitFlag` requires a value token, while a bare System.CommandLine boolean option has none; this belongs to concurrent CLI work.
+  status: resolved before this batch. ConfigCommandTests.CurrentBindsBareFlagsAndEmitsAllValuesAndSourcesAsync verifies the current binding.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: The settings resolver rejects documented boolean environment values `1` and `0`.
   evidence: PRD addendum §E accepts both, but `SettingsResolver.SelectBoolean` calls only `bool.TryParse`; this belongs to concurrent settings work.
+  status: resolved before this batch. SettingsResolver accepts 1 and 0 alongside true and false.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Table format can replace required JSON for describe, send, and query.
   evidence: `CliOutput.WriteAsync` formats every successful document as a table, while PRD FR-12 requires JSON for those verbs; this belongs to concurrent CLI work.
+  status: resolved before this batch. The current CLI output contract and tests require JSON for describe, send and query under table format.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Invalid profile paths can be silently treated as absent profiles.
   evidence: `ProfileStore.Read` returns defaults when `File.Exists` is false, which includes a directory or dangling symlink; this belongs to concurrent settings work.
+  status: resolved before this batch. ProfileFileTransaction checks the selected destination and refuses directories and symbolic links before reading.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: A profile with more than 32 valid allowed extension keys is rejected.
   evidence: `SettingsResolver` passes the allowlist to `ExtensionValidator.Validate`, whose 32-entry limit is for one submitted command; this belongs to concurrent settings work.
@@ -67,6 +79,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Malformed Gateway paging metadata can enter a successful query result.
   evidence: `OperationExecutor` copies paging values without checking a nonempty cursor or numeric constraints. Story 2.9 review loop 3 deferred successful-response hardening under its frozen decision.
+  status: done 2026-11-24
+  resolution: Core checks positive page size, nonnegative offset and count, and a nonempty continuation cursor after SDK decoding. The shared error keeps the actual HTTP status. CLI and both MCP protocol revisions test valid and malformed paging against the advertised result schema.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Concurrent CLI and settings paths lack focused behavior tests.
   evidence: No current test covers settings precedence, bare boolean switches, boolean environment values, or the format behavior described in PRD FR-12.
@@ -547,6 +561,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-6-publish-the-bootstrap-decoration-package.md`
   summary: The agent instructions do not name the release script suite or the bootstrap gate that runs it.
   evidence: Low. `AGENTS.md:96` (`Running and verifying`, synced to `CLAUDE.md` and `.github/copilot-instructions.md`) lists only .NET test commands. It has no `python3 -m unittest discover -s scripts/tests` command and does not mention `.github/workflows/bootstrap-package.yml:31`, so an agent changing `scripts/release-*.sh` or the release Python scripts may skip `scripts/tests/test_bootstrap_release.py` until CI runs it. Add one line in the next bmad-project-context refresh, copy it to the other two entry points, and run `scripts/check-agent-instructions-sync.sh`.
+  status: resolved before this batch. Central publication replaced the module bootstrap job and test_bootstrap_release.py. The current Linux product hook runs the maintained scripts/tests suite.
 
 ## Deferred from: code review of spec-4-7-enforce-the-production-dependency-boundary.md (2026-10-18)
 
@@ -733,6 +748,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
     - An agent trusting the instructions can look up APIs or release notes for the wrong package versions.
     - Fix: correct the versions in `AGENTS.md`, or drop them in favor of the central catalog and policy. Then copy `AGENTS.md` to the other two entry points and run `scripts/check-agent-instructions-sync.sh`.
     - The ledger had no equivalent entry.
+  status: resolved before this batch. The synchronized instructions already name the restored ModelContextProtocol 2.4.0 and System.CommandLine 3.0.0.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md`
   summary: The generic-runner rule in the agent instructions does not cover the spec-required, module-specific source-build list in the CI hook.
   evidence: Low.
@@ -830,6 +846,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
   evidence: Low; introduced by commit `a3989b4` (published-profile work), not by Story 4.17.
     - `README.md:567` says preparation builds both domain hosts against the package cohort; `tools/live-topology/ci.py:383-388` still requires each `references/<module>` checkout and raises `Missing declared direct root source prerequisite` otherwise.
     - Fix: add the source-checkout prerequisite back to that paragraph.
+  status: resolved before this batch. The following README paragraph already names the four root owner repositories and links the qualified source prerequisites.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: CI package provenance may omit an executable actually launched by Aspire.
   evidence: Medium, unverified; pre-existing published-profile work. `tools/live-topology/ci.py:231-233` binds only DLL/JSON outputs, while native apphost files also exist. Inspect the effective Aspire/DCP launch command to determine whether any excluded native executable runs; bind the used launch assets and add mutation coverage if so.
@@ -1501,3 +1518,20 @@ explicit severity followed by original ledger order within each severity.
 | Windows profile directory ACL inheritance | Already specified and tested. `ProfileStoreTests` covers inheritance for new files and preservation of existing children. |
 | Frozen Memories and Tenants peer build properties | Superseded. The current EventStore 5.5.1 preparation does not use the historical build-time overrides. |
 | Tenants query treats a rejection-only checkpoint as existing | Already implemented upstream. The current handler also checks the stored tenant identity. |
+
+## Next priority follow-up dispositions (2026-11-24)
+
+Ten implementations carry closure notes at their original entries. Existing
+fixes, obsolete items and blocked findings did not count toward those ten.
+
+| Skipped finding | Disposition |
+| --- | --- |
+| First-time operator timing, Tenants bootstrap, Platform reference authentication | These high-priority findings still need an independent operator or their owning team's action. |
+| FreeBSD x64 and flattened ConformanceHost RID assets | An actual FreeBSD x64 runtime and a deployment with the affected asset layout are still needed. |
+| Tenants first-member policy and structural test, Parties behavior and producer checks, EventStore Query error detail, AI.Tools commit validation | The upstream repositories own the changes. |
+| Paired acceptance comparison and bootstrap signature verification | Central publication replaced the triggering workflows. Historical recovery and successor decisions remain with their owners. |
+| First-build native catalog-reader source sealing | The original second-build evidence did not reach the qualified fresh build. The first-build question remains open. |
+| Profile identity with a Gateway selected from flags or environment | The current precedence is documented. Changing it requires a decision on dropping or refusing inherited profile values. |
+| Memories and ChatBot inventory corrections | These require approved versioned successors. |
+| Story 5.11 evidence refresh | The approved evidence is a historical snapshot. Regenerating the bound audit for the current ledger requires approval of new bytes. |
+| Existing MCP fault coverage, CLI/profile checks, Catalog checks and source guidance | The current code, regression tests, and earlier ledger tables already cover the findings. Original entries carry the verified resolutions where they were missing. |

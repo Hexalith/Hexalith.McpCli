@@ -280,9 +280,16 @@ public sealed class OperationExecutor(
             Paging = run.PageSize is not null || run.Offset is not null || run.Cursor is not null
                 ? new QueryPagingOptions(run.PageSize, run.Offset, run.Cursor) : null,
         };
-        EventStoreQueryResult result = await gateway.SubmitQueryAsync(queryRequest, cancellationToken: cancellationToken)
+        (EventStoreQueryResult result, int? queryStatus) = await GatewayResponseStatusHandler
+            .CaptureAsync(() => gateway.SubmitQueryAsync(queryRequest, cancellationToken: cancellationToken))
             .ConfigureAwait(false);
         QueryPagingMetadata? paging = result.Metadata?.Paging;
+        if (paging is not null
+            && (paging.PageSize <= 0 || paging.Offset < 0 || paging.TotalCount < 0 || paging.NextCursor is ""))
+        {
+            return InvalidGatewayResponse(queryStatus, "The Gateway returned invalid query paging metadata.");
+        }
+
         return new OperationOutcome(new QueryResult(operation.Name, tenant!, result.Payload,
             paging is null ? null : new QueryPagingDocument(paging.PageSize, paging.Offset, paging.NextCursor,
                 paging.TotalCount, paging.HasMore)), null);

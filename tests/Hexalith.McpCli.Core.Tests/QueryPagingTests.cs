@@ -103,13 +103,25 @@ public sealed class QueryPagingTests
         descriptor.LintFindings.ShouldContain(finding => finding.Code == "payload_paging_member" && finding.Property == "/properties/Cursor");
     }
 
-    /// <summary>Returned paging members are independent, including zero, false, and an empty cursor.</summary>
+    /// <summary>An injected client without HTTP metadata cannot supply a status to the public error.</summary>
+    [Fact]
+    public async Task InvalidPagingWithoutTransportStatusUsesInternalErrorAsync()
+    {
+        IEventStoreGatewayClient gateway = Gateway(new QueryResponseMetadata(Paging: new QueryPagingMetadata(0)));
+        OperationOutcome outcome = await Executor(gateway).ExecuteAsync(
+            new RunQueryArguments("string-fixture.list-items", "{}"), Context(), TestContext.Current.CancellationToken);
+        outcome.Document.ShouldBeNull();
+        outcome.Error.ShouldBe(new OperationError("internal_error", Message: "The Gateway returned invalid query paging metadata."));
+        AssertRequest(gateway, new SubmitQueryRequest("fixed-tenant", "string-fixture", "items-index", "list-items-wire",
+            "string-items", JsonSerializer.SerializeToElement(new { })));
+    }
+
+    /// <summary>Returned paging members are independent, including zero and false.</summary>
     [Theory]
     [InlineData(null, true, false)]
     [InlineData("{\"pageSize\":17}", true, false)]
     [InlineData("{\"pageSize\":17,\"offset\":0}", true, false)]
     [InlineData("{\"pageSize\":17,\"nextCursor\":\"next-page\"}", true, false)]
-    [InlineData("{\"pageSize\":17,\"nextCursor\":\"\"}", true, false)]
     [InlineData("{\"pageSize\":17,\"totalCount\":0}", true, false)]
     [InlineData("{\"pageSize\":17,\"totalCount\":9223372036854775807}", true, false)]
     [InlineData("{\"pageSize\":17,\"hasMore\":false}", true, false)]

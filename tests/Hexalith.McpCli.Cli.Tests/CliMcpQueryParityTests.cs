@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using Hexalith.McpCli.Core.Settings;
 using Hexalith.McpCli.Sample.Contracts;
+using Json.Schema;
 using Shouldly;
 
 namespace Hexalith.McpCli.Cli.Tests;
@@ -61,6 +62,64 @@ public sealed class CliMcpQueryParityTests
             HeadDiagnostics.AssertNoGateway(cli);
             HeadDiagnostics.AssertNoGateway(mcp);
             gateway.Requests.ShouldBeEmpty();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Returned paging follows the advertised schema after the Gateway client's typed decoding.</summary>
+    [Theory]
+    [InlineData(200, "", null, null)]
+    [InlineData(202, ",\"metadata\":null", null, null)]
+    [InlineData(200, ",\"metadata\":{\"paging\":null}", null, null)]
+    [InlineData(200, ",\"metadata\":{\"paging\":{\"pageSize\":\"+0201\",\"offset\":\"-0\",\"totalCount\":0,\"hasMore\":false,\"nextCursor\":null}}",
+        "{\"pageSize\":201,\"offset\":0,\"totalCount\":0,\"hasMore\":false}", null)]
+    [InlineData(200, ",\"metadata\":{\"paging\":{}}", null, "The Gateway returned invalid query paging metadata.")]
+    [InlineData(202, ",\"metadata\":{\"paging\":{\"offset\":0}}", null, "The Gateway returned invalid query paging metadata.")]
+    [InlineData(200, ",\"metadata\":{\"paging\":{\"pageSize\":0}}", null, "The Gateway returned invalid query paging metadata.")]
+    [InlineData(202, ",\"metadata\":{\"paging\":{\"pageSize\":-1}}", null, "The Gateway returned invalid query paging metadata.")]
+    [InlineData(200, ",\"metadata\":{\"paging\":{\"pageSize\":1,\"offset\":-1}}", null, "The Gateway returned invalid query paging metadata.")]
+    [InlineData(200, ",\"metadata\":{\"paging\":{\"pageSize\":1,\"totalCount\":-1}}", null, "The Gateway returned invalid query paging metadata.")]
+    [InlineData(200, ",\"metadata\":{\"paging\":{\"pageSize\":1,\"nextCursor\":\"\"}}", null, "The Gateway returned invalid query paging metadata.")]
+    [InlineData(202, ",\"metadata\":{\"paging\":{\"pageSize\":1,\"hasMore\":\"false\"}}", null, "Query response body could not be parsed.")]
+    public async Task ReturnedPagingMatchesAdvertisedSchemaAsync(int status, string metadata, string? paging, string? detail)
+    {
+        string directory = Directory.CreateTempSubdirectory("mcpcli-query-response-").FullName;
+        try
+        {
+            await using var gateway = new ScriptedGateway(_ => ScriptedGateway.Response(status,
+                status == 202 ? "Accepted" : "OK", "application/json",
+                $$"""{"correlationId":"01J9MZHXT3RKM0VWXRXGSJDATK","payload":{},"success":true{{metadata}}}"""));
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            Func<IReadOnlyList<Assembly>> manifest = () => [typeof(GetItemQuery).Assembly];
+            IReadOnlyDictionary<string, string?> environment = new Dictionary<string, string?>();
+            string[] globals = ["--url", gateway.Url];
+            string payload = $$"""{"ItemId":"{{ItemId}}"}""";
+            HeadResult cli = await BothHeads.InvokeCliAsync(store, manifest, environment,
+                ["query", "sample.get-item", "--payload", payload, .. globals]);
+            gateway.Requests.Count.ShouldBe(1);
+            string pagingMember = paging is null ? "" : $$""","paging":{{paging}}""";
+            string expected = detail is null
+                ? $$"""{"operation":"sample.get-item","tenant":"sample-tenant","document":{}{{pagingMember}}}"""
+                : JsonSerializer.Serialize(new { error = new { code = "gateway_error", status, detail } });
+            int requests = 1;
+            foreach (string version in new[] { "2025-06-18", "2026-07-28" })
+            {
+                HeadResult mcp = await BothHeads.InvokeMcpAsync(store, manifest, environment, globals, "run_query",
+                    new Dictionary<string, object?> { ["operation"] = "sample.get-item", ["payload"] = payload },
+                    captureOutputSchema: true, protocolVersion: version);
+                gateway.Requests.Count.ShouldBe(++requests);
+                JsonSchema schema = JsonSchema.FromText(mcp.OutputSchema.ShouldNotBeNull().GetRawText());
+                foreach (HeadResult head in new[] { cli, mcp })
+                {
+                    BothHeads.AssertDocument(head, expected, isError: detail is not null);
+                    HeadDiagnostics.AssertGatewayOnly(head, gateway.Url, "/api/v1/queries", status);
+                    using JsonDocument document = JsonDocument.Parse(head.Document);
+                    schema.Evaluate(document.RootElement).IsValid.ShouldBeTrue(head.Document);
+                }
+            }
         }
         finally
         {

@@ -171,7 +171,6 @@ public sealed class QueryPagingCommandTests
     [InlineData("{\"pageSize\":17}", true, false)]
     [InlineData("{\"pageSize\":17,\"offset\":0}", true, false)]
     [InlineData("{\"pageSize\":17,\"nextCursor\":\"next-page\"}", true, false)]
-    [InlineData("{\"pageSize\":17,\"nextCursor\":\"\"}", true, false)]
     [InlineData("{\"pageSize\":17,\"totalCount\":0}", true, false)]
     [InlineData("{\"pageSize\":17,\"totalCount\":9223372036854775807}", true, false)]
     [InlineData("{\"pageSize\":17,\"hasMore\":false}", true, false)]

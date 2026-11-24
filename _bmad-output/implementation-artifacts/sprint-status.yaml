@@ -112,7 +112,7 @@ development_status:
   5-19-enforce-the-profile-size-limit-before-replacement: backlog
   5-20-detect-unsupported-linux-process-supervision: backlog
   5-21-qualify-populated-projects-reads-and-access-denial: backlog
-  5-22-validate-gateway-query-paging-in-both-heads: backlog
+  5-22-validate-gateway-query-paging-in-both-heads: done
   5-23-protect-profile-files-from-cli-result-output: backlog
   5-24-reject-invalid-default-query-ids-at-catalog-admission: review # 2026-11-23, implemented in spec-reconcile-deferred-query-contract.md.
   epic-5-retrospective: optional
