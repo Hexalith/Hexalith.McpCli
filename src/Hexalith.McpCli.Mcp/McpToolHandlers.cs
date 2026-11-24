@@ -119,7 +119,7 @@ internal static class McpToolHandlers
     private static CallToolResult Convert(object? document, OperationError? error)
     {
         object body = error is null ? document! : new { error };
-        string json = JsonSerializer.Serialize(body, McpCliJson.Result);
+        string json = McpCliJson.SerializeText(body);
         return new CallToolResult
         {
             Content = [new TextContentBlock { Text = json }],

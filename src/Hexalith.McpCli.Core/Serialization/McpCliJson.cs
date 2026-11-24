@@ -1,5 +1,8 @@
 using System.Collections.Concurrent;
+using System.Globalization;
 using System.Reflection;
+using System.Text;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
@@ -18,6 +21,26 @@ public static class McpCliJson
 
     /// <summary>Gets the separate result document options.</summary>
     public static JsonSerializerOptions Result { get; } = CreateResult();
+
+    // Declared after Result: static initializers run in textual order and these copy its contract.
+    private static readonly JsonSerializerOptions ResultText = CreateText(Result);
+
+    private static readonly JsonSerializerOptions CompactText = CreateText(null);
+
+    /// <summary>Serializes a result or error document as the indented JSON text both heads emit.</summary>
+    /// <param name="value">The result or error document.</param>
+    /// <returns>
+    /// ASCII JSON text. Characters outside ASCII and control characters use JSON escapes, while HTML-sensitive
+    /// ASCII characters such as an apostrophe, angle brackets, ampersand and plus sign are written as themselves.
+    /// </returns>
+    public static string SerializeText(object? value)
+        => EscapeNonAscii(JsonSerializer.Serialize(value, ResultText));
+
+    /// <summary>Serializes one JSON value on a single line with the same escaping as <see cref="SerializeText"/>.</summary>
+    /// <param name="value">The JSON value.</param>
+    /// <returns>The compact ASCII JSON text.</returns>
+    public static string SerializeCompactText(JsonElement value)
+        => EscapeNonAscii(JsonSerializer.Serialize(value, CompactText));
 
     /// <summary>Gets one cached payload options instance for a Contracts module.</summary>
     /// <param name="contractsAssembly">The marked Contracts assembly.</param>
@@ -112,6 +135,39 @@ public static class McpCliJson
         options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
         options.MakeReadOnly();
         return options;
+    }
+
+    private static JsonSerializerOptions CreateText(JsonSerializerOptions? source)
+    {
+        // The relaxed encoder still escapes quotes, backslashes and control characters; EscapeNonAscii keeps the text ASCII.
+        var options = source is null
+            ? new JsonSerializerOptions { TypeInfoResolver = new DefaultJsonTypeInfoResolver() }
+            : new JsonSerializerOptions(source);
+        options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
+        options.MakeReadOnly();
+        return options;
+    }
+
+    private static string EscapeNonAscii(string json)
+    {
+        // Serializer output places non-ASCII characters only inside string literals, where a UTF-16 escape is valid.
+        int first = json.AsSpan().IndexOfAnyInRange('\u007F', char.MaxValue);
+        if (first < 0)
+        {
+            return json;
+        }
+
+        var builder = new StringBuilder(json.Length + 16);
+        _ = builder.Append(json, 0, first);
+        for (int index = first; index < json.Length; index++)
+        {
+            char character = json[index];
+            _ = character < '\u007F'
+                ? builder.Append(character)
+                : builder.Append("\\u").Append(((int)character).ToString("X4", CultureInfo.InvariantCulture));
+        }
+
+        return builder.ToString();
     }
 
     private static DefaultJsonTypeInfoResolver CreateResolver()

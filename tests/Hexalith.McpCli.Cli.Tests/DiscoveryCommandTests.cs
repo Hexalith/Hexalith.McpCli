@@ -269,6 +269,29 @@ public sealed class DiscoveryCommandTests
         AssertJson(output, """{"error":{"code":"unknown_module","module":"Smple","suggestions":["sample"]}}""");
     }
 
+    /// <summary>Error text writes HTML-sensitive ASCII as itself and escapes non-ASCII on the stdout document.</summary>
+    [Fact]
+    public async Task ErrorTextKeepsHtmlSensitiveCharactersReadableAsync()
+    {
+        const string requested = "sample.<item>&'+\u00E9";
+        (int exit, string output, string error) = await InvokeAsync(SampleManifest, "describe", requested);
+        exit.ShouldBe(2);
+        error.ShouldBeEmpty();
+        output.ShouldBe(string.Join('\n',
+            "{",
+            "  \"error\": {",
+            "    \"code\": \"unknown_operation\",",
+            "    \"operation\": \"sample.<item>&'+\\u00E9\",",
+            "    \"suggestions\": [",
+            "      \"sample.get-item\",",
+            "      \"sample.create-item\",",
+            "      \"sample.rename-item\"",
+            "    ]",
+            "  }",
+            "}",
+            string.Empty));
+    }
+
     /// <summary>Nonfixed tenants, examples, and declared idempotency requirements flow into envelope documents.</summary>
     [Fact]
     public async Task DescribeKeepsModuleCasingAndApplicableEnvelopeArgumentsAsync()

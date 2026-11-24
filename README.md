@@ -602,7 +602,7 @@ With `--format table`, modules use tab-separated `NAME`, `OPERATIONS`, `DESCRIPT
 
 ### Output and exit codes
 
-Results use the canonical JSON serializer on stdout, or in `--output` when a result file is selected. JSON uses UTF-8 with LF internally and one LF terminator on every OS; table formatting keeps the platform newline. Tables apply only to module, operation, and configuration displays. Successful `describe`, `send`, and `query` results remain JSON and emit one format note on stderr when table format was requested.
+Results use the canonical JSON serializer on stdout, or in `--output` when a result file is selected. JSON uses UTF-8 with LF internally and one LF terminator on every OS; table formatting keeps the platform newline. Result and error text, including MCP tool text and configuration table values, is ASCII: quotes, backslashes, control characters and every character outside ASCII use JSON escapes such as `\u00E9`, while characters such as `'`, `<`, `>`, `&` and `+` appear as written. Tables apply only to module, operation, and configuration displays. Successful `describe`, `send`, and `query` results remain JSON and emit one format note on stderr when table format was requested.
 
 - Exit 0 means a result. Help, version, and normal MCP shutdown also exit 0.
 - Exit 1 is reserved for `describe --lint` with findings.

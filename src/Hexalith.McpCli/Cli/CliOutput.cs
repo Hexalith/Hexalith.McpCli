@@ -169,10 +169,10 @@ internal static class CliOutput
         bool table = error is null && settings.Format == "table" && tableHeader is not null;
         string terminator = table ? Environment.NewLine : "\n";
         string output = error is not null
-            ? JsonSerializer.Serialize(new { error }, McpCliJson.Result)
+            ? McpCliJson.SerializeText(new { error })
             : settings.Format == "table" && tableHeader is not null
                 ? FormatTable(document!, tableHeader)
-                : JsonSerializer.Serialize(document, McpCliJson.Result);
+                : McpCliJson.SerializeText(document);
         if (error is null && settings.Output is not null)
         {
             await WriteResultFileAsync(settings.Output, output + terminator, cancellationToken,
@@ -199,7 +199,7 @@ internal static class CliOutput
 
     private static async Task<int> WriteDirectErrorAsync(OperationError error)
     {
-        await Console.Out.WriteAsync(JsonSerializer.Serialize(new { error }, McpCliJson.Result) + "\n").ConfigureAwait(false);
+        await Console.Out.WriteAsync(McpCliJson.SerializeText(new { error }) + "\n").ConfigureAwait(false);
         return 2;
     }
 
@@ -487,7 +487,7 @@ internal static class CliOutput
 
         JsonElement json = JsonSerializer.SerializeToElement(document, McpCliJson.Result);
         string[] fields = json.EnumerateObject().Select(property
-            => TableCell(property.Name) + "\t" + JsonSerializer.Serialize(property.Value)).ToArray();
+            => TableCell(property.Name) + "\t" + McpCliJson.SerializeCompactText(property.Value)).ToArray();
         return fields.Length == 0 ? header : header + Environment.NewLine + string.Join(Environment.NewLine, fields);
     }
 
