@@ -25,15 +25,16 @@ commit. Use `git -C <dir> commit --cleanup=verbatim --file <message-file>` with 
 Compare the resulting commit object's message bytes with the file before pushing.
 
 For an adopted module, use the validator from its committed Builds release. When it supplies
-`Github/lib/guard_tools.py`, run it with `run-with-temp python3`. Import `Tools` from that directory
+`Github/lib/guard_tools.py`, run it with `run-with-temp python3 -B`. Import `Tools` from that directory
 and call `Tools(Path(os.environ["TMPDIR"])).lint_message(message, identity)` with the exact UTF-8
 message read from the file. The guard installs and verifies the locked tooling. Record the Builds
 revision, validator command and result. Follow the owning repository's instructions for other
 validator installations.
 
 Run the owning repository's required checks before pushing. Adopted modules require
-`python3 references/Hexalith.Builds/check.py` from a clean standalone checkout of the exact commit
-being pushed, with Builds at the committed direct gitlink and `origin/main` fetched.
+`run-with-temp python3 references/Hexalith.Builds/check.py` from a clean standalone checkout of the
+exact commit being pushed. Use the committed Builds gitlink and the direct submodules required by
+the module's CI configuration. Fetch `origin/main` before running the check.
 
 ## /pushall-specific rules (never deviate)
 
@@ -125,7 +126,10 @@ Apply this to one repo directory `<dir>` at a time (a submodule path, or `.` for
      `HEAD`. Keep that full ref as the merge target. Keep `<branch>` and the fetched object ID for
      the deletion lease in step 10. Do not shorten the ref.
 7. For every ref in the merge list (full local branch refs first, then full remote-tracking refs):
-   - Skip a ref already contained in the destination. Prepare and validate a message with a short
+   - Resolve the source and destination object IDs. Skip a ref already contained in the destination.
+     Skip a candidate that would change centrally owned files or pins, including during conflict
+     resolution. Compare the pending merge against the destination before committing.
+   - Prepare and validate a message with a short
      subject and a body identifying the source and destination tips by their full object IDs.
      Record the full refs in the run evidence. Run `git -C <dir> merge --no-ff --no-commit -- <ref>`.
      On success, commit the pending merge using the validated file.
@@ -139,14 +143,17 @@ Apply this to one repo directory `<dir>` at a time (a submodule path, or `.` for
      `git -C <dir> merge --abort`, record the ref as skipped, and continue to the next ref.
    - If another merge or commit error leaves a pending merge started by this run, abort it before
      continuing. If cleanup fails, stop processing the repo and report the pending state.
-8. `git -C <dir> push origin <default-branch>`. Record failure and continue if it's rejected.
+8. Resolve the default branch's full object ID and run the pre-push checks on that exact commit.
+   Push the checked ID with `git -C <dir> push origin <checked-oid>:refs/heads/<default-branch>`.
+   Verify the pushed tip with `git -C <dir> ls-remote --exit-code origin refs/heads/<default-branch>`.
+   If the push or verification fails, report it and leave remote branches intact.
 9. Delete local branches now fully merged into the default branch (excluding the default branch
    itself): `git -C <dir> branch --merged <default-branch>` minus the default branch, then
    `git -C <dir> branch -d <each>`.
 10. Only if step 8 succeeded, prune each remote branch recorded in step 6 whose fetched object ID
-    is an ancestor of the default branch. The branch name is the `<branch>` captured in step 6.
+    is an ancestor of the verified pushed commit. The branch name is the `<branch>` captured in step 6.
     Refuse `origin`, `HEAD`, an empty name, and the default branch:
-    - Verify with `git -C <dir> merge-base --is-ancestor <fetched-object-id> <default-branch>`.
+    - Verify with `git -C <dir> merge-base --is-ancestor <fetched-object-id> <checked-oid>`.
     - Delete with `git -C <dir> push
       --force-with-lease=refs/heads/<branch>:<fetched-object-id> origin --delete <branch>`.
     - If the lease or deletion fails, record the branch as not pruned and continue. Never retry
