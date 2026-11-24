@@ -807,6 +807,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: Package Gateway socket tests do not independently reject missing or invalid app-channel/workload credentials.
   evidence: Medium verification gap, not a demonstrated authentication bypass; pre-existing package-host work. `tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:183-184` sets a valid dapr-api-token and workload assertion for every proof-defect case. Add missing/wrong app-channel and missing/invalid workload-assertion probes against the actual package host.
+  status: done 2026-11-24
+  resolution: Actual package-host socket tests require HTTP 401 independently for missing and invalid app-channel tokens and workload assertions with valid bound signing proof.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: A clean focused Manifest.Tests build does not build the package Gateway host required by its socket tests.
   evidence: Low; pre-existing package-host work. `tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:41` asserts that the host DLL already exists, but `tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj:12` and the referenced Integration.Tests/AppHost graph have no package-host build dependency. The documented full solution build supplies it; add a build-only project dependency for clean focused runs.

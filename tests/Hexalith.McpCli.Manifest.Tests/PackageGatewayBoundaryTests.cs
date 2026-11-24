@@ -174,6 +174,21 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
         Assert.Equal(HttpStatusCode.Forbidden, response.StatusCode);
     }
 
+    /// <summary>The socket boundary requires both the channel token and workload assertion with a valid signing proof.</summary>
+    [Theory]
+    [InlineData("missing-channel-token")]
+    [InlineData("invalid-channel-token")]
+    [InlineData("missing-workload-assertion")]
+    [InlineData("invalid-workload-assertion")]
+    public async Task ActualStreamBoundaryRequiresBothCredentials(string defect)
+    {
+        using HttpRequestMessage request = CreateStreamRequest(defect);
+        using HttpResponseMessage response = await _http!.SendAsync(request, TestContext.Current.CancellationToken);
+        Assert.Equal(HttpStatusCode.Unauthorized, response.StatusCode);
+        string body = await response.Content.ReadAsStringAsync(TestContext.Current.CancellationToken);
+        Assert.DoesNotContain("Stream replay failed.", body, StringComparison.Ordinal);
+    }
+
     /// <summary>A valid proof reaches unavailable private infrastructure, proving the denied probes passed authentication.</summary>
     [Fact]
     public async Task ActualStreamBoundaryAdmitsValidAuthorityBeforeStateAccess()
@@ -203,9 +218,16 @@ public sealed class PackageGatewayBoundaryTests : IAsyncLifetime
         {
             Content = JsonContent.Create(new { tenant = scope, domain, aggregateId = "tenant-a" }),
         };
-        request.Headers.Add("dapr-api-token", _channelToken);
+        if (defect != "missing-channel-token")
+        {
+            request.Headers.Add("dapr-api-token", defect == "invalid-channel-token" ? "invalid-channel-token" : _channelToken);
+        }
+
         request.Headers.Add("X-Hexalith-Scope", scope);
-        request.Headers.Add("X-Hexalith-Workload-Assertion", assertion);
+        if (defect != "missing-workload-assertion")
+        {
+            request.Headers.Add("X-Hexalith-Workload-Assertion", defect == "invalid-workload-assertion" ? "invalid-assertion" : assertion);
+        }
         if (defect != "absent-proof")
         {
             string proofPayload = Encode(JsonSerializer.SerializeToUtf8Bytes(new
