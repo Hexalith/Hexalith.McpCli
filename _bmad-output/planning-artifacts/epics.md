@@ -775,9 +775,9 @@ So that I can read business data with the same routing the agent will use.
 **Acceptance Criteria:**
 
 **Given** the pinned EventStore client and a throwaway Gateway harness before Story 4.12 creates this repository's test AppHost,
-**When** the `tenants.list-tenants` Query spike runs against EventStore Gateway and Tenants started locally through the existing EventStore AppHost and root-declared checkouts, or against an already running local Tenants topology that the user explicitly authorizes for reuse,
+**When** the `tenants.list-tenants` Query spike runs against EventStore Gateway and Tenants started locally through the existing EventStore AppHost and root-declared checkouts, or, as an exception the user explicitly authorizes, against an already running local EventStore Gateway and Tenants topology,
 **Then** the harness calls the pinned client directly and receives a page without depending on a decorated Tenants Contracts release or the Story 4.12 topology,
-**And** the spike records the local startup path, or for an authorized reuse the authorization and the running Tenants and EventStore revisions, plus the Gateway endpoint, required test identity, request routing, and response evidence without storing credentials. (Story 2.5's delivered proof used the authorized reuse recorded in its Spec Change Log on 2026-10-01.)
+**And** the spike records the local startup path, or for an authorized reuse the authorization, the running Tenants and EventStore revisions, and proof that the routing and validation sources it relies on match the root-declared checkouts, plus the Gateway endpoint, required test identity, request routing, and response evidence without storing credentials. (Story 2.5's delivered proof used the authorized reuse recorded in its Spec Change Log on 2026-10-01.)
 
 **Given** the existing Tenants list Query route uses `index` as its aggregate identifier,
 **When** the spike selects the candidate `aggregateId` constant before Story 4.8,
