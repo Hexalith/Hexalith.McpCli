@@ -551,6 +551,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-7-enforce-the-production-dependency-boundary.md`
   summary: The dependency gate does not detect a stale or missing `src/Hexalith.McpCli/obj/project.assets.json`.
   evidence: Low; pre-existing (the replaced test read the same file). `tests/Hexalith.McpCli.Manifest.Tests/DependencyPolicyTests.cs:944` loads whatever assets file exists. A stale restore gives a local false pass, or misleading "Direct package X has no production reference" failures, the pitfall `CLAUDE.md` records ("a stale restore passes locally and fails in CI"). A missing file throws a bare `FileNotFoundException`. CI restores fresh. Compare `project.restore.projectPath` and the tool's evaluated `PackageReference` items with the assets file, and fail with a message to run `dotnet restore Hexalith.McpCli.slnx`.
+  status: done 2026-11-24
+  resolution: The production dependency gate compares the assets project path, Release framework and package metadata, and project references with a freshly evaluated NuGet restore graph. Missing or stale assets give the exact solution restore command.
 
 ## Deferred from: spec-4-8-make-tenants-gateway-ready-for-v1.md (2026-10-19)
 

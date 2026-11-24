@@ -8,6 +8,7 @@ namespace Hexalith.McpCli.Manifest.Tests;
 /// <summary>Proves the production graph boundary and the separate test-only allowances.</summary>
 public sealed class DependencyPolicyTests
 {
+    private const string RestoreSolution = "Run dotnet restore Hexalith.McpCli.slnx from the repository root.";
     private static readonly string TestRoot = Path.Combine(Path.GetTempPath(), "mcpcli-policy-unit");
     private static readonly string ToolProject = Path.Combine(TestRoot, "src", "Hexalith.McpCli", "Hexalith.McpCli.csproj");
 
@@ -19,7 +20,7 @@ public sealed class DependencyPolicyTests
         string policyPath = Path.Combine(root, "tools", "dependency-policy.json");
         byte[] before = File.ReadAllBytes(policyPath);
         DependencyPolicy policy = DependencyPolicy.Load(policyPath);
-        RestoredDependencyGraph graph = LoadProductionGraph(root);
+        RestoredDependencyGraph graph = LoadProductionGraph(root, requireCurrent: true);
         Dictionary<string, XDocument> projects = ReadProjects(Path.Combine(root, "src"));
         foreach ((string path, XDocument document) in projects)
         {
@@ -28,6 +29,54 @@ public sealed class DependencyPolicyTests
 
         Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckProduction(policy, graph, projects, root));
         Assert.Equal(before, File.ReadAllBytes(policyPath));
+    }
+
+    [Fact]
+    public void MissingProductionAssetsExplainHowToRestore()
+    {
+        string missing = Path.Combine(TestRoot, Guid.NewGuid().ToString("N"), "project.assets.json");
+        InvalidOperationException error = Assert.Throws<InvalidOperationException>(() => ReadProductionAssets(missing));
+        Assert.Equal($"Production assets file was not found at {missing}. {RestoreSolution}", error.Message);
+    }
+
+    [Theory]
+    [InlineData("projectPath", "Project path")]
+    [InlineData("dependencies", "Frameworks or packages")]
+    [InlineData("centralPackageVersions", "Frameworks or packages")]
+    [InlineData("projectReferences", "Project references")]
+    public void ChangedProductionRestoreInputsExplainHowToRestore(string changed, string reason)
+    {
+        var current = JsonNode.Parse("""
+            {
+              "restore": {
+                "projectPath": "tool.csproj",
+                "frameworks": {"net11.0": {"projectReferences": {"core.csproj": {}}}}
+              },
+              "frameworks": {"net11.0": {
+                "dependencies": {"sample": {"version": "[1.0.0, )"}},
+                "centralPackageVersions": {"sample": "1.0.0"}
+              }}
+            }
+            """)!.AsObject();
+        JsonObject stale = current.DeepClone().AsObject();
+        switch (changed)
+        {
+            case "projectPath":
+                stale["restore"]![changed] = "other.csproj";
+                break;
+            case "projectReferences":
+                stale["restore"]!["frameworks"]!["net11.0"]![changed] = new JsonObject();
+                break;
+            default:
+                stale["frameworks"]!["net11.0"]![changed] = new JsonObject();
+                break;
+        }
+
+        JsonElement expected = JsonSerializer.SerializeToElement(current);
+        RequireCurrentProductionAssets(expected, expected);
+        InvalidOperationException error = Assert.Throws<InvalidOperationException>(() =>
+            RequireCurrentProductionAssets(JsonSerializer.SerializeToElement(stale), expected));
+        Assert.Equal($"Production assets are stale. {reason} differ from the current restore inputs. {RestoreSolution}", error.Message);
     }
 
     /// <summary>Checks every test project, including the conformance host outside the solution and injected test roots.</summary>
@@ -1065,35 +1114,7 @@ public sealed class DependencyPolicyTests
     {
         itemTypes ??= ["PackageReference", "ProjectReference"];
         string itemArgument = "-getItem:" + string.Join(',', itemTypes);
-        using var process = new Process
-        {
-            StartInfo = new ProcessStartInfo("dotnet")
-            {
-                WorkingDirectory = FindRepositoryRoot(),
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-            },
-        };
-        foreach (string argument in new[] { "msbuild", project, itemArgument, $"-p:Configuration={configuration}", "-nologo" })
-        {
-            process.StartInfo.ArgumentList.Add(argument);
-        }
-
-        process.Start();
-        Task<string> stdout = process.StandardOutput.ReadToEndAsync();
-        Task<string> stderr = process.StandardError.ReadToEndAsync();
-        if (!process.WaitForExit(60_000))
-        {
-            process.Kill(entireProcessTree: true);
-            process.WaitForExit();
-            throw new TimeoutException($"Dependency item evaluation timed out: dotnet msbuild {project} {itemArgument} -p:Configuration={configuration}");
-        }
-
-        string output = stdout.GetAwaiter().GetResult();
-        string error = stderr.GetAwaiter().GetResult();
-        Assert.True(process.ExitCode == 0, $"Dependency item evaluation failed for {project} ({configuration}): {output}{error}");
-        using JsonDocument result = JsonDocument.Parse(output);
+        using JsonDocument result = JsonDocument.Parse(RunMsBuild(project, configuration, itemArgument));
         var items = new XElement("ItemGroup");
         foreach (string name in itemTypes)
         {
@@ -1111,6 +1132,39 @@ public sealed class DependencyPolicyTests
         }
 
         return new XDocument(new XElement("Project", items));
+    }
+
+    private static string RunMsBuild(string project, string configuration, params string[] arguments)
+    {
+        using var process = new Process
+        {
+            StartInfo = new ProcessStartInfo("dotnet")
+            {
+                WorkingDirectory = FindRepositoryRoot(),
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                UseShellExecute = false,
+            },
+        };
+        foreach (string argument in new[] { "msbuild", project, $"-p:Configuration={configuration}", "-nologo" }.Concat(arguments))
+        {
+            process.StartInfo.ArgumentList.Add(argument);
+        }
+
+        process.Start();
+        Task<string> stdout = process.StandardOutput.ReadToEndAsync();
+        Task<string> stderr = process.StandardError.ReadToEndAsync();
+        if (!process.WaitForExit(60_000))
+        {
+            process.Kill(entireProcessTree: true);
+            process.WaitForExit();
+            throw new TimeoutException($"Dependency evaluation timed out: dotnet msbuild {project} {string.Join(' ', arguments)} -p:Configuration={configuration}");
+        }
+
+        string output = stdout.GetAwaiter().GetResult();
+        string error = stderr.GetAwaiter().GetResult();
+        Assert.True(process.ExitCode == 0, $"Dependency evaluation failed for {project} ({configuration}): {output}{error}");
+        return output;
     }
 
     private static bool IsAnalyzerFrameworkReference(JsonElement item, string identity)
@@ -1201,11 +1255,57 @@ public sealed class DependencyPolicyTests
             .OrderBy(node => node.Id, StringComparer.Ordinal).Select(node => node.Identity));
     }
 
-    private static RestoredDependencyGraph LoadProductionGraph(string root)
+    private static RestoredDependencyGraph LoadProductionGraph(string root, bool requireCurrent = false)
     {
         string project = Path.Combine(root, "src", "Hexalith.McpCli", "Hexalith.McpCli.csproj");
-        using JsonDocument assets = JsonDocument.Parse(File.ReadAllText(Path.Combine(Path.GetDirectoryName(project)!, "obj", "project.assets.json")));
+        using JsonDocument assets = ReadProductionAssets(Path.Combine(Path.GetDirectoryName(project)!, "obj", "project.assets.json"));
+        if (requireCurrent)
+        {
+            string graphPath = Path.GetTempFileName();
+            try
+            {
+                _ = RunMsBuild(project, "Release", "-t:GenerateRestoreGraphFile", $"-p:RestoreGraphOutputPath={graphPath}");
+                using JsonDocument graph = JsonDocument.Parse(File.ReadAllText(graphPath));
+                RequireCurrentProductionAssets(assets.RootElement.GetProperty("project"),
+                    graph.RootElement.GetProperty("projects").GetProperty(project));
+            }
+            finally
+            {
+                File.Delete(graphPath);
+            }
+        }
+
         return RestoredDependencyGraph.Load(assets.RootElement, project);
+    }
+
+    private static JsonDocument ReadProductionAssets(string assetsPath)
+    {
+        try
+        {
+            return JsonDocument.Parse(File.ReadAllText(assetsPath));
+        }
+        catch (IOException error) when (error is FileNotFoundException or DirectoryNotFoundException)
+        {
+            throw new InvalidOperationException($"Production assets file was not found at {assetsPath}. {RestoreSolution}", error);
+        }
+    }
+
+    private static void RequireCurrentProductionAssets(JsonElement restored, JsonElement current)
+    {
+        JsonElement restoredMetadata = restored.GetProperty("restore");
+        JsonElement currentMetadata = current.GetProperty("restore");
+        foreach ((string name, JsonElement actual, JsonElement expected) in new[]
+        {
+            ("Project path", restoredMetadata.GetProperty("projectPath"), currentMetadata.GetProperty("projectPath")),
+            ("Frameworks or packages", restored.GetProperty("frameworks"), current.GetProperty("frameworks")),
+            ("Project references", restoredMetadata.GetProperty("frameworks"), currentMetadata.GetProperty("frameworks")),
+        })
+        {
+            if (!JsonElement.DeepEquals(actual, expected))
+            {
+                throw new InvalidOperationException($"Production assets are stale. {name} differ from the current restore inputs. {RestoreSolution}");
+            }
+        }
     }
 
     private static Dictionary<string, XDocument> ReadProjects(string directory)
