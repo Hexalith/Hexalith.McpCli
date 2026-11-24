@@ -248,46 +248,17 @@ public sealed class McpProtocolTests
     public async Task ToolTextKeepsHtmlSensitiveCharactersReadableAsync(string protocolVersion)
     {
         const string requested = "sample.<item>&'+\u00E9";
-        using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
-        ResolvedSettings settings = new(null, null, "session-tenant", null,
-            false, new HashSet<string>(), "json", null, false, false, null, new Dictionary<string, string>());
-        var services = new ServiceCollection();
-        services.AddLogging();
-        services.AddMcpCliCore(settings, () => [typeof(CreateItemCommand).Assembly], _ => { });
-        services.AddMcpCliMcpServer(settings);
-        using ServiceProvider provider = services.BuildServiceProvider();
-        McpServerOptions options = provider.GetRequiredService<IOptions<McpServerOptions>>().Value;
-        var clientToServer = new Pipe();
-        var serverToClient = new Pipe();
-        await using var serverTransport = new StreamServerTransport(
-            clientToServer.Reader.AsStream(), serverToClient.Writer.AsStream(), "test-server");
-        var clientTransport = new StreamClientTransport(
-            clientToServer.Writer.AsStream(), serverToClient.Reader.AsStream());
-        await using McpServer server = McpServer.Create(serverTransport, options,
-            provider.GetRequiredService<ILoggerFactory>(), provider);
-        Task serverTask = server.RunAsync(timeout.Token);
-        await using McpClient client = await McpClient.CreateAsync(clientTransport,
-            new McpClientOptions { ProtocolVersion = protocolVersion }, cancellationToken: timeout.Token);
+        await using McpTestSession session = await McpTestSession.CreateAsync(protocolVersion);
 
-        CallToolResult failure = await client.CallToolAsync("describe_operation",
-            new Dictionary<string, object?> { ["operation"] = requested }, cancellationToken: timeout.Token);
+        CallToolResult failure = await session.CallAsync("describe_operation", new Dictionary<string, object?> { ["operation"] = requested });
 
-        OperationError expected = provider.GetRequiredService<ICatalog>().Describe(requested).Error.ShouldNotBeNull();
+        OperationError expected = session.Provider.GetRequiredService<ICatalog>().Describe(requested).Error.ShouldNotBeNull();
         expected.Operation.ShouldBe(requested);
-        AssertCoreDocument(failure, new { error = expected }, isError: true);
+        McpTestSession.AssertDocument(failure, new { error = expected }, isError: true);
         string text = failure.Content.Single().ShouldBeOfType<TextContentBlock>().Text;
         text.ShouldBe(Core.Serialization.McpCliJson.SerializeText(new { error = expected }));
         text.ShouldContain("\"operation\": \"sample.<item>&'+\\u00E9\"");
         text.All(char.IsAscii).ShouldBeTrue();
-
-        timeout.Cancel();
-        try
-        {
-            await serverTask;
-        }
-        catch (OperationCanceledException)
-        {
-        }
     }
 
     private static JsonElement AssertCoreDocument<T>(CallToolResult result, T expected, bool isError = false)

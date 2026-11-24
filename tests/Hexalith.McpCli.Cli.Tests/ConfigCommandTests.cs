@@ -391,6 +391,37 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>Configuration table values and result files keep HTML-sensitive ASCII readable and escape non-ASCII text.</summary>
+    [Fact]
+    public async Task ConfigurationTextKeepsHtmlSensitiveCharactersReadableAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            const string actor = "O'Brien+<ops>&\u00E9";
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/", null, "json", "acme", actor, false, []));
+            store.Use("dev");
+            string target = Path.Combine(directory, "current.json");
+
+            (int tableExit, string table, string tableError) = await InvokeAsync(store, "config", "current", "--format", "table");
+            (int fileExit, string fileOutput, string fileError) = await InvokeAsync(store, "config", "current", "--output", target);
+
+            (tableExit, tableError, fileExit, fileOutput, fileError).ShouldBe((0, string.Empty, 0, string.Empty, string.Empty));
+            const string escaped = "\"O'Brien+<ops>&\\u00E9\"";
+            table.Split(Environment.NewLine).ShouldContain("actor\t" + escaped);
+            table.All(char.IsAscii).ShouldBeTrue();
+            string written = await File.ReadAllTextAsync(target, TestContext.Current.CancellationToken);
+            written.ShouldContain("\"actor\": " + escaped);
+            written.All(char.IsAscii).ShouldBeTrue();
+            JsonDocument.Parse(written).RootElement.GetProperty("actor").GetString().ShouldBe(actor);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Table output includes every resolved field, all sources, and only the masked token.</summary>
     [Fact]
     public async Task CurrentTableIncludesEveryValueAndSourceWithoutRawTokenAsync()
@@ -724,10 +755,10 @@ public sealed class ConfigCommandTests
             exit.ShouldBe(2);
             output.ShouldBeEmpty();
             hostRuns.ShouldBe(0);
-            error.ShouldBe(JsonSerializer.Serialize(new
+            error.ShouldBe(McpCliJson.SerializeText(new
             {
                 error = new OperationError("configuration_invalid", Message: "Invalid gateway URL from EVENTSTORE_URL."),
-            }, McpCliJson.Result) + "\n");
+            }) + "\n");
         }
         finally
         {
@@ -889,10 +920,10 @@ public sealed class ConfigCommandTests
             exit.ShouldBe(canceled ? 0 : 2);
             output.ToString().ShouldBeEmpty();
             servingRuns.ShouldBe(0);
-            error.ToString().ShouldBe(canceled ? string.Empty : JsonSerializer.Serialize(new
+            error.ToString().ShouldBe(canceled ? string.Empty : McpCliJson.SerializeText(new
             {
                 error = new OperationError("internal_error", Message: "MCP server failed."),
-            }, McpCliJson.Result) + "\n");
+            }) + "\n");
         }
         finally
         {
@@ -1044,21 +1075,21 @@ public sealed class ConfigCommandTests
                 store, invalidEnvironment, ReadManifest, "mcp", "--format", "table", "--output", target);
             formatExit.ShouldBe(2);
             formatOutput.ShouldBeEmpty();
-            formatError.ShouldBe(JsonSerializer.Serialize(new
+            formatError.ShouldBe(McpCliJson.SerializeText(new
             {
                 error = new OperationError("invalid_arguments",
                     Message: "MCP stdio accepts only explicit json format.", Argument: "format"),
-            }, McpCliJson.Result) + "\n");
+            }) + "\n");
 
             (int outputExit, string output, string outputError) = await InvokeAsync(
                 store, invalidEnvironment, ReadManifest, "mcp", "--output", target);
             outputExit.ShouldBe(2);
             output.ShouldBeEmpty();
-            outputError.ShouldBe(JsonSerializer.Serialize(new
+            outputError.ShouldBe(McpCliJson.SerializeText(new
             {
                 error = new OperationError("invalid_arguments",
                     Message: "MCP stdio cannot write protocol output to a file.", Argument: "output"),
-            }, McpCliJson.Result) + "\n");
+            }) + "\n");
             manifestReads.ShouldBe(0);
             (await File.ReadAllTextAsync(target, TestContext.Current.CancellationToken)).ShouldBe("sentinel");
         }
@@ -1198,10 +1229,10 @@ public sealed class ConfigCommandTests
             int start = error.IndexOf(marker, StringComparison.Ordinal);
             start.ShouldBeGreaterThanOrEqualTo(0);
             error.IndexOf(marker, start + marker.Length, StringComparison.Ordinal).ShouldBe(-1);
-            error[start..].ShouldBe(JsonSerializer.Serialize(new
+            error[start..].ShouldBe(McpCliJson.SerializeText(new
             {
                 error = new OperationError(code, Message: message),
-            }, McpCliJson.Result) + "\n");
+            }) + "\n");
         }
         finally
         {
@@ -1861,14 +1892,14 @@ public sealed class ConfigCommandTests
 
             (int exit, string output, string error) = await InvokeAsync(store,
                 "config", "set", "dev", "tenant", "invalid tenant");
-            string expected = JsonSerializer.Serialize(new
+            string expected = McpCliJson.SerializeText(new
             {
                 error = new
                 {
                     code = "configuration_invalid",
                     message = "A lowercased profile tenant must contain 1 to 64 ASCII letters, digits, or hyphens and start and end with a letter or digit.",
                 },
-            }, McpCliJson.Result) + "\n";
+            }) + "\n";
             exit.ShouldBe(2);
             output.ShouldBe(expected);
             error.ShouldBeEmpty();
@@ -2141,11 +2172,11 @@ public sealed class ConfigCommandTests
 
             exit.ShouldBe(2);
             error.ShouldBeEmpty();
-            output.ShouldBe(JsonSerializer.Serialize(new
+            output.ShouldBe(McpCliJson.SerializeText(new
             {
                 error = new OperationError("configuration_invalid", Message: "The gateway URL from flag and the token from "
                     + "EVENTSTORE_TOKEN must come from the same source: flags, environment, or the selected profile."),
-            }, McpCliJson.Result) + "\n");
+            }) + "\n");
             AssertNoSecret(output, error, environmentToken, ProfileStore.MaskToken(environmentToken)!);
             Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
 
@@ -2352,13 +2383,13 @@ public sealed class ConfigCommandTests
             }
 
             string Source(string source, string variable) => source == "environment" ? variable : source;
-            string expected = JsonSerializer.Serialize(new
+            string expected = McpCliJson.SerializeText(new
             {
                 error = new OperationError("configuration_invalid", Message:
                     $"The gateway URL from {Source(urlSource, "EVENTSTORE_URL")} and the token from "
                     + $"{Source(tokenSource, "EVENTSTORE_TOKEN")} must come from the same source: flags, environment, "
                     + "or the selected profile."),
-            }, McpCliJson.Result) + "\n";
+            }) + "\n";
             Func<IReadOnlyList<Assembly>> manifest = () => [typeof(CreateItemCommand).Assembly];
             bool served = false;
             HeadResult result;
@@ -2713,11 +2744,11 @@ public sealed class ConfigCommandTests
 
             exit.ShouldBe(2);
             error.ShouldBeEmpty();
-            output.ShouldBe(JsonSerializer.Serialize(new
+            output.ShouldBe(McpCliJson.SerializeText(new
             {
                 error = new OperationError("configuration_invalid",
                     Message: "Profile names must contain 1 to 64 ASCII letters, digits, underscores, or hyphens."),
-            }, McpCliJson.Result) + "\n");
+            }) + "\n");
             File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
             AssertNoSecret(output, error, StoredToken);
         }
@@ -2879,10 +2910,10 @@ public sealed class ConfigCommandTests
 
             const string invalidHome = "MCPCLI_HOME must be an absolute directory path.";
             string message = settingTenant ? invalidHome : $"Invalid mcpcli profile file: {invalidHome}";
-            string expected = JsonSerializer.Serialize(new
+            string expected = McpCliJson.SerializeText(new
             {
                 error = new { code = "configuration_invalid", message },
-            }, McpCliJson.Result) + "\n";
+            }) + "\n";
             exit.ShouldBe(2);
             if (arguments[0] == "mcp")
             {

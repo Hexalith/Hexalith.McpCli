@@ -176,7 +176,7 @@ public sealed class PartiesRetirementSafetyTests
                 HeadResult cli = await BothHeads.InvokeCliAsync(store, Manifest, EmptyEnvironment, ["operations", module]);
                 HeadResult mcp = await BothHeads.InvokeMcpAsync(store, Manifest, EmptyEnvironment, [], "list_operations",
                     new Dictionary<string, object?> { ["module"] = module, ["confirm"] = true });
-                string expected = JsonSerializer.Serialize(catalog.ListOperations(module).Document, McpCliJson.Result);
+                string expected = McpCliJson.SerializeText(catalog.ListOperations(module).Document);
                 BothHeads.AssertDocument(cli, expected, isError: false);
                 BothHeads.AssertDocument(mcp, expected, isError: false);
                 HeadDiagnostics.AssertNoGateway(cli);
@@ -190,7 +190,7 @@ public sealed class PartiesRetirementSafetyTests
                 // Suggestions belong to discovery; the exact whole lookup error must be preserved by execution.
                 OperationError lookup = catalog.Describe(name).Error.ShouldNotBeNull();
                 lookup.Code.ShouldBe("unknown_operation");
-                string expected = JsonSerializer.Serialize(new { error = lookup }, McpCliJson.Result);
+                string expected = McpCliJson.SerializeText(new { error = lookup });
                 foreach (bool confirm in new[] { false, true })
                 {
                     string payload = confirm ? """{"confirm":true}""" : "{}";

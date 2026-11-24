@@ -22,8 +22,8 @@ public static class McpCliJson
     /// <summary>Gets the separate result document options.</summary>
     public static JsonSerializerOptions Result { get; } = CreateResult();
 
-    // Declared after Result: static initializers run in textual order and these copy its contract.
-    private static readonly JsonSerializerOptions ResultText = CreateText(Result);
+    // A fresh copy of the result contract, so this field does not depend on member declaration order.
+    private static readonly JsonSerializerOptions ResultText = CreateText(CreateResult());
 
     private static readonly JsonSerializerOptions CompactText = CreateText(null);
 
