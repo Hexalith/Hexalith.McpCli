@@ -210,7 +210,7 @@ NFR8: Ensure each exposed description is understandable without source-code cont
 - **MR4:** Task and actor context that legacy surfaces carry travels as ordinary Payload properties, through `actorProperty`, or in allowed Envelope extensions, never in module-specific code (PRD FR-21).
 - **MR5:** Each inventory states its approval authority explicitly. Under the accepted single-maintainer model, requesting-user approval satisfies owning-maintainer authority when it names the roles it covers, as Story 5.1's approval does; the five Epic 4 inventories that record `external_maintainer_approval: unasserted` carry session-scope approval only and need such an owner approval before any completeness, enrollment, or retirement claim, and the release coverage gate rejects `scope-only` authority (Epic 4 retro F11; migration plan "Approval limits"; `tools/inventory-coverage/v1/README.md`).
 - **MR6:** A surface retires only after its owning maintainer approves an exact replacement or explicit withdrawal and the selected-environment authorization, behavior, conformance, release, and rollback evidence passes. FrontComposer's host and the Projects plug-in retire together after other host consumers are accounted for; forwarded per-user identity is necessary but insufficient for Memories; EventStore Admin waits for confidential UI coverage under AD-23 A1–A4 and its retained G1–G6 safety, authorization and effect evidence, including G4 (migration plan "Retirement and release prerequisites"; PRD FR-21).
-- **MR7:** Every change to the Hexalith.AI.Tools migration plan is published under a new `plan_version` and moves `inventory_revision` when an indexed inventory is re-pinned or added; the authoritative plan 1.2.0 has an obsolete index. The Story 5.11 owner approved the reconciliation packet covering all eight inventory histories. Publishing the inventories, approving the final plan bytes and integrating plan 1.3.0 remain separate gates (Story 5.11 evidence/approval.json and integration.json).
+- **MR7:** Every change to the Hexalith.AI.Tools migration plan is published under a new `plan_version` and moves `inventory_revision` when an indexed inventory is re-pinned or added; the owner-approved plan 1.3.0 indexes all eight inventory histories at the published revision and is integrated in the pinned AI.Tools reference. Story 5.11 retains the separate release-note integration gate.
 - **MR8:** At least one Legacy Server is deleted within three months of v1, and the product owner decides deletion order (PRD SM-3, OQ-6).
 - **MR9:** HTTP transport with forwarded per-user identity is the separately committed next release after the OQ-1 authentication design; MCP resources and prompts, event-stream reading, plug-in loading, and executor retries stay out unless the PRD changes; the tool never calls a Module's REST or Dapr API (PRD §8.2, §8.3).
 - **MR10:** Epic 5 stories do not start while a previous retrospective verdict is `rejected` without a recorded human decision; the Epic 4 verdict is `rejected`, and its open items 5 (CI redaction), 6 (release acceptance binding), 8 (this gate), and 9 (ASCII tenant input) bear on Epic 5 evidence, release, and tenant-isolation claims (Epic 4 retro F10; `sprint-status.yaml` action items). Item 8 was decided on 2026-11-08 (see the Epic 5 Entry); items 5, 6 and 9 remain open.
@@ -1324,15 +1324,15 @@ So that a release cannot silently omit or misidentify an Operation.
 
 **Acceptance Criteria:**
 
-**Given** a versioned inventory with include and exclude rows,
+**Given** a versioned approved inventory with replacement, withdrawal and deferral dispositions,
 **When** the generic coverage check runs for a Module,
-**Then** every included canonical Operation Name appears exactly once in `list_operations <module>` and maps to the named decorated CLR contract type in `OperationDescriptor.ContractType`,
-**And** CLR type names remain absent from public discovery documents.
+**Then** every included replacement appears exactly once and maps to its approved decorated CLR contract type,
+**And** the CLR type names stay internal.
 
-**Given** a legacy operation that is missing, extra, duplicated, mapped to a different type, or excluded without approval and rationale,
+**Given** a missing, duplicated or incorrectly mapped replacement, or an exclusion without approval and rationale,
 **When** the check runs,
-**Then** it fails with the specific row and mismatch,
-**And** it does not treat conformance-vector coverage as a substitute for inventory coverage.
+**Then** it fails with the row and mismatch. Catalog operations absent from the inventory are reported.
+Operation Shape coverage remains an independent conformance gate.
 
 **Given** a synthetic approved inventory and matching Catalog fixture,
 **When** the generic coverage gate runs,

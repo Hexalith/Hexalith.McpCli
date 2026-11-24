@@ -158,6 +158,8 @@
   summary: Migration planning artifacts disagree on inventory dispositions, v1 scope, retirement claims, and the no-new-proprietary-surface rule.
   audit: Story 5.11 evidence/story-5-11/deferral-dispositions.md records the prepared reconciliation and all Epic 5 owners/gates; exact-byte owner acceptance and upstream integration remain pending. This row is not closed.
   evidence: Medium; the concurrent planning-history advance left AD-21 and Story 4.5 on include/exclude-only semantics, conflicts over EventStore Admin timing and temporary exceptions, and stale PRD wording and metrics. Reconcile the architecture, PRD, epics, and authoritative agent baseline together.
+  status: done 2026-11-24
+  resolution: The current README, release status, architecture, PRD, epics and Epic 5 context agree with the pinned owner-approved AI.Tools migration plan 1.3.0, published inventories and outstanding removal and release-note gates.
 
 ## Deferred from: code review of spec-2-1-inspect-effective-session-settings.md (2026-09-28)
 

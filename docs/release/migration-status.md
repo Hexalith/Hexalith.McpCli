@@ -9,11 +9,11 @@ legacy retirement is evidenced by this release status.
 
 As assessed on 2026-11-22, **no PS01–PS14 surface has an evidenced retirement**.
 The [approved inventory and delivery chain](https://github.com/Hexalith/Hexalith.McpCli/blob/main/_bmad-output/implementation-artifacts/evidence/story-5-11/inputs.json)
-distinguishes inventory authority from delivery. The authoritative AI.Tools plan
-remains 1.2.0. The owner approved the reconciliation packet and its audit on
-22 November 2026. Plan 1.3.0 still requires inventory publication, approval of
-the final plan bytes and upstream integration. Story 5.10 delivered its approved
-inventories and the five ChatBot/Memories labels.
+distinguishes inventory authority from delivery. The approved
+[migration plan 1.3.0](https://github.com/Hexalith/Hexalith.AI.Tools/blob/01e64857ab73bde74be137c675a8376c4da8cbee/hexalith-mcpcli-migration-instructions.md)
+binds the published inventory revision `c6a40c10fd6db19cfce4cb0592f3b82bbb853729`
+and is integrated in the root-declared AI.Tools pin. Story 5.10 delivered its
+approved inventories and the five ChatBot/Memories labels.
 
 | ID | Remaining binary or surface | State and removal gate |
 | --- | --- | --- |
@@ -36,5 +36,5 @@ The owner selected **“Labels + slip”** for Parties; SM-3 remains pending, no
 met, with deadline **2027-02-05** (three months after the first paired release,
 2.0.1 on 2026-11-05). That deadline is future at this assessment. Reassess it at
 completion; record the product owner's reason if no Legacy Server is deleted by
-the deadline. This status waives no removal gate. The independent restriction on
-publication after 2.0.1 until the Epic 3 output-contract item is resolved remains.
+the deadline. The Epic 3 output-contract remediation closed on 8 November 2026.
+Remaining candidate qualification and per-surface removal gates still apply.
