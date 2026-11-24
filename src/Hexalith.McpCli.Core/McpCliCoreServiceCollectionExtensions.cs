@@ -43,6 +43,7 @@ public static class McpCliCoreServiceCollectionExtensions
             settings.Strict));
 
         IHttpClientBuilder gatewayBuilder = services.AddEventStoreGatewayClient(options => options.BaseAddress = settings.Url);
+        gatewayBuilder.AddHttpMessageHandler(() => new GatewayResponseStatusHandler());
         configureGateway(gatewayBuilder);
         return services;
     }

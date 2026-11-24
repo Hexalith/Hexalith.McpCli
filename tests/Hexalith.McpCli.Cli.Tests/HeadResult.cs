@@ -1,3 +1,4 @@
+using System.Text.Json;
 using ModelContextProtocol.Protocol;
 
 namespace Hexalith.McpCli.Cli.Tests;
@@ -8,7 +9,9 @@ namespace Hexalith.McpCli.Cli.Tests;
 /// <param name="Error">Everything written to standard error.</param>
 /// <param name="Tool">The MCP tool result, when the MCP head served the call.</param>
 /// <param name="ProtocolTranscript">All MCP process stdout frames, including intermediate notifications.</param>
-internal sealed record HeadResult(int Exit, string Output, string Error, CallToolResult? Tool, string ProtocolTranscript = "")
+/// <param name="OutputSchema">The selected tool's advertised schema, when requested by the test.</param>
+internal sealed record HeadResult(int Exit, string Output, string Error, CallToolResult? Tool, string ProtocolTranscript = "",
+    JsonElement? OutputSchema = null)
 {
     /// <summary>Gets the public document: CLI stdout, or the MCP structured content after checking it matches the text content.</summary>
     internal string Document => Tool is null ? Output : Tool.StructuredContent?.GetRawText() ?? string.Empty;

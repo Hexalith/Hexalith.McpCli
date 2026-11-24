@@ -73,10 +73,13 @@ internal static class BothHeads
     /// <param name="arguments">The tool arguments.</param>
     /// <param name="inspect">An optional check of the started host before any tool call.</param>
     /// <returns>The exit code, captured channels and tool result; the result is null when no tool was called.</returns>
+    /// <param name="captureOutputSchema">Whether to request the tool's advertised output schema.</param>
+    /// <param name="protocolVersion">The MCP protocol revision to negotiate.</param>
     internal static Task<HeadResult> InvokeMcpAsync(ProfileStore store, Func<IReadOnlyList<Assembly>> manifest,
         IReadOnlyDictionary<string, string?> environment, IReadOnlyList<string> globals, string? tool,
-        IReadOnlyDictionary<string, object?>? arguments = null, Action<IHost>? inspect = null)
-        => InvokeMcpAsync(store, manifest, Reader(environment), globals, tool, arguments, inspect);
+        IReadOnlyDictionary<string, object?>? arguments = null, Action<IHost>? inspect = null, bool captureOutputSchema = false,
+        string protocolVersion = "2025-06-18")
+        => InvokeMcpAsync(store, manifest, Reader(environment), globals, tool, arguments, inspect, captureOutputSchema, protocolVersion);
 
     /// <summary>Starts the <c>mcp</c> verb with an environment reader and calls one tool over in-process pipes.</summary>
     /// <param name="store">The private profile store.</param>
@@ -87,11 +90,15 @@ internal static class BothHeads
     /// <param name="arguments">The tool arguments.</param>
     /// <param name="inspect">An optional check of the started host before any tool call.</param>
     /// <returns>The exit code, captured channels and tool result; the result is null when no tool was called.</returns>
+    /// <param name="captureOutputSchema">Whether to request the tool's advertised output schema.</param>
+    /// <param name="protocolVersion">The MCP protocol revision to negotiate.</param>
     internal static async Task<HeadResult> InvokeMcpAsync(ProfileStore store, Func<IReadOnlyList<Assembly>> manifest,
         Func<string, string?> readEnvironment, IReadOnlyList<string> globals, string? tool,
-        IReadOnlyDictionary<string, object?>? arguments = null, Action<IHost>? inspect = null)
+        IReadOnlyDictionary<string, object?>? arguments = null, Action<IHost>? inspect = null, bool captureOutputSchema = false,
+        string protocolVersion = "2025-06-18")
     {
         CallToolResult? result = null;
+        JsonElement? outputSchema = null;
         async Task<int> ServeAsync(IHost host, CancellationToken cancellationToken)
         {
             inspect?.Invoke(host);
@@ -114,8 +121,14 @@ internal static class BothHeads
                 host.Services.GetRequiredService<ILoggerFactory>(), host.Services);
             Task serverTask = server.RunAsync(serving.Token);
             await using (McpClient client = await McpClient.CreateAsync(clientTransport,
-                new McpClientOptions { ProtocolVersion = "2025-06-18" }, cancellationToken: serving.Token))
+                new McpClientOptions { ProtocolVersion = protocolVersion }, cancellationToken: serving.Token))
             {
+                if (captureOutputSchema)
+                {
+                    IList<McpClientTool> tools = await client.ListToolsAsync(cancellationToken: serving.Token);
+                    outputSchema = tools.Single(item => item.Name == tool).ProtocolTool.OutputSchema;
+                }
+
                 result = await client.CallToolAsync(tool, arguments ?? new Dictionary<string, object?>(),
                     cancellationToken: serving.Token);
                 await completion.Completed.WaitAsync(serving.Token);
@@ -146,7 +159,7 @@ internal static class BothHeads
             Console.SetError(error);
             int exit = await new CliRunner(store, manifest, readEnvironment, ServeAsync)
                 .InvokeAsync(["mcp", "--transport", "stdio", .. globals], TestContext.Current.CancellationToken);
-            return new HeadResult(exit, output.ToString(), error.ToString(), result);
+            return new HeadResult(exit, output.ToString(), error.ToString(), result, OutputSchema: outputSchema);
         }
         finally
         {

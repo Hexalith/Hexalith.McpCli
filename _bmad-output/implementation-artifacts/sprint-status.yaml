@@ -107,7 +107,7 @@ development_status:
   5-14-restore-the-proprietary-surface-census-gate: backlog
   5-15-bind-paired-release-acceptance-to-the-published-candidates: backlog
   5-16-protect-profile-credential-entry-and-transport: backlog
-  5-17-validate-gateway-command-acknowledgments: backlog
+  5-17-validate-gateway-command-acknowledgments: done
   5-18-reject-non-ascii-public-tenant-input-before-normalization: backlog
   5-19-enforce-the-profile-size-limit-before-replacement: backlog
   5-20-detect-unsupported-linux-process-supervision: backlog

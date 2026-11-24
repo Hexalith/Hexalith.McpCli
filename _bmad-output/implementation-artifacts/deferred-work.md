@@ -62,6 +62,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Malformed Gateway response identifiers can enter a successful command result.
   evidence: `OperationExecutor` copies response IDs without the ULID validation required by PRD addendum §G. Story 2.9 review loop 3 deferred successful-response hardening under its frozen decision.
+  status: done 2026-11-24
+  resolution: Core requires a present acknowledgment message ID to be canonical. Both heads preserve HTTP 200 and 202 and the submitted correlation ID in the error. Omitted or null IDs still fall back to the submitted message ID. Tests assert output schemas and one request per invocation.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Malformed Gateway paging metadata can enter a successful query result.
   evidence: `OperationExecutor` copies paging values without checking a nonempty cursor or numeric constraints. Story 2.9 review loop 3 deferred successful-response hardening under its frozen decision.
@@ -318,6 +320,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-7-submit-a-command-once.md`
   summary: Decide how to handle a successful Gateway response with an empty or whitespace command message ID.
   evidence: `SubmitCommandResponse.MessageId` is nullable and the EventStore client validates only `CorrelationId` in a successful response. The pre-existing `src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:229` expression uses `response.MessageId ?? messageId`, so an empty or whitespace value reaches the accepted document and cannot be used to track the command. Decide whether to fall back to the submitted ID or reject the malformed response before changing the mapping.
+  status: duplicate of the resolved Story 1.7 malformed Gateway response identifier entry.
+
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-7-submit-a-command-once.md`
   summary: An uncertain command failure (Gateway timeout or unreachable) returns no identifier the caller can use to check the outcome.
   evidence: `EventStoreGatewayClient.CreateTransportException` sets no correlation, `OperationError.FromGateway` copies only `exception.CorrelationId` (`src/Hexalith.McpCli.Core/Execution/OperationError.cs:52`), and the executor's catch (`src/Hexalith.McpCli.Core/Execution/OperationExecutor.cs:34`) drops the message and correlation IDs it generated at `:147-148`. The Gateway status endpoint is keyed by message ID (`CommandStatusController.cs:58`), and callers never supply one, so after the README's "may have reached the Gateway" warning nothing can be polled, even with `--correlation-id`. Story 2.9 froze the decision to add no generated tracking fields to errors and documents the retry warning in README; this remains deferred. Under a caller idempotency key the Gateway tracks status by its own execution message ID (`CommandsController.cs:193`), which can differ from the submitted one.

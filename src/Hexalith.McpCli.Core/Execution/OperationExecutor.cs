@@ -259,7 +259,14 @@ public sealed class OperationExecutor(
             var request = new SubmitCommandRequest(messageId!, tenant!, operation.Routing.Domain, aggregateId!,
                 operation.Routing.WireType, rebuilt, correlationId,
                 extensions, idempotencyKey);
-            SubmitCommandResponse response = await gateway.SubmitCommandAsync(request, cancellationToken).ConfigureAwait(false);
+            (SubmitCommandResponse response, int? status) = await GatewayResponseStatusHandler
+                .CaptureAsync(() => gateway.SubmitCommandAsync(request, cancellationToken)).ConfigureAwait(false);
+            if (response.MessageId is { } acknowledgedId && !IsCanonicalUlid(acknowledgedId))
+            {
+                return InvalidGatewayResponse(status,
+                    "The Gateway returned an invalid command message ID. The command may have succeeded.", correlationId);
+            }
+
             return new OperationOutcome(new CommandResult(operation.Name, response.MessageId ?? messageId!,
                 correlationId!, tenant!, aggregateId!, "accepted", idempotencyKey, response.ResultPayload), null);
         }
@@ -340,6 +347,17 @@ public sealed class OperationExecutor(
         }
 
         return perCall is not null && (context.Tenant is null || context.AllowTenantOverride) ? perCall : context.Tenant;
+    }
+
+    private static OperationOutcome InvalidGatewayResponse(int? status, string detail, string? correlationId = null)
+    {
+        if (status is int httpStatus)
+        {
+            throw new EventStoreGatewayException(httpStatus, "Invalid Gateway response", detail: detail,
+                correlationId: correlationId);
+        }
+
+        return new OperationOutcome(null, new OperationError("internal_error", Message: detail));
     }
 
     private static PayloadViolation? ValidateQueryArguments(RunQueryArguments query)

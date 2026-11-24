@@ -10,6 +10,7 @@ using Hexalith.McpCli.Core;
 using Hexalith.McpCli.Core.Settings;
 using Hexalith.McpCli.Mcp;
 using Hexalith.McpCli.Sample.Contracts;
+using Json.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -26,6 +27,80 @@ public sealed class CliMcpCommandParityTests
     private const string ItemId = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
     private const string CorrelationId = "01J9MZHXT3RKM0VWXRXGSJDATK";
     private const string IdempotencyKey = "01J9MZHXT3RKM0VWXRXGSJDATM";
+
+    /// <summary>Both heads use only a canonical acknowledgment ID and preserve the actual status on rejection.</summary>
+    [Theory]
+    [InlineData(200, "", false)]
+    [InlineData(202, ",\"messageId\":null", false)]
+    [InlineData(202, ",\"messageId\":\"01ARZ3NDEKTSV4RRFFQ69G5FAV\"", false)]
+    [InlineData(200, ",\"messageId\":\"\"", true)]
+    [InlineData(202, ",\"messageId\":\" \"", true)]
+    [InlineData(200, ",\"messageId\":\"01arz3ndektsv4rrffq69g5fav\"", true)]
+    [InlineData(202, ",\"messageId\":\"unexpected-identifier\"", true, true)]
+    public async Task AcknowledgmentMessageIdUsesSharedContractAsync(int status, string messageId, bool isError, bool generated = false)
+    {
+        string directory = Directory.CreateTempSubdirectory("mcpcli-ack-").FullName;
+        try
+        {
+            await using var gateway = new ScriptedGateway(_ => ScriptedGateway.Response(status,
+                status == 202 ? "Accepted" : "OK", "application/json",
+                $$"""{"correlationId":"{{ItemId}}"{{messageId}}}"""));
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            Func<IReadOnlyList<System.Reflection.Assembly>> manifest = () => [typeof(CreateItemCommand).Assembly];
+            IReadOnlyDictionary<string, string?> environment = new Dictionary<string, string?>();
+            string[] globals = ["--url", gateway.Url];
+            string payload = $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""";
+            var arguments = new Dictionary<string, object?>
+            {
+                ["operation"] = "sample.create-item", ["payload"] = payload,
+            };
+            string[] correlationOption = [];
+            if (!generated)
+            {
+                arguments["correlationId"] = CorrelationId;
+                correlationOption = ["--correlation-id", CorrelationId];
+            }
+
+            HeadResult cli = await BothHeads.InvokeCliAsync(store, manifest, environment,
+                ["send", "sample.create-item", "--payload", payload, .. correlationOption, .. globals]);
+            gateway.Requests.Count.ShouldBe(1);
+            var heads = new List<HeadResult> { cli };
+            foreach (string version in new[] { "2025-06-18", "2026-07-28" })
+            {
+                heads.Add(await BothHeads.InvokeMcpAsync(store, manifest, environment, globals, "send_command", arguments,
+                    captureOutputSchema: true, protocolVersion: version));
+                gateway.Requests.Count.ShouldBe(heads.Count);
+            }
+
+            foreach ((HeadResult head, GatewayRequest request) in heads.Zip(gateway.Requests))
+            {
+                using JsonDocument sent = JsonDocument.Parse(request.Body);
+                string? submitted = sent.RootElement.GetProperty("messageId").GetString();
+                string? submittedCorrelation = sent.RootElement.GetProperty("correlationId").GetString();
+                submittedCorrelation.ShouldBe(generated ? submitted : CorrelationId);
+                string? acknowledged = messageId.EndsWith("\"", StringComparison.Ordinal) ? ItemId : submitted;
+                string expected = isError
+                    ? $$$"""{"error":{"code":"gateway_error","status":{{{status}}},"detail":"The Gateway returned an invalid command message ID. The command may have succeeded.","correlationId":"{{{submittedCorrelation}}}"}}"""
+                    : $$"""{"operation":"sample.create-item","messageId":"{{acknowledged}}","correlationId":"{{CorrelationId}}","tenant":"sample-tenant","aggregateId":"{{ItemId}}","status":"accepted"}""";
+                BothHeads.AssertDocument(head, expected, isError);
+                HeadDiagnostics.AssertGatewayOnly(head, gateway.Url, "/api/v1/commands", status);
+                using JsonDocument document = JsonDocument.Parse(head.Document);
+                foreach (JsonElement schema in heads.Skip(1).Select(mcp => mcp.OutputSchema.ShouldNotBeNull()))
+                {
+                    JsonSchema.FromText(schema.GetRawText()).Evaluate(document.RootElement).IsValid.ShouldBeTrue(head.Document);
+                }
+
+                if (isError)
+                {
+                    head.AllChannels.ShouldNotContain("unexpected-identifier");
+                }
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
 
     /// <summary>Both heads submit equivalent envelopes and echo only a caller-supplied idempotency key.</summary>
     [Theory]
