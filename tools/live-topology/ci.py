@@ -773,22 +773,23 @@ def prepare(evidence: Path) -> None:
         logging = ET.SubElement(overrides_xml, 'Target', {
             'Name': 'McpCliRequireDeterministicLoggingGenerator', 'BeforeTargets': 'CoreCompile',
             'Condition': tenant_condition})
-        for item, filename, package in (
-                ('_McpCliTelemetryLoggingGenerator', 'Microsoft.Gen.Logging', 'Microsoft.Extensions.Telemetry.Abstractions'),
-                ('_McpCliStandardLoggingGenerator', 'Microsoft.Extensions.Logging.Generators', 'Microsoft.NETCore.App.Ref')):
+        for item, filename, package, version in (
+                ('_McpCliTelemetryLoggingGenerator', 'Microsoft.Gen.Logging', 'Microsoft.Extensions.Telemetry.Abstractions', '11.0.1'),
+                ('_McpCliStandardLoggingGenerator', 'Microsoft.Extensions.Logging.Generators', 'Microsoft.NETCore.App.Ref', '11.0.0')):
             ET.SubElement(ET.SubElement(logging, 'ItemGroup'), item, {
                 'Include': '@(Analyzer)', 'Condition': "'%(Analyzer.Filename)' == '" + filename + "'"})
             ET.SubElement(logging, 'Error', {'Condition': "'@(" + item + "->Count())' != '1'",
                 'Text': 'The current Tenant fixture requires exactly one ' + filename + ' generator.'})
             identity = "'%(" + item + ".NuGetPackageId)' == '" + package \
-                + "' And '%(" + item + ".NuGetPackageVersion)' == '11.0.0'"
+                + "' And '%(" + item + ".NuGetPackageVersion)' == '" + version + "'"
             if package == 'Microsoft.NETCore.App.Ref':
                 identity += " And '%(" + item + ".FrameworkReferenceName)' == 'Microsoft.NETCore.App'" \
                     + " And '%(" + item + ".FrameworkReferenceVersion)' == '11.0.0'"
             ET.SubElement(ET.SubElement(logging, 'ItemGroup'), item + 'Expected', {
                 'Include': '@(' + item + ')', 'Condition': identity})
             ET.SubElement(logging, 'Error', {'Condition': "'@(" + item + "Expected->Count())' != '1'",
-                'Text': 'The current Tenant fixture requires the exact ' + package + ' 11.0.0 generator identity.'})
+                'Text': f"The current Tenant fixture requires the exact {package} {version} generator identity. "
+                        f"Found @({item}->'%(NuGetPackageId)/%(NuGetPackageVersion)')."})
         ET.SubElement(ET.SubElement(logging, 'ItemGroup'), 'Analyzer', {
             'Remove': '@(_McpCliTelemetryLoggingGenerator)'})
         ET.ElementTree(overrides_xml).write(overrides, encoding='utf-8', xml_declaration=True)

@@ -244,9 +244,11 @@ back to the launched receiver. The current Tenant
 source build uses the standard `LoggerMessage` generator from the exact
 `Microsoft.NETCore.App.Ref` 11.0.0 targeting pack. The telemetry replacement generator emits its two nested
 `Log` types in an unstable order, changing DLL/PDB hashes on an unchanged rebuild.
-The private post-import target requires exactly one generator from each expected
-11.0.0 package or targeting pack (including exact framework metadata), removes only the telemetry logging replacement, and retains the
-metrics generator and all runtime/reference packages. This same configuration is
+The private post-import target requires exactly one logging generator from
+`Microsoft.Extensions.Telemetry.Abstractions` 11.0.1 and exactly one from the
+11.0.0 targeting pack with its framework metadata. The target removes the
+telemetry logging replacement and retains the metrics generator and all
+runtime and reference packages. This configuration is
 sealed before execution and inherited by the ordinary SDK preparation and Aspire
 rebuilds. Historical profiles remain unchanged. The Parties
 adapter remains a separate compiled library. Its ordinary build uses

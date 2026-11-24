@@ -1118,9 +1118,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
     def test_current_tenant_generator_selection_uses_real_msbuild_and_refuses_identity_drift(self):
         prepared = self.prepare()
         override = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
-        telemetry = ('telemetry/Microsoft.Gen.Logging.dll', 'Microsoft.Extensions.Telemetry.Abstractions', '11.0.0')
+        telemetry = ('telemetry/Microsoft.Gen.Logging.dll', 'Microsoft.Extensions.Telemetry.Abstractions', '11.0.1')
         standard = ('logging/Microsoft.Extensions.Logging.Generators.dll', 'Microsoft.NETCore.App.Ref', '11.0.0')
-        metrics = ('telemetry/Microsoft.Gen.Metrics.dll', 'Microsoft.Extensions.Telemetry.Abstractions', '11.0.0')
+        metrics = ('telemetry/Microsoft.Gen.Metrics.dll', 'Microsoft.Extensions.Telemetry.Abstractions', '11.0.1')
         other = ('unrelated/Other.Analyzer.dll', 'Other.Analyzer', '1.0.0')
 
         def execute(name, analyzers, project_name='Hexalith.Tenants'):
@@ -1153,7 +1153,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual(0, selected.returncode, selected.stdout + selected.stderr)
         self.assertEqual('false', selected.stdout.strip())
         self.assertEqual({'Microsoft.Extensions.Logging.Generators|Microsoft.NETCore.App.Ref|11.0.0',
-                          'Microsoft.Gen.Metrics|Microsoft.Extensions.Telemetry.Abstractions|11.0.0',
+                          'Microsoft.Gen.Metrics|Microsoft.Extensions.Telemetry.Abstractions|11.0.1',
                           'Other.Analyzer|Other.Analyzer|1.0.0'}, set(remaining.read_text().splitlines()))
         unchanged, remaining = execute('unrelated', [telemetry, standard, metrics, other], 'Other.Host')
         self.assertEqual(0, unchanged.returncode, unchanged.stdout + unchanged.stderr)
@@ -1166,7 +1166,8 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             'duplicate-standard': [telemetry, standard, ('duplicate/' + standard[0], *standard[1:])],
             'wrong-telemetry-package': [(telemetry[0], 'Untrusted.Package', telemetry[2]), standard],
             'wrong-standard-package': [telemetry, (standard[0], 'Untrusted.Package', standard[2])],
-            'wrong-telemetry-version': [(telemetry[0], telemetry[1], '11.0.1'), standard],
+            'previous-telemetry-version': [(telemetry[0], telemetry[1], '11.0.0'), standard],
+            'wrong-telemetry-version': [(telemetry[0], telemetry[1], '11.0.2'), standard],
             'wrong-standard-version': [telemetry, (standard[0], standard[1], '11.0.1')],
             'wrong-standard-framework': [telemetry, standard],
             'wrong-standard-framework-version': [telemetry, standard],
