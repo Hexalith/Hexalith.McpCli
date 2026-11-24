@@ -1371,10 +1371,20 @@ done
         self.assertEqual(report['errors'], [])
         self.assertEqual([(s['surface'], s['signals']) for s in report['surfaces']],
                          [(self.binding(), ['executable-project'])])
+        # A Compile glob beside a nested gitlink also still expands over committed sources.
+        self.write(self.repo, 'dependencies/tool/Tool.cs', 'using System.CommandLine;')
+        self.write(self.repo, PROJECT, '<Project><ItemGroup><Compile Include="../../../dependencies/**/*.cs"/></ItemGroup></Project>')
+        self.commit_with_gitlinks({'vendor/producer': pin}); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertIn((self.binding(), ['command-line-source'], ['dependencies/tool/Tool.cs']),
+                      [(s['surface'], s['signals'], s['sources']) for s in report['surfaces']])
         # A glob cannot prove what an unopened gitlink below its directory contains.
         for project, rule, label in (
                 ('<Project><Import Project="../../../dependencies/*/eng/*.props"/></Project>',
                  'unavailable-local-import', 'dependencies/*/eng/*.props'),
+                ('<Project><Import Project="../../../dependencies/?roducer/eng/*.props"/></Project>',
+                 'unavailable-local-import', 'dependencies/?roducer/eng/*.props'),
                 ('<Project><ItemGroup><Compile Include="../../../dependencies/**/*.cs"/></ItemGroup></Project>',
                  'unsafe-or-nested-compile-source', 'dependencies/**/*.cs')):
             with self.subTest(rule=rule):
@@ -1382,8 +1392,8 @@ done
                 self.commit_with_gitlinks({'vendor/producer': pin, 'dependencies/producer': pin}); self.pin()
                 report = self.run_cli(1)
                 self.assert_source_errors(report, PROJECT, [rule], [label])
-                # The refused project yields no surface; unimported metadata is still classified on its own.
-                self.assertEqual([s['surface']['kind'] for s in report['surfaces']], ['source'])
+                # The refused project yields no surface; unconsumed files are still classified on their own.
+                self.assertEqual([s['surface']['kind'] for s in report['surfaces']], ['source', 'source'])
 
     def test_partial_root_keeps_other_projects_sources_and_publication_observations(self):
         self.write(self.repo, 'broken/Broken.csproj', '<Project>')
