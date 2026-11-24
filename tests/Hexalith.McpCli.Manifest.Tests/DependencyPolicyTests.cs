@@ -531,6 +531,21 @@ public sealed class DependencyPolicyTests
         Assert.Equal([expected], Check(policy, graph, projects));
     }
 
+    /// <summary>Assembly references and package downloads are refused outside the reviewed graph.</summary>
+    [Theory]
+    [InlineData("Hexalith.McpCli", """<Reference Include="Foreign.Binary" HintPath="../../Foreign.Binary.dll" />""",
+        "Reference item Foreign.Binary: Hexalith.McpCli")]
+    [InlineData("Hexalith.McpCli", """<packagedownload Include="Foreign.Package" Version="[1.0.0]" />""",
+        "PackageDownload item Foreign.Package: Hexalith.McpCli")]
+    [InlineData("Hexalith.McpCli.Analyzers", """<Reference Update="Foreign.Binary"><HintPath>Foreign.dll</HintPath></Reference>""",
+        "Reference item Foreign.Binary: Hexalith.McpCli > Hexalith.McpCli.Analyzers")]
+    public void RefusesDependenciesOutsideTheRestoreGraph(string project, string declaration, string diagnostic)
+    {
+        var (policy, graph, projects) = Minimal();
+        AddReference(projects, Path.Combine(TestRoot, "src", project, project + ".csproj"), declaration);
+        Assert.Equal([$"Project {project} uses forbidden {diagnostic}"], Check(policy, graph, projects));
+    }
+
     /// <summary>MSBuild metadata updates and removals are not additional dependency declarations.</summary>
     [Theory]
     [InlineData("<PackageReference Update=\"Unapproved.Package\" PrivateAssets=\"all\" />")]

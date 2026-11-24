@@ -18,13 +18,24 @@ internal static class DependencyPolicyGate
         CheckIntegrity(policy, failures);
         foreach ((string project, XDocument document) in projects.OrderBy(item => item.Key, StringComparer.Ordinal))
         {
+            string projectId = Path.GetFileNameWithoutExtension(project);
+            string projectPath = paths.GetValueOrDefault(projectId, $"{graph.RootId} > {projectId}");
+            foreach (string itemType in new[] { "Reference", "PackageDownload" })
+            {
+                foreach (XElement item in document.Descendants()
+                    .Where(element => element.Name.LocalName.Equals(itemType, StringComparison.OrdinalIgnoreCase)))
+                {
+                    string identity = (string?)item.Attribute("Include") ?? (string?)item.Attribute("Update")
+                        ?? (string?)item.Attribute("Remove") ?? string.Empty;
+                    failures.Add($"Project {projectId} uses forbidden {itemType} item {identity}: {projectPath}");
+                }
+            }
+
             if (project == Path.Combine(root, "src", "Hexalith.McpCli.Analyzers", "Hexalith.McpCli.Analyzers.csproj"))
             {
                 continue;
             }
 
-            string projectId = Path.GetFileNameWithoutExtension(project);
-            string projectPath = paths.GetValueOrDefault(projectId, $"{graph.RootId} > {projectId}");
             if (!IsProductionProject(root, project))
             {
                 failures.Add($"Production source contains non-McpCli project {projectId}: {projectPath}");
