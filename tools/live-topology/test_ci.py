@@ -79,7 +79,9 @@ if name == 'dotnet':
     with (root / 'dotnet-package-caches.jsonl').open('a') as caches:
         caches.write(json.dumps({'args': args, 'cache': os.environ.get('NUGET_PACKAGES'),
                                  'overrides': os.environ.get('CustomAfterMicrosoftCommonTargets'),
-                                 'afterDirectory': os.environ.get('CustomAfterDirectoryBuildTargets')}) + '\n')
+                                 'afterDirectory': os.environ.get('CustomAfterDirectoryBuildTargets'),
+                                 'restoreConfig': os.environ.get('RestoreConfigFile'),
+                                 'httpCache': os.environ.get('NUGET_HTTP_CACHE_PATH')}) + '\n')
     if '-list' in args and args[-1] == 'tests':
         modules = root / 'tools/conformance-vectors/v1/current/modules'
         plans = root / 'tools/live-topology/plans-current'
@@ -240,6 +242,9 @@ with (root / 'runner-source-overrides.jsonl').open('a') as log:
     log.write(json.dumps(os.environ.get('CustomAfterMicrosoftCommonTargets')) + '\n')
 with (root / 'runner-after-directory.jsonl').open('a') as log:
     log.write(json.dumps(os.environ.get('CustomAfterDirectoryBuildTargets')) + '\n')
+with (root / 'runner-restore.jsonl').open('a') as log:
+    log.write(json.dumps({'config': os.environ.get('RestoreConfigFile'),
+                         'httpCache': os.environ.get('NUGET_HTTP_CACHE_PATH')}) + '\n')
 with (root / 'runner-reader-audit.jsonl').open('a') as log:
     log.write(json.dumps({'path': os.environ.get('MCPCLI_NATIVE_READER_AUDIT_PATH'),
                          'sha256': os.environ.get('MCPCLI_NATIVE_READER_AUDIT_SHA256')}) + '\n')
@@ -905,12 +910,17 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
     def test_source_catalog_override_reaches_all_builds_and_both_isolated_runners(self):
         self.env['CustomAfterMicrosoftCommonTargets'] = str(self.root / 'untrusted.targets')
         self.env['CustomAfterDirectoryBuildTargets'] = str(self.root / 'untrusted-after-directory.targets')
+        self.env['RestoreConfigFile'] = str(self.root / 'untrusted.config')
+        self.env['NUGET_HTTP_CACHE_PATH'] = str(self.root / 'untrusted-http')
         prepared = self.prepare()
         override = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
         after_directory = Path(prepared['privateDirectory']) / 'source-runtime-after-directory.targets'
+        config = Path(prepared['privateDirectory']) / 'source-restore.config'
+        http_cache = Path(prepared['privateDirectory']) / 'source-http'
         self.assertEqual(hashlib.sha256(override.read_bytes()).hexdigest(), prepared['sourcePackageCatalog']['overridesSha256'])
         self.assertEqual(hashlib.sha256(after_directory.read_bytes()).hexdigest(),
                          prepared['sourcePackageCatalog']['afterDirectorySha256'])
+        self.assertEqual(hashlib.sha256(config.read_bytes()).hexdigest(), prepared['sourcePackageCatalog']['restoreConfigSha256'])
         warning_policy = ET.parse(override).getroot().findall('./PropertyGroup/WarningsNotAsErrors')
         self.assertEqual(1, len(warning_policy))
         self.assertEqual('', warning_policy[0].text or '')
@@ -918,12 +928,16 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         builds = [call for call in calls if call['args'][0] in ('build', 'msbuild')]
         self.assertEqual({str(override)}, {call['overrides'] for call in builds})
         self.assertEqual({str(after_directory)}, {call['afterDirectory'] for call in builds})
+        self.assertEqual({str(config)}, {call['restoreConfig'] for call in builds})
+        self.assertEqual({str(http_cache)}, {call['httpCache'] for call in builds})
         result = self.invoke('run-ci.sh')
         self.assertEqual(0, result.returncode, result.stdout + result.stderr)
         inherited = [json.loads(line) for line in (self.root / 'runner-source-overrides.jsonl').read_text().splitlines()]
         self.assertEqual([str(override)] * 3, inherited)
         inherited_after = [json.loads(line) for line in (self.root / 'runner-after-directory.jsonl').read_text().splitlines()]
         self.assertEqual([str(after_directory)] * 3, inherited_after)
+        inherited_restore = [json.loads(line) for line in (self.root / 'runner-restore.jsonl').read_text().splitlines()]
+        self.assertEqual([{'config': str(config), 'httpCache': str(http_cache)}] * 3, inherited_restore)
 
     def test_after_directory_import_replaces_published_tenants_catalog_sdk_errors(self):
         prepared = self.prepare()
@@ -1379,7 +1393,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         private = Path(prepared['privateDirectory'])
         paths = [self.root / 'references/Hexalith.Builds/Props/Directory.Packages.props',
                  private / 'source-runtime-packages.props', private / 'source-runtime-overrides.targets',
-                 private / 'source-runtime-after-directory.targets',
+                 private / 'source-runtime-after-directory.targets', private / 'source-restore.config',
                  private / 'Hexalith.Builds' / 'Props' / 'Directory.Packages.props',
                  private / 'Hexalith.Builds' / 'Props' / 'ContainerProvenance.targets']
         for path in paths:

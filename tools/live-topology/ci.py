@@ -387,7 +387,8 @@ def require_source_catalog(prepared: dict) -> Path:
             or hashlib.sha256(catalog.read_bytes()).hexdigest() != expected.get('catalogSha256'):
         raise ValueError('The prepared root-declared source package catalog identity or bytes changed.')
     files = {'source-runtime-packages.props': 'overlaySha256', 'source-runtime-overrides.targets': 'overridesSha256',
-             'source-runtime-after-directory.targets': 'afterDirectorySha256'}
+             'source-runtime-after-directory.targets': 'afterDirectorySha256',
+             'source-restore.config': 'restoreConfigSha256'}
     for name, key in files.items():
         path = private / name
         if path.is_symlink() or not path.is_file() or hashlib.sha256(path.read_bytes()).hexdigest() != expected.get(key):
@@ -827,22 +828,24 @@ def prepare(evidence: Path) -> None:
         nested_props.mkdir(parents=True)
         shutil.copyfile(overlay, nested_props / 'Directory.Packages.props')
         shutil.copyfile(provenance, nested_props / 'ContainerProvenance.targets')
+        source_restore_config = private / 'source-restore.config'
+        native_audit.write_restore_config(source_restore_config)
         source_environment = dict(os.environ, NUGET_PACKAGES=str(package_cache),
                                   NUGET_HTTP_CACHE_PATH=str(private / 'source-http'),
                                   CustomAfterMicrosoftCommonTargets=str(overrides),
-                                  CustomAfterDirectoryBuildTargets=str(after_directory))
+                                  CustomAfterDirectoryBuildTargets=str(after_directory),
+                                  RestoreConfigFile=str(source_restore_config))
         receipt['sourcePackageCatalog'] = {'buildsCommit': actual_builds,
                                            'catalogSha256': hashlib.sha256(catalog.read_bytes()).hexdigest(),
                                            'overlaySha256': hashlib.sha256(overlay.read_bytes()).hexdigest(),
                                            'overridesSha256': hashlib.sha256(overrides.read_bytes()).hexdigest(),
                                            'afterDirectorySha256': hashlib.sha256(after_directory.read_bytes()).hexdigest(),
+                                           'restoreConfigSha256': hashlib.sha256(source_restore_config.read_bytes()).hexdigest(),
                                            'nestedProvenanceSha256': hashlib.sha256(provenance.read_bytes()).hexdigest()}
         receipt['sources'] = native_cohort.select_sources(ROOT, selection, evidence, bounded)
         fixture_root = private / 'source-fixtures'
         source_proof = native_sources.create(ROOT, fixture_root, selection, evidence, bounded)
         receipt['sourceFixtureRoot'] = str(fixture_root)
-        source_restore_config = private / 'source-restore.config'
-        native_audit.write_restore_config(source_restore_config)
 
         def source_properties(module: str) -> list[str]:
             properties = ['-p:NuGetAudit=true', '-p:NuGetAuditMode=all', '-p:NuGetAuditLevel=low', '-p:TreatWarningsAsErrors=true',
@@ -1038,6 +1041,8 @@ def run(evidence: Path) -> None:
                            MCPCLI_NATIVE_SOURCE_FIXTURES_SHA256=prepared['sourceFixtures']['sha256'],
                            CustomAfterMicrosoftCommonTargets=str(source_overrides),
                            CustomAfterDirectoryBuildTargets=str(source_overrides.with_name('source-runtime-after-directory.targets')),
+                           RestoreConfigFile=str(source_overrides.with_name('source-restore.config')),
+                           NUGET_HTTP_CACHE_PATH=str(source_overrides.with_name('source-http')),
                            UseHexalithProjectReferences='false', UseNuGetDeps='true',
                            HexalithEventStoreFromSource='false', HexalithEventStoreVersion=EVENTSTORE_COHORT,
                            Topology__UsePackagedGateway='true',
