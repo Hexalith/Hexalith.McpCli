@@ -2,7 +2,7 @@
 name: pushall
 description: Process every root-declared submodule in its own subagent, then commit, merge, push, and safely prune branches in the main repository after all subagents finish. Only invoke this directly with /pushall — never trigger it automatically.
 disable-model-invocation: true
-allowed-tools: Bash(git *)
+allowed-tools: Bash(git *) Bash(mktemp *) Bash(printf *) Bash(sed *) Bash(cmp *) Bash(run-with-temp python3 *)
 ---
 
 # /pushall — sync, merge, and prune every branch
@@ -16,6 +16,24 @@ submodule pointers and its push happens last.
 Before running any Git command, read
 `references/Hexalith.AI.Tools/hexalith-git-instructions.md` completely and follow it. Treat it as
 authoritative. If it is unavailable, stop `/pushall` and report the missing instructions.
+
+For every commit, write the full proposed Conventional Commit message to a temporary file and
+validate that file with the owning repository's pinned commitlint CLI and configuration. Keep the
+exact file and successful validation result with the run evidence. Revise rejected messages and
+validate them again. If validation cannot run, record the exact failing command and stop that
+commit. Use `git -C <dir> commit --cleanup=verbatim --file <message-file>` with the validated file.
+Compare the resulting commit object's message bytes with the file before pushing.
+
+For an adopted module, use the validator from its committed Builds release. When it supplies
+`Github/lib/guard_tools.py`, run it with `run-with-temp python3`. Import `Tools` from that directory
+and call `Tools(Path(os.environ["TMPDIR"])).lint_message(message, identity)` with the exact UTF-8
+message read from the file. The guard installs and verifies the locked tooling. Record the Builds
+revision, validator command and result. Follow the owning repository's instructions for other
+validator installations.
+
+Run the owning repository's required checks before pushing. Adopted modules require
+`python3 references/Hexalith.Builds/check.py` from a clean standalone checkout of the exact commit
+being pushed, with Builds at the committed direct gitlink and `origin/main` fetched.
 
 ## /pushall-specific rules (never deviate)
 
@@ -89,8 +107,8 @@ Apply this to one repo directory `<dir>` at a time (a submodule path, or `.` for
    - Follow the owning repository's submodule policy. Verify each allowed staged gitlink is
      available on its declared remote before committing pointer changes separately from ordinary
      files. Leave centrally owned gitlinks untouched.
-   - Commit a nonempty reviewed staged patch with
-     `git -C <dir> commit -m "build: sync local changes via /pushall"`.
+   - Validate and commit each nonempty reviewed staged patch using the preflight procedure. Use a
+     subject describing the reviewed changes. Give a separate gitlink commit its own message.
 4. `git -C <dir> switch <default-branch>`. If the switch would overwrite working changes, keep
    them intact and report the repo as blocked.
 5. Try `git -C <dir> merge --ff-only origin/<default-branch>` to catch up with the remote first.
@@ -107,14 +125,20 @@ Apply this to one repo directory `<dir>` at a time (a submodule path, or `.` for
      `HEAD`. Keep that full ref as the merge target. Keep `<branch>` and the fetched object ID for
      the deletion lease in step 10. Do not shorten the ref.
 7. For every ref in the merge list (full local branch refs first, then full remote-tracking refs):
-   - `git -C <dir> merge --no-ff <ref> -m "build: merge <ref> into <default-branch> via /pushall"`
+   - Skip a ref already contained in the destination. Prepare and validate a message with a short
+     subject and a body identifying the source and destination tips by their full object IDs.
+     Record the full refs in the run evidence. Run `git -C <dir> merge --no-ff --no-commit -- <ref>`.
+     On success, commit the pending merge using the validated file.
    - On conflict, list unresolved paths with `git -C <dir> diff --name-only --diff-filter=U`, inspect
      the base and both sides, and edit the files to preserve compatible changes and intended
      behavior from both branches.
    - Stage the resolved paths, verify that no unresolved paths remain, run the repository's most
-     relevant available validation, then complete the merge with `git -C <dir> commit --no-edit`.
+     relevant available validation, and complete the merge with the validated file. If the message
+     changes, validate the entire revised file first.
    - If the conflict cannot be resolved safely, unresolved paths remain, or validation fails, run
      `git -C <dir> merge --abort`, record the ref as skipped, and continue to the next ref.
+   - If another merge or commit error leaves a pending merge started by this run, abort it before
+     continuing. If cleanup fails, stop processing the repo and report the pending state.
 8. `git -C <dir> push origin <default-branch>`. Record failure and continue if it's rejected.
 9. Delete local branches now fully merged into the default branch (excluding the default branch
    itself): `git -C <dir> branch --merged <default-branch>` minus the default branch, then
