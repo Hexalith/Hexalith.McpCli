@@ -2790,12 +2790,13 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                                    stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         child = None
         try:
-            deadline = time.monotonic() + 30
+            # Smoke starts after the vector process exits and its owned cleanup completes.
+            deadline = time.monotonic() + 60
             while not (self.root / 'cancel-child.json').exists():
                 if process.poll() is not None:
                     self.fail('Smoke child did not become ready: ' + ''.join(process.communicate(timeout=2)))
                 if time.monotonic() >= deadline:
-                    self.fail('Smoke child did not become ready within 30 seconds.')
+                    self.fail('Smoke child did not become ready within 60 seconds.')
                 time.sleep(.01)
             child = json.loads((self.root / 'cancel-child.json').read_text())
             process.send_signal(signal.SIGTERM)
