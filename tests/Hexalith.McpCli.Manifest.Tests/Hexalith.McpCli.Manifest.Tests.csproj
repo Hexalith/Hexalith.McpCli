@@ -25,6 +25,7 @@
     <Compile Include="../Hexalith.McpCli.Integration.Tests/ProjectionWriterBootstrap.cs" Link="ProjectionWriterBootstrap.cs" />
     <Compile Include="../Hexalith.McpCli.Integration.Tests/TopologyPrerequisites.cs" Link="TopologyPrerequisites.cs" />
     <ProjectReference Include="../Hexalith.McpCli.AppHost/Hexalith.McpCli.AppHost.csproj" IsAspireProjectResource="false" ReferenceOutputAssembly="false" />
+    <ProjectReference Include="../Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj" ReferenceOutputAssembly="false" />
     <ProjectReference Include="../Hexalith.McpCli.Integration.Tests/Hexalith.McpCli.Integration.Tests.csproj" ReferenceOutputAssembly="false" />
     <ProjectReference Include="../fixtures/Topology.DaprStub/Topology.DaprStub.csproj" ReferenceOutputAssembly="false" />
     <Compile Include="../Hexalith.McpCli.AppHost/TopologyConfiguration.cs" Link="TopologyConfiguration.cs" />

@@ -836,6 +836,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: A clean focused Manifest.Tests build does not build the package Gateway host required by its socket tests.
   evidence: Low; pre-existing package-host work. `tests/Hexalith.McpCli.Manifest.Tests/PackageGatewayBoundaryTests.cs:41` asserts that the host DLL already exists, but `tests/Hexalith.McpCli.Manifest.Tests/Hexalith.McpCli.Manifest.Tests.csproj:12` and the referenced Integration.Tests/AppHost graph have no package-host build dependency. The documented full solution build supplies it; add a build-only project dependency for clean focused runs.
+  status: done 2026-11-24
+  resolution: Manifest.Tests builds the owned Gateway host through a build-only project reference. The package host is produced by a clean focused Release build before its socket tests run.
 
 ## Deferred from: implementation of spec-4-18-publish-the-validated-package-pair.md (2026-11-05)
 
