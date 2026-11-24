@@ -44,7 +44,7 @@ public sealed class McpStdioProcessTests
             var transport = new RecordingClientTransport(new StreamClientTransport(
                 process.StandardInput.BaseStream, standardOutput));
             await using (McpClient client = await McpClient.CreateAsync(transport,
-                new McpClientOptions { ProtocolVersion = version }, cancellationToken: timeout.Token))
+                PinnedVersion(version), cancellationToken: timeout.Token))
             {
                 transport.Methods[0].ShouldBe(firstMethod);
                 client.NegotiatedProtocolVersion.ShouldBe(version);
@@ -138,7 +138,7 @@ public sealed class McpStdioProcessTests
             Task<string> standardError = process.StandardError.ReadToEndAsync(timeout.Token);
             var transport = new StreamClientTransport(process.StandardInput.BaseStream, process.StandardOutput.BaseStream);
             await using (McpClient client = await McpClient.CreateAsync(transport,
-                new McpClientOptions { ProtocolVersion = version }, cancellationToken: timeout.Token))
+                PinnedVersion(version), cancellationToken: timeout.Token))
             {
                 client.NegotiatedProtocolVersion.ShouldBe(version);
                 const string operation = "routing-fixture.items-list";
@@ -208,7 +208,7 @@ public sealed class McpStdioProcessTests
             var standardOutput = new RecordingReadStream(process.StandardOutput.BaseStream);
             var transport = new RecordingClientTransport(new StreamClientTransport(process.StandardInput.BaseStream, standardOutput));
             await using (McpClient client = await McpClient.CreateAsync(transport,
-                new McpClientOptions { ProtocolVersion = version }, cancellationToken: timeout.Token))
+                PinnedVersion(version), cancellationToken: timeout.Token))
             {
                 transport.Methods[0].ShouldBe(firstMethod);
                 client.NegotiatedProtocolVersion.ShouldBe(version);
@@ -333,7 +333,7 @@ public sealed class McpStdioProcessTests
             var standardOutput = new RecordingReadStream(process.StandardOutput.BaseStream);
             var transport = new StreamClientTransport(process.StandardInput.BaseStream, standardOutput);
             await using (McpClient client = await McpClient.CreateAsync(transport,
-                new McpClientOptions { ProtocolVersion = "2026-07-28" }, cancellationToken: timeout.Token))
+                PinnedVersion("2026-07-28"), cancellationToken: timeout.Token))
             {
                 IList<McpClientTool> tools = await client.ListToolsAsync(cancellationToken: timeout.Token);
                 tools.Select(tool => tool.Name).ShouldBe([
@@ -519,7 +519,7 @@ public sealed class McpStdioProcessTests
             var standardOutput = new RecordingReadStream(process.StandardOutput.BaseStream);
             await using (McpClient client = await McpClient.CreateAsync(
                 new StreamClientTransport(process.StandardInput.BaseStream, standardOutput),
-                new McpClientOptions { ProtocolVersion = "2025-06-18" }, cancellationToken: timeout.Token))
+                PinnedVersion("2025-06-18"), cancellationToken: timeout.Token))
             {
                 CallToolResult description = await client.CallToolAsync("describe_operation",
                     new Dictionary<string, object?> { ["operation"] = "sample.create-item" }, cancellationToken: timeout.Token);
@@ -557,6 +557,11 @@ public sealed class McpStdioProcessTests
             Directory.Delete(directory, recursive: true);
         }
     }
+
+    // These fixture processes must negotiate the selected revision within the test's overall deadline.
+    // The shorter discovery probe is for clients that can fall back to an older revision.
+    private static McpClientOptions PinnedVersion(string version)
+        => new() { ProtocolVersion = version, DiscoverProbeTimeout = Timeout.InfiniteTimeSpan };
 
     private static void AssertStartupError(string diagnostic, string code, string? argument = null)
     {
