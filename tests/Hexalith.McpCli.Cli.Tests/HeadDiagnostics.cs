@@ -81,7 +81,7 @@ internal static partial class HeadDiagnostics
                 or ("1256455528", "Server (stream) (hexalith) shut down.");
         return entry.Category == "Microsoft.Hosting.Lifetime" && entry.Id == "0"
             && (entry.Message is "Application started. Press Ctrl+C to shut down." or "Hosting environment: Production"
-                or "Application is shutting down..." || entry.Message == "Content root path: " + RepositoryRoot());
+                or "Application is shutting down..." || entry.Message == "Content root path: " + HostBaseDirectory());
     }
 
     private static void AssertProcessLifecycle(List<(string Level, string Category, string Id, string Message)> entries,
@@ -92,6 +92,11 @@ internal static partial class HeadDiagnostics
         lifecycle.Length.ShouldBe(8, result.Error);
         lifecycle.Distinct().Count().ShouldBe(8, result.Error);
     }
+
+    // The empty host builder roots the unused content root at the launched host's base directory, never the working directory.
+    private static string HostBaseDirectory()
+        => Path.Combine(RepositoryRoot(), "tests", "Hexalith.McpCli.ConformanceHost", "bin", "Release", "net11.0")
+            + Path.DirectorySeparatorChar;
 
     private static string RepositoryRoot()
     {
