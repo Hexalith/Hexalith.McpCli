@@ -330,7 +330,8 @@ the four digest-pinned, SHA-256-verified binaries into a new runtime beneath
 `RUNNER_TEMP` (the system temporary directory locally). Only a nonsecret
 preparation receipt path is exported through `GITHUB_ENV`. Source SHAs and Git
 status, each host's selected `HexalithEventStoreVersion`, gateway provenance,
-tool versions and executable hashes are retained. Source-checkout commits record
+tool versions and executable hashes are retained. The Gateway receipt also
+binds the native .NET apphost alongside the managed assemblies and configuration. Source-checkout commits record
 the domain code; the snapshot manifest records its exact configuration source.
 The separate gateway package source commit identifies the deployed gateway
 implementation.

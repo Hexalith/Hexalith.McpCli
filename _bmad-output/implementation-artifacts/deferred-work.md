@@ -799,6 +799,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: CI package provenance may omit an executable actually launched by Aspire.
   evidence: Medium, unverified; pre-existing published-profile work. `tools/live-topology/ci.py:231-233` binds only DLL/JSON outputs, while native apphost files also exist. Inspect the effective Aspire/DCP launch command to determine whether any excluded native executable runs; bind the used launch assets and add mutation coverage if so.
+  status: done 2026-11-24
+  resolution: The qualified Linux Gateway receipt requires the regular executable SDK apphost and rechecks its hash before execution. Regressions cover non-executable and changed apphost files.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-17-verify-the-operator-setup-experience.md`
   summary: Frozen Memories/Tenants peers are selected by build properties without independent restored-graph assertions.
   evidence: Medium; pre-existing peer-cohort work. `tools/live-topology/ci.py:185-193` checks only EventStore identities, while `tools/live-topology/ci.py:405` passes Memories 3.0.11 and Tenants 5.11.2 properties. Verify the actual required peer identities in project.assets.json and add mutation coverage for ignored/overridden properties.

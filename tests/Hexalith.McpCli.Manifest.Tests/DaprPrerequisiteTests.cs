@@ -123,7 +123,9 @@ public sealed class DaprPrerequisiteTests(DaprPrerequisiteWorkspace workspace) :
         start.ArgumentList.Add("*MissingDaprProducesStandardSkipAndNeverClaimsLiveSuccess");
         using Process process = Process.Start(start)!;
         using var timeout = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
-        timeout.CancelAfter(TimeSpan.FromSeconds(30));
+        // This child runs all twelve prerequisite scenarios. Each nested program
+        // keeps its own 30-second deadline, so the outer process needs a separate budget.
+        timeout.CancelAfter(TimeSpan.FromMinutes(7));
         Task<string> output = process.StandardOutput.ReadToEndAsync(timeout.Token);
         Task<string> error = process.StandardError.ReadToEndAsync(timeout.Token);
         try { await process.WaitForExitAsync(timeout.Token); }

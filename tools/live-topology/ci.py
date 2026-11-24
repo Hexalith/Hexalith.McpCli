@@ -220,7 +220,7 @@ def require_contract() -> None:
         raise ValueError('TEST_PLATFORM must be microsoft-testing-platform.')
 
 
-def restored_cohort(project: Path, required: str, *, deployed_required: bool = True) -> dict:
+def restored_cohort(project: Path, required: str, *, deployed_required: bool = True, apphost_required: bool = False) -> dict:
     """Verify restored EventStore archives and any assemblies copied to the project output."""
     assets = json.loads((project.parent / 'obj/project.assets.json').read_text())
     libraries = {name: item for name, item in assets['libraries'].items()
@@ -271,6 +271,12 @@ def restored_cohort(project: Path, required: str, *, deployed_required: bool = T
                                   'binaries': binaries}
     owned = {path.name: hashlib.sha256(path.read_bytes()).hexdigest()
              for path in sorted(output.iterdir()) if path.is_file() and path.suffix in ('.dll', '.json')}
+    if apphost_required:
+        # Native qualification runs on Linux, where the SDK apphost has no extension.
+        executable = output / project.stem
+        if executable.is_symlink() or not executable.is_file() or not os.access(executable, os.X_OK):
+            raise ValueError(f'Launched host is missing its regular executable apphost: {executable}.')
+        owned[executable.name] = hashlib.sha256(executable.read_bytes()).hexdigest()
     return {'packages': packages, 'output': owned, 'deploymentRequired': deployed_required}
 
 
@@ -278,7 +284,7 @@ def gateway_package_provenance(source_root: Path | None = None) -> dict:
     """Bind every launched host, the restored archives and actual configuration to one receipt."""
     source_root = source_root or ROOT / 'references'
     selection = native_cohort.manifest(NATIVE_SELECTION)
-    gateway = restored_cohort(ROOT / PACKAGE_GATEWAY, 'Hexalith.EventStore.Gateway')
+    gateway = restored_cohort(ROOT / PACKAGE_GATEWAY, 'Hexalith.EventStore.Gateway', apphost_required=True)
     identity = 'Hexalith.EventStore.Gateway/' + EVENTSTORE_COHORT
     package = gateway['packages'][identity]
     domains = {module: restored_cohort(source_root / module / 'src' / module / (module + '.csproj'),
@@ -740,6 +746,10 @@ def prepare(evidence: Path) -> None:
         # compile against that same version in their private fixture graph.
         ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
                       {'Update': 'Hexalith.McpCli.Abstractions', 'Version': mcpcli[0]})
+        # Frozen owner props carry a separate legacy test harness pin. These private
+        # runtime builds use the selected package cohort for every EventStore row.
+        ET.SubElement(ET.SubElement(overrides_xml, 'ItemGroup'), 'PackageVersion',
+                      {'Update': 'Hexalith.EventStore.Testing.Integration', 'Version': '$(HexalithEventStoreVersion)'})
         # Telemetry 11's replacement logging generator orders two nested Log types
         # nondeterministically. Keep the actual current Tenant source/runtime packages,
         # but select the standard LoggerMessage generator consistently before sealing.

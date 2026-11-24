@@ -466,6 +466,7 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                 archive.writestr('lib/net11.0/' + name + '.dll', payload)
         projects = [gateway, *(self.root / 'references' / ('Hexalith.' + module) / 'src' / ('Hexalith.' + module)
                               for module in ('Tenants', 'Parties'))]
+        apphost = gateway / 'bin/Release/net11.0/Hexalith.McpCli.EventStoreGateway.TestHost'
         adapter = self.root / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions'
         adapter.mkdir()
         (adapter / 'Hexalith.Parties.EventStoreExtensions.csproj').touch()
@@ -474,6 +475,9 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
             (project / 'obj').mkdir(exist_ok=True)
             output = project / 'bin/Release/net11.0'
             output.mkdir(parents=True)
+            if project == gateway:
+                apphost.write_bytes(b'fixture SDK apphost')
+                apphost.chmod(0o755)
             libraries = {'Hexalith.EventStore.' + suffix + '/5.5.1': {'type': 'package'} for suffix in assemblies}
             target = {name: {'type': 'package', 'runtime': {'lib/net11.0/' + name.split('/')[0] + '.dll': {}}}
                       for name in libraries}
@@ -716,7 +720,8 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         for package, (_, version) in SOURCE_PACKAGE_VERSIONS.items():
             expected_overrides.extend([{'Include': package, 'Exclude': '@(PackageVersion)', 'Version': version},
                                        {'Update': package, 'Version': version}])
-        self.assertEqual([*expected_overrides, {'Update': 'Hexalith.McpCli.Abstractions', 'Version': '3.0.0'}],
+        self.assertEqual([*expected_overrides, {'Update': 'Hexalith.McpCli.Abstractions', 'Version': '3.0.0'},
+                          {'Update': 'Hexalith.EventStore.Testing.Integration', 'Version': '$(HexalithEventStoreVersion)'}],
                          [row.attrib for row in overrides_xml.iter('PackageVersion')])
         after_directory = Path(prepared['privateDirectory']) / 'source-runtime-after-directory.targets'
         self.assertEqual(hashlib.sha256(after_directory.read_bytes()).hexdigest(),
@@ -1553,6 +1558,24 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                         self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
                     finally:
                         path.write_bytes(original)
+
+    def test_preparation_requires_and_run_rechecks_the_gateway_apphost(self):
+        apphost = self.root / 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/bin/Release/net11.0/Hexalith.McpCli.EventStoreGateway.TestHost'
+        apphost.chmod(0o644)
+        result = self.invoke('prepare-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('missing its regular executable apphost', result.stderr)
+
+        apphost.chmod(0o755)
+        self.fresh_evidence()
+        prepared = self.prepare()
+        self.assertEqual(hashlib.sha256(apphost.read_bytes()).hexdigest(),
+                         prepared['gateway']['gatewayHost']['output'][apphost.name])
+        apphost.write_bytes(b'changed SDK apphost')
+        result = self.invoke('run-ci.sh')
+        self.assertNotEqual(0, result.returncode)
+        self.assertIn('gateway.gatewayHost.output.Hexalith.McpCli.EventStoreGateway.TestHost', result.stderr)
+        self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
 
     def test_archive_only_utility_does_not_relax_actual_adapter_deployment_gate(self):
         project = self.root / 'references/Hexalith.Parties/src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj'
