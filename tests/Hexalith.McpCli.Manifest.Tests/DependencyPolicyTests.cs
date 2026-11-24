@@ -44,12 +44,14 @@ public sealed class DependencyPolicyTests
     [InlineData("dependencies", "Frameworks or packages")]
     [InlineData("centralPackageVersions", "Frameworks or packages")]
     [InlineData("projectReferences", "Project references")]
+    [InlineData("sources", "NuGet sources")]
     public void ChangedProductionRestoreInputsExplainHowToRestore(string changed, string reason)
     {
         var current = JsonNode.Parse("""
             {
               "restore": {
                 "projectPath": "tool.csproj",
+                "sources": {"https://example.invalid/feed": {}},
                 "frameworks": {"net11.0": {"projectReferences": {"core.csproj": {}}}}
               },
               "frameworks": {"net11.0": {
@@ -67,6 +69,9 @@ public sealed class DependencyPolicyTests
             case "projectReferences":
                 stale["restore"]!["frameworks"]!["net11.0"]![changed] = new JsonObject();
                 break;
+            case "sources":
+                stale["restore"]![changed] = new JsonObject();
+                break;
             default:
                 stale["frameworks"]!["net11.0"]![changed] = new JsonObject();
                 break;
@@ -77,6 +82,28 @@ public sealed class DependencyPolicyTests
         InvalidOperationException error = Assert.Throws<InvalidOperationException>(() =>
             RequireCurrentProductionAssets(JsonSerializer.SerializeToElement(stale), expected));
         Assert.Equal($"Production assets are stale. {reason} differ from the current restore inputs. {RestoreSolution}", error.Message);
+    }
+
+    [Fact]
+    public void DependencyProjectChangesInvalidateTheProductionRestore()
+    {
+        using JsonDocument baseline = JsonDocument.Parse("""
+            {
+              "tool.csproj": { "restore": { "projectPath": "tool.csproj", "frameworks": {
+                "net11.0": { "projectReferences": { "core.csproj": {} } }
+              } }, "frameworks": {} },
+              "core.csproj": { "restore": { "projectPath": "core.csproj", "frameworks": {} }, "frameworks": {
+                "net11.0": { "dependencies": { "sample": { "version": "[1.0.0, )" } } }
+              } }
+            }
+            """);
+        JsonObject current = JsonNode.Parse(baseline.RootElement.GetRawText())!.AsObject();
+        RequireCurrentRestoreGraph(baseline.RootElement, JsonSerializer.SerializeToElement(current), "tool.csproj");
+        current["core.csproj"]!["frameworks"]!["net11.0"]!["dependencies"]!["sample"]!["version"] = "[2.0.0, )";
+        InvalidOperationException error = Assert.Throws<InvalidOperationException>(() =>
+            RequireCurrentRestoreGraph(baseline.RootElement, JsonSerializer.SerializeToElement(current), "tool.csproj"));
+        Assert.Equal($"Production assets are stale. Frameworks or packages differ from the current restore inputs. {RestoreSolution}",
+            error.Message);
     }
 
     /// <summary>Checks every test project, including the conformance host outside the solution and injected test roots.</summary>
@@ -1266,8 +1293,11 @@ public sealed class DependencyPolicyTests
             {
                 _ = RunMsBuild(project, "Release", "-t:GenerateRestoreGraphFile", $"-p:RestoreGraphOutputPath={graphPath}");
                 using JsonDocument graph = JsonDocument.Parse(File.ReadAllText(graphPath));
-                RequireCurrentProductionAssets(assets.RootElement.GetProperty("project"),
-                    graph.RootElement.GetProperty("projects").GetProperty(project));
+                string restoredGraphPath = Path.Combine(Path.GetDirectoryName(project)!, "obj", Path.GetFileName(project) + ".nuget.dgspec.json");
+                using JsonDocument restoredGraph = ReadProductionAssets(restoredGraphPath);
+                JsonElement currentProjects = graph.RootElement.GetProperty("projects");
+                RequireCurrentProductionAssets(assets.RootElement.GetProperty("project"), currentProjects.GetProperty(project));
+                RequireCurrentRestoreGraph(restoredGraph.RootElement.GetProperty("projects"), currentProjects, project);
             }
             finally
             {
@@ -1294,16 +1324,51 @@ public sealed class DependencyPolicyTests
     {
         JsonElement restoredMetadata = restored.GetProperty("restore");
         JsonElement currentMetadata = current.GetProperty("restore");
+        _ = restoredMetadata.TryGetProperty("sources", out JsonElement restoredSources);
+        _ = currentMetadata.TryGetProperty("sources", out JsonElement currentSources);
         foreach ((string name, JsonElement actual, JsonElement expected) in new[]
         {
             ("Project path", restoredMetadata.GetProperty("projectPath"), currentMetadata.GetProperty("projectPath")),
             ("Frameworks or packages", restored.GetProperty("frameworks"), current.GetProperty("frameworks")),
             ("Project references", restoredMetadata.GetProperty("frameworks"), currentMetadata.GetProperty("frameworks")),
+            ("NuGet sources", restoredSources, currentSources),
         })
         {
-            if (!JsonElement.DeepEquals(actual, expected))
+            if (actual.ValueKind != expected.ValueKind || actual.ValueKind != JsonValueKind.Undefined && !JsonElement.DeepEquals(actual, expected))
             {
                 throw new InvalidOperationException($"Production assets are stale. {name} differ from the current restore inputs. {RestoreSolution}");
+            }
+        }
+    }
+
+    private static void RequireCurrentRestoreGraph(JsonElement restored, JsonElement current, string rootProject)
+    {
+        // Limit the generated graph to NuGet edges. Build-only analyzer references do not appear in the tool's restore.
+        var pending = new Queue<string>();
+        var visited = new HashSet<string>(StringComparer.Ordinal);
+        pending.Enqueue(rootProject);
+        visited.Add(rootProject);
+        while (pending.TryDequeue(out string? path))
+        {
+            if (!restored.TryGetProperty(path, out JsonElement restoredProject))
+            {
+                throw new InvalidOperationException($"Production assets are stale. The restore omits {path}. {RestoreSolution}");
+            }
+
+            JsonElement project = current.GetProperty(path);
+            RequireCurrentProductionAssets(restoredProject, project);
+            foreach (JsonProperty framework in project.GetProperty("restore").GetProperty("frameworks").EnumerateObject())
+            {
+                if (framework.Value.TryGetProperty("projectReferences", out JsonElement references))
+                {
+                    foreach (JsonProperty reference in references.EnumerateObject())
+                    {
+                        if (visited.Add(reference.Name))
+                        {
+                            pending.Enqueue(reference.Name);
+                        }
+                    }
+                }
             }
         }
     }
