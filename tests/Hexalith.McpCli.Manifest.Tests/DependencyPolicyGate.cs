@@ -120,6 +120,10 @@ internal static class DependencyPolicyGate
                 {
                     failures.Add($"Project {projectId} has an unapproved direct package {graph.Identity(id)}: {path}");
                 }
+                else if (!LayerAllowsPackage(projectId, id))
+                {
+                    failures.Add($"Project {projectId} cannot reference {id} in its layer: {path}");
+                }
                 else if (policy.DirectPackages.Contains(id)
                     && graph.Nodes.TryGetValue(projectId, out RestoredDependencyNode? projectNode)
                     && projectNode.Type == "project" && projectNode.ProjectPath == project
@@ -228,11 +232,22 @@ internal static class DependencyPolicyGate
 
                 foreach (string dependency in node.Dependencies.Keys.Order(StringComparer.Ordinal))
                 {
-                    if (graph.Nodes.TryGetValue(dependency, out RestoredDependencyNode? target) && target.Type == "package"
-                        && !policy.DirectPackages.Contains(dependency) && !dependency.Equals(decoration, StringComparison.OrdinalIgnoreCase)
+                    if (!graph.Nodes.TryGetValue(dependency, out RestoredDependencyNode? target) || target.Type != "package")
+                    {
+                        continue;
+                    }
+
+                    if (!policy.DirectPackages.Contains(dependency) && !dependency.Equals(decoration, StringComparison.OrdinalIgnoreCase)
                         && !(node.Id == graph.RootId && policy.Modules.ContainsKey(dependency)))
                     {
                         failures.Add($"Restored project {node.Id} has an unapproved direct package {target.Identity}: {path} > {target.Identity}");
+                    }
+                    // A module and a project reference can resolve the shared decoration ID
+                    // through the same package node. Source checks still reject a direct PackageReference.
+                    else if (!dependency.Equals(decoration, StringComparison.OrdinalIgnoreCase)
+                        && !LayerAllowsPackage(node.Id, dependency))
+                    {
+                        failures.Add($"Restored project {node.Id} cannot reference {dependency} in its layer: {path} > {target.Identity}");
                     }
                 }
 
@@ -361,6 +376,16 @@ internal static class DependencyPolicyGate
             }
         }
     }
+
+    private static bool LayerAllowsPackage(string project, string package)
+        => project switch
+        {
+            "Hexalith.McpCli.Abstractions" => false,
+            "Hexalith.McpCli.Core" => new[] { "ByteAether.Ulid", "Hexalith.EventStore.Client",
+                "Hexalith.EventStore.Contracts", "JsonSchema.Net" }.Contains(package, StringComparer.OrdinalIgnoreCase),
+            "Hexalith.McpCli.Mcp" => string.Equals(package, "ModelContextProtocol", StringComparison.OrdinalIgnoreCase),
+            _ => true,
+        };
 
     private static string? Pin(DependencyPolicy policy, string id)
         => id.Equals(policy.DecorationPackage.Key, StringComparison.OrdinalIgnoreCase) ? policy.DecorationPackage.Value

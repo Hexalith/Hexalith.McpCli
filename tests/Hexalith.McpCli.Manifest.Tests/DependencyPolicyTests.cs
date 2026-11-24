@@ -21,6 +21,10 @@ public sealed class DependencyPolicyTests
         DependencyPolicy policy = DependencyPolicy.Load(policyPath);
         RestoredDependencyGraph graph = LoadProductionGraph(root);
         Dictionary<string, XDocument> projects = ReadProjects(Path.Combine(root, "src"));
+        foreach ((string path, XDocument document) in projects)
+        {
+            AddEvaluatedProductionItems(path, document);
+        }
 
         Assert.Equal(Array.Empty<string>(), DependencyPolicyGate.CheckProduction(policy, graph, projects, root));
         Assert.Equal(before, File.ReadAllBytes(policyPath));
@@ -454,12 +458,12 @@ public sealed class DependencyPolicyTests
     public void SourcePackageDiagnosticsIncludeDeclaringLibrary()
     {
         var (policy, graph, projects) = Minimal();
-        const string id = "Hexalith.McpCli.Core";
+        const string id = "Hexalith.McpCli.Library";
         string project = Path.Combine(TestRoot, "src", id, id + ".csproj");
         graph = Replace(graph, new(id, "1.0.0", "project", new Dictionary<string, string> { ["Stack.Root"] = "1.0.0" }, [], project));
         graph = Replace(graph, graph.Nodes[graph.RootId] with { Dependencies = new Dictionary<string, string>(graph.Nodes[graph.RootId].Dependencies) { [id] = "1.0.0" } });
         AddReference(projects, project, "<PackageReference Include=\"Stack.Root\" Version=\"1.0.0\" />");
-        Assert.Equal(["Project Hexalith.McpCli.Core pins Stack.Root inline instead of centrally: Hexalith.McpCli > Hexalith.McpCli.Core > Stack.Root/1.0.0"], Check(policy, graph, projects));
+        Assert.Equal(["Project Hexalith.McpCli.Library pins Stack.Root inline instead of centrally: Hexalith.McpCli > Hexalith.McpCli.Library > Stack.Root/1.0.0"], Check(policy, graph, projects));
     }
 
     /// <summary>Imported or stale restored direct roots must still be approved, even when already in the baseline.</summary>
@@ -544,6 +548,63 @@ public sealed class DependencyPolicyTests
         var (policy, graph, projects) = Minimal();
         AddReference(projects, Path.Combine(TestRoot, "src", project, project + ".csproj"), declaration);
         Assert.Equal([$"Project {project} uses forbidden {diagnostic}"], Check(policy, graph, projects));
+    }
+
+    /// <summary>Evaluated imports cannot introduce dependencies missing from the source project XML.</summary>
+    [Fact]
+    public void ProductionImportsAreCheckedAfterEvaluation()
+    {
+        string directory = Directory.CreateTempSubdirectory("mcpcli-imported-dependencies-").FullName;
+        try
+        {
+            string project = Path.Combine(directory, "Hexalith.McpCli.Core.csproj");
+            var document = XDocument.Parse("""<Project><Import Project="injected.props" /></Project>""");
+            document.Save(project);
+            File.WriteAllText(Path.Combine(directory, "injected.props"), """
+                <Project>
+                    <ItemGroup>
+                        <Reference Include="Foreign.Binary" HintPath="Foreign.dll" />
+                        <PackageDownload Include="Foreign.Package" Version="[1.0.0]" />
+                        <PackageReference Include="Stack.Root" />
+                    </ItemGroup>
+                </Project>
+                """);
+            AddEvaluatedProductionItems(project, document);
+            var (policy, graph, projects) = Minimal();
+            projects.Add(Path.Combine(TestRoot, "src", "Hexalith.McpCli.Core", "Hexalith.McpCli.Core.csproj"), document);
+
+            Assert.Equal([
+                "Project Hexalith.McpCli.Core cannot reference Stack.Root in its layer: Hexalith.McpCli > Hexalith.McpCli.Core > Stack.Root/1.0.0",
+                "Project Hexalith.McpCli.Core uses forbidden PackageDownload item Foreign.Package: Hexalith.McpCli > Hexalith.McpCli.Core",
+                "Project Hexalith.McpCli.Core uses forbidden Reference item Foreign.Binary: Hexalith.McpCli > Hexalith.McpCli.Core",
+            ], Check(policy, graph, projects));
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A globally approved package must still be allowed in its declared and restored layer.</summary>
+    [Theory]
+    [InlineData("Hexalith.McpCli.Abstractions")]
+    [InlineData("Hexalith.McpCli.Core")]
+    [InlineData("Hexalith.McpCli.Mcp")]
+    public void LayerDirectionAppliesToSourceAndRestoredPackages(string projectId)
+    {
+        var (policy, graph, projects) = Minimal();
+        string project = Path.Combine(TestRoot, "src", projectId, projectId + ".csproj");
+        AddReference(projects, project, """<PackageReference Include="Stack.Root" />""");
+        graph = Replace(graph, new RestoredDependencyNode(projectId, "unversioned", "project",
+            new Dictionary<string, string> { ["Stack.Root"] = "1.0.0" }, [], project));
+        RestoredDependencyNode root = graph.Nodes[graph.RootId];
+        graph = Replace(graph, root with
+        {
+            Dependencies = new Dictionary<string, string>(root.Dependencies) { [projectId] = "unversioned" },
+        });
+        string path = $"Hexalith.McpCli > {projectId} > Stack.Root/1.0.0";
+        Assert.Contains($"Project {projectId} cannot reference Stack.Root in its layer: {path}", Check(policy, graph, projects));
+        Assert.Contains($"Restored project {projectId} cannot reference Stack.Root in its layer: {path}", Check(policy, graph, projects));
     }
 
     /// <summary>MSBuild metadata updates and removals are not additional dependency declarations.</summary>
@@ -989,8 +1050,21 @@ public sealed class DependencyPolicyTests
         return new XDocument(new XElement("Project", new XElement("ItemGroup", items)));
     }
 
-    private static XDocument EvaluateReferences(string project, string configuration)
+    private static void AddEvaluatedProductionItems(string path, XDocument document)
     {
+        string[] itemTypes = ["Reference", "PackageDownload", "PackageReference"];
+        XDocument evaluated = EvaluateReferences(path, "Release", itemTypes);
+        var existing = document.Descendants()
+            .Where(item => item.Attribute("Include") is not null)
+            .Select(item => (item.Name.LocalName, (string?)item.Attribute("Include"))).ToHashSet();
+        document.Root!.Add(new XElement("ItemGroup", evaluated.Descendants("ItemGroup").Elements()
+            .Where(item => existing.Add((item.Name.LocalName, (string?)item.Attribute("Include"))))));
+    }
+
+    private static XDocument EvaluateReferences(string project, string configuration, string[]? itemTypes = null)
+    {
+        itemTypes ??= ["PackageReference", "ProjectReference"];
+        string itemArgument = "-getItem:" + string.Join(',', itemTypes);
         using var process = new Process
         {
             StartInfo = new ProcessStartInfo("dotnet")
@@ -1001,7 +1075,7 @@ public sealed class DependencyPolicyTests
                 UseShellExecute = false,
             },
         };
-        foreach (string argument in new[] { "msbuild", project, "-getItem:PackageReference,ProjectReference", $"-p:Configuration={configuration}", "-nologo" })
+        foreach (string argument in new[] { "msbuild", project, itemArgument, $"-p:Configuration={configuration}", "-nologo" })
         {
             process.StartInfo.ArgumentList.Add(argument);
         }
@@ -1013,7 +1087,7 @@ public sealed class DependencyPolicyTests
         {
             process.Kill(entireProcessTree: true);
             process.WaitForExit();
-            throw new TimeoutException($"Dependency item evaluation timed out: dotnet msbuild {project} -getItem:PackageReference,ProjectReference -p:Configuration={configuration}");
+            throw new TimeoutException($"Dependency item evaluation timed out: dotnet msbuild {project} {itemArgument} -p:Configuration={configuration}");
         }
 
         string output = stdout.GetAwaiter().GetResult();
@@ -1021,15 +1095,38 @@ public sealed class DependencyPolicyTests
         Assert.True(process.ExitCode == 0, $"Dependency item evaluation failed for {project} ({configuration}): {output}{error}");
         using JsonDocument result = JsonDocument.Parse(output);
         var items = new XElement("ItemGroup");
-        foreach (string name in new[] { "PackageReference", "ProjectReference" })
+        foreach (string name in itemTypes)
         {
             foreach (JsonElement item in result.RootElement.GetProperty("Items").GetProperty(name).EnumerateArray())
             {
-                items.Add(new XElement(name, new XAttribute("Include", item.GetProperty("Identity").GetString()!)));
+                string identity = item.GetProperty("Identity").GetString()!;
+                if (name == "Reference" && Path.GetFileName(project) == "Hexalith.McpCli.Analyzers.csproj"
+                    && IsAnalyzerFrameworkReference(item, identity))
+                {
+                    continue;
+                }
+
+                items.Add(new XElement(name, new XAttribute("Include", identity)));
             }
         }
 
         return new XDocument(new XElement("Project", items));
+    }
+
+    private static bool IsAnalyzerFrameworkReference(JsonElement item, string identity)
+    {
+        // The netstandard2.0 analyzer receives its framework assemblies from the SDK's
+        // implicit NETStandard.Library package. Source declarations remain checked.
+        if (!item.TryGetProperty("NuGetPackageId", out JsonElement package) || package.GetString() != "NETStandard.Library"
+            || !item.TryGetProperty("Private", out JsonElement copyLocal) || copyLocal.GetString() != "false")
+        {
+            return false;
+        }
+
+        string origin = item.GetProperty("DefiningProjectFullPath").GetString()!;
+        return Path.GetFileName(origin) == "NETStandard.Library.targets"
+            && Path.GetFileName(Path.GetDirectoryName(origin)) == "netstandard2.0"
+            && Path.GetDirectoryName(identity) == Path.Combine(Path.GetDirectoryName(origin)!, "ref");
     }
 
     private static RestoredDependencyGraph Replace(RestoredDependencyGraph graph, RestoredDependencyNode node)
