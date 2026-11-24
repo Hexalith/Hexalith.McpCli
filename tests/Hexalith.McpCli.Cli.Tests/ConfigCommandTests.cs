@@ -6,6 +6,7 @@ using Hexalith.McpCli.Core.Execution;
 using Hexalith.McpCli.Core.Serialization;
 using Hexalith.McpCli.Core.Settings;
 using Hexalith.McpCli.Sample.Contracts;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -901,39 +902,47 @@ public sealed class ConfigCommandTests
         }
     }
 
-    /// <summary>Host configuration errors never echo the configuration file path in either head.</summary>
+    /// <summary>Content-root application settings and unrelated environment variables never reach the invocation host.</summary>
     [Theory]
     [InlineData("modules")]
     [InlineData("mcp")]
     [InlineData("config profile list")]
-    [InlineData("config use dev")]
-    [InlineData("config set dev tenant t")]
-    public async Task MalformedApplicationConfigurationUsesSafeInternalErrorAsync(string command)
+    [InlineData("config current")]
+    public async Task ApplicationConfigurationFilesAreIgnoredAsync(string command)
     {
         string directory = TemporaryDirectory();
         string originalDirectory = Directory.GetCurrentDirectory();
         try
         {
-            await File.WriteAllTextAsync(Path.Combine(directory, "appsettings.json"), "{",
-                TestContext.Current.CancellationToken);
+            foreach (string name in new[] { "appsettings.json", "appsettings.Production.json", "appsettings.Development.json" })
+            {
+                await File.WriteAllTextAsync(Path.Combine(directory, name), "{", TestContext.Current.CancellationToken);
+            }
+
             Directory.SetCurrentDirectory(directory);
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
-            (int exit, string output, string error) = await InvokeAsync(store, command.Split(' '));
+            IConfiguration? configuration = null;
+            (int exit, string output, string error) = await InvokeAsync(store, new Dictionary<string, string?>(),
+                () => [typeof(CreateItemCommand).Assembly],
+                (host, _) =>
+                {
+                    configuration = host.Services.GetRequiredService<IConfiguration>();
+                    return Task.FromResult(0);
+                },
+                command.Split(' '));
 
-            exit.ShouldBe(2);
+            exit.ShouldBe(0, output + error);
+            error.ShouldBeEmpty();
             if (command == "mcp")
             {
                 output.ShouldBeEmpty();
-                error.ShouldContain("\"internal_error\"");
-                error.ShouldContain("MCP server failed.");
-                error.ShouldNotContain(directory);
+                Environment.GetEnvironmentVariable("PATH").ShouldNotBeNull();
+                configuration.ShouldNotBeNull()["PATH"].ShouldBeNull();
+                configuration.AsEnumerable().ShouldBeEmpty();
             }
             else
             {
-                error.ShouldBeEmpty();
-                output.ShouldContain("\"internal_error\"");
-                output.ShouldContain("The CLI action failed.");
-                output.ShouldNotContain(directory);
+                JsonDocument.Parse(output).RootElement.TryGetProperty("error", out _).ShouldBeFalse(output);
             }
         }
         finally

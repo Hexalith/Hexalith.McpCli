@@ -207,6 +207,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Offline CLI actions can still depend on unrelated application configuration loaded by the default Host builder.
   evidence: Pre-existing: `HostFactory.CreateHost` uses `Host.CreateApplicationBuilder()`, which loads content-root `appsettings*.json` and every environment variable (including `EVENTSTORE_ADMIN_*`) into an unused `IConfiguration`; consider `Host.CreateEmptyApplicationBuilder` in a separate hosting hardening change.
+  status: done 2026-11-24
+  resolution: The CLI and MCP host start from an empty host builder, so content-root `appsettings*.json` files and unrelated environment variables never enter host configuration. CLI tests run discovery, profile listing, `config current` and MCP startup beside malformed `appsettings*.json` files and check that the MCP host configuration has no entries.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-1-inspect-effective-session-settings.md`
   summary: Verb-action I/O failures are reported as configuration errors with raw exception text.

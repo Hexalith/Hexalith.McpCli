@@ -44,7 +44,8 @@ internal static class HostFactory
     private static IHost CreateHost(ResolvedSettings settings, bool mcp,
         Func<IReadOnlyList<Assembly>>? manifest, Action<IServiceCollection>? configureServices)
     {
-        HostApplicationBuilder builder = Host.CreateApplicationBuilder();
+        // An empty builder keeps content-root appsettings files and unrelated environment variables out of every verb.
+        HostApplicationBuilder builder = Host.CreateEmptyApplicationBuilder(new HostApplicationBuilderSettings());
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole(options =>
         {
