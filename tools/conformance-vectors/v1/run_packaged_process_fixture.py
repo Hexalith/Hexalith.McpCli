@@ -135,8 +135,8 @@ def sdk_response_cases(repo: Path, root: Path, host: Path, artifact: Path, env: 
     for vector in (command, rename):
         invalid = copy.deepcopy(vector['invocation'])
         invalid['scriptedResponse'] = {
-            'statusCode': 202, 'body': {'messageId': message.lower(), 'correlationId': message},
-            'echoRequestFields': []}
+            'statusCode': 202, 'body': {'messageId': message.lower()},
+            'echoRequestFields': ['correlationId']}
         invalid['assertions'] = [{'path': '/error/detail', 'operator': 'equals', 'value': detail},
                                  {'path': '/error/status', 'operator': 'equals', 'value': 202}]
         vector['prerequisites'].append(invalid)
