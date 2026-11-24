@@ -329,7 +329,7 @@ internal sealed class CliRunner
             (services, settings, token) =>
             {
                 CatalogLookupResult<ModulesDocument> result = services.GetRequiredService<ICatalog>().ListModules();
-                return CliOutput.WriteAsync(result.Document, result.Error, settings, token, tableHeader: "NAME\tOPERATIONS\tDESCRIPTION");
+                return WriteResultAsync(result.Document, result.Error, settings, token, tableHeader: "NAME\tOPERATIONS\tDESCRIPTION");
             }, cancellationToken));
         return command;
     }
@@ -357,7 +357,7 @@ internal sealed class CliRunner
                 }
 
                 CatalogLookupResult<OperationsDocument> result = services.GetRequiredService<ICatalog>().ListOperations(name, filter);
-                return CliOutput.WriteAsync(result.Document, result.Error, settings, token, tableHeader: "NAME\tKIND\tDESCRIPTION");
+                return WriteResultAsync(result.Document, result.Error, settings, token, tableHeader: "NAME\tKIND\tDESCRIPTION");
             }, cancellationToken));
         return command;
     }
@@ -380,7 +380,7 @@ internal sealed class CliRunner
                 }
 
                 CatalogLookupResult<OperationDescriptionDocument> result = services.GetRequiredService<ICatalog>().Describe(name);
-                int exit = await CliOutput.WriteAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
+                int exit = await WriteResultAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
                 return exit == 0 && parsed.GetValue(lint) && result.Document!.LintFindings.Count > 0 ? 1 : exit;
             }, cancellationToken));
         return command;
@@ -417,7 +417,7 @@ internal sealed class CliRunner
                     OperationOutcome refusal = await services.GetRequiredService<IOperationExecutor>()
                         .ExecuteAsync(new SendCommandArguments(name, string.Empty),
                             services.GetRequiredService<EnvelopeContext>(), token).ConfigureAwait(false);
-                    return await CliOutput.WriteAsync(refusal.Document, refusal.Error, settings, token).ConfigureAwait(false);
+                    return await WriteResultAsync(refusal.Document, refusal.Error, settings, token).ConfigureAwait(false);
                 }
 
                 (string? content, bool fileReadFailed) = await ReadPayloadAsync(parsed.GetValue(payload), token).ConfigureAwait(false);
@@ -452,7 +452,7 @@ internal sealed class CliRunner
                         _ => Task.FromResult(PreflightError(settings.Output))).ConfigureAwait(false);
                 try
                 {
-                    return await CliOutput.WriteAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
+                    return await WriteResultAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
                 }
                 catch (Exception) when (settings.Output is not null && result.Document is Core.Execution.CommandResult accepted)
                 {
@@ -510,7 +510,7 @@ internal sealed class CliRunner
                 OperationOutcome result = await services.GetRequiredService<IOperationExecutor>()
                     .ExecuteAsync(call, services.GetRequiredService<EnvelopeContext>(), token,
                         _ => Task.FromResult(PreflightError(settings.Output))).ConfigureAwait(false);
-                return await CliOutput.WriteAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
+                return await WriteResultAsync(result.Document, result.Error, settings, token).ConfigureAwait(false);
             }, cancellationToken));
         return command;
     }
@@ -541,7 +541,7 @@ internal sealed class CliRunner
                     settings.Strict,
                     settings.Sources,
                 };
-                return CliOutput.WriteAsync(document, null, settings, token, tableHeader: "FIELD\tVALUE");
+                return WriteResultAsync(document, null, settings, token, tableHeader: "FIELD\tVALUE");
             }, cancellationToken));
         config.Subcommands.Add(current);
         config.Subcommands.Add(CreateConfigProfile());
@@ -573,7 +573,7 @@ internal sealed class CliRunner
                         allowedExtensions = entry.Value.AllowedExtensions ?? [],
                     }).ToArray(),
             };
-            return CliOutput.WriteAsync(document, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
+            return WriteResultAsync(document, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
 
         Argument<string?> addName = new("name") { Description = "Case-sensitive profile name (1-64 ASCII letters, digits, underscores or hyphens). For a leading hyphen, put options first and the name after --.", Arity = ArgumentArity.ZeroOrOne };
@@ -601,9 +601,9 @@ internal sealed class CliRunner
             }
 
             _profileStore.ValidateRemove(name);
-            CliOutput.Preflight(settings.Output);
+            CliOutput.Preflight(settings.Output, _profileStore.ProfilePath);
             ProfileSnapshot snapshot = _profileStore.Remove(name);
-            return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
+            return WriteResultAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
 
         profile.Subcommands.Add(list);
@@ -631,9 +631,9 @@ internal sealed class CliRunner
         // supplied-but-invalid name or value as configuration_invalid.
         var profile = new ConnectionProfile(input.Url, input.Token, input.Format);
         _profileStore.ValidateAdd(name, profile);
-        CliOutput.Preflight(settings.Output);
+        CliOutput.Preflight(settings.Output, _profileStore.ProfilePath);
         ProfileSnapshot snapshot = _profileStore.Add(name, profile);
-        return CliOutput.WriteAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
+        return WriteResultAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
     }
 
     private static OperationError? RejectOperatorFlags(SettingsInput input)
@@ -662,9 +662,9 @@ internal sealed class CliRunner
             }
 
             _profileStore.ValidateUse(shouldClear ? null : selected);
-            CliOutput.Preflight(settings.Output);
+            CliOutput.Preflight(settings.Output, _profileStore.ProfilePath);
             ProfileSnapshot snapshot = _profileStore.Use(shouldClear ? null : selected);
-            return CliOutput.WriteAsync(new { activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
+            return WriteResultAsync(new { activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
         return use;
     }
@@ -690,9 +690,9 @@ internal sealed class CliRunner
 
             // Supplied names, fields, and values are validated by the store and fail as configuration_invalid.
             _profileStore.ValidateSet(selected, key, content);
-            CliOutput.Preflight(settings.Output);
+            CliOutput.Preflight(settings.Output, _profileStore.ProfilePath);
             _profileStore.Set(selected, key, content);
-            return CliOutput.WriteAsync(new { profile = selected, field = key }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
+            return WriteResultAsync(new { profile = selected, field = key }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
         return set;
     }
@@ -861,6 +861,11 @@ internal sealed class CliRunner
             return await CliOutput.WriteErrorAsync(new OperationError("internal_error",
                 Message: CliOutput.PreflightFailureMessage), cancellationToken).ConfigureAwait(false);
         }
+        catch (ProfileOutputConflictException exception)
+        {
+            return await CliOutput.WriteErrorAsync(new OperationError("internal_error",
+                Message: exception.Message), cancellationToken).ConfigureAwait(false);
+        }
         catch (InvalidDataException exception) when (presentationOnly && actionStarted)
         {
             return await CliOutput.WriteErrorAsync(new OperationError("configuration_invalid", Message: exception.Message),
@@ -900,11 +905,16 @@ internal sealed class CliRunner
         }
     }
 
-    private static OperationError? PreflightError(string? output)
+    private Task<int> WriteResultAsync(object? document, OperationError? error, ResolvedSettings settings,
+        CancellationToken cancellationToken, string? tableHeader = null)
+        => CliOutput.WriteAsync(document, error, settings, cancellationToken, tableHeader,
+            profilePath: error is null && settings.Output is not null ? _profileStore.ProfilePath : null);
+
+    private OperationError? PreflightError(string? output)
     {
         try
         {
-            CliOutput.Preflight(output);
+            CliOutput.Preflight(output, _profileStore.ProfilePath);
             return null;
         }
         catch (OutputPreflightException)

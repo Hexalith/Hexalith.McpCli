@@ -425,6 +425,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: `--output` naming the profile file overwrites the profile store with the result document.
   evidence: Medium. Reproduced 2026-10-10 on the HEAD Debug build with an isolated `HOME`: `config profile add dev --url https://gw.example`, then `config use dev --output ~/.eventstore/mcpcli.json` exits 0 and leaves `{"activeProfile":"dev"}`; the next `config current` returns `configuration_invalid`, and every stored profile and token is lost. Preflight accepts the existing regular file (`src/Hexalith.McpCli/Cli/CliRunner.cs:645`) and the writer replaces it after `ProfileStore.Use`. Pre-existing writer behavior: Story 2.11 review loops 1–7 deferred it (B1 and carried items) without a ledger entry. A guard that compares the resolved output with `ProfileStore.ProfilePath`, its lock and temporary files, including hard links, needs an owning settings story.
+  status: done 2026-11-24
+  resolution: CLI output refuses the profile, lock and transient transaction paths before writes. The guard resolves links and compares file identities. Tests verify no mutation or byte changes for direct paths and link aliases.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: Verify the FreeBSD x64 native result-target inspection on an existing output file.

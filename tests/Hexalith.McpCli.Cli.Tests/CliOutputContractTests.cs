@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO.Pipes;
 using System.Net.Sockets;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
 using System.Security.AccessControl;
 using System.Security.Principal;
@@ -50,7 +51,7 @@ public sealed class CliOutputContractTests
         }
     }
 
-    /// <summary>Windows console aliases open the actual output buffer, including with redirected stdout.</summary>
+    /// <summary>Windows console aliases resolve to the native output buffer name.</summary>
     [Theory]
     [InlineData("CON")]
     [InlineData("conout$")]
@@ -431,6 +432,154 @@ public sealed class CliOutputContractTests
             Directory.Delete(directory, recursive: true);
         }
     }
+
+    /// <summary>Neither discovery nor a profile mutation can write to the profile or its transaction files.</summary>
+    [Theory]
+    [InlineData("profile")]
+    [InlineData("lock")]
+    [InlineData("temporary")]
+    [InlineData("missing-temporary")]
+    [InlineData("symlink")]
+    [InlineData("hardlink")]
+    [InlineData("hardlink-lock")]
+    [InlineData("hardlink-temporary")]
+    public async Task ResultDestinationCannotAliasProfileTransactionFilesAsync(string target)
+    {
+        Assert.SkipWhen(OperatingSystem.IsWindows() && target == "symlink",
+            "These path fixtures use Unix links.");
+        string directory = NewDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/"));
+            byte[] previous = File.ReadAllBytes(store.ProfilePath);
+            string temporary = store.ProfilePath + ".tmp-0123456789abcdef0123456789abcdef";
+            string destination = target switch
+            {
+                "profile" => store.ProfilePath,
+                "lock" => store.ProfilePath + ".lock",
+                "temporary" or "missing-temporary" => temporary,
+                _ => Path.Combine(directory, "alias"),
+            };
+            if (target == "temporary")
+            {
+                File.WriteAllText(destination, "active profile transaction");
+            }
+            else if (target == "symlink")
+            {
+                File.CreateSymbolicLink(destination, store.ProfilePath);
+            }
+            else if (target.StartsWith("hardlink", StringComparison.Ordinal))
+            {
+                string original = target switch
+                {
+                    "hardlink-lock" => store.ProfilePath + ".lock",
+                    "hardlink-temporary" => temporary,
+                    _ => store.ProfilePath,
+                };
+                if (target == "hardlink-temporary")
+                {
+                    File.WriteAllText(temporary, "active profile transaction");
+                }
+                await CreateHardLinkAsync(destination, original);
+            }
+
+            byte[]? originalTarget = File.Exists(destination) ? File.ReadAllBytes(destination) : null;
+            foreach (string[] arguments in new[] { new[] { "modules" }, new[] { "config", "use", "dev" } })
+            {
+                (int exit, string output, string error) = await InvokeAsync(store, [.. arguments, "--output", destination]);
+                exit.ShouldBe(2);
+                error.ShouldBeEmpty();
+                AssertErrorJson(output, arguments[0] == "modules"
+                    ? """{"error":{"code":"internal_error","message":"The result destination belongs to the profile store."}}"""
+                    : """{"error":{"code":"internal_error","message":"The result destination cannot be written; no request was sent."}}""");
+                File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+                if (originalTarget is null)
+                {
+                    File.Exists(destination).ShouldBeFalse();
+                }
+                else
+                {
+                    File.ReadAllBytes(destination).ShouldBe(originalTarget);
+                }
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>A destination linked to the profile after staging never reaches truncation.</summary>
+    [Fact]
+    public async Task OpenedResultFileCannotAliasTheProfileAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/"));
+            byte[] original = File.ReadAllBytes(store.ProfilePath);
+            string destination = Path.Combine(directory, "result");
+            string alias = Path.Combine(directory, "alias");
+            File.WriteAllText(destination, "prior result");
+            await CreateHardLinkAsync(alias, store.ProfilePath);
+            var settings = new SettingsResolver(store, new Dictionary<string, string?>())
+                .Resolve(new SettingsInput(Output: destination)).Settings.ShouldNotBeNull();
+
+            await Should.ThrowAsync<ProfileOutputConflictException>(() => CliOutput.WriteAsync(new { result = 1 }, null,
+                settings, TestContext.Current.CancellationToken, profilePath: store.ProfilePath,
+                beforeExistingDestinationOpen: () => File.Move(alias, destination, overwrite: true)));
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(original);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>On Windows a trailing dot aliases the first profile destination.</summary>
+    [Fact]
+    public async Task WindowsOutputCannotAliasTheFirstProfileFileAsync()
+    {
+        Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows path normalization is required.");
+        string directory = NewDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            (int exit, string output, string error) = await InvokeAsync(store, ["config", "profile", "add", "dev",
+                "--url", "https://gateway.example/", "--output", store.ProfilePath + "."]);
+            exit.ShouldBe(2);
+            error.ShouldBeEmpty();
+            AssertErrorJson(output,
+                """{"error":{"code":"internal_error","message":"The result destination cannot be written; no request was sent."}}""");
+            File.Exists(store.ProfilePath).ShouldBeFalse();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    private static async Task CreateHardLinkAsync(string path, string existing)
+    {
+        if (OperatingSystem.IsWindows())
+        {
+            CreateHardLink(path, existing, 0).ShouldBeTrue();
+            return;
+        }
+
+        var start = new ProcessStartInfo("ln") { UseShellExecute = false };
+        start.ArgumentList.Add(existing);
+        start.ArgumentList.Add(path);
+        using Process link = Process.Start(start).ShouldNotBeNull();
+        await link.WaitForExitAsync(TestContext.Current.CancellationToken);
+        link.ExitCode.ShouldBe(0);
+    }
+
+    [DllImport("kernel32.dll", EntryPoint = "CreateHardLinkW", CharSet = CharSet.Unicode, ExactSpelling = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    private static extern bool CreateHardLink(string path, string existing, nint reserved);
 
     /// <summary>Known no-result errors win over an unusable destination, while valid mutations are blocked.</summary>
     [Fact]

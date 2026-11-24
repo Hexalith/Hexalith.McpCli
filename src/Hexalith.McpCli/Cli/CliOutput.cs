@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text;
+using Microsoft.Win32.SafeHandles;
 using Hexalith.McpCli.Core.Catalog;
 using Hexalith.McpCli.Core.Execution;
 using Hexalith.McpCli.Core.Serialization;
@@ -14,7 +15,7 @@ internal static class CliOutput
     internal const string PreflightFailureMessage = "The result destination cannot be written; no request was sent.";
 
     /// <summary>Checks predictable destination failures before an action can have side effects.</summary>
-    internal static void Preflight(string? output)
+    internal static void Preflight(string? output, string? profilePath = null)
     {
         if (output is null)
         {
@@ -23,7 +24,7 @@ internal static class CliOutput
 
         try
         {
-            PreflightCore(output);
+            PreflightCore(output, profilePath);
         }
         catch (Exception exception)
         {
@@ -31,7 +32,7 @@ internal static class CliOutput
         }
     }
 
-    private static void PreflightCore(string output)
+    private static void PreflightCore(string output, string? profilePath)
     {
         if (WindowsOutputDevice.Resolve(output) is string device)
         {
@@ -41,6 +42,7 @@ internal static class CliOutput
 
         string path = ResolveFinalSymlink(output);
         OutputTargetKind kind = OutputFileType.Inspect(path);
+        ProtectProfileFiles(path, kind, profilePath);
         if (kind == OutputTargetKind.Missing)
         {
             ProbeStagingDirectory(Path.GetDirectoryName(Path.GetFullPath(path))!);
@@ -84,6 +86,61 @@ internal static class CliOutput
         ProbeStagingDirectory(Path.GetTempPath());
     }
 
+    private static void ProtectProfileFiles(string destination, OutputTargetKind kind, string? profilePath,
+        SafeFileHandle? opened = null)
+    {
+        if (profilePath is null)
+        {
+            return;
+        }
+
+        if (OperatingSystem.IsWindows() && !destination.StartsWith(@"\\?\", StringComparison.Ordinal))
+        {
+            // Ordinary Win32 file paths treat trailing dots and spaces as equivalent.
+            destination = destination.TrimEnd('.', ' ');
+        }
+
+        string profile = Path.GetFullPath(profilePath);
+        bool parentExists = Directory.Exists(Path.GetDirectoryName(profile)!);
+        if (parentExists)
+        {
+            profile = ResolveFinalSymlink(profile);
+        }
+
+        string parent = Path.GetDirectoryName(profile)!;
+        string lockFile = profile + ProfileFileTransaction.LockSuffix;
+        string temporaryPrefix = profile + ProfileFileTransaction.TemporarySuffix;
+        StringComparison comparison = kind == OutputTargetKind.Missing && (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS())
+            ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
+        if (destination.Equals(profile, comparison) || destination.Equals(lockFile, comparison)
+            || destination.StartsWith(temporaryPrefix, comparison))
+        {
+            throw new ProfileOutputConflictException();
+        }
+
+        if (kind != OutputTargetKind.Regular || !parentExists)
+        {
+            return;
+        }
+
+        var identity = opened is null ? OutputFileType.FileIdentity(destination) : OutputFileType.FileIdentity(opened);
+        if (identity is not { } file)
+        {
+            return;
+        }
+
+        if (IsSameFile(profile) || IsSameFile(lockFile)
+            || (file.Links > 1 || (OperatingSystem.IsWindows() && Path.GetDirectoryName(destination)!.Equals(parent, StringComparison.OrdinalIgnoreCase)))
+                && Directory.EnumerateFiles(parent, Path.GetFileName(temporaryPrefix) + "*").Any(IsSameFile))
+        {
+            throw new ProfileOutputConflictException();
+        }
+
+        bool IsSameFile(string candidate)
+            => OutputFileType.FileIdentity(candidate) is { } other
+                && (file.Volume, file.Low, file.High) == (other.Volume, other.Low, other.High);
+    }
+
     private static void ProbeStagingDirectory(string directory)
     {
         string path = Path.Combine(directory, ".mcpcli-probe-" + Guid.NewGuid().ToString("N"));
@@ -101,16 +158,14 @@ internal static class CliOutput
     /// <param name="cancellationToken">Cancels file output.</param>
     /// <param name="tableHeader">The verb's tab-separated column names, or null for JSON-only results.</param>
     /// <param name="afterDestinationTruncated">Test seam for a recoverable failure after existing-file truncation.</param>
+    /// <param name="profilePath">The profile store protected from result writes, when present.</param>
+    /// <param name="beforeExistingDestinationOpen">Test seam for a destination change after inspection.</param>
     /// <returns>Zero for a result or two for an error.</returns>
     internal static async Task<int> WriteAsync(object? document, OperationError? error,
         ResolvedSettings settings, CancellationToken cancellationToken, string? tableHeader = null,
-        Func<FileStream, CancellationToken, Task>? afterDestinationTruncated = null)
+        Func<FileStream, CancellationToken, Task>? afterDestinationTruncated = null, string? profilePath = null,
+        Action? beforeExistingDestinationOpen = null)
     {
-        if (error is null && settings.Format == "table" && tableHeader is null)
-        {
-            await Console.Error.WriteLineAsync("This result is emitted as JSON; no table view is defined.").ConfigureAwait(false);
-        }
-
         bool table = error is null && settings.Format == "table" && tableHeader is not null;
         string terminator = table ? Environment.NewLine : "\n";
         string output = error is not null
@@ -121,11 +176,16 @@ internal static class CliOutput
         if (error is null && settings.Output is not null)
         {
             await WriteResultFileAsync(settings.Output, output + terminator, cancellationToken,
-                afterDestinationTruncated).ConfigureAwait(false);
+                afterDestinationTruncated, profilePath, beforeExistingDestinationOpen).ConfigureAwait(false);
         }
         else
         {
             await Console.Out.WriteAsync(output + terminator).ConfigureAwait(false);
+        }
+
+        if (error is null && settings.Format == "table" && tableHeader is null)
+        {
+            await Console.Error.WriteLineAsync("This result is emitted as JSON; no table view is defined.").ConfigureAwait(false);
         }
 
         return error is null ? 0 : 2;
@@ -144,7 +204,7 @@ internal static class CliOutput
     }
 
     private static async Task WriteResultFileAsync(string path, string output, CancellationToken cancellationToken,
-        Func<FileStream, CancellationToken, Task>? afterDestinationTruncated)
+        Func<FileStream, CancellationToken, Task>? afterDestinationTruncated, string? profilePath, Action? beforeExistingDestinationOpen)
     {
         if (WindowsOutputDevice.Resolve(path) is string device)
         {
@@ -155,6 +215,7 @@ internal static class CliOutput
         path = ResolveFinalSymlink(path);
         cancellationToken.ThrowIfCancellationRequested();
         OutputTargetKind kind = OutputFileType.Inspect(path);
+        ProtectProfileFiles(path, kind, profilePath);
         if (kind == OutputTargetKind.Pipe)
         {
             OutputFileType.WritePipe(path, Encoding.UTF8.GetBytes(output), cancellationToken);
@@ -212,12 +273,15 @@ internal static class CliOutput
             }
 
             backupPath = Path.Combine(Path.GetTempPath(), ".mcpcli-backup-" + Guid.NewGuid().ToString("N"));
+            beforeExistingDestinationOpen?.Invoke();
             await using FileStream destination = new(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read,
                 bufferSize: 0, useAsync: true);
             if (!destination.CanSeek)
             {
                 throw new IOException("The existing result target is not seekable.");
             }
+
+            ProtectProfileFiles(path, kind, profilePath, destination.SafeFileHandle);
 
             await using (FileStream backup = CreatePrivateTemporaryFile(backupPath))
             {

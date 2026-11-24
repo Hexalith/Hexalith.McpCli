@@ -8,6 +8,12 @@ namespace Hexalith.McpCli.Core.Settings;
 /// <summary>Serializes one profile mutation through an exclusive cross-process lock.</summary>
 internal sealed class ProfileFileTransaction(string path)
 {
+    /// <summary>The suffix of the sibling file used to serialize profile transactions.</summary>
+    internal const string LockSuffix = ".lock";
+
+    /// <summary>The prefix suffix shared by all transient files of one profile store.</summary>
+    internal const string TemporarySuffix = ".tmp-";
+
     private static readonly UnixFileMode PrivateFileMode = UnixFileMode.UserRead | UnixFileMode.UserWrite;
     private static readonly UnixFileMode PrivateDirectoryMode = PrivateFileMode | UnixFileMode.UserExecute;
 
@@ -20,7 +26,7 @@ internal sealed class ProfileFileTransaction(string path)
         Directory.CreateDirectory(directory);
         RejectSymlinkDirectory(directory);
         RestrictDirectory(directory);
-        string lockPath = path + ".lock";
+        string lockPath = path + LockSuffix;
         RejectNonRegularFile(lockPath);
         using FileStream mutex = AcquireLock(lockPath);
         ProfileSnapshot next = update(read());
@@ -30,7 +36,7 @@ internal sealed class ProfileFileTransaction(string path)
             RestrictFile(path);
         }
 
-        string temporaryPath = path + ".tmp-" + Guid.NewGuid().ToString("N");
+        string temporaryPath = path + TemporarySuffix + Guid.NewGuid().ToString("N");
         try
         {
             using (FileStream temporary = CreatePrivateFile(temporaryPath))
