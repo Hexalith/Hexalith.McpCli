@@ -22,7 +22,8 @@ class EvidenceSecretScanTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)
-        self.root = Path(self.temporary.name)
+        # Resolve the temporary root: linked system temp directories would otherwise be refused ancestors.
+        self.root = Path(self.temporary.name).resolve()
         self.packet = self.root / 'packet'
         self.packet.mkdir()
 
@@ -162,6 +163,30 @@ class EvidenceSecretScanTests(unittest.TestCase):
                 result = self.invoke(f'scan-{index}.json', evidence=evidence)
                 self.assertEqual(2, result.returncode, result.stdout)
                 self.assertEqual('scan-error', json.loads(result.stdout)['result'])
+
+    def test_linked_ancestors_and_parent_steps_cannot_substitute_the_packet(self):
+        real = self.root / 'real' / 'packet'
+        real.mkdir(parents=True)
+        (real / 'capture.txt').write_text('retained diagnostic\n')
+        (self.root / 'link').symlink_to(self.root / 'real', target_is_directory=True)
+        for index, evidence in enumerate((self.root / 'link' / 'packet', self.packet / '..' / 'real' / 'packet',
+                                          Path(os.path.relpath(real, self.root)))):
+            with self.subTest(evidence=str(evidence)):
+                if not evidence.is_absolute():
+                    result = subprocess.run([sys.executable, str(SCRIPTS / 'scan-evidence-secrets.py'), str(evidence),
+                                             '--receipt', str(self.root / f'relative-{index}.json')],
+                                            env={'PATH': os.environ.get('PATH', '')}, cwd=self.root,
+                                            capture_output=True, text=True, timeout=15)
+                    self.assertEqual(0, result.returncode, result.stdout + result.stderr)
+                    self.assertEqual(['capture.txt'], [file['path'] for file in json.loads(result.stdout)['files']])
+                    continue
+                result = self.invoke(f'linked-{index}.json', evidence=evidence)
+                self.assertEqual((2, ''), (result.returncode, result.stderr), result.stdout)
+                report = json.loads(result.stdout)
+                self.assertEqual(('scan-error', [{'path': '.', 'rule': 'directory-required-no-links'}], [], []),
+                                 (report['result'], report['errors'], report['files'], report['findings']))
+        clean = self.invoke('real.json', evidence=real)
+        self.assertEqual(0, clean.returncode, clean.stdout)
 
     def test_links_and_special_files_are_refused_without_reading_their_targets(self):
         outside = self.root / 'outside.txt'

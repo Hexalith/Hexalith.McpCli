@@ -23,6 +23,11 @@ def serialized(value):
     return json.dumps(value, sort_keys=True, ensure_ascii=True, separators=(',', ':')).encode('utf-8')
 
 
+def reached_through_link_or_parent(root):
+    """True when an absolute, unnormalized root names a parent step or passes through a linked ancestor."""
+    return '..' in root.parts or any(ancestor.is_symlink() for ancestor in root.parents)
+
+
 def scan(root, *, environment=None, receipt=None):
     """Return a deterministic receipt; never include source snippets or credential values."""
     root = Path(root).absolute()
@@ -35,7 +40,8 @@ def scan(root, *, environment=None, receipt=None):
     def error(path, rule):
         errors.append({'path': label(path), 'rule': rule})
 
-    if root.is_symlink() or not root.is_dir():
+    # O_NOFOLLOW protects only each opened file, so the root must also be reached without links or '..' steps.
+    if root.is_symlink() or reached_through_link_or_parent(root) or not root.is_dir():
         errors.append({'path': '.', 'rule': 'directory-required-no-links'})
     else:
         paths = []

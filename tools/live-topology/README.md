@@ -450,7 +450,8 @@ manifest with the final packet.
 There are no extension or hidden-file exclusions. Inputs must be UTF-8 text or
 BOM-marked UTF-16 text; unsupported binary/archive formats, invalid encodings,
 non-whitespace C0 controls and DEL, links, special files, unreadable inputs and
-empty packets fail closed. Render terminal controls as plain text first. Extract
+empty packets fail closed. The packet root itself must be a directory reached
+without a symbolic link in any ancestor and without a `..` step. Render terminal controls as plain text first. Extract
 archives and select the sanitized text packet before scanning; record binary and
 downloaded artifact hashes in the packet. This policy detects the credential and
 private-key forms covered by the shared redactor, rather than arbitrary unknown
