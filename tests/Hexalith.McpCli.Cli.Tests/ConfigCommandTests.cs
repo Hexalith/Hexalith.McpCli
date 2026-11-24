@@ -902,53 +902,97 @@ public sealed class ConfigCommandTests
         }
     }
 
-    /// <summary>Content-root application settings and unrelated environment variables never reach the invocation host.</summary>
+    /// <summary>Content-root application settings never change a verb's documents, channels or exit code.</summary>
     [Theory]
-    [InlineData("modules")]
-    [InlineData("mcp")]
-    [InlineData("config profile list")]
-    [InlineData("config current")]
-    public async Task ApplicationConfigurationFilesAreIgnoredAsync(string command)
+    [InlineData("modules", 0)]
+    [InlineData("describe sample.get-item", 0)]
+    [InlineData("config profile list", 0)]
+    [InlineData("config current", 0)]
+    [InlineData("config use dev", 2)]
+    [InlineData("config set dev tenant t", 2)]
+    [InlineData("mcp", 0)]
+    public async Task ApplicationConfigurationFilesAreIgnoredAsync(string command, int expectedExit)
     {
-        string directory = TemporaryDirectory();
+        string clean = TemporaryDirectory();
+        string configured = TemporaryDirectory();
+        string stores = TemporaryDirectory();
         string originalDirectory = Directory.GetCurrentDirectory();
         try
         {
-            foreach (string name in new[] { "appsettings.json", "appsettings.Production.json", "appsettings.Development.json" })
+            foreach (string name in new[] { "appsettings.json", "appsettings.Production.json" })
             {
-                await File.WriteAllTextAsync(Path.Combine(directory, name), "{", TestContext.Current.CancellationToken);
+                await File.WriteAllTextAsync(Path.Combine(configured, name), "{", TestContext.Current.CancellationToken);
             }
 
-            Directory.SetCurrentDirectory(directory);
-            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            // Only the working directory differs; one store keeps documents free of differing paths.
+            var store = new ProfileStore(Path.Combine(stores, "mcpcli.json"));
+            var results = new List<(int Exit, string Output, string Error)>();
             IConfiguration? configuration = null;
-            (int exit, string output, string error) = await InvokeAsync(store, new Dictionary<string, string?>(),
-                () => [typeof(CreateItemCommand).Assembly],
-                (host, _) =>
-                {
-                    configuration = host.Services.GetRequiredService<IConfiguration>();
-                    return Task.FromResult(0);
-                },
-                command.Split(' '));
+            foreach (string directory in new[] { clean, configured })
+            {
+                Directory.SetCurrentDirectory(directory);
+                results.Add(await InvokeAsync(store, new Dictionary<string, string?>(),
+                    () => [typeof(CreateItemCommand).Assembly],
+                    (host, _) =>
+                    {
+                        configuration = host.Services.GetRequiredService<IConfiguration>();
+                        return Task.FromResult(0);
+                    },
+                    command.Split(' ')));
+            }
 
-            exit.ShouldBe(0, output + error);
-            error.ShouldBeEmpty();
+            results[0].Exit.ShouldBe(expectedExit, results[0].Output + results[0].Error);
+            results[1].ShouldBe(results[0]);
             if (command == "mcp")
             {
-                output.ShouldBeEmpty();
+                results[1].Output.ShouldBeEmpty();
+                results[1].Error.ShouldBeEmpty();
                 Environment.GetEnvironmentVariable("PATH").ShouldNotBeNull();
                 configuration.ShouldNotBeNull()["PATH"].ShouldBeNull();
                 configuration.AsEnumerable().ShouldBeEmpty();
             }
             else
             {
-                JsonDocument.Parse(output).RootElement.TryGetProperty("error", out _).ShouldBeFalse(output);
+                JsonDocument.Parse(results[1].Output).RootElement.TryGetProperty("error", out _).ShouldBe(expectedExit != 0);
             }
         }
         finally
         {
             Directory.SetCurrentDirectory(originalDirectory);
-            Directory.Delete(directory, recursive: true);
+            foreach (string directory in new[] { clean, configured, stores })
+            {
+                Directory.Delete(directory, recursive: true);
+            }
+        }
+    }
+
+    /// <summary>The built CLI ignores a Development settings file even when .NET host variables select and configure it.</summary>
+    [Fact]
+    public async Task HostEnvironmentVariablesCannotSelectApplicationSettingsAsync()
+    {
+        string clean = TemporaryDirectory();
+        string configured = TemporaryDirectory();
+        try
+        {
+            await File.WriteAllTextAsync(Path.Combine(configured, "appsettings.Development.json"), "{",
+                TestContext.Current.CancellationToken);
+            var hostVariables = new Dictionary<string, string>
+            {
+                ["DOTNET_ENVIRONMENT"] = "Development",
+                ["Logging__LogLevel__Default"] = "Trace",
+            };
+
+            (int Exit, string Output, string Error) baseline = await RunExecutableAsync(clean, "config", "current");
+            (int Exit, string Output, string Error) selected = await RunExecutableAsync(configured, hostVariables, "config", "current");
+
+            baseline.Exit.ShouldBe(0, baseline.Output + baseline.Error);
+            baseline.Error.ShouldBeEmpty();
+            selected.ShouldBe(baseline);
+        }
+        finally
+        {
+            Directory.Delete(clean, recursive: true);
+            Directory.Delete(configured, recursive: true);
         }
     }
 
