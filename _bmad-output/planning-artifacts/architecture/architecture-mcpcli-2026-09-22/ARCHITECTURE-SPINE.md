@@ -288,7 +288,7 @@ Successful Command results carry the submitted correlation ID, including when th
 | Query results | `QueryResult.Document` always carries the Gateway payload, including JSON null. AD-20 requires validation of returned paging metadata and preserves zero offsets, zero counts and false continuation flags. |
 | State | The Catalog is immutable after build. The executor is stateless. Only the profile store may mutate the selected profile and its transaction files. AD-14 reserves those destinations from CLI result output and governs credential storage for connected staging. |
 | Tests | xUnit v3, Shouldly and NSubstitute are shared through `tests/Directory.Build.props`. Core, Manifest, CLI and MCP suites check the Catalog, restored graph, public documents and wire behavior. Live tests carry the Integration trait. `Hexalith.McpCli.Sample.Contracts` declares one synthetic Ulid Module. Other catalog populations are isolated fixtures. |
-| Code style | `Hexalith.Builds` conventions: central package management from `references/Hexalith.Builds/Props/Directory.Packages.props` with the three-path import, `TreatWarningsAsErrors`, one type per file, StyleCop header. |
+| Code style | `Hexalith.Builds` conventions: central package management from `references/Hexalith.Builds/Props/Directory.Packages.props` with the three-path import, `TreatWarningsAsErrors`, one type per file. |
 
 ## Stack
 
