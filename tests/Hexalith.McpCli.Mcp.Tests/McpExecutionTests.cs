@@ -7,8 +7,10 @@ using Hexalith.McpCli.Core.Execution;
 using Hexalith.McpCli.Core.Serialization;
 using Hexalith.McpCli.Core.Schema;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using ModelContextProtocol;
 using ModelContextProtocol.Protocol;
+using ModelContextProtocol.Server;
 using NSubstitute;
 using Shouldly;
 using static Hexalith.McpCli.Mcp.Tests.McpTestSession;
@@ -18,6 +20,38 @@ namespace Hexalith.McpCli.Mcp.Tests;
 /// <summary>Proves execution arguments and complete documents survive the MCP boundary.</summary>
 public sealed class McpExecutionTests
 {
+    [Fact]
+    public async Task CallerCancellationLeavesTheToolInvocationCancelledAsync()
+    {
+        using var caller = new CancellationTokenSource();
+        await using McpTestSession session = await CreateAsync("2026-07-28", configure: (_, gateway) =>
+            gateway.SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>())
+                .Returns(call =>
+                {
+                    caller.Cancel();
+                    return Task.FromCanceled<SubmitCommandResponse>(call.Arg<CancellationToken>());
+                }));
+        McpServerTool tool = session.Provider.GetRequiredService<IOptions<McpServerOptions>>().Value.ToolCollection!
+            .Single(tool => tool.ProtocolTool.Name == "send_command");
+        var request = new RequestContext<CallToolRequestParams>(session.Server,
+            new JsonRpcRequest { Method = "tools/call", Id = new RequestId(1) },
+            new CallToolRequestParams
+            {
+                Name = "send_command",
+                Arguments = new Dictionary<string, JsonElement>
+                {
+                    ["operation"] = JsonSerializer.SerializeToElement("sample.create-item"),
+                    ["payload"] = JsonSerializer.SerializeToElement(CommandPayload),
+                },
+            });
+
+        OperationCanceledException canceled = await Should.ThrowAsync<OperationCanceledException>(
+            () => tool.InvokeAsync(request, caller.Token).AsTask());
+
+        canceled.CancellationToken.ShouldBe(caller.Token);
+        await session.Gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), caller.Token);
+    }
+
     /// <summary>All command envelope fields reach one Gateway call and both heads serialize the same result.</summary>
     [Theory]
     [InlineData("2025-06-18", false)]

@@ -21,6 +21,58 @@ public sealed class OperationExecutorTests
     private const string ItemId = "01ARZ3NDEKTSV4RRFFQ69G5FAV";
     private const string CorrelationId = "01J9MZHXT3RKM0VWXRXGSJDATK";
 
+    /// <summary>Cancellation before dispatch skips the Gateway and during dispatch never retries.</summary>
+    /// <param name="cancelBeforeSubmit">Whether the caller cancels during result destination checks.</param>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task CallerCancellationPropagatesWithoutRetryAsync(bool cancelBeforeSubmit)
+    {
+        using var caller = new CancellationTokenSource();
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        gateway.SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>())
+            .Returns(call =>
+            {
+                caller.Cancel();
+                return Task.FromCanceled<SubmitCommandResponse>(call.Arg<CancellationToken>());
+            });
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        var call = new SendCommandArguments("sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""");
+
+        OperationCanceledException cancellation = await Should.ThrowAsync<OperationCanceledException>(
+            () => executor.ExecuteAsync(call, Context(), caller.Token, _ =>
+            {
+                if (cancelBeforeSubmit)
+                {
+                    caller.Cancel();
+                    return Task.FromResult<OperationError?>(new OperationError("internal_error", Message: "Preflight failed."));
+                }
+
+                return Task.FromResult<OperationError?>(null);
+            }));
+
+        cancellation.CancellationToken.ShouldBe(caller.Token);
+        await gateway.Received(cancelBeforeSubmit ? 0 : 1)
+            .SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), caller.Token);
+    }
+
+    /// <summary>A dependency cancellation unrelated to the caller remains an internal failure.</summary>
+    [Fact]
+    public async Task UnrequestedCancellationUsesInternalErrorAsync()
+    {
+        IEventStoreGatewayClient gateway = Substitute.For<IEventStoreGatewayClient>();
+        gateway.SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromCanceled<SubmitCommandResponse>(new CancellationToken(true)));
+        IOperationExecutor executor = Create(gateway, typeof(CreateItemCommand), hasGatewayUrl: true);
+        var call = new SendCommandArguments("sample.create-item", $$"""{"ItemId":"{{ItemId}}","Title":"Hello"}""");
+
+        OperationOutcome outcome = await executor.ExecuteAsync(call, Context(), TestContext.Current.CancellationToken);
+
+        outcome.Document.ShouldBeNull();
+        outcome.Error.ShouldBe(new OperationError("internal_error", Message: "Operation execution failed."));
+        await gateway.Received(1).SubmitCommandAsync(Arg.Any<SubmitCommandRequest>(), Arg.Any<CancellationToken>());
+    }
+
     /// <summary>A no-result validation failure skips the output check, and a failed check skips the Gateway.</summary>
     [Fact]
     public async Task PreSubmitCheckRunsOnlyAfterCoreValidationAsync()

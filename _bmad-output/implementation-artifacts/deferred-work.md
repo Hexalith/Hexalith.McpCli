@@ -57,6 +57,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Executor cancellation is reported as an internal error.
   evidence: `OperationExecutor.ExecuteAsync` catches `OperationCanceledException` in its blanket catch; this belongs to concurrent executor work.
+  status: done 2026-11-24
+  resolution: The shared executor propagates caller cancellation before or during dispatch and retains sanitized failures for unrelated dependency cancellation. Non-MCP CLI actions exit 130 without error output; MCP lets the session handle cancellation. Core and both heads have regression tests.
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-7-warn-on-missing-operation-descriptions-at-build-time.md`
   summary: Malformed Gateway response identifiers can enter a successful command result.
   evidence: `OperationExecutor` copies response IDs without the ULID validation required by PRD addendum §G. Story 2.9 review loop 3 deferred successful-response hardening under its frozen decision.

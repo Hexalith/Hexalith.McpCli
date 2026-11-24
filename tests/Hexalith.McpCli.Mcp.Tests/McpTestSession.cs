@@ -44,6 +44,7 @@ internal sealed class McpTestSession : IAsyncDisposable
     internal ServiceProvider Provider { get; }
     internal IEventStoreGatewayClient Gateway { get; }
     internal McpClient Client { get; private set; } = null!;
+    internal McpServer Server => _server;
     internal CancellationToken Token => _timeout.Token;
 
     internal static ResolvedSettings Settings(string? tenant = "session-tenant", bool allowOverride = false,

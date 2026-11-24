@@ -8,6 +8,7 @@ public interface IOperationExecutor
     /// <param name="context">Trusted session envelope values.</param>
     /// <param name="cancellationToken">The request cancellation token.</param>
     /// <param name="beforeSubmit">Optional check immediately before the gateway request.</param>
+    /// <exception cref="OperationCanceledException">The caller cancelled the operation.</exception>
     Task<OperationOutcome> ExecuteAsync(OperationCall call, EnvelopeContext context, CancellationToken cancellationToken = default,
         Func<CancellationToken, Task<OperationError?>>? beforeSubmit = null);
 }

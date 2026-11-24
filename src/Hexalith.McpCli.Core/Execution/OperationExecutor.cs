@@ -30,7 +30,12 @@ public sealed class OperationExecutor(
         ArgumentNullException.ThrowIfNull(context);
         try
         {
+            cancellationToken.ThrowIfCancellationRequested();
             return await ExecuteCoreAsync(call, context, cancellationToken, beforeSubmit).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch (EventStoreGatewayException exception)
         {
@@ -238,17 +243,19 @@ public sealed class OperationExecutor(
             return Fail(call, path, "The aggregate identifier does not match the module and Gateway rules.");
         }
 
+        cancellationToken.ThrowIfCancellationRequested();
+        if (beforeSubmit is not null)
+        {
+            OperationError? preflightError = await beforeSubmit(cancellationToken).ConfigureAwait(false);
+            cancellationToken.ThrowIfCancellationRequested();
+            if (preflightError is not null)
+            {
+                return new OperationOutcome(null, preflightError);
+            }
+        }
+
         if (call is SendCommandArguments)
         {
-            if (beforeSubmit is not null)
-            {
-                OperationError? preflightError = await beforeSubmit(cancellationToken).ConfigureAwait(false);
-                if (preflightError is not null)
-                {
-                    return new OperationOutcome(null, preflightError);
-                }
-            }
-
             var request = new SubmitCommandRequest(messageId!, tenant!, operation.Routing.Domain, aggregateId!,
                 operation.Routing.WireType, rebuilt, correlationId,
                 extensions, idempotencyKey);
@@ -258,15 +265,6 @@ public sealed class OperationExecutor(
         }
 
         var run = (RunQueryArguments)call;
-        if (beforeSubmit is not null)
-        {
-            OperationError? preflightError = await beforeSubmit(cancellationToken).ConfigureAwait(false);
-            if (preflightError is not null)
-            {
-                return new OperationOutcome(null, preflightError);
-            }
-        }
-
         // Preserve the descriptor's wire selector; receiver admission remains the Gateway's responsibility.
         var queryRequest = new SubmitQueryRequest(tenant!, operation.Routing.Domain, aggregateId!, operation.Routing.WireType,
             operation.Routing.ProjectionType, rebuilt.ValueKind == JsonValueKind.Null ? null : rebuilt,

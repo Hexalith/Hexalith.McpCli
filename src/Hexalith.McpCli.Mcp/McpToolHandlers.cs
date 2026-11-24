@@ -67,7 +67,7 @@ internal static class McpToolHandlers
                 idempotencyKey, extensions), services.GetRequiredService<EnvelopeContext>(), cancellationToken)
             .ConfigureAwait(false);
         return Convert(result.Document, result.Error);
-        }).ConfigureAwait(false);
+        }, cancellationToken).ConfigureAwait(false);
 
     internal static async Task<CallToolResult> RunQuery(
         [Description("Canonical read operation name from list_operations.")] string operation,
@@ -86,7 +86,7 @@ internal static class McpToolHandlers
                 pageSize, offset, cursor), services.GetRequiredService<EnvelopeContext>(), cancellationToken)
             .ConfigureAwait(false);
         return Convert(result.Document, result.Error);
-        }).ConfigureAwait(false);
+        }, cancellationToken).ConfigureAwait(false);
 
     private static CallToolResult Guard(Func<CallToolResult> action)
     {
@@ -100,11 +100,15 @@ internal static class McpToolHandlers
         }
     }
 
-    private static async Task<CallToolResult> GuardAsync(Func<Task<CallToolResult>> action)
+    private static async Task<CallToolResult> GuardAsync(Func<Task<CallToolResult>> action, CancellationToken cancellationToken)
     {
         try
         {
             return await action().ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch (Exception)
         {

@@ -856,6 +856,10 @@ internal sealed class CliRunner
             actionStarted = true;
             return await action(host.Services, settings, cancellationToken).ConfigureAwait(false);
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            return 130;
+        }
         catch (OutputPreflightException)
         {
             return await CliOutput.WriteErrorAsync(new OperationError("internal_error",

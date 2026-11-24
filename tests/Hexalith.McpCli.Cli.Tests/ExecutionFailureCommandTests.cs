@@ -19,6 +19,36 @@ public sealed class ExecutionFailureCommandTests
 {
     private const string Id = "01J9MZHXT3RKM0VWXRXGSJDATK";
 
+    /// <summary>Caller cancellation exits 130 without an error document or a submission.</summary>
+    [Fact]
+    public async Task CallerCancellationIsAnInterruptionAsync()
+    {
+        using var caller = new CancellationTokenSource();
+        string directory = NewDirectory();
+        try
+        {
+            await using var gateway = new ScriptedGateway(ScriptedGateway.AcceptCommand);
+            IReadOnlyList<Assembly> Manifest()
+            {
+                caller.Cancel();
+                return [typeof(SampleContracts.CreateItemCommand).Assembly];
+            }
+
+            (int exit, string output, string error) = await InvokeCliAsync(
+                ["send", "sample.create-item", "--payload", $$"""{"ItemId":"{{Id}}","Title":"Hello"}""", "--url", gateway.Url],
+                directory, caller.Token, Manifest);
+
+            exit.ShouldBe(130);
+            output.ShouldBeEmpty();
+            error.ShouldBeEmpty();
+            gateway.Requests.ShouldBeEmpty();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Problem Details status and supplied metadata survive one command submission.</summary>
     [Fact]
     public async Task CompleteProblemDetailsKeepsExceptionStatusAsync()
@@ -1174,7 +1204,7 @@ public sealed class ExecutionFailureCommandTests
     }
 
     private static async Task<(int Exit, string Output, string Error)> InvokeCliAsync(string[] arguments, string directory,
-        CancellationToken cancellationToken)
+        CancellationToken cancellationToken, Func<IReadOnlyList<Assembly>>? manifest = null)
     {
         TextWriter originalOut = Console.Out;
         TextWriter originalError = Console.Error;
@@ -1185,7 +1215,7 @@ public sealed class ExecutionFailureCommandTests
             Console.SetOut(output);
             Console.SetError(error);
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
-            Func<IReadOnlyList<Assembly>> manifest = () => [typeof(SampleContracts.CreateItemCommand).Assembly,
+            manifest ??= () => [typeof(SampleContracts.CreateItemCommand).Assembly,
                 typeof(StringContracts.Module).Assembly];
             int exit = await new CliRunner(store, manifest, _ => null).InvokeAsync(arguments, cancellationToken);
             return (exit, output.ToString(), error.ToString());
