@@ -23,6 +23,45 @@ public sealed class CliOutputContractTests
     private const string ParseMessage = "The command arguments are missing or invalid. Run with --help for usage.";
     private const string HelpMessage = "Help must be requested without arguments or options.";
 
+    /// <summary>A Windows null destination discards a successful result without opening a cwd-relative file.</summary>
+    [Theory]
+    [InlineData("NUL")]
+    [InlineData("nul")]
+    [InlineData(@"\\.\NUL")]
+    public async Task WindowsNullDeviceDiscardsResultsAsync(string device)
+    {
+        Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows null device is required.");
+        string directory = NewDirectory();
+        string prior = Environment.CurrentDirectory;
+        try
+        {
+            Environment.CurrentDirectory = directory;
+            var store = new ProfileStore(Path.Combine(directory, "private", "mcpcli.json"));
+            (int exit, string output, string error) = await InvokeAsync(store, ["modules", "--output", device]);
+            exit.ShouldBe(0);
+            output.ShouldBeEmpty();
+            error.ShouldBeEmpty();
+            Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
+        }
+        finally
+        {
+            Environment.CurrentDirectory = prior;
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Windows console aliases open the actual output buffer, including with redirected stdout.</summary>
+    [Theory]
+    [InlineData("CON")]
+    [InlineData("conout$")]
+    [InlineData(@"\\.\CON")]
+    public void WindowsConsoleAliasesSelectConsoleOutput(string name)
+    {
+        Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows console device names are required.");
+        WindowsOutputDevice.Resolve(name).ShouldBe("CONOUT$");
+        WindowsOutputDevice.Resolve(Path.Combine("out", "CON")).ShouldBeNull();
+    }
+
     /// <summary>Malformed input is one safe error with no usage or supplied value.</summary>
     [Fact]
     public async Task ParserFailuresUseSafeDocumentsAsync()

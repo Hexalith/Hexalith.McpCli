@@ -390,6 +390,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-9-explain-execution-failures-with-stable-documents.md`
   summary: Windows `--output NUL` or `CON` may fail, or may create a literal file, instead of writing to the device.
   evidence: Unverified; would be medium if confirmed. `CliOutput.IsSpecialDevicePath` (`src/Hexalith.McpCli/Cli/CliOutput.cs:161`) is always false on Windows. `ResolveFinalSymlink` combines a relative device name with the working directory without calling `Path.GetFullPath`, so the result goes through `File.Exists` and the staged `File.Move`. The baseline `File.WriteAllTextAsync("NUL")` opened `\\.\NUL`. Settle it by running `hexalith config current --output NUL` on Windows 10 and Windows 11 and checking the exit code and whether a file named `NUL` is created; if it reproduces, detect reserved device names or character-device handles on Windows and write to them directly.
+  status: done 2026-11-24
+  resolution: Windows reserves bare NUL and console names and their explicit device paths, then probes and writes through native device handles. Windows 11 regressions cover real NUL output and console name resolution.
 
 ## Deferred from: implementation of spec-2-10-refuse-writes-in-read-only-mode.md (2026-10-05)
 

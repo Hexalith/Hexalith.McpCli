@@ -33,6 +33,12 @@ internal static class CliOutput
 
     private static void PreflightCore(string output)
     {
+        if (WindowsOutputDevice.Resolve(output) is string device)
+        {
+            WindowsOutputDevice.Probe(device);
+            return;
+        }
+
         string path = ResolveFinalSymlink(output);
         OutputTargetKind kind = OutputFileType.Inspect(path);
         if (kind == OutputTargetKind.Missing)
@@ -140,6 +146,12 @@ internal static class CliOutput
     private static async Task WriteResultFileAsync(string path, string output, CancellationToken cancellationToken,
         Func<FileStream, CancellationToken, Task>? afterDestinationTruncated)
     {
+        if (WindowsOutputDevice.Resolve(path) is string device)
+        {
+            WindowsOutputDevice.Write(device, output, cancellationToken);
+            return;
+        }
+
         path = ResolveFinalSymlink(path);
         cancellationToken.ThrowIfCancellationRequested();
         OutputTargetKind kind = OutputFileType.Inspect(path);
