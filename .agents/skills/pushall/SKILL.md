@@ -37,7 +37,8 @@ authoritative. If it is unavailable, stop `/pushall` and report the missing inst
 - If a repo has no remote, push fails, or the local default branch has diverged from
   `origin/<default-branch>` (fast-forward not possible), record it as skipped/failed and continue
   with the rest — never stop the whole run for one repo.
-- Always end each repo back on its default branch, never detached HEAD or a feature branch.
+- End each completed repo on its default branch. If switching would overwrite working changes,
+  preserve the current checkout and report the blocker.
 - Give a one-line progress update per repo as you go, and a final consolidated report (per repo:
   local and remote branches merged, local and remote branches deleted, anything skipped/failed,
   push status).
@@ -72,9 +73,26 @@ Apply this to one repo directory `<dir>` at a time (a submodule path, or `.` for
 1. `git -C <dir> fetch --all --prune`
 2. Determine the default branch: prefer `main`, else `master`, else
    `git -C <dir> remote show origin | sed -n 's/.*HEAD branch: //p'`.
-3. If `git -C <dir> status --porcelain` is non-empty, stage and commit everything:
-   `git -C <dir> add -A && git -C <dir> commit -m "build: sync local changes via /pushall"`.
-4. `git -C <dir> checkout <default-branch>`
+3. Inspect `git -C <dir> status --porcelain=v1 --untracked-files=all`, the index and the working
+   tree. If a Git operation is already in progress or the index contains changes outside the
+   reviewed sync, leave the checkout intact and report it as blocked.
+   - If `git -C <dir> symbolic-ref --quiet HEAD` reports detached HEAD, check whether the tip
+     is already contained in the local default branch. If it is unmerged or there are reviewed
+     changes to commit, create a fresh `pushall/recovery-<unique-suffix>` branch at the detached
+     tip with `git -C <dir> switch -c <recovery-branch>` before committing or switching branches.
+     If this fails, stop processing the repo. Include the branch in step 6.
+   - For reviewed tracked files whose full changes are in scope, stage explicit leaf paths with
+     `git -C <dir> --literal-pathspecs add -u -- <tracked-paths>`. Preserve partial staging when
+     only the indexed changes are in scope. Stage an untracked file only when its exact path and
+     content are reviewed and authorized, using `git -C <dir> --literal-pathspecs add -- <paths>`.
+     Use these commands only with nonempty lists and check the final staged patch.
+   - Follow the owning repository's submodule policy. Verify each allowed staged gitlink is
+     available on its declared remote before committing pointer changes separately from ordinary
+     files. Leave centrally owned gitlinks untouched.
+   - Commit a nonempty reviewed staged patch with
+     `git -C <dir> commit -m "build: sync local changes via /pushall"`.
+4. `git -C <dir> switch <default-branch>`. If the switch would overwrite working changes, keep
+   them intact and report the repo as blocked.
 5. Try `git -C <dir> merge --ff-only origin/<default-branch>` to catch up with the remote first.
    If this fails because local and remote diverged, record it and skip the rest of this repo.
 6. Build the merge list from both kinds of refs. A merge target is a full ref under `refs/heads/`
@@ -120,8 +138,9 @@ Apply this to one repo directory `<dir>` at a time (a submodule path, or `.` for
    submodule paths to the same subagent.
 4. Collect each finished subagent's structured result and launch queued subagents until every
    declared submodule has a terminal result.
-5. After the last submodule subagent has finished and none remain active, run the per-repo procedure
-   for the superproject (`.`). Its step 3 auto-commit will pick up the updated submodule gitlink
-   pointers from the completed submodule runs along with any other superproject changes. This is
-   the only point at which the main repository may be pushed.
+5. After the last submodule subagent has finished, verify the required submodule commits, pushes,
+   and remote availability. If any required action failed, report its blocker and stop before
+   committing the superproject. Otherwise, run the per-repo procedure for the superproject (`.`).
+   Its separate pointer commit records only allowed, verified root gitlinks. Push the main
+   repository after that verification.
 6. Print the consolidated report, including every subagent result and the superproject result.
