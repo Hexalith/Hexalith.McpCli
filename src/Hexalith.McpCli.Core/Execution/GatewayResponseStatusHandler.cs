@@ -1,4 +1,5 @@
 using System.Runtime.CompilerServices;
+using Hexalith.EventStore.Client.Gateway;
 
 namespace Hexalith.McpCli.Core.Execution;
 
@@ -16,6 +17,13 @@ internal sealed class GatewayResponseStatusHandler : DelegatingHandler
         {
             T response = await submit().ConfigureAwait(false);
             return (response, capture.Value);
+        }
+        catch (InvalidOperationException exception) when (exception.InnerException is ArgumentException
+            && capture.Value is >= 200 and <= 299)
+        {
+            // HttpContentJsonExtensions wraps an unrecognized response charset in InvalidOperationException.
+            throw new EventStoreGatewayException(capture.Value.Value, "Invalid Gateway response",
+                detail: "The Gateway response charset is invalid.", innerException: exception);
         }
         finally
         {

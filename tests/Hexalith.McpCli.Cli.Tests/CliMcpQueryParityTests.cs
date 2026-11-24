@@ -84,13 +84,15 @@ public sealed class CliMcpQueryParityTests
     [InlineData(200, ",\"metadata\":{\"paging\":{\"pageSize\":1,\"totalCount\":-1}}", null, "The Gateway returned invalid query paging metadata.")]
     [InlineData(200, ",\"metadata\":{\"paging\":{\"pageSize\":1,\"nextCursor\":\"\"}}", null, "The Gateway returned invalid query paging metadata.")]
     [InlineData(202, ",\"metadata\":{\"paging\":{\"pageSize\":1,\"hasMore\":\"false\"}}", null, "Query response body could not be parsed.")]
-    public async Task ReturnedPagingMatchesAdvertisedSchemaAsync(int status, string metadata, string? paging, string? detail)
+    [InlineData(202, ",\"metadata\":{\"paging\":{\"pageSize\":1}}", null, "The Gateway response charset is invalid.", "application/json; charset=unknown-charset")]
+    public async Task ReturnedPagingMatchesAdvertisedSchemaAsync(int status, string metadata, string? paging, string? detail,
+        string contentType = "application/json")
     {
         string directory = Directory.CreateTempSubdirectory("mcpcli-query-response-").FullName;
         try
         {
             await using var gateway = new ScriptedGateway(_ => ScriptedGateway.Response(status,
-                status == 202 ? "Accepted" : "OK", "application/json",
+                status == 202 ? "Accepted" : "OK", contentType,
                 $$"""{"correlationId":"01J9MZHXT3RKM0VWXRXGSJDATK","payload":{},"success":true{{metadata}}}"""));
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
             Func<IReadOnlyList<Assembly>> manifest = () => [typeof(GetItemQuery).Assembly];
