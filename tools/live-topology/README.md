@@ -410,7 +410,9 @@ in escaped JSON, malformed XML, and command arguments. The hook redacts separate
 argument values before joining them for display. It omits an entire stdout or
 stderr channel above 4 MiB and records its byte count in the command receipt.
 Commands whose stdout supplies machine input fail if that channel exceeds the
-limit. Vector execution uses its separate lane receipt. Raw private runtime
+limit. The per-vector runner also applies the limit before reading the wrapper's
+stdout for its isolation receipt. The evidence copy omits oversized runtime
+logs. Raw private runtime
 state stays outside uploaded evidence. Keep its location from `preparation.json` until
 diagnostics are complete, then remove only that task-owned directory.
 

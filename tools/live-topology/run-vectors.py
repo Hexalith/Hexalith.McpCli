@@ -14,6 +14,7 @@ import uuid
 import xml.etree.ElementTree as ET
 
 from live_plans import ROOT, preflight, require_phases, selection_binding
+from retained_output import OUTPUT_LIMIT, read_capped
 from validate import VectorError, _load_json
 
 
@@ -161,7 +162,11 @@ def main(argv=None) -> int:
                         raise VectorError(f'{operation}: missing, stale or unsuccessful semantic receipt')
                     require_phases(item, live.get('phases', []))
                     # Verify the wrapper's ownership receipt, including successful private infrastructure cleanup.
-                    lines = (output / 'child.stdout.txt').read_text().splitlines()
+                    with (output / 'child.stdout.txt').open('rb') as stream:
+                        stdout, omitted = read_capped(stream, OUTPUT_LIMIT)
+                    if stdout is None:
+                        raise VectorError(f'{operation}: isolated child stdout exceeded {OUTPUT_LIMIT} bytes ({omitted} bytes observed)')
+                    lines = stdout.decode('utf-8', errors='replace').splitlines()
                     runs = [Path(line.removeprefix('Isolated run: ')) for line in lines if line.startswith('Isolated run: ')]
                     if len(runs) != 1:
                         raise VectorError(f'{operation}: missing isolated runtime receipt')

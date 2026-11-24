@@ -26,6 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import native_cohort
 import native_audit
 import native_sources
+from retained_output import OUTPUT_LIMIT, read_capped
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
@@ -44,7 +45,7 @@ MODULE_AUDIT_PROJECTS = (PACKAGE_GATEWAY,
 SERVICES = {'sentry', 'redis', 'placement', 'scheduler'}
 NAMESPACES = {'user', 'pid', 'net', 'mnt'}
 OWNER_FILE = '.mcpcli-ci-owner'
-COMMAND_CHANNEL_LIMIT = 4 * 1024 * 1024
+COMMAND_CHANNEL_LIMIT = OUTPUT_LIMIT
 ASPIRE_CLI_URL = 'https://github.com/microsoft/aspire/releases/download/v17.0.0/aspire-cli-linux-x64-17.0.0.tar.gz'
 ASPIRE_CLI_SHA256 = '74a6d6418fcddb117770ccd235e2de4a96a02e36ebcfd0b0e2a0e69d6e85fc18'
 # Exact root selections are a closed policy; owner projects use their native net11 graph.
@@ -134,14 +135,10 @@ def save(path: Path, value, *, environment=None) -> None:
     path.write_text(sanitized(json.dumps(value, indent=2), environment=environment) + '\n')
 
 
-def read_command_channel(stream, environment) -> tuple[str, int]:
-    size = os.fstat(stream.fileno()).st_size
-    if size <= COMMAND_CHANNEL_LIMIT:
-        stream.seek(0)
-        content = stream.read(COMMAND_CHANNEL_LIMIT + 1)
-        if len(content) <= COMMAND_CHANNEL_LIMIT:
-            return sanitized(content.decode(errors='replace'), environment=environment), 0
-        size = max(len(content), os.fstat(stream.fileno()).st_size)
+def read_command_channel(stream, environment=None, *, sanitize=sanitized) -> tuple[str, int]:
+    content, size = read_capped(stream, COMMAND_CHANNEL_LIMIT)
+    if content is not None:
+        return sanitize(content.decode(errors='replace'), environment=environment), 0
     # Redaction needs the complete channel. A retained fragment could split a credential.
     return f'[Output omitted: {size} bytes exceed the {COMMAND_CHANNEL_LIMIT}-byte limit.]\n', size
 
@@ -870,11 +867,13 @@ def prepare(evidence: Path) -> None:
             working = fixture_root / module
             project = f'src/{module}/{module}.csproj'
             bounded(['dotnet', 'restore', project, '-p:Configuration=Release', '-warnaserror', *properties],
-                    300, evidence / (module + '-restore'), cwd=working, environment=source_environment)
+                    300, evidence / (module + '-restore'), cwd=working, environment=source_environment,
+                    require_complete_stdout=False)
             if module == 'Hexalith.Parties':
                 bounded(['dotnet', 'restore', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                          '-p:Configuration=Release', '-warnaserror', '-p:CopyLocalLockFileAssemblies=true', *properties],
-                        300, evidence / 'parties-adapter-restore', cwd=working, environment=source_environment)
+                        300, evidence / 'parties-adapter-restore', cwd=working, environment=source_environment,
+                        require_complete_stdout=False)
         prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt, required=True)
         for source in receipt['sources']:
             module = source['module']
@@ -889,11 +888,13 @@ def prepare(evidence: Path) -> None:
             if source['HexalithEventStoreVersion'] != EVENTSTORE_COHORT:
                 raise ValueError(f'{module} did not select the exact published EventStore cohort.')
             bounded(['dotnet', 'build', project, '--no-restore', '--configuration', 'Release', '-warnaserror', '-m:1',
-                     *properties], 300, evidence / (module + '-build'), cwd=working, environment=source_environment)
+                     *properties], 300, evidence / (module + '-build'), cwd=working, environment=source_environment,
+                    require_complete_stdout=False)
             if module == 'Hexalith.Parties':
                 bounded(['dotnet', 'build', 'src/Hexalith.Parties.EventStoreExtensions/Hexalith.Parties.EventStoreExtensions.csproj',
                          '--no-restore', '--configuration', 'Release', '-warnaserror', '-m:1', '-p:CopyLocalLockFileAssemblies=true', *properties],
-                        300, evidence / 'parties-adapter-build', cwd=working, environment=source_environment)
+                        300, evidence / 'parties-adapter-build', cwd=working, environment=source_environment,
+                        require_complete_stdout=False)
             prove_source_advisories(private, package_cache, tools, bounded, evidence, receipt)
         source_path = evidence / 'native-source-fixtures.json'
         save(source_path, native_sources.seal(source_proof))
@@ -969,7 +970,9 @@ def copy_diagnostics(runtime: Path, output: Path) -> None:
                 if path.is_file() and not path.is_symlink():
                     target = output / run.name / name
                     target.parent.mkdir(parents=True, exist_ok=True)
-                    target.write_text(sanitized(path.read_text(errors='replace')))
+                    with path.open('rb') as stream:
+                        content, _ = read_command_channel(stream)
+                    target.write_text(content)
 
 
 INDEPENDENT_CASE_TIMEOUT = 960
@@ -1142,8 +1145,9 @@ def run(evidence: Path) -> None:
             copy_diagnostics(runtime, evidence / report['runId'] / 'runtime-diagnostics')
         for pattern in ('*.stdout.txt', '*.stderr.txt', 'tests.xml'):
             for path in (evidence / report['runId']).rglob(pattern):
-                text = path.read_text(errors='replace')
-                path.write_text(sanitized_xml(text) if path.name == 'tests.xml' else sanitized(text))
+                with path.open('rb') as stream:
+                    content, _ = read_command_channel(stream, sanitize=sanitized_xml if path.name == 'tests.xml' else sanitized)
+                path.write_text(content)
         save(evidence / 'ci-live.json', report)
 
 

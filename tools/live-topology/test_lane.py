@@ -17,6 +17,29 @@ spec.loader.exec_module(lane)
 
 
 class LaneTests(unittest.TestCase):
+    def test_oversized_child_stdout_cannot_supply_an_isolation_receipt(self):
+        operation = 'fixture.operation'
+        selected = {'operation': operation, **{key: key for key in BINDING_KEYS}}
+
+        def child(_command, _environment, output, _timeout):
+            (output / 'tests.xml').write_text(self.xml())
+            (output / 'live-result.json').write_text(json.dumps({
+                'operation': operation, 'result': 'passed', 'binding': selection_binding(selected)}))
+            (output / 'child.stdout.txt').write_bytes(b'x' * 65)
+            return 0
+
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.dict('os.environ', {'MCPCLI_ISOLATED_RUNTIME_DIR': '/private/test-runtime'}), \
+                patch.object(lane, 'expected_operations', return_value=[operation]), \
+                patch.object(lane, 'preflight', return_value=[selected]), \
+                patch.object(lane, 'require_phases'), \
+                patch.object(lane, 'bounded_child', side_effect=child), \
+                patch.object(lane, 'OUTPUT_LIMIT', 64):
+            self.assertEqual(1, lane.main(['--output', directory]))
+            report = json.loads((Path(directory) / 'live-lane.json').read_text())
+            self.assertFalse(report['fullLiveAccepted'])
+            self.assertIn('isolated child stdout exceeded 64 bytes (65 bytes observed)', report['vectors'][0]['error'])
+
     def test_full_coverage_cannot_be_inferred_from_returned_preflight_subset(self):
         expected = ['fixture.first', 'fixture.second']
         lane.require_coverage([{'operation': op} for op in expected], expected)

@@ -403,7 +403,7 @@ class CiHooksTests(unittest.TestCase):
         self.runner_temp.mkdir()
         self.tools = self.root / 'tools/live-topology'
         self.tools.mkdir(parents=True)
-        for name in ('prepare-ci.sh', 'run-ci.sh', 'ci.py', 'native_cohort.py', 'native_audit.py', 'native_sources.py'):
+        for name in ('prepare-ci.sh', 'run-ci.sh', 'ci.py', 'native_cohort.py', 'native_audit.py', 'native_sources.py', 'retained_output.py'):
             shutil.copyfile(HERE / name, self.tools / name)
         (self.root / 'scripts').mkdir()
         shutil.copyfile(HERE.parents[1] / 'scripts/evidence_redaction.py', self.root / 'scripts/evidence_redaction.py')
@@ -2487,6 +2487,20 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                     receipt = json.loads(output.with_suffix('.command.json').read_text())
                     self.assertEqual({'stdout': size, 'stderr': size}, receipt['omittedOutputBytes'])
                     self.assertEqual(0, receipt['exitCode'])
+
+    def test_large_runtime_log_is_omitted_before_copying_evidence(self):
+        module = self.ci_module()
+        runtime = self.root / 'runtime'
+        run = runtime / 'runs/example'
+        run.mkdir(parents=True)
+        (run / 'command.stdout.txt').write_text('x' * 128 + 'Bearer boundary-private-value')
+        (run / 'command.stderr.txt').write_text('safe diagnostic\n')
+        copied = self.root / 'runtime-diagnostics'
+        with patch.object(module, 'COMMAND_CHANNEL_LIMIT', 128):
+            module.copy_diagnostics(runtime, copied)
+        self.assertEqual('[Output omitted: 157 bytes exceed the 128-byte limit.]\n',
+                         (copied / 'example/command.stdout.txt').read_text())
+        self.assertEqual('safe diagnostic\n', (copied / 'example/command.stderr.txt').read_text())
 
     def test_child_only_environment_secrets_are_redacted_on_success_failure_and_cancellation(self):
         module = self.ci_module()

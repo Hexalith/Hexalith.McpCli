@@ -204,7 +204,7 @@ def audit_project(project: Path, private: Path, evidence: Path, sdk_policy: dict
         bounded(['dotnet', 'restore', str(fixture), '--configfile', str(config), '--force', '-warnaserror',
                  '-p:NuGetAudit=true', '-p:NuGetAuditMode=all', '-p:NuGetAuditLevel=low',
                  '-p:TreatWarningsAsErrors=true', '-p:WarningsNotAsErrors=', '-p:NoWarn='],
-                300, evidence, cwd=private, environment=environment)
+                300, evidence, cwd=private, environment=environment, require_complete_stdout=False)
         audited_path = private / 'obj/project.assets.json'
         policy = require_policy(audited_path)
         actual = package_graph(audited_path)
