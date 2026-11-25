@@ -1692,7 +1692,8 @@ The original entries record five changes and the FreeBSD verification.
 The Tenants startup and structural fixes
 were already present upstream, and the old SDK installation wildcard was
 superseded. Those three dispositions are excluded from the six. Fifty-two
-entries remain open, including partial closures.
+previous entries remain open, including partial closures. The cancellation
+failure found during verification adds one open entry, for a total of 53.
 
 | Skipped findings | Reason |
 | --- | --- |
@@ -1703,3 +1704,10 @@ entries remain open, including partial closures.
 | Story 5.4 F7, C05 and raw-string bounds | F7 is a historical acceptance. C05 needs qualified stale projection, erasure and restriction fixtures. Raw-string differences need a Parties inventory disposition. |
 | Parties retirement and restrictions, owner README and package labels, Folders gate, Parties and Tenants keyed vectors | These depend on owning module releases, resealing, qualification or exact vector re-approval. |
 | Folders K12 and builder work, Projects paging, census classifications, exact inventory wording, ChatBot/Memories successors and Story 5.11 evidence | These depend on the architecture decisions, owner fixtures or approved successors named at their entries. |
+
+## Deferred from: full product verification of the six-item batch (2026-12-21)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-refuse-short-credentials-in-structured-evidence.md`
+  summary: Investigate the intermittent detached-child cleanup assertion in the Linux topology tooling suite.
+  evidence: On `b77d79973c5c206a9fb0167015361bf3cb3ba7ec`, `python scripts/product_ci.py linux` reached the 276-case topology suite and failed only `CiHooksTests.test_cancellation_waits_for_real_vector_runner_detached_child_cleanup` in `tools/live-topology/test_ci.py:2928`. The fixture's process-existence check did not raise `ProcessLookupError` after cancellation. The standalone topology suite passed, and the focused test passed under the same product process supervisor. A failing run needs process state and parent identity to distinguish a live descendant from delayed reaping. Preserve the cleanup assertion.
+  status: open; intermittent failure reproduced in the full product run only.
