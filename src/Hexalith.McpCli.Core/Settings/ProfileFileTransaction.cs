@@ -18,8 +18,9 @@ internal sealed class ProfileFileTransaction(string path)
     private static readonly UnixFileMode PrivateDirectoryMode = PrivateFileMode | UnixFileMode.UserExecute;
 
     internal ProfileSnapshot Apply(Func<ProfileSnapshot> read, Func<ProfileSnapshot, ProfileSnapshot> update,
-        JsonSerializerOptions options)
+        JsonSerializerOptions options, CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         RejectNonRegularFile(path);
         string directory = Path.GetDirectoryName(path) ?? throw new InvalidDataException("The profile path has no directory.");
         RejectSymlinkDirectory(directory);
@@ -28,7 +29,8 @@ internal sealed class ProfileFileTransaction(string path)
         RestrictDirectory(directory);
         string lockPath = path + LockSuffix;
         RejectNonRegularFile(lockPath);
-        using FileStream mutex = AcquireLock(lockPath);
+        using FileStream mutex = AcquireLock(lockPath, cancellationToken);
+        cancellationToken.ThrowIfCancellationRequested();
         ProfileSnapshot next = update(read());
         RejectNonRegularFile(path);
         if (File.Exists(path))
@@ -46,6 +48,7 @@ internal sealed class ProfileFileTransaction(string path)
             }
 
             RejectNonRegularFile(path);
+            cancellationToken.ThrowIfCancellationRequested();
             if (OperatingSystem.IsWindows() && File.Exists(path))
             {
                 File.Replace(temporaryPath, path, null);
@@ -67,11 +70,12 @@ internal sealed class ProfileFileTransaction(string path)
         }
     }
 
-    private static FileStream AcquireLock(string lockPath)
+    private static FileStream AcquireLock(string lockPath, CancellationToken cancellationToken)
     {
         DateTime deadline = DateTime.UtcNow.AddSeconds(10);
         while (true)
         {
+            cancellationToken.ThrowIfCancellationRequested();
             try
             {
                 FileStream stream = new(lockPath, LockOptions());

@@ -318,9 +318,11 @@ When a URL and token both resolve, both must come from flags, from the environme
 or from the selected Profile. A mixed pair is `configuration_invalid`.
 A URL may be used without a token.
 
-**Private credential entry (Story 5.16, backlog).** Profile creation and
-rotation must support a non-echoing terminal prompt and explicitly selected
-stdin for automation. Reject conflicting inputs. Keep the token out of process
+**Private credential entry (Story 5.16).** Use `config profile add NAME
+--url URL --token-input prompt|stdin` to create a profile, or `config profile
+rotate-token NAME --token-input prompt|stdin` to rotate only the token. Prompt
+uses an interactive terminal without echo. Stdin requires redirection and
+reads one line. Add refuses simultaneous `--token` and `--token-input`. Keep the token out of process
 arguments, stdout, stderr and diagnostics on these paths. Ordinary commands
 and MCP stdio retain their input streams. Use the locked private-file
 transaction so cancellation or invalid input preserves the original settings

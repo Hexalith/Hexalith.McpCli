@@ -10,6 +10,58 @@ namespace Hexalith.McpCli.Core.Tests;
 /// <summary>Checks profile transactions, validation, and private storage.</summary>
 public sealed class ProfileStoreTests
 {
+    /// <summary>A token entered for the old endpoint cannot overwrite the replacement profile.</summary>
+    [Fact]
+    public void RotationRefusesAConcurrentlyChangedGateway()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://original.example/", "original-token"));
+            string? url = store.ValidateRotation("dev");
+            store.Add("dev", new ConnectionProfile("https://replacement.example/", "replacement-token"));
+            byte[] before = File.ReadAllBytes(store.ProfilePath);
+            Should.Throw<InvalidDataException>(() => store.RotateToken("dev", url, "pending-token",
+                    TestContext.Current.CancellationToken))
+                .Message.ShouldBe("The profile Gateway URL changed during token entry. Rerun token rotation.");
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Cancellation while a second process holds the lock leaves the first profile intact.</summary>
+    [Fact]
+    public async Task TokenRotationCanCancelWhileWaitingForLockAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/", "original-token"));
+            byte[] before = File.ReadAllBytes(store.ProfilePath);
+            using var cancellation = CancellationTokenSource.CreateLinkedTokenSource(TestContext.Current.CancellationToken);
+            using FileStream mutex = File.Open(store.ProfilePath + ".lock", FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+            using var started = new ManualResetEventSlim();
+            Task<ProfileSnapshot> rotation = Task.Run(() =>
+            {
+                started.Set();
+                return store.RotateToken("dev", "https://gateway.example/", "pending-token", cancellation.Token);
+            }, TestContext.Current.CancellationToken);
+            started.Wait(TestContext.Current.CancellationToken);
+            cancellation.Cancel();
+            await Should.ThrowAsync<OperationCanceledException>(() => rotation);
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(before);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>The explicit file wins over home and an unset override retains the user-profile default.</summary>
     [Fact]
     public void HomeResolutionPreservesPathPrecedence()
@@ -716,7 +768,8 @@ public sealed class ProfileStoreTests
             JsonSerializerOptions options = ConnectionProfileProbeConverter.Options(
                 _ => observed.Add(File.GetUnixFileMode(TemporaryFiles(store).Single())));
 
-            new ProfileFileTransaction(store.ProfilePath).Apply(store.Read, snapshot => snapshot, options);
+            new ProfileFileTransaction(store.ProfilePath).Apply(store.Read, snapshot => snapshot, options,
+                TestContext.Current.CancellationToken);
 
             observed.ShouldNotBeEmpty();
             observed.ShouldAllBe(mode => mode == (UnixFileMode.UserRead | UnixFileMode.UserWrite));
@@ -857,7 +910,8 @@ public sealed class ProfileStoreTests
                 observed.Add(permissions.GetAccessControl());
             });
 
-            new ProfileFileTransaction(store.ProfilePath).Apply(store.Read, snapshot => snapshot, options);
+            new ProfileFileTransaction(store.ProfilePath).Apply(store.Read, snapshot => snapshot, options,
+                TestContext.Current.CancellationToken);
 
             observed.ShouldNotBeEmpty();
             foreach (FileSecurity security in observed)

@@ -416,6 +416,8 @@ When the tool starts with `--read-only` or `EVENTSTORE_READ_ONLY` (FR-13), write
 
 #### FR-18: Manage Profiles
 
+Profile creation accepts private terminal or redirected stdin input with `--token-input prompt|stdin`. `config profile rotate-token NAME` accepts the same modes and updates only the credential in the locked transaction. Both Heads require HTTPS when sending a bearer token to a non-loopback Gateway.
+
 A shell user can select a Profile by name; a Profile holds `url`, `token`, `format`, `tenant`, `actor`, `allowTenantOverride`, and `allowedExtensions` (addendum §E).
 
 **Consequences (testable):**

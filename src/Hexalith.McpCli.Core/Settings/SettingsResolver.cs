@@ -1,5 +1,6 @@
 using System.Collections.Frozen;
 using System.Collections.ObjectModel;
+using System.Net;
 using Hexalith.McpCli.Core.Execution;
 
 namespace Hexalith.McpCli.Core.Settings;
@@ -89,6 +90,11 @@ public sealed class SettingsResolver
                     + "from the same source: flags, environment, or the selected profile.");
             }
 
+            if (token is not null && RequiresHttps(url))
+            {
+                return Failure("A gateway URL with a token must use HTTPS or a loopback IP address.");
+            }
+
             string? tenant = Select(input.Tenant, "EVENTSTORE_TENANT", profile?.Tenant, null, "tenant", sources);
             string? actor = Select(input.Actor, "EVENTSTORE_ACTOR", profile?.Actor, null, "actor", sources);
             string format = Select(input.Format, "EVENTSTORE_FORMAT", profile?.Format, "json", "format", sources)!;
@@ -139,6 +145,27 @@ public sealed class SettingsResolver
         {
             return Failure(exception.Message);
         }
+    }
+
+    /// <summary>Determines whether a bearer token would use unencrypted remote HTTP.</summary>
+    internal static bool RequiresHttps(Uri? url)
+    {
+        if (url is not { Scheme: "http" })
+        {
+            return false;
+        }
+
+        if (!IPAddress.TryParse(url.IdnHost, out IPAddress? address))
+        {
+            return true;
+        }
+
+        if (address.IsIPv4MappedToIPv6)
+        {
+            address = address.MapToIPv4();
+        }
+
+        return !IPAddress.IsLoopback(address);
     }
 
     private string? Select(string? flag, string environmentName, string? profile, string? fallback,

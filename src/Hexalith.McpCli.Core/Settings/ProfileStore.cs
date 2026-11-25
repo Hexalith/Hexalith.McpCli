@@ -112,9 +112,13 @@ public sealed partial class ProfileStore
 
     /// <summary>Adds or replaces a named profile in one locked transaction.</summary>
     public ProfileSnapshot Add(string name, ConnectionProfile profile)
+        => AddWithCancellation(name, profile, CancellationToken.None);
+
+    /// <summary>Adds a profile while observing cancellation until replacement.</summary>
+    internal ProfileSnapshot AddWithCancellation(string name, ConnectionProfile profile, CancellationToken cancellationToken)
     {
         ValidateName(name);
-        ValidateProfile(profile);
+        ValidateProfile(profile, forMutation: true);
         ValidateTenant(profile.Tenant);
         return Mutate(snapshot =>
         {
@@ -123,7 +127,7 @@ public sealed partial class ProfileStore
                 [name] = profile,
             };
             return snapshot with { Profiles = profiles };
-        });
+        }, cancellationToken);
     }
 
     /// <summary>Removes a profile and clears its active selection.</summary>
@@ -193,11 +197,61 @@ public sealed partial class ProfileStore
 
     /// <summary>Checks an add or replace without changing the profile file.</summary>
     public void ValidateAdd(string name, ConnectionProfile profile)
+        => ValidateAdd(name, profile, tokenInput: false);
+
+    /// <summary>Checks add preconditions before reading a requested token.</summary>
+    internal void ValidateAdd(string name, ConnectionProfile profile, bool tokenInput)
     {
         ValidateName(name);
-        ValidateProfile(profile);
+        ValidateProfile(profile, forMutation: true);
+        if (tokenInput && profile.Url is not null)
+        {
+            ValidateTokenEndpoint(new Uri(profile.Url, UriKind.Absolute));
+        }
+
         ValidateTenant(profile.Tenant);
         _ = Read();
+    }
+
+    /// <summary>Checks that the named profile can receive a token and returns its current Gateway URL.</summary>
+    internal string? ValidateRotation(string name)
+    {
+        ValidateName(name);
+        string? url = GetProfile(Read(), name).Url;
+        ValidateTokenEndpoint(url is null ? null : new Uri(url, UriKind.Absolute));
+        return url;
+    }
+
+    /// <summary>Updates only the token using the latest locked profile snapshot.</summary>
+    internal ProfileSnapshot RotateToken(string name, string? gatewayUrl, string token, CancellationToken cancellationToken)
+    {
+        ValidateName(name);
+        return Mutate(snapshot =>
+        {
+            ConnectionProfile profile = GetProfile(snapshot, name);
+            if (!string.Equals(profile.Url, gatewayUrl, StringComparison.Ordinal))
+            {
+                throw new InvalidDataException("The profile Gateway URL changed during token entry. Rerun token rotation.");
+            }
+
+            var profiles = new Dictionary<string, ConnectionProfile>(snapshot.Profiles, StringComparer.Ordinal)
+            {
+                [name] = WithToken(profile, token),
+            };
+            return snapshot with { Profiles = profiles };
+        }, cancellationToken);
+    }
+
+    private static ConnectionProfile GetProfile(ProfileSnapshot snapshot, string name)
+        => snapshot.Profiles.TryGetValue(name, out ConnectionProfile? profile)
+            ? profile
+            : throw new InvalidDataException("The named mcpcli profile does not exist.");
+
+    private static ConnectionProfile WithToken(ConnectionProfile profile, string token)
+    {
+        ConnectionProfile updated = profile with { Token = token };
+        ValidateProfile(updated, forMutation: true);
+        return updated;
     }
 
     /// <summary>Checks a removal without changing the profile file.</summary>
@@ -273,8 +327,8 @@ public sealed partial class ProfileStore
         return masked.Contains(token, StringComparison.Ordinal) ? FullMask(token) : masked;
     }
 
-    private ProfileSnapshot Mutate(Func<ProfileSnapshot, ProfileSnapshot> update)
-        => new ProfileFileTransaction(ProfilePath).Apply(Read, update, JsonOptions);
+    private ProfileSnapshot Mutate(Func<ProfileSnapshot, ProfileSnapshot> update, CancellationToken cancellationToken = default)
+        => new ProfileFileTransaction(ProfilePath).Apply(Read, update, JsonOptions, cancellationToken);
 
     private static ProfileSnapshot? Parse(string json)
     {
@@ -329,7 +383,7 @@ public sealed partial class ProfileStore
             },
             _ => throw new InvalidDataException("Unsupported profile field."),
         };
-        ValidateProfile(updated);
+        ValidateProfile(updated, forMutation: true);
         if (field == "tenant")
         {
             ValidateTenant(updated.Tenant);
@@ -355,14 +409,20 @@ public sealed partial class ProfileStore
         }
     }
 
-    private static void ValidateProfile(ConnectionProfile profile)
+    private static void ValidateProfile(ConnectionProfile profile, bool forMutation = false)
     {
         ArgumentNullException.ThrowIfNull(profile);
-        if (profile.Url is not null && (!Uri.TryCreate(profile.Url, UriKind.Absolute, out Uri? uri)
+        Uri? uri = null;
+        if (profile.Url is not null && (!Uri.TryCreate(profile.Url, UriKind.Absolute, out uri)
             || uri.Scheme is not ("http" or "https") || uri.UserInfo.Length > 0
             || uri.Query.Length > 0 || uri.Fragment.Length > 0))
         {
             throw new InvalidDataException("A profile URL must be an absolute HTTP(S) gateway URL.");
+        }
+
+        if (forMutation && profile.Token is not null)
+        {
+            ValidateTokenEndpoint(uri);
         }
 
         if (profile.Format is not null && profile.Format is not ("json" or "table"))
@@ -389,6 +449,14 @@ public sealed partial class ProfileStore
         if (allowed.Any(key => !ExtensionValidator.IsValidKey(key)))
         {
             throw new InvalidDataException("A profile has invalid allowed extension keys.");
+        }
+    }
+
+    private static void ValidateTokenEndpoint(Uri? uri)
+    {
+        if (SettingsResolver.RequiresHttps(uri))
+        {
+            throw new InvalidDataException("A gateway URL with a token must use HTTPS or a loopback IP address.");
         }
     }
 

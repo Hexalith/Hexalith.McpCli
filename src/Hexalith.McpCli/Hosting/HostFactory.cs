@@ -65,6 +65,12 @@ internal static class HostFactory
                     .CreateLogger(category + ".ClientHandler")));
             if (settings.Token is not null)
             {
+                if (settings.Url is { Scheme: "http" })
+                {
+                    // The only allowed HTTP bearer endpoint is a private loopback forward.
+                    _ = gateway.ConfigurePrimaryHttpMessageHandler(() => new SocketsHttpHandler { UseProxy = false });
+                }
+
                 builder.Services.AddTransient(_ => new StaticBearerTokenHandler(settings.Token));
                 _ = gateway.AddHttpMessageHandler<StaticBearerTokenHandler>();
             }

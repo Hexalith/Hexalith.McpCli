@@ -267,6 +267,152 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>Redirected input creates and rotates credentials while a failed rotation preserves private state.</summary>
+    [Fact]
+    public async Task PrivateTokenInputPreservesProfileAndPermissionsAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            const string initial = "first-synthetic-private-token";
+            string replacement = new string('a', 16_384);
+            var environment = new Dictionary<string, string>();
+            var store = new ProfileStore(Path.Combine(directory, ".eventstore", "mcpcli.json"));
+            string success = McpCliJson.SerializeText(new { name = "dev", activeProfile = (string?)null }) + "\n";
+
+            (int exit, string output, string error) = await RunExecutableWithInputAsync(directory, environment,
+                initial + "\r\n", "config", "profile", "add", "dev", "--url", "http://127.0.0.1:18170",
+                "--token-input", "stdin");
+            (exit, output, error).ShouldBe((0, success, ""));
+            store.Read().Profiles["dev"].Token.ShouldBe(initial);
+            store.Set("dev", "tenant", "acme");
+            store.Set("dev", "actor", "operator");
+            store.Set("dev", "allowTenantOverride", "true");
+            store.Set("dev", "allowedExtensions", "trace-label");
+            store.Use("dev");
+            byte[] original = await File.ReadAllBytesAsync(store.ProfilePath, TestContext.Current.CancellationToken);
+            UnixFileMode? mode = OperatingSystem.IsWindows() ? null : File.GetUnixFileMode(store.ProfilePath);
+
+            (exit, output, error) = await RunExecutableWithInputAsync(directory, environment,
+                "\n", "config", "profile", "rotate-token", "dev", "--token-input", "stdin");
+            (exit, output, error).ShouldBe((2, McpCliJson.SerializeText(new { error = new OperationError("configuration_invalid",
+                    Message: "Token input must contain one nonblank line without control characters.") }) + "\n", ""));
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(original);
+            if (!OperatingSystem.IsWindows())
+            {
+                File.GetUnixFileMode(store.ProfilePath).ShouldBe(mode!.Value);
+            }
+
+            (exit, output, error) = await RunExecutableWithInputAsync(directory, environment,
+                "", "config", "profile", "rotate-token", "dev", "--token-input", "prompt");
+            (exit, output, error).ShouldBe((2, McpCliJson.SerializeText(new { error = new OperationError("configuration_invalid",
+                    Message: "A token prompt requires an interactive terminal.") }) + "\n", ""));
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(original);
+
+            (exit, output, error) = await RunExecutableWithInputAsync(directory, environment,
+                replacement + "\r\n", "config", "profile", "rotate-token", "dev", "--token-input", "stdin");
+            (exit, output, error).ShouldBe((0, McpCliJson.SerializeText(new { name = "dev", activeProfile = "dev" }) + "\n", ""));
+            ProfileSnapshot snapshot = store.Read();
+            snapshot.ActiveProfile.ShouldBe("dev");
+            ConnectionProfile profile = snapshot.Profiles["dev"];
+            profile.Token.ShouldBe(replacement);
+            profile.Url.ShouldBe("http://127.0.0.1:18170");
+            profile.Tenant.ShouldBe("acme");
+            profile.Actor.ShouldBe("operator");
+            profile.AllowTenantOverride.ShouldBe(true);
+            profile.AllowedExtensions.ShouldBe(["trace-label"]);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Private and argument-based token sources cannot both be supplied.</summary>
+    [Fact]
+    public async Task ConflictingTokenInputsFailBeforeCreatingProfileAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            (int exit, string output, string error) = await RunExecutableWithInputAsync(directory, new Dictionary<string, string>(),
+                "", "config", "profile", "add", "dev", "--url", "https://gateway.example",
+                "--token", SuppliedToken, "--token-input", "stdin");
+            (exit, output, error).ShouldBe((2,
+                McpCliJson.SerializeText(new { error = new OperationError("invalid_arguments", Argument: "token",
+                    Message: "provide --token or --token-input") }) + "\n", ""));
+            Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Remote HTTP credentials are refused on profile mutation and before either head starts.</summary>
+    [Theory]
+    [InlineData("http://gateway.example/")]
+    [InlineData("http://loopback/")]
+    [InlineData("http://localhost/")]
+    public async Task BothHeadsAndProfileMutationRequireHttpsForRemoteTokensAsync(string remote)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            string failure = McpCliJson.SerializeText(new { error = new OperationError("configuration_invalid",
+                Message: "A gateway URL with a token must use HTTPS or a loopback IP address.") }) + "\n";
+            (await RunExecutableAsync(directory, "config", "profile", "add", "dev", "--url", remote,
+                "--token", SuppliedToken)).ShouldBe((2, failure, ""));
+            Directory.EnumerateFileSystemEntries(directory).ShouldBeEmpty();
+            (await RunExecutableAsync(directory, "modules", "--url", remote, "--token", SuppliedToken))
+                .ShouldBe((2, failure, ""));
+            (await RunExecutableAsync(directory, "mcp", "--url", remote, "--token", SuppliedToken))
+                .ShouldBe((2, "", failure));
+            (await RunExecutableAsync(directory, "config", "profile", "add", "dev", "--url", remote))
+                .ShouldBe((0, McpCliJson.SerializeText(new { name = "dev", activeProfile = (string?)null }) + "\n", ""));
+            var store = new ProfileStore(Path.Combine(directory, ".eventstore", "mcpcli.json"));
+            byte[] original = await File.ReadAllBytesAsync(store.ProfilePath, TestContext.Current.CancellationToken);
+            (await RunExecutableWithInputAsync(directory, new Dictionary<string, string>(), "",
+                "config", "profile", "rotate-token", "dev", "--token-input", "stdin")).ShouldBe((2, failure, ""));
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(original);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Only the private forward receives a bearer token even when a proxy is configured.</summary>
+    [Fact]
+    public async Task CredentialedLoopbackBypassesHttpProxyAsync()
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            await using var gateway = new ScriptedGateway(ScriptedGateway.AcceptCommand);
+            await using var proxy = new ScriptedGateway(ScriptedGateway.AcceptCommand);
+            var environment = new Dictionary<string, string>
+            {
+                ["http_proxy"] = proxy.Url,
+                ["HTTP_PROXY"] = proxy.Url,
+                ["no_proxy"] = "",
+                ["NO_PROXY"] = "",
+            };
+            const string payload = """{"PartyId":"private-forward","Type":"Person","PersonDetails":{"FirstName":"Private","LastName":"Forward"}}""";
+            (int exit, string output, string error) = await RunExecutableAsync(directory, environment,
+                "send", "parties.create-party", "--tenant", "tenant-a", "--payload", payload,
+                "--url", gateway.Url, "--token", SuppliedToken);
+            exit.ShouldBe(0, output + error);
+            AssertNoSecret(output, error, SuppliedToken);
+            gateway.Requests.ShouldHaveSingleItem().Headers["Authorization"].ShouldBe("Bearer " + SuppliedToken);
+            proxy.Requests.ShouldBeEmpty();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>Bare boolean flags are explicit true values and the current document is complete.</summary>
     [Fact]
     public async Task CurrentBindsBareFlagsAndEmitsAllValuesAndSourcesAsync()
@@ -2825,14 +2971,22 @@ public sealed class ConfigCommandTests
     private static Task<(int Exit, string Output, string Error)> RunExecutableAsync(string home, params string[] args)
         => RunExecutableAsync(home, new Dictionary<string, string>(), args);
 
-    private static async Task<(int Exit, string Output, string Error)> RunExecutableAsync(
+    private static Task<(int Exit, string Output, string Error)> RunExecutableAsync(
         string home,
         IReadOnlyDictionary<string, string> environment,
+        params string[] args)
+        => RunExecutableWithInputAsync(home, environment, null, args);
+
+    private static async Task<(int Exit, string Output, string Error)> RunExecutableWithInputAsync(
+        string home,
+        IReadOnlyDictionary<string, string> environment,
+        string? input,
         params string[] args)
     {
         var startInfo = new ProcessStartInfo
         {
             FileName = Environment.GetEnvironmentVariable("DOTNET_HOST_PATH") ?? "dotnet",
+            RedirectStandardInput = input is not null,
             RedirectStandardError = true,
             RedirectStandardOutput = true,
             UseShellExecute = false,
@@ -2860,6 +3014,12 @@ public sealed class ConfigCommandTests
         using Process process = Process.Start(startInfo).ShouldNotBeNull();
         Task<string> output = process.StandardOutput.ReadToEndAsync(TestContext.Current.CancellationToken);
         Task<string> error = process.StandardError.ReadToEndAsync(TestContext.Current.CancellationToken);
+        if (input is not null)
+        {
+            await process.StandardInput.WriteAsync(input);
+            process.StandardInput.Close();
+        }
+
         await process.WaitForExitAsync(TestContext.Current.CancellationToken);
         return (process.ExitCode, await output, await error);
     }

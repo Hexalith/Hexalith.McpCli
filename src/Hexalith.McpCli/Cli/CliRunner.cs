@@ -577,8 +577,10 @@ internal sealed class CliRunner
         }, token));
 
         Argument<string?> addName = new("name") { Description = "Case-sensitive profile name (1-64 ASCII letters, digits, underscores or hyphens). For a leading hyphen, put options first and the name after --.", Arity = ArgumentArity.ZeroOrOne };
+        Option<string?> addTokenInput = CreateTokenInputOption();
         Command add = new("add", "Add or replace a connection profile from --url, --token, and --format; set operator fields with config set. Pass --url explicitly. Only supplied connection flags are stored.");
         add.Arguments.Add(addName);
+        add.Options.Add(addTokenInput);
         add.SetAction((parsed, token) =>
         {
             // Operator settings are edited only through config set; an explicit flag here is refused, never dropped.
@@ -586,8 +588,33 @@ internal sealed class CliRunner
             return operatorFlag is not null
                 ? CliOutput.WriteErrorAsync(operatorFlag, token)
                 : RunManagementAsync(parsed,
-                    (_, settings, cancellationToken) => AddProfileAsync(parsed, addName, settings, cancellationToken), token);
+                    (_, settings, cancellationToken) => AddProfileAsync(parsed, addName, addTokenInput, settings, cancellationToken), token);
         });
+
+        Argument<string?> rotateName = new("name") { Description = "Existing case-sensitive profile name.", Arity = ArgumentArity.ZeroOrOne };
+        Option<string?> rotateTokenInput = CreateTokenInputOption();
+        Command rotate = new("rotate-token", "Replace a profile token while preserving the other stored settings.");
+        rotate.Arguments.Add(rotateName);
+        rotate.Options.Add(rotateTokenInput);
+        rotate.SetAction((parsed, token) => RunManagementAsync(parsed, async (_, settings, cancellationToken) =>
+        {
+            string? name = parsed.GetValue(rotateName);
+            string? mode = parsed.GetValue(rotateTokenInput);
+            if (name is null || mode is null || _globals.Read(parsed).Token is not null)
+            {
+                return await CliOutput.WriteErrorAsync(
+                    Invalid("token", "provide a profile name and --token-input for rotation without --token"),
+                    cancellationToken).ConfigureAwait(false);
+            }
+
+            string? gatewayUrl = _profileStore.ValidateRotation(name);
+            CliOutput.Preflight(settings.Output, _profileStore.ProfilePath);
+            string credential = await ProfileTokenInput.ReadAsync(mode, cancellationToken).ConfigureAwait(false);
+            cancellationToken.ThrowIfCancellationRequested();
+            ProfileSnapshot snapshot = _profileStore.RotateToken(name, gatewayUrl, credential, cancellationToken);
+            return await WriteResultAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings,
+                cancellationToken, tableHeader: "FIELD\tVALUE").ConfigureAwait(false);
+        }, token));
 
         Argument<string?> removeName = new("name") { Description = "Name of the profile to remove. Removing the active profile clears the selection.", Arity = ArgumentArity.ZeroOrOne };
         Command remove = new("remove", "Remove a connection profile");
@@ -608,32 +635,50 @@ internal sealed class CliRunner
 
         profile.Subcommands.Add(list);
         profile.Subcommands.Add(add);
+        profile.Subcommands.Add(rotate);
         profile.Subcommands.Add(remove);
         return profile;
     }
 
-    private Task<int> AddProfileAsync(ParseResult parsed, Argument<string?> addName, ResolvedSettings settings,
-        CancellationToken cancellationToken)
+    private static Option<string?> CreateTokenInputOption()
+        => new("--token-input") { Description = "Read the token from a non-echoing terminal prompt (prompt) or from redirected standard input (stdin). Use without --token." };
+
+    private async Task<int> AddProfileAsync(ParseResult parsed, Argument<string?> addName,
+        Option<string?> tokenInput, ResolvedSettings settings, CancellationToken cancellationToken)
     {
         string? name = parsed.GetValue(addName);
         SettingsInput input = _globals.Read(parsed);
         if (name is null)
         {
-            return CliOutput.WriteErrorAsync(Invalid("name", "profile name is required"), cancellationToken);
+            return await CliOutput.WriteErrorAsync(Invalid("name", "profile name is required"), cancellationToken).ConfigureAwait(false);
         }
 
         if (input.Url is null)
         {
-            return CliOutput.WriteErrorAsync(Invalid("url", "--url is required for profile add"), cancellationToken);
+            return await CliOutput.WriteErrorAsync(Invalid("url", "--url is required for profile add"), cancellationToken).ConfigureAwait(false);
+        }
+
+        string? mode = parsed.GetValue(tokenInput);
+        if (mode is not null && input.Token is not null)
+        {
+            return await CliOutput.WriteErrorAsync(Invalid("token", "provide --token or --token-input"),
+                cancellationToken).ConfigureAwait(false);
         }
 
         // Add replaces the whole record with only the supplied connection fields; the store rejects a
         // supplied-but-invalid name or value as configuration_invalid.
         var profile = new ConnectionProfile(input.Url, input.Token, input.Format);
-        _profileStore.ValidateAdd(name, profile);
+        _profileStore.ValidateAdd(name, profile, tokenInput: mode is not null);
         CliOutput.Preflight(settings.Output, _profileStore.ProfilePath);
-        ProfileSnapshot snapshot = _profileStore.Add(name, profile);
-        return WriteResultAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
+        if (mode is not null)
+        {
+            profile = profile with { Token = await ProfileTokenInput.ReadAsync(mode, cancellationToken).ConfigureAwait(false) };
+            cancellationToken.ThrowIfCancellationRequested();
+        }
+
+        ProfileSnapshot snapshot = _profileStore.AddWithCancellation(name, profile, cancellationToken);
+        return await WriteResultAsync(new { name, activeProfile = snapshot.ActiveProfile }, null, settings,
+            cancellationToken, tableHeader: "FIELD\tVALUE").ConfigureAwait(false);
     }
 
     private static OperationError? RejectOperatorFlags(SettingsInput input)
