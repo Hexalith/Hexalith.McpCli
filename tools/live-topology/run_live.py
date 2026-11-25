@@ -193,6 +193,12 @@ def main(argv=None) -> int:
         if parsed.scheme != 'http' or parsed.hostname not in ('localhost', '127.0.0.1', '::1') \
                 or parsed.username is not None or parsed.password is not None or parsed.query or parsed.fragment or not token.strip():
             raise VectorError('Private discovered loopback endpoint and short-lived identity are required.')
+        if parsed.hostname == 'localhost':
+            # Aspire can advertise localhost for the private proxy. The CLI
+            # requires a loopback IP literal before sending a bearer over HTTP.
+            port = parsed.port
+            address = f'127.0.0.1:{port}' if port is not None else '127.0.0.1'
+            url = parsed._replace(netloc=address).geturl()
         selections = preflight(args.host.resolve(), args.output / 'preflight', operation=args.operation)
         selected = [item for item in selections if item['operation'] == args.operation]
         if len(selected) != 1:

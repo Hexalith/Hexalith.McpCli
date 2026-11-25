@@ -75,6 +75,8 @@ then launches one new isolated process per approved live vector and the independ
 A failed early boundary stops before the vector sweep. Each case runs once.
 Use the bounded preparation/execution hooks
 below; direct default/native launches do not establish the canonical profile.
+If Aspire reports the private Gateway proxy as `localhost`, the vector runner
+uses `127.0.0.1` with the same port and path for authenticated HTTP calls.
 
 Each vector child retains its independent 960-second bound. The wrapper retains its existing 900-second child bound. The selected
 Python runner has an eight-minute process budget, each CLI process a maximum of

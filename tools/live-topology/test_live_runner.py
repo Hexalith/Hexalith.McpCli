@@ -290,12 +290,12 @@ class RunnerTests(unittest.TestCase):
                        'result': 'passed', 'attempts': [{'result': 'passed', 'exitCode': 0}]}]
             def execute(selected, host, url, token, report, *, checkpoint):
                 self.assertEqual(selection, selected)
-                self.assertEqual('http://127.0.0.1:1234/', url)
+                self.assertEqual('http://127.0.0.1:1234/gateway/', url)
                 self.assertEqual('private-token', token)
                 report['phases'].extend(phases)
                 checkpoint()
             with patch.dict('os.environ', {'MCPCLI_ISOLATED_TOPOLOGY': '1', 'MCPCLI_LIVE_TOKEN': 'private-token',
-                                          'MCPCLI_LIVE_URL': 'http://127.0.0.1:1234/',
+                                          'MCPCLI_LIVE_URL': 'http://localhost:1234/gateway/',
                                           'MCPCLI_LIVE_BINDING': json.dumps(binding)}), \
                     patch.object(run_live, 'preflight', return_value=[selection]), \
                     patch.object(run_live, 'execute', side_effect=execute) as executed:
