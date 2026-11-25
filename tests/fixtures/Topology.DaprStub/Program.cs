@@ -28,6 +28,12 @@ if (Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_ASSETS") is { Length:
             File.AppendAllText(Path.Combine(Path.GetDirectoryName(project)!, "PublishedCatalogArtifactCohort.cs"), "// changed copy");
         if (behavior == "catalog-source-after-restore")
             File.AppendAllText(Environment.GetEnvironmentVariable("MCPCLI_TEST_READER_CATALOG_SOURCE")!, "// changed catalog");
+        if (behavior == "intermediate-source-before-build")
+        {
+            string generated = Path.Combine(directory, "Release", "net11.0");
+            Directory.CreateDirectory(generated);
+            File.WriteAllText(Path.Combine(generated, "Hexalith.Platform.CatalogBuilder.AssemblyInfo.cs"), "// unexpected intermediate source");
+        }
         return 0;
     }
     if (behavior is not null && args is ["build", ..])

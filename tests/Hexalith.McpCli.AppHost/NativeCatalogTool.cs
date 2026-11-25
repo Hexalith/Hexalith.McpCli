@@ -122,6 +122,14 @@ internal static class NativeCatalogTool
             }
         }
         RequireUnchangedReaderInputs(repositoryRoot.FullName, build, auditPath, auditHash, sdkVersion, templateHashes, readerInputHashes);
+        // Restore produces metadata only. The first build must create its own SDK sources.
+        string intermediate = Path.Combine(build, "obj");
+        if (Directory.EnumerateFiles(intermediate, "*", SearchOption.AllDirectories)
+            .Any(path => Path.GetExtension(path).Equals(".cs", StringComparison.OrdinalIgnoreCase)))
+        {
+            throw new InvalidDataException("The private catalog reader contains intermediate source before its first build.");
+        }
+
         await RunAsync(build, "build.log", ["build", project, "--no-restore", "-c", "Release", "-m:1", "--output", output,
             .. properties], token, dotnetExecutable).ConfigureAwait(false);
         RequireUnchangedReaderInputs(repositoryRoot.FullName, build, auditPath, auditHash, sdkVersion, templateHashes, readerInputHashes);

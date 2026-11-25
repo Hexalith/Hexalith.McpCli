@@ -96,6 +96,7 @@ public sealed class NativeCatalogToolTests : IDisposable
     [InlineData("catalog-source-missing")]
     [InlineData("catalog-source-changed")]
     [InlineData("catalog-source-after-restore")]
+    [InlineData("intermediate-source-before-build")]
     [InlineData("copy-cohort-after-build")]
     [InlineData("uppercase-source-after-build")]
     public async Task ActualReaderValidatesRestoredBytesBeforeCompilation(string kind)
@@ -171,6 +172,7 @@ public sealed class NativeCatalogToolTests : IDisposable
             ["MCPCLI_TEST_READER_BEHAVIOR"] = kind.Contains("-generation", StringComparison.Ordinal)
                 || kind.EndsWith("-after-build", StringComparison.Ordinal)
                 || kind is "matching-generated" or "matching-frozen-generated" or "copy-cohort-before-build" or "catalog-source-after-restore"
+                    or "intermediate-source-before-build"
                 ? kind == "matching-frozen-generated" ? "matching-generated" : kind : null,
             ["MCPCLI_TEST_READER_CATALOG_SOURCE"] = catalog,
             ["CustomAfterMicrosoftCommonTargets"] = fallback,
@@ -257,6 +259,8 @@ public sealed class NativeCatalogToolTests : IDisposable
                 || kind.StartsWith("copy-before-seal-", StringComparison.Ordinal);
             if (kind == "catalog-source-missing") Assert.IsType<FileNotFoundException>(failure);
             else Assert.IsType<InvalidDataException>(failure);
+            if (kind == "intermediate-source-before-build")
+                Assert.Equal("The private catalog reader contains intermediate source before its first build.", failure!.Message);
             if (kind.StartsWith("copy-before-seal-", StringComparison.Ordinal)) Assert.Equal(1, copyStageCalls);
             if (beforeProcess) Assert.Empty(commands);
             else
