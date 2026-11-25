@@ -1173,6 +1173,89 @@ done
         report = self.run_cli(0)
         self.assertEqual((report['errors'], report['surfaces']), ([], []))
 
+    def test_inline_comments_and_dockerfile_continuations_keep_publication_visible(self):
+        for path, text, expected in (
+            ('ship.sh', 'echo ok # ignore \\', 'missing/Real.csproj'),
+            ('ship.sh', 'echo ok \\\n# ignore \\', 'missing/Real.csproj'),
+            ('ship.sh', 'echo "keep # literal" && dotnet \\\n', 'missing/Real.csproj'),
+            ('ship.sh', 'echo keep\\#literal && dotnet \\\n', 'missing/Real.csproj'),
+            ('ship.sh', 'echo keep\\ #literal && dotnet \\\n', 'missing/Real.csproj'),
+            ('ship.ps1', 'echo ok # ignore `', 'missing/Real.csproj'),
+            ('Dockerfile', 'RUN echo ok && \\\n# ignored by Docker', 'missing/Real.csproj'),
+            ('Dockerfile.windows', '# syntax=docker/dockerfile:1\n# escape=`\nRUN echo ok && `\n# ignored by Docker', 'missing/Real.csproj'),
+            ('.github/workflows/ship.yml',
+             'jobs:\n  publish:\n    steps:\n      - run: |\n          echo ok # ignore `', 'missing/Real.csproj'),
+        ):
+            with self.subTest(path=path, text=text):
+                if path.endswith('.yml'):
+                    text += '\n          dotnet publish `\n            ' + expected + '\n        shell: pwsh\n'
+                elif text.endswith('\n'):
+                    text += '  publish ' + expected + '\n'
+                else:
+                    text += '\ndotnet publish ' + expected + '\n'
+                self.write(self.repo, path, text)
+                self.commit(self.repo); self.pin()
+                report = self.run_cli(1)
+                self.assertEqual([], report['errors'])
+                self.assertIn(self.binding(path, 'publication', expected),
+                              [entry['surface'] for entry in report['surfaces']])
+                self.git(self.repo, 'rm', '-q', path)
+                self.commit(self.repo); self.pin()
+
+    def test_literal_windows_runner_uses_powershell_continuations_without_a_shell_override(self):
+        path = '.github/workflows/ship.yml'
+        self.write(self.repo, path, """jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+      - run: |
+          dotnet publish `
+            missing/Real.csproj
+""")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual([], report['errors'])
+        self.assertEqual([self.binding(path, 'publication', 'missing/Real.csproj')],
+                         [entry['surface'] for entry in report['surfaces']])
+
+    def test_workflow_shell_defaults_reach_continued_matrix_targets(self):
+        path = '.github/workflows/ship.yml'
+        self.write(self.repo, path, """defaults:
+  run:
+    shell: pwsh
+jobs:
+  publish:
+    strategy:
+      matrix:
+        project: [missing/Real.csproj]
+    steps:
+      - run: |
+          $help = @"
+          shell: bash
+          "@
+          dotnet publish `
+            ${{ matrix.project }}
+""")
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual([], report['errors'])
+        self.assertEqual([self.binding(path, 'publication', 'missing/Real.csproj')],
+                         [entry['surface'] for entry in report['surfaces']])
+
+    def test_container_commands_in_yaml_outside_run_blocks_are_retained(self):
+        path = 'jobs/push.yaml'
+        self.write(self.repo, path, '''kind: Job
+spec:
+  args:
+    - |
+      docker push example/neutral:latest
+''')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual([], report['errors'])
+        self.assertEqual([self.binding(path, 'publication', 'example/neutral:latest')],
+                         [entry['surface'] for entry in report['surfaces']])
+
     def test_unrelated_shell_control_flow_does_not_mask_other_publication_signals(self):
         path = 'scripts/ship.sh'
         self.write(self.repo, path, 'cat <<EOF\n$(printf unrelated)\nEOF\n'

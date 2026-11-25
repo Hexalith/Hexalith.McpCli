@@ -1164,8 +1164,10 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`
   summary: Shell, PowerShell and Dockerfile continuation joining does not model comment semantics, so a following `dotnet publish` can be merged into a comment and missed. The cases are a trailing `\` inside an inline `#` comment, a `#` line after a continued line or a second joining pass, and a full-line comment inside a Dockerfile `RUN` continuation.
   owner: McpCli maintainer (proprietary-surface census).
-  status: open; deferred by the Story 5.6 cross-tree resolution review loop 1 (BH3, EC7, EC8). The inline-comment and Dockerfile cases predate the review range. Whether `94f5ee6` introduced the EC7 case is unverified.
+  status: done 2026-11-25
+  resolution: Publication discovery joins each script block using its language’s comment and continuation rules. Dockerfile full-line comments are discarded before joining, and YAML structure is read separately. Tests cover inline and continued shell comments, PowerShell workflow steps, Dockerfile escape directives, and quoted or escaped hashes.
   evidence: `tools/proprietary-surfaces/v1/check.py:1379` (`logical_commands`) joins `\`, backtick and `^` continuations and preserves only whole `#` lines. Reviewer probes: `dotnet build # note \` followed by `dotnet publish missing/Real.csproj` scans with exit 0 and no surface. A Dockerfile `RUN a \` / `# c` / `dotnet publish x` scans with no surface. The fix needs per-language comment stripping before joining, applied once per text.
+  prior_status: open; deferred by the Story 5.6 cross-tree resolution review loop 1 (BH3, EC7, EC8). The inline-comment and Dockerfile cases predate the review range. Whether `94f5ee6` introduced the EC7 case is unverified.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`
   summary: Unresolved `$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', …))` imports never visit or refuse the upward `Directory.Build.props` chain. Name matching explicitly skips `Directory.Build.*` candidates, so parent props and their own imports (for example Builds' `Hexalith.Build.props`) stay unread without a coverage error.

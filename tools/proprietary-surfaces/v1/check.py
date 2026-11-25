@@ -1342,6 +1342,8 @@ def expand_workflow_projects(text, path):
     lines = text.splitlines(keepends=True)
     boundaries = [index for index, line in enumerate(lines) if re.match(r'^  [A-Za-z_][\w-]*:[ \t]*(?:#.*)?$', line)]
     boundaries = sorted(set([0, *boundaries, len(lines)]))
+    _, defaults, _ = workflow_script_context(text.splitlines())
+    workflow_defaults = {key: value for key, value in defaults.items() if key[0] is None}
     output = []
     for begin, end in zip(boundaries, boundaries[1:]):
         block = ''.join(lines[begin:end])
@@ -1355,7 +1357,8 @@ def expand_workflow_projects(text, path):
             return f'{prefix}-{len(expressions) - 1}@'
         masked = re.sub(r'\$\{\{(.*?)\}\}', placeholder, block, flags=re.S)
         targets = set()
-        for script, _ in script_blocks(masked, path):
+        script_context = 'jobs:\n' + masked if begin else masked
+        for script, _ in script_blocks(script_context, path, workflow_defaults):
             for invocation in dotnet_invocations(script):
                 suffix = script[invocation.end():].split('\n', 1)[0]
                 try:
@@ -1442,12 +1445,90 @@ def build_action_images(lines):
     return images
 
 
-def logical_commands(text):
-    """Join supported shell, PowerShell and batch continuation lines."""
-    # A shell/PowerShell comment's trailing continuation character does not
-    # consume the next physical command. Preserve it before joining commands.
-    return re.sub(r'(?m)(^[ \t]*#[^\r\n]*(?:\r?\n|$))|(?:\\|`|\^)[ \t]*\r?\n[ \t]*',
-                  lambda match: match[1] if match[1] is not None else ' ', text)
+def logical_commands(text, shell):
+    """Join physical lines using the selected language's continuation and comments."""
+    dockerfile = shell == 'dockerfile'
+    marker = {'powershell': '`', 'batch': '^'}.get(shell, '\\')
+    if dockerfile:
+        for line in text.splitlines():
+            directive = re.fullmatch(r'\s*#\s*(syntax|check|escape)\s*=\s*(.*?)\s*', line, re.I)
+            if not directive:
+                break
+            if directive[1].casefold() == 'escape' and directive[2] in ('\\', '`'):
+                marker = directive[2]
+                break
+    commands, pending, quote, delimiter = [], '', None, None
+    for line in text.splitlines():
+        if delimiter:
+            commands.append(line)
+            if line.strip() == delimiter:
+                delimiter = None
+            continue
+        if dockerfile and line.lstrip().startswith('#'):
+            continue
+        content = line.rstrip(' \t') if dockerfile else line
+        continued = False
+        offset = 0
+        while offset < len(content):
+            char = content[offset]
+            if char == marker and (quote != "'" or dockerfile):
+                if offset + 1 == len(content):
+                    continued = True
+                    break
+                offset += 2
+                continue
+            if dockerfile:
+                offset += 1
+                continue
+            if quote:
+                if char == quote:
+                    quote = None
+            elif char in ('"', "'"):
+                quote = char
+            elif shell != 'batch' and char == '#' and starts_shell_comment(pending + content, len(pending) + offset, marker):
+                content = content[:offset]
+                break
+            offset += 1
+        pending += content[:-1] if continued else content
+        if not continued:
+            commands.append(pending)
+            if shell == 'shell':
+                heredoc = heredoc_operator(pending)
+                delimiter = heredoc[2] if heredoc else None
+            pending = ''
+    if pending:
+        commands.append(pending)
+    return '\n'.join(commands)
+
+
+def starts_shell_comment(text, index, escape='\\'):
+    if index == 0:
+        return True
+    previous = text[index - 1]
+    if not previous.isspace() and previous not in ';|&(':
+        return False
+    end = index - 2
+    while end >= 0 and text[end] == escape:
+        end -= 1
+    return (index - end) % 2 == 0
+
+
+def script_shell(path, explicit=''):
+    """Select the language for a script or workflow step."""
+    command = explicit.strip('"\'').split()
+    if command:
+        name = PurePosixPath(command[0].replace('\\', '/')).stem.casefold()
+        if name in ('pwsh', 'powershell'):
+            return 'powershell'
+        if name == 'cmd':
+            return 'batch'
+    if path.endswith('.ps1'):
+        return 'powershell'
+    if path.endswith(('.cmd', '.bat')):
+        return 'batch'
+    if PurePosixPath(path).name.startswith('Dockerfile'):
+        return 'dockerfile'
+    return 'shell'
 
 
 def heredoc_operator(line):
@@ -1470,7 +1551,7 @@ def heredoc_operator(line):
                 quote = None
         elif char in ('"', "'"):
             quote = char
-        elif char == '#' and (index == 0 or line[index - 1].isspace() or line[index - 1] in ';|&('):
+        elif char == '#' and starts_shell_comment(line, index):
             break
         elif line[index:index + 2] == '<<' and line[index:index + 3] != '<<<':
             return re.match(r'''<<-?\s*(["']?)([A-Za-z_][\w]*)\1''', line[index:])
@@ -1524,7 +1605,7 @@ def dotnet_invocations(text):
         elif quote:
             if char == quote:
                 quote = None
-        elif char == '#' and (index == 0 or text[index - 1].isspace() or text[index - 1] in ';|&('):
+        elif char == '#' and starts_shell_comment(lexical, index):
             comment = True
         else:
             positions.add(index)
@@ -1537,12 +1618,8 @@ def dotnet_invocations(text):
         yield match
 
 
-def script_blocks(text, path):
-    """Separate YAML run scopes so shell state never leaks between steps."""
-    if not path.endswith(('.yml', '.yaml')):
-        return [(text, '.')]
-    lines, blocks = text.splitlines(), []
-    stack, contexts, defaults = [], [], {}
+def workflow_script_context(lines):
+    stack, contexts, defaults, runner_shells = [], [], {}, {}
     for line in lines:
         key = re.match(r'^(\s*)(?:-\s+)?([A-Za-z_][\w.-]*):(?:[ \t]*(.*))?$', line)
         if key:
@@ -1551,11 +1628,25 @@ def script_blocks(text, path):
                 stack.pop()
             ancestry = [entry[1] for entry in stack]
             job = ancestry[ancestry.index('jobs') + 1] if 'jobs' in ancestry and len(ancestry) > ancestry.index('jobs') + 1 else None
-            if key[2] == 'working-directory' and ancestry[-2:] == ['defaults', 'run']:
-                defaults[job] = (key[3] or '').strip('"\'')
+            if key[2] in ('working-directory', 'shell') and ancestry[-2:] == ['defaults', 'run']:
+                defaults[job, key[2]] = (key[3] or '').strip('"\'')
+            if key[2] == 'runs-on' and ancestry[-2:] == ['jobs', job]:
+                runner = key[3] or ''
+                if '${{' not in runner and re.search(r'\bwindows(?:-[a-z0-9-]+)?\b', runner, re.I):
+                    runner_shells[job] = 'pwsh'
             stack.append((indent, key[2]))
         ancestry = [entry[1] for entry in stack]
         contexts.append(ancestry[ancestry.index('jobs') + 1] if 'jobs' in ancestry and len(ancestry) > ancestry.index('jobs') + 1 else None)
+    return contexts, defaults, runner_shells
+
+
+def script_blocks(text, path, workflow_defaults=None):
+    """Separate YAML run scopes so shell state never leaks between steps."""
+    if not path.endswith(('.yml', '.yaml')):
+        return [(logical_commands(text, script_shell(path)), '.')]
+    lines, blocks = text.splitlines(), []
+    contexts, defaults, runner_shells = workflow_script_context(lines)
+    defaults = {**(workflow_defaults or {}), **defaults}
     for index, line in enumerate(lines):
         match = re.match(r'^(\s*)(?:-\s+)?run:[ \t]*(.*)$', line)
         if not match:
@@ -1572,11 +1663,16 @@ def script_blocks(text, path):
             if lines[step_end].strip() and len(lines[step_end]) - len(lines[step_end].lstrip()) < indent:
                 break
             step_end += 1
-        directory = defaults.get(contexts[index], defaults.get(None, '.'))
+        job = contexts[index]
+        directory = defaults.get((job, 'working-directory'), defaults.get((None, 'working-directory'), '.'))
+        shell = defaults.get((job, 'shell'), defaults.get((None, 'shell'), runner_shells.get(job, '')))
         for setting in lines[begin:step_end]:
-            value = re.match(r'^\s*working-directory:[ \t]*(.*?)\s*$', setting)
-            if value:
-                directory = value[1].strip('"\'')
+            value = re.match(r'^(\s*)(-\s+)?(working-directory|shell):[ \t]*(.*?)\s*$', setting)
+            if value and len(value[1]) + len(value[2] or '') == indent:
+                if value[3] == 'working-directory':
+                    directory = value[4].strip('"\'')
+                else:
+                    shell = value[4]
         if raw.startswith(('|', '>')):
             body = lines[index + 1:end]
             base = min((len(row) - len(row.lstrip()) for row in body if row.strip()), default=0)
@@ -1587,7 +1683,7 @@ def script_blocks(text, path):
             script = raw
             if script[:1] in ('"', "'") and script[-1:] == script[:1]:
                 script = script[1:-1]
-        blocks.append((script, directory))
+        blocks.append((logical_commands(script, script_shell(path, shell)), directory))
     return blocks
 
 
@@ -1624,13 +1720,13 @@ def shell_segments(text):
     return result
 
 
-def static_project_targets(tree, text, path, errors):
+def static_project_targets(tree, text, path, errors, scripts):
     """Bounded shell dataflow for literal variables, loops, calls and directories.
 
     This is an overapproximation of source paths, never a shell interpreter:
     no command, condition, substitution, external file or nested tree is run.
     """
-    if not DOTNET_INVOCATION.search(text):
+    if not any(DOTNET_INVOCATION.search(script) for script, _ in scripts):
         return []  # Other publication signals are inspected separately.
     targets, functions, called, budget = set(), {}, set(), [0]
     effects = []
@@ -2101,7 +2197,7 @@ def static_project_targets(tree, text, path, errors):
                         invoke(command, environment, directory, unbounded)
         return directory
 
-    for script, directory in script_blocks(text, path):
+    for script, directory in scripts:
         environment = {}
         effects.clear()
         functions.clear()
@@ -2110,7 +2206,7 @@ def static_project_targets(tree, text, path, errors):
         directory = normalized('.', next(iter(directories))) if directories and len(directories) == 1 else None
         if directory and directory != '.' and not any(p.startswith(directory + '/') or p == directory for p in tree.entries):
             directory = None
-        execute(logical_commands(script).splitlines(), environment, directory)
+        execute(script.splitlines(), environment, directory)
         for name, body in list(functions.items()):
             if name not in called:
                 execute(body, dict(environment), directory)
@@ -2356,10 +2452,10 @@ def scan_tree(tree, repository, exclusions, resolver=None):
                     continue
                 # Every literal project invocation and proprietary package/container
                 # identity is checked, including orphan entries after source removal.
-                text = logical_commands(text)
                 if path.startswith('.github/workflows/'):
                     text = expand_workflow_projects(text, path)
-                for target in static_project_targets(tree, text, path, errors):
+                scripts = script_blocks(text, path)
+                for target in static_project_targets(tree, text, path, errors, scripts):
                     if target in projects:
                         publication(path, target, target, 'project-publication-reference')
                     else:
@@ -2403,7 +2499,10 @@ def scan_tree(tree, repository, exclusions, resolver=None):
                             if repository_match:
                                 publication(path, repository_match[1], signal='container-image')
                                 break
-                for line in lines:
+                command_lines = [line for script, _ in scripts for line in script.splitlines()]
+                if path.endswith(('.yml', '.yaml')):
+                    command_lines.extend(lines)  # Other YAML formats also carry literal commands.
+                for line in command_lines:
                     try:
                         command = shlex.split(line, comments=True)
                     except ValueError:
