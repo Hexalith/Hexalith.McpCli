@@ -19,15 +19,18 @@ namespace Hexalith.McpCli.Cli.Tests;
 public sealed class CliMcpDiscoveryParityTests
 {
     /// <summary>The CLI and MCP protocol return equal discovery documents and lookup errors.</summary>
-    [Fact]
-    public async Task DiscoveryDocumentsMatchAcrossHeadsAsync()
+    [Theory]
+    [InlineData("2025-06-18")]
+    [InlineData("2026-07-28")]
+    public async Task DiscoveryDocumentsMatchAcrossHeadsAsync(string version)
     {
         using var timeout = new CancellationTokenSource(TimeSpan.FromSeconds(10));
         string directory = Path.Combine(Path.GetTempPath(), "mcpcli-parity-" + Guid.NewGuid().ToString("N"));
         try
         {
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
-            Func<IReadOnlyList<System.Reflection.Assembly>> manifest = () => [typeof(CreateItemCommand).Assembly];
+            Func<IReadOnlyList<System.Reflection.Assembly>> manifest = () =>
+                [typeof(CreateItemCommand).Assembly, typeof(global::Catalog.Explicit.Contracts.Module).Assembly];
             ResolvedSettings settings = new(new Uri("https://gateway.example/"), null, "sample-tenant", null,
                 false, new HashSet<string>(), "json", null, false, false, null, new Dictionary<string, string>());
             var services = new ServiceCollection();
@@ -46,13 +49,19 @@ public sealed class CliMcpDiscoveryParityTests
                 provider.GetRequiredService<ILoggerFactory>(), provider);
             Task serverTask = server.RunAsync(timeout.Token);
             await using McpClient client = await McpClient.CreateAsync(clientTransport,
-                new McpClientOptions { ProtocolVersion = "2025-06-18" }, cancellationToken: timeout.Token);
+                new McpClientOptions { ProtocolVersion = version }, cancellationToken: timeout.Token);
 
             await CompareAsync(store, manifest, client, ["modules"], "list_modules", new Dictionary<string, object?>());
             await CompareAsync(store, manifest, client, ["operations", "sample"], "list_operations",
                 new Dictionary<string, object?> { ["module"] = "sample" });
-            await CompareAsync(store, manifest, client, ["describe", "sample.create-item"], "describe_operation",
+            JsonElement ulid = await CompareAsync(store, manifest, client, ["describe", "sample.create-item"], "describe_operation",
                 new Dictionary<string, object?> { ["operation"] = "sample.create-item" });
+            ulid.GetProperty("envelope").GetProperty("identifierKind").GetString().ShouldBe("ulid");
+            JsonElement text = await CompareAsync(store, manifest, client, ["describe", "explicit-fixture.valid"], "describe_operation",
+                new Dictionary<string, object?> { ["operation"] = "explicit-fixture.valid" });
+            JsonElement envelope = text.GetProperty("envelope");
+            envelope.GetProperty("aggregateIdRequired").GetBoolean().ShouldBeTrue();
+            envelope.GetProperty("identifierKind").GetString().ShouldBe("string");
             await CompareAsync(store, manifest, client, ["operations", "missing"], "list_operations",
                 new Dictionary<string, object?> { ["module"] = "missing" }, expectedError: true);
 
@@ -74,7 +83,7 @@ public sealed class CliMcpDiscoveryParityTests
         }
     }
 
-    private static async Task CompareAsync(ProfileStore store, Func<IReadOnlyList<System.Reflection.Assembly>> manifest,
+    private static async Task<JsonElement> CompareAsync(ProfileStore store, Func<IReadOnlyList<System.Reflection.Assembly>> manifest,
         McpClient client, string[] cliArgs, string tool, Dictionary<string, object?> arguments, bool expectedError = false)
     {
         TextWriter originalOut = Console.Out;
@@ -93,8 +102,9 @@ public sealed class CliMcpDiscoveryParityTests
 
         CallToolResult mcp = await client.CallToolAsync(tool, arguments);
         mcp.IsError.ShouldBe(expectedError);
-        JsonElement cli = JsonDocument.Parse(output.ToString()).RootElement;
+        using JsonDocument cli = JsonDocument.Parse(output.ToString());
         JsonElement structured = mcp.StructuredContent.ShouldNotBeNull();
-        JsonElement.DeepEquals(cli, structured).ShouldBeTrue();
+        JsonElement.DeepEquals(cli.RootElement, structured).ShouldBeTrue();
+        return structured;
     }
 }

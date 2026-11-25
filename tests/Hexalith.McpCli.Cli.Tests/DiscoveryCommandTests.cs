@@ -307,7 +307,7 @@ public sealed class DiscoveryCommandTests
         description.GetProperty("description").GetString().ShouldBe("Change an item using mapped envelope values.");
         AssertJson(description.GetProperty("example").GetRawText(), """{"ItemId":"01ARZ3NDEKTSV4RRFFQ69G5FAV"}""");
         AssertJson(description.GetProperty("envelope").GetRawText(), """
-            {"aggregateIdRequired":false,"idempotencyKeyRequired":true,
+            {"identifierKind":"ulid","aggregateIdRequired":false,"idempotencyKeyRequired":true,
              "arguments":["tenant","aggregateId","correlationId","idempotencyKey","extensions"]}
             """);
         description.GetProperty("submittable").GetBoolean().ShouldBeFalse();
@@ -341,7 +341,7 @@ public sealed class DiscoveryCommandTests
         AssertJson(queryOutput, """
             {"name":"routing-fixture.get-http2-status","kind":"read","description":"Read HTTP2 status.",
              "schema":{"type":["object","null"],"additionalProperties":false},
-             "envelope":{"aggregateIdRequired":true,"idempotencyKeyRequired":false,
+             "envelope":{"identifierKind":"ulid","aggregateIdRequired":true,"idempotencyKeyRequired":false,
                 "arguments":["tenant","aggregateId","entityId","pageSize","offset","cursor"]},
              "lintFindings":[],"submittable":false,"reason":"configuration_invalid"}
             """);
@@ -354,7 +354,7 @@ public sealed class DiscoveryCommandTests
                 "ItemId":{"type":"string","pattern":"^[0-7][0-9A-HJKMNP-TV-Z]{25}$","minLength":26,"maxLength":26},
                 "Idempotency":{"type":["string","null"],"default":null,"readOnly":true}
              },"required":["ItemId"],"additionalProperties":false},
-             "envelope":{"aggregateIdRequired":false,"idempotencyKeyRequired":false,
+             "envelope":{"identifierKind":"ulid","aggregateIdRequired":false,"idempotencyKeyRequired":false,
                 "arguments":["tenant","aggregateId","correlationId","idempotencyKey","extensions"]},
              "lintFindings":[
                 {"code":"missing_property_description","severity":"warning",
@@ -388,7 +388,7 @@ public sealed class DiscoveryCommandTests
             AssertJson(normal, """
                 {"name":"lint-fixture.inspect-hollow","kind":"read","description":" inspect hollow ",
                  "schema":{"type":["object","null"],"additionalProperties":false},
-                 "envelope":{"aggregateIdRequired":false,"idempotencyKeyRequired":false,
+                 "envelope":{"identifierKind":"ulid","aggregateIdRequired":false,"idempotencyKeyRequired":false,
                     "arguments":["tenant","aggregateId","entityId","pageSize","offset","cursor"]},
                  "lintFindings":[{"code":"hollow_description","severity":"warning",
                     "message":"Operation description only repeats the name of InspectHollowQuery; explain what it does."}],
@@ -673,7 +673,7 @@ public sealed class DiscoveryCommandTests
             (true, "describe") => """
                 {"name":"routing-fixture.items-list","kind":"read","description":"List all synthetic items.",
                  "schema":{"type":["object","null"],"additionalProperties":false},
-                 "envelope":{"aggregateIdRequired":false,"idempotencyKeyRequired":false,
+                 "envelope":{"identifierKind":"ulid","aggregateIdRequired":false,"idempotencyKeyRequired":false,
                     "arguments":["aggregateId","entityId","pageSize","offset","cursor"],
                     "platformScope":"platform:routing"},
                  "lintFindings":[],"submittable":false,"reason":"configuration_invalid"}
@@ -681,7 +681,7 @@ public sealed class DiscoveryCommandTests
             (false, "describe") => """
                 {"name":"explicit-fixture.valid","kind":"read","description":"Valid explicit-route query.",
                  "schema":{"type":["object","null"],"additionalProperties":false},
-                 "envelope":{"aggregateIdRequired":true,"idempotencyKeyRequired":false,
+                 "envelope":{"identifierKind":"string","aggregateIdRequired":true,"idempotencyKeyRequired":false,
                     "arguments":["tenant","aggregateId","entityId","pageSize","offset","cursor"]},
                  "lintFindings":[],"submittable":false,"reason":"configuration_invalid"}
                 """,
@@ -707,7 +707,7 @@ public sealed class DiscoveryCommandTests
         string optionalReason = reason is null ? string.Empty : ",\"reason\":" + JsonSerializer.Serialize(reason);
         AssertJson(output, $$"""
             {"name":"{{name}}","kind":"{{(write ? "write" : "read")}}","description":"{{description}}",
-             "schema":{{schema}},"envelope":{"fixedTenant":"sample-tenant","aggregateIdRequired":false,
+             "schema":{{schema}},"envelope":{"fixedTenant":"sample-tenant","identifierKind":"ulid","aggregateIdRequired":false,
                 "idempotencyKeyRequired":false,"arguments":{{arguments}}},
              "lintFindings":[],"submittable":{{(reason is null ? "true" : "false")}}{{optionalReason}}}
             """);

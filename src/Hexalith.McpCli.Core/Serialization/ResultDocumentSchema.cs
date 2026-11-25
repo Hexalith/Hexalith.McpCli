@@ -164,6 +164,12 @@ public static class ResultDocumentSchema
         }
         else if (type == typeof(OperationEnvelopeDocument))
         {
+            properties["identifierKind"] = new JsonObject
+            {
+                ["type"] = "string",
+                ["enum"] = Strings(["ulid", "string"]),
+                ["description"] = "Module Identifier Kind for aggregate IDs. Use a canonical uppercase ULID for ulid or the Gateway aggregate-ID syntax for string.",
+            };
             properties["fixedTenant"] = Text(TenantPattern);
             properties["platformScope"] = Text(PlatformPattern);
             properties["arguments"]!["uniqueItems"] = true;

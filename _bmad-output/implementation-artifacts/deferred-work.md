@@ -403,6 +403,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-8-protect-command-identity-and-extensions.md`
   summary: Discovery does not expose a module's Identifier Kind, so callers cannot determine the aggregate format from discovery when an operation has no mapped aggregate property.
   evidence: `src/Hexalith.McpCli.Core/Catalog/ModuleSummary.cs:7` exposes only name, description, and operation count; `src/Hexalith.McpCli.Core/Catalog/OperationEnvelopeDocument.cs:10` exposes only fixed tenant, requirements, and argument names. Both omit Identifier Kind at baseline `1554a84d792a0178a342d62367259999fd45e0b9`, before Story 2.8, even though execution already distinguished ULID-kind and String-kind aggregates. Decide how the public discovery documents and MCP schemas should advertise identifier rules in a later change.
+  status: done 2026-12-21
+  resolution: CLI and MCP operation descriptions report the declared `envelope.identifierKind` as `ulid` or `string`. The MCP result schema and PRD addendum specify both values. Tests cover operations with no mapped aggregate property. See [implementation](spec-show-discovery-identifier-kind.md).
 
 ## Deferred from: code review of spec-2-8-protect-command-identity-and-extensions.md (2026-10-03, follow-up pass)
 

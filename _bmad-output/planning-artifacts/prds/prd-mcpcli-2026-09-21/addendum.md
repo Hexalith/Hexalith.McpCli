@@ -412,7 +412,7 @@ for ownership checks, and validates the complete rebuilt Payload after filling
 |---|---|---|
 | `list_modules` | `modules`; each item has `name`, `description`, `operationCount` | none |
 | `list_operations` | `module`, `operations`; each item has `name`, `kind`, `description` | none |
-| `describe_operation` | `name`, `kind`, `description`, `schema`, `envelope`, `lintFindings`, `submittable`; `envelope` has `aggregateIdRequired`, `idempotencyKeyRequired`, `arguments`; each lint finding has `code`, `severity`, `message` | `example`, `envelope.fixedTenant`, `envelope.platformScope`, lint finding `property` (required for property-level findings), `reason` (required when `submittable` is `false`) |
+| `describe_operation` | `name`, `kind`, `description`, `schema`, `envelope`, `lintFindings`, `submittable`; `envelope` has `aggregateIdRequired`, `idempotencyKeyRequired`, `arguments`, `identifierKind`; each lint finding has `code`, `severity`, `message` | `example`, `envelope.fixedTenant`, `envelope.platformScope`, lint finding `property` (required for property-level findings), `reason` (required when `submittable` is `false`) |
 | `send_command` | `operation`, `messageId`, `correlationId`, `tenant`, `aggregateId`, `status` | `idempotencyKey` (echoed only when caller-supplied), `result` (present only when the Gateway returns a result payload) |
 | `run_query` | `operation`, `tenant`, `document` | `paging`; when present it requires `pageSize` and may independently include `offset`, `nextCursor`, `totalCount`, `hasMore` |
 
@@ -426,6 +426,7 @@ Public member types and constraints:
 | `operationCount`, `paging.offset`, `paging.totalCount` | integer greater than or equal to zero |
 | `paging.pageSize` | integer greater than zero |
 | `kind` | string enum: `read`, `write` |
+| `envelope.identifierKind` | Module’s declared Identifier Kind as `ulid` or `string`. An explicit aggregate identifier must also satisfy the Gateway aggregate-identifier pattern. |
 | `schema` | JSON object produced by FR-7; contents remain open, including nested boolean schemas (owner clarification, 2026-11-08) |
 | `example` | JSON object that validates against `schema` |
 | `envelope` | JSON object; `fixedTenant` is an exact Gateway-valid ordinary Tenant string; `platformScope` is an exact declared `platform:` scope under PRD §5.1; the two optional members are mutually exclusive; `aggregateIdRequired` and `idempotencyKeyRequired` are booleans; `idempotencyKeyRequired` is true exactly when the Operation names a non-nullable or serializer-required `idempotencyKeyProperty` (effective `JsonPropertyInfo.IsRequired` under its Payload options); `arguments` is a duplicate-free array of applicable §E argument-name strings |
@@ -462,7 +463,7 @@ The following JSON documents illustrate the result shapes with synthetic data.
   "description": "Lists the users of one tenant.",
   "schema": { "type": "object", "additionalProperties": false, "properties": { "TenantId": { "type": "string", "description": "…" } }, "required": ["TenantId"] },
   "example": { "TenantId": "acme" },
-  "envelope": { "aggregateIdRequired": false, "idempotencyKeyRequired": false, "arguments": ["tenant", "aggregateId", "entityId", "pageSize", "offset", "cursor"] },
+  "envelope": { "aggregateIdRequired": false, "idempotencyKeyRequired": false, "arguments": ["tenant", "aggregateId", "entityId", "pageSize", "offset", "cursor"], "identifierKind": "string" },
   "lintFindings": [],
   "submittable": true
 }
@@ -471,7 +472,7 @@ The following JSON documents illustrate the result shapes with synthetic data.
 For `tenants.list-tenants`, the corresponding platform-scoped Envelope is:
 
 ```json
-{ "platformScope": "platform:tenants", "aggregateIdRequired": false, "idempotencyKeyRequired": false, "arguments": ["aggregateId", "entityId", "pageSize", "offset", "cursor"] }
+{ "platformScope": "platform:tenants", "aggregateIdRequired": false, "idempotencyKeyRequired": false, "arguments": ["aggregateId", "entityId", "pageSize", "offset", "cursor"], "identifierKind": "string" }
 ```
 
 `arguments` lists the Envelope arguments the caller may supply; `tenant` is

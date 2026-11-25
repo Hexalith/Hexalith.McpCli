@@ -238,6 +238,7 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
         JsonSchema descriptionSchema = JsonSchema.FromText(tools.Single(item => item.Name == "describe_operation").ProtocolTool.OutputSchema!.Value.GetRawText());
         JsonElement description = (await offline.CallAsync("describe_operation", new { operation = "sample.get-item" })).StructuredContent!.Value;
         AssertValid(descriptionSchema, description, "describe_operation");
+        description.GetProperty("envelope").GetProperty("identifierKind").GetString().ShouldBe("ulid");
         AssertClosedObjects(descriptionSchema, JsonNode.Parse(description.GetRawText())!, "describe_operation");
 
         await using McpTestSession readOnly = await CreateAsync(version, Settings(hasUrl: false, readOnly: true));
@@ -428,7 +429,7 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
             {"name":"sample.get-item","kind":"read","description":"Reads an item.",
              "schema":{"type":"object","properties":{"a/b":{"properties":{"~key":false}}},"examples":[{"messageId":"bad","paging":{"pageSize":-1}}]},
              "example":{"a/b":{"open":{"messageId":42,"values":[null,true]}},"envelope":{"arguments":["arbitrary"]}},
-             "envelope":{"aggregateIdRequired":false,"idempotencyKeyRequired":false,"arguments":["tenant","aggregateId","entityId","pageSize","offset","cursor"]},
+             "envelope":{"aggregateIdRequired":false,"idempotencyKeyRequired":false,"arguments":["tenant","aggregateId","entityId","pageSize","offset","cursor"],"identifierKind":"ulid"},
              "lintFindings":[],"submittable":true}
             """)!;
         JsonSchema.FromText(description["schema"]!.ToJsonString()).Evaluate(
@@ -446,6 +447,10 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
         Description(node => node["envelope"]!["arguments"]!.AsArray().RemoveAt(0), false);
         Description(node => node["envelope"]!["arguments"]!.AsArray().RemoveAt(1), false);
         Description(node => node["envelope"]!["idempotencyKeyRequired"] = true, false);
+        Description(node => node["envelope"]!["identifierKind"] = "string", true);
+        Description(node => node["envelope"]!["identifierKind"] = "Ulid", false);
+        Description(node => node["envelope"]!["identifierKind"] = "uuid", false);
+        Description(node => node["envelope"]!["identifierKind"] = 1, false);
         Description(node => node["envelope"]!["fixedTenant"] = "acme", false);
         Description(node => { Scoped(node, "fixedTenant", "acme"); node["envelope"]!["platformScope"] = "platform:scope"; }, false);
         Description(node => Scoped(node, "fixedTenant", "Acme"), false);
@@ -642,7 +647,7 @@ public sealed class McpOutputSchemaTests(ITestOutputHelper output)
         {
             "modules" => ["name", "description", "operationCount"],
             "operations" => ["name", "kind", "description"],
-            "envelope" => ["aggregateIdRequired", "idempotencyKeyRequired", "arguments"],
+            "envelope" => ["aggregateIdRequired", "idempotencyKeyRequired", "arguments", "identifierKind"],
             "lintFindings" => ["code", "severity", "message"],
             "paging" => ["pageSize"],
             "error" when path.Length > 1 => ["path", "message"],

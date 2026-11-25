@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Hexalith.McpCli.Abstractions;
 using Hexalith.McpCli.Core.Catalog;
 using Hexalith.McpCli.Core.Execution;
 using Hexalith.McpCli.Core.Schema;
@@ -42,13 +43,13 @@ public sealed class ResultDocumentContractTests
         };
         var description = new OperationDescriptionDocument("sample.get", "read", "Get item.",
             JsonNode.Parse("""{"type":"object","properties":{}}""")!, JsonNode.Parse("{}"),
-            new OperationEnvelopeDocument("system", false, false, ["aggregateId", "pageSize"]), findings,
+            new OperationEnvelopeDocument("system", false, false, ["aggregateId", "pageSize"], IdentifierKind.String), findings,
             reason is null, reason);
         string suffix = reason is null ? "" : ",\"reason\":\"" + reason + "\"";
         AssertJson(description, """
             {"name":"sample.get","kind":"read","description":"Get item.","schema":{"type":"object","properties":{}},
              "example":{},"envelope":{"fixedTenant":"system","aggregateIdRequired":false,
-             "idempotencyKeyRequired":false,"arguments":["aggregateId","pageSize"]},"lintFindings":[
+             "idempotencyKeyRequired":false,"arguments":["aggregateId","pageSize"],"identifierKind":"string"},"lintFindings":[
              {"code":"missing_property_description","severity":"warning","message":"Describe it.","property":"/properties/key~1~0"},
              {"code":"unmarked_identifier_like_property","severity":"warning","message":"Mark it.","property":"/properties/id"},
              {"code":"payload_paging_member","severity":"warning","message":"Move it.","property":"/properties/pageSize"},
@@ -56,9 +57,9 @@ public sealed class ResultDocumentContractTests
             """ + (reason is null ? "true" : "false") + suffix + "}");
         AssertJson(new OperationDescriptionDocument("sample.create", "write", "Create item.",
             JsonNode.Parse("""{"type":"object"}""")!, null,
-            new OperationEnvelopeDocument(null, true, true, ["tenant", "aggregateId", "idempotencyKey"]),
+            new OperationEnvelopeDocument(null, true, true, ["tenant", "aggregateId", "idempotencyKey"], IdentifierKind.Ulid),
             [], true, null),
-            """{"name":"sample.create","kind":"write","description":"Create item.","schema":{"type":"object"},"envelope":{"aggregateIdRequired":true,"idempotencyKeyRequired":true,"arguments":["tenant","aggregateId","idempotencyKey"]},"lintFindings":[],"submittable":true}""");
+            """{"name":"sample.create","kind":"write","description":"Create item.","schema":{"type":"object"},"envelope":{"aggregateIdRequired":true,"idempotencyKeyRequired":true,"arguments":["tenant","aggregateId","idempotencyKey"],"identifierKind":"ulid"},"lintFindings":[],"submittable":true}""");
     }
 
     /// <summary>Command result is optional even for explicit JSON null; absent metadata stays absent.</summary>
