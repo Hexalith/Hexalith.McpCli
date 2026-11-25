@@ -690,7 +690,7 @@ public sealed class CliOutputContractTests
         try
         {
             var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
-            store.Add("dev", new ConnectionProfile("https://gateway.example/"));
+            store.Add("dev", new ConnectionProfile("https://gateway.example/", Actor: "original"));
             byte[] before = File.ReadAllBytes(store.ProfilePath);
             string bad = Path.Combine(directory, "occupied-directory");
             Directory.CreateDirectory(bad);
@@ -708,6 +708,7 @@ public sealed class CliOutputContractTests
                     new[] { "config", "profile", "remove", "dev" },
                     new[] { "config", "use", "dev" },
                     new[] { "config", "set", "dev", "actor", "operator" },
+                    new[] { "config", "set", "dev", "actor", "--clear" },
                 })
             {
                 (int exit, string output, string error) = await InvokeAsync(store, [.. arguments, "--output", bad]);

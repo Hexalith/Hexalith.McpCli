@@ -256,6 +256,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-3-update-and-remove-profiles-safely.md`
   summary: A stored `tenant` or `actor` cannot be cleared. `config set dev tenant ""` fails validation, and the only way back is `config profile add`, which replaces the whole record and drops the token, format and allowed extensions.
   evidence: `ProfileStore.Set` assigns the value as given, and `ValidateProfile` rejects a blank tenant or actor. Story 2.3's frozen Never forbids a field-unset verb, and the new `add` operator-flag error sends users to `config set`. By design for v1, but no story owns the clearing path yet.
+  status: done 2026-12-21
+  resolution: `config set PROFILE tenant --clear` and `config set PROFILE actor --clear` remove the named setting through the existing locked mutation and output preflight. Tests verify preservation of the other settings and active profile, and full refusal documents. See [implementation](spec-clear-stored-profile-identity.md).
 
 ## Deferred from: code review of spec-2-3-update-and-remove-profiles-safely.md, fifth pass (2026-09-29)
 

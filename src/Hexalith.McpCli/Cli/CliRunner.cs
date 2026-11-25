@@ -719,24 +719,31 @@ internal sealed class CliRunner
         Argument<string?> name = new("profile") { Description = "Existing case-sensitive profile name.", Arity = ArgumentArity.ZeroOrOne };
         Argument<string?> field = new("field") { Description = "One of tenant, actor, allowTenantOverride or allowedExtensions.", Arity = ArgumentArity.ZeroOrOne };
         Argument<string?> value = new("value") { Description = "A lowercased tenant must be 1–64 ASCII letters, digits, or hyphens and start and end with a letter or digit. Supply nonblank text for actor. For allowTenantOverride use true, false, 1 or 0. For allowedExtensions use comma-separated keys without spaces, or an empty string to clear.", Arity = ArgumentArity.ZeroOrOne };
+        Option<bool> clear = new("--clear")
+        {
+            Description = "Remove the stored tenant or actor. Omit the value argument.",
+            Arity = ArgumentArity.Zero,
+        };
         Command set = new("set", "Set tenant, actor, allowTenantOverride, or allowedExtensions");
         set.Arguments.Add(name);
         set.Arguments.Add(field);
         set.Arguments.Add(value);
+        set.Options.Add(clear);
         set.SetAction((parsed, token) => RunManagementAsync(parsed, (_, settings, cancellationToken) =>
         {
             string? selected = parsed.GetValue(name);
             string? key = parsed.GetValue(field);
             string? content = parsed.GetValue(value);
-            if (selected is null || key is null || content is null)
+            bool shouldClear = parsed.GetValue(clear);
+            if (selected is null || key is null || shouldClear == (content is not null))
             {
-                return CliOutput.WriteErrorAsync(Invalid("set", "profile, field, and value are required"), cancellationToken);
+                return CliOutput.WriteErrorAsync(Invalid("set", "provide a profile, a field, and either a value or --clear"), cancellationToken);
             }
 
             // Supplied names, fields, and values are validated by the store and fail as configuration_invalid.
-            _profileStore.ValidateSet(selected, key, content);
+            _profileStore.ValidateSetField(selected, key, content);
             CliOutput.Preflight(settings.Output, _profileStore.ProfilePath);
-            _profileStore.Set(selected, key, content);
+            _profileStore.SetField(selected, key, content);
             return WriteResultAsync(new { profile = selected, field = key }, null, settings, cancellationToken, tableHeader: "FIELD\tVALUE");
         }, token));
         return set;

@@ -172,13 +172,15 @@ public sealed partial class ProfileStore
     /// <summary>Changes one operator setting on an existing profile.</summary>
     public ProfileSnapshot Set(string name, string field, string value)
     {
-        ValidateName(name);
         ArgumentNullException.ThrowIfNull(value);
-        if (field is not ("tenant" or "actor" or "allowTenantOverride" or "allowedExtensions"))
-        {
-            throw new InvalidDataException("Only tenant, actor, allowTenantOverride, and allowedExtensions can be set.");
-        }
+        return SetField(name, field, value);
+    }
 
+    /// <summary>Changes one field, with null clearing a stored tenant or actor.</summary>
+    internal ProfileSnapshot SetField(string name, string field, string? value)
+    {
+        ValidateName(name);
+        ValidateFieldChange(field, value);
         return Mutate(snapshot =>
         {
             if (!snapshot.Profiles.TryGetValue(name, out ConnectionProfile? existing))
@@ -286,13 +288,15 @@ public sealed partial class ProfileStore
     /// <summary>Checks a profile setting and its resulting record without changing the file.</summary>
     public void ValidateSet(string name, string field, string value)
     {
-        ValidateName(name);
         ArgumentNullException.ThrowIfNull(value);
-        if (field is not ("tenant" or "actor" or "allowTenantOverride" or "allowedExtensions"))
-        {
-            throw new InvalidDataException("Only tenant, actor, allowTenantOverride, and allowedExtensions can be set.");
-        }
+        ValidateSetField(name, field, value);
+    }
 
+    /// <summary>Checks a set or clear operation against the current profile.</summary>
+    internal void ValidateSetField(string name, string field, string? value)
+    {
+        ValidateName(name);
+        ValidateFieldChange(field, value);
         if (!Read().Profiles.TryGetValue(name, out ConnectionProfile? existing))
         {
             throw new InvalidDataException("The named mcpcli profile does not exist.");
@@ -370,14 +374,27 @@ public sealed partial class ProfileStore
             _ => throw new InvalidDataException("allowTenantOverride must be true, false, 1, or 0."),
         };
 
-    private static ConnectionProfile UpdateProfile(ConnectionProfile profile, string field, string value)
+    private static void ValidateFieldChange(string field, string? value)
+    {
+        if (value is null && field is not ("tenant" or "actor"))
+        {
+            throw new InvalidDataException("Only tenant and actor can be cleared with --clear.");
+        }
+
+        if (field is not ("tenant" or "actor" or "allowTenantOverride" or "allowedExtensions"))
+        {
+            throw new InvalidDataException("Only tenant, actor, allowTenantOverride, and allowedExtensions can be set.");
+        }
+    }
+
+    private static ConnectionProfile UpdateProfile(ConnectionProfile profile, string field, string? value)
     {
         ConnectionProfile updated = field switch
         {
             "tenant" => profile with { Tenant = value },
             "actor" => profile with { Actor = value },
-            "allowTenantOverride" => profile with { AllowTenantOverride = ParseBoolean(value) },
-            "allowedExtensions" => profile with
+            "allowTenantOverride" when value is not null => profile with { AllowTenantOverride = ParseBoolean(value) },
+            "allowedExtensions" when value is not null => profile with
             {
                 AllowedExtensions = value.Length == 0 ? [] : value.Split(',', StringSplitOptions.None),
             },

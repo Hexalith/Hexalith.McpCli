@@ -2024,6 +2024,77 @@ public sealed class ConfigCommandTests
         }
     }
 
+    /// <summary>Clearing a stored identity field preserves the rest of the profile.</summary>
+    [Theory]
+    [InlineData("tenant")]
+    [InlineData("actor")]
+    public async Task SetClearRemovesOnlyTheNamedIdentityFieldAsync(string field)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            var original = new ConnectionProfile("https://gateway.example/", StoredToken, Format: "table",
+                Tenant: "acme", Actor: "ops", AllowTenantOverride: true, AllowedExtensions: ["task-id"]);
+            store.Add("dev", original);
+            store.Add("test", new ConnectionProfile(Actor: "tester"));
+            store.Use("test");
+
+            string expected = McpCliJson.SerializeText(new { profile = "dev", field }) + "\n";
+            (int exit, string output, string error) = await InvokeAsync(store, "config", "set", "dev", field, "--clear");
+
+            exit.ShouldBe(0, output);
+            output.ShouldBe(expected);
+            error.ShouldBeEmpty();
+            ProfileSnapshot snapshot = store.Read();
+            snapshot.ActiveProfile.ShouldBe("test");
+            snapshot.Profiles["test"].Actor.ShouldBe("tester");
+            snapshot.Profiles["dev"].AllowedExtensions.ShouldBe(["task-id"]);
+            ConnectionProfile identity = field == "tenant" ? original with { Tenant = null } : original with { Actor = null };
+            (snapshot.Profiles["dev"] with { AllowedExtensions = original.AllowedExtensions }).ShouldBe(identity);
+            using JsonDocument stored = JsonDocument.Parse(File.ReadAllText(store.ProfilePath));
+            stored.RootElement.GetProperty("profiles").GetProperty("dev").TryGetProperty(field, out _).ShouldBeFalse();
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Invalid field clearing leaves the stored profile untouched.</summary>
+    [Theory]
+    [InlineData("dev", "tenant", "other", "invalid_arguments", "provide a profile, a field, and either a value or --clear")]
+    [InlineData("dev", "actor", "true", "invalid_arguments", "provide a profile, a field, and either a value or --clear")]
+    [InlineData("dev", "allowedExtensions", null, "configuration_invalid", "Only tenant and actor can be cleared with --clear.")]
+    [InlineData("missing", "actor", null, "configuration_invalid", "The named mcpcli profile does not exist.")]
+    public async Task SetRejectsInvalidClearWithoutWritingAsync(string profile, string field, string? value,
+        string code, string message)
+    {
+        string directory = TemporaryDirectory();
+        try
+        {
+            var store = new ProfileStore(Path.Combine(directory, "mcpcli.json"));
+            store.Add("dev", new ConnectionProfile(Tenant: "acme", Actor: "ops"));
+            byte[] previous = File.ReadAllBytes(store.ProfilePath);
+            string[] arguments = value is null ? ["config", "set", profile, field, "--clear"]
+                : ["config", "set", profile, field, "--clear", value];
+
+            (int exit, string output, string error) = await InvokeAsync(store, arguments);
+
+            exit.ShouldBe(2, output);
+            output.ShouldBe(McpCliJson.SerializeText(new
+            {
+                error = new OperationError(code, Message: message, Argument: value is null ? null : "set"),
+            }) + "\n");
+            error.ShouldBeEmpty();
+            File.ReadAllBytes(store.ProfilePath).ShouldBe(previous);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>An invalid tenant returns a stable error before changing the profile.</summary>
     [Fact]
     public async Task SetRejectsInvalidTenantWithoutWritingAsync()
