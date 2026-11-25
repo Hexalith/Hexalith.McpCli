@@ -2,7 +2,7 @@
 title: '5.11 Reconcile product claims and the migration plan'
 type: 'chore'
 created: '2026-11-16'
-status: 'in-review'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: '008d95ccc77d932a372cb6c749d9d1fb1bc1ea57'
@@ -230,3 +230,37 @@ The user confirmed “Yes, I cover all 13 listed roles”. The [owner receipt](e
 
 - **Low · Require an alternative layout for all owner checkouts.** The verifier documents sibling checkouts, which are also checked in the approved manifest. Replay succeeded in that layout. Supporting additional directory mappings is optional tooling work; the November 19 review already assessed this request.
 - **False as a historical delivery failure · Require every later McpCli main revision to retain the original gitlink.** The story requires a recorded containing revision. The verifier checks its main ancestry, committed gitlink and approved plan/rule blobs at `verify_reconciliation.py:462`. A later pointer change is a separate event that can be assessed against that later revision.
+
+## Code review on 25 November 2026
+
+### Review Findings
+
+**Changes requested.** Four reviewers examined the delivery verifier, its tests,
+and the approval and integration records at `ec657cbc` against `008d95cc`.
+The default command and `--approved-completion` both exited 1 with
+`FAIL: deferral accounting/source/owner/gate mismatch`. The verifier suite ran
+41 tests and reported 12 failures, including subtests, from the same mismatch.
+The instruction-sync check passed.
+
+Eight existing patch items still apply. The frozen audit replayed exactly with
+both the ledger and the redactor from `c6a40c10`. The historical ledger alone
+left two entries different. Invoking the delivery check separately reproduced
+the whole-file drift failure on EventStore's PRD at `e2cb52894`. The unrelated
+PRD updates left the migration passages intact. The previous findings also
+cover the unsupported AC3 Boolean, root publication checks, Git authorization
+binding, canonical repository identity, immutable URLs in each inventory row,
+and the default command's delivered-state test gap.
+
+- [ ] [Review][Patch] **High · Require evidence that a legacy server cleared its removal gates before crediting SM-3.** The completion test credits Parties MCP on a five-field assertion without evidence for G01–G06, the separate restriction conflict, or the owning repository's removal. [`evidence/story-5-11/verify_reconciliation.py:355`]
+- [ ] [Review][Patch] **Medium · Verify the complete delivery footprint.** The nine recorded owner commits match their expected paths, and the recorded pin commit changes only the AI.Tools gitlink. The verifier reads individual blobs and accepts delivery commits that also change files outside that scope. [`evidence/story-5-11/verify_reconciliation.py:443`]
+- [ ] [Review][Patch] **Medium · Bind AI.Tools approval and hosted checks to the delivered revision.** The verifier accepts a pass string without comparing the tested head, the receipt's reviewed head, and the recorded merge. The fixture accepts unrelated heads and an open review. [`evidence/story-5-11/verify_reconciliation.py:485`]
+- [ ] [Review][Patch] **Medium · Check the final plan's authority and compatibility claims.** The fixture accepts draft status, claims that all compatibility surfaces are retired, and a replacement of confidential UI and refusal guidance with proprietary adapter and MCP execution. Check approved status and the applicable AD-23 and retirement claims. [`evidence/story-5-11/verify_reconciliation.py:478`]
+- [ ] [Review][Patch] **Medium · Bind the packet approval to the reviewed receipt and explicit role confirmation.** Removing `reviewedReceiptSha256` and `exactRoleConfirmation` passes the approval check. The published receipt has both fields, and its reviewed digest can be replayed from the pending form. [`evidence/story-5-11/verify_reconciliation.py:43`]
+- [ ] [Review][Patch] **Medium · Test the Projects rebase through the delivery caller.** The helper is tested directly. Removing its invocation from delivery verification leaves all 15 completion-binding tests green and would reject the recorded rebase. [`evidence/story-5-11/test_verify_reconciliation.py:422`]
+- [ ] [Review][Patch] **Medium · Test the final approval receipt digest with real receipt bytes.** The completion fixture replaces the digest check with a stub. A receipt with changed bytes and the same parsed fields needs to fail at the digest check. [`evidence/story-5-11/test_verify_reconciliation.py:371`]
+- [ ] [Review][Patch] **Medium · Require the completion date to follow delivery and approval.** The fixture accepts completion before publication, delivery authorization and final approval. A backdated completion would preserve a pre-deadline SM-3 assessment despite later delivery. [`evidence/story-5-11/verify_reconciliation.py:346`]
+- [ ] [Review][Patch] **Medium · Bind earlier historical approval receipts to their frozen revisions.** A changed Story 5.1 approver with a replacement digest passes both the historical and publication checks. The existing baseline receipt check covers Stories 5.7–5.10. [`evidence/story-5-11/verify_reconciliation.py:78`]
+
+#### Rejected
+
+- **Low · Add object-shape checks to every evidence reader.** A manually corrupted JSON document with a scalar or list at its root produces a traceback and still refuses verification. The recorded packet and normal generation produce objects.
