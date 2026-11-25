@@ -37,11 +37,11 @@ def digest(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def read_json(path):
+def read_json(path, *, object_pairs_hook=None):
     path = Path(path)
     if path.is_symlink() or not path.is_file():
         raise ValueError('Evidence must be a regular file.')
-    document = json.loads(path.read_text(encoding='utf-8'))
+    document = json.loads(path.read_text(encoding='utf-8'), object_pairs_hook=object_pairs_hook)
     if not isinstance(document, dict):
         raise ValueError('Evidence must contain a JSON object.')
     return document

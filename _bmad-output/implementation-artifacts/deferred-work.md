@@ -856,6 +856,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
     - `accept-staged-pair` writes `acceptance-source.json`; `scripts/compare-paired-evidence.py:15-32` reads only `source-before.json` and `source-after.json`.
     - A CI re-run or an upstream `main` move between preparation and acceptance could go unnoticed.
     - To settle it: read `accept-staged-pair` in `.github/workflows/release.yml:295` and the comparator for a cross-check.
+  status: done 2026-12-21
+  resolution: The retained historical comparator requires the acceptance source receipt to match the final preparation receipt and validate independently. The paired verifier supplies both artifacts before accepting recomputed results. Tests refuse a changed run attempt, a moved upstream revision and reuse of the initial preparation receipt. See [implementation](spec-bind-historical-acceptance-to-preparation.md).
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-16-stage-and-validate-the-paired-packages.md`
   summary: An invalid `MCPCLI_HOME` throws lazily from the `ProfilePath` getter, so a verb may bypass the `configuration_invalid` document.
   evidence: Medium, unverified.

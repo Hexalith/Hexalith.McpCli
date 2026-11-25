@@ -301,13 +301,13 @@ def validate(candidate, operator_path, version, sha, run_id, actor, output):
         if prepared.get('source_sha') != sha or prepared.get('version') != version:
             raise ValueError('Staging source or shared version differs from semantic-release selection.')
         accepted_path = root / 'accepted-staging-only/accepted-pair.json'
+        acceptance_source = root / 'accepted-staging-only/acceptance-source.json'
         recomputed = root / 'recomputed.json'
         module('compare-paired-evidence').compare(preparation / 'packages', prepared_path,
-            [root / name for name in ARTIFACTS if name.startswith('paired-consumer-')], recomputed)
+            [root / name for name in ARTIFACTS if name.startswith('paired-consumer-')], recomputed,
+            acceptance_source=acceptance_source)
         if read_json(recomputed) != read_json(accepted_path):
             raise ValueError('Original staging acceptance does not equal recomputed acceptance.')
-        acceptance_source = root / 'accepted-staging-only/acceptance-source.json'
-        validate_source_evidence(read_json(acceptance_source), sha)
         validate_pair_content(preparation / 'packages', version, sha)
         decision = operator_acceptance(operator_path, prepared, accepted_path, origin, actor)
         operator_decision = {'schema': decision['schema']}

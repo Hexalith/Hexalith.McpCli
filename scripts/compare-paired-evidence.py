@@ -6,10 +6,19 @@ import json
 import re
 from pathlib import Path
 import sys
-from paired_release import check_prepared, digest, module, validate_source_evidence, write_new
+from paired_release import check_prepared, digest, module, read_json, validate_source_evidence, write_new
 
 
-def compare(staging, prepared_path, consumers, output):
+def unique_source_members(pairs):
+    result = {}
+    for name, value in pairs:
+        if name in result:
+            raise ValueError('Paired source evidence contains duplicate JSON keys.')
+        result[name] = value
+    return result
+
+
+def compare(staging, prepared_path, consumers, output, *, acceptance_source):
     prepared_path = Path(prepared_path)
     prepared = check_prepared(staging, prepared_path)
     if prepared.get('eligibility') != 'current-main' or prepared.get('source_clean') is not True:
@@ -21,9 +30,14 @@ def compare(staging, prepared_path, consumers, output):
     for name, sha in prepared['evidence'].items():
         if Path(name).name != name or digest(evidence / name) != sha:
             raise ValueError('Preparation evidence changed after packing.')
-    for name in ('source-before', 'source-after'):
-        gate = json.loads((evidence / f'{name}.json').read_text())
-        validate_source_evidence(gate, prepared['source_sha'])
+    source_before = read_json(evidence / 'source-before.json', object_pairs_hook=unique_source_members)
+    source_after = read_json(evidence / 'source-after.json', object_pairs_hook=unique_source_members)
+    validate_source_evidence(source_before, prepared['source_sha'])
+    validate_source_evidence(source_after, prepared['source_sha'])
+    accepted = read_json(acceptance_source, object_pairs_hook=unique_source_members)
+    validate_source_evidence(accepted, prepared['source_sha'])
+    if json.dumps(accepted, sort_keys=True) != json.dumps(source_after, sort_keys=True):
+        raise ValueError('Acceptance source evidence differs from the final preparation snapshot.')
     validation = json.loads((evidence / 'validation.json').read_text())
     if any(validation.get(key) != prepared[key] for key in ('source_sha', 'version', 'packages')) or validation.get('phase') != 'paired':
         raise ValueError('Package validation does not bind the prepared pair.')
@@ -115,9 +129,11 @@ def main():
     parser.add_argument('--prepared', type=Path, required=True)
     parser.add_argument('--consumer', action='append', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--acceptance-source', type=Path, required=True,
+                        help='Re-verified source receipt from the acceptance step')
     args = parser.parse_args()
     try:
-        compare(args.staging, args.prepared, args.consumer, args.output)
+        compare(args.staging, args.prepared, args.consumer, args.output, acceptance_source=args.acceptance_source)
         return 0
     except (ValueError, KeyError, OSError) as error:
         print(f'Paired acceptance refused: {error}', file=sys.stderr)
