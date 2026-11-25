@@ -2452,6 +2452,31 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertEqual(str(Path(prepared['python']).parents[1]), nested['prefix'])
         self.assertEqual('prepared-venv-only', nested['marker'])
 
+    def test_evidence_refuses_short_credentials_before_launching_or_writing(self):
+        module = self.ci_module()
+        output = self.root / 'short-credential' / 'run'
+        environment = {'SECRET_ENABLED': 'true', 'X_TOKEN_TTL': '12'}
+        with patch.object(module.subprocess, 'Popen') as launch:
+            with self.assertRaisesRegex(ValueError, 'Structured evidence requires known environment credentials'):
+                module.bounded(['would-launch'], 5, output, environment=environment)
+            launch.assert_not_called()
+        self.assertFalse(output.parent.exists())
+        receipt = self.root / 'previous.json'
+        contents = '{"hash":"ab12cd34ef","ok":true}\n'
+        receipt.write_text(contents)
+        with self.assertRaisesRegex(ValueError, 'Structured evidence requires known environment credentials'):
+            module.save(receipt, {'hash': 'ab12cd34ef', 'ok': True}, environment=environment)
+        self.assertEqual(contents, receipt.read_text())
+        runtime = self.root / 'runtime'
+        source = runtime / 'runs' / 'example' / 'result.json'
+        source.parent.mkdir(parents=True)
+        source.write_text(contents)
+        copied = self.root / 'diagnostics'
+        with patch.dict('os.environ', environment):
+            with self.assertRaisesRegex(ValueError, 'Structured evidence requires known environment credentials'):
+                module.copy_diagnostics(runtime, copied)
+        self.assertFalse(copied.exists())
+
     def test_bounded_command_console_and_retained_arguments_are_sanitized(self):
         module = self.ci_module()
         output = self.root / 'bounded'

@@ -105,13 +105,54 @@ class EvidenceSecretScanTests(unittest.TestCase):
                 self.assertEqual(text, source.read_text())
 
     def test_known_environment_secret_is_checked_without_repeating_its_value(self):
-        for index, secret in enumerate(('synthetic-arbitrary-secret-canary', 'abc123')):
+        for index, secret in enumerate(('synthetic-arbitrary-secret-canary', 'bc123-aB')):
             with self.subTest(index=index):
                 (self.packet / 'stdout.txt').write_text(json.dumps({'output': secret}))
                 result = self.invoke(f'environment-{index}.json', environment={'MCPCLI_TEST_SECRET': secret})
                 self.assertEqual(1, result.returncode, result.stdout)
                 self.assertEqual(1, json.loads(result.stdout)['knownCredentialCount'])
                 self.assertNotIn(secret, result.stdout + result.stderr)
+
+    def test_short_known_credentials_refuse_even_a_clean_packet_without_a_receipt(self):
+        source = self.packet / 'data.json'
+        contents = '{"sha256":"ab12cd34ef","ok":true}\n'
+        source.write_text(contents)
+        for name, value in {'X_TOKEN_TTL': '12', 'SECRET_ENABLED': 'true', 'MCPCLI_TEST_SECRET': 'abc12-A'}.items():
+            with self.subTest(name=name):
+                result = self.invoke(environment={name: value})
+                self.assertEqual(2, result.returncode)
+                self.assertEqual('', result.stdout)
+                self.assertEqual('Secret scan refused: Structured evidence requires known environment credentials '
+                                 'of at least eight characters.\n', result.stderr)
+                self.assertFalse((self.root / 'scan.json').exists())
+                self.assertEqual(contents, source.read_text())
+
+    def test_standalone_evidence_commands_refuse_before_creating_outputs(self):
+        output = self.root / 'disallowed-output'
+        root = SCRIPTS.parent
+        for command, arguments in (
+            ('scripts/product_ci.py', ['linux']),
+            ('scripts/verify-paired-publication.py', ['record-operator', '--output', str(output)]),
+            ('tools/proprietary-surfaces/v1/check.py', ['--output', str(output)]),
+        ):
+            with self.subTest(command=command):
+                environment = {'PATH': os.environ.get('PATH', ''), 'MCPCLI_LIVE_TOKEN': 'abc1234'}
+                result = subprocess.run([sys.executable, str(root / command), *arguments],
+                                        env=environment, capture_output=True, text=True, timeout=15)
+                self.assertEqual(1, result.returncode, result.stderr)
+                self.assertEqual('', result.stdout)
+                self.assertIn('Structured evidence requires known environment credentials', result.stderr)
+                self.assertNotIn(environment['MCPCLI_LIVE_TOKEN'], result.stderr)
+                self.assertFalse(output.exists())
+                self.assertFalse(output.with_suffix('.failure.json').exists())
+
+    def test_refusal_redacts_a_short_value_matching_its_message(self):
+        result = self.invoke(environment={'MCPCLI_TEST_SECRET': 'eight'})
+        self.assertEqual(2, result.returncode)
+        self.assertEqual('', result.stdout)
+        self.assertNotIn('eight', result.stderr)
+        self.assertIn('[REDACTED]', result.stderr)
+        self.assertFalse((self.root / 'scan.json').exists())
 
     def test_utf16_bom_and_hidden_extensionless_files_are_scanned(self):
         (self.packet / '.capture').write_bytes('Bearer opaque-canary'.encode('utf-16'))

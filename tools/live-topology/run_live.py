@@ -8,10 +8,12 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import time
 
 from live_plans import ROOT, preflight, require_phases, resolve, selection_binding, typed, validate_call
+from evidence_redaction import ShortEvidenceCredentialError, require_evidence_credentials, sanitized
 from run_loopback import HeadProcess, _assert_result, _call_args, _pointer, _steps
 from validate import VectorError, _encode_json, _load_json
 
@@ -167,6 +169,11 @@ def main(argv=None) -> int:
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--host', type=Path, default=ROOT / 'tests/Hexalith.McpCli.ConformanceHost/bin/Release/net11.0/Hexalith.McpCli.ConformanceHost.dll')
     args = parser.parse_args(argv)
+    try:
+        require_evidence_credentials()
+    except ShortEvidenceCredentialError as error:
+        print(sanitized(str(error)), file=sys.stderr)
+        return 1
     args.output.mkdir(parents=True, exist_ok=True)
     report = {'operation': args.operation, 'result': 'pending', 'phases': []}
     receipt = args.output / 'live-result.json'

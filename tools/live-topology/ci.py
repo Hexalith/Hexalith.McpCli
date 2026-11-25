@@ -30,7 +30,7 @@ from retained_output import OUTPUT_LIMIT, read_capped
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from evidence_redaction import sanitized, sanitized_values, sanitized_xml
+from evidence_redaction import require_evidence_credentials, sanitized, sanitized_values, sanitized_xml
 PROJECT = 'tests/Hexalith.McpCli.Integration.Tests'
 TESTS = ROOT / PROJECT / 'bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.dll'
 MODULES = native_cohort.MODULES
@@ -132,6 +132,7 @@ def require_current_runtime_profile(prepared: dict) -> dict:
 
 
 def save(path: Path, value, *, environment=None) -> None:
+    require_evidence_credentials(environment)
     path.write_text(sanitized(json.dumps(value, indent=2), environment=environment) + '\n')
 
 
@@ -146,6 +147,8 @@ def read_command_channel(stream, environment=None, *, sanitize=sanitized) -> tup
 def bounded(command: list[str], seconds: int, output: Path, *, cwd=ROOT, environment=None,
             require_complete_stdout: bool = True) -> str:
     """Enforce a process bound, retain both sanitized channels, and propagate failures."""
+    environment = dict(os.environ if environment is None else environment)
+    require_evidence_credentials(environment)
     output.parent.mkdir(parents=True, exist_ok=True)
     argv = list(map(str, command))
     actual = ['timeout', '--signal=TERM', '--kill-after=30s', str(seconds), *argv]
@@ -969,6 +972,8 @@ def require_owned(path: Path, runtime: Path) -> dict:
 
 def copy_diagnostics(runtime: Path, output: Path) -> None:
     """Copy an explicit allowlist, excluding state stores, issuer credentials and keys."""
+    environment = dict(os.environ)
+    require_evidence_credentials(environment)
     names = {'result.json', 'outside.json', 'command.stdout.txt', 'command.stderr.txt',
              'sentry.log', 'redis.log', 'placement.log', 'scheduler.log', 'initial-redis-backup.json', 'native-catalog.json'}
     for run in sorted((runtime / 'runs').glob('*')):
@@ -979,7 +984,7 @@ def copy_diagnostics(runtime: Path, output: Path) -> None:
                     target = output / run.name / name
                     target.parent.mkdir(parents=True, exist_ok=True)
                     with path.open('rb') as stream:
-                        content, _ = read_command_channel(stream)
+                        content, _ = read_command_channel(stream, environment)
                     target.write_text(content)
 
 
@@ -1164,6 +1169,7 @@ def run(evidence: Path) -> None:
 def main() -> int:
     signal.signal(signal.SIGTERM, lambda *_: sys.exit(143))
     try:
+        require_evidence_credentials()
         evidence = evidence_directory(preparing=sys.argv[1:] == ['prepare'])
         if sys.argv[1:] == ['prepare']:
             prepare(evidence)

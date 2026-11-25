@@ -14,6 +14,7 @@ import uuid
 import xml.etree.ElementTree as ET
 
 from live_plans import ROOT, preflight, require_phases, selection_binding
+from evidence_redaction import ShortEvidenceCredentialError, require_evidence_credentials, sanitized
 from retained_output import OUTPUT_LIMIT, read_capped
 from validate import VectorError, _load_json
 
@@ -95,6 +96,11 @@ def main(argv=None) -> int:
     parser.add_argument('--operation', help='Diagnostic subset; never grants full live acceptance.')
     parser.add_argument('--preflight-only', action='store_true')
     args = parser.parse_args(argv)
+    try:
+        require_evidence_credentials()
+    except ShortEvidenceCredentialError as error:
+        print(sanitized(f'Live vector lane refused: {error}'), file=sys.stderr)
+        return 1
     args.output = args.output.resolve()
     args.output.mkdir(parents=True, exist_ok=True)
     report = {'runId': uuid.uuid4().hex, 'result': 'pending', 'fullLiveAccepted': False, 'vectors': [], 'reported': []}

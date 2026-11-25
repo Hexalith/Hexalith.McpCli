@@ -15,7 +15,7 @@ import tempfile
 from zipfile import BadZipFile, ZipFile
 from xml.etree import ElementTree
 
-from evidence_redaction import sanitized, sanitized_values
+from evidence_redaction import ShortEvidenceCredentialError, require_evidence_credentials, sanitized, sanitized_values
 
 from paired_release import ROOT, digest, module, packages, read_json, validate_source_evidence, write_new
 
@@ -133,6 +133,7 @@ def unique_operator_keys(pairs):
 
 
 def require_sanitized_operator(decision):
+    require_evidence_credentials()
     if redact_operator_values(decision) != decision:
         raise ValueError('Operator acceptance contains a credential or private key; redact the source evidence first.')
 
@@ -147,6 +148,7 @@ def record_operator(serialized, output):
 
 
 def retain_operator(paths, output):
+    require_evidence_credentials()
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
     entries = []
@@ -347,6 +349,7 @@ def main():
     verify.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     try:
+        require_evidence_credentials()
         if args.command == 'record-operator':
             if os.environ.get('GITHUB_EVENT_PATH'):
                 event = read_json(os.environ['GITHUB_EVENT_PATH'])
@@ -364,6 +367,9 @@ def main():
             module('release-request').check_registry(args.version, 'paired')
             validate(args.candidate, args.operator, args.version, args.source_sha, args.staging_run, args.actor, args.output)
         return 0
+    except ShortEvidenceCredentialError as error:
+        print(sanitized(f'Paired publication refused: {error}'), file=sys.stderr)
+        return 1
     except (ValueError, KeyError, TypeError, OSError, BadZipFile, ElementTree.ParseError, subprocess.CalledProcessError) as error:
         detail = module('verify-release-source').failure_detail(error)
         if args.command in ('verify', 'record-operator'):

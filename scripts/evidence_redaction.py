@@ -38,6 +38,10 @@ _BEARER = re.compile(r'\bBearer\s+[A-Za-z0-9._~+/-]+=*', re.I)
 _MARKERS = {'[REDACTED]', '[REDACTED PEM]', '[REDACTED JWT]', '<redacted>'}
 
 
+class ShortEvidenceCredentialError(ValueError):
+    """A short known credential makes structured evidence unsafe to retain."""
+
+
 def private_key(key):
     """Identify the supported named private settings, including qualified names."""
     return isinstance(key, str) and _PRIVATE.search(key) is not None
@@ -48,6 +52,13 @@ def known_credentials(environment=None):
     environment = os.environ if environment is None else environment
     return {value for key, value in environment.items() if isinstance(value, str) and value.strip()
             and _ENVIRONMENT.search(key)}
+
+
+def require_evidence_credentials(environment=None):
+    """Refuse ambiguous short values before writing or certifying evidence."""
+    if any(len(value) < 8 for value in known_credentials(environment)):
+        raise ShortEvidenceCredentialError(
+            'Structured evidence requires known environment credentials of at least eight characters.')
 
 
 def _arguments(text, marker, *, protect_json=False):

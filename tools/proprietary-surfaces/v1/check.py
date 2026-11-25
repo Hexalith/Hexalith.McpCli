@@ -23,7 +23,7 @@ import xml.etree.ElementTree as ET
 
 ROOT = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(ROOT / 'scripts'))
-from evidence_redaction import sanitized
+from evidence_redaction import ShortEvidenceCredentialError, require_evidence_credentials, sanitized
 
 SCHEMA = 'mcpcli-proprietary-surface-census/v1'
 PROJECT = re.compile(r'\.(?:cs|fs|vb)proj\Z', re.I)
@@ -2692,6 +2692,11 @@ def main(argv=None):
     parser.add_argument('--amendments', type=Path, default=Path(__file__).with_name('amendments.json'))
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args(argv)
+    try:
+        require_evidence_credentials()
+    except ShortEvidenceCredentialError as error:
+        print(sanitized(f'Proprietary surface census refused: {error}'), file=sys.stderr)
+        return 1
     try:
         report = scan(args.workspace.resolve(), args.revision, args.baseline, args.amendments, datetime.now(timezone.utc).date())
     except (CensusError, OSError, UnicodeError, TypeError, KeyError, AttributeError) as error:

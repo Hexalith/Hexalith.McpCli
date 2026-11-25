@@ -9,7 +9,7 @@ import subprocess
 import sys
 import tempfile
 import time
-from evidence_redaction import sanitized
+from evidence_redaction import require_evidence_credentials, sanitized
 
 
 class LinuxTree:
@@ -157,7 +157,8 @@ sys.exit(subprocess.call(sys.argv[2:]))
 
 def run(command, *, cwd: Path, output: Path, timeout: float, environment=None, grace=20):
     """Execute once; nonzero, timeout and cleanup failures retain a failing command receipt."""
-    environment = os.environ.copy() if environment is None else environment
+    environment = dict(os.environ if environment is None else environment)
+    require_evidence_credentials(environment)
     command = list(map(str, command)); output.parent.mkdir(parents=True, exist_ok=True)
     supervisor = None
     child = None; timed_out = False; cleanup_error = None

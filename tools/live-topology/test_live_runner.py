@@ -1,5 +1,5 @@
 """Exercise bounded reads and exactly-once write submission without a live service."""
-from contextlib import redirect_stdout
+from contextlib import redirect_stderr, redirect_stdout
 import io
 import json
 from pathlib import Path
@@ -34,6 +34,16 @@ class Head:
 
 
 class RunnerTests(unittest.TestCase):
+    def test_short_token_refuses_before_writing_a_live_receipt(self):
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.dict('os.environ', {'MCPCLI_LIVE_TOKEN': 'abc1234'}), \
+                redirect_stdout(io.StringIO()) as stdout, redirect_stderr(io.StringIO()) as stderr:
+            output = Path(directory) / 'live'
+            self.assertEqual(1, run_live.main(['--operation', 'sample.get-item', '--output', str(output)]))
+            self.assertEqual('', stdout.getvalue())
+            self.assertIn('Structured evidence requires known environment credentials', stderr.getvalue())
+            self.assertFalse(output.exists())
+
     def call(self, kind='query'):
         return {'operation': 'fixture.operation', 'kind': kind, 'payload': {}, 'envelope': {'tenant': 'test'},
                 'expectedGateway': {'body': {'aggregateId': 'approved-id'}},

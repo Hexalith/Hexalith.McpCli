@@ -17,6 +17,19 @@ spec.loader.exec_module(lane)
 
 
 class LaneTests(unittest.TestCase):
+    def test_short_credentials_preserve_a_prior_receipt_and_refuse_a_new_generation(self):
+        with tempfile.TemporaryDirectory() as directory, \
+                patch.dict('os.environ', {'X_TOKEN_TTL': '12'}), \
+                redirect_stdout(io.StringIO()) as stdout, redirect_stderr(io.StringIO()) as stderr:
+            receipt = Path(directory) / 'live-lane.json'
+            previous = '{"result":"passed","fullLiveAccepted":true}\n'
+            receipt.write_text(previous)
+            self.assertEqual(1, lane.main(['--output', directory, '--preflight-only']))
+            self.assertEqual('', stdout.getvalue())
+            self.assertIn('Structured evidence requires known environment credentials', stderr.getvalue())
+            self.assertEqual([receipt], list(receipt.parent.iterdir()))
+            self.assertEqual(previous, receipt.read_text())
+
     def test_oversized_child_stdout_cannot_supply_an_isolation_receipt(self):
         operation = 'fixture.operation'
         selected = {'operation': operation, **{key: key for key in BINDING_KEYS}}

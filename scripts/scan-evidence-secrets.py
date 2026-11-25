@@ -11,7 +11,9 @@ import re
 import stat
 import sys
 
-from evidence_redaction import REDACTION_POLICY, known_credentials, sanitized, sanitized_xml
+from evidence_redaction import (
+    REDACTION_POLICY, ShortEvidenceCredentialError, known_credentials, require_evidence_credentials, sanitized, sanitized_xml,
+)
 
 SCHEMA = 'mcpcli-evidence-secret-scan/v1'
 
@@ -48,6 +50,7 @@ def scan(root, *, environment=None, receipt=None, retain_root=None):
     """Return a deterministic receipt; never include source snippets or credential values."""
     root = Path(root).absolute()
     environment = dict(os.environ if environment is None else environment)
+    require_evidence_credentials(environment)
     files, findings, errors = [], [], []
 
     def label(path):
@@ -201,7 +204,11 @@ def main():
             scanned_directory = os.dup(directory)
             handles.callback(os.close, scanned_directory)
 
-        report = scan(packet, receipt=receipt, retain_root=retain if in_packet else None)
+        try:
+            report = scan(packet, receipt=receipt, retain_root=retain if in_packet else None)
+        except ShortEvidenceCredentialError as error:
+            print(sanitized(f'Secret scan refused: {error}'), file=sys.stderr)
+            return 2
         output = json.dumps(report, sort_keys=True, indent=2) + '\n'
         try:
             if scanned_directory is not None:

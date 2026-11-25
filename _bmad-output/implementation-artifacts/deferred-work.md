@@ -1083,7 +1083,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: R54-D9 — Restore a minimum length for known environment credentials, or fail closed on short values, instead of rewriting substrings.
   owner: McpCli maintainer / CI redaction maintainer.
-  status: open; separate prerequisite follow-up, not a waiver or closure of G01–G06.
+  status: done 2026-12-21
+  resolution: The scanner and structured evidence entry points refuse a known credential shorter than eight characters before issuing receipts. Diagnostic logging continues to redact known values of every length. Tests cover coincidental numeric and Boolean values, refusal with untouched evidence, and diagnostic redaction. See [implementation](spec-refuse-short-credentials-in-structured-evidence.md).
   evidence: scripts/evidence_redaction.py:25; `known_credentials` accepts any nonblank value whose name matches `_ENVIRONMENT`, while the replaced `ci.py` rule required at least 8 characters. With `X_TOKEN_TTL=12`, `{"sha256":"ab12cd34ef"}` becomes `ab[REDACTED]cd34ef`; with `SECRET_ENABLED=true`, `{"ok": true}` becomes invalid JSON. Retained hashes such as those in `preparation.json` can be corrupted, and scan verdicts depend on ambient variables. Reproduced during Story 5.4 review pass 2. Prerequisite code from `296617072ab3fb632d2bddb9189b52fd94286f83`.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`

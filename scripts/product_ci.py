@@ -13,6 +13,7 @@ import sys
 import tempfile
 
 from product_process import run as run_owned
+from evidence_redaction import require_evidence_credentials
 from product_packages import read_json, check_prepared, digest, failure_detail, git, module, packages, validate_version, write_new
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -151,6 +152,7 @@ def main() -> int:
     parser.add_argument('--expected-os', choices=('Windows', 'Darwin'))
     arguments = parser.parse_args()
     try:
+        require_evidence_credentials()
         if arguments.phase != 'platform':
             prepared_python = os.environ.get('HEXALITH_CI_PYTHON')
             if not prepared_python or Path(prepared_python).absolute() != Path(sys.executable).absolute():

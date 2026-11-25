@@ -18,6 +18,16 @@ class ProductProcessTests(unittest.TestCase):
         self.addCleanup(self.temporary.cleanup)
         self.root = Path(self.temporary.name)
 
+    def test_short_child_credential_refuses_before_launch_or_output(self):
+        marker = self.root / 'launched'
+        output = self.root / 'evidence' / 'run'
+        command = [sys.executable, '-c', 'from pathlib import Path; import sys; Path(sys.argv[1]).touch()', str(marker)]
+        with self.assertRaisesRegex(ValueError, 'Structured evidence requires known environment credentials'):
+            product_process.run(command, cwd=self.root, output=output, timeout=5,
+                                environment={**os.environ, 'PRODUCT_SECRET': 'abc1234'})
+        self.assertFalse(marker.exists())
+        self.assertFalse(output.parent.exists())
+
     def test_failure_is_propagated_with_both_sanitized_channels_and_outcome(self):
         output = self.root / 'failure'
         environment = {**os.environ, 'PRODUCT_SECRET': 'owned-process-secret'}

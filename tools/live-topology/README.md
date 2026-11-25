@@ -442,7 +442,13 @@ byte length and SHA-256, a digest of that sorted manifest, the redaction policy
 and SHA-256 hashes of the scanner and redactor implementations. Output and ordering
 are deterministic for identical input bytes and environment. Known values from
 credential environment variables are checked as well; only their count is
-recorded. The receipt itself is the only excluded path when it is created inside
+recorded. Structured evidence producers and the scanner refuse a nonblank known
+credential shorter than eight characters. The scanner exits 2 without a receipt
+and reports the refusal on stderr without the variable name or value. Diagnostic
+logging still redacts known values of every length. Check credential-related
+environment variables before retrying with a valid environment.
+
+The receipt itself is the only excluded path when it is created inside
 the packet. Freeze all other packet files before scanning. Any edit or added file
 requires another scan with a new receipt destination; compare the receipt's
 manifest with the final packet.
