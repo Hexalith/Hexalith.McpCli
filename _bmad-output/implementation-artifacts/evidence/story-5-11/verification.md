@@ -1,6 +1,6 @@
 # Story 5.11 verification
 
-## Current assessment on 22 November 2026
+## Pre-delivery assessment on 22 November 2026
 
 McpCli main `0db47f2c` records completed Story 5.10 delivery. Its published
 inventory revision is `008d95ccc77d932a372cb6c749d9d1fb1bc1ea57`. The
@@ -123,7 +123,7 @@ disposable Python bytecode was removed and final tests disable bytecode writes. 
 owner main containment, mandatory checks, final-plan approval, AI.Tools
 containment, instruction synchronization and completion-date SM-3 reassessment.
 
-Both Node tests pass and invoke installed `@semantic-release/release-notes-generator` **14.1.1**,
+Both historical Node tests passed and invoked the installed `@semantic-release/release-notes-generator` **14.1.1**,
 check unchanged conventional output plus the complete committed status, and
 refuse absent or empty status input. No publishing plugin is invoked.
 
@@ -255,3 +255,44 @@ them for the updated verification/integration metadata.
 The owner approved plan 1.3.0 with SHA-256 `6f9fd0d22976161a9ed17e704506dff1d39649b2b350d852ddb528e10875627c`. GitHub Actions passed on the reviewed AI.Tools head. Its merged plan and instruction rule match the reviewed bytes. McpCli pins AI.Tools `2e591bddc6c951ee8a2018c2bac05755f2f5af00` at `eed86f296244454c9c8c27f7c8a55eb308026224`. The three root instruction files match byte for byte. The [integration record](integration.json) binds the published inventories and all nine owner commits. Generated release notes remain with CiCd/Builds under AC3.
 
 All 47 focused tests passed after integration. The default reconciliation check verified the published inventory, owner files, final plan, approval receipt and containing AI.Tools reference. The full story-completion check still reports the deferred AC3 release-note requirement.
+
+## 25 November 2026 follow-up
+
+The [owner documentation follow-up](owner-doc-follow-up/README.md) includes
+nine patches prepared from local owner main references. Every patch applied in
+a disposable checkout. The projected ChatBot and Works documents satisfied the
+active-guidance checks and the original owners’ updated documents retained the
+approved passages. The follow-up requires fresh owner approval and integration.
+The 39-artifact packet, its delivery record and the AI.Tools approval receipt
+retain their published bytes.
+
+All 54 focused tests passed. The default `verify_reconciliation.py` command
+passed. It replayed the 65-entry
+audit against the ledger and redaction code from the approved publication, then
+verified the recorded owner deliveries and AI.Tools plan 1.3.0. Running the
+same command with `--approved-completion` exited 1 with
+`FAIL: AC3 generated release notes remain deferred by the owner`. Adoption and
+instruction-sync checks passed. The explicit completion path also requires
+published ChatBot and Works follow-up guidance.
+
+The existing Release executable at `3.0.0+ad7f963182bfff8492793ead400295c7e39d9015`
+passed offline module and Projects operation discovery, Tenants description,
+ChatBot unknown-operation refusal, MCP help and the five generic stdio tools.
+The eight offline probe tests passed. A failed rerun retains both sanitized
+streams in a separate failure directory. Each successful run publishes its
+manifest and streams in one directory under the optional `--output` parent.
+
+`dotnet tests/Hexalith.Parties.Tests/bin/Release/net11.0/Hexalith.Parties.Tests.dll -class Hexalith.Parties.Tests.FitnessTests.DocumentationFitnessTests`
+returned exit 1 with eight passes in both the original and patched Parties
+scratch exports. The existing test binary's
+project inventory assertion failed on `AttachedLifecycleQualification.Tests`.
+Its technology-table check threw `NullReferenceException` before checking any
+README text. The other results matched across both exports.
+
+The original Node release-note tests were removed by `aad8894e` when CiCd
+registered product checks. The current generator remains subject to AC3.
+The current shared secret scanner cleared the changed evidence. It reports
+`redaction-required` on `deferral-dispositions.json` and
+`deferral-dispositions.md`, including when scanned directly from published
+revision `c6a40c10fd6db19cfce4cb0592f3b82bbb853729`. Those two files remain
+bound to the owner’s approval.

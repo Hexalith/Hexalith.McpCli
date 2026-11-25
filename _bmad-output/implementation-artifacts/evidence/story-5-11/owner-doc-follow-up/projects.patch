@@ -1,0 +1,21 @@
+--- a/README.md
++++ b/README.md
+@@ -9,3 +9,3 @@
+ 
+-## Shared McpCli access (reconciliation candidate)
++## Shared McpCli access
+ 
+--- a/_bmad-output/planning-artifacts/epics.md
++++ b/_bmad-output/planning-artifacts/epics.md
+@@ -58,3 +58,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** Current McpCli source enrolls published Projects.Contracts 2.0.0 and discovers four reads: projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments. The published McpCli 2.0.1 tool predates Projects enrollment. Independent Gateway authorization, native live qualification and release evidence remain required. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.
++> **Current McpCli disposition:** Current McpCli source enrolls published Projects.Contracts 2.0.0 and discovers four reads: projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments. The published McpCli 2.0.1 tool predates Projects enrollment. Independent Gateway authorization, native live qualification and release evidence remain required. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.
+ 
+--- a/_bmad-output/planning-artifacts/prds/prd-Hexalith.Projects-2026-05-24/prd.md
++++ b/_bmad-output/planning-artifacts/prds/prd-Hexalith.Projects-2026-05-24/prd.md
+@@ -9,3 +9,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** Current McpCli source enrolls published Projects.Contracts 2.0.0 and discovers four reads: projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments. The published McpCli 2.0.1 tool predates Projects enrollment. Independent Gateway authorization, native live qualification and release evidence remain required. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.
++> **Current McpCli disposition:** Current McpCli source enrolls published Projects.Contracts 2.0.0 and discovers four reads: projects.list, projects.describe, projects.trace-conversation and projects.trace-attachments. The published McpCli 2.0.1 tool predates Projects enrollment. Independent Gateway authorization, native live qualification and release evidence remain required. Readiness/setup/task-control and audit operations must not be inferred from those reads. Preserve 6.7 cutover, K12 confidential UI and Payload paging versus AD-20 gates. Tenant selection is envelope-owned; actor attribution and independent Gateway authorization remain separate.
+ 

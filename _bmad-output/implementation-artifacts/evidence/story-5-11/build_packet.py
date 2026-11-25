@@ -269,7 +269,7 @@ def corrected_document(name, file, prepared, label_rows):
     return after.replace('\n',newline).encode(encoding)
 
 
-def scoped_deferrals(text):
+def scoped_deferrals(text, sanitize=sanitized_xml):
     entries = []
     heading = ''
     lines = text.splitlines()
@@ -303,9 +303,9 @@ def scoped_deferrals(text):
         entries.append({'id':sha(summary.encode())[:16],'sourceSpec':fields['source_spec'],'heading':heading,'ledger':str(A/'deferred-work.md')+':'+str(i+1),'entrySha256':sha(block.encode()),'summary':summary,'owner':owner,'gate':gate,'sourceStatus':status,'evidence':fields.get('evidence',''),'disposition':disposition,'ownerDecision':None})
         for field in ['resolution','audit']:
             if fields.get(field):
-                entries[-1][field] = sanitized_xml(fields[field])
+                entries[-1][field] = sanitize(fields[field])
         for field in ['summary','owner','gate','sourceStatus','evidence']:
-            entries[-1][field] = sanitized_xml(entries[-1][field])
+            entries[-1][field] = sanitize(entries[-1][field])
     return entries
 
 

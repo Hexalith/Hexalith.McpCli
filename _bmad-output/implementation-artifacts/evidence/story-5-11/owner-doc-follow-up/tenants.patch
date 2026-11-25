@@ -1,0 +1,7 @@
+--- a/_bmad-output/planning-artifacts/architecture.md
++++ b/_bmad-output/planning-artifacts/architecture.md
+@@ -72,3 +72,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** The FrontComposer inspect/migrate compiler is retained K13 local tooling under merged AI.Tools plan 1.2.0. It requires no generic McpCli migration/diagnostic transport and is never counted retired.
++> **Current McpCli disposition:** The FrontComposer inspect/migrate compiler is retained K13 local tooling under merged AI.Tools plan 1.2.0. It requires no generic McpCli migration/diagnostic transport and is never counted retired.
+ 

@@ -1,0 +1,135 @@
+--- a/README.md
++++ b/README.md
+@@ -199,3 +199,3 @@
+ 
+-## Shared McpCli access (reconciliation candidate)
++## Shared McpCli access
+ 
+--- a/_bmad-output/planning-artifacts/architecture.md
++++ b/_bmad-output/planning-artifacts/architecture.md
+@@ -45,3 +45,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
++> **Current McpCli disposition:** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
+ 
+--- a/_bmad-output/planning-artifacts/architecture/architecture-chatbot-2026-09-14/ARCHITECTURE-SPINE.md
++++ b/_bmad-output/planning-artifacts/architecture/architecture-chatbot-2026-09-14/ARCHITECTURE-SPINE.md
+@@ -34,3 +34,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
++> **Current McpCli disposition:** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
+ 
+--- a/_bmad-output/planning-artifacts/prds/prd-Hexalith.ChatBot-2026-05-28/prd.md
++++ b/_bmad-output/planning-artifacts/prds/prd-Hexalith.ChatBot-2026-05-28/prd.md
+@@ -68,3 +68,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
++> **Current McpCli disposition:** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
+ 
+@@ -209,3 +209,3 @@
+ 
+-M1 parity means UI, CLI, and MCP share backend state transitions for intake-status inspection, candidate review, association confirm/reject/defer/correct, attachment storage/status, task-intent capture/status, AI-action approval, approved-command execution, retry, operation status, and audit lookup. Presentation and event-driven initiation may differ, but candidate order/evidence, authorization, records, reason codes, redaction, idempotency, and audit outcomes are equivalent and contract-tested. Human decisions over MCP require a current human-delegated session, recorded presence, and `actorType=human`; AI/tool/service principals receive structural denial.
++M1 uses a shared backend command pipeline. Both McpCli heads must match the confidential UI on operations approved for both surfaces, including eligible intake/status reads, candidate review, task-intent proposals, retries and audit lookups. Verify equivalent authorization, records, reason codes, redaction, idempotency and audit outcomes. Association decisions, AI-action approval and approved-command execution require the confidential ChatBot UI. Test refusal for those operations on both McpCli heads.
+ 
+@@ -213,3 +213,3 @@
+ 
+-Validation uses a labeled corpus and a representative pilot mailbox sample covering deterministic and ambiguous matches, no match, unauthorized and cross-tenant references, duplicates, retries, attachments, external parties, and risky AI approval paths. Passing evidence includes correct association decisions, complete evidence display, and complete audit records across UI, CLI, and MCP.
++Validation uses a labeled corpus and a representative pilot mailbox sample covering deterministic and ambiguous matches, no match, unauthorized and cross-tenant references, duplicates, retries, attachments, external parties, and risky AI approval paths. Passing evidence includes correct decisions and complete evidence display in the confidential UI, plus complete audit records and safe refusal or parity evidence for both McpCli heads.
+ 
+@@ -234,9 +234,9 @@
+ - Allow low-risk AI assistance according to tenant policy and project authorization.
+-- Require approval for state-changing, externally visible, file-exposing, task-creating, tool-invoking, or participant-representing AI actions.
+-- Execute approved actions through Hexalith service commands.
++- Require approval in the confidential ChatBot UI for state-changing, externally visible, file-exposing, task-creating, tool-invoking, or participant-representing AI actions.
++- Initiate approved execution through the confidential ChatBot UI. Execute the resulting action through its governed Hexalith service command.
+ - Record outcomes as auditable events and projections.
+ - Handle duplicate mailbox delivery, retries, and partial ingestion failures without corrupting project state.
+-- Expose core email-to-project project, conversation, file, task, approval, audit, and status operations through chatbot UI, CLI, and MCP.
+-
+-MVP scope is intentionally limited to governed email-to-project context creation and approved project collaboration commands. Task intent is limited to detecting candidate action requests from associated project email and surfacing them for governed review; it does not include full task lifecycle management unless explicitly approved through service commands. Conversation context is limited to email-derived project context, association evidence, attachments, decisions, detected risks, and approved actions. Service-command execution is limited to a fixed allowlist of project collaboration commands with authorization, approval where required, and audit logging across UI, CLI, and MCP.
++- Provide the core email-to-project workflow in ChatBot UI. Enroll approved agent-eligible reads and proposals for the two McpCli heads when their decorated Contracts and authorization are qualified.
++
++MVP scope covers governed email-to-project context creation and approved project collaboration commands. Capture task intent as evidence for governed review. Conversation context covers associated email activity, evidence, attachments, decisions, risk and approved actions. The confidential UI initiates approved execution against a fixed command allowlist with authorization, required approval and audit logging.
+ 
+@@ -287,3 +287,3 @@
+ 
+-- CLI and MCP parity for the singular exit set: intake-status inspection, candidate review, confirm/reject/defer/correct association, attachment storage/status inspection, task-intent capture/status, AI-action approval, approved-command execution, retry, operation status, and audit lookup. Human-decision operations require a human-delegated session with current authentication and recorded user presence; AI/tool/service MCP principals are structurally denied those mutations.
++- Verify the M1 exit set in §Cross-surface parity outcomes. Run eligible operations through both McpCli heads after Contracts enrollment. Run association decisions, approvals and approved execution through the confidential UI and verify refusal on CLI and MCP.
+ - Cross-surface parity enforced by a single shared command pipeline at the architectural layer (see FR81a and `addendum.md` §Shared Command Pipeline). Contract tests verify the invariant; they do not enforce it.
+@@ -430,9 +430,9 @@
+ 
+-### Journey 6: Developer Uses CLI To Inspect and Resolve Project Email Workflow
+-
+-Leo is a developer and automation builder supporting project operations. He uses the CLI to inspect unmatched or ambiguous project emails, view candidate projects and evidence, resolve an association, check attachment storage status, trigger an approved command, and verify audit output.
+-
+-Leo does not expect the CLI to mimic the chatbot UI. He expects operation parity: the same command model, authorization rules, candidate list, evidence fields, resolve/reject/defer/correct actions, permission failures, state transitions, and audit results as the UI and MCP.
+-
+-He runs a CLI command to list unresolved associations, inspects the candidate project evidence, selects the correct project, confirms attachment status, and checks the resulting audit record. When a retry is needed, the CLI exposes retry status without creating duplicate conversations, files, or task requests. If a CLI command succeeds but an audit projection is delayed, the CLI returns a clear partial-success state rather than implying the system is fully reconciled.
++### Journey 6: Developer inspects the workflow in CLI and resolves it in ChatBot
++
++Leo supports project operations. When the eligible reads are enrolled and authorized, he uses the McpCli CLI to inspect unmatched emails, candidate project evidence, attachment status and audit outcomes. He opens the confidential ChatBot UI to resolve the association or start approved execution.
++
++Leo expects the CLI and UI to return equivalent authorization, evidence, state and audit outcomes for shared operations. A confirmation-required action through the CLI produces a safe refusal that directs him to the confidential UI.
++
++Leo lists unresolved associations and checks the evidence he is authorized to see. He selects and confirms the project in the confidential UI. He checks attachment and audit status through an eligible read once it is enrolled. Retry and delayed projection status remain distinguishable from confirmed state.
+ 
+@@ -574,3 +574,3 @@
+ 
+-CLI and MCP integration must expose the same governed operations as the UI for the email-to-project workflow. These surfaces must not provide bypass paths around UI-enforced permissions, approvals, tenant isolation, or audit recording.
++Both McpCli heads expose only approved agent-eligible operations that have decorated Contracts, Gateway authorization and enrollment. Association decisions, AI-action approval, approved execution and confirmation-required behavior route to the confidential ChatBot UI. All surfaces enforce tenant isolation, permissions and audit recording.
+ 
+@@ -629,3 +629,3 @@
+ | ServiceClient | Explicitly granted tenant/project/service scopes | Execute granted command/query operations with correlation, expiry, and audit metadata | Inheriting human roles; operating outside granted scope; silent privilege escalation |
+-| CLI Client | Same backend resources as the authenticated actor or service client | Inspect, associate, reject, defer, retry, approve, execute, status, and audit operations where authorized | Bypassing UI/API authorization, audit logging, validation, or tenant filters |
++| McpCli CLI Client | Public agent surface scoped to the caller and the enrolled operation | Approved eligible reads and proposals after Gateway authorization | Association decisions, confirmation, AI-action approval, approved execution, restricted/admin/outbound mutations and cross-tenant access. Route human decisions to the confidential ChatBot UI. |
+ | Human-delegated MCP Client | Public agent surface; no elevation from delegation or presence | Approved eligible read/proposal set only after Gateway authorization | Human decisions, confirmation, approved execution, restricted/admin/outbound mutation and cross-tenant access; hand off to confidential UI |
+@@ -662,4 +662,4 @@
+ | `ai-action-mediator-client` | M0 | per-tenant + per-AI-actor; bound to requester, Project, proposal, approval, and one allowlisted command | submits exactly one approved `Project.AppendConversationMessage`; AI actor never authenticates directly | short-lived delegated grant; expires on use, revocation, or 5 minutes |
+-| `cli-automation-client` | M1 | per-tenant; configured per CLI installation; user-delegated via OAuth device flow | the MVP parity set (per §Cross-surface parity outcomes) | 7 days, refresh required |
+-| `mcp-human-delegated-client` | M1 | per-tenant + current authenticated human; records source user, user presence, `actorType=human`, scope, and delegation expiry | the actor-authorized MVP parity set; human-decision mutations require current presence at submission | 1 hour maximum; terminates on logout, revocation, or lost presence |
++| `cli-automation-client` | M1 | per-tenant; configured per CLI installation; user-delegated via OAuth device flow | Only enrolled, actor-authorized CLI operations in the shared agent-eligible set | 7 days, refresh required |
++| `mcp-human-delegated-client` | M1 | per-tenant + current authenticated human; record source user, presence, actor type, scope and delegation expiry for audit | Only enrolled, actor-authorized MCP operations in the shared agent-eligible set. Approval and approved execution require the confidential UI. | 1 hour maximum; terminates on logout, revocation, or lost presence |
+ | `mcp-tool-client` | M1 | per-tenant + per-AI/tool actor; MCP-tool-scoped grants | only actor-visible status/evidence queries plus `ProposeAIAction` and eligible `ExecuteLowRiskAssistance`; explicitly excludes association decisions, approval/revision decisions, approved execution, outbound, policy, permission, and admin mutations | 24 hours maximum; refresh required |
+@@ -813,3 +813,3 @@
+ 
+-CLI and MCP are first-class MVP surfaces for the email-to-project workflow. They are clients over the same command/query surface, not privileged backdoors. They must use public application/service APIs only and must not connect directly to databases, message queues, internal indexes, mailbox stores, or tenant-scoped storage.
++M1 includes both McpCli heads for the approved agent-eligible scope. They invoke enrolled Commands and Queries through the EventStore Gateway. The confidential ChatBot UI owns the human review and execution flow.
+ 
+@@ -819,3 +819,3 @@
+ 
+-CLI and MCP must expose only the same governed MVP operations available through approved application services. They must not bypass tenant isolation, role checks, audit logging, association confidence rules, validation, or human-review requirements.
++Both McpCli heads share the approved agent-eligible operation set and enforce tenant isolation, role checks, audit, association confidence and validation. Refuse confirmation-required operations and direct the caller to the confidential ChatBot UI.
+ 
+--- a/_bmad-output/planning-artifacts/ux-designs/ux-Hexalith.ChatBot-2026-05-28/EXPERIENCE.md
++++ b/_bmad-output/planning-artifacts/ux-designs/ux-Hexalith.ChatBot-2026-05-28/EXPERIENCE.md
+@@ -28,3 +28,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
++> **Current McpCli disposition:** The module CLI and stdio MCP adapter are retained compatibility sources. ChatBot has no operation enrolled in the current shipped McpCli cohort. Eligible reads/proposals need decorated Contracts, handler/admission and enrollment proof first. Association decisions, AI-action approval, execution and confirmation-required behavior stay on confidential UI; human-delegated MCP, presence, actorType or confirm claims never grant public-agent authority.
+ 
+@@ -332,3 +332,3 @@
+ | Surface exposure | It is explicitly exposed on UI, CLI, and/or MCP for this actor class. |
+-| MCP tool tag | The typed tool declares the exact operation and effect profile. |
++| McpCli Catalog entry | The exact operation is enrolled and explicitly eligible on both generic heads. |
+ | AI allowlist | AI-originated proposal eligibility and all applicable six-effect classes are explicit. |
+@@ -336,3 +336,3 @@
+ 
+-For valid members, UI/CLI/MCP preserve normalized input, authorization/redaction, state transition, stable identity, origin attribution, audit envelope, retry/conflict, and long-running outcome. Presentation may differ. Human-delegated MCP approval is candidate M1 behavior only when current user presence and `actorType=human` are recorded; it remains unavailable until the implementation proves the aligned shared-pipeline decision contract, delegated user presence, principal type, parity, and applicable qualification evidence. AI, tool, and service principals are structurally denied and cannot approve or co-sign.
++For approved shared operations, UI and both McpCli heads preserve normalized input, authorization, redaction, state transitions, identity, attribution, audit, retry/conflict and long-running outcomes. Association decisions, AI-action approval and approved execution require the confidential ChatBot UI. Both McpCli heads refuse those operations. User presence and `actorType=human` support audit and UI authorization.
+ 
+@@ -478,3 +478,3 @@
+ 
+-### Journey 6: Developer Uses CLI To Inspect and Resolve Project Email Workflow
++### Journey 6: Developer inspects the workflow in CLI and resolves it in ChatBot
+ 
+@@ -483,7 +483,7 @@
+ 1. Leo selects a normalized operation in the Cross-surface attribution view.
+-2. He verifies catalog membership, surface exposure, MCP tagging, AI allowlist eligibility, owner qualification, and increment before invocation.
+-3. He confirms an association through an exposed surface and receives stable identity, origin, canonical transition, and audit outcome.
++2. He verifies Catalog membership, operation eligibility, applicable AI allowlist rules, owner qualification and authorization before invoking an eligible read.
++3. He follows the handoff to the confidential ChatBot UI and confirms the association there. The UI displays the stable identity, canonical transition and audit outcome.
+ 4. **Climax:** An authorized lookup returns the equivalent outcome through another surface while omitted resources remain omitted from data, counts, diagnostics, and timing.
+ 
+-**Failure/recovery:** Membership or authority failure blocks invocation; parity cannot grant access. Replay returns the prior outcome, changed input conflicts, AI/tool/service MCP approval is denied, and candidate human-delegated MCP approval remains unavailable until shared-pipeline decision enforcement, delegated user presence/`actorType=human`, parity, and applicable qualification evidence are implemented and proven.
++**Failure/recovery:** Membership or authority failure blocks invocation. Replay returns the prior outcome, and changed input conflicts. CLI and MCP refuse human decisions, approval and approved execution. The handoff directs Leo to the confidential ChatBot UI without exposing restricted evidence.
+ 

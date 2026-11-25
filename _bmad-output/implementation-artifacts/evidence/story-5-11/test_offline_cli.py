@@ -1,3 +1,4 @@
+import hashlib
 import importlib.util
 import json
 import os
@@ -58,9 +59,10 @@ class OfflineCliTests(unittest.TestCase):
                 self.assertEqual((root/'offline-install.stdout.txt').read_bytes(),C.retained(stdout or b''))
                 self.assertEqual((root/'offline-install.stderr.txt').read_bytes(),C.retained(stderr or b''))
 
-    def test_malformed_stdio_retains_only_sanitized_private_diagnostics(self):
+    def test_malformed_stdio_retains_sanitized_captures_of_both_streams(self):
         sensitive=b'Bear'+b'er '+b'x'*40
-        child='import os;os.write(2,'+repr(sensitive)+');os.write(1,b"null\\n")'
+        stdout = json.dumps(sensitive.decode()).encode() + b'\n'
+        child=f'import os;os.write(2,{sensitive!r});os.write(1,{stdout!r})'
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             evidence = root/'evidence'
@@ -70,3 +72,60 @@ class OfflineCliTests(unittest.TestCase):
             diagnostic=(evidence/'offline-stdio.stderr.txt').read_bytes()
             self.assertEqual(diagnostic,C.retained(sensitive))
             self.assertNotIn(sensitive,diagnostic)
+            retained_stdout = (evidence/'offline-stdio.stdout.txt').read_bytes()
+            self.assertEqual(retained_stdout, C.retained(stdout))
+            self.assertNotIn(sensitive, retained_stdout)
+
+    def test_successful_stdio_binds_raw_and_retained_stdout_separately(self):
+        sensitive = 'Bear' + 'er ' + 'x' * 40
+        responses = {
+            1: {'jsonrpc': '2.0', 'id': 1, 'result': {
+                'protocolVersion': '2025-06-18', 'serverInfo': {'name': 'hexalith'}}},
+            2: {'jsonrpc': '2.0', 'id': 2, 'result': {'tools': [
+                {'name': name, 'inputSchema': {}, 'description': sensitive}
+                for name in sorted(C.TOOLS)]}},
+        }
+        raw = ''.join(json.dumps(responses[request_id]) + '\n' for request_id in (1, 2)).encode()
+        child = (
+            'import json, sys\n'
+            f'responses = {responses!r}\n'
+            'for line in sys.stdin:\n'
+            '    request_id = json.loads(line).get("id")\n'
+            '    if request_id in responses:\n'
+            '        print(json.dumps(responses[request_id]), flush=True)\n'
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            record = C.discover_stdio([sys.executable, '-c', child], None, root, root)
+            captured = (root/'offline-stdio.stdout.txt').read_bytes()
+            self.assertNotEqual(raw, captured)
+            self.assertEqual(captured, C.retained(raw))
+            self.assertEqual(record['stdoutSha256'], hashlib.sha256(captured).hexdigest())
+            self.assertEqual(record['rawStdoutSha256'], hashlib.sha256(raw).hexdigest())
+
+    def test_failed_rerun_preserves_prior_manifest_and_capture(self):
+        capture = 'offline-modules.stdout.txt'
+
+        def successful(evidence):
+            (evidence/capture).write_bytes(b'first capture')
+            return {'records': [{'name': 'modules'}]}
+
+        def failed(evidence):
+            (evidence/capture).write_bytes(b'failed capture')
+            raise ValueError('modules: unexpected exit code')
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            with mock.patch.object(C, 'collect', side_effect=successful):
+                published = C.run_probe(root)
+            manifest = (published/'offline-cli.json').read_bytes()
+            with mock.patch.object(C, 'collect', side_effect=failed):
+                with self.assertRaisesRegex(ValueError, r'^modules: unexpected exit code\. Retained evidence in '):
+                    C.run_probe(root)
+            failures = list(root.glob('failed-*'))
+            self.assertEqual(list(root.glob('run-*')), [published])
+            self.assertEqual(len(failures), 1)
+            self.assertEqual((failures[0]/capture).read_bytes(), b'failed capture')
+            self.assertEqual(list(failures[0].glob('*.json')), [])
+            self.assertEqual((published/'offline-cli.json').read_bytes(), manifest)
+            self.assertEqual((published/capture).read_bytes(), b'first capture')

@@ -1,0 +1,21 @@
+--- a/README.md
++++ b/README.md
+@@ -65,3 +65,3 @@
+ 
+-## Shared McpCli access (reconciliation candidate)
++## Shared McpCli access
+ 
+--- a/_bmad-output/planning-artifacts/prd.md
++++ b/_bmad-output/planning-artifacts/prd.md
+@@ -130,3 +130,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** C13 remains the adopted four-surface accounting denominator, not evidence that every operation is public-agent eligible. The separate owner-approved K12 successor must resolve restricted and mixed operation classifications and C13 cells before any enrollment or retirement claim; existing 1.1.0 approval does not waive it. Current shipped McpCli has no Folders enrollment. Legacy adapters below remain retained compatibility; no resource/stream fallback is admitted.
++> **Current McpCli disposition:** C13 remains the adopted four-surface accounting denominator, not evidence that every operation is public-agent eligible. The separate owner-approved K12 successor must resolve restricted and mixed operation classifications and C13 cells before any enrollment or retirement claim; existing 1.1.0 approval does not waive it. Current shipped McpCli has no Folders enrollment. Legacy adapters below remain retained compatibility; no resource/stream fallback is admitted.
+ 
+--- a/_bmad-output/planning-artifacts/architecture.md
++++ b/_bmad-output/planning-artifacts/architecture.md
+@@ -51,3 +51,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** C13 remains the adopted four-surface accounting denominator, not evidence that every operation is public-agent eligible. The separate owner-approved K12 successor must resolve restricted and mixed operation classifications and C13 cells before any enrollment or retirement claim; existing 1.1.0 approval does not waive it. Current shipped McpCli has no Folders enrollment. Legacy adapters below remain retained compatibility; no resource/stream fallback is admitted.
++> **Current McpCli disposition:** C13 remains the adopted four-surface accounting denominator, not evidence that every operation is public-agent eligible. The separate owner-approved K12 successor must resolve restricted and mixed operation classifications and C13 cells before any enrollment or retirement claim; existing 1.1.0 approval does not waive it. Current shipped McpCli has no Folders enrollment. Legacy adapters below remain retained compatibility; no resource/stream fallback is admitted.
+ 

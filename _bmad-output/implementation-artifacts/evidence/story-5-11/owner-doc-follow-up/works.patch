@@ -1,0 +1,39 @@
+--- a/_bmad-output/planning-artifacts/ux-designs/ux-works-2026-06-14/DESIGN.md
++++ b/_bmad-output/planning-artifacts/ux-designs/ux-works-2026-06-14/DESIGN.md
+@@ -109,3 +109,3 @@
+ | v1 headless harness | [Harness evidence](mockups/key-v1-harness.html) | Structured builder evidence, never production navigation. |
+-| Theme 2 remainder | [MCP/CLI](mockups/key-mcp-cli.html) | Command-shaped adapter anatomy; exact tools, resources, syntax, and protocol remain source-open. |
++| Theme 2 remainder | [MCP/CLI](mockups/key-mcp-cli.html) | Illustrates command-shaped input and result states. Production access uses generic McpCli tools and CLI verbs after Works Contracts enrollment and authorization. |
+ | Uncommitted FrontComposer web | [What's next](mockups/key-whats-next.html), [Work Item detail](mockups/key-work-item.html), [Work Tree/Roll-Up](mockups/key-work-tree.html), [Capture](mockups/key-capture.html) | Proposed Module composition only; no shipping commitment. |
+--- a/_bmad-output/planning-artifacts/ux-designs/ux-works-2026-06-14/EXPERIENCE.md
++++ b/_bmad-output/planning-artifacts/ux-designs/ux-works-2026-06-14/EXPERIENCE.md
+@@ -37,3 +37,3 @@
+ | **v1: Theme 1 plus Theme 2 kernel slice** | Domain aggregates, contracts, Reactor, projections, ports, boundary record, and automated/manual command-pipeline exercise through the platform-hosted test harness. No end-user surface. |
+-| **Theme 2 remainder** | Exact MCP tools/resources and CLI commands over the kernel. Command-shaped input only; no natural-language interpretation. |
++| **Theme 2 remainder** | Enroll eligible Works Commands and Queries for the generic McpCli CLI and stdio MCP heads after owner authorization and qualification. Keep command-shaped input. |
+ | **Theme 3** | Chatbot natural language, email-as-UI, magic-link actions, and response interpretation/recovery. |
+@@ -63,3 +63,3 @@
+ | Platform-hosted test harness | v1 | Builder-facing command and event evidence only; no simulated production navigation. Group accepted, domain-rejected, authorization-denied, and infrastructure-unknown results with current domain evidence and a next safe action. |
+-| MCP and CLI | Theme 2 remainder | Command-shaped input identifies the registered act and target with verified tenant/actor context kept non-editable. Results preserve command lifecycle/outcome, exact Work Status, effort/Unit, freshness, and next legal action; exact tool/resource names and syntax remain source-open. |
++| MCP and CLI | Theme 2 remainder | Discover enrolled Works Commands and Queries through the generic McpCli heads. Command-shaped input identifies the act and target. Results preserve authorization, lifecycle, Work Status, effort/Unit, freshness and the next legal action. |
+ | Chatbot and email | Theme 3 | Constrained actions first, natural-language fallback second; email is a single-purpose external surface with no shell. |
+@@ -339,3 +339,3 @@
+ 
+-**Protagonist and horizon:** A service Party with Channel = MCP and machine authority; the domain path is v1, while a production MCP adapter is Theme 2 remainder.
++**Protagonist and horizon:** A service Party with Channel = MCP and machine authority. The v1 harness verifies the domain path. A production caller needs an enrolled, authorized Works operation through McpCli.
+ 
+@@ -354,3 +354,3 @@
+ 
+-**Protagonist and horizon:** Ada's release-checklist Work Item, driven by a system Party on MCP; v1 kernel/Reactor behavior, with the MCP adapter in Theme 2 remainder.
++**Protagonist and horizon:** Ada's release-checklist Work Item, driven by a system Party. The v1 harness verifies kernel and Reactor behavior. Future MCP access uses an enrolled, authorized Works operation through McpCli.
+ 
+--- a/_bmad-output/planning-artifacts/ux-designs/ux-works-2026-06-14/mockups/key-mcp-cli.html
++++ b/_bmad-output/planning-artifacts/ux-designs/ux-works-2026-06-14/mockups/key-mcp-cli.html
+@@ -44,5 +44,5 @@
+   <main>
+-    <span class="kicker">Theme 2 remainder · command-shaped adapters</span><h1>MCP and CLI evidence</h1><p class="lede">Both adapters expose registered domain commands and resources without natural-language interpretation. Exact tool names, CLI syntax, and generated field names remain owned by the Theme 2 adapter contract.</p>
++    <span class="kicker">Theme 2 remainder · shared McpCli heads</span><h1>MCP and CLI evidence</h1><p class="lede">The shared McpCli CLI and stdio MCP heads expose eligible Works operations after Contracts enrollment and authorization. The examples illustrate domain evidence for command-shaped input.</p>
+     <div class="rule"><strong>No natural language:</strong> choose a registered act, supply schema-defined fields, and preserve exact lifecycle, Work Status, Unit, freshness, rejection, and next-action evidence.</div>
+-    <section class="surfaces" aria-label="Theme 2 adapter examples">
++    <section class="surfaces" aria-label="Theme 2 shared-head examples">
+       <article class="terminal"><h2>MCP · registered command descriptor</h2><div class="note">Illustrative rendering of generated metadata; not a proposed protocol payload.</div><pre><span class="label">registered act</span>  <span class="value">Claim</span>

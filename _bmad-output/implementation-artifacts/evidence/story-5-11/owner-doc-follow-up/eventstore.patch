@@ -1,0 +1,28 @@
+--- a/README.md
++++ b/README.md
+@@ -211,3 +211,3 @@
+ 
+-## Shared McpCli access (reconciliation candidate)
++## Shared McpCli access
+ 
+--- a/_bmad-output/planning-artifacts/architecture.md
++++ b/_bmad-output/planning-artifacts/architecture.md
+@@ -90,3 +90,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** Remote Admin A1–A4 are confidential-UI-only under adopted AD-23; local Admin A5–A8 are withdrawn from the public migration target. No generic Admin contract or transport is required or admitted. EventStore and platform/operator maintainers retain Admin G1–G6, G4 route/scope, token/URL safety fixes, human authorization, bounded behavior, audit and persisted-effect proof before removal.
++> **Current McpCli disposition:** Remote Admin A1–A4 are confidential-UI-only under adopted AD-23; local Admin A5–A8 are withdrawn from the public migration target. No generic Admin contract or transport is required or admitted. EventStore and platform/operator maintainers retain Admin G1–G6, G4 route/scope, token/URL safety fixes, human authorization, bounded behavior, audit and persisted-effect proof before removal.
+ 
+--- a/_bmad-output/planning-artifacts/prd.md
++++ b/_bmad-output/planning-artifacts/prd.md
+@@ -109,3 +109,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** Remote Admin A1–A4 are confidential-UI-only under adopted AD-23; local Admin A5–A8 are withdrawn from the public migration target. No generic Admin contract or transport is required or admitted. EventStore and platform/operator maintainers retain Admin G1–G6, G4 route/scope, token/URL safety fixes, human authorization, bounded behavior, audit and persisted-effect proof before removal.
++> **Current McpCli disposition:** Remote Admin A1–A4 are confidential-UI-only under adopted AD-23; local Admin A5–A8 are withdrawn from the public migration target. No generic Admin contract or transport is required or admitted. EventStore and platform/operator maintainers retain Admin G1–G6, G4 route/scope, token/URL safety fixes, human authorization, bounded behavior, audit and persisted-effect proof before removal.
+ 
+--- a/_bmad-output/planning-artifacts/ux-designs/ux-eventstore-2026-07-05/EXPERIENCE.md
++++ b/_bmad-output/planning-artifacts/ux-designs/ux-eventstore-2026-07-05/EXPERIENCE.md
+@@ -17,3 +17,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** Remote Admin A1–A4 are confidential-UI-only under adopted AD-23; local Admin A5–A8 are withdrawn from the public migration target. No generic Admin contract or transport is required or admitted. EventStore and platform/operator maintainers retain Admin G1–G6, G4 route/scope, token/URL safety fixes, human authorization, bounded behavior, audit and persisted-effect proof before removal.
++> **Current McpCli disposition:** Remote Admin A1–A4 are confidential-UI-only under adopted AD-23; local Admin A5–A8 are withdrawn from the public migration target. No generic Admin contract or transport is required or admitted. EventStore and platform/operator maintainers retain Admin G1–G6, G4 route/scope, token/URL safety fixes, human authorization, bounded behavior, audit and persisted-effect proof before removal.
+ 

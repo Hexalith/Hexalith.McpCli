@@ -1,0 +1,35 @@
+--- a/README.md
++++ b/README.md
+@@ -145,3 +145,3 @@
+ 
+-## Shared McpCli access (reconciliation candidate)
++## Shared McpCli access
+ 
+--- a/_bmad-output/planning-artifacts/prd.md
++++ b/_bmad-output/planning-artifacts/prd.md
+@@ -36,3 +36,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.
++> **Current McpCli disposition:** The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.
+ 
+--- a/_bmad-output/planning-artifacts/architecture.md
++++ b/_bmad-output/planning-artifacts/architecture.md
+@@ -20,3 +20,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.
++> **Current McpCli disposition:** The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.
+ 
+--- a/_bmad-output/planning-artifacts/architecture/architecture-memories-2026-09-09/ARCHITECTURE-SPINE.md
++++ b/_bmad-output/planning-artifacts/architecture/architecture-memories-2026-09-09/ARCHITECTURE-SPINE.md
+@@ -70,3 +70,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.
++> **Current McpCli disposition:** The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.
+ 
+--- a/_bmad-output/planning-artifacts/ux-designs/ux-memories-2026-09-12/EXPERIENCE.md
++++ b/_bmad-output/planning-artifacts/ux-designs/ux-memories-2026-09-12/EXPERIENCE.md
+@@ -26,3 +26,3 @@
+ 
+-> **Current McpCli disposition (Story 5.11 candidate):** The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.
++> **Current McpCli disposition:** The proprietary CLI/MCP phases, ingress topology and installation commands below describe retained compatibility. There is no promised generic migration or diagnostics surface. No Memories operation is enrolled in the current shipped McpCli cohort. Forwarded per-user HTTP authority is necessary but insufficient for retirement; tenant/user/administrative authorization, semantics, release and rollback evidence remain. PS14 stays owner-held local tooling in all four modes, never counted retired.
+ 
