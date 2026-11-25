@@ -995,6 +995,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
   summary: Acceptance receipt for the F7 Kelvin alias limitation in Story 5.4, bound to `epic-4-retro-item-9-ascii-tenant-input`.
   owner: McpCli maintainer; the Parties owner accepted the limited Story 5.4 use on 2026-11-09.
   evidence: The frozen spec’s decision 1 records the user’s verbatim "accept". `tests/Hexalith.McpCli.Cli.Tests/PartiesRetirementSafetyTests.cs:127` pins U+212A mapping to ASCII `kelvin` through both heads; its test names item 9 so the fix must deliberately flip the expectation. Other specified look-alikes are refused with no Gateway call. This acceptance does not close item 9, authorize release or retirement, or accept any other non-ASCII alias. The existing rejection-only stream and mixed profile-identity deferrals remain `deferred-work.md:557` and `deferred-work.md:836`; no duplicate work entries are added for them.
+  status: historical acceptance record. The canonicalizer change is tracked by Epic 4 retro item 9 and Story 5.18.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: Supply selected-cohort C05 execution evidence for forced stale projections and erased or processing-restricted delete/pre-read branches, or record an exact-byte owner-approved inventory disposition.
@@ -1196,7 +1197,7 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-2-decide-generic-non-gateway-capability-contracts.md`
   summary: Reconcile epics MR1 with adopted AD-23. MR1 still requires approving a generic catalog/transport extension before retiring any surface that exposes infrastructure administration, MCP resources, migration diagnostics or REST/Dapr-only behavior. AD-23 binds MR1 but admits no extension and retires the Admin heads on confidential UI coverage, so later retirement specs read two conflicting rules.
   owner: McpCli product/architecture owner; reconcile MR1, and its Epic 6 "as written" application, before any Admin or diagnostic-surface retirement spec relies on it, at the latest in Story 5.11.
-  status: open; AD-23's approved bytes stay unchanged; the fix edits `epics.md`, outside Story 5.2's deliverables.
+  status: resolved before this batch. MR1 and the Epic 6 entry both apply adopted AD-23, including confidential UI, withdrawal and local exemptions. The approved architecture bytes are preserved.
   evidence: `_bmad-output/planning-artifacts/epics.md:206` (MR1, citing the 2026-09-27 Spine Design Paradigm) and `:302` (Epic 6 applies MR1–MR9 and MR11 as written); `_bmad-output/planning-artifacts/architecture/architecture-mcpcli-2026-09-22/AD-23-non-gateway-capability-classes.md:6` binds MR1, and `:165` and `:249` retire the Admin heads on UI coverage; spec Owner Decision 1 (`spec-5-2-decide-generic-non-gateway-capability-contracts.md:47`). Story 5.2 code review pass 3 searched the ledger for MR1 and "catalog/transport extension" before appending and found no equivalent entry.
 
 ## Deferred from: code review of spec-5-7-re-disposition-eventstore-admin-and-technical-tool-inventories.md (2026-11-13)
@@ -1548,6 +1549,8 @@ See [implementation and verification](spec-close-cli-result-output-deferrals.md)
 - source_spec: `_bmad-output/implementation-artifacts/spec-close-cli-result-output-deferrals.md`
   summary: Recheck result-target identity at open time if another process replaces the destination between inspection and opening.
   evidence: `src/Hexalith.McpCli/Cli/CliOutput.cs` still opens devices and existing regular files by path after inspecting the path. A concurrent replacement with a FIFO can affect those branches. FIFO writes themselves open nonblocking.
+  status: done 2026-11-25
+  resolution: The CLI compares the inspected and opened type and identity before backing up, truncating or writing an existing target. Unix opens are nonblocking, and the regular preflight repeats the handle check. Regression tests cover replacement files, FIFO swaps and protection of profile aliases.
 
 
 ## Priority follow-up dispositions (2026-11-24)
@@ -1627,3 +1630,21 @@ Seven implementations carry dated closures at their original entries: Story 2.1 
 | Story 5.5 retirement, upstream README, Folders gate and FrontComposer labels; Parties and Tenants keyed vectors | Owner releases, owner gates or user-deferred label work. |
 | Story 5.12, STAGING_JOBS and workflow step names | Obsolete. Module tests must not assert workflow YAML text. |
 | Already resolved: Story 1.7 profile allowlists, settings tests and blank operations; Story 2.1 profile snapshots and repair; Tenants enrollment; Catalog timing isolation; the net10 restore failure | The original entries now carry the verified resolutions, together with the entries earlier follow-up tables had closed. |
+
+
+## Deferred-work follow-up dispositions (2026-11-25)
+
+Selection follows recorded severity and ledger order. The seven new implementations carry dated closures at their original entries. The following entries did not count toward the seven.
+
+| Skipped findings | Reason |
+| --- | --- |
+| First-time operator timing | An independent first-time operator must run the approved procedure. |
+| Tenants bootstrap and handler findings, Parties behavior and producer checks, EventStore Query diagnostics, Platform reference authentication and AI.Tools commit validation | The owning repositories control the affected code, published artifacts or policy. |
+| FreeBSD x64 and Linux ARM output qualification | They require the corresponding runtime or a CiCd-owned runner change. |
+| Story 2.3 field clearing and secret input, Story 2.7 uncertain command failures, Story 2.8 Identifier Kind discovery, inherited profile identity, and R54-D9 short credential handling | They require decisions about the public settings and discovery contracts, generated tracking fields, or evidence redaction policy. |
+| Historical acceptance comparison and NuGet signature gating | Central publication replaced the triggering workflows. The historical and successor checks remain with their respective owners. |
+| Story 5.4 F7 Kelvin-alias acceptance | This entry records an acceptance. The canonicalizer change is tracked separately. |
+| Story 5.4 C05, actor attribution and raw-string parity, Parties restrictions and retirement, Folders gate, FrontComposer labels, and keyed Parties/Tenants vectors | They require owner releases, approved inventory or vector successors, or qualifying execution evidence. |
+| Story 5.2 MR1 and Epic 6 | The current epics already apply the adopted AD-23 dispositions. |
+| The PE03/PE05 census classifications, historical inventory wording, Folders K12 successor and builder guards, Projects paging, ChatBot/Memories corrections and the Story 5.11 evidence refresh | They require their recorded architecture, inventory, or exact-byte successor approvals. |
+| CI managed-runtime selection and generated migration release notes | Hexalith.CiCd owns the workflow and release configuration. |

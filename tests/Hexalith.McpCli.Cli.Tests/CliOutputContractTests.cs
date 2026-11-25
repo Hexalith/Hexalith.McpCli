@@ -538,6 +538,107 @@ public sealed class CliOutputContractTests
         }
     }
 
+    /// <summary>Writing or preflighting an existing result refuses a different file at the same path.</summary>
+    [Fact]
+    public async Task ReplacedRegularResultIsPreservedAsync()
+    {
+        string directory = NewDirectory();
+        try
+        {
+            string destination = Path.Combine(directory, "result");
+            string replacement = Path.Combine(directory, "replacement");
+            File.WriteAllText(destination, "original result");
+            File.WriteAllText(replacement, "unrelated result");
+            Action replace = () => File.Move(replacement, destination, overwrite: true);
+            var store = new ProfileStore(Path.Combine(directory, "profile.json"));
+            var settings = new SettingsResolver(store, new Dictionary<string, string?>())
+                .Resolve(new SettingsInput(Output: destination)).Settings.ShouldNotBeNull();
+
+            IOException failure = await Should.ThrowAsync<IOException>(() => CliOutput.WriteAsync(new { result = 1 }, null,
+                settings, TestContext.Current.CancellationToken, beforeExistingDestinationOpen: replace));
+            failure.Message.ShouldBe("The result destination changed before it could be opened.");
+            File.ReadAllText(destination).ShouldBe("unrelated result");
+
+            File.WriteAllText(replacement, "preflight replacement");
+            var preflight = Should.Throw<OutputPreflightException>(() => CliOutput.Preflight(destination,
+                beforeExistingDestinationOpen: replace));
+            preflight.Message.ShouldBe(CliOutput.PreflightFailureMessage);
+            preflight.InnerException!.Message.ShouldBe(failure.Message);
+            File.ReadAllText(destination).ShouldBe("preflight replacement");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Windows metadata and the output writer accept the same long filesystem paths.</summary>
+    [Fact]
+    public async Task WindowsLongOutputPathSupportsCreateAndReplaceAsync()
+    {
+        Assert.SkipUnless(OperatingSystem.IsWindows(), "Windows long paths are required.");
+        string directory = NewDirectory();
+        try
+        {
+            string parent = Path.Combine(directory, new string('a', 140), new string('b', 140));
+            Directory.CreateDirectory(parent);
+            string destination = Path.Combine(parent, "result.json");
+            var store = new ProfileStore(Path.Combine(directory, "profile.json"));
+            foreach (string[] command in new[] { new[] { "config", "current" }, new[] { "config", "profile", "list" } })
+            {
+                (int exit, string stdout, string stderr) = await InvokeAsync(store, [.. command, "--output", destination]);
+                exit.ShouldBe(0, stdout + stderr);
+                stdout.ShouldBeEmpty();
+                stderr.ShouldBeEmpty();
+                using JsonDocument result = JsonDocument.Parse(File.ReadAllText(destination));
+                result.RootElement.ValueKind.ShouldBe(JsonValueKind.Object);
+            }
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
+    /// <summary>Replacements between files and FIFOs are refused before any bytes are written.</summary>
+    [Theory]
+    [InlineData(true)]
+    [InlineData(false)]
+    public async Task SwappedFifoAndRegularResultAreRefusedAsync(bool startWithFifo)
+    {
+        Assert.SkipUnless(OperatingSystem.IsLinux(), "The FIFO fixture uses the Linux mkfifo utility.");
+        string directory = NewDirectory();
+        try
+        {
+            string destination = Path.Combine(directory, "result");
+            string replacement = Path.Combine(directory, "replacement");
+            string fifo = startWithFifo ? destination : replacement;
+            using Process created = Process.Start(new ProcessStartInfo("mkfifo") { ArgumentList = { fifo }, UseShellExecute = false })
+                .ShouldNotBeNull();
+            await created.WaitForExitAsync(TestContext.Current.CancellationToken);
+            created.ExitCode.ShouldBe(0);
+            string regular = startWithFifo ? replacement : destination;
+            File.WriteAllText(regular, "keep these bytes");
+            string archived = Path.Combine(directory, "archived");
+            var store = new ProfileStore(Path.Combine(directory, "profile.json"));
+            var settings = new SettingsResolver(store, new Dictionary<string, string?>())
+                .Resolve(new SettingsInput(Output: destination)).Settings.ShouldNotBeNull();
+
+            IOException failure = await Should.ThrowAsync<IOException>(() => CliOutput.WriteAsync(new { result = 1 }, null,
+                settings, TestContext.Current.CancellationToken, beforeExistingDestinationOpen: () =>
+                {
+                    File.Move(destination, archived);
+                    File.Move(replacement, destination);
+                }).WaitAsync(TimeSpan.FromSeconds(3), TestContext.Current.CancellationToken));
+            failure.Message.ShouldBe("The result destination changed before it could be opened.");
+            File.ReadAllText(startWithFifo ? destination : archived).ShouldBe("keep these bytes");
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
+
     /// <summary>On Windows a trailing dot aliases the first profile destination.</summary>
     [Fact]
     public async Task WindowsOutputCannotAliasTheFirstProfileFileAsync()

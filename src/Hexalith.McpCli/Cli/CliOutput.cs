@@ -15,7 +15,7 @@ internal static class CliOutput
     internal const string PreflightFailureMessage = "The result destination cannot be written; no request was sent.";
 
     /// <summary>Checks predictable destination failures before an action can have side effects.</summary>
-    internal static void Preflight(string? output, string? profilePath = null)
+    internal static void Preflight(string? output, string? profilePath = null, Action? beforeExistingDestinationOpen = null)
     {
         if (output is null)
         {
@@ -24,7 +24,7 @@ internal static class CliOutput
 
         try
         {
-            PreflightCore(output, profilePath);
+            PreflightCore(output, profilePath, beforeExistingDestinationOpen);
         }
         catch (Exception exception)
         {
@@ -32,7 +32,7 @@ internal static class CliOutput
         }
     }
 
-    private static void PreflightCore(string output, string? profilePath)
+    private static void PreflightCore(string output, string? profilePath, Action? beforeExistingDestinationOpen)
     {
         if (WindowsOutputDevice.Resolve(output) is string device)
         {
@@ -41,7 +41,8 @@ internal static class CliOutput
         }
 
         string path = ResolveFinalSymlink(output);
-        OutputTargetKind kind = OutputFileType.Inspect(path);
+        OutputTarget expected = OutputFileType.Inspect(path);
+        OutputTargetKind kind = expected.Kind;
         ProtectProfileFiles(path, kind, profilePath);
         if (kind == OutputTargetKind.Missing)
         {
@@ -79,8 +80,13 @@ internal static class CliOutput
             }
         }
 
-        using (new FileStream(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read))
+        beforeExistingDestinationOpen?.Invoke();
+        using (SafeFileHandle handle = OutputFileType.OpenExisting(path, FileAccess.ReadWrite, FileShare.Read))
         {
+            OutputTarget opened = OutputFileType.Inspect(handle);
+            ProtectProfileFiles(path, opened.Kind, profilePath, handle);
+            expected.RequireMatch(opened);
+            OutputFileType.RequireSharedAccess(handle);
         }
 
         ProbeStagingDirectory(Path.GetTempPath());
@@ -214,19 +220,24 @@ internal static class CliOutput
 
         path = ResolveFinalSymlink(path);
         cancellationToken.ThrowIfCancellationRequested();
-        OutputTargetKind kind = OutputFileType.Inspect(path);
+        OutputTarget expected = OutputFileType.Inspect(path);
+        OutputTargetKind kind = expected.Kind;
         ProtectProfileFiles(path, kind, profilePath);
-        if (kind == OutputTargetKind.Pipe)
+        if (kind is OutputTargetKind.Pipe or OutputTargetKind.Device)
         {
-            OutputFileType.WritePipe(path, Encoding.UTF8.GetBytes(output), cancellationToken);
-            return;
-        }
+            beforeExistingDestinationOpen?.Invoke();
+            using SafeFileHandle handle = OutputFileType.OpenExisting(path, FileAccess.Write, FileShare.ReadWrite);
+            expected.RequireMatch(OutputFileType.Inspect(handle));
+            byte[] bytes = Encoding.UTF8.GetBytes(output);
+            if (kind == OutputTargetKind.Pipe)
+            {
+                OutputFileType.WriteStream(handle, bytes, cancellationToken);
+                return;
+            }
 
-        if (kind == OutputTargetKind.Device)
-        {
-            await using FileStream target = new(path, FileMode.Open, FileAccess.Write, FileShare.ReadWrite,
-                bufferSize: 0, useAsync: true);
-            await target.WriteAsync(Encoding.UTF8.GetBytes(output), cancellationToken).ConfigureAwait(false);
+            OutputFileType.AllowBlockingDeviceWrites(handle);
+            await using FileStream target = new(handle, FileAccess.Write, bufferSize: 1);
+            await target.WriteAsync(bytes, cancellationToken).ConfigureAwait(false);
             await target.FlushAsync(cancellationToken).ConfigureAwait(false);
             return;
         }
@@ -274,14 +285,16 @@ internal static class CliOutput
 
             backupPath = Path.Combine(Path.GetTempPath(), ".mcpcli-backup-" + Guid.NewGuid().ToString("N"));
             beforeExistingDestinationOpen?.Invoke();
-            await using FileStream destination = new(path, FileMode.Open, FileAccess.ReadWrite, FileShare.Read,
-                bufferSize: 0, useAsync: true);
+            using SafeFileHandle handle = OutputFileType.OpenExisting(path, FileAccess.ReadWrite, FileShare.Read);
+            OutputTarget opened = OutputFileType.Inspect(handle);
+            ProtectProfileFiles(path, opened.Kind, profilePath, handle);
+            expected.RequireMatch(opened);
+            OutputFileType.RequireSharedAccess(handle);
+            await using FileStream destination = new(handle, FileAccess.ReadWrite, bufferSize: 1);
             if (!destination.CanSeek)
             {
                 throw new IOException("The existing result target is not seekable.");
             }
-
-            ProtectProfileFiles(path, kind, profilePath, destination.SafeFileHandle);
 
             await using (FileStream backup = CreatePrivateTemporaryFile(backupPath))
             {
@@ -291,8 +304,7 @@ internal static class CliOutput
 
             try
             {
-                destination.Position = 0;
-                destination.SetLength(0);
+                ResetDestination(destination);
                 if (afterDestinationTruncated is not null)
                 {
                     await afterDestinationTruncated(destination, cancellationToken).ConfigureAwait(false);
@@ -307,8 +319,7 @@ internal static class CliOutput
             {
                 await using FileStream backup = new(backupPath, FileMode.Open, FileAccess.Read, FileShare.Read,
                     bufferSize: 4096, useAsync: true);
-                destination.Position = 0;
-                destination.SetLength(0);
+                ResetDestination(destination);
                 await backup.CopyToAsync(destination, CancellationToken.None).ConfigureAwait(false);
                 await destination.FlushAsync(CancellationToken.None).ConfigureAwait(false);
                 throw;
@@ -323,6 +334,14 @@ internal static class CliOutput
                 TryDelete(backupPath);
             }
         }
+    }
+
+    private static void ResetDestination(FileStream destination)
+    {
+        destination.SetLength(0);
+        destination.Position = 0;
+        // Native file-to-file copies use the handle's offset rather than the stream position.
+        _ = destination.SafeFileHandle;
     }
 
     private static string ResolveFinalSymlink(string path)
