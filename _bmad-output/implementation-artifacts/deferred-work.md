@@ -489,6 +489,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: Verify the FreeBSD x64 native result-target inspection on an existing output file.
   evidence: Unverified, medium if wrong. `src/Hexalith.McpCli/Cli/OutputFileType.cs:51` reads `st_mode` from the FreeBSD x64 `stat` layout, but the shared CI job at `.github/workflows/ci.yml:18` invokes `domain-ci.yml@main` on Ubuntu x64. A FreeBSD x64 run of `CliOutputContractTests.MutationPreflightRemovesProbeFilesAsync` would settle whether valid existing-file output is classified correctly before a profile mutation.
+  status: done 2026-12-21
+  resolution: The named Release test passed on FreeBSD 14.4 amd64 with native .NET 11 RC2 and zero skips. It exercises fresh, existing and symbolic-link output targets. See [qualification](spec-qualify-freebsd-result-target-inspection.md).
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-2-11-keep-cli-output-and-exit-codes-predictable.md`
   summary: No running test reaches the existing-file mode-bit preflight guard, the only preflight refusal a root process gets for a read-only or write-only result file.
@@ -641,6 +643,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
   evidence: Medium; pre-existing authorization rule, confirmed by the Story 4.8 NFR-8 reviewer (round 2, observation 16). `/home/administrator/projects/hexalith/tenants/src/Hexalith.Tenants.Server/Aggregates/TenantAggregate.cs:104` gates owner checks on `state.HasMembershipHistory` (`TenantState.cs:13,45`), and `tenants.add-user-to-tenant` now exposes it to agents. Story 4.8 forbade changing authorization. The Tenants maintainer should confirm it is intended, or restrict first-member creation, for example to a global administrator.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md`
   summary: Tenants IntegrationTests fails deterministically on `TenantsApiStructuralTests.TenantsSources_DelegateDaprRoutingHeaderOwnershipToThePlatformHandlerOnly`, which flags `src/Hexalith.Tenants/Authorization/TenantOwnerSourceGateway.cs`.
+  status: resolved upstream 2026-12-21
+  resolution: Tenants revision `a0dcfa24898f2d6aafdb624b8a6beb12deafa6c3` delegates outbound routing headers to the platform layer and is an ancestor of the current root and native fixture pins. The source implicated by the original structural test no longer sets either Dapr routing header.
   evidence: Medium; pre-existing, unrelated to Story 4.8. Rerun on 2026-10-20 it failed 1/1 (`/home/administrator/projects/hexalith/tenants/tests/Hexalith.Tenants.IntegrationTests/TenantsApiStructuralTests.cs:181`). The flagged file was last changed in `bbd95f95`, and Story 4.8 touches neither it nor IntegrationTests. Fix in the Tenants repository: either move that file's Dapr routing-header handling to the platform handler, or correct the structural rule.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-8-make-tenants-gateway-ready-for-v1.md`
   summary: Enrolling the decorated Tenants Contracts forces McpCli onto EventStore 3.125.1 or later and Commons 2.30.3, which changes the tool's own gateway client and needs the conformance gates.
@@ -964,6 +968,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-epic-4-retro-item-2-close-bootstrap-line.md`
   summary: Pinned Tenants startup can leave BootstrapGlobalAdmin rejected after a /process HTTP 500, preventing persisted administrator authority in the isolated live lane.
+  status: resolved upstream 2026-12-21
+  resolution: The current native source pin includes Tenants app-channel readiness revision `26d9a1968b5a13a0af8e187fb20b5ddabd3ed882` and its dispatch regression. The qualified Story 5.4 boundary passed the persisted administrator barrier before proving actor attribution. The historical HTTP 500 evidence remains recorded below.
   owner: Tenants maintainer and EventStore maintainer, then McpCli maintainer for an approved published cohort rebind.
   evidence: High; pre-existing runtime qualification failure, also observed at baseline main before the F2 release changes. `_bmad-output/implementation-artifacts/evidence/epic-4-retro-item-2-bootstrap/hosted-bootstrap-rejections.json:15` records the HTTP 500, `:19` the rejected bootstrap, and `:23` the startup service returning without another dispatch. Run 42230625514 attempt 1 passed 19 vectors and smoke but failed two 60-second authority checks; baseline run 42221463909 failed five on the identical upstream source cohort. First sidecar-health timing supports a startup-readiness lead, but the precise 500 body was discarded upstream and its cause remains unproven. `tools/live-topology/native_cohort.py:37` binds source to public package metadata, so an owner fix needs a new upstream release and approved artifact/vector rebind; this task forbids publication, dependency updates or weakening the gate. Preserve single bootstrap dispatch and the persisted-authority assertion; investigate an own app-channel readiness barrier before the first send and retain the original 500 detail upstream.
 
@@ -1346,7 +1352,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-8-refresh-and-re-disposition-the-folders-inventory.md`
   summary: Align CI SDK installation with the exact qualified managed runtime before a later .NET 11 patch is selected. The workflow requests `11.0.x`, but topology preparation requires the highest installed Core and ASP.NET runtime to be exactly `11.0.0`; a newer patch therefore refuses preparation. Preserve the runtime qualification guard while either pinning installation or separately qualifying a newer runtime and its bound artifacts.
   owner: McpCli CI and live-topology maintenance owners.
-  status: open; independent net11 maintenance included by the preserved Story 5.8 baseline, not caused by the pass-8 patches. No CI, dependency or runtime policy is changed here.
+  status: superseded 2026-12-21
+  resolution: The delivered Builds v6.8.1 Linux setup reads the SDK version from the module’s `global.json`, which specifies 11.0.100. The old `11.0.x` installation is gone. The separate managed runtime inventory check still requires 11.0.0.
   evidence: `.github/workflows/ci.yml:21` supplies the SDK wildcard; `tools/live-topology/ci.py:86` implements exact runtime selection and `tools/live-topology/ci.py:504` applies it to `dotnet --list-runtimes` during preparation. `_bmad-output/implementation-artifacts/evidence/story-5-8/review-pass8-20261115/ci-runtime-maintenance-deferral.json` records the unmodified guard accepting `11.0.0` and refusing `11.0.1`. Ledger searches for `11.0.x`, `11.0.0`, `wildcard` and `highest installed` found no existing entry before append.
 
 ## Deferred from: spec-5-9-refresh-and-re-disposition-projects-and-frontcomposer-inventories.md (2026-11-16)
@@ -1678,3 +1685,21 @@ carry the closures. Sixty-one entries remain open, including partial closures.
 | Historical paired acceptance and signature checks | Central publication replaced the old workflows. Historical recovery and successor verification belong to their release owners. |
 | Story 5.4 C05 and raw-string parity, Parties restrictions and retirement, Folders gate, FrontComposer labels, and keyed Parties/Tenants vectors | These need an approved fixture or inventory, an owner release, or an approved vector change. |
 | Folders K12, Projects paging, census classifications, historical inventory wording, ChatBot/Memories successors, and the Story 5.11 evidence refresh | These need the approved architecture, owner host and selected data, or exact-byte successors recorded at their entries. |
+
+## Six deferred-work implementations (2026-12-21)
+
+The original entries record five changes and the FreeBSD verification.
+The Tenants startup and structural fixes
+were already present upstream, and the old SDK installation wildcard was
+superseded. Those three dispositions are excluded from the six. Fifty-two
+entries remain open, including partial closures.
+
+| Skipped findings | Reason |
+| --- | --- |
+| First-time operator timing, Platform reference authentication | A first-time operator must run the approved procedure. The Platform runner still mixes Gateway credential sources and its owner controls the fix. |
+| Tenants authorization and handler behavior, Parties handler behavior and producer checks, EventStore Query detail, AI.Tools local hooks | The owning repositories control these changes and qualifying releases. |
+| Linux ARM output qualification and generated migration release notes | Hexalith.CiCd owns runner selection and release-note generation. |
+| Inherited profile identity and uncertain Command tracking | The profile precedence choice is pending. For uncertain submissions, tracking still needs a public error contract and a reliable Gateway identifier for keyed Commands. |
+| Story 5.4 F7, C05 and raw-string bounds | F7 is a historical acceptance. C05 needs qualified stale projection, erasure and restriction fixtures. Raw-string differences need a Parties inventory disposition. |
+| Parties retirement and restrictions, owner README and package labels, Folders gate, Parties and Tenants keyed vectors | These depend on owning module releases, resealing, qualification or exact vector re-approval. |
+| Folders K12 and builder work, Projects paging, census classifications, exact inventory wording, ChatBot/Memories successors and Story 5.11 evidence | These depend on the architecture decisions, owner fixtures or approved successors named at their entries. |
