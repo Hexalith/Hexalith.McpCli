@@ -254,8 +254,13 @@ hash, and are never initialized. An unknown directory cannot be qualified from
 local suffix matches alone. Cyclic/undefined aliases, more than 32 alias levels
 or more than 4,096 source items fail with their metadata path.
 Unresolved import globs inspect committed local suffix matches regardless of
-extension. Shell, PowerShell and batch continuation lines are joined before
-publication discovery; quoted project arguments retain their complete path,
+extension. An explicit MSBuild `GetPathOfFileAbove` import follows the first
+matching committed file from its starting directory upward. An exact
+`Exists` or nonempty guard makes a missing match optional. Unresolved starts,
+links, and parent-workspace files outside the readable trees produce coverage
+errors under the same one-hop rules as literal imports.
+Shell, PowerShell, batch and Dockerfile continuations are joined within each
+script before publication discovery. Quoted project arguments retain their complete path,
 and Docker push options do not obscure its image argument. Supported Docker
 global options (including context/host) and the `image push` form retain the
 complete image identity. VB registration

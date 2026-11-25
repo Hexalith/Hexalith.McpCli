@@ -752,6 +752,9 @@ def resolve_path(base, value):
 PROPERTY_NAMES = {name.lower(): name for name in (
     'OutputType', 'PackAsTool', 'ToolCommandName', 'PackageId', 'AssemblyName',
     'ContainerRepository', 'ContainerRegistry', 'IsPackable', 'TargetName')}
+UPWARD_IMPORT = re.compile(
+    r'''\$\(\[MSBuild\]::GetPathOfFileAbove\(\s*(["']?)([\w.-]+)\1'''
+    r'''(?:\s*,\s*(["']?)(@repo/[^"'(),;]*?)\3)?\s*\)\)''', re.I)
 
 
 def attribute(element, name):
@@ -787,6 +790,10 @@ def expand_msbuild(value, properties, current, project, *, required=True):
     value = re.sub(r"\$\(\[MSBuild\]::NormalizePath\((.*?)\)\)", normalize, value, flags=re.I)
     value = re.sub(r"\$\(\[System\.IO\.Path\]::GetFullPath\('([^']*)'\)\)",
                    lambda match: posixpath.normpath(match[1]), value, flags=re.I)
+    upward = UPWARD_IMPORT.fullmatch(value)
+    if upward and upward[4] is None:
+        # Preserve the declaring file's directory when the lookup is carried in a property.
+        value = f"$([MSBuild]::GetPathOfFileAbove('{upward[2]}', '{context['msbuildthisfiledirectory']}'))"
     if required:
         require('$(' not in value, f'unresolved-classification-metadata:{current}')
     return value
@@ -924,6 +931,30 @@ def metadata_files(tree):
     # Import extensions have no MSBuild semantics. The caller selects imports
     # from every committed blob, and only selected XML is parsed as metadata.
     return {path for path, entry in tree.entries.items() if entry[0] in ('100644', '100755')}
+
+
+def resolve_upward_import(value, current, metadata_paths, resolver):
+    """Find the nearest committed match, treating opaque paths as a coverage error."""
+    lookup = UPWARD_IMPORT.fullmatch(value.strip())
+    refusal = Refusal('unresolved-upward-import', current, value)
+    refusal.require(lookup is not None and lookup[4] is not None)
+    filename, start = lookup[2], lookup[4]
+    refusal.require(filename not in ('.', '..') and not re.search(r'[$*?%]', start))
+    directory = posixpath.dirname(label_path(current, start.rstrip('/\\') + '/' + filename)) or '.'
+    substitution = resolver.substitution(current)
+    while True:
+        candidate = resolver.canonical_label(posixpath.normpath(directory + '/' + filename))
+        if substitution is None and resolver.local(candidate):
+            if candidate in metadata_paths and resolver.tree.entries[candidate][0] in REGULAR:
+                return candidate
+            Refusal('unavailable-local-import', current, candidate).require(resolver.tree.absent(candidate))
+        else:
+            found, _ = resolver.matches(candidate, substitution, 'unsafe-import-path', current)
+            if found:
+                return found[0]
+        if resolver.workspace is not None and posixpath.normpath(resolver.repository + '/' + directory) == '.':
+            return None  # The declared parent workspace is the outer boundary.
+        directory = posixpath.normpath(directory + '/..')
 
 
 def expanded_values(value, properties, current, project, *, required=True):
@@ -1083,7 +1114,21 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                         local = substitution is None and resolver.local(label)
                         raise CensusError(f"{'unavailable-local-import' if local else 'unsafe-import-path'}:{current}", target=label)
                     value = value if item is None else item
-                    if '$(' not in value:
+                    if re.search(r'\[MSBuild\]::GetPathOfFileAbove\s*\(', value, re.I):
+                        candidate = resolve_upward_import(value, current, metadata_paths, resolver)
+                        if candidate is not None:
+                            visit(candidate, conditional)
+                        else:
+                            condition = attribute(element, 'Condition') or ''
+                            guards = exists_arguments(condition)
+                            for conjunct in condition_conjuncts(condition):
+                                nonempty = re.fullmatch(r'''\s*(["'])(.+)\1\s*!=\s*(["'])\3\s*''', conjunct)
+                                if nonempty:
+                                    guards.append(nonempty[2])
+                            optional = any(set(expanded_values(guard, properties, current, path, required=False)) == {value}
+                                           for guard in guards)
+                            Refusal('unavailable-upward-import', current, value).require(optional)
+                    elif '$(' not in value:
                         label = resolver.canonical_label(label_path(current, value))
                         if substitution is None and resolver.local(label):
                             target = label

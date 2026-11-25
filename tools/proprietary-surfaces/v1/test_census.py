@@ -1098,11 +1098,11 @@ class CensusTests(unittest.TestCase):
                 entries=[entry for entry in self.run_cli(1)['surfaces'] if entry['surface']['path']==filename and entry['status']=='rejected']
                 self.assertEqual([entry['surface']['identity'] for entry in entries],['missing/New Runner.csproj'])
 
-    def assert_source_errors(self, report, path, rules, targets=None):
+    def assert_source_errors(self, report, path, rules, targets=None, *, declared_at=None):
         pin = self.git(self.repo, 'rev-parse', 'HEAD')
         # Every rule needs exactly one target slot; a short list never truncates the expectation.
         self.assertEqual(report['errors'], [dict(repository='references/opaque', gitlink=pin,
-            path=path, rule=rule + ':' + path, **({'target': target} if target else {}))
+            path=path, rule=rule + ':' + (declared_at or path), **({'target': target} if target else {}))
             for rule, target in zip(rules, [None] * len(rules) if targets is None else targets, strict=True)])
 
     def test_literal_shell_variables_loops_functions_and_aliases_resolve_exact_targets(self):
@@ -1940,6 +1940,57 @@ dotnet publish "$target"
         self.assertEqual([e['surface'] for e in report['surfaces']],
                          [self.binding('Directory.Build.targets', 'source', 'Directory.Build.targets'), self.binding(project, 'project', 'Neutral')])
         self.assertEqual([e['signals'] for e in report['surfaces']], [['unresolved-tool-metadata'], ['executable-project']])
+
+    def test_upward_import_visits_the_nearest_committed_props_and_its_imports(self):
+        self.write(self.repo, 'Directory.Build.props', '<Project><PropertyGroup><PackAsTool>true</PackAsTool></PropertyGroup></Project>')
+        self.write(self.repo, 'odd/Directory.Build.props', '<Project><Import Project="eng/Runner.props"/></Project>')
+        self.write(self.repo, 'odd/eng/Runner.props', '<Project><PropertyGroup><OutputType>Exe</OutputType></PropertyGroup></Project>')
+        self.write(self.repo, 'odd/location/Directory.Build.props', """<Project>
+            <PropertyGroup><Parent>$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)../'))</Parent></PropertyGroup>
+            <Import Project="$(Parent)" Condition="Exists('$(Parent)')"/>
+            </Project>""")
+        self.write(self.repo, PROJECT, '<Project/>')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual([], report['errors'])
+        project = next(s for s in report['surfaces'] if s['surface'] == self.binding())
+        self.assertEqual(['executable-project'], project['signals'])
+
+    def test_upward_import_refuses_opaque_targets_and_unreadable_parent_metadata(self):
+        declaring = 'odd/location/Directory.Build.props'
+        self.write(self.repo, PROJECT, '<Project/>')
+        text = """<Project><Import Project="$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', '$(MSBuildThisFileDirectory)..'))"/></Project>"""
+        self.write(self.repo, declaring, text)
+        self.write(self.root, 'Directory.Build.props', '<Project/>')
+        self.git(self.root, 'add', 'Directory.Build.props')
+        self.commit(self.repo); self.pin()
+        self.assert_source_errors(self.run_cli(1), PROJECT,
+                                  ['unsafe-import-path'], ['../../Directory.Build.props'], declared_at=declaring)
+        self.write(self.repo, 'odd/Actual.props', '<Project/>')
+        (self.repo / 'odd/Directory.Build.props').symlink_to('Actual.props')
+        self.commit(self.repo); self.pin()
+        report = self.run_cli(1)
+        pin = self.git(self.repo, 'rev-parse', 'HEAD')
+        self.assertEqual([
+            {'repository': 'references/opaque', 'gitlink': pin, 'path': 'odd/Directory.Build.props',
+             'rule': 'regular-committed-blob-required:odd/Directory.Build.props'},
+            {'repository': 'references/opaque', 'gitlink': pin, 'path': PROJECT,
+             'rule': 'unavailable-local-import:' + declaring, 'target': 'odd/Directory.Build.props'},
+        ], report['errors'])
+
+    def test_absent_upward_import_respects_the_exact_nonempty_guard(self):
+        declaring = 'odd/location/Directory.Build.targets'
+        self.write(self.repo, PROJECT, '<Project/>')
+        self.write(self.repo, declaring, """<Project>
+            <PropertyGroup><Parent>$([MSBuild]::GetPathOfFileAbove('Directory.Build.targets', '$(MSBuildThisFileDirectory)..'))</Parent></PropertyGroup>
+            <Import Project="$(Parent)" Condition="'$(Parent)' != ''"/>
+            </Project>""")
+        self.commit(self.repo); self.pin()
+        self.assertEqual([], self.run_cli(0)['errors'])
+        self.write(self.root, 'Directory.Build.targets', '<Project/>')
+        self.git(self.root, 'add', 'Directory.Build.targets'); self.pin()
+        self.assert_source_errors(self.run_cli(1), PROJECT, ['unsafe-import-path'],
+                                  ['../../Directory.Build.targets'], declared_at=declaring)
 
     def test_review_s11_conditional_loop_keeps_prebranch_target(self):
         path = 'scripts/ship.sh'

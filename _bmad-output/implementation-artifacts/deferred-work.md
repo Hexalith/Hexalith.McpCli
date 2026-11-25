@@ -1172,7 +1172,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`
   summary: Unresolved `$([MSBuild]::GetPathOfFileAbove('Directory.Build.props', …))` imports never visit or refuse the upward `Directory.Build.props` chain. Name matching explicitly skips `Directory.Build.*` candidates, so parent props and their own imports (for example Builds' `Hexalith.Build.props`) stay unread without a coverage error.
   owner: McpCli maintainer (proprietary-surface census).
-  status: open; pre-existing gap, deferred by the Story 5.6 cross-tree resolution review loop 1 (BH4). Unconsumed defaults are still classified independently, but their imports are not followed.
+  status: done 2026-11-25
+  resolution: Committed upward lookups visit the nearest matching metadata and follow its imports. The census reports unresolved and opaque targets, including a match outside the readable trees. Tests cover the nearest match, its transitive import, a symlink and the parent workspace boundary.
   evidence: `tools/proprietary-surfaces/v1/check.py:1059` excludes `Directory.Build.props`/`Directory.Build.targets` from unresolved-import name matching. Commons `src/libraries/Directory.Build.props` and PolymorphicSerializations use this upward pattern. Resolve `GetPathOfFileAbove` against committed trees under the existing one-hop rules, or refuse it, and rescan the committed pins.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-6-reject-new-proprietary-surfaces-in-ci.md`
