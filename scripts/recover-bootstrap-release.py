@@ -41,6 +41,15 @@ def verify_source(phase, version):
                     os.environ.get('DISPATCH_SHA', ''), os.environ.get('DISPATCH_REF', ''), phase], check=True)
 
 
+def verify_public_signature(package):
+    """Require NuGet signature verification on the complete public archive."""
+    try:
+        subprocess.run(['dotnet', 'nuget', 'verify', '--all', str(package.resolve())],
+                       check=True, capture_output=True, timeout=120)
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, OSError) as error:
+        raise ValueError(f'Public NuGet signature verification failed for {package.name}: {type(error).__name__}.') from None
+
+
 def download_public_package(url, downloaded, pushed):
     # Newly pushed packages can return 404 while NuGet processes them. Existing
     # packages and every other uncertain response still fail immediately.
@@ -62,6 +71,7 @@ def download_public_package(url, downloaded, pushed):
             failure = type(error).__name__
         else:
             downloaded.write_bytes(package_bytes)
+            verify_public_signature(downloaded)
             return
         raise ValueError(f'Could not verify the public package: uncertain registry response ({failure})') from None
 
