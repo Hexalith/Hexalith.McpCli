@@ -1379,6 +1379,14 @@ done
         self.assertEqual(report['errors'], [])
         self.assertIn((self.binding(), ['command-line-source'], ['dependencies/tool/Tool.cs']),
                       [(s['surface'], s['signals'], s['sources']) for s in report['surfaces']])
+        # A deeper gitlink or a mismatched segment cannot be reached by single-segment wildcards.
+        self.write(self.repo, PROJECT, '<Project><Import Project="../../../dependencies/t??l/eng/*.props"/>'
+                   '<ItemGroup><Compile Include="../../../dependencies/t??l/*.cs"/></ItemGroup></Project>')
+        self.commit_with_gitlinks({'dependencies/tool/eng/vendor/nested': pin, 'dependencies/producer': pin}); self.pin()
+        report = self.run_cli(1)
+        self.assertEqual(report['errors'], [])
+        self.assertIn((self.binding(), ['command-line-source', 'executable-project'], ['dependencies/tool/Tool.cs', PROJECT]),
+                      [(s['surface'], s['signals'], s['sources']) for s in report['surfaces']])
         # A glob cannot prove what an unopened gitlink below its directory contains.
         for project, rule, label in (
                 ('<Project><Import Project="../../../dependencies/*/eng/*.props"/></Project>',
@@ -2913,13 +2921,18 @@ dotnet publish "$target"
             self.cross_read('../shared/lib/Plain.cs', 'workspace', pinned, 'lib/Plain.cs', 'class Plain {}'),
             self.cross_read('dependencies/shared/src/Tool.cs', 'nested', nested, 'src/Tool.cs', 'builder.Services.AddMcpServer();',
                             gitlink='dependencies/shared')])
-        # A glob cannot prove what an unopened gitlink below its directory contains.
+        # Single-segment wildcards stay beside the gitlink; a recursive glob reaches it.
         self.commit_with_gitlinks({'lib/vendor': nested}, shared)
         self.pin_root('shared')
         self.write(self.repo, PROJECT, '<Project><ItemGroup><Compile Include="../../../../shared/lib/*.cs"/></ItemGroup></Project>')
         self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
         report = self.run_cli(1)
-        self.assert_source_errors(report, PROJECT, ['unsafe-or-nested-compile-source'], ['../shared/lib/*.cs'])
+        self.assertEqual([], report['errors'])
+        self.assertIn(self.binding(), [surface['surface'] for surface in report['surfaces']])
+        self.write(self.repo, PROJECT, '<Project><ItemGroup><Compile Include="../../../../shared/lib/**/*.cs"/></ItemGroup></Project>')
+        self.commit_with_gitlinks({'dependencies/shared': nested}); self.pin()
+        report = self.run_cli(1)
+        self.assert_source_errors(report, PROJECT, ['unsafe-or-nested-compile-source'], ['../shared/lib/**/*.cs'])
         self.assertEqual(self.summaries(report)['references/opaque']['crossTreeReads'], [])
 
     def test_nested_pin_unavailable_workspace_root_object_refuses(self):

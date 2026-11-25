@@ -487,9 +487,8 @@ class Resolver:
             refusal.require(entry[0] in REGULAR)
             found = [inner]
         else:
-            # A glob cannot prove what an unopened gitlink below its directory contains.
-            refusal.require(not gitlink_below(tree, inner))
             pattern = (inner + '/' if inner else '') + '/'.join(parts[wildcard:])
+            refusal.require(not glob_crosses_gitlink(tree, pattern))
             found = sorted(p for p, entry in tree.entries.items() if entry[0] in REGULAR and msbuild_glob(p, pattern))
         labels = []
         for path in found:
@@ -905,10 +904,20 @@ def glob_directory(label):
     return '/'.join(parts[:wildcard])
 
 
-def gitlink_below(tree, directory):
-    """A glob cannot prove what an unopened gitlink below its directory contains."""
-    return any(entry[0] == '160000' and (not directory or path.startswith(directory + '/'))
-               for path, entry in tree.entries.items())
+def glob_crosses_gitlink(tree, pattern):
+    """A glob can inspect only committed files outside the unopened gitlinks it reaches."""
+    directory = glob_directory(pattern)
+    segments = pattern.split('/')
+    for path, entry in tree.entries.items():
+        if entry[0] != '160000' or (directory and not path.startswith(directory + '/')):
+            continue
+        if '**' in pattern:
+            return True
+        prefix = path.split('/')
+        if len(prefix) <= len(segments) and all(msbuild_glob(name, segment)
+                                               for name, segment in zip(prefix, segments)):
+            return True
+    return False
 
 
 def metadata_files(tree):
@@ -1080,7 +1089,7 @@ def project_metadata(tree, path, metadata_paths, errors=None, resolver=None):
                             target = label
                             if re.search(r'[*?]', target):
                                 Refusal('unavailable-local-import', current, label).require(
-                                    not gitlink_below(resolver.tree, glob_directory(target)))
+                                    not glob_crosses_gitlink(resolver.tree, target))
                             matches = ([target] if target in metadata_paths else []) if not re.search(r'[*?]', target) else sorted(
                                 candidate for candidate in metadata_paths if msbuild_glob(candidate, target))
                             if not matches and not re.search(r'[*?]', target):
@@ -1193,7 +1202,7 @@ def compile_provenance(tree, project, properties, records, copy_sources, errors=
                     if resolver.local(label):
                         if re.search(r'[*?]', label):
                             Refusal('unsafe-or-nested-compile-source', current, label).require(
-                                not gitlink_below(tree, glob_directory(label)))
+                                not glob_crosses_gitlink(tree, label))
                         # Project-relative sources stay in the inspected tree; no hop is read.
                         matches = {candidate for candidate, entry in tree.entries.items()
                                    if entry[0] in ('100644', '100755') and msbuild_glob(candidate, label)}

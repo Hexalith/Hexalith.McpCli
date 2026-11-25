@@ -1602,6 +1602,8 @@ fixes, obsolete items and blocked findings did not count toward those ten.
 - source_spec: `_bmad-output/implementation-artifacts/spec-close-next-seven-deferred-work.md`
   summary: The census refuses a local or substituted glob whenever an unopened gitlink lies below its literal directory, even when the glob's single-segment wildcards cannot reach that gitlink.
   evidence: Low; a fresh committed-pin scan shows no affected root. `gitlink_below` in `tools/proprietary-surfaces/v1/check.py` ignores pattern depth, so `eng/*.props` with a gitlink at `eng/tools/vendor`, or a root-level `*.props` beside `references/*` gitlinks, fails closed. Refuse only when the pattern has `**` or its segments can match the gitlink path or one of its parent directories.
+  status: done 2026-11-25
+  resolution: Local imports, local Compile items and substituted globs share a segment-aware gitlink check. Tests cover reachable gitlinks, deeper and mismatched paths, and recursive globs across the same substituted tree.
 
 ## Next seven follow-up dispositions (2026-11-24)
 

@@ -116,15 +116,17 @@ relative to their declaring file.
   outside every root is never listed, and a directory, a tree root or the parent
   workspace root is never a file. A local import through a committed link is
   refused as `unavailable-local-import` with its label as `target`. A local
-  import or Compile glob is also refused when an unopened nested gitlink lies
-  below its directory: an import as `unavailable-local-import` and a Compile
+  import or Compile glob is also refused when its pattern can reach an unopened
+  nested gitlink: an import as `unavailable-local-import` and a Compile
   item as `unsafe-or-nested-compile-source`, each with its label as `target`.
 - **One hop.** A substituted file's imports must stay inside that same
   substituted tree. A further escape, including one back into the inspected
   root, or a gitlink inside the substituted tree fails. A Compile item declared
   there may name files in that same substituted tree or the inspected root's own
   committed sources, which need no cross-tree read; any other tree fails. A
-  glob is refused when an unopened gitlink lies below its directory.
+  glob is refused when it can reach an unopened gitlink. Recursive `**`
+  patterns conservatively cover all descendants of their literal directory.
+  Single-segment wildcards cover only matching path segments up to the glob depth.
 
 Anything else, including a path above the parent root or an unavailable
 workspace root object (`workspace-object-unavailable`), keeps
