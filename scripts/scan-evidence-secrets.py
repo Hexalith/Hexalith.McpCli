@@ -2,6 +2,7 @@
 """Scan a complete evidence directory and bind the result to its exact file bytes."""
 
 import argparse
+from contextlib import ExitStack
 import hashlib
 import json
 import os
@@ -28,7 +29,22 @@ def reached_through_link_or_parent(root):
     return '..' in root.parts or any(ancestor.is_symlink() for ancestor in root.parents)
 
 
-def scan(root, *, environment=None, receipt=None):
+def open_root(root, flags):
+    """Open the whole absolute path one component at a time without following links."""
+    components = root.parts[1:]
+    # Ancestors need search permission. Only the packet root needs to be listed.
+    search_flags = flags | getattr(os, 'O_SEARCH', getattr(os, 'O_PATH', 0))
+    descriptor = os.open(root.anchor, search_flags if components else flags)
+    for index, component in enumerate(components, 1):
+        try:
+            child = os.open(component, flags if index == len(components) else search_flags, dir_fd=descriptor)
+        finally:
+            os.close(descriptor)
+        descriptor = child
+    return descriptor
+
+
+def scan(root, *, environment=None, receipt=None, retain_root=None):
     """Return a deterministic receipt; never include source snippets or credential values."""
     root = Path(root).absolute()
     environment = dict(os.environ if environment is None else environment)
@@ -40,61 +56,86 @@ def scan(root, *, environment=None, receipt=None):
     def error(path, rule):
         errors.append({'path': label(path), 'rule': rule})
 
-    if root.is_symlink() or not root.is_dir():
-        errors.append({'path': '.', 'rule': 'directory-required-no-links'})
-    elif reached_through_link_or_parent(root):
-        # O_NOFOLLOW protects only each opened file, so the root must also be reached without links or '..' steps.
-        errors.append({'path': '.', 'rule': 'root-path-not-canonical'})
-    else:
-        paths = []
-        def walk_error(failure):
-            error(Path(failure.filename), 'directory-unreadable')
-        for directory, directories, names in os.walk(root, followlinks=False, onerror=walk_error):
-            for name in sorted(directories):
-                path = Path(directory) / name
-                if path.is_symlink():
-                    error(path, 'symlink-refused')
-                    directories.remove(name)
-            paths.extend(Path(directory) / name for name in names)
-        for path in sorted(paths, key=lambda entry: entry.relative_to(root).as_posix()):
-            relative = path.relative_to(root).as_posix()
-            try:
-                mode = path.lstat().st_mode
-                if not stat.S_ISREG(mode):
+    def scan_file(directory, name, path):
+        relative = path.relative_to(root).as_posix()
+        try:
+            mode = os.stat(name, dir_fd=directory, follow_symlinks=False).st_mode
+            if not stat.S_ISREG(mode):
+                error(path, 'regular-file-required-no-links')
+                return
+            descriptor = os.open(name, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK, dir_fd=directory)
+            with os.fdopen(descriptor, 'rb') as source:
+                if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
                     error(path, 'regular-file-required-no-links')
-                    continue
-                # Refuse links swapped into the tree after enumeration as well.
-                descriptor = os.open(path, os.O_RDONLY | getattr(os, 'O_NOFOLLOW', 0) | getattr(os, 'O_NONBLOCK', 0))
-                with os.fdopen(descriptor, 'rb') as source:
-                    if not stat.S_ISREG(os.fstat(source.fileno()).st_mode):
-                        error(path, 'regular-file-required-no-links')
-                        continue
-                    data = source.read()
-            except OSError:
-                error(path, 'file-unreadable')
-                continue
-            entry = {'path': label(path), 'bytes': len(data), 'sha256': digest(data)}
-            files.append(entry)
-            if entry['path'] != relative:
-                findings.append({'path': entry['path'], 'rule': 'sensitive-path'})
+                    return
+                data = source.read()
+        except OSError:
+            error(path, 'file-unreadable')
+            return
+        entry = {'path': label(path), 'bytes': len(data), 'sha256': digest(data)}
+        files.append(entry)
+        if entry['path'] != relative:
+            findings.append({'path': entry['path'], 'rule': 'sensitive-path'})
+        try:
+            encoding = 'utf-16' if data.startswith((b'\xff\xfe', b'\xfe\xff')) else 'utf-8-sig'
+            text = data.decode(encoding)
+            if re.search(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', text) or data.startswith((
+                    b'%PDF-', b'PK\x03\x04', b'PK\x05\x06', b'\x1f\x8b', b'!<arch>\n', b'!<thin>\n',
+                    b'BZh', b'\xfd7zXZ\x00', b'7z\xbc\xaf\x27\x1c')) \
+                    or data[257:262] == b'ustar':
+                raise ValueError('binary')
+        except (UnicodeError, ValueError):
+            error(path, 'unsupported-text-or-binary')
+            return
+        try:
+            if sanitized_xml(text, environment=environment) != text:
+                findings.append({'path': entry['path'], 'rule': 'redaction-required'})
+        except (ValueError, RecursionError, OverflowError):
+            error(path, 'redaction-failed')
+
+    def scan_directory(directory, path, flags):
+        try:
+            with os.scandir(directory) as entries:
+                for entry in entries:
+                    child_path = path / entry.name
+                    if entry.is_dir(follow_symlinks=False):
+                        try:
+                            child = os.open(entry.name, flags, dir_fd=directory)
+                        except OSError:
+                            error(child_path, 'directory-unreadable')
+                            continue
+                        try:
+                            scan_directory(child, child_path, flags)
+                        finally:
+                            os.close(child)
+                    elif entry.is_symlink() and entry.is_dir():
+                        error(child_path, 'symlink-refused')
+                    else:
+                        scan_file(directory, entry.name, child_path)
+        except (OSError, RecursionError):
+            error(path, 'directory-unreadable')
+
+    if root.is_symlink() or not root.is_dir():
+        error(root, 'directory-required-no-links')
+    elif reached_through_link_or_parent(root):
+        error(root, 'root-path-not-canonical')
+    elif not all(hasattr(os, flag) for flag in ('O_DIRECTORY', 'O_NOFOLLOW', 'O_NONBLOCK')):
+        error(root, 'directory-unreadable')
+    else:
+        flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+        try:
+            directory = open_root(root, flags)
+        except OSError:
+            error(root, 'root-path-not-canonical')
+        else:
             try:
-                encoding = 'utf-16' if data.startswith((b'\xff\xfe', b'\xfe\xff')) else 'utf-8-sig'
-                text = data.decode(encoding)
-                if re.search(r'[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', text) or data.startswith((
-                        b'%PDF-', b'PK\x03\x04', b'PK\x05\x06', b'\x1f\x8b', b'!<arch>\n', b'!<thin>\n',
-                        b'BZh', b'\xfd7zXZ\x00', b'7z\xbc\xaf\x27\x1c')) \
-                        or data[257:262] == b'ustar':
-                    raise ValueError('binary')
-            except (UnicodeError, ValueError):
-                error(path, 'unsupported-text-or-binary')
-                continue
-            try:
-                if sanitized_xml(text, environment=environment) != text:
-                    findings.append({'path': entry['path'], 'rule': 'redaction-required'})
-            except (ValueError, RecursionError, OverflowError):
-                error(path, 'redaction-failed')
+                if retain_root is not None:
+                    retain_root(directory)
+                scan_directory(directory, root, flags)
+            finally:
+                os.close(directory)
         if not files and not errors:
-            errors.append({'path': '.', 'rule': 'empty-evidence'})
+            error(root, 'empty-evidence')
 
     files.sort(key=lambda entry: (entry['path'], entry['sha256']))
     findings.sort(key=lambda entry: (entry['path'], entry['rule']))
@@ -120,6 +161,28 @@ def scan(root, *, environment=None, receipt=None):
     }
 
 
+def write_packet_receipt(packet, directory, relative, output):
+    flags = os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW
+    if '..' in relative.parts or not relative.name:
+        raise OSError('Invalid packet receipt path')
+    with ExitStack() as handles:
+        current = open_root(packet, flags)
+        handles.callback(os.close, current)
+        if not os.path.samestat(os.fstat(current), os.fstat(directory)):
+            raise OSError('Packet directory changed during scanning')
+        for component in relative.parts[:-1]:
+            try:
+                os.mkdir(component, dir_fd=directory)
+            except FileExistsError:
+                pass
+            directory = os.open(component, flags, dir_fd=directory)
+            handles.callback(os.close, directory)
+        descriptor = os.open(relative.name, os.O_WRONLY | os.O_CREAT | os.O_EXCL | os.O_NOFOLLOW,
+                             mode=0o666, dir_fd=directory)
+        with os.fdopen(descriptor, 'w', encoding='utf-8', newline='\n') as destination:
+            destination.write(output)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('evidence', type=Path, help='Complete evidence packet directory')
@@ -128,15 +191,28 @@ def main():
     if args.receipt.exists() or args.receipt.is_symlink():
         print('Secret scan refused: receipt destination must be new.', file=sys.stderr)
         return 2
-    report = scan(args.evidence, receipt=args.receipt)
-    output = json.dumps(report, sort_keys=True, indent=2) + '\n'
-    try:
-        args.receipt.parent.mkdir(parents=True, exist_ok=True)
-        with args.receipt.open('x', encoding='utf-8', newline='\n') as destination:
-            destination.write(output)
-    except OSError:
-        print('Secret scan failed: receipt could not be written.', file=sys.stderr)
-        return 2
+    packet, receipt = args.evidence.absolute(), args.receipt.absolute()
+    in_packet = receipt.is_relative_to(packet)
+    with ExitStack() as handles:
+        scanned_directory = None
+
+        def retain(directory):
+            nonlocal scanned_directory
+            scanned_directory = os.dup(directory)
+            handles.callback(os.close, scanned_directory)
+
+        report = scan(packet, receipt=receipt, retain_root=retain if in_packet else None)
+        output = json.dumps(report, sort_keys=True, indent=2) + '\n'
+        try:
+            if scanned_directory is not None:
+                write_packet_receipt(packet, scanned_directory, receipt.relative_to(packet), output)
+            else:
+                receipt.parent.mkdir(parents=True, exist_ok=True)
+                with receipt.open('x', encoding='utf-8', newline='\n') as destination:
+                    destination.write(output)
+        except OSError:
+            print('Secret scan failed: receipt could not be written.', file=sys.stderr)
+            return 2
     sys.stdout.write(output)
     return report['exitCode']
 

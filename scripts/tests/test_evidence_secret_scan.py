@@ -2,6 +2,7 @@
 
 import hashlib
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
@@ -203,6 +204,7 @@ class EvidenceSecretScanTests(unittest.TestCase):
 
     def test_unreadable_file_and_directory_are_errors_not_clean_omissions(self):
         (self.packet / 'capture').write_text('safe')
+        (self.packet / 'unreadable-directory').mkdir()
         original = SCANNER.os.open
         def refuse(path, *args, **kwargs):
             if Path(path).name == 'capture':
@@ -212,13 +214,77 @@ class EvidenceSecretScanTests(unittest.TestCase):
             report = SCANNER.scan(self.packet, environment={})
         self.assertEqual(2, report['exitCode'])
         self.assertEqual([{'path': 'capture', 'rule': 'file-unreadable'}], report['errors'])
-        def inaccessible(*args, onerror, **kwargs):
-            onerror(PermissionError(13, 'private failure', str(self.packet / 'unreadable-directory')))
-            return iter([])
-        with patch.object(SCANNER.os, 'walk', side_effect=inaccessible):
+        def inaccessible(path, *args, **kwargs):
+            if path == 'unreadable-directory':
+                raise PermissionError(13, 'private failure', path)
+            return original(path, *args, **kwargs)
+        with patch.object(SCANNER.os, 'open', side_effect=inaccessible):
             report = SCANNER.scan(self.packet, environment={})
-        self.assertEqual([{'path': 'unreadable-directory', 'rule': 'directory-unreadable'}], report['errors'])
         self.assertEqual(2, report['exitCode'])
+        self.assertEqual([{'path': 'unreadable-directory', 'rule': 'directory-unreadable'}], report['errors'])
+
+    def test_directory_replaced_before_open_is_refused(self):
+        outside = self.root / 'outside'
+        outside.mkdir()
+        (outside / 'subdirectory').mkdir()
+        (outside / 'subdirectory' / 'capture').write_text('outside packet')
+        original = SCANNER.os.open
+        for component, target, rule, error_path in (
+                ('packet', outside, 'root-path-not-canonical', '.'),
+                ('subdirectory', outside / 'subdirectory', 'directory-unreadable', 'subdirectory')):
+            with self.subTest(component=component):
+                nested = self.packet / 'subdirectory'
+                nested.mkdir(exist_ok=True)
+                changed = self.packet if component == 'packet' else nested
+                saved = self.root / 'saved'
+
+                def replace(path, *args, **kwargs):
+                    if path == component:
+                        changed.rename(saved)
+                        changed.symlink_to(target, target_is_directory=True)
+                    return original(path, *args, **kwargs)
+
+                with patch.object(SCANNER.os, 'open', side_effect=replace):
+                    report = SCANNER.scan(self.packet, environment={})
+                self.assertEqual((2, [], [{'path': error_path, 'rule': rule}]),
+                                 (report['exitCode'], report['files'], report['errors']))
+                changed.unlink()
+                saved.rename(changed)
+
+    def test_file_reads_remain_relative_to_the_opened_directory(self):
+        nested = self.packet / 'nested'
+        nested.mkdir()
+        (nested / 'capture').write_bytes(b'original bytes')
+        outside = self.root / 'outside'
+        outside.mkdir()
+        (outside / 'capture').write_bytes(b'different bytes')
+        original = SCANNER.os.open
+
+        def replace(path, *args, **kwargs):
+            if path == 'capture':
+                nested.rename(self.root / 'saved')
+                nested.symlink_to(outside, target_is_directory=True)
+            return original(path, *args, **kwargs)
+
+        with patch.object(SCANNER.os, 'open', side_effect=replace):
+            report = SCANNER.scan(self.packet, environment={})
+        self.assertEqual(0, report['exitCode'])
+        self.assertEqual([{'path': 'nested/capture', 'bytes': 14,
+                           'sha256': hashlib.sha256(b'original bytes').hexdigest()}], report['files'])
+
+    @unittest.skipUnless(hasattr(os, 'O_PATH') or hasattr(os, 'O_SEARCH'), 'search-only directory handles are required')
+    def test_ancestor_requires_only_search_permission(self):
+        ancestor = self.root / 'search-only'
+        ancestor.mkdir()
+        packet = ancestor / 'packet'
+        packet.mkdir()
+        (packet / 'capture').write_text('safe')
+        ancestor.chmod(0o100)
+        try:
+            report = SCANNER.scan(packet, environment={})
+        finally:
+            ancestor.chmod(0o700)
+        self.assertEqual((0, ['capture']), (report['exitCode'], [item['path'] for item in report['files']]))
 
     def test_receipt_inside_packet_is_explicitly_excluded_and_must_be_new(self):
         (self.packet / 'capture').write_text('safe')
@@ -232,6 +298,28 @@ class EvidenceSecretScanTests(unittest.TestCase):
         self.assertEqual((2, '', 'Secret scan refused: receipt destination must be new.\n'),
                          (refused.returncode, refused.stdout, refused.stderr))
         self.assertEqual(original, (self.packet / 'secret-scan.json').read_bytes())
+
+    def test_receipt_cannot_attest_to_a_replacement_packet(self):
+        (self.packet / 'capture').write_text('reviewed bytes')
+        saved = self.root / 'saved'
+        receipt = self.packet / 'scan.json'
+        original = SCANNER.os.open
+
+        def replace(path, *args, **kwargs):
+            if path == 'capture':
+                self.packet.rename(saved)
+                self.packet.mkdir()
+                (self.packet / 'capture').write_text('unreviewed bytes')
+            return original(path, *args, **kwargs)
+
+        with patch.object(SCANNER.os, 'open', side_effect=replace), \
+                patch.object(sys, 'argv', ['scan-evidence-secrets.py', str(self.packet), '--receipt', str(receipt)]), \
+                patch.object(sys, 'stdout', new_callable=io.StringIO) as stdout, \
+                patch.object(sys, 'stderr', new_callable=io.StringIO) as stderr:
+            self.assertEqual(2, SCANNER.main())
+        self.assertEqual('', stdout.getvalue())
+        self.assertEqual('Secret scan failed: receipt could not be written.\n', stderr.getvalue())
+        self.assertFalse(receipt.exists())
 
     def test_redaction_failure_cannot_report_clean(self):
         (self.packet / 'capture').write_text('safe')
