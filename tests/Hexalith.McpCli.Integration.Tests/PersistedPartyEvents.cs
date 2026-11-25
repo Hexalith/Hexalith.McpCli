@@ -9,7 +9,7 @@ internal static class PersistedPartyEvents
     /// <summary>Requires exactly one durable deactivation event and returns its sequence.</summary>
     internal static async Task<long> RequireOneDeactivationAsync(HttpClient http, string tenant, string party, CancellationToken cancellationToken)
     {
-        IReadOnlyList<(long Sequence, string Type)> events = await ReadAsync(http, tenant, party, cancellationToken);
+        var events = await ReadEventTypesAsync(http, tenant, party, cancellationToken);
         Assert.NotEmpty(events);
         return Assert.Single(events, item => item.Type.EndsWith("PartyDeactivated", StringComparison.Ordinal)).Sequence;
     }
@@ -17,9 +17,27 @@ internal static class PersistedPartyEvents
     /// <summary>Refuses any creation effect; a rejection-only stream is not an existing business party (ledger item 556).</summary>
     internal static async Task RequireNoPartyCreatedAsync(HttpClient http, string tenant, string party, CancellationToken cancellationToken)
     {
-        IReadOnlyList<(long Sequence, string Type)> events = await ReadAsync(http, tenant, party, cancellationToken);
+        var events = await ReadEventTypesAsync(http, tenant, party, cancellationToken);
         Assert.DoesNotContain(events, item => item.Type.EndsWith("PartyCreated", StringComparison.Ordinal));
         Assert.DoesNotContain(events, item => item.Type.EndsWith("PartyDeactivated", StringComparison.Ordinal));
+    }
+
+    /// <summary>Checks that the accepted creation persisted the authenticated principal in its event envelope.</summary>
+    internal static async Task RequireCreationActorAsync(HttpClient http, string tenant, string party,
+        string correlationId, string authenticatedSubject, CancellationToken cancellationToken)
+    {
+        var events = await ReadAsync(http, tenant, party, static (_, envelope) =>
+        {
+            string type = Property(envelope, "eventTypeName").GetString()!;
+            return type.EndsWith("PartyCreated", StringComparison.Ordinal)
+                ? (Created: true, CorrelationId: OptionalStringProperty(envelope, "correlationId"),
+                    UserId: OptionalStringProperty(envelope, "userId"))
+                : (Created: false, CorrelationId: null, UserId: null);
+        }, cancellationToken);
+        var created = Assert.Single(events, item => item.Created);
+        created.CorrelationId.ShouldBe(correlationId);
+        Assert.True(string.Equals(created.UserId, authenticatedSubject, StringComparison.Ordinal),
+            "The persisted creation user must match the synthetic signed subject.");
     }
 
     /// <summary>Reads the committed aggregate event sequence independently of its projection.</summary>
@@ -48,18 +66,24 @@ internal static class PersistedPartyEvents
         return http;
     }
 
-    private static async Task<IReadOnlyList<(long Sequence, string Type)>> ReadAsync(HttpClient http, string tenant, string party, CancellationToken cancellationToken)
+    private static Task<IReadOnlyList<(long Sequence, string Type)>> ReadEventTypesAsync(
+        HttpClient http, string tenant, string party, CancellationToken cancellationToken)
+        => ReadAsync(http, tenant, party,
+            static (sequence, envelope) => (sequence, Property(envelope, "eventTypeName").GetString()!), cancellationToken);
+
+    private static async Task<IReadOnlyList<T>> ReadAsync<T>(HttpClient http, string tenant, string party,
+        Func<long, JsonElement, T> project, CancellationToken cancellationToken)
     {
         string identity = $"{tenant}:party:{party}";
         using JsonDocument? metadata = await ReadStateAsync(http, identity, identity + ":metadata", cancellationToken);
         if (metadata is null) return [];
         long count = Property(metadata.RootElement, "currentSequence").GetInt64();
-        var events = new List<(long Sequence, string Type)>();
+        var events = new List<T>();
         for (long sequence = 1; sequence <= count; sequence++)
         {
             using JsonDocument? envelope = await ReadStateAsync(http, identity, identity + $":events:{sequence}", cancellationToken);
             Assert.NotNull(envelope);
-            events.Add((sequence, Property(envelope.RootElement, "eventTypeName").GetString()!));
+            events.Add(project(sequence, envelope.RootElement));
         }
         return events;
 
@@ -76,4 +100,11 @@ internal static class PersistedPartyEvents
 
     private static JsonElement Property(JsonElement value, string name)
         => value.EnumerateObject().Single(property => property.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
+
+    private static string? OptionalStringProperty(JsonElement value, string name)
+    {
+        JsonElement element = value.EnumerateObject()
+            .SingleOrDefault(property => property.Name.Equals(name, StringComparison.OrdinalIgnoreCase)).Value;
+        return element.ValueKind == JsonValueKind.String ? element.GetString() : null;
+    }
 }

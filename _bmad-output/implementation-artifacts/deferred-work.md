@@ -1008,7 +1008,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
   summary: Prove persisted actor attribution for the configured operator credential, or record an exact-byte owner-approved inventory disposition for the actor-attribution variant.
   owner: Parties maintainer and EventStore Gateway maintainer.
-  status: open; retirement-blocking, retained by the Story 5.4 owner's exact-byte approval (2026-11-09); see `evidence/story-5-4-owner-approval/owner-approval.json`.
+  status: done 2026-11-25
+  resolution: The qualified shared-head boundary verified the persisted signed subject and accepted correlation for independent CLI and MCP creations. See [the focused evidence](spec-5-4-prove-persisted-actor-attribution.md#verification). The historical owner receipt records its original retirement verdict.
   evidence: `tests/Hexalith.McpCli.Integration.Tests/SharedHeadBoundaryTests.cs:154` proves a durable deactivation count, while `tests/Hexalith.McpCli.Integration.Tests/PersistedPartyEvents.cs:51` retains only sequence and event type. No assertion checks the persisted event/audit user against the configured signed principal. `tests/Hexalith.McpCli.Cli.Tests/CliMcpQueryParityTests.cs:37` refuses an undeclared ActorId but establishes no persisted attribution. Legacy `PartiesMcpRequestContext.cs:35` and `McpContextForwardingHandler.cs:16` at inventory revision `493730941329d1bca3b4f6b2f6a67ffe305c2443` obtain and forward user context. Signed tenant-grant refusals alone do not establish this behavior.
 
 - source_spec: `_bmad-output/implementation-artifacts/spec-5-4-prove-shared-head-parity-and-safety.md`
@@ -1650,3 +1651,21 @@ Selection follows recorded severity and ledger order. The seven new implementati
 | Story 5.2 MR1 and Epic 6 | The current epics already apply the adopted AD-23 dispositions. |
 | The PE03/PE05 census classifications, historical inventory wording, Folders K12 successor and builder guards, Projects paging, ChatBot/Memories corrections and the Story 5.11 evidence refresh | They require their recorded architecture, inventory, or exact-byte successor approvals. |
 | CI managed-runtime selection and generated migration release notes | Hexalith.CiCd owns the workflow and release configuration. |
+
+## Six-item follow-up dispositions (2026-11-25)
+
+Two entries had an approved implementation or a locally executable proof. Story
+5.16 superseded the earlier private token entry design blocker. The qualified
+boundary supplied the persisted actor proof for Story 5.4. The original entries
+carry the closures. Sixty-one entries remain open, including partial closures.
+
+| Skipped findings | Dependency or disposition |
+| --- | --- |
+| First-time operator quick-start timing | The approved procedure needs an independent first-time operator. |
+| Tenants bootstrap, authorization, handler and source-test findings, Parties handler and producer checks, EventStore Query diagnostics, and Platform authentication | Their owners control the affected code, qualified source and published artifacts. |
+| AI.Tools commit enforcement | The current pin uses Builds CI for blocking commit validation. The AI.Tools owner controls local hook installation. |
+| FreeBSD and Linux ARM output qualification, CI runtime selection, and generated notes | These need the target runtime or action by Hexalith.CiCd. |
+| Profile tenant and actor clearing, inherited profile identity, uncertain command tracking, Identifier Kind disclosure, and R54-D9 short credentials | These need public contract or redaction policy decisions. A submitted ID alone cannot identify every keyed Gateway command. |
+| Historical paired acceptance and signature checks | Central publication replaced the old workflows. Historical recovery and successor verification belong to their release owners. |
+| Story 5.4 C05 and raw-string parity, Parties restrictions and retirement, Folders gate, FrontComposer labels, and keyed Parties/Tenants vectors | These need an approved fixture or inventory, an owner release, or an approved vector change. |
+| Folders K12, Projects paging, census classifications, historical inventory wording, ChatBot/Memories successors, and the Story 5.11 evidence refresh | These need the approved architecture, owner host and selected data, or exact-byte successors recorded at their entries. |

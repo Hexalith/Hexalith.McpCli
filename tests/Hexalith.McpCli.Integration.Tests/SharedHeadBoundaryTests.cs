@@ -42,14 +42,8 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
         {
             await using var forwarder = new LiveGatewayForwarder(fixture.GatewayEndpoint);
             string profile = Path.Combine(directory, "mcpcli.json");
-            string create = JsonSerializer.Serialize(new { PartyId = Party, Type = "Person",
-                PersonDetails = new { FirstName = "BoundaryPrivateMarker", LastName = "MustNotBeDisclosed" } });
-            HeadResult created = await InvokeAsync(false, true, "parties.create-party", create, "tenant-b", authorizedToken);
-            var creation = forwarder.Responses.ShouldHaveSingleItem();
-            creation.Status.ShouldBe(202);
-            BoundaryHeads.AssertCommandAccepted(created, "parties.create-party", "tenant-b", Party, creation.Request, creation.Body);
-            HeadDiagnostics.AssertGatewayOnly(created, forwarder.Url, "/api/v1/commands", 202, process: true);
-            JsonElement active = await ReadAsync(Party, active: true);
+            JsonElement active = await CreateAndProveActorAsync(mcp: false, Party);
+            _ = await CreateAndProveActorAsync(mcp: true, Party + "-actor-mcp");
             foreach (bool mcp in new[] { false, true })
             foreach (bool command in new[] { false, true })
             {
@@ -160,12 +154,37 @@ public sealed class SharedHeadBoundaryTests(AspireTopologyFixture fixture)
             { result = "passed", identityAuthority = "Gateway checks exact signed tenant grants; administrator bootstrap independently reads persisted membership.", cases = receipts },
                 new JsonSerializerOptions { WriteIndented = true }), cancellation);
 
+            async Task<JsonElement> CreateAndProveActorAsync(bool mcp, string target)
+            {
+                const string sessionActor = "different-session-actor";
+                sessionActor.ShouldNotBe(AspireTopologyFixture.AdministratorId);
+                string payload = JsonSerializer.Serialize(new { PartyId = target, Type = "Person",
+                    PersonDetails = new { FirstName = "BoundaryPrivateMarker", LastName = "MustNotBeDisclosed" } });
+                int before = forwarder.Responses.Count;
+                HeadResult created = await InvokeAsync(mcp, true, "parties.create-party", payload, "tenant-b",
+                    authorizedToken, sessionActor: sessionActor);
+                forwarder.Responses.Count.ShouldBe(before + 1);
+                var creation = forwarder.Responses[^1];
+                creation.Status.ShouldBe(202);
+                BoundaryHeads.AssertCommandAccepted(created, "parties.create-party", "tenant-b", target, creation.Request, creation.Body);
+                HeadDiagnostics.AssertGatewayOnly(created, forwarder.Url, "/api/v1/commands", 202, process: true);
+                JsonElement business = await ReadAsync(target, active: true);
+                using JsonDocument result = JsonDocument.Parse(created.Document);
+                string correlationId = result.RootElement.GetProperty("correlationId").GetString()!;
+                await PersistedPartyEvents.RequireCreationActorAsync(persistedState, "tenant-b", target,
+                    correlationId, AspireTopologyFixture.AdministratorId, cancellation);
+                receipts.Add(new { scenario = "G04-persisted-actor", head = mcp ? "mcp" : "cli",
+                    persistedActorMatchesSignedSubject = true, acceptedCorrelationMatches = true });
+                return business;
+            }
+
             async Task<HeadResult> InvokeAsync(bool mcp, bool command, string operation, string payload, string tenant, string? token,
-                string? perCallTenant = null, bool allowOverride = false)
+                string? perCallTenant = null, bool allowOverride = false, string? sessionActor = null)
             {
                 var environment = new Dictionary<string, string?> { ["EVENTSTORE_URL"] = forwarder.Url, ["EVENTSTORE_TOKEN"] = token };
                 var globals = new List<string> { "--tenant", tenant };
                 if (allowOverride) globals.Add("--allow-tenant-override");
+                if (sessionActor is not null) globals.AddRange(["--actor", sessionActor]);
                 HeadResult result;
                 if (mcp)
                 {

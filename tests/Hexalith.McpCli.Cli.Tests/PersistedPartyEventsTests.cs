@@ -122,6 +122,37 @@ public sealed class PersistedPartyEventsTests
         failure.Message.ShouldStartWith("Assert.DoesNotContain()");
     }
 
+    /// <summary>The actor oracle requires both the signed subject and the accepted correlation in the creation envelope.</summary>
+    [Theory]
+    [InlineData("signed-subject", "accepted-correlation", true)]
+    [InlineData("different-session-actor", "accepted-correlation", false)]
+    [InlineData(null, "accepted-correlation", false)]
+    [InlineData("signed-subject", "other-correlation", false)]
+    [InlineData("signed-subject", null, false)]
+    public async Task CreationActorOracleRequiresSubjectAndCorrelationAsync(string? user, string? correlation, bool expected)
+    {
+        await using var sidecar = new ScriptedGateway(request =>
+        {
+            string path = Uri.UnescapeDataString(request.Path);
+            string body = path.EndsWith(":metadata", StringComparison.Ordinal)
+                ? """{"currentSequence":2}"""
+                : path.EndsWith(":events:1", StringComparison.Ordinal)
+                    ? JsonSerializer.Serialize(new { eventTypeName = "PartyCreated", userId = user, correlationId = correlation })
+                    : """{"eventTypeName":"PartyDisplayNameDerived"}""";
+            return ScriptedGateway.Response(200, "OK", "application/json", body);
+        });
+        using HttpClient client = PersistedPartyEvents.CreateClient(new Uri(sidecar.Url), null);
+        Exception? failure = await Record.ExceptionAsync(() => PersistedPartyEvents.RequireCreationActorAsync(client,
+            "tenant-b", "state-party", "accepted-correlation", "signed-subject", TestContext.Current.CancellationToken));
+        (failure is null).ShouldBe(expected);
+        if (failure is not null)
+        {
+            failure.Message.ShouldContain(correlation == "accepted-correlation" ? "signed subject" : "accepted-correlation");
+        }
+
+        sidecar.Requests.Count.ShouldBe(3);
+    }
+
     private static ScriptedGateway EventStream(string events)
     {
         string[] names = events.Length == 0 ? [] : events.Split(',');
