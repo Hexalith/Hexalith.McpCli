@@ -685,12 +685,15 @@ class AdapterDependencyTests(unittest.TestCase):
         import live_plans
         import zipfile
         from unittest.mock import patch
-        for defect in [None, 'absent-other-os', 'bytes', 'unrestored-asset', 'rid', 'asset-type']:
+        for defect in [None, 'absent-other-os', 'bytes', 'unrestored-asset', 'rid', 'asset-type',
+                       'flat-approved', 'flat-fallback', 'flat-stale', 'flat-stale-beside-nested', 'flat-undeclared']:
             with self.subTest(defect=defect), tempfile.TemporaryDirectory() as directory:
                 host, assets, deps = self.fixture(directory)
                 identity = 'Gateway.Client/1.0.0'
                 target = deps['runtimeTarget']['name']
-                asset = 'runtimes/win/lib/net11.0/Gateway.Client.dll'
+                flat = defect is not None and defect.startswith('flat-')
+                filename = 'Gateway.Helper.dll' if flat else 'Gateway.Client.dll'
+                asset = 'runtimes/win/lib/net11.0/' + filename
                 metadata = {'rid': 'win', 'assetType': 'runtime'}
                 deps['targets'][target][identity]['runtimeTargets'] = {asset: metadata.copy()}
                 assets['targets'][target][identity]['runtimeTargets'] = {} if defect == 'unrestored-asset' else {asset: metadata}
@@ -699,17 +702,35 @@ class AdapterDependencyTests(unittest.TestCase):
                 package = host.parent / 'cache/gateway.client/1.0.0/gateway.client.1.0.0.nupkg'
                 with zipfile.ZipFile(package, 'a') as archive:
                     archive.writestr(asset, b'approved RID assembly')
+                    if flat:
+                        fallback = 'runtimes/unix/lib/net11.0/' + filename
+                        metadata = {'rid': 'unix', 'assetType': 'runtime'}
+                        archive.writestr(fallback, b'approved fallback assembly')
+                        deps['targets'][target][identity]['runtimeTargets'][fallback] = metadata
+                        assets['targets'][target][identity]['runtimeTargets'][fallback] = metadata.copy()
+                if defect == 'flat-undeclared':
+                    del deps['targets'][target][identity]['runtimeTargets']
                 content_hash = base64.b64encode(hashlib.sha512(package.read_bytes()).digest()).decode()
                 assets['libraries'][identity]['sha512'] = content_hash
                 deps['libraries'][identity]['sha512'] = 'sha512-' + content_hash
                 host.with_suffix('.deps.json').write_text(json.dumps(deps))
-                if defect != 'absent-other-os':
+                if defect not in ('absent-other-os', 'flat-approved', 'flat-fallback', 'flat-stale', 'flat-undeclared'):
                     output = host.parent / asset
                     output.parent.mkdir(parents=True)
                     output.write_bytes(b'stale RID assembly' if defect == 'bytes' else b'approved RID assembly')
+                if flat:
+                    flat_bytes = {
+                        'flat-approved': b'approved RID assembly',
+                        'flat-fallback': b'approved fallback assembly',
+                    }.get(defect, b'stale flattened RID assembly')
+                    (host.parent / filename).write_bytes(flat_bytes)
                 with patch.object(live_plans, 'shared_runtime_assemblies', return_value={'System.Runtime.dll'}):
-                    if defect in ('bytes', 'unrestored-asset', 'rid', 'asset-type'):
-                        message = 'private runtime DLL bytes differ' if defect == 'bytes' else 'RID runtime asset differs'
+                    if defect == 'flat-undeclared':
+                        with self.assertRaisesRegex(VectorError, 'present executable RID runtime asset is undeclared'):
+                            live_plans.check_adapter_dependencies(host, assets)
+                    elif defect in ('bytes', 'flat-stale', 'flat-stale-beside-nested', 'unrestored-asset', 'rid', 'asset-type'):
+                        message = ('private runtime DLL bytes differ' if defect in ('bytes', 'flat-stale', 'flat-stale-beside-nested')
+                                   else 'RID runtime asset differs')
                         with self.assertRaisesRegex(VectorError, message):
                             live_plans.check_adapter_dependencies(host, assets)
                     else:

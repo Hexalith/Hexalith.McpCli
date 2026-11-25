@@ -288,14 +288,34 @@ def check_adapter_dependencies(host: Path, assets: dict) -> None:
             # RID-specific runtime assets may legitimately be absent on another OS.
             rid_assets = target.get(identity, {}).get('runtimeTargets', {})
             restored_rid = restored_target.get(identity, {}).get('runtimeTargets', {})
+            ordinary_names = {Path(asset).name for asset in selected}
+            flattened = {}
             for asset, metadata in rid_assets.items():
                 if asset not in restored_rid or any(metadata.get(key) != restored_rid[asset].get(key)
                                                     for key in ('rid', 'assetType')):
                     raise VectorError(f'{host}: executable RID runtime asset differs: {identity}: {asset}')
                 if metadata.get('assetType') == 'runtime' and asset.endswith('.dll'):
                     output = host.parent / asset
-                    if output.is_file() and output.read_bytes() != archive.read(asset):
+                    if output.exists() and (not output.is_file() or output.read_bytes() != archive.read(asset)):
                         raise VectorError(f'{output}: private runtime DLL bytes differ from restored package {identity}')
+                    if output.name not in ordinary_names:
+                        flattened.setdefault(output.name, []).append(asset)
+            for asset, metadata in restored_rid.items():
+                if asset in rid_assets or metadata.get('assetType') != 'runtime' or not asset.endswith('.dll'):
+                    continue
+                output = host.parent / asset
+                if output.exists() or (output.name not in ordinary_names and output.name not in flattened
+                                       and (host.parent / output.name).exists()):
+                    raise VectorError(f'{host}: present executable RID runtime asset is undeclared: {identity}: {asset}')
+            # Several declared RIDs may provide the same basename. A flat, RID-only
+            # copy must match one of those assets even if its nested copy also exists.
+            for filename, candidates in flattened.items():
+                output = host.parent / filename
+                if not output.exists():
+                    continue
+                content = output.read_bytes() if output.is_file() else None
+                if not any(content == archive.read(asset) for asset in candidates):
+                    raise VectorError(f'{output}: private runtime DLL bytes differ from restored package {identity}')
             for asset in selected:
                 output = host.parent / Path(asset).name
                 if not output.exists() and output.name in shared:

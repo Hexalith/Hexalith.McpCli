@@ -732,6 +732,8 @@ status: resolved (2026-11-23) in `spec-close-cli-mcp-execution-deferrals.md`.
 - source_spec: `_bmad-output/implementation-artifacts/spec-4-13-test-every-vector-against-live-gateway-semantics.md`
   summary: RID runtime DLL bytes are compared only when the deps-relative path already exists beside the host, so a flattened copy can skip the check.
   evidence: Unverified (`maybe-false`); medium if true. `tools/live-topology/live_plans.py:283` compares bytes only when `(host.parent / asset).is_file()`. The next loop checks non-RID `runtime` assets by file name. Settle by listing `runtimeTargets` in the built `tests/Hexalith.McpCli.ConformanceHost/bin/Release/net10.0/Hexalith.McpCli.ConformanceHost.deps.json` and checking whether any of those DLLs exist beside the host under a flattened name with bytes that differ from the nupkg. Chunk A review. The ledger had no equivalent entry.
+  status: done 2026-11-25
+  resolution: Preflight byte-checks a flattened RID-only DLL against the hash-verified package’s declared assets for that basename, including when a nested copy is also present. The adapter tests cover approved, alternate-RID and stale flat copies, and verify the actual Release adapter.
 
 ## Deferred from: implementation review of spec-4-14-make-the-live-semantic-lane-blocking-in-ci.md (2026-10-26)
 
