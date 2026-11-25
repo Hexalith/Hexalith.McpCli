@@ -1711,3 +1711,11 @@ failure found during verification adds one open entry, for a total of 53.
   summary: Investigate the intermittent detached-child cleanup assertion in the Linux topology tooling suite.
   evidence: On `b77d79973c5c206a9fb0167015361bf3cb3ba7ec`, `python scripts/product_ci.py linux` reached the 276-case topology suite and failed only `CiHooksTests.test_cancellation_waits_for_real_vector_runner_detached_child_cleanup` in `tools/live-topology/test_ci.py:2928`. The fixture's process-existence check did not raise `ProcessLookupError` after cancellation. The standalone topology suite passed, and the focused test passed under the same product process supervisor. A failing run needs process state and parent identity to distinguish a live descendant from delayed reaping. Preserve the cleanup assertion.
   status: open; intermittent failure reproduced in the full product run only.
+
+## Deferred from: code review of spec-5-11-reconcile-product-claims-and-the-migration-plan.md (2026-11-25)
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-5-11-reconcile-product-claims-and-the-migration-plan.md`
+  summary: Correct the nine ledger statuses dated 2026-12-21, a date after their recording.
+  owner: McpCli maintainer.
+  evidence: `deferred-work.md:259`, `:406`, `:492`, `:646`, `:863`, `:926`, `:971`, `:1094` and `:1355` carry "2026-12-21", as do the headings at `:1689` and `:1708`. The 25 November Story 5.11 code review found them, and Story 5.11 audited entries `bcf011d9603aebe0` and `a03161fe049a33d2` are among them.
+  status: open; pre-existing data from the six-item deferred-work batch.

@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 09-23-2026 07:41
-last_updated: '11-25-2026 22:16'
+last_updated: '11-26-2026 00:44'
 project: mcpcli
 project_key: NOKEY
 tracking_system: file-system
@@ -101,7 +101,7 @@ development_status:
   5-8-refresh-and-re-disposition-the-folders-inventory: done # Code review pass 9 2026-11-16: all four patches applied (label ID-set, artifact/row type and approved-role tests; pass-8 commit citation), 0 deferred, 31 rejected. 103 tests pass in ordinary and synthetic lifecycle workspaces, both completion gates under UTF-8/ASCII, AD-23 and closure audit pass. Approved inventory/receipt/labels unchanged; K12 successor remains an Epic 6 catalog prerequisite; one independent CI runtime-maintenance issue tracked (deferred-work.md:1166). No commit or push.
   5-9-refresh-and-re-disposition-projects-and-frontcomposer-invent: done # Owner-approved packet published at 4fbe3e2; authorized README-only PS03/PS04/PS08/PS09 integration is on both owner main branches. Both completion gates pass; 31 tests cover the final lifecycle. K03/AD-20 and independent retirement gates remain open; no parity or retirement claim.
   5-10-refresh-and-re-disposition-chatbot-and-memories-inventories: done # 2026-11-22: Authorized labels are on ChatBot and Memories main. Prior build passed all 39 Story 5.10 tests. Story 5.11 owns the open ledger reconciliation (3W1).
-  5-11-reconcile-product-claims-and-the-migration-plan: review # 2026-11-22: Owner approved the packet and 65-entry audit for all 13 roles. McpCli inventories and the 28 owner documentation files are on main. AI.Tools merged plan 1.3.0 in PR 3. McpCli pins the merge. AC3 generated release notes remain deferred to CiCd/Builds.
+  5-11-reconcile-product-claims-and-the-migration-plan: in-progress # 2026-11-26: Code review pass 2 of 008d95cc..88fd6347 left 18 patches as action items. Both decisions are resolved: neutral follow-up wording with current-main drift reported, and ea9d3ee's audited status restored. Completion also needs resolutions for the 23 changed audited deferrals. AC3 remains deferred to CiCd/Builds.
   5-12-gate-enrolled-modules-by-operation-shape: done # 2026-11-10 shape-coverage proposal; precedes Story 6.1.
   5-13-restore-the-native-dependency-audit-and-live-ci: backlog
   5-14-restore-the-proprietary-surface-census-gate: backlog
