@@ -36,6 +36,8 @@ TESTS = ROOT / PROJECT / 'bin/Release/net11.0/Hexalith.McpCli.Integration.Tests.
 MODULES = native_cohort.MODULES
 # Published Testing.Integration remains independent of these test-owned launched SDK hosts.
 EVENTSTORE_COHORT = native_cohort.COHORT
+# Source owners select their published Tenants packages and assembly version from this cohort.
+TENANTS_COHORT = native_cohort.TENANT_COHORTS[EVENTSTORE_COHORT]
 NATIVE_SELECTION = ROOT / 'tools/live-topology/native-runtime-current.json'
 PACKAGE_GATEWAY = 'tests/Hexalith.McpCli.EventStoreGateway.TestHost/Hexalith.McpCli.EventStoreGateway.TestHost.csproj'
 MODULE_AUDIT_PROJECTS = (PACKAGE_GATEWAY,
@@ -738,9 +740,15 @@ def prepare(evidence: Path) -> None:
         mcpcli = [item.text for item in own_versions.iter('HexalithMcpCliVersion')]
         if mcpcli != ['3.0.0']:
             raise ValueError('The qualified source catalog requires the exact root McpCli 3.0.0 pin.')
+        tenants = [item.text for item in own_versions.iter('HexalithTenantsVersion')]
+        if tenants != [TENANTS_COHORT]:
+            raise ValueError(f'The qualified source catalog requires the exact root Tenants {TENANTS_COHORT} pin.')
         selections = source_package_versions(own_versions)
         overlay = private / 'source-runtime-packages.props'
         project_xml = ET.Element('Project')
+        # Select the native Tenants cohort before the root catalog applies its newer default.
+        # Both source owners import this overlay, including the SDK's unparameterized builds.
+        ET.SubElement(ET.SubElement(project_xml, 'PropertyGroup'), 'HexalithTenantsVersion').text = TENANTS_COHORT
         ET.SubElement(project_xml, 'Import', {'Project': msbuild_path_literal(catalog)})
         versions = ET.SubElement(project_xml, 'ItemGroup')
         for package, version in selections.items():

@@ -223,7 +223,10 @@ qualified commit; local revisions and nested dependencies are never updated.
 
 All builds and nested preparation processes inherit a fresh task-owned
 `NUGET_PACKAGES`. The actual gateway, domain hosts, separate Parties adapter and
-Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the current root catalog’s published dependency selections. Source hosts and
+Integration.Tests/AppHost are built with the public SDK cohort. Parties uses the current root catalog’s published dependency selections. Before importing
+that catalog, the overlay sets `HexalithTenantsVersion` to the native Tenants **8.0.2** cohort,
+which must equal the root pin. The catalog's newer Tenants default would select packages that
+require EventStore 5.6.0, and Tenants derives its assembly version from the same property. Source hosts and
 the separate adapter use the root McpCli 3.0.0 pin so their Abstractions identity
 matches the AppHost, including later SDK/Aspire rebuilds. The published Tenants **8.0.2** source qualifies EventStore only through **5.3.1**.
 Published Parties **4.0.0** likewise gates `HEXALITH_EVENTSTORE_CATALOG_API` on that

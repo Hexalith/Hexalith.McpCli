@@ -434,7 +434,8 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         (self.root / 'global.json').write_text('{"sdk":{"version":"11.0.100","rollForward":"latestPatch"}}')
         (self.root / '.gitmodules').touch()
         (self.root / 'Directory.Build.props').write_text(
-            '<Project><PropertyGroup><HexalithMcpCliVersion>3.0.0</HexalithMcpCliVersion></PropertyGroup>'
+            '<Project><PropertyGroup><HexalithMcpCliVersion>3.0.0</HexalithMcpCliVersion>'
+            '<HexalithTenantsVersion>8.0.2</HexalithTenantsVersion></PropertyGroup>'
             '<ItemGroup>' + ''.join('<PackageVersion ' + mode + '="' + package + '" Version="' + version + '" />'
                                    for package, (mode, version) in SOURCE_PACKAGE_VERSIONS.items()) + '</ItemGroup></Project>')
         builds = self.root / 'references/Hexalith.Builds'
@@ -719,6 +720,10 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
                       overlay.read_text())
         self.assertEqual([{mode: package, 'Version': version} for package, (mode, version) in SOURCE_PACKAGE_VERSIONS.items()],
                          [row.attrib for row in ET.parse(overlay).getroot().iter('PackageVersion')])
+        overlay_xml = ET.parse(overlay).getroot()
+        self.assertEqual(['PropertyGroup', 'Import', 'ItemGroup'], [child.tag for child in overlay_xml])
+        self.assertEqual([('HexalithTenantsVersion', {}, '8.0.2')],
+                         [(row.tag, row.attrib, row.text) for row in overlay_xml.find('./PropertyGroup')])
         overrides = Path(prepared['privateDirectory']) / 'source-runtime-overrides.targets'
         self.assertIn('Update="Hexalith.McpCli.Abstractions" Version="3.0.0"', overrides.read_text())
         overrides_xml = ET.parse(overrides).getroot()
@@ -1349,6 +1354,17 @@ pathlib.Path(sys.argv[sys.argv.index('--output') + 1]).write_text(json.dumps({'r
         self.assertFalse((self.root / 'runner-gateway-environment.jsonl').exists())
         self.assertEqual('ValueError: ' + error, json.loads((self.evidence / 'ci-live.json').read_text())['error'])
 
+
+    def test_mismatched_root_tenants_pin_refuses_before_source_builds(self):
+        path = self.root / 'Directory.Build.props'
+        path.write_text(path.read_text().replace('>8.0.2<', '>8.1.0<'))
+        result = self.invoke('prepare-ci.sh')
+        self.assertEqual(1, result.returncode)
+        error = 'The qualified source catalog requires the exact root Tenants 8.0.2 pin.'
+        self.assertEqual('Live CI failed: ValueError: ' + error + '\n', result.stderr)
+        self.assertFalse(any(call[0] == 'dotnet' and call[2] in ('restore', 'build') and call[3].startswith('src/')
+                             for call in self.calls()))
+        self.assertEqual('ValueError: ' + error, json.loads((self.evidence / 'preparation.json').read_text())['error'])
 
     def test_mismatched_root_mcpcli_pin_refuses_before_source_builds(self):
         path = self.root / 'Directory.Build.props'
