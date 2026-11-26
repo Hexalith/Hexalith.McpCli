@@ -97,6 +97,19 @@ class ProductControllerTests(unittest.TestCase):
                     product_ci.package_checks(platform_checks=True, expected_os=expected)
                 execute.assert_not_called()
 
+    def test_product_entry_refuses_short_credentials_before_creating_evidence(self):
+        runner_temp = self.root / 'uncreated-runner-temp'
+        credential = 'abc1234'
+        environment = {'PATH': os.environ.get('PATH', ''), 'MCPCLI_LIVE_TOKEN': credential,
+                       'RUNNER_TEMP': str(runner_temp)}
+        result = subprocess.run([sys.executable, str(Path(__file__).resolve().parents[1] / 'product_ci.py'), 'linux'],
+                                env=environment, capture_output=True, text=True, timeout=15)
+        self.assertEqual(1, result.returncode, result.stderr)
+        self.assertEqual('', result.stdout)
+        self.assertIn('Structured evidence requires known environment credentials', result.stderr)
+        self.assertNotIn(credential, result.stderr)
+        self.assertFalse(runner_temp.exists())
+
     def test_linux_discovery_keeps_preparation_immutable_and_binds_its_exact_hash(self):
         original = self.prepared.read_bytes()
         original_hash = product_packages.digest(self.prepared)

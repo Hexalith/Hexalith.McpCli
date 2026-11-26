@@ -203,8 +203,8 @@ elif name == 'git':
         print(('e' if source_mode == 'moved-source' else ('c' if mode == 'wrong-builds-source' else 'b') if pathlib.Path.cwd().name == 'Hexalith.Builds' else 'd' if mode in ('wrong-builds-source', 'dirty-builds-source') else 'a') * 40)
     elif args == ['remote', 'get-url', 'origin']:
         print('https://example.invalid/foreign.git' if source_mode == 'foreign-source' else 'https://github.com/Hexalith/' + pathlib.Path.cwd().name + '.git')
-    elif args[0] == 'show':
-        sys.stdout.buffer.write((pathlib.Path.cwd() / args[1].split(':', 1)[1]).read_bytes())
+    elif args[:2] == ['show', '--end-of-options']:
+        sys.stdout.buffer.write((pathlib.Path.cwd() / args[2].split(':', 1)[1]).read_bytes())
     elif args == ['status', '--porcelain', '--untracked-files=normal', '--ignore-submodules=all']:
         if source_mode == 'dirty-source' or mode == 'dirty-source' and pathlib.Path.cwd().name != 'Hexalith.Builds' or mode == 'dirty-builds-source' and pathlib.Path.cwd().name == 'Hexalith.Builds': print('M  ' + pathlib.Path.cwd().name + '-fixture.txt')
 elif name == 'sudo':

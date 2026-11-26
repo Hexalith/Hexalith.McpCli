@@ -336,7 +336,8 @@ def gateway_package_provenance(source_root: Path | None = None) -> dict:
             raise ValueError('The package configuration snapshot differs from its declared native source provenance.')
         # Source is needed only by actual live qualification. Builds-only conformance
         # compiles and exercises the same required, owned snapshot without a runtime checkout.
-        native = subprocess.check_output(['git', 'show', commit + ':' + original], cwd=source, timeout=10)
+        native = subprocess.check_output(['git', 'show', '--end-of-options', commit + ':' + original],
+                                         cwd=source, timeout=10)
         if native != snapshot:
             raise ValueError('The package configuration snapshot differs from its exact native source blob.')
     deployed = host / 'bin/Release/net11.0/appsettings.gateway.json'

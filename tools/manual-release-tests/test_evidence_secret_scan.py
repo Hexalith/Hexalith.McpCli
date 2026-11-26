@@ -12,7 +12,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 
-SCRIPTS = Path(__file__).resolve().parents[1]
+SCRIPTS = Path(__file__).resolve().parents[2] / 'scripts'
 sys.path.insert(0, str(SCRIPTS))
 SPEC = importlib.util.spec_from_file_location('evidence_secret_scan', SCRIPTS / 'scan-evidence-secrets.py')
 SCANNER = importlib.util.module_from_spec(SPEC)
@@ -131,7 +131,6 @@ class EvidenceSecretScanTests(unittest.TestCase):
         output = self.root / 'disallowed-output'
         root = SCRIPTS.parent
         for command, arguments in (
-            ('scripts/product_ci.py', ['linux']),
             ('scripts/verify-paired-publication.py', ['record-operator', '--output', str(output)]),
             ('tools/proprietary-surfaces/v1/check.py', ['--output', str(output)]),
         ):

@@ -10,7 +10,7 @@ from unittest.mock import patch
 from zipfile import ZipFile
 
 
-SCRIPTS = Path(__file__).resolve().parents[1]
+SCRIPTS = Path(__file__).resolve().parents[2] / 'scripts'
 SPEC = importlib.util.spec_from_file_location('recover_bootstrap', SCRIPTS / 'recover-bootstrap-release.py')
 RECOVERY = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(RECOVERY)

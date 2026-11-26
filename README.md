@@ -90,6 +90,11 @@ The instruction prerequisite for paired publication requires authoritative `main
 
 ## Bootstrap package release
 
+The central Hexalith.CiCd nightly workflow handles current publication. The
+bootstrap recovery, paired acceptance and retained evidence checks below are
+historical procedures. Run their tests from the repository root with
+`python3 -m unittest discover -s tools/manual-release-tests -p 'test_*.py'`.
+
 The independent [Bootstrap package workflow](https://github.com/Hexalith/Hexalith.McpCli/blob/main/.github/workflows/bootstrap-package.yml) restores and builds only Abstractions and its bundled analyzer production projects. It runs the Abstractions and analyzer author-time tests (including synthetic Contracts fixtures), release rejection tests, and a decorated consumer build with a fresh package cache, explicit NuGet configuration and cleared fallback folders. Its deliberately blank description must produce exactly one `MCPCLI001` warning, proving the packaged analyzer loads. This gate needs no decorated upstream module, tool build, Aspire tier, or FR-22 evidence.
 
 [`Hexalith.McpCli.Abstractions`](https://www.nuget.org/packages/Hexalith.McpCli.Abstractions) has no consumer-visible package dependencies. A standalone .NET 11 Contracts consumer pins one verified published version with a single exact reference, for example:
