@@ -1,0 +1,56 @@
+[
+  {
+    "file": "verify_reconciliation.py",
+    "function": "check_successors",
+    "guard": "Compare predecessor bytes to the corresponding baseline blob",
+    "binding": "check_histories compares both predecessor inventories to the immutable baseline before check_successors runs. The amendment receipt also binds each predecessor digest."
+  },
+  {
+    "file": "verify_reconciliation.py",
+    "function": "check_patches",
+    "guard": "Require the scratch target to remain inside the isolated Git repository",
+    "binding": "The earlier active-topic path set matches fixed repository-relative files exactly. Each patch is restricted to its declared file in a newly initialized scratch repository."
+  },
+  {
+    "file": "verify_reconciliation.py",
+    "function": "check_patches",
+    "guard": "Search the patched README for the setup block",
+    "binding": "The earlier exact-byte comparison with corrected_document includes the setup block. The manifest binds the patch and applied SHA-256, and the approved publication binds the manifest."
+  },
+  {
+    "file": "verify_reconciliation.py",
+    "function": "check_patches",
+    "guard": "Count the exact label text in the patched README",
+    "binding": "The earlier exact-byte comparison uses corrected_document, which replaces each label at its unique matching line. The approved publication binds the label register and manifest, and check_delivery still counts labels on current owner main."
+  },
+  {
+    "file": "verify_reconciliation.py",
+    "function": "check_deferrals",
+    "guard": "Revalidate the owner, gate and pending decision of replayed audit entries",
+    "binding": "The preceding exact audit comparison replays the committed ledger and redactor at the immutable inventory publication. The approved publication additionally binds both audit digests."
+  },
+  {
+    "file": "verify_reconciliation.py",
+    "function": "check_prior_delivery.historical_git",
+    "guard": "Revalidate the canonical revision when rewriting an origin/main blob read",
+    "binding": "Story 5.10 check_delivery validates the full owner commit before reading the current README and the full inventory revision before reading current inventory blobs."
+  },
+  {
+    "file": "verify_reconciliation.py",
+    "function": "check_release_notes",
+    "guard": "Require a releaseNotesResolution binding",
+    "binding": "check_assessments requires this same binding before reading completion dates and passes it to check_release_notes."
+  },
+  {
+    "file": "verify_reconciliation.py",
+    "function": "check_inventory_publication",
+    "guard": "Parse the publication date and compare it with the inventory commit date",
+    "binding": "The immutable publication record pins the exact verifiedOn value, and check_delivery pins the full inventory revision. Completion still parses that date and orders it against the completion date."
+  },
+  {
+    "file": "verify_reconciliation.py",
+    "function": "verify",
+    "guard": "Revalidate decision and role coverage on baseline approval receipts",
+    "binding": "The previous check matches the receipts against their exact committed baseline blobs. Story 5.10 also replays its explicit decision and role validation before delivery."
+  }
+]

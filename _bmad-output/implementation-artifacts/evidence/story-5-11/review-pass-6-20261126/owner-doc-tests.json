@@ -1,0 +1,35 @@
+{
+  "workingDirectory": "Disposable git archive of baseRevision with the revised ChatBot follow-up applied and the existing Release test binaries copied from the owner checkout.",
+  "checks": [
+    {
+      "owner": "chatbot",
+      "baseRevision": "794753deb77b636f59f0f94e64ad4fbccdbf13da",
+      "patchSha256": "5db5edb74a3c7790075df6789e59d85b6c3bbbe6de010911d278565dbc4776c8",
+      "testAssemblySha256": "604f5b9dcc6e79044174d02a2d1fc9a7d21abae8b4f6273e8f33e9de4e726017",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.ChatBot.Architecture.Tests/bin/Release/net11.0/Hexalith.ChatBot.Architecture.Tests.dll",
+        "-method",
+        "Hexalith.ChatBot.Architecture.Tests.AiResponseStreamingTransportAdrTests.Architecture_ShouldLinkAcceptedAiResponseStreamingTransportAdrWithCanonicalMapping"
+      ],
+      "exitCode": 0,
+      "stdout": "chatbot-streaming-adr.stdout.txt",
+      "stderr": "chatbot-streaming-adr.stderr.txt"
+    },
+    {
+      "owner": "chatbot",
+      "baseRevision": "794753deb77b636f59f0f94e64ad4fbccdbf13da",
+      "patchSha256": "5db5edb74a3c7790075df6789e59d85b6c3bbbe6de010911d278565dbc4776c8",
+      "testAssemblySha256": "604f5b9dcc6e79044174d02a2d1fc9a7d21abae8b4f6273e8f33e9de4e726017",
+      "command": [
+        "dotnet",
+        "tests/Hexalith.ChatBot.Architecture.Tests/bin/Release/net11.0/Hexalith.ChatBot.Architecture.Tests.dll",
+        "-method",
+        "Hexalith.ChatBot.Architecture.Tests.DomainServiceSdkHostAdoptionAdrTests.ArchitectureD8_ShouldLinkAcceptedAdrAndCanonicalTechnicalEnablerMapping"
+      ],
+      "exitCode": 0,
+      "stdout": "chatbot-host-adoption-adr.stdout.txt",
+      "stderr": "chatbot-host-adoption-adr.stderr.txt"
+    }
+  ]
+}

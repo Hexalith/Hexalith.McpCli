@@ -1,0 +1,293 @@
+{
+  "head": "78a02644dcb67ddec2a0ae1fa3a8cd94a0069931",
+  "checks": [
+    {
+      "name": "delivery",
+      "command": [
+        "/usr/bin/python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "PASS: eight inventory histories; preserved AD-23/predecessors; fourteen labels; nine owner patch sets; scoped deferral accounting\nPASS: decision: approved; approved integration verified\n",
+      "stderr": "reported: eventstore: current main migration text drift: _bmad-output/planning-artifacts/prd.md\n"
+    },
+    {
+      "name": "completion",
+      "command": [
+        "/usr/bin/python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/verify_reconciliation.py",
+        "--approved-completion"
+      ],
+      "exitCode": 1,
+      "expectedExitCode": 1,
+      "stdout": "",
+      "stderr": "reported: eventstore: current main migration text drift: _bmad-output/planning-artifacts/prd.md\nFAIL: AC3 generated release notes remain deferred by the owner\n"
+    },
+    {
+      "name": "ad23",
+      "command": [
+        "/usr/bin/python3",
+        "_bmad-output/implementation-artifacts/evidence/story-5-2/verify_class_map.py"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "PASS: _bmad-output/implementation-artifacts/eventstore-admin-migration-inventory-v1.md: 71 classified rows + 20 non-operation records = 91\nPASS: _bmad-output/implementation-artifacts/technical-tools-migration-inventory-v1.md: 28 classified rows + 40 non-operation records = 68\nPASS: _bmad-output/implementation-artifacts/folders-migration-inventory-v1.md: 103 classified rows + 58 non-operation records = 161\nPASS: _bmad-output/implementation-artifacts/projects-migration-inventory-v1.md: 46 classified rows + 6 non-operation records = 52\nPASS: _bmad-output/implementation-artifacts/frontcomposer-migration-inventory-v1.md: 26 classified rows + 4 non-operation records = 30\nPASS: _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md: 39 classified rows + 9 non-operation records = 48\nPASS: _bmad-output/implementation-artifacts/memories-migration-inventory-v1.md: 39 classified rows + 12 non-operation records = 51\nPASS: _bmad-output/implementation-artifacts/parties-migration-inventory-v1.md: 20 classified rows + 4 non-operation records = 24\nPASS: exact-byte partition verified; effective decision status: adopted; parity remains a separate gate\n",
+      "stderr": ""
+    },
+    {
+      "name": "instruction-sync",
+      "command": [
+        "bash",
+        "scripts/check-agent-instructions-sync.sh"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "diff-check",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "diff",
+        "--check"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "references-index",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "diff",
+        "--cached",
+        "--raw",
+        "--",
+        "references/"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "builds-gitlink",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "ls-tree",
+        "HEAD",
+        "references/Hexalith.Builds"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "160000 commit deccbc3bcf4ed687ecf4d556ebe356fe57148777\treferences/Hexalith.Builds\n",
+      "stderr": ""
+    },
+    {
+      "name": "builds-checkout",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-C",
+        "references/Hexalith.Builds",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "stdout": "deccbc3bcf4ed687ecf4d556ebe356fe57148777\n",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-chatbot",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/chatbot.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "sourceRevision": "794753deb77b636f59f0f94e64ad4fbccdbf13da",
+      "patchSha256": "5db5edb74a3c7790075df6789e59d85b6c3bbbe6de010911d278565dbc4776c8",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-eventstore",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/eventstore.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "sourceRevision": "ed66aef9516a3426a2a66e95c343be2a0d6284dd",
+      "patchSha256": "0d1173c15a08ce6cb9d0d671e83db9a1009c1f86c700ce5fa2fb8be7fc55e90d",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-folders",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/folders.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "sourceRevision": "b9ac1212aa2e65fe10ed50379bb4a04b3cebac77",
+      "patchSha256": "14f81f29ce1b47e5dee36e3c4e19bdf52002d0b5070d35c72cdaf426a1099da2",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-frontcomposer",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/frontcomposer.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "sourceRevision": "937c52d27aacf68318382f25c01efc884b2c145c",
+      "patchSha256": "11ca64e06997822e639aeaf0564b2cfa350c6f3565a905887f4f54d753630d45",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-memories",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/memories.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "sourceRevision": "81928b7e0a1700ac609a7af7c4d748fdd5aaede5",
+      "patchSha256": "3ae9261858501b510d3b1e842ff00612c091c5a83d3968119d718cc75a52e276",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-parties",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/parties.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "sourceRevision": "b4558672ded123e24012a66cf431c1ae9ea081e8",
+      "patchSha256": "d065b2f7fbba3789edd262bdb67ebf47451ee574877e9eaad05ca0cd8f5d3f2e",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-projects",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/projects.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "sourceRevision": "bde8c1d4da66818fbe58fad13ccc7354807aa635",
+      "patchSha256": "816e13ab12c636738ba9a3a27e7da409a104706d9aee4ffb2c68bdc717ccf1f5",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-tenants",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/tenants.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "sourceRevision": "ce3aadd8f2f7c96c67544d4bdc422f6e923a69d0",
+      "patchSha256": "894dca079bcb7d7e74c5e26d54d92ce34c082a9d3fe2ee3bd19e701cae9827f1",
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "owner-main-works",
+      "command": [
+        "git",
+        "-c",
+        "core.commitGraph=false",
+        "-c",
+        "core.whitespace=cr-at-eol",
+        "apply",
+        "--check",
+        "--whitespace=error",
+        "/home/administrator/projects/hexalith/mcpcli/_bmad-output/implementation-artifacts/evidence/story-5-11/owner-doc-follow-up/works.patch"
+      ],
+      "exitCode": 0,
+      "expectedExitCode": 0,
+      "sourceRevision": "2089d01beb98b0bed810f62733e15b9408703a71",
+      "patchSha256": "a5e9ea4e244ff2d62cdb45c954c67740d8ec496e96b5261f8ccad82cee534f4e",
+      "stdout": "",
+      "stderr": ""
+    }
+  ],
+  "verifierSha256": "36a1652dc2f5e4bacf2b9cfa6ff89f7ccf08e19184048ba1845008a7444e708f"
+}

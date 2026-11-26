@@ -1,0 +1,52 @@
+{
+  "checks": [
+    {
+      "name": "guard-removal",
+      "command": [
+        "run-with-temp",
+        "python3",
+        "-B",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/review-pass-6-20261126/sweep_guards.py",
+        "--jobs",
+        "12",
+        "--output",
+        "_bmad-output/implementation-artifacts/evidence/story-5-11/review-pass-6-20261126/guard-removal-result.json"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "stdout": "guard-removal.stdout.txt",
+      "stderr": "guard-removal.stderr.txt",
+      "result": "guard-removal-result.json"
+    },
+    {
+      "name": "live-ledger",
+      "command": [
+        "run-with-temp",
+        "python3",
+        "-B",
+        "-m",
+        "unittest",
+        "-v",
+        "test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_live_ledger_matches_the_22_recorded_deferral_blockers"
+      ],
+      "cwd": "_bmad-output/implementation-artifacts/evidence/story-5-11",
+      "exitCode": 0,
+      "stdout": "retained-deferrals.stdout.txt",
+      "stderr": "retained-deferrals.stderr.txt"
+    },
+    {
+      "name": "historical-node-notes-command",
+      "command": [
+        "run-with-temp",
+        "node",
+        "--test",
+        "scripts/tests/migration-release-notes.test.mjs"
+      ],
+      "cwd": ".",
+      "exitCode": 1,
+      "stdout": "node-notes.stdout.txt",
+      "stderr": "node-notes.stderr.txt",
+      "outcome": "The file was removed in aad8894e on 2026-11-17. No Node release-note test ran."
+    }
+  ]
+}

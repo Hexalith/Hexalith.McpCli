@@ -1,0 +1,6 @@
+test_live_ledger_matches_the_22_recorded_deferral_blockers (test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_live_ledger_matches_the_22_recorded_deferral_blockers) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.426s
+
+OK

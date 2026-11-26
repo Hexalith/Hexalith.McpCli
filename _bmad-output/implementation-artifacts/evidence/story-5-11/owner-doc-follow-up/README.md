@@ -37,7 +37,7 @@ matched the prepared bytes, including the original line endings.
 
 | Patch | Owner main revision | Files | Patch SHA-256 |
 | --- | --- | ---: | --- |
-| [ChatBot](chatbot.patch) | `794753deb77b636f59f0f94e64ad4fbccdbf13da` | 6 | `ec4f1c597d861e043f84980bb36e286df045c70489fd094f3524b606bd16ac83` |
+| [ChatBot](chatbot.patch) | `794753deb77b636f59f0f94e64ad4fbccdbf13da` | 6 | `5db5edb74a3c7790075df6789e59d85b6c3bbbe6de010911d278565dbc4776c8` |
 | [EventStore](eventstore.patch) | `7a42a0f01cfc6cafe6aa2d3e5ef05cbc370b22cb` | 4 | `0d1173c15a08ce6cb9d0d671e83db9a1009c1f86c700ce5fa2fb8be7fc55e90d` |
 | [Folders](folders.patch) | `20b7a0a82d1056030088e7e94cadcc2d416d4f73` | 3 | `14f81f29ce1b47e5dee36e3c4e19bdf52002d0b5070d35c72cdaf426a1099da2` |
 | [FrontComposer](frontcomposer.patch) | `ac145de3bfe5aaf1614cecf0feed7c7b732847ee` | 5 | `11ca64e06997822e639aeaf0564b2cfa350c6f3565a905887f4f54d753630d45` |

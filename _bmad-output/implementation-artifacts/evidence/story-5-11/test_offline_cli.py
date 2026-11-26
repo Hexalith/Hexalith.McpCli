@@ -52,6 +52,10 @@ class OfflineCliTests(unittest.TestCase):
     def test_describe_requires_the_expected_offline_schema_scope_and_availability(self):
         captured = (C.E/'offline-describe.stdout.txt').read_bytes()
         for field,path,value in (('submittable',(),True),
+                                 ('reason',(),'unrelated'),
+                                 ('name',(),'tenants.other'),
+                                 ('kind',(),'command'),
+                                 ('description',(),[]),
                                  ('platformScope',('envelope',),'platform:other'),
                                  ('Unexpected',('schema','properties'),{'type':'string'})):
             with self.subTest(field=field):
@@ -106,6 +110,24 @@ class OfflineCliTests(unittest.TestCase):
                         C.install_tool(['dotnet'],{},root)
                 self.assertEqual((root/'offline-install.stdout.txt').read_bytes(),C.retained(stdout or b''))
                 self.assertEqual((root/'offline-install.stderr.txt').read_bytes(),C.retained(stderr or b''))
+
+    def test_unsuccessful_install_refuses_and_retains_both_streams(self):
+        install = subprocess.CompletedProcess(['dotnet'], 1, b'install started\n', b'package unavailable\n')
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            stdout, stderr = io.StringIO(), io.StringIO()
+            with mock.patch.object(subprocess, 'run', return_value=install) as run, \
+                    contextlib.redirect_stdout(stdout), contextlib.redirect_stderr(stderr):
+                status = C.main(['--output', str(output)])
+            [failed] = output.iterdir()
+            self.assertTrue(failed.name.startswith('failed-'))
+            failure = ('FAIL: Published CLI install failed; see offline-install streams. '
+                       f'Retained evidence in {failed}\n')
+            self.assertEqual((status, stdout.getvalue(), stderr.getvalue()), (1, '', failure))
+            self.assertEqual((failed/'offline-install.stdout.txt').read_bytes(), install.stdout)
+            self.assertEqual((failed/'offline-install.stderr.txt').read_bytes(), install.stderr)
+            self.assertFalse((failed/'offline-cli.json').exists())
+            run.assert_called_once()
 
     def test_malformed_stdio_retains_sanitized_captures_of_both_streams(self):
         sensitive=b'Bear'+b'er '+b'x'*40

@@ -420,8 +420,9 @@ reported the same drift and refused because AC3 remains deferred.
 [Owner documentation tests and commands](review-pass-4-20261126/owner-doc-tests.json) ·
 [Delivery, completion and policy check manifest](review-pass-4-20261126/parent-checks.json)
 
-The Node release-notes command exercised no tests. The test file was removed
-when AC3 moved to CiCd/Builds on 19 November.
+The Node release-notes command exercised no tests. Commit `aad8894e` removed
+the test file on 17 November 2026. The owner deferred AC3 to CiCd/Builds on
+19 November 2026.
 [Deferral `77748cf5a6cb9421`](../../deferred-work.md#deferred-from-code-review-of-spec-5-11-reconcile-product-claims-and-the-migration-planmd-2026-11-19)
 
 The shared secret scan passed for the changed evidence and edited ledger and
@@ -494,12 +495,43 @@ All nine follow-ups passed the apply check on the local owner main snapshots.
 The built CLI help confirmed `--transport stdio` and `--actor`. Adopted AD-23,
 instruction sync and the story diff check passed. The delivery verifier
 confirmed the approved integration and reported EventStore PRD drift. The
-completion verifier refused on the deferred AC3 release notes. A separate
-ledger check found 22 changed audited entries and zero separate resolutions.
+completion verifier refused on the deferred AC3 release notes. The live-ledger
+regression test introduced in pass 6 confirms 22 changed audited entries and
+zero separate resolutions against the approved audit and the table above.
 [Delivery and policy checks](review-pass-5-20261126/parent-checks.json)
+[Live-ledger test run](review-pass-6-20261126/retained-deferrals.stderr.txt)
 
 The secret scan passed for the changed evidence and edited sprint-status lines.
 The full sprint-status file still contains the same redaction spans as the
 starting revision.
 [Changed evidence scan](review-pass-5-20261126/secret-scan.json) ·
 [Full-file scan](review-pass-5-20261126/full-file-secret-scan.json)
+
+### Pass-6 verification on 26 November 2026
+
+All 94 focused tests passed. The first complete sweep found one undetected
+removal in the working-tree instruction comparison. A fixture now changes
+the working-tree read of `CLAUDE.md` and asserts the exact refusal. The final
+sweep detected every one of the 229 `require` and ancestry statement removals.
+Its result binds the runner, source and test hashes and identifies the coverage
+that allowed nine redundant checks to be removed.
+[Runner](review-pass-6-20261126/sweep_guards.py) ·
+[Guard results](review-pass-6-20261126/guard-removal-result.json) ·
+[Focused commands and streams](review-pass-6-20261126/focused-checks.json)
+
+The live-ledger test confirmed the 22 changed audit entries listed above and
+zero separate owner resolutions. Both ChatBot documentation tests passed
+after the revised patch. All nine follow-ups applied to the locally observed
+owner main revisions. Adopted AD-23 and instruction sync passed. The Builds
+checkout and recorded root gitlink both resolve to `deccbc3b`, and the reference
+index diff is empty.
+[Live-ledger test](review-pass-6-20261126/retained-deferrals.stderr.txt) ·
+[Owner documentation tests](review-pass-6-20261126/owner-doc-tests.json) ·
+[Delivery and policy checks](review-pass-6-20261126/parent-checks.json)
+
+The default verifier reported EventStore PRD drift and verified the approved
+delivery. The explicit completion check refused the deferred AC3 release notes.
+Completion also awaits approval and integration of the nine owner follow-ups,
+22 separate owner resolutions and reassessment of SM-3 on the completion date.
+[Current blockers](integration.json) ·
+[Changed evidence scan](review-pass-6-20261126/secret-scan.json)

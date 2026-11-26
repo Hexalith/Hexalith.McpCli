@@ -1,0 +1,2822 @@
+{
+  "schemaVersion": "1.0.0",
+  "baselineTests": 94,
+  "sourceSha256": {
+    "verify_reconciliation.py": "36a1652dc2f5e4bacf2b9cfa6ff89f7ccf08e19184048ba1845008a7444e708f",
+    "check_offline_cli.py": "1464b8dd8cf1dca624a6af4594ec7e130ad176bbe11ab6f5517c2d2d3dc7f3cf"
+  },
+  "testSha256": {
+    "test_verify_reconciliation.py": "c00ec2580169e8ee54d6dbd1d17080a76ec0600a9b8dfb185ddd9bf5a24713e1",
+    "test_offline_cli.py": "b531732dea048724e0762743affe906e6bc4e8223564deba4cd08e0fe4a1f069"
+  },
+  "runnerSha256": "c7fa99564e82907345db3d1000720b1a0a782df2fd5194e88371a34b39c9f614",
+  "targets": 229,
+  "removedGuards": [
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_successors",
+      "guard": "Compare predecessor bytes to the corresponding baseline blob",
+      "binding": "check_histories compares both predecessor inventories to the immutable baseline before check_successors runs. The amendment receipt also binds each predecessor digest."
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "guard": "Require the scratch target to remain inside the isolated Git repository",
+      "binding": "The earlier active-topic path set matches fixed repository-relative files exactly. Each patch is restricted to its declared file in a newly initialized scratch repository."
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "guard": "Search the patched README for the setup block",
+      "binding": "The earlier exact-byte comparison with corrected_document includes the setup block. The manifest binds the patch and applied SHA-256, and the approved publication binds the manifest."
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "guard": "Count the exact label text in the patched README",
+      "binding": "The earlier exact-byte comparison uses corrected_document, which replaces each label at its unique matching line. The approved publication binds the label register and manifest, and check_delivery still counts labels on current owner main."
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_deferrals",
+      "guard": "Revalidate the owner, gate and pending decision of replayed audit entries",
+      "binding": "The preceding exact audit comparison replays the committed ledger and redactor at the immutable inventory publication. The approved publication additionally binds both audit digests."
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_prior_delivery.historical_git",
+      "guard": "Revalidate the canonical revision when rewriting an origin/main blob read",
+      "binding": "Story 5.10 check_delivery validates the full owner commit before reading the current README and the full inventory revision before reading current inventory blobs."
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_notes",
+      "guard": "Require a releaseNotesResolution binding",
+      "binding": "check_assessments requires this same binding before reading completion dates and passes it to check_release_notes."
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_inventory_publication",
+      "guard": "Parse the publication date and compare it with the inventory commit date",
+      "binding": "The immutable publication record pins the exact verifiedOn value, and check_delivery pins the full inventory revision. Completion still parses that date and orders it against the completion date."
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "verify",
+      "guard": "Revalidate decision and role coverage on baseline approval receipts",
+      "binding": "The previous check matches the receipts against their exact committed baseline blobs. Story 5.10 also replays its explicit decision and role validation before delivery."
+    }
+  ],
+  "results": [
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 37,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_cli_refuses_bad_status_discovery_streams_and_help (name='modules', status=2, stdout=b'{\\n  \"modules\": [\\n    {\\n      \"name\": \"pa', stderr=b'')"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 39,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_captured_published_discovery_and_complete_unknown_streams"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 41,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_cli_refuses_bad_status_discovery_streams_and_help (name='modules', status=0, stdout=b'{\\n  \"modules\": [\\n    {\\n      \"name\": \"pa', stderr=b'unexpected diagnostic\\n')"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 43,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_cli_refuses_bad_status_discovery_streams_and_help (name='modules', status=0, stdout=b'{\"modules\": [{\"name\": \"parties\", \"descri', stderr=b'')"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 46,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_nonobject_discovery_payloads_retain_failed_run_evidence (name='modules', field='modules', value=[1, 2])"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 48,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_captured_published_discovery_and_complete_unknown_streams"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 54,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_nonobject_discovery_payloads_retain_failed_run_evidence (name='tenants', field='operations', value=[None, None, None, None, None, None, None, None, None, None, None, None, None, None])"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 57,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_nonobject_discovery_payloads_retain_failed_run_evidence (name='tenants', field='operations', value=[{'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}, {'name': {}, 'description': 'fixture'}])"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 64,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_nonobject_discovery_payloads_retain_failed_run_evidence (name='describe', field='schema', value=[])"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 66,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_describe_requires_the_expected_offline_schema_scope_and_availability (field='submittable')"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_probe",
+      "line": 71,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_cli_refuses_bad_status_discovery_streams_and_help (name='mcp-help', status=0, stdout=b'', stderr=b'')"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_tools",
+      "line": 76,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_nonobject_stdio_payloads_retain_failed_run_evidence (message='tools/list result must be a JSON object')"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_tools",
+      "line": 78,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_nonobject_stdio_payloads_retain_failed_run_evidence (message='tools/list tools must be an array of JSON objects')"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "validate_tools",
+      "line": 80,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_exact_tool_names_are_required"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "Responses.receive",
+      "line": 97,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_stdio_rejects_nonobject_responses (line=b'null\\n')"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "Responses.receive",
+      "line": 104,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_stdio_rejects_a_response_larger_than_the_buffer"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "install_tool",
+      "line": 124,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_unsuccessful_install_refuses_and_retains_both_streams"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "discover_stdio",
+      "line": 142,
+      "column": 24,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_nonobject_stdio_payloads_retain_failed_run_evidence (message='initialize result must be a JSON object')"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "discover_stdio",
+      "line": 144,
+      "column": 24,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_stdio_requires_initialize_identity_and_clean_shutdown (protocol='2024-11-05', server={'name': 'hexalith'}, status=0)"
+      ]
+    },
+    {
+      "file": "check_offline_cli.py",
+      "function": "discover_stdio",
+      "line": 155,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_offline_cli.OfflineCliTests.test_stdio_requires_initialize_identity_and_clean_shutdown (protocol='2025-06-18', server={'name': 'hexalith'}, status=3)"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "checked",
+      "line": 45,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_artifact_binding_rejects_missing_and_escaping_paths"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "checked",
+      "line": 47,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_artifact_binding_rejects_missing_and_escaping_paths"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "checked",
+      "line": 49,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_history_missing_duplicate_version_and_hash (message='artifact hash mismatch: _bmad-output/implementation-artifacts/folders-migration-inventory-v1.md')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 54,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_approval_requires_valid_schema_roles_state_and_attribution (field='schemaVersion')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 55,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_guard_removals_are_detected_for_hash_roles_history_labels_and_gates (guard='approval artifact accounting/hash mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 56,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_approval_requires_valid_schema_roles_state_and_attribution (field='requiredApprovalRoles')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 57,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_approval_requires_valid_schema_roles_state_and_attribution (field='decision')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 61,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_approval_requires_valid_schema_roles_state_and_attribution (field='approver')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 62,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_fresh_approval_needs_hashes_roles_words_and_no_pending_claim"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 64,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_guard_removals_are_detected_for_hash_roles_history_labels_and_gates (guard='approval lacks explicitly covered roles')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 65,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_guard_removals_are_detected_for_hash_roles_history_labels_and_gates (guard='approval lacks explicit confirmation of the reviewed roles')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 69,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_guard_removals_are_detected_for_hash_roles_history_labels_and_gates (guard='approval lacks the exact reviewed receipt digest')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 73,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_fresh_approval_needs_hashes_roles_words_and_no_pending_claim"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_approval",
+      "line": 74,
+      "column": 19,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_approval_requires_valid_schema_roles_state_and_attribution"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 79,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_history_missing_duplicate_version_and_hash (message='eight-family history accounting mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 82,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_history_missing_duplicate_version_and_hash (message='folders: missing/duplicate historical version')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 84,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_history_missing_duplicate_version_and_hash (message='folders: version/path history mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 86,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_history_requires_version_repository_status_receipt_and_committed_predecessor (field='declared version')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 88,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_history_missing_duplicate_version_and_hash (message='folders: full source revision binding missing or mismatched')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 89,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_history_requires_version_repository_status_receipt_and_committed_predecessor (field='source repository')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 92,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_history_missing_duplicate_version_and_hash (message='folders: earlier/fresh authority conflated')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 94,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_history_requires_version_repository_status_receipt_and_committed_predecessor (field='authority status')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 96,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_prior_authority_and_own_receipt_are_required"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 99,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_history_requires_version_repository_status_receipt_and_committed_predecessor (field='receipt')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 101,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_historical_receipt_cannot_be_replaced_with_a_matching_new_digest"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_histories",
+      "line": 104,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_history_requires_version_repository_status_receipt_and_committed_predecessor (field='predecessor')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_successors",
+      "line": 112,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_successor_preserves_rows_fields_and_values_beyond_the_derivation"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_successors",
+      "line": 114,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_successor_preserves_rows_fields_and_values_beyond_the_derivation (failure='row accounting mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_successors",
+      "line": 116,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_successor_preserves_rows_fields_and_values_beyond_the_derivation (failure='row fields missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_successors",
+      "line": 121,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_successor_preserves_rows_fields_and_values_beyond_the_derivation (failure='preserved field changed')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_successors",
+      "line": 123,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_fresh_approval_needs_hashes_roles_words_and_no_pending_claim"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 127,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_label_register_requires_state_predecessors_inventory_citations_and_owners (message='unknown label state')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 130,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_label_register_requires_state_predecessors_inventory_citations_and_owners (message='label predecessor path mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 133,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_every_label_and_gate_is_required"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 135,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_guard_removals_are_detected_for_hash_roles_history_labels_and_gates (guard='fourteen-label accounting/duplicate mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 137,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_label_register_requires_state_predecessors_inventory_citations_and_owners (message='label successor inventory hash binding mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 140,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_guard_removals_are_detected_for_hash_roles_history_labels_and_gates (guard='owner/surface/removal gate changed')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 142,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_label_register_requires_state_predecessors_inventory_citations_and_owners (message='PS01: label text/hash/citation mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 146,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_admin_labels_bind_exact_successor_link_and_hash (old='Admin inventory 1.0.3')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 148,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_label_register_requires_state_predecessors_inventory_citations_and_owners"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 150,
+      "column": 48,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_compiler_and_vector_exemptions_remain_retained_never_retired (surface='PS03')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_labels",
+      "line": 151,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_label_register_requires_state_predecessors_inventory_citations_and_owners (message='seven README owner accounting mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "prepared_before",
+      "line": 157,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_sources_bind_snapshot_composition_and_base"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "prepared_before",
+      "line": 165,
+      "column": 14,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_sources_bind_snapshot_composition_and_base"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "prepared_before",
+      "line": 167,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_sources_bind_snapshot_composition_and_base"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "literal_patch",
+      "line": 173,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_sources_bind_snapshot_composition_and_base"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "literal_patch",
+      "line": 176,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_literal_patch_preserves_source_and_refuses_missing_or_duplicate_targets (before=b'missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 183,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_every_active_file_and_no_change_owner_is_accounted"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 184,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_every_active_file_and_no_change_owner_is_accounted"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 187,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_manifest_requires_valid_inspection_and_canonical_owner_base (message='platform: invalid inspection revision')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 192,
+      "column": 8,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_delivery_requires_main_containment_committed_pin_bytes_and_historical_blobs (ancestor='0f6468edbb8efd4e47fb272286cb1bfd5baa3255', descendant='origin/main')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 194,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_unchanged_inspections_bind_reason_and_source_files"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 198,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_manifest_requires_valid_inspection_and_canonical_owner_base (message='eventstore: wrong owning checkout')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 199,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_manifest_requires_valid_inspection_and_canonical_owner_base (message='eventstore: canonical main base missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 201,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_every_active_file_and_no_change_owner_is_accounted"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 209,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_application_reports_each_failed_git_step (subcommand=['init', '--quiet'])"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 216,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_manifest_requires_valid_inspection_and_canonical_owner_base (message='eventstore: empty correction patch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 222,
+      "column": 20,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_unlisted_secondary_patch_target_refused"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 226,
+      "column": 20,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_application_reports_each_failed_git_step (subcommand=['apply', '--check', '-'])"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 228,
+      "column": 20,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_application_reports_each_failed_git_step (subcommand=['apply', '-'])"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 230,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_manifest_requires_valid_inspection_and_canonical_owner_base (message='eventstore: applied patch bytes differ')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 235,
+      "column": 20,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_notice_with_missing_in_place_edit_refuses_even_when_rehashed"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_patches",
+      "line": 237,
+      "column": 40,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_patch_manifest_requires_applied_candidate_bytes"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_deferrals",
+      "line": 252,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_all_deferrals_retain_source_owner_gate_and_acceptance_boundary"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_deferrals",
+      "line": 253,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_all_deferrals_retain_source_owner_gate_and_acceptance_boundary"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_deferrals",
+      "line": 255,
+      "column": 27,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_audit_prose_and_candidate_plan_account_for_every_entry"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_candidate_plan",
+      "line": 260,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_audit_prose_and_candidate_plan_account_for_every_entry (message='prepared plan must expose missing immutable publication binding')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_candidate_plan",
+      "line": 263,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_audit_prose_and_candidate_plan_account_for_every_entry (message='eventstore-admin: prepared plan omits version/path/hash')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_plan_semantics",
+      "line": 278,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_unresolved_conflicts_and_deadline_cannot_disappear_from_plan (token='G01\u2013G06')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_origin",
+      "line": 290,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_each_owner_origin_requires_canonical_github_repository"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_prior_delivery",
+      "line": 299,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels (message='completion requires integrated PS06/PS07/PS12/PS13/PS14 labels')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_prior_delivery",
+      "line": 305,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels (message='historical Story 5.10 owner receipt differs')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_prior_delivery",
+      "line": 310,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels (message='historical Story 5.10 published artifact mismatch: _bmad-output/implementation-artifacts/chatbot-migration-inventory-v1.md')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_prior_delivery",
+      "line": 314,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels (message='historical Story 5.10 predecessor binding mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_prior_delivery",
+      "line": 316,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels (message='historical Story 5.10 owner accounting mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_prior_delivery",
+      "line": 329,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels (message='historical Story 5.10 repository binding mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_prior_delivery",
+      "line": 335,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_real_prior_lifecycle_checks_historical_delivery_with_superseding_current_labels (message='historical Story 5.10 README reconstruction mismatch')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "recorded_date",
+      "line": 348,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_ac3_requires_current_ledger_decision_and_actual_generated_text (message='AC3 owner decision date missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "recorded_date",
+      "line": 351,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='recorded completion date missing or invalid')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "commit_date",
+      "line": 360,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.GuardRefusalTests.test_commit_date_requires_an_offset"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_publication",
+      "line": 368,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_ac3_requires_current_ledger_decision_and_actual_generated_text (message='AC3 requires committed release and generation-run evidence for the tag')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_publication",
+      "line": 372,
+      "column": 4,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_ancestry_from_the_inventory_through_committed_main_evidence (ancestor='1111111111111111111111111111111111111111', descendant='efc7f815937bbe116d410b59ecf15b4b4fb951cc')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_publication",
+      "line": 373,
+      "column": 4,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_ancestry_from_the_inventory_through_committed_main_evidence (ancestor='efc7f815937bbe116d410b59ecf15b4b4fb951cc', descendant='origin/main')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_publication",
+      "line": 378,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_exact_source_workflow_and_committed_published_notes"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_publication",
+      "line": 383,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_published_identity_and_ordered_evidence (field='draft')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_publication",
+      "line": 387,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_published_identity_and_ordered_evidence (mutation={'hosted_mutation': <function CompletionBindingTests.test_release_requires_published_identity_and_ordered_evidence.<locals>.<lambda> at 0x77026a0d56f0>})"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_publication",
+      "line": 390,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_exact_source_workflow_and_committed_published_notes"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_publication",
+      "line": 393,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_exact_source_workflow_and_committed_published_notes"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_publication",
+      "line": 398,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_exact_source_workflow_and_committed_published_notes"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_notes",
+      "line": 404,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_ac3_requires_current_ledger_decision_and_actual_generated_text (message='AC3 resolution lacks an explicit owner decision bound to the approved entry')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_notes",
+      "line": 410,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_ledger_requires_its_owner_and_closed_disposition (change=<function CompletionBindingTests.test_release_ledger_requires_its_owner_and_closed_disposition.<locals>.<lambda> at 0x770269748eb0>)"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_notes",
+      "line": 415,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_ac3_requires_current_ledger_decision_and_actual_generated_text (message='AC3 resolution requires the full release source revision')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_notes",
+      "line": 417,
+      "column": 4,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_ancestry_from_the_inventory_through_committed_main_evidence (ancestor='c6a40c10fd6db19cfce4cb0592f3b82bbb853729', descendant='1111111111111111111111111111111111111111')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_notes",
+      "line": 418,
+      "column": 4,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_release_requires_ancestry_from_the_inventory_through_committed_main_evidence (ancestor='1111111111111111111111111111111111111111', descendant='origin/main')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_notes",
+      "line": 420,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_ac3_requires_current_ledger_decision_and_actual_generated_text (message='AC3 resolution date does not follow release or exceeds completion')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_release_notes",
+      "line": 423,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_ac3_requires_current_ledger_decision_and_actual_generated_text (message='AC3 generated notes omit the committed migration status')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "retained_deferral_changes",
+      "line": 437,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution (change=<function CompletionBindingTests.test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution.<locals>.<lambda> at 0x77026a0b0040>)"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retained_deferrals",
+      "line": 448,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.RecordedAuthorityAndLifecycleTests.test_live_ledger_matches_the_22_recorded_deferral_blockers"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retained_deferrals",
+      "line": 450,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution (field='owner')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retained_deferrals",
+      "line": 457,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retained_deferrals",
+      "line": 458,
+      "column": 8,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retained_deferrals",
+      "line": 460,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retained_deferrals",
+      "line": 463,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution (decidedOn='2026-11-21')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retained_deferrals",
+      "line": 466,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_owner_conflicts",
+      "line": 523,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_completion_requires_both_owner_conflicts_to_be_closed"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 528,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 531,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal (verdict='approval')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 538,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 544,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 551,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 554,
+      "column": 4,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal (ancestor='4c7267a9b4cb85bf66b2719347a2002b0ebd677a', descendant='4863f413803b8b789e360900f9fcfa6aca9fb024')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 555,
+      "column": 4,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal (ancestor='4863f413803b8b789e360900f9fcfa6aca9fb024', descendant='origin/main')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 556,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal (scope='Review the exact successor as retirement-ready.')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 563,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal (acceptance='fullLiveAccepted')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 573,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_parties_verdict",
+      "line": 579,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal (snapshot='fixture-manifest.json')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 591,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 593,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal (retirement_field='state')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 595,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 608,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_admin_gates_are_independent_and_pair_is_required_from_both_owners"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 611,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_admin_gates_are_independent_and_pair_is_required_from_both_owners"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 613,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 617,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 622,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 623,
+      "column": 8,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal (ancestor='382407df93d1b7da40cd624f9fe6c46e53f7ec06', descendant='origin/main')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 624,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 626,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 630,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 638,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal (gate_proof='surface')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_retirements",
+      "line": 643,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 648,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='completion requires explicit structured deferral owner decision')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 650,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='deferral decision must bind exact audit bytes')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 652,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='deferral decision must bind the reviewed packet and owner instruction')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 658,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='deferral decision must preserve every unresolved owner/gate')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 661,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_completion_requires_exactly_one_audited_ac3_disposition"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 663,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_open_ac3_boolean_is_no_substitute_for_an_explicit_resolution"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 666,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='recorded completion date is in the future')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 667,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='deferral decision occurs after completion')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 674,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='completion predates approval or verified delivery')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 679,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='structured SM-3 assessment missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 680,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='SM-3 assessment must bind recorded completion date')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 681,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (field='deadline', default=True)"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 683,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='SM-3 outcome/retirement accounting missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 685,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='SM-3 met requires evidenced retirement')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 688,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 690,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_overdue_assessment_requires_a_recorded_owner_reason"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_assessments",
+      "line": 692,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_sm3_requires_the_parties_gates_verdict_and_proof_of_owner_removal"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_published_index",
+      "line": 701,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_delivery_requires_main_containment_committed_pin_bytes_and_historical_blobs"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_published_index",
+      "line": 709,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_delivery_requires_main_containment_committed_pin_bytes_and_historical_blobs"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_published_index",
+      "line": 716,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_published_inventory_receipt_must_approve_the_exact_indexed_digest (decision='pending', digest='ec388eae1b2c17cf1634f7b9b422b50124d2281bd0dfc445bfa11c9ad7a03cc2')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_published_index",
+      "line": 720,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_final_plan_requires_authority_and_capability_outcomes (before='scope-approved-only; session-scope-only:')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_published_index",
+      "line": 724,
+      "column": 16,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_immutable_links_are_verified_inside_each_row"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "rebased_document_hash",
+      "line": 731,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_recorded_projects_rebase_is_verified_by_the_delivery_caller"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "rebased_document_hash",
+      "line": 735,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_recorded_projects_rebase_is_verified_by_the_delivery_caller"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "rebased_document_hash",
+      "line": 738,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_recorded_projects_rebase_is_verified_by_the_delivery_caller"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_footprint",
+      "line": 744,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_content_and_complete_delivery_footprints"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_inventory_publication",
+      "line": 799,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='McpCli publication lacks approved artifact count or receipt digest')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_inventory_publication",
+      "line": 803,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='McpCli publication lacks passing commitlint and story tests')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_inventory_publication",
+      "line": 806,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='McpCli publication checks or scoped Builds exception differ from recorded evidence')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_ai_review",
+      "line": 812,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='AI.Tools final approval must bind the merged review and its exact head')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_ai_review",
+      "line": 819,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='AI.Tools hosted checks do not bind the approved review head')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_ai_review",
+      "line": 824,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_squash_merged_checkout_can_replay_immutable_review_with_pr_head_absent"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_ai_review",
+      "line": 831,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_content_and_complete_delivery_footprints"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_ai_review",
+      "line": 835,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_git_authorization_date_and_ai_tools_link_count_are_independent_of_immutable_record"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 840,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_default_delivery_requires_the_packet_to_be_approved"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 842,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_approved_inventory_is_distinct_from_incomplete_delivery"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 844,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='completion requires separate explicit Git delivery authorization')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 848,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='completion requires separate explicit Git delivery authorization')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 852,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='Git delivery authorization does not bind the approved packet receipt')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 855,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='Git delivery authorization differs from the immutable publication record')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 857,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_git_authorization_date_and_ai_tools_link_count_are_independent_of_immutable_record"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 861,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='completion requires the frozen published inventory revision')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 864,
+      "column": 4,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_delivery_requires_main_containment_committed_pin_bytes_and_historical_blobs (ancestor='c6a40c10fd6db19cfce4cb0592f3b82bbb853729', descendant='origin/main')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 866,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_content_and_complete_delivery_footprints"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 867,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_content_and_complete_delivery_footprints"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 870,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='completion requires every owner integration binding')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 873,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='eventstore: upstream integration missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 876,
+      "column": 8,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_delivery_requires_main_containment_committed_pin_bytes_and_historical_blobs"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 879,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_actual_delivery_and_later_ac3_resolution_run_through_default_entry_point"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 882,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_recorded_projects_rebase_is_verified_by_the_delivery_caller"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 890,
+      "column": 12,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_content_and_complete_delivery_footprints"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 896,
+      "column": 24,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_current_main_reports_migration_drift_and_enforces_visible_labels (replacement=b'- An obsolete Admin recommendation.')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 901,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_content_and_complete_delivery_footprints"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 903,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='completion requires full AI.Tools integration revision')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 905,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='AI.Tools revision differs from actual owner integration')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 907,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='committed root integration revision missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 908,
+      "column": 4,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_delivery_requires_main_containment_committed_pin_bytes_and_historical_blobs (ancestor='eed86f296244454c9c8c27f7c8a55eb308026224', descendant='origin/main')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 911,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_delivery_requires_main_containment_committed_pin_bytes_and_historical_blobs"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 913,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='containing AI.Tools gitlink missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 914,
+      "column": 4,
+      "kind": "ancestry",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_delivery_requires_main_containment_committed_pin_bytes_and_historical_blobs (ancestor='2e591bddc6c951ee8a2018c2bac05755f2f5af00', descendant='2e591bddc6c951ee8a2018c2bac05755f2f5af00')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 919,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_delivery_requires_main_containment_committed_pin_bytes_and_historical_blobs"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 921,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_final_plan_requires_authority_and_capability_outcomes"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 924,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_final_plan_requires_authority_and_capability_outcomes (before=\"inventory_revision: 'c6a40c10fd6db19cfce4cb0592f3b82bbb853729'\")"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 926,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_final_plan_requires_authority_and_capability_outcomes (before='status: approved')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 933,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_final_plan_requires_authority_and_capability_outcomes (before='Version **1.3.0**')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 937,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='final plan exact-byte approval/hash/revision binding missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 938,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (field='exactApprovalInstruction', default=True)"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 939,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='final plan approval lacks covered roles')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 947,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_content_and_complete_delivery_footprints"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 949,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_content_and_complete_delivery_footprints"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "check_delivery",
+      "line": 951,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.CompletionBindingTests.test_mandatory_delivery_bindings (message='passing instruction synchronization binding missing')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "verify",
+      "line": 967,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_adopted_and_prior_authority_bytes_match_baseline_even_when_rehashed (key='authorities')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "verify",
+      "line": 969,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_prior_authority_and_own_receipt_are_required"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "verify",
+      "line": 971,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_prior_authority_and_own_receipt_are_required"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "verify",
+      "line": 974,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_adopted_and_prior_authority_bytes_match_baseline_even_when_rehashed (key='priorApprovals')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "verify",
+      "line": 979,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_story_510_requires_the_exact_approval_labels_and_delivery_binding (binding='labels binding')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "verify",
+      "line": 981,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_story_510_requires_the_exact_approval_labels_and_delivery_binding (binding='delivery binding')"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "verify",
+      "line": 1000,
+      "column": 4,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_unknown_integration_state_is_refused_in_both_modes (completion=False)"
+      ]
+    },
+    {
+      "file": "verify_reconciliation.py",
+      "function": "verify",
+      "line": 1003,
+      "column": 8,
+      "kind": "require",
+      "status": "killed",
+      "testsRun": 1,
+      "failures": [
+        "test_verify_reconciliation.ReconciliationTests.test_every_label_and_gate_is_required"
+      ]
+    }
+  ],
+  "killed": 229,
+  "survived": 0
+}
