@@ -2,7 +2,7 @@
 title: '5.11 Reconcile product claims and the migration plan'
 type: 'chore'
 created: '2026-11-16'
-status: 'in-review'
+status: 'in-progress'
 route: 'dispatch'
 review_loop_iteration: 1
 baseline_commit: '008d95ccc77d932a372cb6c749d9d1fb1bc1ea57'
@@ -525,3 +525,75 @@ evidence for AC3. [Verification evidence](evidence/story-5-11/verification.md#pa
 - **Low · A NuGet.Config feed could supply 2.0.1 (edge).** Rejected in passes 2 and 3.
 - **False · Removing "historical acceptance record" from F7 invites sweeps to reopen it (edge).** Pass-2 decision 2 (option 2) restored the open gate deliberately.
 - **Low · The 3.0.0 stdio record's stream hashes have no retained files (verification-gap).** Pass 3 rejected the record's missing generator and per-record hashes as low.
+
+## Code review pass 5 on 26 November 2026
+
+### Review Findings
+
+**Changes requested.** Four reviewers examined the full deliverables diff
+`008d95cc..4e13fbe3` (7,560 lines, 97 files). It covers the pass-4 set plus
+the `review-pass-4-20261126/` receipts, the `offline-runs/run-g777xqtd/`
+capture and the story's two ledger hunks (F7 and the `:189` audit line). At
+`4e13fbe3` all 73 reconciliation and offline-probe tests passed (46.9 s). The
+default verifier exited 0 and reported EventStore PRD drift.
+`--approved-completion` exited 1 with
+`FAIL: AC3 generated release notes remain deferred by the owner`. CI run
+45797258656 on `4e13fbe3` was still running, and the `d4fcb4ee` and
+`4d5bcf08` runs had failed. The four layers returned 55 findings: no decisions,
+11 patches covering 12 findings, no deferrals and 43 rejections.
+
+- [ ] [Review][Patch] **Medium · Stop the ChatBot follow-up from saying the Gateway authorizes the session actor.** The patched `cli-automation-client` row says "The EventStore Gateway authorizes actor, tenant and operation". McpCli's `--actor` is a "Trusted operator actor" value that the caller supplies (`src/Hexalith.McpCli/Cli/GlobalOptionsBinding.cs:13`). The Gateway checks the cataloged operation, the credential and the required permission (`README.md:564`). The Projects follow-up in the same packet keeps "actor attribution and independent Gateway authorization remain separate". The clause came from the pass-4 decision text. Keep the decision's class mapping. Say that the Gateway authorizes the credential, tenant and operation, and that the session actor provides attribution. Refresh the patch SHA-256 and rerun the replay. [`evidence/story-5-11/owner-doc-follow-up/chatbot.patch:92`]
+- [ ] [Review][Patch] **Medium · Finish the ChatBot epics follow-up outside the Epic 5 acceptance criteria.** With `chatbot.patch` applied to `794753de`, `epics.md:560` still reads "FR82: Epic 5 — Deliver CLI parity for the singular M1 set". The patched FR82 (`:141`) limits access to the agent-eligible set. Story 7.11 (`:4479`, Epic 7, in ChatBot's backlog) still adds `mcp-human-delegated-client` to M1, a class the patched PRD registry withdraws. The `:30` banner covers only Epic 5. The Epic 5 overview (`:632`, `:636`) still models human-delegated MCP as a distinct identity. Following pass-4 decision 1, patch the `:560` coverage line to match FR82. Add its stale phrase to `check_owner_conflicts` with a refusal subtest. In `owner-doc-follow-up/README.md:14-17`, list Story 7.11 at `:4479` beside `:1609` and `:5686`, and say that the Epic 5 overview at `:632-636` stays under the banner. Refresh the patch SHA-256 and rerun the replay. [`evidence/story-5-11/owner-doc-follow-up/chatbot.patch`]
+- [ ] [Review][Patch] **Medium · Date each separate deferral resolution decision.** The pass-4 cutoff checks only that the resolution's ledger revision is committed by `completedOn` (`verify_reconciliation.py:461-465`). The resolution record has no decision date, so an owner "approve" given after the recorded completion still passes. The AC3 resolution already requires `commit_date(released) <= decidedOn <= completed` (`:429-430`). Require the same ordering for a `decidedOn` field in each deferral resolution. Add missing-date and late-date cases to `test_changed_deferral_requires_a_unique_entry_and_a_committed_owner_resolution`. [`evidence/story-5-11/verify_reconciliation.py:461`]
+- [ ] [Review][Patch] **Medium · Test the SM-3 retirement receipt guards.** Removing the state and authority check (`verify_reconciliation.py:593`) or the deadline check (`:617`) leaves all 73 tests green. Every fixture uses `state:'retired'` and `retiredOn:'2026-11-22'` (`test_verify_reconciliation.py:1161`, `:1298`). The duplicate-receipt (`:591`), removal-revision (`:622`, `:624`) and empty-result (`:643`) guards never fail in the suite. Add refusal cases with their exact messages, including a `retiredOn` after 2027-02-05 or after `completedOn`, and `state:'planned'`. [`evidence/story-5-11/verify_reconciliation.py:593`]
+- [ ] [Review][Patch] **Medium · Test the Parties successor verdict guards.** Removing the acceptance-evidence check (`verify_reconciliation.py:563`) or the approval-scope and ordering check (`:556`) leaves all tests green. `complete_fixture` always writes `fullLiveAccepted` and `fullV1Accepted` as true, with a clean scan and an approving scope. Its git fixture returns the same bytes for every revision, so the snapshot-byte check (`:579`) cannot fail, and the verdict-date check (`:538`) never fails. Add variants for unaccepted evidence, a scan with findings, a `retirement-blocked` scope and differing committed snapshot bytes. [`evidence/story-5-11/verify_reconciliation.py:563`]
+- [ ] [Review][Patch] **Medium · Test the final-plan approval instruction and `inventory_revision` guards.** Removing `verify_reconciliation.py:940` leaves all tests green, so a re-bound approval whose `exactApprovalInstruction` is "I do not approve" verifies in both modes. The `inventory_revision:` check (`:926`) never fails. Add `test_mandatory_delivery_bindings` cases for the instruction and the source, plus a `plan_mutation` for the `inventory_revision` line. [`evidence/story-5-11/verify_reconciliation.py:940`]
+- [ ] [Review][Patch] **Medium · Test the main-containment checks for future completion evidence.** Removing the ancestry calls at `verify_reconciliation.py:427` (release after the published inventory), `:463` (resolution on main) or `:623` (owner removal on main) leaves all tests green, because the fixtures answer every `merge-base` with success. The calls at `:380`, `:381`, `:428`, `:554` and `:555` also have no negative case. Add `git_mutation` refusals for each call in the deferral, release and SM-3 tests. [`evidence/story-5-11/verify_reconciliation.py:427`]
+- [ ] [Review][Patch] **Medium · Test the typed `describe` probe semantics.** Removing `check_offline_cli.py:66-69` leaves all tests green, because no case changes the captured `describe` document. Add refusals for `submittable: true`, a wrong `platformScope` and an extra schema property, each asserting `describe: expected typed offline discovery required`. [`evidence/story-5-11/check_offline_cli.py:66`]
+- [ ] [Review][Patch] **Low · Bind the Projects AD-29 test to the recorded revision.** `test_current_projects_spine_accepts_the_adopted_ad29_guidance` reads Projects `origin/main` (`test_verify_reconciliation.py:1052`). Since pass 4 that ref has moved from the recorded `4d740a88` to `fa85cf96`. A later spine edit would turn the suite red or stop exercising the branch. Read the spine at `4d740a889787bb095b16303ed749ec7f165e5683`. [`evidence/story-5-11/test_verify_reconciliation.py:1052`]
+- [ ] [Review][Patch] **Low · Point the pass-3 exit-code claims at a manifest.** The pass-3 section says AD-23, instruction sync and `git diff --check` exited 0 and that the Node command exited 1 (`verification.md:396-403`). Only the unmanifested `review-pass-3-20261126/` streams back these claims, although pass-4 patch 9 asked for a manifest. State that `review-pass-4-20261126/parent-checks.json` re-records these commands and their exit codes on the final bytes. [`evidence/story-5-11/verification.md:396`]
+- [ ] [Review][Patch] **Low · Say that the Node release-notes command checks nothing (acceptance, blind).** `parent-checks.json` records `node --test scripts/tests/migration-release-notes.test.mjs` with an expected exit code of 1. Its stderr says the file cannot be found, because the test was removed when AC3 was deferred on 19 November. The pass-4 section links the manifest without saying so. Add that sentence, citing deferral `77748cf5a6cb9421`, and leave the retained receipt unchanged. [`evidence/story-5-11/verification.md:419`]
+
+#### Rejected
+
+- **False · `1c8ef2a87fc429cc` contradicts itself and names a placeholder owner (blind, edge).** The `:189` audit line uses the wording that pass-4 patch 10 prescribed, `0545c3fc` set `done`, and pass 3 rejected the "looks closed" variant. The 22 November review (Edge 3) marked the owner as proposed, and pass 4 requires each resolution to name the audited owner exactly.
+- **False · The F7 status restore reopens a historical receipt (blind, edge).** Pass-2 decision 2 (option 2) restored the open gate, and passes 3 and 4 rejected this finding.
+- **Low · No resolution type exists for an amended entry that stays open (blind).** All 22 changed statuses now start with `done`, `resolved`, `obsolete` or `superseded`, so no entry is stuck. A new type would add a branch.
+- **Low · Entry `ce7ad8cbadf460d8` is outside the audit (blind).** It postdates the approved 65-entry audit. The ledger keeps its owner and its open status, as AC4 requires. Checking new entries would add a branch.
+- **False · New open items have no ledger entries (blind).** Rejected in pass 3: the blockers and their owners are in `integration.json` and the audit.
+- **False · Completion passes with drift on owner main (blind).** Pass-2 decision 1 (option 4) chose reported drift, and pass 3 rejected this finding.
+- **False · A failed Builds check and the GitHub rule bypasses were accepted (blind).** Rejected in passes 2 and 3.
+- **False · The delivery-authorization phrase guard is fitted to one phrase and untested (blind).** The words must equal the immutable publication record (`verify_reconciliation.py:857`). Rejected in passes 2 and 3.
+- **Low · A missing AI.Tools PR head skips a comparison (blind).** Rejected in pass 3: the skip is deliberate, and the record comparison still binds the checks.
+- **False · "Expiry and renewal follow the issuer" drops the 7-day bound (blind).** Pass-4 decision 1 chose this wording, and Platform AD-14 keeps the client map under Platform ownership.
+- **False · The ChatBot audit sentence still records OAuth and presence evidence for delegated flows (blind).** The patch removed the McpCli examples. The remaining delegated flow is the `ai-action-mediator-client` grant.
+- **False · The stdio MCP actor row does not relate to `mcp-tool-client` (blind).** The registry maps both McpCli heads to `cli-automation-client`. `mcp-tool-client` stays with the AI/tool MCP client row.
+- **False · The follow-up README's revisions and apply command are inconsistent (blind).** The introduction qualifies the listed revisions as locally observed. All nine patches pass the documented `git apply --check --whitespace=error` at those revisions without `cr-at-eol`. The Works audit row records a separate, earlier observation.
+- **False · The follow-up has no defined approval scope (blind).** Rejected in passes 3 and 4. The active flow audit records that Works no longer fits its no-change class.
+- **Low · The offline probe runs from the repository root and records a local content-root path (blind).** The path names a generic account, and the published tool installed normally. Passes 2 and 3 rejected the nupkg-origin and record-timestamp points.
+- **Low · The 3.0.0 capture cannot be reproduced (blind).** Rejected in pass 3.
+- **Low · The tests read the root captures, not `run-g777xqtd` (blind).** The bytes are identical today, and a binding test would add tooling.
+- **False · The owner documentation tests are irrelevant to the changes (blind).** Rejected in pass 4.
+- **False · The deferral comparison mixes redactor versions (blind).** Rejected in pass 2: the replay found the 42 unchanged entries equal.
+- **False · `verification.md` has no current summary (blind).** Rejected in pass 4: every section is dated.
+- **False · The release status lacks release-specific content (blind).** Rejected in passes 2 and 3.
+- **False · The owner README setup still installs 2.0.1 (blind).** 2.0.1 is the published release. The Projects follow-up ties discovery to a published release that enrolls Projects.Contracts 2.0.0.
+- **Low · `correct()` replacements can silently do nothing (edge).** Rejected in passes 2 through 4.
+- **Low · Patch generation fails without a final newline (edge).** Rejected in pass 4: the generator is frozen.
+- **Low · Banner insertion ignores front matter (edge).** Rejected in pass 2.
+- **Low · Summary-hash IDs give no resolution path (edge).** Rejected in pass 2.
+- **Low · Redaction depends on the ambient environment (edge).** Rejected in pass 3.
+- **Low · Patch mode headers (edge).** Rejected in pass 3.
+- **False · Deleting only the `.csproj` passes SM-3 (edge).** Rejected in pass 3.
+- **Low · A gate proof can predate the removal commit (edge).** No retirement is claimed, and pass 4 rejected the `verifiedOn` variant.
+- **Low · Null or non-object values cause tracebacks (edge).** Rejected on 25 November and in passes 2 through 4.
+- **False · An empty `sourceRepository` passes (edge).** `inputs.json` is hash-bound. Rejected in passes 2 through 4.
+- **Low · A non-canonical or future `approvedOn` passes (edge).** The approval receipt is immutable and hash-bound.
+- **Low · `completedOn` is compared with UTC commit dates (edge).** Rejected in pass 3.
+- **Low · An option-like Story 5.10 `inventoryRevision` reaches git (edge).** The register is a committed evidence file, so this requires a malicious repository edit.
+- **Low · A NuGet feed or an empty `packages` list (edge).** Rejected in passes 2 and 3.
+- **Low · Late stdout after `tools/list` goes unrecorded (edge).** Rejected in pass 4.
+- **Low · Discovery timeouts lose their streams (edge).** Rejected in passes 2 and 3.
+- **False · `stdin.close()` raises `BrokenPipeError` and orphans the server (edge).** Every request is flushed (`check_offline_cli.py:137`), and a broken pipe means the server has already exited.
+- **Low · The test replay helpers inherit `GIT_*` variables (edge).** No Git hook runs this suite.
+- **False · The AC3 refusal at `verify_reconciliation.py:412` is unreachable (verification-gap).** It duplicates the earlier refusal and changes no outcome.
